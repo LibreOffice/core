@@ -25,7 +25,6 @@
 #include <vcl/filter/pdfdocument.hxx>
 
 #include <documentsignaturemanager.hxx>
-#include <pdfio/pdfdocument.hxx>
 #include <pdfsignaturehelper.hxx>
 
 #ifdef _WIN32
@@ -53,8 +52,7 @@ protected:
      * Read a pdf and make sure that it has the expected number of valid
      * signatures.
      */
-    std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount,
-                                             const OString& rExpectedSubFilter);
+    std::vector<SignatureInformation> verify(const OUString& rURL, size_t nCount);
 
 public:
     PDFSigningTest();
@@ -76,8 +74,7 @@ void PDFSigningTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount,
-                                                         const OString& rExpectedSubFilter)
+std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, size_t nCount)
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxComponentContext);
@@ -86,26 +83,13 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     std::vector<SignatureInformation> aRet;
 
     SvFileStream aStream(rURL, StreamMode::READ);
-    vcl::filter::PDFDocument aVerifyDocument;
-    CPPUNIT_ASSERT(aVerifyDocument.Read(aStream));
-    std::vector<vcl::filter::PDFObjectElement*> aSignatures = aVerifyDocument.GetSignatureWidgets();
-    CPPUNIT_ASSERT_EQUAL(nCount, aSignatures.size());
-    for (size_t i = 0; i < aSignatures.size(); ++i)
+    PDFSignatureHelper aHelper;
+    CPPUNIT_ASSERT(aHelper.ReadAndVerifySignatureSvStream(aStream));
+    CPPUNIT_ASSERT_EQUAL(nCount, aHelper.GetSignatureInformations().size());
+    for (size_t i = 0; i < aHelper.GetSignatureInformations().size(); ++i)
     {
-        SignatureInformation aInfo(i);
-        CPPUNIT_ASSERT(
-            xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, aVerifyDocument));
-        aRet.push_back(aInfo);
-
-        if (!rExpectedSubFilter.isEmpty())
-        {
-            vcl::filter::PDFObjectElement* pValue = aSignatures[i]->LookupObject("V");
-            CPPUNIT_ASSERT(pValue);
-            auto pSubFilter
-                = dynamic_cast<vcl::filter::PDFNameElement*>(pValue->Lookup("SubFilter"));
-            CPPUNIT_ASSERT(pSubFilter);
-            CPPUNIT_ASSERT_EQUAL(rExpectedSubFilter, pSubFilter->GetValue());
-        }
+        const SignatureInformation& rInfo = aHelper.GetSignatureInformations()[i];
+        aRet.push_back(rInfo);
     }
 
     return aRet;
@@ -172,7 +156,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
 
     // This was nOriginalSignatureCount when PDFDocument::Sign() silently returned success, without doing anything.
     if (bSignSuccessful)
-        verify(rOutURL, nOriginalSignatureCount + 1, /*rExpectedSubFilter=*/OString());
+        verify(rOutURL, nOriginalSignatureCount + 1);
 
     // May return false if NSS failed to parse its own profile or Windows has no valid certificates installed.
     return bSignSuccessful;
@@ -191,7 +175,8 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFAdd)
     if (bHadCertificates)
     {
         // Assert that the SubFilter is not adbe.pkcs7.detached in the bAdES case.
-        std::vector<SignatureInformation> aInfos = verify(aOutURL, 1, "ETSI.CAdES.detached");
+        std::vector<SignatureInformation> aInfos = verify(aOutURL, 1);
+        CPPUNIT_ASSERT(aInfos[0].bHasSigningCertificate);
         // Make sure the timestamp is correct.
         DateTime aDateTime(DateTime::SYSTEM);
         // This was 0 (on Windows), as neither the /M key nor the PKCS#7 blob contained a timestamp.
@@ -230,32 +215,33 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFRemove)
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = xSEInitializer->createSecurityContext(OUString());
     vcl::filter::PDFDocument aDocument;
+    OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
+    OUString aInURL = aSourceDir + "good.pdf";
     {
-        OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
-        OUString aInURL = aSourceDir + "good.pdf";
         SvFileStream aStream(aInURL, StreamMode::READ);
-        CPPUNIT_ASSERT(aDocument.Read(aStream));
-        std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
-        SignatureInformation aInfo(0);
-        CPPUNIT_ASSERT(
-            xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[0], aInfo, aDocument));
+        PDFSignatureHelper aHelper;
+        aHelper.ReadAndVerifySignatureSvStream(aStream);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aHelper.GetSignatureInformations().size());
     }
 
     // Remove the signature and write out the result as remove.pdf.
     OUString aTargetDir
         = m_directories.getURLFromWorkdir("/CppunitTest/xmlsecurity_pdfsigning.test.user/");
     OUString aOutURL = aTargetDir + "remove.pdf";
+    osl::File::copy(aInURL, aOutURL);
     {
-        CPPUNIT_ASSERT(aDocument.RemoveSignature(0));
-        SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
-        CPPUNIT_ASSERT(aDocument.Write(aOutStream));
+        uno::Reference<io::XInputStream> xInputStream;
+        std::unique_ptr<SvStream> pStream
+            = utl::UcbStreamHelper::CreateStream(aOutURL, StreamMode::READWRITE);
+        uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
+        xInputStream.set(xStream, uno::UNO_QUERY);
+        PDFSignatureHelper::RemoveSignature(xInputStream, 0);
     }
 
     // Read back the pdf and make sure that it no longer has signatures.
     // This failed when PDFDocument::RemoveSignature() silently returned
     // success, without doing anything.
-    verify(aOutURL, 0, /*rExpectedSubFilter=*/OString());
+    verify(aOutURL, 0);
 }
 
 /// Test removing all signatures from a previously multi-signed file.
@@ -327,8 +313,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14Adobe)
     // This was 0, as we failed to find the Annots key's value when it was a
     // reference-to-array, not an array.
     std::vector<SignatureInformation> aInfos
-        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2,
-                 /*rExpectedSubFilter=*/OString());
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14adobe.pdf", 2);
     // This was 0, out-of-PKCS#7 signature date wasn't read.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2016), aInfos[1].stDateTime.Year);
 }
@@ -340,8 +325,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Adobe)
     // stream with a predictor. And a valid signature.
     // Found signatures was 0, as parsing failed due to lack of support for
     // these features.
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1,
-           /*rExpectedSubFilter=*/OString());
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
 }
 
 /// Test adding a signature to a PDF 1.6 document.
@@ -373,23 +357,22 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF14LOWin)
     // algorithm when it meant SEC_OID_SHA1, make sure we tolerate that on all
     // platforms.
     // This failed, as NSS HASH_Create() didn't handle the sign algorithm.
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1,
-           /*rExpectedSubFilter=*/OString());
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf14lowin.pdf", 1);
 }
 
 /// Test a PAdES document, signed by LO on Linux.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDFPAdESGood)
 {
-    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1,
-           "ETSI.CAdES.detached");
+    std::vector<SignatureInformation> aInfos
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "good-pades.pdf", 1);
+    CPPUNIT_ASSERT(aInfos[0].bHasSigningCertificate);
 }
 
 /// Test a valid signature that does not cover the whole file.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartial)
 {
     std::vector<SignatureInformation> aInfos
-        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1,
-                 /*rExpectedSubFilter=*/OString());
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial.pdf", 1);
     CPPUNIT_ASSERT(!aInfos.empty());
     SignatureInformation& rInformation = aInfos[0];
     CPPUNIT_ASSERT(rInformation.bPartialDocumentSignature);
@@ -398,8 +381,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartial)
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPartialInBetween)
 {
     std::vector<SignatureInformation> aInfos
-        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial-in-between.pdf", 2,
-                 /*rExpectedSubFilter=*/OString());
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "partial-in-between.pdf", 2);
     CPPUNIT_ASSERT(!aInfos.empty());
     SignatureInformation& rInformation = aInfos[0];
     // Without the accompanying fix in place, this test would have failed, as unsigned incremental
@@ -421,7 +403,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testSigningCertificateAttribute)
         return;
 
     // Verify it.
-    std::vector<SignatureInformation> aInfos = verify(aOutURL, 1, "ETSI.CAdES.detached");
+    std::vector<SignatureInformation> aInfos = verify(aOutURL, 1);
     CPPUNIT_ASSERT(!aInfos.empty());
     SignatureInformation& rInformation = aInfos[0];
     // Assert that it has a signed signingCertificateV2 attribute.
@@ -441,8 +423,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testGood)
     for (const auto& rName : aNames)
     {
         std::vector<SignatureInformation> aInfos
-            = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1,
-                     /*rExpectedSubFilter=*/OString());
+            = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + rName, 1);
         CPPUNIT_ASSERT(!aInfos.empty());
         SignatureInformation& rInformation = aInfos[0];
         CPPUNIT_ASSERT_EQUAL(int(xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED),
