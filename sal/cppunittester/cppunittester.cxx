@@ -98,8 +98,9 @@ public:
     TimingListener(const TimingListener&) = delete;
     TimingListener& operator=(const TimingListener&) = delete;
 
-    void startTest( CppUnit::Test *) override
+    void startTest( CppUnit::Test *test) override
     {
+        std::cout << "[_RUN_____] " << test->getName() << std::endl;
         m_nStartTime = osl_getGlobalTimer();
     }
 
