@@ -1019,7 +1019,7 @@ public:
     void            DecInDdeLinkUpdate() { if ( nInDdeLinkUpdate ) --nInDdeLinkUpdate; }
     bool            IsInDdeLinkUpdate() const   { return nInDdeLinkUpdate != 0; }
 
-    SC_DLLPUBLIC void CopyDdeLinks( ScDocument* pDestDoc ) const;
+    SC_DLLPUBLIC void CopyDdeLinks( ScDocument& rDestDoc ) const;
 
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
@@ -1653,7 +1653,7 @@ public:
     void            ClosingClipboardSource();
 
     void            MixDocument( const ScRange& rRange, ScPasteFunc nFunction, bool bSkipEmpty,
-                                    ScDocument* pSrcDoc );
+                                 ScDocument& rSrcDoc );
 
     void            FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                                 InsertDeleteFlags nFlags, ScPasteFunc nFunction,
@@ -1668,7 +1668,7 @@ public:
                                 bool bColInfo = false, bool bRowInfo = false );
     void            AddUndoTab( SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );
-    SC_DLLPUBLIC void           InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
+    SC_DLLPUBLIC void           InitUndoSelected( const ScDocument& rSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo = false, bool bRowInfo = false );
 
                     //  don't use anymore:
@@ -2043,7 +2043,7 @@ public:
     void                         UpdStlShtPtrsFrmNms();
     void                         StylesToNames();
 
-    SC_DLLPUBLIC void            CopyStdStylesFrom( const ScDocument* pSrcDoc );
+    SC_DLLPUBLIC void            CopyStdStylesFrom( const ScDocument& rSrcDoc );
 
     static sal_uInt16            GetSrcVersion() { return nSrcVer; }
 
@@ -2556,17 +2556,17 @@ private:
     class NumFmtMergeHandler
     {
     public:
-        explicit NumFmtMergeHandler(ScDocument* pDoc, const ScDocument* pSrcDoc);
+        explicit NumFmtMergeHandler(ScDocument& rDoc, const ScDocument& rSrcDoc);
         ~NumFmtMergeHandler();
 
     private:
-        ScDocument* mpDoc;
+        ScDocument& mrDoc;
     };
 
     ScTable* FetchTable( SCTAB nTab );
     const ScTable* FetchTable( SCTAB nTab ) const;
 
-    void    MergeNumberFormatter(const ScDocument* pSrcDoc);
+    void    MergeNumberFormatter(const ScDocument& rSrcDoc);
 
     void    ImplCreateOptions(); // Suggestion: switch to on-demand?
     void    ImplDeleteOptions();
@@ -2619,24 +2619,25 @@ typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocument
  */
 struct ScMutationDisable
 {
-    ScMutationDisable(ScDocument* pDocument, ScMutationGuardFlags nFlags)
+#ifndef NDEBUG
+    ScMutationDisable(ScDocument& rDocument, ScMutationGuardFlags nFlags)
+        : mnFlagRestore(rDocument.mnMutationGuardFlags)
+        , mrDocument(rDocument)
     {
-#ifndef NDEBUG
-        mpDocument = pDocument;
-        mnFlagRestore = pDocument->mnMutationGuardFlags;
         assert((mnFlagRestore & nFlags) == 0);
-        mpDocument->mnMutationGuardFlags |= static_cast<size_t>(nFlags);
-#else
-        (void)pDocument; (void)nFlags;
-#endif
+        mrDocument.mnMutationGuardFlags |= static_cast<size_t>(nFlags);
     }
-#ifndef NDEBUG
     ~ScMutationDisable()
     {
-        mpDocument->mnMutationGuardFlags = mnFlagRestore;
+        mrDocument.mnMutationGuardFlags = mnFlagRestore;
     }
     size_t mnFlagRestore;
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
+#else
+    ScMutationDisable(ScDocument& rDocument, ScMutationGuardFlags nFlags)
+    {
+        (void)rDocument; (void)nFlags;
+    }
 #endif
 };
 
@@ -2651,25 +2652,26 @@ struct ScMutationDisable
  */
 struct ScMutationGuard
 {
-    ScMutationGuard(ScDocument* pDocument, ScMutationGuardFlags nFlags)
+#ifndef NDEBUG
+    ScMutationGuard(ScDocument& rDocument, ScMutationGuardFlags nFlags)
+        : mnFlags(static_cast<size_t>(nFlags))
+        , mrDocument(rDocument)
     {
-#ifndef NDEBUG
-        mpDocument = pDocument;
-        mnFlags = static_cast<size_t>(nFlags);
-        assert((mpDocument->mnMutationGuardFlags & mnFlags) == 0);
-#else
-        (void)pDocument; (void)nFlags;
-#endif
+        assert((mrDocument.mnMutationGuardFlags & mnFlags) == 0);
     }
-#ifndef NDEBUG
+
     ~ScMutationGuard()
     {
-        assert((mpDocument->mnMutationGuardFlags & mnFlags) == 0);
+        assert((mrDocument.mnMutationGuardFlags & mnFlags) == 0);
     }
     size_t mnFlags;
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
+#else
+    ScMutationGuard(ScDocument& rDocument, ScMutationGuardFlags nFlags)
+    {
+        (void)rDocument; (void)nFlags;
+    }
 #endif
-
 };
 
 class ScDocShellRecalcGuard

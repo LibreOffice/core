@@ -177,8 +177,8 @@ const std::vector<std::shared_ptr<sc::DataTransformation>>& ExternalDataSource::
     return maDataTransformations;
 }
 
-ExternalDataMapper::ExternalDataMapper(ScDocument* /*pDoc*/)
-    //mpDoc(pDoc)
+ExternalDataMapper::ExternalDataMapper(ScDocument& /*rDoc*/)
+    //mrDoc(rDoc)
 {
 }
 

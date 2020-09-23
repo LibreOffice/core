@@ -77,7 +77,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svSingleRef:
                 {
                     const ScSingleRefData& rRef = *p->GetSingleRef();
-                    if (!rRef.Valid(&rDoc))
+                    if (!rRef.Valid(rDoc))
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.IsFlag3D())
                         bFailure = true;
@@ -86,7 +86,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svDoubleRef:
                 {
                     const ScComplexRefData& rRef = *p->GetDoubleRef();
-                    if (!rRef.Valid(&rDoc))
+                    if (!rRef.Valid(rDoc))
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
                         bFailure = true;
@@ -94,13 +94,13 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svExternalSingleRef:
                 {
-                    if (!p->GetSingleRef()->ValidExternal(&rDoc))
+                    if (!p->GetSingleRef()->ValidExternal(rDoc))
                         bFailure = true;
                 }
                 break;
             case svExternalDoubleRef:
                 {
-                    if (!p->GetDoubleRef()->ValidExternal(&rDoc))
+                    if (!p->GetDoubleRef()->ValidExternal(rDoc))
                         bFailure = true;
                 }
                 break;

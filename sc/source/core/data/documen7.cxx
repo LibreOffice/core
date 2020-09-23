@@ -260,7 +260,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
     OSL_ENSURE( pCell, "PutInFormulaTree: pCell Null" );
     RemoveFromFormulaTree( pCell );
     // append
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
@@ -273,7 +273,7 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 
 void ScDocument::RemoveFromFormulaTree( ScFormulaCell* pCell )
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     OSL_ENSURE( pCell, "RemoveFromFormulaTree: pCell Null" );
     ScFormulaCell* pPrev = pCell->GetPrevious();
     assert(pPrev != pCell);                 // pointing to itself?!?
@@ -330,7 +330,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     if ( IsCalculatingFormulaTree() )
         return ;
 
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     mpFormulaGroupCxt.reset();
     bCalculatingFormulaTree = true;
 

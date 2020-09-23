@@ -1619,7 +1619,7 @@ void Test::testSharedFormulaUpdateOnDBChange()
     ScDBDocFunc aFunc(getDocShell());
 
     // Change the range referenced by MyRange to A1:A4.
-    ScDBCollection aNewDBs(m_pDoc);
+    ScDBCollection aNewDBs(*m_pDoc);
     std::unique_ptr<ScDBData> pNewData(new ScDBData("MyRange", 0, 0, 0, 0, 3));
     bInserted = aNewDBs.getNamedDBs().insert(std::move(pNewData));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);

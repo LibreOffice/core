@@ -49,19 +49,19 @@ public:
 };
 
 // ScChartListener
-ScChartListener::ExternalRefListener::ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc) :
-    mrParent(rParent), mpDoc(pDoc)
+ScChartListener::ExternalRefListener::ExternalRefListener(ScChartListener& rParent, ScDocument& rDoc) :
+    mrParent(rParent), mrDoc(rDoc)
 {
 }
 
 ScChartListener::ExternalRefListener::~ExternalRefListener()
 {
-    if (!mpDoc || mpDoc->IsInDtorClear())
+    if (mrDoc.IsInDtorClear())
         // The document is being destroyed.  Do nothing.
         return;
 
     // Make sure to remove all pointers to this object.
-    mpDoc->GetExternalRefManager()->removeLinkListener(this);
+    mrDoc.GetExternalRefManager()->removeLinkListener(this);
 }
 
 void ScChartListener::ExternalRefListener::notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType)
@@ -92,23 +92,23 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
+ScChartListener::ScChartListener( const OUString& rName, ScDocument& rDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
     mpTokens(new vector<ScTokenRef>),
     maName(rName),
-    mpDoc( pDocP ),
+    mrDoc( rDocP ),
     bUsed( false ),
     bDirty( false )
 {
-    ScRefTokenHelper::getTokensFromRangeList(pDocP, *mpTokens, *rRangeList);
+    ScRefTokenHelper::getTokensFromRangeList(&rDocP, *mpTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std::unique_ptr<vector<ScTokenRef>> pTokens ) :
+ScChartListener::ScChartListener( const OUString& rName, ScDocument& rDocP, std::unique_ptr<vector<ScTokenRef>> pTokens ) :
     SvtListener(),
     mpTokens(std::move(pTokens)),
     maName(rName),
-    mpDoc( pDocP ),
+    mrDoc( rDocP ),
     bUsed( false ),
     bDirty( false )
 {
@@ -123,7 +123,7 @@ ScChartListener::~ScChartListener()
     if (mpExtRefListener)
     {
         // Stop listening to all external files.
-        ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
         const std::unordered_set<sal_uInt16>& rFileIds = mpExtRefListener->getAllFileIds();
         for (const auto& rFileId : rFileIds)
             pRefMgr->removeLinkListener(rFileId, mpExtRefListener.get());
@@ -160,11 +160,11 @@ void ScChartListener::Notify( const SfxHint& rHint )
 
 void ScChartListener::Update()
 {
-    if ( mpDoc->IsInInterpreter() )
+    if ( mrDoc.IsInInterpreter() )
     {   // If interpreting do nothing and restart timer so we don't
         // interfere with interpreter and don't produce an Err522 or similar.
         // This may happen if we are rescheduled via Basic function.
-        mpDoc->GetChartListenerCollection()->StartTimer();
+        mrDoc.GetChartListenerCollection()->StartTimer();
         return ;
     }
     if ( pUnoData )
@@ -176,24 +176,24 @@ void ScChartListener::Update()
                                         0, 0, 0, 0 );
         pUnoData->GetListener()->chartDataChanged( aEvent );
     }
-    else if ( mpDoc->GetAutoCalc() )
+    else if ( mrDoc.GetAutoCalc() )
     {
         bDirty = false;
-        mpDoc->UpdateChart(GetName());
+        mrDoc.UpdateChart(GetName());
     }
 }
 
 ScRangeListRef ScChartListener::GetRangeList() const
 {
     ScRangeListRef aRLRef(new ScRangeList);
-    ScRefTokenHelper::getRangeListFromTokens(mpDoc, *aRLRef, *mpTokens, ScAddress());
+    ScRefTokenHelper::getRangeListFromTokens(&mrDoc, *aRLRef, *mpTokens, ScAddress());
     return aRLRef;
 }
 
 void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
 {
     vector<ScTokenRef> aTokens;
-    ScRefTokenHelper::getTokensFromRangeList(mpDoc, aTokens, *rNew);
+    ScRefTokenHelper::getTokensFromRangeList(&mrDoc, aTokens, *rNew);
     mpTokens->swap(aTokens);
 }
 
@@ -202,8 +202,8 @@ namespace {
 class StartEndListening
 {
 public:
-    StartEndListening(ScDocument* pDoc, ScChartListener& rParent, bool bStart) :
-        mpDoc(pDoc), mrParent(rParent), mbStart(bStart) {}
+    StartEndListening(ScDocument& rDoc, ScChartListener& rParent, bool bStart) :
+        mrDoc(rDoc), mrParent(rParent), mbStart(bStart) {}
 
     void operator() (const ScTokenRef& pToken)
     {
@@ -214,7 +214,7 @@ public:
         if (bExternal)
         {
             sal_uInt16 nFileId = pToken->GetIndex();
-            ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
+            ScExternalRefManager* pRefMgr = mrDoc.GetExternalRefManager();
             ScChartListener::ExternalRefListener* pExtRefListener = mrParent.GetExtRefListener();
             if (mbStart)
             {
@@ -230,7 +230,7 @@ public:
         else
         {
             ScRange aRange;
-            ScRefTokenHelper::getRangeFromToken(mpDoc, aRange, pToken, ScAddress(), bExternal);
+            ScRefTokenHelper::getRangeFromToken(&mrDoc, aRange, pToken, ScAddress(), bExternal);
             if (mbStart)
                 startListening(aRange);
             else
@@ -241,20 +241,20 @@ private:
     void startListening(const ScRange& rRange)
     {
         if (rRange.aStart == rRange.aEnd)
-            mpDoc->StartListeningCell(rRange.aStart, &mrParent);
+            mrDoc.StartListeningCell(rRange.aStart, &mrParent);
         else
-            mpDoc->StartListeningArea(rRange, false, &mrParent);
+            mrDoc.StartListeningArea(rRange, false, &mrParent);
     }
 
     void endListening(const ScRange& rRange)
     {
         if (rRange.aStart == rRange.aEnd)
-            mpDoc->EndListeningCell(rRange.aStart, &mrParent);
+            mrDoc.EndListeningCell(rRange.aStart, &mrParent);
         else
-            mpDoc->EndListeningArea(rRange, false, &mrParent);
+            mrDoc.EndListeningArea(rRange, false, &mrParent);
     }
 private:
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     ScChartListener& mrParent;
     bool mbStart;
 };
@@ -267,7 +267,7 @@ void ScChartListener::StartListeningTo()
         // no references to listen to.
         return;
 
-    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mpDoc, *this, true));
+    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mrDoc, *this, true));
 }
 
 void ScChartListener::EndListeningTo()
@@ -276,7 +276,7 @@ void ScChartListener::EndListeningTo()
         // no references to listen to.
         return;
 
-    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mpDoc, *this, false));
+    for_each(mpTokens->begin(), mpTokens->end(), StartEndListening(mrDoc, *this, false));
 }
 
 void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
@@ -292,19 +292,19 @@ void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
 void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
     ScTokenRef pToken;
-    ScRefTokenHelper::getTokenFromRange(mpDoc, pToken, rRange);
+    ScRefTokenHelper::getTokenFromRange(&mrDoc, pToken, rRange);
 
-    if (ScRefTokenHelper::intersects(mpDoc, *mpTokens, pToken, ScAddress()))
+    if (ScRefTokenHelper::intersects(&mrDoc, *mpTokens, pToken, ScAddress()))
     {
         // force update (chart has to be loaded), don't use ScChartListener::Update
-        mpDoc->UpdateChart(GetName());
+        mrDoc.UpdateChart(GetName());
     }
 }
 
 ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 {
     if (!mpExtRefListener)
-        mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
+        mpExtRefListener.reset(new ExternalRefListener(*this, mrDoc));
 
     return mpExtRefListener.get();
 }
@@ -312,7 +312,7 @@ ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 void ScChartListener::SetUpdateQueue()
 {
     bDirty = true;
-    mpDoc->GetChartListenerCollection()->StartTimer();
+    mrDoc.GetChartListenerCollection()->StartTimer();
 }
 
 bool ScChartListener::operator==( const ScChartListener& r ) const
@@ -320,7 +320,7 @@ bool ScChartListener::operator==( const ScChartListener& r ) const
     bool b1 = (mpTokens && !mpTokens->empty());
     bool b2 = (r.mpTokens && !r.mpTokens->empty());
 
-    if (mpDoc != r.mpDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
+    if (&mrDoc != &r.mrDoc || bUsed != r.bUsed || bDirty != r.bDirty ||
         GetName() != r.GetName() || b1 != b2)
         return false;
 
@@ -352,9 +352,9 @@ void ScChartListenerCollection::Init()
     aIdle.SetDebugName( "sc::ScChartListenerCollection aIdle" );
 }
 
-ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
+ScChartListenerCollection::ScChartListenerCollection( ScDocument& rDocP ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
-    pDoc( pDocP )
+    rDoc( rDocP )
 {
     Init();
 }
@@ -362,7 +362,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
-    pDoc( rColl.pDoc )
+    rDoc( rColl.rDoc )
 {
     Init();
 }
@@ -438,7 +438,7 @@ void ScChartListenerCollection::ChangeListening( const OUString& rName,
     }
     else
     {
-        pCL = new ScChartListener(rName, pDoc, rRangeListRef);
+        pCL = new ScChartListener(rName, rDoc, rRangeListRef);
         insert(pCL);
     }
     pCL->StartListeningTo();
@@ -518,7 +518,7 @@ void ScChartListenerCollection::UpdateDirtyCharts()
         if (meModifiedDuringUpdate == SC_CLCUPDATE_MODIFIED)
             break;      // iterator is invalid
 
-        if (aIdle.IsActive() && !pDoc->IsImportingXML())
+        if (aIdle.IsActive() && !rDoc.IsImportingXML())
             break;                      // one interfered
     }
     meModifiedDuringUpdate = SC_CLCUPDATE_NONE;
@@ -554,10 +554,10 @@ void ScChartListenerCollection::SetDiffDirty(
                     bool b1 = rList1.is();
                     bool b2 = rList2.is();
                     if ( b1 != b2 || (b1 && b2 && (*rList1 != *rList2)) )
-                        pDoc->SetChartRangeList( pCL->GetName(), rList1 );
+                        rDoc.SetChartRangeList( pCL->GetName(), rList1 );
                 }
                 else
-                    pDoc->SetChartRangeList( pCL->GetName(), pCL->GetRangeList() );
+                    rDoc.SetChartRangeList( pCL->GetName(), pCL->GetRangeList() );
             }
             bDirty = true;
             pCL->SetDirty( true );
@@ -595,7 +595,7 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 
 void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 {
-    ScRange aRange( 0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab );
+    ScRange aRange( 0, 0, nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab );
     for (auto const& it : m_Listeners)
     {
         it.second->UpdateChartIntersecting(aRange);
@@ -606,7 +606,7 @@ bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
 {
     // Do not use ScStrCollection::operator==() here that uses IsEqual and Compare.
     // Use ScChartListener::operator==() instead.
-    if (pDoc != r.pDoc)
+    if (&rDoc != &r.rDoc)
         return false;
 
     return std::equal(m_Listeners.begin(), m_Listeners.end(), r.m_Listeners.begin(), r.m_Listeners.end(),

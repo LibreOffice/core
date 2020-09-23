@@ -36,7 +36,7 @@ class ScDdeLink : public ::sfx2::SvBaseLink, public SvtBroadcaster
 private:
 static bool bIsInUpdate;
 
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
 
     OUString        aAppl;          // connection/ link data
     OUString        aTopic;
@@ -49,11 +49,11 @@ static bool bIsInUpdate;
 
 public:
 
-            ScDdeLink( ScDocument* pD,
+            ScDdeLink( ScDocument& rD,
                         const OUString& rA, const OUString& rT, const OUString& rI,
                         sal_uInt8 nM );
-            ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr );
-            ScDdeLink( ScDocument* pD, const ScDdeLink& rOther );
+            ScDdeLink( ScDocument& rD, SvStream& rStream, ScMultipleReadHeader& rHdr );
+            ScDdeLink( ScDocument& rD, const ScDdeLink& rOther );
     virtual ~ScDdeLink() override;
 
     void            Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const;

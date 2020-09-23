@@ -1026,7 +1026,7 @@ void ScDocument::UpdateReference(
         UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
         if ( pValidationList )
         {
-            ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+            ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
             pValidationList->UpdateReference(rCxt);
         }
         if ( pDetOpList )
@@ -1528,7 +1528,7 @@ void ScDocument::GetFilterEntries(
     if (!pDBData)
         return;
 
-    pDBData->ExtendDataArea(this);
+    pDBData->ExtendDataArea(*this);
     SCTAB nAreaTab;
     SCCOL nStartCol;
     SCROW nStartRow;

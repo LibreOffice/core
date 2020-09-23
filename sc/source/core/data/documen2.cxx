@@ -193,14 +193,14 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mxPoolHelper = new ScPoolHelper( this );
 
         pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
-        pChartListenerCollection.reset( new ScChartListenerCollection( this ) );
+        pChartListenerCollection.reset( new ScChartListenerCollection( *this ) );
         pRefreshTimerControl.reset( new ScRefreshTimerControl );
     }
     else
     {
         pChartListenerCollection = nullptr;
     }
-    pDBCollection.reset( new ScDBCollection(this) );
+    pDBCollection.reset( new ScDBCollection(*this) );
     pSelectionAttr = nullptr;
     apTemporaryChartLock.reset( new ScTemporaryChartLock(this) );
     xColNameRanges = new ScRangePairList;
@@ -407,7 +407,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 {
     OSL_ENSURE(bIsClip, "InitClipPtrs and not bIsClip");
 
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
 
     pValidationList.reset();
 
@@ -419,7 +419,7 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     // TODO: Copy Templates?
     const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList.get();
     if ( pSourceValid )
-        pValidationList.reset(new ScValidationDataList(this, *pSourceValid));
+        pValidationList.reset(new ScValidationDataList(*this, *pSourceValid));
 
     // store Links in Stream
     pClipData.reset();
@@ -468,7 +468,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
 {
     if ( !mpNoteEngine )
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         mpNoteEngine.reset( new ScNoteEditEngine( GetEnginePool(), GetEditPool() ) );
         mpNoteEngine->SetUpdateMode( false );
         mpNoteEngine->EnableUndo( false );
@@ -958,7 +958,7 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
         }
 
         {
-            NumFmtMergeHandler aNumFmtMergeHdl(this, &rSrcDoc);
+            NumFmtMergeHandler aNumFmtMergeHdl(*this, rSrcDoc);
 
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, static_cast<SCTAB>(GetTableCount() - 1));
