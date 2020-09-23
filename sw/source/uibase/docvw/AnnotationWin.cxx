@@ -460,6 +460,9 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject const * pText)
 
     //collect our old meta data
     SwAnnotationWin* pWin = mrMgr.GetNextPostIt(KEY_PAGEUP, this);
+    if (!pWin)
+        return;
+
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     SwRewriter aRewriter;
