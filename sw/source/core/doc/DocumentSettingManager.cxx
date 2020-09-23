@@ -112,6 +112,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbAddExternalLeading                = !aOptions.GetDefault( SvtCompatibilityEntry::Index::NoExtLeading );
         mbOldLineSpacing                    = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseLineSpacing );
         mbAddParaSpacingToTableCells        = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing );
+        mbAddParaLineSpacingToTableCells    = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing ); // FIXME? separate UI?
         mbUseFormerObjectPos                = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseObjectPositioning );
         mbUseFormerTextWrapping             = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTextWrapping );
         mbConsiderWrapOnObjPos              = aOptions.GetDefault( SvtCompatibilityEntry::Index::ConsiderWrappingStyle );
@@ -131,6 +132,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbAddExternalLeading                = true;
         mbOldLineSpacing                    = false;
         mbAddParaSpacingToTableCells        = false;
+        mbAddParaLineSpacingToTableCells    = false;
         mbUseFormerObjectPos                = false;
         mbUseFormerTextWrapping             = false;
         mbConsiderWrapOnObjPos              = false;
@@ -167,6 +169,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::OLD_NUMBERING: return mbOldNumbering;
         case DocumentSettingId::OLD_LINE_SPACING: return mbOldLineSpacing;
         case DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS: return mbAddParaSpacingToTableCells;
+        case DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS: return mbAddParaLineSpacingToTableCells;
         case DocumentSettingId::USE_FORMER_OBJECT_POS: return mbUseFormerObjectPos;
         case DocumentSettingId::USE_FORMER_TEXT_WRAPPING: return mbUseFormerTextWrapping;
         case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
@@ -282,6 +285,9 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS:
             mbAddParaSpacingToTableCells = value;
+            break;
+        case DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS:
+            mbAddParaLineSpacingToTableCells = value;
             break;
         case DocumentSettingId::USE_FORMER_OBJECT_POS:
             mbUseFormerObjectPos = value;
@@ -588,6 +594,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbAddExternalLeading = rSource.mbAddExternalLeading;
     mbOldLineSpacing = rSource.mbOldLineSpacing;
     mbAddParaSpacingToTableCells = rSource.mbAddParaSpacingToTableCells;
+    mbAddParaLineSpacingToTableCells = rSource.mbAddParaLineSpacingToTableCells;
     mbUseFormerObjectPos = rSource.mbUseFormerObjectPos;
     mbUseFormerTextWrapping = rSource.mbUseFormerTextWrapping;
     mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
