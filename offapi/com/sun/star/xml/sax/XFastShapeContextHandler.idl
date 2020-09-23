@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/document/XDocumentProperties.idl>
-
+#include <com/sun/star/graphic/XGraphicMapper.idl>
 
 module com {  module sun {  module star {  module xml {  module sax {
 
@@ -45,6 +45,13 @@ interface XFastShapeContextHandler: com::sun::star::xml::sax::XFastContextHandle
     [attribute] com::sun::star::awt::Point Position;
     [attribute] com::sun::star::document::XDocumentProperties DocumentProperties;
     [attribute] sequence< com::sun::star::beans::PropertyValue > MediaDescriptor;
+
+    /** Graphic mapper to map a key/id string to a XGraphic. This is needed to
+        remember for XGraphics for a path in the document storage
+
+        @since LibreOffice 7.1
+     */
+    void setGraphicMapper([in] com::sun::star::graphic::XGraphicMapper xGraphicMapper);
 };
 
 
