@@ -1,0 +1,11 @@
+--- a/cairo/src/cairo-ft-font.c	2020-09-23 15:27:09.114619562 +0200
++++ b/cairo/src/cairo-ft-font.c	2020-09-23 15:27:22.602808705 +0200
+@@ -2838,7 +2838,7 @@
+ 	    goto cleanup;
+ 	}
+ 
+-#if FREETYPE_MAJOR > 2 || ( FREETYPE_MAJOR == 2 &&  FREETYPE_MINOR >= 8)
++#if 0
+ 	/* If FT_Get_Var_Blend_Coordinates() is available, we can check if the
+ 	 * current design coordinates are the default coordinates. In this case
+ 	 * the current outlines match the font tables.
