@@ -1,0 +1,35 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef com_sun_star_graphic_XGraphicCache_idl
+#define com_sun_star_graphic_XGraphicCache_idl
+
+#include <com/sun/star/graphic/XGraphic.idl>
+
+module com { module sun { module star { module graphic
+{
+
+/** This interface allows mapping of XGraphics for a certain string key
+
+    @since LibreOffice 7.1
+ */
+interface XGraphicMapper
+{
+    /** Find if we have the XGraphic for the certain key */
+    com::sun::star::graphic::XGraphic findGraphic([in] string Id);
+
+    /** Insert a new entry to map an id/key to the XGraphic */
+    void putGraphic([in] string Id, [in] com::sun::star::graphic::XGraphic Graphic);
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

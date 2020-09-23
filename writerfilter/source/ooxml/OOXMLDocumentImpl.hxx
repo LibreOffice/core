@@ -23,6 +23,7 @@
 
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/graphic/XGraphicMapper.hpp>
 
 #include "OOXMLPropertySet.hxx"
 
@@ -65,6 +66,8 @@ class OOXMLDocumentImpl : public OOXMLDocument
     /// DocumentBaseURL
     OUString const m_rBaseURL;
     css::uno::Sequence<css::beans::PropertyValue> const maMediaDescriptor;
+    /// Graphic mapper
+    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 
 private:
     void resolveFastSubStream(Stream & rStream,
@@ -136,6 +139,11 @@ public:
     bool IsSkipImages() const { return mbSkipImages; };
     OUString const& GetDocumentBaseURL() const { return m_rBaseURL; };
     const css::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
+
+    const css::uno::Reference<css::graphic::XGraphicMapper>& getGraphicMapper() const
+    {
+        return mxGraphicMapper;
+    }
 };
 }}
 #endif // OOXML_DOCUMENT_IMPL_HXX

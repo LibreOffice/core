@@ -31,6 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <com/sun/star/graphic/XGraphicProvider2.hpp>
+#include <com/sun/star/graphic/XGraphicMapper.hpp>
 
 struct WmfExternal;
 
@@ -133,9 +134,10 @@ public:
         @return The original Graphic size in 100thmm */
     css::awt::Size getOriginalSize( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
 
+    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper);
 
+    void initializeGraphicMapperIfNeeded() const;
 private:
-    typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
@@ -143,9 +145,9 @@ private:
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     ::std::map< sal_Int32, ::Color >  maSystemPalette;  ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
-    mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
+    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 };
 
 
