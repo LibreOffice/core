@@ -341,7 +341,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         {
             sal_UCS4 cMin = *(pCP++);
             sal_UCS4 cEnd = *(pCP++);
-            while( cMin < cEnd )
+            // ofz#25868 the conversion only makes sense with
+            // input codepoints in 0..SAL_MAX_UINT16 range
+            while (cMin < cEnd && cMin <= SAL_MAX_UINT16)
             {
                 int j = 0;
                 for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
