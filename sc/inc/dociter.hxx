@@ -131,7 +131,7 @@ private:
     {
         typedef std::pair<sc::CellStoreType::const_iterator,size_t> PositionType;
     public:
-        DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc, const ScInterpreterContext& rContext);
+        DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument& rDoc, const ScInterpreterContext& rContext);
         virtual ~DataAccessInternal() override;
         virtual bool getCurrent(Value& rValue) override;
         virtual bool getFirst(Value& rValue) override;
@@ -144,7 +144,7 @@ private:
         const sc::CellStoreType* mpCells;
         PositionType maCurPos;
         ScDBQueryParamInternal* mpParam;
-        ScDocument*         mpDoc;
+        ScDocument&         mrDoc;
         const ScInterpreterContext& mrContext;
         const ScAttrArray*  pAttrArray;
         sal_uInt32          nNumFormat;     // for CalcAsShown
@@ -479,8 +479,8 @@ private:
 class ScHorizontalValueIterator
 {
 private:
-    ScDocument               *pDoc;
-    const ScAttrArray        *pAttrArray;
+    ScDocument&               rDoc;
+    const ScAttrArray*        pAttrArray;
     std::unique_ptr<ScHorizontalCellIterator>
                               pCellIter;
     sal_uInt32                nNumFormat;     // for CalcAsShown
@@ -493,7 +493,7 @@ private:
 
 public:
 
-                    ScHorizontalValueIterator( ScDocument* pDocument,
+                    ScHorizontalValueIterator( ScDocument& rDocument,
                                                const ScRange& rRange );
                     ~ScHorizontalValueIterator();
     /// Does NOT reset rValue if no value found!

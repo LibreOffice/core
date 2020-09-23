@@ -108,7 +108,7 @@ public:
 
 private:
 
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     SCCOL mnColumnCount;
 
     /**
@@ -169,7 +169,7 @@ public:
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
-    void InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
+    void InitFromDoc(ScDocument& rDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
     /**
@@ -189,7 +189,7 @@ public:
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
-    ScDocument* GetDoc() const;
+    ScDocument& GetDoc() const;
     long GetColumnCount() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
@@ -199,7 +199,7 @@ public:
 
     ScDPCache(const ScDPCache&) = delete;
     const ScDPCache& operator=(const ScDPCache&) = delete;
-    ScDPCache(ScDocument* pDoc);
+    ScDPCache(ScDocument& rDoc);
     ~ScDPCache();
 
 #if DUMP_PIVOT_TABLE

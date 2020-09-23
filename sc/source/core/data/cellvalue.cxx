@@ -662,9 +662,9 @@ OUString ScRefCellValue::getString( const ScDocument* pDoc ) const
     return getStringImpl(*this, pDoc);
 }
 
-OUString ScRefCellValue::getRawString( const ScDocument* pDoc ) const
+OUString ScRefCellValue::getRawString( const ScDocument& rDoc ) const
 {
-    return getRawStringImpl(*this, pDoc);
+    return getRawStringImpl(*this, &rDoc);
 }
 
 bool ScRefCellValue::isEmpty() const

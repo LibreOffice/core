@@ -170,7 +170,7 @@ struct SC_DLLPUBLIC ScRefCellValue
      *
      * This method is thread-safe.
      */
-    OUString getRawString( const ScDocument* pDoc ) const;
+    OUString getRawString( const ScDocument& rDoc ) const;
 
     bool isEmpty() const;
 

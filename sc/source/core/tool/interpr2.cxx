@@ -1356,7 +1356,7 @@ void ScInterpreter::ScNPV()
                     FormulaError nErr = FormulaError::NONE;
                     double fCellVal;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
-                    ScHorizontalValueIterator aValIter( &mrDoc, aRange );
+                    ScHorizontalValueIterator aValIter( mrDoc, aRange );
                     while ((nErr == FormulaError::NONE) && aValIter.GetNext(fCellVal, nErr))
                     {
                         fVal += (fCellVal / pow(1.0 + fRate, fCount));
