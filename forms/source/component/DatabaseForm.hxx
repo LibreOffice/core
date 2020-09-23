@@ -446,7 +446,7 @@ private:
     void    reload_impl(bool bMoveToFirst,
         const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >());
     void    submit_impl(const css::uno::Reference< css::awt::XControl>& Control, const css::awt::MouseEvent& MouseEvt);
-    void    reset_impl(bool _bAproveByListeners);
+    void    reset_impl(bool _bApproveByListeners);
 
     bool    implEnsureConnection();
 
