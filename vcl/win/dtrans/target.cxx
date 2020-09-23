@@ -343,7 +343,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
             fire_dragEnter( e);
             // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
             // by the listener (m_nCurrentDropAction) is allowed by the source. Only an allowed action is set
-            // in pdwEffect. The listener notification is asynchron, that is we cannot expect that the listener
+            // in pdwEffect. The listener notification is asynchronous, that is we cannot expect that the listener
             // has already reacted to the notification.
             // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
@@ -391,7 +391,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             fire_dragOver( e);
             // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
             // by the listener (m_nCurrentDropAction) is allowed by the source. Only an allowed action is set
-            // in pdwEffect. The listener notification is asynchron, that is we cannot expect that the listener
+            // in pdwEffect. The listener notification is asynchronous, that is we cannot expect that the listener
             // has already reacted to the notification.
             // If there is more than one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
