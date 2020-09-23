@@ -860,7 +860,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     ConvertTable(pTmpTable.get(),nStartHeadRow,nEndHeadRow,0,nCol);
 
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
-    std::unique_ptr<sal_uInt8[]> CellMark( new sal_uInt8[nRowNum] );
+    std::vector<sal_uInt8> CellMark(nRowNum);
 
     if (nRowNum == 1)
     {
@@ -872,11 +872,11 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     else
     {
         sal_uInt8 nFirstColSpann = 1;
-        const bool bFindFlag = FindSplitColMark(pTmpTable.get(),CellMark.get(),nFirstColSpann);
+        const bool bFindFlag = FindSplitColMark(pTmpTable.get(), CellMark, nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
         {
-            SplitRowToCells(pTmpTable.get(),pXFTable,nFirstColSpann,CellMark.get());
+            SplitRowToCells(pTmpTable.get(), pXFTable, nFirstColSpann, CellMark.data());
             nContentRow = nEndHeadRow;
         }
         else//can not split,the first row will be the heading row,the rest will be content row
@@ -992,7 +992,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
  * @param  pXFTable - pointer of tmp XFtable
  * @param  CellMark - pointer of cell mark array
  */
-bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
+bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, std::vector<sal_uInt8>& rCellMark,
             sal_uInt8& nMaxColSpan)
 {
     sal_uInt16 nRowNum = pXFTable->GetRowCount();
@@ -1022,7 +1022,7 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
             }
             if (nColSpan > nMaxColSpan)
                 nMaxColSpan = nColSpan;
-            pCellMark[nRowLoop] = 0;//reset all cell mark to zero
+            rCellMark.at(nRowLoop) = 0;//reset all cell mark to zero
         }
 
         //find if other row has the same column
@@ -1045,11 +1045,11 @@ bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable, sal_uInt8* pCellMark,
             if (nCellMark == 0)
                 break;
             else
-                pCellMark[nRowLoop] = nCellMark;
+                rCellMark.at(nRowLoop) = nCellMark;
         }
         for(nRowLoop=1;nRowLoop<=nRowNum;nRowLoop++)//check if all ==0,break
         {
-            if (pCellMark[nRowLoop] == 0)
+            if (rCellMark.at(nRowLoop) == 0)
                 break;
         }
         if (nRowLoop == nRowNum+1)
