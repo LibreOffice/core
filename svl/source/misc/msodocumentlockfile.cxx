@@ -228,8 +228,16 @@ LockFileEntry MSODocumentLockFile::GetLockData()
                 nUTF16Len = *++pBuf; // use Excel/PowerPoint position
 
             if (nUTF16Len > 0 && nUTF16Len <= 52) // skip wrong format
-                aResult[LockFileComponent::OOOUSERNAME]
-                    = OUString(reinterpret_cast<const sal_Unicode*>(pBuf + 2), nUTF16Len);
+            {
+                OUStringBuffer str(nUTF16Len);
+                sal_uInt8 const* p = reinterpret_cast<sal_uInt8 const*>(pBuf + 2);
+                for (int i = 0; i != nUTF16Len; ++i)
+                {
+                    str.append(sal_Unicode(p[0] | (sal_uInt32(p[1]) << 8)));
+                    p += 2;
+                }
+                aResult[LockFileComponent::OOOUSERNAME] = str.makeStringAndClear();
+            }
         }
     }
     return aResult;
