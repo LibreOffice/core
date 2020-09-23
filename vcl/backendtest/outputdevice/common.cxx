@@ -52,6 +52,44 @@ void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
     }
 }
 
+void checkValue(BitmapScopedWriteAccess& pAccess, int x, int y, Color aExpected,
+                      int& nNumberOfQuirks, int& nNumberOfErrors, int nColorDeltaThresh, int nColorDeltaThreshQuirk = 0)
+{
+    const bool bColorize = false;
+    Color aColor = pAccess->GetPixel(y, x);
+    int nColorDelta = deltaColor(aColor, aExpected);
+    nColorDeltaThreshQuirk = std::max( nColorDeltaThresh, nColorDeltaThreshQuirk);
+
+    if (nColorDelta <= nColorDeltaThresh)
+    {
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_LIGHTGREEN);
+    }
+    else if (nColorDelta <= nColorDeltaThreshQuirk)
+    {
+        nNumberOfQuirks++;
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_YELLOW);
+    }
+    else
+    {
+        nNumberOfErrors++;
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_LIGHTRED);
+    }
+}
+
+// Return all colors in the rectangle and their count.
+std::map<Color, int> collectColors(Bitmap& bitmap, const tools::Rectangle& rectangle)
+{
+    std::map<Color, int> colors;
+    BitmapScopedWriteAccess pAccess(bitmap);
+    for( long y = rectangle.getY(); y < rectangle.GetHeight(); ++y)
+        for( long x = rectangle.getX(); x < rectangle.GetWidth(); ++x)
+          ++colors[pAccess->GetPixel(y, x)]; // operator[] initializes to 0 (default ctor) if creating
+    return colors;
+}
+
 TestResult checkRect(Bitmap& rBitmap, int aLayerNumber, Color aExpectedColor)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
@@ -471,6 +509,209 @@ TestResult OutputDeviceTestCommon::checkBezier(Bitmap& rBitmap)
     // Check the bezier doesn't go over to the margins first
     // TODO extend the check with more exact assert
     return checkRectangles(rBitmap, aExpected);
+}
+
+// Check 'count' pixels from (x,y) in (addX,addY) direction, the color values must not decrease.
+static bool checkGradient(BitmapScopedWriteAccess& pAccess, int x, int y, int count, int addX, int addY)
+{
+    const bool bColorize = false;
+    Color maxColor = COL_BLACK;
+    for( int i = 0; i < count; ++i )
+    {
+        Color color = pAccess->GetPixel(y, x);
+        if( color.GetRed() < maxColor.GetRed() || color.GetGreen() < maxColor.GetGreen() || color.GetBlue() < maxColor.GetBlue())
+        {
+            if (bColorize)
+                pAccess->SetPixel(y, x, COL_RED);
+            return false;
+        }
+        maxColor = color;
+        if (bColorize)
+            pAccess->SetPixel(y, x, COL_LIGHTGREEN);
+        x += addX;
+        y += addY;
+    }
+    return true;
+}
+
+TestResult OutputDeviceTestCommon::checkLinearGradient(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    // The lowest line is missing in the default VCL implementation => quirk.
+    checkValue(pAccess, 1, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, true, 255 / 10);
+    checkValue(pAccess, 10, 10, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, true, 255 / 10);
+    for(int y = 1; y < 10; ++y)
+    {
+        checkValue(pAccess, 1, y, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10);
+        checkValue(pAccess, 10, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10);
+    }
+    for(int y = 1; y < 10; ++y)
+        if( !checkGradient( pAccess, 10, y, 10, -1, 0 ))
+            return TestResult::Failed;
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkLinearGradientAngled(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    // The top-left pixel is not white but gray in the default VCL implementation => quirk.
+    checkValue(pAccess, 1, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 50);
+    checkValue(pAccess, 10, 10, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 0, 255 / 10); // Bottom-right.
+    // Main diagonal.
+    if( !checkGradient( pAccess, 10, 10, 10, -1, -1 ))
+        return TestResult::Failed;
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return TestResult::Passed;
+}
+
+TestResult OutputDeviceTestCommon::checkLinearGradientBorder(Bitmap& bitmap)
+{
+    TestResult aResult = TestResult::Passed;
+    // Top half is border.
+    checkResult(checkFilled(bitmap, tools::Rectangle(Point(1, 1), Size(10, 5)), COL_WHITE), aResult);
+    BitmapScopedWriteAccess pAccess(bitmap);
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+    for(int x = 1; x <= 10; ++x)
+    {
+        checkValue(pAccess, x, 10, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+        if( !checkGradient( pAccess, x, 10, 5, 0, -1 ))
+            return TestResult::Failed;
+    }
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkLinearGradientIntensity(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for(int x = 1; x <= 10; ++x)
+    {
+        // The gradient starts at half intensity, i.e. white's 255's are halved.
+        checkValue(pAccess, x, 1, Color(128,128,128), nNumberOfQuirks, nNumberOfErrors, false, 10);
+        checkValue(pAccess, x, 10, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10);
+        if( !checkGradient( pAccess, x, 10, 10, 0, -1 ))
+            return TestResult::Failed;
+    }
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkLinearGradientSteps(Bitmap& bitmap)
+{
+    // Reuse the basic linear gradient check.
+    TestResult aResult = checkLinearGradient(bitmap);
+    // Only 4 steps in the gradient, there should be only 4 colors.
+    if( collectColors( bitmap, tools::Rectangle( Point( 1, 1 ), Size( 10, 10 ))).size() != 4 )
+        return TestResult::Failed;
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkAxialGradient(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+
+    for(int y = 1; y <= 11; ++y)
+    {
+        // Middle horizontal line is white, gradients to the sides.
+        checkValue(pAccess, 6, y, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, false);
+        checkValue(pAccess, 1, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, false);
+        checkValue(pAccess, 11, y, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, false);
+        if( !checkGradient( pAccess, 1, y, 6, 1, 0 ))
+            return TestResult::Failed;
+        if( !checkGradient( pAccess, 11, y, 6, -1, 0 ))
+            return TestResult::Failed;
+    }
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkRadialGradient(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+    // The default VCL implementation is off-center in the direction to the top-left.
+    // This means not all corners will be pure white => quirks.
+    checkValue(pAccess, 1, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 3);
+    checkValue(pAccess, 1, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 10, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 10, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    // And not all centers will be pure black => quirks.
+    checkValue(pAccess, 5, 5, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 5, 6, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 3);
+    checkValue(pAccess, 6, 5, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 3);
+    checkValue(pAccess, 6, 6, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 2);
+    // Check diagonals, from the offset center.
+    if(!checkGradient(pAccess, 5, 5, 5, -1, -1))
+        return TestResult::Failed;
+    if(!checkGradient(pAccess, 5, 5, 6, 1, 1))
+        return TestResult::Failed;
+    if(!checkGradient(pAccess, 5, 5, 5, 1, -1))
+        return TestResult::Failed;
+    if(!checkGradient(pAccess, 5, 5, 5, -1, 1))
+        return TestResult::Failed;
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
+}
+
+TestResult OutputDeviceTestCommon::checkRadialGradientOfs(Bitmap& bitmap)
+{
+    BitmapScopedWriteAccess pAccess(bitmap);
+    TestResult aResult = TestResult::Passed;
+    int nNumberOfQuirks = 0;
+    int nNumberOfErrors = 0;
+    checkValue(pAccess, 1, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 10, 1, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 1, 10, COL_WHITE, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    checkValue(pAccess, 10, 10, COL_BLACK, nNumberOfQuirks, nNumberOfErrors, 255 / 10, 255 / 5);
+    // Check gradients from the center (=bottom-right corner).
+    if(!checkGradient(pAccess, 10, 10, 10, -1, -1))
+        return TestResult::Failed;
+    if(!checkGradient(pAccess, 10, 10, 10, -1, 0))
+        return TestResult::Failed;
+    if(!checkGradient(pAccess, 10, 10, 10, 0, -1))
+        return TestResult::Failed;
+    if (nNumberOfQuirks > 0)
+        checkResult(TestResult::PassedWithQuirks, aResult);
+    if (nNumberOfErrors > 0)
+        checkResult(TestResult::Failed, aResult);
+    return aResult;
 }
 
 } // end namespace vcl::test
