@@ -104,7 +104,10 @@ ShapeGraphicHelper::ShapeGraphicHelper( const ShapeFilterBase& rFilter ) :
 
 GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
 {
-    return new ShapeGraphicHelper( *this );
+    GraphicHelper* pGraphicHelper = new ShapeGraphicHelper(*this);
+    if (mxGraphicMapper.is())
+        pGraphicHelper->setGraphicMapper(mxGraphicMapper);
+    return pGraphicHelper;
 }
 
 ::Color ShapeFilterBase::getSchemeColor( sal_Int32 nToken ) const
