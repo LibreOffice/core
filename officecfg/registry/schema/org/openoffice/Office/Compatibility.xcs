@@ -76,7 +76,13 @@
       </prop>
       <prop oor:name="AddTableSpacing" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>???</desc>
+          <desc>Add paragraph and table spacing at bottom of table cells</desc>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="AddTableLineSpacing" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Add paragraph line spacing at bottom of table cells</desc>
         </info>
         <value>true</value>
       </prop>
