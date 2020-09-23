@@ -237,7 +237,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     }
 
     ScChartListener* pChartListener =
-            new ScChartListener( aName, &rDoc, xNewRanges );
+            new ScChartListener( aName, rDoc, xNewRanges );
     rDoc.GetChartListenerCollection()->insert( pChartListener );
     pChartListener->StartListeningTo();
 

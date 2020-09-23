@@ -213,7 +213,7 @@ public:
                         SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                         SCCOL nDx, SCROW nDy, SCTAB nDz);
 
-    void ExtendDataArea(const ScDocument* pDoc);
+    void ExtendDataArea(const ScDocument& rDoc);
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
     void GetFilterSelCount(SCSIZE& nSelected, SCSIZE& nTotal);
 
@@ -303,13 +303,13 @@ public:
 
 private:
     Link<Timer *, void> aRefreshHandler;
-    ScDocument* pDoc;
+    ScDocument& rDoc;
     sal_uInt16 nEntryIndex;         ///< counter for unique indices
     NamedDBs maNamedDBs;
     AnonDBs maAnonDBs;
 
 public:
-    ScDBCollection(ScDocument* pDocument);
+    ScDBCollection(ScDocument& rDocument);
     ScDBCollection(const ScDBCollection& r);
 
     NamedDBs& getNamedDBs() { return maNamedDBs;}

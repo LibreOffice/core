@@ -92,14 +92,14 @@ public:
     void SetRelName( bool bVal ) { Flags.bRelName = bVal; }
     bool IsRelName() const { return Flags.bRelName; }
 
-    bool Valid(const ScDocument* pDoc) const;
-    bool ColValid(const ScDocument* pDoc) const;
-    bool RowValid(const ScDocument* pDoc) const;
+    bool Valid(const ScDocument& rDoc) const;
+    bool ColValid(const ScDocument& rDoc) const;
+    bool RowValid(const ScDocument& rDoc) const;
     bool TabValid() const;
     /** In external references nTab is -1 if the external document was not
         loaded but the sheet was cached, or >=0 if the external document was
         loaded. */
-    bool ValidExternal(const ScDocument* pDoc) const;
+    bool ValidExternal(const ScDocument& rDoc) const;
 
     ScAddress toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const;
     ScAddress toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
@@ -147,12 +147,12 @@ struct ScComplexRefData
     /// InitFlags and set range, relative to rPos if rRef1 and rRef2 say so.
     void InitFromRefAddresses( const ScDocument& rDoc, const ScRefAddress& rRef1, const ScRefAddress& rRef2, const ScAddress& rPos );
 
-    bool Valid(const ScDocument* pDoc) const;
+    bool Valid(const ScDocument& rDoc) const;
 
     /** In external references nTab is -1 for the start tab and -1 for the end
         tab if one sheet and the external document was not loaded but sheet was
         cached, or >=0 also if more than one sheets. */
-    bool ValidExternal(const ScDocument* pDoc) const;
+    bool ValidExternal(const ScDocument& rDoc) const;
 
     /** Whether this references entire columns, A:A */
     bool IsEntireCol() const

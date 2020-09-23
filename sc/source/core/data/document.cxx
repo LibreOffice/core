@@ -560,7 +560,7 @@ bool ScDocument::InsertTab(
 
                 if (pValidationList)
                 {
-                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+                    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateInsertTab(aCxt);
                 }
 
@@ -650,7 +650,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
 
                 if (pValidationList)
                 {
-                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+                    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateInsertTab(aCxt);
                 }
 
@@ -715,7 +715,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if (pValidationList)
                 {
-                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+                    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateDeleteTab(aCxt);
                 }
                 if ( pUnoBroadcaster )
@@ -807,7 +807,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1*nSheets );
                 if (pValidationList)
                 {
-                    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+                    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
                     pValidationList->UpdateDeleteTab(aCxt);
                 }
                 if ( pUnoBroadcaster )
@@ -1975,14 +1975,14 @@ void ScDocument::DeleteAreaTab( const ScRange& rRange, InsertDeleteFlags nDelFla
                        nTab, nDelFlag );
 }
 
-void ScDocument::InitUndoSelected( const ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
-                                bool bColInfo, bool bRowInfo )
+void ScDocument::InitUndoSelected(const ScDocument& rSrcDoc, const ScMarkData& rTabSelection,
+                                  bool bColInfo, bool bRowInfo )
 {
     if (bIsUndo)
     {
         Clear();
 
-        SharePooledResources(pSrcDoc);
+        SharePooledResources(&rSrcDoc);
 
         for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
@@ -2433,21 +2433,21 @@ void ScDocument::CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClip
     copyUsedNamesToClip(pClipDoc->GetRangeName(), pRangeName.get(), aUsedGlobalNames);
 }
 
-ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument* pDoc, const ScDocument* pSrcDoc) :
-        mpDoc(pDoc)
+ScDocument::NumFmtMergeHandler::NumFmtMergeHandler(ScDocument& rDoc, const ScDocument& rSrcDoc)
+    : mrDoc(rDoc)
 {
-    mpDoc->MergeNumberFormatter(pSrcDoc);
+    mrDoc.MergeNumberFormatter(rSrcDoc);
 }
 
 ScDocument::NumFmtMergeHandler::~NumFmtMergeHandler()
 {
-    ScMutationGuard aGuard(mpDoc, ScMutationGuardFlags::CORE);
-    mpDoc->pFormatExchangeList = nullptr;
+    ScMutationGuard aGuard(mrDoc, ScMutationGuardFlags::CORE);
+    mrDoc.pFormatExchangeList = nullptr;
 }
 
 void ScDocument::PrepareFormulaCalc()
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     mpFormulaGroupCxt.reset();
 }
 
@@ -2530,17 +2530,17 @@ ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL n
     return maTabs[nTab]->GetColumnsRange(nColBegin, nColEnd);
 }
 
-void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
+void ScDocument::MergeNumberFormatter(const ScDocument& rSrcDoc)
 {
     SvNumberFormatter* pThisFormatter = mxPoolHelper->GetFormTable();
-    SvNumberFormatter* pOtherFormatter = pSrcDoc->mxPoolHelper->GetFormTable();
+    SvNumberFormatter* pOtherFormatter = rSrcDoc.mxPoolHelper->GetFormTable();
     if (pOtherFormatter && pOtherFormatter != pThisFormatter)
     {
         SvNumberFormatterIndexTable* pExchangeList =
                  pThisFormatter->MergeFormatter(*pOtherFormatter);
         if (!pExchangeList->empty())
         {
-            ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+            ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
             pFormatExchangeList = pExchangeList;
         }
     }
@@ -2815,7 +2815,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     sc::AutoCalcSwitch aACSwitch(*this, false); // temporarily turn off auto calc.
 
-    NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
+    NumFmtMergeHandler aNumFmtMergeHdl(*this, *pClipDoc);
 
     SCCOL nAllCol1 = rDestRange.aStart.Col();
     SCROW nAllRow1 = rDestRange.aStart.Row();
@@ -3026,7 +3026,7 @@ void ScDocument::CopyMultiRangeFromClip(
     // Right now, we don't allow pasting into filtered rows, so we don't even handle it here.
 
     sc::AutoCalcSwitch aACSwitch(*this, false); // turn of auto calc temporarily.
-    NumFmtMergeHandler aNumFmtMergeHdl(this, pClipDoc);
+    NumFmtMergeHandler aNumFmtMergeHdl(*this, *pClipDoc);
 
     ScRange aDestRange;
     rMark.GetMarkArea(aDestRange);
@@ -3206,16 +3206,16 @@ bool ScDocument::HasClipFilteredRows()
 }
 
 void ScDocument::MixDocument( const ScRange& rRange, ScPasteFunc nFunction, bool bSkipEmpty,
-                                    ScDocument* pSrcDoc )
+                              ScDocument& rSrcDoc )
 {
     SCTAB nTab1 = rRange.aStart.Tab();
     SCTAB nTab2 = rRange.aEnd.Tab();
     sc::MixDocContext aCxt(*this);
-    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pSrcDoc->maTabs.size()));
+    SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), rSrcDoc.maTabs.size()));
     for (SCTAB i = nTab1; i <= nTab2 && i < nMinSizeBothTabs; i++)
     {
         ScTable* pTab = FetchTable(i);
-        const ScTable* pSrcTab = pSrcDoc->FetchTable(i);
+        const ScTable* pSrcTab = rSrcDoc.FetchTable(i);
         if (!pTab || !pSrcTab)
             continue;
 
@@ -3523,7 +3523,7 @@ svl::SharedString ScDocument::GetSharedString( const ScAddress& rPos ) const
 
 std::shared_ptr<sc::FormulaGroupContext>& ScDocument::GetFormulaGroupContext()
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     if (!mpFormulaGroupCxt)
         mpFormulaGroupCxt = std::make_shared<sc::FormulaGroupContext>();
 
@@ -3906,7 +3906,7 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
         }
     }
 
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     mpFormulaGroupCxt.reset();
 }
 
@@ -3996,7 +3996,7 @@ void ScDocument::CompileXML()
 
     if ( pValidationList )
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         pValidationList->CompileXML();
     }
 
@@ -6378,7 +6378,7 @@ SfxUndoManager* ScDocument::GetUndoManager()
     if (!mpUndoManager)
     {
         // to support enhanced text edit for draw objects, use an SdrUndoManager
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
 
         SdrUndoManager* pUndoManager = new SdrUndoManager;
         pUndoManager->SetDocShell(GetDocumentShell());
