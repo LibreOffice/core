@@ -369,7 +369,8 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
                 m_bNoYieldLock = true;
                 bool const bEvents = pInst->DoYield(false, request == SvpRequest::MainThreadDispatchAllEvents);
                 m_bNoYieldLock = false;
-                write(m_FeedbackFDs[1], &bEvents, sizeof(bool));
+                ssize_t nBytes = write(m_FeedbackFDs[1], &bEvents, sizeof(bool));
+                (void)nBytes; //avoid unused-result warning
             }
         }
         while (true);
