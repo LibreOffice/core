@@ -466,10 +466,12 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
             const size_t bytes = mPixelsSize.Height() * mScanlineSize;
             std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
             memcpy(data.get(), mBuffer.get(), bytes);
+            // The bitmap's alpha matters only if SKIA_USE_BITMAP32 is set, otherwise
+            // the alpha is in a separate bitmap.
 #if SKIA_USE_BITMAP32
             SkAlphaType alphaType = kPremul_SkAlphaType;
 #else
-            SkAlphaType alphaType = kUnpremul_SkAlphaType;
+            SkAlphaType alphaType = kOpaque_SkAlphaType;
 #endif
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(), alphaType),
@@ -917,6 +919,10 @@ void SkiaSalBitmap::EnsureBitmapData()
     // Try to fill mBuffer from mImage.
     assert(mImage->colorType() == kN32_SkColorType);
     SkiaZone zone;
+    // Use kUnpremul_SkAlphaType to make Skia convert from premultiplied alpha when reading
+    // from the SkImage, in case there is any alpha involved. If converting to bpp<32 formats,
+    // we will ignore the alpha when converting to mBuffer. Unless bpp==32 and SKIA_USE_BITMAP32,
+    // in which case keep the format, since SKIA_USE_BITMAP32 implies premultiplied alpha.
     SkAlphaType alphaType = kUnpremul_SkAlphaType;
 #if SKIA_USE_BITMAP32
     if (mBitCount == 32)

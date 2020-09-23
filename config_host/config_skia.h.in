@@ -8,19 +8,24 @@ are the same.
 #ifndef CONFIG_SKIA_H
 #define CONFIG_SKIA_H
 
-// This a setting that should be set manually and it affects LO
+// This is a setting that should be set manually and it affects LO
 // code rather than Skia itself. It basically controls setting
-// BackendCapabilities::mbSupportsBitmap32.
+// BackendCapabilities::mbSupportsBitmap32, i.e. whether one LO bitmap
+// contains all the 32bits of an image including the alpha (premultiplied).
+//
 // Since Skia does not natively support 24bpp, the preferred setup is
 // that the setting should be enabled, it makes the code faster and cleaner.
+//
 // Unfortunately VCL historically splits alpha into a whole separate
 // bitmap and works with 24bpp+8bpp, which is generally more complicated,
 // more error-prone and just worse, but that's how LO code has been
 // written and so there are many places in LO that expect this and
 // do not work correctly with true 32bpp bitmaps.
+//
 // So ultimately the 24+8 split should be dumped (preferably in all of LO,
 // not just the Skia-related code), but until all of LO works correctly
-// with 32bpp disabling this will avoid such breakages.
+// with 32bpp keep this disabled in order to avoid such breakages.
+
 //#define SKIA_USE_BITMAP32 1
 #define SKIA_USE_BITMAP32 0
 
