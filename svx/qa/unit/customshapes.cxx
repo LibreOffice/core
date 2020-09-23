@@ -12,10 +12,14 @@
 #include <rtl/ustring.hxx>
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/unoapi.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -24,6 +28,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -748,6 +753,58 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf122323_largeSwingAngle)
     // last point comes from line to center, therefore -2 instead of -1
     const basegfx::B2DPoint aEnd(aPolygon.getB2DPoint(aPolygon.count() - 2));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Start <> End", aStart, aEnd);
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
+{
+    // Error was, that fObjectRotation was not correctly updated after shearing.
+    // The problem becomes visible after save and reload.
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf136176_rot30_flip.odg";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
+
+    for (sal_uInt16 i = 0; i < 3; i++)
+    {
+        // get shape
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        // apply shearing 20deg
+        const Point aCenter = rSdrObjCustomShape.GetSnapRect().Center();
+        rSdrObjCustomShape.Shear(aCenter, 2000, tan(basegfx::deg2rad(20.0)), false);
+    }
+
+    // Save and reload
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw8");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(aTempFile.GetURL());
+
+    // Expected values of point 4 of the shape polygon
+    const OString sTestCase[] = { "FlipH", "FlipV", "FlipHV" };
+    const double fX[] = { 14981.0, 3849.0, 15214.0 };
+    const double fY[] = { 9366.0, 16464.0, 23463.0 };
+
+    // Verify correct positions
+    for (sal_uInt16 i = 0; i < 3; i++)
+    {
+        // Get shape
+        const uno::Reference<drawing::XShape> xShape(getShape(i));
+        const SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
+        // Create polygon from shape and examine point 4 of the polygon
+        const basegfx::B2DPolyPolygon aLineGeometry = rSdrObjCustomShape.GetLineGeometry(false);
+        const basegfx::B2DPoint aPoint(aLineGeometry.getB2DPolygon(0).getB2DPoint(4));
+        // Allow some tolerance for rounding errors
+        if (fabs(aPoint.getX() - fX[i]) > 2.0 || fabs(aPoint.getY() - fY[i]) > 2.0)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sTestCase[i].getStr(), aPoint,
+                                         basegfx::B2DPoint(fX[i], fY[i]));
+        }
+    }
 }
 }
 
