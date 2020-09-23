@@ -1649,21 +1649,28 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nAngle, double tn, boo
     // updating fObjectRotation
     long nTextObjRotation = aGeo.nRotationAngle;
     double fAngle = nTextObjRotation;
-
     fAngle /= 100.0;
-
-    bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
-
-    fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
-
-    if ( fObjectRotation < 0 )
+    if (IsMirroredX())
     {
-        fObjectRotation = 360.0 + fObjectRotation;
+        if (IsMirroredY())
+            fObjectRotation = fAngle - 180.0;
+        else
+            fObjectRotation = -fAngle;
     }
+    else
+    {
+        if (IsMirroredY())
+            fObjectRotation = 180.0 - fAngle;
+        else
+            fObjectRotation = fAngle;
+    }
+    while (fObjectRotation < 0)
+        fObjectRotation += 360.0;
+    while (fObjectRotation >= 360.0)
+        fObjectRotation -= 360.0;
 
     InvalidateRenderGeometry();
 }
-
 
 SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
 {
