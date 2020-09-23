@@ -19,6 +19,9 @@ namespace test {
 // Calls InitVCL etc.; needed from multiple places in the test infrastructure:
 OOO_DLLPUBLIC_TEST_SETUPVCL void setUpVcl(bool forceHeadless = false);
 
+// Calls DeInitVCL etc.; needed from multiple places in the test infrastructure:
+OOO_DLLPUBLIC_TEST_SETUPVCL void tearDownVcl();
+
 }
 
 #endif
