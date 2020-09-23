@@ -16,6 +16,24 @@
       "revId": "a1f136bc5cef2ce47b07c0b3744a9f38930b87f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26989095_cfa3cf34",
+        "filename": "sw/source/core/txtnode/fntcache.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2020-09-23T10:48:13Z",
+      "side": 1,
+      "message": "The problem occurred only with small capitals, that is why I put it here.",
+      "parentUuid": "cf27e228_ec328188",
+      "revId": "a1f136bc5cef2ce47b07c0b3744a9f38930b87f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
