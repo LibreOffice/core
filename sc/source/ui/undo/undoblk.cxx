@@ -1008,7 +1008,7 @@ void ScUndoPaste::DoChange(bool bUndo)
             }
 
             pRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
-            pRedoDoc->InitUndoSelected( &rDoc, aMarkData, bColInfo, bRowInfo );
+            pRedoDoc->InitUndoSelected( rDoc, aMarkData, bColInfo, bRowInfo );
         }
         //  read "redo" data from the document in the first undo
         //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc

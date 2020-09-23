@@ -680,7 +680,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     m_pDoc->GetName( m_aBlock.aStart.Tab(), aTabName );
     rDestDoc.RenameTab( 0, aTabName );
 
-    rDestDoc.CopyStdStylesFrom( m_pDoc.get() );
+    rDestDoc.CopyStdStylesFrom(*m_pDoc);
 
     SCCOL nStartX = m_aBlock.aStart.Col();
     SCROW nStartY = m_aBlock.aStart.Row();
@@ -738,7 +738,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     ScRange aMergeRange = aDestRange;
     rDestDoc.ExtendMerge( aMergeRange, true );
 
-    m_pDoc->CopyDdeLinks( &rDestDoc );         // copy values of DDE Links
+    m_pDoc->CopyDdeLinks( rDestDoc );         // copy values of DDE Links
 
     //  page format (grid etc) and page size (maximum size for ole object)
 

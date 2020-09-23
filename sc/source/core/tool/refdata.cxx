@@ -127,37 +127,37 @@ bool ScSingleRefData::IsDeleted() const
     return IsColDeleted() || IsRowDeleted() || IsTabDeleted();
 }
 
-bool ScSingleRefData::Valid(const ScDocument* pDoc) const
+bool ScSingleRefData::Valid(const ScDocument& rDoc) const
 {
-    return ColValid(pDoc) && RowValid(pDoc) && TabValid();
+    return ColValid(rDoc) && RowValid(rDoc) && TabValid();
 }
 
-bool ScSingleRefData::ColValid(const ScDocument* pDoc) const
+bool ScSingleRefData::ColValid(const ScDocument& rDoc) const
 {
     if (Flags.bColRel)
     {
-        if (mnCol < -pDoc->MaxCol() || pDoc->MaxCol() < mnCol)
+        if (mnCol < -rDoc.MaxCol() || rDoc.MaxCol() < mnCol)
             return false;
     }
     else
     {
-        if (mnCol < 0 || pDoc->MaxCol() < mnCol)
+        if (mnCol < 0 || rDoc.MaxCol() < mnCol)
             return false;
     }
 
     return true;
 }
 
-bool ScSingleRefData::RowValid(const ScDocument* pDoc) const
+bool ScSingleRefData::RowValid(const ScDocument& rDoc) const
 {
     if (Flags.bRowRel)
     {
-        if (mnRow < -pDoc->MaxRow() || pDoc->MaxRow() < mnRow)
+        if (mnRow < -rDoc.MaxRow() || rDoc.MaxRow() < mnRow)
             return false;
     }
     else
     {
-        if (mnRow < 0 || pDoc->MaxRow() < mnRow)
+        if (mnRow < 0 || rDoc.MaxRow() < mnRow)
             return false;
     }
 
@@ -180,9 +180,9 @@ bool ScSingleRefData::TabValid() const
     return true;
 }
 
-bool ScSingleRefData::ValidExternal(const ScDocument* pDoc) const
+bool ScSingleRefData::ValidExternal(const ScDocument& rDoc) const
 {
-    return ColValid(pDoc) && RowValid(pDoc) && mnTab >= -1;
+    return ColValid(rDoc) && RowValid(rDoc) && mnTab >= -1;
 }
 
 ScAddress ScSingleRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const
@@ -475,14 +475,14 @@ ScComplexRefData& ScComplexRefData::Extend( ScSheetLimits& rLimits, const ScComp
     return Extend( rLimits, rRef.Ref1, rPos).Extend( rLimits, rRef.Ref2, rPos);
 }
 
-bool ScComplexRefData::Valid(const ScDocument* pDoc) const
+bool ScComplexRefData::Valid(const ScDocument& rDoc) const
 {
-    return Ref1.Valid(pDoc) && Ref2.Valid(pDoc);
+    return Ref1.Valid(rDoc) && Ref2.Valid(rDoc);
 }
 
-bool ScComplexRefData::ValidExternal(const ScDocument* pDoc) const
+bool ScComplexRefData::ValidExternal(const ScDocument& rDoc) const
 {
-    return Ref1.ValidExternal(pDoc) && Ref2.ColValid(pDoc) && Ref2.RowValid(pDoc) && Ref1.Tab() <= Ref2.Tab();
+    return Ref1.ValidExternal(rDoc) && Ref2.ColValid(rDoc) && Ref2.RowValid(rDoc) && Ref1.Tab() <= Ref2.Tab();
 }
 
 ScRange ScComplexRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const

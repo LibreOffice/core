@@ -2783,7 +2783,7 @@ void ScInterpreter::ScDde()
 
     if (!pLink)
     {
-        pLink = new ScDdeLink( &mrDoc, aAppl, aTopic, aItem, nMode );
+        pLink = new ScDdeLink( mrDoc, aAppl, aTopic, aItem, nMode );
         mpLinkManager->InsertDDELink( pLink, aAppl, aTopic, aItem );
         if ( mpLinkManager->GetLinks().size() == 1 )                    // the first one?
         {

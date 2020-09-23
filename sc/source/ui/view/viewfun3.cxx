@@ -122,7 +122,7 @@ void ScViewFunc::CutToClip()
         if ( bRecord )
         {
             pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndoSelected( &rDoc, rMark );
+            pUndoDoc->InitUndoSelected( rDoc, rMark );
             // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
             ScRange aCopyRange = aRange;
             aCopyRange.aStart.SetTab(0);
@@ -1250,7 +1250,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     if ( bRecord )
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( &rDoc, aFilteredMark, bColInfo, bRowInfo );
+        pUndoDoc->InitUndoSelected( rDoc, aFilteredMark, bColInfo, bRowInfo );
 
         // all sheets - CopyToDocument skips those that don't exist in pUndoDoc
         SCTAB nTabCount = rDoc.GetTableCount();
@@ -1336,7 +1336,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 
     if ( pMixDoc )              // calculate with original data?
     {
-        rDoc.MixDocument( aUserRange, nFunction, bSkipEmpty, pMixDoc.get() );
+        rDoc.MixDocument( aUserRange, nFunction, bSkipEmpty, *pMixDoc );
     }
     pMixDoc.reset();
 
@@ -1549,7 +1549,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (rDoc.IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndoSelected(&rDoc, aMark, false, bRowInfo);
+        pUndoDoc->InitUndoSelected(rDoc, aMark, false, bRowInfo);
         rDoc.CopyToDocument(aMarkedRange, nUndoFlags, false, *pUndoDoc, &aMark);
     }
 
@@ -1559,7 +1559,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         if ( nFlags & InsertDeleteFlags::CONTENTS )
         {
             pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            pMixDoc->InitUndoSelected(&rDoc, aMark);
+            pMixDoc->InitUndoSelected(rDoc, aMark);
             rDoc.CopyToDocument(aMarkedRange, InsertDeleteFlags::CONTENTS, false, *pMixDoc, &aMark);
         }
     }
@@ -1578,7 +1578,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
                                  true, bAsLink, false, bSkipEmpty);
 
     if (pMixDoc)
-        rDoc.MixDocument(aMarkedRange, nFunction, bSkipEmpty, pMixDoc.get());
+        rDoc.MixDocument(aMarkedRange, nFunction, bSkipEmpty, *pMixDoc);
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
@@ -1700,7 +1700,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     if (rDoc.IsUndoEnabled())
     {
         pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        pUndoDoc->InitUndoSelected(&rDoc, aMark);
+        pUndoDoc->InitUndoSelected(rDoc, aMark);
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
         {
             rDoc.CopyToDocument(
@@ -1714,7 +1714,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         if (nFlags & InsertDeleteFlags::CONTENTS)
         {
             pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            pMixDoc->InitUndoSelected(&rDoc, aMark);
+            pMixDoc->InitUndoSelected(rDoc, aMark);
             for (size_t i = 0, n = aRanges.size(); i < n; ++i)
             {
                 rDoc.CopyToDocument(
@@ -1739,7 +1739,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     if (pMixDoc)
     {
         for (size_t i = 0, n = aRanges.size(); i < n; ++i)
-            rDoc.MixDocument(aRanges[i], nFunction, bSkipEmpty, pMixDoc.get());
+            rDoc.MixDocument(aRanges[i], nFunction, bSkipEmpty, *pMixDoc);
     }
 
     AdjustBlockHeight();            // update row heights before pasting objects
@@ -1978,7 +1978,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     if ( bRecord )
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndoSelected( &rDoc , rMark , bColInfo , bRowInfo );
+        pUndoDoc->InitUndoSelected( rDoc , rMark , bColInfo , bRowInfo );
         rDoc.CopyToDocument( aUserRange , InsertDeleteFlags::VALUE , false, *pUndoDoc );
     }
     sal_uInt16 nExtFlags = 0;

@@ -623,17 +623,17 @@ void ScDBData::UpdateReference(const ScDocument* pDoc, UpdateRefMode eUpdateRefM
     //TODO: check if something was deleted/inserted with-in the range !!!
 }
 
-void ScDBData::ExtendDataArea(const ScDocument* pDoc)
+void ScDBData::ExtendDataArea(const ScDocument& rDoc)
 {
     // Extend the DB area to include data rows immediately below.
     SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
     SCROW nOldEndRow = nEndRow;
-    pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
+    rDoc.GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
     // nOldEndRow==rDoc.MaxRow() may easily happen when selecting whole columns and
     // setting an AutoFilter (i.e. creating an anonymous database-range). We
     // certainly don't want to iterate over nearly a million empty cells, but
     // keep only an intentionally user selected range.
-    if (nOldEndRow < pDoc->MaxRow() && nEndRow < nOldEndRow)
+    if (nOldEndRow < rDoc.MaxRow() && nEndRow < nOldEndRow)
         nEndRow = nOldEndRow;
     if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
     {
@@ -1287,11 +1287,11 @@ ScDBCollection::AnonDBs::AnonDBs(AnonDBs const& r)
     }
 }
 
-ScDBCollection::ScDBCollection(ScDocument* pDocument) :
-    pDoc(pDocument), nEntryIndex(1), maNamedDBs(*this, *pDocument) {}
+ScDBCollection::ScDBCollection(ScDocument& rDocument) :
+    rDoc(rDocument), nEntryIndex(1), maNamedDBs(*this, rDocument) {}
 
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
-    pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs, *this), maAnonDBs(r.maAnonDBs) {}
+    rDoc(r.rDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs, *this), maAnonDBs(r.maAnonDBs) {}
 
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
@@ -1302,7 +1302,7 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
-    const ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    const ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,ePortion))
             return pNoNameData;
@@ -1326,7 +1326,7 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDB
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
-    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,ePortion))
             return pNoNameData;
@@ -1351,7 +1351,7 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
-    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
@@ -1362,7 +1362,7 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
         return pData;
 
     // As a last resort, check for the document global temporary anonymous db range.
-    pNoNameData = pDoc->GetAnonymousDBData();
+    pNoNameData = rDoc.GetAnonymousDBData();
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
@@ -1380,7 +1380,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
-    ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+    ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
@@ -1391,7 +1391,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
         return const_cast<ScDBData*>(pData);
 
     // As a last resort, check for the document global temporary anonymous db range.
-    pNoNameData = pDoc->GetAnonymousDBData();
+    pNoNameData = rDoc.GetAnonymousDBData();
     if (pNoNameData)
         if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             return pNoNameData;
@@ -1439,13 +1439,13 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
-    ScDBData* pData = pDoc->GetAnonymousDBData(nTab1);
+    ScDBData* pData = rDoc.GetAnonymousDBData(nTab1);
     if (pData)
     {
         if (nTab1 == nTab2 && nDz == 0)
         {
             pData->UpdateReference(
-                pDoc, eUpdateRefMode,
+                &rDoc, eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
         }
         else
@@ -1454,7 +1454,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
     }
 
-    UpdateRefFunc func(pDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
+    UpdateRefFunc func(&rDoc, eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz);
     for_each(maNamedDBs.begin(), maNamedDBs.end(), func);
     for_each(maAnonDBs.begin(), maAnonDBs.end(), func);
 }
@@ -1489,7 +1489,7 @@ ScDBData* ScDBCollection::GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
     if (pNearData)
         return pNearData;                   // adjacent, if no direct hit
-    return pDoc->GetAnonymousDBData(nTab);  // "unbenannt"/"unnamed" only if nothing else
+    return rDoc.GetAnonymousDBData(nTab);  // "unbenannt"/"unnamed" only if nothing else
 }
 
 bool ScDBCollection::empty() const
@@ -1500,7 +1500,7 @@ bool ScDBCollection::empty() const
 bool ScDBCollection::operator== (const ScDBCollection& r) const
 {
     return maNamedDBs == r.maNamedDBs && maAnonDBs == r.maAnonDBs &&
-        nEntryIndex == r.nEntryIndex && pDoc == r.pDoc && aRefreshHandler == r.aRefreshHandler;
+        nEntryIndex == r.nEntryIndex && &rDoc == &r.rDoc && aRefreshHandler == r.aRefreshHandler;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
