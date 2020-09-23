@@ -68,10 +68,10 @@ ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGrou
 
 ScDPCache::Field::Field() : mnNumFormat(0) {}
 
-ScDPCache::ScDPCache(ScDocument* pDoc) :
-    mpDoc( pDoc ),
+ScDPCache::ScDPCache(ScDocument& rDoc) :
+    mrDoc( rDoc ),
     mnColumnCount ( 0 ),
-    maEmptyRows(0, pDoc->GetSheetLimits().GetMaxRowCount(), true),
+    maEmptyRows(0, rDoc.GetSheetLimits().GetMaxRowCount(), true),
     mnDataSize(-1),
     mnRowCount(0),
     mbDisposing(false)
@@ -107,17 +107,17 @@ namespace {
 class MacroInterpretIncrementer
 {
 public:
-    explicit MacroInterpretIncrementer(ScDocument* pDoc) :
-        mpDoc(pDoc)
+    explicit MacroInterpretIncrementer(ScDocument& rDoc) :
+        mrDoc(rDoc)
     {
-        mpDoc->IncMacroInterpretLevel();
+        mrDoc.IncMacroInterpretLevel();
     }
     ~MacroInterpretIncrementer()
     {
-        mpDoc->DecMacroInterpretLevel();
+        mrDoc.DecMacroInterpretLevel();
     }
 private:
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 };
 
 rtl_uString* internString( ScDPCache::StringSetType& rPool, const OUString& rStr )
@@ -125,9 +125,9 @@ rtl_uString* internString( ScDPCache::StringSetType& rPool, const OUString& rStr
     return rPool.insert(rStr).first->pData;
 }
 
-OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellValue& rCell )
+OUString createLabelString( const ScDocument& rDoc, SCCOL nCol, const ScRefCellValue& rCell )
 {
-    OUString aDocStr = rCell.getRawString(pDoc);
+    OUString aDocStr = rCell.getRawString(rDoc);
 
     if (aDocStr.isEmpty())
     {
@@ -144,20 +144,20 @@ OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellV
 }
 
 void initFromCell(
-    ScDPCache::StringSetType& rStrPool, const ScDocument* pDoc, const ScAddress& rPos,
+    ScDPCache::StringSetType& rStrPool, const ScDocument& rDoc, const ScAddress& rPos,
     const ScRefCellValue& rCell, ScDPItemData& rData, sal_uInt32& rNumFormat)
 {
-    OUString aDocStr = rCell.getRawString(pDoc);
+    OUString aDocStr = rCell.getRawString(rDoc);
     rNumFormat = 0;
 
     if (rCell.hasError())
     {
-        rData.SetErrorStringInterned(internString(rStrPool, pDoc->GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
+        rData.SetErrorStringInterned(internString(rStrPool, rDoc.GetString(rPos.Col(), rPos.Row(), rPos.Tab())));
     }
     else if (rCell.hasNumeric())
     {
         double fVal = rCell.getRawValue();
-        rNumFormat = pDoc->GetNumberFormat(rPos);
+        rNumFormat = rDoc.GetNumberFormat(rPos);
         rData.SetValue(fVal);
     }
     else if (!rCell.isEmpty())
@@ -319,14 +319,14 @@ struct InitColumnData
 
 struct InitDocData
 {
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     SCTAB mnDocTab;
     SCROW mnStartRow;
     SCROW mnEndRow;
     bool mbTailEmptyRows;
 
-    InitDocData() :
-        mpDoc(nullptr),
+    InitDocData(ScDocument& rDoc) :
+        mrDoc(rDoc),
         mnDocTab(-1),
         mnStartRow(-1),
         mnEndRow(-1),
@@ -388,7 +388,7 @@ std::vector<OUString> normalizeLabels(const ScDPCache::DBConnector& rDB, const s
 void initColumnFromDoc( InitDocData& rDocData, InitColumnData &rColData )
 {
     ScDPCache::Field& rField = *rColData.mpField;
-    ScDocument* pDoc = rDocData.mpDoc;
+    ScDocument& rDoc = rDocData.mrDoc;
     SCTAB nDocTab = rDocData.mnDocTab;
     SCCOL nCol = rColData.mnCol;
     SCROW nStartRow = rDocData.mnStartRow;
@@ -396,13 +396,13 @@ void initColumnFromDoc( InitDocData& rDocData, InitColumnData &rColData )
     bool bTailEmptyRows = rDocData.mbTailEmptyRows;
 
     std::unique_ptr<sc::ColumnIterator> pIter =
-        pDoc->GetColumnIterator(nDocTab, nCol, nStartRow, nEndRow);
+        rDoc.GetColumnIterator(nDocTab, nCol, nStartRow, nEndRow);
     assert(pIter);
     assert(pIter->hasCell());
 
     ScDPItemData aData;
 
-    rColData.maLabel = createLabelString(pDoc, nCol, pIter->getCell());
+    rColData.maLabel = createLabelString(rDoc, nCol, pIter->getCell());
     pIter->next();
 
     std::vector<Bucket> aBuckets;
@@ -415,7 +415,7 @@ void initColumnFromDoc( InitDocData& rDocData, InitColumnData &rColData )
 
         sal_uInt32 nNumFormat = 0;
         ScAddress aPos(nCol, pIter->getRow(), nDocTab);
-        initFromCell(*rColData.mpStrPool, pDoc, aPos, pIter->getCell(), aData, nNumFormat);
+        initFromCell(*rColData.mpStrPool, rDoc, aPos, pIter->getCell(), aData, nNumFormat);
 
         aBuckets.emplace_back(aData, i);
 
@@ -507,24 +507,23 @@ public:
 
 }
 
-void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
+void ScDPCache::InitFromDoc(ScDocument& rDoc, const ScRange& rRange)
 {
     Clear();
 
-    InitDocData aDocData;
-    aDocData.mpDoc = pDoc;
+    InitDocData aDocData(rDoc);
 
     // Make sure the formula cells within the data range are interpreted
     // during this call, for this method may be called from the interpretation
     // of GETPIVOTDATA, which disables nested formula interpretation without
     // increasing the macro level.
-    MacroInterpretIncrementer aMacroInc(pDoc);
+    MacroInterpretIncrementer aMacroInc(rDoc);
 
     aDocData.mnStartRow = rRange.aStart.Row();  // start of data
     aDocData.mnEndRow = rRange.aEnd.Row();
 
     // Sanity check
-    if (!GetDoc()->ValidRow(aDocData.mnStartRow) || !GetDoc()->ValidRow(aDocData.mnEndRow) || aDocData.mnEndRow <= aDocData.mnStartRow)
+    if (!GetDoc().ValidRow(aDocData.mnStartRow) || !GetDoc().ValidRow(aDocData.mnEndRow) || aDocData.mnEndRow <= aDocData.mnStartRow)
         return;
 
     SCCOL nStartCol = rRange.aStart.Col();
@@ -539,7 +538,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     // Skip trailing empty rows if exists.
     SCCOL nCol1 = nStartCol, nCol2 = nEndCol;
     SCROW nRow1 = aDocData.mnStartRow, nRow2 = aDocData.mnEndRow;
-    pDoc->ShrinkToDataArea(aDocData.mnDocTab, nCol1, nRow1, nCol2, nRow2);
+    rDoc.ShrinkToDataArea(aDocData.mnDocTab, nCol1, nRow1, nCol2, nRow2);
     aDocData.mbTailEmptyRows = aDocData.mnEndRow > nRow2; // Trailing empty rows exist.
     aDocData.mnEndRow = nRow2;
 
@@ -553,7 +552,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     }
 
     maStringPools.resize(mnColumnCount);
-    std::vector<InitColumnData> aColData(mnColumnCount, InitColumnData(pDoc->GetSheetLimits()));
+    std::vector<InitColumnData> aColData(mnColumnCount, InitColumnData(rDoc.GetSheetLimits()));
     maFields.reserve(mnColumnCount);
     for (SCCOL i = 0; i < mnColumnCount; ++i)
         maFields.push_back(std::make_unique<Field>());
@@ -561,7 +560,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     maLabelNames.reserve(mnColumnCount+1);
 
     // Ensure that none of the formula cells in the data range are dirty.
-    pDoc->EnsureFormulaCellResults(rRange);
+    rDoc.EnsureFormulaCellResults(rRange);
 
 #if ENABLE_THREADED_PIVOT_CACHE
     ThreadQueue aQueue(std::thread::hardware_concurrency());
@@ -659,7 +658,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
                 if (!aData.IsEmpty())
                 {
                     maEmptyRows.insert_back(nRow, nRow+1, false);
-                    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
                     rField.mnNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
                 }
 
@@ -692,7 +691,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
 
-    bool bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
+    bool bMatchWholeCell = mrDoc.GetDocOptions().IsMatchWholeCell();
 
     SCSIZE nEntryCount = rParam.GetEntryCount();
     std::vector<bool> aPassed(nEntryCount, false);
@@ -883,9 +882,9 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     return bRet;
 }
 
-ScDocument* ScDPCache::GetDoc() const
+ScDocument& ScDPCache::GetDoc() const
 {
-    return mpDoc;
+    return mrDoc;
 }
 
 long ScDPCache::GetColumnCount() const
@@ -1071,7 +1070,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     if (nDim >= mnColumnCount)
         return false;
 
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
     if (!pFormatter)
         return false;
 
@@ -1114,7 +1113,7 @@ void ScDPCache::RemoveReference(ScDPObject* pObj) const
 
     maRefObjects.erase(pObj);
     if (maRefObjects.empty())
-        mpDoc->GetDPCollection()->RemoveCache(this);
+        mrDoc.GetDPCollection()->RemoveCache(this);
 }
 
 const ScDPCache::ScDPObjectSet& ScDPCache::GetAllReferences() const
@@ -1217,7 +1216,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
     if (eType == ScDPItemData::Value)
     {
         // Format value using the stored number format.
-        SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+        SvNumberFormatter* pFormatter = mrDoc.GetFormatTable();
         if (pFormatter)
         {
             sal_uInt32 nNumFormat = GetNumberFormat(nDim);
@@ -1245,7 +1244,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
             fEnd = p->maInfo.mfEnd;
         }
         return ScDPUtil::getDateGroupName(
-            aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable(), fStart, fEnd);
+            aAttr.mnGroupType, aAttr.mnValue, mrDoc.GetFormatTable(), fStart, fEnd);
     }
 
     if (eType == ScDPItemData::RangeStart)
@@ -1256,7 +1255,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
             return rItem.GetString();
 
         sal_Unicode cDecSep = ScGlobal::getLocaleDataPtr()->getNumDecimalSep()[0];
-        return ScDPUtil::getNumGroupName(fVal, p->maInfo, cDecSep, mpDoc->GetFormatTable());
+        return ScDPUtil::getNumGroupName(fVal, p->maInfo, cDecSep, mrDoc.GetFormatTable());
     }
 
     return rItem.GetString();
@@ -1264,7 +1263,7 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, boo
 
 SvNumberFormatter* ScDPCache::GetNumberFormatter() const
 {
-    return mpDoc->GetFormatTable();
+    return mrDoc.GetFormatTable();
 }
 
 long ScDPCache::AppendGroupField()

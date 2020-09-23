@@ -292,9 +292,9 @@ public:
         typedef std::vector<ScRange> RangeIndexType;
         CachesType m_Caches;
         RangeIndexType maRanges;
-        ScDocument* mpDoc;
+        ScDocument& mrDoc;
     public:
-        SheetCaches(ScDocument* pDoc);
+        SheetCaches(ScDocument& rDoc);
         bool hasCache(const ScRange& rRange) const;
         const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         SC_DLLPUBLIC size_t size() const;
@@ -319,9 +319,9 @@ public:
         friend class ScDPCollection;
         typedef ::std::map<OUString, std::unique_ptr<ScDPCache>> CachesType;
         CachesType m_Caches;
-        ScDocument* mpDoc;
+        ScDocument& mrDoc;
     public:
-        NameCaches(ScDocument* pDoc);
+        NameCaches(ScDocument& rDoc);
         bool hasCache(const OUString& rName) const;
         const ScDPCache* getCache(
             const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
@@ -359,9 +359,9 @@ public:
         friend class ScDPCollection;
         typedef ::std::map<DBType, std::unique_ptr<ScDPCache>, DBType::less> CachesType;
         CachesType m_Caches;
-        ScDocument* mpDoc;
+        ScDocument& mrDoc;
     public:
-        DBCaches(ScDocument* pDoc);
+        DBCaches(ScDocument& rDoc);
         bool hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const;
         const ScDPCache* getCache(
             sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
@@ -380,7 +380,7 @@ public:
         bool remove(const ScDPCache* p);
     };
 
-    ScDPCollection(ScDocument* pDocument);
+    ScDPCollection(ScDocument& rDocument);
     ScDPCollection(const ScDPCollection& r);
     ~ScDPCollection();
 
@@ -442,7 +442,7 @@ private:
 private:
     typedef std::vector< std::unique_ptr<ScDPObject> > TablesType;
 
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     TablesType maTables;
     SheetCaches maSheetCaches;
     NameCaches maNameCaches;

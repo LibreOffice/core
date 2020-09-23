@@ -78,21 +78,21 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 static void ScAttrArray_IterGetNumberFormat( sal_uInt32& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
-        const ScDocument* pDoc, const ScInterpreterContext* pContext = nullptr )
+        const ScDocument& rDoc, const ScInterpreterContext* pContext = nullptr )
 {
     if ( rpArr == pNewArr && nAttrEndRow >= nRow )
         return;
 
     SCROW nRowStart = 0;
-    SCROW nRowEnd = pDoc->MaxRow();
+    SCROW nRowEnd = rDoc.MaxRow();
     const ScPatternAttr* pPattern = pNewArr->GetPatternRange( nRowStart, nRowEnd, nRow );
     if( !pPattern )
     {
-        pPattern = pDoc->GetDefPattern();
-        nRowEnd = pDoc->MaxRow();
+        pPattern = rDoc.GetDefPattern();
+        nRowEnd = rDoc.MaxRow();
     }
 
-    nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : pDoc->GetFormatTable() );
+    nFormat = pPattern->GetNumberFormat( pContext ? pContext->GetFormatTable() : rDoc.GetFormatTable() );
     rpArr = pNewArr;
     nAttrEndRow = nRowEnd;
 }
@@ -209,7 +209,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                 if (bCalcAsShown)
                 {
                     ScAttrArray_IterGetNumberFormat(nNumFormat, pAttrArray,
-                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, &mrDoc, pContext);
+                        nAttrEndRow, pCol->pAttrArray.get(), nCurRow, mrDoc, pContext);
                     rValue = mrDoc.RoundValueAsShown(rValue, nNumFormat, pContext);
                 }
                 return true; // Found it!
@@ -344,11 +344,11 @@ bool ScDBQueryDataIterator::IsQueryValid(
     return rDoc.maTabs[nTab]->ValidQuery(nRow, rParam, pCell);
 }
 
-ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument* pDoc, const ScInterpreterContext& rContext)
+ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInternal* pParam, ScDocument& rDoc, const ScInterpreterContext& rContext)
     : DataAccess()
     , mpCells(nullptr)
     , mpParam(pParam)
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
     , mrContext(rContext)
     , pAttrArray(nullptr)
     , nNumFormat(0) // Initialized in GetNumberFormat
@@ -358,7 +358,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInte
     , nAttrEndRow(0)
     , nTab(mpParam->nTab)
     , nNumFmtType(SvNumFormatType::ALL)
-    , bCalcAsShown(pDoc->GetDocOptions().IsCalcAsShown())
+    , bCalcAsShown(rDoc.GetDocOptions().IsCalcAsShown())
 {
     SCSIZE i;
     SCSIZE nCount = mpParam->GetEntryCount();
@@ -369,7 +369,7 @@ ScDBQueryDataIterator::DataAccessInternal::DataAccessInternal(ScDBQueryParamInte
         rItems.resize(1);
         ScQueryEntry::Item& rItem = rItems.front();
         sal_uInt32 nIndex = 0;
-        bool bNumber = mpDoc->GetFormatTable()->IsNumberFormat(
+        bool bNumber = mrDoc.GetFormatTable()->IsNumberFormat(
             rItem.maString.getString(), nIndex, rItem.mfVal);
         rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
     }
@@ -412,7 +412,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
             pCell = &aCell;
         }
 
-        if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, pCell))
+        if (ScDBQueryDataIterator::IsQueryValid(mrDoc, *mpParam, nTab, nRow, pCell))
         {
             if (!pCell)
                 aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
@@ -425,10 +425,10 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                     if ( bCalcAsShown )
                     {
                         const ScAttrArray* pNewAttrArray =
-                            ScDBQueryDataIterator::GetAttrArrayByCol(*mpDoc, nTab, nCol);
+                            ScDBQueryDataIterator::GetAttrArrayByCol(mrDoc, nTab, nCol);
                         ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
-                            nAttrEndRow, pNewAttrArray, nRow, mpDoc );
-                        rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
+                            nAttrEndRow, pNewAttrArray, nRow, mrDoc );
+                        rValue.mfValue = mrDoc.RoundValueAsShown( rValue.mfValue, nNumFormat );
                     }
                     nNumFmtType = SvNumFormatType::NUMBER;
                     nNumFmtIndex = 0;
@@ -442,7 +442,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                     {
                         rValue.mfValue = aCell.mpFormula->GetValue();
                         rValue.mbIsNumber = true;
-                        mpDoc->GetNumberFormatInfo(
+                        mrDoc.GetNumberFormatInfo(
                             mrContext, nNumFmtType, nNumFmtIndex, ScAddress(nCol, nRow, nTab));
                         rValue.mnError = aCell.mpFormula->GetErrCode();
                         return true; // Found it!
@@ -465,7 +465,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                         incPos();
                     else
                     {
-                        rValue.maString = aCell.getString(mpDoc);
+                        rValue.maString = aCell.getString(&mrDoc);
                         rValue.mfValue = 0.0;
                         rValue.mnError = FormulaError::NONE;
                         rValue.mbIsNumber = false;
@@ -487,7 +487,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getFirst(Value& rValue)
     if (mpParam->bHasHeader)
         ++nRow;
 
-    mpCells = ScDBQueryDataIterator::GetColumnCellStore(*mpDoc, nTab, nCol);
+    mpCells = ScDBQueryDataIterator::GetColumnCellStore(mrDoc, nTab, nCol);
     if (!mpCells)
         return false;
 
@@ -758,7 +758,7 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument& rDocument, const ScInte
         case ScDBQueryParamBase::INTERNAL:
         {
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(mpParam.get());
-            mpData.reset(new DataAccessInternal(p, &rDocument, rContext));
+            mpData.reset(new DataAccessInternal(p, rDocument, rContext));
         }
         break;
         case ScDBQueryParamBase::MATRIX:
@@ -2287,11 +2287,11 @@ void ScHorizontalCellIterator::SkipInvalid()
         mbMore = false;
 }
 
-ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
+ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument& rDocument,
         const ScRange& rRange ) :
-    pDoc( pDocument ),
+    rDoc( rDocument ),
     nEndTab( rRange.aEnd.Tab() ),
-    bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() )
+    bCalcAsShown( rDocument.GetDocOptions().IsCalcAsShown() )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -2302,10 +2302,10 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     PutInOrder( nStartRow, nEndRow);
     PutInOrder( nStartTab, nEndTab );
 
-    if (!pDoc->ValidCol(nStartCol)) nStartCol = pDoc->MaxCol();
-    if (!pDoc->ValidCol(nEndCol)) nEndCol = pDoc->MaxCol();
-    if (!pDoc->ValidRow(nStartRow)) nStartRow = pDoc->MaxRow();
-    if (!pDoc->ValidRow(nEndRow)) nEndRow = pDoc->MaxRow();
+    if (!rDoc.ValidCol(nStartCol)) nStartCol = rDoc.MaxCol();
+    if (!rDoc.ValidCol(nEndCol)) nEndCol = rDoc.MaxCol();
+    if (!rDoc.ValidRow(nStartRow)) nStartRow = rDoc.MaxRow();
+    if (!rDoc.ValidRow(nEndRow)) nEndRow = rDoc.MaxRow();
     if (!ValidTab(nStartTab)) nStartTab = MAXTAB;
     if (!ValidTab(nEndTab)) nEndTab = MAXTAB;
 
@@ -2317,7 +2317,7 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     pAttrArray = nullptr;
     nAttrEndRow = 0;
 
-    pCellIter.reset( new ScHorizontalCellIterator( pDoc, nStartTab, nStartCol,
+    pCellIter.reset( new ScHorizontalCellIterator( &rDoc, nStartTab, nStartCol,
             nStartRow, nEndCol, nEndRow ) );
 }
 
@@ -2349,10 +2349,10 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, FormulaError& rErr )
                     rErr = FormulaError::NONE;
                     if ( bCalcAsShown )
                     {
-                        ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
+                        ScColumn* pCol = &rDoc.maTabs[nCurTab]->aCol[nCurCol];
                         ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
-                                nAttrEndRow, pCol->pAttrArray.get(), nCurRow, pDoc );
-                        rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
+                                nAttrEndRow, pCol->pAttrArray.get(), nCurRow, rDoc );
+                        rValue = rDoc.RoundValueAsShown( rValue, nNumFormat );
                     }
                     bFound = true;
                 }

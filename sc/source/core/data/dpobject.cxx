@@ -2872,7 +2872,7 @@ void ScDPObject::DumpCache() const
 }
 #endif
 
-ScDPCollection::SheetCaches::SheetCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+ScDPCollection::SheetCaches::SheetCaches(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 namespace {
 
@@ -2939,8 +2939,8 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     }
 
     // Not cached.  Create a new cache.
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
-    pCache->InitFromDoc(mpDoc, rRange);
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mrDoc));
+    pCache->InitFromDoc(mrDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
 
@@ -3025,7 +3025,7 @@ void ScDPCollection::SheetCaches::updateReference(
         SCTAB nTab2 = rKeyRange.aEnd.Tab();
 
         ScRefUpdateRes eRes = ScRefUpdate::Update(
-            mpDoc, eMode,
+            &mrDoc, eMode,
             r.aStart.Col(), r.aStart.Row(), r.aStart.Tab(),
             r.aEnd.Col(), r.aEnd.Row(), r.aEnd.Tab(), nDx, nDy, nDz,
             nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -3061,7 +3061,7 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
     ScDPCache& rCache = *itCache->second;
 
     // Update the cache with new cell values. This will clear all group dimension info.
-    rCache.InitFromDoc(mpDoc, rRange);
+    rCache.InitFromDoc(mrDoc, rRange);
 
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
@@ -3089,7 +3089,7 @@ const std::vector<ScRange>& ScDPCollection::SheetCaches::getAllRanges() const
     return maRanges;
 }
 
-ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+ScDPCollection::NameCaches::NameCaches(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
 {
@@ -3104,8 +3104,8 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
         // already cached.
         return itr->second.get();
 
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
-    pCache->InitFromDoc(mpDoc, rRange);
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mrDoc));
+    pCache->InitFromDoc(mrDoc, rRange);
     if (pDimData)
         pDimData->WriteToCache(*pCache);
 
@@ -3137,7 +3137,7 @@ void ScDPCollection::NameCaches::updateCache(
 
     ScDPCache& rCache = *itr->second;
     // Update the cache with new cell values. This will clear all group dimension info.
-    rCache.InitFromDoc(mpDoc, rRange);
+    rCache.InitFromDoc(mrDoc, rRange);
 
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
@@ -3166,7 +3166,7 @@ bool ScDPCollection::DBType::less::operator() (const DBType& left, const DBType&
     return left < right;
 }
 
-ScDPCollection::DBCaches::DBCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
+ScDPCollection::DBCaches::DBCaches(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const
 {
@@ -3189,7 +3189,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     if (!xRowSet.is())
         return nullptr;
 
-    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
+    ::std::unique_ptr<ScDPCache> pCache(new ScDPCache(mrDoc));
     SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(*pCache, xRowSet, aFormat.GetNullDate());
     if (!aDB.isValid())
@@ -3328,19 +3328,19 @@ bool ScDPCollection::DBCaches::remove(const ScDPCache* p)
     return false;
 }
 
-ScDPCollection::ScDPCollection(ScDocument* pDocument) :
-    mpDoc( pDocument ),
-    maSheetCaches(pDocument),
-    maNameCaches(pDocument),
-    maDBCaches(pDocument)
+ScDPCollection::ScDPCollection(ScDocument& rDocument) :
+    mrDoc(rDocument),
+    maSheetCaches(rDocument),
+    maNameCaches(rDocument),
+    maDBCaches(rDocument)
 {
 }
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
-    mpDoc(r.mpDoc),
-    maSheetCaches(r.mpDoc),
-    maNameCaches(r.mpDoc),
-    maDBCaches(r.mpDoc)
+    mrDoc(r.mrDoc),
+    maSheetCaches(r.mrDoc),
+    maNameCaches(r.mrDoc),
+    maDBCaches(r.mrDoc)
 {
 }
 
@@ -3616,7 +3616,7 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
         e.SetTab(nNew);
         ScDPObject* pNew = new ScDPObject(rObj);
         pNew->SetOutRange(aOutRange);
-        mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+        mrDoc.ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
         aAdded.push_back(std::unique_ptr<ScDPObject>(pNew));
     }
 
@@ -3718,7 +3718,7 @@ void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
     const ScRange& rOutRange = pDPObject->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    mpDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+    mrDoc.RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 
     auto funcRemoveCondition = [pDPObject] (std::unique_ptr<ScDPObject> const & pCurrent)
     {
@@ -3733,7 +3733,7 @@ ScDPObject* ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
+    mrDoc.ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 
     maTables.push_back(std::move(pDPObj));
     return maTables.back().get();
