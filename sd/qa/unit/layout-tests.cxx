@@ -12,10 +12,12 @@ class SdLayoutTest : public SdModelTestBaseXML
 {
 public:
     void testTdf104722();
+    void testTdf136949();
 
     CPPUNIT_TEST_SUITE(SdLayoutTest);
 
     CPPUNIT_TEST(testTdf104722);
+    CPPUNIT_TEST(testTdf136949);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -37,6 +39,26 @@ void SdLayoutTest::testTdf104722()
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "x", "2093");
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[1]", "y", "9273");
+
+    xDocShRef->DoClose();
+}
+
+void SdLayoutTest::testTdf136949()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf136949.odp"), ODP);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 13687
+    // - Actual  : 2832
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[1]", "x", "13687");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline/point[2]", "x", "24759");
 
     xDocShRef->DoClose();
 }
