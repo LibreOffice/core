@@ -9,6 +9,8 @@
 #ifndef INCLUDED_CUI_INC_QRCODEGENDIALOG_HXX
 #define INCLUDED_CUI_INC_QRCODEGENDIALOG_HXX
 
+#include <config_qrcodegen.h>
+
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
