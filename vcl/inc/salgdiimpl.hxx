@@ -37,6 +37,7 @@ class SalFrame;
 class Gradient;
 class OpenGLContext;
 class SalVirtualDevice;
+struct SalGradient;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
@@ -202,6 +203,7 @@ public:
                     sal_uInt8 nTransparency ) = 0;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
+    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) = 0;
 
     virtual bool supportsOperation(OutDevSupportType eType) const = 0;
 };

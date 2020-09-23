@@ -24,11 +24,13 @@
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/gradient.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
 #include <SkCanvas.h>
+#include <SkGradientShader.h>
 #include <SkPath.h>
 #include <SkRegion.h>
 #include <SkDashPathEffect.h>
@@ -190,6 +192,12 @@ SkColor toSkColor(Color color)
 SkColor toSkColorWithTransparency(Color aColor, double fTransparency)
 {
     return SkColorSetA(toSkColor(aColor), 255 * (1.0 - fTransparency));
+}
+
+SkColor toSkColorWithIntensity(Color color, int intensity)
+{
+    return SkColorSetARGB(255 - color.GetTransparency(), color.GetRed() * intensity / 100,
+                          color.GetGreen() * intensity / 100, color.GetBlue() * intensity / 100);
 }
 
 Color fromSkColor(SkColor color)
@@ -1758,7 +1766,103 @@ bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHei
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon&, const Gradient&) { return false; }
+bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
+                                       const Gradient& rGradient)
+{
+    if (rGradient.GetStyle() != GradientStyle::Linear
+        && rGradient.GetStyle() != GradientStyle::Radial)
+        return false; // unsupported
+    if (rGradient.GetSteps() != 0)
+        return false; // We can't tell Skia how many colors to use in the gradient.
+    preDraw();
+    SAL_INFO("vcl.skia.trace", "drawgradient(" << this << "): " << rPolyPolygon.getB2DPolyPolygon()
+                                               << ":" << static_cast<int>(rGradient.GetStyle()));
+    tools::Rectangle boundRect(rPolyPolygon.GetBoundRect());
+    if (boundRect.IsEmpty())
+        return true;
+    SkPath path;
+    if (rPolyPolygon.IsRect())
+    {
+        // Rect->Polygon conversion loses the right and bottom edge, fix that.
+        path.addRect(SkRect::MakeXYWH(boundRect.getX(), boundRect.getY(), boundRect.GetWidth(),
+                                      boundRect.GetHeight()));
+        boundRect.AdjustRight(1);
+        boundRect.AdjustBottom(1);
+    }
+    else
+        addPolyPolygonToPath(rPolyPolygon.getB2DPolyPolygon(), path);
+    path.setFillType(SkPathFillType::kEvenOdd);
+    addXorRegion(path.getBounds());
+
+    Gradient aGradient(rGradient);
+    tools::Rectangle aBoundRect;
+    Point aCenter;
+    aGradient.SetAngle(aGradient.GetAngle() + 2700);
+    aGradient.GetBoundRect(boundRect, aBoundRect, aCenter);
+    tools::Polygon aPoly(aBoundRect);
+    aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600);
+
+    SkColor startColor
+        = toSkColorWithIntensity(rGradient.GetStartColor(), rGradient.GetStartIntensity());
+    SkColor endColor = toSkColorWithIntensity(rGradient.GetEndColor(), rGradient.GetEndIntensity());
+
+    sk_sp<SkShader> shader;
+    if (rGradient.GetStyle() == GradientStyle::Linear)
+    {
+        SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
+                              SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
+        SkColor colors[2] = { startColor, endColor };
+        SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
+        shader = SkGradientShader::MakeLinear(points, colors, pos, 2, SkTileMode::kClamp);
+    }
+    else
+    {
+        // Move the center by (-1,-1) (the default VCL algorithm is a bit off-center that way).
+        SkPoint center = SkPoint::Make(toSkX(aCenter.X()) - 1, toSkY(aCenter.Y()) - 1);
+        SkScalar radius = std::max(aBoundRect.GetWidth() / 2, aBoundRect.GetHeight() / 2);
+        SkColor colors[2] = { endColor, startColor };
+        SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
+        shader = SkGradientShader::MakeRadial(center, radius, colors, pos, 2, SkTileMode::kClamp);
+    }
+
+    SkPaint paint;
+    paint.setShader(shader);
+    getDrawCanvas()->drawPath(path, paint);
+    postDraw();
+    return true;
+}
+
+bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyPolygon,
+                                           const SalGradient& rGradient)
+{
+    preDraw();
+    SAL_INFO("vcl.skia.trace",
+             "impldrawgradient(" << this << "): " << rPolyPolygon << ":" << rGradient.maPoint1
+                                 << "->" << rGradient.maPoint2 << ":" << rGradient.maStops.size());
+
+    SkPath path;
+    addPolyPolygonToPath(rPolyPolygon, path);
+    path.setFillType(SkPathFillType::kEvenOdd);
+
+    SkPoint points[2]
+        = { SkPoint::Make(toSkX(rGradient.maPoint1.getX()), toSkY(rGradient.maPoint1.getY())),
+            SkPoint::Make(toSkX(rGradient.maPoint2.getX()), toSkY(rGradient.maPoint2.getY())) };
+    std::vector<SkColor> colors;
+    std::vector<SkScalar> pos;
+    for (const SalGradientStop& stop : rGradient.maStops)
+    {
+        colors.emplace_back(toSkColor(stop.maColor));
+        pos.emplace_back(stop.mfOffset);
+    }
+    sk_sp<SkShader> shader = SkGradientShader::MakeLinear(points, colors.data(), pos.data(),
+                                                          colors.size(), SkTileMode::kDecal);
+    SkPaint paint;
+    paint.setShader(shader);
+    getDrawCanvas()->drawPath(path, paint);
+    addXorRegion(path.getBounds());
+    postDraw();
+    return true;
+}
 
 static double toRadian(int degree10th) { return (3600 - degree10th) * M_PI / 1800.0; }
 static double toCos(int degree10th) { return SkScalarCos(toRadian(degree10th)); }
