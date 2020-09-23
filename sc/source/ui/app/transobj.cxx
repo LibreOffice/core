@@ -319,7 +319,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 sal_uInt32 nNumFmt = pPattern->GetNumberFormat(pFormatter);
                 OUString aText;
                 const Color* pColor;
-                ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, m_pDoc.get());
+                ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, *m_pDoc);
                 if (!aText.isEmpty())
                     aEngine.SetTextCurrentDefaults(aText);
             }

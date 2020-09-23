@@ -982,7 +982,7 @@ void ScViewFunc::RemoveManualBreaks()
     if (bUndo)
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument( 0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );
         pDocSh->GetUndoManager()->AddUndoAction(
                                 std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );
@@ -1638,7 +1638,7 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     if (bUndo)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
         for (const SCTAB& i : rMark)
             if (i != nTab )
@@ -1936,7 +1936,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         if ( nCommand == SvxSearchCmd::REPLACE_ALL )
         {
             pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
+            pUndoDoc->InitUndo( rDoc, nStartTab, nEndTab );
         }
     }
 
@@ -2467,7 +2467,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
         {
             SCTAB nTab = TheTabs[i];
             if (i==0)
-                pUndoDoc->InitUndo( &rDoc, nTab,nTab, true,true );   // incl. column/fow flags
+                pUndoDoc->InitUndo( rDoc, nTab,nTab, true,true );   // incl. column/fow flags
             else
                 pUndoDoc->AddUndoTab( nTab,nTab, true,true );       // incl. column/fow flags
 

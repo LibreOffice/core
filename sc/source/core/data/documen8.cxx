@@ -228,7 +228,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 {
                     const SfxPoolItem *pItem = nullptr;
                     if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SfxItemState::SET )
-                        ScChartHelper::DoUpdateAllCharts( this );
+                        ScChartHelper::DoUpdateAllCharts( *this );
                 }
             }
             break;
@@ -377,7 +377,7 @@ EEHorizontalTextDirection ScDocument::GetEditTextDirection(SCTAB nTab) const
 ScMacroManager* ScDocument::GetMacroManager()
 {
     if (!mpMacroMgr)
-        mpMacroMgr.reset(new ScMacroManager(this));
+        mpMacroMgr.reset(new ScMacroManager(*this));
     return mpMacroMgr.get();
 }
 

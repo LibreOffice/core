@@ -2976,7 +2976,7 @@ void ScInterpreter::ScExternal()
                                 PopSingleRef( aAdr );
                                 ScRange aRange( aAdr );
                                 uno::Reference<table::XCellRange> xObj =
-                                        ScCellRangeObj::CreateRangeFromDoc( &mrDoc, aRange );
+                                        ScCellRangeObj::CreateRangeFromDoc( mrDoc, aRange );
                                 if (xObj.is())
                                     aParam <<= xObj;
                                 else
@@ -2988,7 +2988,7 @@ void ScInterpreter::ScExternal()
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
                                 uno::Reference<table::XCellRange> xObj =
-                                        ScCellRangeObj::CreateRangeFromDoc( &mrDoc, aRange );
+                                        ScCellRangeObj::CreateRangeFromDoc( mrDoc, aRange );
                                 if (xObj.is())
                                 {
                                     aParam <<= xObj;
@@ -3139,17 +3139,17 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     return uno::makeAny( xIf );
 }
 
-static bool lcl_setVBARange( const ScRange& aRange, const ScDocument* pDok, SbxVariable* pPar )
+static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxVariable* pPar )
 {
     bool bOk = false;
     try
     {
         uno::Reference< uno::XInterface > xVBARange;
-        uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
+        uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( rDok, aRange );
         uno::Sequence< uno::Any > aArgs(2);
-        aArgs[0] = lcl_getSheetModule( xCellRange, pDok );
+        aArgs[0] = lcl_getSheetModule( xCellRange, &rDok );
         aArgs[1] <<= xCellRange;
-        xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
+        xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( rDok.GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {
             SbxObjectRef aObj = GetSbUnoObject( "A-Range", uno::Any( xVBARange ) );
@@ -3303,7 +3303,7 @@ void ScInterpreter::ScMacro()
                 if ( bUseVBAObjects )
                 {
                     ScRange aRange( aAdr );
-                    bOk = lcl_setVBARange( aRange, &mrDoc, pPar );
+                    bOk = lcl_setVBARange( aRange, mrDoc, pPar );
                 }
                 else
                 {
@@ -3330,7 +3330,7 @@ void ScInterpreter::ScMacro()
                     if ( bUseVBAObjects )
                     {
                         ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                        bOk = lcl_setVBARange( aRange, &mrDoc, pPar );
+                        bOk = lcl_setVBARange( aRange, mrDoc, pPar );
                     }
                     else
                     {

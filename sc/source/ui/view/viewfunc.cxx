@@ -1067,7 +1067,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         bool bCopyOnlyMarked = false;
         if( !bRemoveAdjCellBorder )
             bCopyOnlyMarked = bMulti;
-        pUndoDoc->InitUndo( &rDoc, nStartTab, nStartTab );
+        pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
         for (const auto& rTab : aFuncMark)
             if (rTab != nStartTab)
                 pUndoDoc->AddUndoTab( rTab, rTab );
@@ -1177,7 +1177,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             aCopyRange.aEnd.SetTab(nTabCount-1);
 
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &rDoc, nStartTab, nStartTab );
+            pUndoDoc->InitUndo( rDoc, nStartTab, nStartTab );
             for (const auto& rTab : aFuncMark)
                 if (rTab != nStartTab)
                     pUndoDoc->AddUndoTab( rTab, rTab );
@@ -1347,7 +1347,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
         {
             SCTAB nTab = rViewData.GetTabNo();
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab );
             for (const auto& rTab : aFuncMark)
                 if (rTab != nTab)
                     pUndoDoc->AddUndoTab( rTab, rTab );
@@ -1379,7 +1379,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
         if ( bRecord )
         {
             ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab );
             for (const auto& rTab : aFuncMark)
                 if (rTab != nTab)
                     pUndoDoc->AddUndoTab( rTab, rTab );
@@ -1837,7 +1837,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     if (bRecord)
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab, !bRows, bRows );      // row height
+        pUndoDoc->InitUndo( rDoc, nTab, nTab, !bRows, bRows );      // row height
 
         for (const sc::ColRowSpan & rSpan : aSpans)
         {
@@ -2093,7 +2093,7 @@ void ScViewFunc::SetWidthOrHeight(
             if (bWidth)
             {
                 if ( nTab == nFirstTab )
-                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, true );
+                    pUndoDoc->InitUndo( rDoc, nTab, nTab, true );
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, true );
                 rDoc.CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
@@ -2103,7 +2103,7 @@ void ScViewFunc::SetWidthOrHeight(
             else
             {
                 if ( nTab == nFirstTab )
-                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
+                    pUndoDoc->InitUndo( rDoc, nTab, nTab, false, true );
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, false, true );
                 rDoc.CopyToDocument( 0, nStart, nTab, rDoc.MaxCol(), nEnd, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc );

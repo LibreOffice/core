@@ -1303,7 +1303,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
             const Color* pColor;
             sal_uInt32 nNumFmt = pDoc->GetNumberFormat(aCellPos);
             OUString aStr;
-            ScCellFormat::GetString(aCell, nNumFmt, aStr, &pColor, *pDoc->GetFormatTable(), pDoc);
+            ScCellFormat::GetString(aCell, nNumFmt, aStr, &pColor, *pDoc->GetFormatTable(), *pDoc);
             return aStr;
         }
     }
@@ -1355,7 +1355,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
     OUString aText = maFormula->first;
 
-    ScExternalRefManager::ApiGuard aExtRefGuard(pDoc);
+    ScExternalRefManager::ApiGuard aExtRefGuard(*pDoc);
 
     if ( aText.isEmpty() )
         return;

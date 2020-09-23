@@ -359,7 +359,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                     pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
                     pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                    pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
                     rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0,
                                         nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab,
                                         InsertDeleteFlags::NONE, false, *pUndoDoc);
@@ -368,7 +368,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
                                         InsertDeleteFlags::NONE, false, *pUndoDoc);
                 }
                 else
-                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
+                    pUndoDoc->InitUndo( rDoc, nTab, nTab, false, true );
 
                 //  secure data range - incl. filtering result
                 rDoc.CopyToDocument(0, nStartRow, nTab, rDoc.MaxCol(), nEndRow, nTab, InsertDeleteFlags::ALL, false, *pUndoDoc);
@@ -755,7 +755,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
         if (bCopy)
         {
-            pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
+            pUndoDoc->InitUndo( rDoc, nDestTab, nDestTab, false, true );
             rDoc.CopyToDocument(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nDestTab,
                                 InsertDeleteFlags::ALL, false, *pUndoDoc);
@@ -769,7 +769,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
         else
         {
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab, false, true );
             rDoc.CopyToDocument(0, rQueryParam.nRow1, nTab, rDoc.MaxCol(), rQueryParam.nRow2, nTab,
                                 InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
@@ -798,7 +798,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             aAttribRange.aEnd.SetCol( aAttribRange.aEnd.Col() + nFormulaCols );
 
             pAttribDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pAttribDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
+            pAttribDoc->InitUndo( rDoc, nDestTab, nDestTab, false, true );
             rDoc.CopyToDocument(aAttribRange, InsertDeleteFlags::ATTRIB, false, *pAttribDoc);
         }
 
@@ -1056,12 +1056,12 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
             pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
             pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
             rDoc.CopyToDocument(static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), rDoc.MaxRow(), nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
             rDoc.CopyToDocument(0, nOutStartRow, nTab, rDoc.MaxCol(), nOutEndRow, nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         }
         else
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab, false, bOldFilter );
 
         //  secure data range - incl. filtering result
         rDoc.CopyToDocument(0, rParam.nRow1+1,nTab, rDoc.MaxCol(),rParam.nRow2,nTab,
@@ -1183,12 +1183,12 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     return true;
 }
 
-void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument* pDoc, const ScRange& rRange)
+void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument& rDoc, const ScRange& rRange)
 {
     SCTAB nTab = rRange.aStart.Tab();
     pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(pDoc, nTab, nTab);
-    pDoc->CopyToDocument(rRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
+    pUndoDoc->InitUndo(rDoc, nTab, nTab);
+    rDoc.CopyToDocument(rRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
 }
 
 bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
@@ -1274,7 +1274,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         bRecord = false;
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, &rDoc, pOldObj->GetOutRange());
+        createUndoDoc(pOldUndoDoc, rDoc, pOldObj->GetOutRange());
 
     pNewObj->WriteSourceDataTo(*pOldObj);     // copy source data
 
@@ -1319,7 +1319,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
     pOldObj->Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1393,7 +1393,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     SCTAB nTab = aRange.aStart.Tab();
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, &rDoc, aRange);
+        createUndoDoc(pOldUndoDoc, rDoc, aRange);
 
     rDoc.DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
@@ -1513,7 +1513,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
     rDestObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1549,7 +1549,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
         bRecord = false;
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, &rDoc, rDPObj.GetOutRange());
+        createUndoDoc(pOldUndoDoc, rDoc, rDPObj.GetOutRange());
 
     rDPObj.SetAllowMove(false);
     rDPObj.ReloadGroupTableData();
@@ -1587,7 +1587,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, rDoc, aNewOut);
 
     rDPObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts

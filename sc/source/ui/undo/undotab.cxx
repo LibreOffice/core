@@ -904,7 +904,7 @@ void ScUndoImportTab::Undo()
     if (bMakeRedo)
     {
         xRedoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-        xRedoDoc->InitUndo(&rDoc, nTab,nTab+nCount-1, true, true);
+        xRedoDoc->InitUndo(rDoc, nTab,nTab+nCount-1, true, true);
 
         OUString aOldName;
         for (i=0; i<nCount; i++)

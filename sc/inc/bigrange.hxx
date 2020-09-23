@@ -60,7 +60,7 @@ public:
     void    GetVars( sal_Int32& nColP, sal_Int32& nRowP, sal_Int32& nTabP ) const
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
-    bool IsValid( const ScDocument* pDoc ) const;
+    bool IsValid( const ScDocument& rDoc ) const;
     inline ScAddress    MakeAddress() const;
 
     ScBigAddress&   operator=( const ScBigAddress& r )
@@ -132,8 +132,8 @@ public:
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
                   aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
-    bool    IsValid( const ScDocument* pDoc ) const
-                { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }
+    bool    IsValid( const ScDocument& rDoc ) const
+                { return aStart.IsValid( rDoc ) && aEnd.IsValid( rDoc ); }
     ScRange  MakeRange() const
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }

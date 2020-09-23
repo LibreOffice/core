@@ -150,7 +150,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     if ( rSettings.HasComment() )
     {
         OUString aTmp;
-        rAction.GetDescription(aTmp, &rDocument);
+        rAction.GetDescription(aTmp, rDocument);
         OUString aComStr = rAction.GetComment() + " (" + aTmp + ")";
 
         if(!rSettings.IsValidComment(&aComStr))

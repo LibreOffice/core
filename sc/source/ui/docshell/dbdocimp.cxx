@@ -181,7 +181,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
     // ImportDoc - also used for Redo
     ScDocumentUniquePtr pImportDoc(new ScDocument( SCDOCMODE_UNDO ));
-    pImportDoc->InitUndo( &rDoc, nTab, nTab );
+    pImportDoc->InitUndo( rDoc, nTab, nTab );
 
     //  get data from database into import document
 
@@ -466,7 +466,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if ( bRecord )
         {
             pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+            pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
             pUndoDBData.reset(new ScDBData( *pDBData ));
         }

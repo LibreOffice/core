@@ -256,7 +256,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             sal_uInt32 nNumFmt = mrDoc.GetNumberFormat(aPos);
             OUString aText;
             const Color* pColor;
-            ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, &mrDoc);
+            ScCellFormat::GetString(aCell, nNumFmt, aText, &pColor, *pFormatter, mrDoc);
 
             SetTextCurrentDefaults(aText);
         }

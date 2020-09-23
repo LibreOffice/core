@@ -2090,7 +2090,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         if ( bFixedWidth || bSaveAsShown )
                         {
                             const Color* pDummy;
-                            ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
+                            ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, m_aDocument);
                             bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                         }
                         else
@@ -2105,7 +2105,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         {
                             sal_uInt32 nFormat = m_aDocument.GetNumberFormat(aPos);
                             const Color* pDummy;
-                            ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
+                            ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, m_aDocument);
                         }
                         else
                             aString = pCell->mpFormula->GetString().getString();
@@ -2118,7 +2118,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 {
                     sal_uInt32 nFormat = m_aDocument.GetNumberFormat(aPos);
                     const Color* pDummy;
-                    ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
+                    ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, m_aDocument);
                 }
                 else
                     aString = pCell->mpString->getString();
@@ -2140,7 +2140,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     if ( bFixedWidth || bSaveAsShown )
                     {
                         const Color* pDummy;
-                        ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, &m_aDocument);
+                        ScCellFormat::GetString(*pCell, nFormat, aString, &pDummy, rFormatter, m_aDocument);
                         bString = bSaveAsShown && rFormatter.IsTextFormat( nFormat);
                     }
                     else

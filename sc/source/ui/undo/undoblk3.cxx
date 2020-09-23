@@ -1391,7 +1391,7 @@ void ScUndoRefreshLink::Undo()
             if (bMakeRedo)
             {
                 if (bFirst)
-                    xRedoDoc->InitUndo(&rDoc, nTab, nTab, true, true);
+                    xRedoDoc->InitUndo(rDoc, nTab, nTab, true, true);
                 else
                     xRedoDoc->AddUndoTab(nTab, nTab, true, true);
                 bFirst = false;
