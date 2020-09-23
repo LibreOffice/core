@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e35ea76d_dc7f0b73",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1202,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-23T13:19:28Z",
+      "side": 1,
+      "message": "that one potential exception was just meant as an example; e.g., the initialization of xJavaComponentLoader could likely also throw an exception; i.e., I would cover the whole function body in some try/catch, esp. since a failure here would be \"harmless\"",
+      "parentUuid": "f4bb333a_20d6b264",
+      "revId": "e0ba5895fdbb491542983e935a938e237564aaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b2f72cec_875784ed",
         "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
         "patchSetId": 7
@@ -39,6 +57,30 @@
       "revId": "e0ba5895fdbb491542983e935a938e237564aaae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30642ad9_a2b7fd80",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 7
+      },
+      "lineNbr": 5827,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-23T13:19:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2f72cec_875784ed",
+      "range": {
+        "startLine": 5827,
+        "startChar": 22,
+        "endLine": 5827,
+        "endChar": 29
+      },
+      "revId": "e0ba5895fdbb491542983e935a938e237564aaae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
