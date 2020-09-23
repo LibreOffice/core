@@ -568,6 +568,7 @@ $(eval $(call gb_Library_use_externals,pdfium,\
     zlib \
     icu_headers \
     icuuc \
+    libpng \
 ))
 
 ifneq (,$(filter LINUX ANDROID,$(OS)))

@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,fontconfig,\
 
 $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 	$(call gb_ExternalProject_run,build,\
-		CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
+		CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS) -fPIC" $(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		./configure \
 			--disable-shared \
 			--disable-silent-rules \
