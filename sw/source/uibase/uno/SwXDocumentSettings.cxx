@@ -94,6 +94,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_ALLOW_PRINTJOB_CANCEL,
     HANDLE_USE_FORMER_LINE_SPACING,
     HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS,
+    HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS,
     HANDLE_USE_FORMER_OBJECT_POSITIONING,
     HANDLE_USE_FORMER_TEXT_WRAPPING,
     HANDLE_CHANGES_PASSWORD,
@@ -186,6 +187,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           cppu::UnoType<bool>::get(),           0},
         { OUString("UseFormerLineSpacing"),       HANDLE_USE_FORMER_LINE_SPACING,         cppu::UnoType<bool>::get(),           0},
         { OUString("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
+        { OUString("AddParaLineSpacingToTableCells"), HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, cppu::UnoType<bool>::get(),           0},
         { OUString("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   cppu::UnoType<bool>::get(),           0},
         { OUString("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        cppu::UnoType<bool>::get(),           0},
         { OUString("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                cppu::UnoType< cppu::UnoSequenceType<sal_Int8> >::get(),           0},
@@ -632,6 +634,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, bTmp);
+        }
+        break;
+        case HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, bTmp);
         }
         break;
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:
@@ -1220,6 +1228,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS);
+        }
+        break;
+        case HANDLE_ADD_PARA_LINE_SPACING_TO_TABLE_CELLS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS);
         }
         break;
         case HANDLE_USE_FORMER_OBJECT_POSITIONING:

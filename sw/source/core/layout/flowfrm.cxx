@@ -1735,7 +1735,8 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
 {
     SwTwips nAdditionalLowerSpace = 0;
 
-    if ( m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+    IDocumentSettingAccess const& rIDSA(m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess());
+    if (rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS))
     {
         const SwFrame* pFrame = &m_rThis;
         if ( pFrame->IsSctFrame() )
@@ -1760,7 +1761,14 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
         }
 
         if (_pAttrs)
-            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower() + _pAttrs->CalcLineSpacing();
+        {
+            nAdditionalLowerSpace += _pAttrs->GetULSpace().GetLower();
+
+            if (rIDSA.get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS))
+            {
+                nAdditionalLowerSpace += _pAttrs->CalcLineSpacing();
+            }
+        }
     }
 
     return nAdditionalLowerSpace;

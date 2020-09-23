@@ -1196,10 +1196,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
     assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/Text", "Portion",
                 "Abc def ghi jkl mno pqr stu vwx yz.");
     // height was: 1517
-    assertXPath(
-        pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/infos/bounds", "height",
-        // "253"); // FIXME: this is correct but 3cccdabf19a99fd3f657985c1822436d7679df2b breaks it
-        "379");
+    // tdf#134782 height was: 379
+    assertXPath(pLayout, "/root/page[2]/body/tab[1]/row[5]/cell[5]/txt[1]/infos/bounds", "height",
+                "253");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
