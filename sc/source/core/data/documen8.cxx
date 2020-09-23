@@ -285,11 +285,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
     }
 }
 
-void ScDocument::CopyStdStylesFrom( const ScDocument* pSrcDoc )
+void ScDocument::CopyStdStylesFrom( const ScDocument& rSrcDoc )
 {
     // number format exchange list has to be handled here, too
-    NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
-    mxPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->mxPoolHelper->GetStylePool() );
+    NumFmtMergeHandler aNumFmtMergeHdl(*this, rSrcDoc);
+    mxPoolHelper->GetStylePool()->CopyStdStylesFrom( rSrcDoc.mxPoolHelper->GetStylePool() );
 }
 
 void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
@@ -766,7 +766,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 
     for (sal_uInt16 i=0; i<nCount; ++i)
     {
-        ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
+        ScDdeLink* pLink = new ScDdeLink( *this, rStream, aHdr );
         pMgr->InsertDDELink(pLink, pLink->GetAppl(), pLink->GetTopic(), pLink->GetItem());
     }
 }
@@ -861,14 +861,14 @@ void ScDocument::UpdateExternalRefLinks(weld::Window* pWin)
     }
 }
 
-void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
+void ScDocument::CopyDdeLinks( ScDocument& rDestDoc ) const
 {
     if (bIsClip)        // Create from Stream
     {
         if (pClipData)
         {
             pClipData->Seek(0);
-            pDestDoc->LoadDdeLinks(*pClipData);
+            rDestDoc.LoadDdeLinks(*pClipData);
         }
 
         return;
@@ -878,7 +878,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     if (!pMgr)
         return;
 
-    sfx2::LinkManager* pDestMgr = pDestDoc->GetDocLinkManager().getLinkManager(pDestDoc->bAutoCalc);
+    sfx2::LinkManager* pDestMgr = rDestDoc.GetDocLinkManager().getLinkManager(rDestDoc.bAutoCalc);
     if (!pDestMgr)
         return;
 
@@ -888,7 +888,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
         const sfx2::SvBaseLink* pBase = rLink.get();
         if (const ScDdeLink* p = dynamic_cast<const ScDdeLink*>(pBase))
         {
-            ScDdeLink* pNew = new ScDdeLink(pDestDoc, *p);
+            ScDdeLink* pNew = new ScDdeLink(rDestDoc, *p);
             pDestMgr->InsertDDELink(
                 pNew, pNew->GetAppl(), pNew->GetTopic(), pNew->GetItem());
         }
@@ -1006,7 +1006,7 @@ bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, c
         if( !pDdeLink )
         {
             // create a new DDE link, but without TryUpdate
-            pDdeLink = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
+            pDdeLink = new ScDdeLink( *this, rAppl, rTopic, rItem, nMode );
             pMgr->InsertDDELink(pDdeLink, rAppl, rTopic, rItem);
         }
 

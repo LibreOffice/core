@@ -7,13 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <test/bootstrapfixture.hxx>
 
 #include <address.hxx>
 #include <chartlis.hxx>
+#include <scdll.hxx>
 
 namespace {
 
@@ -23,8 +21,17 @@ const ScRange RANGE_2(20, 10, 0, 29, 10, 0);
 const ScRange RANGE_INTERSECTING_1_AND_2(10, 10, 0, 29, 10, 0);
 
 
-class ChartListenerCollectionTest : public CppUnit::TestFixture {
+class ChartListenerCollectionTest : public test::BootstrapFixture {
 
+public:
+    virtual void setUp() override
+    {
+        BootstrapFixture::setUp();
+
+        ScDLL::Init();
+    }
+
+private:
     void ListenerGetsNotifiedWhenItsRangeIsSetDirty();
     void ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes();
     void ListenerDoesNotGetNotifiedWhenListeningStops();
@@ -56,7 +63,8 @@ struct MockedHiddenRangeListener : public ScChartHiddenRangeListener {
 
 void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.SetRangeDirty(RANGE_INTERSECTING_1_AND_2);
@@ -66,7 +74,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedWhenItsRangeIsSetDirty() {
 
 void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTimes() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
 
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
@@ -77,7 +86,8 @@ void ChartListenerCollectionTest::ListenerGetsNotifiedTwiceWhenRegisteredTwoTime
 
 void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
 
     sut.EndListeningHiddenRange(&listener);
@@ -89,7 +99,8 @@ void ChartListenerCollectionTest::ListenerDoesNotGetNotifiedWhenListeningStops()
 
 void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
     MockedHiddenRangeListener listener;
-    ScChartListenerCollection sut(nullptr);
+    ScDocument aDoc;
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener);
     sut.StartListeningHiddenRange(RANGE_2, &listener);
 
@@ -102,8 +113,9 @@ void ChartListenerCollectionTest::ListenerStopsListeningForAllRanges() {
 void ChartListenerCollectionTest::ListenersStopListeningIndependently() {
     MockedHiddenRangeListener listener1;
     MockedHiddenRangeListener listener2;
+    ScDocument aDoc;
 
-    ScChartListenerCollection sut(nullptr);
+    ScChartListenerCollection sut(aDoc);
     sut.StartListeningHiddenRange(RANGE_1, &listener1);
     sut.StartListeningHiddenRange(RANGE_2, &listener2);
 

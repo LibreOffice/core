@@ -41,10 +41,10 @@
 
 bool ScDdeLink::bIsInUpdate = false;
 
-ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, const OUString& rI,
+ScDdeLink::ScDdeLink( ScDocument& rD, const OUString& rA, const OUString& rT, const OUString& rI,
                         sal_uInt8 nM ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
-    pDoc( pD ),
+    rDoc( rD ),
     aAppl( rA ),
     aTopic( rT ),
     aItem( rI ),
@@ -61,9 +61,9 @@ ScDdeLink::~ScDdeLink()
     // pResult is refcounted
 }
 
-ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
+ScDdeLink::ScDdeLink( ScDocument& rD, const ScDdeLink& rOther ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
-    pDoc    ( pD ),
+    rDoc    ( rD ),
     aAppl   ( rOther.aAppl ),
     aTopic  ( rOther.aTopic ),
     aItem   ( rOther.aItem ),
@@ -75,9 +75,9 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
         pResult = rOther.pResult->Clone();
 }
 
-ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
+ScDdeLink::ScDdeLink( ScDocument& rD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ALWAYS,SotClipboardFormatId::STRING),
-    pDoc( pD ),
+    rDoc( rD ),
     bNeedUpdate( false ),
     pResult( nullptr )
 {
@@ -159,8 +159,8 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         //  always newly re-create matrix, so that bIsString doesn't get mixed up
         pResult = new ScMatrix(nCols, nRows, 0.0);
 
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
+        SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+        svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
 
         //  nMode determines how the text is interpreted (#44455#/#49783#):
         //  SC_DDE_DEFAULT - number format from cell template "Standard"
@@ -169,7 +169,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         sal_uLong nStdFormat = 0;
         if ( nMode == SC_DDE_DEFAULT )
         {
-            ScPatternAttr* pDefPattern = pDoc->GetDefPattern();     // contains standard template
+            ScPatternAttr* pDefPattern = rDoc.GetDefPattern();     // contains standard template
             if ( pDefPattern )
                 nStdFormat = pDefPattern->GetNumberFormat( pFormatter );
         }
@@ -201,8 +201,8 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     if (HasListeners())
     {
         Broadcast(ScHint(SfxHintId::ScDataChanged, ScAddress()));
-        pDoc->TrackFormulas();      // must happen immediately
-        pDoc->StartTrackTimer();
+        rDoc.TrackFormulas();      // must happen immediately
+        rDoc.StartTrackTimer();
 
         //  StartTrackTimer asynchronously calls TrackFormulas, Broadcast(FID_DATACHANGED),
         //  ResetChanged, SetModified and Invalidate(SID_SAVEDOC/SID_DOC_MODIFIED)
@@ -214,7 +214,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         //TODO: do this asynchronously?
         ScLinkRefreshedHint aHint;
         aHint.SetDdeLink( aAppl, aTopic, aItem );
-        pDoc->BroadcastUno( aHint );
+        rDoc.BroadcastUno( aHint );
     }
 
     return SUCCESS;
@@ -225,14 +225,14 @@ void ScDdeLink::ListenersGone()
     bool bWas = bIsInUpdate;
     bIsInUpdate = true;             // Remove() can trigger reschedule??!?
 
-    ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
+    ScDocument& rStackDoc = rDoc;   // member rDoc can't be used after removing the link
 
-    sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = rDoc.GetLinkManager();
     pLinkMgr->Remove( this);        // deletes this
 
     if ( pLinkMgr->GetLinks().empty() )            // deleted the last one ?
     {
-        SfxBindings* pBindings = pStackDoc->GetViewBindings();      // don't use member pDoc!
+        SfxBindings* pBindings = rStackDoc.GetViewBindings();      // don't use member rDoc!
         if (pBindings)
             pBindings->Invalidate( SID_LINKS );
     }
@@ -257,9 +257,9 @@ void ScDdeLink::TryUpdate()
     else
     {
         bIsInUpdate = true;
-        pDoc->IncInDdeLinkUpdate();
+        rDoc.IncInDdeLinkUpdate();
         Update();
-        pDoc->DecInDdeLinkUpdate();
+        rDoc.DecInDdeLinkUpdate();
         bIsInUpdate = false;
         bNeedUpdate = false;
     }
