@@ -479,6 +479,8 @@ void SwModelTestBase::setTestInteractionHandler(const char* pPassword,
     rFilterOptions[0].Value <<= xInteraction;
 }
 
+void SwModelTestBase::header() {}
+
 void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
 {
     if (mxComponent.is())
