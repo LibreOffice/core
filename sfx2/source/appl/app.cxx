@@ -73,6 +73,7 @@
 #include <eventsupplier.hxx>
 #include <sfx2/dockwin.hxx>
 #include <shellimpl.hxx>
+#include <comphelper/lok.hxx>
 
 #include <unotools/saveopt.hxx>
 #include <svtools/helpopt.hxx>
@@ -296,7 +297,9 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         {
             if ( bTaskActivate )
                 NotifyEvent( SfxViewEventHint( SfxEventHintId::DeactivateDoc, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldFrame->GetObjectShell(), pOldFrame->GetFrame().GetController() ) );
-            pOldFrame->DoDeactivate( bTaskActivate, pFrame );
+
+            if ( !comphelper::LibreOfficeKit::isDialogPainting() )
+                pOldFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldFrame->GetProgress() )
                 pOldFrame->GetProgress()->Suspend();
