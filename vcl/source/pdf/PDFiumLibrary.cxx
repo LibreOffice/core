@@ -19,6 +19,7 @@
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
 
+#include <osl/endian.h>
 #include <vcl/bitmap.hxx>
 
 #include <bitmapwriteaccess.hxx>
@@ -237,7 +238,16 @@ OUString PDFiumPageObject::getText(std::unique_ptr<PDFiumTextPage> const& pTextP
     assert(nActualBytes % 2 == 0);
     nActualBytes /= 2;
     if (nActualBytes > 1)
+    {
+#if defined OSL_BIGENDIAN
+        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
+        for (int i = 0; i != nActualBytes; ++i)
+        {
+            pText[i] = OSL_SWAPWORD(pText[i]);
+        }
+#endif
         sReturnText = OUString(pText.get());
+    }
 
     return sReturnText;
 }
@@ -432,7 +442,16 @@ OUString PDFiumAnnotation::getString(OString const& rKey)
         assert(nStringSize % 2 == 0);
         nStringSize /= 2;
         if (nStringSize > 0)
+        {
+#if defined OSL_BIGENDIAN
+            // The data returned by FPDFAnnot_GetStringValue is documented to always be UTF-16LE:
+            for (unsigned long i = 0; i != nStringSize; ++i)
+            {
+                pText[i] = OSL_SWAPWORD(pText[i]);
+            }
+#endif
             rString = OUString(pText.get());
+        }
     }
     return rString;
 }
