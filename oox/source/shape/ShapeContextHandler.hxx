@@ -119,6 +119,8 @@ public:
     virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getMediaDescriptor() override;
     virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor) override;
 
+    void SAL_CALL setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper) override;
+
 private:
     ShapeContextHandler(ShapeContextHandler const &) = delete;
     void operator =(ShapeContextHandler const &) = delete;
