@@ -72,7 +72,9 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
     m_xGlobalOptionsCLB->set_column_fixed_widths(aWidths);
 
     int nPos = 0;
-    for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1; i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+    for (int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1;
+         i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID) - 1; // omit AddTableLineSpacing
+         ++i)
     {
         int nCoptIdx = i - 2; /* Do not consider "Name" & "Module" indexes */
 
@@ -122,6 +124,7 @@ static sal_uLong convertBools2Ulong_Impl
     bool _bNoExtLeading,
     bool _bUseLineSpacing,
     bool _bAddTableSpacing,
+    bool _bAddTableLineSpacing,
     bool _bUseObjPos,
     bool _bUseOurTextWrapping,
     bool _bConsiderWrappingStyle,
@@ -154,6 +157,9 @@ static sal_uLong convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bAddTableSpacing )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (_bAddTableLineSpacing)
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bUseObjPos )
@@ -253,6 +259,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::NoExtLeading ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseLineSpacing ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::AddTableSpacing ),
+            aEntry.getValue<bool>(SvtCompatibilityEntry::Index::AddTableLineSpacing),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseObjectPositioning ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::UseOurTextWrapping ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ConsiderWrappingStyle ),
@@ -288,6 +295,15 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
 
                 int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
                 pItem->setValue<bool>( SvtCompatibilityEntry::Index(nCoptIdx), bChecked );
+                if (nCoptIdx == int(SvtCompatibilityEntry::Index::AddTableSpacing))
+                {
+                    bool const isLineSpacing = m_xOptionsLB->get_toggle(i, 0) == TRISTATE_TRUE;
+                    pItem->setValue<bool>(SvtCompatibilityEntry::Index::AddTableLineSpacing, isLineSpacing);
+                }
+                else
+                {
+                    assert(m_xOptionsLB->get_toggle(i, 0) != TRISTATE_INDET);
+                }
             }
         }
 
@@ -302,7 +318,17 @@ void SwCompatibilityOptPage::SetCurrentOptions( sal_uLong nOptions )
     for (int i = 0; i < nCount; ++i)
     {
         bool bChecked = ( ( nOptions & 0x00000001 ) == 0x00000001 );
-        m_xOptionsLB->set_toggle(i, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
+        TriState value = bChecked ? TRISTATE_TRUE : TRISTATE_FALSE;
+        if (i == int(SvtCompatibilityEntry::Index::AddTableSpacing) - 2)
+        {   // hack: map 2 bools to 1 tristate
+            nOptions = nOptions >> 1;
+            if (value == TRISTATE_TRUE
+                && (nOptions & 0x00000001) != 0x00000001) // ADD_PARA_LINE_SPACING_TO_TABLE_CELLS
+            {
+                value = TRISTATE_INDET; // 3 values possible here
+            }
+        }
+        m_xOptionsLB->set_toggle(i, value, 0);
         nOptions = nOptions >> 1;
     }
 }
@@ -321,6 +347,7 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
             !rIDocumentSettingAccess.get( DocumentSettingId::ADD_EXT_LEADING ),
             rIDocumentSettingAccess.get( DocumentSettingId::OLD_LINE_SPACING ),
             rIDocumentSettingAccess.get( DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS ),
+            rIDocumentSettingAccess.get( DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS ),
             rIDocumentSettingAccess.get( DocumentSettingId::USE_FORMER_OBJECT_POS ),
             rIDocumentSettingAccess.get( DocumentSettingId::USE_FORMER_TEXT_WRAPPING ),
             rIDocumentSettingAccess.get( DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION ),
@@ -356,10 +383,21 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
         for (int i = 0; i < nCount; ++i)
         {
-            bool bChecked = m_xOptionsLB->get_toggle(i, 0) == TRISTATE_TRUE;
-            bool bSavedChecked = ( ( nSavedOptions & 0x00000001 ) == 0x00000001 );
-            if ( bChecked != bSavedChecked )
+            TriState const current = m_xOptionsLB->get_toggle(i, 0);
+            TriState saved = ((nSavedOptions & 0x00000001) == 0x00000001) ? TRISTATE_TRUE : TRISTATE_FALSE;
+            if (i == int(SvtCompatibilityEntry::Index::AddTableSpacing) - 2)
+            {   // hack: map 2 bools to 1 tristate
+                nSavedOptions = nSavedOptions >> 1;
+                if (saved == TRISTATE_TRUE
+                    && ((nSavedOptions & 0x00000001) != 0x00000001))
+                {
+                    saved = TRISTATE_INDET;
+                }
+            }
+            if (current != saved)
             {
+                bool const bChecked(current != TRISTATE_FALSE);
+                assert(current != TRISTATE_INDET); // can't *change* it to that
                 int nCoptIdx = i + 2; /* Consider "Name" & "Module" indexes */
                 switch ( SvtCompatibilityEntry::Index(nCoptIdx) )
                 {
