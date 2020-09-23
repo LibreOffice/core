@@ -90,21 +90,21 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
     //  make sure the data references of charts are adapted
     //  (this must be after InsertObject!)
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( rSrcDoc, *this, nSrcPos, nDestPos );
-    ScChartHelper::UpdateChartsOnDestinationPage(this, nDestPos);
+    ScChartHelper::UpdateChartsOnDestinationPage(*this, nDestPos);
 }
 
 void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 {
     if (pDocShell && !mpShell)
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         mpShell = pDocShell;
     }
 
     if (mpDrawLayer)
         return;
 
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
     OUString aName;
     if ( mpShell && !mpShell->IsLoading() )       // don't call GetTitle while loading
         aName = mpShell->GetTitle();
@@ -216,7 +216,7 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
         xColorList = mpDrawLayer->GetColorList();
     else
     {
-        ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+        ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
         if (!pColorList.is())
             pColorList = XColorList::CreateStdColorList();
         xColorList = pColorList;
@@ -226,7 +226,7 @@ IMPL_LINK( ScDocument, GetUserDefinedColor, sal_uInt16, nColorIndex, Color* )
 
 void ScDocument::DeleteDrawLayer()
 {
-    ScMutationGuard aGuard(this, ScMutationGuardFlags::CORE);
+    ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);
 
     // remove DrawingLayer's SfxItemPool from Calc's SfxItemPool where
     // it is registered as secondary pool

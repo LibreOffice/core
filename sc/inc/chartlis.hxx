@@ -44,7 +44,7 @@ public:
     class SAL_DLLPRIVATE ExternalRefListener final : public ScExternalRefManager::LinkListener
     {
     public:
-        ExternalRefListener(ScChartListener& rParent, ScDocument* pDoc);
+        ExternalRefListener(ScChartListener& rParent, ScDocument& rDoc);
         virtual ~ExternalRefListener() override;
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) override;
         void addFileId(sal_uInt16 nFileId);
@@ -56,7 +56,7 @@ public:
 
         ScChartListener& mrParent;
         std::unordered_set<sal_uInt16> maFileIds;
-        ScDocument*                 mpDoc;
+        ScDocument&                 mrDoc;
     };
 
 private:
@@ -66,16 +66,16 @@ private:
 
     OUString maName;
     std::unique_ptr<ScChartUnoData> pUnoData;
-    ScDocument*     mpDoc;
+    ScDocument&     mrDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
     bool            bDirty:1;
 
     ScChartListener& operator=( const ScChartListener& ) = delete;
 
 public:
-    ScChartListener( const OUString& rName, ScDocument* pDoc,
+    ScChartListener( const OUString& rName, ScDocument& rDoc,
                      const ScRangeListRef& rRangeListRef );
-    ScChartListener( const OUString& rName, ScDocument* pDoc,
+    ScChartListener( const OUString& rName, ScDocument& rDoc,
                      std::unique_ptr<::std::vector<ScTokenRef>> pTokens );
     ScChartListener( const ScChartListener& ) = delete;
     virtual ~ScChartListener() override;
@@ -138,7 +138,7 @@ private:
     StringSetType maNonOleObjectNames;
 
     Idle            aIdle;
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
 
                     DECL_LINK(TimerHdl, Timer *, void);
 
@@ -147,7 +147,7 @@ private:
     void Init();
 
 public:
-    ScChartListenerCollection( ScDocument* pDoc );
+    ScChartListenerCollection( ScDocument& rDoc );
     ScChartListenerCollection( const ScChartListenerCollection& );
     ~ScChartListenerCollection();
 

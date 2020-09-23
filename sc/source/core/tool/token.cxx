@@ -339,9 +339,9 @@ bool ScRawToken::IsValidReference(const ScDocument& rDoc) const
     switch (eType)
     {
         case svSingleRef:
-            return aRef.Ref1.Valid(&rDoc);
+            return aRef.Ref1.Valid(rDoc);
         case svDoubleRef:
-            return aRef.Valid(&rDoc);
+            return aRef.Valid(rDoc);
         case svExternalSingleRef:
         case svExternalDoubleRef:
             return true;

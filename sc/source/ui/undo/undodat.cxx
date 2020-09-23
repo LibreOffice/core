@@ -1833,7 +1833,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
             bool bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==rDoc.MaxCol() );
 
             xRedoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-            xRedoDoc->InitUndoSelected(&rDoc, *mxMarkData, bColInfo, bRowInfo);
+            xRedoDoc->InitUndoSelected(rDoc, *mxMarkData, bColInfo, bRowInfo);
         }
         //  read "redo" data from the document in the first undo
             //  all sheets - CopyToDocument skips those that don't exist in pRedoDoc

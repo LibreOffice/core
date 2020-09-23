@@ -465,7 +465,7 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
     if (!pNewDBCollection)
     {
-        rNewDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(&rNewDoc)));
+        rNewDoc.SetDBCollection(std::unique_ptr<ScDBCollection>(new ScDBCollection(rNewDoc)));
         pNewDBCollection = rNewDoc.GetDBCollection();
     }
     ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
@@ -4917,7 +4917,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             assert(!rDocument.IsThreadedGroupCalcInProgress());
             rDocument.SetThreadedGroupCalcInProgress(true);
 
-            ScMutationDisable aGuard(&rDocument, ScMutationGuardFlags::CORE);
+            ScMutationDisable aGuard(rDocument, ScMutationGuardFlags::CORE);
 
             // Start nThreadCount new threads
             std::shared_ptr<comphelper::ThreadTaskTag> aTag = comphelper::ThreadPool::createThreadTaskTag();
