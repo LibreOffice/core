@@ -638,7 +638,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_gtk3_kde5=yes
     test_gdb_index=yes
     test_split_debug=yes
-    if test "$enable_fuzzers" != yes; then
+    if test "$enable_fuzzers" != yes && test "$with_system_cairo" != no; then
         test_freetype=yes
         test_fontconfig=yes
     else
