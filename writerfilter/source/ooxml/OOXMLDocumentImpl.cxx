@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
@@ -60,6 +61,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, con
     , mnProgressEndPos(0)
     , m_rBaseURL(utl::MediaDescriptor(rDescriptor).getUnpackedValueOrDefault("DocumentBaseURL", OUString()))
     , maMediaDescriptor(rDescriptor)
+    , mxGraphicMapper(graphic::GraphicMapper::create(mpStream->getContext()))
 {
     pushShapeContext();
 }
