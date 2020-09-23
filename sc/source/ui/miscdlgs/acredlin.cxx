@@ -322,10 +322,10 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     if(eType==SC_CAT_CONTENT)
     {
         if(!pScChangeAction->IsDialogParent())
-            pScChangeAction->GetDescription(aDesc, pDoc, true);
+            pScChangeAction->GetDescription(aDesc, *pDoc, true);
     }
     else
-        pScChangeAction->GetDescription(aDesc, pDoc, !pScChangeAction->IsMasterDelete());
+        pScChangeAction->GetDescription(aDesc, *pDoc, !pScChangeAction->IsMasterDelete());
 
     if (!aDesc.isEmpty())
     {
@@ -394,7 +394,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
         else
         {
             aBuf.append(*MakeTypeString(eType));
-            pScChangeAction->GetDescription( aDesc, pDoc, true);
+            pScChangeAction->GetDescription( aDesc, *pDoc, true);
         }
     }
     else
@@ -403,16 +403,16 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
 
         if(bDelMaster)
         {
-            pScChangeAction->GetDescription( aDesc, pDoc,true);
+            pScChangeAction->GetDescription( aDesc, *pDoc,true);
             pNewData->bDisabled=true;
             pNewData->bIsRejectable=false;
         }
         else
-            pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
+            pScChangeAction->GetDescription( aDesc, *pDoc, !pScChangeAction->IsMasterDelete());
 
     }
 
-    pScChangeAction->GetRefString(aRefStr, pDoc, true);
+    pScChangeAction->GetRefString(aRefStr, *pDoc, true);
 
     aBuf.append('\t');
     aBuf.append(aRefStr);
@@ -565,7 +565,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             else
             {
                 aActionString=*MakeTypeString(eType);
-                pScChangeAction->GetDescription( aDesc, pDoc, true);
+                pScChangeAction->GetDescription( aDesc, *pDoc, true);
             }
         }
         else
@@ -574,12 +574,12 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
 
             if(bDelMaster)
             {
-                pScChangeAction->GetDescription( aDesc, pDoc,true);
+                pScChangeAction->GetDescription( aDesc, *pDoc,true);
                 pNewData->bDisabled=true;
                 pNewData->bIsRejectable=false;
             }
             else
-                pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
+                pScChangeAction->GetDescription( aDesc, *pDoc,!pScChangeAction->IsMasterDelete());
 
         }
 
@@ -597,7 +597,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
             rTreeView.insert(pParent, -1, &aActionString, &sId, nullptr, nullptr, bCreateOnDemand, xEntry.get());
 
             OUString aRefStr;
-            pScChangeAction->GetRefString(aRefStr, pDoc, true);
+            pScChangeAction->GetRefString(aRefStr, *pDoc, true);
             rTreeView.set_text(*xEntry, aRefStr, 1);
 
             if (!bIsGenerated)
@@ -685,7 +685,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
 
     aDesc += a2String;
     aString += "\t";
-    pScChangeAction->GetRefString(aRefStr, pDoc, true);
+    pScChangeAction->GetRefString(aRefStr, *pDoc, true);
     aString += aRefStr + "\t";
 
     if(!bIsGenerated)
@@ -1584,7 +1584,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
     for (size_t i = 0, nCount = aActions.size(); i < nCount; ++i)
     {
         const ScBigRange& rBigRange = aActions[i]->GetBigRange();
-        if (rBigRange.IsValid(pDoc) && m_xDialog->has_toplevel_focus())
+        if (rBigRange.IsValid(*pDoc) && m_xDialog->has_toplevel_focus())
         {
             bool bSetCursor = i == nCount - 1;
             pTabView->MarkRange(rBigRange.MakeRange(), bSetCursor, bContMark);

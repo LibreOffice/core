@@ -10,14 +10,14 @@
 #include <bigrange.hxx>
 #include <document.hxx>
 
-bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
+bool ScBigAddress::IsValid( const ScDocument& rDoc ) const
 {   // min/max interval bounds define whole col/row/tab
     return
-        ((0 <= nCol && nCol <= pDoc->MaxCol())
+        ((0 <= nCol && nCol <= rDoc.MaxCol())
             || nCol == nInt32Min || nCol == nInt32Max) &&
-        ((0 <= nRow && nRow <= pDoc->MaxRow())
+        ((0 <= nRow && nRow <= rDoc.MaxRow())
             || nRow == nInt32Min || nRow == nInt32Max) &&
-        ((0 <= nTab && nTab < pDoc->GetTableCount())
+        ((0 <= nTab && nTab < rDoc.GetTableCount())
             || nTab == nInt32Min || nTab == nInt32Max)
         ;
 }

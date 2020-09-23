@@ -392,7 +392,7 @@ public:
     class SC_DLLPUBLIC ApiGuard
     {
     public:
-        ApiGuard(const ScDocument* pDoc);
+        ApiGuard(const ScDocument& rDoc);
         ~ApiGuard();
     private:
         ScExternalRefManager* mpMgr;
@@ -431,7 +431,7 @@ public:
     };
 
 public:
-    explicit ScExternalRefManager(ScDocument* pDoc);
+    explicit ScExternalRefManager(ScDocument& rDoc);
     virtual ~ScExternalRefManager() override;
 
     virtual OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const override;
@@ -721,7 +721,7 @@ private:
     bool getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab, sal_uInt16 nFileId ) const;
 
     ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
-        sal_uInt16 nFileId, ScDocument* pSrcDoc, const ScAddress& rPos,
+        sal_uInt16 nFileId, ScDocument& rSrcDoc, const ScAddress& rPos,
         ScExternalRefCache::CellFormat* pFmt);
 
     /**
@@ -789,7 +789,7 @@ private:
      */
     void purgeStaleSrcDocument(sal_Int32 nTimeOut);
 
-    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument* pSrcDoc);
+    sal_uInt32 getMappedNumberFormat(sal_uInt16 nFileId, sal_uInt32 nNumFmt, const ScDocument& rSrcDoc);
 
     /**
      * If in maUnsavedDocShells move it to maDocShells and create a correct
@@ -800,7 +800,7 @@ private:
     void transformUnsavedRefToSavedRef( SfxObjectShell* pShell );
 
 private:
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 
     /** cache of referenced ranges and names from source documents. */
     ScExternalRefCache maRefCache;

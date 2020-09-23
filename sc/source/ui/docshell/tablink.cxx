@@ -236,7 +236,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             if (bAddUndo && bUndo)
             {
                 if (bFirst)
-                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                    pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;

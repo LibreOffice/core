@@ -50,7 +50,7 @@ ScDocumentUniquePtr DocFuncUtil::createDeleteContentsUndoDoc(
 {
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
     SCTAB nTab = rRange.aStart.Tab();
-    pUndoDoc->InitUndo(&rDoc, nTab, nTab);
+    pUndoDoc->InitUndo(rDoc, nTab, nTab);
     SCTAB nTabCount = rDoc.GetTableCount();
     for (const auto& rTab : rMark)
         if (rTab != nTab)

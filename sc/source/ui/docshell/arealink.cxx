@@ -342,17 +342,17 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             {
                 if ( nNewEndX != nOldEndX || nNewEndY != nOldEndY )             // range changed?
                 {
-                    pUndoDoc->InitUndo( &rDoc, 0, rDoc.GetTableCount()-1 );
+                    pUndoDoc->InitUndo( rDoc, 0, rDoc.GetTableCount()-1 );
                     rDoc.CopyToDocument(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB,
                                         InsertDeleteFlags::FORMULA, false, *pUndoDoc);     // all formulas
                 }
                 else
-                    pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab );             // only destination table
+                    pUndoDoc->InitUndo( rDoc, nDestTab, nDestTab );             // only destination table
                 rDoc.CopyToDocument(aOldRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc);
             }
             else        // without insertion
             {
-                pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab );             // only destination table
+                pUndoDoc->InitUndo( rDoc, nDestTab, nDestTab );             // only destination table
                 rDoc.CopyToDocument(aMaxRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc);
             }
         }
@@ -413,7 +413,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if ( bAddUndo && bUndo)
         {
             ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
-            pRedoDoc->InitUndo( &rDoc, nDestTab, nDestTab );
+            pRedoDoc->InitUndo( rDoc, nDestTab, nDestTab );
             rDoc.CopyToDocument(aNewRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pRedoDoc);
 
             m_pDocSh->GetUndoManager()->AddUndoAction(

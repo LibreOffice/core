@@ -225,9 +225,9 @@ void ScSpellDialogChildWindow::Init()
     // *** create Undo/Redo documents *** -------------------------------------
 
     mxUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
-    mxUndoDoc->InitUndo( mpDoc, nTab, nTab );
+    mxUndoDoc->InitUndo( *mpDoc, nTab, nTab );
     mxRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
-    mxRedoDoc->InitUndo( mpDoc, nTab, nTab );
+    mxRedoDoc->InitUndo( *mpDoc, nTab, nTab );
 
     if ( rMarkData.GetSelectCount() > 1 )
     {

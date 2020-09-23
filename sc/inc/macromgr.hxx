@@ -25,7 +25,7 @@ class ScUserMacroDepTracker;
 class ScMacroManager
 {
 public:
-    explicit ScMacroManager(ScDocument* pDoc);
+    explicit ScMacroManager(ScDocument& rDoc);
     ~ScMacroManager();
 
     SC_DLLPUBLIC void InitUserFuncData();
@@ -42,7 +42,7 @@ private:
     css::uno::Reference< css::container::XContainerListener > mxContainerListener;
 
     ::std::unique_ptr<ScUserMacroDepTracker> mpDepTracker;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 };
 
 #endif

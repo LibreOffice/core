@@ -2007,7 +2007,7 @@ void ScDocument::InitUndoSelected(const ScDocument& rSrcDoc, const ScMarkData& r
     }
 }
 
-void ScDocument::InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
+void ScDocument::InitUndo( const ScDocument& rSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo, bool bRowInfo )
 {
     if (!bIsUndo)
@@ -2019,10 +2019,10 @@ void ScDocument::InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
     Clear();
 
     // Undo document shares its pooled resources with the source document.
-    SharePooledResources(pSrcDoc);
+    SharePooledResources(&rSrcDoc);
 
-    if (pSrcDoc->mpShell->GetMedium())
-        maFileURL = pSrcDoc->mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
+    if (rSrcDoc.mpShell->GetMedium())
+        maFileURL = rSrcDoc.mpShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
     if ( nTab2 >= static_cast<SCTAB>(maTabs.size()))
         maTabs.resize(nTab2 + 1);
@@ -3262,7 +3262,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
                     if (!pMixDoc)
                     {
                         pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-                        pMixDoc->InitUndo( this, i, i );
+                        pMixDoc->InitUndo( *this, i, i );
                     }
                     else
                         pMixDoc->AddUndoTab( i, i );
@@ -3330,7 +3330,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
                     if (!pMixDoc)
                     {
                         pMixDoc.reset(new ScDocument(SCDOCMODE_UNDO));
-                        pMixDoc->InitUndo( this, i, i );
+                        pMixDoc->InitUndo( *this, i, i );
                     }
                     else
                         pMixDoc->AddUndoTab( i, i );

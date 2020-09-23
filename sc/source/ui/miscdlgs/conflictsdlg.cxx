@@ -402,12 +402,12 @@ void ScConflictsDlg::SetActionString(const ScChangeAction* pAction, ScDocument* 
 {
     OSL_ENSURE( pAction, "ScConflictsDlg::GetActionString(): pAction is null!" );
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
-    if (!(pAction && pDoc))
+    if (!pAction || !pDoc)
         return;
 
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
     OUString aDesc;
-    pAction->GetDescription(aDesc, pDoc, true, false);
+    pAction->GetDescription(aDesc, *pDoc, true, false);
     rTreeView.set_text(rEntry, aDesc, 0);
 
     OUString aUser = comphelper::string::strip(pAction->GetUser(), ' ');
@@ -497,7 +497,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
     for (size_t i = 0, nCount = aActions.size(); i < nCount; ++i)
     {
         const ScBigRange& rBigRange = aActions[i]->GetBigRange();
-        if (rBigRange.IsValid(mpOwnDoc))
+        if (rBigRange.IsValid(*mpOwnDoc))
         {
             bool bSetCursor = i == nCount - 1;
             pTabView->MarkRange(rBigRange.MakeRange(), bSetCursor, bContMark);

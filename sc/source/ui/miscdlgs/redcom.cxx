@@ -99,7 +99,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         return;
 
     OUString aTitle;
-    pChangeAction->GetDescription( aTitle, &pDocShell->GetDocument());
+    pChangeAction->GetDescription(aTitle, pDocShell->GetDocument());
     pDlg->SetText(aTitle);
     aComment=pChangeAction->GetComment();
 
@@ -136,7 +136,7 @@ void ScRedComDialog::SelectCell()
     const ScChangeAction* pAction=pChangeAction;
     const ScBigRange& rRange = pAction->GetBigRange();
 
-    if(rRange.IsValid(&pDocShell->GetDocument()))
+    if(rRange.IsValid(pDocShell->GetDocument()))
     {
         ScViewData* pViewData=ScDocShell::GetViewData();
         ScRange aRef=rRange.MakeRange();

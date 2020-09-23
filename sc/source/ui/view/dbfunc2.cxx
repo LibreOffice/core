@@ -31,7 +31,7 @@ void ScDBFunc::UpdateCharts( bool bAllCharts )
         nFound = DoUpdateCharts( ScAddress( rViewData.GetCurX(),
                                             rViewData.GetCurY(),
                                             rViewData.GetTabNo()),
-                                 &rDoc,
+                                 rDoc,
                                  bAllCharts );
 
     if ( !nFound && !bAllCharts )

@@ -1664,7 +1664,7 @@ public:
 
     void            TransliterateText( const ScMarkData& rMultiMark, TransliterationFlags nType );
 
-    SC_DLLPUBLIC void           InitUndo( const ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
+    SC_DLLPUBLIC void           InitUndo( const ScDocument& rSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );
     void            AddUndoTab( SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );

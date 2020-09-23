@@ -498,7 +498,7 @@ public:
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
     static css::uno::Reference<css::table::XCellRange>
-                            CreateRangeFromDoc( const ScDocument* pDoc, const ScRange& rR );
+                            CreateRangeFromDoc( const ScDocument& rDoc, const ScRange& rR );
 
     virtual css::uno::Any SAL_CALL queryInterface(
                                 const css::uno::Type & rType ) override;

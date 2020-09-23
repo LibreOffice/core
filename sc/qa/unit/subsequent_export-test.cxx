@@ -2903,7 +2903,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
     ScChangeAction* pAction = pCT->GetAction(1);
     CPPUNIT_ASSERT(pAction);
     OUString aDesc;
-    pAction->GetDescription(aDesc, pDoc);
+    pAction->GetDescription(aDesc, *pDoc);
     CPPUNIT_ASSERT_EQUAL(OUString("Cell B2 changed from '<empty>' to '1'"), aDesc);
 
     bGood = aTest.checkRevisionUserAndTime(*pDoc, aOwnerName);

@@ -828,11 +828,11 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
     return false;
 }
 
-static bool lcl_SelHasAttrib( const ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+static bool lcl_SelHasAttrib( const ScDocument& rDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rTabSelection, HasAttrFlags nMask )
 {
     return std::any_of(rTabSelection.begin(), rTabSelection.end(),
-        [&](const SCTAB& rTab) { return pDoc->HasAttrib( nCol1, nRow1, rTab, nCol2, nRow2, rTab, nMask ); });
+        [&](const SCTAB& rTab) { return rDoc.HasAttrib( nCol1, nRow1, rTab, nCol2, nRow2, rTab, nMask ); });
 }
 
 //  paste into sheet:
@@ -841,7 +841,7 @@ static bool lcl_SelHasAttrib( const ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, 
 
 namespace {
 
-bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument* pDoc, const ScMarkData& rMark, weld::Window* pParentWnd)
+bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument& rDoc, const ScMarkData& rMark, weld::Window* pParentWnd)
 {
     bool bIsEmpty = true;
     size_t nRangeSize = rDestRanges.size();
@@ -850,7 +850,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
         for (size_t i = 0; i < nRangeSize && bIsEmpty; ++i)
         {
             const ScRange& rRange = rDestRanges[i];
-            bIsEmpty = pDoc->IsBlockEmpty(
+            bIsEmpty = rDoc.IsBlockEmpty(
                 rTab, rRange.aStart.Col(), rRange.aStart.Row(),
                 rRange.aEnd.Col(), rRange.aEnd.Row());
         }
@@ -1161,7 +1161,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bAskIfNotEmpty )
         {
             ScRangeList aTestRanges(aUserRange);
-            if (!checkDestRangeForOverwrite(aTestRanges, &rDoc, aFilteredMark, GetViewData().GetDialogParent()))
+            if (!checkDestRangeForOverwrite(aTestRanges, rDoc, aFilteredMark, GetViewData().GetDialogParent()))
                 return false;
         }
     }
@@ -1212,7 +1212,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     }
 
     if (bClipOver)
-        if (lcl_SelHasAttrib( &rDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HasAttrFlags::Overlapped ))
+        if (lcl_SelHasAttrib( rDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HasAttrFlags::Overlapped ))
         {       // "Cell merge not possible if cells already merged"
             ScDocAttrIterator aIter( rDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
             const ScPatternAttr* pPattern = nullptr;
@@ -1260,7 +1260,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( bCutMode )
         {
             pRefUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pRefUndoDoc->InitUndo( &rDoc, 0, nTabCount-1 );
+            pRefUndoDoc->InitUndo( rDoc, 0, nTabCount-1 );
 
             pUndoData.reset(new ScRefUndoData( &rDoc ));
         }
@@ -1288,7 +1288,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if ( nFlags & InsertDeleteFlags::CONTENTS )
         {
             pMixDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pMixDoc->InitUndo( &rDoc, nStartTab, nEndTab );
+            pMixDoc->InitUndo( rDoc, nStartTab, nEndTab );
             rDoc.CopyToDocument(nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
                                  InsertDeleteFlags::CONTENTS, false, *pMixDoc);
         }
@@ -1385,7 +1385,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         if (pRefUndoDoc)
         {
             pRedoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-            pRedoDoc->InitUndo( &rDoc, nStartTab, nEndTab, bColInfo, bRowInfo );
+            pRedoDoc->InitUndo( rDoc, nStartTab, nEndTab, bColInfo, bRowInfo );
 
             //      move adapted refs to Redo-Doc
 
@@ -1530,7 +1530,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (bAskIfNotEmpty)
     {
         ScRangeList aTestRanges(aMarkedRange);
-        if (!checkDestRangeForOverwrite(aTestRanges, &rDoc, aMark, GetViewData().GetDialogParent()))
+        if (!checkDestRangeForOverwrite(aTestRanges, rDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 
@@ -1692,7 +1692,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     if (bAskIfNotEmpty)
     {
-        if (!checkDestRangeForOverwrite(aRanges, &rDoc, aMark, GetViewData().GetDialogParent()))
+        if (!checkDestRangeForOverwrite(aRanges, rDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
 

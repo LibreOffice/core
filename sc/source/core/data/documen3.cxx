@@ -605,7 +605,7 @@ ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
     ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr)
-        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager(*pThis));
 
     return pExternalRefMgr.get();
 }

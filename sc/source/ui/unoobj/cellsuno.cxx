@@ -926,13 +926,13 @@ static SCTAB lcl_FirstTab( const ScRangeList& rRanges )
     return rFirst.aStart.Tab();
 }
 
-static bool lcl_WholeSheet( const ScDocument* pDoc, const ScRangeList& rRanges )
+static bool lcl_WholeSheet( const ScDocument& rDoc, const ScRangeList& rRanges )
 {
     if ( rRanges.size() == 1 )
     {
         const ScRange & rRange = rRanges[0];
-        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() &&
-             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
+        if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == rDoc.MaxCol() &&
+             rRange.aStart.Row() == 0 && rRange.aEnd.Row() == rDoc.MaxRow() )
             return true;
     }
     return false;
@@ -1069,7 +1069,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
         if (bUndo)
         {
             if ( i==0 )
-                pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+                pUndoDoc->InitUndo( rDoc, nTab, nTab );
             else
                 pUndoDoc->AddUndoTab( nTab, nTab );
             rDoc.CopyToDocument(rRange, InsertDeleteFlags::ATTRIB, false, *pUndoDoc);
@@ -1130,7 +1130,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     if ( bUndo )
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS, false, *pUndoDoc);
     }
 
@@ -1265,7 +1265,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
     if ( bUndo )
     {
         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab );
         rDoc.CopyToDocument(rRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc);
     }
 
@@ -3811,7 +3811,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                 ScDocument& rDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
                 //  always only within this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -3849,7 +3849,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                 ScDocument& rDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SvxSearchCmd::FIND );
                 //  only always in this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -3931,7 +3931,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                 bool bUndo(rDoc.IsUndoEnabled());
                 pSearchItem->SetCommand( SvxSearchCmd::REPLACE_ALL );
                 //  only always in this object
-                pSearchItem->SetSelection( !lcl_WholeSheet(&rDoc, aRanges) );
+                pSearchItem->SetSelection( !lcl_WholeSheet(rDoc, aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
 
@@ -3959,7 +3959,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     if (bUndo)
                     {
                         pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-                        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+                        pUndoDoc->InitUndo( rDoc, nTab, nTab );
                     }
                     for (const auto& rTab : aMark)
                     {
@@ -4565,9 +4565,9 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
             SCPARAPROPERTIES_SERVICE};
 }
 
-uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( const ScDocument* pDoc, const ScRange& rR )
+uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( const ScDocument& rDoc, const ScRange& rR )
 {
-    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
         return new ScCellRangeObj( pDocShell, rR );
     return nullptr;
@@ -5065,7 +5065,7 @@ void SAL_CALL ScCellRangeObj::setFormulaArray(
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
-        ScExternalRefManager::ApiGuard aExtRefGuard(&pDocSh->GetDocument());
+        ScExternalRefManager::ApiGuard aExtRefGuard(pDocSh->GetDocument());
 
         // GRAM_API for API compatibility.
         bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray, formula::FormulaGrammar::GRAM_API );
@@ -6880,7 +6880,7 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks()
     if (bUndo)
     {
         ScDocumentUniquePtr pUndoDoc(new ScDocument( SCDOCMODE_UNDO ));
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab, true, true );
         rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab, InsertDeleteFlags::NONE, false, *pUndoDoc);
         pDocSh->GetUndoManager()->AddUndoAction(
                                 std::make_unique<ScUndoRemoveBreaks>( pDocSh, nTab, std::move(pUndoDoc) ) );

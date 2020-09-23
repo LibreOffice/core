@@ -333,7 +333,7 @@ void Test::testSharedStringPoolUndoDoc()
     m_pDoc->SetString(ScAddress(0,3,0), "A3");
 
     ScDocument aUndoDoc(SCDOCMODE_UNDO);
-    aUndoDoc.InitUndo(m_pDoc, 0, 0);
+    aUndoDoc.InitUndo(*m_pDoc, 0, 0);
 
     bool bSuccess = aTest.check(*m_pDoc, aUndoDoc);
     CPPUNIT_ASSERT_MESSAGE("Check failed with undo document.", bSuccess);
@@ -3381,7 +3381,7 @@ void Test::testCopyPaste()
 
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
+    pUndoDoc->InitUndo(*m_pDoc, 1, 1, true, true);
     std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, std::move(pUndoDoc)));
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
@@ -3774,7 +3774,7 @@ void Test::testCopyPasteSkipEmpty()
 
     // Create undo document.
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pUndoDoc, &aMark);
 
     // Paste clipboard content onto A1:A5 but skip empty cells.
@@ -3782,7 +3782,7 @@ void Test::testCopyPasteSkipEmpty()
 
     // Create redo document.
     ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pRedoDoc->InitUndo(m_pDoc, 0, 0);
+    pRedoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aDestRange, InsertDeleteFlags::ALL, false, *pRedoDoc, &aMark);
 
     // Create an undo object for this.
@@ -3886,7 +3886,7 @@ void Test::testCutPasteRefUndo()
 
     // Set up undo document for reference update.
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0);
 
     // Do the pasting of 12 into C2.  This should update A2 to reference C2.
     m_pDoc->CopyFromClip(ScAddress(2,1,0), aMark, InsertDeleteFlags::CONTENTS, pUndoDoc.get(), &aClipDoc);
@@ -4081,7 +4081,7 @@ void Test::testUndoCut()
 
     // Set up an undo object for cutting A1:A3.
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 0 ,0);
+    pUndoDoc->InitUndo(*m_pDoc, 0 ,0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
     ASSERT_DOUBLES_EQUAL(  1.0, pUndoDoc->GetValue(ScAddress(0,0,0)));
     ASSERT_DOUBLES_EQUAL( 10.0, pUndoDoc->GetValue(ScAddress(0,1,0)));
@@ -6023,7 +6023,7 @@ void Test::testDeleteContents()
     aMark.SetMarkArea(aRange);
 
     ScDocumentUniquePtr pUndoDoc(new ScDocument(SCDOCMODE_UNDO));
-    pUndoDoc->InitUndo(m_pDoc, 0, 0);
+    pUndoDoc->InitUndo(*m_pDoc, 0, 0);
     m_pDoc->CopyToDocument(aRange, InsertDeleteFlags::CONTENTS, false, *pUndoDoc, &aMark);
     ScUndoDeleteContents aUndo(&getDocShell(), aMark, aRange, std::move(pUndoDoc), false, InsertDeleteFlags::CONTENTS, true);
 

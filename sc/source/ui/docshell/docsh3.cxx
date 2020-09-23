@@ -732,9 +732,9 @@ static bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, bool 
     //  don't compare state if an old change has been accepted
 }
 
-static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, bool bIgnore100Sec )
+static bool lcl_FindAction( ScDocument& rDoc, const ScChangeAction* pAction, ScDocument& rSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, bool bIgnore100Sec )
 {
-    if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction || !pLastSearchAction )
+    if ( !pAction || !pFirstSearchAction || !pLastSearchAction )
     {
         return false;
     }
@@ -751,9 +751,9 @@ static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScD
              pAction->GetBigRange() == pA->GetBigRange() )
         {
             OUString aActionDesc;
-            pAction->GetDescription(aActionDesc, pDoc, true);
+            pAction->GetDescription(aActionDesc, rDoc, true);
             OUString aADesc;
-            pA->GetDescription(aADesc, pSearchDoc, true);
+            pA->GetDescription(aADesc, rSearchDoc, true);
             if (aActionDesc == aADesc)
             {
                 OSL_FAIL( "lcl_FindAction(): found equal action!" );
@@ -894,7 +894,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         bool bMergeAction = false;
         if ( bShared )
         {
-            if ( !bCheckDuplicates || !lcl_FindAction( &rOtherDoc, pSourceAction, &m_aDocument, pFirstSearchAction, pLastSearchAction, bIgnore100Sec ) )
+            if ( !bCheckDuplicates || !lcl_FindAction( rOtherDoc, pSourceAction, m_aDocument, pFirstSearchAction, pLastSearchAction, bIgnore100Sec ) )
             {
                 bMergeAction = true;
             }

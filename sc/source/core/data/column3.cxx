@@ -791,7 +791,7 @@ bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, sc::CellSt
     OUString aStr;
     const Color* pColor;
     sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter, pCondSet);
-    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, &rDocument);
+    ScCellFormat::GetString(aCell, nFormat, aStr, &pColor, *pFormatter, rDocument);
 
     // Store the real script type to the array.
     rAttr.mnScriptType = rDocument.GetStringScriptType(aStr);
@@ -2919,7 +2919,7 @@ void ScColumn::GetString( const ScRefCellValue& aCell, SCROW nRow, OUString& rSt
     sal_uInt32 nFormat = GetNumberFormat( pContext ? *pContext : GetDoc().GetNonThreadedContext(), nRow);
     const Color* pColor = nullptr;
     ScCellFormat::GetString(aCell, nFormat, rString, &pColor,
-        pContext ? *(pContext->GetFormatTable()) : *(GetDoc().GetFormatTable()), &GetDoc());
+        pContext ? *(pContext->GetFormatTable()) : *(GetDoc().GetFormatTable()), GetDoc());
 }
 
 double* ScColumn::GetValueCell( SCROW nRow )
@@ -3146,7 +3146,7 @@ class MaxStringLenHandler
         const Color* pColor;
         OUString aString;
         sal_uInt32 nFormat = mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT).GetValue();
-        ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, &mrColumn.GetDoc());
+        ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
         {

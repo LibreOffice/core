@@ -115,7 +115,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             if (bRecord)
             {
                 pUndoDoc.reset(new ScDocument( SCDOCMODE_UNDO ));
-                pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+                pUndoDoc->InitUndo( rDoc, nTab, nTab );
                 rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
             }
 
@@ -136,7 +136,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             if (bRecord)
             {
                 ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
-                pRedoDoc->InitUndo( &rDoc, nTab, nTab );
+                pRedoDoc->InitUndo( rDoc, nTab, nTab );
                 rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc );
 
                 ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
@@ -213,7 +213,7 @@ void ScViewFunc::DoRefConversion()
     {
         pUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
         SCTAB nTab = aMarkRange.aStart.Tab();
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
         {
@@ -280,7 +280,7 @@ void ScViewFunc::DoRefConversion()
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument( SCDOCMODE_UNDO ));
         SCTAB nTab = aMarkRange.aStart.Tab();
-        pRedoDoc->InitUndo( &rDoc, nTab, nTab );
+        pRedoDoc->InitUndo( rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
         {
@@ -482,9 +482,9 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     if (bRecord)
     {
         pUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+        pUndoDoc->InitUndo( rDoc, nTab, nTab );
         pRedoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
-        pRedoDoc->InitUndo( &rDoc, nTab, nTab );
+        pRedoDoc->InitUndo( rDoc, nTab, nTab );
 
         if ( rMark.GetSelectCount() > 1 )
         {
