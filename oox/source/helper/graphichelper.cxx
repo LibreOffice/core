@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/graphic/GraphicMapper.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <comphelper/seqstream.hxx>
@@ -316,16 +317,24 @@ void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamN
     std::vector<OUString> aMissingStreamNames;
     std::vector< uno::Reference<io::XInputStream> > aMissingStreams;
 
+    initializeGraphicMapperIfNeeded();
+
+    SAL_WARN_IF(!mxGraphicMapper.is(), "oox", "GraphicHelper::importEmbeddedGraphic - graphic mapper not available");
+
     for (const auto& rStreamName : rStreamNames)
     {
-        if(rStreamName.isEmpty())
+
+        if (rStreamName.isEmpty())
         {
             SAL_WARN("oox", "GraphicHelper::importEmbeddedGraphics - empty stream name");
             continue;
         }
 
-        EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find(rStreamName);
-        if (aIt == maEmbeddedGraphics.end())
+        Reference<XGraphic> xGraphic;
+
+        xGraphic = mxGraphicMapper->findGraphic(rStreamName);
+
+        if (!xGraphic.is())
         {
             aMissingStreamNames.push_back(rStreamName);
             aMissingStreams.push_back(mxStorage->openInputStream(rStreamName));
@@ -334,11 +343,14 @@ void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamN
 
     std::vector< uno::Reference<graphic::XGraphic> > aGraphics = importGraphics(aMissingStreams);
 
+
     assert(aGraphics.size() == aMissingStreamNames.size());
     for (size_t i = 0; i < aGraphics.size(); ++i)
     {
         if (aGraphics[i].is())
-            maEmbeddedGraphics[aMissingStreamNames[i]] = aGraphics[i];
+        {
+            mxGraphicMapper->putGraphic(aMissingStreamNames[i], aGraphics[i]);
+        }
     }
 }
 
@@ -346,22 +358,26 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
 {
     Reference< XGraphic > xGraphic;
     OSL_ENSURE( !rStreamName.isEmpty(), "GraphicHelper::importEmbeddedGraphic - empty stream name" );
+
     if( !rStreamName.isEmpty() )
     {
-        EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
-        if( aIt == maEmbeddedGraphics.end() )
+        initializeGraphicMapperIfNeeded();
+
+        SAL_WARN_IF(!mxGraphicMapper.is(), "oox", "GraphicHelper::importEmbeddedGraphic - graphic mapper not available");
+
+        xGraphic = mxGraphicMapper->findGraphic(rStreamName);
+        if (!xGraphic.is())
         {
             // Lazy-loading doesn't work with TIFF or WMF at the moment.
             WmfExternal aHeader;
             if ( (rStreamName.endsWith(".tiff") || rStreamName.endsWith(".wmf") ) && !pExtHeader)
                 pExtHeader = &aHeader;
 
-            xGraphic = importGraphic(mxStorage->openInputStream(rStreamName), pExtHeader);
-            if( xGraphic.is() )
-                maEmbeddedGraphics[ rStreamName ] = xGraphic;
+            auto xStream = mxStorage->openInputStream(rStreamName);
+            xGraphic = importGraphic(xStream, pExtHeader);
+            if (xGraphic.is())
+                mxGraphicMapper->putGraphic(rStreamName, xGraphic);
         }
-        else
-            xGraphic = aIt->second;
     }
     return xGraphic;
 }
@@ -377,6 +393,20 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
             aSizeHmm = convertScreenPixelToHmm( aSizePixel );
     }
     return aSizeHmm;
+}
+
+void GraphicHelper::setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper)
+{
+    mxGraphicMapper = rGraphicMapper;
+}
+
+void GraphicHelper::initializeGraphicMapperIfNeeded() const
+{
+    if (!mxGraphicMapper.is())
+    {
+        auto* pNonConstThis = const_cast<GraphicHelper*>(this);
+        pNonConstThis->mxGraphicMapper = graphic::GraphicMapper::create(mxContext);
+    }
 }
 
 } // namespace oox

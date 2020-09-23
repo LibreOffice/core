@@ -593,6 +593,12 @@ void SAL_CALL ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans:
     maMediaDescriptor = rMediaDescriptor;
 }
 
+void SAL_CALL ShapeContextHandler::setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
+{
+    auto pShapeFilterBase = static_cast<ShapeFilterBase*>(mxFilterBase.get());
+    pShapeFilterBase->setGraphicMapper(rxGraphicMapper);
+}
+
 OUString ShapeContextHandler::getImplementationName()
 {
     return "com.sun.star.comp.oox.ShapeContextHandler";
