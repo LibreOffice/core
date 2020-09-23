@@ -546,6 +546,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreakB, "tdf132149_pgBreakB.odt")
+{
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //page::breakBefore must not be lost. This SHOULD be on page 3, but sadly it is not.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");  //landscape
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
 {
     // This 3 page document is designed to visually exaggerate the problems
@@ -554,6 +565,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
     uno::Reference<beans::XPropertySet> xParaThird(getParagraph(3), uno::UNO_QUERY_THROW);
     // The only page style change should be between page 1 and 2.
     CPPUNIT_ASSERT_EQUAL(uno::Any(), xParaThird->getPropertyValue("PageDescName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf136952_pgBreak3B, "tdf136952_pgBreak3B.odt")
+{
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //page::breakAfter must not be lost.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "8391");  //landscape
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")
