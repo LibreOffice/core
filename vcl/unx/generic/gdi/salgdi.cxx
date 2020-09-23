@@ -773,6 +773,11 @@ bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradien
     return mxImpl->drawGradient(rPoly, rGradient);
 }
 
+bool X11SalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient)
+{
+    return mxImpl->implDrawGradient(rPolyPolygon, rGradient);
+}
+
 SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
 {
     if (m_pFrame)

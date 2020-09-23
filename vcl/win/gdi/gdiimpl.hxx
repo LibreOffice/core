@@ -241,6 +241,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) override;
+    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
+                SalGradient const & rGradient) override;
 
     virtual bool supportsOperation(OutDevSupportType eType) const override;
 };
