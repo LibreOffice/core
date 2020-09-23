@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppunit/Protector.h>
 #include <sal/types.h>
 #include <sal/log.hxx>
@@ -26,6 +28,16 @@ public:
 
 private:
     virtual ~Protector() override {
+        // the desktop has to be terminate() before it can be dispose()
+        css::uno::Reference<css::frame::XDesktop> xDesktop;
+        try {
+            xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+        } catch (css::uno::DeploymentException &) {}
+        if (xDesktop)
+            try {
+                xDesktop->terminate();
+            } catch (css::uno::DeploymentException &) {}
+
 #if defined(__COVERITY__)
         try {
 #endif
