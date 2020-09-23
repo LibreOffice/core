@@ -2525,7 +2525,7 @@ void SwBorderAttrs::GetBottomLine_( const SwFrame& _rFrame )
 
 void SwBorderAttrs::CalcLineSpacing_()
 {
-    // tdf#125300 compatibility option AddParaSpacingToTableCells needs also line spacing
+    // tdf#125300 compatibility option AddParaLineSpacingToTableCells needs also line spacing
     const SvxLineSpacingItem &rSpace = m_rAttrSet.GetLineSpacing();
     if ( rSpace.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop && rSpace.GetPropLineSpace() > 100 )
     {

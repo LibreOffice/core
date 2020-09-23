@@ -1337,6 +1337,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bUseOldNumbering = false;
     bool bAddExternalLeading = false;
     bool bAddParaSpacingToTableCells = false;
+    bool bAddParaLineSpacingToTableCells = false;
     bool bUseFormerLineSpacing = false;
     bool bUseFormerObjectPositioning = false;
     bool bUseFormerTextWrapping = false;
@@ -1409,6 +1410,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bAddExternalLeading = true;
                 else if ( rValue.Name == "AddParaSpacingToTableCells" )
                     bAddParaSpacingToTableCells = true;
+                else if ( rValue.Name == "AddParaLineSpacingToTableCells" )
+                    bAddParaLineSpacingToTableCells = true;
                 else if ( rValue.Name == "UseFormerLineSpacing" )
                     bUseFormerLineSpacing = true;
                 else if ( rValue.Name == "UseFormerObjectPositioning" )
@@ -1510,6 +1513,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue( "AddParaSpacingToTableCells",
             makeAny( false ) );
+    }
+    if (!bAddParaLineSpacingToTableCells)
+    {
+        xProps->setPropertyValue("AddParaLineSpacingToTableCells", makeAny(false));
     }
 
     if( !bUseFormerTextWrapping )
