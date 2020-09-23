@@ -41,7 +41,7 @@ class ScMyOLEFixer
     std::vector<ScMyToFixupOLE>   aShapes;
     ScChartListenerCollection*  pCollection;
 
-    void CreateChartListener(ScDocument* pDoc,
+    void CreateChartListener(ScDocument& rDoc,
         const OUString& rName,
         const OUString& rRangeList);
 public:
