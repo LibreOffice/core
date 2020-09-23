@@ -21,6 +21,7 @@
 #define INCLUDED_FONTCHARMAP_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/vclenum.hxx>
 #include <tools/ref.hxx>
 
 class ImplFontCharMap;
@@ -28,7 +29,6 @@ class CmapResult;
 class FontCharMap;
 class OutputDevice;
 
-typedef sal_uInt32 sal_UCS4;
 typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 

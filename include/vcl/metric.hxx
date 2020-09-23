@@ -27,7 +27,6 @@
 
 class FontCharMap;
 
-typedef sal_uInt32 sal_UCS4;
 typedef tools::SvRef<FontCharMap> FontCharMapRef;
 
 class VCL_DLLPUBLIC FontMetric : public vcl::Font
