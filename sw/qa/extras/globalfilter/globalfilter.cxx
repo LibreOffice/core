@@ -44,6 +44,7 @@ public:
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
     void testGraphicShape();
+    void testMultipleIdenticalGraphics();
     void testCharHighlight();
     void testCharHighlightODF();
     void testCharHighlightBody();
@@ -68,6 +69,7 @@ public:
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testGraphicShape);
+    CPPUNIT_TEST(testMultipleIdenticalGraphics);
     CPPUNIT_TEST(testCharHighlight);
     CPPUNIT_TEST(testCharHighlightODF);
     CPPUNIT_TEST(testMSCharBackgroundEditing);
@@ -391,6 +393,87 @@ void Test::testGraphicShape()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(620), xBitmap->getSize().Width);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(465), xBitmap->getSize().Height);
         }
+    }
+}
+
+namespace
+{
+
+std::vector<uno::Reference<graphic::XGraphic>>
+    lcl_getGraphics(const uno::Reference<lang::XComponent>& xComponent)
+{
+    std::vector<uno::Reference<graphic::XGraphic>> aGraphics;
+    uno::Reference<drawing::XShape> xShape;
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xShapeProperties(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xShapeProperties->getPropertyValue("Graphic") >>= xGraphic;
+        if (xGraphic.is())
+        {
+            aGraphics.push_back(xGraphic);
+        }
+    }
+
+    return aGraphics;
+}
+
+}
+
+void Test::testMultipleIdenticalGraphics()
+{
+    // We have multiple identical graphics. When we save them we want
+    // them to be saved de-duplicated and the same should still be true
+    // after loading them again. This test check that the de-duplication
+    // works as expected.
+
+    const OUString aFilterNames[] {
+        "writer8",
+        //"Rich Text Format", // doesn't work correctly for now
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for (OUString const & rFilterName : aFilterNames)
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+
+        mxComponent = loadFromDesktop(m_directories.getURLFromSrc("/sw/qa/extras/globalfilter/data/multiple_identical_graphics.odt"), "com.sun.star.text.TextDocument");
+
+        // Export the document and import again for a check
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= rFilterName;
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        mxComponent->dispose();
+
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check whether graphic exported well
+        const OString sFailedMessage = OStringLiteral("Failed on filter: ") + rFilterName.toUtf8();
+        auto aGraphics = lcl_getGraphics(mxComponent);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(5), aGraphics.size());
+
+        // Get all GfxLink addresses, we expect all of them to be the same
+        // indicating we use the same graphic instance for all shapes
+        std::vector<sal_Int64> aGfxLinkAddresses;
+        for (auto const & rxGraphic : aGraphics)
+        {
+            GfxLink* pLink = Graphic(rxGraphic).GetSharedGfxLink().get();
+            aGfxLinkAddresses.emplace_back(reinterpret_cast<sal_Int64>(pLink));
+        }
+
+        // Check all addresses are the same
+        bool bResult = std::equal(aGfxLinkAddresses.begin() + 1, aGfxLinkAddresses.end(), aGfxLinkAddresses.begin());
+        const OString sGraphicNotTheSameFailedMessage = OStringLiteral("Graphics not the same for filter: '") + rFilterName.toUtf8() + OStringLiteral("'");
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sGraphicNotTheSameFailedMessage.getStr(), true, bResult);
     }
 }
 

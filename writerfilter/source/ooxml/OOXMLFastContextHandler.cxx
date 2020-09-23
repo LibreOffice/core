@@ -1670,6 +1670,11 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
 
     mrShapeContext->setRelationFragmentPath(mpParserState->getTarget());
 
+    auto xGraphicMapper = getDocument()->getGraphicMapper();
+
+    if (xGraphicMapper.is())
+        mrShapeContext->setGraphicMapper(xGraphicMapper);
+
     OOXMLFastContextHandler::setToken(nToken);
 
     if (mrShapeContext.is())
