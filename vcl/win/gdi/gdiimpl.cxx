@@ -2688,6 +2688,12 @@ bool WinSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
     return false;
 }
 
+bool WinSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/,
+    SalGradient const & /*rGradient*/)
+{
+    return false;
+}
+
 bool WinSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
     static bool bAllowForTest(true);

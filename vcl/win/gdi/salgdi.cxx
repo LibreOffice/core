@@ -816,6 +816,16 @@ bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* 
     return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
 
+bool WinSalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
+{
+    return mpImpl->drawGradient(rPoly, rGradient);
+}
+
+bool WinSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient)
+{
+    return mpImpl->implDrawGradient(rPolyPolygon, rGradient);
+}
+
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )

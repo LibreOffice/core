@@ -178,6 +178,8 @@ public:
                                         bool bPixelSnapHairline) override;
 
     virtual bool                    drawGradient( const tools::PolyPolygon&, const Gradient& ) override;
+    virtual bool                    implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon,
+                                        SalGradient const & rGradient) override;
 
 #if 1 // TODO: remove these obsolete methods
     virtual bool                    drawPolyLineBezier(
