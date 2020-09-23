@@ -65,6 +65,15 @@ public:
     static TestResult checkChecker(Bitmap& rBitmap, sal_Int32 nStartX, sal_Int32 nEndX,
                                    sal_Int32 nStartY, sal_Int32 nEndY, std::vector<Color> const & rExpected);
 
+    static TestResult checkLinearGradient(Bitmap& bitmap);
+    static TestResult checkLinearGradientAngled(Bitmap& bitmap);
+    static TestResult checkLinearGradientBorder(Bitmap& bitmap);
+    static TestResult checkLinearGradientIntensity(Bitmap& bitmap);
+    static TestResult checkLinearGradientSteps(Bitmap& bitmap);
+    static TestResult checkAxialGradient(Bitmap& bitmap);
+    static TestResult checkRadialGradient(Bitmap& bitmap);
+    static TestResult checkRadialGradientOfs(Bitmap& bitmap);
+
     static void createDiamondPoints(tools::Rectangle rRect, int nOffset,
                                     Point& rPoint1, Point& rPoint2,
                                     Point& rPoint3, Point& rPoint4);
@@ -200,7 +209,13 @@ public:
     OutputDeviceTestGradient() = default;
 
     Bitmap setupLinearGradient();
+    Bitmap setupLinearGradientAngled();
+    Bitmap setupLinearGradientBorder();
+    Bitmap setupLinearGradientIntensity();
+    Bitmap setupLinearGradientSteps();
+    Bitmap setupAxialGradient();
     Bitmap setupRadialGradient();
+    Bitmap setupRadialGradientOfs();
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestClip : public OutputDeviceTestCommon

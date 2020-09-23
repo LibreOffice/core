@@ -90,7 +90,7 @@ class VisualBackendTestWindow : public WorkWindow
 private:
     Timer maUpdateTimer;
     std::vector<std::chrono::high_resolution_clock::time_point> mTimePoints;
-    static constexpr unsigned char gnNumberOfTests = 10;
+    static constexpr unsigned char gnNumberOfTests = 11;
     unsigned char mnTest;
     bool mbAnimate;
     ScopedVclPtr<VirtualDevice> mpVDev;
@@ -526,6 +526,71 @@ public:
         }
     }
 
+    static void testGradients(vcl::RenderContext& rRenderContext, int nWidth, int nHeight)
+    {
+        tools::Rectangle aRectangle;
+        size_t index = 0;
+
+        std::vector<tools::Rectangle> aRegions = setupRegions(4, 2, nWidth, nHeight);
+
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLinearGradient();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkLinearGradient(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLinearGradientAngled();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkLinearGradientAngled(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLinearGradientBorder();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkLinearGradientBorder(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLinearGradientIntensity();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkLinearGradientIntensity(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupLinearGradientSteps();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkLinearGradientSteps(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupAxialGradient();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkAxialGradient(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupRadialGradient();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkRadialGradient(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+        aRectangle = aRegions[index++];
+        {
+            vcl::test::OutputDeviceTestGradient aOutDevTest;
+            Bitmap aBitmap = aOutDevTest.setupRadialGradientOfs();
+            assertAndSetBackground(vcl::test::OutputDeviceTestGradient::checkRadialGradientOfs(aBitmap), aRectangle, rRenderContext);
+            drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
+        }
+    }
+
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/) override
     {
         if (mnTest % gnNumberOfTests == gnNumberOfTests - 1)
@@ -634,7 +699,11 @@ public:
         }
         else if (mnTest % gnNumberOfTests == 8)
         {
-            std::vector<tools::Rectangle> aRegions = setupRegions(2, 2, nWidth, nHeight);
+            testGradients(rRenderContext, nWidth, nHeight);
+        }
+        else if (mnTest % gnNumberOfTests == 9)
+        {
+            std::vector<tools::Rectangle> aRegions = setupRegions(2, 1, nWidth, nHeight);
 
             aRectangle = aRegions[index++];
             {
@@ -648,18 +717,6 @@ public:
                 vcl::test::OutputDeviceTestLine aOutDevTest;
                 Bitmap aBitmap = aOutDevTest.setupDashedLine();
                 assertAndSetBackground(vcl::test::OutputDeviceTestLine::checkDashedLine(aBitmap), aRectangle, rRenderContext);
-                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
-            }
-            aRectangle = aRegions[index++];
-            {
-                vcl::test::OutputDeviceTestGradient aOutDevTest;
-                Bitmap aBitmap = aOutDevTest.setupLinearGradient();
-                drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
-            }
-            aRectangle = aRegions[index++];
-            {
-                vcl::test::OutputDeviceTestGradient aOutDevTest;
-                Bitmap aBitmap = aOutDevTest.setupRadialGradient();
                 drawBitmapScaledAndCentered(aRectangle, aBitmap, rRenderContext);
             }
         }
