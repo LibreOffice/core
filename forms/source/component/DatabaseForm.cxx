@@ -1909,9 +1909,9 @@ void SAL_CALL ODatabaseForm::reset()
 }
 
 
-void ODatabaseForm::reset_impl(bool _bAproveByListeners)
+void ODatabaseForm::reset_impl(bool _bApproveByListeners)
 {
-    if ( _bAproveByListeners )
+    if ( _bApproveByListeners )
         if ( !m_aResetListeners.approveReset() )
             return;
 
