@@ -441,11 +441,11 @@ void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     if (!comphelper::LibreOfficeKit::isActive())
     {
         // draw a line at the bottom to distinguish that from the grid
-        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-        Size aSize = GetSizePixel();
-        rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
-                                Point(aSize.Width() - 1, aSize.Height() - 1));
+        // const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        // rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+        // Size aSize = GetSizePixel();
+        // rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
+        //                        Point(aSize.Width() - 1, aSize.Height() - 1));
     }
 }
 
