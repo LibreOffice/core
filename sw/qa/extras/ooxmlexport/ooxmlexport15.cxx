@@ -552,6 +552,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak, "tdf132149_pgBreak.odt")
     CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreakB, "tdf132149_pgBreakB.odt")
+{
+    // This 5 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //Sanity check to ensure the correct page is being tested. This SHOULD be on page 3, but sadly it is not.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[5]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    //Prior to this fix, the original alternation between portrait and landscape was completely lost.
+    assertXPath(pDump, "//page[5]/infos/bounds", "width", "8391");  //landscape
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
 {
     // This 3 page document is designed to visually exaggerate the problems
@@ -564,6 +576,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf132149_pgBreak2, "tdf132149_pgBreak2.odt")
     // The ODT is only 2 paragraphs, but a hack to get the right page style breaks para1 into pieces.
     // This was 4 paragraphs - the unnecessary page break had hacked in another paragraph split.
     CPPUNIT_ASSERT_LESSEQUAL( 3, getParagraphs() );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf136952_pgBreak3B, "tdf136952_pgBreak3B.odt")
+{
+    // This 4 page document is designed to visually exaggerate the problems
+    // of emulating LO's followed-by-page-style into MSWord's sections.
+    xmlDocUniquePtr pDump = parseLayoutDump();
+
+    //page::breakAfter must not be lost.
+    //Prior to this bug fix, the Lorem ipsum paragraph was in the middle of a portrait page, with no switch to landscape occurring.
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[3]/body/txt[1]/Text[1]", "Portion").startsWith("Lorem ipsum"));
+    assertXPath(pDump, "//page[3]/infos/bounds", "width", "8391");  //landscape
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135949_anchoredBeforeBreak, "tdf135949_anchoredBeforeBreak.docx")

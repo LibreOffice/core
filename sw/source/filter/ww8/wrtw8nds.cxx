@@ -2736,9 +2736,22 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             // only try to sectionBreak after a split para if the next node specifies a break
             if ( bNeedParaSplit )
             {
+                m_pCurrentPageDesc = pNextSplitParaPageDesc;
                 SwNodeIndex aNextIndex( rNode, 1 );
                 const SwTextNode* pNextNode = aNextIndex.GetNode().GetTextNode();
                 bCheckSectionBreak = pNextNode && !NoPageBreakSection( pNextNode->GetpSwAttrSet() );
+
+                if ( !bCheckSectionBreak )
+                {
+                    auto rBreak = ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK);
+                    if ( rBreak.GetBreak() == SvxBreak::PageAfter )
+                    {
+                        if ( pNextNode && pNextNode->FindPageDesc() != pNextSplitParaPageDesc )
+                            bCheckSectionBreak = true;
+                        else
+                            AttrOutput().SectionBreak(msword::PageBreak, /*bBreakAfter=*/true);
+                    }
+                }
             }
 
             if ( bCheckSectionBreak )
