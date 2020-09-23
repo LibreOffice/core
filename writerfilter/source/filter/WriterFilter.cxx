@@ -293,6 +293,7 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("DoNotResetParaAttrsForNumFont", uno::makeAny(false));
     xSettings->setPropertyValue("UseFormerLineSpacing", uno::makeAny(false));
     xSettings->setPropertyValue("AddParaSpacingToTableCells", uno::makeAny(true));
+    xSettings->setPropertyValue("AddParaLineSpacingToTableCells", uno::makeAny(true));
     xSettings->setPropertyValue("UseFormerObjectPositioning", uno::makeAny(false));
     xSettings->setPropertyValue("ConsiderTextWrapOnObjPos", uno::makeAny(true));
     xSettings->setPropertyValue("UseFormerTextWrapping", uno::makeAny(false));
