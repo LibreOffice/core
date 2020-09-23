@@ -338,10 +338,7 @@ protected:
     /// Get TextFrame by name
     css::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);
 
-    void header()
-    {
-        std::cout << "File tested,Execution Time (ms)" << std::endl;
-    }
+    void header();
 
     void load(const OUString& pDir, const char* pName, const char* pPassword = nullptr)
     {
