@@ -6599,7 +6599,7 @@ void SwEditWin::SetGraphicTwipPosition(bool bStart, const Point& rPosition)
     }
 }
 
-void SwEditWin::SetOutlineContentVisiblityButtons()
+void SwEditWin::SetOutlineContentVisibilityButtons()
 {
     SwWrtShell& rSh = m_rView.GetWrtShell();
     const SwOutlineNodes& rOutlineNodes = rSh.GetDoc()->GetNodes().GetOutLineNds();
