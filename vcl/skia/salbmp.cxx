@@ -47,6 +47,9 @@
 #define CANARY "skia-canary"
 #endif
 
+// As constexpr here, evaluating it directly in code makes Clang warn about unreachable code.
+constexpr bool kN32_SkColorTypeIsBGRA = (kN32_SkColorType == kBGRA_8888_SkColorType);
+
 SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
@@ -253,23 +256,14 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             buffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
         case 24:
-        {
-// Make the RGB/BGR format match the default Skia 32bpp format, to allow
-// easy conversion later.
-// Use a macro to hide an unreachable code warning.
-#define GET_FORMAT                                                                                 \
-    (kN32_SkColorType == kBGRA_8888_SkColorType ? ScanlineFormat::N24BitTcBgr                      \
-                                                : ScanlineFormat::N24BitTcRgb)
-            buffer->mnFormat = GET_FORMAT;
-#undef GET_FORMAT
+            // Make the RGB/BGR format match the default Skia 32bpp format, to allow
+            // easy conversion later.
+            buffer->mnFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N24BitTcBgr
+                                                      : ScanlineFormat::N24BitTcRgb;
             break;
-        }
         case 32:
-#define GET_FORMAT                                                                                 \
-    (kN32_SkColorType == kBGRA_8888_SkColorType ? ScanlineFormat::N32BitTcBgra                     \
-                                                : ScanlineFormat::N32BitTcRgba)
-            buffer->mnFormat = GET_FORMAT;
-#undef GET_FORMAT
+            buffer->mnFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
+                                                      : ScanlineFormat::N32BitTcRgba;
             break;
         default:
             abort();
@@ -542,13 +536,9 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
         }
         else
         {
-// Use a macro to hide an unreachable code warning.
-#define GET_FORMAT                                                                                 \
-    (kN32_SkColorType == kBGRA_8888_SkColorType ? BitConvert::BGRA : BitConvert::RGBA)
-            std::unique_ptr<sal_uInt8[]> data
-                = convertDataBitCount(mBuffer.get(), mPixelsSize.Width(), mPixelsSize.Height(),
-                                      mBitCount, mScanlineSize, mPalette, GET_FORMAT);
-#undef GET_FORMAT
+            std::unique_ptr<sal_uInt8[]> data = convertDataBitCount(
+                mBuffer.get(), mPixelsSize.Width(), mPixelsSize.Height(), mBitCount, mScanlineSize,
+                mPalette, kN32_SkColorTypeIsBGRA ? BitConvert::BGRA : BitConvert::RGBA);
             if (!bitmap.installPixels(
                     SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(),
                                          kOpaque_SkAlphaType),
