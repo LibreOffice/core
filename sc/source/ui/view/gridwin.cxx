@@ -873,9 +873,10 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         ScCheckListMenuControl::ResultType aResult;
         rControl.getResult(aResult);
 
-        if (aResult == aSaveAutoFilterResult)
+        if (aResult == aSaveAutoFilterResult && !rControl.isAllSelected())
         {
             SAL_INFO("sc.ui", "Apply autofilter to data when entries are the same");
+
             // Apply autofilter to data
             ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
             pEntry->bDoQuery = true;
