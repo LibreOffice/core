@@ -19,7 +19,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from collections import Mapping
+from collections.abc import Mapping
 import gdb
 import re
 import six
