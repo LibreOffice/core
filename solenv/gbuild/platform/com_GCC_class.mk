@@ -194,7 +194,13 @@ endef
 # CppunitTest class
 
 ifeq ($(strip $(DEBUGCPPUNIT)),TRUE)
-gb_CppunitTest_GDBTRACE := gdb -nx -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout --args
+ifeq ($(strip $(CPPUNITTRACE)),)
+CPPUNITTRACE := gdb --args
+endif
+ifeq ($(filter gdb,$(CPPUNITTRACE)),)
+$(error For DEBUGCPPUNIT=TRUE, CPPUNITTRACE must be a command that runs gdb)
+endif
+gb_CppunitTest_DEBUGCPPUNIT := -nx --batch --command=$(SRCDIR)/solenv/bin/gdbtrycatchtrace-stdout
 endif
 
 # ExternalProject class
