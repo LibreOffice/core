@@ -56,7 +56,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
         InitLineColor();
 
     // use b2dpolygon drawing if possible
-    if(DrawPolyLineDirect(
+    if(DrawPolyLineDirectInternal(
         basegfx::B2DHomMatrix(),
         rPoly.getB2DPolygon()))
     {
@@ -171,7 +171,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
 
     // use b2dpolygon drawing if possible
-    if(DrawPolyLineDirect(
+    if(DrawPolyLineDirectInternal(
         basegfx::B2DHomMatrix(),
         rB2DPolygon,
         fLineWidth,
@@ -228,7 +228,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(auto const& rPolygon : aAreaPolyPolygon)
         {
-            (void)DrawPolyLineDirect(
+            (void)DrawPolyLineDirectInternal(
                 basegfx::B2DHomMatrix(),
                 rPolygon,
                 0.0,
@@ -311,6 +311,40 @@ bool OutputDevice::DrawPolyLineDirect(
     double fMiterMinimumAngle,
     bool bBypassAACheck)
 {
+    if(DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
+        pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bBypassAACheck))
+    {
+        // Worked, add metafile action (if recorded). This is done only here,
+        // because this function is public, other OutDev functions already add metafile
+        // actions, so they call the internal function directly.
+        if( mpMetaFile )
+        {
+            LineInfo aLineInfo;
+            if( fLineWidth != 0.0 )
+                aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+            // Transport known information, might be needed
+            aLineInfo.SetLineJoin(eLineJoin);
+            aLineInfo.SetLineCap(eLineCap);
+            // MiterMinimumAngle does not exist yet in LineInfo
+            const tools::Polygon aToolsPolygon( rB2DPolygon );
+            mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
+        }
+        return true;
+    }
+    return false;
+}
+
+bool OutputDevice::DrawPolyLineDirectInternal(
+    const basegfx::B2DHomMatrix& rObjectTransform,
+    const basegfx::B2DPolygon& rB2DPolygon,
+    double fLineWidth,
+    double fTransparency,
+    const std::vector< double >* pStroke, // MM01
+    basegfx::B2DLineJoin eLineJoin,
+    css::drawing::LineCap eLineCap,
+    double fMiterMinimumAngle,
+    bool bBypassAACheck)
+{
     assert(!is_double_buffered_window());
 
     // AW: Do NOT paint empty PolyPolygons
@@ -358,20 +392,6 @@ bool OutputDevice::DrawPolyLineDirect(
 
         if( bDrawSuccess )
         {
-            // worked, add metafile action (if recorded) and return true
-            if( mpMetaFile )
-            {
-                LineInfo aLineInfo;
-                if( fLineWidth != 0.0 )
-                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-                // Transport known information, might be needed
-                aLineInfo.SetLineJoin(eLineJoin);
-                aLineInfo.SetLineCap(eLineCap);
-                // MiterMinimumAngle does not exist yet in LineInfo
-                const tools::Polygon aToolsPolygon( rB2DPolygon );
-                mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
-            }
-
             if (mpAlphaVDev)
                 mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
                                                 fTransparency, pStroke, eLineJoin, eLineCap,

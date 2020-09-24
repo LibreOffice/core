@@ -826,6 +826,16 @@ private:
 
     ///@}
 
+    bool                        DrawPolyLineDirectInternal(
+                                    const basegfx::B2DHomMatrix& rObjectTransform,
+                                    const basegfx::B2DPolygon& rB2DPolygon,
+                                    double fLineWidth = 0.0,
+                                    double fTransparency = 0.0,
+                                    const std::vector< double >* = nullptr, // MM01
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
+                                    bool bBypassAACheck = false);
 
     /** @name Polygon functions
      */
