@@ -419,7 +419,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
     loadLibrary( Name );
 
     bool bKillCryptedFiles = false;
-    bool bKillUncryptedFiles = false;
+    bool bKillUnencryptedFiles = false;
 
     // Remove or change password?
     if( bOldPassword )
@@ -480,11 +480,11 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             // Store application basic crypted
             uno::Reference< embed::XStorage > xStorage;
             storeLibraries_Impl( xStorage, false );
-            bKillUncryptedFiles = true;
+            bKillUnencryptedFiles = true;
         }
     }
 
-    if( !(bKillCryptedFiles || bKillUncryptedFiles) )
+    if( !(bKillCryptedFiles || bKillUnencryptedFiles) )
         return;
 
     Sequence< OUString > aElementNames = pImplLib->getElementNames();
@@ -501,7 +501,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             aElementInetObj.insertName( aElementName, false,
                                         INetURLObject::LAST_SEGMENT,
                                         INetURLObject::EncodeMechanism::All );
-            if( bKillUncryptedFiles )
+            if( bKillUnencryptedFiles )
             {
                 aElementInetObj.setExtension( maLibElementFileExtension );
             }
