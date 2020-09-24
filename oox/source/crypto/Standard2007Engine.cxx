@@ -77,12 +77,12 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     std::vector<sal_uInt8> initialData(saltSize + passwordByteLength);
     std::copy(saltArray, saltArray + saltSize, initialData.begin());
 
-    const sal_uInt8* passwordByteArray = reinterpret_cast<const sal_uInt8*>(rPassword.getStr());
-
-    std::copy(
-        passwordByteArray,
-        passwordByteArray + passwordByteLength,
-        initialData.begin() + saltSize);
+    auto p = initialData.begin() + saltSize;
+    for (sal_Int32 i = 0; i != rPassword.getLength(); ++i) {
+        auto c = rPassword[i];
+        *p++ = c & 0xFF;
+        *p++ = c >> 8;
+    }
 
     // use "hash" vector for result of sha1 hashing
     // calculate SHA1 hash of initialData
@@ -221,11 +221,23 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
     sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
     rStream.WriteUInt32(headerSize);
 
-    rStream.writeMemory(&mInfo.header, encryptionHeaderSize);
+    rStream.WriteUInt32(mInfo.header.flags);
+    rStream.WriteUInt32(mInfo.header.sizeExtra);
+    rStream.WriteUInt32(mInfo.header.algId);
+    rStream.WriteUInt32(mInfo.header.algIdHash);
+    rStream.WriteUInt32(mInfo.header.keyBits);
+    rStream.WriteUInt32(mInfo.header.providedType);
+    rStream.WriteUInt32(mInfo.header.reserved1);
+    rStream.WriteUInt32(mInfo.header.reserved2);
     rStream.writeUnicodeArray(lclCspName);
     rStream.WriteUInt16(0);
 
-    rStream.writeMemory(&mInfo.verifier, sizeof(msfilter::EncryptionVerifierAES));
+    rStream.WriteUInt32(mInfo.verifier.saltSize);
+    rStream.writeMemory(&mInfo.verifier.salt, sizeof mInfo.verifier.salt);
+    rStream.writeMemory(&mInfo.verifier.encryptedVerifier, sizeof mInfo.verifier.encryptedVerifier);
+    rStream.WriteUInt32(mInfo.verifier.encryptedVerifierHashSize);
+    rStream.writeMemory(
+        &mInfo.verifier.encryptedVerifierHash, sizeof mInfo.verifier.encryptedVerifierHash);
 }
 
 void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,

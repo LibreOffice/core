@@ -461,9 +461,11 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
 
     while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
-        sal_uInt8* segmentBegin = reinterpret_cast<sal_uInt8*>(&segment);
-        sal_uInt8* segmentEnd   = segmentBegin + sizeof(segment);
-        std::copy(segmentBegin, segmentEnd, saltWithBlockKey.begin() + saltSize);
+        auto p = saltWithBlockKey.begin() + saltSize;
+        p[0] = segment & 0xFF;
+        p[1] = (segment >> 8) & 0xFF;
+        p[2] = (segment >> 16) & 0xFF;
+        p[3] = segment >> 24;
 
         hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
 
@@ -804,9 +806,11 @@ void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rx
                         inputLength : oox::crypto::roundUp(inputLength, sal_uInt32(mInfo.blockSize));
 
         // Update Key
-        sal_uInt8* segmentBegin = reinterpret_cast<sal_uInt8*>(&nSegment);
-        sal_uInt8* segmentEnd   = segmentBegin + nSegmentByteSize;
-        std::copy(segmentBegin, segmentEnd, saltWithBlockKey.begin() + saltSize);
+        auto p = saltWithBlockKey.begin() + saltSize;
+        p[0] = nSegment & 0xFF;
+        p[1] = (nSegment >> 8) & 0xFF;
+        p[2] = (nSegment >> 16) & 0xFF;
+        p[3] = nSegment >> 24;
 
         hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
 
