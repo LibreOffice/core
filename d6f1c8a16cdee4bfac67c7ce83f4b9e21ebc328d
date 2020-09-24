@@ -16,6 +16,24 @@
       "revId": "d6f1c8a16cdee4bfac67c7ce83f4b9e21ebc328d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33f5b8eb_14f5209b",
+        "filename": "vcl/inc/salgdiimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-09-24T07:40:33Z",
+      "side": 1,
+      "message": "It\u0027s there to match SalGraphics, which does it this way *shrug*.",
+      "parentUuid": "193bf501_243674df",
+      "revId": "d6f1c8a16cdee4bfac67c7ce83f4b9e21ebc328d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
