@@ -61,7 +61,8 @@ void PresentationViewShell::InitInterface_Impl()
 
 
 PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
-: DrawViewShell( rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
+    : DrawViewShell(rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
+    , mnAbortSlideShowEvent(nullptr)
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
@@ -70,6 +71,9 @@ PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl
 
 PresentationViewShell::~PresentationViewShell()
 {
+    if (mnAbortSlideShowEvent)
+        Application::RemoveUserEvent(mnAbortSlideShowEvent);
+
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !maOldVisArea.IsEmpty() )
         GetDocSh()->SetVisArea( maOldVisArea );
 }
@@ -102,6 +106,14 @@ VclPtr<SvxRuler> PresentationViewShell::CreateVRuler(::sd::Window*)
     return nullptr;
 }
 
+IMPL_LINK_NOARG(PresentationViewShell, AbortSlideShowHdl, void*, void)
+{
+    mnAbortSlideShowEvent = nullptr;
+    rtl::Reference<SlideShow> xSlideShow(SlideShow::GetSlideShow(GetViewShellBase()));
+    if (xSlideShow.is())
+        xSlideShow->end();
+}
+
 void PresentationViewShell::Activate( bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
@@ -115,7 +127,20 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if( xSlideShow.is() )
-            xSlideShow->activate(GetViewShellBase());
+        {
+            bool bSuccess = xSlideShow->activate(GetViewShellBase());
+            if (!bSuccess)
+            {
+                /* tdf#64711 PresentationViewShell is deleted by 'end' due to end closing
+                   the object shell. So if we call xSlideShow->end during Activate there are
+                   a lot of places in the call stack of Activate which understandable don't
+                   expect this ViewShell to be deleted during use. Defer to the next event
+                   loop the abort of the slideshow
+                */
+                if (!mnAbortSlideShowEvent)
+                    mnAbortSlideShowEvent = Application::PostUserEvent(LINK(this, PresentationViewShell, AbortSlideShowHdl));
+            }
+        }
 
         if( HasCurrentFunction() )
             GetCurrentFunction()->Activate();
