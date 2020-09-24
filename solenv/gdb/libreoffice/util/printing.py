@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from collections import Mapping
+from collections.abc import Mapping
 import gdb
 import re
 import six
