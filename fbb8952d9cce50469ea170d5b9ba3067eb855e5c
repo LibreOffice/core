@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd4e049b_442bd8d5",
+        "filename": "sc/qa/unit/copy_paste_test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T09:21:14Z",
+      "side": 1,
+      "message": "missing spaces",
+      "revId": "fbb8952d9cce50469ea170d5b9ba3067eb855e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01febd7c_6f0af240",
+        "filename": "sc/qa/unit/copy_paste_test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T09:21:14Z",
+      "side": 1,
+      "message": "test explicitly that merge data exist before and after, i.e.\n\nCPPUNIT_ASSERT_EQUAL(..MERGE, ..... lcl_getMergeFlagOfCell(rDoc, 7, ...);\nCPPUNIT_ASSERT_EQUAL(..MERGE, ..... lcl_getMergeFlagOfCell(rDoc, 8, ...);\nCPPUNIT_ASSERT_EQUAL(..MERGE_FLAG, ..... lcl_getMergeSizeOfCell(rDoc, 7, ...);\nCPPUNIT_ASSERT_EQUAL(..MERGE_FLAG, ..... lcl_getMergeSizeOfCell(rDoc, 8, ...);",
+      "range": {
+        "startLine": 528,
+        "startChar": 0,
+        "endLine": 529,
+        "endChar": 72
+      },
+      "revId": "fbb8952d9cce50469ea170d5b9ba3067eb855e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efe448bc_1eeedf99",
+        "filename": "sc/qa/unit/copy_paste_test.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T09:21:14Z",
+      "side": 1,
+      "message": "missing spaces",
+      "revId": "fbb8952d9cce50469ea170d5b9ba3067eb855e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "508bad41_03d12322",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T09:21:14Z",
+      "side": 1,
+      "message": "if this TODO list is solved by the follow-up commit https://gerrit.libreoffice.org/c/core/+/103001, it would be better to merge them",
+      "range": {
+        "startLine": 644,
+        "startChar": 123,
+        "endLine": 650,
+        "endChar": 31
+      },
+      "revId": "fbb8952d9cce50469ea170d5b9ba3067eb855e5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
