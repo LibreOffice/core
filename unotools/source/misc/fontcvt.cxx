@@ -1180,7 +1180,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     }
 
     //In order of preference
-    static const ExtendedConvertTable aAgressiveTable[] =
+    static const ExtendedConvertTable aAggressiveTable[] =
     {
         ExtendedConvertTable(Symbol, aSymbolExtraTab2,
             sizeof(aSymbolExtraTab2)),
@@ -1193,11 +1193,11 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     };
 
      //Allow extra conversions that are not perfect, but "good enough"
-    nEntries = SAL_N_ELEMENTS(aAgressiveTable);
+    nEntries = SAL_N_ELEMENTS(aAggressiveTable);
 
     for (i = 0; i < nEntries; ++i)
     {
-        const ExtendedConvertTable& r = aAgressiveTable[i];
+        const ExtendedConvertTable& r = aAggressiveTable[i];
         SymbolEntry aEntry;
         aEntry.eFont = r.meFont;
         for (int j = r.mnSize / sizeof(r.mpTable[0]) - 1; j >=0; --j)
