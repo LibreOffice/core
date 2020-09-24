@@ -1631,7 +1631,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
     if( isComplexCategoryAxis() )
     {
         sal_Int32 nTextLevelCount = getTextLevelCount();
-        B2DVector aCummulatedLabelsDistance(0,0);
+        B2DVector aCumulatedLabelsDistance(0,0);
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
             std::unique_ptr<TickIter> apTickIter(createLabelTickIterator(nTextLevel));
@@ -1640,14 +1640,14 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nTextLevel>0 )
                 {
-                    lcl_shiftLabels(*apTickIter, aCummulatedLabelsDistance);
+                    lcl_shiftLabels(*apTickIter, aCumulatedLabelsDistance);
                     //multilevel labels: 0 or 90 by default
                     if( m_aAxisProperties.m_bSwapXAndY )
                         fRotationAngleDegree = 90.0;
                     else
                         fRotationAngleDegree = 0.0;
                 }
-                aCummulatedLabelsDistance += lcl_getLabelsDistance(
+                aCumulatedLabelsDistance += lcl_getLabelsDistance(
                     *apTickIter, pTickFactory2D->getDistanceAxisTickToText(m_aAxisProperties),
                     fRotationAngleDegree);
             }
