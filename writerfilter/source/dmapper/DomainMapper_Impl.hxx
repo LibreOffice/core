@@ -650,10 +650,6 @@ public:
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
     bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
 
-    /// Track if a textframe has been inserted into this section
-    void SetIsTextFrameInserted( bool bIsInserted );
-    bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
-
     void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
     bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }
     void SetParaSectpr(bool bParaSectpr);
