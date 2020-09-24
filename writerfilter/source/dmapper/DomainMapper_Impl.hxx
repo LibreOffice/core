@@ -431,9 +431,11 @@ struct SymbolData
 struct SectionInfo
 {
     OUString sType;
+    bool bDummyParaAddedForTable;
 
     SectionInfo( OUString sSectionType = "" )
         :sType(sSectionType)
+        ,bDummyParaAddedForTable(false)
     { }
 };
 
@@ -666,7 +668,7 @@ public:
     void SetIsFirstParagraphInShape(bool bIsFirst);
     bool GetIsFirstParagraphInShape() const { return m_bIsFirstParaInShape; }
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
-    bool GetIsDummyParaAddedForTableInSection() const { return m_bDummyParaAddedForTableInSection;}
+    bool GetIsDummyParaAddedForTableInSection() const;// { return m_bDummyParaAddedForTableInSection;}
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );

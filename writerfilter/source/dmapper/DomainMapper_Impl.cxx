@@ -650,7 +650,17 @@ void DomainMapper_Impl::SetIsFirstParagraphInShape(bool bIsFirst)
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 {
+SAL_WARN("JCL","SetIsDummyParaAdddedForTalbeInSection["<<bIsAdded<<"] was SectionInfo["<< GetSectionInfo().bDummyParaAddedForTable<<"] bDummy["<< m_bDummyParaAddedForTableInSection<<"]" );
+    assert (GetSectionInfo().bDummyParaAddedForTable == m_bDummyParaAddedForTableInSection );
+    GetSectionInfo().bDummyParaAddedForTable = bIsAdded;
     m_bDummyParaAddedForTableInSection = bIsAdded;
+}
+
+bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection() const
+{
+SAL_WARN("JCL","::GetIsDummyParaAddedForTableInSection SectionInfoSectionInfo["<< GetSectionInfo().bDummyParaAddedForTable<<"] bDummy["<< m_bDummyParaAddedForTableInSection<<"]" );
+    //assert (GetSectionInfo().bDummyParaAddedForTable == m_bDummyParaAddedForTableInSection );
+    return GetSectionInfo().bDummyParaAddedForTable;//m_bDummyParaAddedForTableInSection;
 }
 
 
