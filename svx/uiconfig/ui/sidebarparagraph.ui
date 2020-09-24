@@ -267,6 +267,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">3</property>
                     <property name="icon_name">svx/res/symphony/spacing1.png</property>
                   </object>
                   <packing>
@@ -313,6 +315,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">3</property>
                     <property name="icon_name">svx/res/symphony/spacing2.png</property>
                   </object>
                   <packing>
@@ -355,6 +359,7 @@
                 <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
+                <property name="margin_left">3</property>
                 <child>
                   <object class="GtkMenuToolButton" id=".uno:LineSpacing">
                     <property name="visible">True</property>
@@ -464,6 +469,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">3</property>
                     <property name="icon_name">svx/res/symphony/Indent4.png</property>
                   </object>
                   <packing>
@@ -510,6 +517,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">3</property>
                     <property name="icon_name">svx/res/symphony/Indent3.png</property>
                   </object>
                   <packing>
@@ -556,6 +565,8 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
+                    <property name="margin_left">6</property>
+                    <property name="margin_right">3</property>
                     <property name="icon_name">svx/res/symphony/Indent2.png</property>
                   </object>
                   <packing>
