@@ -33,7 +33,7 @@ ifeq ($(ENABLE_JAVA),TRUE)
 endif
 
 run:
-	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then $(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(ANDROID_PACKAGE_NAME)/.ui.LibreOfficeUIActivity ; fi
+	if test "$$ENABLE_ANDROID_LOK" != "TRUE" ; then $(ANDROID_SDK_HOME)/platform-tools/adb shell am start -n $(ANDROID_PACKAGE_NAME)/org.libreoffice.ui.LibreOfficeUIActivity ; fi
 
 debugrun:
 	@echo "please debug with lldb from within Android Studio, or setup ndk-gdb manually (see android/README for details)"
