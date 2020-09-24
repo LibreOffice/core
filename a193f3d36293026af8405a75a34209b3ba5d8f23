@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "065633c5_7859f503",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T11:33:52Z",
+      "side": 1,
+      "message": "root frame",
+      "revId": "a193f3d36293026af8405a75a34209b3ba5d8f23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fd95843_2dc90b32",
+        "filename": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T11:33:52Z",
+      "side": 1,
+      "message": "FollowTextFlow",
+      "range": {
+        "startLine": 439,
+        "startChar": 31,
+        "endLine": 439,
+        "endChar": 45
+      },
+      "revId": "a193f3d36293026af8405a75a34209b3ba5d8f23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
