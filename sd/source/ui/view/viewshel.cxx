@@ -320,8 +320,11 @@ void ViewShell::Activate(bool bIsMDIActivate)
         rBindings.Invalidate( SID_3D_STATE, true );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-        if(xSlideShow.is() && xSlideShow->isRunning() )
-            xSlideShow->activate(GetViewShellBase());
+        if (xSlideShow.is() && xSlideShow->isRunning())
+        {
+            bool bSuccess = xSlideShow->activate(GetViewShellBase());
+            assert(bSuccess && "can only return false with a PresentationViewShell"); (void)bSuccess;
+        }
 
         if(HasCurrentFunction())
             GetCurrentFunction()->Activate();
