@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "951d0b46_d797f1c8",
+        "filename": "sw/source/core/text/porfld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-09-24T07:08:13Z",
+      "side": 1,
+      "message": "should this be removed?",
+      "range": {
+        "startLine": 435,
+        "startChar": 6,
+        "endLine": 435,
+        "endChar": 98
+      },
+      "revId": "af7fc528e5099f5b5eec4e6eca424ad589c45f29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
