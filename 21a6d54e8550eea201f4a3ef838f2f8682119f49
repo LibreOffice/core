@@ -16,6 +16,24 @@
       "revId": "21a6d54e8550eea201f4a3ef838f2f8682119f49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d0b77e2_586691fe",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-24T16:06:42Z",
+      "side": 1,
+      "message": "\u003e Maybe be a bit more direct here:\n\u003e \n\u003e This is done by using MsgWaitForMultipleObjects(\u003ccond\u003e, ..., QS_SENDMESSAGE) in osl_waitCondition.\n\nPushed the change as-is now.  If you want to improve the comment\u0027s wording further, please do so in a follow-up commit.",
+      "parentUuid": "15e28998_1af28d66",
+      "revId": "21a6d54e8550eea201f4a3ef838f2f8682119f49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
