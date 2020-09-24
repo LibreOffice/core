@@ -586,7 +586,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
     {
         // Make sure that we own the solar mutex, otherwise later
         // vcl::SolarThreadExecutor::execute() will release the solar mutex, even if it's owned by
-        // an other thread, leading to an std::abort() at the end.
+        // another thread, leading to an std::abort() at the end.
         SolarMutexGuard g;
 
         return vcl::solarthread::syncExecute(std::bind(&LoadEnv::loadComponentFromURL, xThis,
