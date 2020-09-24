@@ -2500,7 +2500,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     // range for cell iterator
     SCCOL nLastIterScCol = nMaxScCol;
     SCROW nLastIterScRow = ulimit_cast< SCROW >( nLastUsedScRow, nMaxScRow );
-    ScUsedAreaIterator aIt( &rDoc, nScTab, 0, 0, nLastIterScCol, nLastIterScRow );
+    ScUsedAreaIterator aIt( rDoc, nScTab, 0, 0, nLastIterScCol, nLastIterScRow );
 
     // activate the correct segment and sub segment at the progress bar
     GetProgressBar().ActivateCreateRowsSegment();

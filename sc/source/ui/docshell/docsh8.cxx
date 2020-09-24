@@ -997,7 +997,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
             SCCOL nDocCol = nFirstCol;
             const sal_Int32* pColTypes = aColTypes.getConstArray();
             const sal_Int32* pColLengths = aColLengths.getConstArray();
-            ScHorizontalCellIterator aIter( &m_aDocument, nTab, nFirstCol,
+            ScHorizontalCellIterator aIter( m_aDocument, nTab, nFirstCol,
                     nDocRow, nLastCol, nDocRow);
             bool bTest = true;
             while (bTest)

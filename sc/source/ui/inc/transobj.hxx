@@ -63,7 +63,7 @@ private:
     static void StripRefs( ScDocument& rDoc, SCCOL nStartX, SCROW nStartY,
                             SCCOL nEndX, SCROW nEndY,
                             ScDocument& rDestDoc );
-    static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
+    static void PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPrintFactor,
                             const ScRange& rBlock );
     static void GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 

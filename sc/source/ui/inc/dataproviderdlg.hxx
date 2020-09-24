@@ -69,7 +69,7 @@ public:
     void replaceNullTransformation();
     void dateTimeTransformation();
 
-    void import(ScDocument* pDoc, bool bInternal = false);
+    void import(ScDocument& rDoc, bool bInternal = false);
 };
 
 #endif

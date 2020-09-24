@@ -786,7 +786,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         bHaveEmpty = true;  // Assume we have empty ones and fill below.
     else
     {
-        ScHorizontalCellIterator aIter( pDoc, nTable, nStartCol, nStartRow, nEndCol, nStartRow);  // header row only
+        ScHorizontalCellIterator aIter(*pDoc, nTable, nStartCol, nStartRow, nEndCol, nStartRow);  // header row only
         ScRefCellValue* pCell;
         SCCOL nCol, nLastColFilled = nStartCol - 1;
         SCROW nRow;

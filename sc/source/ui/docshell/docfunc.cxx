@@ -5683,7 +5683,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
         ScConditionalFormatList* pOld = rDoc.GetCondFormList(nTab);
 
         if (pOld)
-            pUndoDoc->SetCondFormList(new ScConditionalFormatList(pUndoDoc.get(), *pOld), nTab);
+            pUndoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoDoc, *pOld), nTab);
         else
             pUndoDoc->SetCondFormList(nullptr, nTab);
 
@@ -5703,7 +5703,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     {
         ScDocumentUniquePtr pRedoDoc(new ScDocument(SCDOCMODE_UNDO));
         pRedoDoc->InitUndo( rDoc, nTab, nTab );
-        pRedoDoc->SetCondFormList(new ScConditionalFormatList(pRedoDoc.get(), *pList), nTab);
+        pRedoDoc->SetCondFormList(new ScConditionalFormatList(*pRedoDoc, *pList), nTab);
 
         rDocShell.GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoConditionalFormatList>(&rDocShell, std::move(pUndoDoc), std::move(pRedoDoc), nTab));

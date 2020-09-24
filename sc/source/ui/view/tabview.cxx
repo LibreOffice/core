@@ -1428,17 +1428,17 @@ void ScTabView::UpdateShow()
 
     if (bShowH && !pGridWin[SC_SPLIT_BOTTOMRIGHT])
     {
-        pGridWin[SC_SPLIT_BOTTOMRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMRIGHT );
+        pGridWin[SC_SPLIT_BOTTOMRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, aViewData, SC_SPLIT_BOTTOMRIGHT );
         DoAddWin( pGridWin[SC_SPLIT_BOTTOMRIGHT] );
     }
     if (bShowV && !pGridWin[SC_SPLIT_TOPLEFT])
     {
-        pGridWin[SC_SPLIT_TOPLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_TOPLEFT );
+        pGridWin[SC_SPLIT_TOPLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, aViewData, SC_SPLIT_TOPLEFT );
         DoAddWin( pGridWin[SC_SPLIT_TOPLEFT] );
     }
     if (bShowH && bShowV && !pGridWin[SC_SPLIT_TOPRIGHT])
     {
-        pGridWin[SC_SPLIT_TOPRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_TOPRIGHT );
+        pGridWin[SC_SPLIT_TOPRIGHT] = VclPtr<ScGridWindow>::Create( pFrameWin, aViewData, SC_SPLIT_TOPRIGHT );
         DoAddWin( pGridWin[SC_SPLIT_TOPRIGHT] );
     }
 

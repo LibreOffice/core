@@ -650,7 +650,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
 
     mpCellItr.reset(
         new ScHorizontalCellIterator(
-            rExport.GetDocument(), nCurrentTable, 0, 0,
+            *rExport.GetDocument(), nCurrentTable, 0, 0,
             static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
             static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
 
