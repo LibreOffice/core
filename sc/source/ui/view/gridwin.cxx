@@ -876,13 +876,18 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         if (aResult == aSaveAutoFilterResult)
         {
             SAL_INFO("sc.ui", "Apply autofilter to data when entries are the same");
-            // Apply autofilter to data
-            ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
-            pEntry->bDoQuery = true;
-            pEntry->nField = rPos.Col();
-            pEntry->eConnect = SC_AND;
-            pEntry->eOp = SC_EQUAL;
-            pViewData->GetView()->Query(aParam, nullptr, true);
+
+            if (!rControl.isAllSelected())
+            {
+                // Apply autofilter to data
+                ScQueryEntry* pEntry = aParam.FindEntryByField(rPos.Col(), true);
+                pEntry->bDoQuery = true;
+                pEntry->nField = rPos.Col();
+                pEntry->eConnect = SC_AND;
+                pEntry->eOp = SC_EQUAL;
+                pViewData->GetView()->Query(aParam, nullptr, true);
+            }
+
             return;
         }
     }
