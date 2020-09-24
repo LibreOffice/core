@@ -167,26 +167,8 @@ void Theme::UpdateTheme()
             maPropertyIdToNameMap[Paint_DeckTitleBarBackground],
             Any(sal_Int32(aBaseBackgroundColor.GetRGBColor())));
         setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckLeftPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckTopPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckRightPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckBottomPadding],
-            Any(sal_Int32(2)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_DeckBorderSize],
-            Any(sal_Int32(1)));
-        setPropertyValue(
             maPropertyIdToNameMap[Int_DeckSeparatorHeight],
             Any(sal_Int32(1)));
-        setPropertyValue(
-            maPropertyIdToNameMap[Int_ButtonCornerRadius],
-            Any(sal_Int32(3)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_DeckTitleFont],
             Any(sal_Int32(rStyle.GetFontColor().GetRGBColor())));
@@ -202,11 +184,7 @@ void Theme::UpdateTheme()
 
         setPropertyValue(
             maPropertyIdToNameMap[Paint_PanelTitleBarBackground],
-            Any(Tools::VclToAwtGradient(Gradient(
-                        GradientStyle::Linear,
-                        aSecondColor.GetRGBColor(),
-                        aBaseBackgroundColor.GetRGBColor()
-                        ))));
+            Any(sal_Int32(aSecondColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Color_PanelTitleFont],
             Any(sal_Int32(mbIsHighContrastMode ? 0x00ff00 : 0x262626)));
@@ -234,13 +212,13 @@ void Theme::UpdateTheme()
 
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabMenuPadding],
-            Any(sal_Int32(6)));
+            Any(sal_Int32(3)));
         setPropertyValue(
             maPropertyIdToNameMap[Color_TabMenuSeparator],
             Any(sal_Int32(aBorderColor.GetRGBColor())));
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabMenuSeparatorPadding],
-            Any(sal_Int32(7)));
+            Any(sal_Int32(3)));
 
         setPropertyValue(
             maPropertyIdToNameMap[Int_TabItemWidth],
