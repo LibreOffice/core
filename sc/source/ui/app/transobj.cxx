@@ -91,21 +91,18 @@ void ScTransferObj::GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab
     nCol = nMaxCol;
 }
 
-void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
+void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument& rDoc, double nPrintFactor,
                                 const ScRange& rBlock )
 {
-    if (!pDoc)
-        return;
-
     tools::Rectangle aBound( Point(), pDev->GetOutputSize() );      //! use size from clip area?
 
-    ScViewData aViewData(*pDoc);
+    ScViewData aViewData(rDoc);
 
     aViewData.SetTabNo( rBlock.aEnd.Tab() );
     aViewData.SetScreen( rBlock.aStart.Col(), rBlock.aStart.Row(),
                             rBlock.aEnd.Col(), rBlock.aEnd.Row() );
 
-    ScPrintFunc::DrawToDev( pDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
+    ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
 }
 
 ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc ) :
@@ -233,9 +230,9 @@ void ScTransferObj::AddSupportedFormats()
     }
 }
 
-static ScRange lcl_reduceBlock(const ScDocumentUniquePtr &pDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
+static ScRange lcl_reduceBlock(const ScDocument& rDoc, ScRange aReducedBlock, bool bIncludeVisual = false)
 {
-    if ((aReducedBlock.aEnd.Col() == pDoc->MaxCol() || aReducedBlock.aEnd.Row() == pDoc->MaxRow()) &&
+    if ((aReducedBlock.aEnd.Col() == rDoc.MaxCol() || aReducedBlock.aEnd.Row() == rDoc.MaxRow()) &&
         aReducedBlock.aStart.Tab() == aReducedBlock.aEnd.Tab())
     {
         // Shrink the block here so we don't waste time creating huge
@@ -244,7 +241,7 @@ static ScRange lcl_reduceBlock(const ScDocumentUniquePtr &pDoc, ScRange aReduced
         SCCOL nPrintAreaEndCol = 0;
         SCROW nPrintAreaEndRow = 0;
         if (bIncludeVisual)
-            pDoc->GetPrintArea( aReducedBlock.aStart.Tab(), nPrintAreaEndCol, nPrintAreaEndRow, true );
+            rDoc.GetPrintArea( aReducedBlock.aStart.Tab(), nPrintAreaEndCol, nPrintAreaEndRow, true );
 
         // Shrink the area to allow pasting to external applications.
         // Shrink to real data area for HTML, RTF and RICHTEXT, but include
@@ -254,9 +251,9 @@ static ScRange lcl_reduceBlock(const ScDocumentUniquePtr &pDoc, ScRange aReduced
         SCCOL nEndCol = aReducedBlock.aEnd.Col();
         SCROW nEndRow = aReducedBlock.aEnd.Row();
         bool bShrunk = false;
-        pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
-                                      false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
-                                      bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
+        rDoc.ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow,
+                                   false, bIncludeVisual /*bStickyTopRow*/, bIncludeVisual /*bStickyLeftCol*/,
+                                   bIncludeVisual /*bConsiderCellNotes*/, bIncludeVisual /*bConsiderCellDrawObjects*/);
 
         if ( nPrintAreaEndRow > nEndRow )
             nEndRow = nPrintAreaEndRow;
@@ -289,7 +286,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                                      nFormat == SotClipboardFormatId::PNG);
 
         if (bReduceBlockFormat)
-            aReducedBlock = lcl_reduceBlock(m_pDoc, m_aBlock, bIncludeVisual);
+            aReducedBlock = lcl_reduceBlock(*m_pDoc, m_aBlock, bIncludeVisual);
 
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
@@ -396,7 +393,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             ScopedVclPtrInstance< VirtualDevice > pVirtDev;
             pVirtDev->SetOutputSizePixel(pVirtDev->LogicToPixel(aMMRect.GetSize(), MapMode(MapUnit::Map100thMM)));
 
-            PaintToDev( pVirtDev, m_pDoc.get(), 1.0, aReducedBlock );
+            PaintToDev( pVirtDev, *m_pDoc, 1.0, aReducedBlock );
 
             pVirtDev->SetMapMode( MapMode( MapUnit::MapPixel ) );
             BitmapEx aBmp = pVirtDev->GetBitmapEx( Point(), pVirtDev->GetOutputSize() );
@@ -544,7 +541,7 @@ bool ScTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* p
 
 sal_Bool SAL_CALL ScTransferObj::isComplex()
 {
-    ScRange aReduced = lcl_reduceBlock(m_pDoc, m_aBlock);
+    ScRange aReduced = lcl_reduceBlock(*m_pDoc, m_aBlock);
     size_t nCells = (aReduced.aEnd.Col() - aReduced.aStart.Col() + 1) *
                     (aReduced.aEnd.Row() - aReduced.aStart.Row() + 1) *
                     (aReduced.aEnd.Tab() - aReduced.aStart.Tab() + 1);

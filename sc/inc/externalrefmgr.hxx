@@ -56,7 +56,7 @@ class ColumnSpanSet;
 class ScExternalRefLink final : public ::sfx2::SvBaseLink
 {
 public:
-    ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId);
+    ScExternalRefLink(ScDocument& rDoc, sal_uInt16 nFileId);
     virtual ~ScExternalRefLink() override;
 
     virtual void Closed() override;
@@ -71,7 +71,7 @@ private:
     ScExternalRefLink(const ScExternalRefLink&) = delete;
 
     sal_uInt16  mnFileId;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     bool        mbDoRefresh;
 };
 

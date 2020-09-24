@@ -41,8 +41,8 @@ void dumpScDrawObjData(const ScGridWindow& rWindow, const ScDrawObjData& rData, 
 
 void ScGridWindow::dumpColumnInformationPixel()
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
@@ -53,8 +53,8 @@ void ScGridWindow::dumpColumnInformationPixel()
 
 void ScGridWindow::dumpColumnInformationHmm()
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
     for (SCCOL nCol = 0; nCol <= 20; ++nCol)
     {
         sal_uInt16 nWidth = rDoc.GetColWidth(nCol, nTab);
@@ -65,9 +65,9 @@ void ScGridWindow::dumpColumnInformationHmm()
 
 void ScGridWindow::dumpCellProperties()
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    const ScMarkData& rMark = pViewData->GetMarkData();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    const ScMarkData& rMark = mrViewData.GetMarkData();
+    SCTAB nTab = mrViewData.GetTabNo();
 
     ScRangeList aList;
     if (rMark.IsMultiMarked())
@@ -82,8 +82,8 @@ void ScGridWindow::dumpCellProperties()
     }
     else
     {
-        SCCOL nCol = pViewData->GetCurX();
-        SCROW nRow = pViewData->GetCurY();
+        SCCOL nCol = mrViewData.GetCurX();
+        SCROW nRow = mrViewData.GetCurY();
 
         ScRange aRange(nCol, nRow, nTab);
         aList.Join(aRange, false);
@@ -126,7 +126,7 @@ void ScGridWindow::dumpCellProperties()
 
 void ScGridWindow::dumpGraphicInformation()
 {
-    ScDocument& rDoc = pViewData->GetDocument();
+    ScDocument& rDoc = mrViewData.GetDocument();
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     if (!pDrawLayer)
         return;
@@ -154,9 +154,9 @@ void ScGridWindow::dumpGraphicInformation()
 void ScGridWindow::dumpColumnCellStorage()
 {
     // Get the current cursor position.
-    ScAddress aCurPos = pViewData->GetCurPos();
+    ScAddress aCurPos = mrViewData.GetCurPos();
 
-    ScDocument& rDoc = pViewData->GetDocument();
+    ScDocument& rDoc = mrViewData.GetDocument();
     const ScDPObject* pDP = rDoc.GetDPAtCursor(aCurPos.Col(), aCurPos.Row(), aCurPos.Tab());
     if (pDP)
     {

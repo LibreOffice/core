@@ -1991,7 +1991,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     SCROW nEmptyRow;
     SvNumberFormatter& rFormatter = *m_aDocument.GetFormatTable();
 
-    ScHorizontalCellIterator aIter( &m_aDocument, nTab, nStartCol, nStartRow,
+    ScHorizontalCellIterator aIter( m_aDocument, nTab, nStartCol, nStartRow,
         nEndCol, nEndRow );
     ScRefCellValue* pCell;
     while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != nullptr )

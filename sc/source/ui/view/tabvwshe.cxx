@@ -60,7 +60,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             {
                 // limit range to one data row
                 // (only when  the call comes from a format dialog)
-                ScHorizontalCellIterator aIter( &rDoc, aRange.aStart.Tab(),
+                ScHorizontalCellIterator aIter( rDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
                 SCCOL nCol;

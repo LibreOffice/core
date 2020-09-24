@@ -48,8 +48,8 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {
     bool bDone = false;
 
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB       nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB       nTab = mrViewData.GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     OUString aTrackText;
@@ -172,13 +172,13 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 
             mpNoteMarker.reset();
 
-            bool bHSplit = pViewData->GetHSplitMode() != SC_SPLIT_NONE;
-            bool bVSplit = pViewData->GetVSplitMode() != SC_SPLIT_NONE;
+            bool bHSplit = mrViewData.GetHSplitMode() != SC_SPLIT_NONE;
+            bool bVSplit = mrViewData.GetVSplitMode() != SC_SPLIT_NONE;
 
-            vcl::Window* pLeft = pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
-            vcl::Window* pRight = bHSplit ? pViewData->GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr;
-            vcl::Window* pBottom = bVSplit ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr;
-            vcl::Window* pDiagonal = (bHSplit && bVSplit) ? pViewData->GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : nullptr;
+            vcl::Window* pLeft = mrViewData.GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
+            vcl::Window* pRight = bHSplit ? mrViewData.GetView()->GetWindowByPos( bVSplit ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT ) : nullptr;
+            vcl::Window* pBottom = bVSplit ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMLEFT ) : nullptr;
+            vcl::Window* pDiagonal = (bHSplit && bVSplit) ? mrViewData.GetView()->GetWindowByPos( SC_SPLIT_BOTTOMRIGHT ) : nullptr;
             OSL_ENSURE( pLeft, "ScGridWindow::ShowNoteMarker - missing top-left grid window" );
 
             /*  If caption is shown from right or bottom windows, adjust
@@ -207,7 +207,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bDone = false;
     bool bHelpEnabled = bool(rHEvt.GetMode() & ( HelpEventMode::BALLOON | HelpEventMode::QUICK ));
-    SdrView* pDrView = pViewData->GetScDrawView();
+    SdrView* pDrView = mrViewData.GetScDrawView();
     bool bDrawTextEdit = false;
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
@@ -217,7 +217,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         SCCOL nPosX;
         SCROW nPosY;
-        pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
+        mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
         if ( ShowNoteMarker( nPosX, nPosY, false ) )
         {
@@ -311,15 +311,15 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 aHelpText = SfxHelp::GetURLHelpText(
                     INetURLObject::decode(aUrl, INetURLObject::DecodeMechanism::Unambiguous));
 
-                ScDocument& rDoc = pViewData->GetDocument();
+                ScDocument& rDoc = mrViewData.GetDocument();
                 SCCOL nPosX;
                 SCROW nPosY;
-                SCTAB       nTab = pViewData->GetTabNo();
-                pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
+                SCTAB       nTab = mrViewData.GetTabNo();
+                mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
 
                 // bForceToTop = sal_False, use the cell's real position
-                aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
+                aPixRect = mrViewData.GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
             }
         }
 
@@ -349,7 +349,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
     // If QuickHelp for AutoFill is shown, do not allow it to be removed
 
-    if ( nMouseStatus == SC_GM_TABDOWN && pViewData->GetRefType() == SC_REFTYPE_FILL &&
+    if ( nMouseStatus == SC_GM_TABDOWN && mrViewData.GetRefType() == SC_REFTYPE_FILL &&
             Help::IsQuickHelpEnabled() )
         bDone = true;
 
@@ -360,7 +360,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 bool ScGridWindow::IsMyModel(const SdrEditView* pSdrView)
 {
     return pSdrView &&
-            pSdrView->GetModel() == pViewData->GetDocument().GetDrawLayer();
+            pSdrView->GetModel() == mrViewData.GetDocument().GetDrawLayer();
 }
 
 void ScGridWindow::HideNoteMarker()
@@ -379,7 +379,7 @@ css::uno::Reference< css::accessibility::XAccessible >
 
     ScAccessibleDocument* pAccessibleDocument =
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
-            pViewData->GetViewShell(), eWhich);
+            mrViewData.GetViewShell(), eWhich);
     pAccessibleDocument->PreInit();
 
     xAcc = pAccessibleDocument;

@@ -72,7 +72,7 @@ void ScTabView::Init()
 
     for (i=0; i<4; i++)
         pGridWin[i] = nullptr;
-    pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, &aViewData, SC_SPLIT_BOTTOMLEFT );
+    pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, aViewData, SC_SPLIT_BOTTOMLEFT );
 
     pSelEngine.reset( new ScViewSelectionEngine( pGridWin[SC_SPLIT_BOTTOMLEFT], this,
                                                 SC_SPLIT_BOTTOMLEFT ) );

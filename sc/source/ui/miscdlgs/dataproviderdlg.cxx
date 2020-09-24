@@ -817,7 +817,7 @@ IMPL_LINK(ScDataProviderDlg, ImportHdl, ScDataProviderBaseControl*, pCtrl, void)
 {
     if (pCtrl == mxDataProviderCtrl.get())
     {
-        import(mxDoc.get(), true);
+        import(*mxDoc, true);
     }
 }
 
@@ -903,9 +903,9 @@ bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
 
 }
 
-void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
+void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
 {
-    sc::ExternalDataSource aSource = mxDataProviderCtrl->getDataSource(pDoc);
+    sc::ExternalDataSource aSource = mxDataProviderCtrl->getDataSource(&rDoc);
 
     for (size_t i = 0; i < maControls.size(); ++i)
     {
@@ -917,11 +917,11 @@ void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
     else
     {
         aSource.setDBData(mxDBRanges->get_active_text());
-        if (!hasDBName(aSource.getDBName(), pDoc->GetDBCollection()))
+        if (!hasDBName(aSource.getDBName(), rDoc.GetDBCollection()))
             return;
-        pDoc->GetExternalDataMapper().insertDataSource(aSource);
+        rDoc.GetExternalDataMapper().insertDataSource(aSource);
     }
-    aSource.refresh(pDoc, true);
+    aSource.refresh(&rDoc, true);
     mxTable->Invalidate();
 }
 
