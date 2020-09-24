@@ -34,6 +34,24 @@
       "revId": "2c20b728d0e54487a14b051c88016a23ed8f192e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fd95048_bd36bf07",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-24T06:17:50Z",
+      "side": 1,
+      "message": "\u003chttps://gerrit.libreoffice.org/c/core/+/103288\u003e \"Clean up SalYieldMutex::doAcquire\"",
+      "parentUuid": "8cf6926a_78a8b242",
+      "revId": "2c20b728d0e54487a14b051c88016a23ed8f192e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
