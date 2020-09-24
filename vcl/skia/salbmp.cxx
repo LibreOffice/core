@@ -62,8 +62,7 @@ static bool isValidBitCount(sal_uInt16 nBitCount)
 
 SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 {
-    ResetCachedData();
-    mBuffer.reset();
+    ResetAllData();
     mImage = image;
     mPalette = BitmapPalette();
     mBitCount = 32;
@@ -77,7 +76,7 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
-    ResetCachedData();
+    ResetAllData();
     mBuffer.reset();
     if (!isValidBitCount(nBitCount))
         return false;
@@ -190,8 +189,7 @@ void SkiaSalBitmap::Destroy()
 #ifdef DBG_UTIL
     assert(mWriteAccessCount == 0);
 #endif
-    ResetCachedData();
-    mBuffer.reset();
+    ResetAllData();
 }
 
 Size SkiaSalBitmap::GetSize() const { return mSize; }
@@ -441,8 +439,7 @@ bool SkiaSalBitmap::Erase(const Color& color)
     // Optimized variant, just remember the color and apply it when needed,
     // which may save having to do format conversions (e.g. GetSkImage()
     // may directly erase the SkImage).
-    ResetCachedData();
-    mBuffer.reset();
+    ResetAllData();
     mEraseColorSet = true;
     mEraseColor = color;
     return true;
@@ -1066,6 +1063,14 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
     SkiaZone zone;
     mBuffer.reset();
     mImage = image;
+    mAlphaImage.reset();
+}
+
+void SkiaSalBitmap::ResetAllData()
+{
+    SkiaZone zone;
+    mBuffer.reset();
+    mImage.reset();
     mAlphaImage.reset();
 }
 
