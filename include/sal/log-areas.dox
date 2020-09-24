@@ -572,8 +572,8 @@ certain functionality.
 @li @c xmlsecurity.dialogs - xml security dialogs
 @li @c xmlsecurity.helper
 @li @c xmlsecurity.ooxml - OOXML signature support
-@li @c xmlsecurity.pdfio - signing of existing PDF
-@li @c xmlsecurity.pdfio.test
+@li @c xmlsecurity.qa
+@li @c xmlsecurity.workben
 @li @c xmlsecurity.xmlsec - xmlsec wrapper
 @li @c xmlsecurity.xmlsec.gpg - gpg xmlsec component
 

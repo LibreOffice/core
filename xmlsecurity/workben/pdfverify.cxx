@@ -58,7 +58,7 @@ int pdfVerify(int nArgc, char** pArgv)
 {
     if (nArgc < 2)
     {
-        SAL_WARN("xmlsecurity.pdfio", "not enough parameters");
+        SAL_WARN("xmlsecurity.workben", "not enough parameters");
         return 1;
     }
 
@@ -70,7 +70,7 @@ int pdfVerify(int nArgc, char** pArgv)
     }
     catch (const uno::RuntimeException&)
     {
-        TOOLS_WARN_EXCEPTION("xmlsecurity.pdfio",
+        TOOLS_WARN_EXCEPTION("xmlsecurity.workben",
                              "cppu::defaultBootstrap_InitialComponentContext() failed:");
         return 1;
     }
@@ -95,7 +95,7 @@ int pdfVerify(int nArgc, char** pArgv)
     }
     catch (const uno::DeploymentException&)
     {
-        TOOLS_WARN_EXCEPTION("xmlsecurity.pdfio",
+        TOOLS_WARN_EXCEPTION("xmlsecurity.workben",
                              "DeploymentException while creating SEInitializer:");
         return 1;
     }
@@ -142,7 +142,7 @@ int pdfVerify(int nArgc, char** pArgv)
     vcl::filter::PDFDocument aDocument;
     if (!aDocument.Read(aStream))
     {
-        SAL_WARN("xmlsecurity.pdfio", "failed to read the document");
+        SAL_WARN("xmlsecurity.workben", "failed to read the document");
         return 1;
     }
 
@@ -159,14 +159,14 @@ int pdfVerify(int nArgc, char** pArgv)
         size_t nPosition = aSignatures.size() - 1;
         if (!aDocument.RemoveSignature(nPosition))
         {
-            SAL_WARN("xmlsecurity.pdfio", "failed to remove signature #" << nPosition);
+            SAL_WARN("xmlsecurity.workben", "failed to remove signature #" << nPosition);
             return 1;
         }
 
         SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
         if (!aDocument.Write(aOutStream))
         {
-            SAL_WARN("xmlsecurity.pdfio", "failed to write the document");
+            SAL_WARN("xmlsecurity.workben", "failed to write the document");
             return 1;
         }
 
@@ -180,19 +180,19 @@ int pdfVerify(int nArgc, char** pArgv)
         = xSecurityEnvironment->getPersonalCertificates();
     if (!aCertificates.hasElements())
     {
-        SAL_WARN("xmlsecurity.pdfio", "no signing certificates found");
+        SAL_WARN("xmlsecurity.workben", "no signing certificates found");
         return 1;
     }
     if (!aDocument.Sign(aCertificates[0], "pdfverify", /*bAdES=*/true))
     {
-        SAL_WARN("xmlsecurity.pdfio", "failed to sign");
+        SAL_WARN("xmlsecurity.workben", "failed to sign");
         return 1;
     }
 
     SvFileStream aOutStream(aOutURL, StreamMode::WRITE | StreamMode::TRUNC);
     if (!aDocument.Write(aOutStream))
     {
-        SAL_WARN("xmlsecurity.pdfio", "failed to write the document");
+        SAL_WARN("xmlsecurity.workben", "failed to write the document");
         return 1;
     }
 

@@ -127,7 +127,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
             // Only try certificates that are already active and not expired
             if ((now > aNotValidAfter) || (now < aNotValidBefore))
             {
-                SAL_WARN("xmlsecurity.pdfio.test",
+                SAL_WARN("xmlsecurity.qa",
                          "Skipping a certificate that is not yet valid or already not valid");
             }
             else
@@ -139,8 +139,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
                     DWORD dwErr = GetLastError();
                     if (HRESULT_FROM_WIN32(dwErr) == CRYPT_E_NO_KEY_PROPERTY)
                     {
-                        SAL_WARN("xmlsecurity.pdfio.test",
-                                 "Skipping a certificate without a private key");
+                        SAL_WARN("xmlsecurity.qa", "Skipping a certificate without a private key");
                         continue; // The certificate does not have a private key - not a valid certificate
                     }
                 }
