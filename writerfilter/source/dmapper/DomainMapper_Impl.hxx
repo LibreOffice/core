@@ -432,10 +432,12 @@ struct SectionInfo
 {
     OUString sType;
     bool bDummyParaAddedForTable;
+    bool bTextFrameInserted;
 
     SectionInfo( OUString sSectionType = "" )
         :sType(sSectionType)
         ,bDummyParaAddedForTable(false)
+        ,bTextFrameInserted(false)
     { }
 };
 
@@ -672,7 +674,7 @@ public:
 
     /// Track if a textframe has been inserted into this section
     void SetIsTextFrameInserted( bool bIsInserted );
-    bool GetIsTextFrameInserted() const { return m_bTextFrameInserted;}
+    bool GetIsTextFrameInserted() const;// { return m_bTextFrameInserted;}
 
     void SetIsPreviousParagraphFramed( bool bIsFramed ) { m_bIsPreviousParagraphFramed = bIsFramed; }
     bool GetIsPreviousParagraphFramed() const { return m_bIsPreviousParagraphFramed; }

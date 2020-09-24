@@ -533,6 +533,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     // Shapes can't have sections.
     if (IsInShape())
         return;
+//affects ooxmlexport11 eatenSection, but no effect, probably because of page break.  assert (GetSectionInfo().bTextFrameInserted == m_bTextFrameInserted );
 
     if (!m_aTextAppendStack.empty())
     {
@@ -666,7 +667,17 @@ SAL_WARN("JCL","::GetIsDummyParaAddedForTableInSection SectionInfoSectionInfo["<
 
 void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
 {
+SAL_WARN("JCL","::SetIsTextFrameInserted SectionInfoSectionInfo["<< GetSectionInfo().bTextFrameInserted<<"] bVal["<< m_bTextFrameInserted<<"]" );
+    //assert (GetSectionInfo().bTextFrameInserted == m_bTextFrameInserted );
+    GetSectionInfo().bTextFrameInserted = bIsInserted;
     m_bTextFrameInserted  = bIsInserted;
+}
+
+bool DomainMapper_Impl::GetIsTextFrameInserted() const
+{
+SAL_WARN("JCL","::GetIsTextFrameInserted SectionInfoSectionInfo["<< GetSectionInfo().bTextFrameInserted<<"] bVal["<< m_bTextFrameInserted<<"]" );
+    //assert (GetSectionInfo().bTextFrameInserted == m_bTextFrameInserted );
+    return GetSectionInfo().bTextFrameInserted;
 }
 
 
