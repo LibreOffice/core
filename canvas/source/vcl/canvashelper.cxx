@@ -25,7 +25,6 @@
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/utils/canvastools.hxx>
@@ -395,33 +394,24 @@ namespace vclcanvas
             // user coordinates.
             aStrokedPolyPoly.transform( aMatrix );
 
-            if(aStrokedPolyPoly.isClosed())
+            // TODO(F2): When using alpha here, must handle that via
+            // temporary surface or somesuch.
+
+            // Note: the generated stroke poly-polygon is NOT free of
+            // self-intersections. Therefore, if we would render it
+            // via OutDev::DrawPolyPolygon(), on/off fill would
+            // generate off areas on those self-intersections.
+            for( sal_uInt32 i=0; i<aStrokedPolyPoly.count(); ++i )
             {
-                // Note: the generated stroke poly-polygon is NOT free of
-                // self-intersections. Therefore, if we would render it
-                // directly via OutDev::DrawPolyPolygon(), on/off fill would
-                // generate off areas on those self-intersections.
-                aStrokedPolyPoly = basegfx::utils::createNonzeroConform( aStrokedPolyPoly );
-                mpOutDevProvider->getOutDev().DrawPolyPolygon( aStrokedPolyPoly );
-                if( mp2ndOutDevProvider )
-                    mp2ndOutDevProvider->getOutDev().DrawPolyPolygon( aStrokedPolyPoly );
-            }
-            else
-            {
-                // TODO(F2): When using alpha here, must handle that via
-                // temporary surface or somesuch.
-                for( sal_uInt32 i=0; i<aStrokedPolyPoly.count(); ++i )
-                {
-                    const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
-                    if( polygon.isClosed()) {
-                        mpOutDevProvider->getOutDev().DrawPolygon( polygon );
-                        if( mp2ndOutDevProvider )
-                            mp2ndOutDevProvider->getOutDev().DrawPolygon( polygon );
-                    } else {
-                        mpOutDevProvider->getOutDev().DrawPolyLine( polygon );
-                        if( mp2ndOutDevProvider )
-                            mp2ndOutDevProvider->getOutDev().DrawPolyLine( polygon );
-                    }
+                const basegfx::B2DPolygon& polygon = aStrokedPolyPoly.getB2DPolygon( i );
+                if( polygon.isClosed()) {
+                    mpOutDevProvider->getOutDev().DrawPolygon( polygon );
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolygon( polygon );
+                } else {
+                    mpOutDevProvider->getOutDev().DrawPolyLine( polygon );
+                    if( mp2ndOutDevProvider )
+                        mp2ndOutDevProvider->getOutDev().DrawPolyLine( polygon );
                 }
             }
         }
