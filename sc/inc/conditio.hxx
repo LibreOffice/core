@@ -668,8 +668,8 @@ public:
 
     ScRangeList GetCombinedRange() const;
 
-    void RemoveFromDocument(ScDocument* pDoc) const;
-    void AddToDocument(ScDocument* pDoc) const;
+    void RemoveFromDocument(ScDocument& rDoc) const;
+    void AddToDocument(ScDocument& rDoc) const;
 
     iterator begin();
     const_iterator begin() const;

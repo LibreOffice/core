@@ -70,7 +70,7 @@ constexpr sal_uInt32 SCTRANS_TYPE_EDIT_BIN           = 3;
 constexpr sal_uInt32 SCTRANS_TYPE_EMBOBJ             = 4;
 constexpr sal_uInt32 SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT = 5;
 
-void ScTransferObj::GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
+void ScTransferObj::GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
     SCCOL nMaxCol = 0;
     SCROW nMaxRow = 0;
@@ -79,7 +79,7 @@ void ScTransferObj::GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab
         SCCOL nLastCol = 0;
         SCROW nLastRow = 0;
         // GetPrintArea instead of GetCellArea - include drawing objects
-        if( pDoc->GetPrintArea( nTab, nLastCol, nLastRow ) )
+        if( rDoc.GetPrintArea( nTab, nLastCol, nLastRow ) )
         {
             if( nLastCol > nMaxCol )
                 nMaxCol = nLastCol;
@@ -158,7 +158,7 @@ ScTransferObj::ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableOb
     {
         SCROW nMaxRow;
         SCCOL nMaxCol;
-        GetAreaSize( m_pDoc.get(), nTab1, nTab2, nMaxRow, nMaxCol );
+        GetAreaSize( *m_pDoc, nTab1, nTab2, nMaxRow, nMaxCol );
         if( nMaxRow < nRow2 )
             nRow2 = nMaxRow;
         if( nMaxCol < nCol2 )
@@ -733,7 +733,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     rDestDoc.CopyFromClip( aDestRange, aDestMark, InsertDeleteFlags::ALL, nullptr, m_pDoc.get(), false );
     m_pDoc->SetClipArea( aDestRange, bWasCut );
 
-    StripRefs( m_pDoc.get(), nStartX,nStartY, nEndX,nEndY, &rDestDoc );
+    StripRefs(*m_pDoc, nStartX,nStartY, nEndX,nEndY, rDestDoc);
 
     ScRange aMergeRange = aDestRange;
     rDestDoc.ExtendMerge( aMergeRange, true );
@@ -829,25 +829,20 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     }
 }
 
-void ScTransferObj::StripRefs( ScDocument* pDoc,
+void ScTransferObj::StripRefs( ScDocument& rDoc,
                     SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
-                    ScDocument* pDestDoc )
+                    ScDocument& rDestDoc )
 {
-    if (!pDestDoc)
-    {
-        pDestDoc = pDoc;
-    }
-
     //  In a clipboard doc the data don't have to be on the first sheet
 
     SCTAB nSrcTab = 0;
-    while (nSrcTab<pDoc->GetTableCount() && !pDoc->HasTable(nSrcTab))
+    while (nSrcTab < rDoc.GetTableCount() && !rDoc.HasTable(nSrcTab))
         ++nSrcTab;
     SCTAB nDestTab = 0;
-    while (nDestTab<pDestDoc->GetTableCount() && !pDestDoc->HasTable(nDestTab))
+    while (nDestTab < rDestDoc.GetTableCount() && !rDestDoc.HasTable(nDestTab))
         ++nDestTab;
 
-    if (!pDoc->HasTable(nSrcTab) || !pDestDoc->HasTable(nDestTab))
+    if (!rDoc.HasTable(nSrcTab) || !rDestDoc.HasTable(nDestTab))
     {
         OSL_FAIL("Sheet not found in ScTransferObj::StripRefs");
         return;
@@ -855,7 +850,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
     ScRange aRef;
 
-    ScCellIterator aIter( *pDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
+    ScCellIterator aIter( rDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
     {
         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -863,7 +858,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
         bool bOut = false;
-        ScDetectiveRefIter aRefIter( *pDoc, pFCell );
+        ScDetectiveRefIter aRefIter( rDoc, pFCell );
         while ( !bOut && aRefIter.GetNextRef( aRef ) )
         {
             if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
@@ -880,33 +875,33 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             ScAddress aPos(nCol, nRow, nDestTab);
             if (nErrCode != FormulaError::NONE)
             {
-                if ( pDestDoc->GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY)->GetValue() ==
+                if ( rDestDoc.GetAttr( nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY)->GetValue() ==
                         SvxCellHorJustify::Standard )
-                    pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
+                    rDestDoc.ApplyAttr( nCol,nRow,nDestTab,
                             SvxHorJustifyItem(SvxCellHorJustify::Right, ATTR_HOR_JUSTIFY) );
 
                 ScSetStringParam aParam;
                 aParam.setTextInput();
-                pDestDoc->SetString(aPos, ScGlobal::GetErrorString(nErrCode), &aParam);
+                rDestDoc.SetString(aPos, ScGlobal::GetErrorString(nErrCode), &aParam);
             }
             else if (pFCell->IsValue())
             {
-                pDestDoc->SetValue(aPos, pFCell->GetValue());
+                rDestDoc.SetValue(aPos, pFCell->GetValue());
             }
             else
             {
                 OUString aStr = pFCell->GetString().getString();
                 if ( pFCell->IsMultilineResult() )
                 {
-                    ScFieldEditEngine& rEngine = pDestDoc->GetEditEngine();
+                    ScFieldEditEngine& rEngine = rDestDoc.GetEditEngine();
                     rEngine.SetTextCurrentDefaults(aStr);
-                    pDestDoc->SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
+                    rDestDoc.SetEditText(ScAddress(nCol,nRow,nDestTab), rEngine.CreateTextObject());
                 }
                 else
                 {
                     ScSetStringParam aParam;
                     aParam.setTextInput();
-                    pDestDoc->SetString(aPos, aStr, &aParam);
+                    rDestDoc.SetString(aPos, aStr, &aParam);
                 }
             }
         }

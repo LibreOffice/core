@@ -40,7 +40,7 @@ public:
 
         StrData();
     };
-    static void PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+    static void PutData( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const css::uno::Reference< css::sdbc::XRow>& xRow,
                         long nRowPos,
                         long nType, bool bCurrency, StrData* pStrData = nullptr );

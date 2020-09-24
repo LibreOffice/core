@@ -390,7 +390,7 @@ void ScViewFunc::DoThesaurus()
 
     if (eState == EESpellState::ErrorFound)              // should happen later through Wrapper!
     {
-        LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
+        LanguageType eLnge = ScViewUtil::GetEffLanguage( rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge) + ScResId( STR_SPELLING_NO_LANG );
 
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(GetViewData().GetDialogParent(),

@@ -349,7 +349,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                     if (!bDisable)
                     {
                         //  test for available languages
-                        LanguageType nLang = ScViewUtil::GetEffLanguage( &rDoc, aCursor );
+                        LanguageType nLang = ScViewUtil::GetEffLanguage( rDoc, aCursor );
                         bDisable = !ScModule::HasThesaurusLanguage( nLang );
                     }
                 }
@@ -571,7 +571,7 @@ bool checkDestRanges(ScViewData& rViewData)
     aMark.MarkToSimple();
     aMark.FillRangeListWithMarks(&aRanges, false);
 
-    return ScClipUtil::CheckDestRanges(&rDoc, nColSize, nRowSize, aMark, aRanges);
+    return ScClipUtil::CheckDestRanges(rDoc, nColSize, nRowSize, aMark, aRanges);
 }
 
 }

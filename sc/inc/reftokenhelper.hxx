@@ -61,8 +61,8 @@ namespace ScRefTokenHelper
 
     bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken);
 
-    ScTokenRef createRefToken(const ScDocument* pDoc, const ScAddress& rAddr);
-    ScTokenRef createRefToken(const ScDocument* pDoc, const ScRange& rRange);
+    ScTokenRef createRefToken(const ScDocument& rDoc, const ScAddress& rAddr);
+    ScTokenRef createRefToken(const ScDocument& rDoc, const ScRange& rRange);
 };
 
 #endif

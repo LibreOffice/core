@@ -27,16 +27,15 @@
 #include <docpool.hxx>
 #include <stlpool.hxx>
 
-ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
-:pEditPool(nullptr)
-,pEnginePool(nullptr)
-,m_pSourceDoc(pSourceDoc)
+ScPoolHelper::ScPoolHelper( ScDocument& rSourceDoc )
+    : pEditPool(nullptr)
+    , pEnginePool(nullptr)
+    , m_rSourceDoc(rSourceDoc)
 {
-    OSL_ENSURE( pSourceDoc, "ScPoolHelper: no document" );
     pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 
-    mxStylePool = new ScStyleSheetPool( *pDocPool, pSourceDoc );
+    mxStylePool = new ScStyleSheetPool( *pDocPool, &rSourceDoc );
 }
 
 ScPoolHelper::~ScPoolHelper()
@@ -96,7 +95,7 @@ std::unique_ptr<SvNumberFormatter> ScPoolHelper::CreateNumberFormatter() const
         osl::MutexGuard aGuard(&maMtxCreateNumFormatter);
         p.reset(new SvNumberFormatter(comphelper::getProcessComponentContext(), LANGUAGE_SYSTEM));
     }
-    p->SetColorLink( LINK(m_pSourceDoc, ScDocument, GetUserDefinedColor) );
+    p->SetColorLink( LINK(&m_rSourceDoc, ScDocument, GetUserDefinedColor) );
     p->SetEvalDateFormat(NF_EVALDATEFORMAT_INTL_FORMAT);
 
     sal_uInt16 d,m;

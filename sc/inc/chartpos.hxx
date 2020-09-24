@@ -103,7 +103,7 @@ class ScDocument;
 class ScChartPositioner final             // only parameter struct
 {
     ScRangeListRef  aRangeListRef;
-    ScDocument* pDocument;
+    ScDocument& rDocument;
     std::unique_ptr<ScChartPositionMap> pPositionMap;
     ScChartGlue eGlue;
     SCCOL       nStartCol;
@@ -118,10 +118,10 @@ class ScChartPositioner final             // only parameter struct
     void        CreatePositionMap();
 
 public:
-    ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
+    ScChartPositioner( ScDocument& rDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP,
                     SCCOL nEndColP, SCROW nEndRowP );
-    ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList );
+    ScChartPositioner( ScDocument& rDoc, const ScRangeListRef& rRangeList );
     ScChartPositioner( const ScChartPositioner& rPositioner );
 
     ~ScChartPositioner();

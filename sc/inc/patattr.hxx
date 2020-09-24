@@ -125,7 +125,7 @@ public:
     void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
     const OUString*         GetStyleName() const;
-    void                    UpdateStyleSheet(const ScDocument* pDoc);
+    void                    UpdateStyleSheet(const ScDocument& rDoc);
     void                    StyleToName();
 
     bool                    IsVisible() const;

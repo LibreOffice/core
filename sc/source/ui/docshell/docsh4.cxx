@@ -390,7 +390,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     bool bOk = true;
                     if ( !bAddRange && ( !bColInit || !bRowInit ) )
                     {
-                        ScChartPositioner aChartPositioner( &m_aDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
+                        ScChartPositioner aChartPositioner( m_aDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
                         if (!bColInit)
                             bColHeaders = aChartPositioner.HasColHeaders();
                         if (!bRowInit)

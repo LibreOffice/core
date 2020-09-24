@@ -447,19 +447,19 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
     return true;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScAddress& rAddr)
+ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument& rDoc, const ScAddress& rAddr)
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress(rAddr);
-    ScTokenRef pRef(new ScSingleRefToken(pDoc->GetSheetLimits(), aRefData));
+    ScTokenRef pRef(new ScSingleRefToken(rDoc.GetSheetLimits(), aRefData));
     return pRef;
 }
 
-ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument* pDoc, const ScRange& rRange)
+ScTokenRef ScRefTokenHelper::createRefToken(const ScDocument& rDoc, const ScRange& rRange)
 {
     ScComplexRefData aRefData;
     aRefData.InitRange(rRange);
-    ScTokenRef pRef(new ScDoubleRefToken(pDoc->GetSheetLimits(), aRefData));
+    ScTokenRef pRef(new ScDoubleRefToken(rDoc.GetSheetLimits(), aRefData));
     return pRef;
 }
 

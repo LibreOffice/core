@@ -87,15 +87,15 @@ struct DebugCalculationEntry
 {
           ScAddress     maPos;
           OUString      maResult;
-    const ScDocument*   mpDoc;
+    const ScDocument&   mrDoc;
           sal_uInt32    mnGroup;
           sal_uInt16    mnRecursion;
 
-    DebugCalculationEntry( const ScAddress& rPos, ScDocument* pDoc, sal_uInt32 nGroup ) :
+    DebugCalculationEntry( const ScAddress& rPos, ScDocument& rDoc, sal_uInt32 nGroup ) :
         maPos(rPos),
-        mpDoc(pDoc),
+        mrDoc(rDoc),
         mnGroup(nGroup),
-        mnRecursion(pDoc->GetRecursionHelper().GetRecursionCount())
+        mnRecursion(rDoc.GetRecursionHelper().GetRecursionCount())
     {
     }
 };
@@ -125,7 +125,7 @@ static struct DebugCalculation
     {
         for (auto const& it : mvPos)
         {
-            OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, it.mpDoc) +
+            OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, &it.mrDoc) +
                     " [" + OUString::number( it.mnRecursion) + "," + OUString::number( it.mnGroup) + "]");
             fprintf( stderr, "%s -> ", aStr.toUtf8().getStr());
         }
@@ -137,7 +137,7 @@ static struct DebugCalculation
     {
         for (auto const& it : mvResults)
         {
-            OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, it.mpDoc));
+            OUString aStr( it.maPos.Format( ScRefFlags::VALID | ScRefFlags::TAB_3D, &it.mrDoc));
             aStr += " (" + it.maResult + ")";
             fprintf( stderr, "%s, ", aStr.toUtf8().getStr());
         }
@@ -176,13 +176,13 @@ static struct DebugCalculation
 
 struct DebugCalculationStacker
 {
-    DebugCalculationStacker( const ScAddress& rPos, ScDocument* pDoc )
+    DebugCalculationStacker( const ScAddress& rPos, ScDocument& rDoc )
     {
         if (!aDC.mbActive && rPos == aDC.maTrigger)
             aDC.mbActive = aDC.mbSwitchOff = true;
         if (aDC.mbActive)
         {
-            aDC.mvPos.push_back( DebugCalculationEntry( rPos, pDoc, aDC.mnGroup));
+            aDC.mvPos.push_back( DebugCalculationEntry( rPos, rDoc, aDC.mnGroup));
             aDC.mbPrint = true;
         }
     }
@@ -1565,7 +1565,7 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
         aDC.mbPrintResults = true;
         bDebugCalculationInit = false;
     }
-    DebugCalculationStacker aDebugEntry( aPos, &rDocument);
+    DebugCalculationStacker aDebugEntry(aPos, rDocument);
 #endif
 
     if (!IsDirtyOrInTableOpDirty() || rRecursionHelper.IsInReturn())
@@ -2833,7 +2833,7 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     return aResult.GetMatrix().get();
 }
 
-bool ScFormulaCell::GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) const
+bool ScFormulaCell::GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2847,8 +2847,8 @@ bool ScFormulaCell::GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) c
             if( t )
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
-                ScAddress aAbs = rRef.toAbs(*pDoc, aPos);
-                if (pDoc->ValidAddress(aAbs))
+                ScAddress aAbs = rRef.toAbs(rDoc, aPos);
+                if (rDoc.ValidAddress(aAbs))
                 {
                     rPos = aAbs;
                     return true;
@@ -2861,7 +2861,7 @@ bool ScFormulaCell::GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) c
     return false;
 }
 
-sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& rOrgPos ) const
+sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument& rDoc, ScAddress& rOrgPos ) const
 {
     switch ( cMatrixFlag )
     {
@@ -2871,7 +2871,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& 
             static thread_local SCCOL nC;
             static thread_local SCROW nR;
             ScAddress aOrg;
-            if ( !GetMatrixOrigin( pDoc, aOrg ) )
+            if ( !GetMatrixOrigin( rDoc, aOrg ) )
                 return sc::MatrixEdge::Nothing;
             if ( aOrg != rOrgPos )
             {   // First time or a different matrix than last time.
@@ -2899,7 +2899,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& 
                         {
                             pCell = rDocument.GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(&rDocument, aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(rDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nC++;
                                 aAdr.IncCol();
@@ -2914,7 +2914,7 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( const ScDocument* pDoc, ScAddress& 
                         {
                             pCell = rDocument.GetFormulaCell(aAdr);
                             if (pCell && pCell->cMatrixFlag == ScMatrixMode::Reference &&
-                                pCell->GetMatrixOrigin(&rDocument, aTmpOrg) && aTmpOrg == aOrg)
+                                pCell->GetMatrixOrigin(rDocument, aTmpOrg) && aTmpOrg == aOrg)
                             {
                                 nR++;
                                 aAdr.IncRow();

@@ -34,9 +34,9 @@ ScDatabaseDocUtil::StrData::StrData() :
 {
 }
 
-void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+void ScDatabaseDocUtil::PutData(ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
-                                long nType, bool bCurrency, StrData* pStrData )
+                                long nType, bool bCurrency, StrData* pStrData)
 {
     OUString aString;
     double nVal = 0.0;
@@ -54,7 +54,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
                 //TODO: use language from doc (here, date/time and currency)?
-                nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
+                nFormatIndex = rDoc.GetFormatTable()->GetStandardFormat(
                                     SvNumFormatType::LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
@@ -91,7 +91,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                         nVal = 0.0;
                     else
                     {
-                        SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
+                        SvNumberFormatter* pFormTable = rDoc.GetFormatTable();
                         nFormatIndex = pFormTable->GetStandardFormat(
                                 SvNumFormatType::DATE, ScGlobal::eLnge );
                         nVal = Date( aDate ) - pFormTable->GetNullDate();
@@ -102,7 +102,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
             case sdbc::DataType::TIME:
                 {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
+                    SvNumberFormatter* pFormTable = rDoc.GetFormatTable();
                     nFormatIndex = pFormTable->GetStandardFormat(
                                         SvNumFormatType::TIME, ScGlobal::eLnge );
 
@@ -118,7 +118,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
             case sdbc::DataType::TIMESTAMP:
                 {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
+                    SvNumberFormatter* pFormTable = rDoc.GetFormatTable();
                     nFormatIndex = pFormTable->GetStandardFormat(
                                         SvNumFormatType::DATETIME, ScGlobal::eLnge );
 
@@ -154,21 +154,21 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
     }
 
     if ( bValue && bCurrency )
-        nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
+        nFormatIndex = rDoc.GetFormatTable()->GetStandardFormat(
                             SvNumFormatType::CURRENCY, ScGlobal::eLnge );
 
     ScAddress aPos(nCol, nRow, nTab);
     if (bEmptyFlag)
-        pDoc->SetEmptyCell(aPos);
+        rDoc.SetEmptyCell(aPos);
     else if (bError)
     {
-        pDoc->SetError( nCol, nRow, nTab, FormulaError::NotAvailable );
+        rDoc.SetError( nCol, nRow, nTab, FormulaError::NotAvailable );
     }
     else if (bValue)
     {
-        pDoc->SetValue(aPos, nVal);
+        rDoc.SetValue(aPos, nVal);
         if (nFormatIndex)
-            pDoc->SetNumberFormat(aPos, nFormatIndex);
+            rDoc.SetNumberFormat(aPos, nFormatIndex);
     }
     else
     {
@@ -176,7 +176,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         {
             if (ScStringUtil::isMultiline(aString))
             {
-                pDoc->SetEditText(aPos, aString);
+                rDoc.SetEditText(aPos, aString);
                 if (pStrData)
                     pStrData->mbSimpleText = false;
             }
@@ -184,7 +184,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             {
                 ScSetStringParam aParam;
                 aParam.setTextInput();
-                pDoc->SetString(aPos, aString, &aParam);
+                rDoc.SetString(aPos, aString, &aParam);
                 if (pStrData)
                     pStrData->mbSimpleText = true;
             }
@@ -193,7 +193,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                 pStrData->mnStrLength = aString.getLength();
         }
         else
-            pDoc->SetEmptyCell(aPos);
+            rDoc.SetEmptyCell(aPos);
     }
 }
 

@@ -284,7 +284,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             if ( eFamily == SfxStyleFamily::Para ) // CellStyles
             {
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
-                ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+                ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
                 aFuncMark.MarkToMulti();
 
                 if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
@@ -609,7 +609,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 // Name to style pointer
                                 rDoc.UpdStlShtPtrsFrmNms();
                             else
-                                rDoc.GetPool()->CellStyleCreated( aStyleName, &rDoc );
+                                rDoc.GetPool()->CellStyleCreated( aStyleName, rDoc );
 
                             // Adopt attribute and use style
                             pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -818,7 +818,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                                ScTabViewShell::MakeNumberInfoItem(&rDoc, GetViewData()));
+                                ScTabViewShell::MakeNumberInfoItem(rDoc, GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
                             bPage = false;
@@ -886,7 +886,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                     pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
                             }
 
-                            rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName(), &rDoc );
+                            rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName(), rDoc );
                         }
                         else
                         {
@@ -1769,7 +1769,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 aSetItem.PutItemForScriptType( nScript, rFont );
 
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
-                ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+                ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
                 rDoc.SetPreviewFont( aSetItem.GetItemSet().Clone() );
                 aFuncMark.MarkToMulti();
 

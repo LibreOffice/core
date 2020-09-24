@@ -66,14 +66,14 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-LanguageType ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
+LanguageType ScViewUtil::GetEffLanguage( ScDocument& rDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 
-    SvtScriptType nScript = pDoc->GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
+    SvtScriptType nScript = rDoc.GetScriptType(rPos.Col(), rPos.Row(), rPos.Tab());
     sal_uInt16 nWhich = ( nScript == SvtScriptType::ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                     ( ( nScript == SvtScriptType::COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
-    const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
+    const SfxPoolItem* pItem = rDoc.GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
     const SvxLanguageItem* pLangIt = dynamic_cast<const SvxLanguageItem*>( pItem  );
     LanguageType eLnge;
     if (pLangIt)
@@ -82,7 +82,7 @@ LanguageType ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos
         if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
         {
             LanguageType eLatin, eCjk, eCtl;
-            pDoc->GetLanguage( eLatin, eCjk, eCtl );
+            rDoc.GetLanguage( eLatin, eCjk, eCtl );
             eLnge = ( nScript == SvtScriptType::ASIAN ) ? eCjk :
                     ( ( nScript == SvtScriptType::COMPLEX ) ? eCtl : eLatin );
         }
@@ -220,7 +220,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     return true;
 }
 
-void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc )
+void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument& rDoc )
 {
     rMark.MarkToMulti();
 
@@ -237,7 +237,7 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc )
         for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
         {
             SCROW nLastRow = nRow;
-            if (pDoc->RowFiltered(nRow, nTab, nullptr, &nLastRow))
+            if (rDoc.RowFiltered(nRow, nTab, nullptr, &nLastRow))
             {
                 // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
                 // (visible in repaint for indentation)
@@ -255,27 +255,27 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc )
     rMark.MarkToSimple();
 }
 
-bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows )
+bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument& rDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
     // Always fit the range on its first sheet.
     OSL_ENSURE( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
-    SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, pDoc->MaxRow(), nTab);
-    if (pDoc->ValidRow(nLastRow))
+    SCROW nLastRow = rDoc.LastNonFilteredRow(nStartRow, rDoc.MaxRow(), nTab);
+    if (rDoc.ValidRow(nLastRow))
         rRange.aEnd.SetRow(nLastRow);
-    SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, pDoc->MaxRow(), nTab);
+    SCROW nCount = rDoc.CountNonFilteredRows(nStartRow, rDoc.MaxRow(), nTab);
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
-bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument* pDoc )
+bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument& rDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
     for (SCTAB nTab=rRange.aStart.Tab(); nTab<=rRange.aEnd.Tab(); nTab++)
     {
-        if (pDoc->HasFilteredRows(nStartRow, nEndRow, nTab))
+        if (rDoc.HasFilteredRows(nStartRow, nEndRow, nTab))
             return true;
     }
 

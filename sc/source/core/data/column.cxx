@@ -130,7 +130,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
         if (pCell->GetMatrixFlag() == ScMatrixMode::NONE)
             return MatrixEdge::Nothing;
 
-        return pCell->GetMatrixEdge(&GetDoc(), aOrigin);
+        return pCell->GetMatrixEdge(GetDoc(), aOrigin);
     }
 
     bool bOpen = false;
@@ -160,7 +160,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
             if (pCell->GetMatrixFlag() == ScMatrixMode::NONE)
                 continue;
 
-            nEdges = pCell->GetMatrixEdge(&GetDoc(), aOrigin);
+            nEdges = pCell->GetMatrixEdge(GetDoc(), aOrigin);
             if (nEdges == MatrixEdge::Nothing)
                 continue;
 
@@ -240,7 +240,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
                     // cell is not a part of a matrix.
                     continue;
 
-                MatrixEdge nEdges = pCell->GetMatrixEdge(&GetDoc(), aOrigin);
+                MatrixEdge nEdges = pCell->GetMatrixEdge(GetDoc(), aOrigin);
                 if (nEdges == MatrixEdge::Nothing)
                     continue;
 

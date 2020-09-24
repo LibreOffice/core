@@ -393,7 +393,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
                 for (i=0; i<nColCount; i++)
                 {
                     ScDatabaseDocUtil::StrData aStrData;
-                    ScDatabaseDocUtil::PutData( &m_aDocument, nCol, nRow, 0,
+                    ScDatabaseDocUtil::PutData( m_aDocument, nCol, nRow, 0,
                                                 xRow, i+1, pTypeArr[i], false,
                                                 &aStrData );
 

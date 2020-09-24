@@ -482,7 +482,7 @@ void ScTable::FillFormula(
     if ( bLast && pDestCell->GetMatrixFlag() != ScMatrixMode::NONE )
     {
         ScAddress aOrg;
-        if ( pDestCell->GetMatrixOrigin( &GetDoc(), aOrg ) )
+        if ( pDestCell->GetMatrixOrigin( GetDoc(), aOrg ) )
         {
             if ( nDestCol >= aOrg.Col() && nDestRow >= aOrg.Row() )
             {

@@ -332,9 +332,9 @@ public:
      */
     svl::SharedString GetRawString() const;
     const ScMatrix* GetMatrix();
-    bool            GetMatrixOrigin( const ScDocument* pDoc, ScAddress& rPos ) const;
+    bool            GetMatrixOrigin( const ScDocument& rDoc, ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
-    sc::MatrixEdge  GetMatrixEdge( const ScDocument* pDoc, ScAddress& rOrgPos ) const;
+    sc::MatrixEdge  GetMatrixEdge( const ScDocument& rDoc, ScAddress& rOrgPos ) const;
     FormulaError    GetErrCode();   // interpret first if necessary
     FormulaError    GetRawError() const;  // don't interpret, just return code or result error
     bool            GetErrorOrValue( FormulaError& rErr, double& rVal );

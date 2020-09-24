@@ -1028,7 +1028,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 {
     ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
@@ -1111,7 +1111,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
     ScDocShell* pDocSh      = rViewData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
@@ -1329,7 +1329,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
     ScDocShell* pDocSh      = rViewData.GetDocShell();
     ScDocument& rDoc        = pDocSh->GetDocument();
     ScMarkData aFuncMark( rViewData.GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
     SCTAB nTabCount     = rDoc.GetTableCount();
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
@@ -1746,7 +1746,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     SCTAB nTab = GetViewData().GetTabNo();
     ScDocument& rDoc = pDocSh->GetDocument();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
     bool bRecord = true;
     if (!rDoc.IsUndoEnabled())
@@ -1959,7 +1959,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     ScDocument& rDoc = GetViewData().GetDocument();
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
 
     bool bRecord =true;
     if (!rDoc.IsUndoEnabled())
@@ -2828,7 +2828,7 @@ void ScViewFunc::ChangeIndent( bool bIncrement )
     ScMarkData& rMark   = rViewData.GetMarkData();
 
     ScMarkData aWorkMark = rMark;
-    ScViewUtil::UnmarkFiltered( aWorkMark, &pDocSh->GetDocument() );
+    ScViewUtil::UnmarkFiltered( aWorkMark, pDocSh->GetDocument() );
     aWorkMark.MarkToMulti();
     if (!aWorkMark.IsMultiMarked())
     {

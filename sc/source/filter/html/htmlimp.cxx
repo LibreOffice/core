@@ -192,20 +192,18 @@ void ScHTMLImport::WriteToDocument(
     }
 }
 
-OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName )
+OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument& rDoc, const OUString& rOrigName )
 {
-    return ScHTMLImport::GetHTMLRangeNameList( pDoc, rOrigName );
+    return ScHTMLImport::GetHTMLRangeNameList( rDoc, rOrigName );
 }
 
-OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument* pDoc, const OUString& rOrigName )
+OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, const OUString& rOrigName )
 {
-    OSL_ENSURE( pDoc, "ScHTMLImport::GetHTMLRangeNameList - missing document" );
-
     if (rOrigName.isEmpty())
         return OUString();
 
     OUString aNewName;
-    ScRangeName* pRangeNames = pDoc->GetRangeName();
+    ScRangeName* pRangeNames = rDoc.GetRangeName();
     ScRangeList aRangeList;
     sal_Int32 nStringIx = 0;
     do

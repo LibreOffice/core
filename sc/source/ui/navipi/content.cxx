@@ -1093,13 +1093,13 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
     return !bEqual;
 }
 
-static bool lcl_GetRange( const ScDocument* pDoc, ScContentId nType, const OUString& rName, ScRange& rRange )
+static bool lcl_GetRange( const ScDocument& rDoc, ScContentId nType, const OUString& rName, ScRange& rRange )
 {
     bool bFound = false;
 
     if ( nType == ScContentId::RANGENAME )
     {
-        ScRangeName* pList = pDoc->GetRangeName();
+        ScRangeName* pList = rDoc.GetRangeName();
         if (pList)
         {
             const ScRangeData* p = pList->findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
@@ -1109,7 +1109,7 @@ static bool lcl_GetRange( const ScDocument* pDoc, ScContentId nType, const OUStr
     }
     else if ( nType == ScContentId::DBAREA )
     {
-        ScDBCollection* pList = pDoc->GetDBCollection();
+        ScDBCollection* pList = rDoc.GetDBCollection();
         if (pList)
         {
             const ScDBData* p = pList->getNamedDBs().findByUpperName(ScGlobal::getCharClassPtr()->uppercase(rName));
@@ -1338,7 +1338,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                         if ( nType == ScContentId::RANGENAME || nType == ScContentId::DBAREA )
                         {
                             ScRange aRange;
-                            if ( lcl_GetRange( &rSrcDoc, nType, aText, aRange ) )
+                            if ( lcl_GetRange( rSrcDoc, nType, aText, aRange ) )
                             {
                                 bDisallow = lcl_DoDragCells( pSrcShell, aRange, ScDragSrc::Navigator, *m_xTreeView );
                             }

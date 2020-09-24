@@ -73,7 +73,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
     // various import helpers
     virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;
     virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) = 0;
-    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
+    virtual OUString       GetHTMLRangeNameList( ScDocument& rDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
     virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;

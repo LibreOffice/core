@@ -544,16 +544,16 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName 
     aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SfxStyleFamily::Para );
 }
 
-ScTableValidationObj::ScTableValidationObj(const ScDocument* pDoc, sal_uLong nKey,
-                                            const formula::FormulaGrammar::Grammar eGrammar) :
+ScTableValidationObj::ScTableValidationObj(const ScDocument& rDoc, sal_uLong nKey,
+                                           const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  read the entry from the document...
 
     bool bFound = false;
-    if ( pDoc && nKey )
+    if (nKey)
     {
-        const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
+        const ScValidationData* pData = rDoc.GetValidationEntry( nKey );
         if (pData)
         {
             nMode = pData->GetOperation();
@@ -573,7 +573,7 @@ ScTableValidationObj::ScTableValidationObj(const ScDocument* pDoc, sal_uLong nKe
             // saved, even if in the list, see
             // ScMyValidationsContainer::GetCondition(), so shall not mark
             // anything in use.
-            if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
+            if (nValMode != SC_VALID_ANY && rDoc.IsInExternalReferenceMarking())
                 pData->MarkUsedExternalReferences();
 
             bFound = true;

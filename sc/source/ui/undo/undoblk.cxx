@@ -1630,13 +1630,13 @@ void ScUndoConditionalFormatList::DoChange(const ScDocument* pSrcDoc)
 
     if (pSrcDoc == mpUndoDoc.get())
     {
-        mpRedoDoc->GetCondFormList(mnTab)->RemoveFromDocument(&rDoc);
-        mpUndoDoc->GetCondFormList(mnTab)->AddToDocument(&rDoc);
+        mpRedoDoc->GetCondFormList(mnTab)->RemoveFromDocument(rDoc);
+        mpUndoDoc->GetCondFormList(mnTab)->AddToDocument(rDoc);
     }
     else
     {
-        mpUndoDoc->GetCondFormList(mnTab)->RemoveFromDocument(&rDoc);
-        mpRedoDoc->GetCondFormList(mnTab)->AddToDocument(&rDoc);
+        mpUndoDoc->GetCondFormList(mnTab)->RemoveFromDocument(rDoc);
+        mpRedoDoc->GetCondFormList(mnTab)->AddToDocument(rDoc);
     }
     rDoc.SetCondFormList(new ScConditionalFormatList(&rDoc, *pSrcDoc->GetCondFormList(mnTab)), mnTab);
 

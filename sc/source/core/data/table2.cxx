@@ -596,7 +596,7 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
 
 namespace {
 
-bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* pOldFormat, const ScConditionalFormat* pNewFormat, SCTAB nTab)
+bool CheckAndDeduplicateCondFormat(ScDocument& rDocument, ScConditionalFormat* pOldFormat, const ScConditionalFormat* pNewFormat, SCTAB nTab)
 {
     if (!pOldFormat)
         return false;
@@ -609,7 +609,7 @@ bool CheckAndDeduplicateCondFormat(ScDocument* pDocument, ScConditionalFormat* p
         {
             rDstRangeList.Join(rNewRangeList[i]);
         }
-        pDocument->AddCondFormatData(rNewRangeList, nTab, pOldFormat->GetKey());
+        rDocument.AddCondFormatData(rNewRangeList, nTab, pOldFormat->GetKey());
         return true;
     }
 
@@ -643,7 +643,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         aRefCxt.mnTabDelta = nTab - pTable->nTab;
         pNewFormat->UpdateReference(aRefCxt, true);
 
-        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(&rDocument, mpCondFormatList->GetFormat(rxCondFormat->GetKey()), pNewFormat.get(), nTab))
+        if (bSameDoc && pTable->nTab == nTab && CheckAndDeduplicateCondFormat(rDocument, mpCondFormatList->GetFormat(rxCondFormat->GetKey()), pNewFormat.get(), nTab))
         {
             continue;
         }
@@ -653,7 +653,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         {
             // Check if there is the same format in the destination
             // If there is, then simply expand its range
-            if (CheckAndDeduplicateCondFormat(&rDocument, rxCond.get(), pNewFormat.get(), nTab))
+            if (CheckAndDeduplicateCondFormat(rDocument, rxCond.get(), pNewFormat.get(), nTab))
             {
                 bDuplicate = true;
                 break;

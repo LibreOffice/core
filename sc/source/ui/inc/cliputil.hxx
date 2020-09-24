@@ -23,7 +23,7 @@ namespace ScClipUtil
     void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 
     bool CheckDestRanges(
-        const ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,
+        const ScDocument& rDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,
         const ScRangeList& rDest);
 }
 

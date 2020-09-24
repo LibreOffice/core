@@ -506,7 +506,7 @@ void ScTabControl::DoDrag()
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
-static sal_uInt16 lcl_DocShellNr( const ScDocument* pDoc )
+static sal_uInt16 lcl_DocShellNr( const ScDocument& rDoc )
 {
     sal_uInt16 nShellCnt = 0;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();
@@ -514,7 +514,7 @@ static sal_uInt16 lcl_DocShellNr( const ScDocument* pDoc )
     {
         if ( dynamic_cast<const ScDocShell *>(pShell) != nullptr )
         {
-            if ( &static_cast<ScDocShell*>(pShell)->GetDocument() == pDoc )
+            if ( &static_cast<ScDocShell*>(pShell)->GetDocument() == &rDoc )
                 return nShellCnt;
 
             ++nShellCnt;
@@ -549,7 +549,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             if ( !rDoc.GetChangeTrack() && rDoc.IsDocEditable() )
             {
                 //! use table selection from the tab control where dragging was started?
-                pViewData->GetView()->MoveTable( lcl_DocShellNr(&rDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
+                pViewData->GetView()->MoveTable( lcl_DocShellNr(rDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
                 rData.pCellTransfer->SetDragWasInternal();          // don't delete
                 return DND_ACTION_COPY;

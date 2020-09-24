@@ -42,7 +42,7 @@ public:
     virtual MapUnit             GetMetric( sal_uInt16 nWhich ) const override;
 
     void StyleDeleted( const ScStyleSheet* pStyle );      // delete templates(?) in organizer
-    void CellStyleCreated( const OUString& rName, const ScDocument* pDoc );
+    void CellStyleCreated( const OUString& rName, const ScDocument& rDoc );
     virtual bool GetPresentation( const SfxPoolItem&  rItem,
                                   MapUnit          ePresentationMetric,
                                   OUString&           rText,
