@@ -95,13 +95,14 @@ void MenuButton::ExecuteMenu()
     mbStartingMenu = false;
 
     SetPressed(false);
+    OUString aID = get_id(); // tdf#136678 take a copy if we are destroyed by Select callback
     if (mnCurItemId)
     {
         Select();
         mnCurItemId = 0;
         msCurItemIdent.clear();
     }
-    collectUIInformation(get_id(),"OPENLIST","","");
+    collectUIInformation(aID,"OPENLIST","","");
 }
 
 void MenuButton::CancelMenu()
