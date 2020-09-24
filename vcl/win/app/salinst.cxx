@@ -99,6 +99,9 @@ static LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
 class SalYieldMutex : public comphelper::SolarMutex
 {
+public: // for ImplSalYield() and ImplSalYieldMutexAcquireWithWait()
+    osl::Condition            m_condition; /// for MsgWaitForMultipleObjects()
+
 protected:
     virtual void              doAcquire( sal_uInt32 nLockCount ) override;
     virtual sal_uInt32        doRelease( bool bUnlockAll ) override;
@@ -135,11 +138,31 @@ void SalYieldMutex::BeforeReleaseHandler()
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
-    if ( pInst && pInst->IsMainThread() && pInst->m_nNoYieldLock )
+    if ( pInst && pInst->IsMainThread() )
     {
-        return;
+        if ( pInst->m_nNoYieldLock )
+            return;
+        // tdf#96887 If this is the main thread, then we must wait for two things:
+        // - the yield mutex being unlocked
+        // - SendMessage() being triggered
+        // This can nicely be done using MsgWaitForMultipleObjects, which is called in
+        // m_condition.wait(). The 2nd one is
+        // needed because if we don't reschedule, then we create deadlocks if a
+        // Window's create/destroy is called via SendMessage() from another thread.
+        // Have a look at the osl_waitCondition implementation for more info.
+        do {
+            // reset condition *before* acquiring!
+            m_condition.reset();
+            if (m_aMutex.tryToAcquire())
+                break;
+            // wait for SalYieldMutex::release() to set the condition
+            osl::Condition::Result res = m_condition.wait();
+            assert(osl::Condition::Result::result_ok == res);
+        }
+        while ( true );
     }
-    m_aMutex.acquire();
+    else
+        m_aMutex.acquire();
     ++m_nCount;
     --nLockCount;
 
@@ -152,7 +175,11 @@ sal_uInt32 SalYieldMutex::doRelease( const bool bUnlockAll )
     if ( pInst && pInst->m_nNoYieldLock && pInst->IsMainThread() )
         return 1;
 
-    return comphelper::SolarMutex::doRelease( bUnlockAll );
+    sal_uInt32 nCount = comphelper::SolarMutex::doRelease( bUnlockAll );
+    // wake up ImplSalYieldMutexAcquireWithWait() after release
+    if ( 0 == m_nCount )
+        m_condition.set();
+    return nCount;
 }
 
 bool SalYieldMutex::tryToAcquire()
