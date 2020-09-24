@@ -972,7 +972,7 @@ void SlideShow::resize( const Size &rSize )
         mxController->resize( rSize );
 }
 
-void SlideShow::activate( ViewShellBase& rBase )
+bool SlideShow::activate( ViewShellBase& rBase )
 {
     if( (mpFullScreenViewShellBase == &rBase) && !mxController.is() )
     {
@@ -984,23 +984,19 @@ void SlideShow::activate( ViewShellBase& rBase )
 
             CreateController( pShell.get(), pShell->GetView(), rBase.GetViewWindow() );
 
-            if( mxController->startShow(mxCurrentSettings.get()) )
-            {
-                pShell->Resize();
-                // Defer the sd::ShowWindow's GrabFocus to here. so that the accessible event can be fired correctly.
-                pShell->GetActiveWindow()->GrabFocus();
-            }
-            else
-            {
-                end();
-                return;
-            }
+            if (!mxController->startShow(mxCurrentSettings.get()))
+                return false;
+
+            pShell->Resize();
+            // Defer the sd::ShowWindow's GrabFocus to here. so that the accessible event can be fired correctly.
+            pShell->GetActiveWindow()->GrabFocus();
         }
     }
 
     if( mxController.is() )
         mxController->activate();
 
+    return true;
 }
 
 void SlideShow::deactivate()
