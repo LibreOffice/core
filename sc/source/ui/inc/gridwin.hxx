@@ -125,7 +125,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
         SCROW mnRow1;
         SCROW mnRow2;
 
-        VisibleRange(const ScDocument*);
+        VisibleRange(const ScDocument&);
 
         bool isInside(SCCOL nCol, SCROW nRow) const;
         bool set(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
@@ -146,7 +146,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
 
     std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
-    ScViewData*             pViewData;
+    ScViewData&             mrViewData;
     ScSplitPos              eWhich;
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
@@ -327,7 +327,7 @@ protected:
 public:
     enum class AutoFilterMode { Normal, Top10, Custom, Empty, NonEmpty, SortAscending, SortDescending };
 
-    ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
+    ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow() override;
     virtual void dispose() override;
 
@@ -471,7 +471,7 @@ public:
     /// Same as MouseMove(), but coordinates are in logic unit.
     virtual void LogicMouseMove(const MouseEvent& rMouseEvent) override;
 
-    ScViewData* getViewData();
+    ScViewData& getViewData();
     virtual FactoryFunction GetUITestFactory() const override;
 
     void updateLOKValListButton(bool bVisible, const ScAddress& rPos) const;

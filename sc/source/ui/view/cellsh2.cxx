@@ -764,7 +764,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             ScDataProviderDlg aDialog(pTabViewShell->GetDialogParent(), xDoc, &rDoc);
             if (aDialog.run() == RET_OK)
             {
-                aDialog.import(&rDoc);
+                aDialog.import(rDoc);
             }
         }
         break;

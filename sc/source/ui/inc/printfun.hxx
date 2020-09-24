@@ -296,7 +296,7 @@ public:
 
                     ~ScPrintFunc();
 
-    static void     DrawToDev( ScDocument* rDoc, OutputDevice* pDev, double nPrintFactor,
+    static void     DrawToDev( ScDocument& rDoc, OutputDevice* pDev, double nPrintFactor,
                                const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile );
 
     void            SetDrawView( FmFormView* pNew );

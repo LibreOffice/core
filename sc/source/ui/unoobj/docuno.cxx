@@ -2089,7 +2089,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         // The bMetaFile argument maybe could be
         // pDev->GetConnectMetaFile() != nullptr
         // but for some yet unknown reason does not draw cell content if true.
-        ScPrintFunc::DrawToDev( &rDoc, pDev, nPrintFactor, aBound, &aViewData, false /*bMetaFile*/ );
+        ScPrintFunc::DrawToDev( rDoc, pDev, nPrintFactor, aBound, &aViewData, false /*bMetaFile*/ );
 
         return;
     }

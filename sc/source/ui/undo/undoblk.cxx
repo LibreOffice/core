@@ -1638,7 +1638,7 @@ void ScUndoConditionalFormatList::DoChange(const ScDocument* pSrcDoc)
         mpUndoDoc->GetCondFormList(mnTab)->RemoveFromDocument(rDoc);
         mpRedoDoc->GetCondFormList(mnTab)->AddToDocument(rDoc);
     }
-    rDoc.SetCondFormList(new ScConditionalFormatList(&rDoc, *pSrcDoc->GetCondFormList(mnTab)), mnTab);
+    rDoc.SetCondFormList(new ScConditionalFormatList(rDoc, *pSrcDoc->GetCondFormList(mnTab)), mnTab);
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostDataChanged();

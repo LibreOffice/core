@@ -188,7 +188,7 @@ public:
 class ScFormulaGroupIterator
 {
 private:
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     SCTAB mnTab;
     SCCOL mnCol;
     bool mbNullCol;
@@ -196,7 +196,7 @@ private:
     std::vector<sc::FormulaGroupEntry> maEntries;
 
 public:
-    ScFormulaGroupIterator( ScDocument* pDoc );
+    ScFormulaGroupIterator( ScDocument& rDoc );
 
     sc::FormulaGroupEntry* first();
     sc::FormulaGroupEntry* next();
@@ -374,7 +374,7 @@ class ScCountIfCellIterator
     typedef sc::CellStoreType::const_position_type PositionType;
     PositionType    maCurPos;
     ScQueryParam    maParam;
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     const ScInterpreterContext& mrContext;
     SCTAB           nTab;
     SCCOL           nCol;
@@ -387,7 +387,7 @@ class ScCountIfCellIterator
     void            AdvanceQueryParamEntryField();
 
 public:
-                    ScCountIfCellIterator(ScDocument* pDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                    ScCountIfCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
                                         const ScQueryParam& aParam);
     int             GetCount();
 };
@@ -416,7 +416,7 @@ class ScAttrRectIterator            // all attribute areas, including areas stre
                                     // across more than one column
 {
 private:
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     SCTAB           nTab;
     SCCOL           nEndCol;
     SCROW           nStartRow;
@@ -427,7 +427,7 @@ private:
                     pColIter;
 
 public:
-                    ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
+                    ScAttrRectIterator(ScDocument& rDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScAttrRectIterator();
 
@@ -447,7 +447,7 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     std::vector<ColParam>::iterator maColPos;
     std::vector<ColParam> maColPositions;
 
-    ScDocument*     pDoc;
+    ScDocument&     rDoc;
     SCTAB           mnTab;
     SCCOL           nStartCol;
     SCCOL           nEndCol;
@@ -459,7 +459,7 @@ class ScHorizontalCellIterator      // walk through all non empty cells in an ar
     bool            mbMore;
 
 public:
-    ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
+    ScHorizontalCellIterator(ScDocument& rDocument, SCTAB nTable,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ~ScHorizontalCellIterator();
 
@@ -505,7 +505,7 @@ public:
 class ScHorizontalAttrIterator
 {
 private:
-    ScDocument*             pDoc;
+    ScDocument&             rDoc;
     SCTAB                   nTab;
     SCCOL                   nStartCol;
     SCROW                   nStartRow;
@@ -526,7 +526,7 @@ private:
     bool InitForNextAttr();
 
 public:
-            ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,
+            ScHorizontalAttrIterator( ScDocument& rDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScHorizontalAttrIterator();
 
@@ -560,7 +560,7 @@ private:
     ScRefCellValue maFoundCell;
 
 public:
-            ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
+            ScUsedAreaIterator( ScDocument& rDocument, SCTAB nTable,
                                 SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScUsedAreaIterator();
 
