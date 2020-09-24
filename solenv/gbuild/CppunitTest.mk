@@ -22,12 +22,11 @@
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
 
-ifeq ($(strip $(gb_CppunitTest_GDBTRACE)),)
 ifneq ($(strip $(CPPUNITTRACE)),)
 ifneq ($(filter gdb,$(CPPUNITTRACE)),)
 # sneak (a) setting the LD_LIBRARY_PATH, and (b) setting malloc debug flags, into the "gdb --args" command line
 gb_CppunitTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(gb_CppunitTest_malloc_check),\
+	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
 gb_CppunitTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
@@ -38,6 +37,7 @@ gb_CppunitTest_POSTGDBTRACE := rm $$lo_dyldpathfile
 else
 gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 endif
+ifneq ($(strip $(DEBUGCPPUNIT)),TRUE)
 gb_CppunitTest__interactive := $(true)
 endif
 endif
