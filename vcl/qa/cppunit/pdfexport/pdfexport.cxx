@@ -29,6 +29,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <osl/endian.h>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -1700,6 +1701,12 @@ void PdfExportTest::testTdf115262()
             unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
             std::vector<sal_Unicode> aText(nTextSize);
             FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+#if defined OSL_BIGENDIAN
+            // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
+            for (auto & j: aText) {
+                j = OSL_SWAPWORD(j);
+            }
+#endif
             OUString sText(aText.data(), nTextSize / 2 - 1);
             if (sText == "400")
                 nRowTop = fTop;
@@ -1735,6 +1742,12 @@ void PdfExportTest::testTdf121962()
         unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
         std::vector<sal_Unicode> aText(nTextSize);
         FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+#if defined OSL_BIGENDIAN
+        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
+        for (auto & j: aText) {
+            j = OSL_SWAPWORD(j);
+        }
+#endif
         OUString sText(aText.data(), nTextSize / 2 - 1);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
@@ -1767,6 +1780,12 @@ void PdfExportTest::testTdf115967()
         unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 2);
         std::vector<sal_Unicode> aText(nTextSize);
         FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+#if defined OSL_BIGENDIAN
+        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
+        for (auto & j: aText) {
+            j = OSL_SWAPWORD(j);
+        }
+#endif
         OUString sChar(aText.data(), nTextSize / 2 - 1);
         sText += sChar.trim();
     }
@@ -2298,8 +2317,16 @@ void PdfExportTest::testFormFontName()
     CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "DA"));
     CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "DA"));
     size_t nDALength = FPDFAnnot_GetStringValue(pAnnot.get(), "DA", nullptr, 0);
-    std::vector<FPDF_WCHAR> aDABuf(nDALength);
-    FPDFAnnot_GetStringValue(pAnnot.get(), "DA", aDABuf.data(), nDALength);
+    CPPUNIT_ASSERT_EQUAL(std::size_t(0), nDALength % 2);
+    std::vector<sal_Unicode> aDABuf(nDALength / 2);
+    FPDFAnnot_GetStringValue(
+        pAnnot.get(), "DA", reinterpret_cast<FPDF_WCHAR *>(aDABuf.data()), nDALength);
+#if defined OSL_BIGENDIAN
+    // The data returned by FPDFAnnot_GetStringValue is documented to always be UTF-16LE:
+    for (auto & i: aDABuf) {
+        i = OSL_SWAPWORD(i);
+    }
+#endif
     OUString aDA(reinterpret_cast<sal_Unicode*>(aDABuf.data()));
 
     // Without the accompanying fix in place, this test would have failed with:
