@@ -29,6 +29,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,framework,\
     CppunitTest_framework_dispatch \
 ))
 
+# Not sure why this is not stable on macOS.
+ifneq ($(OS),MACOSX)
+$(eval $(call gb_Module_add_slowcheck_targets,framework,\
+    CppunitTest_framework_services \
+))
+endif
+
 $(eval $(call gb_Module_add_l10n_targets,framework,\
     AllLangMoTarget_fwk \
 ))
