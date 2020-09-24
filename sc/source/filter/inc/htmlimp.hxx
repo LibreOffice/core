@@ -33,7 +33,7 @@ public:
     virtual void        WriteToDocument( bool bSizeColsRows = false, double nOutputFactor = 1.0,
                                          SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
 
-    static OUString     GetHTMLRangeNameList( const ScDocument* pDoc, const OUString& rOrigName );
+    static OUString     GetHTMLRangeNameList( const ScDocument& rDoc, const OUString& rOrigName );
 };
 
 #endif

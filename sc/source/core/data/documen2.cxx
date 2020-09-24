@@ -190,7 +190,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
      * have all of these available. */
     if ( eMode == SCDOCMODE_DOCUMENT || eMode == SCDOCMODE_FUNCTIONACCESS )
     {
-        mxPoolHelper = new ScPoolHelper( this );
+        mxPoolHelper = new ScPoolHelper( *this );
 
         pBASM.reset( new ScBroadcastAreaSlotMachine( this ) );
         pChartListenerCollection.reset( new ScChartListenerCollection( *this ) );

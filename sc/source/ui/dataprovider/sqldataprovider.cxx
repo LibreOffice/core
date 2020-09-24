@@ -102,7 +102,7 @@ void SQLFetchThread::execute()
 
                 for (SCCOL nCol = 0; nCol < nColCount; nCol++)
                 {
-                    ScDatabaseDocUtil::PutData(&mrDocument, nCol, nRow - 1, 0, xRow, nCol + 1,
+                    ScDatabaseDocUtil::PutData(mrDocument, nCol, nRow - 1, 0, xRow, nCol + 1,
                                                xMetaData->getColumnType(nCol + 1), false);
                 }
             }

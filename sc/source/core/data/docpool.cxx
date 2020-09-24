@@ -358,7 +358,7 @@ void ScDocumentPool::StyleDeleted( const ScStyleSheet* pStyle )
     }
 }
 
-void ScDocumentPool::CellStyleCreated( const OUString& rName, const ScDocument* pDoc )
+void ScDocumentPool::CellStyleCreated( const OUString& rName, const ScDocument& rDoc )
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.
@@ -372,7 +372,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName, const ScDocument* 
         {
             const OUString* pStyleName = pPattern->GetStyleName();
             if ( pStyleName && *pStyleName == rName )
-                pPattern->UpdateStyleSheet(pDoc); // find and store style pointer
+                pPattern->UpdateStyleSheet(rDoc); // find and store style pointer
         }
     }
 }

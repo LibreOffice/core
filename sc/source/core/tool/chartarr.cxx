@@ -55,9 +55,9 @@ ScMemChart::~ScMemChart()
 }
 
 ScChartArray::ScChartArray(
-    ScDocument* pDoc, const ScRangeListRef& rRangeList ) :
-    pDocument( pDoc ),
-    aPositioner(pDoc, rRangeList) {}
+    ScDocument& rDoc, const ScRangeListRef& rRangeList ) :
+    rDocument( rDoc ),
+    aPositioner(rDoc, rRangeList) {}
 
 std::unique_ptr<ScMemChart> ScChartArray::CreateMemChart()
 {
@@ -135,12 +135,12 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
     // Skip hidden columns.
     // TODO: make use of last column value once implemented.
     SCCOL nLastCol = -1;
-    while (pDocument->ColHidden(nCol1, nTab1, nullptr, &nLastCol))
+    while (rDocument.ColHidden(nCol1, nTab1, nullptr, &nLastCol))
         ++nCol1;
 
     // Skip hidden rows.
     SCROW nLastRow = -1;
-    if (pDocument->RowHidden(nRow1, nTab1, nullptr, &nLastRow))
+    if (rDocument.RowHidden(nRow1, nTab1, nullptr, &nLastRow))
         nRow1 = nLastRow + 1;
 
     // if everything is hidden then the label remains at the beginning
@@ -161,7 +161,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
     for (SCSIZE i=0; i<nTotalCols; i++)
     {
         SCCOL nThisCol = sal::static_int_cast<SCCOL>(nCol1+i);
-        if (!pDocument->ColHidden(nThisCol, nTab1, nullptr, &nLastCol))
+        if (!rDocument.ColHidden(nThisCol, nTab1, nullptr, &nLastCol))
             aCols.push_back(nThisCol);
     }
     SCSIZE nColCount = aCols.size();
@@ -175,7 +175,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
         SCROW nThisRow = nRow1;
         while (nThisRow <= nRow2)
         {
-            if (pDocument->RowHidden(nThisRow, nTab1, nullptr, &nLastRow))
+            if (rDocument.RowHidden(nThisRow, nTab1, nullptr, &nLastRow))
                 nThisRow = nLastRow;
             else
                 aRows.push_back(nThisRow);
@@ -210,14 +210,14 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
 
     if ( bValidData )
     {
-        bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+        bool bCalcAsShown = rDocument.GetDocOptions().IsCalcAsShown();
         for (nCol=0; nCol<nColCount; nCol++)
         {
             for (nRow=0; nRow<nRowCount; nRow++)
             {
                 // DBL_MIN is a Hack for Chart to recognize empty cells.
                 ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
-                double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
+                double nVal = getCellValue(rDocument, aPos, DBL_MIN, bCalcAsShown);
                 pMemChart->SetData(nCol, nRow, nVal);
             }
         }
@@ -236,7 +236,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
     {
         OUString aString;
         if (HasColHeaders())
-            aString = pDocument->GetString(aCols[nCol], nStrRow, nTab1);
+            aString = rDocument.GetString(aCols[nCol], nStrRow, nTab1);
         if (aString.isEmpty())
         {
             OUStringBuffer aBuf;
@@ -258,7 +258,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartSingle()
         OUString aString;
         if (HasRowHeaders())
         {
-            aString = pDocument->GetString(nStrCol, aRows[nRow], nTab1);
+            aString = rDocument.GetString(nStrCol, aRows[nRow], nTab1);
         }
         if (aString.isEmpty())
         {
@@ -303,7 +303,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
 
     SCSIZE nCol = 0;
     SCSIZE nRow = 0;
-    bool bCalcAsShown = pDocument->GetDocOptions().IsCalcAsShown();
+    bool bCalcAsShown = rDocument.GetDocOptions().IsCalcAsShown();
     sal_uLong nIndex = 0;
     if (bValidData)
     {
@@ -315,7 +315,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                 if (pPos)
                     // otherwise: Gap
-                    nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
+                    nVal = getCellValue(rDocument, *pPos, DBL_MIN, bCalcAsShown);
 
                 pMemChart->SetData(nCol, nRow, nVal);
             }
@@ -329,7 +329,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
             const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
             if (pPos)
                 // otherwise: Gap
-                nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
+                nVal = getCellValue(rDocument, *pPos, DBL_MIN, bCalcAsShown);
 
             pMemChart->SetData(nCol, nRow, nVal);
         }
@@ -345,7 +345,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
         OUString aString;
         const ScAddress* pPos = GetPositionMap()->GetColHeaderPosition( static_cast<SCCOL>(nCol) );
         if ( HasColHeaders() && pPos )
-            aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+            aString = rDocument.GetString(pPos->Col(), pPos->Row(), pPos->Tab());
 
         if (aString.isEmpty())
         {
@@ -370,7 +370,7 @@ std::unique_ptr<ScMemChart> ScChartArray::CreateMemChartMulti()
         OUString aString;
         const ScAddress* pPos = GetPositionMap()->GetRowHeaderPosition( nRow );
         if ( HasRowHeaders() && pPos )
-            aString = pDocument->GetString(pPos->Col(), pPos->Row(), pPos->Tab());
+            aString = rDocument.GetString(pPos->Col(), pPos->Row(), pPos->Tab());
 
         if (aString.isEmpty())
         {

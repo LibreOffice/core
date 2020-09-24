@@ -180,7 +180,7 @@ OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
 }
 
 template<typename CellT>
-OUString getRawStringImpl( const CellT& rCell, const ScDocument* pDoc )
+OUString getRawStringImpl( const CellT& rCell, const ScDocument& rDoc )
 {
     switch (rCell.meType)
     {
@@ -190,7 +190,7 @@ OUString getRawStringImpl( const CellT& rCell, const ScDocument* pDoc )
             return rCell.mpString->getString();
         case CELLTYPE_EDIT:
             if (rCell.mpEditText)
-                return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+                return ScEditUtil::GetString(*rCell.mpEditText, &rDoc);
         break;
         case CELLTYPE_FORMULA:
             return rCell.mpFormula->GetRawString().getString();
@@ -664,7 +664,7 @@ OUString ScRefCellValue::getString( const ScDocument* pDoc ) const
 
 OUString ScRefCellValue::getRawString( const ScDocument& rDoc ) const
 {
-    return getRawStringImpl(*this, &rDoc);
+    return getRawStringImpl(*this, rDoc);
 }
 
 bool ScRefCellValue::isEmpty() const

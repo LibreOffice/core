@@ -277,7 +277,7 @@ public:
 
     virtual std::unique_ptr<ScEEAbsImport> CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) override;
     virtual std::unique_ptr<ScEEAbsImport> CreateHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const ScRange& rRange ) override;
-    virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) override;
+    virtual OUString       GetHTMLRangeNameList( ScDocument& rDoc, const OUString& rOrigName ) override;
 
     // various export filters
     virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;

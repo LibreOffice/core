@@ -997,13 +997,13 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             nEndRow = nStartRow + nDestSizeY;
             nEndTab = nStartTab;
             aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-            if (ScViewUtil::HasFiltered( aMarkRange, &rDoc))
+            if (ScViewUtil::HasFiltered(aMarkRange, rDoc))
             {
                 bMarkIsFiltered = true;
                 // Fit to clipboard's row count unfiltered rows. If there is no
                 // fit assume that pasting is not possible. Note that nDestSizeY is
                 // size-1 (difference).
-                if (!ScViewUtil::FitToUnfilteredRows( aMarkRange, &rDoc, nDestSizeY+1))
+                if (!ScViewUtil::FitToUnfilteredRows(aMarkRange, rDoc, nDestSizeY+1))
                     bNoPaste = true;
             }
             aFilteredMark.SetMarkArea( aMarkRange);
@@ -1032,7 +1032,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     ScRangeList aRangeList;
     if (bMarkIsFiltered)
     {
-        ScViewUtil::UnmarkFiltered( aFilteredMark, &rDoc);
+        ScViewUtil::UnmarkFiltered(aFilteredMark, rDoc);
         aFilteredMark.FillRangeListWithMarks( &aRangeList, false);
         nUnfilteredRows = 0;
         size_t ListSize = aRangeList.size();
@@ -1096,11 +1096,11 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                 // introduce filtered rows where there weren't any before, so
                 // we also need to test for that.
                 aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-                if (bMarkIsFiltered || ScViewUtil::HasFiltered( aMarkRange, &rDoc))
+                if (bMarkIsFiltered || ScViewUtil::HasFiltered(aMarkRange, rDoc))
                 {
                     bMarkIsFiltered = true;
                     // Worst case: all rows up to the end of the sheet are filtered.
-                    if (!ScViewUtil::FitToUnfilteredRows( aMarkRange, &rDoc, nDestSizeY+1))
+                    if (!ScViewUtil::FitToUnfilteredRows(aMarkRange, rDoc, nDestSizeY+1))
                     {
                         ErrorMessage(STR_PASTE_FULL);
                         return false;
@@ -1110,7 +1110,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                 aFilteredMark.SetMarkArea( aMarkRange);
                 if (bMarkIsFiltered)
                 {
-                    ScViewUtil::UnmarkFiltered( aFilteredMark, &rDoc);
+                    ScViewUtil::UnmarkFiltered(aFilteredMark, rDoc);
                     aFilteredMark.FillRangeListWithMarks( &aRangeList, true);
                 }
             }
@@ -1517,9 +1517,9 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     // Extend the marked range to account for filtered rows in the destination
     // area.
-    if (ScViewUtil::HasFiltered(aMarkedRange, &rDoc))
+    if (ScViewUtil::HasFiltered(aMarkedRange, rDoc))
     {
-        if (!ScViewUtil::FitToUnfilteredRows(aMarkedRange, &rDoc, nRowSize))
+        if (!ScViewUtil::FitToUnfilteredRows(aMarkedRange, rDoc, nRowSize))
             return false;
     }
 
@@ -1676,7 +1676,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     ScRangeList aRanges;
     aMark.MarkToSimple();
     aMark.FillRangeListWithMarks(&aRanges, false);
-    if (!ScClipUtil::CheckDestRanges(&rDoc, nColSize, nRowSize, aMark, aRanges))
+    if (!ScClipUtil::CheckDestRanges(rDoc, nColSize, nRowSize, aMark, aRanges))
     {
         ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
         return false;

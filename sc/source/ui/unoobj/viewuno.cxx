@@ -883,7 +883,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         else if ( nTabs == 1 && (eMarkType == SC_MARK_SIMPLE_FILTERED) )
         {
             ScMarkData aFilteredMark( rMark );
-            ScViewUtil::UnmarkFiltered( aFilteredMark, &pDocSh->GetDocument());
+            ScViewUtil::UnmarkFiltered( aFilteredMark, pDocSh->GetDocument());
             ScRangeList aRangeList;
             aFilteredMark.FillRangeListWithMarks( &aRangeList, false);
             // Theoretically a selection may start and end on a filtered row.

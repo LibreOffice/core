@@ -2343,7 +2343,7 @@ void checkMatrixRange(ScDocument& rDoc, const ScRange& rRange)
             const ScFormulaCell* pCell = rDoc.GetFormulaCell(aPos);
             CPPUNIT_ASSERT_MESSAGE("This must be a formula cell.", pCell);
 
-            bIsMatrix = pCell->GetMatrixOrigin(&rDoc, aMatOrigin);
+            bIsMatrix = pCell->GetMatrixOrigin(rDoc, aMatOrigin);
             CPPUNIT_ASSERT_MESSAGE("Not a part of matrix formula.", bIsMatrix);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong matrix origin.", aMatRange.aStart, aMatOrigin);
         }

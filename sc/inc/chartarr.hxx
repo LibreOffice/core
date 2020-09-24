@@ -57,14 +57,14 @@ public:
 
 class ScChartArray             // only parameter-struct
 {
-    ScDocument* pDocument;
+    ScDocument& rDocument;
     ScChartPositioner aPositioner;
 
 private:
     std::unique_ptr<ScMemChart> CreateMemChartSingle();
     std::unique_ptr<ScMemChart> CreateMemChartMulti();
 public:
-    ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList );
+    ScChartArray( ScDocument& rDoc, const ScRangeListRef& rRangeList );
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }

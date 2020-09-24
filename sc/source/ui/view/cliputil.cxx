@@ -94,7 +94,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
 }
 
 bool ScClipUtil::CheckDestRanges(
-    const ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
+    const ScDocument& rDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark, const ScRangeList& rDest)
 {
     for (size_t i = 0, n = rDest.size(); i < n; ++i)
     {
@@ -104,7 +104,7 @@ bool ScClipUtil::CheckDestRanges(
         {
             aTest.aStart.SetTab(rTab);
             aTest.aEnd.SetTab(rTab);
-            if (ScViewUtil::HasFiltered(aTest, pDoc))
+            if (ScViewUtil::HasFiltered(aTest, rDoc))
             {
                 // I don't know how to handle pasting into filtered rows yet.
                 return false;

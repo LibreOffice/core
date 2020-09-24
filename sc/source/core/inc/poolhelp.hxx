@@ -41,10 +41,10 @@ private:
     mutable std::unique_ptr<SvNumberFormatter> pFormTable;
     mutable SfxItemPool*        pEditPool;                      // EditTextObjectPool
     mutable SfxItemPool*        pEnginePool;                    // EditEnginePool
-    ScDocument*                 m_pSourceDoc;
+    ScDocument&                 m_rSourceDoc;
 
 public:
-                ScPoolHelper( ScDocument* pSourceDoc );
+                ScPoolHelper( ScDocument& rSourceDoc );
     virtual     ~ScPoolHelper() override;
 
                 // called in dtor of main document

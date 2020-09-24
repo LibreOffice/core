@@ -60,12 +60,12 @@ private:
     // #i123405# added parameter to allow size calculation without limitation
     // to PageSize, e.g. used for Metafile creation for clipboard.
     void        InitDocShell(bool bLimitToPageSize);
-    static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
+    static void StripRefs( ScDocument& rDoc, SCCOL nStartX, SCROW nStartY,
                             SCCOL nEndX, SCROW nEndY,
-                            ScDocument* pDestDoc );
+                            ScDocument& rDestDoc );
     static void PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
                             const ScRange& rBlock );
-    static void GetAreaSize( const ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
+    static void GetAreaSize( const ScDocument& rDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol );
 
 public:
             ScTransferObj( ScDocumentUniquePtr pClipDoc, const TransferableObjectDescriptor& rDesc );

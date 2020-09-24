@@ -1194,18 +1194,18 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     }
 }
 
-void ScPatternAttr::UpdateStyleSheet(const ScDocument* pDoc)
+void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 {
     if (pName)
     {
-        pStyle = static_cast<ScStyleSheet*>(pDoc->GetStyleSheetPool()->Find(*pName, SfxStyleFamily::Para));
+        pStyle = static_cast<ScStyleSheet*>(rDoc.GetStyleSheetPool()->Find(*pName, SfxStyleFamily::Para));
 
         //  use Standard if Style is not found,
         //  to avoid empty display in Toolbox-Controller
         //  Assumes that "Standard" is always the 1st entry!
         if (!pStyle)
         {
-            std::unique_ptr<SfxStyleSheetIterator> pIter = pDoc->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Para);
+            std::unique_ptr<SfxStyleSheetIterator> pIter = rDoc.GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Para);
             pStyle = dynamic_cast< ScStyleSheet* >(pIter->First());
         }
 

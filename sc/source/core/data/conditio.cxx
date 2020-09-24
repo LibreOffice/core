@@ -2228,16 +2228,16 @@ ScRangeList ScConditionalFormatList::GetCombinedRange() const
     return aRange;
 }
 
-void ScConditionalFormatList::RemoveFromDocument(ScDocument* pDoc) const
+void ScConditionalFormatList::RemoveFromDocument(ScDocument& rDoc) const
 {
     ScRangeList aRange = GetCombinedRange();
-    ScMarkData aMark(pDoc->GetSheetLimits());
+    ScMarkData aMark(rDoc.GetSheetLimits());
     aMark.MarkFromRangeList(aRange, true);
     sal_uInt16 const pItems[2] = { sal_uInt16(ATTR_CONDITIONAL),0};
-    pDoc->ClearSelectionItems(pItems, aMark);
+    rDoc.ClearSelectionItems(pItems, aMark);
 }
 
-void ScConditionalFormatList::AddToDocument(ScDocument* pDoc) const
+void ScConditionalFormatList::AddToDocument(ScDocument& rDoc) const
 {
     for (auto& itr: m_ConditionalFormats)
     {
@@ -2246,7 +2246,7 @@ void ScConditionalFormatList::AddToDocument(ScDocument* pDoc) const
             continue;
 
         SCTAB nTab = rRange.front().aStart.Tab();
-        pDoc->AddCondFormatData(rRange, nTab, itr->GetKey());
+        rDoc.AddCondFormatData(rRange, nTab, itr->GetKey());
     }
 }
 

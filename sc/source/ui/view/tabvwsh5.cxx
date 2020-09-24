@@ -311,7 +311,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     SfxViewShell::Notify( rBC, rHint );
 }
 
-std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, const ScViewData* pViewData )
+std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocument& rDoc, const ScViewData* pViewData )
 {
 
     // construct NumberInfo item
@@ -320,7 +320,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     double              nCellValue      = 0;
     OUString aCellString;
 
-    ScRefCellValue aCell(*pDoc, pViewData->GetCurPos());
+    ScRefCellValue aCell(rDoc, pViewData->GetCurPos());
 
     switch (aCell.meType)
     {
@@ -362,13 +362,13 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     {
         case SvxNumberValueType::String:
             return std::make_unique<SvxNumberInfoItem>(
-                                pDoc->GetFormatTable(),
+                                rDoc.GetFormatTable(),
                                 aCellString,
                                 SID_ATTR_NUMBERFORMAT_INFO );
 
         case SvxNumberValueType::Number:
             return std::make_unique<SvxNumberInfoItem>(
-                                pDoc->GetFormatTable(),
+                                rDoc.GetFormatTable(),
                                 nCellValue,
                                 SID_ATTR_NUMBERFORMAT_INFO );
 
@@ -378,7 +378,7 @@ std::unique_ptr<SvxNumberInfoItem> ScTabViewShell::MakeNumberInfoItem( ScDocumen
     }
 
     return std::make_unique<SvxNumberInfoItem>(
-        pDoc->GetFormatTable(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
+        rDoc.GetFormatTable(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
 }
 
 void ScTabViewShell::UpdateNumberFormatter(

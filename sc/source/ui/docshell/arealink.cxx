@@ -261,7 +261,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     OUString aTempArea;
 
     if( rNewFilter == ScDocShell::GetWebQueryFilterName() )
-        aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( &rSrcDoc, rNewArea );
+        aTempArea = ScFormatFilter::Get().GetHTMLRangeNameList( rSrcDoc, rNewArea );
     else
         aTempArea = rNewArea;
 

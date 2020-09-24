@@ -47,10 +47,10 @@ ScItemValue::~ScItemValue()
 namespace
 {
 
-ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument* pDocument)
+ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocument)
 {
     ScRange aInvalidRange(ScAddress::INITIALIZE_INVALID);
-    ScRangeName* pRangeName = pDocument->GetRangeName();
+    ScRangeName* pRangeName = rDocument.GetRangeName();
     if (pRangeName == nullptr)
         return aInvalidRange;
 
@@ -398,7 +398,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
     if (mxSourceRadioNamedRange->get_active())
     {
         OUString aEntryString = mxSourceListBox->get_active_text();
-        ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, &mrDocument);
+        ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, mrDocument);
         if (!aSourceRange.IsValid() || aSourceSheet.GetSourceRange() == aSourceRange)
             return;
         aSourceSheet.SetRangeName(aEntryString);
@@ -424,7 +424,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
         }
         else
         {
-            aSourceRange = lclGetRangeForNamedRange(aSourceString, &mrDocument);
+            aSourceRange = lclGetRangeForNamedRange(aSourceString, mrDocument);
         }
 
         if (!aSourceRange.IsValid())
@@ -583,7 +583,7 @@ bool ScPivotLayoutDialog::GetDestination(ScRange& aDestinationRange, bool& bToNe
     if (mxDestinationRadioNamedRange->get_active())
     {
         OUString aName = mxDestinationListBox->get_active_text();
-        aDestinationRange = lclGetRangeForNamedRange(aName, &mrDocument);
+        aDestinationRange = lclGetRangeForNamedRange(aName, mrDocument);
         if (!aDestinationRange.IsValid())
             return false;
     }

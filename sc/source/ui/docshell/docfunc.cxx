@@ -1551,13 +1551,13 @@ namespace {
  * @return true if this insertion can be done safely without shearing any
  *         existing pivot tables, false otherwise.
  */
-bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, InsCellCmd eCmd, const ScDocument* pDoc)
+bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, InsCellCmd eCmd, const ScDocument& rDoc)
 {
-    if (!pDoc->HasPivotTable())
+    if (!rDoc.HasPivotTable())
         // This document has no pivot tables.
         return true;
 
-    const ScDPCollection* pDPs = pDoc->GetDPCollection();
+    const ScDPCollection* pDPs = rDoc.GetDPCollection();
 
     ScRange aRange(rRange); // local copy
     switch (eCmd)
@@ -1565,7 +1565,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         case INS_INSROWS_BEFORE:
         {
             aRange.aStart.SetCol(0);
-            aRange.aEnd.SetCol(pDoc->MaxCol());
+            aRange.aEnd.SetCol(rDoc.MaxCol());
             [[fallthrough]];
         }
         case INS_CELLSDOWN:
@@ -1600,7 +1600,7 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
         case INS_INSCOLS_BEFORE:
         {
             aRange.aStart.SetRow(0);
-            aRange.aEnd.SetRow(pDoc->MaxRow());
+            aRange.aEnd.SetRow(rDoc.MaxRow());
             [[fallthrough]];
         }
         case INS_CELLSRIGHT:
@@ -1645,13 +1645,13 @@ bool canInsertCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, I
  * @return true if this deletion can be done safely without shearing any
  *         existing pivot tables, false otherwise.
  */
-bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, DelCellCmd eCmd, const ScDocument* pDoc)
+bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, DelCellCmd eCmd, const ScDocument& rDoc)
 {
-    if (!pDoc->HasPivotTable())
+    if (!rDoc.HasPivotTable())
         // This document has no pivot tables.
         return true;
 
-    const ScDPCollection* pDPs = pDoc->GetDPCollection();
+    const ScDPCollection* pDPs = rDoc.GetDPCollection();
 
     ScRange aRange(rRange); // local copy
 
@@ -1660,7 +1660,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         case DelCellCmd::Rows:
         {
             aRange.aStart.SetCol(0);
-            aRange.aEnd.SetCol(pDoc->MaxCol());
+            aRange.aEnd.SetCol(rDoc.MaxCol());
             [[fallthrough]];
         }
         case DelCellCmd::CellsUp:
@@ -1684,7 +1684,7 @@ bool canDeleteCellsByPivot(const ScRange& rRange, const ScMarkData& rMarkData, D
         case DelCellCmd::Cols:
         {
             aRange.aStart.SetRow(0);
-            aRange.aEnd.SetRow(pDoc->MaxRow());
+            aRange.aEnd.SetRow(rDoc.MaxRow());
             [[fallthrough]];
         }
         case DelCellCmd::CellsLeft:
@@ -1887,7 +1887,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     }
 
     // Check if this insertion is allowed with respect to pivot table.
-    if (!canInsertCellsByPivot(aTargetRange, aMark, eCmd, &rDoc))
+    if (!canInsertCellsByPivot(aTargetRange, aMark, eCmd, rDoc))
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
@@ -2380,7 +2380,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         return false;
     }
 
-    if (!canDeleteCellsByPivot(rRange, aMark, eCmd, &rDoc))
+    if (!canDeleteCellsByPivot(rRange, aMark, eCmd, rDoc))
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
@@ -5691,10 +5691,10 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
 
     // first remove all old entries
     ScConditionalFormatList* pOldList = rDoc.GetCondFormList(nTab);
-    pOldList->RemoveFromDocument(&rDoc);
+    pOldList->RemoveFromDocument(rDoc);
 
     // then set new entries
-    pList->AddToDocument(&rDoc);
+    pList->AddToDocument(rDoc);
 
     rDoc.SetCondFormList(pList, nTab);
     rDocShell.PostPaintGridAll();

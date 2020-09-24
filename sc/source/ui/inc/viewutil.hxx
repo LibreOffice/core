@@ -51,15 +51,15 @@ public:
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 sal_uInt16 nWhichId, SvtScriptType nScript );
 
-    static LanguageType GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
+    static LanguageType GetEffLanguage( ScDocument& rDoc, const ScAddress& rPos );
 
     static TransliterationFlags GetTransliterationType( sal_uInt16 nSlotID );
 
-    static bool HasFiltered( const ScRange& rRange, const ScDocument* pDoc );
+    static bool HasFiltered( const ScRange& rRange, const ScDocument& rDoc );
     /** Fit a range to cover nRows number of unfiltered rows.
         @return <TRUE/> if the resulting range covers nRows unfiltered rows. */
-    static bool FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows );
-    static void UnmarkFiltered( ScMarkData& rMark, const ScDocument* pDoc );
+    static bool FitToUnfilteredRows( ScRange & rRange, const ScDocument& rDoc, size_t nRows );
+    static void UnmarkFiltered( ScMarkData& rMark, const ScDocument& rDoc );
 
     static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId );
 

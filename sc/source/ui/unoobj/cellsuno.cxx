@@ -2021,7 +2021,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
                             aAny <<= uno::Reference<beans::XPropertySet>(
-                                    new ScTableValidationObj( &rDoc, 0, eGrammar ));
+                                    new ScTableValidationObj( rDoc, 0, eGrammar ));
                         }
                         break;
                     case SC_WID_UNO_NUMRULES:
@@ -2507,7 +2507,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         sal_uLong nIndex =
                                 pPattern->GetItem(ATTR_VALIDDATA).GetValue();
                         rAny <<= uno::Reference<beans::XPropertySet>(
-                                new ScTableValidationObj( &rDoc, nIndex, eGrammar ));
+                                new ScTableValidationObj( rDoc, nIndex, eGrammar ));
                     }
                 }
                 break;
@@ -2952,7 +2952,7 @@ std::unique_ptr<ScMemChart> ScCellRangesBase::CreateMemChart_Impl() const
         }
         if (!xChartRanges.is())         //  otherwise take Ranges directly
             xChartRanges = new ScRangeList(aRanges);
-        ScChartArray aArr( &pDocShell->GetDocument(), xChartRanges );
+        ScChartArray aArr( pDocShell->GetDocument(), xChartRanges );
 
         // RowAsHdr = ColHeaders and vice versa
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );
@@ -3032,7 +3032,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
     if ( pDocShell && xChartRanges.is() )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
-        ScChartArray aArr( &rDoc, xChartRanges );
+        ScChartArray aArr( rDoc, xChartRanges );
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
         const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
         if (pPosMap)
@@ -3103,7 +3103,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            ScChartArray aArr( &rDoc, xChartRanges );
+            ScChartArray aArr( rDoc, xChartRanges );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
@@ -3172,7 +3172,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
         if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
-            ScChartArray aArr( &rDoc, xChartRanges );
+            ScChartArray aArr( rDoc, xChartRanges );
             aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );      // RowAsHdr = ColHeaders
             const ScChartPositionMap* pPosMap = aArr.GetPositionMap();
             if (pPosMap)
@@ -4858,7 +4858,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
         ScAddress aStart1;
         ScAddress aStart2;
-        if (pFCell1->GetMatrixOrigin(&rDoc, aStart1) && pFCell2->GetMatrixOrigin(&rDoc, aStart2))
+        if (pFCell1->GetMatrixOrigin(rDoc, aStart1) && pFCell2->GetMatrixOrigin(rDoc, aStart2))
         {
             if (aStart1 == aStart2)               // both the same matrix
                 pFCell1->GetFormula(aFormula);    // it doesn't matter from which cell
@@ -4922,7 +4922,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
         const ScFormulaCell* pFCell2 = aCell2.mpFormula;
         ScAddress aStart1;
         ScAddress aStart2;
-        if (pFCell1->GetMatrixOrigin(&rDoc, aStart1) && pFCell2->GetMatrixOrigin(&rDoc, aStart2))
+        if (pFCell1->GetMatrixOrigin(rDoc, aStart1) && pFCell2->GetMatrixOrigin(rDoc, aStart2))
         {
             if (aStart1 == aStart2)
             {

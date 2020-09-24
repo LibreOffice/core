@@ -3274,7 +3274,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
     ScDocument& rDoc = GetViewData().GetDocument();
     ScMarkData aFuncMark( GetViewData().GetMarkData() );       // local copy for UnmarkFiltered
-    ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
+    ScViewUtil::UnmarkFiltered( aFuncMark, rDoc );
     ScDocShell*             pDocSh = GetViewData().GetDocShell();
     const ScPatternAttr*    pSelAttrs = GetSelectionPattern();
     const SfxItemSet&       rSelItemSet = pSelAttrs->GetItemSet();

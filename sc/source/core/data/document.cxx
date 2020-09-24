@@ -5435,7 +5435,7 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
         return false;
 
     ScAddress aOrigin = rCellPos;
-    if (!pFCell->GetMatrixOrigin(this, aOrigin))
+    if (!pFCell->GetMatrixOrigin(*this, aOrigin))
         // Failed to get the address of the matrix origin.
         return false;
 
@@ -5457,7 +5457,7 @@ bool ScDocument::GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMat
         // from old file format).
         // Needs an "invalid" initialized address.
         aOrigin.SetInvalid();
-        pFCell->GetMatrixEdge(this, aOrigin);
+        pFCell->GetMatrixEdge(*this, aOrigin);
         pFCell->GetMatColsRows(nSizeX, nSizeY);
     }
 
@@ -6114,9 +6114,9 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     {
         auto pPattern = const_cast<ScPatternAttr*>(dynamic_cast<const ScPatternAttr*>(pItem));
         if (pPattern)
-            pPattern->UpdateStyleSheet(this);
+            pPattern->UpdateStyleSheet(*this);
     }
-    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(this);
+    const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(*this);
 }
 
 void ScDocument::StylesToNames()

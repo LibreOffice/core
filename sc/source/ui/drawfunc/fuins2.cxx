@@ -162,7 +162,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         aRangeListRef->Format( aTmpStr, ScRefFlags::RANGE_ABS_3D, rScDoc, rScDoc.GetAddressConvention() );
         aRangeString = aTmpStr;
 
-        ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
+        ScChartPositioner aChartPositioner( rScDoc, aRangeListRef );
         const ScChartPositionMap* pPositionMap( aChartPositioner.GetPositionMap() );
         if( pPositionMap )
         {

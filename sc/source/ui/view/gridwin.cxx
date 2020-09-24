@@ -360,7 +360,7 @@ static bool lcl_IsEditableMatrix( ScDocument& rDoc, const ScRange& rRange )
 
     ScRefCellValue aCell(rDoc, rRange.aEnd);
     ScAddress aPos;
-    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(&rDoc, aPos) && aPos == rRange.aStart);
+    return (aCell.meType == CELLTYPE_FORMULA && aCell.mpFormula->GetMatrixOrigin(rDoc, aPos) && aPos == rRange.aStart);
 }
 
 static void lcl_UnLockComment( ScDrawView* pView, const Point& rPos, const ScViewData* pViewData )
@@ -3584,7 +3584,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         ScRange aDropRange = lcl_MakeDropRange( rThisDoc, nNewDragX, nNewDragY, nTab, aSourceRange );
         if ( lcl_TestScenarioRedliningDrop( &rThisDoc, aDropRange ) ||
              lcl_TestScenarioRedliningDrop( pSourceDoc, aSourceRange ) ||
-             ScViewUtil::HasFiltered( aDropRange, &rThisDoc) )
+             ScViewUtil::HasFiltered( aDropRange, rThisDoc) )
         {
             if (bDragRect)
             {
@@ -4077,7 +4077,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         }
         else
             // Don't copy or move to filtered destination.
-            bFiltered = ScViewUtil::HasFiltered( aDest, &rThisDoc);
+            bFiltered = ScViewUtil::HasFiltered(aDest, rThisDoc);
     }
 
     bool bDone = false;

@@ -330,7 +330,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                             nCol = rParam.nCol1;
                             for (long i=0; i<nColCount; i++)
                             {
-                                ScDatabaseDocUtil::PutData( pImportDoc.get(), nCol, nRow, nTab,
+                                ScDatabaseDocUtil::PutData( *pImportDoc, nCol, nRow, nTab,
                                                 xRow, i+1, pTypeArr[i], pCurrArr[i] );
                                 ++nCol;
                             }

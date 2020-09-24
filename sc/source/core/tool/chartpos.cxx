@@ -26,14 +26,14 @@
 
 namespace
 {
-    bool lcl_hasValueDataButNoDates( const ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
+    bool lcl_hasValueDataButNoDates( const ScDocument& rDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
     {
         bool bReturn = false;
-        if (pDocument->HasValueData( nCol, nRow, nTab ))
+        if (rDocument.HasValueData( nCol, nRow, nTab ))
         {
             //treat dates like text #i25706#
-            sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
-            SvNumFormatType nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
+            sal_uInt32 nNumberFormat = rDocument.GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
+            SvNumFormatType nType = rDocument.GetFormatTable()->GetType(nNumberFormat);
             bool bIsDate(nType & SvNumFormatType::DATE);
             bReturn = !bIsDate;
         }
@@ -41,9 +41,9 @@ namespace
     }
 }
 
-ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
+ScChartPositioner::ScChartPositioner( ScDocument& rDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
-        pDocument( pDoc ),
+        rDocument( rDoc ),
         eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
@@ -55,9 +55,9 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
     CheckColRowHeaders();
 }
 
-ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rRangeList ) :
+ScChartPositioner::ScChartPositioner( ScDocument& rDoc, const ScRangeListRef& rRangeList ) :
         aRangeListRef( rRangeList ),
-        pDocument( pDoc ),
+        rDocument( rDoc ),
         eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
@@ -71,7 +71,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
 
 ScChartPositioner::ScChartPositioner( const ScChartPositioner& rPositioner ) :
         aRangeListRef( rPositioner.aRangeListRef ),
-        pDocument(rPositioner.pDocument),
+        rDocument(rPositioner.rDocument),
         eGlue(rPositioner.eGlue),
         nStartCol(rPositioner.nStartCol),
         nStartRow(rPositioner.nStartRow),
@@ -285,12 +285,12 @@ void ScChartPositioner::CheckColRowHeaders()
         {
             for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
             {
-                if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
+                if (lcl_hasValueDataButNoDates( rDocument, iCol, nRow1, nTab1 ))
                         bColStrings = false;
             }
             for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
             {
-                if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
+                if (lcl_hasValueDataButNoDates( rDocument, nCol1, iRow, nTab1 ))
                         bRowStrings = false;
             }
         }
@@ -312,7 +312,7 @@ void ScChartPositioner::CheckColRowHeaders()
                 if ( nCol1 <= nCol2 )
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
-                        if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
+                        if (lcl_hasValueDataButNoDates( rDocument, nCol1, iRow, nTab1 ))
                                 bRowStrings = false;
                     }
             }
@@ -321,7 +321,7 @@ void ScChartPositioner::CheckColRowHeaders()
                 if ( nRow1 <= nRow2 )
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
-                        if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
+                        if (lcl_hasValueDataButNoDates( rDocument, iCol, nRow1, nTab1 ))
                                 bColStrings = false;
                     }
             }
