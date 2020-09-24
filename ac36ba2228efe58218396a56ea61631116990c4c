@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e558c648_0746ccdc",
+        "filename": "oox/source/drawingml/shape.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-24T10:53:55Z",
+      "side": 1,
+      "message": "grab-bag",
+      "range": {
+        "startLine": 1419,
+        "startChar": 47,
+        "endLine": 1419,
+        "endChar": 53
+      },
+      "revId": "ac36ba2228efe58218396a56ea61631116990c4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
