@@ -962,7 +962,15 @@ SwFltAnchorListener::SwFltAnchorListener(SwFltAnchor* pFltAnchor)
 
 void SwFltAnchorListener::Notify(const SfxHint& rHint)
 {
-    if(auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::Dying)
+        m_pFltAnchor->SetFrameFormat(nullptr);
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    {
+        if (pDrawFrameFormatHint->m_eId != sw::DrawFrameFormatHintId::DYING)
+            return;
+        m_pFltAnchor->SetFrameFormat(nullptr);
+    }
+    else if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
         if(pLegacyHint->m_pNew->Which() != RES_FMT_CHG)
             return;
@@ -970,12 +978,6 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
         auto pFrameFormat = pFormatChg ? dynamic_cast<SwFrameFormat*>(pFormatChg->pChangedFormat) : nullptr;
         if(pFrameFormat)
             m_pFltAnchor->SetFrameFormat(pFrameFormat);
-    }
-    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
-    {
-        if (pDrawFrameFormatHint->m_eId != sw::DrawFrameFormatHintId::DYING)
-            return;
-        m_pFltAnchor->SetFrameFormat(nullptr);
     }
 }
 
