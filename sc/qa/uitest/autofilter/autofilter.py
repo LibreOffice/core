@@ -8,6 +8,7 @@
 from uitest.framework import UITestCase
 from uitest.path import get_srcdir_url
 
+from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from libreoffice.calc.document import get_row
 
@@ -69,5 +70,32 @@ class AutofilterTest(UITestCase):
         self.assertTrue(is_row_hidden(doc, 2))
         self.assertTrue(is_row_hidden(doc, 3))
         self.assertFalse(is_row_hidden(doc, 4))
+
+    def test_tdf134351(self):
+        doc = self.ui_test.load_file(get_url_for_data_file("autofilter.ods"))
+
+        xGridWin = self.xUITest.getTopFocusWindow().getChild("grid_window")
+        xGridWin.executeAction("LAUNCH", mkPropertyValues({"AUTOFILTER": "", "COL": "0", "ROW": "0"}))
+
+        xFloatWindow = self.xUITest.getFloatWindow()
+        xCheckListMenu = xFloatWindow.getChild("check_list_menu")
+
+        xTreeList = xCheckListMenu.getChild("check_list_box")
+
+        self.assertEqual(2, len(xTreeList.getChildren()))
+        self.assertTrue(get_state_as_dict(xTreeList.getChild('0'))['IsSelected'])
+        self.assertTrue(get_state_as_dict(xTreeList.getChild('1'))['IsSelected'])
+
+        xOkBtn = xFloatWindow.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
+
+        self.assertFalse(is_row_hidden(doc, 0))
+        # Without the fix in place, this test would have failed here
+        self.assertFalse(is_row_hidden(doc, 1))
+        self.assertFalse(is_row_hidden(doc, 2))
+        self.assertFalse(is_row_hidden(doc, 3))
+        self.assertFalse(is_row_hidden(doc, 4))
+
+        self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
