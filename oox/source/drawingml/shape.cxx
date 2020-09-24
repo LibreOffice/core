@@ -1416,10 +1416,10 @@ Reference< XShape > const & Shape::createAndInsert(
                     // When upright is set, we want the text without any rotation.
                     // But if we set 0 here, the text is still rotated if the
                     // shape containing it is rotated.
-                    // Hence, we rotate the text into the the opposite direction of
+                    // Hence, we rotate the text into the opposite direction of
                     // the rotation of the shape, by as much as the shape was rotated.
                     mpCustomShapePropertiesPtr->setTextRotateAngle(mnRotation / 60000);
-                    // Also put this away in a Gabbag.
+                    // Also put this away in a GrabBag.
                     putPropertyToGrabBag("Upright", Any(isUpright));
                 }
                 else
