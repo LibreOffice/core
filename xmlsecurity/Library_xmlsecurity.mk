@@ -75,7 +75,6 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/helper/xsecparser \
 	xmlsecurity/source/helper/xsecsign \
 	xmlsecurity/source/helper/xsecverify \
-	xmlsecurity/source/pdfio/pdfdocument \
 ))
 
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
