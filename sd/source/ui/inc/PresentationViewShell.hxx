@@ -58,9 +58,12 @@ protected:
 
 private:
     ::tools::Rectangle       maOldVisArea;
+    ImplSVEvent* mnAbortSlideShowEvent;
 
     virtual void Activate (bool bIsMDIActivate) override;
     virtual void Paint (const ::tools::Rectangle& rRect, ::sd::Window* pWin) override;
+
+    DECL_LINK(AbortSlideShowHdl, void*, void);
 };
 
 } // end of namespace sd
