@@ -294,7 +294,7 @@ Function InitResources(Description) as boolean
 Dim xResource as Object
 Dim sOfficeDir as String
 Dim aArgs(5) as Any
-	On Error Goto ErrorOcurred
+	On Error Goto ErrorOccurred
 	sOfficeDir = &quot;$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/wizards/&quot;
 	sOfficeDir = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.util.theMacroExpander&quot;).ExpandMacros(sOfficeDir)
 	aArgs(0) = sOfficeDir
@@ -311,7 +311,7 @@ Dim aArgs(5) as Any
 		InitResources = TRUE
 	End If
 	Exit Function
-ErrorOcurred:
+ErrorOccurred:
 	Dim nSolarVer
 	InitResources = FALSE
 	nSolarVer = GetSolarVersion()
@@ -323,7 +323,7 @@ End Function
 
 Function GetResText( sID as String ) As string
 Dim sString as String
-	On Error Goto ErrorOcurred
+	On Error Goto ErrorOccurred
 	If Not IsNull(oResSrv) Then
 		sString = oResSrv.resolveString(sID)
 		GetResText = ReplaceString(sString, GetProductname(), &quot;%PRODUCTNAME&quot;)
@@ -331,7 +331,7 @@ Dim sString as String
 		GetResText = &quot;&quot;
 	End If
 	Exit Function
-ErrorOcurred:
+ErrorOccurred:
 	GetResText = &quot;&quot;
 	MsgBox(&quot;Resource with ID =&quot; + sID + &quot; not found!&quot;, 16, GetProductName())
 	Resume CLERROR
