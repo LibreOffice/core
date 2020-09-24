@@ -3001,9 +3001,6 @@ if test $_os = Darwin; then
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
         stdlib=-stdlib=libc++
-        if test "$ENABLE_LTO" = TRUE; then
-            lto=-flto
-        fi
 
         AC_MSG_CHECKING([what C compiler to use])
         CC="`xcrun -find clang`"
@@ -3013,7 +3010,7 @@ if test $_os = Darwin; then
         else
             CC+=" -target arm64-apple-macos"
         fi
-        CC+=" $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        CC+=" -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
         AC_MSG_RESULT([$CC])
 
         AC_MSG_CHECKING([what C++ compiler to use])
@@ -3024,7 +3021,7 @@ if test $_os = Darwin; then
         else
             CXX+=" -target arm64-apple-macos"
         fi
-        CXX+=" $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+        CXX+=" $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
         AC_MSG_RESULT([$CXX])
 
         INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
@@ -3193,24 +3190,18 @@ if test $_os = iOS; then
 
     AC_MSG_RESULT($sysroot)
 
-    # LTO is not really recommended for iOS builds,
-    # the link time will be astronomical
-    if test "$ENABLE_LTO" = TRUE; then
-        lto=-flto
-    fi
-
     stdlib="-stdlib=libc++"
 
     AC_MSG_CHECKING([what C compiler to use])
     CC="`xcrun -find clang`"
     CC_BASE=`first_arg_basename "$CC"`
-    CC+=" -arch $host_cpu_for_clang -isysroot $sysroot $lto $versionmin"
+    CC+=" -arch $host_cpu_for_clang -isysroot $sysroot $versionmin"
     AC_MSG_RESULT([$CC])
 
     AC_MSG_CHECKING([what C++ compiler to use])
     CXX="`xcrun -find clang++`"
     CXX_BASE=`first_arg_basename "$CXX"`
-    CXX+=" -arch $host_cpu_for_clang $stdlib -isysroot $sysroot $lto $versionmin"
+    CXX+=" -arch $host_cpu_for_clang $stdlib -isysroot $sysroot $versionmin"
     AC_MSG_RESULT([$CXX])
 
     INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
