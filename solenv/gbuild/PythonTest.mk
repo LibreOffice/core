@@ -9,6 +9,8 @@
 
 # PythonTest class
 
+# (gb_PythonTest_GDBTRACE is defined alongside gb_CppunitTest_GDBTRACE in CppunitTest.mk)
+
 gb_PythonTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 
 ifeq ($(SYSTEM_PYTHON),)
@@ -46,7 +48,7 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		($(gb_PythonTest_PRECOMMAND) \
+		($(if $(filter gdb,$(gb_PythonTest_GDBTRACE)),,$(gb_PythonTest_PRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
@@ -57,7 +59,7 @@ else
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*)))" \
 		PYTHONDONTWRITEBYTECODE=1 \
 		$(gb_TEST_ENV_VARS) \
-		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
+		$(ICECREAM_RUN) $(gb_PythonTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_PythonTest_COMMAND) \
 			$(if $(PYTHON_TEST_NAME),$(PYTHON_TEST_NAME),$(MODULES)) \
 		$(if $(gb_CppunitTest__interactive),, \
