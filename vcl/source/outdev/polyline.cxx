@@ -219,11 +219,6 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
-        const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                          mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                          RasterOp::OverPaint == GetRasterOp() &&
-                          IsLineColor());
-
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
         for(auto const& rPolygon : aAreaPolyPolygon)
@@ -234,10 +229,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                 0.0,
                 0.0,
                 nullptr, // MM01
-                basegfx::B2DLineJoin::NONE,
-                css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0) /*default, not used*/,
-                bTryAA);
+                basegfx::B2DLineJoin::NONE);
         }
     }
     else
@@ -308,8 +300,7 @@ bool OutputDevice::DrawPolyLineDirect(
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle,
-    bool bBypassAACheck)
+    double fMiterMinimumAngle)
 {
     assert(!is_double_buffered_window());
 
@@ -330,57 +321,38 @@ bool OutputDevice::DrawPolyLineDirect(
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA( bBypassAACheck ||
-                      ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-                      mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                      RasterOp::OverPaint == GetRasterOp() &&
-                      IsLineColor()));
+    if( !mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) || RasterOp::OverPaint != GetRasterOp() || !IsLineColor())
+        return false;
 
-    if(bTryAA)
-    {
-        // combine rObjectTransform with WorldToDevice
-        const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
-        const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
+    // combine rObjectTransform with WorldToDevice
+    const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
+    const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
 
-        const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
-        // draw the polyline
-        bool bDrawSuccess = mpGraphics->DrawPolyLine(
-            aTransform,
-            rB2DPolygon,
-            fAdjustedTransparency,
+    const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
+    // draw the polyline
+    if( !mpGraphics->DrawPolyLine( aTransform, rB2DPolygon, fAdjustedTransparency,
             fLineWidth, // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
-            pStroke, // MM01
-            eLineJoin,
-            eLineCap,
-            fMiterMinimumAngle,
-            bPixelSnapHairline,
-            this);
+            pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline, this))
+        return false;
 
-        if( bDrawSuccess )
-        {
-            // worked, add metafile action (if recorded) and return true
-            if( mpMetaFile )
-            {
-                LineInfo aLineInfo;
-                if( fLineWidth != 0.0 )
-                    aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-                // Transport known information, might be needed
-                aLineInfo.SetLineJoin(eLineJoin);
-                aLineInfo.SetLineCap(eLineCap);
-                // MiterMinimumAngle does not exist yet in LineInfo
-                const tools::Polygon aToolsPolygon( rB2DPolygon );
-                mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
-            }
-
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
-                                                fTransparency, pStroke, eLineJoin, eLineCap,
-                                                fMiterMinimumAngle, bBypassAACheck);
-
-            return true;
-        }
+    // worked, add metafile action (if recorded) and return true
+    if( mpMetaFile )
+    {
+        LineInfo aLineInfo;
+        if( fLineWidth != 0.0 )
+            aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
+        // Transport known information, might be needed
+        aLineInfo.SetLineJoin(eLineJoin);
+        aLineInfo.SetLineCap(eLineCap);
+        // MiterMinimumAngle does not exist yet in LineInfo
+        const tools::Polygon aToolsPolygon( rB2DPolygon );
+        mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
-    return false;
+    if (mpAlphaVDev)
+        mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
+                                        fTransparency, pStroke, eLineJoin, eLineCap,
+                                        fMiterMinimumAngle);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
