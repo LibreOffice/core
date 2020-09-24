@@ -635,7 +635,7 @@ private:
 public:
     ScConditionalFormatList() {}
     ScConditionalFormatList(const ScConditionalFormatList& rList);
-    ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList);
+    ScConditionalFormatList(ScDocument& rDoc, const ScConditionalFormatList& rList);
 
     void    InsertNew( std::unique_ptr<ScConditionalFormat> pNew );
 

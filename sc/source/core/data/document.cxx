@@ -6149,7 +6149,7 @@ sal_uLong ScDocument::GetFormulaGroupCount() const
 {
     sal_uLong nFormulaGroupCount = 0;
 
-    ScFormulaGroupIterator aIter( const_cast<ScDocument*>(this) );
+    ScFormulaGroupIterator aIter( *const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
     {
          nFormulaGroupCount++;

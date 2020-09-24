@@ -1411,10 +1411,10 @@ ScExternalRefCache::DocItem* ScExternalRefCache::getDocItem(sal_uInt16 nFileId) 
     return &itrDoc->second;
 }
 
-ScExternalRefLink::ScExternalRefLink(ScDocument* pDoc, sal_uInt16 nFileId) :
+ScExternalRefLink::ScExternalRefLink(ScDocument& rDoc, sal_uInt16 nFileId) :
     ::sfx2::SvBaseLink(::SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SIMPLE_FILE),
     mnFileId(nFileId),
-    mpDoc(pDoc),
+    mrDoc(rDoc),
     mbDoRefresh(true)
 {
 }
@@ -1425,7 +1425,7 @@ ScExternalRefLink::~ScExternalRefLink()
 
 void ScExternalRefLink::Closed()
 {
-    ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
+    ScExternalRefManager* pMgr = mrDoc.GetExternalRefManager();
     pMgr->breakLink(mnFileId);
 }
 
@@ -1436,7 +1436,7 @@ void ScExternalRefLink::Closed()
 
     OUString aFile, aFilter;
     sfx2::LinkManager::GetDisplayNames(this, nullptr, &aFile, nullptr, &aFilter);
-    ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
+    ScExternalRefManager* pMgr = mrDoc.GetExternalRefManager();
 
     if (!pMgr->isFileLoadable(aFile))
         return ERROR_GENERAL;
@@ -2620,7 +2620,7 @@ void ScExternalRefManager::maybeLinkExternalFile( sal_uInt16 nFileId, bool bDefe
         SAL_WARN( "sc.ui", "ScExternalRefManager::maybeLinkExternalFile: pLinkMgr==NULL");
         return;
     }
-    ScExternalRefLink* pLink = new ScExternalRefLink(&mrDoc, nFileId);
+    ScExternalRefLink* pLink = new ScExternalRefLink(mrDoc, nFileId);
     OSL_ENSURE(pFileName, "ScExternalRefManager::maybeLinkExternalFile: file name pointer is NULL");
     pLinkMgr->InsertFileLink(*pLink, sfx2::SvBaseLinkObjectType::ClientFile, *pFileName,
             (aFilter.isEmpty() && bDeferFilterDetection ? nullptr : &aFilter));

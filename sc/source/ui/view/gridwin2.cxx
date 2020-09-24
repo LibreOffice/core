@@ -53,8 +53,8 @@ using std::vector;
 
 DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
     ScDPObject* pDPObj = rDoc.GetDPAtCursor(nCol, nRow, nTab);
     if (!pDPObj)
         return DataPilotFieldOrientation_HIDDEN;
@@ -103,9 +103,9 @@ bool ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 
 bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
-    Point aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
+    Point aScrPos  = mrViewData.GetScrPos(nCol, nRow, eWhich);
     Point aDiffPix = rMEvt.GetPosPixel();
 
     aDiffPix -= aScrPos;
@@ -114,13 +114,13 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
         aDiffPix.setX( -aDiffPix.X() );
 
     long nSizeX, nSizeY;
-    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     // The button height should not use the merged cell height, should still use single row height
-    nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), pViewData->GetPPTY());
+    nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), mrViewData.GetPPTY());
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
-    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomY(), &rDoc));
+    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &mrViewData.GetZoomY(), &rDoc));
     mpFilterButton->setBoundingBox(aScrPos, aScrSize, bLayoutRTL);
     mpFilterButton->setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
     Point aPopupPos;
@@ -147,8 +147,8 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
 
 void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt, bool bButton, bool bPopup )
 {
-    ScDocument& rDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScDocument& rDoc = mrViewData.GetDocument();
+    SCTAB nTab = mrViewData.GetTabNo();
 
     ScDPObject* pDPObj  = rDoc.GetDPAtCursor(nCol, nRow, nTab);
 
@@ -195,15 +195,15 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
                 nSrcTab = pDesc->GetSourceRange().aStart.Tab();
             }
 
-            SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
+            SfxItemSet aArgSet( mrViewData.GetViewShell()->GetPool(),
                                         svl::Items<SCITEM_QUERYDATA, SCITEM_QUERYDATA>{} );
-            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
+            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &mrViewData, &aQueryParam ) );
 
             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
             ScopedVclPtr<AbstractScPivotFilterDlg> pDlg(
                 pFact->CreateScPivotFilterDlg(
-                    pViewData->GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
+                    mrViewData.GetViewShell()->GetFrameWeld(), aArgSet, nSrcTab));
             if ( pDlg->Execute() == RET_OK )
             {
                 ScSheetSourceDesc aNewDesc(&rDoc);
@@ -215,9 +215,9 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );
-                ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+                ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
                 aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
-                pViewData->GetView()->CursorPosChanged();       // shells may be switched
+                mrViewData.GetView()->CursorPosChanged();       // shells may be switched
             }
         }
     }
@@ -255,21 +255,21 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         UpdateDragRect( false, tools::Rectangle() );
 
         if ( nDx  != 0)
-            pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
+            mrViewData.GetView()->ScrollX( nDx, WhichH(eWhich) );
         if ( nDy != 0 )
-            pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
+            mrViewData.GetView()->ScrollY( nDy, WhichV(eWhich) );
 
         bTimer = true;
     }
 
     SCCOL  nPosX;
     SCROW  nPosY;
-    pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), eWhich, nPosX, nPosY );
+    mrViewData.GetPosFromPixel( aPixel.X(), aPixel.Y(), eWhich, nPosX, nPosY );
     bool    bMouseLeft;
     bool    bMouseTop;
-    pViewData->GetMouseQuadrant( aPixel, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
+    mrViewData.GetMouseQuadrant( aPixel, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
 
-    ScAddress aPos( nPosX, nPosY, pViewData->GetTabNo() );
+    ScAddress aPos( nPosX, nPosY, mrViewData.GetTabNo() );
 
     tools::Rectangle aPosRect;
     DataPilotFieldOrientation nOrient;
@@ -308,7 +308,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
                                 nOrient != DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
-            pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
+            mrViewData.GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
         }
         else if ( bAllowed )
         {
@@ -326,28 +326,28 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
             ScDPObject aNewObj( *pDragDPObj );
             aNewObj.SetSaveData( aSaveData );
-            ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+            ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
             // when dragging fields, allow re-positioning (bAllowMove)
             aFunc.DataPilotUpdate( pDragDPObj, &aNewObj, true, false, true );
-            pViewData->GetView()->CursorPosChanged();       // shells may be switched
+            mrViewData.GetView()->CursorPosChanged();       // shells may be switched
         }
     }
 
     if (bTimer && bMove)
-        pViewData->GetView()->SetTimer( this, rMEvt );          // repeat event
+        mrViewData.GetView()->SetTimer( this, rMEvt );          // repeat event
     else
-        pViewData->GetView()->ResetTimer();
+        mrViewData.GetView()->ResetTimer();
 }
 
 bool ScGridWindow::DPTestFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj)
 {
-    bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = mrViewData.GetDocument().IsLayoutRTL( mrViewData.GetTabNo() );
 
     // Get the geometry of the cell.
-    Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
+    Point aScrPos = mrViewData.GetScrPos(rPos.Col(), rPos.Row(), eWhich);
     long nSizeX, nSizeY;
-    pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
+    mrViewData.GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
     Size aScrSize(nSizeX-1, nSizeY-1);
 
     // Check if the mouse cursor is clicking on the popup arrow box.
@@ -467,7 +467,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
     const ScDPLabelData& rLabelData = pDPData->maLabels;
 
     mpDPFieldPopup.disposeAndClear();
-    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &pViewData->GetDocument(),
+    mpDPFieldPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &mrViewData.GetDocument(),
                                                                bDimOrientNotPage, false));
 
     ScCheckListMenuControl& rControl = mpDPFieldPopup->get_widget();
@@ -505,7 +505,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         }
 
         // Populate the menus.
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         rControl.addMenuItem(
             ScResId(STR_MENU_SORT_ASC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
@@ -533,7 +533,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
 
     ScCheckListMenuControl::Config aConfig;
     aConfig.mbAllowEmptySet = false;
-    aConfig.mbRTL = pViewData->GetDocument().IsLayoutRTL(pViewData->GetTabNo());
+    aConfig.mbRTL = mrViewData.GetDocument().IsLayoutRTL(mrViewData.GetTabNo());
     rControl.setConfig(aConfig);
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -594,7 +594,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     }
     pDim->UpdateMemberVisibility(aResult);
 
-    ScDBDocFunc aFunc(*pViewData->GetDocShell());
+    ScDBDocFunc aFunc(*mrViewData.GetDocShell());
     aFunc.UpdatePivotTable(*pDPObj, true, false);
 }
 
@@ -611,7 +611,7 @@ T lcl_getValidValue(T value, T defvalue)
 
 bool ScGridWindow::UpdateVisibleRange()
 {
-    ScDocument const& rDoc = pViewData->GetDocument();
+    ScDocument const& rDoc = mrViewData.GetDocument();
     SCCOL nPosX = 0;
     SCROW nPosY = 0;
     SCCOL nXRight = rDoc.MaxCol();
@@ -619,7 +619,7 @@ bool ScGridWindow::UpdateVisibleRange()
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
         nPosX = lcl_getValidValue(pViewShell->GetLOKStartHeaderCol(), nPosX);
         nPosY = lcl_getValidValue(pViewShell->GetLOKStartHeaderRow(), nPosY);
         nXRight = lcl_getValidValue(pViewShell->GetLOKEndHeaderCol(), nXRight);
@@ -627,12 +627,12 @@ bool ScGridWindow::UpdateVisibleRange()
     }
     else
     {
-        nPosX = pViewData->GetPosX(eHWhich);
-        nPosY = pViewData->GetPosY(eVWhich);
-        nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+        nPosX = mrViewData.GetPosX(eHWhich);
+        nPosY = mrViewData.GetPosY(eVWhich);
+        nXRight = nPosX + mrViewData.VisibleCellsX(eHWhich);
         if (nXRight > rDoc.MaxCol())
             nXRight = rDoc.MaxCol();
-        nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+        nYBottom = nPosY + mrViewData.VisibleCellsY(eVWhich);
         if (nYBottom > rDoc.MaxRow())
             nYBottom = rDoc.MaxRow();
     }
@@ -696,7 +696,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     SCCOLROW nBreak = 0;
     SCCOLROW nPrev = 0;
 
-    ScPageBreakData* pPageData = pViewData->GetView()->GetPageBreakData();
+    ScPageBreakData* pPageData = mrViewData.GetView()->GetPageBreakData();
     if ( pPageData )
     {
         bool bHori = false;
@@ -708,9 +708,9 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         long nMouseY = rMouse.Y();
         SCCOL nPosX;
         SCROW nPosY;
-        pViewData->GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );
-        Point aTL = pViewData->GetScrPos( nPosX, nPosY, eWhich );
-        Point aBR = pViewData->GetScrPos( nPosX+1, nPosY+1, eWhich );
+        mrViewData.GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );
+        Point aTL = mrViewData.GetScrPos( nPosX, nPosY, eWhich );
+        Point aBR = mrViewData.GetScrPos( nPosX+1, nPosY+1, eWhich );
 
         //  Horizontal more tolerances as for vertical, because there is more space
         if ( nMouseX <= aTL.X() + 4 )
@@ -846,31 +846,31 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
             UpdateDragRectOverlay();
         }
 
-        if ( nDx != 0 ) pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
-        if ( nDy != 0 ) pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
+        if ( nDx != 0 ) mrViewData.GetView()->ScrollX( nDx, WhichH(eWhich) );
+        if ( nDy != 0 ) mrViewData.GetView()->ScrollY( nDy, WhichV(eWhich) );
         bTimer = true;
     }
 
     // Switching when fixating (so Scrolling works)
 
-    if ( eWhich == pViewData->GetActivePart() )     //??
+    if ( eWhich == mrViewData.GetActivePart() )     //??
     {
-        if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX )
+        if ( mrViewData.GetHSplitMode() == SC_SPLIT_FIX )
             if ( nDx > 0 )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT );
+                    mrViewData.GetView()->ActivatePart( SC_SPLIT_TOPRIGHT );
                 else if ( eWhich == SC_SPLIT_BOTTOMLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT );
+                    mrViewData.GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT );
             }
 
-        if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX )
+        if ( mrViewData.GetVSplitMode() == SC_SPLIT_FIX )
             if ( nDy > 0 )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT );
+                    mrViewData.GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT );
                 else if ( eWhich == SC_SPLIT_TOPRIGHT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT );
+                    mrViewData.GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT );
             }
     }
 
@@ -879,9 +879,9 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     // Searching for a position between the cells (before nPosX / nPosY)
     SCCOL nPosX;
     SCROW nPosY;
-    pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
+    mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     bool bLeft, bTop;
-    pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bLeft, bTop );
+    mrViewData.GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bLeft, bTop );
     if ( !bLeft ) ++nPosX;
     if ( !bTop )  ++nPosY;
 
@@ -963,10 +963,10 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 
     if ( bUp )
     {
-        ScViewFunc* pViewFunc = pViewData->GetView();
-        ScDocShell* pDocSh = pViewData->GetDocShell();
+        ScViewFunc* pViewFunc = mrViewData.GetView();
+        ScDocShell* pDocSh = mrViewData.GetDocShell();
         ScDocument& rDoc = pDocSh->GetDocument();
-        SCTAB nTab = pViewData->GetTabNo();
+        SCTAB nTab = mrViewData.GetTabNo();
         bool bUndo (rDoc.IsUndoEnabled());
 
         if ( bBreak )
@@ -978,7 +978,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 if (bUndo)
                 {
                     OUString aUndo = ScResId( STR_UNDO_DRAG_BREAK );
-                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
+                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
                 }
 
                 bool bGrow = !bHide && nNew > nPagebreakBreak;
@@ -1086,9 +1086,9 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     //  Timer for Scrolling
 
     if (bTimer && !bUp)
-        pViewData->GetView()->SetTimer( this, rMEvt );          // repeat event
+        mrViewData.GetView()->SetTimer( this, rMEvt );          // repeat event
     else
-        pViewData->GetView()->ResetTimer();
+        mrViewData.GetView()->ResetTimer();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

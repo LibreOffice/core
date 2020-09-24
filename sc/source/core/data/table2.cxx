@@ -520,7 +520,7 @@ void ScTable::CopyToClip(
         for (SCCOL i = nCol1; i <= nCol2; i++)
             pTable->aCol[i].RemoveProtected(nRow1, nRow2);
 
-    pTable->mpCondFormatList.reset(new ScConditionalFormatList(&pTable->rDocument, *mpCondFormatList));
+    pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->rDocument, *mpCondFormatList));
 }
 
 void ScTable::CopyToClip(
@@ -1194,7 +1194,7 @@ void ScTable::CopyToTable(
 
     if(bIsUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
     {
-        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(&pDestTab->rDocument, *mpCondFormatList));
+        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->rDocument, *mpCondFormatList));
     }
 
     if (pDBDataNoName)
@@ -1356,7 +1356,7 @@ void ScTable::UndoToTable(
     }
 
     if (nFlags & InsertDeleteFlags::ATTRIB)
-        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(&pDestTab->rDocument, *mpCondFormatList));
+        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->rDocument, *mpCondFormatList));
 
     if (!(bWidth||bHeight))
         return;

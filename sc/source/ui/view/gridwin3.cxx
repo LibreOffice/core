@@ -38,8 +38,8 @@
 bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bRet = false;
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
-    if (pDraw && !pViewData->IsRefMode())
+    FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
+    if (pDraw && !mrViewData.IsRefMode())
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
@@ -65,7 +65,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
     }
 
     // cancel draw with right key
-    ScDrawView* pDrView = pViewData->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetScDrawView();
     if ( pDrView && !rMEvt.IsLeft() && !bRet )
     {
         pDrView->BrkAction();
@@ -76,10 +76,10 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
 
 bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 {
-    ScViewFunc* pView = pViewData->GetView();
+    ScViewFunc* pView = mrViewData.GetView();
     bool bRet = false;
     FuPoor* pDraw = pView->GetDrawFuncPtr();
-    if (pDraw && !pViewData->IsRefMode())
+    if (pDraw && !mrViewData.IsRefMode())
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
@@ -93,7 +93,7 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
         SfxItemSet* pDrawBrush = pView->GetDrawBrushSet();
         if ( pDrawBrush )
         {
-            ScDrawView* pDrView = pViewData->GetScDrawView();
+            ScDrawView* pDrView = mrViewData.GetScDrawView();
             if ( pDrView )
             {
                 pDrView->SetAttrToMarked(*pDrawBrush, true/*bReplaceAll*/);
@@ -112,8 +112,8 @@ bool ScGridWindow::DrawMouseButtonUp(const MouseEvent& rMEvt)
 
 bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
 {
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
-    if (pDraw && !pViewData->IsRefMode())
+    FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
+    if (pDraw && !mrViewData.IsRefMode())
     {
         MapMode aDrawMode = GetDrawMapMode();
         MapMode aOldMode = GetMapMode();
@@ -139,11 +139,11 @@ bool ScGridWindow::DrawMouseMove(const MouseEvent& rMEvt)
 
 void ScGridWindow::DrawEndAction()
 {
-    ScDrawView* pDrView = pViewData->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetScDrawView();
     if ( pDrView && pDrView->IsAction() )
         pDrView->BrkAction();
 
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
+    FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
     if (pDraw)
         pDraw->StopDragTimer();
 
@@ -152,9 +152,9 @@ void ScGridWindow::DrawEndAction()
 
 bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
 {
-    ScDrawView* pDrView = pViewData->GetScDrawView();
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
-    if (pDrView && pDraw && !pViewData->IsRefMode())
+    ScDrawView* pDrView = mrViewData.GetScDrawView();
+    FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
+    if (pDrView && pDraw && !mrViewData.IsRefMode())
     {
         pDraw->SetWindow( this );
         sal_uInt8 nUsed = pDraw->Command( rCEvt );
@@ -169,9 +169,9 @@ bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
 
 bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 {
-    ScDrawView* pDrView = pViewData->GetScDrawView();
-    FuPoor* pDraw = pViewData->GetView()->GetDrawFuncPtr();
-    if (pDrView && pDraw && !pViewData->IsRefMode())
+    ScDrawView* pDrView = mrViewData.GetScDrawView();
+    FuPoor* pDraw = mrViewData.GetView()->GetDrawFuncPtr();
+    if (pDrView && pDraw && !mrViewData.IsRefMode())
     {
         pDraw->SetWindow( this );
         bool bOldMarked = pDrView->AreObjectsMarked();
@@ -180,10 +180,10 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
             bool bLeaveDraw = false;
             bool bUsed = true;
             bool bNewMarked = pDrView->AreObjectsMarked();
-            if ( !pViewData->GetView()->IsDrawSelMode() )
+            if ( !mrViewData.GetView()->IsDrawSelMode() )
                 if ( !bNewMarked )
                 {
-                    pViewData->GetViewShell()->SetDrawShell( false );
+                    mrViewData.GetViewShell()->SetDrawShell( false );
                     bLeaveDraw = true;
                     if ( !bOldMarked &&
                         rKEvt.GetKeyCode().GetCode() == KEY_DELETE )
@@ -202,7 +202,7 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 
 void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer )
 {
-    const ScViewOptions& rOpts = pViewData->GetOptions();
+    const ScViewOptions& rOpts = mrViewData.GetOptions();
 
     // use new flags at SdrPaintView for hiding objects
     const bool bDrawOle(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE));
@@ -212,7 +212,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer )
     if(!(bDrawOle || bDrawChart || bDrawDraw))
         return;
 
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
 
     if(pDrView)
     {
@@ -229,7 +229,7 @@ void ScGridWindow::DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevi
 {
     // Draw grid lines
 
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if ( pDrView && pDrView->IsGridVisible() )
     {
         SdrPageView* pPV = pDrView->GetSdrPageView();
@@ -245,7 +245,7 @@ void ScGridWindow::DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevi
 
 MapMode ScGridWindow::GetDrawMapMode( bool bForce )
 {
-    ScDocument& rDoc = pViewData->GetDocument();
+    ScDocument& rDoc = mrViewData.GetDocument();
 
     // FIXME this shouldn't be necessary once we change the entire Calc to
     // work in the logic coordinates (ideally 100ths of mm - so that it is
@@ -253,15 +253,15 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     // SetMapMode's and other unnecessary fun we have with pixels
     if (comphelper::LibreOfficeKit::isActive())
     {
-        return pViewData->GetLogicMode();
+        return mrViewData.GetLogicMode();
     }
 
-    SCTAB nTab = pViewData->GetTabNo();
+    SCTAB nTab = mrViewData.GetTabNo();
     bool bNegativePage = rDoc.IsNegativePage( nTab );
 
-    MapMode aDrawMode = pViewData->GetLogicMode();
+    MapMode aDrawMode = mrViewData.GetLogicMode();
 
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if ( pDrView || bForce )
     {
         Fraction aScaleX;
@@ -276,15 +276,15 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
             if (nEndCol<20) nEndCol = 20;
             if (nEndRow<20) nEndRow = 1000;
             ScDrawUtil::CalcScale( rDoc, nTab, 0,0, nEndCol,nEndRow, this,
-                                   pViewData->GetZoomX(),pViewData->GetZoomY(),
-                                   pViewData->GetPPTX(),pViewData->GetPPTY(),
+                                   mrViewData.GetZoomX(),mrViewData.GetZoomY(),
+                                   mrViewData.GetPPTX(),mrViewData.GetPPTY(),
                                    aScaleX,aScaleY );
         }
         aDrawMode.SetScaleX(aScaleX);
         aDrawMode.SetScaleY(aScaleY);
     }
     aDrawMode.SetOrigin(Point());
-    Point aStartPos = pViewData->GetPixPos(eWhich);
+    Point aStartPos = mrViewData.GetPixPos(eWhich);
     if ( bNegativePage )
     {
         //  RTL uses negative positions for drawing objects
@@ -299,7 +299,7 @@ void ScGridWindow::DrawAfterScroll()
 {
     PaintImmediately(); // always, so the behaviour with and without DrawingLayer is the same
 
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if (pDrView)
     {
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
@@ -310,14 +310,14 @@ void ScGridWindow::DrawAfterScroll()
 
 void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress)
 {
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if (pDrView)
     {
-        const ScViewOptions& rOpts = pViewData->GetOptions();
+        const ScViewOptions& rOpts = mrViewData.GetOptions();
         if(rOpts.GetOption( VOPT_ANCHOR ))
         {
-            bool bNegativePage = pViewData->GetDocument().IsNegativePage( pViewData->GetTabNo() );
-            Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
+            bool bNegativePage = mrViewData.GetDocument().IsNegativePage( mrViewData.GetTabNo() );
+            Point aPos = mrViewData.GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
             rHdl.AddHdl(std::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));
         }
@@ -326,7 +326,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
 
 void ScGridWindow::UpdateStatusPosSize()
 {
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if (!pDrView)
         return; // shouldn't be called in that case
 
@@ -334,7 +334,7 @@ void ScGridWindow::UpdateStatusPosSize()
     if (!pPV)
         return; // shouldn't be called in that case either
 
-    SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), svl::Items<SID_ATTR_POSITION, SID_ATTR_SIZE>{});
+    SfxItemSet aSet(mrViewData.GetViewShell()->GetPool(), svl::Items<SID_ATTR_POSITION, SID_ATTR_SIZE>{});
 
     //  Fill items for position and size:
     //  show action rectangle during action,
@@ -374,18 +374,18 @@ void ScGridWindow::UpdateStatusPosSize()
         }
     }
 
-    pViewData->GetBindings().SetState(aSet);
+    mrViewData.GetBindings().SetState(aSet);
 }
 
 bool ScGridWindow::DrawHasMarkedObj()
 {
-    ScDrawView* p = pViewData->GetScDrawView();
+    ScDrawView* p = mrViewData.GetScDrawView();
     return p && p->AreObjectsMarked();
 }
 
 void ScGridWindow::DrawMarkDropObj( SdrObject* pObj )
 {
-    ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
+    ScDrawView* pDrView = mrViewData.GetView()->GetScDrawView();
     if (pDrView)
         pDrView->MarkDropObj(pObj);
 }
