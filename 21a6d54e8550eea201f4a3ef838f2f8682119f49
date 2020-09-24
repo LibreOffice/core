@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15e28998_1af28d66",
+        "filename": "vcl/win/app/salinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-09-24T11:51:49Z",
+      "side": 1,
+      "message": "Maybe be a bit more direct here:\n\nThis is done by using MsgWaitForMultipleObjects(\u003ccond\u003e, ..., QS_SENDMESSAGE) in osl_waitCondition.\n\nThinking about this some more: should all conditions on Win32 do this, and not just the one used by the SolarMutex? This is a very special case, because you have to run some code in the main thread, while holding the SolarMutex, but we\u0027re processing all SendMessage messages this way. Can this be a problem, resulting in the deadlock?\n\nThis is all about the Windows version of \"RunInMain\", but probably it\u0027s not correctly implemented this way? ... have to think a bit more about it.",
+      "revId": "21a6d54e8550eea201f4a3ef838f2f8682119f49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
