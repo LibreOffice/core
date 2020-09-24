@@ -54,9 +54,8 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="border_width">6</property>
-        <property name="row_spacing">6</property>
-        <property name="column_spacing">12</property>
+        <property name="row_spacing">3</property>
+        <property name="column_spacing">6</property>
         <child>
           <object class="GtkComboBoxText" id="documents">
             <property name="visible">True</property>
@@ -132,6 +131,7 @@
           <object class="GtkToolbar" id="toolbox">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
             <property name="toolbar_style">icons</property>
             <property name="icon_size">2</property>
             <child>
@@ -206,9 +206,11 @@
               <object class="GtkSeparatorToolItem" id="separator">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="hexpand">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="homogeneous">False</property>
               </packing>
             </child>
@@ -226,7 +228,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -243,7 +245,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
           </object>
