@@ -500,7 +500,7 @@ sub run {
         my $allupdatelastsequences = "";
         my $allupdatediskids = "";
 
-        if ( $installer::globals::iswindowsbuild || $installer::globals::packageformat eq 'msi' )
+        if ( $installer::globals::packageformat eq 'msi' )
         {
             if ( $allvariableshashref->{'UPDATE_DATABASE'} )
             {
