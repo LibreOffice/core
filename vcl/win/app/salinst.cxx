@@ -135,14 +135,10 @@ void SalYieldMutex::BeforeReleaseHandler()
 void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
 {
     WinSalInstance* pInst = GetSalData()->mpInstance;
-    if ( pInst && pInst->IsMainThread() && pInst->m_nNoYieldLock )
+    if ( pInst && pInst->m_nNoYieldLock && pInst->IsMainThread() )
     {
         return;
     }
-    m_aMutex.acquire();
-    ++m_nCount;
-    --nLockCount;
-
     comphelper::SolarMutex::doAcquire( nLockCount );
 }
 
