@@ -9,3 +9,34 @@
  	/* If FT_Get_Var_Blend_Coordinates() is available, we can check if the
  	 * current design coordinates are the default coordinates. In this case
  	 * the current outlines match the font tables.
+--- a/cairo/src/cairo-ft-font.c	2020-09-24 10:35:25.391941702 +0200
++++ b/cairo/src/cairo-ft-font.c	2020-09-24 10:35:39.900126419 +0200
+@@ -451,7 +451,7 @@
+         unscaled->have_color = FT_HAS_COLOR (face) != 0;
+         unscaled->have_color_set = TRUE;
+ 
+-#ifdef HAVE_FT_GET_VAR_DESIGN_COORDINATES
++#if 0
+ 	{
+ 	    FT_MM_Var *ft_mm_var;
+ 	    if (0 == FT_Get_MM_Var (face, &ft_mm_var))
+@@ -2377,7 +2377,7 @@
+         }
+ 
+         current_coords = malloc (sizeof (FT_Fixed) * ft_mm_var->num_axis);
+-#ifdef HAVE_FT_GET_VAR_DESIGN_COORDINATES
++#if 0
+         ret = FT_Get_Var_Design_Coordinates (face, ft_mm_var->num_axis, current_coords);
+         if (ret == 0) {
+             for (i = 0; i < ft_mm_var->num_axis; i++) {
+--- a/cairo/test/font-variations.c	2020-09-24 10:36:01.592402635 +0200
++++ b/cairo/test/font-variations.c	2020-09-24 10:36:08.728493510 +0200
+@@ -117,7 +117,7 @@
+         return CAIRO_TEST_FAILURE;
+     }
+ 
+-#ifdef HAVE_FT_GET_VAR_DESIGN_COORDINATES
++#if 0
+     ret = FT_Get_Var_Design_Coordinates (ft_face, 20, coords);
+     if (ret != 0) {
+         cairo_test_log (ctx, "Failed to get coords");
