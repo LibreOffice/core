@@ -26,10 +26,10 @@ ifneq ($(strip $(CPPUNITTRACE)),)
 ifneq ($(filter gdb,$(CPPUNITTRACE)),)
 # sneak (a) setting the LD_LIBRARY_PATH, and (b) setting malloc debug flags, into the "gdb --args" command line
 gb_CppunitTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	PYTHONWARNINGS=default gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_CppunitTest_CPPTESTPRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 gb_PythonTest_GDBTRACE := $(subst gdb,\
-	gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
+	PYTHONWARNINGS=default gdb -return-child-result -ex "add-auto-load-safe-path $(INSTDIR)" -ex "set environment $(subst =, ,$(gb_PythonTest_PRECOMMAND))" $(if $(PYTHONWARNINGS),-ex 'set environment PYTHONWARNINGS $(PYTHONWARNINGS)') $(gb_CppunitTest_malloc_check) $(gb_CppunitTest_DEBUGCPPUNIT),\
 	$(CPPUNITTRACE))
 else ifneq ($(filter lldb,$(CPPUNITTRACE)),)
 gb_CppunitTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_CppunitTest_CPPTESTPRECOMMAND))
