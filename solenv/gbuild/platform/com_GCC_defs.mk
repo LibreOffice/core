@@ -177,8 +177,12 @@ gb_CFLAGS_COMMON += -std=gnu89
 
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_IS_CLANG),TRUE)
+ifneq (,$(index,iOS MACOSX,$(OS)))
+gb_LTOFLAGS := -flto=thin
+else
 gb_LTOFLAGS := -flto
 gb_LTOPLUGINFLAGS := --plugin LLVMgold.so
+endif
 else
 gb_LTOFLAGS := -flto$(if $(filter-out 0,$(PARALLELISM)),=$(PARALLELISM)) -fuse-linker-plugin -O2
 endif
