@@ -106,6 +106,7 @@ StringMap TreeListEntryUIObject::get_state()
     aMap["Text"] = mxTreeList->GetEntryText(mpEntry);
     aMap["Children"] = OUString::number(mxTreeList->GetLevelChildCount(mpEntry));
     aMap["VisibleChildCount"] = OUString::number(mxTreeList->GetVisibleChildCount(mpEntry));
+    aMap["IsSelected"] = OUString::boolean(mxTreeList->IsSelected(mpEntry));
 
     return aMap;
 }
