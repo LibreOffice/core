@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "193bf501_243674df",
+        "filename": "vcl/inc/salgdiimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-24T07:13:00Z",
+      "side": 1,
+      "message": "no need to give this method a different name, method call overloading can cope with different param types \u003cgrin\u003e",
+      "revId": "d6f1c8a16cdee4bfac67c7ce83f4b9e21ebc328d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
