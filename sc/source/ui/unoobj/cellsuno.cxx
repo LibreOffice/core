@@ -8878,7 +8878,7 @@ ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(long nIndex) const
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         long nPos = 0;
-        ScAttrRectIterator aIter( &rDoc, aTotalRange.aStart.Tab(),
+        ScAttrRectIterator aIter( rDoc, aTotalRange.aStart.Tab(),
                                     aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
                                     aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
         SCCOL nCol1, nCol2;
@@ -8913,7 +8913,7 @@ sal_Int32 SAL_CALL ScCellFormatsObj::getCount()
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
-        ScAttrRectIterator aIter( &rDoc, aTotalRange.aStart.Tab(),
+        ScAttrRectIterator aIter( rDoc, aTotalRange.aStart.Tab(),
                                     aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
                                     aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
         SCCOL nCol1, nCol2;
@@ -8970,7 +8970,7 @@ ScCellFormatsEnumeration::ScCellFormatsEnumeration(ScDocShell* pDocSh, const ScR
     OSL_ENSURE( rRange.aStart.Tab() == rRange.aEnd.Tab(),
                 "CellFormatsEnumeration: different tables" );
 
-    pIter.reset( new ScAttrRectIterator( &rDoc, nTab,
+    pIter.reset( new ScAttrRectIterator( rDoc, nTab,
                                     rRange.aStart.Col(), rRange.aStart.Row(),
                                     rRange.aEnd.Col(), rRange.aEnd.Row() ) );
     Advance_Impl();
@@ -9239,7 +9239,7 @@ ScUniqueCellFormatsObj::ScUniqueCellFormatsObj(ScDocShell* pDocSh, const ScRange
 
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab = rTotalRange.aStart.Tab();
-    ScAttrRectIterator aIter( &rDoc, nTab,
+    ScAttrRectIterator aIter( rDoc, nTab,
                                 rTotalRange.aStart.Col(), rTotalRange.aStart.Row(),
                                 rTotalRange.aEnd.Col(), rTotalRange.aEnd.Row() );
     SCCOL nCol1, nCol2;

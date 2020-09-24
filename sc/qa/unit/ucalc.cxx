@@ -888,11 +888,11 @@ struct HoriIterCheck
 };
 
 template<size_t Size>
-bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
+bool checkHorizontalIterator(ScDocument& rDoc, const char* pData[][Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
 {
     ScAddress aPos(0,0,0);
-    Test::insertRangeData(pDoc, aPos, pData, nDataCount);
-    ScHorizontalCellIterator aIter(pDoc, 0, 0, 0, 1, nDataCount-1);
+    Test::insertRangeData(&rDoc, aPos, pData, nDataCount);
+    ScHorizontalCellIterator aIter(rDoc, 0, 0, 0, 1, nDataCount-1);
 
     SCCOL nCol;
     SCROW nRow;
@@ -918,10 +918,10 @@ bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][Size], size_t
             return false;
         }
 
-        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(pDoc))
+        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(&rDoc))
         {
             cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
-                pCell->getString(pDoc) << endl;
+                pCell->getString(&rDoc) << endl;
             return false;
         }
     }
@@ -956,7 +956,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test mixed.");
@@ -979,7 +979,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test hole.");
@@ -1012,7 +1012,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test holy.");
@@ -1027,7 +1027,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), nullptr, 0);
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), nullptr, 0);
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test degenerate.");
@@ -1046,7 +1046,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test at end.");
@@ -1068,7 +1068,7 @@ void Test::testHorizontalIterator()
         };
 
         bool bRes = checkHorizontalIterator(
-            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+            *m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
 
         if (!bRes)
             CPPUNIT_FAIL("Failed on test in middle.");
@@ -1131,7 +1131,7 @@ void Test::testHorizontalAttrIterator()
         const int aChecks[][3] = { {1, 3, 1}, {1, 2, 2}, {4, 4, 2}, {2, 3, 3}, {1, 4, 4} };
         const size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
 
-        ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 5, 5);
+        ScHorizontalAttrIterator aIter(*m_pDoc, 0, 0, 0, 5, 5);
         SCCOL nCol1, nCol2;
         SCROW nRow;
         size_t nCheckPos = 0;

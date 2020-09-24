@@ -443,8 +443,8 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 //      -   Ole-Object (DocShell::Draw)
 //      -   Preview of templates
 
-void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPrintFactor */,
-                            const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile )
+void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPrintFactor */,
+                            const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile)
 {
     //! evaluate nPrintFactor !!!
 
@@ -453,8 +453,8 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         nTab = pViewData->GetTabNo();
 
     bool bDoGrid, bNullVal, bFormula;
-    ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SfxStyleFamily::Page );
+    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+    SfxStyleSheetBase* pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ), SfxStyleFamily::Page );
     if (pStyleSheet)
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -464,7 +464,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     }
     else
     {
-        const ScViewOptions& rOpt = pDoc->GetViewOptions();
+        const ScViewOptions& rOpt = rDoc.GetViewOptions();
         bDoGrid  = rOpt.GetOption(VOPT_GRID);
         bNullVal = rOpt.GetOption(VOPT_NULLVALS);
         bFormula = rOpt.GetOption(VOPT_FORMULAS);
@@ -483,7 +483,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     SCROW nY2 = OLE_STD_CELLS_Y - 1;
     if (bMetaFile)
     {
-        ScRange aRange = pDoc->GetRange( nTab, rBound );
+        ScRange aRange = rDoc.GetRange( nTab, rBound );
         nX1 = aRange.aStart.Col();
         nY1 = aRange.aStart.Row();
         nX2 = aRange.aEnd.Col();
@@ -502,18 +502,18 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         if (nY2>nY1) --nY2;
     }
 
-    if (nX1 > pDoc->MaxCol()) nX1 = pDoc->MaxCol();
-    if (nX2 > pDoc->MaxCol()) nX2 = pDoc->MaxCol();
-    if (nY1 > pDoc->MaxRow()) nY1 = pDoc->MaxRow();
-    if (nY2 > pDoc->MaxRow()) nY2 = pDoc->MaxRow();
+    if (nX1 > rDoc.MaxCol()) nX1 = rDoc.MaxCol();
+    if (nX2 > rDoc.MaxCol()) nX2 = rDoc.MaxCol();
+    if (nY1 > rDoc.MaxRow()) nY1 = rDoc.MaxRow();
+    if (nY2 > rDoc.MaxRow()) nY2 = rDoc.MaxRow();
 
     long nDevSizeX = aRect.Right()-aRect.Left()+1;
     long nDevSizeY = aRect.Bottom()-aRect.Top()+1;
 
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
-        nTwipsSizeX += pDoc->GetColWidth( i, nTab );
-    long nTwipsSizeY = static_cast<long>(pDoc->GetRowHeight( nY1, nY2, nTab ));
+        nTwipsSizeX += rDoc.GetColWidth( i, nTab );
+    long nTwipsSizeY = static_cast<long>(rDoc.GetRowHeight( nY1, nY2, nTab ));
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initializes aLines to 0,0,0,0)
@@ -525,22 +525,22 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
                             //!     hand over Flag at FillInfo !!!!!
     ScRange aERange;
-    bool bEmbed = pDoc->IsEmbedded();
+    bool bEmbed = rDoc.IsEmbedded();
     if (bEmbed)
     {
-        pDoc->GetEmbedded(aERange);
-        pDoc->ResetEmbedded();
+        rDoc.GetEmbedded(aERange);
+        rDoc.ResetEmbedded();
     }
 
     //  Assemble data
 
     ScTableInfo aTabInfo;
-    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nScaleX, nScaleY, false, bFormula );
+    rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
+                   nScaleX, nScaleY, false, bFormula );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
-        pDoc->SetEmbedded(aERange);
+        rDoc.SetEmbedded(aERange);
 
     long nScrX = aRect.Left();
     long nScrY = aRect.Top();
@@ -550,13 +550,13 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     nScrX += 1;
     nScrY += 1;
 
-    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pDoc, nTab,
+    ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nScaleX, nScaleY );
     aOutputData.SetMetaFileMode(bMetaFile);
     aOutputData.SetShowNullValues(bNullVal);
     aOutputData.SetShowFormulas(bFormula);
 
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
     std::unique_ptr<FmFormView> pDrawView;
 
     if( pModel )
@@ -617,7 +617,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         long nRight = nScrX + aOutputData.GetScrW() - aOne.Width();
         long nBottom = nScrY + aOutputData.GetScrH() - aOne.Height();
 
-        bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
         // extra line at the left edge for left-to-right, right for right-to-left
         if ( bLayoutRTL )

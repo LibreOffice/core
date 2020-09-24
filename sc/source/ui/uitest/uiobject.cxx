@@ -63,24 +63,24 @@ StringMap ScGridWinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    aMap["SelectedTable"] = OUString::number(mxGridWindow->getViewData()->GetTabNo());
-    aMap["CurrentColumn"] = OUString::number(mxGridWindow->getViewData()->GetCurX());
-    aMap["CurrentRow"] = OUString::number(mxGridWindow->getViewData()->GetCurY());
+    aMap["SelectedTable"] = OUString::number(mxGridWindow->getViewData().GetTabNo());
+    aMap["CurrentColumn"] = OUString::number(mxGridWindow->getViewData().GetCurX());
+    aMap["CurrentRow"] = OUString::number(mxGridWindow->getViewData().GetCurY());
 
-    ScSplitPos eAlign = mxGridWindow->getViewData()->GetActivePart();
+    ScSplitPos eAlign = mxGridWindow->getViewData().GetActivePart();
     ScHSplitPos eAlignX = WhichH(eAlign);
     ScVSplitPos eAlignY = WhichV(eAlign);
-    aMap["TopVisibleRow"] = OUString::number(mxGridWindow->getViewData()->GetPosY(eAlignY));
-    aMap["TopVisibleColumn"] = OUString::number(mxGridWindow->getViewData()->GetPosX(eAlignX));
+    aMap["TopVisibleRow"] = OUString::number(mxGridWindow->getViewData().GetPosY(eAlignY));
+    aMap["TopVisibleColumn"] = OUString::number(mxGridWindow->getViewData().GetPosX(eAlignX));
 
-    ScRangeList aMarkedArea = mxGridWindow->getViewData()->GetMarkData().GetMarkedRanges();
+    ScRangeList aMarkedArea = mxGridWindow->getViewData().GetMarkData().GetMarkedRanges();
     OUString aMarkedAreaString;
-    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, &mxGridWindow->getViewData()->GetDocument(), formula::FormulaGrammar::CONV_OOO);
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, &mxGridWindow->getViewData().GetDocument(), formula::FormulaGrammar::CONV_OOO);
 
     aMap["MarkedArea"] = aMarkedAreaString;
 
-    ScDocument& rDoc = mxGridWindow->getViewData()->GetDocument();
-    ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
+    ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
+    ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().GetTabNo() );
     if ( rDoc.HasNote( aPos ) )
     {
         ScPostIt* pNote = rDoc.GetNote(aPos);
@@ -95,32 +95,32 @@ StringMap ScGridWinUIObject::get_state()
 
 ScDBFunc* ScGridWinUIObject::getDBFunc()
 {
-    ScViewData* pViewData = mxGridWindow->getViewData();
-    ScDBFunc* pFunc = pViewData->GetView();
+    ScViewData& rViewData = mxGridWindow->getViewData();
+    ScDBFunc* pFunc = rViewData.GetView();
 
     return pFunc;
 }
 
 ScDrawView* ScGridWinUIObject::getDrawView()
 {
-    ScViewData* pViewData = mxGridWindow->getViewData();
-    ScDrawView* pDrawView = pViewData->GetScDrawView();
+    ScViewData& rViewData = mxGridWindow->getViewData();
+    ScDrawView* pDrawView = rViewData.GetScDrawView();
 
     return pDrawView;
 }
 
 ScTabViewShell* ScGridWinUIObject::getViewShell()
 {
-    ScViewData* pViewData = mxGridWindow->getViewData();
-    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    ScViewData& rViewData = mxGridWindow->getViewData();
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
 
     return pViewShell;
 }
 
 ScViewFunc* ScGridWinUIObject::getViewFunc()
 {
-    ScViewData* pViewData = mxGridWindow->getViewData();
-    ScViewFunc* pViewFunc = pViewData->GetView();
+    ScViewData& rViewData = mxGridWindow->getViewData();
+    ScViewFunc* pViewFunc = rViewData.GetView();
 
     return pViewFunc;
 }
@@ -142,7 +142,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("CELL");
             const OUString& rStr = itr->second;
-            ScAddress aAddr = get_address_from_string(mxGridWindow->getViewData()->GetDocument(), rStr);
+            ScAddress aAddr = get_address_from_string(mxGridWindow->getViewData().GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(ScRange(aAddr), true, bExtend);
             mxGridWindow->CursorChanged();
@@ -151,7 +151,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("RANGE");
             const OUString rStr = itr->second;
-            ScRange aRange = get_range_from_string(mxGridWindow->getViewData()->GetDocument(), rStr);
+            ScRange aRange = get_range_from_string(mxGridWindow->getViewData().GetDocument(), rStr);
             ScDBFunc* pFunc = getDBFunc();
             pFunc->MarkRange(aRange, true, bExtend);
             mxGridWindow->CursorChanged();
@@ -161,7 +161,7 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             auto itr = rParameters.find("TABLE");
             const OUString rStr = itr->second;
             sal_Int32 nTab = rStr.toUInt32();
-            ScTabView* pTabView = mxGridWindow->getViewData()->GetView();
+            ScTabView* pTabView = mxGridWindow->getViewData().GetView();
             if (pTabView)
                 pTabView->SetTabNo(nTab);
         }
@@ -263,15 +263,15 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             FuDraw* pDraw = dynamic_cast<FuDraw*>(getViewFunc()->GetDrawFuncPtr());
             assert(pDraw);
-            ScViewData* pViewData = mxGridWindow->getViewData();
-            pViewData->GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
+            ScViewData& rViewData = mxGridWindow->getViewData();
+            rViewData.GetDispatcher().Execute( pDraw->GetSlotID() , SfxCallMode::SLOT | SfxCallMode::RECORD );
         }
         else if ( rParameters.find("SETTEXT") != rParameters.end() )
         {
             auto itr = rParameters.find("SETTEXT");
             const OUString rStr = itr->second;
-            ScDocument& rDoc = mxGridWindow->getViewData()->GetDocument();
-            ScAddress aPos( mxGridWindow->getViewData()->GetCurX() , mxGridWindow->getViewData()->GetCurY() , mxGridWindow->getViewData()->GetTabNo() );
+            ScDocument& rDoc = mxGridWindow->getViewData().GetDocument();
+            ScAddress aPos( mxGridWindow->getViewData().GetCurX() , mxGridWindow->getViewData().GetCurY() , mxGridWindow->getViewData().GetTabNo() );
             rDoc.GetOrCreateNote( aPos )->SetText( aPos , rStr );
         }
     }
@@ -320,7 +320,7 @@ namespace {
 
 ScDrawLayer* get_draw_layer(VclPtr<ScGridWindow> const & xGridWindow)
 {
-    return xGridWindow->getViewData()->GetDocument().GetDrawLayer();
+    return xGridWindow->getViewData().GetDocument().GetDrawLayer();
 }
 
 SdrPage* get_draw_page(VclPtr<ScGridWindow> const & xGridWindow, SCTAB nTab)
@@ -332,7 +332,7 @@ SdrPage* get_draw_page(VclPtr<ScGridWindow> const & xGridWindow, SCTAB nTab)
 
 std::set<OUString> collect_charts(VclPtr<ScGridWindow> const & xGridWindow)
 {
-    SCTAB nTab = xGridWindow->getViewData()->GetTabNo();
+    SCTAB nTab = xGridWindow->getViewData().GetTabNo();
     SdrPage* pPage = get_draw_page(xGridWindow, nTab);
 
     std::set<OUString> aRet;

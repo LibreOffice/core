@@ -2055,10 +2055,10 @@ ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& 
         InsertNew( rxFormat->Clone() );
 }
 
-ScConditionalFormatList::ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList)
+ScConditionalFormatList::ScConditionalFormatList(ScDocument& rDoc, const ScConditionalFormatList& rList)
 {
     for(const auto& rxFormat : rList)
-        InsertNew( rxFormat->Clone(pDoc) );
+        InsertNew( rxFormat->Clone(&rDoc) );
 }
 
 void ScConditionalFormatList::InsertNew( std::unique_ptr<ScConditionalFormat> pNew )
