@@ -102,7 +102,7 @@ EditPaM ImpEditEngine::Read(SvStream& rInput, const OUString& rBaseURL, EETextFo
     }
 
     FormatFullDoc();        // perhaps a simple format is enough?
-    SetUpdateMode( _bUpdate );
+    SetUpdateMode( _bUpdate, pActiveView );
 
     return aPaM;
 }
