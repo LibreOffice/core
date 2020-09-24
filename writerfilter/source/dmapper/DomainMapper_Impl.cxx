@@ -284,7 +284,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaChanged( false ),
         m_bIsFirstParaInSection( true ),
         m_bIsFirstParaInSectionAfterRedline( true ),
-        m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
         m_bIsLastSectionGroup( false ),
@@ -639,12 +638,6 @@ void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
 bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection() const
 {
     return GetSectionInfo().bDummyParaAddedForTable;
-}
-
-
-void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
-{
-    m_bTextFrameInserted  = bIsInserted;
 }
 
 
@@ -3046,7 +3039,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             bool checkZOrderStatus = false;
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
-                SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
                 uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
@@ -6440,7 +6432,7 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
      * So bookmark is not attached to the wrong paragraph.
      */
     if(hasTableManager() && getTableManager().isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
-                    && !GetIsDummyParaAddedForTableInSection() &&!GetIsTextFrameInserted())
+                    && !GetIsDummyParaAddedForTableInSection())
     {
         AddDummyParaForTableInSection();
     }
@@ -6544,7 +6536,7 @@ void DomainMapper_Impl::startOrEndPermissionRange(sal_Int32 permissinId)
     * So permission is not attached to the wrong paragraph.
     */
     if (getTableManager().isInCell() && m_nTableDepth == 0 && GetIsFirstParagraphInSection()
-        && !GetIsDummyParaAddedForTableInSection() && !GetIsTextFrameInserted())
+        && !GetIsDummyParaAddedForTableInSection())
     {
         AddDummyParaForTableInSection();
     }
