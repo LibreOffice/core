@@ -629,7 +629,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
             {
                 if(rParameters.getAntiAliase())
                 {
-                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
+                    aVDev->SetAntialiasing(aVDev->GetAntialiasing() | AntialiasingFlags::Enable);
                 }
 
                 if(rParameters.getSnapHorVerLines())

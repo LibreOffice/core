@@ -235,7 +235,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
         pOutputDev->SetExtOutDevData(&aPDFExtOutDevData);
     }
 
-    pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | AntialiasingFlags::EnableB2dDraw);
+    pOutputDev->SetAntialiasing(pOutputDev->GetAntialiasing() | AntialiasingFlags::Enable);
     MapMode mm = pOutputDev->GetMapMode();
     mm.SetScaleX( Fraction(fScaleX) );
     mm.SetScaleY( Fraction(fScaleY) );

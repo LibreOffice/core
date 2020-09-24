@@ -711,7 +711,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     rRenderContext.DrawRect(::tools::Rectangle(Point(), aWinSize));
 
     // use AA, the Graphic may be a metafile/svg and would then look ugly
-    rRenderContext.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+    rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
 
     // draw Graphic
     ::tools::Rectangle aRect(

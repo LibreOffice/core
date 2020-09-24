@@ -705,7 +705,7 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
                                            << Point(nX2, nY2) << ":" << mLineColor);
     SkPaint paint;
     paint.setColor(toSkColor(mLineColor));
-    paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+    paint.setAntiAlias(mParent.getAntiAlias());
     getDrawCanvas()->drawLine(toSkX(nX1), toSkY(nY1), toSkX(nX2), toSkY(nY2), paint);
     addXorRegion(SkRect::MakeLTRB(nX1, nY1, nX2 + 1, nY2 + 1));
     postDraw();
@@ -720,7 +720,7 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
                                 << ":" << mLineColor << ":" << mFillColor << ":" << fTransparency);
     SkCanvas* canvas = getDrawCanvas();
     SkPaint paint;
-    paint.setAntiAlias(!blockAA && mParent.getAntiAliasB2DDraw());
+    paint.setAntiAlias(!blockAA && mParent.getAntiAlias());
     if (mFillColor != SALCOLOR_NONE)
     {
         paint.setColor(toSkColorWithTransparency(mFillColor, fTransparency));
@@ -817,7 +817,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         return true;
     }
 
-    performDrawPolyPolygon(aPolyPolygon, fTransparency, mParent.getAntiAliasB2DDraw());
+    performDrawPolyPolygon(aPolyPolygon, fTransparency, mParent.getAntiAlias());
     return true;
 }
 
@@ -898,7 +898,7 @@ bool SkiaSalGraphicsImpl::delayDrawPolyPolygon(const basegfx::B2DPolyPolygon& aP
     // actually isn't handled here.
 
     // Only AA polygons need merging, because they do not line up well because of the AA of the edges.
-    if (!mParent.getAntiAliasB2DDraw())
+    if (!mParent.getAntiAlias())
         return false;
     // Only filled polygons without an outline are problematic.
     if (mFillColor == SALCOLOR_NONE || mLineColor != SALCOLOR_NONE)
@@ -1043,9 +1043,9 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
     aPaint.setColor(toSkColorWithTransparency(mLineColor, fTransparency));
     aPaint.setStrokeMiter(fMiterLimit);
     aPaint.setStrokeWidth(fLineWidth);
-    aPaint.setAntiAlias(mParent.getAntiAliasB2DDraw());
+    aPaint.setAntiAlias(mParent.getAntiAlias());
     // See the tdf#134346 comment above.
-    const SkScalar posFix = mParent.getAntiAliasB2DDraw() ? toSkXYFix : 0;
+    const SkScalar posFix = mParent.getAntiAlias() ? toSkXYFix : 0;
 
     if (pStroke && std::accumulate(pStroke->begin(), pStroke->end(), 0.0) != 0)
     {

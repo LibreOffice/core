@@ -264,7 +264,7 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 AntialiasingFlags nOldAA = rDev.GetAntialiasing();
-                rDev.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+                rDev.SetAntialiasing(AntialiasingFlags::Enable);
 
                 std::vector<tools::Rectangle> aRegions(DemoRenderer::partition(rCtx, 4, 4));
                 DemoRenderer::clearRects(rDev, aRegions);
@@ -1165,7 +1165,7 @@ public:
             rDev.Push();
 
             AntialiasingFlags nFlags = rDev.GetAntialiasing();
-            rDev.SetAntialiasing(nFlags & ~AntialiasingFlags::EnableB2dDraw);
+            rDev.SetAntialiasing(nFlags & ~AntialiasingFlags::Enable);
             rDev.SetRasterOp( RasterOp::Xor );
 
             rCtx.mpDemoRenderer->drawThumbs(rDev, r, true);

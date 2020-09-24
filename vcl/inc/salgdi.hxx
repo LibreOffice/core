@@ -83,8 +83,8 @@ public:
     /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
     rtl::Reference<OpenGLContext> GetOpenGLContext() const;
 
-    void                        setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
-    bool                        getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
+    void                        setAntiAlias(bool bNew) { m_bAntiAlias = bNew; }
+    bool                        getAntiAlias() const { return m_bAntiAlias; }
 
     // public SalGraphics methods, the interface to the independent vcl part
 
@@ -600,7 +600,7 @@ private:
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
-    bool                        m_bAntiAliasB2DDraw : 1;
+    bool                        m_bAntiAlias : 1;
 
     inline long GetDeviceWidth(const OutputDevice* pOutDev) const;
 

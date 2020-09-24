@@ -148,7 +148,7 @@ namespace vclcanvas
     {
         mp2ndOutDevProvider = rOutDev;
         mp2ndOutDevProvider->getOutDev().EnableMapMode( false );
-        mp2ndOutDevProvider->getOutDev().SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        mp2ndOutDevProvider->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
     }
 
     void CanvasHelper::clear()
@@ -161,7 +161,7 @@ namespace vclcanvas
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
         rOutDev.SetLineColor( COL_WHITE );
         rOutDev.SetFillColor( COL_WHITE );
         rOutDev.SetClipRegion();
@@ -175,7 +175,7 @@ namespace vclcanvas
 
         rOutDev2.SetDrawMode( DrawModeFlags::Default );
         rOutDev2.EnableMapMode( false );
-        rOutDev2.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev2.SetAntialiasing( AntialiasingFlags::Enable );
         rOutDev2.SetLineColor( COL_WHITE );
         rOutDev2.SetFillColor( COL_WHITE );
         rOutDev2.SetClipRegion();
@@ -870,7 +870,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
         // TODO(F2): Support alpha vdev canvas here
         const Point aEmptyPoint(0,0);
@@ -900,7 +900,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
         Bitmap aBitmap( rOutDev.GetBitmapEx(aRect.TopLeft(),
                                           aRect.GetSize()).GetBitmap() );
@@ -950,7 +950,7 @@ namespace vclcanvas
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -994,7 +994,7 @@ namespace vclcanvas
         OutputDevice* p2ndOutDev = nullptr;
 
         rOutDev.EnableMapMode( false );
-        rOutDev.SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+        rOutDev.SetAntialiasing( AntialiasingFlags::Enable );
 
         if( mp2ndOutDevProvider )
             p2ndOutDev = &mp2ndOutDevProvider->getOutDev();

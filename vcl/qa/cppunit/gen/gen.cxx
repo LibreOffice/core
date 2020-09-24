@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(GenTest, testTdf107966)
     pVirtualDevice->DrawRect(tools::Rectangle(Point(), Size(1350, 225)));
     pVirtualDevice->SetFillColor(Color(0, 0, 0));
     AntialiasingFlags nOldAA = pVirtualDevice->GetAntialiasing();
-    pVirtualDevice->SetAntialiasing(nOldAA & ~AntialiasingFlags::EnableB2dDraw);
+    pVirtualDevice->SetAntialiasing(nOldAA & ~AntialiasingFlags::Enable);
 
     // Paint a black polygon on it.
     basegfx::B2DPolygon aPolygon;

@@ -2148,7 +2148,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
             nullptr);
     }
 
-    if(mrParent.getAntiAliasB2DDraw())
+    if(mrParent.getAntiAlias())
     {
         aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     }
@@ -2441,7 +2441,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
     }
 
-    if(mrParent.getAntiAliasB2DDraw())
+    if(mrParent.getAntiAlias())
     {
         aGraphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     }

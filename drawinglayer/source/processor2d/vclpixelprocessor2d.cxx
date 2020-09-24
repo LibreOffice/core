@@ -96,13 +96,11 @@ VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rVie
     // react on AntiAliasing settings
     if (getOptionsDrawinglayer().IsAntiAliasing())
     {
-        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing
-                                        | AntialiasingFlags::EnableB2dDraw);
+        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing | AntialiasingFlags::Enable);
     }
     else
     {
-        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing
-                                        & ~AntialiasingFlags::EnableB2dDraw);
+        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing & ~AntialiasingFlags::Enable);
     }
 }
 
@@ -194,8 +192,7 @@ bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(
         rSource.getLineAttribute().getWidth(), fTransparency,
         bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(),
         rSource.getLineAttribute().getLineJoin(), rSource.getLineAttribute().getLineCap(),
-        rSource.getLineAttribute().getMiterMinimumAngle()
-        /* false bBypassAACheck, default*/);
+        rSource.getLineAttribute().getMiterMinimumAngle());
 }
 
 void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
@@ -538,7 +535,7 @@ void VclPixelProcessor2D::processPolyPolygonColorPrimitive2D(
     // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
     // Caution: This is needed in both cases (!)
     if (!(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing()
-          && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::EnableB2dDraw)))
+          && (mpOutputDevice->GetAntialiasing() & AntialiasingFlags::Enable)))
         return;
 
     const basegfx::BColor aPolygonColor(
@@ -817,8 +814,7 @@ void VclPixelProcessor2D::processBackgroundColorPrimitive2D(
     const AntialiasingFlags nOriginalAA(mpOutputDevice->GetAntialiasing());
 
     // switch AA off in all cases
-    mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing()
-                                    & ~AntialiasingFlags::EnableB2dDraw);
+    mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~AntialiasingFlags::Enable);
 
     // create color for fill
     const basegfx::BColor aPolygonColor(
@@ -875,7 +871,7 @@ void VclPixelProcessor2D::processBorderLinePrimitive2D(
         && rBorder.isHorizontalOrVertical(getViewInformation2D()))
     {
         AntialiasingFlags nAntiAliasing = mpOutputDevice->GetAntialiasing();
-        mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
+        mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::Enable);
         process(rBorder);
         mpOutputDevice->SetAntialiasing(nAntiAliasing);
     }
@@ -893,7 +889,7 @@ void VclPixelProcessor2D::processInvertPrimitive2D(const primitive2d::BasePrimit
     mpOutputDevice->Push();
     mpOutputDevice->SetRasterOp(RasterOp::Xor);
     const AntialiasingFlags nAntiAliasing(mpOutputDevice->GetAntialiasing());
-    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::EnableB2dDraw);
+    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~AntialiasingFlags::Enable);
 
     // process content recursively
     process(rCandidate);

@@ -72,7 +72,7 @@ void PageObjectPainter::PaintPageObject (
     // Turn off antialiasing to avoid the bitmaps from being
     // shifted by fractions of a pixel and thus show blurry edges.
     const AntialiasingFlags nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~AntialiasingFlags::EnableB2dDraw);
+    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~AntialiasingFlags::Enable);
 
     PaintBackground(pPageObjectLayouter, rDevice, rpDescriptor);
     PaintPreview(pPageObjectLayouter, rDevice, rpDescriptor);

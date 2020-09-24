@@ -27,9 +27,9 @@ public:
         , m_nPreviousAAState(m_rOutputDevice.GetAntialiasing())
     {
         if (bAAState)
-            rOutputDevice.SetAntialiasing(m_nPreviousAAState | AntialiasingFlags::EnableB2dDraw);
+            rOutputDevice.SetAntialiasing(m_nPreviousAAState | AntialiasingFlags::Enable);
         else
-            rOutputDevice.SetAntialiasing(m_nPreviousAAState & ~AntialiasingFlags::EnableB2dDraw);
+            rOutputDevice.SetAntialiasing(m_nPreviousAAState & ~AntialiasingFlags::Enable);
     }
 
     ~ScopedAntialiasing() { m_rOutputDevice.SetAntialiasing(m_nPreviousAAState); }

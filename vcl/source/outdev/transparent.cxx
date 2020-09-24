@@ -232,8 +232,7 @@ void OutputDevice::DrawTransparent(
     if( mbInitFillColor )
         InitFillColor();
 
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
-       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
+    if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        (RasterOp::OverPaint == GetRasterOp()) )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms

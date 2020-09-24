@@ -67,11 +67,11 @@ namespace sdr::overlay
                             {
                                 if(bIsAntiAliasing && rCandidate.allowsAntiAliase())
                                 {
-                                    rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
+                                    rDestinationDevice.SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
                                 }
                                 else
                                 {
-                                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::EnableB2dDraw);
+                                    rDestinationDevice.SetAntialiasing(nOriginalAA & ~AntialiasingFlags::Enable);
                                 }
 
                                 pProcessor->process(rSequence);
