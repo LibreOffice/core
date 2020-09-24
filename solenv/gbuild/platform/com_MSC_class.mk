@@ -519,7 +519,7 @@ gb_PythonTest_PRECOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND)
 gb_PythonTest_DEPS = $(call gb_Package_get_target,python3) $(call gb_Executable_get_target,python)
 
 ifeq ($(strip $(CPPUNITTRACE)),TRUE)
-gb_CppunitTest_GDBTRACE := '$(DEVENV)' /debugexe
+override CPPUNITTRACE := '$(DEVENV)' /debugexe
 endif
 
 # WinResTarget class
