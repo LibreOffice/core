@@ -45,10 +45,10 @@ using namespace xmloff::token;
 
 namespace {
 
-class OSpecialHanldeXMLImportPropertyMapper : public SvXMLImportPropertyMapper
+class OSpecialHandleXMLImportPropertyMapper : public SvXMLImportPropertyMapper
 {
 public:
-    OSpecialHanldeXMLImportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper,SvXMLImport& _rImport) : SvXMLImportPropertyMapper(rMapper ,_rImport)
+    OSpecialHandleXMLImportPropertyMapper(const rtl::Reference< XMLPropertySetMapper >& rMapper,SvXMLImport& _rImport) : SvXMLImportPropertyMapper(rMapper ,_rImport)
     {
     }
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
@@ -189,7 +189,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
                 if( !m_xCellImpPropMapper.is() )
                 {
                     m_xCellImpPropMapper =
-                        new XMLTextImportPropertyMapper/*OSpecialHanldeXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport );
+                        new XMLTextImportPropertyMapper/*OSpecialHandleXMLImportPropertyMapper*/( rImport.GetCellStylesPropertySetMapper(), m_rImport );
 
                     m_xCellImpPropMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(m_rImport));
                 }
@@ -208,7 +208,7 @@ rtl::Reference < SvXMLImportPropertyMapper >
             case XmlStyleFamily::TABLE_ROW:
             {
                 if( !m_xRowImpPropMapper.is() )
-                    m_xRowImpPropMapper =new OSpecialHanldeXMLImportPropertyMapper( rImport.GetRowStylesPropertySetMapper(), m_rImport );
+                    m_xRowImpPropMapper =new OSpecialHandleXMLImportPropertyMapper( rImport.GetRowStylesPropertySetMapper(), m_rImport );
                 xMapper = m_xRowImpPropMapper;
             }
              break;
