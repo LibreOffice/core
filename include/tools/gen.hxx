@@ -25,6 +25,8 @@
 #include <algorithm>
 #include <ostream>
 #include <config_options.h>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 
 class SvStream;
 namespace rtl
@@ -73,6 +75,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SAL_DLLPUBLIC_EXPORT) Point final : prote
 public:
                         Point() {}
                         Point( long nX, long nY ) : Pair( nX, nY ) {}
+                        Point(basegfx::B2DPoint const & rPoint) : Pair(rPoint.getX(), rPoint.getY()) {}
 
     long                X() const { return nA; }
     long                Y() const { return nB; }
@@ -102,6 +105,8 @@ public:
 
     Pair const &        toPair() const { return *this; }
     Pair &              toPair() { return *this; }
+
+    operator basegfx::B2DPoint() const { return basegfx::B2DPoint(nA, nB); }
 
     using Pair::toString;
 };
@@ -479,6 +484,8 @@ public:
     void                SaturatingSetSize(const Size& rSize);
     void                SaturatingSetX(long x);
     void                SaturatingSetY(long y);
+
+    operator basegfx::B2DRectangle() const { return basegfx::B2DRectangle(nLeft, nTop, nRight, nBottom); }
 
 private:
     long                nLeft;
