@@ -1798,8 +1798,6 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     Point aCenter;
     aGradient.SetAngle(aGradient.GetAngle() + 2700);
     aGradient.GetBoundRect(boundRect, aBoundRect, aCenter);
-    tools::Polygon aPoly(aBoundRect);
-    aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600);
 
     SkColor startColor
         = toSkColorWithIntensity(rGradient.GetStartColor(), rGradient.GetStartIntensity());
@@ -1808,6 +1806,8 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     sk_sp<SkShader> shader;
     if (rGradient.GetStyle() == GradientStyle::Linear)
     {
+        tools::Polygon aPoly(aBoundRect);
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600);
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
         SkColor colors[2] = { startColor, endColor };
@@ -1816,15 +1816,17 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     }
     else
     {
-        // Move the center by (-1,-1) (the default VCL algorithm is a bit off-center that way).
+        // Move the center by (-1,-1) (the default VCL algorithm is a bit off-center that way,
+        // Skia is the opposite way).
         SkPoint center = SkPoint::Make(toSkX(aCenter.X()) - 1, toSkY(aCenter.Y()) - 1);
-        SkScalar radius = std::max(aBoundRect.GetWidth() / 2, aBoundRect.GetHeight() / 2);
+        SkScalar radius = std::max(aBoundRect.GetWidth() / 2.0, aBoundRect.GetHeight() / 2.0);
         SkColor colors[2] = { endColor, startColor };
         SkScalar pos[2] = { SkDoubleToScalar(aGradient.GetBorder() / 100.0), 1.0 };
         shader = SkGradientShader::MakeRadial(center, radius, colors, pos, 2, SkTileMode::kClamp);
     }
 
     SkPaint paint;
+    paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
     paint.setShader(shader);
     getDrawCanvas()->drawPath(path, paint);
     postDraw();
@@ -1856,6 +1858,7 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
     sk_sp<SkShader> shader = SkGradientShader::MakeLinear(points, colors.data(), pos.data(),
                                                           colors.size(), SkTileMode::kDecal);
     SkPaint paint;
+    paint.setAntiAlias(mParent.getAntiAliasB2DDraw());
     paint.setShader(shader);
     getDrawCanvas()->drawPath(path, paint);
     addXorRegion(path.getBounds());
