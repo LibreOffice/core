@@ -74,9 +74,20 @@
               <object class="GtkToolbar" id="style">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="margin_left">3</property>
                 <property name="toolbar_style">icons</property>
                 <property name="show_arrow">False</property>
                 <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:FormatPaintbrush">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkToolButton" id=".uno:StyleUpdateByExample">
                     <property name="visible">True</property>
