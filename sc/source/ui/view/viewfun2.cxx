@@ -1128,10 +1128,10 @@ bool ScViewFunc::TestMergeCells()           // pre-test (for menu)
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
         ScRange aRange;
-        bool bMergable = ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE );
-        bMergable = bMergable && ( aRange.aStart.Col() != aRange.aEnd.Col() ||
+        bool bMergeable = ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE );
+        bMergeable = bMergeable && ( aRange.aStart.Col() != aRange.aEnd.Col() ||
                                    aRange.aStart.Row() != aRange.aEnd.Row() );
-        return bMergable;
+        return bMergeable;
     }
     else
         return false;
