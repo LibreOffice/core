@@ -20,13 +20,11 @@ package mod._remotebridge;
 
 import java.io.PrintWriter;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;

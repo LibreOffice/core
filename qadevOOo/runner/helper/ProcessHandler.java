@@ -25,8 +25,6 @@ import java.io.PrintWriter;
 import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
-import lib.TestParameters;
-import util.PropertyName;
 import util.utils;
 
 /*

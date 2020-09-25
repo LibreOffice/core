@@ -25,7 +25,6 @@ import com.sun.star.sdbc.XResultSetUpdate;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
-import java.util.HashSet;
 import ifc.form._XUpdateBroadcaster.UpdateChecker;
 
 import lib.TestEnvironment;

@@ -20,9 +20,6 @@ package helper;
 import java.io.FileInputStream;
 
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 
 import lib.TestParameters;

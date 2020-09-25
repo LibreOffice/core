@@ -19,7 +19,6 @@
 package ifc.text;
 
 import lib.MultiMethodTest;
-import lib.Status;
 import util.XInstCreator;
 
 import com.sun.star.container.XIndexAccess;

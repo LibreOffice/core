@@ -30,7 +30,6 @@ import com.sun.star.sdbc.XStatement;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import connectivity.tools.sdb.Connection;
-import java.io.File;
 import static org.junit.Assert.*;
 
 public abstract class AbstractDatabase implements DatabaseAccess

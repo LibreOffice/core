@@ -26,7 +26,6 @@ import com.sun.star.lang.WrappedTargetException;
 import java.io.PrintWriter;
 import java.util.Comparator;
 
-import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
