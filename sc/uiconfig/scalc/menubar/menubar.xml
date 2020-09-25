@@ -145,7 +145,7 @@
       <menu:menuitem menu:id=".uno:NormalViewMode" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:PagebreakMode"  menu:style="radio"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToolbarMode"/>
+      <menu:menuitem menu:id=".uno:ToolbarModeUI"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
       <menu:menuitem menu:id=".uno:InputLineVisible" menu:style="text"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
