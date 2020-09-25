@@ -37,13 +37,13 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 bool ScTabViewShell::HasSelection( bool bText ) const
 {
     bool bHas = false;
-    ScViewData* pData = const_cast<ScViewData*>(&GetViewData());
+    ScViewData& rData = const_cast<ScViewData&>(GetViewData());
     if ( bText )
     {
         // Content contained: Count2 >= 1
-        ScDocument& rDoc = pData->GetDocument();
-        ScMarkData& rMark = pData->GetMarkData();
-        ScAddress aCursor( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
+        ScDocument& rDoc = rData.GetDocument();
+        ScMarkData& rMark = rData.GetMarkData();
+        ScAddress aCursor( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
         double fVal = 0.0;
         if ( rDoc.GetSelectionFunction( SUBTOTAL_FUNC_CNT2, aCursor, rMark, fVal ) )
             bHas = ( fVal > 0.5 );
@@ -51,7 +51,7 @@ bool ScTabViewShell::HasSelection( bool bText ) const
     else
     {
         ScRange aRange;
-        ScMarkType eMarkType = pData->GetSimpleArea( aRange );
+        ScMarkType eMarkType = rData.GetSimpleArea( aRange );
         if ( eMarkType == SC_MARK_SIMPLE )
             bHas = ( aRange.aStart != aRange.aEnd );    // more than 1 cell
         else

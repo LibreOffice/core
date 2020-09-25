@@ -237,7 +237,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
         ActivateView( false, false );
 
         if ( GetViewFrame()->GetFrame().IsInPlace() ) // inplace
-            GetViewData().GetDocShell()->UpdateOle(&GetViewData(), true);
+            GetViewData().GetDocShell()->UpdateOle(GetViewData(), true);
 
         if ( pHdl )
             pHdl->NotifyChange( nullptr, true ); // timer-delayed due to document switching

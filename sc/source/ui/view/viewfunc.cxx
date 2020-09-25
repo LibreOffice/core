@@ -578,7 +578,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if (bAutoFormat)
         DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged);
 
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
 
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
 
@@ -620,7 +620,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
         }
 
         pDocSh->PostPaintCell( aPos );
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
     }
     else
@@ -732,7 +732,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             ShowAllCursors();
 
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
 
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, rMark, nCol, nRow);
 
@@ -792,7 +792,7 @@ void ScViewFunc::EnterMatrix( const OUString& rString, ::formula::FormulaGrammar
         bool bSuccess = pDocSh->GetDocFunc().EnterMatrix(
             aRange, &rMark, nullptr, rString, false, false, EMPTY_OUSTRING, eGram );
         if (bSuccess)
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
         else
             PaintArea(nCol, nRow, nCol, nRow);        // possibly the edit-engine is still painted there
     }
@@ -1096,7 +1096,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     rDoc.ApplySelectionPattern( rAttr, aFuncMark );
 
     pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid, nExt );
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
     aModificator.SetDocumentModified();
     CellContentChanged();
 
@@ -1197,7 +1197,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
                            PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
     }
@@ -1237,7 +1237,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
         pOldPat.reset();     // is copied in undo (Pool)
 
         pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PaintPartFlags::Grid, nExtFlags | SC_PF_TESTMERGE );
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         aModificator.SetDocumentModified();
         CellContentChanged();
     }
@@ -1611,7 +1611,7 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
             bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
 
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
             CellContentChanged();
             ResetAutoSpell();
 
@@ -1685,7 +1685,7 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
         }
 
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         CellContentChanged();
         ResetAutoSpell();
 
@@ -1987,7 +1987,7 @@ void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
     else
         rDocFunc.DeleteContents(aFuncMark, nFlags, bRecord, false);
 
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
 
     if (ScModelObj *pModelObj = HelperNotifyChanges::getMustPropagateChangesModel(*pDocSh))
     {
@@ -2296,7 +2296,7 @@ void ScViewFunc::SetWidthOrHeight(
             }
         }
 
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         if( !pDocSh->IsReadOnly() )
             aModificator.SetDocumentModified();
     }
@@ -2841,7 +2841,7 @@ void ScViewFunc::ChangeIndent( bool bIncrement )
     bool bSuccess = pDocSh->GetDocFunc().ChangeIndent( aWorkMark, bIncrement, false );
     if (bSuccess)
     {
-        pDocSh->UpdateOle(&rViewData);
+        pDocSh->UpdateOle(rViewData);
         StartFormatArea();
 
         // stuff for sidebar panels
@@ -2983,7 +2983,7 @@ void ScViewFunc::InsertNameList()
     ScAddress aPos( GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo() );
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     if ( pDocSh->GetDocFunc().InsertNameList( aPos, false ) )
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
 }
 
 void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr  )

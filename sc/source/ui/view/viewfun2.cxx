@@ -172,7 +172,7 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
     }
 
     if ( bPaint && bAnyChanged )
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -1252,7 +1252,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
             //DoneBlockMode( sal_False);
             Unmark();
 
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
             UpdateInputLine();
 
             OUString aStartAddress = aMarkRange.aStart.GetColRowString();
@@ -1345,7 +1345,7 @@ bool ScViewFunc::RemoveMerge()
         MarkRange( aExtended );
 
         if (bOk)
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
     }
 
     OUString aCellLocation = aRange.aStart.GetColRowString();
@@ -1364,7 +1364,7 @@ void ScViewFunc::FillSimple( FillDir eDir )
         bool bSuccess = pDocSh->GetDocFunc().FillSimple( aRange, &rMark, eDir, false );
         if (bSuccess)
         {
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
             UpdateScrollBars();
 
             auto& rDoc = pDocSh->GetDocument();
@@ -1416,7 +1416,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
                                     fStart, fStep, fMax, false );
         if (bSuccess)
         {
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
             UpdateScrollBars();
 
             HelperNotifyChanges::NotifyIfChangesListeners(*pDocSh, aRange);
@@ -1440,7 +1440,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
         return;
 
     MarkRange( aRange, false );         // aRange was modified in FillAuto
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
     UpdateScrollBars();
 
     bool bDoAutoSpell = pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
@@ -1861,7 +1861,7 @@ void ScViewFunc::AutoFormat( sal_uInt16 nFormatNo )
 
         bool bSuccess = pDocSh->GetDocFunc().AutoFormat( aRange, &rMark, nFormatNo, false );
         if (bSuccess)
-            pDocSh->UpdateOle(&GetViewData());
+            pDocSh->UpdateOle(GetViewData());
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
@@ -3365,7 +3365,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                        nEndCol, nEndRow, nEndTab,
                        PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
-    pDocSh->UpdateOle( &GetViewData() );
+    pDocSh->UpdateOle(GetViewData());
     pDocSh->SetDocumentModified();
 }
 

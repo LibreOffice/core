@@ -149,15 +149,13 @@ bool ScDocShell::IsOle() const
     return (GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
 }
 
-void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
+void ScDocShell::UpdateOle(const ScViewData& rViewData, bool bSnapSize)
 {
     //  if it isn't Ole at all, one can be spared the calculations
     //  (VisArea will then be reset at the save)
 
     if (GetCreateMode() == SfxObjectCreateMode::STANDARD)
         return;
-
-    OSL_ENSURE(pViewData,"pViewData==0 at ScDocShell::UpdateOle");
 
     tools::Rectangle aOldArea = SfxObjectShell::GetVisArea();
     tools::Rectangle aNewArea = aOldArea;
@@ -167,15 +165,15 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, bool bSnapSize )
         aNewArea = m_aDocument.GetEmbeddedRect();
     else
     {
-        SCTAB nTab = pViewData->GetTabNo();
+        SCTAB nTab = rViewData.GetTabNo();
         if ( nTab != m_aDocument.GetVisibleTab() )
             m_aDocument.SetVisibleTab( nTab );
 
         bool bNegativePage = m_aDocument.IsNegativePage( nTab );
-        SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
+        SCCOL nX = rViewData.GetPosX(SC_SPLIT_LEFT);
         if ( nX != m_aDocument.GetPosLeft() )
             m_aDocument.SetPosLeft( nX );
-        SCROW nY = pViewData->GetPosY(SC_SPLIT_BOTTOM);
+        SCROW nY = rViewData.GetPosY(SC_SPLIT_BOTTOM);
         if ( nY != m_aDocument.GetPosTop() )
             m_aDocument.SetPosTop( nY );
         tools::Rectangle aMMRect = m_aDocument.GetMMRect( nX,nY, nX,nY, nTab );

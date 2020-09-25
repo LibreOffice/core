@@ -283,7 +283,7 @@ public:
     void            DoRecalc( bool bApi );
     void            DoHardRecalc();
 
-    void            UpdateOle( const ScViewData* pViewData, bool bSnapSize = false);
+    void            UpdateOle(const ScViewData& rViewData, bool bSnapSize = false);
     bool            IsOle() const;
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2 );

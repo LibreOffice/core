@@ -24,7 +24,7 @@ class ScRandomNumberGeneratorDialog : public ScAnyRefDlgController
 public:
     ScRandomNumberGeneratorDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScRandomNumberGeneratorDialog() override;
 
@@ -34,7 +34,7 @@ public:
 
 private:
     // Data
-    ScViewData*                mpViewData;
+    ScViewData&                mrViewData;
     const ScDocument&          mrDoc;
 
     ScRange             maInputRange;
