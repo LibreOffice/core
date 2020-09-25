@@ -138,7 +138,7 @@ enum SdDocumentSettingsPropertyHandles
 {
     HANDLE_PRINTDRAWING, HANDLE_PRINTNOTES, HANDLE_PRINTHANDOUT, HANDLE_PRINTOUTLINE, HANDLE_MEASUREUNIT, HANDLE_SCALE_NUM,
     HANDLE_SCALE_DOM, HANDLE_TABSTOP, HANDLE_PRINTPAGENAME, HANDLE_PRINTDATE, HANDLE_PRINTTIME,
-    HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
+    HANDLE_PRINTHIDDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_SAVETHUMBNAIL, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PRINTERPAPERSIZE, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT,
@@ -185,7 +185,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintDate"),           HANDLE_PRINTDATE,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintTime"),           HANDLE_PRINTTIME,           cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
-            { OUString("IsPrintHiddenPages"),    HANDLE_PRINTHIDENPAGES,     cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
+            { OUString("IsPrintHiddenPages"),    HANDLE_PRINTHIDDENPAGES,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintFitPage"),        HANDLE_PRINTFITPAGE,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintTilePage"),       HANDLE_PRINTTILEPAGE,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
             { OUString("IsPrintBooklet"),        HANDLE_PRINTBOOKLET,        cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
@@ -594,7 +594,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                     bOk = true;
                 }
                 break;
-            case HANDLE_PRINTHIDENPAGES:
+            case HANDLE_PRINTHIDDENPAGES:
                 if( *pValues >>= bValue )
                 {
                     if( aPrintOpts.IsHiddenPages() != bValue)
@@ -1148,7 +1148,7 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_PRINTTIME:
                 *pValue <<= aPrintOpts.IsTime();
                 break;
-            case HANDLE_PRINTHIDENPAGES:
+            case HANDLE_PRINTHIDDENPAGES:
                 *pValue <<= aPrintOpts.IsHiddenPages();
                 break;
             case HANDLE_PRINTFITPAGE:
