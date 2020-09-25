@@ -161,7 +161,7 @@ public class OQueryDesign extends TestCase {
 
         tEnv.addObjRelation("Frame", xFrame);
 
-        tEnv.addObjRelation("XInitialization.xIni", getUnititializedObj(Param));
+        tEnv.addObjRelation("XInitialization.xIni", getUninitializedObj(Param));
 
         log.println("ImplementationName: "+util.utils.getImplName(oObj));
 
@@ -169,7 +169,7 @@ public class OQueryDesign extends TestCase {
 
     } // finish method getTestEnvironment
 
-    private XInitialization getUnititializedObj(TestParameters Param) throws Exception {
+    private XInitialization getUninitializedObj(TestParameters Param) throws Exception {
         // creating an object which ist not initialized
 
         // get a model of a DataSource
