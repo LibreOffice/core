@@ -112,6 +112,7 @@ public:
     void testTdf134221();
     void testLinearRule();
     void testAutofitSync();
+    void testSnakeRows();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testTdf134221);
     CPPUNIT_TEST(testLinearRule);
     CPPUNIT_TEST(testAutofitSync);
+    CPPUNIT_TEST(testSnakeRows);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1601,6 +1603,30 @@ void SdImportTestSmartArt::testAutofitSync()
     drawing::TextFitToSizeType eType{};
     CPPUNIT_ASSERT(xThirdInner->getPropertyValue("TextFitToSize") >>= eType);
     CPPUNIT_ASSERT_EQUAL(drawing::TextFitToSizeType_NONE, eType);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testSnakeRows()
+{
+    // Load a smartart which contains a snake algorithm.
+    // The expected layout of the 6 children is a 3x2 grid.
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-snake-rows.pptx"), PPTX);
+
+    uno::Reference<drawing::XShapes> xDiagram(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    std::set<sal_Int32> aYPositions;
+    for (sal_Int32 nChild = 0; nChild < xDiagram->getCount(); ++nChild)
+    {
+        uno::Reference<drawing::XShape> xChild(xDiagram->getByIndex(nChild), uno::UNO_QUERY);
+        aYPositions.insert(xChild->getPosition().Y);
+    }
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 4
+    // i.e. one more unwanted row appeared. This is better, but the ideal would be just 2 rows.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aYPositions.size());
 
     xDocShRef->DoClose();
 }
