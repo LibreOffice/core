@@ -686,10 +686,14 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     }
 
     // we need to make sure OpenGL never reaches this slow code path
+    // tdf#136223: The slow code path will be obviously also reached if mirroring
+    // is used, which makes the block above be skipped, as the blend bitmap calls
+    // do not handle that case. Given that this seems to be rather rare, just
+    // disable the assert, until faster mirroring is actually needed.
 
-    assert(!SkiaHelper::isVCLSkiaEnabled());
+    assert(!SkiaHelper::isVCLSkiaEnabled() || !bTryDirectPaint);
 #if HAVE_FEATURE_OPENGL
-    assert(!OpenGLHelper::isVCLOpenGLEnabled());
+    assert(!OpenGLHelper::isVCLOpenGLEnabled() || !bTryDirectPaint);
 #endif
     tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
     if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
