@@ -114,7 +114,7 @@
       <menu:menuitem menu:id=".uno:PageMode" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:MasterPage" menu:style="radio"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ToolbarMode"/>
+      <menu:menuitem menu:id=".uno:ToolbarModeUI"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:StatusBarVisible" menu:style="text"/>
