@@ -2796,8 +2796,8 @@ tools::Time TimeFormatter::GetTime() const
 
     if ( GetField() )
     {
-        bool bAllowMailformed = ImplAllowMalformedInput();
-        if ( TextToTime( GetField()->GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMailformed ) )
+        bool bAllowMalformed = ImplAllowMalformedInput();
+        if ( TextToTime( GetField()->GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), !bAllowMalformed ) )
         {
             if ( aTime > GetMax() )
                 aTime = GetMax();
@@ -2806,7 +2806,7 @@ tools::Time TimeFormatter::GetTime() const
         }
         else
         {
-            if ( bAllowMailformed )
+            if ( bAllowMalformed )
                 aTime = tools::Time( 99, 99, 99 ); // set invalid time
             else
                 aTime = maLastTime;
