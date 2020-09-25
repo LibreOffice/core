@@ -17,6 +17,8 @@
 #include <memory>
 #include <set>
 
+#include <sfx2/listview.hxx>
+
 //template thumbnail item defines
 #define TEMPLATE_ITEM_MAX_WIDTH 160
 #define TEMPLATE_ITEM_MAX_HEIGHT 148
@@ -137,16 +139,19 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
-class SfxTemplateLocalView final : public SfxThumbnailView
+class SfxTemplateLocalView final : public SfxThumbnailView, public ListView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
 public:
 
     SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                         std::unique_ptr<weld::Menu> xMenu);
+                         std::unique_ptr<weld::Menu> xMenu,
+                         std::unique_ptr<weld::TreeView> xTreeView);
 
     virtual ~SfxTemplateLocalView () override;
+
+    void setTemplateViewMode ( TemplateViewMode eMode );
 
     // Fill view with new item list
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);
@@ -230,6 +235,28 @@ public:
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
+    void appendFilteredItems();
+
+    void Show() override;
+
+    void Hide() override;
+
+    bool IsVisible();
+
+    void syncSelection();
+
+    void ListViewChanged();
+
+    void connect_focus_rect(const Link<weld::Widget&, tools::Rectangle>& rLink) { GetDrawingArea()->connect_focus_rect(rLink);}
+
+    void MakeItemVisible( sal_uInt16 nId ) { SfxThumbnailView::MakeItemVisible(nId);}
+
+    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+
+    DECL_LINK(ListViewChangedHdl, weld::TreeView&, void);
+
+    DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
+
 private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
@@ -249,6 +276,7 @@ private:
     std::unique_ptr<SfxDocumentTemplates> mpDocTemplates;
     std::vector<std::unique_ptr<TemplateContainerItem> > maRegions;
     std::vector<TemplateItemProperties > maAllTemplates;
+    TemplateViewMode mViewMode;
 };
 
 
