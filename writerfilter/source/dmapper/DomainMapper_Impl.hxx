@@ -433,11 +433,17 @@ struct SectionInfo
     OUString sType;
     bool bDummyParaAddedForTable;
     bool bTextFrameInserted;
+    bool bFirstPara;
+    bool bFirstParaAfterRedline;
+    bool bLastPara;
 
     SectionInfo( OUString sSectionType = "" )
         :sType(sSectionType)
         ,bDummyParaAddedForTable(false)
         ,bTextFrameInserted(false)
+        ,bFirstPara(true)
+        ,bFirstParaAfterRedline(true)
+        ,bLastPara(false)
     { }
 };
 
@@ -653,7 +659,7 @@ public:
     void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
-    bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
+    bool GetIsLastParagraphInSection() const;// { return m_bIsLastParaInSection;}
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
     void SetRubyText( OUString const &sText, OUString const &sStyle) {
         m_aRubyInfo.sRubyText = sText;
