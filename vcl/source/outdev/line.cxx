@@ -108,8 +108,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         InitLineColor();
 
     // #i101598# support AA and snap for lines, too
-    if((mnAntialiasing & AntialiasingFlags::Enable)
-        && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+    if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor())
     {
@@ -151,8 +150,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
-    const bool bTryAA((mnAntialiasing & AntialiasingFlags::Enable)
-        && mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+    const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
         && RasterOp::OverPaint == GetRasterOp()
         && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
@@ -234,7 +232,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
             bool bDone(false);
 
-            if(bTryAA)
+            if(bTryB2d)
             {
                 bDone = mpGraphics->DrawPolyLine(
                     basegfx::B2DHomMatrix(),
@@ -272,7 +270,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         bool bDone(false);
 
-        if(bTryAA)
+        if(bTryB2d)
         {
             bDone = mpGraphics->DrawPolyPolygon(
                 basegfx::B2DHomMatrix(),

@@ -132,7 +132,7 @@ Bitmap OutputDeviceTestLine::setupDashedLine()
                               rectangle.getY() + rectangle.getHeight()),
             basegfx::B2DPoint(rectangle.getX() + rectangle.getWidth(), rectangle.getY()),
             basegfx::B2DPoint(rectangle.getX(), rectangle.getY())},
-        1, 0, &stroke, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, basegfx::deg2rad(15.0), true );
+        1, 0, &stroke, basegfx::B2DLineJoin::NONE );
 
     return mpVirtualDevice->GetBitmap(maVDRectangle.TopLeft(), maVDRectangle.GetSize());
 }
