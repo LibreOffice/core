@@ -317,7 +317,7 @@ struct TDataCntnrEntry_Impl
 struct TransferDataContainer_Impl
 {
     std::vector< TDataCntnrEntry_Impl > aFmtList;
-    Link<sal_Int8,void> aFinshedLnk;
+    Link<sal_Int8,void> aFinishedLnk;
     std::unique_ptr<INetBookmark> pBookmk;
 
     TransferDataContainer_Impl()
@@ -449,14 +449,14 @@ void TransferDataContainer::StartDrag(
         vcl::Window* pWindow, sal_Int8 nDragSourceActions,
         const Link<sal_Int8,void>& rLnk )
 {
-    pImpl->aFinshedLnk = rLnk;
+    pImpl->aFinishedLnk = rLnk;
     TransferableHelper::StartDrag( pWindow, nDragSourceActions );
 }
 
 
 void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 {
-    pImpl->aFinshedLnk.Call( nDropAction );
+    pImpl->aFinishedLnk.Call( nDropAction );
 }
 
 Reference<XClipboard> GetSystemClipboard()
