@@ -110,7 +110,7 @@ End Sub
 
 Sub SaveCurrentStyles(oDocument as Object)
 &apos;This sub stores the current document in the directory to hold temporary files.
-	On Error Goto ErrorOcurred
+	On Error Goto ErrorOccurred
 	aTempURL = GetPathSettings(&quot;Temp&quot;, False)
 	Dim aRightMost as String
 	aRightMost = Right(aTempURL, 1)
@@ -126,7 +126,7 @@ Sub SaveCurrentStyles(oDocument as Object)
 	oDocument.storeToURL(aTempURL, NoArgs())
 	Exit Sub
 
-ErrorOcurred:
+ErrorOccurred:
 	MsgBox(GetResText(&quot;STYLES_1&quot;), 16, GetResText(&quot;STYLES_0&quot;))
 	On Local Error Goto 0
 End Sub
