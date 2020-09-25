@@ -194,7 +194,7 @@ public class _XTreeNode extends MultiMethodTest {
         try {
             DisplayValue = AnyConverter.toString(dispVal);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("ERROR: could not convert the returned object of 'getDisplyValue()' " +
+            log.println("ERROR: could not convert the returned object of 'getDisplayValue()' " +
                 "to String with AnyConverter: " + ex.toString());
         }
 
