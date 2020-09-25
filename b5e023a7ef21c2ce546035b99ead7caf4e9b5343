@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3cecb0aa_97c43f33",
+        "filename": "vcl/skia/salbmp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-25T08:30:38Z",
+      "side": 1,
+      "message": "Looks like a left-over.",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "b5e023a7ef21c2ce546035b99ead7caf4e9b5343",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
