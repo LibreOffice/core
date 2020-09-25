@@ -77,7 +77,6 @@ SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
 bool SkiaSalBitmap::Create(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
     ResetAllData();
-    mBuffer.reset();
     if (!isValidBitCount(nBitCount))
         return false;
     mPalette = rPal;
