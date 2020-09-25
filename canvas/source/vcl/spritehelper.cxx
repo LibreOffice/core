@@ -266,7 +266,7 @@ namespace vclcanvas
                     rTargetSurface.SetLineColor( Color( 0,255,0 ) );
                     rTargetSurface.SetFillColor();
 
-                    rTargetSurface.DrawPolyPolygon(::tools::PolyPolygon(aClipPoly)); // #i76339#
+                    rTargetSurface.DrawPolyPolygon(aClipPoly); // #i76339#
                 }
 
                 vcl::Region aClipRegion( aClipPoly );

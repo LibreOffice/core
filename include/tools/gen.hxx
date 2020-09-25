@@ -390,6 +390,7 @@ public:
     /// Constructs an empty Rectangle, with top/left at the specified params
                         Rectangle( long nLeft, long nTop );
                         Rectangle( const Point& rLT, const Size& rSize );
+                        Rectangle( basegfx::B2DRectangle const & );
 
     static Rectangle    Justify( const Point& rLT, const Point& rRB );
 
@@ -531,6 +532,14 @@ inline tools::Rectangle::Rectangle( const Point& rLT, const Size& rSize )
     nTop    = rLT.Y();
     nRight  = rSize.Width()  ? nLeft+(rSize.Width()-1) : RECT_EMPTY;
     nBottom = rSize.Height() ? nTop+(rSize.Height()-1) : RECT_EMPTY;
+}
+
+inline tools::Rectangle::Rectangle( const basegfx::B2DRectangle& rRect )
+{
+    nLeft   = rRect.getMinX();
+    nTop    = rRect.getMinY();
+    nRight  = !rRect.isEmpty() ? rRect.getMaxX() : RECT_EMPTY;
+    nBottom = !rRect.isEmpty() ? rRect.getMaxY() : RECT_EMPTY;
 }
 
 inline bool tools::Rectangle::IsEmpty() const
