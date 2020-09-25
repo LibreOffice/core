@@ -2981,8 +2981,6 @@ void DomainMapper::lcl_startSectionGroup()
     {
         m_pImpl->PushProperties(CONTEXT_SECTION);
     }
-    m_pImpl->SetIsFirstParagraphInSection(true);
-    m_pImpl->SetIsFirstParagraphInSectionAfterRedline(true);
 }
 
 void DomainMapper::lcl_endSectionGroup()
