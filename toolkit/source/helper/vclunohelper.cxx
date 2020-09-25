@@ -185,6 +185,19 @@ tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 
     return aPoly;
 }
 
+basegfx::B2DPolygon VCLUnoHelper::CreateB2DPolygon( const css::uno::Sequence< sal_Int32 >& DataX,
+                                            const css::uno::Sequence< sal_Int32 >& DataY )
+{
+    sal_Int32 nLen = DataX.getLength();
+    const sal_Int32* pDataX = DataX.getConstArray();
+    const sal_Int32* pDataY = DataY.getConstArray();
+    basegfx::B2DPolygon aPoly;
+    aPoly.reserve( nLen );
+    for ( sal_Int32 n = 0; n < nLen; n++ )
+        aPoly.append( basegfx::B2DPoint(pDataX[n], pDataY[n]) );
+    return aPoly;
+}
+
 css::uno::Reference< css::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( vcl::Window* pWindow )
 {
     UnoControlContainer* pContainer = new UnoControlContainer( pWindow->GetComponentInterface() );

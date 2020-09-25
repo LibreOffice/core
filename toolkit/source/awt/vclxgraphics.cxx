@@ -376,9 +376,9 @@ void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int3
     {
         InitOutputDevice( InitOutDevFlags::COLORS );
         sal_uInt16 nPolys = static_cast<sal_uInt16>(DataX.getLength());
-        tools::PolyPolygon aPolyPoly( nPolys );
+        basegfx::B2DPolyPolygon aPolyPoly;
         for ( sal_uInt16 n = 0; n < nPolys; n++ )
-            aPolyPoly[n] = VCLUnoHelper::CreatePolygon( DataX.getConstArray()[n], DataY.getConstArray()[n] );
+            aPolyPoly.append( VCLUnoHelper::CreateB2DPolygon( DataX.getConstArray()[n], DataY.getConstArray()[n] ) );
 
         mpOutputDevice->DrawPolyPolygon( aPolyPoly );
     }
