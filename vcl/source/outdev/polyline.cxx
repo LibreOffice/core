@@ -135,6 +135,36 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
     drawPolyLine(rPoly, rLineInfo);
 }
 
+void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rPoly, const LineInfo& rLineInfo )
+{
+    assert(!is_double_buffered_window());
+
+    if ( rLineInfo.IsDefault() )
+    {
+        DrawPolyLine( rPoly );
+        return;
+    }
+
+    // #i101491#
+    // Try direct Fallback to B2D-Version of DrawPolyLine
+    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
+       LineStyle::Solid == rLineInfo.GetStyle())
+    {
+        DrawPolyLine(
+            rPoly,
+            static_cast< double >(rLineInfo.GetWidth()),
+            rLineInfo.GetLineJoin(),
+            rLineInfo.GetLineCap(),
+            basegfx::deg2rad(15.0) /* default fMiterMinimumAngle, value not available in LineInfo */);
+        return;
+    }
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaPolyLineAction( tools::Polygon(rPoly), rLineInfo ) );
+
+    drawPolyLine(tools::Polygon(rPoly), rLineInfo);
+}
+
 void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  double fLineWidth,
                                  basegfx::B2DLineJoin eLineJoin,

@@ -78,6 +78,7 @@ namespace basegfx
         /// Coordinate interface
         basegfx::B2DPoint const & getB2DPoint(sal_uInt32 nIndex) const;
         void setB2DPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
+        basegfx::B2DPoint const & operator[](sal_uInt32 nIndex) const { return getB2DPoint(nIndex); }
 
         /// Coordinate insert/append
         void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
