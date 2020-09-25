@@ -252,7 +252,7 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
             const SfxUInt16Item* pItem = rReq.GetArg<SfxUInt16Item>(nSlot);
             if ( pItem != nullptr )
             {
-                const sal_uInt16 nChoosenItemIdx = pItem->GetValue();
+                const sal_uInt16 nChosenItemIdx = pItem->GetValue();
                 svx::sidebar::NBOType nNBOType = svx::sidebar::NBOType::Bullets;
                 if ( nSlot == FN_SVX_SET_NUMBER )
                     nNBOType = svx::sidebar::NBOType::Numbering;
@@ -290,7 +290,7 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                     aSet.Put( SvxNumBulletItem( aNewSvxNumRule, SID_ATTR_NUMBERING_RULE ) );
 
                     pNBOTypeMgr->SetItems( &aSet );
-                    pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
+                    pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChosenItemIdx - 1, nActNumLvl );
 
                     aNewNumRule.SetSvxRule( aNewSvxNumRule, GetShell().GetDoc() );
                     aNewNumRule.SetAutoRule( true );
