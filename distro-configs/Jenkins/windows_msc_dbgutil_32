@@ -1,4 +1,5 @@
---host=i686-pc-cygwin
+--host=x86_64-pc-cygwin
 --enable-dbgutil
 --disable-symbols
 --disable-dependency-tracking
+--with-jdk-home=
