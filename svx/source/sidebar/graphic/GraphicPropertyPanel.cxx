@@ -52,11 +52,7 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     mxMtrBrightness(m_xBuilder->weld_metric_spin_button("setbrightness", FieldUnit::PERCENT)),
     mxMtrContrast(m_xBuilder->weld_metric_spin_button("setcontrast", FieldUnit::PERCENT)),
     mxLBColorMode(m_xBuilder->weld_combo_box("setcolormode")),
-    mxMtrTrans(m_xBuilder->weld_metric_spin_button("setgraphtransparency", FieldUnit::PERCENT)),
-    mxMtrRed(m_xBuilder->weld_metric_spin_button("setred", FieldUnit::PERCENT)),
-    mxMtrGreen(m_xBuilder->weld_metric_spin_button("setgreen", FieldUnit::PERCENT)),
-    mxMtrBlue(m_xBuilder->weld_metric_spin_button("setblue", FieldUnit::PERCENT)),
-    mxMtrGamma(m_xBuilder->weld_spin_button("setgamma"))
+    mxMtrTrans(m_xBuilder->weld_metric_spin_button("setgraphtransparency", FieldUnit::PERCENT))
 {
     mxLBColorMode->set_size_request(mxLBColorMode->get_preferred_size().Width(), -1);
     Initialize();
@@ -73,10 +69,6 @@ void GraphicPropertyPanel::dispose()
     mxMtrContrast.reset();
     mxLBColorMode.reset();
     mxMtrTrans.reset();
-    mxMtrRed.reset();
-    mxMtrGreen.reset();
-    mxMtrBlue.reset();
-    mxMtrGamma.reset();
 
     maBrightControl.dispose();
     maContrastControl.dispose();
@@ -101,11 +93,6 @@ void GraphicPropertyPanel::Initialize()
     mxLBColorMode->append_text(SvxResId(RID_SVXSTR_GRAFMODE_MONO));
     mxLBColorMode->append_text(SvxResId(RID_SVXSTR_GRAFMODE_WATERMARK));
     mxLBColorMode->connect_changed( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
-
-    mxMtrRed->connect_value_changed( LINK( this, GraphicPropertyPanel, RedHdl ) );
-    mxMtrGreen->connect_value_changed( LINK( this, GraphicPropertyPanel, GreenHdl ) );
-    mxMtrBlue->connect_value_changed( LINK( this, GraphicPropertyPanel, BlueHdl ) );
-    mxMtrGamma->connect_value_changed( LINK( this, GraphicPropertyPanel, GammaHdl ) );
 }
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyBrightnessHdl, weld::MetricSpinButton&, void )
@@ -141,42 +128,6 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, weld::ComboBox&, void 
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_MODE,
             SfxCallMode::RECORD, { &aTransItem });
-}
-
-
-IMPL_LINK_NOARG( GraphicPropertyPanel, RedHdl, weld::MetricSpinButton&, void )
-{
-    const sal_Int16 nRed = mxMtrRed->get_value(FieldUnit::PERCENT);
-    const SfxInt16Item aRedItem( SID_ATTR_GRAF_RED, nRed );
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_RED,
-            SfxCallMode::RECORD, { &aRedItem });
-}
-
-
-IMPL_LINK_NOARG( GraphicPropertyPanel, GreenHdl, weld::MetricSpinButton&, void )
-{
-    const sal_Int16 nGreen = mxMtrGreen->get_value(FieldUnit::PERCENT);
-    const SfxInt16Item aGreenItem( SID_ATTR_GRAF_GREEN, nGreen );
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_GREEN,
-            SfxCallMode::RECORD, { &aGreenItem });
-}
-
-
-IMPL_LINK_NOARG(GraphicPropertyPanel, BlueHdl, weld::MetricSpinButton&, void)
-{
-    const sal_Int16 nBlue = mxMtrBlue->get_value(FieldUnit::PERCENT);
-    const SfxInt16Item aBlueItem( SID_ATTR_GRAF_BLUE, nBlue );
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_BLUE,
-            SfxCallMode::RECORD, { &aBlueItem });
-}
-
-
-IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl, weld::SpinButton&, void)
-{
-    const sal_Int32 nGamma = mxMtrGamma->get_value();
-    const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_GAMMA,
-            SfxCallMode::RECORD, { &nGammaItem });
 }
 
 
@@ -305,102 +256,6 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             {
                 mxLBColorMode->set_sensitive(true);
                 mxLBColorMode->set_active(-1);
-            }
-            break;
-        }
-        case SID_ATTR_GRAF_RED:
-        {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                mxMtrRed->set_sensitive(true);
-                const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
-
-                if(pItem)
-                {
-                    const sal_Int64 nRed = pItem->GetValue();
-                    mxMtrRed->set_value(nRed, FieldUnit::PERCENT);
-                }
-            }
-            else if(SfxItemState::DISABLED == eState)
-            {
-                mxMtrRed->set_sensitive(false);
-            }
-            else
-            {
-                mxMtrRed->set_sensitive(true);
-                mxMtrRed->set_text(OUString());
-            }
-            break;
-        }
-        case SID_ATTR_GRAF_GREEN:
-        {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                mxMtrGreen->set_sensitive(true);
-                const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
-
-                if(pItem)
-                {
-                    const sal_Int64 nGreen = pItem->GetValue();
-                    mxMtrGreen->set_value(nGreen, FieldUnit::PERCENT);
-                }
-            }
-            else if(SfxItemState::DISABLED == eState)
-            {
-                mxMtrGreen->set_sensitive(false);
-            }
-            else
-            {
-                mxMtrGreen->set_sensitive(true);
-                mxMtrGreen->set_text(OUString());
-            }
-            break;
-        }
-        case SID_ATTR_GRAF_BLUE:
-        {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                mxMtrBlue->set_sensitive(true);
-                const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
-
-                if(pItem)
-                {
-                    const sal_Int64 nBlue = pItem->GetValue();
-                    mxMtrBlue->set_value(nBlue, FieldUnit::PERCENT);
-                }
-            }
-            else if(SfxItemState::DISABLED == eState)
-            {
-                mxMtrBlue->set_sensitive(false);
-            }
-            else
-            {
-                mxMtrBlue->set_sensitive(true);
-                mxMtrBlue->set_text(OUString());
-            }
-            break;
-        }
-        case SID_ATTR_GRAF_GAMMA:
-        {
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                mxMtrGamma->set_sensitive(true);
-                const SfxUInt32Item* pItem = dynamic_cast< const SfxUInt32Item* >(pState);
-
-                if(pItem)
-                {
-                    const sal_Int64 nGamma = pItem->GetValue();
-                    mxMtrGamma->set_value( nGamma );
-                }
-            }
-            else if(SfxItemState::DISABLED == eState)
-            {
-                mxMtrGamma->set_sensitive(false);
-            }
-            else
-            {
-                mxMtrGamma->set_sensitive(true);
-                mxMtrGamma->set_text(OUString());
             }
             break;
         }
