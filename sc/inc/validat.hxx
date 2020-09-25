@@ -34,6 +34,7 @@ struct RefUpdateContext;
 class ScPatternAttr;
 class ScTokenArray;
 class ScTypedStrData;
+struct ScValidationDataIsNumeric;
 
 enum ScValidationMode
 {
@@ -183,6 +184,15 @@ private:
 
     /** Tests, if contents of pCell occur in cell range referenced by own formula, or in a string list. */
     bool IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
+
+    /** Tests, if string or numeric data has valid text length.
+        @param pDataNumeric
+                nullptr if string data to be tested, else for numeric data a
+                properly initialized ScValidationDataIsNumeric struct, see
+                implementation.
+     */
+    bool IsDataValidTextLen( const OUString& rTest, const ScAddress& rPos,
+            ScValidationDataIsNumeric* pDataNumeric ) const;
 };
 
 //  list of conditions:
