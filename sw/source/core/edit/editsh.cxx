@@ -983,7 +983,8 @@ OUString SwEditShell::DeleteExtTextInput( bool bInsText )
 
 void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
-    const SwPosition& rPos = *GetCursor()->GetPoint();
+    SwPaM* pCurrentCursor = GetCursor();
+    const SwPosition& rPos = *pCurrentCursor->GetPoint();
     SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.nNode.GetNode() );
     if( !pInput )
         return;
@@ -1000,10 +1001,39 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
     // ugly but works
     ShowCursor();
     const sal_Int32 nDiff = nNewCursorPos - rPos.nContent.GetIndex();
-    if( 0 > nDiff )
-        Left( -nDiff, CRSR_SKIP_CHARS );
-    else if( 0 < nDiff )
-        Right( nDiff, CRSR_SKIP_CHARS );
+    if( nDiff != 0)
+    {
+        bool bLeft = nDiff < 0;
+        sal_Int32 nMaxGuard = std::abs(nDiff);
+        while (true)
+        {
+            auto nOldPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
+            if (bLeft)
+                Left(1, CRSR_SKIP_CHARS);
+            else
+                Right(1, CRSR_SKIP_CHARS);
+            auto nNewPos = pCurrentCursor->GetPoint()->nContent.GetIndex();
+
+            // expected success
+            if (nNewPos == nNewCursorPos)
+                break;
+
+            if (nNewPos == nOldPos)
+            {
+                // if there was no movement, we have failed for some reason
+                SAL_WARN("sw.core", "IM cursor move failed");
+                break;
+            }
+
+            if (--nMaxGuard == 0)
+            {
+                // if it takes more cursor moves than there are utf-16 chars to move past
+                // something has probably gone wrong
+                SAL_WARN("sw.core", "IM abandoning cursor positioning");
+                break;
+            }
+        }
+    }
 
     SetOverwriteCursor( rData.IsCursorOverwrite() );
 
