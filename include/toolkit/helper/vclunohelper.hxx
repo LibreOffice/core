@@ -93,6 +93,7 @@ public:
 
     // Polygon
     static tools::Polygon CreatePolygon( const css::uno::Sequence< sal_Int32 >& DataX, const css::uno::Sequence< sal_Int32 >& DataY );
+    static basegfx::B2DPolygon CreateB2DPolygon( const css::uno::Sequence< sal_Int32 >& DataX, const css::uno::Sequence< sal_Int32 >& DataY );
 
     /** convert Font to css::awt::FontDescriptor
         @param  rFont  Font to be converted

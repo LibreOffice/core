@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_defs,tk,\
 $(eval $(call gb_Library_use_sdk_api,tk))
 
 $(eval $(call gb_Library_use_libraries,tk,\
+    basegfx \
     comphelper \
     cppu \
     cppuhelper \
