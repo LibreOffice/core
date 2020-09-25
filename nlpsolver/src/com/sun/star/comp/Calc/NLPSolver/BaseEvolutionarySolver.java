@@ -356,23 +356,21 @@ public abstract class BaseEvolutionarySolver extends BaseNLPSolver {
         boolean result = true;
         for (int i = 0; i < m_constraintCount && result; i++) {
             if (m_extConstraints[i].Left.getError() == 0) {
-                Double value, targetValue;
-
-                value = m_extConstraints[i].getLeftValue();
-                targetValue = m_extConstraints[i].Data;
+                double value = m_extConstraints[i].getLeftValue();
+                double targetValue = m_extConstraints[i].Data;
 
                 switch (m_extConstraints[i].Operator.getValue()) {
                     case SolverConstraintOperator.EQUAL_value:
-                        result = (targetValue != null && value.equals(targetValue));
+                        result = value == targetValue;
                         break;
                     case SolverConstraintOperator.GREATER_EQUAL_value:
-                        result = (targetValue != null && value >= targetValue);
+                        result = value >= targetValue;
                         break;
                     case SolverConstraintOperator.LESS_EQUAL_value:
-                        result = (targetValue != null && value <= targetValue);
+                        result = value <= targetValue;
                         break;
                     case SolverConstraintOperator.INTEGER_value:
-                        result = (Math.rint(value) == value);
+                        result = Math.rint(value) == value;
                         break;
                     case SolverConstraintOperator.BINARY_value:
                         result = (value == 0.0 || value == 1.0);
