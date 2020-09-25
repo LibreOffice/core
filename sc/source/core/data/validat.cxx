@@ -476,6 +476,53 @@ bool ScValidationData::IsDataValidCustom(
     return bRet;
 }
 
+/** To test numeric data text length in IsDataValidTextLen().
+
+    If mpFormatter is not set, it is obtained from the document and the format
+    key is determined from the cell position's attribute pattern.
+ */
+struct ScValidationDataIsNumeric
+{
+    SvNumberFormatter*  mpFormatter;
+    double              mfVal;
+    sal_uInt32          mnFormat;
+
+    ScValidationDataIsNumeric( double fVal, SvNumberFormatter* pFormatter = nullptr, sal_uInt32 nFormat = 0 )
+        : mpFormatter(pFormatter), mfVal(fVal), mnFormat(nFormat)
+    {
+    }
+
+    void init( const ScDocument& rDoc, const ScAddress& rPos )
+    {
+        const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab());
+        mpFormatter = rDoc.GetFormatTable();
+        mnFormat = pPattern->GetNumberFormat( mpFormatter);
+    }
+};
+
+bool ScValidationData::IsDataValidTextLen( const OUString& rTest, const ScAddress& rPos,
+        ScValidationDataIsNumeric* pDataNumeric ) const
+{
+    sal_Int32 nLen;
+    if (!pDataNumeric)
+        nLen = rTest.getLength();
+    else
+    {
+        if (!pDataNumeric->mpFormatter)
+            pDataNumeric->init( *GetDocument(), rPos);
+
+        // For numeric values use the resulting input line string to
+        // determine length, otherwise an once accepted value maybe could
+        // not be edited again, for example abbreviated dates or leading
+        // zeros or trailing zeros after decimal separator change length.
+        OUString aStr;
+        pDataNumeric->mpFormatter->GetInputLineString( pDataNumeric->mfVal, pDataNumeric->mnFormat, aStr);
+        nLen = aStr.getLength();
+    }
+    ScRefCellValue aTmpCell( static_cast<double>(nLen));
+    return IsCellValid( aTmpCell, rPos);
+}
+
 bool ScValidationData::IsDataValid(
     const OUString& rTest, const ScPatternAttr& rPattern, const ScAddress& rPos ) const
 {
@@ -498,21 +545,13 @@ bool ScValidationData::IsDataValid(
     bool bRet;
     if (SC_VALID_TEXTLEN == eDataMode)
     {
-        double nLenVal;
         if (!bIsVal)
-            nLenVal = static_cast<double>(rTest.getLength());
+            bRet = IsDataValidTextLen( rTest, rPos, nullptr);
         else
         {
-            // For numeric values use the resulting input line string to
-            // determine length, otherwise an once accepted value maybe could
-            // not be edited again, for example abbreviated dates or leading
-            // zeros or trailing zeros after decimal separator change length.
-            OUString aStr;
-            pFormatter->GetInputLineString( nVal, nFormat, aStr);
-            nLenVal = static_cast<double>( aStr.getLength() );
+            ScValidationDataIsNumeric aDataNumeric( nVal, pFormatter, nFormat);
+            bRet = IsDataValidTextLen( rTest, rPos, &aDataNumeric);
         }
-        ScRefCellValue aTmpCell(nLenVal);
-        bRet = IsCellValid(aTmpCell, rPos);
     }
     else
     {
@@ -589,25 +628,13 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
             break;
 
         case SC_VALID_TEXTLEN:
-        {
-            double nLenVal;
-            bOk = !bIsVal;          // only Text
-            if ( bOk )
-            {
-                nLenVal = static_cast<double>(aString.getLength());
-            }
+            if (!bIsVal)
+                bOk = IsDataValidTextLen( aString, rPos, nullptr);
             else
             {
-                const ScPatternAttr* pPattern
-                    = mpDoc->GetPattern(rPos.Col(), rPos.Row(), rPos.Tab());
-                SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
-                sal_uInt32 nFormat = pPattern->GetNumberFormat(pFormatter);
-                pFormatter->GetInputLineString(nVal, nFormat, aString);
-                nLenVal = static_cast<double>(aString.getLength());
+                ScValidationDataIsNumeric aDataNumeric( nVal);
+                bOk = IsDataValidTextLen( aString, rPos, &aDataNumeric);
             }
-            ScRefCellValue aTmpCell(nLenVal);
-            bOk = IsCellValid(aTmpCell, rPos);
-        }
         break;
 
         default:
