@@ -282,8 +282,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsInFootnoteProperties( false ),
         m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
-        m_bIsFirstParaInSection( true ),
-        m_bIsFirstParaInSectionAfterRedline( true ),
         m_bTextFrameInserted(false),
         m_bIsPreviousParagraphFramed( false ),
         m_bIsLastParaInSection( false ),
@@ -608,19 +606,19 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {
-    m_bIsFirstParaInSection = bIsFirst;
+    GetSectionInfo().bFirstPara = bIsFirst;
 }
 
 void DomainMapper_Impl::SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline )
 {
-    m_bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
+    GetSectionInfo().bFirstParaAfterRedline = bIsFirstAfterRedline;
 }
 
 bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
-    return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
+    return ( bAfterRedline ? GetSectionInfo().bFirstParaAfterRedline : GetSectionInfo().bFirstPara )
                 && !IsInShape()
                 && !m_bIsInComments
                 && !IsInFootOrEndnote();
