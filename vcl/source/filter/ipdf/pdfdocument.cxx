@@ -1215,7 +1215,8 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
             }
             default:
             {
-                if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)) || ch == '-')
+                if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)) || ch == '-' || ch == '+'
+                    || ch == '.')
                 {
                     // Numbering object: an integer or a real.
                     auto pNumberElement = new PDFNumberElement();
@@ -2189,14 +2190,15 @@ bool PDFNumberElement::Read(SvStream& rStream)
     {
         return false;
     }
-    if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-' && ch != '.')
+    if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-' && ch != '+' && ch != '.')
     {
         rStream.SeekRel(-1);
         return false;
     }
     while (!rStream.eof())
     {
-        if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-' && ch != '.')
+        if (!rtl::isAsciiDigit(static_cast<unsigned char>(ch)) && ch != '-' && ch != '+'
+            && ch != '.')
         {
             rStream.SeekRel(-1);
             m_nLength = rStream.Tell() - m_nOffset;
