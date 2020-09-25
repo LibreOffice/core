@@ -223,7 +223,9 @@ GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradi
         case drawinglayer::attribute::GradientStyle::Rect:
             return GradientStyle::Rect;
         case drawinglayer::attribute::GradientStyle::Linear:
+            return GradientStyle::Linear;
         default:
+            assert(false);
             return GradientStyle::Linear;
     }
 }
@@ -1184,8 +1186,13 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
 
-    if (rFillGradient.getSteps() > 0
-        || rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear)
+    // VCL should be able to handle all styles, but for tdf#133477 the VCL result
+    // is different from processing the gradient manually by drawinglayer
+    // (and the Writer unittest for it fails). Keep using the drawinglayer code
+    // until somebody founds out what's wrong and fixes it.
+    if (rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Axial
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Radial)
     {
         process(rPrimitive);
         return;
