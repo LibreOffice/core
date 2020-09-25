@@ -115,15 +115,11 @@ public class ProcessHandler
     private File workDir = null;
     private PrintWriter log;
     private int exitValue = -1;
-    private boolean isFinished = false;
     private boolean isStarted = false;
     private PrintStream stdIn = null;
     private Process m_aProcess = null;
     private boolean debug = false;
     private boolean bUseOutput = true;
-
-    private int m_nProcessTimeout = 0;
-    private ProcessWatcher m_aWatcher;
 
     /**
      * Creates instance with specified external command and
@@ -308,18 +304,6 @@ public class ProcessHandler
     }
 
     /**
-     * Returns the information about the final state of command
-     * execution.
-     *
-     * @return <code>true</code> if the command correctly starts,
-     * exits and was not interrupted due to timeout.
-     */
-    private boolean isFinished()
-    {
-        return isFinished;
-    }
-
-    /**
      * Returns exit code of the external command.
      *
      * @return exit code of command if it was finished,
@@ -345,56 +329,4 @@ public class ProcessHandler
             log.println(utils.getDateTime() + "PH." + message);
         }
     }
-
-    private static class ProcessWatcher extends Thread
-    {
-
-        private int m_nTimeoutInSec;
-        private final boolean m_bInterrupt;
-
-        private ProcessWatcher(int _nTimeOut)
-        {
-            m_nTimeoutInSec = _nTimeOut;
-            m_bInterrupt = false;
-        }
-
-        /**
-         * returns true, if the thread should hold on
-         */
-        public synchronized boolean isInHoldOn()
-        {
-            return m_bInterrupt;
-        }
-        @Override
-        public void run()
-        {
-            while (m_nTimeoutInSec > 0)
-            {
-                m_nTimeoutInSec--;
-                util.utils.pause(1000);
-                if (isInHoldOn())
-                {
-                    break;
-                }
-            }
-        }
-
-    }
-
-    /**
-     *  If the timeout only given by setProcessTimeout(int seconds) function is != 0,
-     *  an extra thread is created and after time has run out, the ProcessKiller string
-     *  given by function setProcessKiller(string) will execute.
-     *  So it is possible to kill a running office after a given time of seconds.
-     */
-    private void initializeProcessKiller()
-    {
-        if (m_nProcessTimeout != 0)
-        {
-            m_aWatcher = new ProcessWatcher(m_nProcessTimeout);
-            m_aWatcher.start();
-        }
-    }
-
-
 }
