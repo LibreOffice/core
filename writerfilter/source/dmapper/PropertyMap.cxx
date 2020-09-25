@@ -1894,7 +1894,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     m_xRelativeWidthShapes.clear();
 
     rDM_Impl.SetIsLastSectionGroup( false );
-    rDM_Impl.SetIsFirstParagraphInSection( true );
 
     if ( !rDM_Impl.IsInFootOrEndnote() )
     {

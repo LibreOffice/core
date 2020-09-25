@@ -430,10 +430,14 @@ struct SymbolData
 // This stack is new for LO 7.2. The intent is to slowly move existing flags into this new struct.
 struct SectionInfo
 {
+    bool bFirstPara; // this is the first paragraph in this section
+    bool bFirstParaAfterRedline; // this is the first real, non-deleted paragraph in this section
     bool bDummyParaAddedForTable;
 
     SectionInfo()
-        : bDummyParaAddedForTable(false)
+        : bFirstPara(true)
+        , bFirstParaAfterRedline(true)
+        , bDummyParaAddedForTable(false)
     {
     }
 };
@@ -559,8 +563,6 @@ private:
 
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
-    bool                            m_bIsFirstParaInSection;
-    bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
