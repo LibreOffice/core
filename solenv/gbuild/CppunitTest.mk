@@ -37,9 +37,9 @@ gb_CppunitTest_GDBTRACE := $(subst lldb,\
 	lldb -s $$lo_dyldpathfile $(gb_CppunitTest_malloc_check),\
 	$(CPPUNITTRACE))
 gb_CppunitTest_POSTGDBTRACE := rm $$lo_dyldpathfile
-#TODO: PythonTest.mk probably needs to handle gb_CppunitTest_PREGDBTRACE and
-# gb_CppunitTest_POSTGDBTRACE in addition to gb_PythonTest_GDBTRACE (aka gb_CppunitTest_GDBTRACE):
+gb_PythonTest_PREGDBTRACE := lo_dyldpathfile=$(call var2file,$(shell $(gb_MKTEMP)),500,settings set target.env-vars $(gb_PythonTest_PRECOMMAND))
 gb_PythonTest_GDBTRACE := $(gb_CppunitTest_GDBTRACE)
+gb_PythonTest_POSTGDBTRACE := $(gb_CppunitTest_POSTGDBTRACE)
 else
 gb_CppunitTest_GDBTRACE := $(CPPUNITTRACE)
 gb_PythonTest_GDBTRACE := $(gb_CppunitTest_GDBTRACE)
