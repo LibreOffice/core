@@ -78,15 +78,22 @@ void TemplateLocalView::updateThumbnailDimensions(tools::Long itemMaxSize)
 }
 
 TemplateLocalView::TemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                           std::unique_ptr<weld::Menu> xMenu)
+                                     std::unique_ptr<weld::Menu> xMenu,
+                                     std::unique_ptr<weld::TreeView> xTreeView)
     : ThumbnailView(std::move(xWindow), std::move(xMenu))
+    , ListView(std::move(xTreeView))
     , mnCurRegionId(0)
     , maSelectedItem(nullptr)
     , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
     , mnThumbnailHeight(TEMPLATE_THUMBNAIL_MAX_HEIGHT)
     , maPosition(0,0)
     , mpDocTemplates(new SfxDocumentTemplates)
+    , mViewMode(TemplateViewMode::eThumbnailView)
 {
+    mxTreeView->connect_row_activated(LINK(this, TemplateLocalView, RowActivatedHdl));
+    mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
+    mxTreeView->connect_changed(LINK(this, TemplateLocalView, ListViewChangedHdl));
+    mxTreeView->connect_popup_menu(LINK(this, TemplateLocalView, PopupMenuHdl));
 }
 
 TemplateLocalView::~TemplateLocalView()
@@ -165,6 +172,7 @@ void TemplateLocalView::showAllTemplates()
     mnCurRegionId = 0;
 
     insertItems(maAllTemplates, false, true);
+    appendFilteredItems();
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -174,6 +182,7 @@ void TemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     mnCurRegionId = pItem->mnRegionId+1;
 
     insertItems(pItem->maTemplates);
+    appendFilteredItems();
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -213,11 +222,19 @@ void TemplateLocalView::createContextMenu(const bool bIsDefault)
     mxContextMenu->append_separator("separator");
     mxContextMenu->append("rename",SfxResId(STR_SFX_RENAME));
     mxContextMenu->append("delete",SfxResId(STR_DELETE));
-    deselectItems();
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
-    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
-    Invalidate();
+
+    if(mViewMode == TemplateViewMode::eThumbnailView)
+    {
+        deselectItems();
+        maSelectedItem->setSelection(true);
+        maItemStateHdl.Call(maSelectedItem);
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
+        Invalidate();
+    }
+    else if(mViewMode == TemplateViewMode::eListView)
+    {
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(maPosition, Size(1,1))));
+    }
 }
 
 void TemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
@@ -241,6 +258,7 @@ void TemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
         {
             maSelectedItem->setTitle(sNewTitle);
         }
+        ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
     }
     else if (rIdent == "delete")
     {
@@ -251,9 +269,13 @@ void TemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
 
         maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
+        ListView::remove(OUString::number(maSelectedItem->mnId));
     }
     else if (rIdent == "default")
+    {
         maDefaultTemplateHdl.Call(maSelectedItem);
+        ListView::updateIsDefaultColumn();
+    }
 }
 
 sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
@@ -953,5 +975,162 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
         maOpenTemplateHdl.Call(pViewItem);
 }
 
+void TemplateLocalView::appendFilteredItems()
+{
+    ListView::clearListView();
+    for (const ThumbnailViewItem * rItem: mFilteredItemList)
+    {
+        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(rItem);
+        if(!pViewItem)
+            return;
+        bool isDefault = pViewItem->IsDefaultTemplate();
+        OUString sId = OUString::number(pViewItem->mnId);
+        ListView::AppendItem(sId, rItem->maTitle, getRegionName(pViewItem->mnRegionId), pViewItem->getPath(), isDefault);
+    }
+    ListView::sort();
+}
 
+void TemplateLocalView::setTemplateViewMode ( TemplateViewMode eMode )
+{
+    mViewMode = eMode;
+}
+
+void TemplateLocalView::Show()
+{
+    if ( mViewMode == TemplateViewMode::eListView)
+    {
+        ThumbnailView::Hide();
+        ListView::ShowListView();
+    }
+    else
+    {
+        ThumbnailView::Show();
+        ListView::HideListView();
+    }
+    syncSelection();
+}
+void TemplateLocalView::Hide()
+{
+    ThumbnailView::Hide();
+    ListView::HideListView();
+}
+
+bool TemplateLocalView::IsVisible()
+{
+    return ThumbnailView::IsVisible() || ListView::IsListViewVisible();
+}
+
+void TemplateLocalView::syncSelection()
+{
+    if ( mViewMode == TemplateViewMode::eListView)
+    {
+        ListView::unselect_all();
+        int nIndex = -1;
+
+        for(auto it = mFilteredItemList.cbegin(); it != mFilteredItemList.cend() ; ++it )
+        {
+            if((*it)->mbSelected)
+            {
+                nIndex = -1;
+                nIndex = ListView::get_index((*it)->mnId);
+                if(nIndex >= 0)
+                {
+                    ListView::set_cursor(nIndex);
+                    ListView::select(nIndex);
+                    break;
+                }
+            }
+        }
+        ListViewChanged();
+    }
+    else
+    {
+        ThumbnailView::deselectItems();
+        std::vector<int> aSelRows = ListView::get_selected_rows();
+        if(aSelRows.empty())
+            return;
+        sal_uInt16 nCursorId = ListView::get_cursor_nId();
+        ThumbnailView::SelectItem(nCursorId);
+        MakeItemVisible(nCursorId);
+
+        for(auto it = mFilteredItemList.begin(); it != mFilteredItemList.end() ; ++it )
+        {
+            if((*it)->mnId == nCursorId)
+            {
+                mpStartSelRange = it;
+                break;
+            }
+        }
+
+        size_t nPos =  GetItemPos(nCursorId);
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+        if(pViewItem)
+            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    }
+}
+
+void TemplateLocalView::ListViewChanged()
+{
+    ThumbnailView::deselectItems();
+    for(auto nIndex : ListView::get_selected_rows())
+    {
+        ThumbnailView::SelectItem(ListView::get_nId(nIndex) );
+    }
+
+    sal_uInt16  nCursorId =  ListView::get_cursor_nId();
+    size_t nPos =  GetItemPos(nCursorId);
+    ThumbnailViewItem* pItem = ImplGetItem(nPos);
+    const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+    if(pViewItem)
+        maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    return;
+}
+
+IMPL_LINK_NOARG(TemplateLocalView, RowActivatedHdl, weld::TreeView&, bool)
+{
+    maOpenTemplateHdl.Call(maSelectedItem);
+    return true;
+}
+
+IMPL_LINK(TemplateLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return false;
+
+    if (rCEvt.IsMouseEvent())
+    {
+        if(ListView::get_selected_rows().empty())
+            return true;
+        int nIndex = ListView::get_cursor_index();
+        ListView::unselect_all();
+        ListView::select(nIndex);
+        ListView::set_cursor(nIndex);
+        Point aPosition (rCEvt.GetMousePosPixel());
+        maPosition = aPosition;
+        ListViewChanged();
+        if(maSelectedItem)
+            maCreateContextMenuHdl.Call(maSelectedItem);
+        return true;
+    }
+    else
+    {
+        if(ListView::get_selected_rows().empty())
+            return true;
+        int nIndex = ListView::get_cursor_index();
+        ListView::unselect_all();
+        ListView::select(nIndex) ;
+        ListView::set_cursor(nIndex) ;
+        maPosition = Point(0,0);
+        ListViewChanged();
+        if(maSelectedItem)
+            maCreateContextMenuHdl.Call(maSelectedItem);
+        return true;
+    }
+}
+
+IMPL_LINK_NOARG(TemplateLocalView, ListViewChangedHdl, weld::TreeView&, void)
+{
+    ListViewChanged();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

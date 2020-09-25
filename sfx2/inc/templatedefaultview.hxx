@@ -15,7 +15,8 @@ class TemplateDefaultView : public TemplateLocalView
 {
 public:
     TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                        std::unique_ptr<weld::Menu> xMenu);
+                        std::unique_ptr<weld::Menu> xMenu,
+                        std::unique_ptr<weld::TreeView> xTreeView);
 
     virtual void showAllTemplates () override;
 

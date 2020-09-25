@@ -22,8 +22,9 @@ constexpr int gnItemPadding(5); //TODO:: Change padding to 10. It looks really c
 constexpr tools::Long gnTextHeight = 30;
 
 TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                         std::unique_ptr<weld::Menu> xMenu)
-    : TemplateLocalView(std::move(xWindow), std::move(xMenu))
+                                         std::unique_ptr<weld::Menu> xMenu,
+                                         std::unique_ptr<weld::TreeView> xTreeView)
+    : TemplateLocalView(std::move(xWindow), std::move(xMenu), std::move(xTreeView))
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     tools::Long nItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
@@ -42,9 +43,9 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
 
 void TemplateDefaultView::showAllTemplates()
 {
-    mnCurRegionId = 0;
+//    mnCurRegionId = 0;
 
-    insertItems(maAllTemplates, false);
+//    insertItems(maAllTemplates, false);
 }
 
 bool TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
@@ -56,12 +57,12 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+/*        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
         if(pViewItem)
             maOpenTemplateHdl.Call(pViewItem);
-        return true;
+*/        return true;
     }
 
     return TemplateLocalView::MouseButtonDown(rMEvt);
@@ -73,10 +74,10 @@ void TemplateDefaultView::createContextMenu()
     mxContextMenu->append("open",SfxResId(STR_OPEN));
     mxContextMenu->append("edit",SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
-    maSelectedItem->setSelection(true);
+/*    maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);
     ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
-    Invalidate();
+*/    Invalidate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
