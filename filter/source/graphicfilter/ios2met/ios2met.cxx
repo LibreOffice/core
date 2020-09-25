@@ -28,6 +28,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gdimtf.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/curve/b2dcubicbezier.hxx>
 
 #include <math.h>
 #include <memory>
@@ -223,7 +227,7 @@ struct OSPalette {
 struct OSArea {
     OSArea    * pSucc;
     sal_uInt8   nFlags;
-    tools::PolyPolygon aPPoly;
+    basegfx::B2DPolyPolygon aPPoly;
     bool    bClosed;
     Color       aCol;
     Color       aBgCol;
@@ -236,7 +240,7 @@ struct OSPath
 {
     OSPath*     pSucc;
     sal_uInt32  nID;
-    tools::PolyPolygon aPPoly;
+    basegfx::B2DPolyPolygon aPPoly;
     bool    bClosed;
     bool    bStroke;
 };
@@ -365,8 +369,8 @@ private:
 
     std::unique_ptr<SvStream> xOrdFile;
 
-    void AddPointsToPath(const tools::Polygon & rPoly);
-    void AddPointsToArea(const tools::Polygon & rPoly);
+    void AddPointsToPath(const basegfx::B2DPolygon & rPoly);
+    void AddPointsToArea(const basegfx::B2DPolygon & rPoly);
     void CloseFigure();
     void PushAttr(sal_uInt16 nPushOrder);
     void PopAttr();
@@ -383,9 +387,9 @@ private:
 
 
     bool        IsLineInfo() const;
-    void        DrawPolyLine( const tools::Polygon& rPolygon );
-    void        DrawPolygon( const tools::Polygon& rPolygon );
-    void        DrawPolyPolygon( const tools::PolyPolygon& rPolygon );
+    void        DrawPolyLine( const basegfx::B2DPolygon& rPolygon );
+    void        DrawPolygon( const basegfx::B2DPolygon& rPolygon );
+    void        DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolygon );
     sal_uInt16  ReadBigEndianWord();
     sal_uInt32  ReadBigEndian3BytesLong();
     sal_uInt32  ReadLittleEndian3BytesLong();
@@ -501,7 +505,7 @@ bool OS2METReader::IsLineInfo() const
     return ( ! ( aLineInfo.IsDefault() || ( aLineInfo.GetStyle() == LineStyle::NONE ) || ( pVirDev->GetLineColor() == COL_TRANSPARENT ) ) );
 }
 
-void OS2METReader::DrawPolyLine( const tools::Polygon& rPolygon )
+void OS2METReader::DrawPolyLine( const basegfx::B2DPolygon& rPolygon )
 {
     if ( aLineInfo.GetStyle() == LineStyle::Dash || ( aLineInfo.GetWidth() > 1 ) )
         pVirDev->DrawPolyLine( rPolygon, aLineInfo );
@@ -509,7 +513,7 @@ void OS2METReader::DrawPolyLine( const tools::Polygon& rPolygon )
         pVirDev->DrawPolyLine( rPolygon );
 }
 
-void OS2METReader::DrawPolygon( const tools::Polygon& rPolygon )
+void OS2METReader::DrawPolygon( const basegfx::B2DPolygon& rPolygon )
 {
     if ( IsLineInfo() )
     {
@@ -523,7 +527,7 @@ void OS2METReader::DrawPolygon( const tools::Polygon& rPolygon )
         pVirDev->DrawPolygon( rPolygon );
 }
 
-void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
+void OS2METReader::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     if ( IsLineInfo() )
     {
@@ -531,53 +535,53 @@ void OS2METReader::DrawPolyPolygon( const tools::PolyPolygon& rPolyPolygon )
         pVirDev->SetLineColor( COL_TRANSPARENT );
         pVirDev->DrawPolyPolygon( rPolyPolygon );
         pVirDev->Pop();
-        for ( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i++ )
-            pVirDev->DrawPolyLine( rPolyPolygon.GetObject( i ), aLineInfo );
+        for ( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
+            pVirDev->DrawPolyLine( rPolyPolygon.getB2DPolygon( i ), aLineInfo );
     }
     else
         pVirDev->DrawPolyPolygon( rPolyPolygon );
 }
 
-void OS2METReader::AddPointsToArea(const tools::Polygon & rPoly)
+void OS2METReader::AddPointsToArea(const basegfx::B2DPolygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
-    if (pAreaStack==nullptr || rPoly.GetSize()==0) return;
-    tools::PolyPolygon * pPP=&(pAreaStack->aPPoly);
-    if (pPP->Count()==0 || pAreaStack->bClosed) pPP->Insert(rPoly);
+    if (pAreaStack==nullptr || rPoly.count()==0) return;
+    basegfx::B2DPolyPolygon * pPP=&(pAreaStack->aPPoly);
+    if (pPP->count()==0 || pAreaStack->bClosed) pPP->append(rPoly);
     else {
-        tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
-        nOldSize=aLastPoly.GetSize();
-        if (nOldSize && aLastPoly.GetPoint(nOldSize-1)==rPoly.GetPoint(0)) nOldSize--;
-        nNewSize=nOldSize+rPoly.GetSize();
-        aLastPoly.SetSize(nNewSize);
+        basegfx::B2DPolygon aLastPoly(pPP->getB2DPolygon(pPP->count()-1));
+        nOldSize=aLastPoly.count();
+        if (nOldSize && aLastPoly.getB2DPoint(nOldSize-1)==rPoly.getB2DPoint(0)) nOldSize--;
+        nNewSize=nOldSize+rPoly.count();
+        aLastPoly.reserve(nNewSize);
         for (i=nOldSize; i<nNewSize; i++) {
-            aLastPoly.SetPoint(rPoly.GetPoint(i-nOldSize),i);
+            aLastPoly.append(rPoly.getB2DPoint(i-nOldSize),i);
         }
-        pPP->Replace(aLastPoly,pPP->Count()-1);
+        pPP->setB2DPolygon(pPP->count()-1, aLastPoly);
     }
     pAreaStack->bClosed=false;
 }
 
-void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
+void OS2METReader::AddPointsToPath(const basegfx::B2DPolygon & rPoly)
 {
     sal_uInt16 nOldSize, nNewSize,i;
 
-    if (pPathStack==nullptr || rPoly.GetSize()==0) return;
-    tools::PolyPolygon * pPP=&(pPathStack->aPPoly);
-    if (pPP->Count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->Insert(rPoly);
+    if (pPathStack==nullptr || rPoly.count()==0) return;
+    basegfx::B2DPolyPolygon * pPP=&(pPathStack->aPPoly);
+    if (pPP->count()==0 /*|| pPathStack->bClosed==sal_True*/) pPP->append(rPoly);
     else {
-        tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
-        nOldSize=aLastPoly.GetSize();
-        if (nOldSize && aLastPoly.GetPoint(nOldSize-1)!=rPoly.GetPoint(0)) pPP->Insert(rPoly);
+        basegfx::B2DPolygon aLastPoly(pPP->getB2DPolygon(pPP->count()-1));
+        nOldSize=aLastPoly.count();
+        if (nOldSize && aLastPoly.getB2DPoint(nOldSize-1)!=rPoly.getB2DPoint(0)) pPP->append(rPoly);
         else {
             nOldSize--;
-            nNewSize=nOldSize+rPoly.GetSize();
-            aLastPoly.SetSize(nNewSize);
+            nNewSize=nOldSize+rPoly.count();
+            aLastPoly.reserve(nNewSize);
             for (i=nOldSize; i<nNewSize; i++) {
-                aLastPoly.SetPoint(rPoly.GetPoint(i-nOldSize),i);
+                aLastPoly.append(rPoly.getB2DPoint(i-nOldSize),i);
             }
-            pPP->Replace(aLastPoly,pPP->Count()-1);
+            pPP->setB2DPolygon(pPP->count()-1, aLastPoly);
         }
     }
     pPathStack->bClosed=false;
@@ -869,12 +873,15 @@ void OS2METReader::ReadLine(bool bGivenPos, sal_uInt16 nOrderLen)
     if (bCoord32) nPolySize=nOrderLen/8; else nPolySize=nOrderLen/4;
     if (!bGivenPos) nPolySize++;
     if (nPolySize==0) return;
-    tools::Polygon aPolygon(nPolySize);
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.reserve(nPolySize);
     for (i=0; i<nPolySize; i++) {
-        if (i==0 && !bGivenPos) aPolygon.SetPoint(aAttr.aCurPos,i);
-        else aPolygon.SetPoint(ReadPoint(),i);
+        if (i==0 && !bGivenPos)
+            aPolygon.append(aAttr.aCurPos);
+        else
+            aPolygon.append(ReadPoint());
     }
-    aAttr.aCurPos=aPolygon.GetPoint(nPolySize-1);
+    aAttr.aCurPos=Point(aPolygon.getB2DPoint(nPolySize-1));
     if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
     else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
@@ -899,15 +906,16 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
         throw css::uno::Exception("attempt to read past end of input", nullptr);
     nPolySize=nOrderLen/2;
     if (nPolySize==0) return;
-    tools::Polygon aPolygon(nPolySize);
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.reserve(nPolySize);
     for (i=0; i<nPolySize; i++) {
         sal_Int8 nsignedbyte;
         pOS2MET->ReadSChar( nsignedbyte ); aP0.AdjustX(static_cast<sal_Int32>(nsignedbyte));
         pOS2MET->ReadSChar( nsignedbyte ); aP0.AdjustY(-static_cast<sal_Int32>(nsignedbyte));
         aCalcBndRect.Union(tools::Rectangle(aP0,Size(1,1)));
-        aPolygon.SetPoint(aP0,i);
+        aPolygon.append(aP0);
     }
-    aAttr.aCurPos=aPolygon.GetPoint(nPolySize-1);
+    aAttr.aCurPos=aPolygon.getB2DPoint(nPolySize-1);
     if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
     else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
@@ -938,9 +946,9 @@ void OS2METReader::ReadBox(bool bGivenPos)
     tools::Rectangle aBoxRect( P0, aAttr.aCurPos );
 
     if ( pAreaStack )
-        AddPointsToArea( tools::Polygon( aBoxRect ) );
+        AddPointsToArea( basegfx::utils::createPolygonFromRect( aBoxRect ) );
     else if ( pPathStack )
-        AddPointsToPath( tools::Polygon( aBoxRect ) );
+        AddPointsToPath( basegfx::utils::createPolygonFromRect( aBoxRect ) );
     else
     {
         if ( nFlags & 0x20 )
@@ -961,7 +969,7 @@ void OS2METReader::ReadBox(bool bGivenPos)
 
         if ( IsLineInfo() )
         {
-            tools::Polygon aPolygon( aBoxRect, nHRound, nVRound );
+            basegfx::B2DPolygon aPolygon = basegfx::utils::createPolygonFromRect( aBoxRect, nHRound, nVRound );
             if ( nFlags & 0x40 )
             {
                 pVirDev->Push( PushFlags::LINECOLOR );
@@ -1211,8 +1219,8 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 
 void OS2METReader::ReadPolygons()
 {
-    tools::PolyPolygon aPolyPoly;
-    tools::Polygon aPoly;
+    basegfx::B2DPolyPolygon aPolyPoly;
+    basegfx::B2DPolygon aPoly;
     Point aPoint;
 
     sal_uInt8 nFlags(0);
@@ -1239,15 +1247,15 @@ void OS2METReader::ReadPolygons()
             return;
         }
         if (i==0) ++nNumPoints;
-        aPoly.SetSize(static_cast<short>(nNumPoints));
+        aPoly.reserve(static_cast<short>(nNumPoints));
         for (sal_uInt32 j=0; j<nNumPoints; ++j)
         {
             if (i==0 && j==0) aPoint=aAttr.aCurPos;
             else aPoint=ReadPoint();
-            aPoly.SetPoint(aPoint,static_cast<short>(j));
+            aPoly.append(aPoint);
             if (i==nNumPolys-1 && j==nNumPoints-1) aAttr.aCurPos=aPoint;
         }
-        aPolyPoly.Insert(aPoly);
+        aPolyPoly.append(aPoly);
     }
 
     ChangeBrush(aAttr.aPatCol, aAttr.bFill);
@@ -1269,39 +1277,34 @@ void OS2METReader::ReadBezier(bool bGivenPos, sal_uInt16 nOrderLen)
     if( !nNumPoints )
         return;
 
-    tools::Polygon aPolygon( nNumPoints );
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.reserve( nNumPoints );
 
     for( i=0; i < nNumPoints; i++ )
     {
         if( i==0 && !bGivenPos)
-            aPolygon.SetPoint( aAttr.aCurPos, i );
+            aPolygon.append( aAttr.aCurPos );
         else
-            aPolygon.SetPoint( ReadPoint(), i );
+            aPolygon.append( ReadPoint() );
     }
 
     if( !( nNumPoints % 4 ) )
     {
         // create bezier polygon
         const sal_uInt16 nSegPoints = 25;
-        const sal_uInt16 nSegments = aPolygon.GetSize() >> 2;
-        tools::Polygon aBezPoly( nSegments * nSegPoints );
+        const sal_uInt16 nSegments = aPolygon.count() >> 2;
+        basegfx::B2DPolygon aBezPoly;
+        aBezPoly.reserve( nSegments * nSegPoints );
 
         sal_uInt16 nSeg, nBezPos, nStartPos;
         for( nSeg = 0, nBezPos = 0, nStartPos = 0; nSeg < nSegments; nSeg++, nStartPos += 4 )
         {
-            const tools::Polygon aSegPoly( aPolygon[ nStartPos ], aPolygon[ nStartPos + 1 ],
-                                           aPolygon[ nStartPos + 3 ], aPolygon[ nStartPos + 2 ],
-                                           nSegPoints );
-
-            for( sal_uInt16 nSegPos = 0; nSegPos < nSegPoints; )
-                aBezPoly[ nBezPos++ ] = aSegPoly[ nSegPos++ ];
+            const basegfx::B2DCubicBezier aSegPoly( aPolygon[ nStartPos ], aPolygon[ nStartPos + 1 ],
+                                           aPolygon[ nStartPos + 3 ], aPolygon[ nStartPos + 2 ] );
+            aSegPoly.adaptiveSubdivideByCount(aBezPoly, 25);
         }
 
         nNumPoints = nBezPos;
-
-        if( nNumPoints != aBezPoly.GetSize() )
-            aBezPoly.SetSize( nNumPoints );
-
         aPolygon = aBezPoly;
     }
 
@@ -1326,12 +1329,13 @@ void OS2METReader::ReadFillet(bool bGivenPos, sal_uInt16 nOrderLen)
     if (bCoord32) nNumPoints=nOrderLen/8; else nNumPoints=nOrderLen/4;
     if (!bGivenPos) nNumPoints++;
     if (nNumPoints==0) return;
-    tools::Polygon aPolygon(nNumPoints);
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.reserve(nNumPoints);
     for (i=0; i<nNumPoints; i++) {
-        if (i==0 && !bGivenPos) aPolygon.SetPoint(aAttr.aCurPos,i);
-        else aPolygon.SetPoint(ReadPoint(),i);
+        if (i==0 && !bGivenPos) aPolygon.append(aAttr.aCurPos);
+        else aPolygon.append(ReadPoint());
     }
-    aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
+    aAttr.aCurPos=aPolygon[nNumPoints-1];
     if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
     else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else {
@@ -1351,10 +1355,11 @@ void OS2METReader::ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen)
     }
     if (bCoord32) nNumPoints=1+nOrderLen/10;
     else nNumPoints=1+nOrderLen/6;
-    tools::Polygon aPolygon(nNumPoints);
-    aPolygon.SetPoint(aAttr.aCurPos,0);
-    for (i=1; i<nNumPoints; i++) aPolygon.SetPoint(ReadPoint(),i);
-    aAttr.aCurPos=aPolygon.GetPoint(nNumPoints-1);
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.reserve(nNumPoints);
+    aPolygon.append(aAttr.aCurPos);
+    for (i=1; i<nNumPoints; i++) aPolygon.append(ReadPoint());
+    aAttr.aCurPos=aPolygon[nNumPoints-1];
     if (pAreaStack!=nullptr) AddPointsToArea(aPolygon);
     else if (pPathStack!=nullptr) AddPointsToPath(aPolygon);
     else
@@ -1393,59 +1398,59 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
                 break;
             case  3:   // DIAMOND
             case  7: { // SOLIDDIAMOND
-                tools::Polygon aPoly(4);
-                aPoly.SetPoint(Point(x,y+4),0);
-                aPoly.SetPoint(Point(x+4,y),1);
-                aPoly.SetPoint(Point(x,y-4),2);
-                aPoly.SetPoint(Point(x-4,y),3);
+                basegfx::B2DPolygon aPoly{
+                    Point(x,y+4),
+                    Point(x+4,y),
+                    Point(x,y-4),
+                    Point(x-4,y) };
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
             case  4:   // SQUARE
             case  8: { // SOLIDSUARE
-                tools::Polygon aPoly(4);
-                aPoly.SetPoint(Point(x+4,y+4),0);
-                aPoly.SetPoint(Point(x+4,y-4),1);
-                aPoly.SetPoint(Point(x-4,y-4),2);
-                aPoly.SetPoint(Point(x-4,y+4),3);
+                basegfx::B2DPolygon aPoly {
+                    Point(x+4,y+4),
+                    Point(x+4,y-4),
+                    Point(x-4,y-4),
+                    Point(x-4,y+4) };
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
             case  5: { // SIXPOINTSTAR
-                tools::Polygon aPoly(12);
-                aPoly.SetPoint(Point(x  ,y-4),0);
-                aPoly.SetPoint(Point(x+2,y-2),1);
-                aPoly.SetPoint(Point(x+4,y-2),2);
-                aPoly.SetPoint(Point(x+2,y  ),3);
-                aPoly.SetPoint(Point(x+4,y+2),4);
-                aPoly.SetPoint(Point(x+2,y+2),5);
-                aPoly.SetPoint(Point(x  ,y+4),6);
-                aPoly.SetPoint(Point(x-2,y+2),7);
-                aPoly.SetPoint(Point(x-4,y+2),8);
-                aPoly.SetPoint(Point(x-2,y  ),9);
-                aPoly.SetPoint(Point(x-4,y-2),10);
-                aPoly.SetPoint(Point(x-2,y-2),11);
+                basegfx::B2DPolygon aPoly {
+                    Point(x  ,y-4),
+                    Point(x+2,y-2),
+                    Point(x+4,y-2),
+                    Point(x+2,y  ),
+                    Point(x+4,y+2),
+                    Point(x+2,y+2),
+                    Point(x  ,y+4),
+                    Point(x-2,y+2),
+                    Point(x-4,y+2),
+                    Point(x-2,y  ),
+                    Point(x-4,y-2),
+                    Point(x-2,y-2) };
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
             case  6: { // EIGHTPOINTSTAR
-                tools::Polygon aPoly(16);
-                aPoly.SetPoint(Point(x  ,y-4),0);
-                aPoly.SetPoint(Point(x+1,y-2),1);
-                aPoly.SetPoint(Point(x+3,y-3),2);
-                aPoly.SetPoint(Point(x+2,y-1),3);
-                aPoly.SetPoint(Point(x+4,y  ),4);
-                aPoly.SetPoint(Point(x+2,y+1),5);
-                aPoly.SetPoint(Point(x+3,y+3),6);
-                aPoly.SetPoint(Point(x+1,y+2),7);
-                aPoly.SetPoint(Point(x  ,y+4),8);
-                aPoly.SetPoint(Point(x-1,y+2),9);
-                aPoly.SetPoint(Point(x-3,y+3),10);
-                aPoly.SetPoint(Point(x-2,y+1),11);
-                aPoly.SetPoint(Point(x-4,y  ),12);
-                aPoly.SetPoint(Point(x-2,y-1),13);
-                aPoly.SetPoint(Point(x-3,y-3),14);
-                aPoly.SetPoint(Point(x-1,y-2),15);
+                basegfx::B2DPolygon aPoly {
+                    Point(x  ,y-4),
+                    Point(x+1,y-2),
+                    Point(x+3,y-3),
+                    Point(x+2,y-1),
+                    Point(x+4,y  ),
+                    Point(x+2,y+1),
+                    Point(x+3,y+3),
+                    Point(x+1,y+2),
+                    Point(x  ,y+4),
+                    Point(x-1,y+2),
+                    Point(x-3,y+3),
+                    Point(x-2,y+1),
+                    Point(x-4,y  ),
+                    Point(x-2,y-1),
+                    Point(x-3,y-3),
+                    Point(x-1,y-2) };
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
@@ -1535,9 +1540,9 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 pAreaStack = p->pSucc;
                 if ( pPathStack )
                 {
-                    for ( sal_uInt16 i=0; i<p->aPPoly.Count(); i++ )
+                    for ( sal_uInt32 i=0; i<p->aPPoly.count(); i++ )
                     {
-                        AddPointsToPath( p->aPPoly.GetObject( i ) );
+                        AddPointsToPath( p->aPPoly[ i ] );
                         CloseFigure();
                     }
                 }
@@ -1612,8 +1617,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                         SetRasterOp( aAttr.ePatMix );
                         if ( IsLineInfo() )
                         {
-                            for ( sal_uInt16 i = 0; i < p->aPPoly.Count(); i++ )
-                                pVirDev->DrawPolyLine( p->aPPoly.GetObject( i ), aLineInfo );
+                            for ( sal_uInt32 i = 0; i < p->aPPoly.count(); i++ )
+                                pVirDev->DrawPolyLine( p->aPPoly[ i ], aLineInfo );
                         }
                         else
                             pVirDev->DrawPolyPolygon( p->aPPoly );
@@ -1657,13 +1662,13 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
                 ChangeBrush(COL_TRANSPARENT, false);
-                nC=p->aPPoly.Count();
+                nC=p->aPPoly.count();
                 for (i=0; i<nC; i++)
                 {
                     if (i+1<nC || p->bClosed)
-                        DrawPolygon( p->aPPoly.GetObject( i ) );
+                        DrawPolygon( p->aPPoly[ i ] );
                     else
-                        DrawPolyLine( p->aPPoly.GetObject( i ) );
+                        DrawPolyLine( p->aPPoly[ i ] );
                 }
             }
             break;
