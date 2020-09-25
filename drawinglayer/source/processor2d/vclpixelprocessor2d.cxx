@@ -223,7 +223,9 @@ GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradi
         case drawinglayer::attribute::GradientStyle::Rect:
             return GradientStyle::Rect;
         case drawinglayer::attribute::GradientStyle::Linear:
+            return GradientStyle::Linear;
         default:
+            assert(false);
             return GradientStyle::Linear;
     }
 }
@@ -1183,14 +1185,6 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     const primitive2d::FillGradientPrimitive2D& rPrimitive)
 {
     const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
-
-    if (rFillGradient.getSteps() > 0
-        || rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear)
-    {
-        process(rPrimitive);
-        return;
-    }
-
     GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
 
     basegfx::B2DRange aRange(rPrimitive.getOutputRange());
