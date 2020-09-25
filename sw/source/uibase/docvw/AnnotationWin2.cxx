@@ -24,6 +24,7 @@
 #include "SidebarWinAcc.hxx"
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include "SidebarTxtControl.hxx"
 #include "SidebarScrollBar.hxx"
@@ -1078,6 +1079,20 @@ void SwAnnotationWin::SetReadonly(bool bSet)
 
 void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
+    IDocumentUndoRedo& rUndoRedo(
+        mrView.GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
+    const bool bDocUndoEnabled = rUndoRedo.DoesUndo();
+    const bool bOutlinerUndoEnabled = mpOutliner->IsUndoEnabled();
+    const bool bOutlinerModified = mpOutliner->IsModified();
+    const bool bDisableAndRestoreUndoMode = !bDocUndoEnabled && bOutlinerUndoEnabled;
+
+    if (bDisableAndRestoreUndoMode)
+    {
+        // doc undo is disabled, but outliner was enabled, turn outliner undo off
+        // for the duration of this function
+        mpOutliner->EnableUndo(false);
+    }
+
     Link<LinkParamNone*,void> aLink = mpOutliner->GetModifyHdl();
     mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     ESelection aOld = GetOutlinerView()->GetSelection();
@@ -1087,6 +1102,13 @@ void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(rNewItem);
     GetOutlinerView()->SetAttribs( aEditAttr );
+
+    if (!mpOutliner->IsUndoEnabled() && !bOutlinerModified)
+    {
+        // if undo was disabled (e.g. this is a redo action) and we were
+        // originally 'unmodified' keep it that way
+        mpOutliner->ClearModifyFlag();
+    }
 
     GetOutlinerView()->SetSelection(aOld);
     mpOutliner->SetModifyHdl( aLink );
@@ -1105,6 +1127,11 @@ void SwAnnotationWin::SetLanguage(const SvxLanguageItem& rNewItem)
     mpOutliner->SetControlWord(nCntrl);
 
     mpOutliner->CompleteOnlineSpelling();
+
+    // restore original mode
+    if (bDisableAndRestoreUndoMode)
+        mpOutliner->EnableUndo(true);
+
     Invalidate();
 }
 
