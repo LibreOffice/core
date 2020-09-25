@@ -1321,11 +1321,18 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 nRow = nCount;
             else
             {
+                double fShapeHeight = rShape->getSize().Height;
+                double fShapeWidth = rShape->getSize().Width;
+                // Check if we have a child aspect ratio. If so, need to shrink one dimension to
+                // achieve that ratio.
+                if (fChildAspectRatio && fShapeHeight && fChildAspectRatio < (fShapeWidth/fShapeHeight))
+                {
+                    fShapeWidth = fShapeHeight * fChildAspectRatio;
+                }
+
                 for ( ; nRow<nCount; nRow++)
                 {
                     nCol = (nCount+nRow-1) / nRow;
-                    const double fShapeHeight = rShape->getSize().Height;
-                    const double fShapeWidth = rShape->getSize().Width;
                     if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
                         break;
                 }
