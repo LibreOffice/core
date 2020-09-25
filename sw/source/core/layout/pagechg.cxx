@@ -1449,9 +1449,9 @@ void SwRootFrame::RemoveSuperfluous()
             // attached to generic content it is also superfluous (checking DocBody should be enough)
             // OD 19.06.2003 #108784# - consider that drawing objects in
             // header/footer are supported now.
-            bool bOnlySuperfluosObjs = true;
+            bool bOnlySuperfluousObjs = true;
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( size_t i = 0; bOnlySuperfluosObjs && i < rObjs.size(); ++i )
+            for ( size_t i = 0; bOnlySuperfluousObjs && i < rObjs.size(); ++i )
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
@@ -1460,10 +1460,10 @@ void SwRootFrame::RemoveSuperfluous()
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
                      !pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader() )
                 {
-                    bOnlySuperfluosObjs = false;
+                    bOnlySuperfluousObjs = false;
                 }
             }
-            bExistEssentialObjs = !bOnlySuperfluosObjs;
+            bExistEssentialObjs = !bOnlySuperfluousObjs;
         }
 
         // OD 19.06.2003 #108784# - optimization: check first, if essential objects
