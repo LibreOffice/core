@@ -272,9 +272,9 @@ void AquaSalGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFa
 
 static bool AddTempDevFont(const OUString& rFontFileURL)
 {
-    OUString aUSytemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
-    OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
+    OUString aUSystemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSystemPath ) );
+    OString aCFileName = OUStringToOString( aUSystemPath, RTL_TEXTENCODING_UTF8 );
 
     CFStringRef rFontPath = CFStringCreateWithCString(nullptr, aCFileName.getStr(), kCFStringEncodingUTF8);
     CFURLRef rFontURL = CFURLCreateWithFileSystemPath(nullptr, rFontPath, kCFURLPOSIXPathStyle, true);
