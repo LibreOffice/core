@@ -19,7 +19,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
-#include <sfx2/templatelocalview.hxx>
+#include <sfx2/templatedlglocalview.hxx>
 
 class TemplateSearchView;
 class ThumbnailViewItem;
@@ -44,6 +44,8 @@ public:
     virtual short run() override;
 
     void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
+    void setTemplateViewMode(TemplateViewMode eViewMode);
+    TemplateViewMode getTemplateViewMode();
 
 protected:
     void getApplicationSpecificSettings();
@@ -82,6 +84,11 @@ protected:
     DECL_LINK(LoseFocusHdl, weld::Widget&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+    DECL_LINK(ListViewHdl, weld::Button&, void);
+    DECL_LINK(ThumbnailViewHdl, weld::Button&, void);
+    DECL_LINK(FocusRectLocalHdl, weld::Widget&, tools::Rectangle);
+    DECL_LINK(FocusRectSearchHdl, weld::Widget&, tools::Rectangle);
 
     void OnTemplateImportCategory(const OUString& sCategory);
     //    static void OnTemplateLink ();
@@ -134,10 +141,14 @@ protected:
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateSearchView> mxSearchView;
-    std::unique_ptr<TemplateLocalView> mxLocalView;
+    std::unique_ptr<TemplateDlgLocalView> mxLocalView;
     std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
     std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
+    std::unique_ptr<weld::ToggleButton> mxListViewButton;
+    std::unique_ptr<weld::ToggleButton> mxThumbnailViewButton;
+    TemplateViewMode mViewMode;
+    bool bMakeSelItemVisible;
 };
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------
