@@ -823,7 +823,7 @@ bool AquaSalGraphics::drawPolyLine(
             xPath,
             aPolyLine,
             aPolyLine.isClosed(),
-            !getAntiAliasB2DDraw(),
+            !getAntiAlias(),
             true);
     }
 
@@ -887,7 +887,7 @@ bool AquaSalGraphics::drawPolyPolygon(
     // the transformation is not used here...)
     for(auto const& rPolygon : aPolyPolygon)
     {
-        AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
+        AddPolygonToPath( xPath, rPolygon, true, !getAntiAlias(), IsPenVisible() );
     }
 
     const CGRect aRefreshRect = CGPathGetBoundingBox( xPath );
@@ -1608,7 +1608,7 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
     {
         const basegfx::B2DPolyPolygon aClip(i_rClip.GetAsB2DPolyPolygon());
 
-        AddPolyPolygonToPath( mxClipPath, aClip, !getAntiAliasB2DDraw(), false );
+        AddPolyPolygonToPath( mxClipPath, aClip, !getAntiAlias(), false );
     }
     else
     {

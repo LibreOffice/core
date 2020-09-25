@@ -2414,7 +2414,7 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     aPoly.SetPoint(Point(x, y), 3);
 
     auto aaflags = rRenderContext.GetAntialiasing();
-    rRenderContext.SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+    rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
     rRenderContext.DrawPolygon( aPoly );
     rRenderContext.SetAntialiasing(aaflags);
 

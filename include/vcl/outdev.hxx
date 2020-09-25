@@ -230,7 +230,7 @@ enum class AntialiasingFlags
 {
     NONE                = 0x0000,
     DisableText         = 0x0001,
-    EnableB2dDraw       = 0x0002,
+    Enable              = 0x0002,
     PixelSnapHairline  = 0x0004,
 };
 namespace o3tl

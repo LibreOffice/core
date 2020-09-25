@@ -446,7 +446,7 @@ void ScreenshotAnnotationDlg_Impl::RepaintToBuffer(
 
     if (bIsAntiAliasing)
     {
-        mxVirtualBufferDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+        mxVirtualBufferDevice->SetAntialiasing(AntialiasingFlags::Enable);
     }
 
     // paint selected entries

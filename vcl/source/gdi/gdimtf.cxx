@@ -2782,10 +2782,10 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, BmpConversion eColorConve
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     ScopedVclPtrInstance< VirtualDevice > aVDev;
-    // set EnableB2dDraw to tease the rendering down the code paths which use B2DPolygon and
+    // set Enable to tease the rendering down the code paths which use B2DPolygon and
     // avoid integer overflows on scaling tools::Polygon, e.g. moz1545040-1.svg
     // note: this is similar to DocumentToGraphicRenderer::renderToGraphic
-    aVDev->SetAntialiasing(AntialiasingFlags::EnableB2dDraw | aVDev->GetAntialiasing());
+    aVDev->SetAntialiasing(AntialiasingFlags::Enable | aVDev->GetAntialiasing());
     const Point     aNullPt;
     const Point     aTLPix( aVDev->LogicToPixel( aNullPt, GetPrefMapMode() ) );
     const Point     aBRPix( aVDev->LogicToPixel( Point( GetPrefSize().Width() - 1, GetPrefSize().Height() - 1 ), GetPrefMapMode() ) );

@@ -232,7 +232,7 @@ void OutputDevice::DrawTransparent(
     if( mbInitFillColor )
         InitFillColor();
 
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
+    if((mnAntialiasing & AntialiasingFlags::Enable) &&
        mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        (RasterOp::OverPaint == GetRasterOp()) )
     {

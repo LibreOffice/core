@@ -417,7 +417,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     aMtf.WindStart();
 
     const AntialiasingFlags nOriginalAA(pPrerenderVDev->GetAntialiasing());
-    pPrerenderVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::EnableB2dDraw);
+    pPrerenderVDev->SetAntialiasing(nOriginalAA | AntialiasingFlags::Enable);
     aMtf.Play( pPrerenderVDev.get(), Point( 0, 0 ), aLogicSize );
     pPrerenderVDev->SetAntialiasing(nOriginalAA);
 

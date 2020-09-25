@@ -282,7 +282,7 @@ void OutputDeviceTestCommon::initialSetup(long nWidth, long nHeight, Color aColo
     maVDRectangle = tools::Rectangle(Point(), Size (nWidth, nHeight));
     mpVirtualDevice->SetOutputSizePixel(maVDRectangle.GetSize());
     if (bEnableAA)
-        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw | AntialiasingFlags::PixelSnapHairline);
+        mpVirtualDevice->SetAntialiasing(AntialiasingFlags::Enable | AntialiasingFlags::PixelSnapHairline);
     else
         mpVirtualDevice->SetAntialiasing(AntialiasingFlags::NONE);
     mpVirtualDevice->SetBackground(Wallpaper(aColor));

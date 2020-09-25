@@ -606,7 +606,7 @@ bool X11SalGraphics::drawPolyPolygon(
     if (!m_bOpenGL && !m_bSkia && nullptr != pUseCairoForPolygons && SupportsCairo())
     {
         // snap to raster if requested
-        const bool bSnapPoints(!getAntiAliasB2DDraw());
+        const bool bSnapPoints(!getAntiAlias());
 
         if(bSnapPoints)
         {
@@ -736,7 +736,7 @@ bool X11SalGraphics::drawPolyLine(
                 cr,
                 nullptr,
                 mnPenColor,
-                getAntiAliasB2DDraw(),
+                getAntiAlias(),
                 rObjectToDevice,
                 rPolygon,
                 fTransparency,

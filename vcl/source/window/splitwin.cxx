@@ -1487,7 +1487,7 @@ void SplitWindow::ImplDrawGrip(vcl::RenderContext& rRenderContext, const tools::
     }
 
     AntialiasingFlags nAA = rRenderContext.GetAntialiasing();
-    rRenderContext.SetAntialiasing(nAA | AntialiasingFlags::PixelSnapHairline | AntialiasingFlags::EnableB2dDraw);
+    rRenderContext.SetAntialiasing(nAA | AntialiasingFlags::PixelSnapHairline | AntialiasingFlags::Enable);
 
     long nWidth = rRect.getWidth();
     long nWidthHalf = nWidth / 2;

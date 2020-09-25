@@ -731,7 +731,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+    if( blockAA || !mrParent.getAntiAlias())
         return;
 
     // Make the edges antialiased by drawing the edge lines again with AA.
@@ -776,7 +776,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+    if( blockAA || !mrParent.getAntiAlias())
         return;
 
     // Make the edges antialiased by drawing the edge lines again with AA.
@@ -828,7 +828,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
-    if( blockAA || !mrParent.getAntiAliasB2DDraw())
+    if( blockAA || !mrParent.getAntiAlias())
         return;
 
     // Make the edges antialiased by drawing the edge lines again with AA.
@@ -1536,7 +1536,7 @@ void OpenGLSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
 void OpenGLSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
 {
     VCL_GL_INFO("::drawLine (" << nX1 << ", " << nY1 << ") (" << nX2 << ", " << nY2 << ")");
-    mpRenderList->addDrawLine(nX1, nY1, nX2, nY2, mnLineColor, mrParent.getAntiAliasB2DDraw());
+    mpRenderList->addDrawLine(nX1, nY1, nX2, nY2, mnLineColor, mrParent.getAntiAlias());
     PostBatchDraw();
 }
 
@@ -1628,7 +1628,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon(
         fTransparency,
         mnLineColor,
         mnFillColor,
-        mrParent.getAntiAliasB2DDraw());
+        mrParent.getAntiAlias());
 
     PostBatchDraw();
     return true;
@@ -1700,7 +1700,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             eLineCap,
             fMiterMinimumAngle,
             mnLineColor,
-            mrParent.getAntiAliasB2DDraw());
+            mrParent.getAntiAlias());
 
         // MM01: not sure - maybe this can be moved out of this loop, but to
         // keep on the safe side for now, do not really change something for now
