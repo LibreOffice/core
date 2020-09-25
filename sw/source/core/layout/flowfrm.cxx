@@ -1448,10 +1448,10 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             SwTwips nPrevLowerSpace = 0;
             SwTwips nPrevLineSpacing = 0;
             // i#102458
-            bool bPrevLineSpacingPorportional = false;
+            bool bPrevLineSpacingProportional = false;
             GetSpacingValuesOfFrame( (*pPrevFrame),
                                    nPrevLowerSpace, nPrevLineSpacing,
-                                   bPrevLineSpacingPorportional,
+                                   bPrevLineSpacingProportional,
                                    bIdenticalStyles);
             if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
@@ -1485,7 +1485,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // Otherwise, the maximum of the leading line spacing
                         // of the previous text frame and the own leading line
                         // spacing is built.
-                        if ( bPrevLineSpacingPorportional )
+                        if ( bPrevLineSpacingProportional )
                         {
                             nAdd += static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true );
                         }
@@ -1533,7 +1533,7 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                         // Otherwise, the maximum of the leading line spacing
                         // of the previous text frame and the own leading line
                         // spacing is built.
-                        if ( bPrevLineSpacingPorportional )
+                        if ( bPrevLineSpacingProportional )
                         {
                             nAdd += static_cast<SwTextFrame*>(pOwn)->GetLineSpace( true );
                         }
