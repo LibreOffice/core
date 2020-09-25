@@ -9,7 +9,7 @@
 
 # PythonTest class
 
-# (gb_PythonTest_GDBTRACE is defined alongside gb_CppunitTest_GDBTRACE in CppunitTest.mk)
+# (gb_PythonTest_GDBTRACE et al are defined alongside gb_CppunitTest_GDBTRACE in CppunitTest.mk)
 
 gb_PythonTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 
@@ -48,7 +48,9 @@ else
 		$(if $(gb_CppunitTest__interactive),, \
 			$(if $(value gb_CppunitTest_postprocess), \
 				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
-		($(if $(filter gdb,$(gb_PythonTest_GDBTRACE)),,$(gb_PythonTest_PRECOMMAND)) \
+		{ \
+		$(if $(gb_PythonTest_PREGDBTRACE),$(gb_PythonTest_PREGDBTRACE) &&) \
+		$(if $(filter gdb,$(gb_PythonTest_GDBTRACE)),,$(gb_PythonTest_PRECOMMAND)) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
 		$(DEFS) \
@@ -62,12 +64,15 @@ else
 		$(ICECREAM_RUN) $(gb_PythonTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_PythonTest_COMMAND) \
 			$(if $(PYTHON_TEST_NAME),$(PYTHON_TEST_NAME),$(MODULES)) \
+		$(if $(gb_PythonTest_POSTGDBTRACE), \
+			; RET=$$? && $(gb_PythonTest_POSTGDBTRACE) && (exit $$RET)) \
+		; } \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(gb_PythonTest_UNITTESTFAILED) Python $*))))
+				cat $@.log; $(gb_PythonTest_UNITTESTFAILED) Python $*)))
 	$(call gb_Trace_EndRange,$*,PYT)
 endif
 
