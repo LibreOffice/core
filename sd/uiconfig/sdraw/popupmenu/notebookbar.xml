@@ -12,7 +12,7 @@
   <menu:menuitem menu:id=".uno:RecentFileList"/>
   <menu:menuitem menu:id=".uno:CloseDoc"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ToolbarMode"/>
+  <menu:menuitem menu:id=".uno:ToolbarModeUI"/>
   <menu:menuitem menu:id=".uno:AvailableToolbars"/>
   <menu:menuitem menu:id=".uno:ConfigureDialog"/>
   <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
