@@ -217,7 +217,7 @@ bool DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
     return false;
 }
 
-void DlgEdFunc::checkTwoCklicks(const MouseEvent& rMEvt)
+void DlgEdFunc::checkTwoClicks(const MouseEvent& rMEvt)
 {
     deactivateOle();
 
@@ -723,7 +723,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
         m_rView.MarkObj(aVEvt.pRootObj, pPV);
     }
-    checkTwoCklicks(rMEvt);
+    checkTwoClicks(rMEvt);
     m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
     return bReturn;
 }
@@ -832,7 +832,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         checkMovementAllowed(rMEvt);
 
     m_pParent->getSectionWindow()->getViewsWindow()->EndAction();
-    checkTwoCklicks(rMEvt);
+    checkTwoClicks(rMEvt);
 
     m_pParent->SetPointer( m_rView.GetPreferredPointer( aPnt, m_pParent) );
 

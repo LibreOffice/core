@@ -82,7 +82,7 @@ protected:
     */
     void    activateOle(SdrObject* _pObj);
 
-    void checkTwoCklicks(const MouseEvent& rMEvt);
+    void checkTwoClicks(const MouseEvent& rMEvt);
 
 public:
     DlgEdFunc( OReportSection* pParent );
