@@ -343,6 +343,11 @@
 #define STR_CLICKHYPERLINK                      NC_("STR_CLICKHYPERLINK", "Click to open hyperlink: %{link}")
 
 #define STR_STYLEUSEDBY                         NC_("STR_STYLEUSEDBY", "(used by: %STYLELIST)")
+
+#define STR_DOCUMENT                            NC_("STR_DOCUMENT", "Document")
+#define STR_SPREADSHEET                         NC_("STR_SPREADSHEET", "Spreadsheet")
+#define STR_PRESENTATION                        NC_("STR_PRESENTATION", "Presentation")
+#define STR_DRAWING                             NC_("STR_DRAWING", "Drawing")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
