@@ -157,7 +157,7 @@ public:
 
     // events
     void resize( const Size &rSize );
-    // return false if the activate failed. callers should call end in response to failre
+    // return false if the activate failed. callers should call end in response to failure
     bool activate(ViewShellBase& rBase);
     void deactivate();
     void paint();
