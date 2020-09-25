@@ -26,8 +26,8 @@ void XCellRangeReferrer::testGetReferredCells()
     uno::Reference< sheet::XCellRangeReferrer > xReferrer(init(), UNO_QUERY_THROW);
     uno::Reference< table::XCellRange > xReferredRange = xReferrer->getReferredCells();
 
-    uno::Reference< sheet::XCellRangeAddressable > xAdressable( xReferredRange, UNO_QUERY_THROW );
-    table::CellRangeAddress aCellRange = xAdressable->getRangeAddress();
+    uno::Reference< sheet::XCellRangeAddressable > xAddressable( xReferredRange, UNO_QUERY_THROW );
+    table::CellRangeAddress aCellRange = xAddressable->getRangeAddress();
 
     CPPUNIT_ASSERT_EQUAL(aCellRange, getCellRange());
 }
