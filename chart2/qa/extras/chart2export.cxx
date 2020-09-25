@@ -94,8 +94,8 @@ public:
     void testChartTitlePropertiesColorFillDOCX();
     void testChartTitlePropertiesGradientFillDOCX();
     void testChartTitlePropertiesBitmapFillDOCX();
-    void testColorGradientWithTransparancyDOCX();
-    void testColorGradientWithTransparancyODS();
+    void testColorGradientWithTransparencyDOCX();
+    void testColorGradientWithTransparencyODS();
     void testColorGradientStopXLSX();
     void testRadialColorGradientDOCX();
     void testBarChartDataPointPropDOCX();
@@ -236,8 +236,8 @@ public:
     CPPUNIT_TEST(testChartTitlePropertiesColorFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesGradientFillDOCX);
     CPPUNIT_TEST(testChartTitlePropertiesBitmapFillDOCX);
-    CPPUNIT_TEST(testColorGradientWithTransparancyDOCX);
-    CPPUNIT_TEST(testColorGradientWithTransparancyODS);
+    CPPUNIT_TEST(testColorGradientWithTransparencyDOCX);
+    CPPUNIT_TEST(testColorGradientWithTransparencyODS);
     CPPUNIT_TEST(testColorGradientStopXLSX);
     CPPUNIT_TEST(testRadialColorGradientDOCX);
     CPPUNIT_TEST(testBarChartDataPointPropDOCX);
@@ -1335,10 +1335,10 @@ void Chart2ExportTest::testChartTitlePropertiesBitmapFillDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:title/c:spPr/a:ln/a:noFill", 1);
 }
 
-void Chart2ExportTest::testColorGradientWithTransparancyDOCX()
+void Chart2ExportTest::testColorGradientWithTransparencyDOCX()
 {
     // Test color gradient (two color) with gradient transparency
-    load("/chart2/qa/extras/data/docx/", "testColorGradientWithTransparancy.docx");
+    load("/chart2/qa/extras/data/docx/", "testColorGradientWithTransparency.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the transparency of the first color
@@ -1347,10 +1347,10 @@ void Chart2ExportTest::testColorGradientWithTransparancyDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr/a:alpha", "val", "90196");
 }
 
-void Chart2ExportTest::testColorGradientWithTransparancyODS()
+void Chart2ExportTest::testColorGradientWithTransparencyODS()
 {
     // Test color gradient (two color) with simple transparency
-    load("/chart2/qa/extras/data/ods/", "testColorGradientWithTransparancy.ods");
+    load("/chart2/qa/extras/data/ods/", "testColorGradientWithTransparency.ods");
     xmlDocUniquePtr pXmlDoc = parseExport("xl/charts/chart", "Calc Office Open XML");
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the transparency of the first color
