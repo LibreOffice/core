@@ -643,9 +643,9 @@ public class GridControl
     }
 
 
-    public <T> T createInstance( Class<T> i_interfaceClass, final String i_serviceIndentifer ) throws Exception
+    public <T> T createInstance( Class<T> i_interfaceClass, final String i_serviceIndentifier ) throws Exception
     {
-        return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceIndentifer ) );
+        return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceIndentifier ) );
     }
 
 
