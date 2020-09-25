@@ -26,11 +26,16 @@
 #define MNI_DELETE             "delete"
 
 TemplateSearchView::TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                       std::unique_ptr<weld::Menu> xMenu)
+                                       std::unique_ptr<weld::Menu> xMenu,
+                                       std::unique_ptr<weld::TreeView> xTreeView)
     : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    , ListView(std::move(xTreeView))
     , maSelectedItem(nullptr)
     , maPosition(0,0)
 {
+    mxTreeView->connect_popup_menu(LINK(this, TemplateSearchView, CommandHdl));
+    mxTreeView->connect_row_activated(LINK(this, TemplateSearchView, RowActivatedHdl));
+    mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
 }
 
 bool TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
@@ -137,10 +142,18 @@ void TemplateSearchView::createContextMenu(const bool bIsDefault)
 
     mxContextMenu->append_separator("separator");
     mxContextMenu->append(MNI_DELETE,SfxResId(STR_DELETE));
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
-    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
-    Invalidate();
+
+    if(mViewMode == TemplateViewMode::eThumbnailView)
+    {
+        maSelectedItem->setSelection(true);
+        maItemStateHdl.Call(maSelectedItem);
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
+        Invalidate();
+    }
+    else if(mViewMode == TemplateViewMode::eListView)
+    {
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(maPosition, Size(1,1))));
+    }
 }
 
 void TemplateSearchView::ContextMenuSelectHdl(const OString& rIdent)
@@ -157,12 +170,16 @@ void TemplateSearchView::ContextMenuSelectHdl(const OString& rIdent)
             return;
 
         maDeleteTemplateHdl.Call(maSelectedItem);
+        ListView::remove(OUString::number(maSelectedItem->mnId));
         RemoveItem(maSelectedItem->mnId);
 
         CalculateItemPositions();
     }
     else if (rIdent == MNI_DEFAULT_TEMPLATE)
+    {
         maDefaultTemplateHdl.Call(maSelectedItem);
+        updateIsDefaultColumn();
+    }
 }
 
 void TemplateSearchView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
@@ -217,6 +234,10 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     if(TemplateLocalView::IsDefaultTemplate(rPath))
         pItem->showDefaultIcon(true);
 
+    bool isDefault = pItem->IsDefaultTemplate();
+    OUString sId = OUString::number(pItem->mnId);
+    ListView::AppendItem(sId, rTitle, rSubtitle, rPath, isDefault);
+
     SfxThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
@@ -238,6 +259,108 @@ BitmapEx TemplateSearchView::getDefaultThumbnail( const OUString& rPath )
         aImg = BitmapEx(SFX_THUMBNAIL_DRAWING);
 
     return aImg;
+}
+void TemplateSearchView::setTemplateViewMode ( TemplateViewMode eMode )
+{
+    mViewMode = eMode;
+}
+
+std::vector<ThumbnailViewItem*> TemplateSearchView::getSelectedRows()
+{
+    std::vector<ThumbnailViewItem*> aItems;
+    for(auto index : ListView::get_selected_rows())
+    {
+        sal_uInt16  nId =  static_cast<sal_uInt16>(ListView::get_id(index).toInt32());
+        size_t nPos =  GetItemPos(nId);
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        if(pItem)
+        {
+            aItems.push_back(pItem);
+        }
+    }
+    return aItems;
+}
+
+void TemplateSearchView::setSelectedItemFromListView()
+{
+    deselectItems();
+    sal_uInt16 nId =  static_cast<sal_uInt16>(ListView::get_selected_id().toInt32());
+    size_t nPos =  GetItemPos(nId);
+    ThumbnailViewItem* pItem = ImplGetItem(nPos);
+    const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+    if(pViewItem)
+    {
+        maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    }
+}
+
+void TemplateSearchView::Show()
+{
+    if ( mViewMode == TemplateViewMode::eListView)
+    {
+        SfxThumbnailView::Hide();
+        ListView::ShowListView();
+
+        ListView::unselect_all();
+        for ( const ThumbnailViewItem *rItem : mFilteredItemList)
+        {
+            if(rItem->mbSelected)
+                ListView::select_id(OUString::number(rItem->mnId));
+        }
+    }
+    else
+    {
+        SfxThumbnailView::Show();
+        ListView::HideListView();
+
+        SfxThumbnailView::deselectItems();
+        for ( auto index : ListView::get_selected_rows())
+        {
+            sal_uInt16 nId = static_cast<sal_uInt16> (ListView::get_id(index).toInt32());
+            SfxThumbnailView::SelectItem(nId);
+        }
+    }
+}
+void TemplateSearchView::Hide()
+{
+    SfxThumbnailView::Hide();
+    ListView::HideListView();
+}
+void TemplateSearchView::Clear()
+{
+    SfxThumbnailView::Clear();
+    ListView::clearListView();
+}
+bool TemplateSearchView::IsVisible()
+{
+    return SfxThumbnailView::IsVisible() || ListView::IsListViewVisible();
+}
+
+IMPL_LINK_NOARG(TemplateSearchView, RowActivatedHdl, weld::TreeView&, bool)
+{
+    maOpenTemplateHdl.Call(maSelectedItem);
+    return true;
+}
+
+IMPL_LINK(TemplateSearchView, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        if (rCEvt.IsMouseEvent())
+        {
+            Point aPosition;
+            aPosition = rCEvt.GetMousePosPixel();
+            maPosition = aPosition;
+            if(mxTreeView->get_selected_index() > -1)
+                maCreateContextMenuHdl.Call(maSelectedItem);
+        }
+        else
+        {
+            maPosition = Point(0,0);
+            maCreateContextMenuHdl.Call(maSelectedItem);
+        }
+    }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
