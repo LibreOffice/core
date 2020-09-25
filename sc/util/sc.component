@@ -92,7 +92,7 @@
     <service name="com.sun.star.sheet.TableAutoFormats"/>
   </implementation>
   <implementation name="stardiv.StarCalc.ScFunctionAccess"
-      constructor="ScFunctionAcceess_get_implementation">
+      constructor="ScFunctionAccess_get_implementation">
     <service name="com.sun.star.sheet.FunctionAccess"/>
   </implementation>
   <implementation name="stardiv.StarCalc.ScFunctionListObj"
