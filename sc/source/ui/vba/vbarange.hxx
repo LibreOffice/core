@@ -83,7 +83,7 @@ class ScVbaRange : public ScVbaRange_BASE
     double getCalcColWidth(const css::table::CellRangeAddress&);
     /// @throws css::uno::RuntimeException
     double getCalcRowHeight(const css::table::CellRangeAddress&);
-    void visitArray( ArrayVisitor& vistor );
+    void visitArray( ArrayVisitor& visitor );
 
     /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getEntireColumnOrRow( bool bColumn );
