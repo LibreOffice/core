@@ -814,8 +814,7 @@ public:
                                     const std::vector< double >* = nullptr, // MM01
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
-                                    bool bBypassAACheck = false);
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
 private:
 
@@ -834,8 +833,7 @@ private:
                                     const std::vector< double >* = nullptr, // MM01
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLineJoin::NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
-                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0),
-                                    bool bBypassAACheck = false);
+                                    double fMiterMinimumAngle = basegfx::deg2rad(15.0));
 
     /** @name Polygon functions
      */

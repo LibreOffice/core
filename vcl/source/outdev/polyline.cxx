@@ -117,8 +117,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & AntialiasingFlags::Enable) &&
-       LineStyle::Solid == rLineInfo.GetStyle())
+    if(LineStyle::Solid == rLineInfo.GetStyle())
     {
         DrawPolyLine(
             rPoly.getB2DPolygon(),
@@ -219,25 +218,13 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
-        const bool bTryAA((mnAntialiasing & AntialiasingFlags::Enable) &&
-                          mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                          RasterOp::OverPaint == GetRasterOp() &&
-                          IsLineColor());
-
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
         for(auto const& rPolygon : aAreaPolyPolygon)
         {
             (void)DrawPolyLineDirectInternal(
                 basegfx::B2DHomMatrix(),
-                rPolygon,
-                0.0,
-                0.0,
-                nullptr, // MM01
-                basegfx::B2DLineJoin::NONE,
-                css::drawing::LineCap_BUTT,
-                basegfx::deg2rad(15.0) /*default, not used*/,
-                bTryAA);
+                rPolygon);
         }
     }
     else
@@ -308,11 +295,10 @@ bool OutputDevice::DrawPolyLineDirect(
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle,
-    bool bBypassAACheck)
+    double fMiterMinimumAngle)
 {
     if(DrawPolyLineDirectInternal(rObjectTransform, rB2DPolygon, fLineWidth, fTransparency,
-        pStroke, eLineJoin, eLineCap, fMiterMinimumAngle, bBypassAACheck))
+        pStroke, eLineJoin, eLineCap, fMiterMinimumAngle))
     {
         // Worked, add metafile action (if recorded). This is done only here,
         // because this function is public, other OutDev functions already add metafile
@@ -342,8 +328,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
     const std::vector< double >* pStroke, // MM01
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle,
-    bool bBypassAACheck)
+    double fMiterMinimumAngle)
 {
     assert(!is_double_buffered_window());
 
@@ -364,13 +349,11 @@ bool OutputDevice::DrawPolyLineDirectInternal(
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA( bBypassAACheck ||
-                      ((mnAntialiasing & AntialiasingFlags::Enable) &&
-                      mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
+    const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                       RasterOp::OverPaint == GetRasterOp() &&
-                      IsLineColor()));
+                      IsLineColor());
 
-    if(bTryAA)
+    if(bTryB2d)
     {
         // combine rObjectTransform with WorldToDevice
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
@@ -395,7 +378,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
             if (mpAlphaVDev)
                 mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
                                                 fTransparency, pStroke, eLineJoin, eLineCap,
-                                                fMiterMinimumAngle, bBypassAACheck);
+                                                fMiterMinimumAngle);
 
             return true;
         }
