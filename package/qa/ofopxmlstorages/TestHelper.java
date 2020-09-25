@@ -897,7 +897,7 @@ public class TestHelper  {
         try
         {
             Object oDummyStream = xStorage.openStreamElement( sName, nMode );
-            Error( "The trying to open substoream '" + sName + "' must fail!" );
+            Error( "The trying to open substream '" + sName + "' must fail!" );
         }
         catch( Exception e )
         {
