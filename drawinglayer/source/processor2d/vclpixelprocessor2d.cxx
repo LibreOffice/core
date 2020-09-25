@@ -64,7 +64,162 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+<<<<<<< HEAD   (3de1b0 fix Graphic duplication in import and add GraphicMapper)
         struct VclPixelProcessor2D::Impl
+=======
+    }
+};
+
+VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+                                         OutputDevice& rOutDev,
+                                         const basegfx::BColorModifierStack& rInitStack)
+    : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
+    , m_pImpl(new Impl(rOutDev))
+{
+    // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
+    maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
+
+    // prepare output directly to pixels
+    mpOutputDevice->Push(PushFlags::MAPMODE);
+    mpOutputDevice->SetMapMode();
+
+    // react on AntiAliasing settings
+    if (getOptionsDrawinglayer().IsAntiAliasing())
+    {
+        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing
+                                        | AntialiasingFlags::EnableB2dDraw);
+    }
+    else
+    {
+        mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing
+                                        & ~AntialiasingFlags::EnableB2dDraw);
+    }
+}
+
+VclPixelProcessor2D::~VclPixelProcessor2D()
+{
+    // restore MapMode
+    mpOutputDevice->Pop();
+
+    // restore AntiAliasing
+    mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
+}
+
+void VclPixelProcessor2D::tryDrawPolyPolygonColorPrimitive2DDirect(
+    const drawinglayer::primitive2d::PolyPolygonColorPrimitive2D& rSource, double fTransparency)
+{
+    if (!rSource.getB2DPolyPolygon().count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        // no geometry, done
+        return;
+    }
+
+    const basegfx::BColor aPolygonColor(
+        maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+
+    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+    mpOutputDevice->SetLineColor();
+    mpOutputDevice->DrawTransparent(maCurrentTransformation, rSource.getB2DPolyPolygon(),
+                                    fTransparency);
+}
+
+bool VclPixelProcessor2D::tryDrawPolygonHairlinePrimitive2DDirect(
+    const drawinglayer::primitive2d::PolygonHairlinePrimitive2D& rSource, double fTransparency)
+{
+    const basegfx::B2DPolygon& rLocalPolygon(rSource.getB2DPolygon());
+
+    if (!rLocalPolygon.count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        // no geometry, done
+        return true;
+    }
+
+    const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
+
+    mpOutputDevice->SetFillColor();
+    mpOutputDevice->SetLineColor(Color(aLineColor));
+    //aLocalPolygon.transform(maCurrentTransformation);
+
+    // try drawing; if it did not work, use standard fallback
+    return mpOutputDevice->DrawPolyLineDirect(maCurrentTransformation, rLocalPolygon, 0.0,
+                                              fTransparency);
+}
+
+bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(
+    const drawinglayer::primitive2d::PolygonStrokePrimitive2D& rSource, double fTransparency)
+{
+    const basegfx::B2DPolygon& rLocalPolygon(rSource.getB2DPolygon());
+
+    if (!rLocalPolygon.count() || fTransparency < 0.0 || fTransparency >= 1.0)
+    {
+        // no geometry, done
+        return true;
+    }
+
+    if (basegfx::B2DLineJoin::NONE == rSource.getLineAttribute().getLineJoin()
+        && css::drawing::LineCap_BUTT != rSource.getLineAttribute().getLineCap())
+    {
+        // better use decompose to get that combination done for now, see discussion
+        // at https://bugs.documentfoundation.org/show_bug.cgi?id=130478#c17 and ff
+        return false;
+    }
+
+    // MM01: Radically change here - no dismantle/applyLineDashing,
+    // let that happen low-level at DrawPolyLineDirect implementations
+    // to open up for buffering and evtl. direct draw with sys-dep
+    // graphic systems. Check for stroke is in use
+    const bool bStrokeAttributeNotUsed(rSource.getStrokeAttribute().isDefault()
+                                       || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen());
+
+    const basegfx::BColor aLineColor(
+        maBColorModifierStack.getModifiedColor(rSource.getLineAttribute().getColor()));
+
+    mpOutputDevice->SetFillColor();
+    mpOutputDevice->SetLineColor(Color(aLineColor));
+
+    // MM01 draw direct, hand over dash data if available
+    return mpOutputDevice->DrawPolyLineDirect(
+        maCurrentTransformation, rLocalPolygon,
+        // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
+        rSource.getLineAttribute().getWidth(), fTransparency,
+        bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(),
+        rSource.getLineAttribute().getLineJoin(), rSource.getLineAttribute().getLineCap(),
+        rSource.getLineAttribute().getMiterMinimumAngle()
+        /* false bBypassAACheck, default*/);
+}
+
+namespace
+{
+GradientStyle convertGradientStyle(drawinglayer::attribute::GradientStyle eGradientStyle)
+{
+    switch (eGradientStyle)
+    {
+        case drawinglayer::attribute::GradientStyle::Axial:
+            return GradientStyle::Axial;
+        case drawinglayer::attribute::GradientStyle::Radial:
+            return GradientStyle::Radial;
+        case drawinglayer::attribute::GradientStyle::Elliptical:
+            return GradientStyle::Elliptical;
+        case drawinglayer::attribute::GradientStyle::Square:
+            return GradientStyle::Square;
+        case drawinglayer::attribute::GradientStyle::Rect:
+            return GradientStyle::Rect;
+        case drawinglayer::attribute::GradientStyle::Linear:
+            return GradientStyle::Linear;
+        default:
+            assert(false);
+            return GradientStyle::Linear;
+    }
+}
+
+} // end anonymous namespace
+
+void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+{
+    switch (rCandidate.getPrimitive2DID())
+    {
+        case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D:
+>>>>>>> CHANGE (6965bb forward axial and radial gradient types to VCL too)
         {
             AntialiasingFlags m_nOrigAntiAliasing;
 
@@ -857,7 +1012,157 @@ namespace drawinglayer
                 mpOutputDevice->SetAntialiasing(nOldAntiAliase);
             }
         }
+<<<<<<< HEAD   (3de1b0 fix Graphic duplication in import and add GraphicMapper)
     } // end of namespace processor2d
 } // end of namespace drawinglayer
+=======
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processSoftEdgePrimitive2D(
+    const primitive2d::SoftEdgePrimitive2D& rCandidate)
+{
+    // TODO: don't limit the object at view range. This is needed to not blur objects at window
+    // borders, where they don't end. Ideally, process the full object once at maximal reasonable
+    // resolution, and store the resulting alpha mask in primitive's cache; then reuse it later,
+    // applying the transform.
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aRadiusVector(rCandidate.getRadius(), 0);
+    // Calculate the pixel size of soft edge radius in current transformation
+    aRadiusVector *= maCurrentTransformation;
+    // Blur radius is equal to soft edge radius
+    const double fBlurRadius = aRadiusVector.getLength();
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    if (aBufferDevice.isVisible())
+    {
+        // remember last OutDev and set to content
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+        // Since the effect converts all children to bitmap, we can't disable antialiasing here,
+        // because it would result in poor quality in areas not affected by the effect
+        process(rCandidate);
+
+        // Limit the bitmap size to the visible area.
+        basegfx::B2DRange viewRange(getViewInformation2D().getDiscreteViewport());
+        basegfx::B2DRange bitmapRange(aRange);
+        bitmapRange.intersect(viewRange);
+        if (!bitmapRange.isEmpty())
+        {
+            const tools::Rectangle aRect(static_cast<long>(std::floor(bitmapRange.getMinX())),
+                                         static_cast<long>(std::floor(bitmapRange.getMinY())),
+                                         static_cast<long>(std::ceil(bitmapRange.getMaxX())),
+                                         static_cast<long>(std::ceil(bitmapRange.getMaxY())));
+            BitmapEx bitmap = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+
+            AlphaMask aMask = bitmap.GetAlpha();
+            AlphaMask blurMask = ProcessAndBlurAlphaMask(aMask, -fBlurRadius, fBlurRadius, 0);
+
+            aMask.BlendWith(blurMask);
+
+            // The end result is the original bitmap with blurred 8-bit alpha mask
+            BitmapEx result(bitmap.GetBitmap(), aMask);
+
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+            mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
+        }
+        else
+        {
+            mpOutputDevice = pLastOutputDevice;
+        }
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processShadowPrimitive2D(const primitive2d::ShadowPrimitive2D& rCandidate)
+{
+    if (rCandidate.getShadowBlur() == 0)
+    {
+        process(rCandidate);
+        return;
+    }
+
+    basegfx::B2DRange aRange(rCandidate.getB2DRange(getViewInformation2D()));
+    aRange.transform(maCurrentTransformation);
+    basegfx::B2DVector aBlurRadiusVector(rCandidate.getShadowBlur(), 0);
+    aBlurRadiusVector *= maCurrentTransformation;
+    const double fBlurRadius = aBlurRadiusVector.getLength();
+
+    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+    if (aBufferDevice.isVisible())
+    {
+        OutputDevice* pLastOutputDevice = mpOutputDevice;
+        mpOutputDevice = &aBufferDevice.getContent();
+
+        process(rCandidate);
+
+        const tools::Rectangle aRect(static_cast<long>(std::floor(aRange.getMinX())),
+                                     static_cast<long>(std::floor(aRange.getMinY())),
+                                     static_cast<long>(std::ceil(aRange.getMaxX())),
+                                     static_cast<long>(std::ceil(aRange.getMaxY())));
+
+        BitmapEx bitmapEx = mpOutputDevice->GetBitmapEx(aRect.TopLeft(), aRect.GetSize());
+
+        AlphaMask mask = ProcessAndBlurAlphaMask(bitmapEx.GetAlpha(), 0, fBlurRadius, 0);
+
+        const basegfx::BColor aShadowColor(
+            maBColorModifierStack.getModifiedColor(rCandidate.getShadowColor()));
+
+        Bitmap bitmap = bitmapEx.GetBitmap();
+        bitmap.Erase(Color(aShadowColor));
+        BitmapEx result(bitmap, mask);
+
+        mpOutputDevice = pLastOutputDevice;
+        mpOutputDevice->DrawBitmapEx(aRect.TopLeft(), result);
+    }
+    else
+        SAL_WARN("drawinglayer", "Temporary buffered virtual device is not visible");
+}
+
+void VclPixelProcessor2D::processFillGradientPrimitive2D(
+    const primitive2d::FillGradientPrimitive2D& rPrimitive)
+{
+    const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getFillGradient();
+
+    // VCL should be able to handle all styles, but for tdf#133477 the VCL result
+    // is different from processing the gradient manually by drawinglayer
+    // (and the Writer unittest for it fails). Keep using the drawinglayer code
+    // until somebody founds out what's wrong and fixes it.
+    if (rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Linear
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Axial
+        && rFillGradient.getStyle() != drawinglayer::attribute::GradientStyle::Radial)
+    {
+        process(rPrimitive);
+        return;
+    }
+
+    GradientStyle eGradientStyle = convertGradientStyle(rFillGradient.getStyle());
+
+    basegfx::B2DRange aRange(rPrimitive.getOutputRange());
+    aRange.transform(maCurrentTransformation);
+
+    const tools::Rectangle aRectangle(
+        sal_Int32(std::floor(aRange.getMinX())), sal_Int32(std::floor(aRange.getMinY())),
+        sal_Int32(std::ceil(aRange.getMaxX())), sal_Int32(std::ceil(aRange.getMaxY())));
+
+    Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
+                       Color(rFillGradient.getEndColor()));
+
+    aGradient.SetAngle(rFillGradient.getAngle() / F_PI1800);
+    aGradient.SetBorder(rFillGradient.getBorder() * 100);
+    aGradient.SetOfsX(rFillGradient.getOffsetX() * 100.0);
+    aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);
+    aGradient.SetSteps(rFillGradient.getSteps());
+
+    mpOutputDevice->DrawGradient(aRectangle, aGradient);
+}
+
+} // end of namespace
+>>>>>>> CHANGE (6965bb forward axial and radial gradient types to VCL too)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
