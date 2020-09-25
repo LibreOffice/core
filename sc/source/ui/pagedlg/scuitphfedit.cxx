@@ -715,8 +715,8 @@ IMPL_LINK_NOARG(ScHFEditPage, ListHdl_Impl, weld::ComboBox&, void)
     sal_Int64 nNow = sal_Int64(aNow.Seconds) * 1000000000L + aNow.Nanosec;
 
     // order of dropdown vs select not guaranteed
-    bool bDiscrepency = m_xLbDefined->get_popup_shown() != m_bDropDownActive;
-    if (bDiscrepency)
+    bool bDiscrepancy = m_xLbDefined->get_popup_shown() != m_bDropDownActive;
+    if (bDiscrepancy)
         ListToggleHdl_Impl(*m_xLbDefined);
 
     bool bFocusToTarget = !m_xLbDefined->get_popup_shown() && m_nTimeToggled != -1 && (nNow - m_nTimeToggled < 800000000L);
@@ -726,7 +726,7 @@ IMPL_LINK_NOARG(ScHFEditPage, ListHdl_Impl, weld::ComboBox&, void)
         RemoveFromDefinedList();
 
     // keep balanced
-    if (bDiscrepency)
+    if (bDiscrepancy)
         ListToggleHdl_Impl(*m_xLbDefined);
 }
 
