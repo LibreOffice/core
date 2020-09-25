@@ -431,10 +431,14 @@ struct SymbolData
 struct SectionInfo
 {
     OUString sType; // just to help debug and test accuracy of predicted use of sections
+    bool bFirstPara;    // this is the first paragraph in this section
+    bool bFirstParaAfterRedline; // this is the first real, non-deleted paragraph in this section
     bool bDummyParaAddedForTable;
 
     SectionInfo(OUString sSectionType = "")
         : sType(sSectionType)
+        , bFirstPara(true)
+        , bFirstParaAfterRedline(true)
         , bDummyParaAddedForTable(false)
     {
     }
@@ -561,8 +565,6 @@ private:
 
     /// If the current paragraph has any runs.
     bool                            m_bParaChanged;
-    bool                            m_bIsFirstParaInSection;
-    bool                            m_bIsFirstParaInSectionAfterRedline;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
