@@ -17,6 +17,8 @@
 #include <memory>
 #include <set>
 
+#include <sfx2/listview.hxx>
+
 //template thumbnail item defines
 #define TEMPLATE_ITEM_MAX_WIDTH 160
 #define TEMPLATE_ITEM_MAX_HEIGHT 148
@@ -137,16 +139,19 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
-class SfxTemplateLocalView final : public SfxThumbnailView
+class SfxTemplateLocalView final : public SfxThumbnailView, public ListView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
 public:
 
     SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                         std::unique_ptr<weld::Menu> xMenu);
+                         std::unique_ptr<weld::Menu> xMenu,
+                         std::unique_ptr<weld::TreeView> xTreeView);
 
     virtual ~SfxTemplateLocalView () override;
+
+    void setTemplateViewMode ( TemplateViewMode eMode );
 
     // Fill view with new item list
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);
@@ -230,8 +235,26 @@ public:
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
+    void setSelectedItemFromListView();
+
+    std::vector<ThumbnailViewItem*> getSelectedRows();
+
+    void appendFilteredItems();
+
+    void Show() override;
+
+    void Hide() override;
+
+    bool IsVisible();
+
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
+    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
+
 private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
+
+    TemplateViewMode mViewMode;
 
     sal_uInt16 mnCurRegionId;
 
