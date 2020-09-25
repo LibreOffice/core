@@ -92,7 +92,7 @@ public class Instance
     private XNode removeNode( XNode _parentElement, String _elementName ) throws DOMException
     {
         XNodeList nodes = _parentElement.getChildNodes();
-        for ( int i=0; i<nodes.(); ++i )
+        for ( int i=0; i<nodes.getLength(); ++i )
         {
             XNode node = nodes.item(i);
             if ( node.getLocalName().equals( _elementName ) )
