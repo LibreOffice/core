@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7db2eaf_4cfd9c80",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-25T17:44:33Z",
+      "side": 1,
+      "message": "Nitpick: the assignment of bOk\u003d!bIsVal is now superfluous because bOk is reassigned anyway below.",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 595,
+        "endChar": 3
+      },
+      "revId": "c14aa27abcc7a7c6bfe435040de360923858dd31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65595b16_b5b6c142",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-25T17:44:33Z",
+      "side": 1,
+      "message": "While this in general is correct, I\u0027d rather not see the code duplication but as said earlier in a comment to patch set 5, instead factor out the common parts to a subroutine and call that from both places.",
+      "revId": "c14aa27abcc7a7c6bfe435040de360923858dd31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
