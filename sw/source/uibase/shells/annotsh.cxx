@@ -1662,7 +1662,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                     else if ((nWhich == SID_GETREDOSTRINGS) &&
                              (rSh.GetFirstRedoInfo(nullptr, nullptr)))
                     {
-                        rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
+                        rSh.GetDoStrings( SwWrtShell::REDO, aItem );
                     }
 
                     sList.append(aItem.GetString());
