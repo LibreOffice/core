@@ -266,7 +266,7 @@ namespace vclcanvas
 
             const ::basegfx::B2DPolyPolygon& rPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
-            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
+            const ::basegfx::B2DPolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
 
             if( rPolyPoly.isClosed() )
             {
@@ -284,9 +284,9 @@ namespace vclcanvas
                 // DrawPolygon(), and open ones via DrawPolyLine():
                 // closed polygons will simply already contain the
                 // closing segment.
-                sal_uInt16 nSize( aPolyPoly.Count() );
+                sal_uInt32 nSize( aPolyPoly.count() );
 
-                for( sal_uInt16 i=0; i<nSize; ++i )
+                for( sal_uInt32 i=0; i<nSize; ++i )
                 {
                     mpOutDevProvider->getOutDev().DrawPolyLine( aPolyPoly[i] );
 
@@ -476,7 +476,7 @@ namespace vclcanvas
             ::basegfx::B2DPolyPolygon aB2DPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             aB2DPolyPoly.setClosed(true); // ensure closed poly, otherwise VCL does not fill
-            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            const ::basegfx::B2DPolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                              aB2DPolyPoly,
                                              viewState, renderState ) );
             const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
@@ -486,8 +486,10 @@ namespace vclcanvas
             }
             else
             {
-                const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
-                mpOutDevProvider->getOutDev().DrawTransparent( aPolyPoly, static_cast<sal_uInt16>(nTransPercent) );
+                const double dTransparency( (nTransparency + 128) / 255.0 );
+                basegfx::B2DHomMatrix aIdentityMatrix;
+                aIdentityMatrix.identity();
+                mpOutDevProvider->getOutDev().DrawTransparent( aIdentityMatrix, aPolyPoly, dTransparency );
             }
 
             if( mp2ndOutDevProvider )
