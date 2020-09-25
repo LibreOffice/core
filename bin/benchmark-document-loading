@@ -69,12 +69,12 @@ validCalcFileExtensions = [ ".xlsx", ".xls", ".ods", ".fods" ]
 validWriterFileExtensions = [ ".docx" , ".rtf", ".odt", ".fodt", ".doc" ]
 validImpressFileExtensions = [ ".ppt", ".pptx", ".odp", ".fodp" ]
 validDrawFileExtensions = [ ".odg", ".fodg" ]
-validRevereseFileExtensions = [ ".vsd", ".vdx", ".cdr", ".pub", ".wpd" ]
+validReverseFileExtensions = [ ".vsd", ".vdx", ".cdr", ".pub", ".wpd" ]
 validFileExtensions = {"calc": validCalcFileExtensions,
                        "writer": validWriterFileExtensions,
                        "impress": validImpressFileExtensions,
                        "draw": validDrawFileExtensions,
-                       "reverse": validRevereseFileExtensions}
+                       "reverse": validReverseFileExtensions}
 flatODFTypes = {"calc": (".fods", "OpenDocument Spreadsheet Flat XML"),
                 "writer": (".fodt", "OpenDocument Text Flat XML"),
                 "impress": (".fodp", "OpenDocument Presentation Flat XML"),
