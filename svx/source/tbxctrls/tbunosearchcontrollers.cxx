@@ -399,7 +399,10 @@ void FindTextFieldControl::set_entry_message_type(weld::EntryMessageType eType)
 void FindTextFieldControl::GetFocus()
 {
     if (m_xWidget)
+    {
         m_xWidget->grab_focus();
+        FocusInHdl(*m_xWidget);
+    }
     InterimItemWindow::GetFocus();
 }
 
