@@ -172,7 +172,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             aImpEx.ImportString( aStr, SotClipboardFormatId::RICHTEXT );
 
         AdjustRowHeight( nStartRow, aImpEx.GetRange().aEnd.Row() );
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         ShowAllCursors();
     }
 }
@@ -299,7 +299,7 @@ void ScViewFunc::DoRefConversion()
     }
 
     pDocSh->PostPaint( aMarkRange, PaintPartFlags::Grid );
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
     pDocSh->SetDocumentModified();
     CellContentChanged();
 

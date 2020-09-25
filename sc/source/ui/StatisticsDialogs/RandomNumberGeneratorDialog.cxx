@@ -44,12 +44,12 @@ const sal_Int64 DIGITS      = 4;
 
 ScRandomNumberGeneratorDialog::ScRandomNumberGeneratorDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData)
+                    weld::Window* pParent, ScViewData& rViewData)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent,
                           "modules/scalc/ui/randomnumbergenerator.ui",
                           "RandomNumberGeneratorDialog")
-    , mpViewData(pViewData)
-    , mrDoc(pViewData->GetDocument())
+    , mrViewData(rViewData)
+    , mrDoc(rViewData.GetDocument())
     , mbDialogLostFocus(false)
     , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
@@ -105,7 +105,7 @@ void ScRandomNumberGeneratorDialog::Init()
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
 {
-    mpViewData->GetSimpleArea(maInputRange);
+    mrViewData.GetSimpleArea(maInputRange);
     OUString aCurrentString(maInputRange.Format(mrDoc, ScRefFlags::RANGE_ABS_3D, mrDoc.GetAddressConvention()));
     mxInputRangeEdit->SetText( aCurrentString );
 }
@@ -256,9 +256,9 @@ void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const 
     OUString aDistributionName = ScResId(pDistributionStringId);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
-    ScDocShell* pDocShell = mpViewData->GetDocShell();
+    ScDocShell* pDocShell = mrViewData.GetDocShell();
     SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo, 0, mpViewData->GetViewShell()->GetViewShellId() );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0, mrViewData.GetViewShell()->GetViewShellId() );
 
     SCROW nRowStart = maInputRange.aStart.Row();
     SCROW nRowEnd   = maInputRange.aEnd.Row();

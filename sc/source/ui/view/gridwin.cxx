@@ -2083,7 +2083,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pView->StopRefMode();
         mrViewData.ResetFillMode();
         pView->GetFunctionSet().SetAnchorFlag( false );
-        mrViewData.GetDocShell()->UpdateOle(&mrViewData);
+        mrViewData.GetDocShell()->UpdateOle(mrViewData);
     }
 
     bool bRefMode = mrViewData.IsRefMode();
@@ -4156,7 +4156,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                 nCorrectCursorPosCol = nSizeX;
                             }
                         }
-                        pDocSh->UpdateOle( &mrViewData );
+                        pDocSh->UpdateOle(mrViewData);
                         pView->CellContentChanged();
                     }
                 }
@@ -4202,7 +4202,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
                                 bDone = aDest.Move( -nSizeX, 0, 0, aErrorRange, &rThisDoc );
                             }
-                            pDocSh->UpdateOle( &mrViewData );
+                            pDocSh->UpdateOle(mrViewData);
                             pView->CellContentChanged();
                         }
                     }
@@ -4290,7 +4290,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                     if ( bDone )
                     {
-                        pDocSh->UpdateOle( &mrViewData );
+                        pDocSh->UpdateOle(mrViewData);
                         pView->CellContentChanged();
                     }
                 }
@@ -4350,7 +4350,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 bDone = pDocSh->GetDocFunc().InsertCells( aDest, nullptr, meDragInsertMode, true /*bRecord*/, true /*bApi*/, true /*bPartOfPaste*/ );
                 if ( bDone )
                 {
-                    pDocSh->UpdateOle( &mrViewData );
+                    pDocSh->UpdateOle(mrViewData);
                     pView->CellContentChanged();
                 }
             }

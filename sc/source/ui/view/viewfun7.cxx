@@ -51,9 +51,9 @@ bool bPasteIsMove = false;
 
 using namespace com::sun::star;
 
-static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, const Size& rSize )
+static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSize )
 {
-    SdrPage* pPage = pData->GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(pData->GetTabNo()) );
+    SdrPage* pPage = rData.GetScDrawView()->GetModel()->GetPage( static_cast<sal_uInt16>(rData.GetTabNo()) );
     OSL_ENSURE(pPage,"pPage ???");
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
@@ -193,7 +193,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         SdrPageView* pPv = aView.ShowSdrPage(aView.GetModel()->GetPage(0));
         aView.MarkAllObj(pPv);
         Size aSize = aView.GetAllMarkedRect().GetSize();
-        lcl_AdjustInsertPos( &GetViewData(), aPos, aSize );
+        lcl_AdjustInsertPos( GetViewData(), aPos, aSize );
 
         // don't change marking if OLE object is active
         // (at Drop from OLE object it would be deactivated in the middle of ExecuteDrag!)

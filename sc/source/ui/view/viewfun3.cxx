@@ -147,7 +147,7 @@ void ScViewFunc::CutToClip()
                 std::make_unique<ScUndoCut>( pDocSh, aRange, aOldEnd, rMark, std::move(pUndoDoc) ) );
 
         aModificator.SetDocumentModified();
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
 
         CellContentChanged();
 
@@ -1795,7 +1795,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 {
     ScViewData& rViewData = GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
-    pDocSh->UpdateOle(&rViewData);
+    pDocSh->UpdateOle(rViewData);
 
     SelectionChanged(true);
 
@@ -1897,7 +1897,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
         MarkRange( ScRange( rDestPos, aDestEnd ), false );          //! sal_False ???
 
-        pDocSh->UpdateOle(&GetViewData());
+        pDocSh->UpdateOle(GetViewData());
         SelectionChanged();
         ResetAutoSpell();
     }
@@ -2016,7 +2016,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
     pDocSh->PostPaint(
         ScRange(nStartCol, nCurrentRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
         nPaint, nExtFlags);
-    pDocSh->UpdateOle(&GetViewData());
+    pDocSh->UpdateOle(GetViewData());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

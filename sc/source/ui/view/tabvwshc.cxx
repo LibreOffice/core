@@ -231,7 +231,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             break;
         }
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
-            xResult = std::make_shared<ScRandomNumberGeneratorDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScRandomNumberGeneratorDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_DEFINE_DBNAME:
         {

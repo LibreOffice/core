@@ -801,7 +801,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
     pDocSh->SetVisArea( aNewArea );
 
-    pDocSh->UpdateOle(&aViewData, true);
+    pDocSh->UpdateOle(aViewData, true);
 
     //! SetDocumentModified?
     if ( rDestDoc.IsChartListenerCollectionNeedsUpdate() )
