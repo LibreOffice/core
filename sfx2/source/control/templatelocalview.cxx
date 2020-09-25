@@ -467,13 +467,18 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
 }
 
 SfxTemplateLocalView::SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                           std::unique_ptr<weld::Menu> xMenu)
+                                           std::unique_ptr<weld::Menu> xMenu,
+                                           std::unique_ptr<weld::TreeView> xTreeView)
     : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    , ListView(std::move(xTreeView))
     , mnCurRegionId(0)
     , maSelectedItem(nullptr)
     , maPosition(0,0)
     , mpDocTemplates(new SfxDocumentTemplates)
 {
+    mxTreeView->connect_popup_menu(LINK(this, SfxTemplateLocalView, CommandHdl));
+    mxTreeView->connect_row_activated(LINK(this, SfxTemplateLocalView, RowActivatedHdl));
+    mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
 }
 
 SfxTemplateLocalView::~SfxTemplateLocalView()
@@ -552,6 +557,7 @@ void SfxTemplateLocalView::showAllTemplates()
     mnCurRegionId = 0;
 
     insertItems(maAllTemplates, false, true);
+    appendFilteredItems();
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -561,6 +567,7 @@ void SfxTemplateLocalView::showRegion(TemplateContainerItem const *pItem)
     mnCurRegionId = pItem->mnRegionId+1;
 
     insertItems(pItem->maTemplates);
+    appendFilteredItems();
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -600,11 +607,19 @@ void SfxTemplateLocalView::createContextMenu(const bool bIsDefault)
     mxContextMenu->append_separator("separator");
     mxContextMenu->append("rename",SfxResId(STR_SFX_RENAME));
     mxContextMenu->append("delete",SfxResId(STR_DELETE));
-    deselectItems();
-    maSelectedItem->setSelection(true);
-    maItemStateHdl.Call(maSelectedItem);
-    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
-    Invalidate();
+
+    if(mViewMode == TemplateViewMode::eThumbnailView)
+    {
+        deselectItems();
+        maSelectedItem->setSelection(true);
+        maItemStateHdl.Call(maSelectedItem);
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
+        Invalidate();
+    }
+    else if(mViewMode == TemplateViewMode::eListView)
+    {
+        ContextMenuSelectHdl(mxContextMenu->popup_at_rect(mxTreeView.get(), tools::Rectangle(maPosition, Size(1,1))));
+    }
 }
 
 void SfxTemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
@@ -628,6 +643,7 @@ void SfxTemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
         {
             maSelectedItem->setTitle(sNewTitle);
         }
+        ListView::rename(OUString::number(maSelectedItem->mnId), maSelectedItem->maTitle);
     }
     else if (rIdent == "delete")
     {
@@ -638,9 +654,13 @@ void SfxTemplateLocalView::ContextMenuSelectHdl(const OString& rIdent)
 
         maDeleteTemplateHdl.Call(maSelectedItem);
         reload();
+        ListView::remove(OUString::number(maSelectedItem->mnId));
     }
     else if (rIdent == "default")
+    {
         maDefaultTemplateHdl.Call(maSelectedItem);
+        ListView::updateIsDefaultColumn();
+    }
 }
 
 sal_uInt16 SfxTemplateLocalView::getRegionId(size_t pos) const
@@ -1340,5 +1360,118 @@ void SfxTemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
         maOpenTemplateHdl.Call(pViewItem);
 }
 
+void SfxTemplateLocalView::setSelectedItemFromListView()
+{
+    deselectItems();
+    sal_uInt16 nId =  static_cast<sal_uInt16>(ListView::get_selected_id().toInt32());
+    size_t nPos =  GetItemPos(nId);
+    ThumbnailViewItem* pItem = ImplGetItem(nPos);
+    const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+    if(pViewItem)
+    {
+        maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+    }
+}
+
+void SfxTemplateLocalView::appendFilteredItems()
+{
+    ListView::clearListView();
+    for (const ThumbnailViewItem * rItem: mFilteredItemList)
+    {
+        const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(rItem);
+        if(!pViewItem)
+            return;
+        bool isDefault = pViewItem->IsDefaultTemplate();
+        OUString sId = OUString::number(pViewItem->mnId);
+        ListView::AppendItem(sId, rItem->maTitle, getRegionName(pViewItem->mnRegionId), pViewItem->getPath(), isDefault);
+    }
+    ListView::sort();
+}
+
+void SfxTemplateLocalView::setTemplateViewMode ( TemplateViewMode eMode )
+{
+    mViewMode = eMode;
+}
+
+std::vector<ThumbnailViewItem*> SfxTemplateLocalView::getSelectedRows()
+{
+    std::vector<ThumbnailViewItem*> aItems;
+    for(auto index : ListView::get_selected_rows())
+    {
+        sal_uInt16  nId =  static_cast<sal_uInt16>(ListView::get_id(index).toInt32());
+        size_t nPos =  GetItemPos(nId);
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
+        if(pItem)
+        {
+            aItems.push_back(pItem);
+        }
+    }
+    return aItems;
+}
+
+void SfxTemplateLocalView::Show()
+{
+    if ( mViewMode == TemplateViewMode::eListView)
+    {
+        SfxThumbnailView::Hide();
+        ListView::ShowListView();
+
+        ListView::unselect_all();
+        for ( const ThumbnailViewItem * rItem : mFilteredItemList)
+        {
+            if(rItem->mbSelected)
+                ListView::select_id(OUString::number(rItem->mnId));
+        }
+    }
+    else
+    {
+        SfxThumbnailView::Show();
+        ListView::HideListView();
+
+        SfxThumbnailView::deselectItems();
+        for ( auto index : ListView::get_selected_rows())
+        {
+            sal_uInt16 nId = static_cast<sal_uInt16> (ListView::get_id(index).toInt32());
+            SfxThumbnailView::SelectItem(nId);
+        }
+    }
+}
+void SfxTemplateLocalView::Hide()
+{
+    SfxThumbnailView::Hide();
+    ListView::HideListView();
+}
+
+bool SfxTemplateLocalView::IsVisible()
+{
+    return SfxThumbnailView::IsVisible() || ListView::IsListViewVisible();
+}
+
+IMPL_LINK_NOARG(SfxTemplateLocalView, RowActivatedHdl, weld::TreeView&, bool)
+{
+    maOpenTemplateHdl.Call(maSelectedItem);
+    return true;
+}
+
+IMPL_LINK(SfxTemplateLocalView, CommandHdl, const CommandEvent&, rCEvt, bool)
+{
+    if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
+    {
+        if (rCEvt.IsMouseEvent())
+        {
+            Point aPosition;
+            aPosition = rCEvt.GetMousePosPixel();
+            maPosition = aPosition;
+            if(mxTreeView->get_selected_index() > -1)
+                maCreateContextMenuHdl.Call(maSelectedItem);
+        }
+        else
+        {
+            maPosition = Point(0,0);
+            maCreateContextMenuHdl.Call(maSelectedItem);
+        }
+    }
+    return true;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

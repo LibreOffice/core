@@ -11,17 +11,23 @@
 #define INCLUDED_SFX2_SOURCE_INC_TEMPLATESEARCHVIEW_HXX
 
 #include <sfx2/thumbnailview.hxx>
+#include <sfx2/listview.hxx>
 
 class TemplateViewItem;
 class PopupMenu;
 class Menu;
 
-class TemplateSearchView final : public SfxThumbnailView
+class TemplateSearchView final : public SfxThumbnailView, public ListView
 {
+    TemplateViewMode mViewMode;
+
 public:
 
     TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                       std::unique_ptr<weld::Menu> xMenu);
+                       std::unique_ptr<weld::Menu> xMenu,
+                       std::unique_ptr<weld::TreeView> xTreeView);
+
+    void setTemplateViewMode ( TemplateViewMode eMode );
 
     void setOpenTemplateHdl (const Link<ThumbnailViewItem*, void> &rLink);
 
@@ -42,6 +48,22 @@ public:
                     const OUString &rPath, const BitmapEx &rImage );
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
+
+    void setSelectedItemFromListView();
+
+    std::vector<ThumbnailViewItem*> getSelectedRows();
+
+    void Show() override;
+
+    void Hide() override;
+
+    void Clear();
+
+    bool IsVisible();
+
+    DECL_LINK(CommandHdl, const CommandEvent&, bool);
+
+    DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
 
 private:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
