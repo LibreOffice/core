@@ -200,9 +200,9 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
             readHelpTextCompatibly(_rxInStream);
 
             // DispatchInternal
-            bool bDispath;
-            _rxInStream >> bDispath;
-            setDispatchUrlInternal(bDispath);
+            bool bDispatch;
+            _rxInStream >> bDispatch;
+            setDispatchUrlInternal(bDispatch);
         }
         break;
 
