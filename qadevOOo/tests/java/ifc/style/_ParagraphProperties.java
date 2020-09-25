@@ -22,7 +22,6 @@ import ifc.text._NumberingLevel;
 import java.util.HashMap;
 
 import lib.MultiPropertyTest;
-import lib.Status;
 import share.LogWriter;
 import util.utils;
 

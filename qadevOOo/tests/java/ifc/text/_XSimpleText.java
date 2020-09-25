@@ -19,7 +19,6 @@
 package ifc.text;
 
 import lib.MultiMethodTest;
-import lib.Status;
 
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XSimpleText;

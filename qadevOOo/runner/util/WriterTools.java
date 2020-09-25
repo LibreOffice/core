@@ -27,7 +27,6 @@ import com.sun.star.drawing.XDrawPageSupplier;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XMultiComponentFactory;
 
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
@@ -36,7 +35,6 @@ import com.sun.star.text.XTextDocument;
 
 import com.sun.star.graphic.XGraphic;
 import com.sun.star.graphic.XGraphicProvider;
-import com.sun.star.graphic.GraphicProvider;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
