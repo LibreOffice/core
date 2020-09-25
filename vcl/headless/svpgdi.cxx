@@ -1334,7 +1334,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     // PixelOffset used: To not mix with possible PixelSnap, cannot do
     // directly on coordinates as tried before - despite being already 'snapped'
     // due to being integer. If it would be directly added here, it would be
-    // 'snapped' again when !getAntiAliasB2DDraw(), losing the (0.5, 0.5) offset
+    // 'snapped' again when !getAntiAlias(), losing the (0.5, 0.5) offset
     aPoly.append(basegfx::B2DPoint(nX1, nY1));
     aPoly.append(basegfx::B2DPoint(nX2, nY2));
 
@@ -1350,7 +1350,7 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
         cr,
         aPoly,
         basegfx::B2DHomMatrix(),
-        !getAntiAliasB2DDraw(),
+        !getAntiAlias(),
         false);
 
     applyColor(cr, m_aLineColor);
@@ -1374,7 +1374,7 @@ private:
     // all other values the path data  is based on and
     // need to be compared with to check for data validity
     bool                mbNoJoin;
-    bool                mbAntiAliasB2DDraw;
+    bool                mbAntiAlias;
     std::vector< double >                       maStroke;
 
 public:
@@ -1383,14 +1383,14 @@ public:
         size_t nSizeMeasure,
         cairo_t* cr,
         bool bNoJoin,
-        bool bAntiAliasB2DDraw,
+        bool bAntiAlias,
         const std::vector< double >* pStroke); // MM01
     virtual ~SystemDependentData_CairoPath() override;
 
     // read access
     cairo_path_t* getCairoPath() { return mpCairoPath; }
     bool getNoJoin() const { return mbNoJoin; }
-    bool getAntiAliasB2DDraw() const { return mbAntiAliasB2DDraw; }
+    bool getAntiAlias() const { return mbAntiAlias; }
     const std::vector< double >& getStroke() const { return maStroke; }
 
     virtual sal_Int64 estimateUsageInBytes() const override;
@@ -1403,12 +1403,12 @@ SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     size_t nSizeMeasure,
     cairo_t* cr,
     bool bNoJoin,
-    bool bAntiAliasB2DDraw,
+    bool bAntiAlias,
     const std::vector< double >* pStroke)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpCairoPath(nullptr),
     mbNoJoin(bNoJoin),
-    mbAntiAliasB2DDraw(bAntiAliasB2DDraw),
+    mbAntiAlias(bAntiAlias),
     maStroke()
 {
     // tdf#129845 only create a copy of the path when nSizeMeasure is
@@ -1484,7 +1484,7 @@ bool SvpSalGraphics::drawPolyLine(
             cr,
             &aExtents,
             m_aLineColor,
-            getAntiAliasB2DDraw(),
+            getAntiAlias(),
             rObjectToDevice,
             rPolyLine,
             fTransparency,
@@ -1504,7 +1504,7 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_t* cr,
     basegfx::B2DRange* pExtents,
     const Color& rLineColor,
-    bool bAntiAliasB2DDraw,
+    bool bAntiAlias,
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& rPolyLine,
     double fTransparency,
@@ -1660,7 +1660,7 @@ bool SvpSalGraphics::drawPolyLine(
         // check data validity
         if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
             || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
-            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw
+            || pSystemDependentData_CairoPath->getAntiAlias() != bAntiAlias
             || bPixelSnapHairline /*tdf#124700*/ )
         {
             // data invalid, forget
@@ -1709,7 +1709,7 @@ bool SvpSalGraphics::drawPolyLine(
                     cr,
                     aPolyLine,
                     rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
-                    !bAntiAliasB2DDraw,
+                    !bAntiAlias,
                     bPixelSnapHairline);
             }
             else
@@ -1733,7 +1733,7 @@ bool SvpSalGraphics::drawPolyLine(
                         cr,
                         aEdge,
                         rObjectToDevice, // ObjectToDevice *without* LineDraw-Offset
-                        !bAntiAliasB2DDraw,
+                        !bAntiAlias,
                         bPixelSnapHairline);
 
                     // prepare next step
@@ -1750,7 +1750,7 @@ bool SvpSalGraphics::drawPolyLine(
                 nSizeMeasure,
                 cr,
                 bNoJoin,
-                bAntiAliasB2DDraw,
+                bAntiAlias,
                 pStroke);
         }
     }
@@ -1874,7 +1874,7 @@ bool SvpSalGraphics::drawPolyPolygon(
 
     if (bHasFill)
     {
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
         applyColor(cr, m_aFillColor, fTransparency);
         // Get FillDamage (will be extended for LineDamage below)
@@ -1890,7 +1890,7 @@ bool SvpSalGraphics::drawPolyPolygon(
         cairo_matrix_init_translate(&aMatrix, 0.5, 0.5);
         cairo_set_matrix(cr, &aMatrix);
 
-        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAliasB2DDraw());
+        add_polygon_path(cr, rPolyPolygon, rObjectToDevice, !getAntiAlias());
 
         applyColor(cr, m_aLineColor, fTransparency);
 
@@ -1928,7 +1928,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
         aInputRect.AdjustRight( 1 );
         aInputRect.AdjustBottom( 1 );
         basegfx::B2DHomMatrix rObjectToDevice;
-        AddPolygonToPath(cr, tools::Polygon(aInputRect).getB2DPolygon(), rObjectToDevice, !getAntiAliasB2DDraw(), false);
+        AddPolygonToPath(cr, tools::Polygon(aInputRect).getB2DPolygon(), rObjectToDevice, !getAntiAlias(), false);
     }
     else
     {
@@ -1936,7 +1936,7 @@ bool SvpSalGraphics::drawGradient(const tools::PolyPolygon& rPolyPolygon, const 
         for (auto const & rPolygon : aB2DPolyPolygon)
         {
             basegfx::B2DHomMatrix rObjectToDevice;
-            AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAliasB2DDraw(), false);
+            AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);
         }
     }
 
@@ -1997,7 +1997,7 @@ bool SvpSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolyg
     basegfx::B2DHomMatrix rObjectToDevice;
 
     for (auto const & rPolygon : rPolyPolygon)
-        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAliasB2DDraw(), false);
+        AddPolygonToPath(cr, rPolygon, rObjectToDevice, !getAntiAlias(), false);
 
     cairo_pattern_t* pattern;
     pattern = cairo_pattern_create_linear(rGradient.maPoint1.getX(), rGradient.maPoint1.getY(), rGradient.maPoint2.getX(), rGradient.maPoint2.getY());
@@ -2341,7 +2341,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         cr,
         rPoly,
         basegfx::B2DHomMatrix(),
-        !getAntiAliasB2DDraw(),
+        !getAntiAlias(),
         false);
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
@@ -2491,7 +2491,7 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
-    cairo_set_antialias(cr, getAntiAliasB2DDraw() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
+    cairo_set_antialias(cr, getAntiAlias() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 
     // ensure no linear transformation and no PathInfo in local cairo_path_t

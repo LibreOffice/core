@@ -168,7 +168,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (const cairo_font_options_t* pFontOptions = pSVData->mpDefInst->GetCairoFontOptions())
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        if (!rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAliasB2DDraw())
+        if (!rStyleSettings.GetUseFontAAFromSystem() && !rGraphics.getAntiAlias())
         {
             // Disable font AA in case global AA setting is supposed to affect
             // font rendering (not the default) and AA is disabled.

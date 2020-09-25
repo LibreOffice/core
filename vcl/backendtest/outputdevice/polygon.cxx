@@ -121,7 +121,7 @@ Bitmap OutputDeviceTestPolygon::setupAALines()
 {
     initialSetup(13, 13, constBackgroundColor);
 
-    mpVirtualDevice->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+    mpVirtualDevice->SetAntialiasing(AntialiasingFlags::Enable);
     mpVirtualDevice->SetLineColor(constLineColor);
     mpVirtualDevice->SetFillColor();
 

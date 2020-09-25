@@ -249,7 +249,7 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
 
         if(mpGraphics)
         {
-            mpGraphics->setAntiAliasB2DDraw(bool(mnAntialiasing & AntialiasingFlags::EnableB2dDraw));
+            mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
         }
     }
 

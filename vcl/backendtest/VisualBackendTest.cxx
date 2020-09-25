@@ -620,7 +620,7 @@ public:
 
             Size aSizePixel = GetSizePixel();
 
-            mpVDev->SetAntialiasing(AntialiasingFlags::EnableB2dDraw | AntialiasingFlags::PixelSnapHairline);
+            mpVDev->SetAntialiasing(AntialiasingFlags::Enable | AntialiasingFlags::PixelSnapHairline);
             mpVDev->SetOutputSizePixel(aSizePixel);
             mpVDev->SetBackground(Wallpaper(COL_LIGHTGRAY));
             mpVDev->Erase();

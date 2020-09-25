@@ -1213,7 +1213,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
         const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            pOut->SetAntialiasing( nFormerAntialiasingAtOutput | AntialiasingFlags::EnableB2dDraw );
+            pOut->SetAntialiasing( nFormerAntialiasingAtOutput | AntialiasingFlags::Enable );
         }
 
         bool bContinue = true;
@@ -1399,7 +1399,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
         const AntialiasingFlags nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if (pShell->Imp()->GetDrawView()->IsAntiAliasing())
         {
-            AntialiasingFlags nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | AntialiasingFlags::EnableB2dDraw;
+            AntialiasingFlags nNewAntialiasingAtOutput = nFormerAntialiasingAtOutput | AntialiasingFlags::Enable;
 
             // #i99665#
             // Adjust AntiAliasing mode at output device for chart OLE

@@ -76,7 +76,7 @@ namespace vclcanvas
         {
             // VDev content is more current than bitmap - copy contents before!
             mpVDev->EnableMapMode( false );
-            mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+            mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             const Point aEmptyPoint;
             *maBitmap = mpVDev->GetBitmapEx( aEmptyPoint,
                                              mpVDev->GetOutputSizePixel() );
@@ -97,7 +97,7 @@ namespace vclcanvas
         if( mbVDevContentIsCurrent && mpVDev )
         {
             mpVDev->EnableMapMode( false );
-            mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+            mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             aSize = mpVDev->GetOutputSizePixel();
         }
 
@@ -123,12 +123,12 @@ namespace vclcanvas
         // #i95645#
 #if defined( MACOSX )
         // use AA on VCLCanvas for Mac
-        mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw | mpVDev->GetAntialiasing() );
+        mpVDev->SetAntialiasing( AntialiasingFlags::Enable | mpVDev->GetAntialiasing() );
 #else
         // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
         // is not required to do AA. It would need to be adapted to use it correctly
         // (especially gradient painting). This will need extra work.
-        mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~AntialiasingFlags::EnableB2dDraw);
+        mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~AntialiasingFlags::Enable);
 #endif
     }
 
@@ -141,7 +141,7 @@ namespace vclcanvas
         {
             // fill with bitmap content
             mpVDev->EnableMapMode( false );
-            mpVDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+            mpVDev->SetAntialiasing( AntialiasingFlags::Enable );
             const Point aEmptyPoint;
             mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
         }

@@ -1409,7 +1409,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
     aPolyPolygon.transform(rObjectToDevice);
 
     // snap to raster if requested
-    const bool bSnapToRaster = !mrParent.getAntiAliasB2DDraw();
+    const bool bSnapToRaster = !mrParent.getAntiAlias();
     if( bSnapToRaster )
         aPolyPolygon = basegfx::utils::snapPointsOfHorizontalOrVerticalEdges( aPolyPolygon );
 

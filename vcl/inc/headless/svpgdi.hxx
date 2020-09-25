@@ -109,7 +109,7 @@ public:
         cairo_t* cr,
         basegfx::B2DRange* pExtents,
         const Color& rLineColor,
-        bool bAntiAliasB2DDraw,
+        bool bAntiAlias,
         const basegfx::B2DHomMatrix& rObjectToDevice,
         const basegfx::B2DPolygon& rPolyLine,
         double fTransparency,

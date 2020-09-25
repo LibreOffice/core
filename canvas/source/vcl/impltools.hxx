@@ -151,7 +151,7 @@ namespace vclcanvas
                 {
                     mpOutDev->Push();
                     mpOutDev->EnableMapMode(false);
-                    mpOutDev->SetAntialiasing( AntialiasingFlags::EnableB2dDraw );
+                    mpOutDev->SetAntialiasing( AntialiasingFlags::Enable );
                 }
             }
 

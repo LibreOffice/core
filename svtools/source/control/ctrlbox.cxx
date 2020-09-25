@@ -199,7 +199,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
 static void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, SvxBorderLineStyle nDashing )
 {
     AntialiasingFlags nOldAA = rDev.GetAntialiasing();
-    rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::EnableB2dDraw );
+    rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::Enable );
 
     long nPix = rDev.PixelToLogic(Size(1, 1)).Width();
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing(rPolygon, nDashing, nPix);

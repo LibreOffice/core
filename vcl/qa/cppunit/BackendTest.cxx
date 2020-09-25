@@ -717,7 +717,7 @@ public:
         device->SetOutputSizePixel(Size(100, 100));
         device->SetBackground(Wallpaper(COL_WHITE));
         device->Erase();
-        device->SetAntialiasing(AntialiasingFlags::EnableB2dDraw);
+        device->SetAntialiasing(AntialiasingFlags::Enable);
         device->SetLineColor(COL_BLACK);
         basegfx::B2DHomMatrix matrix;
         // DrawPolyLine() would apply the whole matrix to the line width, making it negative

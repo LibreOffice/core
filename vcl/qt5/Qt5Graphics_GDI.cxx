@@ -142,7 +142,7 @@ bool Qt5Graphics::setClipRegion(const vcl::Region& rRegion)
     {
         QPainterPath aPath;
         const basegfx::B2DPolyPolygon aPolyClip(rRegion.GetAsB2DPolyPolygon());
-        AddPolyPolygonToPath(aPath, aPolyClip, !getAntiAliasB2DDraw(), false);
+        AddPolyPolygonToPath(aPath, aPolyClip, !getAntiAlias(), false);
         m_aClipPath.swap(aPath);
         if (!m_aClipRegion.isEmpty())
         {
@@ -294,8 +294,7 @@ bool Qt5Graphics::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
 
     QPainterPath aPath;
     // ignore empty polygons
-    if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAliasB2DDraw(),
-                              m_aLineColor != SALCOLOR_NONE))
+    if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_aLineColor != SALCOLOR_NONE))
         return true;
 
     Qt5Painter aPainter(*this, true, 255 * (1.0 - fTransparency));
@@ -384,7 +383,7 @@ bool Qt5Graphics::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
     {
         const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
-        AddPolygonToPath(aPath, aPolyLine, aPolyLine.isClosed(), !getAntiAliasB2DDraw(), true);
+        AddPolygonToPath(aPath, aPolyLine, aPolyLine.isClosed(), !getAntiAlias(), true);
     }
 
     Qt5Painter aPainter(*this, false, 255 * (1.0 - fTransparency));

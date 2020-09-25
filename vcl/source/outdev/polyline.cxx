@@ -117,7 +117,7 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rL
 
     // #i101491#
     // Try direct Fallback to B2D-Version of DrawPolyLine
-    if((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
+    if((mnAntialiasing & AntialiasingFlags::Enable) &&
        LineStyle::Solid == rLineInfo.GetStyle())
     {
         DrawPolyLine(
@@ -219,7 +219,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
-        const bool bTryAA((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
+        const bool bTryAA((mnAntialiasing & AntialiasingFlags::Enable) &&
                           mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                           RasterOp::OverPaint == GetRasterOp() &&
                           IsLineColor());
@@ -365,7 +365,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
         InitLineColor();
 
     const bool bTryAA( bBypassAACheck ||
-                      ((mnAntialiasing & AntialiasingFlags::EnableB2dDraw) &&
+                      ((mnAntialiasing & AntialiasingFlags::Enable) &&
                       mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
                       RasterOp::OverPaint == GetRasterOp() &&
                       IsLineColor()));
