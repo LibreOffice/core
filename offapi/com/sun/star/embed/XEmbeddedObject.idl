@@ -94,7 +94,7 @@ published interface XEmbeddedObject
         @returns
             the sequence of states the object can be set to
 
-        @throws com::sun::star::embed::NeedsRunnignStateException
+        @throws com::sun::star::embed::NeedsRunningStateException
             means that the object is in loaded state now and can be switched
             to running state, other possible states can be detected only when
             the object is not in loaded state any more
@@ -146,7 +146,7 @@ published interface XEmbeddedObject
         @returns
             the sequence of verbs the object supports
 
-        @throws com::sun::star::embed::NeedsRunnignStateException
+        @throws com::sun::star::embed::NeedsRunningStateException
             means that the object is in loaded state now and can be switched
             to running state, acceptable verbs can be detected only when the
             object is not in loaded state any more
