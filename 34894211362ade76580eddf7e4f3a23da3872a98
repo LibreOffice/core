@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe63f474_9a706059",
+        "filename": "sw/qa/unit/swmodeltestbase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-25T09:46:33Z",
+      "side": 1,
+      "message": "if that function does nothing, why not remove it (along with any calls to it) completely?",
+      "revId": "34894211362ade76580eddf7e4f3a23da3872a98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
