@@ -200,8 +200,7 @@ bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(
         rSource.getLineAttribute().getWidth(), fTransparency,
         bStrokeAttributeNotUsed ? nullptr : &rSource.getStrokeAttribute().getDotDashArray(),
         rSource.getLineAttribute().getLineJoin(), rSource.getLineAttribute().getLineCap(),
-        rSource.getLineAttribute().getMiterMinimumAngle()
-        /* false bBypassAACheck, default*/);
+        rSource.getLineAttribute().getMiterMinimumAngle());
 }
 
 namespace

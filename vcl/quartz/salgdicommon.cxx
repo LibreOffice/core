@@ -836,7 +836,7 @@ bool AquaSalGraphics::drawPolyLine(
         CGContextBeginPath( maContextHolder.get() );
         CGContextAddPath( maContextHolder.get(), xPath );
         // draw path with antialiased line
-        CGContextSetShouldAntialias( maContextHolder.get(), true );
+        CGContextSetShouldAntialias( maContextHolder.get(), getAntiAlias() );
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
         CGContextSetLineJoin( maContextHolder.get(), aCGLineJoin );
         CGContextSetLineCap( maContextHolder.get(), aCGLineCap );
@@ -921,7 +921,7 @@ bool AquaSalGraphics::drawPolyPolygon(
         CGContextAddPath( maContextHolder.get(), xPath );
 
         // draw path with antialiased polygon
-        CGContextSetShouldAntialias( maContextHolder.get(), true );
+        CGContextSetShouldAntialias( maContextHolder.get(), getAntiAlias() );
         CGContextSetAlpha( maContextHolder.get(), 1.0 - fTransparency );
         CGContextDrawPath( maContextHolder.get(), eMode );
         maContextHolder.restoreState();
