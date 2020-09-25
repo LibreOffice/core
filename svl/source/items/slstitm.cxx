@@ -125,13 +125,12 @@ OUString SfxStringListItem::GetString()
     OUStringBuffer aStr;
     if ( mpList )
     {
-        std::vector<OUString>::const_iterator iter = mpList->begin();
-        for (;;)
+        for (auto iter = mpList->begin(), end = mpList->end(); iter != end;)
         {
             aStr.append(*iter);
             ++iter;
 
-            if (iter == mpList->end())
+            if (iter == end)
                 break;
 
             aStr.append("\r");
