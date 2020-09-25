@@ -3473,6 +3473,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         if (bNewLine)
         {
             const bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
+            assert (!bSingleParagraph || m_pImpl->GetIsFirstParagraphInSection() == SectionInfo().bFirstPara);
             const bool bSingleParagraphAfterRedline = m_pImpl->GetIsFirstParagraphInSection(true) && m_pImpl->GetIsLastParagraphInSection();
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if (!m_pImpl->GetFootnoteContext())
@@ -3519,7 +3520,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                             && !m_pImpl->GetIsPreviousParagraphFramed()
                             && !m_pImpl->HasTopAnchoredObjects()
                             && !m_pImpl->IsParaWithInlineObject());
-
+assert (!bRemove || m_pImpl->GetIsFirstParagraphInSection(true) == m_pImpl->GetSectionInfo().bFirstParaAfterRedline );
             const bool bNoNumbering = bRemove || (!m_pImpl->GetParaChanged() && m_pImpl->GetParaSectpr() && bSingleParagraph);
             PropertyMapPtr xContext = bNoNumbering ? m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH) : PropertyMapPtr();
             if (xContext)

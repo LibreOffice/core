@@ -534,6 +534,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     if (IsInShape())
         return;
 //affects ooxmlexport11 eatenSection, but no effect, probably because of page break.  assert (GetSectionInfo().bTextFrameInserted == m_bTextFrameInserted );
+assert( m_bIsFirstParaInSection == GetSectionInfo().bFirstPara );
 
     if (!m_aTextAppendStack.empty())
     {
@@ -620,17 +621,33 @@ void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {
+SAL_WARN("JCL","::SetIsLastParagraphInSection["<<bIsLast<<"] SectionInfo["<<GetSectionInfo().bLastPara<<"] bVal["<<m_bIsLastParaInSection<<"]");
+//assert( m_bIsLastParaInSection == GetSectionInfo().bLastPara );
+    GetSectionInfo().bLastPara = bIsLast;
     m_bIsLastParaInSection = bIsLast;
+}
+
+bool DomainMapper_Impl::GetIsLastParagraphInSection() const
+{
+SAL_WARN("JCL","::GetIsLastParagraphInSection SectionInfo["<<GetSectionInfo().bLastPara<<"] bVal["<<m_bIsLastParaInSection<<"]");
+//assert( m_bIsLastParaInSection == GetSectionInfo().bLastPara );
+    return GetSectionInfo().bLastPara;
 }
 
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {
+SAL_WARN("JCL","::SetIsFirstParagraphInSection["<<bIsFirst<<"] SectionInfo["<<GetSectionInfo().bFirstPara<<"] bVal["<<m_bIsFirstParaInSection<<"]");
+//assert( m_bIsFirstParaInSection == GetSectionInfo().bFirstPara );
+    GetSectionInfo().bFirstPara = bIsFirst;
     m_bIsFirstParaInSection = bIsFirst;
 }
 
 void DomainMapper_Impl::SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline )
 {
+SAL_WARN("JCL","::SetIsFirstParagraphInSectionAfterRedline["<<bIsFirstAfterRedline<<"] SectionInfo["<<GetSectionInfo().bFirstParaAfterRedline<<"] bVal["<<m_bIsFirstParaInSectionAfterRedline<<"]");
+//assert( m_bIsFirstParaInSectionAfterRedline == GetSectionInfo().bFirstParaAfterRedline );
+    GetSectionInfo().bFirstParaAfterRedline = bIsFirstAfterRedline;
     m_bIsFirstParaInSectionAfterRedline = bIsFirstAfterRedline;
 }
 
@@ -638,7 +655,12 @@ bool DomainMapper_Impl::GetIsFirstParagraphInSection( bool bAfterRedline ) const
 {
     // Anchored objects may include multiple paragraphs,
     // and none of them should be considered the first para in section.
-    return ( bAfterRedline ? m_bIsFirstParaInSectionAfterRedline : m_bIsFirstParaInSection )
+SAL_WARN("JCL","::GetIsFirstParagraphInSection SectionInfo["<<GetSectionInfo().bFirstPara<<"] bVal["<<m_bIsFirstParaInSection<<"] redline  SectionInfo["<<GetSectionInfo().bFirstParaAfterRedline<<"] bVal["<<m_bIsFirstParaInSectionAfterRedline<<"]");
+if ( false &&  bAfterRedline )
+    assert( m_bIsFirstParaInSectionAfterRedline == GetSectionInfo().bFirstParaAfterRedline );
+else if( false )
+    assert( m_bIsFirstParaInSection == GetSectionInfo().bFirstPara );
+    return ( bAfterRedline ? GetSectionInfo().bFirstParaAfterRedline : GetSectionInfo().bFirstPara )
                 && !IsInShape()
                 && !m_bIsInComments
                 && !IsInFootOrEndnote();
@@ -1597,6 +1619,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
                  (m_bFirstParagraphInCell && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
             {
+assert( !GetIsFirstParagraphInShape() || m_bIsFirstParaInSection == GetSectionInfo().bFirstPara );
                 nBeforeAutospacing = 0;
                 // export requires grabbag to match top_margin, so keep them in sync
                 if ( bIsAutoSet )
