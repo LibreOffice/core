@@ -1362,7 +1362,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (!m_xTreeView->get_selected(xEntry.get()))
         xEntry.reset();
 
-    if (!xEntry || !lcl_IsContent(*xEntry, *m_xTreeView))
+    if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView))
         xPop->remove(OString::number(900)); // go to
 
     bool bRemovePostItEntries = true;
@@ -1377,7 +1377,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveSendOutlineEntry = true;
 
     // Edit only if the shown content is coming from the current view.
-    if ((State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
+    if (State::HIDDEN != m_eState &&
+            (State::ACTIVE == m_eState || m_pActiveShell == pActiveView->GetWrtShellPtr())
             && xEntry && lcl_IsContent(*xEntry, *m_xTreeView))
     {
         assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
@@ -1468,17 +1469,32 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
     else if (xEntry)
     {
-        assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-        SwContentType* pType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
-        if (ContentTypeId::OUTLINE == pType->GetType())
+        const SwContentType* pType;
+        if (lcl_IsContentType(*xEntry, *m_xTreeView))
+            pType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+        else
+            pType = reinterpret_cast<SwContent*>(
+                        m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
+        if (pType)
         {
-            bOutline = true;
-            lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry, *xSubPopOutlineContent);
-            bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry, *xPop);
-            bRemoveSendOutlineEntry = false;
+            if (ContentTypeId::OUTLINE == pType->GetType())
+            {
+                bOutline = true;
+                if (State::HIDDEN != m_eState)
+                {
+                    lcl_SetOutlineContentEntriesSensitivities(this, *m_xTreeView, *xEntry,
+                                                              *xSubPopOutlineContent);
+                    bRemoveSendOutlineEntry = false;
+                }
+                bRemoveToggleExpandEntry = lcl_InsertExpandCollapseAllItem(*m_xTreeView, *xEntry,
+                                                                           *xPop);
+            }
+            if (State::HIDDEN != m_eState &&
+                    pType->GetType() == ContentTypeId::POSTIT &&
+                    !m_pActiveShell->GetView().GetDocShell()->IsReadOnly() &&
+                    pType->GetMemberCount() > 0)
+                bRemovePostItEntries = false;
         }
-        if ( (pType->GetType() == ContentTypeId::POSTIT) &&  (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
-            bRemovePostItEntries = false;
     }
 
     if (bRemoveToggleExpandEntry)
@@ -1547,12 +1563,15 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         xSubPop1.reset();
         xPop->remove(OString::number(1)); // outline level menu
+    }
+    if (!bOutline || State::HIDDEN == m_eState)
+    {
         xSubPopOutlineTracking.reset();
         xPop->remove(OString::number(4)); // outline tracking menu
     }
-    if (!bOutline
-            || !m_pActiveShell->GetViewOptions()->IsShowOutlineContentVisibilityButton()
-            || m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() == 0)
+    if (!bOutline || State::HIDDEN == m_eState ||
+            !m_pActiveShell->GetViewOptions()->IsShowOutlineContentVisibilityButton() ||
+            m_pActiveShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() == 0)
     {
         xSubPopOutlineContent.reset();
         xPop->remove(OString::number(5)); // outline content menu
