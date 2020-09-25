@@ -94,7 +94,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 
         // find a map entry for this attribute
         sal_Int32 nLookupToken = nToken;
-        // compatiblity namespaces need to be tranformed into current namespace before looking up
+        // compatibility namespaces need to be transformed into current namespace before looking up
         if (IsTokenInNamespace(nLookupToken, XML_NAMESPACE_FO_COMPAT))
             nLookupToken = XML_ELEMENT(FO, (nLookupToken & TOKEN_MASK));
         SvXMLItemMapEntry const * pEntry = mrMapEntries->getByName( nLookupToken );
