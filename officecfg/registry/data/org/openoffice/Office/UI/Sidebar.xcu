@@ -96,7 +96,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Draw, any, visible ;
+            DrawImpress, any, visible ;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -817,7 +817,7 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            Draw,         any,         visible   ;
+            DrawImpress,         any,         visible   ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
