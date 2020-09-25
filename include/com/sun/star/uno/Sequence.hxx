@@ -73,19 +73,10 @@ inline Sequence< E >::Sequence(
 {
 }
 
-#if defined(__COVERITY__)
-extern "C" void __coverity_tainted_data_sanitize__(void *);
-#endif
-
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
     const Type & rType = ::cppu::getTypeFavourUnsigned( this );
-
-#if defined(__COVERITY__)
-    // cid#1448292 coverity has difficulty with css::uno::Sequence
-    __coverity_tainted_data_sanitize__(const_cast<E*>(pElements));
-#endif
 
     bool success =
     ::uno_type_sequence_construct(

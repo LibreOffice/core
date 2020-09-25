@@ -307,7 +307,7 @@ static bool idefaultConstructElements(
     return true;
 }
 
-
+// coverity[ -tainted_data_sink : arg-1 ]
 static bool icopyConstructFromElements(
     uno_Sequence ** ppSeq, void * pSourceElements,
     typelib_TypeDescriptionReference * pElementType,
@@ -651,7 +651,6 @@ static bool ireallocSequence(
 
 extern "C"
 {
-
 
 sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
