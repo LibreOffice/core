@@ -22,6 +22,30 @@
       "revId": "b5e023a7ef21c2ce546035b99ead7caf4e9b5343",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e19caf3_11f17ffa",
+        "filename": "vcl/skia/salbmp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-09-25T09:30:34Z",
+      "side": 1,
+      "message": "Right, I\u0027ll remove that, thanks.",
+      "parentUuid": "3cecb0aa_97c43f33",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 20
+      },
+      "revId": "b5e023a7ef21c2ce546035b99ead7caf4e9b5343",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
