@@ -314,12 +314,12 @@ sal_Int32 OTextInputStream::implReadNext()
     }
     catch( NotConnectedException& )
     {
-        throw IOException();
+        throw IOException("Not connected");
         //throw IOException( L"OTextInputStream::implReadString failed" );
     }
     catch( BufferSizeExceededException& )
     {
-        throw IOException();
+        throw IOException("Buffer size exceeded");
     }
 }
 

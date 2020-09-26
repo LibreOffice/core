@@ -164,7 +164,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
         // the provided stream must be empty
         xTargetSeek.set( xTargetStream, uno::UNO_QUERY_THROW );
         if ( xTargetSeek->getLength() )
-            throw io::IOException();
+            throw io::IOException("provided stream not empty");
     }
 
     uno::Reference< io::XTruncate > xTargetTruncate( xTargetStream, uno::UNO_QUERY_THROW );

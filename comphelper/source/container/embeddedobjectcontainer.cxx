@@ -88,7 +88,7 @@ const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
     }
 
     if ( !mxImageStorage.is() )
-        throw io::IOException();
+        throw io::IOException("No ObjectReplacements");
 
     return mxImageStorage;
 }

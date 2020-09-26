@@ -110,7 +110,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
     }
 
     if ( !m_xCopyInput.is() )
-        throw io::IOException();
+        throw io::IOException("no m_xCopyInput");
 }
 
 // XInputStream

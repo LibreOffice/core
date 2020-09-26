@@ -51,7 +51,7 @@ namespace stoc_connector {
     {
         if( m_nStatus )
         {
-            throw IOException();
+            throw IOException("pipe already closed");
         }
         if( aReadBytes.getLength() != nBytesToRead )
         {
@@ -65,11 +65,11 @@ namespace stoc_connector {
     {
         if( m_nStatus )
         {
-            throw IOException();
+            throw IOException("pipe already closed");
         }
         if( m_pipe.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
         {
-            throw IOException();
+            throw IOException("short write");
         }
     }
 

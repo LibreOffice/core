@@ -119,10 +119,10 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     try {
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, uno::makeAny( aKey ) );
     }
-    catch ( const uno::Exception& )
+    catch ( const uno::Exception& ex )
     {
         TOOLS_WARN_EXCEPTION( "package.xstor", "Can't write encryption related properties");
-        throw io::IOException(); // TODO
+        throw io::IOException(ex.Message); // TODO
     }
 }
 
@@ -135,10 +135,10 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
     try {
         return xPropertySet->getPropertyValue(STORAGE_ENCRYPTION_KEYS_PROPERTY);
     }
-    catch ( const uno::Exception& )
+    catch ( const uno::Exception& ex )
     {
         TOOLS_WARN_EXCEPTION( "package.xstor", "Can't get encryption related properties");
-        throw io::IOException(); // TODO
+        throw io::IOException(ex.Message); // TODO
     }
 }
 
@@ -503,7 +503,7 @@ OUString const & OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference<
 
                 uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
                 if ( !xTempOutStream.is() )
-                    throw io::IOException(); // TODO:
+                    throw io::IOException("no temp stream"); // TODO:
                 // the current position of the original stream should be still OK, copy further
                 ::comphelper::OStorageHelper::CopyInputToOutput( xStream, xTempOutStream );
                 xTempOutStream->closeOutput();
@@ -579,7 +579,7 @@ OUString const & OWriteStream_Impl::FillTempGetFileName()
 
                         uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
                         if ( !xTempOutStream.is() )
-                            throw io::IOException(); // TODO:
+                            throw io::IOException("no temp stream"); // TODO:
 
                         // copy stream contents to the file
                         xTempOutStream->writeBytes( aData );
@@ -641,7 +641,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
     // in case the stream can not be open
     // an exception should be thrown
     if ( !xTempStream.is() )
-        throw io::IOException(); //TODO:
+        throw io::IOException("no temp stream"); //TODO:
 
     return xTempStream;
 }
@@ -695,7 +695,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_bHasDataToFlush )
-        throw io::IOException();
+        throw io::IOException("m_bHasDataToFlush==true");
 
     OSL_ENSURE( m_aTempURL.isEmpty() && !m_xCacheStream.is(), "The temporary must not exist!" );
 
@@ -1169,11 +1169,11 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             throw;
         }
-        catch ( const uno::Exception& )
+        catch ( const uno::Exception& ex )
         {
             TOOLS_WARN_EXCEPTION( "package.xstor", "Can't write encryption related properties");
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
-            throw io::IOException(); // TODO:
+            throw io::IOException(ex.Message); // TODO:
         }
     }
 

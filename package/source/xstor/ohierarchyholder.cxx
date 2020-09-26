@@ -40,7 +40,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
-        throw io::IOException();
+        throw io::IOException("invalid storage/stream mode combo");
 
     uno::Reference< embed::XExtendedStorageStream > xResult =
         m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aEncryptionData );
@@ -82,7 +82,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( !( nStorageMode & embed::ElementModes::WRITE ) && ( nStreamMode & embed::ElementModes::WRITE ) )
-        throw io::IOException();
+        throw io::IOException("invalid storage/stream mode combo");
 
     if ( aListPath.empty() )
         throw uno::RuntimeException();
