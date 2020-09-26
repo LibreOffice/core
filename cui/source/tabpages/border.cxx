@@ -276,8 +276,8 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xPropertiesFrame(m_xBuilder->weld_container("properties"))
     , m_xMergeWithNextCB(m_xBuilder->weld_check_button("mergewithnext"))
     , m_xMergeAdjacentBordersCB(m_xBuilder->weld_check_button("mergeadjacent"))
-    , m_xRemoveAdjcentCellBordersCB(m_xBuilder->weld_check_button("rmadjcellborders"))
-    , m_xRemoveAdjcentCellBordersFT(m_xBuilder->weld_label("rmadjcellbordersft"))
+    , m_xRemoveAdjacentCellBordersCB(m_xBuilder->weld_check_button("rmadjcellborders"))
+    , m_xRemoveAdjacentCellBordersFT(m_xBuilder->weld_label("rmadjcellbordersft"))
 {
     static std::vector<std::u16string_view> aBorderImageIds;
 
@@ -525,14 +525,14 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     }
     if( bIsCalcDoc )
     {
-        m_xRemoveAdjcentCellBordersCB->connect_toggled(LINK(this, SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl));
-        m_xRemoveAdjcentCellBordersCB->show();
-        m_xRemoveAdjcentCellBordersCB->set_sensitive(false);
+        m_xRemoveAdjacentCellBordersCB->connect_toggled(LINK(this, SvxBorderTabPage, RemoveAdjacentCellBorderHdl_Impl));
+        m_xRemoveAdjacentCellBordersCB->show();
+        m_xRemoveAdjacentCellBordersCB->set_sensitive(false);
     }
     else
     {
-        m_xRemoveAdjcentCellBordersCB->hide();
-        m_xRemoveAdjcentCellBordersFT->hide();
+        m_xRemoveAdjacentCellBordersCB->hide();
+        m_xRemoveAdjacentCellBordersFT->hide();
     }
 }
 
@@ -820,8 +820,8 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     m_xSynchronizeCB->set_active(mbSync);
 
     mbRemoveAdjacentCellBorders = false;
-    m_xRemoveAdjcentCellBordersCB->set_active(false);
-    m_xRemoveAdjcentCellBordersCB->set_sensitive(false);
+    m_xRemoveAdjacentCellBordersCB->set_active(false);
+    m_xRemoveAdjacentCellBordersCB->set_sensitive(false);
 }
 
 void SvxBorderTabPage::ChangesApplied()
@@ -1499,12 +1499,12 @@ void SvxBorderTabPage::UpdateRemoveAdjCellBorderCB( sal_uInt16 nPreset )
     if( !bBorderDeletionReq && ( nPreset == IID_PRE_CELL_NONE || nPreset == IID_PRE_TABLE_NONE ) )
         bBorderDeletionReq = true;
 
-    m_xRemoveAdjcentCellBordersCB->set_sensitive(bBorderDeletionReq);
+    m_xRemoveAdjacentCellBordersCB->set_sensitive(bBorderDeletionReq);
 
     if( !bBorderDeletionReq )
     {
         mbRemoveAdjacentCellBorders = false;
-        m_xRemoveAdjcentCellBordersCB->set_active(false);
+        m_xRemoveAdjacentCellBordersCB->set_active(false);
     }
 }
 
