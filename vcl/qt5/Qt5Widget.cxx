@@ -193,7 +193,8 @@ void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
-    FILL_SAME(m_rFrame, width());
+    fillSalAbstractMouseEvent(m_rFrame, pEvent, pEvent->position().toPoint(), pEvent->buttons(),
+                              width(), aEvent);
 
     // mouse wheel ticks are 120, which we map to 3 lines.
     // we have to accumulate for touch scroll to keep track of the absolute delta.
