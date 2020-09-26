@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab1e06d4_62e84449",
+        "filename": "cui/source/tabpages/tpshadow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-26T07:34:52Z",
+      "side": 1,
+      "message": "rather just remove code, no need to comment it out, we can always recover old code from git history",
+      "revId": "ad5cb29befb78c998bb63394a692dab8d0822e0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f60337ca_c30c8adf",
+        "filename": "include/svx/dlgctrl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-26T07:34:52Z",
+      "side": 1,
+      "message": "the existing SvxXShadowPreview is only used in this one place, so rather just modify the existing one",
+      "revId": "ad5cb29befb78c998bb63394a692dab8d0822e0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
