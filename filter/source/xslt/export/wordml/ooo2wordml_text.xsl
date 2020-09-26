@@ -355,7 +355,7 @@
                 </xsl:element>
             </xsl:if>
             <xsl:if test="@text:number-lines='false'">
-                <w:supressLineNumbers/>
+                <w:suppressLineNumbers/>
             </xsl:if>
             <xsl:variable name="border-top" select="@fo:border-top | @fo:border"/>
             <xsl:variable name="border-bottom" select="@fo:border-bottom | @fo:border"/>
