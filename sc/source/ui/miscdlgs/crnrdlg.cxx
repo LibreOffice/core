@@ -57,11 +57,11 @@ const sal_uLong nEntryDataDelim = 2;
 ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
                                 SfxChildWindow* pCW,
                                 weld::Window* pParent,
-                                ScViewData* ptrViewData )
+                                ScViewData& rViewData )
 
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/namerangesdialog.ui", "NameRangesDialog")
-    , pViewData(ptrViewData)
-    , rDoc(ptrViewData->GetDocument())
+    , m_rViewData(rViewData)
+    , rDoc(rViewData.GetDocument())
     , bDlgLostFocus(false)
     , m_pEdActive(nullptr)
     , m_xLbRange(m_xBuilder->weld_tree_view("range"))
@@ -126,25 +126,15 @@ void ScColRowNameRangesDlg::Init()
 
     UpdateNames();
 
-    if (pViewData)
-    {
-        SCCOL nStartCol = 0;
-        SCROW nStartRow = 0;
-        SCTAB nStartTab = 0;
-        SCCOL nEndCol   = 0;
-        SCROW nEndRow   = 0;
-        SCTAB nEndTab   = 0;
-        pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,  nEndTab );
-        SetColRowData( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab));
-    }
-    else
-    {
-        m_xBtnColHead->set_active(true);
-        m_xBtnRowHead->set_active(false);
-        m_xEdAssign->SetText( EMPTY_OUSTRING );
-        m_xEdAssign2->SetText( EMPTY_OUSTRING );
-    }
+    SCCOL nStartCol = 0;
+    SCROW nStartRow = 0;
+    SCTAB nStartTab = 0;
+    SCCOL nEndCol   = 0;
+    SCROW nEndRow   = 0;
+    SCTAB nEndTab   = 0;
+    m_rViewData.GetSimpleArea(nStartCol, nStartRow, nStartTab,
+                              nEndCol,   nEndRow,  nEndTab );
+    SetColRowData( ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab));
 
     m_xBtnColHead->set_sensitive(true);
     m_xBtnRowHead->set_sensitive(true);
@@ -496,7 +486,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, OkBtnHdl, weld::Button&, void)
     rDoc.GetRowNameRangesRef() = xRowNameRanges;
     // changed ranges need to take effect
     rDoc.CompileColRowNameFormula();
-    ScDocShell* pDocShell = pViewData->GetDocShell();
+    ScDocShell* pDocShell = m_rViewData.GetDocShell();
     pDocShell->PostPaint(ScRange(0, 0, 0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB), PaintPartFlags::Grid);
     pDocShell->SetDocumentModified();
 

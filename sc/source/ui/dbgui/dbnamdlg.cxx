@@ -127,11 +127,11 @@ void DBSaveData::Restore()
 
 
 ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-    ScViewData* ptrViewData)
+    ScViewData& rViewData)
     : ScAnyRefDlgController(pB, pCW, pParent,
         "modules/scalc/ui/definedatabaserangedialog.ui", "DefineDatabaseRangeDialog")
-    , pViewData(ptrViewData)
-    , rDoc(ptrViewData->GetDocument())
+    , m_rViewData(rViewData)
+    , rDoc(rViewData.GetDocument())
     , bRefInputMode(false)
     , aAddrDetails(rDoc.GetAddressConvention(), 0, 0)
     , aLocalDbCol(*(rDoc.GetDBCollection()))
@@ -194,56 +194,53 @@ void ScDbNameDlg::Init()
 
     OUString  theAreaStr;
 
-    if ( pViewData )
+    SCCOL   nStartCol   = 0;
+    SCROW   nStartRow   = 0;
+    SCTAB   nStartTab   = 0;
+    SCCOL   nEndCol     = 0;
+    SCROW   nEndRow     = 0;
+    SCTAB   nEndTab     = 0;
+
+    ScDBCollection* pDBColl = rDoc.GetDBCollection();
+    ScDBData*       pDBData = nullptr;
+
+    m_rViewData.GetSimpleArea( nStartCol, nStartRow, nStartTab,
+                              nEndCol,   nEndRow,  nEndTab );
+
+    theCurArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
+
+    theAreaStr = theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aAddrDetails);
+
+    if ( pDBColl )
     {
-        SCCOL   nStartCol   = 0;
-        SCROW   nStartRow   = 0;
-        SCTAB   nStartTab   = 0;
-        SCCOL   nEndCol     = 0;
-        SCROW   nEndRow     = 0;
-        SCTAB   nEndTab     = 0;
-
-        ScDBCollection* pDBColl = rDoc.GetDBCollection();
-        ScDBData*       pDBData = nullptr;
-
-        pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                  nEndCol,   nEndRow,  nEndTab );
-
-        theCurArea = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-
-        theAreaStr = theCurArea.Format(rDoc, ScRefFlags::RANGE_ABS_3D, aAddrDetails);
-
-        if ( pDBColl )
+        // determine if the defined DB area has been marked:
+        pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::TOP_LEFT );
+        if ( pDBData )
         {
-            // determine if the defined DB area has been marked:
-            pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::TOP_LEFT );
-            if ( pDBData )
+            ScAddress&  rStart = theCurArea.aStart;
+            ScAddress&  rEnd   = theCurArea.aEnd;
+            SCCOL nCol1;
+            SCCOL  nCol2;
+            SCROW  nRow1;
+            SCROW  nRow2;
+            SCTAB  nTab;
+
+            pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
+
+            if (   (rStart.Tab() == nTab)
+                && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
+                && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
             {
-                ScAddress&  rStart = theCurArea.aStart;
-                ScAddress&  rEnd   = theCurArea.aEnd;
-                SCCOL nCol1;
-                SCCOL  nCol2;
-                SCROW  nRow1;
-                SCROW  nRow2;
-                SCTAB  nTab;
+                OUString aDBName = pDBData->GetName();
+                if ( aDBName != STR_DB_LOCAL_NONAME )
+                    m_xEdName->set_entry_text(aDBName);
 
-                pDBData->GetArea( nTab, nCol1, nRow1, nCol2, nRow2 );
-
-                if (   (rStart.Tab() == nTab)
-                    && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
-                    && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
-                {
-                    OUString aDBName = pDBData->GetName();
-                    if ( aDBName != STR_DB_LOCAL_NONAME )
-                        m_xEdName->set_entry_text(aDBName);
-
-                    m_xBtnHeader->set_active( pDBData->HasHeader() );
-                    m_xBtnTotals->set_active( pDBData->HasTotals() );
-                    m_xBtnDoSize->set_active( pDBData->IsDoSize() );
-                    m_xBtnKeepFmt->set_active( pDBData->IsKeepFmt() );
-                    m_xBtnStripData->set_active( pDBData->IsStripData() );
-                    SetInfoStrings( pDBData );
-                }
+                m_xBtnHeader->set_active( pDBData->HasHeader() );
+                m_xBtnTotals->set_active( pDBData->HasTotals() );
+                m_xBtnDoSize->set_active( pDBData->IsDoSize() );
+                m_xBtnKeepFmt->set_active( pDBData->IsKeepFmt() );
+                m_xBtnStripData->set_active( pDBData->IsStripData() );
+                SetInfoStrings( pDBData );
             }
         }
     }
@@ -385,9 +382,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl, weld::Button&, void)
     // Pass the changes and the remove list to the view: both are
     // transferred as a reference only, so that no dead memory can
     // be created at this point:
-    if ( pViewData )
     {
-        ScDBDocFunc aFunc(*pViewData->GetDocShell());
+        ScDBDocFunc aFunc(*m_rViewData.GetDocShell());
         aFunc.ModifyAllDBData(aLocalDbCol, aRemoveList);
     }
 
