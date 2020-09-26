@@ -437,7 +437,7 @@ namespace vclcanvas
                            OutputDevice*                                   p2ndOutDev,
                            const ::canvas::ParametricPolyPolygon::Values&  rValues,
                            const std::vector< ::Color >&                   rColors,
-                           const ::basegfx::B2DPolyPolygon&                rPoly,
+                           const ::tools::PolyPolygon&                     rPoly,
                            const rendering::ViewState&                     viewState,
                            const rendering::RenderState&                   renderState,
                            const rendering::Texture&                       texture,
@@ -466,8 +466,8 @@ namespace vclcanvas
 
             // determine maximal bound rect of texture-filled
             // polygon
-            const ::basegfx::B2DRectangle aPolygonDeviceRectOrig(
-                rPoly.getB2DRange() );
+            const ::tools::Rectangle aPolygonDeviceRectOrig(
+                rPoly.GetBoundRect() );
 
             if( tools::isRectangle( rPoly ) )
             {
@@ -482,7 +482,7 @@ namespace vclcanvas
                 // twice for XOR
 
                 rOutDev.Push( PushFlags::CLIPREGION );
-                rOutDev.IntersectClipRegion( ::tools::Rectangle(aPolygonDeviceRectOrig) );
+                rOutDev.IntersectClipRegion( aPolygonDeviceRectOrig );
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
@@ -570,7 +570,7 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
 
             const int nTransparency( setupOutDevState( viewState, renderState, IGNORE_COLOR ) );
-            ::basegfx::B2DPolyPolygon aPolyPoly( tools::mapPolyPolygon(
+            ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon(
                                        ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                        viewState, renderState ) );
 
@@ -636,7 +636,7 @@ namespace vclcanvas
                 // determine maximal bound rect of texture-filled
                 // polygon
                 const ::tools::Rectangle aPolygonDeviceRect(
-                    aPolyPoly.getB2DRange() );
+                    aPolyPoly.GetBoundRect() );
 
 
                 // first of all, determine whether we have a
@@ -945,10 +945,8 @@ namespace vclcanvas
 
                             // shift output to origin of VDev
                             const ::Point aOutPos( aPt - aPolygonDeviceRect.TopLeft() );
-                            basegfx::B2DHomMatrix aTranslateMatrix;
-                            aTranslateMatrix.translate( -aPolygonDeviceRect.Left(),
-                                                          -aPolygonDeviceRect.Top() );
-                            aPolyPoly.transform( aTranslateMatrix );
+                            aPolyPoly.Translate( ::Point( -aPolygonDeviceRect.Left(),
+                                                          -aPolygonDeviceRect.Top() ) );
 
                             const vcl::Region aPolyClipRegion( aPolyPoly );
 

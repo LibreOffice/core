@@ -803,8 +803,6 @@ public:
      */
     void                        DrawPolyLine( const tools::Polygon& rPoly,
                                               const LineInfo& rLineInfo );
-    void                        DrawPolyLine( const basegfx::B2DPolygon& rPoly,
-                                              const LineInfo& rLineInfo );
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool.

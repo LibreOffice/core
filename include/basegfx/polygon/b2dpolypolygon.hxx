@@ -68,7 +68,6 @@ namespace basegfx
 
         B2DPolygon const & getB2DPolygon(sal_uInt32 nIndex) const;
         void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
-        B2DPolygon const & operator[](sal_uInt32 nIndex) const { return getB2DPolygon(nIndex); }
 
         // test for curve
         bool areControlPointsUsed() const;
