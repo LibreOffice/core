@@ -29,7 +29,7 @@ public:
     void testRoundUp();
     void testStandard2007();
     void testAgileEncryptionVerifier();
-    void testAgileEncrpytionInfoWritingAndParsing();
+    void testAgileEncryptionInfoWritingAndParsing();
     void testAgileDataIntegrityHmacKey();
     void testAgileEncryptingAndDecrypting();
 
@@ -38,7 +38,7 @@ public:
     CPPUNIT_TEST(testRoundUp);
     CPPUNIT_TEST(testStandard2007);
     CPPUNIT_TEST(testAgileEncryptionVerifier);
-    CPPUNIT_TEST(testAgileEncrpytionInfoWritingAndParsing);
+    CPPUNIT_TEST(testAgileEncryptionInfoWritingAndParsing);
     CPPUNIT_TEST(testAgileDataIntegrityHmacKey);
     CPPUNIT_TEST(testAgileEncryptingAndDecrypting);
     CPPUNIT_TEST_SUITE_END();
@@ -192,7 +192,7 @@ void CryptoTest::testAgileEncryptionVerifier()
     CPPUNIT_ASSERT_EQUAL(true, aEngine.decryptAndCheckVerifierHash(aPassword));
 }
 
-void CryptoTest::testAgileEncrpytionInfoWritingAndParsing()
+void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
 {
     OUString aPassword("Password");
     std::vector<sal_uInt8> aKeyDataSalt;
