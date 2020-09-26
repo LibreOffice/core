@@ -218,7 +218,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
 {
     uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
-        throw io::IOException(); // TODO
+        throw io::IOException("no XEncryptionProtectedStorage"); // TODO
 
     if ( aEncryptionData.getLength() == 2 &&
          aEncryptionData[0].Name == "GpgInfos" &&

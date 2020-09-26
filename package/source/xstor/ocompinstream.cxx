@@ -413,7 +413,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
             return aResult;
     }
 
-    throw io::IOException(); // the relations info could not be read
+    throw io::IOException("relations info could not be read"); // the relations info could not be read
 }
 
 void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, sal_Bool /*bReplace*/  )

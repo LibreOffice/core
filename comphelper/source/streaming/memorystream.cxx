@@ -124,7 +124,7 @@ Reference< XOutputStream > SAL_CALL UNOMemoryStream::getOutputStream(  )
 sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if( nBytesToRead < 0 )
-        throw IOException();
+        throw IOException("nBytesToRead < 0");
 
     nBytesToRead = std::min( nBytesToRead, available() );
     aData.realloc( nBytesToRead );
@@ -149,7 +149,7 @@ sal_Int32 SAL_CALL UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, 
 void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 )
-        throw IOException();
+        throw IOException("nBytesToSkip < 0");
 
     mnCursor += std::min( nBytesToSkip, available() );
 }
