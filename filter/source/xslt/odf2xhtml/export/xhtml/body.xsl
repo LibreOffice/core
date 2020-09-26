@@ -1177,7 +1177,7 @@
         <!-- no creation of empty headings (without text content)   -->
         <xsl:if test="text() or descendant::text()">
             <!-- The URL linking of a table-of-content is due to a bug (cp. bug id# 102311) not mapped as URL in the XML.
-                 Linking of the table-of-content can therefore only be archieved by a work-around in HTML -->
+                 Linking of the table-of-content can therefore only be achieved by a work-around in HTML -->
             <xsl:call-template name="create-heading">
                 <xsl:with-param name="globalData" select="$globalData"/>
             </xsl:call-template>
