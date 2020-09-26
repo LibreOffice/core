@@ -152,8 +152,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xMergeWithNextCB;
     // #i29550#
     std::unique_ptr<weld::CheckButton> m_xMergeAdjacentBordersCB;
-    std::unique_ptr<weld::CheckButton> m_xRemoveAdjcentCellBordersCB;
-    std::unique_ptr<weld::Label> m_xRemoveAdjcentCellBordersFT;
+    std::unique_ptr<weld::CheckButton> m_xRemoveAdjacentCellBordersCB;
+    std::unique_ptr<weld::Label> m_xRemoveAdjacentCellBordersFT;
     std::unique_ptr<ShadowControlsWrapper> m_xShadowControls;
     std::unique_ptr<MarginControlsWrapper> m_xMarginControls;
 
