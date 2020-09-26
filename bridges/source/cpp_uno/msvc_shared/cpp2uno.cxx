@@ -96,7 +96,7 @@ cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         {
             pCppArgs[nPos] = pCppIncomingParams;
             pUnoArgs[nPos] = pCppIncomingParams;
-            if (sizeof(void*) == sizeof(sal_Int32)) // acccount 64bit types on 32bit arch
+            if (sizeof(void*) == sizeof(sal_Int32)) // account 64bit types on 32bit arch
             {
                 switch (pParamTD->eTypeClass)
                 {
