@@ -135,7 +135,7 @@ QAccessible::Relation lcl_matchUnoRelation(short relationType)
         case AccessibleRelationType::DESCRIBED_BY:
         default:
             SAL_WARN("vcl.qt5", "Unmatched relation: " << relationType);
-            return nullptr;
+            return {};
     }
 }
 
