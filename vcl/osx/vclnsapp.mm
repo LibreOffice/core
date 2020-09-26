@@ -123,6 +123,13 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     [NSApp miniaturizeAll: nil];
                     return;
                 }
+            } else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @" "] )
+            {
+                if ( nModMask == ( NSCommandKeyMask | NSControlKeyMask ) )
+                {
+                    [NSApp orderFrontCharacterPalette: NSApp];
+                    return;
+                }
             }
 
             // get information whether the event was handled; keyDown returns nothing
