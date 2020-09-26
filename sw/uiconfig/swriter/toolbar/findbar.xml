@@ -27,9 +27,9 @@
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
   <toolbar:toolbarseparator/>
-  <toolbar:toolbaritem xlink:href=".uno:NavElement"/>
-  <toolbar:toolbaritem xlink:href=".uno:ScrollToPrevious"/>
-  <toolbar:toolbaritem xlink:href=".uno:ScrollToNext"/>
+  <toolbar:toolbaritem xlink:href=".uno:NavElement" toolbar:visible="false"/>
+  <toolbar:toolbaritem xlink:href=".uno:ScrollToPrevious" toolbar:visible="false"/>
+  <toolbar:toolbaritem xlink:href=".uno:ScrollToNext" toolbar:visible="false"/>
   <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchLabel"/>
 </toolbar:toolbar>
