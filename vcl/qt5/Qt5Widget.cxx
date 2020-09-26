@@ -181,8 +181,14 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = pEvent->timestamp();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    aEvent.mnX = QGuiApplication::isLeftToRight() ? pEvent->position().toPoint().x()
+                                                  : width() - pEvent->position().toPoint().x();
+    aEvent.mnY = pEvent->position().toPoint().y();
+#else
     aEvent.mnX = QGuiApplication::isLeftToRight() ? pEvent->pos().x() : width() - pEvent->pos().x();
     aEvent.mnY = pEvent->pos().y();
+#endif
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
 
     // mouse wheel ticks are 120, which we map to 3 lines.
