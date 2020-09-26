@@ -142,7 +142,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     if (pInsertText->encoding_is_wchar)
     {
         wchar_t *pWCString = pInsertText->string.wide_char;
-        size_t nBytes = wcstombs ( nullptr, pWCString, 1024 /* don't care */);
+        size_t nBytes = wcstombs ( nullptr, pWCString, 0 /* don't care */);
         pMBString = static_cast<char*>(alloca( nBytes + 1 ));
         nMBLength = wcstombs ( pMBString, pWCString, nBytes + 1);
     }
@@ -476,7 +476,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
                 if( call_data->data.text->string.wide_char )
                 {
                     wchar_t* pWString = call_data->data.text->string.wide_char;
-                    size_t nBytes = wcstombs( nullptr, pWString, 1024 );
+                    size_t nBytes = wcstombs( nullptr, pWString, 0 /*don't care*/ );
                     pMBString = static_cast<sal_Char*>(alloca( nBytes+1 ));
                     nLength = wcstombs( pMBString, pWString, nBytes+1 );
                 }
