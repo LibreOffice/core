@@ -138,43 +138,43 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     switch( nSlotId )
     {
         case SID_CORRELATION_DIALOG:
-            xResult = std::make_shared<ScCorrelationDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScCorrelationDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_SAMPLING_DIALOG:
-            xResult = std::make_shared<ScSamplingDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScSamplingDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
-            xResult = std::make_shared<ScDescriptiveStatisticsDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScDescriptiveStatisticsDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
-            xResult = std::make_shared<ScAnalysisOfVarianceDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScAnalysisOfVarianceDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_COVARIANCE_DIALOG:
-            xResult = std::make_shared<ScCovarianceDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScCovarianceDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
-            xResult = std::make_shared<ScExponentialSmoothingDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScExponentialSmoothingDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_MOVING_AVERAGE_DIALOG:
-            xResult = std::make_shared<ScMovingAverageDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScMovingAverageDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_REGRESSION_DIALOG:
-            xResult = std::make_shared<ScRegressionDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScRegressionDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_FTEST_DIALOG:
-            xResult = std::make_shared<ScFTestDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScFTestDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_TTEST_DIALOG:
-            xResult = std::make_shared<ScTTestDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScTTestDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_ZTEST_DIALOG:
-            xResult = std::make_shared<ScZTestDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScZTestDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_CHI_SQUARE_TEST_DIALOG:
-            xResult = std::make_shared<ScChiSquareTestDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScChiSquareTestDialog>(pB, pCW, pParent, GetViewData());
             break;
         case SID_FOURIER_ANALYSIS_DIALOG:
-            xResult = std::make_shared<ScFourierAnalysisDialog>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScFourierAnalysisDialog>(pB, pCW, pParent, GetViewData());
             break;
         case WID_SIMPLE_REF:
         {

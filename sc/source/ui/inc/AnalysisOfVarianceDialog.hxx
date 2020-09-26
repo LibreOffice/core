@@ -48,7 +48,7 @@ private:
 public:
     ScAnalysisOfVarianceDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScAnalysisOfVarianceDialog() override;
 

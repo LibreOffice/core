@@ -18,7 +18,7 @@ class ScDescriptiveStatisticsDialog : public ScStatisticsInputOutputDialog
 public:
     ScDescriptiveStatisticsDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScDescriptiveStatisticsDialog() override;
 

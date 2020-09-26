@@ -18,7 +18,7 @@ class ScChiSquareTestDialog : public ScStatisticsInputOutputDialog
 public:
     ScChiSquareTestDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScChiSquareTestDialog() override;
 

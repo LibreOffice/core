@@ -25,7 +25,7 @@ public:
 
     ScStatisticsInputOutputDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData,
+        weld::Window* pParent, ScViewData& rViewData,
         const OUString& rUIXMLDescription,
         const OString& rID);
 
@@ -55,7 +55,7 @@ protected:
     std::unique_ptr<weld::RadioButton> mxGroupByRowsRadio;
 
     // Data
-    ScViewData*         mViewData;
+    ScViewData&         mViewData;
     ScDocument&         mDocument;
 
     ScRange             mInputRange;

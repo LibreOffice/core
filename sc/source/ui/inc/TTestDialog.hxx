@@ -18,7 +18,7 @@ class ScTTestDialog : public ScStatisticsTwoVariableDialog
 public:
     ScTTestDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScTTestDialog() override;
 

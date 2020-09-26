@@ -48,7 +48,7 @@ ScRangeList ScStatisticsInputOutputDialog::MakeRowRangeList(SCTAB aTab, ScAddres
 
 ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData, const OUString& rUIXMLDescription, const OString& rID)
+                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxInputRangeLabel(m_xBuilder->weld_label("input-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("input-range-edit")))
@@ -58,15 +58,15 @@ ScStatisticsInputOutputDialog::ScStatisticsInputOutputDialog(
     , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
-    , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mViewData(rViewData)
+    , mDocument(rViewData.GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
     , mGroupedBy(BY_COLUMN)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
     , mpActiveEdit(nullptr)
-    , mCurrentAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo())
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo())
     , mDialogLostFocus(false)
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
@@ -117,7 +117,7 @@ void ScStatisticsInputOutputDialog::Init()
 
 void ScStatisticsInputOutputDialog::GetRangeFromSelection()
 {
-    mViewData->GetSimpleArea(mInputRange);
+    mViewData.GetSimpleArea(mInputRange);
     OUString aCurrentString(mInputRange.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
@@ -274,9 +274,9 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, formula::
 void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
 {
     OUString aUndo(ScResId(GetUndoNameId()));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
     SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData.GetViewShell()->GetViewShellId() );
 
     ScRange aOutputRange = ApplyOutput(pDocShell);
 

@@ -41,10 +41,10 @@ namespace
 
 ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
                                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                                    weld::Window* pParent, ScViewData* pViewData,
+                                    weld::Window* pParent, ScViewData& rViewData,
                                     const OUString& rUiXmlDescription,
                                     const OString& rID)
-    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData, rUiXmlDescription, rID)
+    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, rViewData, rUiXmlDescription, rID)
 {}
 
 ScMatrixComparisonGenerator::~ScMatrixComparisonGenerator()

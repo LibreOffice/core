@@ -18,9 +18,9 @@
 
 ScZTestDialog::ScZTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData ) :
+                    weld::Window* pParent, ScViewData& rViewData ) :
     ScStatisticsTwoVariableDialog(
-            pSfxBindings, pChildWindow, pParent, pViewData,
+            pSfxBindings, pChildWindow, pParent, rViewData,
             "modules/scalc/ui/ztestdialog.ui", "ZTestDialog")
 {
     m_xDialog->set_title(ScResId(STR_ZTEST));

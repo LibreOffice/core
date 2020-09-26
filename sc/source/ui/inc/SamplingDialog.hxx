@@ -20,7 +20,7 @@ class ScSamplingDialog : public ScAnyRefDlgController
 public:
     ScSamplingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScSamplingDialog() override;
 
@@ -32,7 +32,7 @@ private:
     formula::RefEdit* mpActiveEdit;
 
     // Data
-    ScViewData*               mViewData;
+    ScViewData&               mViewData;
     const ScDocument&         mDocument;
 
     ScRange             mInputRange;

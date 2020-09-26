@@ -33,7 +33,7 @@ class ScRegressionDialog : public ScStatisticsTwoVariableDialog
 public:
     ScRegressionDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScRegressionDialog() override;
 
