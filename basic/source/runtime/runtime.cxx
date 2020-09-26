@@ -4268,15 +4268,15 @@ void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     if( !bInError )
     {
         // (there's a difference here in case of a jump out of a loop)
-        sal_uInt16 nExspectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
+        sal_uInt16 nExpectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
         if( !pGosubStk.empty() )
         {
-            nExspectedForLevel = nExspectedForLevel + pGosubStk.back().nStartForLvl;
+            nExpectedForLevel = nExpectedForLevel + pGosubStk.back().nStartForLvl;
         }
 
         // if the actual for-level is too small it'd jump out
         // of a loop -> corrected
-        while( nForLvl > nExspectedForLevel )
+        while( nForLvl > nExpectedForLevel )
         {
             PopFor();
         }
