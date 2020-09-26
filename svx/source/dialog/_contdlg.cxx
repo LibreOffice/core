@@ -76,7 +76,7 @@ SvxContourDlg::~SvxContourDlg()
 {
 }
 
-tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
+basegfx::B2DPolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                                                      const tools::Rectangle* pRect )
 {
     Bitmap  aBmp;
@@ -157,7 +157,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     aBmp.SetPrefSize( rGraphic.GetPrefSize() );
     aBmp.SetPrefMapMode( rGraphic.GetPrefMapMode() );
 
-    return tools::PolyPolygon( BitmapEx(aBmp).GetContour( bContourEdgeDetect, pRect ) );
+    return basegfx::B2DPolyPolygon(BitmapEx(aBmp).GetContour( bContourEdgeDetect, pRect ).getB2DPolygon());
 }
 
 // Loop through to super class, no virtual Methods to not become incompatible
@@ -173,7 +173,7 @@ bool SvxContourDlg::IsGraphicChanged() const
     return m_xImpl->IsGraphicChanged();
 }
 
-tools::PolyPolygon SvxContourDlg::GetPolyPolygon()
+basegfx::B2DPolyPolygon SvxContourDlg::GetPolyPolygon()
 {
     return m_xImpl->GetPolyPolygon();
 }
@@ -184,7 +184,7 @@ const void* SvxContourDlg::GetEditingObject() const
 }
 
 void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
-                            const tools::PolyPolygon* pPolyPoly, void* pEditingObj )
+                            const basegfx::B2DPolyPolygon* pPolyPoly, void* pEditingObj )
 {
     m_xImpl->UpdateGraphic( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
 }
@@ -277,64 +277,73 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
     m_xContourWnd->SetGraphic( aGraphic );
 }
 
-void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
+void SvxSuperContourDlg::SetPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
 {
     DBG_ASSERT(  m_xContourWnd->GetGraphic().GetType() != GraphicType::NONE, "Graphic must've been set first!" );
 
-    tools::PolyPolygon aPolyPoly( rPolyPoly );
+    basegfx::B2DPolyPolygon aPolyPoly;
     const MapMode   aMap100( MapUnit::Map100thMM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
     bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
-    for ( sal_uInt16 j = 0, nPolyCount = aPolyPoly.Count(); j < nPolyCount; j++ )
+    for ( sal_uInt16 j = 0, nPolyCount = rPolyPoly.count(); j < nPolyCount; j++ )
     {
-        tools::Polygon& rPoly = aPolyPoly[ j ];
+        const basegfx::B2DPolygon& rPoly = rPolyPoly[ j ];
+        basegfx::B2DPolygon aNewPoly;
+        aNewPoly.reserve(rPoly.count());
 
-        for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+        for ( sal_uInt16 i = 0, nCount = rPoly.count(); i < nCount; i++ )
         {
-            Point& rPt = rPoly[ i ];
+            basegfx::B2DPoint aPt = rPoly[ i ];
 
             if ( !bPixelMap )
-                rPt = pOutDev->LogicToPixel( rPt, aGrfMap );
+                aPt = pOutDev->LogicToPixel( aPt, aGrfMap );
 
-            rPt = pOutDev->PixelToLogic( rPt, aMap100 );
+            aPt = pOutDev->PixelToLogic( aPt, aMap100 );
+            aNewPoly.append(aPt);
         }
+        aPolyPoly.append(aNewPoly);
     }
 
     m_xContourWnd->SetPolyPolygon( aPolyPoly );
     m_xContourWnd->GetSdrModel()->SetChanged();
 }
 
-tools::PolyPolygon SvxSuperContourDlg::GetPolyPolygon()
+basegfx::B2DPolyPolygon SvxSuperContourDlg::GetPolyPolygon()
 {
-    tools::PolyPolygon aRetPolyPoly( m_xContourWnd->GetPolyPolygon() );
+    const basegfx::B2DPolyPolygon& rInputPolyPoly = m_xContourWnd->GetPolyPolygon();
+    basegfx::B2DPolyPolygon aRetPolyPoly;
 
     const MapMode   aMap100( MapUnit::Map100thMM );
     const MapMode   aGrfMap( aGraphic.GetPrefMapMode() );
     OutputDevice*   pOutDev = Application::GetDefaultDevice();
     bool            bPixelMap = aGrfMap.GetMapUnit() == MapUnit::MapPixel;
 
-    for ( sal_uInt16 j = 0, nPolyCount = aRetPolyPoly.Count(); j < nPolyCount; j++ )
+    for ( sal_uInt32 j = 0, nPolyCount = rInputPolyPoly.count(); j < nPolyCount; j++ )
     {
-        tools::Polygon& rPoly = aRetPolyPoly[ j ];
+        const basegfx::B2DPolygon& rPoly = rInputPolyPoly[ j ];
+        basegfx::B2DPolygon aRetPoly;
+        aRetPoly.reserve(rPoly.count());
 
-        for ( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+        for ( sal_uInt32 i = 0, nCount = rPoly.count(); i < nCount; i++ )
         {
-            Point& rPt = rPoly[ i ];
+            basegfx::B2DPoint aPt = rPoly[ i ];
 
-            rPt = pOutDev->LogicToPixel( rPt, aMap100  );
+            aPt = pOutDev->LogicToPixel( aPt, aMap100  );
 
             if ( !bPixelMap )
-                rPt = pOutDev->PixelToLogic( rPt, aGrfMap  );
+                aPt = pOutDev->PixelToLogic( aPt, aGrfMap  );
+            aRetPoly.append(aPt);
         }
+        aRetPolyPoly.append(aRetPoly);
     }
 
     return aRetPolyPoly;
 }
 
 void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicLinked,
-                                 const tools::PolyPolygon* pPolyPoly, void* pEditingObj )
+                                 const basegfx::B2DPolyPolygon* pPolyPoly, void* pEditingObj )
 {
     aUpdateGraphic = rGraphic;
     bUpdateGraphicLinked = _bGraphicLinked;
@@ -343,7 +352,7 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
     if ( pPolyPoly )
         aUpdatePolyPoly = *pPolyPoly;
     else
-        aUpdatePolyPoly = tools::PolyPolygon();
+        aUpdatePolyPoly = basegfx::B2DPolyPolygon();
 
     aUpdateIdle.Start();
 }
@@ -515,7 +524,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl, Timer *, void)
         bGraphicLinked = bUpdateGraphicLinked;
 
         aUpdateGraphic = Graphic();
-        aUpdatePolyPoly = tools::PolyPolygon();
+        aUpdatePolyPoly = basegfx::B2DPolyPolygon();
         bUpdateGraphicLinked = false;
 
         m_xContourWnd->GetSdrModel()->SetChanged( false );

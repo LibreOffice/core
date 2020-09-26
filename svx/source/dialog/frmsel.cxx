@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 #include <bitmaps.hlst>
 
@@ -103,13 +104,6 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
     return FrameSelFlags::NONE;
 }
 
-/** Merges the rSource polypolygon into the rDest polypolygon. */
-void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygon& rSource )
-{
-    const tools::PolyPolygon aTmp( rDest );
-    aTmp.GetUnion( rSource, rDest );
-}
-
 } // namespace
 
 FrameBorder::FrameBorder( FrameBorderType eType ) :
@@ -164,17 +158,17 @@ void FrameBorder::SetState( FrameBorderState eState )
 
 void FrameBorder::AddFocusPolygon( const tools::Polygon& rFocus )
 {
-    lclPolyPolyUnion( maFocusArea, rFocus );
+    maFocusArea.append( rFocus.getB2DPolygon() );
 }
 
-void FrameBorder::MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const
+void FrameBorder::MergeFocusToPolyPolygon( basegfx::B2DPolyPolygon& rPPoly ) const
 {
-    lclPolyPolyUnion( rPPoly, maFocusArea );
+    rPPoly.append( maFocusArea );
 }
 
 void FrameBorder::AddClickRect( const tools::Rectangle& rRect )
 {
-    lclPolyPolyUnion( maClickArea, tools::Polygon( rRect ) );
+    maClickArea.append( basegfx::utils::createPolygonFromRect( rRect ) );
 }
 
 bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
@@ -184,7 +178,7 @@ bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
 
 tools::Rectangle FrameBorder::GetClickBoundRect() const
 {
-    return maClickArea.GetBoundRect();
+    return maClickArea.getB2DRange();
 }
 
 void FrameBorder::SetKeyboardNeighbors(
@@ -552,7 +546,7 @@ void FrameSelectorImpl::DrawBackground()
         mnLine1 - mnFocusOffs, mnLine1 - mnFocusOffs, mnLine3 + mnFocusOffs, mnLine3 + mnFocusOffs ) );
 
     // draw the white space for enabled frame borders
-    tools::PolyPolygon aPPoly;
+    basegfx::B2DPolyPolygon aPPoly;
     for( FrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt )
         (*aIt)->MergeFocusToPolyPolygon( aPPoly );
     aPPoly.Optimize( PolyOptimizeFlags::CLOSE );
@@ -715,7 +709,7 @@ void FrameSelectorImpl::CopyVirDevToControl(vcl::RenderContext& rRenderContext)
 
 void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
 {
-    tools::PolyPolygon aPPoly;
+    basegfx::B2DPolyPolygon aPPoly;
     if (mrFrameSel.IsAnyBorderSelected())
     {
         for(SelFrameBorderCIter aIt( maEnabBorders ); aIt.Is(); ++aIt)
@@ -724,12 +718,12 @@ void FrameSelectorImpl::DrawAllTrackingRects(vcl::RenderContext& rRenderContext)
     }
     else
         // no frame border selected -> draw tracking rectangle around entire control
-        aPPoly.Insert( tools::Polygon(tools::Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
+        aPPoly.append( basegfx::utils::createPolygonFromRect(tools::Rectangle(maVirDevPos, mpVirDev->GetOutputSizePixel())));
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
 
-    for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
-        rRenderContext.Invert(aPPoly.GetObject(nIdx), InvertFlags::TrackFrame);
+    for(sal_uInt32 nIdx = 0, nCount = aPPoly.count(); nIdx < nCount; ++nIdx)
+        rRenderContext.Invert(aPPoly[nIdx], InvertFlags::TrackFrame);
 }
 
 Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const

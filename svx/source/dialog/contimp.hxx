@@ -66,7 +66,7 @@ class SvxSuperContourDlg
     Graphic             aUndoGraphic;
     Graphic             aRedoGraphic;
     Graphic             aUpdateGraphic;
-    tools::PolyPolygon  aUpdatePolyPoly;
+    basegfx::B2DPolyPolygon  aUpdatePolyPoly;
     Idle                aUpdateIdle;
     Idle                aCreateIdle;
     SfxBindings*        mpBindings;
@@ -116,13 +116,13 @@ public:
     const Graphic&      GetGraphic() const { return aGraphic; }
     bool                IsGraphicChanged() const { return mnGrfChanged > 0; }
 
-    void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    tools::PolyPolygon  GetPolyPolygon();
+    void                SetPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly );
+    basegfx::B2DPolyPolygon GetPolyPolygon();
 
     const void*         GetEditingObject() const { return pCheckObj; }
 
     void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
-                                const tools::PolyPolygon* pPolyPoly,
+                                const basegfx::B2DPolyPolygon* pPolyPoly,
                                 void* pEditingObj );
 };
 

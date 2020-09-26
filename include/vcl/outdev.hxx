@@ -744,6 +744,7 @@ public:
 public:
     void Invert( const tools::Rectangle& rRect, InvertFlags nFlags = InvertFlags::NONE );
     void Invert( const tools::Polygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
+    void Invert( const basegfx::B2DPolygon& rPoly, InvertFlags nFlags = InvertFlags::NONE );
     ///@}
 
     /** @name Line functions
