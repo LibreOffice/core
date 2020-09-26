@@ -26,12 +26,12 @@
 #include <tokenarray.hxx>
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-        const ScViewData* pViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
+        const ScViewData& rViewData, const std::map<OUString, ScRangeName*>& aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlgController( pB, pCW, pParent, "modules/scalc/ui/definename.ui", "DefineNameDialog")
     , mbUndo( bUndo )
-    , mrDoc(pViewData->GetDocument())
-    , mpDocShell ( pViewData->GetDocShell() )
+    , mrDoc(rViewData.GetDocument())
+    , mpDocShell ( rViewData.GetDocShell() )
     , maCursorPos( aCursorPos )
     , maGlobalNameStr  ( ScResId(STR_GLOBAL_SCOPE) )
     , maErrInvalidNameStr( ScResId(STR_ERR_NAME_INVALID))
@@ -76,7 +76,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* 
 
     ScRange aRange;
 
-    pViewData->GetSimpleArea( aRange );
+    rViewData.GetSimpleArea( aRange );
     OUString aAreaStr(aRange.Format(mrDoc, ScRefFlags::RANGE_ABS_3D,
             ScAddress::Details(mrDoc.GetAddressConvention(), 0, 0)));
 

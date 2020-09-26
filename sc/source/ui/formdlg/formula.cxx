@@ -57,7 +57,7 @@ using namespace com::sun::star;
 //      init/ shared functions for dialog
 
 ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
-                           weld::Window* pParent, const ScViewData* pViewData, const formula::IFunctionManager* _pFunctionMgr)
+                           weld::Window* pParent, const ScViewData& rViewData, const formula::IFunctionManager* _pFunctionMgr)
     : formula::FormulaDlg(pB, pCW, pParent, _pFunctionMgr, this)
     , m_aHelper(this,pB)
     , m_pViewShell( nullptr )
@@ -85,7 +85,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
         }
     }
 
-    m_pDoc = &pViewData->GetDocument();
+    m_pDoc = &rViewData.GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(ScServiceProvider::Type::FORMULAPARS,
                                                   static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
@@ -114,16 +114,16 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
 
     pScMod->SetRefInputHdl(pInputHdl);
 
-    m_pDoc = &pViewData->GetDocument();
-    SCCOL nCol = pViewData->GetCurX();
-    SCROW nRow = pViewData->GetCurY();
-    SCTAB nTab = pViewData->GetTabNo();
+    m_pDoc = &rViewData.GetDocument();
+    SCCOL nCol = rViewData.GetCurX();
+    SCROW nRow = rViewData.GetCurY();
+    SCTAB nTab = rViewData.GetTabNo();
     m_CursorPos = ScAddress( nCol, nRow, nTab );
 
     m_pViewShell->InitFormEditData();                             // create new
     pData = m_pViewShell->GetFormEditData();
     pData->SetInputHandler(pInputHdl);
-    pData->SetDocShell(pViewData->GetDocShell());
+    pData->SetDocShell(rViewData.GetDocShell());
 
     OSL_ENSURE(pData,"FormEditData not available");
 
@@ -195,7 +195,7 @@ void ScFormulaDlg::fill()
 
     //  data exists -> restore state (after switch)
     //  don't reinitialise m_pDoc and m_CursorPos
-    //pDoc = pViewData->GetDocument();
+    //pDoc = rViewData.GetDocument();
     if(IsInputHdl(pData->GetInputHandler()))
     {
         pScMod->SetRefInputHdl(pData->GetInputHandler());
