@@ -25,7 +25,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/poly.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/window.hxx>
 
 class SfxBindings;
@@ -61,14 +61,14 @@ public:
     const Graphic&      GetGraphic() const;
     bool                IsGraphicChanged() const;
 
-    tools::PolyPolygon  GetPolyPolygon();
+    basegfx::B2DPolyPolygon GetPolyPolygon();
 
     const void*         GetEditingObject() const;
 
     void                Update( const Graphic& rGraphic, bool bGraphicLinked,
-                                const tools::PolyPolygon* pPolyPoly, void* pEditingObj );
+                                const basegfx::B2DPolyPolygon* pPolyPoly, void* pEditingObj );
 
-    static tools::PolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
+    static basegfx::B2DPolyPolygon  CreateAutoContour(  const Graphic& rGraphic,
                                             const tools::Rectangle* pRect = nullptr );
 };
 

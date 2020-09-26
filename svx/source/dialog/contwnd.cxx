@@ -40,10 +40,10 @@ ContourWindow::ContourWindow(weld::Dialog* pDialog)
 {
 }
 
-void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
+void ContourWindow::SetPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 {
     SdrPage* pPage = pModel->GetPage(0);
-    const sal_uInt16 nPolyCount = rPolyPoly.Count();
+    const sal_uInt32 nPolyCount = rPolyPoly.count();
 
     // First delete all drawing objects
     aPolyPoly = rPolyPoly;
@@ -58,7 +58,7 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
     for (sal_uInt16 i = 0; i < nPolyCount; i++)
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
-        aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
+        aPolyPolygon.append(aPolyPoly[ i ]);
         SdrPathObj* pPathObj = new SdrPathObj(
             *pModel,
             OBJ_PATHFILL,
@@ -84,21 +84,20 @@ void ContourWindow::SetPolyPolygon(const tools::PolyPolygon& rPolyPoly)
     pModel->SetChanged(false);
 }
 
-const tools::PolyPolygon& ContourWindow::GetPolyPolygon()
+const basegfx::B2DPolyPolygon& ContourWindow::GetPolyPolygon()
 {
     if ( pModel->IsChanged() )
     {
         SdrPage* pPage = pModel->GetPage( 0 );
 
-        aPolyPoly = tools::PolyPolygon();
+        aPolyPoly = basegfx::B2DPolyPolygon();
 
         if ( pPage && pPage->GetObjCount() )
         {
             SdrPathObj* pPathObj = static_cast<SdrPathObj*>(pPage->GetObj(0));
             // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
             // curves at all. Keeping subdivision here for security
-            const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::utils::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
-            aPolyPoly = tools::PolyPolygon(aB2DPolyPolygon);
+            aPolyPoly = basegfx::utils::adaptiveSubdivideByAngle(pPathObj->GetPathPoly());
         }
 
         pModel->SetChanged( false );
@@ -142,7 +141,7 @@ bool ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         const Point aLogPt(GetDrawingArea()->get_ref_device().PixelToLogic(rMEvt.GetPosPixel()));
 
-        SetPolyPolygon( tools::PolyPolygon() );
+        SetPolyPolygon( basegfx::B2DPolyPolygon() );
         aWorkRect = tools::Rectangle( aLogPt, aLogPt );
         Invalidate(tools::Rectangle(Point(), GetGraphicSize()));
         SetEditMode( true );
@@ -204,7 +203,7 @@ bool ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
         if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
         {
-            tools::PolyPolygon _aPolyPoly( GetPolyPolygon() );
+            basegfx::B2DPolyPolygon _aPolyPoly( GetPolyPolygon() );
 
             _aPolyPoly.Clip( aWorkRect );
             SetPolyPolygon( _aPolyPoly );

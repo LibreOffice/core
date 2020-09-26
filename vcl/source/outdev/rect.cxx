@@ -206,6 +206,11 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 
+void OutputDevice::Invert( const basegfx::B2DPolygon& rPoly, InvertFlags nFlags )
+{
+    Invert( tools::Polygon(rPoly), nFlags);
+}
+
 void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt32 nLen, Color aStart, Color aEnd)
 {
     assert(!is_double_buffered_window());

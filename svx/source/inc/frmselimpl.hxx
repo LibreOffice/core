@@ -67,11 +67,11 @@ public:
     void SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
     const frame::Style& GetUIStyle() const { return maUIStyle; }
 
-    void ClearFocusArea() { maFocusArea.Clear(); }
+    void ClearFocusArea() { maFocusArea.clear(); }
     void AddFocusPolygon( const tools::Polygon& rFocus );
-    void MergeFocusToPolyPolygon( tools::PolyPolygon& rPPoly ) const;
+    void MergeFocusToPolyPolygon( basegfx::B2DPolyPolygon& rPPoly ) const;
 
-    void ClearClickArea() { maClickArea.Clear(); }
+    void ClearClickArea() { maClickArea.clear(); }
     void AddClickRect( const tools::Rectangle& rRect );
     bool ContainsClickPoint( const Point& rPos ) const;
     tools::Rectangle GetClickBoundRect() const;
@@ -89,8 +89,8 @@ private:
     FrameBorderType meKeyRight; /// Right neighbor for keyboard control.
     FrameBorderType meKeyTop; /// Upper neighbor for keyboard control.
     FrameBorderType meKeyBottom;    /// Lower neighbor for keyboard control.
-    tools::PolyPolygon maFocusArea;    /// Focus drawing areas.
-    tools::PolyPolygon maClickArea;    /// Mouse click areas.
+    basegfx::B2DPolyPolygon maFocusArea;    /// Focus drawing areas.
+    basegfx::B2DPolyPolygon maClickArea;    /// Mouse click areas.
     bool mbEnabled : 1; /// true = Border enabled in control.
     bool mbSelected : 1; /// true = Border selected in control.
 };

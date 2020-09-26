@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SVX_SOURCE_DIALOG_CONTWND_HXX
 #define INCLUDED_SVX_SOURCE_DIALOG_CONTWND_HXX
 
-#include <tools/poly.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <svx/graphctl.hxx>
 
 class ContourWindow final : public GraphCtrl
 {
-    tools::PolyPolygon         aPolyPoly;
+    basegfx::B2DPolyPolygon    aPolyPoly;
     Color               aPipetteColor;
     tools::Rectangle           aWorkRect;
     Link<ContourWindow&,void>  aPipetteLink;
@@ -47,8 +47,8 @@ public:
 
     ContourWindow(weld::Dialog* pDialog);
 
-    void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    const tools::PolyPolygon&  GetPolyPolygon();
+    void                SetPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly );
+    const basegfx::B2DPolyPolygon&  GetPolyPolygon();
 
     void                SetPipetteMode( const bool bPipette ) { bPipetteMode = bPipette; }
     const Color&        GetPipetteColor() const { return aPipetteColor; }
