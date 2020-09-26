@@ -31,7 +31,7 @@ class ScDbNameDlg : public ScAnyRefDlgController
 {
 public:
     ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                ScViewData* ptrViewData);
+                ScViewData& rViewData);
     virtual ~ScDbNameDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
@@ -50,7 +50,7 @@ private:
     OUString        aStrSource;
     OUString        aStrOperations;
 
-    ScViewData*     pViewData;
+    ScViewData&     m_rViewData;
     const ScDocument& rDoc;
     bool            bRefInputMode;
     ScAddress::Details aAddrDetails;

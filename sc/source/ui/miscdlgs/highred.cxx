@@ -26,10 +26,10 @@
 
 
 ScHighlightChgDlg::ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                                     ScViewData* ptrViewData)
+                                     ScViewData& rViewData)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/showchangesdialog.ui", "ShowChangesDialog")
-    , pViewData(ptrViewData)
-    , rDoc(ptrViewData->GetDocument())
+    , m_rViewData(rViewData)
+    , rDoc(rViewData.GetDocument())
     , m_xHighlightBox(m_xBuilder->weld_check_button("showchanges"))
     , m_xCbAccept(m_xBuilder->weld_check_button("showaccepted"))
     , m_xCbReject(m_xBuilder->weld_check_button("showrejected"))
@@ -59,8 +59,6 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
 
 void ScHighlightChgDlg::Init()
 {
-    OSL_ENSURE( pViewData, "ViewData or Document not found!" );
-
     ScChangeTrack* pChanges = rDoc.GetChangeTrack();
     if(pChanges!=nullptr)
     {
@@ -216,7 +214,7 @@ IMPL_LINK_NOARG(ScHighlightChgDlg, OKBtnHdl, weld::Button&, void)
     aChangeViewSet.SetTheRangeList(aLocalRangeList);
     aChangeViewSet.AdjustDateMode( rDoc );
     rDoc.SetChangeViewSettings(aChangeViewSet);
-    pViewData->GetDocShell()->PostPaintGridAll();
+    m_rViewData.GetDocShell()->PostPaintGridAll();
     response(RET_OK);
 }
 

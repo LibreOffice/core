@@ -32,7 +32,7 @@ class ScDocument;
 class ScHighlightChgDlg : public ScAnyRefDlgController
 {
 private:
-    ScViewData*             pViewData;
+    ScViewData&             m_rViewData;
     ScDocument&             rDoc;
     ScChangeViewSettings    aChangeViewSet;
 
@@ -59,8 +59,8 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) override;
 
 public:
-    ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-               ScViewData*      ptrViewData);
+    ScHighlightChgDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
+                      ScViewData& rViewData);
 
     virtual ~ScHighlightChgDlg() override;
 

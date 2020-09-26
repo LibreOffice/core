@@ -189,14 +189,14 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         {
             if (!mbInSwitch)
             {
-                xResult = std::make_shared<ScNameDlg>(pB, pCW, pParent, &GetViewData(),
+                xResult = std::make_shared<ScNameDlg>(pB, pCW, pParent, GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
                                                 GetViewData().GetTabNo() ) );
             }
             else
             {
-                xResult = std::make_shared<ScNameDlg>( pB, pCW, pParent, &GetViewData(),
+                xResult = std::make_shared<ScNameDlg>( pB, pCW, pParent, GetViewData(),
                                      ScAddress( GetViewData().GetCurX(),
                                                 GetViewData().GetCurY(),
                                                 GetViewData().GetTabNo() ), &m_RangeMap);
@@ -211,7 +211,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
                 rDoc.GetRangeNameMap(aRangeMap);
-                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), aRangeMap,
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
                                           GetViewData().GetTabNo()), true);
@@ -223,7 +223,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 {
                     aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr.first, itr.second.get()));
                 }
-                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, &GetViewData(), aRangeMap,
+                xResult = std::make_shared<ScNameDefDlg>(pB, pCW, pParent, GetViewData(), aRangeMap,
                                 ScAddress(GetViewData().GetCurX(),
                                           GetViewData().GetCurY(),
                                           GetViewData().GetTabNo()), false);
@@ -241,14 +241,14 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( false );
 
-            xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScDbNameDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_OPENDLG_EDIT_PRINTAREA:
             xResult = std::make_shared<ScPrintAreasDlg>(pB, pCW, pParent);
             break;
         case SID_DEFINE_COLROWNAMERANGES:
-            xResult = std::make_shared<ScColRowNameRangesDlg>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScColRowNameRangesDlg>(pB, pCW, pParent, GetViewData());
             break;
         case SID_OPENDLG_SOLVE:
         {
@@ -370,7 +370,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case FID_CHG_SHOW:
         {
             // dialog checks, what is in the cell
-            xResult = std::make_shared<ScHighlightChgDlg>(pB, pCW, pParent, &GetViewData());
+            xResult = std::make_shared<ScHighlightChgDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_MANAGE_XML_SOURCE:
@@ -398,7 +398,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             if (!isLOKMobilePhone())
             {
                 // dialog checks, what is in the cell
-                xResult = o3tl::make_shared<ScFormulaDlg>(pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr());
+                xResult = o3tl::make_shared<ScFormulaDlg>(pB, pCW, pParent, GetViewData(), ScGlobal::GetStarCalcFunctionMgr());
             }
             break;
         }

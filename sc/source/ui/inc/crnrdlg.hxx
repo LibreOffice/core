@@ -32,7 +32,7 @@ class ScColRowNameRangesDlg : public ScAnyRefDlgController
 {
 public:
     ScColRowNameRangesDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                          ScViewData* ptrViewData);
+                          ScViewData& rViewData);
     virtual ~ScColRowNameRangesDlg() override;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument& rDoc ) override;
@@ -50,7 +50,7 @@ private:
 
     typedef std::unordered_map< OUString, ScRange > NameRangeMap;
     NameRangeMap    aRangeMap;
-    ScViewData*     pViewData;
+    ScViewData&     m_rViewData;
     ScDocument&     rDoc;
     bool            bDlgLostFocus;
 

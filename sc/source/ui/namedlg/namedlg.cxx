@@ -42,7 +42,7 @@
 //logic
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-        ScViewData*       ptrViewData,
+        ScViewData&  rViewData,
         const ScAddress&  aCursorPos,
         std::map<OUString, std::unique_ptr<ScRangeName>> *const pRangeMap)
     : ScAnyRefDlgController(pB, pCW, pParent, "modules/scalc/ui/managenamesdialog.ui",
@@ -53,8 +53,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParen
     , maErrNameInUse(ScResId(STR_ERR_NAME_EXISTS))
     , maStrMultiSelect(ScResId(STR_MULTI_SELECT))
 
-    , mpViewData(ptrViewData)
-    , mrDoc(ptrViewData->GetDocument())
+    , mrViewData(rViewData)
+    , mrDoc(rViewData.GetDocument())
     , maCursorPos(aCursorPos)
     , mbDataChanged(false)
     , mbCloseWithoutUndo(false)
@@ -171,7 +171,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
 void ScNameDlg::Close()
 {
     if (mbDataChanged && !mbCloseWithoutUndo)
-        mpViewData->GetDocFunc().ModifyAllRangeNames(m_RangeMap);
+        mrViewData.GetDocFunc().ModifyAllRangeNames(m_RangeMap);
     DoClose(ScNameDlgWrapper::GetChildWindowId());
 }
 

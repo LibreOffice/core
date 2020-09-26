@@ -39,7 +39,7 @@ private:
     const OUString maStrMultiSelect;
     OUString maStrInfoDefault;
 
-    ScViewData*     mpViewData;
+    ScViewData&     mrViewData;
     ScDocument&     mrDoc;
     const ScAddress maCursorPos;
 
@@ -108,7 +108,7 @@ protected:
 
 public:
     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-               ScViewData*      ptrViewData,
+               ScViewData&      rViewData,
                const ScAddress& aCursorPos,
                std::map<OUString, std::unique_ptr<ScRangeName>>* pRangeMap = nullptr);
     virtual         ~ScNameDlg() override;
