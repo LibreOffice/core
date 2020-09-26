@@ -18,9 +18,9 @@
 
 ScMovingAverageDialog::ScMovingAverageDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData )
+                    weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsInputOutputDialog(
-            pSfxBindings, pChildWindow, pParent, pViewData,
+            pSfxBindings, pChildWindow, pParent, rViewData,
             "modules/scalc/ui/movingaveragedialog.ui",
             "MovingAverageDialog")
     , mxTrimRangeCheck(m_xBuilder->weld_check_button("trimrange-check"))

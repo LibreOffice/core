@@ -20,16 +20,16 @@
 #include <strings.hrc>
 
 ScSamplingDialog::ScSamplingDialog(SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                                   weld::Window* pParent, ScViewData* pViewData)
+                                   weld::Window* pParent, ScViewData& rViewData)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent,
                           "modules/scalc/ui/samplingdialog.ui", "SamplingDialog")
     , mpActiveEdit(nullptr)
-    , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mViewData(rViewData)
+    , mDocument(rViewData.GetDocument())
     , mInputRange(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0)
     , mOutputAddress(ScAddress::INITIALIZE_INVALID)
-    , mCurrentAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo())
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo())
     , mnLastSampleSizeValue(1)
     , mnLastPeriodValue(1)
     , mDialogLostFocus(false)
@@ -101,7 +101,7 @@ void ScSamplingDialog::Init()
 
 void ScSamplingDialog::GetRangeFromSelection()
 {
-    mViewData->GetSimpleArea(mInputRange);
+    mViewData.GetSimpleArea(mInputRange);
     OUString aCurrentString(mInputRange.Format(mDocument, ScRefFlags::RANGE_ABS_3D, mAddressDetails));
     mxInputRangeEdit->SetText(aCurrentString);
 }
@@ -329,12 +329,12 @@ ScRange ScSamplingDialog::PerformRandomSamplingKeepOrder(ScDocShell* pDocShell)
 void ScSamplingDialog::PerformSampling()
 {
     OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
     SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
 
     ScRange aModifiedRange;
 
-    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData.GetViewShell()->GetViewShellId() );
 
     if (mxRandomMethodRadio->get_active())
     {

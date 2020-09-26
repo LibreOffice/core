@@ -35,7 +35,7 @@ class ScFourierAnalysisDialog : public ScStatisticsInputOutputDialog
 
 public:
     ScFourierAnalysisDialog(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pParent,
-                            ScViewData* pViewData);
+                            ScViewData& rViewData);
 
     virtual ~ScFourierAnalysisDialog() override;
 

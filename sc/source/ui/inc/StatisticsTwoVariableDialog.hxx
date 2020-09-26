@@ -25,7 +25,7 @@ public:
 
     ScStatisticsTwoVariableDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData,
+        weld::Window* pParent, ScViewData& rViewData,
         const OUString& rUIXMLDescription, const OString& rID);
 
     virtual ~ScStatisticsTwoVariableDialog() override;
@@ -55,7 +55,7 @@ protected:
     std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
     // Data
-    ScViewData*               mViewData;
+    ScViewData&               mViewData;
     ScDocument&               mDocument;
 
     ScRange                   mVariable1Range;

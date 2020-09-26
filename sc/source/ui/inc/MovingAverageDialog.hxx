@@ -25,7 +25,7 @@ private:
 public:
     ScMovingAverageDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScMovingAverageDialog() override;
 

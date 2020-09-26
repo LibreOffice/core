@@ -24,7 +24,7 @@ private:
 public:
     ScExponentialSmoothingDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
-        weld::Window* pParent, ScViewData* pViewData );
+        weld::Window* pParent, ScViewData& rViewData );
 
     virtual ~ScExponentialSmoothingDialog() override;
 

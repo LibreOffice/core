@@ -20,7 +20,7 @@
 
 ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData, const OUString& rUIXMLDescription, const OString& rID)
+                    weld::Window* pParent, ScViewData& rViewData, const OUString& rUIXMLDescription, const OString& rID)
     : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, rUIXMLDescription, rID)
     , mxVariable1RangeLabel(m_xBuilder->weld_label("variable1-range-label"))
     , mxVariable1RangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("variable1-range-edit")))
@@ -31,8 +31,8 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
     , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
     , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
-    , mViewData(pViewData)
-    , mDocument(pViewData->GetDocument())
+    , mViewData(rViewData)
+    , mDocument(rViewData.GetDocument())
     , mVariable1Range(ScAddress::INITIALIZE_INVALID)
     , mVariable2Range(ScAddress::INITIALIZE_INVALID)
     , mAddressDetails(mDocument.GetAddressConvention(), 0, 0 )
@@ -42,7 +42,7 @@ ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
     , mxGroupByColumnsRadio(m_xBuilder->weld_radio_button("groupedby-columns-radio"))
     , mxGroupByRowsRadio(m_xBuilder->weld_radio_button("groupedby-rows-radio"))
     , mpActiveEdit(nullptr)
-    , mCurrentAddress(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() )
+    , mCurrentAddress(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() )
     , mDialogLostFocus(false)
 {
     mxVariable1RangeEdit->SetReferences(this, mxVariable1RangeLabel.get());
@@ -106,7 +106,7 @@ void ScStatisticsTwoVariableDialog::GetRangeFromSelection()
     OUString aCurrentString;
 
     ScRange aCurrentRange;
-    mViewData->GetSimpleArea(aCurrentRange);
+    mViewData.GetSimpleArea(aCurrentRange);
 
     if (aCurrentRange.aEnd.Col() - aCurrentRange.aStart.Col() == 1)
     {
@@ -316,9 +316,9 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, formula::
 void ScStatisticsTwoVariableDialog::CalculateInputAndWriteToOutput()
 {
     OUString aUndo(ScResId(GetUndoNameId()));
-    ScDocShell* pDocShell = mViewData->GetDocShell();
+    ScDocShell* pDocShell = mViewData.GetDocShell();
     SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );
+    pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData.GetViewShell()->GetViewShellId() );
 
     ScRange aOutputRange = ApplyOutput(pDocShell);
 

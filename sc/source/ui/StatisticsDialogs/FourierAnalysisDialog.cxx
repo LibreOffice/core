@@ -27,8 +27,8 @@
 
 ScFourierAnalysisDialog::ScFourierAnalysisDialog(SfxBindings* pSfxBindings,
                                                  SfxChildWindow* pChildWindow,
-                                                 weld::Window* pParent, ScViewData* pViewData)
-    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData,
+                                                 weld::Window* pParent, ScViewData& rViewData)
+    : ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, rViewData,
                                     "modules/scalc/ui/fourieranalysisdialog.ui",
                                     "FourierAnalysisDialog")
     , maLabelAddr(ScAddress::INITIALIZE_INVALID)

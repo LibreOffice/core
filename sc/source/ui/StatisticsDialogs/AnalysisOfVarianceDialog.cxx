@@ -86,9 +86,9 @@ void lclMakeSubRangesList(ScRangeList& rRangeList, const ScRange& rInputRange, S
 
 ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    weld::Window* pParent, ScViewData* pViewData )
+                    weld::Window* pParent, ScViewData& rViewData )
     : ScStatisticsInputOutputDialog(
-            pSfxBindings, pChildWindow, pParent, pViewData,
+            pSfxBindings, pChildWindow, pParent, rViewData,
             "modules/scalc/ui/analysisofvariancedialog.ui",
             "AnalysisOfVarianceDialog")
     , meFactor(SINGLE_FACTOR)
