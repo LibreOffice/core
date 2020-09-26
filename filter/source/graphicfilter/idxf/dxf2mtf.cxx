@@ -579,7 +579,7 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
 
     SetAreaAttribute( rE );
     sal_Int32 j = 0;
-    basegfx::B2DPolyPolygon aPolyPoly;
+    tools::PolyPolygon aPolyPoly;
     for ( j = 0; j < rE.nBoundaryPathCount; j++ )
     {
         std::vector< Point > aPtAry;
@@ -619,14 +619,13 @@ void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransf
         sal_uInt16 i, nSize = static_cast<sal_uInt16>(aPtAry.size());
         if ( nSize )
         {
-            basegfx::B2DPolygon aPoly;
-            aPoly.reserve( nSize );
+            tools::Polygon aPoly( nSize );
             for ( i = 0; i < nSize; i++ )
-                aPoly.append(aPtAry[ i ]);
-            aPolyPoly.append( aPoly );
+                aPoly[ i ] = aPtAry[ i ];
+            aPolyPoly.Insert( aPoly );
         }
     }
-    if ( aPolyPoly.count() )
+    if ( aPolyPoly.Count() )
         pVirDev->DrawPolyPolygon( aPolyPoly );
 }
 

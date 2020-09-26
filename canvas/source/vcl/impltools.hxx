@@ -92,7 +92,7 @@ namespace vclcanvas
 
             @return true, if the polygon is a rectangle.
          */
-        bool isRectangle( const ::basegfx::B2DPolyPolygon& rPolyPoly );
+        bool isRectangle( const ::tools::PolyPolygon& rPolyPoly );
 
 
         // Little helper to encapsulate locking into policy class
@@ -164,7 +164,7 @@ namespace vclcanvas
                                 const css::rendering::ViewState&   rViewState,
                                 const css::rendering::RenderState& rRenderState );
 
-        ::basegfx::B2DPolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
+        ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
                                       const css::rendering::ViewState&     rViewState,
                                       const css::rendering::RenderState&   rRenderState );
 
