@@ -121,8 +121,8 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         {"com.sun.star.drawing.MarkerTable",                  SERVICE_NAME_MARKER_TABLE},
 
         {"com.sun.star.xml.NamespaceMap",                     SERVICE_NAME_NAMESPACE_MAP},
-        {"com.sun.star.document.ExportGraphicStoreageHandler", SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER},
-        {"com.sun.star.document.ImportGraphicStoreageHandler", SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER}
+        {"com.sun.star.document.ExportGraphicStorageHandler", SERVICE_NAME_EXPORT_GRAPHIC_STORAGE_RESOLVER},
+        {"com.sun.star.document.ImportGraphicStorageHandler", SERVICE_NAME_IMPORT_GRAPHIC_STORAGE_RESOLVER}
     };
 
     return aServiceNameMap;
