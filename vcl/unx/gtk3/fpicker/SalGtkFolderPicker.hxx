@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFOLDERPICKER_HXX
 #define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFOLDERPICKER_HXX
 
-#include <list>
 #include <memory>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
