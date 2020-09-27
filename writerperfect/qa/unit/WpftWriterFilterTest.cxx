@@ -48,6 +48,7 @@ void WpftWriterFilterTest::test()
         { "Writer_3.1.sdw", REQUIRE_STAROFFICE_VERSION(0, 0, 2) },
     };
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
+        { "PocketWord.psw", REQUIRE_WPS_VERSION(0, 4, 12) },
         { "Word_5.0_DOS.doc", REQUIRE_WPS_VERSION(0, 4, 3) },
         { "Write_3.1.wri", REQUIRE_WPS_VERSION(0, 4, 2) },
     };
