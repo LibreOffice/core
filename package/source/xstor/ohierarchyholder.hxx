@@ -30,7 +30,6 @@
 
 #include <rtl/ref.hxx>
 
-#include <list>
 #include <unordered_map>
 #include <vector>
 
@@ -39,8 +38,8 @@ struct OHierarchyElement_Impl;
 typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
 
-typedef ::std::list< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
-                        OWeakStorRefList_Impl;
+typedef ::std::vector< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
+                        OWeakStorRefVector_Impl;
 
 struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >
 {
@@ -52,7 +51,7 @@ struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransa
 
     OHierarchyElementList_Impl m_aChildren;
 
-    OWeakStorRefList_Impl m_aOpenStreams;
+    OWeakStorRefVector_Impl m_aOpenStreams;
 
 public:
     explicit OHierarchyElement_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage )
