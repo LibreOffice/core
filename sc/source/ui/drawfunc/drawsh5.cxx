@@ -53,7 +53,7 @@ using namespace com::sun::star;
 
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
-    ScDrawView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = rViewData.GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         //  Hyperlink
@@ -150,7 +150,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                     bool bDone = false;
                     if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
-                        ScDrawView* pView = pViewData->GetScDrawView();
+                        ScDrawView* pView = rViewData.GetScDrawView();
                         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                         {
@@ -182,7 +182,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                         xPropSet->setPropertyValue( sPropLabel, uno::Any(rName) );
                                     }
 
-                                    OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
+                                    OUString aTmp = INetURLObject::GetAbsURL( rViewData.GetDocShell()->GetMedium()->GetBaseURL(), rURL );
                                     xPropSet->setPropertyValue( sPropTargetURL, uno::Any(aTmp) );
 
                                     if( !rTarget.isEmpty() && xInfo->hasPropertyByName( sPropTargetFrame ) )
@@ -196,7 +196,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                                     }
 
                                     //! Undo ???
-                                    pViewData->GetDocShell()->SetDocumentModified();
+                                    rViewData.GetDocShell()->SetDocumentModified();
                                     bDone = true;
                                 }
                             }
@@ -209,7 +209,7 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
                     }
 
                     if (!bDone)
-                        pViewData->GetViewShell()->
+                        rViewData.GetViewShell()->
                             InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
 
                     //  If "text" is received by InsertURL of ViewShell, then the DrawShell is turned off !!!
@@ -225,8 +225,8 @@ void ScDrawShell::ExecuteHLink( const SfxRequest& rReq )
 
 void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 {
-    SfxBindings& rBindings = pViewData->GetBindings();
-    ScTabView*   pTabView  = pViewData->GetView();
+    SfxBindings& rBindings = rViewData.GetBindings();
+    ScTabView*   pTabView  = rViewData.GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
     sal_uInt16 nSlotId = rReq.GetSlot();
 
@@ -242,7 +242,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
             //  leave draw shell if nothing selected (layer may be locked)
-            pViewData->GetViewShell()->UpdateDrawShell();
+            rViewData.GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_FRAME_TO_TOP:
@@ -316,12 +316,12 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_DELETE:
         case SID_DELETE_CONTENTS:
             pView->DeleteMarked();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            rViewData.GetViewShell()->UpdateDrawShell();
         break;
 
         case SID_CUT:
             pView->DoCut();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            rViewData.GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_COPY:
@@ -329,7 +329,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
 
         case SID_PASTE:
-            ScClipUtil::PasteFromClipboard ( GetViewData(), GetViewData()->GetViewShell(), true );
+            ScClipUtil::PasteFromClipboard(&GetViewData(), GetViewData().GetViewShell(), true);
             break;
 
         case SID_SELECTALL:
@@ -426,7 +426,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_FONTWORK:
         {
             sal_uInt16 nId = ScGetFontWorkId();
-            SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+            SfxViewFrame* pViewFrm = rViewData.GetViewShell()->GetViewFrame();
 
             if ( rReq.GetArgs() )
                 pViewFrm->SetChildWindow( nId,
@@ -476,14 +476,14 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         OUString aName = pSelected->GetName();
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        vcl::Window* pWin = pViewData->GetActiveWin();
+                        vcl::Window* pWin = rViewData.GetActiveWin();
                         ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(pWin ? pWin->GetFrameWeld() : nullptr, aName));
 
                         pDlg->SetCheckNameHdl(LINK(this, ScDrawShell, NameObjectHdl));
 
                         if(RET_OK == pDlg->Execute())
                         {
-                            ScDocShell* pDocSh = pViewData->GetDocShell();
+                            ScDocShell* pDocSh = rViewData.GetDocShell();
                             pDlg->GetName(aName);
 
                             if (aName != pSelected->GetName())
@@ -495,7 +495,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                                 {
                                     //  graphics objects must have names
                                     //  (all graphics are supposed to be in the navigator)
-                                    ScDrawLayer* pModel = pViewData->GetDocument().GetDrawLayer();
+                                    ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
 
                                     if(pModel)
                                     {
@@ -544,13 +544,13 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         OUString aDescription(pSelected->GetDescription());
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        vcl::Window* pWin = pViewData->GetActiveWin();
+                        vcl::Window* pWin = rViewData.GetActiveWin();
                         ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
                                     pWin ? pWin->GetFrameWeld() : nullptr, aTitle, aDescription));
 
                         if(RET_OK == pDlg->Execute())
                         {
-                            ScDocShell* pDocSh = pViewData->GetDocShell();
+                            ScDocShell* pDocSh = rViewData.GetDocShell();
 
                             // handle Title and Description
                             pDlg->GetTitle(aTitle);
@@ -611,7 +611,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bo
     OUString aName;
     rDialog.GetName( aName );
 
-    ScDrawLayer* pModel = pViewData->GetDocument().GetDrawLayer();
+    ScDrawLayer* pModel = rViewData.GetDocument().GetDrawLayer();
     if ( !aName.isEmpty() && pModel )
     {
         SCTAB nDummyTab;
@@ -627,7 +627,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bo
 
 void ScDrawShell::ExecFormText(const SfxRequest& rReq)
 {
-    ScDrawView*         pDrView     = pViewData->GetScDrawView();
+    ScDrawView*         pDrView     = rViewData.GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
@@ -643,7 +643,7 @@ void ScDrawShell::ExecFormText(const SfxRequest& rReq)
 
 void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 {
-    ScViewFunc* pView = pViewData->GetView();
+    ScViewFunc* pView = rViewData.GetView();
     if ( pView->HasPaintBrush() )
     {
         // cancel paintbrush mode
@@ -656,7 +656,7 @@ void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
         if( pArgs && pArgs->Count() >= 1 )
             bLock = pArgs->Get(SID_FORMATPAINTBRUSH).GetValue();
 
-        ScDrawView* pDrawView = pViewData->GetScDrawView();
+        ScDrawView* pDrawView = rViewData.GetScDrawView();
         if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
             std::unique_ptr<SfxItemSet> pItemSet(new SfxItemSet( pDrawView->GetAttrFromMarked(true/*bOnlyHardAttr*/) ));
@@ -667,9 +667,9 @@ void ScDrawShell::ExecFormatPaintbrush( const SfxRequest& rReq )
 
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
-    ScDrawView* pDrawView = pViewData->GetScDrawView();
+    ScDrawView* pDrawView = rViewData.GetScDrawView();
     bool bSelection = pDrawView && pDrawView->AreObjectsMarked();
-    bool bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
+    bool bHasPaintBrush = rViewData.GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )
         rSet.DisableItem( SID_FORMATPAINTBRUSH );
@@ -679,7 +679,7 @@ void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 
 ScDrawView* ScDrawShell::GetDrawView()
 {
-    return pViewData->GetView()->GetScDrawView();
+    return rViewData.GetView()->GetScDrawView();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

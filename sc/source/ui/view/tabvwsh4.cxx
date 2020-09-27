@@ -739,7 +739,7 @@ void ScTabViewShell::SetEditShell(EditView* pView, bool bActive )
         if (pEditShell)
             pEditShell->SetEditView( pView );
         else
-            pEditShell.reset( new ScEditShell( pView, &GetViewData() ) );
+            pEditShell.reset( new ScEditShell(pView, GetViewData()) );
 
         SetCurSubShell(OST_Editing);
     }
@@ -759,7 +759,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
 
     if(!pCellShell) // is anyway always used
     {
-        pCellShell.reset( new ScCellShell( &GetViewData(), GetFrameWin() ) );
+        pCellShell.reset(new ScCellShell(GetViewData(), GetFrameWin()));
         pCellShell->SetRepeatTarget( &aTarget );
     }
 
@@ -807,7 +807,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pDrawTextShell )
             {
                 pDocSh->MakeDrawLayer();
-                pDrawTextShell.reset( new ScDrawTextObjectBar( &GetViewData() ) );
+                pDrawTextShell.reset( new ScDrawTextObjectBar(GetViewData()) );
             }
             AddSubShell(*pDrawTextShell);
         }
@@ -831,7 +831,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pDrawShell )
             {
                 pDocSh->MakeDrawLayer();
-                pDrawShell.reset( new ScDrawShell( &GetViewData() ) );
+                pDrawShell.reset(new ScDrawShell(GetViewData()));
                 pDrawShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pDrawShell);
@@ -844,7 +844,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pDrawFormShell )
             {
                 pDocSh->MakeDrawLayer();
-                pDrawFormShell.reset( new ScDrawFormShell( &GetViewData() ) );
+                pDrawFormShell.reset( new ScDrawFormShell(GetViewData()) );
                 pDrawFormShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pDrawFormShell);
@@ -857,7 +857,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pChartShell )
             {
                 pDocSh->MakeDrawLayer();
-                pChartShell.reset( new ScChartShell( &GetViewData() ) );
+                pChartShell.reset( new ScChartShell(GetViewData()) );
                 pChartShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pChartShell);
@@ -870,7 +870,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pOleObjectShell )
             {
                 pDocSh->MakeDrawLayer();
-                pOleObjectShell.reset( new ScOleObjectShell( &GetViewData() ) );
+                pOleObjectShell.reset( new ScOleObjectShell(GetViewData()) );
                 pOleObjectShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pOleObjectShell);
@@ -883,7 +883,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pGraphicShell)
             {
                 pDocSh->MakeDrawLayer();
-                pGraphicShell.reset( new ScGraphicShell( &GetViewData() ) );
+                pGraphicShell.reset( new ScGraphicShell(GetViewData()) );
                 pGraphicShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pGraphicShell);
@@ -896,7 +896,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             if ( !pMediaShell)
             {
                 pDocSh->MakeDrawLayer();
-                pMediaShell.reset( new ScMediaShell( &GetViewData() ) );
+                pMediaShell.reset( new ScMediaShell(GetViewData()) );
                 pMediaShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pMediaShell);
@@ -926,7 +926,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             {
                 pDocSh->MakeDrawLayer();    // the waiting time rather now as on the click
 
-                pAuditingShell.reset( new ScAuditingShell( &GetViewData() ) );
+                pAuditingShell.reset( new ScAuditingShell(GetViewData()) );
                 pAuditingShell->SetRepeatTarget( &aTarget );
             }
             AddSubShell(*pAuditingShell);

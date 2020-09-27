@@ -69,8 +69,8 @@ void ScCellShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("cell");
 }
 
-ScCellShell::ScCellShell(ScViewData* pData, const VclPtr<vcl::Window>& frameWin) :
-    ScFormatShell(pData),
+ScCellShell::ScCellShell(ScViewData& rData, const VclPtr<vcl::Window>& frameWin) :
+    ScFormatShell(&rData),
     pImpl( new CellShell_Impl() ),
     bPastePossible(false),
     pFrameWin(frameWin)

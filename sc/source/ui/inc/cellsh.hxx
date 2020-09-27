@@ -79,7 +79,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                ScCellShell( ScViewData* pData, const VclPtr<vcl::Window>& pFrameWin );
+                ScCellShell( ScViewData& rData, const VclPtr<vcl::Window>& pFrameWin );
     virtual     ~ScCellShell() override;
 
     void        Execute(SfxRequest &);

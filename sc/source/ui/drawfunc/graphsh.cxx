@@ -50,8 +50,8 @@ void ScGraphicShell::InitInterface_Impl()
 }
 
 
-ScGraphicShell::ScGraphicShell(ScViewData* pData) :
-    ScDrawShell(pData)
+ScGraphicShell::ScGraphicShell(ScViewData& rData) :
+    ScDrawShell(rData)
 {
     SetName("GraphicObject");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Graphic));
@@ -63,7 +63,7 @@ ScGraphicShell::~ScGraphicShell()
 
 void ScGraphicShell::GetAttrState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
 
     if( pView )
         SvxGrafAttrHelper::GetGrafAttrState( rSet, *pView );
@@ -71,7 +71,7 @@ void ScGraphicShell::GetAttrState( SfxItemSet& rSet )
 
 void ScGraphicShell::Execute( SfxRequest& rReq )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
 
     if( pView )
     {
@@ -82,7 +82,7 @@ void ScGraphicShell::Execute( SfxRequest& rReq )
 
 void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
 
@@ -100,7 +100,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
 
 void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -134,7 +134,7 @@ void ScGraphicShell::ExecuteFilter( const SfxRequest& rReq )
 
 void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )
@@ -154,7 +154,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
 
 void ScGraphicShell::ExecuteExternalEdit( SAL_UNUSED_PARAMETER SfxRequest& )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -175,7 +175,7 @@ void ScGraphicShell::ExecuteExternalEdit( SAL_UNUSED_PARAMETER SfxRequest& )
 
 void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )
@@ -192,7 +192,7 @@ void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
 
 void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -202,7 +202,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
         if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            CompressGraphicsDialog dialog(GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings());
+            CompressGraphicsDialog dialog(GetViewData().GetDialogParent(), pGraphicObj, GetViewData().GetBindings());
             if (dialog.run() == RET_OK)
             {
                 SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
@@ -220,7 +220,7 @@ void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 
 void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )
@@ -237,7 +237,7 @@ void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
 
 void ScGraphicShell::ExecuteCropGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -256,7 +256,7 @@ void ScGraphicShell::ExecuteCropGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 
 void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq*/)
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -265,7 +265,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
         {
             GraphicAttr aGraphicAttr = pObj->GetGraphicAttr();
             short nState = RET_CANCEL;
-            vcl::Window* pWin = GetViewData()->GetActiveWin();
+            vcl::Window* pWin = GetViewData().GetActiveWin();
             weld::Window* pWinFrame = pWin ? pWin->GetFrameWeld() : nullptr;
             if (aGraphicAttr != GraphicAttr()) // the image has been modified
             {
@@ -296,7 +296,7 @@ void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq
 
 void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )
@@ -316,7 +316,7 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
 
 void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rReq*/)
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -326,7 +326,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
         if( dynamic_cast<const SdrGrafObj*>( pObj) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
         {
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-            vcl::Window* pWin = GetViewData()->GetActiveWin();
+            vcl::Window* pWin = GetViewData().GetActiveWin();
             SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC), pWin ? pWin->GetFrameWeld() : nullptr);
 
             if( aDlg.Execute() == ERRCODE_NONE )
@@ -352,7 +352,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
 
 void ScGraphicShell::GetChangePictureState(SfxItemSet &rSet)
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )

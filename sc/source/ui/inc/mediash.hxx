@@ -38,7 +38,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScMediaShell(ScViewData* pData);
+    ScMediaShell(ScViewData& rData);
     virtual ~ScMediaShell() override;
 
     void ExecuteMedia(const SfxRequest& rReq);

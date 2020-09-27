@@ -41,14 +41,14 @@ sal_uInt16 ScGetFontWorkId()
 
 bool ScDrawTextObjectBar::IsNoteEdit() const
 {
-    return ScDrawLayer::IsNoteCaption( pViewData->GetView()->GetScDrawView()->GetTextEditObject() );
+    return ScDrawLayer::IsNoteCaption( mrViewData.GetView()->GetScDrawView()->GetTextEditObject() );
 }
 
 //  if no text edited, functions like in drawsh
 
 void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {
-    ScTabView*   pTabView  = pViewData->GetView();
+    ScTabView*   pTabView  = mrViewData.GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
 
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -60,7 +60,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 
         case SID_CUT:
             pView->DoCut();
-            pViewData->GetViewShell()->UpdateDrawShell();
+            mrViewData.GetViewShell()->UpdateDrawShell();
             break;
 
         case SID_PASTE:
@@ -88,7 +88,7 @@ void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                         css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,
                         SDRATTR_TEXTDIRECTION ) );
                 pView->SetAttributes( aAttr );
-                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
+                mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
                 rReq.Done( aAttr );
             }
             break;
@@ -126,7 +126,7 @@ void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
 
 void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 {
-    ScTabView*   pTabView  = pViewData->GetView();
+    ScTabView*   pTabView  = mrViewData.GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
 
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -135,7 +135,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
         case SID_FONTWORK:
             {
                 sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
-                SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+                SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
 
                 if ( rReq.GetArgs() )
                     pViewFrm->SetChildWindow( nId,
@@ -164,7 +164,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
                                 bLeft ? SvxAdjust::Left : SvxAdjust::Right,
                                 EE_PARA_JUST ) );
                 pView->SetAttributes( aAttr );
-                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+                mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();
                 rReq.Done();        //! Done(aAttr) ?
 
             }
@@ -174,7 +174,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::ExecFormText(const SfxRequest& rReq)
 {
-    ScTabView*          pTabView    = pViewData->GetView();
+    ScTabView*          pTabView    = mrViewData.GetView();
     ScDrawView*         pDrView     = pTabView->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
@@ -192,7 +192,7 @@ void ScDrawTextObjectBar::ExecFormText(const SfxRequest& rReq)
 void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrObject*    pObj        = nullptr;
-    ScDrawView*         pDrView     = pViewData->GetView()->GetScDrawView();
+    ScDrawView*         pDrView     = mrViewData.GetView()->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 )
