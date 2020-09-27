@@ -211,7 +211,7 @@ namespace svt
         if (IsEditing())
         {
             EnableAndShow();
-            if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest.get() == Application::GetFocusWindow()))
+            if (!ControlHasFocus() && (m_pFocusWhileRequest.get() == Application::GetFocusWindow()))
                 aController->GetWindow().GrabFocus();
         }
     }
@@ -467,6 +467,13 @@ namespace svt
                 implActivateCellOnMouseEvent(rEvt, true);
     }
 
+    bool EditBrowseBox::ControlHasFocus() const
+    {
+        Window* pControlWindow = aController ? &aController->GetWindow() : nullptr;
+        if (ControlBase* pControlBase = dynamic_cast<ControlBase*>(pControlWindow))
+            return pControlBase->ControlHasFocus();
+        return pControlWindow && pControlWindow->HasChildPathFocus();
+    }
 
     void EditBrowseBox::implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp)
     {
@@ -474,7 +481,7 @@ namespace svt
             ActivateCell();
         else if (IsEditing() && !aController->GetWindow().IsEnabled())
             DeactivateCell();
-        else if (IsEditing() && !aController->GetWindow().HasChildPathFocus())
+        else if (IsEditing() && !ControlHasFocus())
             AsynchGetFocus();
 
         if (!(IsEditing() && aController->GetWindow().IsEnabled() && aController->WantMouseEvent()))
@@ -546,7 +553,7 @@ namespace svt
     {
         if (rEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
-            if  (   (IsEditing() && Controller()->GetWindow().HasChildPathFocus())
+            if  (   (IsEditing() && ControlHasFocus())
                 ||  rEvt.GetWindow() == &GetDataWindow()
                 ||  (!IsEditing() && HasChildPathFocus())
                 )
