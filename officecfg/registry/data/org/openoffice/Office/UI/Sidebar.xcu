@@ -328,6 +328,9 @@
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
         </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:EditStyle</value>
+        </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
             WriterVariants,   Annotation,         visible                    ;
@@ -372,7 +375,6 @@
             Calc,             DrawLine,           hidden                     ;
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible,  .uno:CellTextDlg ;
-            DrawImpress,      3DObject,           visible                    ;
             DrawImpress,      Draw,               hidden                     ;
             DrawImpress,      DrawText,           visible                    ;
             DrawImpress,      DrawLine,           hidden                     ;
@@ -1222,7 +1224,7 @@
           <value>private:resource/toolpanel/SvxPanelFactory/ListsPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
+          <value>120</value>
         </prop>
       </node>
 
