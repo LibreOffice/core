@@ -33,6 +33,24 @@
       "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "487729e9_6f4ce86c",
+        "filename": "vcl/ios/clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-09-27T13:19:18Z",
+      "side": 1,
+      "message": "There\u0027s no pop_front() method for vector, we must erase first element which is not at all optimized. Do you mean, I may just remove \"listeners.pop_front()\" and then indeed listeners may be changed into a vector?",
+      "parentUuid": "7879d67e_05baec2d",
+      "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
