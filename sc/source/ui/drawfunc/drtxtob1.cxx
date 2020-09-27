@@ -42,8 +42,8 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-        pViewData->GetDialogParent(), &rArgs,
-        pViewData->GetSfxDocShell(), true));
+        mrViewData.GetDialogParent(), &rArgs,
+        mrViewData.GetSfxDocShell(), true));
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
         pDlg->SetCurPageId("fonteffects");
@@ -84,7 +84,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
-        pViewData->GetDialogParent(), &aNewAttr));
+        mrViewData.GetDialogParent(), &aNewAttr));
     bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -99,16 +99,16 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
 
 void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 {
-    SdrView* pView = pViewData->GetScDrawView();
+    SdrView* pView = mrViewData.GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(pViewData->GetDialogParent()));
+    ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog(mrViewData.GetDialogParent()));
 
     pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
     pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );
     pDlg->Insert( SotClipboardFormatId::RICHTEXT,  EMPTY_OUSTRING );
 
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewData.GetActiveWin() ) );
 
     SotClipboardFormatId nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 

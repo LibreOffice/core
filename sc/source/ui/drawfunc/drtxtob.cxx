@@ -105,17 +105,17 @@ void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
-    SfxShell(pData->GetViewShell()),
-    pViewData(pData),
+ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData& rData) :
+    SfxShell(rData.GetViewShell()),
+    mrViewData(rData),
     bPastePossible(false)
 {
-    SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
+    SetPool( mrViewData.GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  At the switching-over the UndoManager is changed to edit mode
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SfxUndoManager* pMgr = mrViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument().IsUndoEnabled() )
+    if ( !mrViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -128,7 +128,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
     if ( mxClipEvtLstnr.is() )
     {
-        mxClipEvtLstnr->RemoveListener( pViewData->GetActiveWin() );
+        mxClipEvtLstnr->RemoveListener( mrViewData.GetActiveWin() );
 
         //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
@@ -140,7 +140,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
 
 void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
-    ScDrawView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = mrViewData.GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     Outliner* pOutliner = pView->GetTextEditOutliner();
 
@@ -236,7 +236,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     }
                 }
                 else
-                    ScViewUtil::ExecuteCharMap( rItem, *pViewData->GetViewShell()->GetViewFrame() );
+                    ScViewUtil::ExecuteCharMap( rItem, *mrViewData.GetViewShell()->GetViewFrame() );
 
                 if ( !aString.isEmpty() )
                 {
@@ -307,7 +307,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             {
                 // Ensure the field is selected first
                 pOutView->SelectFieldAtCursor();
-                pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
+                mrViewData.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_HYPERLINK_DIALOG);
             }
             break;
 
@@ -336,7 +336,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             pView->ScEndTextEdit(); // end text edit before switching direction
             ExecuteGlobal( rReq );
             // restore consistent state between shells and functions:
-            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
+            mrViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             break;
 
         case SID_THES:
@@ -361,7 +361,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
 void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
-    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    SfxViewFrame* pViewFrm = mrViewData.GetViewShell()->GetViewFrame();
     bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
     bool bDisableFontWork = false;
 
@@ -379,7 +379,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_HYPERLINK_GETLINK ) != SfxItemState::UNKNOWN )
     {
         SvxHyperlinkItem aHLinkItem;
-        SdrView* pView = pViewData->GetScDrawView();
+        SdrView* pView = mrViewData.GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
@@ -410,7 +410,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
-        SdrView* pView = pViewData->GetScDrawView();
+        SdrView* pView = mrViewData.GetScDrawView();
         if( !URLFieldHelper::IsCursorAtURLField(pView->GetTextEditOutlinerView()) )
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
@@ -431,7 +431,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
-        SdrView* pView = pViewData->GetScDrawView();
+        SdrView* pView = mrViewData.GetScDrawView();
         SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
@@ -444,7 +444,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_THES ) != SfxItemState::UNKNOWN  ||
          rSet.GetItemState( SID_THESAURUS ) != SfxItemState::UNKNOWN )
     {
-        SdrView * pView = pViewData->GetScDrawView();
+        SdrView * pView = mrViewData.GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
         OUString        aStatusVal;
@@ -477,7 +477,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
     bPastePossible = ( pDataHelper->HasFormat( SotClipboardFormatId::STRING ) || pDataHelper->HasFormat( SotClipboardFormatId::RTF )
         || pDataHelper->HasFormat( SotClipboardFormatId::RICHTEXT ) );
 
-    SfxBindings& rBindings = pViewData->GetBindings();
+    SfxBindings& rBindings = mrViewData.GetBindings();
     rBindings.Invalidate( SID_PASTE );
     rBindings.Invalidate( SID_PASTE_SPECIAL );
     rBindings.Invalidate( SID_PASTE_UNFORMATTED );
@@ -486,7 +486,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
 
 void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 {
-    SdrView* pView = pViewData->GetScDrawView();
+    SdrView* pView = mrViewData.GetScDrawView();
     if ( !pView->GetTextEditOutlinerView() )
     {
         GetGlobalClipState( rSet );
@@ -497,11 +497,11 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     {
         // create listener
         mxClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScDrawTextObjectBar, ClipboardChanged ) );
-        vcl::Window* pWin = pViewData->GetActiveWin();
+        vcl::Window* pWin = mrViewData.GetActiveWin();
         mxClipEvtLstnr->AddListener( pWin );
 
         // get initial state
-        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+        TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewData.GetActiveWin() ) );
         bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF )
             || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) );
     }
@@ -523,7 +523,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
                 {
                     SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                     TransferableDataHelper aDataHelper(
-                            TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
+                            TransferableDataHelper::CreateFromSystemClipboard( mrViewData.GetActiveWin() ) );
 
                     if ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) )
                         aFormats.AddClipbrdFormat( SotClipboardFormatId::STRING );
@@ -548,7 +548,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {
     //  Underline
 
-    SdrView* pView = pViewData->GetScDrawView();
+    SdrView* pView = mrViewData.GetScDrawView();
 
     sal_uInt16 nSlot = rReq.GetSlot();
 
@@ -581,7 +581,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     pView->SetAttributes( aSet );
     rReq.Done();
-    pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+    mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();
 }
 
 static void lcl_RemoveFields( OutlinerView& rOutView )
@@ -662,7 +662,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 
 void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
-    SdrView*            pView = pViewData->GetScDrawView();
+    SdrView*            pView = mrViewData.GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
     sal_uInt16          nSlot = rReq.GetSlot();
 
@@ -812,7 +812,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 }
 
                 rReq.Done( aEmptyAttr );
-                pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+                mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();
                 bDone = false; // already happened here
             }
             break;
@@ -828,7 +828,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                             ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
                     const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
                     pOutView->GetEditView().ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
-                    pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+                    mrViewData.GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
                     bDone = false;
                 }
             }
@@ -876,7 +876,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(pViewData->GetDialogParent(), &aEditAttr, pView));
+                    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(mrViewData.GetDialogParent(), &aEditAttr, pView));
 
                     bDone = ( RET_OK == pDlg->Execute() );
 
@@ -885,7 +885,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
                     pDlg.disposeAndClear();
 
-                    SfxBindings& rBindings = pViewData->GetBindings();
+                    SfxBindings& rBindings = mrViewData.GetBindings();
                     rBindings.Invalidate( SID_TABLE_VERT_NONE );
                     rBindings.Invalidate( SID_TABLE_VERT_CENTER );
                     rBindings.Invalidate( SID_TABLE_VERT_BOTTOM );
@@ -956,7 +956,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         // use args directly
         pView->SetAttributes( *pArgs );
     }
-    pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
+    mrViewData.GetScDrawView()->InvalidateDrawTextAttrs();
 }
 
 void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
@@ -970,7 +970,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
     bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
-    SdrView* pView = pViewData->GetScDrawView();
+    SdrView* pView = mrViewData.GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aAttrSet);
 
@@ -987,7 +987,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     if (pOutView && !pOutView->GetSelection().HasRange())
     {
-        LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
+        LanguageType nInputLang = mrViewData.GetActiveWin()->GetInputLanguage();
         if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
             nInputScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
     }
@@ -1158,7 +1158,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         if ( eAttrDir == SvxFrameDirection::Environment )
         {
             //  get "environment" direction from page style
-            if ( pViewData->GetDocument().GetEditTextDirection( pViewData->GetTabNo() ) == EEHorizontalTextDirection::R2L )
+            if ( mrViewData.GetDocument().GetEditTextDirection( mrViewData.GetTabNo() ) == EEHorizontalTextDirection::R2L )
                 eAttrDir = SvxFrameDirection::Horizontal_RL_TB;
             else
                 eAttrDir = SvxFrameDirection::Horizontal_LR_TB;
@@ -1174,7 +1174,7 @@ void ScDrawTextObjectBar::ExecuteTrans( const SfxRequest& rReq )
     if ( nType == TransliterationFlags::NONE )
         return;
 
-    ScDrawView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = mrViewData.GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     if ( pOutView )
     {
@@ -1192,7 +1192,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
     SfxWhichIter    aIter( rSet );
     sal_uInt16          nWhich = aIter.FirstWhich();
 
-    SdrView*            pView = pViewData->GetScDrawView();
+    SdrView*            pView = mrViewData.GetScDrawView();
 
     SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aEditAttr);

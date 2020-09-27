@@ -27,7 +27,7 @@
 void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrObject*    pObj        = nullptr;
-    ScDrawView*         pDrView     = pViewData->GetScDrawView();
+    ScDrawView*         pDrView     = rViewData.GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 )

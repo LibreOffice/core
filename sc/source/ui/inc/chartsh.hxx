@@ -37,7 +37,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScChartShell(ScViewData* pData);
+    ScChartShell(ScViewData& rData);
     virtual ~ScChartShell() override;
 
     void ExecuteExportAsGraphic(SfxRequest& rReq);

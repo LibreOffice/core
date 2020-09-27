@@ -38,7 +38,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScDrawFormShell(ScViewData* pData);
+    ScDrawFormShell(ScViewData& rData);
     virtual ~ScDrawFormShell() override;
 };
 

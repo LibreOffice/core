@@ -39,7 +39,7 @@ namespace svx::sidebar { class SelectionChangeHandler; }
 
 class ScDrawShell : public SfxShell
 {
-    ScViewData* pViewData;
+    ScViewData& rViewData;
     ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
     DECL_LINK( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
@@ -48,7 +48,7 @@ class ScDrawShell : public SfxShell
 
 protected:
     virtual void    Activate(bool bMDI) override;
-    ScViewData* GetViewData()   { return pViewData; }
+    ScViewData& GetViewData() { return rViewData; }
 
 public:
     SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
@@ -58,7 +58,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                    ScDrawShell(ScViewData* pData);
+                    ScDrawShell(ScViewData& rData);
                     virtual ~ScDrawShell() override;
 
     static void StateDisableItems( SfxItemSet &rSet );

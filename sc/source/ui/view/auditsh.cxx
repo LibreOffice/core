@@ -39,15 +39,15 @@ void ScAuditingShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("audit");
 }
 
-ScAuditingShell::ScAuditingShell(ScViewData* pData) :
-    SfxShell(pData->GetViewShell()),
-    pViewData( pData ),
+ScAuditingShell::ScAuditingShell(ScViewData& rData) :
+    SfxShell(rData.GetViewShell()),
+    rViewData( rData ),
     nFunction( SID_FILL_ADD_PRED )
 {
-    SetPool( &pViewData->GetViewShell()->GetPool() );
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetPool( &rViewData.GetViewShell()->GetPool() );
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument().IsUndoEnabled() )
+    if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -61,7 +61,7 @@ ScAuditingShell::~ScAuditingShell()
 
 void ScAuditingShell::Execute( const SfxRequest& rReq )
 {
-    SfxBindings& rBindings = pViewData->GetBindings();
+    SfxBindings& rBindings = rViewData.GetBindings();
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
@@ -77,7 +77,7 @@ void ScAuditingShell::Execute( const SfxRequest& rReq )
             break;
         case SID_CANCEL:        // Escape
         case SID_FILL_NONE:
-            pViewData->GetViewShell()->SetAuditShell( false );
+            rViewData.GetViewShell()->SetAuditShell( false );
             break;
 
         case SID_FILL_SELECT:
@@ -94,7 +94,7 @@ void ScAuditingShell::Execute( const SfxRequest& rReq )
                                         "wrong items" );
                         SCCOL nCol = static_cast<SCCOL>(static_cast<const SfxInt16Item*>(pXItem)->GetValue());
                         SCROW nRow = static_cast<SCROW>(static_cast<const SfxInt32Item*>(pYItem)->GetValue());
-                        ScViewFunc* pView = pViewData->GetView();
+                        ScViewFunc* pView = rViewData.GetView();
                         pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, false, false );
                         switch ( nFunction )
                         {

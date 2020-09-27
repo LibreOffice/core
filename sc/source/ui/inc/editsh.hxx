@@ -38,7 +38,7 @@ class ScEditShell : public SfxShell
 {
 private:
     EditView*   pEditView;
-    ScViewData* pViewData;
+    ScViewData& rViewData;
     rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;
     bool        bPastePossible;
     bool        bIsInsertMode;
@@ -56,7 +56,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScEditShell(EditView* pView, ScViewData* pData);
+    ScEditShell(EditView* pView, ScViewData& rData);
     virtual ~ScEditShell() override;
 
     void    SetEditView(EditView* pView);
