@@ -41,7 +41,7 @@
 #include "EApi.h"
 #include "NConnection.hxx"
 
-#include <list>
+#include <vector>
 
 namespace connectivity::evoab
 {
