@@ -30,6 +30,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,fuzzerstubs,\
     vcl/workben/localestub/localedata_en_HK \
     vcl/workben/localestub/localedata_en_IE \
     vcl/workben/localestub/localedata_en_IN \
+    vcl/workben/localestub/localedata_en_KE \
     vcl/workben/localestub/localedata_en_JM \
     vcl/workben/localestub/localedata_en_LK \
     vcl/workben/localestub/localedata_en_MW \
