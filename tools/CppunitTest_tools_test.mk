@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_GenericTypeSerializer \
     tools/qa/cppunit/test_cpuid \
     tools/qa/cppunit/test_cpu_runtime_detection_AVX2 \
+    tools/qa/cppunit/test_cpu_runtime_detection_SSSE3 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
@@ -44,7 +45,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
-    tools/qa/cppunit/test_cpu_runtime_detection_SSSE3, $(CXXFLAGS_INTRINSICS_SSSE3) \
+    tools/qa/cppunit/test_cpu_runtime_detection_SSSE3_check, $(CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))

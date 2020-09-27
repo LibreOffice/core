@@ -9,7 +9,7 @@
 
 #include <tools/simdsupport.hxx>
 
-#ifdef LO_SSSE3_AVAILABLE
+#include "test_cpu_runtime_detection_x86_checks.hxx"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -23,7 +23,6 @@ namespace
 class CpuRuntimeDetection_SSSE3 : public CppUnit::TestFixture
 {
 public:
-    void checkSSSE3();
     void testCpuRuntimeDetection();
 
     CPPUNIT_TEST_SUITE(CpuRuntimeDetection_SSSE3);
@@ -33,26 +32,13 @@ public:
 
 void CpuRuntimeDetection_SSSE3::testCpuRuntimeDetection()
 {
-    // can only run if this function if CPU supports SSSE3
+    // can only run this function if CPU supports SSSE3
     if (cpuid::isCpuInstructionSetSupported(cpuid::InstructionSetFlags::SSSE3))
-        checkSSSE3();
-}
-
-void CpuRuntimeDetection_SSSE3::checkSSSE3()
-{
-    // Try some SSSE3 intrinsics calculation
-    __m128i a = _mm_set1_epi32(3);
-    __m128i b = _mm_set1_epi32(3);
-    __m128i c = _mm_maddubs_epi16(a, b);
-
-    // Check result is 9
-    CPPUNIT_ASSERT_EQUAL(0xFFFF, _mm_movemask_epi8(_mm_cmpeq_epi32(c, _mm_set1_epi32(9))));
+        CpuRuntimeDetectionX86Checks::checkSSSE3();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CpuRuntimeDetection_SSSE3);
 
 } // end anonymous namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
