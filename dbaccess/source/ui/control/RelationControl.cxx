@@ -184,7 +184,7 @@ namespace dbaui
 
     bool ORelationControl::PreNotify(NotifyEvent& rNEvt)
     {
-        if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
+        if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() && !ControlHasFocus())
             PostUserEvent(LINK(this, ORelationControl, AsynchDeactivate), nullptr, true);
         else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
             PostUserEvent(LINK(this, ORelationControl, AsynchActivate), nullptr, true);
