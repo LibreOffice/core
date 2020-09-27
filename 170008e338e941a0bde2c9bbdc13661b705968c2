@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32e12c53_9b0c5565",
+        "filename": "vcl/ios/clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-27T11:32:53Z",
+      "side": 1,
+      "message": "then this should be changed too",
+      "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7879d67e_05baec2d",
+        "filename": "vcl/ios/clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-27T11:32:53Z",
+      "side": 1,
+      "message": "also, no need to modify the copied list, can just iterate over it",
+      "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
