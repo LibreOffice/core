@@ -236,7 +236,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                 }
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
 
-                m_pEditWin->GrabFocus();
+                GetDocShell()->Broadcast(SfxHint(SfxHintId::SwNavigatorUpdateTracking));
             }
             break;
             case SvxSearchCmd::FIND_ALL:

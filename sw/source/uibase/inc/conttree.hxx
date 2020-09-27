@@ -225,6 +225,7 @@ public:
 
     void Select();
 
+    void UpdateTracking();
     void SelectOutlinesWithSelection();
 
     // return true if it has any children

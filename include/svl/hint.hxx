@@ -112,6 +112,7 @@ enum class SfxHintId {
     SwDrawViewsCreated,
     SwSplitNodeOperation,
     SwSectionFrameMoveAndDelete,
+    SwNavigatorUpdateTracking,
     SwNavigatorSelectOutlinesWithSelections,
 
     ThisIsAnSdrHint // used to avoid dynamic_cast
@@ -193,6 +194,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::SwDrawViewsCreated: return stream << "SwDrawViewsCreated";
     case SfxHintId::SwSplitNodeOperation: return stream << "SwSplitNodeOperation";
     case SfxHintId::SwSectionFrameMoveAndDelete: return stream << "SwSectionFrameMoveAndDelete";
+    case SfxHintId::SwNavigatorUpdateTracking: return stream << "SwNavigatorUpdateTracking";
     case SfxHintId::SwNavigatorSelectOutlinesWithSelections:
         return stream << "SwNavigatorSelectOutlinesWithSelections";
     case SfxHintId::ThisIsAnSdrHint: return stream << "SdrHint";

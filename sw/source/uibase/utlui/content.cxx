@@ -2719,6 +2719,9 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
     }
     switch (rHint.GetId())
     {
+        case SfxHintId::SwNavigatorUpdateTracking:
+            UpdateTracking();
+            break;
         case SfxHintId::SwNavigatorSelectOutlinesWithSelections:
         {
             if (m_nRootType == ContentTypeId::OUTLINE)
@@ -3115,72 +3118,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
             Display(true);
         }
 
-        // track document outline position at cursor
-        if (m_nOutlineTracking == 3) // no outline tracking
-            return;
-
-        const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL); // find out where the cursor is
-        if (nActPos == SwOutlineNodes::npos)
-            return;
-
-        // only track if selection is already an outline
-        std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
-        if (!m_xTreeView->get_selected(xFirstSelected.get()))
-            xFirstSelected.reset();
-        if (xFirstSelected && lcl_IsContent(*xFirstSelected, *m_xTreeView) &&
-                reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirstSelected).toInt64())->GetParent()->GetType() != ContentTypeId::OUTLINE)
-            return;
-        if (xFirstSelected && lcl_IsContentType(*xFirstSelected, *m_xTreeView) &&
-                reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xFirstSelected).toInt64())->GetType() != ContentTypeId::OUTLINE)
-            return;
-
-        int nSelectedRows = m_xTreeView->count_selected_rows();
-
-        // find the outline in the tree and select it
-        m_xTreeView->all_foreach([this, nSelectedRows, nActPos, &xFirstSelected](weld::TreeIter& rEntry){
-            bool bRet = false;
-
-            if (lcl_IsContent(rEntry, *m_xTreeView) &&
-                    reinterpret_cast<SwContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() == ContentTypeId::OUTLINE)
-            {
-                // might have been scrolled out of view by the user so leave it that way
-                if (reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
-                {
-                    // only select if not already selected or tree has multiple entries selected
-                    if (nSelectedRows != 1 || m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
-                    {
-                        if (m_nOutlineTracking == 2) // focused outline tracking
-                        {
-                            // collapse to children of root node
-                            std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator());
-                            if (m_xTreeView->get_iter_first(*xChildEntry) && m_xTreeView->iter_children(*xChildEntry))
-                            {
-                                do
-                                {
-                                    if (reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xChildEntry).toInt64())->GetParent()->GetType() == ContentTypeId::OUTLINE)
-                                        m_xTreeView->collapse_row(*xChildEntry);
-                                    else
-                                        break;
-                                }
-                                while (m_xTreeView->iter_next(*xChildEntry));
-                            }
-                        }
-                        m_xTreeView->set_cursor(rEntry); // unselect all entries, make pEntry visible, and select
-                        Select();
-                    }
-                    bRet = true;
-                }
-            }
-            else
-            {
-                // use of this break assumes outline content type is first in tree
-                if (lcl_IsContentType(rEntry, *m_xTreeView) &&
-                        reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rEntry).toInt64())->GetType() != ContentTypeId::OUTLINE)
-                    bRet = true;
-            }
-
-            return bRet;
-        });
+        UpdateTracking();
     }
     else if (!pView && State::ACTIVE == m_eState && !m_bIsIdleClear)
     {
@@ -3191,6 +3129,79 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate, Timer *, void)
         clear();
         m_bIsIdleClear = true;
     }
+}
+
+void SwContentTree::UpdateTracking()
+{
+    if (State::HIDDEN == m_eState)
+        return;
+
+    // track document outline position at cursor
+    if (m_nOutlineTracking == 3) // no outline tracking
+        return;
+
+    const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL); // find out where the cursor is
+    if (nActPos == SwOutlineNodes::npos)
+        return;
+
+    // only track if selection is already an outline
+    std::unique_ptr<weld::TreeIter> xFirstSelected(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_selected(xFirstSelected.get()))
+        xFirstSelected.reset();
+    if (xFirstSelected && lcl_IsContent(*xFirstSelected, *m_xTreeView) &&
+            reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirstSelected).toInt64())->GetParent()->GetType() != ContentTypeId::OUTLINE)
+        return;
+    if (xFirstSelected && lcl_IsContentType(*xFirstSelected, *m_xTreeView) &&
+            reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xFirstSelected).toInt64())->GetType() != ContentTypeId::OUTLINE)
+        return;
+
+    int nSelectedRows = m_xTreeView->count_selected_rows();
+
+    // find the outline in the tree and select it
+    m_xTreeView->all_foreach([this, nSelectedRows, nActPos, &xFirstSelected](weld::TreeIter& rEntry){
+        bool bRet = false;
+
+        if (lcl_IsContent(rEntry, *m_xTreeView) &&
+                reinterpret_cast<SwContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+        {
+            // might have been scrolled out of view by the user so leave it that way
+            if (reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
+            {
+                // only select if not already selected or tree has multiple entries selected
+                if (nSelectedRows != 1 || m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
+                {
+                    if (m_nOutlineTracking == 2) // focused outline tracking
+                    {
+                        // collapse to children of root node
+                        std::unique_ptr<weld::TreeIter> xChildEntry(m_xTreeView->make_iterator());
+                        if (m_xTreeView->get_iter_first(*xChildEntry) && m_xTreeView->iter_children(*xChildEntry))
+                        {
+                            do
+                            {
+                                if (reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xChildEntry).toInt64())->GetParent()->GetType() == ContentTypeId::OUTLINE)
+                                    m_xTreeView->collapse_row(*xChildEntry);
+                                else
+                                    break;
+                            }
+                            while (m_xTreeView->iter_next(*xChildEntry));
+                        }
+                    }
+                    m_xTreeView->set_cursor(rEntry); // unselect all entries, make pEntry visible, and select
+                    Select();
+                }
+                bRet = true;
+            }
+        }
+        else
+        {
+            // use of this break assumes outline content type is first in tree
+            if (lcl_IsContentType(rEntry, *m_xTreeView) &&
+                    reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rEntry).toInt64())->GetType() != ContentTypeId::OUTLINE)
+                bRet = true;
+        }
+
+        return bRet;
+    });
 }
 
 void SwContentTree::SelectOutlinesWithSelection()
