@@ -144,9 +144,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
                 {
                     sFindText = pItemWin->get_active_text();
                     if (aFindAll)
-                        pItemWin->GrabFocus();
-                    else
-                        pItemWin->GrabFocusToDocument();
+                        pItemWin->GetFocus();
                 }
             } else if ( sItemCommand == COMMAND_MATCHCASE )
             {
@@ -302,6 +300,7 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
     else if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
     {
         ActivateFind(bShift);
+        m_xWidget->grab_focus();
         bRet = true;
     }
     else
