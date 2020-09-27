@@ -83,10 +83,14 @@ private:
     uno::Reference<lang::XComponent> m_xComponent;
 };
 
+/* TODO: this c/should be derived/defined from the real style count, default
+ * implemented plus sc/res/xml/styles.xml */
+constexpr sal_Int32 kScStyleFamilyObjCount = 20;
+
 ScStyleFamilyObj::ScStyleFamilyObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<style::XStyle>::get())
-    , XIndexAccess(19)
+    , XIndexAccess(kScStyleFamilyObjCount)
     , XNameAccess("ScStyleFamilyObj")
     , XNameContainer("ScStyleFamilyObj")
     , XNameReplace("ScStyleFamilyObj")

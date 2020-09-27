@@ -57,4 +57,8 @@
     <style:style style:name="Accent 3" style:family="table-cell" style:parent-style-name="Accent">
         <style:table-cell-properties fo:background-color="#dddddd"/>
     </style:style>
+
+    <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
+        <style:text-properties fo:font-weight="bold" fo:font-style="italic" style:text-underline-style="solid"/>
+    </style:style>
 </office:styles>
