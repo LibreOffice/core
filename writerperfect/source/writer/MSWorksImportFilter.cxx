@@ -115,6 +115,9 @@ bool MSWorksImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
             case libwps::WPS_RESERVED_1:
                 rTypeName = "writer_DosWord";
                 break;
+            case libwps::WPS_RESERVED_4:
+                rTypeName = "writer_PocketWord_File";
+                break;
             default:
                 break;
         }
