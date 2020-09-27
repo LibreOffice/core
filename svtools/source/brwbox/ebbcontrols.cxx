@@ -28,7 +28,7 @@ namespace svt
 
     //= ComboBoxControl
     ComboBoxControl::ComboBoxControl(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "svt/ui/combocontrol.ui", "ComboControl")
+        : ControlBase(pParent, "svt/ui/combocontrol.ui", "ComboControl")
         , m_xWidget(m_xBuilder->weld_combo_box("combobox"))
     {
         m_xWidget->set_entry_width_chars(1); // so a smaller than default width can be used
@@ -38,7 +38,7 @@ namespace svt
     void ComboBoxControl::dispose()
     {
         m_xWidget.reset();
-        InterimItemWindow::dispose();
+        ControlBase::dispose();
     }
 
     IMPL_LINK_NOARG(ComboBoxControl, SelectHdl, weld::ComboBox&, void)
@@ -111,7 +111,7 @@ namespace svt
 
     //= ListBoxControl
     ListBoxControl::ListBoxControl(vcl::Window* pParent)
-        : InterimItemWindow(pParent, "svt/ui/listcontrol.ui", "ListControl")
+        : ControlBase(pParent, "svt/ui/listcontrol.ui", "ListControl")
         , m_xWidget(m_xBuilder->weld_combo_box("listbox"))
     {
         m_xWidget->set_size_request(42, -1); // so a later narrow size request can stick
@@ -121,7 +121,7 @@ namespace svt
     void ListBoxControl::dispose()
     {
         m_xWidget.reset();
-        InterimItemWindow::dispose();
+        ControlBase::dispose();
     }
 
     IMPL_LINK_NOARG(ListBoxControl, SelectHdl, weld::ComboBox&, void)
