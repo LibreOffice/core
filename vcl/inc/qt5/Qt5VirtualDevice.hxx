@@ -22,7 +22,7 @@
 #include <salvd.hxx>
 
 #include <memory>
-#include <list>
+#include <vector>
 
 #include <QtCore/QSize>
 
@@ -32,7 +32,7 @@ enum class DeviceFormat;
 
 class Qt5VirtualDevice final : public SalVirtualDevice
 {
-    std::list<Qt5Graphics*> m_aGraphics;
+    std::vector<Qt5Graphics*> m_aGraphics;
     std::unique_ptr<QImage> m_pImage;
     DeviceFormat m_eFormat;
     QSize m_aFrameSize;
