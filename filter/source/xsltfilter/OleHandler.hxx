@@ -12,7 +12,6 @@
 #define INCLUDED_FILTER_SOURCE_XSLTFILTER_OLEHANDLER_HXX
 #include <cstdio>
 #include <cstring>
-#include <list>
 #include <map>
 #include <vector>
 #include <iostream>
