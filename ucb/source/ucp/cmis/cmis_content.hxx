@@ -34,8 +34,6 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include <list>
-
 namespace com::sun::star {
     namespace beans {
         struct Property;
