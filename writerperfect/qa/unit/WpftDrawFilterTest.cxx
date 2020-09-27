@@ -31,11 +31,13 @@ WpftDrawFilterTest::WpftDrawFilterTest()
 void WpftDrawFilterTest::test()
 {
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "Canvas_2.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
         { "ClarisDraw.hqx", REQUIRE_MWAW_VERSION(0, 3, 5) },
         { "CorelPainter_3_win.rif", REQUIRE_MWAW_VERSION(0, 3, 15) },
         { "CorelPainter_10", REQUIRE_MWAW_VERSION(0, 3, 15) },
         { "CricketDraw_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
         { "CricketDraw_1.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
+        { "DrawingTable_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
         { "FreeHand_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
         { "FreeHand_2.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
         { "MacDraft_1.0.hqx", REQUIRE_MWAW_VERSION(0, 3, 5) },
