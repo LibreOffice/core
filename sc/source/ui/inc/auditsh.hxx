@@ -29,7 +29,7 @@ class ScViewData;
 class ScAuditingShell : public SfxShell
 {
 private:
-    ScViewData* pViewData;
+    ScViewData& rViewData;
     sal_uInt16 nFunction;
 
 public:
@@ -40,7 +40,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScAuditingShell(ScViewData* pData);
+    ScAuditingShell(ScViewData& rData);
     virtual ~ScAuditingShell() override;
 
     void Execute(const SfxRequest& rReq);

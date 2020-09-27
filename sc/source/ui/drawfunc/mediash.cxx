@@ -45,8 +45,8 @@ void ScMediaShell::InitInterface_Impl()
 }
 
 
-ScMediaShell::ScMediaShell(ScViewData* pData) :
-    ScDrawShell(pData)
+ScMediaShell::ScMediaShell(ScViewData& rData) :
+    ScDrawShell(rData)
 {
     SetName( ScResId( SCSTR_MEDIASHELL ) );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Media));
@@ -58,7 +58,7 @@ ScMediaShell::~ScMediaShell()
 
 void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
 
     if( !pView )
         return;
@@ -97,7 +97,7 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
 
 void ScMediaShell::ExecuteMedia( const SfxRequest& rReq )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
 
     if( pView && SID_AVMEDIA_TOOLBOX == rReq.GetSlot() )
     {

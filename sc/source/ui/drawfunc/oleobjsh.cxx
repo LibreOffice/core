@@ -37,8 +37,8 @@ void ScOleObjectShell::InitInterface_Impl()
 }
 
 
-ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
-    ScDrawShell(pData)
+ScOleObjectShell::ScOleObjectShell(ScViewData& rData) :
+    ScDrawShell(rData)
 {
     SetName("OleObject");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OLE));

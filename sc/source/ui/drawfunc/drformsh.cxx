@@ -41,8 +41,8 @@ void ScDrawFormShell::InitInterface_Impl()
 }
 
 
-ScDrawFormShell::ScDrawFormShell(ScViewData* pData) :
-    ScDrawShell(pData)
+ScDrawFormShell::ScDrawFormShell(ScViewData& rData) :
+    ScDrawShell(rData)
 {
     SetName("DrawForm");
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Form));

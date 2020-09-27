@@ -43,7 +43,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScGraphicShell(ScViewData* pData);
+    ScGraphicShell(ScViewData& rData);
     virtual ~ScGraphicShell() override;
 
     void    Execute(SfxRequest& rReq);

@@ -58,18 +58,18 @@ using namespace com::sun::star::drawing;
 using namespace com::sun::star;
 
 
-ScDrawShell::ScDrawShell( ScViewData* pData ) :
-    SfxShell(pData->GetViewShell()),
-    pViewData( pData ),
+ScDrawShell::ScDrawShell( ScViewData& rData ) :
+    SfxShell(rData.GetViewShell()),
+    rViewData( rData ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
             [this] () { return this->GetSidebarContextName(); },
             GetFrame()->GetFrame().GetController(),
             vcl::EnumContext::Context::Cell))
 {
-    SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetPool( &rViewData.GetScDrawView()->GetModel()->GetItemPool() );
+    SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument().IsUndoEnabled() )
+    if ( !rViewData.GetDocument().IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -85,7 +85,7 @@ ScDrawShell::~ScDrawShell()
 
 void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
 {
-    ScDrawView* pView    = pViewData->GetScDrawView();
+    ScDrawView* pView    = rViewData.GetScDrawView();
     SdrDragMode eMode    = pView->GetDragMode();
 
     rSet.Put( SfxBoolItem( SID_OBJECT_ROTATE, eMode == SdrDragMode::Rotate ) );
@@ -93,7 +93,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
     rSet.Put( SfxBoolItem( SID_BEZIER_EDIT, !pView->IsFrameDragSingles() ) );
 
     sal_uInt16 nFWId = ScGetFontWorkId();
-    SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
+    SfxViewFrame* pViewFrm = rViewData.GetViewShell()->GetViewFrame();
     rSet.Put(SfxBoolItem(SID_FONTWORK, pViewFrm->HasChildWindow(nFWId)));
 
         // Notes always default to Page anchor.
@@ -144,7 +144,7 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
 
 void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
 {
-    ScDrawView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = rViewData.GetScDrawView();
 
     //  call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
     //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
@@ -312,9 +312,9 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {
-    Point       aMousePos   = pViewData->GetMousePosPixel();
-    vcl::Window*     pWindow     = pViewData->GetActiveWin();
-    ScDrawView* pDrView     = pViewData->GetScDrawView();
+    Point       aMousePos   = rViewData.GetMousePosPixel();
+    vcl::Window*     pWindow     = rViewData.GetActiveWin();
+    ScDrawView* pDrView     = rViewData.GetScDrawView();
     Point       aPos        = pWindow->PixelToLogic(aMousePos);
     bool        bHasMarked  = pDrView->AreObjectsMarked();
 
@@ -377,7 +377,7 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
 {
     //  Disable dialogs for Draw-attributes if necessary
 
-    ScDrawView* pDrView = pViewData->GetScDrawView();
+    ScDrawView* pDrView = rViewData.GetScDrawView();
     SfxItemSet aViewSet = pDrView->GetAttrFromMarked(false);
     const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     const size_t nMarkCount = rMarkList.GetMarkCount();
@@ -442,7 +442,7 @@ bool ScDrawShell::AreAllObjectsOnLayer(SdrLayerID nLayerNo,const SdrMarkList& rM
 
 void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
 {
-    ScDrawView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = rViewData.GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMark(0) != nullptr )

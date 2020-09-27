@@ -38,7 +38,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    ScOleObjectShell(ScViewData* pData);
+    ScOleObjectShell(ScViewData& rData);
     virtual ~ScOleObjectShell() override;
 };
 

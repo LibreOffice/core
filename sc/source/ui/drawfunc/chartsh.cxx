@@ -49,8 +49,8 @@ void ScChartShell::InitInterface_Impl()
 }
 
 
-ScChartShell::ScChartShell(ScViewData* pData) :
-    ScDrawShell(pData)
+ScChartShell::ScChartShell(ScViewData& rData) :
+    ScDrawShell(rData)
 {
     SetName( "ChartObject" );
     SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Chart));
@@ -62,7 +62,7 @@ ScChartShell::~ScChartShell()
 
 void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     bool bEnable = false;
     if( rMarkList.GetMarkCount() == 1 )
@@ -82,7 +82,7 @@ void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
 
 void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -91,7 +91,7 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
 
         if( dynamic_cast<const SdrOle2Obj*>( pObject) )
         {
-            vcl::Window* pWin = GetViewData()->GetActiveWin();
+            vcl::Window* pWin = GetViewData().GetActiveWin();
             Reference< drawing::XShape > xSourceDoc( pObject->getUnoShape(), UNO_QUERY_THROW );
             GraphicHelper::SaveShapeAsGraphic(pWin ? pWin->GetFrameWeld() : nullptr, xSourceDoc);
         }
