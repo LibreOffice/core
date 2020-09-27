@@ -41,6 +41,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/BeagleWksSSParser \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksStructManager \
 	UnpackedTarball/libmwaw/src/lib/BeagleWksText \
+	UnpackedTarball/libmwaw/src/lib/CanvasGraph \
+	UnpackedTarball/libmwaw/src/lib/CanvasParser \
+	UnpackedTarball/libmwaw/src/lib/CanvasStyleManager \
 	UnpackedTarball/libmwaw/src/lib/ClarisDrawGraph \
 	UnpackedTarball/libmwaw/src/lib/ClarisDrawParser \
 	UnpackedTarball/libmwaw/src/lib/ClarisDrawStyleManager \
@@ -63,6 +66,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/CricketDrawParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrParser \
 	UnpackedTarball/libmwaw/src/lib/DocMkrText \
+	UnpackedTarball/libmwaw/src/lib/DrawTableParser \
 	UnpackedTarball/libmwaw/src/lib/EDocParser \
 	UnpackedTarball/libmwaw/src/lib/FreeHandParser \
 	UnpackedTarball/libmwaw/src/lib/FullWrtGraph \
@@ -83,6 +87,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/HanMacWrdKGraph \
 	UnpackedTarball/libmwaw/src/lib/HanMacWrdKParser \
 	UnpackedTarball/libmwaw/src/lib/HanMacWrdKText \
+	UnpackedTarball/libmwaw/src/lib/JazzSSParser \
+	UnpackedTarball/libmwaw/src/lib/JazzWriterParser \
 	UnpackedTarball/libmwaw/src/lib/LightWayTxtGraph \
 	UnpackedTarball/libmwaw/src/lib/LightWayTxtParser \
 	UnpackedTarball/libmwaw/src/lib/LightWayTxtText \

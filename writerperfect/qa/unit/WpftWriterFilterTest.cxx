@@ -38,6 +38,7 @@ void WpftWriterFilterTest::test()
         { "Pages_5.pages", REQUIRE_ETONYEK_VERSION(0, 1, 8) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "JazzLotus.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
         { "MaxWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
         { "MouseWrite_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 8) },
         { "RagTime_2.1.hqx", REQUIRE_MWAW_VERSION(0, 3, 2) },
