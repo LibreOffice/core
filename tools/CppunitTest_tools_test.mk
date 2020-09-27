@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_GenericTypeSerializer \
     tools/qa/cppunit/test_cpuid \
     tools/qa/cppunit/test_cpu_runtime_detection_AVX2 \
+    tools/qa/cppunit/test_cpu_runtime_detection_SSE2 \
     tools/qa/cppunit/test_cpu_runtime_detection_SSSE3 \
 ))
 
@@ -41,7 +42,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
-    tools/qa/cppunit/test_cpu_runtime_detection_SSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
+    tools/qa/cppunit/test_cpu_runtime_detection_SSE2_check, $(CXXFLAGS_INTRINSICS_SSE2) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
