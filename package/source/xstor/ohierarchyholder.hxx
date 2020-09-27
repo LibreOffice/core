@@ -33,7 +33,7 @@
 #include <unordered_map>
 #include <vector>
 
-struct OHierarchyElement_Impl;
+class OHierarchyElement_Impl;
 
 typedef std::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl > > OHierarchyElementList_Impl;
@@ -41,7 +41,7 @@ typedef std::unordered_map< OUString,
 typedef ::std::vector< css::uno::WeakReference< css::embed::XExtendedStorageStream > >
                         OWeakStorRefVector_Impl;
 
-struct OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >
+class OHierarchyElement_Impl : public cppu::WeakImplHelper< css::embed::XTransactionListener >
 {
     ::osl::Mutex m_aMutex;
 
