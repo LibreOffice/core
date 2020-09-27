@@ -51,7 +51,6 @@
 #include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 
-#include <list>
 #include <vector>
 #include <memory>
 
