@@ -316,8 +316,18 @@ namespace svt
         DECL_LINK(ModifyHdl, LinkParamNone*, void);
     };
 
+    class SVT_DLLPUBLIC ControlBase : public InterimItemWindow
+    {
+    public:
+        ControlBase(vcl::Window* pParent, const OUString& rUIXMLDescription, const OString& rID)
+            : InterimItemWindow(pParent, rUIXMLDescription, rID)
+        {
+        }
+        virtual bool ControlHasFocus() const = 0;
+    };
+
     //= ComboBoxControl
-    class SVT_DLLPUBLIC ComboBoxControl final : public InterimItemWindow
+    class SVT_DLLPUBLIC ComboBoxControl final : public ControlBase
     {
     private:
         std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -341,6 +351,11 @@ namespace svt
         void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
         {
             m_aModify2Hdl = rLink;
+        }
+
+        virtual bool ControlHasFocus() const override
+        {
+            return m_xWidget && m_xWidget->has_focus();
         }
 
         virtual void dispose() override;
@@ -373,7 +388,7 @@ namespace svt
     };
 
     //= ListBoxControl
-    class SVT_DLLPUBLIC ListBoxControl final : public InterimItemWindow
+    class SVT_DLLPUBLIC ListBoxControl final : public ControlBase
     {
     private:
         std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -397,6 +412,11 @@ namespace svt
         void SetAuxModifyHdl(const Link<LinkParamNone*,void>& rLink)
         {
             m_aModify2Hdl = rLink;
+        }
+
+        virtual bool ControlHasFocus() const override
+        {
+            return m_xWidget && m_xWidget->has_focus();
         }
 
         virtual void dispose() override;
@@ -655,6 +675,7 @@ namespace svt
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) override;
 
         css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        bool ControlHasFocus() const;
     protected:
         // creates the accessible which wraps the active cell
         void    implCreateActiveAccessible( );
