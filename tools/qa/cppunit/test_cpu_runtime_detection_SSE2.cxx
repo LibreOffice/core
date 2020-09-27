@@ -9,7 +9,7 @@
 
 #include <tools/simdsupport.hxx>
 
-#ifdef LO_SSE2_AVAILABLE
+#include "test_cpu_runtime_detection_x86_checks.hxx"
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -23,7 +23,6 @@ namespace
 class CpuRuntimeDetection_SSE2 : public CppUnit::TestFixture
 {
 public:
-    void checkSSE2();
     void testCpuRuntimeDetection();
 
     CPPUNIT_TEST_SUITE(CpuRuntimeDetection_SSE2);
@@ -33,26 +32,13 @@ public:
 
 void CpuRuntimeDetection_SSE2::testCpuRuntimeDetection()
 {
-    // can only run if this function if CPU supports SSE2
+    // can only run this function if CPU supports SSE2
     if (cpuid::isCpuInstructionSetSupported(cpuid::InstructionSetFlags::SSE2))
-        checkSSE2();
-}
-
-void CpuRuntimeDetection_SSE2::checkSSE2()
-{
-    // Try some SSE2 intrinsics calculation
-    __m128i a = _mm_set1_epi32(15);
-    __m128i b = _mm_set1_epi32(15);
-    __m128i c = _mm_xor_si128(a, b);
-
-    // Check zero
-    CPPUNIT_ASSERT_EQUAL(0xFFFF, _mm_movemask_epi8(_mm_cmpeq_epi32(c, _mm_setzero_si128())));
+        CpuRuntimeDetectionX86Checks::checkSSE2();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CpuRuntimeDetection_SSE2);
 
 } // end anonymous namespace
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

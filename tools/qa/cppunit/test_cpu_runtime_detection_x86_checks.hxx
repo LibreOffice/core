@@ -14,6 +14,7 @@ class CpuRuntimeDetectionX86Checks
 {
 public:
     static void checkAVX2();
+    static void checkSSE2();
     static void checkSSSE3();
 };
 
