@@ -26,7 +26,6 @@
 #define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 #include <algorithm>
-#include <list>
 #include <memory>
 #include <vector>
 #include <stdio.h>
