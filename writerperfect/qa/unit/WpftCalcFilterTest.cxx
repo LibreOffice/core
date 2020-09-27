@@ -34,6 +34,7 @@ void WpftCalcFilterTest::test()
         { "Numbers_2.numbers", REQUIRE_ETONYEK_VERSION(0, 1, 2) },
     };
     const writerperfect::test::WpftOptionalMap_t aMWAWOptional{
+        { "JazzLotus.hqx", REQUIRE_MWAW_VERSION(0, 3, 17) },
         { "Multiplan_1.hqx", REQUIRE_MWAW_VERSION(0, 3, 14) },
     };
     const writerperfect::test::WpftOptionalMap_t aWpsOptional{
