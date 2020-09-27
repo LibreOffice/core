@@ -212,7 +212,8 @@ void SAL_CALL AquaClipboard::removeClipboardListener(uno::Reference<datatransfer
         throw lang::IllegalArgumentException("empty reference",
                                    static_cast<XClipboardEx*>(this), 1);
 
-    mClipboardListeners.remove(listener);
+    mClipboardListeners.erase(std::remove(mClipboardListeners.begin(), mClipboardListeners.end(), listener),
+                       mClipboardListeners.end());
 }
 
 void AquaClipboard::applicationDidBecomeActive(NSNotification*)

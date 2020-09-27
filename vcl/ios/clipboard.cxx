@@ -108,7 +108,9 @@ void SAL_CALL iOSClipboard::removeClipboardListener(
         throw css::lang::IllegalArgumentException(
             "empty reference", static_cast<css::datatransfer::clipboard::XClipboardEx*>(this), 1);
 
-    mClipboardListeners.remove(listener);
+    mClipboardListeners.erase(
+        std::remove(mClipboardListeners.begin(), mClipboardListeners.end(), listener),
+        mClipboardListeners.end());
 }
 
 void iOSClipboard::fireClipboardChangedEvent(

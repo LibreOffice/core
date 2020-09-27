@@ -36,7 +36,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <list>
+#include <vector>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>
@@ -137,7 +137,7 @@ private:
 
 private:
   css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  std::list<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> mClipboardListeners;
+  std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> mClipboardListeners;
   css::uno::Reference<css::datatransfer::XTransferable> mXClipboardContent;
   css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;
