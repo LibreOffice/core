@@ -238,6 +238,20 @@ bool ScDocument::InsertNewRangeName( SCTAB nTab, const OUString& rName, const Sc
 const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString* pName ) const
 {
     const ScRangeData* pData = nullptr;
+    if (rBlock.aStart.Tab() == rBlock.aEnd.Tab())
+    {
+        const ScRangeName* pLocalNames = GetRangeName(rBlock.aStart.Tab());
+        if (pLocalNames)
+        {
+            pData = pLocalNames->findByRange( rBlock );
+            if (pData)
+            {
+                if (pName)
+                    *pName = pData->GetName();
+                return pData;
+            }
+        }
+    }
     if ( pRangeName )
     {
         pData = pRangeName->findByRange( rBlock );
