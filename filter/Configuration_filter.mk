@@ -367,6 +367,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	Palm_Text_Document \
 	StarOffice_Writer \
 	writer_EPUB_Document \
+	writer_PocketWord_File \
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,filter/source/config/fragments/filters,\
@@ -415,6 +416,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	Palm_Text_Document \
 	StarOffice_Writer \
 	EPUB \
+	PocketWord_File \
 ))
 
 # fcfg_web
