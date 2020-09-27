@@ -22,7 +22,6 @@
 
 #include "precompile.h"
 
-#include <list>
 #include <math.h>
 
 #include <osl/diagnose.h>

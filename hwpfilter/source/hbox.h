@@ -23,7 +23,6 @@
 #include <sal/config.h>
 
 #include <array>
-#include <list>
 #include <memory>
 
 #include <sal/types.h>

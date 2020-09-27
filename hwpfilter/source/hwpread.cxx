@@ -23,7 +23,6 @@
 #include <unotools/configmgr.hxx>
 
 #include <assert.h>
-#include <list>
 
 #include "hwpfile.h"
 #include "hbox.h"
