@@ -600,7 +600,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 pDlg->StartExecuteAsync([pDlg, pRequest, pTableRep, &rBindings, &rSh, xPaM](sal_Int32 nResult){
                     if (RET_OK == nResult)
                     {
-                        rSh.Push();              // save current cursor on stack
                         rSh.SetSelection(*xPaM); // tdf#135636 set the table selected at dialog launch as current selection
 
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
@@ -610,8 +609,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         pRequest->Done(*pOutSet);
 
                         ItemSetToTableParam(*pOutSet, rSh);
-
-                        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor from stack
                     }
 
                     rBindings.Update(SID_RULER_BORDERS);
