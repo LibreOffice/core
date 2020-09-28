@@ -34,7 +34,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 #include <tools/diagnose_ex.h>
-#include <officecfg/Office/Compatibility.hxx>
 
 #include <rtl/math.hxx>
 
