@@ -254,7 +254,8 @@ public:
 
 private:
 
-    static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
+    static const CharClass      *pCharClassEnglish;     // character classification for en_US locale
+    static const CharClass      *pCharClassLocalized;   // character classification for UI locale
     static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
 
     static const struct AddInMap
@@ -285,7 +286,7 @@ private:
 
     std::queue<OpCode> maPendingOpCodes; // additional opcodes generated from a single symbol
 
-    const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
+    const CharClass* pCharClass; // which character classification is used for parseAnyToken and upper/lower
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
@@ -322,6 +323,7 @@ private:
 #endif
 
     bool   NextNewToken(bool bInArray);
+    bool ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const;
 
     virtual void SetError(FormulaError nError) override;
     sal_Int32 NextSymbol(bool bInArray);
@@ -352,7 +354,8 @@ private:
      */
     ScRangeData* GetRangeData( const formula::FormulaToken& pToken ) const;
 
-    static void InitCharClassEnglish();
+    static const CharClass* GetCharClassEnglish();
+    static const CharClass* GetCharClassLocalized();
 
 public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
