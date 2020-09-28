@@ -496,7 +496,11 @@ static void WriteDop( WW8Export& rWrt )
     uno::Reference<beans::XPropertySet> xProps;
     if ( pDocShell )
     {
-        xProps.set(pDocShell->GetModel(), uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xModelComp(pDocShell->GetModel(), uno::UNO_QUERY);
+        xProps.set(xModelComp, uno::UNO_QUERY);
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(xModelComp, uno::UNO_QUERY_THROW);
+        xDocProps = xDPS->getDocumentProperties();
+        SAL_WARN_IF(!xDocProps.is(), "sw.ww8", "DocumentProperties is null");
 
         rDop.lKeyProtDoc = pDocShell->GetModifyPasswordHash();
     }
