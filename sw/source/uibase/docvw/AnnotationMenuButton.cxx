@@ -72,7 +72,7 @@ void AnnotationMenuButton::Select()
 
     // tdf#136682 ensure this is the currently active sidebar win so the command
     // operates in an active sidebar context
-    mrSidebarWin.SetActiveSidebarWin();
+    bool bSwitchedFocus = mrSidebarWin.SetActiveSidebarWin();
 
     if (sIdent == "reply")
         mrSidebarWin.ExecuteCommand(FN_REPLY);
@@ -90,6 +90,10 @@ void AnnotationMenuButton::Select()
         mrSidebarWin.ExecuteCommand(FN_DELETE_ALL_NOTES);
     else if (sIdent == "formatall")
         mrSidebarWin.ExecuteCommand(FN_FORMAT_ALL_NOTES);
+
+    if (bSwitchedFocus)
+        mrSidebarWin.UnsetActiveSidebarWin();
+    mrSidebarWin.GrabFocusToDocument();
 }
 
 void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
