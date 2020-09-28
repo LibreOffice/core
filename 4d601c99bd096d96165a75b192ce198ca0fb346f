@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dbdeae2a_8a2530ba",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-28T08:26:55Z",
+      "side": 1,
+      "message": "it would be fine to replace this with std::optional\u003cOUString\u003e to avoid exporting the unnecessary upright\u003d\"0\" (which is the default value: https://c-rex.net/projects/samples/ooxml/e1/Part4/OOXML_P4_DOCX_bodyPr_topic_ID0EMGMKB.html)",
+      "range": {
+        "startLine": 2957,
+        "startChar": 8,
+        "endLine": 2957,
+        "endChar": 22
+      },
+      "revId": "4d601c99bd096d96165a75b192ce198ca0fb346f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
