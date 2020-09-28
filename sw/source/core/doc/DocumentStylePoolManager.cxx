@@ -379,8 +379,8 @@ static const char* STR_POOLCOLL_EXTRA_ARY[]
     // Miscellaneous
     STR_POOLCOLL_FRAME,
     STR_POOLCOLL_FOOTNOTE,
-    STR_POOLCOLL_JAKETADRESS,
-    STR_POOLCOLL_SENDADRESS,
+    STR_POOLCOLL_ENVELOPE_ADDRESS,
+    STR_POOLCOLL_SEND_ADDRESS,
     STR_POOLCOLL_ENDNOTE,
     STR_POOLCOLL_LABEL_DRAWING
 };
@@ -505,7 +505,7 @@ static const char* STR_POOLPAGE_ARY[] =
     STR_POOLPAGE_FIRST,
     STR_POOLPAGE_LEFT,
     STR_POOLPAGE_RIGHT,
-    STR_POOLPAGE_JAKET,
+    STR_POOLPAGE_ENVELOPE,
     STR_POOLPAGE_REGISTER,
     STR_POOLPAGE_HTML,
     STR_POOLPAGE_FOOTNOTE,
@@ -969,7 +969,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_LABEL_FIGURE:
             break;
 
-        case RES_POOLCOLL_JAKETADRESS:          // envelope address
+        case RES_POOLCOLL_ENVELOPE_ADDRESS:          // envelope address
             {
                 SvxULSpaceItem aUL( RES_UL_SPACE );
                 aUL.SetLower( PT_3 );
@@ -980,7 +980,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
 
-        case RES_POOLCOLL_SENDADRESS:           // Sender address
+        case RES_POOLCOLL_SEND_ADDRESS:           // Sender address
             {
                 if( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) )
                     SetAllScriptItem( aSet, SvxPostureItem(ITALIC_NORMAL, RES_CHRATR_POSTURE) );
@@ -1804,7 +1804,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         }
         break;
 
-    case RES_POOLPAGE_JAKET:        // "Envelope"
+    case RES_POOLPAGE_ENVELOPE:        // "Envelope"
         {
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );

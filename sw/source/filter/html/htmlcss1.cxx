@@ -902,7 +902,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         }
         break;
     case HtmlTokenId::ADDRESS_ON:
-        nPoolCollId = RES_POOLCOLL_SENDADRESS;
+        nPoolCollId = RES_POOLCOLL_SEND_ADDRESS;
         break;
     case HtmlTokenId::BLOCKQUOTE_ON:
         nPoolCollId = RES_POOLCOLL_HTML_BLOCKQUOTE;

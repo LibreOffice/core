@@ -233,7 +233,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
     OSL_ENSURE(pSh, "Shell missing");
 
     SwTextFormatColl* pColl = pSh->GetTextCollFromPool( static_cast< sal_uInt16 >(
-        bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
+        bSender ? RES_POOLCOLL_SEND_ADDRESS : RES_POOLCOLL_ENVELOPE_ADDRESS));
     OSL_ENSURE(pColl, "Text collection missing");
 
     if (rIdent.startsWith("character"))

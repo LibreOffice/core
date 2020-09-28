@@ -2839,7 +2839,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                         bool bContinue = true;
                         switch( nId )
                         {
-                        case RES_POOLCOLL_SENDADRESS:   //  --> ADDRESS
+                        case RES_POOLCOLL_SEND_ADDRESS: //  --> ADDRESS
                         case RES_POOLCOLL_TABLE_HDLN:   //  --> TH
                         case RES_POOLCOLL_TABLE:        //  --> TD
                         case RES_POOLCOLL_TEXT:         //  --> P
@@ -2908,7 +2908,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             {
                 // then also the ones, that we are mapping:
                 static sal_uInt16 aPoolIds[] = {
-                    RES_POOLCOLL_SENDADRESS,    //  --> ADDRESS
+                    RES_POOLCOLL_SEND_ADDRESS, //  --> ADDRESS
                     RES_POOLCOLL_TABLE_HDLN,    //  --> TH
                     RES_POOLCOLL_TABLE,     //  --> TD
                     RES_POOLCOLL_STANDARD,      //  --> P

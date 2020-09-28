@@ -794,7 +794,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_HEADLINE6:
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_head6);
                 break;
-            case RES_POOLCOLL_SENDADRESS:
+            case RES_POOLCOLL_SEND_ADDRESS:
                 rToken = OString(OOO_STRING_SVTOOLS_HTML_address);
                 break;
             case RES_POOLCOLL_HTML_BLOCKQUOTE:
@@ -1593,7 +1593,7 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
             case RES_POOLCOLL_HEADLINE6:
                 rHTMLWrt.m_nDfltTopMargin = HTML_HEADSPACE;
                 break;
-            case RES_POOLCOLL_SENDADRESS:
+            case RES_POOLCOLL_SEND_ADDRESS:
             case RES_POOLCOLL_HTML_DT:
             case RES_POOLCOLL_HTML_DD:
             case RES_POOLCOLL_HTML_PRE:

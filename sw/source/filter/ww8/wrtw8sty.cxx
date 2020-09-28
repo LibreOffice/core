@@ -235,8 +235,8 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
         case RES_POOLCOLL_TOX_IDXH:         nRet = 33;  break;
         case RES_POOLCOLL_LABEL:            nRet = 34;  break;
         case RES_POOLCOLL_LABEL_DRAWING:    nRet = 35;  break;
-        case RES_POOLCOLL_JAKETADRESS:      nRet = 36;  break;
-        case RES_POOLCOLL_SENDADRESS:       nRet = 37;  break;
+        case RES_POOLCOLL_ENVELOPE_ADDRESS: nRet = 36;  break;
+        case RES_POOLCOLL_SEND_ADDRESS:     nRet = 37;  break;
         case RES_POOLCOLL_ENDNOTE:          nRet = 43;  break;
         case RES_POOLCOLL_TOX_AUTHORITIESH: nRet = 44;  break;
         case RES_POOLCOLL_TOX_CNTNTH:       nRet = 46;  break;
