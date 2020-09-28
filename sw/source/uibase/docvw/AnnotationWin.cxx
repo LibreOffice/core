@@ -249,7 +249,7 @@ void SwAnnotationWin::SetResolved(bool resolved)
     bool oldState = IsResolved();
     static_cast<SwPostItField*>(mpFormatField->GetField())->SetResolved(resolved);
     const SwViewOption* pVOpt = mrView.GetWrtShellPtr()->GetViewOptions();
-    mrSidebarItem.bShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
+    mrSidebarItem.mbShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
 
     mpTextRangeOverlay.reset();
 

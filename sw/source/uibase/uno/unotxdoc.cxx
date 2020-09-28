@@ -3323,7 +3323,7 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
     auto commentsNode = rJsonWriter.startNode("comments");
     for (auto const& sidebarItem : *pDocShell->GetView()->GetPostItMgr())
     {
-        sw::annotation::SwAnnotationWin* pWin = sidebarItem->pPostIt.get();
+        sw::annotation::SwAnnotationWin* pWin = sidebarItem->mpPostIt.get();
 
         const SwPostItField* pField = pWin->GetPostItField();
         const SwRect& aRect = pWin->GetAnchorRect();

@@ -60,14 +60,14 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
 
 SwTextAPIObject::SwTextAPIObject( std::unique_ptr<SwTextAPIEditSource> p )
 : SvxUnoText( p.get(), ImplGetSvxTextPortionPropertySet(), uno::Reference < text::XText >() )
-, pSource(std::move(p))
+, m_pSource(std::move(p))
 {
 }
 
 SwTextAPIObject::~SwTextAPIObject() throw()
 {
-    pSource->Dispose();
-    pSource.reset();
+    m_pSource->Dispose();
+    m_pSource.reset();
 }
 
 struct SwTextAPIEditSource_Impl

@@ -49,15 +49,15 @@ public:
 
 class SwTextAPIObject : public SvxUnoText
 {
-    std::unique_ptr<SwTextAPIEditSource> pSource;
+    std::unique_ptr<SwTextAPIEditSource> m_pSource;
 public:
                         SwTextAPIObject( std::unique_ptr<SwTextAPIEditSource> p);
     virtual             ~SwTextAPIObject() throw() override;
-    void                DisposeEditSource() { pSource->Dispose(); }
-    std::unique_ptr<OutlinerParaObject> CreateText() { return pSource->CreateText(); }
-    void                SetString( const OUString& rText ) { pSource->SetString( rText ); }
-    void                SetText( OutlinerParaObject const & rText ) { pSource->SetText( rText ); }
-    OUString            GetText() const { return pSource->GetText(); }
+    void                DisposeEditSource() { m_pSource->Dispose(); }
+    std::unique_ptr<OutlinerParaObject> CreateText() { return m_pSource->CreateText(); }
+    void                SetString( const OUString& rText ) { m_pSource->SetString( rText ); }
+    void                SetText( OutlinerParaObject const & rText ) { m_pSource->SetText( rText ); }
+    OUString            GetText() const { return m_pSource->GetText(); }
 };
 
 #endif

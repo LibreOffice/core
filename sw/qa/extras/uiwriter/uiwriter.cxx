@@ -4517,10 +4517,10 @@ void SwUiWriterTest::testTdf89720()
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
     for (std::unique_ptr<SwSidebarItem> const & pItem : *pPostItMgr)
     {
-        if (pItem->pPostIt->IsFollow())
+        if (pItem->mpPostIt->IsFollow())
             // This was non-0: reply comments had a text range overlay,
             // resulting in unexpected dark color.
-            CPPUNIT_ASSERT(!pItem->pPostIt->TextRange());
+            CPPUNIT_ASSERT(!pItem->mpPostIt->TextRange());
     }
 }
 

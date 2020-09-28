@@ -2283,7 +2283,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
     for (const auto& pItem : *pPostItMgr)
     {
-        const SwRect& rAnchor = pItem->pPostIt->GetAnchorRect();
+        const SwRect& rAnchor = pItem->mpPostIt->GetAnchorRect();
         CPPUNIT_ASSERT_EQUAL(nFrameLeft, rAnchor.Left());
     }
 

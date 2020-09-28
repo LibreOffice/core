@@ -114,10 +114,10 @@ SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::IMark& rAnno
 }
 
 SwSidebarItem::SwSidebarItem(const bool aFocus)
-    : pPostIt(nullptr)
-    , bShow(true)
-    , bFocus(aFocus)
-    , bPendingLayout(false)
+    : mpPostIt(nullptr)
+    , mbShow(true)
+    , mbFocus(aFocus)
+    , mbPendingLayout(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
     , maLayoutInfo()
 {

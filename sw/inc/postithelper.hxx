@@ -94,10 +94,10 @@ namespace SwPostItHelper
 class SAL_DLLPUBLIC_RTTI SwSidebarItem
 {
 public:
-    VclPtr<sw::annotation::SwAnnotationWin> pPostIt;
-    bool bShow;
-    bool bFocus;
-    bool bPendingLayout;
+    VclPtr<sw::annotation::SwAnnotationWin> mpPostIt;
+    bool mbShow;
+    bool mbFocus;
+    bool mbPendingLayout;
 
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
