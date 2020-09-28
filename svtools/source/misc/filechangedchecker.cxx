@@ -16,7 +16,7 @@
 
 FileChangedChecker::FileChangedChecker(const OUString& rFilename,
         const ::std::function<void ()>& rCallback)
-    : mIdle("SVTools FileChangedChecker Idle")
+    : mTimer("SVTools FileChangedChecker Timer")
     , mFileName(rFilename)
     , mLastModTime()
     , mpCallback(rCallback)
@@ -24,21 +24,24 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
     // Get the curren last file modified Status
     getCurrentModTime(mLastModTime);
 
-    // associate the callback function for the Idle
-    mIdle.SetInvokeHandler(LINK(this, FileChangedChecker, TimerHandler));
+    // associate the callback function for the Timer
+    mTimer.SetInvokeHandler(LINK(this, FileChangedChecker, TimerHandler));
 
-    //start the timer
+    // set timer interval
+    mTimer.SetTimeout(100);
+
+    // start the timer
     resetTimer();
 }
 
 void FileChangedChecker::resetTimer()
 {
-    //Start the Idle if it's not active
-    if(!mIdle.IsActive())
-        mIdle.Start();
+    // Start the Idle if it's not active
+    if(!mTimer.IsActive())
+        mTimer.Start();
 
     // Set lowest Priority
-    mIdle.SetPriority(TaskPriority::LOWEST);
+    mTimer.SetPriority(TaskPriority::LOWEST);
 }
 
 bool FileChangedChecker::getCurrentModTime(TimeValue& o_rValue) const
@@ -90,7 +93,7 @@ IMPL_LINK_NOARG(FileChangedChecker, TimerHandler, Timer *, void)
         mpCallback();
     }
 
-    // Reset the Idle in any case
+    // Reset the Timer in any case
     resetTimer();
 }
 

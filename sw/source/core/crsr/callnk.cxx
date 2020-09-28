@@ -59,7 +59,7 @@ SwCallLink::SwCallLink( SwCursorShell & rSh )
     }
 }
 
-static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShell)
+static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell & rShell)
 {
     if ( !pNode )
         return;
@@ -76,11 +76,12 @@ static void lcl_notifyRow(const SwContentNode* pNode, SwCursorShell const & rShe
 
     const SwTableLine* pLine = pRow->GetTabLine( );
 
-    if (rShell.IsTableMode())
+    if (rShell.IsTableMode() || (rShell.StartsWithTable() && rShell.ExtendedSelectedAll()))
     {
         // If we have a table selection, then avoid the notification: it's not necessary (the text
         // cursor needs no updating) and the notification may kill the selection overlay, leading to
         // flicker.
+        // Same for whole-document selection when it starts with a table.
         return;
     }
 

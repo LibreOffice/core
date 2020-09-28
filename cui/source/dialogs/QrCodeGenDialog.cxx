@@ -16,10 +16,14 @@
 #include <vcl/weld.hxx>
 #include <sal/log.hxx>
 
+#include <config_qrcodegen.h>
+
+#if ENABLE_QRCODEGEN
 #if defined(SYSTEM_QRCODEGEN)
 #include <qrcodegen/QrCode.hpp>
 #else
 #include <QrCode.hpp>
+#endif
 #endif
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -58,7 +62,9 @@ using namespace css::sheet;
 using namespace css::text;
 using namespace css::drawing;
 using namespace css::graphic;
+#if ENABLE_QRCODEGEN
 using namespace qrcodegen;
+#endif
 
 QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel,
                                  bool bEditExisting)
@@ -105,14 +111,19 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
 
 short QrCodeGenDialog::run()
 {
+#if ENABLE_QRCODEGEN
     short nRet = GenericDialogController::run();
     if (nRet == RET_OK)
         Apply();
     return nRet;
+#else
+    return RET_CANCEL;
+#endif
 }
 
 void QrCodeGenDialog::Apply()
 {
+#if ENABLE_QRCODEGEN
     css::drawing::QRCode aQRCode;
     aQRCode.Payload = m_xEdittext->get_text();
 
@@ -232,13 +243,12 @@ void QrCodeGenDialog::Apply()
             throw uno::RuntimeException("Not implemented");
         }
     }
+#endif
 }
 
 OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRBorder)
 {
-#if ENABLE_FUZZERS
-    return OUString();
-#else
+#if ENABLE_QRCODEGEN
     //Select ECC:: value from aQrECC
     qrcodegen::QrCode::Ecc bqrEcc = qrcodegen::QrCode::Ecc::LOW;
 
@@ -274,8 +284,12 @@ OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRB
     qrcodegen::QrCode qr0 = qrcodegen::QrCode::encodeText(qrtext, bqrEcc);
     std::string svg = qr0.toSvgString(aQRBorder);
     //cstring to OUString
-    char* cstr = &svg[0];
-    return OUString::createFromAscii(cstr);
+    return OUString::createFromAscii(svg.c_str());
+#else
+    (void)aQRText;
+    (void)aQRECC;
+    (void)aQRBorder;
+    return OUString();
 #endif
 }
 

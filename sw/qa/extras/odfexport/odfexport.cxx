@@ -2355,5 +2355,17 @@ DECLARE_ODFEXPORT_TEST(tdf124470, "tdf124470TableAndEmbeddedUsedFonts.odt")
     }
 }
 
+DECLARE_ODFEXPORT_TEST(tdf135942, "nestedTableInFooter.odt")
+{
+    // All table autostyles should be collected, including nested, and must not crash.
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    {
+        assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -134,7 +134,11 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
                         {
                             SwBorderAttrAccess aAccess( SwFrame::GetCache(), pLastFrame );
                             const SwBorderAttrs& rAttrs = *aAccess.Get();
-                            nNewTop -= rAttrs.GetULSpace().GetLower() + rAttrs.CalcLineSpacing();
+                            nNewTop -= rAttrs.GetULSpace().GetLower();
+                            if (rIDSA.get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS))
+                            {
+                                nNewTop -= rAttrs.CalcLineSpacing();
+                            }
                         }
                     }
                 }
@@ -2147,10 +2151,16 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
         }
 
         // Also consider lower spacing in table cells
+        IDocumentSettingAccess const& rIDSA(pNewUpper->GetFormat()->getIDocumentSettingAccess());
         if ( bRet && IsInTab() &&
-             pNewUpper->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+            rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS))
         {
-            nSpace -= rAttrs.GetULSpace().GetLower() + rAttrs.CalcLineSpacing();
+            nSpace -= rAttrs.GetULSpace().GetLower();
+
+            if (rIDSA.get(DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS))
+            {
+                nSpace -= rAttrs.CalcLineSpacing();
+            }
             if ( nSpace < 0 )
             {
                 bRet = false;
