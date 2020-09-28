@@ -115,6 +115,15 @@ void BlocklistParserTest::testEvaluate()
     CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
                                     aDriveInfos, VersionType::OpenGL, "10.20.30.40", vendorNVIDIA, "all", DRIVER_OS_WINDOWS_10));
 
+    // Check generic OS
+    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::OpenGL, "10.20.30.50", vendorMicrosoft, "all", DRIVER_OS_WINDOWS_10));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::OpenGL, "10.20.30.50", vendorMicrosoft, "all", DRIVER_OS_LINUX));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::OpenGL, "10.20.30.50", vendorMicrosoft, "all", DRIVER_OS_OSX_10_7));
+    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
+                                    aDriveInfos, VersionType::OpenGL, "10.20.30.50", vendorMicrosoft, "all", DRIVER_OS_OSX_10_8));
 
     // Check Vendors
     CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
