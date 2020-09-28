@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd952922_a3cacb8d",
+        "filename": "chart2/uiconfig/ui/tp_DataLabel.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2020-09-28T15:37:23Z",
+      "side": 1,
+      "message": "This feature is not specific to pie charts, other types can have leader lines as well. \nFor other chart types this is mostly visible with custom positioned data labels.",
+      "range": {
+        "startLine": 500,
+        "startChar": 215,
+        "endLine": 500,
+        "endChar": 225
+      },
+      "revId": "b2775b09369e89f4a5c729cd1639eda868078d28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
