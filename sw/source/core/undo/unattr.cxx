@@ -913,14 +913,15 @@ void SwUndoMoveLeftMargin::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM & rPam = AddUndoRedoPaM(rContext);
 
     rDoc.MoveLeftMargin( rPam,
-                         GetId() == SwUndoId::INC_LEFTMARGIN, m_bModulus );
+                         GetId() == SwUndoId::INC_LEFTMARGIN, m_bModulus,
+                         rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
 }
 
 void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
     rDoc.MoveLeftMargin(rContext.GetRepeatPaM(), GetId() == SwUndoId::INC_LEFTMARGIN,
-                        m_bModulus );
+                        m_bModulus, rDoc.getIDocumentLayoutAccess().GetCurrentLayout());
 }
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
