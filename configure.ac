@@ -1516,6 +1516,11 @@ libo_FUZZ_ARG_ENABLE(formula-logger,
     )
 )
 
+AC_ARG_ENABLE(opencl,
+    AS_HELP_STRING([--disable-opencl],
+        [Disable OpenCL support.]),
+,enable_opencl=yes)
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -10253,7 +10258,7 @@ dnl =================================================
 dnl Check whether to build with OpenCL support.
 dnl =================================================
 
-if test $_os != iOS -a $_os != Android; then
+if test $_os != iOS -a $_os != Android -a "$ENABLE_FUZZERS" != "TRUE" -a "$enable_opencl" = "yes"; then
     # OPENCL in BUILD_TYPE and HAVE_FEATURE_OPENCL tell that OpenCL is potentially available on the
     # platform (optional at run-time, used through clew).
     BUILD_TYPE="$BUILD_TYPE OPENCL"
