@@ -462,8 +462,8 @@ void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 Reference<XClipboard> GetSystemClipboard()
 {
     // On Windows, the css.datatransfer.clipboard.SystemClipboard UNO service is implemented as a
-    // single-instance service (sysdtrans_component_getFactory,
-    // dtrans/source/win32/clipb/wcbentry.cxx) that needs timely disposing to join a spawned thread
+    // single-instance service (dtrans_CWinClipboard_get_implementation in
+    // vcl/win/dtrans/WinClipboard.cxx) that needs timely disposing to join a spawned thread
     // (done in DeInitVCL, vcl/source/app/svmain.cxx), while on other platforms it is implemented as
     // a multi-instance service (ClipboardFactory, vcl/source/components/dtranscomp.cxx) so we
     // should not hold on to a single instance here:
