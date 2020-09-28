@@ -1373,13 +1373,24 @@ IMPL_LINK( SwAnnotationWin, WindowEventListener, VclWindowEvent&, rEvent, void )
     }
 }
 
-void SwAnnotationWin::SetActiveSidebarWin()
+bool SwAnnotationWin::SetActiveSidebarWin()
 {
     if (mrMgr.GetActiveSidebarWin() == this)
-        return;
+        return false;
     const bool bLockView = mrView.GetWrtShell().IsViewLocked();
     mrView.GetWrtShell().LockView( true );
     mrMgr.SetActiveSidebarWin(this);
+    mrView.GetWrtShell().LockView( bLockView );
+    return true;
+}
+
+void SwAnnotationWin::UnsetActiveSidebarWin()
+{
+    if (mrMgr.GetActiveSidebarWin() != this)
+        return;
+    const bool bLockView = mrView.GetWrtShell().IsViewLocked();
+    mrView.GetWrtShell().LockView( true );
+    mrMgr.SetActiveSidebarWin(nullptr);
     mrView.GetWrtShell().LockView( bLockView );
 }
 

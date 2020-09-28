@@ -197,7 +197,10 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         bool IsThreadResolved();
 
         // Set this SwAnnotationWin as the currently active one
-        void SetActiveSidebarWin();
+        // return false if it was already active
+        bool SetActiveSidebarWin();
+        // Unset this SwAnnotationWin as the currently active one
+        void UnsetActiveSidebarWin();
 
         /// Find the first annotation for the thread which this annotation is in.
         /// This may be the same annotation as this one.
