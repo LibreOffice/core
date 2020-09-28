@@ -18,6 +18,7 @@
 
 #include <test/outputdevice.hxx>
 
+// Run tests from visualbackendtest ('bin/run visualbackendtest').
 class BackendTest : public test::BootstrapFixture
 {
     // if enabled - check the result images with:
@@ -72,16 +73,26 @@ public:
         // This ensures that all backends return a valid name.
         assert(!name.isEmpty());
         (void)name;
-        return false;
+        return true;
     }
 
 // Check whether tests should fail depending on which backend is used
 // (not all work). If you want to disable just a specific test
 // for a specific backend, use something like
 // 'if(SHOULD_ASSERT && aOutDevTest.getRenderBackendName() != "skia")'.
+// The macro uses opt-out rather than opt-in so that this doesn't "pass"
+// silently in case a new backend is added.
 #define SHOULD_ASSERT                                                                              \
     (assertBackendNameNotEmpty(aOutDevTest.getRenderBackendName())                                 \
-     || aOutDevTest.getRenderBackendName() == "skia")
+     && aOutDevTest.getRenderBackendName() != "svp"                                                \
+     && aOutDevTest.getRenderBackendName() != "opengl"                                             \
+     && aOutDevTest.getRenderBackendName() != "qt5"                                                \
+     && aOutDevTest.getRenderBackendName() != "qt5svp"                                             \
+     && aOutDevTest.getRenderBackendName() != "gtk3svp"                                            \
+     && aOutDevTest.getRenderBackendName() != "aqua"                                               \
+     && aOutDevTest.getRenderBackendName() != "gen"                                                \
+     && aOutDevTest.getRenderBackendName() != "genpsp"                                             \
+     && aOutDevTest.getRenderBackendName() != "win")
 
     void testDrawRectWithRectangle()
     {
