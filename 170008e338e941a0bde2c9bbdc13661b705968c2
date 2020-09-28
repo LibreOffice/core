@@ -51,6 +51,24 @@
       "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be0474c9_c2bc7686",
+        "filename": "vcl/ios/clipboard.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-09-28T06:19:02Z",
+      "side": 1,
+      "message": "Here we first make a copy of the listener list, then we loop, continually pulling the first element off the list, then we throw that copy of the list away. \nInstead we can do something like:\n\n  auto listeners(mListeners);\n  for (const auto \u0026 l : listeners)\n      if (l.is)\n            try\n            {\n                l-\u003echangedContents(aEvent);\n            }\n            catch (const css::uno::RuntimeException\u0026)\n            {\n            }",
+      "parentUuid": "487729e9_6f4ce86c",
+      "revId": "170008e338e941a0bde2c9bbdc13661b705968c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
