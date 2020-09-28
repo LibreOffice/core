@@ -4411,8 +4411,14 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
 
         // User defined names and such do need i18n upper also in ODF.
-        if (bAsciiUpper)
-            aUpper = pCharClass->uppercase( aOrg );
+        if (bAsciiUpper || pCharClass->getLanguageTag() != ScGlobal::getCharClassPtr()->getLanguageTag())
+        {
+            // Use current system locale here because user defined symbols are
+            // more likely in that localized language than in the formula
+            // language. This in corner cases needs to continue to work for
+            // existing documents and environments.
+            aUpper = ScGlobal::getCharClassPtr()->uppercase( aOrg );
+        }
 
         if (IsNamedRange( aUpper ))
             return true;
