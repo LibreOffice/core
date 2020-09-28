@@ -19,6 +19,8 @@
 #include <attrib.hxx>
 #include <scitems.hxx>
 
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
@@ -48,6 +50,7 @@ public:
     void testTdf131296_legacy();
     void testTdf131296_new();
     void testTdf128218();
+    void testTdf71271();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -64,6 +67,7 @@ public:
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
     CPPUNIT_TEST(testTdf128218);
+    CPPUNIT_TEST(testTdf71271);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -798,6 +802,33 @@ void ScMacrosTest::testTdf128218()
     // - Actual  : Object()
 
     CPPUNIT_ASSERT_EQUAL(OUString("Double"), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf71271()
+{
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
+    CPPUNIT_ASSERT_MESSAGE("Failed to create the doc", xComponent.is());
+
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), uno::UNO_SET_THROW);
+    uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+
+    uno::Reference<beans::XPropertySet> xPropsBefore(xSheet, uno::UNO_QUERY_THROW);
+    uno::Any aValue;
+    aValue <<= "NewCodeName";
+    xPropsBefore->setPropertyValue("ScriptConfiguration", aValue);
+
+    saveAndReload(xComponent, "");
+    CPPUNIT_ASSERT(xComponent);
+
+    OUString sCodeName;
+    uno::Reference<beans::XPropertySet> xPropsAfter(xSheet, uno::UNO_QUERY_THROW);
+    xPropsAfter->getPropertyValue("ScriptConfiguration") >>= sCodeName;
+    CPPUNIT_ASSERT_EQUAL(OUString("NewCodeName"), sCodeName);
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
