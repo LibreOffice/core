@@ -405,8 +405,11 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 try
                 {
                     aStripOffsets.resize(nDataLen);
-                    for (size_t i = 0; i < nOldNumSO; ++i)
-                        aStripOffsets[i] += nOrigPos;
+                    if (nOrigPos)
+                    {
+                        for (size_t i = 0; i < nOldNumSO; ++i)
+                            aStripOffsets[i] += nOrigPos;
+                    }
                     for (size_t i = nOldNumSO; i < aStripOffsets.size(); ++i)
                         aStripOffsets[i] = ReadIntData() + nOrigPos;
                 }
