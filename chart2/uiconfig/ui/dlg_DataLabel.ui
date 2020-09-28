@@ -563,6 +563,11 @@
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="CB_CUSTOM_LEADER_LINES-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="dlg_DataLabel|extended_tip|CB_CUSTOM_LEADER_LINES">Draws a line connecting the data labels to the data points</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
