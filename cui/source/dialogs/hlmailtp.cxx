@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 SvxHyperlinkMailTp::SvxHyperlinkMailTp(weld::Container* pParent, SvxHpLinkDlg* pDlg, const SfxItemSet* pItemSet)
     : SvxHyperlinkTabPageBase(pParent, pDlg, "cui/ui/hyperlinkmailpage.ui", "HyperlinkMailPage", pItemSet)
     , m_xCbbReceiver(new SvxHyperURLBox(xBuilder->weld_combo_box("receiver")))
-    , m_xBtAdrBook(xBuilder->weld_button("adressbook"))
+    , m_xBtAdrBook(xBuilder->weld_button("addressbook"))
     , m_xFtSubject(xBuilder->weld_label("subject_label"))
     , m_xEdSubject(xBuilder->weld_entry("subject"))
 {

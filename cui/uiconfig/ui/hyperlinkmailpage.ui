@@ -51,16 +51,16 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="adressbook">
+                  <object class="GtkButton" id="addressbook">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|adressbook|tooltip_text">Data Sources...</property>
+                    <property name="tooltip_text" translatable="yes" context="hyperlinkmailpage|addressbook|tooltip_text">Data Sources...</property>
                     <property name="image">image1</property>
                     <property name="always_show_image">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="adressbook-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|adressbook">Hides or shows the data source browser.</property>
+                      <object class="AtkObject" id="addressbook-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkmailpage|extended_tip|addressbook">Hides or shows the data source browser.</property>
                       </object>
                     </child>
                   </object>
