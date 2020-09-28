@@ -52,7 +52,7 @@ using namespace com::sun::star;
 void SwTextBoxHelper::create(SwFrameFormat* pShape)
 {
     // If TextBox wasn't enabled previously
-    if (pShape->GetAttrSet().HasItem(RES_CNTNT))
+    if (pShape->GetAttrSet().HasItem(RES_CNTNT) && pShape->GetOtherTextBoxFormat())
         return;
 
     // Create the associated TextFrame and insert it into the document.
