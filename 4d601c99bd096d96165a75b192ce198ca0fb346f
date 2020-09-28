@@ -22,6 +22,30 @@
       "revId": "4d601c99bd096d96165a75b192ce198ca0fb346f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6400d7a6_88cb0bf2",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-28T10:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbdeae2a_8a2530ba",
+      "range": {
+        "startLine": 2957,
+        "startChar": 8,
+        "endLine": 2957,
+        "endChar": 22
+      },
+      "revId": "4d601c99bd096d96165a75b192ce198ca0fb346f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
