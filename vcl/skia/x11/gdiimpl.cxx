@@ -57,6 +57,13 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     SkiaZone zone;
     sk_app::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
+#if defined LINUX
+    // WORKAROUND: VSync causes freezes that can even temporarily freeze the entire desktop.
+    // This happens even with the latest 450.66 drivers despite them claiming a fix for vsync.
+    // https://forums.developer.nvidia.com/t/hangs-freezes-when-vulkan-v-sync-vk-present-mode-fifo-khr-is-enabled/67751
+    if (SkiaHelper::getVendor() == DriverBlocklist::VendorNVIDIA)
+        displayParams.fDisableVsync = true;
+#endif
     sk_app::window_context_factory::XlibWindowInfo winInfo;
     assert(display);
     winInfo.fDisplay = display;
