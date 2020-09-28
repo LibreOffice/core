@@ -97,7 +97,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT(pDoc);
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
-    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // .uno:Copy without touching shared clipboard
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocShell::GetViewData()->GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
@@ -111,7 +115,8 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf133326)
     CPPUNIT_ASSERT_EQUAL(OUString(""), aFormula);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
-    dispatchCommand(mxComponent, ".uno:Paste", {});
+    // .uno:Paste without touching shared clipboard
+    ScDocShell::GetViewData()->GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
     Scheduler::ProcessEventsToIdle();
 
     pDoc->GetFormula(0, 0, 1, aFormula);
