@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ec7382f_240272eb",
+        "filename": "sfx2/source/control/listview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-09-28T06:22:14Z",
+      "side": 1,
+      "message": "you need to place these functions in anonymous namespace to prevent the compiler warnings.",
+      "range": {
+        "startLine": 241,
+        "startChar": 9,
+        "endLine": 241,
+        "endChar": 26
+      },
+      "revId": "6158de3361ae606366d32aafcb99bac06407dd13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
