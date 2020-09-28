@@ -37,6 +37,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
+#include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
@@ -1127,6 +1128,26 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
         TAG_ON(aStr.makeStringAndClear().getStr());
     }
 
+    OUString aURL;
+    bool bWriteHyperLink(false);
+    if (aCell.meType == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = aCell.mpFormula;
+        if (pFCell->IsHyperLinkCell())
+        {
+            OUString aCellText;
+            pFCell->GetURLResult(aURL, aCellText);
+            bWriteHyperLink = true;
+        }
+    }
+
+    if (bWriteHyperLink)
+    {
+        OString aURLStr = HTMLOutFuncs::ConvertStringToHTML(aURL, eDestEnc, &aNonConvertibleChars);
+        OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " " OOO_STRING_SVTOOLS_HTML_O_href "=\"" + aURLStr + "\"";
+        TAG_ON(aStr.getStr());
+    }
+
     OUString aStrOut;
     bool bFieldText = false;
 
@@ -1173,6 +1194,8 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     }
     if ( pGraphEntry )
         WriteGraphEntry( pGraphEntry );
+
+    if (bWriteHyperLink) { TAG_OFF(OOO_STRING_SVTOOLS_HTML_anchor); }
 
     if ( bSetFont )     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
     if ( bCrossedOut )  TAG_OFF( OOO_STRING_SVTOOLS_HTML_strikethrough );
