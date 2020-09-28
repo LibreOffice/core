@@ -1061,8 +1061,10 @@ void FastSaxParserImpl::parse()
                 throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
 
             // Tell libxml2 parser to decode entities in attribute values.
+            // Also allow XML attribute values which are larger than 10MB, because this used to work
+            // with expat.
             // coverity[unsafe_xml_parse_config] - entity support is required
-            xmlCtxtUseOptions(rEntity.mpParser, XML_PARSE_NOENT);
+            xmlCtxtUseOptions(rEntity.mpParser, XML_PARSE_NOENT | XML_PARSE_HUGE);
         }
         else
         {
