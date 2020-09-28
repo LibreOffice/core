@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "76bb5e94_12e97bf2",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-09-28T09:42:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68be15e0_553a72c6",
+      "range": {
+        "startLine": 641,
+        "startChar": 2,
+        "endLine": 641,
+        "endChar": 81
+      },
+      "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67379dcf_599a5e20",
         "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d16652_6ad07ece",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-09-28T09:42:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67379dcf_599a5e20",
+      "range": {
+        "startLine": 657,
+        "startChar": 49,
+        "endLine": 657,
+        "endChar": 82
+      },
+      "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b776598e_f0070e9f",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-09-28T09:42:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cab0e9ea_d63dd0dc",
+      "range": {
+        "startLine": 673,
+        "startChar": 49,
+        "endLine": 673,
+        "endChar": 81
+      },
+      "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e152e6e_16e34b29",
         "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "f826b2ff_a5070db1",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-09-28T09:42:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e152e6e_16e34b29",
+      "range": {
+        "startLine": 747,
+        "startChar": 2,
+        "endLine": 748,
+        "endChar": 78
+      },
+      "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "467e8185_d53fb6a9",
         "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3e55da3_17e3f21c",
+        "filename": "extras/source/autocorr/lang/tr/DocumentList.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1002310
+      },
+      "writtenOn": "2020-09-28T09:42:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "467e8185_d53fb6a9",
+      "range": {
+        "startLine": 769,
+        "startChar": 1,
+        "endLine": 770,
+        "endChar": 89
+      },
+      "revId": "a93b0bd85d16009d232f9dc53197be4e9b0b7749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
