@@ -171,7 +171,7 @@ RES_POOLPAGE_STANDARD = RES_POOLPAGE_BEGIN,         ///< Standard page.
 RES_POOLPAGE_FIRST,                                 ///< First page.
 RES_POOLPAGE_LEFT,                                  ///< Left page.
 RES_POOLPAGE_RIGHT,                                 ///< Right page.
-RES_POOLPAGE_JAKET,                                 ///< Envelope.
+RES_POOLPAGE_ENVELOPE,                              ///< Envelope.
 RES_POOLPAGE_REGISTER,                              ///< Index.
 RES_POOLPAGE_HTML,                                  ///< HTML.
 RES_POOLPAGE_FOOTNOTE,                              ///< Footnote at end of document.
@@ -350,8 +350,8 @@ RES_POOLCOLL_LABEL_FIGURE,                              ///< Label figure
 /// Other stuff.
 RES_POOLCOLL_FRAME,                                     ///< Frames.
 RES_POOLCOLL_FOOTNOTE,                                  ///< Footnotes.
-RES_POOLCOLL_JAKETADRESS,                               ///< Addressee.
-RES_POOLCOLL_SENDADRESS,                                ///< Sender.
+RES_POOLCOLL_ENVELOPE_ADDRESS,                          ///< Addressee.
+RES_POOLCOLL_SEND_ADDRESS,                              ///< Sender.
 RES_POOLCOLL_ENDNOTE,                                   ///< Endnotes.
 
 RES_POOLCOLL_LABEL_DRAWING,                             ///< Label drawing objects.

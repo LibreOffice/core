@@ -213,8 +213,8 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_TABLE:
             case RES_POOLCOLL_FOOTNOTE:
             case RES_POOLCOLL_ENDNOTE:
-            case RES_POOLCOLL_JAKETADRESS:
-            case RES_POOLCOLL_SENDADRESS:
+            case RES_POOLCOLL_ENVELOPE_ADDRESS:
+            case RES_POOLCOLL_SEND_ADDRESS:
             case RES_POOLCOLL_HEADERFOOTER:
             case RES_POOLCOLL_LABEL:
                     nRet = RES_POOLCOLL_STANDARD;              break;        

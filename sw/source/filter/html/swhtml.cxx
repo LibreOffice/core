@@ -1680,7 +1680,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::ADDRESS_ON:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        NewTextFormatColl( HtmlTokenId::ADDRESS_ON, RES_POOLCOLL_SENDADRESS );
+        NewTextFormatColl(HtmlTokenId::ADDRESS_ON, RES_POOLCOLL_SEND_ADDRESS);
         break;
 
     case HtmlTokenId::ADDRESS_OFF:
