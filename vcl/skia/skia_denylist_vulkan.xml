@@ -27,5 +27,8 @@
         <entry os="all" vendor="amd" compare="less_equal" version="2.0.49">
             <device id="all"/>
         </entry>
+        <entry os="windows" vendor="nvidia">
+            <device id="all"/>
+        </entry>
     </denylist>
 </root>
