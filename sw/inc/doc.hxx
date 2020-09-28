@@ -1678,7 +1678,7 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
         mbAllOLENotify = false;
 }
 
-bool sw_GetPostIts( IDocumentFieldsAccess const * pIDFA, SetGetExpFields * pSrtLst );
+bool sw_GetPostIts(const IDocumentFieldsAccess& rIDFA, SetGetExpFields * pSrtLst);
 
 #endif  //_DOC_HXX
 

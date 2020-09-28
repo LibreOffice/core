@@ -242,7 +242,7 @@ public:
     ~SwRenderData();
 
     bool HasPostItData() const  { return m_pPostItShell != nullptr; }
-    void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
+    void CreatePostItData( SwDoc& rDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
     SfxObjectShellLock const& GetTempDocShell() const { return m_xTempDocShell;}

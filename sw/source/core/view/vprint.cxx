@@ -450,7 +450,7 @@ bool SwViewShell::PrintOrPDFExport(
 
     // tdf#91680 Reserve space in margin for comments only if there are comments
     const bool bHasPostItsToPrintInMargins = ( nPostItMode == SwPostItMode::InMargins ) &&
-                                sw_GetPostIts( &GetDoc()->getIDocumentFieldsAccess(), nullptr );
+                                sw_GetPostIts( GetDoc()->getIDocumentFieldsAccess(), nullptr );
 
     if ( bHasPostItsToPrintInMargins )
     {
