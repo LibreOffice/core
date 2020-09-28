@@ -495,6 +495,7 @@ void DeInitVCL()
         SolarMutexReleaser r; // unblock pending "clipboard content changed" notifications
         comp->dispose(); // will use CWinClipbImpl::s_aMutex
     }
+    pSVData->m_xSystemClipboard.clear();
 #endif
 
 #ifndef NDEBUG

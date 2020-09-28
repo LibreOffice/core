@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/RenderingCapabilities.hpp>
@@ -300,9 +301,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CWinClipboard_get_implementation(css::uno::XComponentContext* context,
                                         css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<CWinClipboard> g_Instance(new CWinClipboard(context, ""));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new CWinClipboard(context, "")));
 }
 
 void CWinClipboard::onReleaseDataObject(CXNotifyingDataObject* theCaller)
