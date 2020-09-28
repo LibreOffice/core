@@ -42,5 +42,8 @@
   <implementation name="com.sun.star.datatransfer.clipboard.ClipboardW32"
         constructor="dtrans_CWinClipboard_get_implementation">
     <service name="com.sun.star.datatransfer.clipboard.SystemClipboard"/>
+    <!-- Fake singleton so the servicemanager shuts us down and we can clean up our global instance
+         var: -->
+    <singleton name="com.sun.star.datatransfer.clipboard.theSystemClipboard"/>
   </implementation>
 </component>
