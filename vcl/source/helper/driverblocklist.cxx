@@ -34,6 +34,8 @@ static OperatingSystem getOperatingSystem(const OString& rString)
         return DRIVER_OS_WINDOWS_8_1;
     else if (rString == "10")
         return DRIVER_OS_WINDOWS_10;
+    else if (rString == "windows")
+        return DRIVER_OS_WINDOWS_ALL;
     else if (rString == "linux")
         return DRIVER_OS_LINUX;
     else if (rString == "osx_10_5")
@@ -44,6 +46,8 @@ static OperatingSystem getOperatingSystem(const OString& rString)
         return DRIVER_OS_OSX_10_7;
     else if (rString == "osx_10_8")
         return DRIVER_OS_OSX_10_8;
+    else if (rString == "osx")
+        return DRIVER_OS_OSX_ALL;
     else if (rString == "android")
         return DRIVER_OS_ANDROID;
     return DRIVER_OS_UNKNOWN;
@@ -602,8 +606,18 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
     bool match = false;
     for (std::vector<DriverInfo>::size_type i = 0; i < aDeviceInfos.size(); i++)
     {
-        if (aDeviceInfos[i].meOperatingSystem != DRIVER_OS_ALL
-            && aDeviceInfos[i].meOperatingSystem != system)
+        bool osMatch = false;
+        if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_ALL)
+            osMatch = true;
+        else if (aDeviceInfos[i].meOperatingSystem == system)
+            osMatch = true;
+        else if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_WINDOWS_ALL
+                 && system >= DRIVER_OS_WINDOWS_FIRST && system <= DRIVER_OS_WINDOWS_LAST)
+            osMatch = true;
+        else if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_OSX_ALL
+                 && system >= DRIVER_OS_OSX_FIRST && system <= DRIVER_OS_OSX_LAST)
+            osMatch = true;
+        if (!osMatch)
         {
             continue;
         }

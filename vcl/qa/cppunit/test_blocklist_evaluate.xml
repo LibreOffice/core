@@ -9,7 +9,7 @@
 
 <!--
     entry attributes:
-    os - "all", "7", "8", "8_1", "10"
+    os - "all", "7", "8", "8_1", "10", "windows", "linux", "osx_10_5", "osx_10_6", "osx_10_7", "osx_10_8", "osx"
     vendor - "all", "intel", "amd", "nvidia", "microsoft"
     compare - "less", "less_equal", "greater", "greater_equal", "equal", "not_equal", "between_exclusive", "between_inclusive", "between_inclusive_start"
     version
@@ -26,11 +26,19 @@
             <device id="all"/>
         </entry>
 
-        <entry os="all" vendor="microsoft">
+        <entry os="all" vendor="microsoft" compare="equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
 
         <entry os="all" vendor="intel" compare="less" version="10.18.14.4264">
+            <device id="all"/>
+        </entry>
+
+        <entry os="osx" vendor="microsoft" compare="equal" version="10.20.30.50">
+            <device id="all"/>
+        </entry>
+
+        <entry os="linux" vendor="microsoft" compare="equal" version="10.20.30.50">
             <device id="all"/>
         </entry>
 
