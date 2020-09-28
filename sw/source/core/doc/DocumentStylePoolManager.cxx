@@ -1804,7 +1804,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         }
         break;
 
-    case RES_POOLPAGE_JAKET:        // "Envelope"
+    case RES_POOLPAGE_ENVELOPE:        // "Envelope"
         {
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
