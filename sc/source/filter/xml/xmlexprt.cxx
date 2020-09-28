@@ -5157,11 +5157,13 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     bool bVBACompat = false;
     uno::Reference <container::XNameAccess> xCodeNameAccess;
     OSL_ENSURE( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
-    if( pDoc && pDoc->IsInVBAMode() )
+    // tdf#71271 - add code names regardless of VBA compatibility mode
+    if (pDoc)
     {
         // VBA compatibility mode
-        bVBACompat = true;
-        ++nPropsToAdd;
+        if (bVBACompat = pDoc->IsInVBAMode(); bVBACompat)
+            ++nPropsToAdd;
+
         // code names
         xCodeNameAccess = new XMLCodeNameProvider( pDoc );
         if( xCodeNameAccess->hasElements() )
