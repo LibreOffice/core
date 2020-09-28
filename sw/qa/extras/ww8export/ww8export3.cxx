@@ -12,6 +12,13 @@
 #include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+<<<<<<< HEAD   (ebd3d8 lok: Make the chart (sub)title work even from the mobile-wiz)
+=======
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+>>>>>>> CHANGE (188ddc tdf#136983 partial revert NFC ww8 cleanup: remove unused var)
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -49,6 +56,7 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of Sections", sal_Int32(0), xSections->getCount());
     }
 
+<<<<<<< HEAD   (ebd3d8 lok: Make the chart (sub)title work even from the mobile-wiz)
 DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
 {
     auto xNumberingRules
@@ -120,6 +128,15 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
     // - Actual  : 4
     // i.e. the numbering type was ARABIC, not SYMBOL_CHICAGO.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+=======
+    // tdf#127862: page fill color (in this case white) was lost
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(drawing::FillStyle_NONE != getProperty<drawing::FillStyle>(xStyle, "FillStyle"));
+
+    // tdf#136983
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Last printed date", sal_Int16(2009), xDPS->getDocumentProperties()->getPrintDate().Year);
+>>>>>>> CHANGE (188ddc tdf#136983 partial revert NFC ww8 cleanup: remove unused var)
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
