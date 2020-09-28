@@ -19,6 +19,8 @@
 #include <attrib.hxx>
 #include <scitems.hxx>
 
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
@@ -48,6 +50,7 @@ public:
     void testTdf131296_legacy();
     void testTdf131296_new();
     void testTdf128218();
+    void testTdf71271();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -64,6 +67,7 @@ public:
     CPPUNIT_TEST(testTdf131296_legacy);
     CPPUNIT_TEST(testTdf131296_new);
     CPPUNIT_TEST(testTdf128218);
+    CPPUNIT_TEST(testTdf71271);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -798,6 +802,37 @@ void ScMacrosTest::testTdf128218()
     // - Actual  : Object()
 
     CPPUNIT_ASSERT_EQUAL(OUString("Double"), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf71271()
+{
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop("private:factory/scalc");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
+        xProps->setPropertyValue("CodeName", uno::Any(OUString("NewCodeName")));
+    }
+
+    saveAndReload(xComponent, "");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+        uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+        OUString sCodeName;
+        uno::Reference<beans::XPropertySet> xProps(xSheet, uno::UNO_QUERY_THROW);
+        // Without the fix in place the codename would not have been saved
+        xProps->getPropertyValue("CodeName") >>= sCodeName;
+        CPPUNIT_ASSERT_EQUAL(OUString("NewCodeName"), sCodeName);
+    }
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
