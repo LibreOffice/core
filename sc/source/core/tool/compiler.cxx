@@ -22,6 +22,7 @@
 #include <compiler.hxx>
 
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <basic/sbmeth.hxx>
@@ -78,7 +79,8 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
-CharClass*                          ScCompiler::pCharClassEnglish = nullptr;
+const CharClass*                    ScCompiler::pCharClassEnglish = nullptr;
+const CharClass*                    ScCompiler::pCharClassLocalized = nullptr;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 enum ScanState
@@ -168,12 +170,17 @@ void ScCompiler::DeInit()
         delete pCharClassEnglish;
         pCharClassEnglish = nullptr;
     }
+    if (pCharClassLocalized)
+    {
+        delete pCharClassLocalized;
+        pCharClassLocalized = nullptr;
+    }
 }
 
 bool ScCompiler::IsEnglishSymbol( const OUString& rName )
 {
     // function names are always case-insensitive
-    OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpper = GetCharClassEnglish()->uppercase(rName);
 
     // 1. built-in function name
     OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
@@ -192,11 +199,27 @@ bool ScCompiler::IsEnglishSymbol( const OUString& rName )
     return !aIntName.isEmpty();       // no valid function name
 }
 
-void ScCompiler::InitCharClassEnglish()
+const CharClass* ScCompiler::GetCharClassEnglish()
 {
-    css::lang::Locale aLocale( "en", "US", "");
-    pCharClassEnglish = new CharClass(
-            ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
+    if (!pCharClassEnglish)
+    {
+        css::lang::Locale aLocale( "en", "US", "");
+        pCharClassEnglish = new CharClass(
+                ::comphelper::getProcessComponentContext(), LanguageTag( aLocale));
+    }
+    return pCharClassEnglish;
+}
+
+const CharClass* ScCompiler::GetCharClassLocalized()
+{
+    if (!pCharClassLocalized)
+    {
+        // Switching UI language requires restart; if not, we would have to
+        // keep track of that.
+        pCharClassLocalized = new CharClass(
+                ::comphelper::getProcessComponentContext(), Application::GetSettings().GetUILanguageTag());
+    }
+    return pCharClassLocalized;
 }
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
@@ -261,13 +284,19 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
     {
         mxSymbols = xMap;
         if (mxSymbols->isEnglish())
-        {
-            if (!pCharClassEnglish)
-                InitCharClassEnglish();
-            pCharClass = pCharClassEnglish;
-        }
+            pCharClass = GetCharClassEnglish();
         else
-            pCharClass = ScGlobal::pCharClass;
+            pCharClass = GetCharClassLocalized();
+
+        // The difference is needed for an uppercase() call that usually does not
+        // result in different strings but for a few languages like Turkish;
+        // though even de-DE and de-CH may differ in ß/SS handling..
+        // At least don't care if both are English.
+        // The current locale is more likely to not be "en" so check first.
+        const LanguageTag& rLT1 = ScGlobal::GetpLocaleData()->getLanguageTag();
+        const LanguageTag& rLT2 = pCharClass->getLanguageTag();
+        mbCharClassesDiffer = (rLT1 != rLT2 && (rLT1.getLanguage() != "en" || rLT2.getLanguage() != "en"));
+
         SetGrammarAndRefConvention( mxSymbols->getGrammar(), GetGrammar());
     }
 }
@@ -1789,6 +1818,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
+    mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1812,6 +1842,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
         pCharClass( ScGlobal::pCharClass ),
+        mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -1834,6 +1865,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::pCharClass),
+    mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1857,6 +1889,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
         pCharClass( ScGlobal::pCharClass ),
+        mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -4157,9 +4190,9 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-static bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
+bool ScCompiler::ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const
 {
-    if (FormulaGrammar::isODFF( eGrammar ))
+    if (FormulaGrammar::isODFF( meGrammar ))
     {
         // ODFF has a defined set of English function names, avoid i18n
         // overhead.
@@ -4168,7 +4201,8 @@ static bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, Formul
     }
     else
     {
-        rUpper = ScGlobal::pCharClass->uppercase(rOrg);
+        // One of localized or English.
+        rUpper = pCharClass->uppercase(rOrg);
         return false;
     }
 }
@@ -4262,7 +4296,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     else
     {
         OUString aTmpStr( cSymbol[0] );
-        bMayBeFuncName = ScGlobal::pCharClass->isLetter( aTmpStr, 0 );
+        bMayBeFuncName = pCharClass->isLetter( aTmpStr, 0 );
         bAsciiNonAlnum = false;
     }
 
@@ -4313,7 +4347,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
         if (bAsciiNonAlnum)
         {
-            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+            bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, aOrg);
             if (cSymbol[0] == '#')
             {
                 // Check for TableRef item specifiers first.
@@ -4339,7 +4373,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         if (bMayBeFuncName)
         {
             if (aUpper.isEmpty())
-                bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+                bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, aOrg);
             if (IsOpCode( aUpper, bInArray ))
                 return true;
         }
@@ -4363,7 +4397,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         }
 
         if (aUpper.isEmpty())
-            bAsciiUpper = lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+            bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, aOrg);
 
         // IsBoolean() before IsValue() to catch inline bools without the kludge
         //    for inline arrays.
@@ -4374,8 +4408,14 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
 
         // User defined names and such do need i18n upper also in ODF.
-        if (bAsciiUpper)
+        if (bAsciiUpper || mbCharClassesDiffer)
+        {
+            // Use current system locale here because user defined symbols are
+            // more likely in that localized language than in the formula
+            // language. This in corner cases needs to continue to work for
+            // existing documents and environments.
             aUpper = ScGlobal::pCharClass->uppercase( aOrg );
+        }
 
         if (IsNamedRange( aUpper ))
             return true;
@@ -4433,7 +4473,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     // Provide single token information and continue. Do not set an error, that
     // would prematurely end compilation. Simple unknown names are handled by
     // the interpreter.
-    aUpper = ScGlobal::pCharClass->lowercase( aUpper );
+    aUpper = pCharClass->lowercase( aUpper );
     svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aUpper);
     maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
     maRawToken.NewOpCode( ocBad );
