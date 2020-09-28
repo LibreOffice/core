@@ -45,11 +45,11 @@ SwRenderData::~SwRenderData()
     OSL_ENSURE( !m_pPostItFields, " should already have been deleted" );
 }
 
-void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
+void SwRenderData::CreatePostItData( SwDoc& rDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev )
 {
     DeletePostItData();
     m_pPostItFields.reset(new SetGetExpFields);
-    sw_GetPostIts( &pDoc->getIDocumentFieldsAccess(), m_pPostItFields.get() );
+    sw_GetPostIts( rDoc.getIDocumentFieldsAccess(), m_pPostItFields.get() );
 
     //!! Disable spell and grammar checking in the temporary document.
     //!! Otherwise the grammar checker might process it and crash if we later on
@@ -73,7 +73,6 @@ void SwRenderData::DeletePostItData()
         m_pPostItFields.reset();
     }
 }
-
 
 void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
 {

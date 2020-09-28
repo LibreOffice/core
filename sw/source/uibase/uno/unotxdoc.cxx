@@ -185,7 +185,7 @@ static std::unique_ptr<SwPrintUIOptions> lcl_GetPrintUIOptions(
     const bool bSwSrcView   = nullptr != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView && pSwView->HasSelection( false );  // check for any selection, not just text selection
-    const bool bHasPostIts      = sw_GetPostIts( &pDocShell->GetDoc()->getIDocumentFieldsAccess(), nullptr );
+    const bool bHasPostIts      = sw_GetPostIts(pDocShell->GetDoc()->getIDocumentFieldsAccess(), nullptr);
 
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getIDocumentDeviceAccess().getPrintData();
@@ -2620,7 +2620,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (nPostItMode != SwPostItMode::NONE)
             {
                 VclPtr< OutputDevice > pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-                m_pRenderData->CreatePostItData( pDoc, pViewShell->GetViewOptions(), pOutDev );
+                m_pRenderData->CreatePostItData(*pDoc, pViewShell->GetViewOptions(), pOutDev);
             }
 
             // get set of valid document pages (according to the current settings)

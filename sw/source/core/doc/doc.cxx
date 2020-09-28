@@ -512,9 +512,9 @@ sal_uInt16 PostItField_::GetPageNo(
     return 0;
 }
 
-bool sw_GetPostIts(IDocumentFieldsAccess const* pIDFA, SetGetExpFields* pSrtLst)
+bool sw_GetPostIts(const IDocumentFieldsAccess& rIDFA, SetGetExpFields* pSrtLst)
 {
-    SwFieldType* pFieldType = pIDFA->GetSysFieldType(SwFieldIds::Postit);
+    SwFieldType* pFieldType = rIDFA.GetSysFieldType(SwFieldIds::Postit);
     assert(pFieldType);
 
     std::vector<SwFormatField*> vFields;
