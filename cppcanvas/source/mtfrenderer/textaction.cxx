@@ -904,10 +904,6 @@ namespace cppcanvas::internal
                 const rendering::ViewState& rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
 
-                rCanvas->fillPolyPolygon( mxTextLines,
-                                          rViewState,
-                                          rRenderState );
-
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
                 {
@@ -918,6 +914,11 @@ namespace cppcanvas::internal
                     // background of text
                     rCanvas->fillPolyPolygon(xTextBounds, rViewState, aLocalState);
                 }
+
+                // under/over lines
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
+                                          rRenderState );
 
                 rCanvas->drawText( maStringContext, mxFont,
                                    rViewState,
@@ -1367,8 +1368,6 @@ namespace cppcanvas::internal
                 const rendering::ViewState& rViewState( mpCanvas->getViewState() );
                 const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
 
-                maTextLinesHelper.render(rRenderState, bNormalText);
-
                 //rhbz#1589029 non-transparent text fill background support
                 if (rTextFillColor != COL_AUTO)
                 {
@@ -1379,6 +1378,9 @@ namespace cppcanvas::internal
                     // background of text
                     rCanvas->fillPolyPolygon(xTextBounds, rViewState, aLocalState);
                 }
+
+                // under/over lines
+                maTextLinesHelper.render(rRenderState, bNormalText);
 
                 rCanvas->drawTextLayout( mxTextLayout,
                                          rViewState,
