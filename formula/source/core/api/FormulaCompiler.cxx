@@ -29,6 +29,9 @@
 
 #include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
@@ -140,6 +143,14 @@ void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVe
         lclPushOpCodeMapEntry( rVec, pTable, *pnOpCodes );
 }
 
+CharClass* createCharClassIfNonEnglishUI()
+{
+    const LanguageTag& rLanguageTag( Application::GetSettings().GetUILanguageTag());
+    if (rLanguageTag.getLanguage() == "en")
+        return nullptr;
+    return new CharClass( ::comphelper::getProcessComponentContext(), rLanguageTag);
+}
+
 class OpCodeList
 {
 public:
@@ -163,8 +174,8 @@ OpCodeList::OpCodeList(bool bLocalized, const std::pair<const char*, int>* pSymb
     , mpSymbols(pSymbols)
     , mbLocalized(bLocalized)
 {
-    SvtSysLocale aSysLocale;
-    const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
+    std::unique_ptr<CharClass> xCharClass( xMap->isEnglish() ? nullptr : createCharClassIfNonEnglishUI());
+    const CharClass* pCharClass = xCharClass.get();
     if (meSepType == FormulaCompiler::SeparatorType::RESOURCE_BASE)
     {
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
@@ -809,8 +820,8 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
     NonConstOpCodeMapPtr xMap = std::make_shared<OpCodeMap>( SC_OPCODE_LAST_OPCODE_ID + 1, false,
                 FormulaGrammar::mergeToGrammar( FormulaGrammar::setEnglishBit(
                         FormulaGrammar::GRAM_EXTERNAL, bEnglish), FormulaGrammar::CONV_UNSPECIFIED));
-    SvtSysLocale aSysLocale;
-    const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
+    std::unique_ptr<CharClass> xCharClass( xMap->isEnglish() ? nullptr : createCharClassIfNonEnglishUI());
+    const CharClass* pCharClass = xCharClass.get();
     for (auto const& rMapEntry : rMapping)
     {
         OpCode eOp = OpCode(rMapEntry.Token.OpCode);
