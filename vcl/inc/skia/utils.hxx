@@ -70,7 +70,7 @@ VCL_DLLPUBLIC void dump(const sk_sp<SkImage>& image, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);
 #endif
 
-extern uint32_t vendorId;
+VCL_DLLPUBLIC extern uint32_t vendorId;
 
 inline DriverBlocklist::DeviceVendor getVendor()
 {
