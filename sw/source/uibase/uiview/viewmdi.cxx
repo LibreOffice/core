@@ -515,8 +515,8 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
                 SwFieldType* pFieldType = rSh.GetFieldType(0, SwFieldIds::Postit);
                 if ( !rSh.MoveFieldType( pFieldType, bNext ) )
                 {
-                    bNext ? (*(m_pPostItMgr->begin()))->pPostIt->GotoPos() :
-                        (*(m_pPostItMgr->end()-1))->pPostIt->GotoPos();
+                    bNext ? (*(m_pPostItMgr->begin()))->mpPostIt->GotoPos() :
+                        (*(m_pPostItMgr->end()-1))->mpPostIt->GotoPos();
                     SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
                 }
                 else

@@ -182,10 +182,14 @@ namespace {
 
 class SwSizeEnterLeave : public SwImplEnterLeave
 {
-    long nFrameHeight;
+    long m_nFrameHeight;
+
 public:
-    SwSizeEnterLeave( const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar )
-        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrameHeight( pF->getFrameArea().Height() ) {}
+    SwSizeEnterLeave(const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar)
+        : SwImplEnterLeave(pF, nFunct, nAct, pPar)
+        , m_nFrameHeight(pF->getFrameArea().Height())
+    {
+    }
 
     virtual void Leave() override;           // resize message
 };
@@ -203,10 +207,14 @@ public:
 
 class SwFrameChangesLeave : public SwImplEnterLeave
 {
-    SwRect aFrame;
+    SwRect m_aFrame;
+
 public:
-    SwFrameChangesLeave( const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar )
-        : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrame( pF->getFrameArea() ) {}
+    SwFrameChangesLeave(const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar)
+        : SwImplEnterLeave(pF, nFunct, nAct, pPar)
+        , m_aFrame(pF->getFrameArea())
+    {
+    }
 
     virtual void Enter() override;           // no message
     virtual void Leave() override;           // message when resizing the Frame area
@@ -889,8 +897,8 @@ void SwImplEnterLeave::Leave()
 
 void SwSizeEnterLeave::Leave()
 {
-    nFrameHeight = pFrame->getFrameArea().Height() - nFrameHeight;
-    SwProtocol::Record( pFrame, nFunction, DbgAction::End, &nFrameHeight );
+    m_nFrameHeight = pFrame->getFrameArea().Height() - m_nFrameHeight;
+    SwProtocol::Record(pFrame, nFunction, DbgAction::End, &m_nFrameHeight);
 }
 
 void SwUpperEnterLeave::Enter()
@@ -911,8 +919,8 @@ void SwFrameChangesLeave::Enter()
 
 void SwFrameChangesLeave::Leave()
 {
-    if( pFrame->getFrameArea() != aFrame )
-        SwProtocol::Record( pFrame, PROT::FrmChanges, DbgAction::NONE, &aFrame );
+    if (pFrame->getFrameArea() != m_aFrame)
+        SwProtocol::Record(pFrame, PROT::FrmChanges, DbgAction::NONE, &m_aFrame);
 }
 
 #endif // DBG_UTIL
