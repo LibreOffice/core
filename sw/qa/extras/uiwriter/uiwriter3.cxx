@@ -1301,7 +1301,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130805)
     CPPUNIT_ASSERT(pShpAnch);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The textbox got apart!", pTxAnch->nNode, pShpAnch->nNode);
-    //CPPUNIT_ASSERT_EQUAL_MESSAGE("", xShp->getPosition().Y, xShp2->getPosition().Y);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
+{
+    //Open the sample doc
+    load(DATA_DIRECTORY, "tdf107893.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    //Get the Writer shell
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    //Get the format of the shape
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    SwFrameFormat* pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    //Add a textbox
+    SwTextBoxHelper::create(pShape);
+    SwFrameFormat* pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    //Remove the textbox using Undo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    //Add again
+    SwTextBoxHelper::create(pShape);
+    pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+
+    //This was nullptr because of unsuccessful re-adding
+    CPPUNIT_ASSERT_MESSAGE("Textbox cannot be readd after Undo!", pTxBxFrm);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121031)
