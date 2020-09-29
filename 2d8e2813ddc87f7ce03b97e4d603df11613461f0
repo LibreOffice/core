@@ -34,6 +34,24 @@
       "revId": "2d8e2813ddc87f7ce03b97e4d603df11613461f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69da408c_7be66f74",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-29T13:16:05Z",
+      "side": 1,
+      "message": "(for the record: recent Fedora 32 is enough)",
+      "parentUuid": "cf7cffab_ca806b63",
+      "revId": "2d8e2813ddc87f7ce03b97e4d603df11613461f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
