@@ -33,6 +33,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -182,6 +183,8 @@ namespace dxcanvas
     canvas_directx9_SpriteCanvas_get_implementation(
        css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
     {
+        if(SkiaHelper::isVCLSkiaEnabled())
+            return nullptr;
         rtl::Reference<SpriteCanvas> xCanvas(new SpriteCanvas(args, context));
         xCanvas->initialize();
         xCanvas->acquire();

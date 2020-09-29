@@ -29,6 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include "cairo_spritecanvas.hxx"
 
@@ -50,6 +51,8 @@ namespace cairocanvas
         // #i64742# Only call initialize when not in probe mode
         if( !maArguments.hasElements() )
             return;
+
+        assert( !SkiaHelper::isVCLSkiaEnabled() );
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
@@ -224,6 +227,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_SpriteCanvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
+    if(SkiaHelper::isVCLSkiaEnabled())
+        return nullptr;
     auto p = new cairocanvas::SpriteCanvas(args, context);
     p->acquire();
     p->initialize();

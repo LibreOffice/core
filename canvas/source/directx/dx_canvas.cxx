@@ -240,6 +240,8 @@ namespace dxcanvas
     canvas_gdiplus_Canvas_get_implementation(
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
     {
+        if(SkiaHelper::isVCLSkiaEnabled())
+            return nullptr;
         rtl::Reference<Canvas> xCanvas(new Canvas(args, context));
         xCanvas->initialize();
         xCanvas->acquire();
@@ -250,6 +252,8 @@ namespace dxcanvas
     canvas_gdiplus_BitmapCanvas_get_implementation(
         css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
     {
+        if(SkiaHelper::isVCLSkiaEnabled())
+            return nullptr;
         rtl::Reference<BitmapCanvas> xCanvas(new BitmapCanvas(args, context));
         xCanvas->initialize();
         xCanvas->acquire();

@@ -304,8 +304,6 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         bForceLastEntry = true;
 #endif
-    if( SkiaHelper::isVCLSkiaEnabled() )
-        bForceLastEntry = true;
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);

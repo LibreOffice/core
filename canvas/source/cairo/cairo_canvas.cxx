@@ -179,6 +179,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_Canvas_Cairo_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& args)
 {
+    if(SkiaHelper::isVCLSkiaEnabled())
+        return nullptr;
     auto p = new cairocanvas::Canvas(args, context);
     p->acquire();
     try {
