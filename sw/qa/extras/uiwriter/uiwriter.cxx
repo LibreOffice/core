@@ -359,6 +359,7 @@ public:
     void testTdf133982();
     void testTdf117225();
     void testTdf91801();
+    void testTdf133358();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -569,6 +570,7 @@ public:
     CPPUNIT_TEST(testTdf133982);
     CPPUNIT_TEST(testTdf117225);
     CPPUNIT_TEST(testTdf91801);
+    CPPUNIT_TEST(testTdf133358);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6882,6 +6884,38 @@ void SwUiWriterTest::testTdf91801()
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell(xTable->getCellByName("A1"));
     CPPUNIT_ASSERT_EQUAL(555.0, xCell->getValue());
+}
+
+void SwUiWriterTest::testTdf133358()
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:IncrementIndent", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    // Without the fix in place, this test would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
