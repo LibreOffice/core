@@ -48,8 +48,6 @@ class SwInsTableDlg : public SfxDialogController
     AutoFormatPreview m_aWndPreview;
 
     std::unique_ptr<weld::Entry> m_xNameEdit;
-    std::unique_ptr<weld::SpinButton> m_xColNF;
-    std::unique_ptr<weld::SpinButton> m_xRowNF;
     std::unique_ptr<weld::CheckButton> m_xHeaderCB;
     std::unique_ptr<weld::CheckButton> m_xRepeatHeaderCB;
     std::unique_ptr<weld::SpinButton> m_xRepeatHeaderNF;
@@ -59,6 +57,9 @@ class SwInsTableDlg : public SfxDialogController
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
     std::unique_ptr<weld::Frame> m_xStyleFrame;
+    std::unique_ptr<weld::Label> m_xWarning;
+    std::unique_ptr<weld::Entry> m_xRow;
+    std::unique_ptr<weld::Entry> m_xCol;
 
     // Returns 255 if mapping is not possible.
     // This means there cannot be more than 255 autotable style.
@@ -68,7 +69,7 @@ class SwInsTableDlg : public SfxDialogController
     DECL_LINK(TextFilterHdl, OUString&, bool);
     DECL_LINK(SelFormatHdl, weld::TreeView&, void);
     DECL_LINK(ModifyName, weld::Entry&, void);
-    DECL_LINK(ModifyRowCol, weld::SpinButton&, void);
+    DECL_LINK(ModifyRowCol, weld::Entry&, void);
     DECL_LINK(OKHdl, weld::Button&, void);
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
     DECL_LINK(RepeatHeaderCheckBoxHdl, weld::ToggleButton&, void);
