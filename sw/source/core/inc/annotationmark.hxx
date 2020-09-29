@@ -36,7 +36,7 @@ namespace sw::mark
 
         virtual ~AnnotationMark() override;
 
-        virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+        virtual void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
         const SwFormatField* GetAnnotationFormatField() const;
     };

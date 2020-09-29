@@ -143,53 +143,53 @@ namespace
         }
     }
 
-    void lcl_AssertFieldMarksSet(Fieldmark const * const pField,
+    void lcl_AssertFieldMarksSet(const Fieldmark& rField,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
-            SwPosition const& rStart(pField->GetMarkStart());
+            SwPosition const& rStart(rField.GetMarkStart());
             assert(rStart.nNode.GetNode().GetTextNode()->GetText()[rStart.nContent.GetIndex()] == aStartMark); (void) rStart; (void) aStartMark;
-            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
+            SwPosition const sepPos(sw::mark::FindFieldSep(rField));
             assert(sepPos.nNode.GetNode().GetTextNode()->GetText()[sepPos.nContent.GetIndex()] == CH_TXT_ATR_FIELDSEP); (void) sepPos;
         }
-        SwPosition const& rEnd(pField->GetMarkEnd());
+        SwPosition const& rEnd(rField.GetMarkEnd());
         assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark); (void) rEnd;
     }
 
-    void lcl_SetFieldMarks(Fieldmark* const pField,
-        SwDoc* const io_pDoc,
+    void lcl_SetFieldMarks(Fieldmark& rField,
+        SwDoc& io_rDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark,
         SwPosition const*const pSepPos)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
+        io_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
         OUString startChar(aStartMark);
         if (aEndMark != CH_TXT_ATR_FORMELEMENT
-            && pField->GetMarkStart() == pField->GetMarkEnd())
+            && rField.GetMarkStart() == rField.GetMarkEnd())
         {
             // do only 1 InsertString call - to expand existing bookmarks at the
             // position over the whole field instead of just aStartMark
             startChar += OUStringChar(CH_TXT_ATR_FIELDSEP) + OUStringChar(aEndMark);
         }
 
-        SwPosition start = pField->GetMarkStart();
+        SwPosition start = rField.GetMarkStart();
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             SwPaM aStartPaM(start);
-            io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, startChar);
+            io_rDoc.getIDocumentContentOperations().InsertString(aStartPaM, startChar);
             start.nContent -= startChar.getLength(); // restore, it was moved by InsertString
             // do not manipulate via reference directly but call SetMarkStartPos
             // which works even if start and end pos were the same
-            pField->SetMarkStartPos( start );
-            SwPosition& rEnd = pField->GetMarkEnd(); // note: retrieve after
+            rField.SetMarkStartPos( start );
+            SwPosition& rEnd = rField.GetMarkEnd(); // note: retrieve after
             // setting start, because if start==end it can go stale, see SetMarkPos()
             assert(pSepPos == nullptr || (start < *pSepPos && *pSepPos <= rEnd));
             if (startChar.getLength() == 1)
             {
                 *aStartPaM.GetPoint() = pSepPos ? *pSepPos : rEnd;
-                io_pDoc->getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
+                io_rDoc.getIDocumentContentOperations().InsertString(aStartPaM, OUString(CH_TXT_ATR_FIELDSEP));
                 if (!pSepPos || rEnd < *pSepPos)
                 {   // rEnd is not moved automatically if it's same as insert pos
                     ++rEnd.nContent;
@@ -202,38 +202,38 @@ namespace
             assert(pSepPos == nullptr);
         }
 
-        SwPosition& rEnd = pField->GetMarkEnd();
+        SwPosition& rEnd = rField.GetMarkEnd();
         if (aEndMark && startChar.getLength() == 1)
         {
             SwPaM aEndPaM(rEnd);
-            io_pDoc->getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
+            io_rDoc.getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
             ++rEnd.nContent;
         }
-        lcl_AssertFieldMarksSet(pField, aStartMark, aEndMark);
+        lcl_AssertFieldMarksSet(rField, aStartMark, aEndMark);
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
-    };
+        io_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
+    }
 
-    void lcl_RemoveFieldMarks(Fieldmark const * const pField,
-        SwDoc* const io_pDoc,
+    void lcl_RemoveFieldMarks(const Fieldmark& rField,
+        SwDoc& io_rDoc,
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        io_pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
+        io_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);
 
-        const SwPosition& rStart = pField->GetMarkStart();
+        const SwPosition& rStart = rField.GetMarkStart();
         SwTextNode const*const pStartTextNode = rStart.nNode.GetNode().GetTextNode();
         assert(pStartTextNode);
         if (aEndMark != CH_TXT_ATR_FORMELEMENT)
         {
             (void) pStartTextNode;
             // check this before start / end because of the +1 / -1 ...
-            SwPosition const sepPos(sw::mark::FindFieldSep(*pField));
-            io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(rStart, aStartMark);
-            io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(sepPos, CH_TXT_ATR_FIELDSEP);
+            SwPosition const sepPos(sw::mark::FindFieldSep(rField));
+            io_rDoc.GetDocumentContentOperationsManager().DeleteDummyChar(rStart, aStartMark);
+            io_rDoc.GetDocumentContentOperationsManager().DeleteDummyChar(sepPos, CH_TXT_ATR_FIELDSEP);
         }
 
-        const SwPosition& rEnd = pField->GetMarkEnd();
+        const SwPosition& rEnd = rField.GetMarkEnd();
         SwTextNode *const pEndTextNode = rEnd.nNode.GetNode().GetTextNode();
         assert(pEndTextNode);
         const sal_Int32 nEndPos = (rEnd == rStart)
@@ -241,10 +241,10 @@ namespace
                                    : rEnd.nContent.GetIndex() - 1;
         assert(pEndTextNode->GetText()[nEndPos] == aEndMark);
         SwPosition const aEnd(*pEndTextNode, nEndPos);
-        io_pDoc->GetDocumentContentOperationsManager().DeleteDummyChar(aEnd, aEndMark);
+        io_rDoc.GetDocumentContentOperationsManager().DeleteDummyChar(aEnd, aEndMark);
 
-        io_pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
-    };
+        io_rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::UI_REPLACE, nullptr);
+    }
 
     auto InvalidatePosition(SwPosition const& rPos) -> void
     {
@@ -370,10 +370,10 @@ namespace sw::mark
         m_aRefObj = pObj;
     }
 
-    void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
+    void DdeBookmark::DeregisterFromDoc(SwDoc& rDoc)
     {
         if(m_aRefObj.is())
-            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer(m_aRefObj.get());
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().RemoveServer(m_aRefObj.get());
     }
 
     DdeBookmark::~DdeBookmark()
@@ -400,28 +400,28 @@ namespace sw::mark
         m_aName = rName;
     }
 
-    void Bookmark::InitDoc(SwDoc* const io_pDoc,
+    void Bookmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const, SwPosition const*const)
     {
-        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (io_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+            io_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoInsBookmark>(*this));
         }
-        io_pDoc->getIDocumentState().SetModified();
+        io_rDoc.getIDocumentState().SetModified();
         InvalidateFrames();
     }
 
-    void Bookmark::DeregisterFromDoc(SwDoc* const io_pDoc)
+    void Bookmark::DeregisterFromDoc(SwDoc& io_rDoc)
     {
-        DdeBookmark::DeregisterFromDoc(io_pDoc);
+        DdeBookmark::DeregisterFromDoc(io_rDoc);
 
-        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (io_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+            io_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoDeleteBookmark>(*this));
         }
-        io_pDoc->getIDocumentState().SetModified();
+        io_rDoc.getIDocumentState().SetModified();
         InvalidateFrames();
     }
 
@@ -553,43 +553,43 @@ namespace sw::mark
             m_aName = rName;
     }
 
-    void TextFieldmark::InitDoc(SwDoc* const io_pDoc,
+    void TextFieldmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const eMode, SwPosition const*const pSepPos)
     {
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
+            lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
             // no need to invalidate text frames here, the insertion of the
             // CH_TXT_ATR already invalidates
         }
         else
         {
-            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+            lcl_AssertFieldMarksSet(*this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
         }
     }
 
-    void TextFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    void TextFieldmark::ReleaseDoc(SwDoc& rDoc)
     {
-        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        IDocumentUndoRedo & rIDUR(rDoc.GetIDocumentUndoRedo());
         if (rIDUR.DoesUndo())
         {
             rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
         }
         ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
-        lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        lcl_RemoveFieldMarks(*this, rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
     NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
     { }
 
-    void NonTextFieldmark::InitDoc(SwDoc* const io_pDoc,
+    void NonTextFieldmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const eMode, SwPosition const*const pSepPos)
     {
         assert(pSepPos == nullptr);
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT, pSepPos);
+            lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT, pSepPos);
 
             // For some reason the end mark is moved from 1 by the Insert:
             // we don't want this for checkboxes
@@ -599,19 +599,19 @@ namespace sw::mark
         }
         else
         {
-            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
+            lcl_AssertFieldMarksSet(*this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
         }
     }
 
-    void NonTextFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    void NonTextFieldmark::ReleaseDoc(SwDoc& rDoc)
     {
-        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        IDocumentUndoRedo & rIDUR(rDoc.GetIDocumentUndoRedo());
         if (rIDUR.DoesUndo())
         {
             rIDUR.AppendUndo(std::make_unique<SwUndoDelNoTextFieldmark>(*this));
         }
         ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
-        lcl_RemoveFieldMarks(this, pDoc,
+        lcl_RemoveFieldMarks(*this, rDoc,
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
 
@@ -785,31 +785,31 @@ namespace sw::mark
     {
     }
 
-    void DateFieldmark::InitDoc(SwDoc* const io_pDoc,
+    void DateFieldmark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode eMode, SwPosition const*const pSepPos)
     {
-        m_pNumberFormatter = io_pDoc->GetNumberFormatter();
-        m_pDocumentContentOperationsManager = &io_pDoc->GetDocumentContentOperationsManager();
+        m_pNumberFormatter = io_rDoc.GetNumberFormatter();
+        m_pDocumentContentOperationsManager = &io_rDoc.GetDocumentContentOperationsManager();
         if (eMode == sw::mark::InsertMode::New)
         {
-            lcl_SetFieldMarks(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
+            lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND, pSepPos);
         }
         else
         {
-            lcl_AssertFieldMarksSet(this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+            lcl_AssertFieldMarksSet(*this, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
         }
     }
 
-    void DateFieldmark::ReleaseDoc(SwDoc* const pDoc)
+    void DateFieldmark::ReleaseDoc(SwDoc& rDoc)
     {
-        IDocumentUndoRedo & rIDUR(pDoc->GetIDocumentUndoRedo());
+        IDocumentUndoRedo & rIDUR(rDoc.GetIDocumentUndoRedo());
         if (rIDUR.DoesUndo())
         {
             // TODO does this need a 3rd Undo class?
             rIDUR.AppendUndo(std::make_unique<SwUndoDelTextFieldmark>(*this));
         }
         ::sw::UndoGuard const ug(rIDUR); // prevent SwUndoDeletes
-        lcl_RemoveFieldMarks(this, pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        lcl_RemoveFieldMarks(*this, rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
     }
 
     void DateFieldmark::ShowButton(SwEditWin* pEditWin)

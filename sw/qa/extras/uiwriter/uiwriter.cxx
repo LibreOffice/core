@@ -2178,7 +2178,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
     SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox("C1"))), "TableCellInsert", aDescriptor);
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
-    rExtras.DeleteAllTableRedlines(pDoc, rTable, false, RedlineType::Any);
+    rExtras.DeleteAllTableRedlines(*pDoc, rTable, false, RedlineType::Any);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), rExtras.GetSize());
 }
 

@@ -29,8 +29,8 @@
 #include <editsh.hxx>
 #include <docsh.hxx>
 
-SwURLStateChanged::SwURLStateChanged( SwDoc* pD )
-    : m_pDoc( pD )
+SwURLStateChanged::SwURLStateChanged( SwDoc& rD )
+    : m_rDoc( rD )
 {
     StartListening( *INetURLHistory::GetOrCreate() );
 }
@@ -42,22 +42,22 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( !(dynamic_cast<const INetURLHistoryHint*>(&rHint) && m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+    if( !(dynamic_cast<const INetURLHistoryHint*>(&rHint) && m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
         return;
 
     // This URL has been changed:
     const INetURLObject* pIURL = static_cast<const INetURLHistoryHint&>(rHint).GetObject();
     OUString sURL( pIURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ) ), sBkmk;
 
-    SwEditShell* pESh = m_pDoc->GetEditShell();
+    SwEditShell* pESh = m_rDoc.GetEditShell();
 
-    if( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->GetMedium() &&
+    if( m_rDoc.GetDocShell() && m_rDoc.GetDocShell()->GetMedium() &&
         // If this is our Doc, we can also have local jumps!
-        m_pDoc->GetDocShell()->GetMedium()->GetName() == sURL )
+        m_rDoc.GetDocShell()->GetMedium()->GetName() == sURL )
         sBkmk = "#" + pIURL->GetMark();
 
     bool bAction = false, bUnLockView = false;
-    for (const SfxPoolItem* pItem : m_pDoc->GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
+    for (const SfxPoolItem* pItem : m_rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
     {
         const SwFormatINetFormat* pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
         if( pFormatItem != nullptr &&
@@ -116,7 +116,7 @@ bool SwDoc::IsVisitedURL( const OUString& rURL )
         if( !mpURLStateChgd )
         {
             SwDoc* pD = this;
-            pD->mpURLStateChgd.reset( new SwURLStateChanged( this ) );
+            pD->mpURLStateChgd.reset( new SwURLStateChanged(*this) );
         }
     }
     return bRet;

@@ -137,7 +137,7 @@ namespace sw::mark {
             // container for annotation marks
             container_t m_vAnnotationMarks;
 
-            SwDoc * const m_pDoc;
+            SwDoc& m_rDoc;
 
             sw::mark::FieldmarkWithDropDownButton* m_pLastActiveFieldmark;
     };

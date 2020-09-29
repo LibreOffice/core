@@ -49,7 +49,7 @@ namespace sw::mark
     {
     }
 
-    void AnnotationMark::InitDoc(SwDoc* const io_pDoc,
+    void AnnotationMark::InitDoc(SwDoc& io_rDoc,
             sw::mark::InsertMode const, SwPosition const*const)
     {
         SwTextNode *pTextNode = GetMarkEnd().nNode.GetNode().GetTextNode();
@@ -69,11 +69,11 @@ namespace sw::mark
             const_cast<SwPostItField*>(pPostItField)->SetName( GetName() );
         }
 
-        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (io_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsBookmark>(*this) );
+            io_rDoc.GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoInsBookmark>(*this) );
         }
-        io_pDoc->getIDocumentState().SetModified();
+        io_rDoc.getIDocumentState().SetModified();
     }
 
     const SwFormatField* AnnotationMark::GetAnnotationFormatField() const

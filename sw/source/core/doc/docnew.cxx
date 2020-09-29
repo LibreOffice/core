@@ -192,7 +192,7 @@ static void lcl_DelFormatIndices( SwFormat const * pFormat )
  * exported methods
  */
 SwDoc::SwDoc()
-    : m_pNodes( new SwNodes(this) ),
+    : m_pNodes(new SwNodes(*this)),
     mpAttrPool(new SwAttrPool(this)),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
@@ -200,7 +200,7 @@ SwDoc::SwDoc()
     m_pDocumentRedlineManager( new ::sw::DocumentRedlineManager( *this ) ),
     m_pDocumentStateManager( new ::sw::DocumentStateManager( *this ) ),
     m_pUndoManager(new ::sw::UndoManager(
-            std::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *m_pDocumentStateManager)),
+            std::shared_ptr<SwNodes>(new SwNodes(*this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *m_pDocumentStateManager)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),

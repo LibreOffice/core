@@ -40,7 +40,7 @@ public:
     inline const  SwFlyInContentFrame  *GetFlyFrame( const SwFrame *pCurrFrame ) const;
 
     // creates for itself a new FlyFrameFormat.
-    void CopyFlyFormat( SwDoc* pDoc );
+    void CopyFlyFormat( SwDoc& rDoc );
 };
 
 inline SwFlyInContentFrame *SwTextFlyCnt::GetFlyFrame( const SwFrame *pCurrFrame )

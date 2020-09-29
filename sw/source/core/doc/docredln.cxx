@@ -127,11 +127,11 @@ static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 }
 #endif
 
-bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTable, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
+bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc& rDoc, const SwTable& rTable, bool bSaveInUndo, RedlineType nRedlineTypeToDelete )
 {
     bool bChg = false;
 
-    if (bSaveInUndo && pDoc->GetIDocumentUndoRedo().DoesUndo())
+    if (bSaveInUndo && rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         // #TODO - Add 'Undo' support for deleting 'Table Cell' redlines
         /*
@@ -198,7 +198,7 @@ bool SwExtraRedlineTable::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rT
     }
 
     if( bChg )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     return bChg;
 }

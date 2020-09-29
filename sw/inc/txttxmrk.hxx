@@ -38,7 +38,7 @@ public:
     virtual const sal_Int32 *GetEnd() const override;     // SwTextAttr
     virtual void SetEnd(sal_Int32) override;     // SwTextAttr
 
-    void CopyTOXMark( SwDoc* pDestDoc );
+    void CopyTOXMark( SwDoc& rDestDoc );
 
     // get and set TextNode pointer
     const SwTextNode* GetpTextNd() const { return m_pTextNode; }

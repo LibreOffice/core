@@ -26,9 +26,9 @@ class SwDoc;
 
 class SwURLStateChanged : public SfxListener
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 public:
-    SwURLStateChanged( SwDoc* pD );
+    SwURLStateChanged( SwDoc& rD );
     virtual ~SwURLStateChanged() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

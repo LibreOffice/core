@@ -58,17 +58,17 @@ void SwTextTOXMark::SetEnd(sal_Int32 n)
         m_pHints->EndPosChanged();
 }
 
-void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
+void SwTextTOXMark::CopyTOXMark( SwDoc& rDoc )
 {
     SwTOXMark& rTOX = const_cast<SwTOXMark&>(GetTOXMark());
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();
-    const sal_uInt16 nCount = pDoc->GetTOXTypeCount( eType );
+    const sal_uInt16 nCount = rDoc.GetTOXTypeCount( eType );
     const SwTOXType* pType = nullptr;
     const OUString rNm = rTOX.GetTOXType()->GetTypeName();
 
     for(sal_uInt16 i=0; i < nCount; ++i)
     {
-        const SwTOXType* pSrcType = pDoc->GetTOXType(eType, i);
+        const SwTOXType* pSrcType = rDoc.GetTOXType(eType, i);
         if(pSrcType->GetTypeName() == rNm )
         {
             pType = pSrcType;
@@ -79,8 +79,8 @@ void SwTextTOXMark::CopyTOXMark( SwDoc* pDoc )
     // if the requested tox type does not exist, create it
     if(!pType)
     {
-        pDoc->InsertTOXType( SwTOXType( eType, rNm ) );
-        pType = pDoc->GetTOXType(eType, 0);
+        rDoc.InsertTOXType( SwTOXType( eType, rNm ) );
+        pType = rDoc.GetTOXType(eType, 0);
     }
 
     // register at target tox type

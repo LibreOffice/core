@@ -537,7 +537,7 @@ namespace sw::mark
         , m_vBookmarks()
         , m_vFieldmarks()
         , m_vAnnotationMarks()
-        , m_pDoc(&rDoc)
+        , m_rDoc(rDoc)
         , m_pLastActiveFieldmark(nullptr)
     { }
 
@@ -661,7 +661,7 @@ namespace sw::mark
             pMark->SetName( getUniqueMarkName( pMark->GetName() ) );
 
         // insert any dummy chars before inserting into sorted vectors
-        pMark->InitDoc(m_pDoc, eMode, pSepPos);
+        pMark->InitDoc(m_rDoc, eMode, pSepPos);
 
         // register mark
         lcl_InsertMarkSorted(m_vAllMarks, pMark.get());
@@ -706,8 +706,8 @@ namespace sw::mark
     {
 
         // Disable undo, because we handle it using SwUndoInsTextFieldmark
-        bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
-        m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        bool bUndoIsEnabled = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
+        m_rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
         sw::mark::IMark* pMark = nullptr;
         if(rType == ODF_FORMDATE)
@@ -730,9 +730,9 @@ namespace sw::mark
 
         if (bUndoIsEnabled)
         {
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
+            m_rDoc.GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
             if (pFieldMark)
-                m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsTextFieldmark>(*pFieldMark));
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsTextFieldmark>(*pFieldMark));
         }
 
         return pFieldMark;
@@ -744,11 +744,11 @@ namespace sw::mark
         const OUString& rType)
     {
         // Disable undo, because we handle it using SwUndoInsNoTextFieldmark
-        bool bUndoIsEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
-        m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        bool bUndoIsEnabled = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
+        m_rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
-        bool bEnableSetModified = m_pDoc->getIDocumentState().IsEnableSetModified();
-        m_pDoc->getIDocumentState().SetEnableSetModified(false);
+        bool bEnableSetModified = m_rDoc.getIDocumentState().IsEnableSetModified();
+        m_rDoc.getIDocumentState().SetEnableSetModified(false);
 
         sw::mark::IMark* pMark = nullptr;
         if(rType == ODF_FORMCHECKBOX)
@@ -776,13 +776,13 @@ namespace sw::mark
 
         if (bUndoIsEnabled)
         {
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
+            m_rDoc.GetIDocumentUndoRedo().DoUndo(bUndoIsEnabled);
             if (pFieldMark)
-                m_pDoc->GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsNoTextFieldmark>(*pFieldMark));
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::make_unique<SwUndoInsNoTextFieldmark>(*pFieldMark));
         }
 
-        m_pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
-        m_pDoc->getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetEnableSetModified(bEnableSetModified);
+        m_rDoc.getIDocumentState().SetModified();
 
         return pFieldMark;
     }
@@ -812,7 +812,7 @@ namespace sw::mark
         ::sw::mark::IMark* const io_pMark,
         const SwPaM& rPaM)
     {
-        assert(io_pMark->GetMarkPos().GetDoc() == m_pDoc &&
+        assert(io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::repositionMark(..)>"
             " - Mark is not in my doc.");
         MarkBase* const pMarkBase = dynamic_cast< MarkBase* >(io_pMark);
@@ -839,7 +839,7 @@ namespace sw::mark
         ::sw::mark::IMark* io_pMark,
         const OUString& rNewName )
     {
-        assert(io_pMark->GetMarkPos().GetDoc() == m_pDoc &&
+        assert(io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::renameMark(..)>"
             " - Mark is not in my doc.");
         if ( io_pMark->GetName() == rNewName )
@@ -853,12 +853,12 @@ namespace sw::mark
 
             if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
             {
-                if (m_pDoc->GetIDocumentUndoRedo().DoesUndo())
+                if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
                 {
-                    m_pDoc->GetIDocumentUndoRedo().AppendUndo(
-                            std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, m_pDoc));
+                    m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                            std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, &m_rDoc));
                 }
-                m_pDoc->getIDocumentState().SetModified();
+                m_rDoc.getIDocumentState().SetModified();
             }
         }
         return true;
@@ -1187,9 +1187,9 @@ namespace sw::mark
     struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
         std::unique_ptr<Fieldmark> m_pFieldmark;
-        SwDoc * m_pDoc;
-        LazyFieldmarkDeleter(Fieldmark* pMark, SwDoc *const pDoc)
-            : m_pFieldmark(pMark), m_pDoc(pDoc)
+        SwDoc& m_rDoc;
+        LazyFieldmarkDeleter(Fieldmark* pMark, SwDoc& rDoc)
+            : m_pFieldmark(pMark), m_rDoc(rDoc)
         {
             assert(m_pFieldmark);
         }
@@ -1199,7 +1199,7 @@ namespace sw::mark
             // command *cannot* be deleted here as it would create a separate
             // SwUndoDelete that's interleaved with the SwHistory of the outer
             // one - only delete the CH_TXT_ATR_FIELD*!
-            m_pFieldmark->ReleaseDoc(m_pDoc);
+            m_pFieldmark->ReleaseDoc(m_rDoc);
         }
     };
 
@@ -1244,7 +1244,7 @@ namespace sw::mark
                             ClearFieldActivation();
 
                         m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(dynamic_cast<Fieldmark*>(pMark), m_pDoc));
+                        ret.reset(new LazyFieldmarkDeleter(dynamic_cast<Fieldmark*>(pMark), m_rDoc));
                     }
                     else
                     {
@@ -1271,7 +1271,7 @@ namespace sw::mark
         }
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(pMark);
         if (pDdeBookmark)
-            pDdeBookmark->DeregisterFromDoc(m_pDoc);
+            pDdeBookmark->DeregisterFromDoc(m_rDoc);
         //Effective STL Item 27, get a non-const iterator aI at the same
         //position as const iterator ppMark was
         auto aI = m_vAllMarks.begin();
@@ -1288,7 +1288,7 @@ namespace sw::mark
 
     void MarkManager::deleteMark(const IMark* const pMark)
     {
-        assert(pMark->GetMarkPos().GetDoc() == m_pDoc &&
+        assert(pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
@@ -1586,7 +1586,7 @@ namespace sw::mark
     {
         OSL_ENSURE(rName.getLength(),
             "<MarkManager::getUniqueMarkName(..)> - a name should be proposed");
-        if( m_pDoc->IsInMailMerge())
+        if( m_rDoc.IsInMailMerge())
         {
             OUString newName = rName + "MailMergeMark"
                     + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
