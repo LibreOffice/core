@@ -162,16 +162,16 @@
     <FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey1" default="false" type="short" usage="TIME" formatindex="39">
+    <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME" formatindex="39">
       <FormatCode>HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey2" default="false" type="medium" usage="TIME" formatindex="40">
+    <FormatElement msgid="TimeFormatskey2" default="true" type="medium" usage="TIME" formatindex="40">
       <FormatCode>HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME" formatindex="41">
+    <FormatElement msgid="TimeFormatskey3" default="false" type="short" usage="TIME" formatindex="41">
       <FormatCode>HH:MM AM/PM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME" formatindex="42">
+    <FormatElement msgid="TimeFormatskey4" default="false" type="medium" usage="TIME" formatindex="42">
       <FormatCode>HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME" formatindex="43">
