@@ -301,29 +301,29 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     pMyLayout->EndAllAction();
 }
 
-void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
+void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( dynamic_cast<const SwFEShell*>( this) !=  nullptr,"SwViewShell::Prt for FEShell only");
     SwFEShell* pFESh = static_cast<SwFEShell*>(this);
-    pPrtDoc->getIDocumentFieldsAccess().LockExpFields();
+    rPrtDoc.getIDocumentFieldsAccess().LockExpFields();
 
     // use given printer
     //! Make a copy of it since it gets destroyed with the temporary document
     //! used for PDF export
     if (pPrt)
-        pPrtDoc->getIDocumentDeviceAccess().setPrinter( VclPtr<SfxPrinter>::Create(*pPrt), true, true );
+        rPrtDoc.getIDocumentDeviceAccess().setPrinter( VclPtr<SfxPrinter>::Create(*pPrt), true, true );
 
     const SfxItemPool& rPool = GetAttrPool();
     for( sal_uInt16 nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
     {
         const SfxPoolItem* pCpyItem = rPool.GetPoolDefaultItem( nWh );
         if( nullptr != pCpyItem )
-            pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
+            rPrtDoc.GetAttrPool().SetPoolDefaultItem( *pCpyItem );
     }
 
     // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
     //                              the PrintDoc - will be replaced!
-    pPrtDoc->ReplaceStyles( *GetDoc() );
+    rPrtDoc.ReplaceStyles( *GetDoc() );
 
     SwShellCursor *pActCursor = pFESh->GetCursor_();
     SwShellCursor *pFirstCursor = pActCursor->GetNext();
@@ -358,13 +358,13 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     OSL_ENSURE( pPage, "no page found!" );
 
     // get page descriptor - fall back to the first one if pPage could not be found
-    const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDesc(
-        pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( 0 );
+    const SwPageDesc* pPageDesc = pPage ? rPrtDoc.FindPageDesc(
+        pPage->GetPageDesc()->GetName() ) : &rPrtDoc.GetPageDesc( 0 );
 
     if( !pFESh->IsTableMode() && pActCursor && pActCursor->HasMark() )
     {   // Tweak paragraph attributes of last paragraph
-        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwTextNode* pTextNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTextNode();
+        SwNodeIndex aNodeIdx( *rPrtDoc.GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwTextNode* pTextNd = rPrtDoc.GetNodes().GoNext( &aNodeIdx )->GetTextNode();
         SwContentNode *pLastNd =
             pActCursor->GetContentNode( (*pActCursor->GetMark()) <= (*pActCursor->GetPoint()) );
         // copy the paragraph attributes of the first paragraph
@@ -373,12 +373,12 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     }
 
     // fill it with the selected content
-    pFESh->Copy( pPrtDoc );
+    pFESh->Copy( &rPrtDoc );
 
     // set the page style at the first paragraph
     {
-        SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwContentNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
+        SwNodeIndex aNodeIdx( *rPrtDoc.GetNodes().GetEndOfContent().StartOfSectionNode() );
+        SwContentNode* pCNd = rPrtDoc.GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
         if( pFESh->IsTableMode() )
         {
             SwTableNode* pTNd = pCNd->FindTableNode();

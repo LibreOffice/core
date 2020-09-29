@@ -92,7 +92,7 @@ namespace sw::mark {
                     m_pPos1.swap(m_pPos2);
             }
 
-            virtual void InitDoc(SwDoc* const, sw::mark::InsertMode, SwPosition const*)
+            virtual void InitDoc(SwDoc&, sw::mark::InsertMode, SwPosition const*)
             {
             }
 
@@ -143,7 +143,7 @@ namespace sw::mark {
 
             void SetRefObject( SwServerObject* pObj );
 
-            virtual void DeregisterFromDoc(SwDoc* const pDoc);
+            virtual void DeregisterFromDoc(SwDoc& rDoc);
             virtual ~DdeBookmark() override;
 
         private:
@@ -159,9 +159,9 @@ namespace sw::mark {
             Bookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
-            virtual void InitDoc(SwDoc* const io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            virtual void InitDoc(SwDoc& io_Doc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
 
-            virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;
+            virtual void DeregisterFromDoc(SwDoc& io_rDoc) override;
 
             virtual auto InvalidateFrames() -> void override;
 
@@ -217,7 +217,7 @@ namespace sw::mark {
             virtual void SetFieldHelptext(const OUString& aFieldHelptext) override
                 { m_aFieldHelptext = aFieldHelptext; }
 
-            virtual void ReleaseDoc(SwDoc* const) = 0;
+            virtual void ReleaseDoc(SwDoc&) = 0;
 
             void SetMarkStartPos( const SwPosition& rNewStartPos );
             void SetMarkEndPos( const SwPosition& rNewEndPos );
@@ -237,8 +237,8 @@ namespace sw::mark {
         {
         public:
             TextFieldmark(const SwPaM& rPaM, const OUString& rName);
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc* const pDoc) override;
+            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            virtual void ReleaseDoc(SwDoc& rDoc) override;
         };
 
         // Non text fieldmarks have no content between the start and end marks.
@@ -247,8 +247,8 @@ namespace sw::mark {
         {
         public:
             NonTextFieldmark(const SwPaM& rPaM);
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc* const pDoc) override;
+            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            virtual void ReleaseDoc(SwDoc& rDoc) override;
         };
 
         /// Fieldmark representing a checkbox form field.
@@ -309,8 +309,8 @@ namespace sw::mark {
             DateFieldmark(const SwPaM& rPaM);
             virtual ~DateFieldmark() override;
 
-            virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
-            virtual void ReleaseDoc(SwDoc* const pDoc) override;
+            virtual void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
+            virtual void ReleaseDoc(SwDoc& rDoc) override;
 
             virtual void ShowButton(SwEditWin* pEditWin) override;
 

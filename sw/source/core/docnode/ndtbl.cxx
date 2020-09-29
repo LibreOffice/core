@@ -2493,7 +2493,7 @@ void SwTableNode::RemoveRedlines()
     {
         SwTable& rTable = GetTable();
         if ( pDoc->getIDocumentRedlineAccess().HasExtraRedlineTable() )
-            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines( pDoc, rTable, true, RedlineType::Any );
+            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(*pDoc, rTable, true, RedlineType::Any);
     }
 }
 

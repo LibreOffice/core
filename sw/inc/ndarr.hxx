@@ -101,7 +101,7 @@ class SW_DLLPUBLIC SwNodes final
     void InsertNode( const SwNodePtr pNode,
                      sal_uLong nPos );
 
-    SwDoc* m_pMyDoc;                      ///< This Doc contains the nodes-array.
+    SwDoc& m_rMyDoc;                      ///< This Doc contains the nodes-array.
 
     SwNode *m_pEndOfPostIts, *m_pEndOfInserts,  ///< These are the fixed ranges.
            *m_pEndOfAutotext, *m_pEndOfRedlines;
@@ -129,7 +129,7 @@ class SW_DLLPUBLIC SwNodes final
     SwNodes(SwNodes const&) = delete;
     SwNodes& operator=(SwNodes const&) = delete;
 
-    SwNodes( SwDoc* pDoc );
+    SwNodes(SwDoc& rDoc);
 
 public:
     ~SwNodes();
@@ -299,8 +299,8 @@ public:
                                 bool const bCreateFrames = true);
 
     /// Which Doc contains the nodes-array?
-            SwDoc* GetDoc()         { return m_pMyDoc; }
-    const   SwDoc* GetDoc() const   { return m_pMyDoc; }
+            SwDoc* GetDoc()         { return &m_rMyDoc; }
+    const   SwDoc* GetDoc() const   { return &m_rMyDoc; }
 
     /** Search previous / next content node or table node with frames.
      If no end is given begin with the FrameIndex, else start search

@@ -88,7 +88,7 @@ SwTextFlyCnt::SwTextFlyCnt( SwFormatFlyCnt& rAttr, sal_Int32 nStartPos )
  * SwFlyInContentFrame - this is done automatically already.
  */
 
-void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
+void SwTextFlyCnt::CopyFlyFormat( SwDoc& rDoc )
 {
     SwFrameFormat* pFormat = GetFlyCnt().GetFrameFormat();
     assert(pFormat);
@@ -97,17 +97,17 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
     // content.
 
     // disable undo while copying attribute
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     SwFormatAnchor aAnchor( pFormat->GetAnchor() );
     if ((RndStdIds::FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
-        (pDoc != pFormat->GetDoc()))   // different documents?
+        (&rDoc != pFormat->GetDoc()))   // different documents?
     {
         // JP 03.06.96: ensure that the copied anchor points to valid content!
         //              setting it to the correct position is done later.
-        SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), +2 );
+        SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfExtras(), +2 );
         SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
         if( !pCNd )
-            pCNd = pDoc->GetNodes().GoNext( &aIdx );
+            pCNd = rDoc.GetNodes().GoNext( &aIdx );
 
         SwPosition pos = *aAnchor.GetContentAnchor();
         pos.nNode = aIdx;
@@ -123,7 +123,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
         aAnchor.SetAnchor( &pos );
     }
 
-    SwFrameFormat* pNew = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
+    SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
     const_cast<SwFormatFlyCnt&>(GetFlyCnt()).SetFlyFormat( pNew );
 }
 

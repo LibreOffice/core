@@ -1097,7 +1097,7 @@ SwTextAttr* MakeTextAttr(
             if ( static_cast<const SwFormatFlyCnt &>(rAttr).GetTextFlyCnt() )
             {
                 // if it has an existing attr then the format must be copied
-                static_cast<SwTextFlyCnt *>(pNew)->CopyFlyFormat( &rDoc );
+                static_cast<SwTextFlyCnt *>(pNew)->CopyFlyFormat( rDoc );
             }
         }
         break;

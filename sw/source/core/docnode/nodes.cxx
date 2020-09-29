@@ -55,12 +55,10 @@ static sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
  *
  * @param pDocument TODO: provide documentation
  */
-SwNodes::SwNodes( SwDoc* pDocument )
-    : m_vIndices(nullptr), m_pMyDoc( pDocument )
+SwNodes::SwNodes( SwDoc& rDocument )
+    : m_vIndices(nullptr), m_rMyDoc( rDocument )
 {
     m_bInNodesDel = m_bInDelUpdOutline = false;
-
-    assert(m_pMyDoc);
 
     sal_uLong nPos = 0;
     SwStartNode* pSttNd = new SwStartNode( *this, nPos++ );
@@ -2323,7 +2321,7 @@ SwNode * SwNodes::DocumentSectionEndNode(SwNode * pNode) const
 
 bool SwNodes::IsDocNodes() const
 {
-    return this == &m_pMyDoc->GetNodes();
+    return this == &m_rMyDoc.GetNodes();
 }
 
 void SwNodes::dumpAsXml(xmlTextWriterPtr pWriter) const
