@@ -173,25 +173,11 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="inserttable|3">_Columns:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">colspin</property>
+                            <property name="mnemonic_widget">new_col</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="colspin">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="shadow_type">none</property>
-                            <property name="adjustment">adjustment1</property>
-                            <property name="value">2</property>
-                          </object>
-                          <packing>
-                            <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
@@ -201,7 +187,11 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="inserttable|4">_Rows:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">rowspin</property>
+<<<<<<< Updated upstream
+                            <property name="mnemonic_widget">new_row</property>
+=======
+                            <property name="mnemonic_widget">new_col</property>
+>>>>>>> Stashed changes
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -210,17 +200,62 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="rowspin">
+                          <object class="GtkEntry" id="new_col">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="activates_default">True</property>
                             <property name="shadow_type">out</property>
-                            <property name="adjustment">adjustment2</property>
-                            <property name="value">2</property>
+<<<<<<< Updated upstream
+=======
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="new_col-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|new_col">Enter the number of columns that you want in the table.</property>
+                              </object>
+                            </child>
+>>>>>>> Stashed changes
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="new_row">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
+                            <property name="shadow_type">out</property>
+<<<<<<< Updated upstream
+=======
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="new_row-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|new_row">Enter the number of rows that you want in the table.</property>
+                              </object>
+                            </child>
+>>>>>>> Stashed changes
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="lbwarning">
+                            <property name="can_focus">False</property>
+<<<<<<< Updated upstream
+                            <property name="hexpand">True</property>
+                            <property name="label" translatable="yes">Warning : Large tables may adversely affect performance and compatibility</property>
+                            <property name="single_line_mode">True</property>
+=======
+                            <property name="label" translatable="yes">Warning : Large tables may adversely affect performance and compatibility</property>
+>>>>>>> Stashed changes
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">2</property>
+                            <property name="width">4</property>
                           </packing>
                         </child>
                       </object>
@@ -491,11 +526,14 @@
     <child type="titlebar">
       <placeholder/>
     </child>
+<<<<<<< Updated upstream
+=======
+    <child internal-child="accessible">
+      <object class="AtkObject" id="InsertTableDialog-atkobject">
+        <property name="AtkObject::accessible-description" translatable="yes" context="inserttable|extended_tip|InsertTableDialog">Inserts a table into the document. You can also click the arrow, drag to select the number of rows and columns to include in the table, and then click in the last cell.</property>
+      </object>
+    </child>
+>>>>>>> Stashed changes
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <widgets>
-      <widget name="colspin"/>
-      <widget name="rowspin"/>
-    </widgets>
-  </object>
+  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>
