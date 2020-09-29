@@ -632,23 +632,34 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     ClipToPaintRegion(aDstRect);
 
+    BmpMirrorFlags mirrorFlags = BmpMirrorFlags::NONE;
     if (bHMirr)
     {
         aOutSz.setWidth( -aOutSz.Width() );
         aOutPt.AdjustX( -(aOutSz.Width() - 1) );
+        mirrorFlags |= BmpMirrorFlags::Horizontal;
     }
 
     if (bVMirr)
     {
         aOutSz.setHeight( -aOutSz.Height() );
         aOutPt.AdjustY( -(aOutSz.Height() - 1) );
+        mirrorFlags |= BmpMirrorFlags::Vertical;
     }
 
     if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
         return;
 
+    bool bTryDirectPaint = false;
+    if(SkiaHelper::isVCLSkiaEnabled())
+        bTryDirectPaint = true;
+#if HAVE_FEATURE_OPENGL
+    if(OpenGLHelper::isVCLOpenGLEnabled())
+        bTryDirectPaint = true;
+#endif
     static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-    bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
+    if(pDisableNative)
+        bTryDirectPaint = false;
 
     if (bTryDirectPaint)
     {
@@ -659,8 +670,15 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             aRelPt.X(), aRelPt.Y(),
             aOutSz.Width(), aOutSz.Height());
 
-        SalBitmap* pSalSrcBmp = rBmp.ImplGetSalBitmap().get();
-        SalBitmap* pSalAlphaBmp = rAlpha.ImplGetSalBitmap().get();
+        Bitmap bitmap(rBmp);
+        AlphaMask alpha(rAlpha);
+        if(bHMirr || bVMirr)
+        {
+            bitmap.Mirror(mirrorFlags);
+            alpha.Mirror(mirrorFlags);
+        }
+        SalBitmap* pSalSrcBmp = bitmap.ImplGetSalBitmap().get();
+        SalBitmap* pSalAlphaBmp = alpha.ImplGetSalBitmap().get();
 
         // #i83087# Naturally, system alpha blending (SalGraphics::DrawAlphaBitmap) cannot work
         // with separate alpha VDev
@@ -683,25 +701,26 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
                 return;
         }
+        assert(false);
     }
 
-    // we need to make sure OpenGL never reaches this slow code path
-    // tdf#136223: The slow code path will be obviously also reached if mirroring
-    // is used, which makes the block above be skipped, as the blend bitmap calls
-    // do not handle that case. Given that this seems to be rather rare, just
-    // disable the assert, until faster mirroring is actually needed.
-
-    assert(!SkiaHelper::isVCLSkiaEnabled() || !bTryDirectPaint);
-#if HAVE_FEATURE_OPENGL
-    assert(!OpenGLHelper::isVCLOpenGLEnabled() || !bTryDirectPaint);
-#endif
     tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
     if (!aBmpRect.Intersection(tools::Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
     {
         Point     auxOutPt(LogicToPixel(rDestPt));
         Size      auxOutSz(LogicToPixel(rDestSize));
 
-        DrawDeviceAlphaBitmapSlowPath(rBmp, rAlpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
+        // HACK: The function is broken with alpha vdev and mirroring, mirror here.
+        Bitmap bitmap(rBmp);
+        AlphaMask alpha(rAlpha);
+        if(mpAlphaVDev && (bHMirr || bVMirr))
+        {
+            bitmap.Mirror(mirrorFlags);
+            alpha.Mirror(mirrorFlags);
+            auxOutPt = aOutPt;
+            auxOutSz = aOutSz;
+        }
+        DrawDeviceAlphaBitmapSlowPath(bitmap, alpha, aDstRect, aBmpRect, auxOutSz, auxOutPt);
     }
 }
 
