@@ -67,6 +67,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xflgrit.hxx>
+#include <PropertyHelper.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/debug.hxx>
@@ -944,6 +947,41 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
                 ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
             if( xPointProperties.is() )
                 xPointProperties->setPropertyValue( "FillColor", uno::Any( nColor ) );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION( "chart2" );
+    }
+}
+
+void ChartController::executeDispatch_FillGradient(OUString sJSONGradient)
+{
+    XGradient aXGradient = XGradient::fromJSON(sJSONGradient);
+    css::awt::Gradient aGradient = aXGradient.toGradientUNO();
+
+    try
+    {
+        OUString aCID( m_aSelection.getSelectedCID() );
+        const uno::Reference< frame::XModel >& xChartModel = getModel();
+
+        if( xChartModel.is() )
+        {
+            Reference< beans::XPropertySet > xPropSet(
+                ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ) );
+
+            if( xPropSet.is() )
+            {
+                OUString aPrefferedName = OUString::number(static_cast<sal_Int32>(aXGradient.GetStartColor()))
+                                + OUString::number(static_cast<sal_Int32>(aXGradient.GetEndColor()))
+                                + OUString::number(static_cast<sal_Int32>(aXGradient.GetAngle()));
+
+                OUString aNewName = PropertyHelper::addGradientUniqueNameToTable(css::uno::Any(aGradient),
+                                        css::uno::Reference<css::lang::XMultiServiceFactory>(xChartModel, css::uno::UNO_QUERY_THROW),
+                                        aPrefferedName);
+
+                xPropSet->setPropertyValue("FillGradientName", css::uno::Any(aNewName));
+            }
         }
     }
     catch( const uno::Exception & ex )
