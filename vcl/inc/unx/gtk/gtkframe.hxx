@@ -210,6 +210,7 @@ class GtkSalFrame final : public SalFrame
     GtkDropTarget*                  m_pDropTarget;
     GtkDragSource*                  m_pDragSource;
     bool                            m_bGeometryIsProvisional;
+    bool                            m_bIconSetWhileUnmapped;
 
     GtkSalMenu*                     m_pSalMenu;
 
@@ -319,6 +320,8 @@ class GtkSalFrame final : public SalFrame
     enum class SetType { RetainSize, Fullscreen, UnFullscreen };
 
     void SetScreen( unsigned int nNewScreen, SetType eType, tools::Rectangle const *pSize = nullptr );
+
+    void SetIcon(const char* pIcon);
 
 public:
     cairo_surface_t*                m_pSurface;
