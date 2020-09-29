@@ -16,6 +16,24 @@
       "revId": "2d8e2813ddc87f7ce03b97e4d603df11613461f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf7cffab_ca806b63",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-09-29T09:30:47Z",
+      "side": 1,
+      "message": "And what is that environment ? Is it available in upcoming Fedora 33 ?",
+      "parentUuid": "136eb940_803986c5",
+      "revId": "2d8e2813ddc87f7ce03b97e4d603df11613461f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
