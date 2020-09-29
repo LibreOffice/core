@@ -316,18 +316,61 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
     auto pPage = pDocument->openPage(0);
     CPPUNIT_ASSERT(pPage);
 
-    CPPUNIT_ASSERT_EQUAL(2, pPage->getAnnotationCount());
+    CPPUNIT_ASSERT_EQUAL(6, pPage->getAnnotationCount());
 
     {
         auto pAnnotation = pPage->getAnnotation(0);
         CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::FreeText, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Inline Note"), aContentsString);
     }
 
     {
         auto pAnnotation = pPage->getAnnotation(1);
         CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Ink, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Freehand Text"), aContentsString);
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(2);
+        CPPUNIT_ASSERT(pAnnotation);
         CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Line, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Line Text"), aContentsString);
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(3);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Polygon, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"));
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Polygon Text"), aContentsString);
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(4);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Circle, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Ellipse Text"), aContentsString);
+    }
+
+    {
+        auto pAnnotation = pPage->getAnnotation(5);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Square, pAnnotation->getSubType());
+        CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
+        OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(OUString("Rectangle Text"), aContentsString);
     }
 }
 
