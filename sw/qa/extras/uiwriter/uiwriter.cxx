@@ -7436,6 +7436,38 @@ void SwUiWriterTest::testTdf59666()
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf133358)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    pWrtSh->Insert("Test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:IncrementIndent", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    lcl_dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+
+    // Without the fix in place, this test would have crashed here
+    lcl_dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1251), getProperty<sal_Int32>(xParagraph, "ParaLeftMargin"));
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
