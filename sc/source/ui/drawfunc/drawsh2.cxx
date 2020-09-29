@@ -52,6 +52,11 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <svx/xflclit.hxx>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <sfx2/ipclient.hxx>
+
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace com::sun::star::drawing;
@@ -308,6 +313,45 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     svx::FontworkBar::getState( pView, rSet );
 }
 
+static void setupFillColorForChart(SfxViewShell* pShell, SfxItemSet& rSet)
+{
+    if (pShell)
+    {
+        SfxInPlaceClient* pIPClient = pShell->GetIPClient();
+        if (pIPClient)
+        {
+            const css::uno::Reference<::css::embed::XEmbeddedObject>& xEmbObj = pIPClient->GetObject();
+            if( xEmbObj.is() )
+            {
+                ::css::uno::Reference<::css::chart2::XChartDocument> xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
+                if( xChart.is() )
+                {
+                    css::uno::Reference<css::beans::XPropertySet> xPropSet = xChart->getPageBackground();
+                    if (xPropSet.is())
+                    {
+                        css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+                        if (xInfo.is())
+                        {
+                            if (xInfo->hasPropertyByName("FillColor"))
+                            {
+                                sal_uInt32 nFillColor = 0;
+                                xPropSet->getPropertyValue("FillColor") >>= nFillColor;
+
+                                XFillColorItem aFillColorItem("", Color(nFillColor));
+                                rSet.Put(aFillColorItem);
+
+                                if (comphelper::LibreOfficeKit::isActive())
+                                    pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
+                                            (".uno:FillColor=" + std::to_string(nFillColor)).c_str());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 //          Attributes for Drawing-Objects
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
@@ -352,6 +396,9 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize ) );
             bActionItem = true;
         }
+
+        // Set correct colors for charts in sidebar
+        setupFillColorForChart(pDrView->GetSfxViewShell(), rSet);
     }
     if ( bActionItem )
         return;
