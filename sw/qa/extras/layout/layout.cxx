@@ -2923,6 +2923,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134866)
         pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[4]/push[1]/textarray[2]/text", "100%");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137116)
+{
+    SwDoc* pDoc = createDoc("tdf137116.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nX2 = getXPath(pXmlDoc, "//textarray[2]", "x").toInt32(); // second data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32(); // fourth data label
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 694
+    // - Actual  : -225
+    // - Delta   : 100
+    // i.e. the second data label appeared inside the pie slice.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(694, nX2 - nX4, 100);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130031)
 {
     SwDoc* pDoc = createDoc("tdf130031.docx");
