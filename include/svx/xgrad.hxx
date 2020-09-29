@@ -25,6 +25,7 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 
 class Gradient;
 
@@ -77,6 +78,7 @@ public:
 
     boost::property_tree::ptree dumpAsJSON() const;
     static XGradient fromJSON(const OUString& rJSON);
+    css::awt::Gradient toGradientUNO();
 };
 
 #endif
