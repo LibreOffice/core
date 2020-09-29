@@ -539,8 +539,8 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
 
     // than create table structure partially. First a single line that contains
     // all boxes. The correct structure is then taken from SaveStruct.
-    SwTableBoxFormat* pBoxFormat = GetDoc()->MakeTableBoxFormat();
-    SwTableLineFormat* pLineFormat = GetDoc()->MakeTableLineFormat();
+    SwTableBoxFormat* pBoxFormat = GetDoc().MakeTableBoxFormat();
+    SwTableLineFormat* pLineFormat = GetDoc().MakeTableLineFormat();
     SwTableLine* pLine = new SwTableLine( pLineFormat, rSavedData.size(), nullptr );
     pTableNd->GetTable().GetTabLines().insert( pTableNd->GetTable().GetTabLines().begin(), pLine );
 
@@ -595,7 +595,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         if( pSave->m_pHstry )
         {
             sal_uInt16 nTmpEnd = pSave->m_pHstry->GetTmpEnd();
-            pSave->m_pHstry->TmpRollback( GetDoc(), 0 );
+            pSave->m_pHstry->TmpRollback( &GetDoc(), 0 );
             pSave->m_pHstry->SetTmpEnd( nTmpEnd );
         }
 

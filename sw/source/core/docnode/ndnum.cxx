@@ -69,7 +69,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
     pTextNd->UpdateOutlineState();
 
     // update the structure fields
-    GetDoc()->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->UpdateFields();
+    GetDoc().getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter )->UpdateFields();
 }
 
 void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
@@ -88,7 +88,7 @@ void SwNodes::UpdateOutlineIdx( const SwNode& rNd )
     if( nPos )
         --nPos;
 
-    if( !GetDoc()->IsInDtor() && IsDocNodes() )
+    if( !GetDoc().IsInDtor() && IsDocNodes() )
         UpdateOutlineNode( *(*m_pOutlineNodes)[ nPos ]);
 }
 

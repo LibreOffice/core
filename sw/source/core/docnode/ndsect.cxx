@@ -885,7 +885,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             pCpyTNd->MakeFramesForAdjacentContentNode(*pTNd);
         }
         else
-            new SwTextNode( aInsPos, GetDoc()->GetDfltTextFormatColl() );
+            new SwTextNode( aInsPos, GetDoc().GetDfltTextFormatColl() );
     }
     new SwEndNode( aInsPos, *pSectNd );
 
@@ -895,7 +895,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     // We could optimize this, by not removing already contained Frames and recreating them,
     // but by simply rewiring them
     bool bInsFrame = bCreateFrames && !pSectNd->GetSection().IsHidden() &&
-                   GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+                   GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     SwNode2LayoutSaveUpperFrames *pNode2Layout = nullptr;
     if( bInsFrame )
     {
@@ -1028,7 +1028,7 @@ void SwSectionNode::MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx)
 {
     // Take my successive or preceding ContentFrame
     SwNodes& rNds = GetNodes();
-    if( !(rNds.IsDocNodes() && rNds.GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()) )
+    if( !(rNds.IsDocNodes() && rNds.GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()) )
         return;
 
     if( GetSection().IsHidden() || IsContentHidden() )
@@ -1143,7 +1143,7 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
 {
     OSL_ENSURE( pIdxBehind, "no Index" );
     SwNodes& rNds = GetNodes();
-    SwDoc* pDoc = rNds.GetDoc();
+    SwDoc& rDoc = rNds.GetDoc();
 
     *pIdxBehind = *this;
 
@@ -1153,7 +1153,7 @@ void SwSectionNode::MakeOwnFrames(SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx)
     {
         SwNodeIndex *pEnd = pEndIdx ? pEndIdx :
                             new SwNodeIndex( *EndOfSectionNode(), 1 );
-        ::MakeFrames( pDoc, *pIdxBehind, *pEnd );
+        ::MakeFrames( &rDoc, *pIdxBehind, *pEnd );
         if( !pEndIdx )
             delete pEnd;
     }
@@ -1225,7 +1225,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     if (SectionType::ToxContent != GetSection().GetType())
     {
         // Keep the Name for Move
-        if( rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
+        if( &rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
         {
             pNewSect->SetSectionName( GetSection().GetSectionName() );
         }

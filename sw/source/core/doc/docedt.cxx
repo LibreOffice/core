@@ -412,7 +412,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pOldTextNd->FormatToTextAttr( pTextNd );
 
                 const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-                pContentStore->Save(pDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
+                pContentStore->Save(*pDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
 
                 SwIndex aAlphaIdx(pTextNd);
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwIndex(pOldTextNd),
@@ -422,7 +422,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
                 // move all Bookmarks/TOXMarks
                 if( !pContentStore->Empty() )
-                    pContentStore->Restore( pDoc, aIdx.GetIndex() );
+                    pContentStore->Restore( *pDoc, aIdx.GetIndex() );
 
                 // If the passed PaM is not in the Cursor ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)

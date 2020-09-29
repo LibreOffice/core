@@ -317,7 +317,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
             //             attribute isn't anchored in the TextNode yet.
             //             If it is deleted (e.g. Insert File with footnote
             //             inside fly frame), the content must also be deleted.
-            pDoc = m_pStartNode->GetNodes().GetDoc();
+            pDoc = &m_pStartNode->GetNodes().GetDoc();
         }
 
         // If called from ~SwDoc(), must not delete the footnote nodes,
@@ -444,18 +444,18 @@ void SwTextFootnote::MakeNewTextSection( SwNodes& rNodes )
 
     if( GetFootnote().IsEndNote() )
     {
-        pInfo = &rNodes.GetDoc()->GetEndNoteInfo();
+        pInfo = &rNodes.GetDoc().GetEndNoteInfo();
         nPoolId = RES_POOLCOLL_ENDNOTE;
     }
     else
     {
-        pInfo = &rNodes.GetDoc()->GetFootnoteInfo();
+        pInfo = &rNodes.GetDoc().GetFootnoteInfo();
         nPoolId = RES_POOLCOLL_FOOTNOTE;
     }
 
     pFormatColl = pInfo->GetFootnoteTextColl();
     if( nullptr == pFormatColl )
-        pFormatColl = rNodes.GetDoc()->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId );
+        pFormatColl = rNodes.GetDoc().getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId );
 
     SwStartNode* pSttNd = rNodes.MakeTextSection( SwNodeIndex( rNodes.GetEndOfInserts() ),
                                         SwFootnoteStartNode, pFormatColl );

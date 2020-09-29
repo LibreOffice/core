@@ -118,7 +118,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
     // if there is no layout or it is in a hidden section, MakeFrames is not needed
     const SwSectionNode* pSectNd;
     if (!bNewFrames ||
-        !GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ||
+        !GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() ||
         ( nullptr != (pSectNd = pNode->FindSectionNode()) &&
             pSectNd->GetSection().IsHiddenFlag() ))
         return pNode;
@@ -946,9 +946,9 @@ SwContentNode *SwTextNode::JoinNext()
     SwNodeIndex aIdx( *this );
     if( SwContentNode::CanJoinNext( &aIdx ) )
     {
-        SwDoc* pDoc = rNds.GetDoc();
+        SwDoc& rDoc = rNds.GetDoc();
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save(pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
+        pContentStore->Save(rDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTextNode *pTextNode = aIdx.GetNode().GetTextNode();
         sal_Int32 nOldLen = m_Text.getLength();
 
@@ -1014,12 +1014,12 @@ SwContentNode *SwTextNode::JoinNext()
         }
         // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty())
-            pContentStore->Restore( pDoc, GetIndex(), nOldLen );
+            pContentStore->Restore( rDoc, GetIndex(), nOldLen );
 
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
+            rDoc.CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         rNds.Delete(aIdx);
@@ -1044,9 +1044,9 @@ void SwTextNode::JoinPrev()
     SwNodeIndex aIdx( *this );
     if( SwContentNode::CanJoinPrev( &aIdx ) )
     {
-        SwDoc* pDoc = rNds.GetDoc();
+        SwDoc& rDoc = rNds.GetDoc();
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save( pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
+        pContentStore->Save( rDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTextNode *pTextNode = aIdx.GetNode().GetTextNode();
         const sal_Int32 nLen = pTextNode->Len();
 
@@ -1112,12 +1112,12 @@ void SwTextNode::JoinPrev()
         }
         // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty() )
-            pContentStore->Restore( pDoc, GetIndex() );
+            pContentStore->Restore( rDoc, GetIndex() );
 
         if( pTextNode->HasAnyIndex() )
         {
             // move all ShellCursor/StackCursor/UnoCursor out of delete range
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
+            rDoc.CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         SwNode::Merge const eOldMergeFlag(pTextNode->GetRedlineMergeFlag());
         if (eOldMergeFlag == SwNode::Merge::First

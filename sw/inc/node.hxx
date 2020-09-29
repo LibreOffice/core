@@ -701,11 +701,11 @@ inline const SwNodes& SwNode::GetNodes() const
 
 inline SwDoc* SwNode::GetDoc()
 {
-    return GetNodes().GetDoc();
+    return &GetNodes().GetDoc();
 }
 inline const SwDoc* SwNode::GetDoc() const
 {
-    return GetNodes().GetDoc();
+    return &GetNodes().GetDoc();
 }
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const

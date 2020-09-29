@@ -339,7 +339,7 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
 void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd )
 {
     SwNode* pNd;
-    SwDoc *pDoc = rNds.GetDoc();
+    SwDoc& rDoc = rNds.GetDoc();
     bool bFirst = true;
     for( ; nStt < nEnd; ++nStt )
     {
@@ -388,7 +388,7 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
                     static_cast<SwSectionFrame*>(pNxt)->UnlockJoin();
                 pUp = static_cast<SwLayoutFrame*>(mvUpperFrames[x++]);
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrame(), "Lost Upper" );
-                ::InsertCnt_( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
+                ::InsertCnt_( pUp, &rDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 mvUpperFrames[x-2] = pNxt;
             }

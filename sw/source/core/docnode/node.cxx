@@ -1944,7 +1944,7 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
                 case SwFootnoteStartNode:
                     {
                         nCond = Master_CollCondition::PARA_IN_FOOTNOTE;
-                        const SwFootnoteIdxs& rFootnoteArr = rNds.GetDoc()->GetFootnoteIdxs();
+                        const SwFootnoteIdxs& rFootnoteArr = rNds.GetDoc().GetFootnoteIdxs();
                         const SwTextFootnote* pTextFootnote;
                         const SwNode* pSrchNd = pSttNd;
 

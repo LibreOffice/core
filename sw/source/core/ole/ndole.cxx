@@ -388,7 +388,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     uno::Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
     if (xChild.is())
     {
-        SwDocShell *pDocSh = GetDoc()->GetDocShell();
+        SwDocShell *pDocSh = GetDoc().GetDocShell();
         if (pDocSh)
             xChild->setParent( pDocSh->GetModel() );
     }
@@ -409,7 +409,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
     uno::Reference< container::XChild > xChild( pNode->GetOLEObj().GetObject().GetObject(), UNO_QUERY );
     if (xChild.is())
     {
-        SwDocShell *pDocSh= GetDoc()->GetDocShell();
+        SwDocShell *pDocSh = GetDoc().GetDocShell();
         if (pDocSh)
             xChild->setParent( pDocSh->GetModel() );
     }

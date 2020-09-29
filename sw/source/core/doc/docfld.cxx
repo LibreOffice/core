@@ -179,7 +179,7 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         SwNodeIndex aIdx( rFrame.IsTextFrame()
                 ? *static_cast<SwTextFrame const&>(rFrame).GetTextNodeFirst()
                 : *static_cast<SwNoTextFrame const&>(rFrame).GetNode() );
-        SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
+        SwDoc& rDoc = aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");

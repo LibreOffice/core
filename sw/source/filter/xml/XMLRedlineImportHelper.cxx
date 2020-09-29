@@ -169,7 +169,7 @@ SwDoc* XTextRangeOrNodeIndexPosition::GetDoc()
 {
     OSL_ENSURE(IsValid(), "Can't get Doc");
 
-    return (nullptr != pIndex) ? pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
+    return (nullptr != pIndex) ? &pIndex->GetNodes().GetDoc() : lcl_GetDocViaTunnel(xRange);
 }
 
 bool XTextRangeOrNodeIndexPosition::IsValid() const
