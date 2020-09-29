@@ -1491,9 +1491,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // Probably not much point in caching of just doing a copy.
     if (alphaBitmap == nullptr && targetSize == bitmap.GetSize())
         return image;
-    // Image too small to be worth caching.
-    if (bitmap.GetSize().Width() < 100 && bitmap.GetSize().Height() < 100
-        && targetSize.Width() < 100 && targetSize.Height() < 100)
+    // Image too small to be worth caching if not scaling.
+    if (targetSize == bitmap.GetSize() && targetSize.Width() < 100 && targetSize.Height() < 100)
         return image;
     // In some cases (tdf#134237) the target size may be very large. In that case it's
     // better to rely on Skia to clip and draw only the necessary, rather than prepare
