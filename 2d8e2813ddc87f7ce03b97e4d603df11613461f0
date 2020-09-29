@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "136eb940_803986c5",
+        "filename": "vcl/unx/gtk3/gtk3gtkframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-29T09:15:15Z",
+      "side": 1,
+      "message": "In an environment where bAppIdImmutable is false, a fresh start centre window (i.e., starting just `soffice`) now has the broken app icon.  (It turns into the correct icon via \"File - New - Text Document\" followed by \"File - Close\".)  With bAppIdImmutable forced to true, it would start out with the correct icon.",
+      "revId": "2d8e2813ddc87f7ce03b97e4d603df11613461f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
