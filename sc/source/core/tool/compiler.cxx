@@ -294,6 +294,16 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
         pCharClass = GetCharClassEnglish();
     else
         pCharClass = GetCharClassLocalized();
+
+    // The difference is needed for an uppercase() call that usually does not
+    // result in different strings but for a few languages like Turkish;
+    // though even de-DE and de-CH may differ in ß/SS handling..
+    // At least don't care if both are English.
+    // The current locale is more likely to not be "en" so check first.
+    const LanguageTag& rLT1 = ScGlobal::getCharClassPtr()->getLanguageTag();
+    const LanguageTag& rLT2 = pCharClass->getLanguageTag();
+    mbCharClassesDiffer = (rLT1 != rLT2 && (rLT1.getLanguage() != "en" || rLT2.getLanguage() != "en"));
+
     SetGrammarAndRefConvention( mxSymbols->getGrammar(), GetGrammar());
 }
 
@@ -1832,6 +1842,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::getCharClassPtr()),
+    mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1855,6 +1866,7 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArr
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
         pCharClass( ScGlobal::getCharClassPtr() ),
+        mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -1877,6 +1889,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos,
     mnCurrentSheetTab(-1),
     mnCurrentSheetEndPos(0),
     pCharClass(ScGlobal::getCharClassPtr()),
+    mbCharClassesDiffer(false),
     mnPredetectedReference(0),
     mnRangeOpPosInSymbol(-1),
     pConv(GetRefConvention(FormulaGrammar::CONV_OOO)),
@@ -1900,6 +1913,7 @@ ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos,
         mnCurrentSheetEndPos(0),
         nSrcPos(0),
         pCharClass( ScGlobal::getCharClassPtr() ),
+        mbCharClassesDiffer(false),
         mnPredetectedReference(0),
         mnRangeOpPosInSymbol(-1),
         pConv( GetRefConvention( FormulaGrammar::CONV_OOO ) ),
@@ -4411,7 +4425,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
 
         // User defined names and such do need i18n upper also in ODF.
-        if (bAsciiUpper || pCharClass->getLanguageTag() != ScGlobal::getCharClassPtr()->getLanguageTag())
+        if (bAsciiUpper || mbCharClassesDiffer)
         {
             // Use current system locale here because user defined symbols are
             // more likely in that localized language than in the formula
