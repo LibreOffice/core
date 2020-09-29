@@ -20,6 +20,7 @@
 #include <rtl/instance.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
@@ -34,7 +35,9 @@ constexpr char constDictionaryKeyTitle[] = "T";
 constexpr char constDictionaryKeyContents[] = "Contents";
 constexpr char constDictionaryKeyPopup[] = "Popup";
 constexpr char constDictionaryKeyModificationDate[] = "M";
+
 class PDFiumDocument;
+class PDFiumPageObject;
 
 class VCL_DLLPUBLIC PDFium final
 {
@@ -69,9 +72,11 @@ public:
     PDFAnnotationSubType getSubType();
     basegfx::B2DRectangle getRectangle();
     bool hasKey(OString const& rKey);
+    int getValueType(OString const& rKey);
     OUString getString(OString const& rKey);
     std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
     int getObjectCount();
+    std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
 };
 
 class PDFiumTextPage;
