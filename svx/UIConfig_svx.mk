@@ -83,6 +83,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/inspectortextpanel \
 	svx/uiconfig/ui/interimdockparent \
 	svx/uiconfig/ui/interimparent \
+	svx/uiconfig/ui/interimtearableparent \
 	svx/uiconfig/ui/labelbox \
 	svx/uiconfig/ui/lightingwindow \
 	svx/uiconfig/ui/linkwarndialog \
