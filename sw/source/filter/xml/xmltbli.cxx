@@ -1119,7 +1119,7 @@ static OUString lcl_GenerateFieldTypeName(const OUString& sPrefix, SwTableNode* 
         ++nCount;
         sName = sPrefixStr + OUString::number(nCount);
     }
-    while (nullptr != pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
+    while (nullptr != pTableNode->GetDoc().getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
 
     return sName;
 }
@@ -1153,7 +1153,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     else
     {
         // check for existing DDE field type with the same name
-        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc()->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
+        SwDDEFieldType* pOldType = static_cast<SwDDEFieldType*>(pTableNode->GetDoc().getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, sName, false));
         if (nullptr != pOldType)
         {
             // same values -> return old type
@@ -1179,7 +1179,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
         // create new field type and return
         SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
         pType = static_cast<SwDDEFieldType*>(pTableNode->
-            GetDoc()->getIDocumentFieldsAccess().InsertFieldType(aDDEFieldType));
+            GetDoc().getIDocumentFieldsAccess().InsertFieldType(aDDEFieldType));
     }
 
     OSL_ENSURE(nullptr != pType, "We really want a SwDDEFieldType here!");
@@ -2598,7 +2598,7 @@ void SwXMLTableContext::MakeTable()
     if (!m_pRows || m_pRows->empty() || !GetColumnCount())
     {
         OSL_FAIL("invalid table: no cells; deleting...");
-        m_pTableNode->GetDoc()->getIDocumentContentOperations().DeleteSection( m_pTableNode );
+        m_pTableNode->GetDoc().getIDocumentContentOperations().DeleteSection( m_pTableNode );
         m_pTableNode = nullptr;
         m_pBox1 = nullptr;
         m_bOwnsBox1 = false;
@@ -2766,7 +2766,7 @@ void SwXMLTableContext::MakeTable()
     }
 
     // ??? this is always false: root frame is only created in SwViewShell::Init
-    if( m_pTableNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( m_pTableNode->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         m_pTableNode->DelFrames();
         SwNodeIndex aIdx( *m_pTableNode->EndOfSectionNode(), 1 );
@@ -2826,7 +2826,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCursor> instance." );
         if ( !pDoc )
         {
-            pDoc = const_cast<SwDoc*>(pEndNd->GetDoc());
+            pDoc = &const_cast<SwDoc&>(pEndNd->GetDoc());
         }
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );

@@ -2149,7 +2149,7 @@ bool MSWordExportBase::NeedTextNodeSplit( const SwTextNode& rNd, SwSoftPageBreak
     rNd.fillSoftPageBreakList(tmp);
     // hack: move the break behind any field marks; currently we can't hide the
     // field mark instruction so the layout position is quite meaningless
-    IDocumentMarkAccess const& rIDMA(*rNd.GetDoc()->getIDocumentMarkAccess());
+    IDocumentMarkAccess const& rIDMA(*rNd.GetDoc().getIDocumentMarkAccess());
     sal_Int32 pos(-1);
     for (auto const& it : tmp)
     {

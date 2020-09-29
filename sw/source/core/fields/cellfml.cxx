@@ -767,7 +767,7 @@ static const SwFrame* lcl_GetBoxFrame( const SwTableBox& rBox )
     OSL_ENSURE( pCNd, "Box has no TextNode" );
     Point aPt;      // get the first frame of the layout - table headline
     std::pair<Point, bool> const tmp(aPt, false);
-    return pCNd->getLayoutFrame(pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
+    return pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
 }
 
 static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )

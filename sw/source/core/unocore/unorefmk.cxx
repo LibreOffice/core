@@ -744,13 +744,13 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         SAL_WARN_IF(!pTextAttr, "sw.uno", "CreateXMeta: no text attr?");
         if (!pTextAttr) { return nullptr; }
         const SwPosition aPos(*pTextNode, pTextAttr->GetStart());
-        xParentText.set( ::sw::CreateParentXText(*pTextNode->GetDoc(), aPos) );
+        xParentText.set( ::sw::CreateParentXText(pTextNode->GetDoc(), aPos) );
     }
     if (!xParentText.is()) { return nullptr; }
     SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFormatMeta()->Which())
-        ? new SwXMeta     (pTextNode->GetDoc(), &rMeta, xParentText,
+        ? new SwXMeta     (&pTextNode->GetDoc(), &rMeta, xParentText,
                             std::move(pPortions))
-        : new SwXMetaField(pTextNode->GetDoc(), &rMeta, xParentText,
+        : new SwXMetaField(&pTextNode->GetDoc(), &rMeta, xParentText,
                             std::move(pPortions)));
     // this is why the constructor is private: need to acquire pXMeta here
     xMeta.set(pXMeta);
@@ -924,8 +924,8 @@ SwXMeta::dispose()
         {
             // -1 because of CH_TXTATR
             SwPaM aPam( *pTextNode, nMetaStart - 1, *pTextNode, nMetaEnd );
-            SwDoc * const pDoc( pTextNode->GetDoc() );
-            pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
+            SwDoc& rDoc( pTextNode->GetDoc() );
+            rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
 
             // removal should call Modify and do the dispose
             assert(m_pImpl->m_bIsDisposed);
@@ -1058,7 +1058,7 @@ SwXMeta::getAnchor()
 
     const SwPosition start(*pTextNode, nMetaStart - 1); // -1 due to CH_TXTATR
     const SwPosition end(*pTextNode, nMetaEnd);
-    return SwXTextRange::CreateXTextRange(*pTextNode->GetDoc(), start, &end);
+    return SwXTextRange::CreateXTextRange(pTextNode->GetDoc(), start, &end);
 }
 
 // XTextRange
@@ -1237,7 +1237,7 @@ uno::Reference<frame::XModel> SwXMeta::GetModel()
         SwTextNode const * const pTextNode( pMeta->GetTextNode() );
         if (pTextNode)
         {
-            SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
+            SwDocShell const * const pShell(pTextNode->GetDoc().GetDocShell());
             return pShell ? pShell->GetModel() : nullptr;
         }
     }

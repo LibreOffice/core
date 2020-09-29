@@ -180,7 +180,7 @@ private:
 public:
     SwASC_RedlineIter(SwASCWriter const& rWriter, SwTextNode const& rNode)
         : m_rNode(rNode)
-        , m_rIDRA(rNode.GetDoc()->getIDocumentRedlineAccess())
+        , m_rIDRA(rNode.GetDoc().getIDocumentRedlineAccess())
         , m_nextRedline(rWriter.m_bHideDeleteRedlines
             ? m_rIDRA.GetRedlinePos(m_rNode, RedlineType::Delete)
             : SwRedlineTable::npos)
@@ -266,7 +266,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     const SwNumRule* pNumRule = rNd.GetNumRule();
     if (pNumRule && !nStrPos && rWrt.m_bExportParagraphNumbering && !bIsOneParagraph)
     {
-        bool bIsOutlineNumRule = pNumRule == rNd.GetDoc()->GetOutlineNumRule();
+        bool bIsOutlineNumRule = pNumRule == rNd.GetDoc().GetOutlineNumRule();
 
         // indent each numbering level by 4 spaces
         OUString level;

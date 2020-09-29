@@ -166,10 +166,10 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                             if (eMode & ExpandMode::ExpandFootnote)
                             {
                                 const SwFormatFootnote& rFootnote = static_cast<SwTextFootnote const*>(pAttr)->GetFootnote();
-                                const SwDoc *pDoc = rNode.GetDoc();
+                                const SwDoc& rDoc = rNode.GetDoc();
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : rFootnote.GetViewNumStr(*pDoc, pLayout);
+                                    : rFootnote.GetViewNumStr(rDoc, pLayout);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;
@@ -187,7 +187,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
             //to is
             SwPaM aPaM(rNode, 0, rNode, rNode.Len());
             std::vector<sw::mark::IFieldmark*> aDropDowns =
-                rNode.GetDoc()->getIDocumentMarkAccess()->getDropDownsFor(aPaM);
+                rNode.GetDoc().getIDocumentMarkAccess()->getDropDownsFor(aPaM);
 
             for (sw::mark::IFieldmark *pMark : aDropDowns)
             {

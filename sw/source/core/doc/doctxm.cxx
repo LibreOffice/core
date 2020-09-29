@@ -732,7 +732,7 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
         if( pFrame )
         {
             SwPosition aPos( *pNd );
-            pNd = GetBodyTextNode( *pNd->GetDoc(), aPos, *pFrame );
+            pNd = GetBodyTextNode( pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
         }
     }
@@ -759,7 +759,7 @@ bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos ) const
     if( pSectNd )
     {
         rPos.nNode = *pSectNd;
-        SwContentNode* pCNd = pSectNd->GetDoc()->GetNodes().GoNext( &rPos.nNode );
+        SwContentNode* pCNd = pSectNd->GetDoc().GetNodes().GoNext( &rPos.nNode );
         rPos.nContent.Assign( pCNd, 0 );
         bRet = true;
     }
@@ -787,12 +787,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         maMSTOCExpression.clear();
     }
 
-    SwDoc* pDoc = const_cast<SwDoc*>(pSectNd->GetDoc());
-
-    assert(pDoc); //Where is the document?
+    SwDoc& rDoc = const_cast<SwDoc&>(pSectNd->GetDoc());
 
     if (pAttr && GetFormat())
-        pDoc->ChgFormat(*GetFormat(), *pAttr);
+        rDoc.ChgFormat(*GetFormat(), *pAttr);
 
     // determine default page description, which will be used by the content nodes,
     // if no appropriate one is found.
@@ -842,11 +840,11 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         if ( !pDefaultPageDesc )
         {
             // determine default page description
-            pDefaultPageDesc = &pDoc->GetPageDesc( 0 );
+            pDefaultPageDesc = &rDoc.GetPageDesc( 0 );
         }
     }
 
-    pDoc->getIDocumentState().SetModified();
+    rDoc.getIDocumentState().SetModified();
 
     // get current Language
     SwTOXInternational aIntl(  GetLanguage(),
@@ -866,7 +864,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     const_cast<SwSectionNode*>(pSectNd)->DelFrames();
 
     // This would be a good time to update the Numbering
-    pDoc->UpdateNumRule();
+    rDoc.UpdateNumRule();
 
     if( GetCreateType() & SwTOXElement::Mark )
         UpdateMarks( aIntl, pOwnChapterNode, pLayout );
@@ -910,37 +908,37 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     SwUndoUpdateIndex * pUndo(nullptr);
     {
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, RedlineType::Any );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( *pSectNd, true, RedlineType::Any );
 
         SwNodeIndex aSttIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
-        pFirstEmptyNd = pDoc->GetNodes().MakeTextNode( aEndIdx,
-                        pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
+        pFirstEmptyNd = rDoc.GetNodes().MakeTextNode( aEndIdx,
+                        rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
 
         {
             // Task 70995 - save and restore PageDesc and Break Attributes
             SwNodeIndex aNxtIdx( aSttIdx );
             const SwContentNode* pCNd = aNxtIdx.GetNode().GetContentNode();
             if( !pCNd )
-                pCNd = pDoc->GetNodes().GoNext( &aNxtIdx );
+                pCNd = rDoc.GetNodes().GoNext( &aNxtIdx );
             assert(pCNd != pFirstEmptyNd);
             assert(pCNd->GetIndex() < pFirstEmptyNd->GetIndex());
             if( pCNd->HasSwAttrSet() )
             {
-                SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
+                SfxItemSet aBrkSet( rDoc.GetAttrPool(), aBreakSetRange );
                 aBrkSet.Put( *pCNd->GetpSwAttrSet() );
                 if( aBrkSet.Count() )
                     pFirstEmptyNd->SetAttr( aBrkSet );
             }
         }
 
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
             // note: this will first append a SwUndoDelSection from the ctor...
             pUndo = new SwUndoUpdateIndex(*this);
             // tdf#123313 insert Undo *after* all CrossRefBookmark Undos have
             // been inserted by the Update*() functions
-            pDoc->GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndoUpdateIndex>(pUndo));
+            rDoc.GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndoUpdateIndex>(pUndo));
         }
         else
         {
@@ -953,7 +951,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // (flys must be deleted because the anchor nodes are removed)
             DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
 
-            pDoc->GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
+            rDoc.GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
         }
     }
 
@@ -963,15 +961,15 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // then insert the headline section
         SwNodeIndex aIdx( *pSectNd, +1 );
 
-        SwTextNode* pHeadNd = pDoc->GetNodes().MakeTextNode( aIdx,
+        SwTextNode* pHeadNd = rDoc.GetNodes().MakeTextNode( aIdx,
                                 GetTextFormatColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
         SwSectionData headerData( SectionType::ToxHeader, GetTOXName()+"_Head" );
 
         SwNodeIndex aStt( *pHeadNd ); --aIdx;
-        SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
-        pDoc->GetNodes().InsertTextSection(
+        SwSectionFormat* pSectFormat = rDoc.MakeSectionFormat();
+        rDoc.GetNodes().InsertTextSection(
                 aStt, *pSectFormat, headerData, nullptr, &aIdx, true, false);
 
         if (pUndo)
@@ -985,7 +983,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
     for( size_t nCnt = 0; nCnt < m_aSortArr.size(); ++nCnt )
     {
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         // Put the Text into the TOC
         sal_uInt16 nLvl = m_aSortArr[ nCnt ]->GetLevel();
@@ -997,7 +995,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
 
         // Generate: Set dynamic TabStops
-        SwTextNode* pTOXNd = pDoc->GetNodes().MakeTextNode( aInsPos , pColl );
+        SwTextNode* pTOXNd = rDoc.GetNodes().MakeTextNode( aInsPos , pColl );
         m_aSortArr[ nCnt ]->pTOXNd = pTOXNd;
 
         // Generate: Evaluate Form and insert the place holder for the
@@ -1025,12 +1023,12 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
         // pass node index of table-of-content section and default page description
         // to method <GenerateText(..)>.
-        ::SetProgressState( 0, pDoc->GetDocShell() );
+        ::SetProgressState( 0, rDoc.GetDocShell() );
 
         std::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
                 std::make_shared<sw::DefaultToxTabStopTokenHandler>(
                         pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
-                        pDoc->GetDocumentSettingManager().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
+                        rDoc.GetDocumentSettingManager().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
         sw::ToxTextGenerator ttgn(GetTOXForm(), tabStopTokenHandler);
@@ -1055,7 +1053,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 aEndIdx = *pSectNd;
             else
                 aEndIdx = *pFirstEmptyNd;
-            SwContentNode* pCNd = pDoc->GetNodes().GoNext( &aEndIdx );
+            SwContentNode* pCNd = rDoc.GetNodes().GoNext( &aEndIdx );
             if( pCNd ) // Robust against defect documents, e.g. i60336
                 pCNd->SetAttr( *pFirstEmptyNd->GetpSwAttrSet() );
         }
@@ -1065,10 +1063,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     sal_uLong nIdx = pSectNd->GetIndex();
     // don't delete if index is empty
     if(nIdx + 2 < pSectNd->EndOfSectionIndex())
-        pDoc->GetNodes().Delete( aInsPos );
+        rDoc.GetNodes().Delete( aInsPos );
 
-    aN2L.RestoreUpperFrames( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
+    aN2L.RestoreUpperFrames( rDoc.GetNodes(), nIdx, nIdx + 1 );
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = rDoc.GetAllLayouts();
     for ( const auto& rpLayout : aAllLayouts )
     {
         SwFrame::CheckPageDescs( static_cast<SwPageFrame*>(rpLayout->Lower()) );
@@ -1849,15 +1847,15 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
         xCharStyleIdx->push_back(aNumStr.getLength());
 
     // search by name
-    SwDoc* pDoc = pNd->GetDoc();
+    SwDoc& rDoc = pNd->GetDoc();
     sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), SwGetPoolIdFromName::ChrFmt );
     SwCharFormat* pCharFormat = nullptr;
     if(USHRT_MAX != nPoolId)
-        pCharFormat = pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);
+        pCharFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(nPoolId);
     else
-        pCharFormat = pDoc->FindCharFormatByName( GetMainEntryCharStyle() );
+        pCharFormat = rDoc.FindCharFormatByName( GetMainEntryCharStyle() );
     if(!pCharFormat)
-        pCharFormat = pDoc->MakeCharFormat(GetMainEntryCharStyle(), nullptr);
+        pCharFormat = rDoc.MakeCharFormat(GetMainEntryCharStyle(), nullptr);
 
     // find the page numbers in aNumStr and set the character style
     sal_Int32 nOffset = pNd->GetText().getLength() - aNumStr.getLength();
@@ -2021,7 +2019,7 @@ bool SwTOXBase::IsTOXBaseInReadonly() const
     if (!pSectNode)
         return false;
 
-    const SwDocShell* pDocSh = pSectNode->GetDoc()->GetDocShell();
+    const SwDocShell* pDocSh = pSectNode->GetDoc().GetDocShell();
     if (!pDocSh)
         return false;
 

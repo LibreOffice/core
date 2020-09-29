@@ -94,7 +94,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                       sfx::AccessibilityIssueID::NO_ALT_OLE);
-            pIssue->setDoc(pNoTextNode->GetDoc());
+            pIssue->setDoc(&pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::OLE);
             pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
         }
@@ -102,7 +102,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                       sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
-            pIssue->setDoc(pNoTextNode->GetDoc());
+            pIssue->setDoc(&pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::GRAPHIC);
             pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
         }
@@ -129,14 +129,14 @@ public:
 class TableNodeMergeSplitCheck : public NodeCheck
 {
 private:
-    void addTableIssue(SwTable const& rTable, SwDoc* pDoc)
+    void addTableIssue(SwTable const& rTable, SwDoc& rDoc)
     {
         const SwTableFormat* pFormat = rTable.GetFrameFormat();
         OUString sName = pFormat->GetName();
         OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
         auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                   sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT);
-        pIssue->setDoc(pDoc);
+        pIssue->setDoc(&rDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
         pIssue->setObjectID(sName);
     }
@@ -147,10 +147,10 @@ private:
             return;
 
         SwTable const& rTable = pTableNode->GetTable();
-        SwDoc* pDoc = pTableNode->GetDoc();
+        SwDoc& rDoc = pTableNode->GetDoc();
         if (rTable.IsTableComplex())
         {
-            addTableIssue(rTable, pDoc);
+            addTableIssue(rTable, rDoc);
         }
         else
         {
@@ -186,7 +186,7 @@ private:
                 }
                 if (!bAllColumnsSameSize || bCellSpansOverMoreRows)
                 {
-                    addTableIssue(rTable, pDoc);
+                    addTableIssue(rTable, rDoc);
                 }
             }
         }
@@ -285,7 +285,7 @@ public:
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         uno::Reference<text::XTextContent> xParagraph
-            = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
         if (!xParagraph.is())
             return;
 
@@ -422,7 +422,7 @@ public:
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         uno::Reference<text::XTextContent> xParagraph;
-        xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+        xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
         if (!xParagraph.is())
             return;
 
@@ -526,8 +526,8 @@ public:
                                   sfx::AccessibilityIssueID::TEXT_FORMATTING);
         pIssue->setIssueObject(IssueObject::TEXT);
         pIssue->setNode(pTextNode);
-        SwDoc* pDocument = pTextNode->GetDoc();
-        pIssue->setDoc(pDocument);
+        SwDoc& rDocument = pTextNode->GetDoc();
+        pIssue->setDoc(&rDocument);
         pIssue->setStart(pTextAttr->GetStart());
         pIssue->setEnd(pTextAttr->GetAnyEnd());
     }
@@ -583,7 +583,7 @@ public:
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         uno::Reference<text::XTextContent> xParagraph;
-        xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+        xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
         if (!xParagraph.is())
             return;
 

@@ -344,7 +344,7 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const SwNodeType nNdType )
 
 SwNode::~SwNode()
 {
-    assert(!m_pAnchoredFlys || GetDoc()->IsInDtor()); // must all be deleted
+    assert(!m_pAnchoredFlys || GetDoc().IsInDtor()); // must all be deleted
 }
 
 /// Find the TableNode in which it is located.
@@ -380,7 +380,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
 
     if( !pSh )
         // Get the Shell from the Doc
-        pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        pSh = GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
 
     if( pSh )
     {
@@ -429,7 +429,7 @@ bool SwNode::IsProtect() const
     if( nullptr != pSttNd )
     {
         SwContentFrame* pCFrame;
-        if( IsContentNode() && nullptr != (pCFrame = static_cast<const SwContentNode*>(this)->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ))
+        if( IsContentNode() && nullptr != (pCFrame = static_cast<const SwContentNode*>(this)->getLayoutFrame( GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) ))
             return pCFrame->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
@@ -455,7 +455,7 @@ bool SwNode::IsProtect() const
     pSttNd = FindFootnoteStartNode();
     if( nullptr != pSttNd )
     {
-        const SwTextFootnote* pTFootnote = GetDoc()->GetFootnoteIdxs().SeekEntry(
+        const SwTextFootnote* pTFootnote = GetDoc().GetFootnoteIdxs().SeekEntry(
                                 SwNodeIndex( *pSttNd ) );
         if( pTFootnote )
             return pTFootnote->GetTextNode().IsProtect();
@@ -498,7 +498,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
     {
         const SwFrame* pFrame;
         const SwPageFrame* pPage;
-        if (pNode && nullptr != (pFrame = pNode->getLayoutFrame(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr)) &&
+        if (pNode && nullptr != (pFrame = pNode->getLayoutFrame(pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr)) &&
             nullptr != ( pPage = pFrame->FindPageFrame() ) )
         {
             pPgDesc = pPage->GetPageDesc();
@@ -512,7 +512,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
     if( !pPgDesc )
     {
         // Thus via the nodes array
-        const SwDoc* pDoc = GetDoc();
+        const SwDoc& rDoc = GetDoc();
         const SwNode* pNd = this;
         const SwStartNode* pSttNd;
         if( pNd->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() &&
@@ -520,7 +520,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
         {
             // Find the right Anchor first
             const SwFrameFormat* pFormat = nullptr;
-            const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+            const SwFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
 
             for( size_t n = 0; n < rFormats.size(); ++n )
             {
@@ -587,7 +587,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
         {
             if( pNd->GetIndex() > GetNodes().GetEndOfAutotext().GetIndex() )
             {
-                pPgDesc = &pDoc->GetPageDesc( 0 );
+                pPgDesc = &rDoc.GetPageDesc( 0 );
                 pNd = nullptr;
             }
             else
@@ -610,9 +610,9 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                         eAskUse = UseOnPage::FooterShare;
                     }
 
-                    for( size_t n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
+                    for( size_t n = rDoc.GetPageDescCnt(); n && !pPgDesc; )
                     {
-                        const SwPageDesc& rPgDsc = pDoc->GetPageDesc( --n );
+                        const SwPageDesc& rPgDsc = rDoc.GetPageDesc( --n );
                         const SwFrameFormat* pFormat = &rPgDsc.GetMaster();
                         int nStt = 0, nLast = 1;
                         if( !( eAskUse & rPgDsc.ReadUseOn() )) ++nLast;
@@ -639,14 +639,14 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                     }
 
                     if( !pPgDesc )
-                        pPgDesc = &pDoc->GetPageDesc( 0 );
+                        pPgDesc = &rDoc.GetPageDesc( 0 );
                     pNd = nullptr;
                 }
                 else if( nullptr != ( pSttNd = pNd->FindFootnoteStartNode() ))
                 {
                     // the Anchor can only be in the Body text
                     const SwTextFootnote* pTextFootnote;
-                    const SwFootnoteIdxs& rFootnoteArr = pDoc->GetFootnoteIdxs();
+                    const SwFootnoteIdxs& rFootnoteArr = rDoc.GetFootnoteIdxs();
                     for( size_t n = 0; n < rFootnoteArr.size(); ++n )
                         if( nullptr != ( pTextFootnote = rFootnoteArr[ n ])->GetStartNode() &&
                             static_cast<SwNode const *>(pSttNd) ==
@@ -663,7 +663,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                     OSL_ENSURE( pNd->FindFlyStartNode(),
                             "Where is this Node?" );
 
-                    pPgDesc = &pDoc->GetPageDesc( 0 );
+                    pPgDesc = &rDoc.GetPageDesc( 0 );
                     pNd = nullptr;
                 }
             }
@@ -673,7 +673,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
         {
             SwFindNearestNode aInfo( *pNd );
             // Over all Nodes of all PageDescs
-            for (const SfxPoolItem* pItem : pDoc->GetAttrPool().GetItemSurrogates(RES_PAGEDESC))
+            for (const SfxPoolItem* pItem : rDoc.GetAttrPool().GetItemSurrogates(RES_PAGEDESC))
             {
                 auto pPageDescItem = dynamic_cast<const SwFormatPageDesc*>(pItem);
                 if( pPageDescItem && pPageDescItem->GetDefinedIn() )
@@ -704,7 +704,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
                 }
             }
             if( !pPgDesc )
-                pPgDesc = &pDoc->GetPageDesc( 0 );
+                pPgDesc = &rDoc.GetPageDesc( 0 );
         }
     }
     return pPgDesc;
@@ -726,7 +726,7 @@ SwFrameFormat* SwNode::GetFlyFormat() const
         if( !pRet )
         {
             // The hard way through the Doc is our last way out
-            const SwFrameFormats& rFrameFormatTable = *GetDoc()->GetSpzFrameFormats();
+            const SwFrameFormats& rFrameFormatTable = *GetDoc().GetSpzFrameFormats();
             for( size_t n = 0; n < rFrameFormatTable.size(); ++n )
             {
                 SwFrameFormat* pFormat = rFrameFormatTable[n];
@@ -807,8 +807,8 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel(sal_uInt8 const nLvl,
 
             Point aPt( 0, 0 );
             std::pair<Point, bool> const tmp(aPt, false);
-            const SwFrame* pFrame = pRet->getLayoutFrame(pRet->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp),
-                       * pMyFrame = pCNd ? pCNd->getLayoutFrame(pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
+            const SwFrame* pFrame = pRet->getLayoutFrame(pRet->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp),
+                       * pMyFrame = pCNd ? pCNd->getLayoutFrame(pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;
             if( pPgFrame && pMyFrame &&
                 pPgFrame->getFrameArea().Top() > pMyFrame->getFrameArea().Top() )
@@ -1140,7 +1140,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
             case RES_CONDCOLL_CONDCHG:
                 if(pLegacyHint->m_pNew
                         && static_cast<const SwCondCollCondChg*>(pLegacyHint->m_pNew)->pChangedFormat == GetRegisteredIn()
-                        && &GetNodes() == &GetDoc()->GetNodes() )
+                        && &GetNodes() == &GetDoc().GetNodes() )
                     ChkCondColl();
                 return;    // Do not pass through to the base class/Frames
 
@@ -1179,7 +1179,7 @@ bool SwContentNode::InvalidateNumRule()
     if( GetNodes().IsDocNodes() &&
         nullptr != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, true )) &&
         !static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
-        nullptr != (pRule = GetDoc()->FindNumRulePtr(
+        nullptr != (pRule = GetDoc().FindNumRulePtr(
                                 static_cast<const SwNumRuleItem*>(pItem)->GetValue() ) ) )
     {
         pRule->SetInvalidRule( true );
@@ -1540,7 +1540,7 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
 bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
 {
     if( !GetpSwAttrSet() ) // Have the Nodes created by the corresponding AttrSets
-        NewAttrSet( GetDoc()->GetAttrPool() );
+        NewAttrSet( GetDoc().GetAttrPool() );
 
     OSL_ENSURE( GetpSwAttrSet(), "Why did't we create an AttrSet?");
 
@@ -1621,7 +1621,7 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
     }
 
     if( !GetpSwAttrSet() ) // Have the AttrsSets created by the corresponding Nodes
-        NewAttrSet( GetDoc()->GetAttrPool() );
+        NewAttrSet( GetDoc().GetAttrPool() );
 
     bool bRet = false;
     // If Modify is locked, do not send any Modifys
@@ -2054,7 +2054,7 @@ SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
     std::pair<Point, bool> const tmp(aPt, false);
-    SwFrame* pFrame = getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
+    SwFrame* pFrame = getLayoutFrame(GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
 
     if ( pFrame )
     {
@@ -2105,32 +2105,28 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwContentNode::getSdrAllF
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc()->GetDocumentSettingManager(); }
-const IDocumentDeviceAccess& SwNode::getIDocumentDeviceAccess() const { return GetDoc()->getIDocumentDeviceAccess(); }
-const IDocumentRedlineAccess& SwNode::getIDocumentRedlineAccess() const { return GetDoc()->getIDocumentRedlineAccess(); }
-const IDocumentStylePoolAccess& SwNode::getIDocumentStylePoolAccess() const { return GetDoc()->getIDocumentStylePoolAccess(); }
-const IDocumentDrawModelAccess& SwNode::getIDocumentDrawModelAccess() const { return GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() const { return GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() { return GetDoc()->getIDocumentLayoutAccess(); }
-const IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() const { return GetDoc()->getIDocumentLinksAdministration(); }
-IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() { return GetDoc()->getIDocumentLinksAdministration(); }
-const IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() const { return GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() { return GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentContentOperations& SwNode::getIDocumentContentOperations() { return GetDoc()->getIDocumentContentOperations(); }
-IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc()->getIDocumentListItems(); } // #i83479#
+const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc().GetDocumentSettingManager(); }
+const IDocumentDeviceAccess& SwNode::getIDocumentDeviceAccess() const { return GetDoc().getIDocumentDeviceAccess(); }
+const IDocumentRedlineAccess& SwNode::getIDocumentRedlineAccess() const { return GetDoc().getIDocumentRedlineAccess(); }
+const IDocumentStylePoolAccess& SwNode::getIDocumentStylePoolAccess() const { return GetDoc().getIDocumentStylePoolAccess(); }
+const IDocumentDrawModelAccess& SwNode::getIDocumentDrawModelAccess() const { return GetDoc().getIDocumentDrawModelAccess(); }
+const IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() const { return GetDoc().getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() { return GetDoc().getIDocumentLayoutAccess(); }
+const IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() const { return GetDoc().getIDocumentLinksAdministration(); }
+IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() { return GetDoc().getIDocumentLinksAdministration(); }
+const IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() const { return GetDoc().getIDocumentFieldsAccess(); }
+IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() { return GetDoc().getIDocumentFieldsAccess(); }
+IDocumentContentOperations& SwNode::getIDocumentContentOperations() { return GetDoc().getIDocumentContentOperations(); }
+IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc().getIDocumentListItems(); } // #i83479#
 
-const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
-IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
+const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc().getIDocumentMarkAccess(); }
+IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc().GetIStyleAccess(); }
 
 bool SwNode::IsInRedlines() const
 {
-    const SwDoc * pDoc = GetDoc();
-    bool bResult = false;
+    const SwDoc& rDoc = GetDoc();
 
-    if (pDoc != nullptr)
-        bResult = pDoc->getIDocumentRedlineAccess().IsInRedlines(*this);
-
-    return bResult;
+    return rDoc.getIDocumentRedlineAccess().IsInRedlines(*this);
 }
 
 void SwNode::AddAnchoredFly(SwFrameFormat *const pFlyFormat)

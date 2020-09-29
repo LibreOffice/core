@@ -738,7 +738,7 @@ static SwFrame* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     {
         std::pair<Point, bool> tmp(rPt, false);
         SwContentFrame *pContentFrame = pCNd->getLayoutFrame(
-            pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp);
         pFrame = pContentFrame ? pContentFrame->GetUpper() : nullptr;
         while( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
@@ -3688,7 +3688,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     aEndPos.nContent = nBegin + nLen;
 
     const uno::Reference<text::XTextRange> xRange =
-        SwXTextRange::CreateXTextRange(*rNode.GetDoc(), aStartPos, &aEndPos);
+        SwXTextRange::CreateXTextRange(rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;
 }

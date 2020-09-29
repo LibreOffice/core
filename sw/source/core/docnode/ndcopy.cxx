@@ -335,8 +335,8 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
 {
     // Copy the formats into the other document:
     // Special case for PageBreak/PageDesc/ColBrk
-    SwDoc* pDestDoc = rDestNd.GetDoc();
-    SwAttrSet aPgBrkSet( pDestDoc->GetAttrPool(), aBreakSetRange );
+    SwDoc& rDestDoc = rDestNd.GetDoc();
+    SwAttrSet aPgBrkSet( rDestDoc.GetAttrPool(), aBreakSetRange );
     const SwAttrSet* pSet;
 
     pSet = rDestNd.GetpSwAttrSet();
@@ -351,7 +351,7 @@ void SwTextNode::CopyCollFormat( SwTextNode& rDestNd )
             aPgBrkSet.Put( *pAttr );
     }
 
-    rDestNd.ChgFormatColl( pDestDoc->CopyTextColl( *GetTextColl() ));
+    rDestNd.ChgFormatColl( rDestDoc.CopyTextColl( *GetTextColl() ));
     pSet = GetpSwAttrSet();
     if( nullptr != pSet )
         pSet->CopyToModify( rDestNd );

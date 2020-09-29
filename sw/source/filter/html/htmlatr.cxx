@@ -2240,7 +2240,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     // export numbering string as plain text only for the outline numbering,
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
     if ( pNd->IsOutline() &&
-         pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
+         pNd->GetNumRule() == pNd->GetDoc().GetOutlineNumRule() )
     {
         aOutlineText = pNd->GetNumString();
         nOffset = nOffset + aOutlineText.getLength();

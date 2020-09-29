@@ -888,11 +888,11 @@ SwContentNotify::~SwContentNotify()
     {
         pCnt->SetRetouche();    //fix(13870)
 
-        SwDoc *const pDoc = pCnt->IsTextFrame()
-            ? &static_cast<SwTextFrame*>(pCnt)->GetDoc()
+        SwDoc& rDoc = pCnt->IsTextFrame()
+            ? static_cast<SwTextFrame*>(pCnt)->GetDoc()
             : static_cast<SwNoTextFrame*>(pCnt)->GetNode()->GetDoc();
-        if ( !pDoc->GetSpzFrameFormats()->empty() &&
-             pDoc->DoesContainAtPageObjWithContentAnchor() && !pDoc->getIDocumentState().IsNewDoc() )
+        if ( !rDoc.GetSpzFrameFormats()->empty() &&
+             rDoc.DoesContainAtPageObjWithContentAnchor() && !rDoc.getIDocumentState().IsNewDoc() )
         {
             // If certain import filters for foreign file format import
             // AT_PAGE anchored objects, the corresponding page number is
@@ -903,7 +903,7 @@ SwContentNotify::~SwContentNotify()
             // the page is known. Thus, this data can be corrected now.
 
             const SwPageFrame *pPage = nullptr;
-            SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
+            SwFrameFormats *pTable = rDoc.GetSpzFrameFormats();
 
             for ( size_t i = 0; i < pTable->size(); ++i )
             {

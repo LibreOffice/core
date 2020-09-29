@@ -309,7 +309,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
         SwDoc* pDoc;
         if ( m_pTextNode )
         {
-            pDoc = m_pTextNode->GetDoc();
+            pDoc = &m_pTextNode->GetDoc();
         }
         else
         {
@@ -372,7 +372,7 @@ void SwTextFootnote::InvalidateNumberInLayout()
 {
     assert(m_pTextNode);
     SwFormatFootnote const& rFootnote(GetFootnote());
-    SwNodes &rNodes = m_pTextNode->GetDoc()->GetNodes();
+    SwNodes &rNodes = m_pTextNode->GetDoc().GetNodes();
     m_pTextNode->ModifyNotification( nullptr, &rFootnote );
     if ( m_pStartNode )
     {
@@ -401,8 +401,8 @@ void SwTextFootnote::CopyFootnote(
     if (m_pStartNode && rDest.GetStartNode())
     {
         // footnotes not necessarily in same document!
-        SwDoc *const pDstDoc = rDestNode.GetDoc();
-        SwNodes &rDstNodes = pDstDoc->GetNodes();
+        SwDoc& rDstDoc = rDestNode.GetDoc();
+        SwNodes &rDstNodes = rDstDoc.GetNodes();
 
         // copy only the content of the section
         SwNodeRange aRg( *m_pStartNode, 1,
@@ -414,7 +414,7 @@ void SwTextFootnote::CopyFootnote(
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTextNode->GetDoc()->GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aEnd);
+        m_pTextNode->GetDoc().GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, aEnd);
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE
@@ -536,13 +536,13 @@ void SwTextFootnote::SetSeqRefNo()
     if( !m_pTextNode )
         return;
 
-    SwDoc* pDoc = m_pTextNode->GetDoc();
-    if( pDoc->IsInReading() )
+    SwDoc& rDoc = m_pTextNode->GetDoc();
+    if( rDoc.IsInReading() )
         return;
 
     std::set<sal_uInt16> aUsedNums;
     std::vector<SwTextFootnote*> badRefNums;
-    ::lcl_FillUsedFootnoteRefNumbers(*pDoc, this, aUsedNums, badRefNums);
+    ::lcl_FillUsedFootnoteRefNumbers(rDoc, this, aUsedNums, badRefNums);
     if ( ::lcl_IsRefNumAvailable(aUsedNums, m_nSeqNo) )
         return;
     std::vector<sal_uInt16> unused;

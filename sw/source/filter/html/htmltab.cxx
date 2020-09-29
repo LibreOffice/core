@@ -4945,13 +4945,13 @@ void SwHTMLParser::ClearFootnotesMarksInRange(const SwNodeIndex& rMkNdIdx, const
     //follow DelFlyInRange pattern here
     assert(rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex());
 
-    SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
+    SwDoc& rDoc = rMkNdIdx.GetNode().GetDoc();
 
     //ofz#9733 drop bookmarks in this range
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
     pMarkAccess->deleteMarks(rMkNdIdx, SwNodeIndex(rPtNdIdx, 1), nullptr, nullptr, nullptr);
 
-    SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
+    SwFrameFormats& rTable = *rDoc.GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )
     {
         SwFrameFormat *pFormat = rTable[--i];

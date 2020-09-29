@@ -750,7 +750,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
 
 void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
-    SwFootnoteIdxs& rFootnoteArr = pNd->GetDoc()->GetFootnoteIdxs();
+    SwFootnoteIdxs& rFootnoteArr = pNd->GetDoc().GetFootnoteIdxs();
     if( rFootnoteArr.empty() )
         return;
 
@@ -1338,7 +1338,7 @@ void SwSectionNode::NodesArrChgd()
     // Moving Nodes to the UndoNodes array?
     if( rNds.IsDocNodes() )
     {
-        OSL_ENSURE( pDoc == GetDoc(),
+        OSL_ENSURE( pDoc == &GetDoc(),
                 "Moving to different Documents?" );
         if( m_pSection->IsLinkType() ) // Remove the Link
             m_pSection->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );

@@ -100,9 +100,9 @@ bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos )
 {
     const SwTextFrame * pMyFrame = static_cast<SwTextFrame*>(rMyNd.getLayoutFrame(
-        rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr));
+        rMyNd.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr));
     const SwTextFrame * pFrame = static_cast<SwTextFrame*>(rBehindNd.getLayoutFrame(
-        rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr));
+        rBehindNd.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr));
 
     if( !pFrame || !pMyFrame)
         return false;

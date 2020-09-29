@@ -913,7 +913,7 @@ void SwNumRule::SetInvalidRule(bool bFlag)
         for ( const SwTextNode* pTextNode : maTextNodeList )
         {
             // #i111681# - applying patch from cmc
-            SwList* pList = pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
+            SwList* pList = pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() );
             OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue.");
             if ( pList )
             {
@@ -1024,7 +1024,7 @@ void SwNumRule::Validate()
     o3tl::sorted_vector< SwList* > aLists;
     for ( const SwTextNode* pTextNode : maTextNodeList )
     {
-        aLists.insert( pTextNode->GetDoc()->getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
+        aLists.insert( pTextNode->GetDoc().getIDocumentListsAccess().getListByName( pTextNode->GetListId() ) );
     }
     for ( auto aList : aLists )
         aList->ValidateListTree();

@@ -105,12 +105,12 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         const bool bLocked = pNode->IsModifyLocked();
         pNode->LockModify();
 
-        SwDoc* pDoc = pNode->GetDoc();
+        SwDoc& rDoc = pNode->GetDoc();
 
         // remove unused attribute RES_LR_SPACE
         // add list attributes
         SfxItemSet aSavedAttrsSet(
-            pDoc->GetAttrPool(),
+            rDoc.GetAttrPool(),
             svl::Items<
                 RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
                 RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1,
@@ -120,7 +120,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
-            SfxItemSet aListAttrSet( pDoc->GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{} );
+            SfxItemSet aListAttrSet( rDoc.GetAttrPool(), svl::Items<RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1>{} );
             aListAttrSet.Set(*pAttrSetOfNode);
             if ( aListAttrSet.Count() )
             {

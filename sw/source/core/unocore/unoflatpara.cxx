@@ -258,11 +258,11 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
-    UnoActionContext aAction( GetTextNode()->GetDoc() );
+    UnoActionContext aAction( &GetTextNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -291,11 +291,11 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 
     SwPaM aPaM( *GetTextNode(), nPos, *GetTextNode(), nPos+nLen );
 
-    UnoActionContext aAction( GetTextNode()->GetDoc() );
+    UnoActionContext aAction( &GetTextNode()->GetDoc() );
 
     const uno::Reference< text::XTextRange > xRange =
         SwXTextRange::CreateXTextRange(
-            *GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+            GetTextNode()->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -520,7 +520,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
         return xRet;
 
     SwTextNode* pNextTextNode = nullptr;
-    const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
+    const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
 
     for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
     {
@@ -566,7 +566,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
         return xRet;
 
     SwTextNode* pPrevTextNode = nullptr;
-    const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
+    const SwNodes& rNodes = pCurrentNode->GetDoc().GetNodes();
 
     for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > 0; --nCurrentNode )
     {

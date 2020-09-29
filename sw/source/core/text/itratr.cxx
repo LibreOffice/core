@@ -995,7 +995,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
 void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin ) const
 {
-    SwViewShell const * pSh = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell const * pSh = GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     OutputDevice* pOut = nullptr;
     if( pSh )
         pOut = pSh->GetWin();
@@ -1025,7 +1025,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     aNodeArgs.nRightDiff = 0;
     if( nIndex )
     {
-        SwFrameFormats* pTmp = const_cast<SwFrameFormats*>(GetDoc()->GetSpzFrameFormats());
+        SwFrameFormats* pTmp = const_cast<SwFrameFormats*>(GetDoc().GetSpzFrameFormats());
         if( pTmp )
         {
             aNodeArgs.nIndx = nIndex;

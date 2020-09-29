@@ -233,7 +233,7 @@ class SwHTMLTableLayout
 
     const SwStartNode *GetAnyBoxStartNode() const;
     SwFrameFormat *FindFlyFrameFormat() const;
-    const SwDoc *GetDoc() const { return GetAnyBoxStartNode()->GetDoc(); }
+    const SwDoc *GetDoc() const { return &GetAnyBoxStartNode()->GetDoc(); }
 
     void Resize_( sal_uInt16 nAbsAvail, bool bRecalc );
 

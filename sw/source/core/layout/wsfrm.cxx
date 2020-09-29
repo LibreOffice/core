@@ -4198,7 +4198,7 @@ static void AddRemoveFlysForNode(
     {
         // pNode's frame has been deleted by CheckParaRedlineMerge()
         AppendObjsOfNode(&rTable,
-            pNode->GetIndex(), &rFrame, pPage, rTextNode.GetDoc(),
+            pNode->GetIndex(), &rFrame, pPage, &rTextNode.GetDoc(),
             &rIterFirst, &rIterEnd, pFirstNode, pLastNode);
         if (pSkipped)
         {
@@ -4237,7 +4237,7 @@ void AddRemoveFlysAnchoredToFrameStartingAtNode(
         && rTextNode.GetIndex() <= pMerged->pLastNode->GetIndex());
     // add visible flys in non-first node to merged frame
     // (hidden flys remain and are deleted via DelFrames())
-    SwFrameFormats& rTable(*rTextNode.GetDoc()->GetSpzFrameFormats());
+    SwFrameFormats& rTable(*rTextNode.GetDoc().GetSpzFrameFormats());
     SwPageFrame *const pPage(rFrame.FindPageFrame());
     std::vector<sw::Extent>::const_iterator iterFirst(pMerged->extents.begin());
     std::vector<sw::Extent>::const_iterator iter(iterFirst);

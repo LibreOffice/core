@@ -202,7 +202,7 @@ sal_uInt16 SwAuthorityFieldType::GetSequencePos(const SwAuthEntry* pAuthEntry,
             }
             const SwTextNode& rFieldTextNode = pTextField->GetTextNode();
             SwPosition aFieldPos(rFieldTextNode);
-            SwDoc& rDoc = *const_cast<SwDoc*>(rFieldTextNode.GetDoc());
+            SwDoc& rDoc = const_cast<SwDoc&>(rFieldTextNode.GetDoc());
             SwContentFrame *pFrame = rFieldTextNode.getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
             const SwTextNode* pTextNode = nullptr;
             if(pFrame && !pFrame->IsInDocBody())

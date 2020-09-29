@@ -25,7 +25,7 @@ void SwHTMLNumRuleInfo::Set( const SwTextNode& rTextNd )
 {
     const SwNumRule* pTextNdNumRule( rTextNd.GetNumRule() );
     if ( pTextNdNumRule &&
-         pTextNdNumRule != rTextNd.GetDoc()->GetOutlineNumRule() )
+         pTextNdNumRule != rTextNd.GetDoc().GetOutlineNumRule() )
     {
         pNumRule = const_cast<SwNumRule*>(pTextNdNumRule);
         nDeep = static_cast< sal_uInt16 >(pNumRule ? rTextNd.GetActualListLevel() + 1 : 0);

@@ -211,7 +211,7 @@ void SwTextINetFormat::InitINetFormat(SwTextNode & rNode)
 {
     ChgTextNode(&rNode);
     SwCharFormat * const pFormat(
-         rNode.GetDoc()->getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_INET_NORMAL) );
+         rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_INET_NORMAL) );
     pFormat->Add( this );
 }
 
@@ -219,7 +219,7 @@ void SwTextRuby::InitRuby(SwTextNode & rNode)
 {
     ChgTextNode(&rNode);
     SwCharFormat * const pFormat(
-        rNode.GetDoc()->getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_RUBYTEXT) );
+        rNode.GetDoc().getIDocumentStylePoolAccess().GetCharFormatFromPool(RES_POOLCHR_RUBYTEXT) );
     pFormat->Add( this );
 }
 
@@ -231,7 +231,7 @@ MakeTextAttrNesting(SwTextNode & rNode, SwTextAttrNesting & rNesting,
         const sal_Int32 nStart, const sal_Int32 nEnd)
 {
     SwTextAttr * const pNew( MakeTextAttr(
-            *rNode.GetDoc(), rNesting.GetAttr(), nStart, nEnd ) );
+            rNode.GetDoc(), rNesting.GetAttr(), nStart, nEnd ) );
     switch (pNew->Which())
     {
         case RES_TXTATR_INETFMT:
@@ -400,7 +400,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
                     case FAIL:
                         SAL_INFO("sw.core", "cannot insert hint: overlap");
                         for (const auto& aSplit : SplitNew)
-                            TextAttrDelete(*rNode.GetDoc(), aSplit);
+                            TextAttrDelete(rNode.GetDoc(), aSplit);
                         return false;
                     case SPLIT_NEW:
                         lcl_DoSplitNew(SplitNew, rNode, nNewStart,
@@ -455,7 +455,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             {
                 SAL_INFO("sw.core", "cannot insert hint: fieldmark overlap");
                 assert(SplitNew.size() == 1);
-                TextAttrDelete(*rNode.GetDoc(), &rNewHint);
+                TextAttrDelete(rNode.GetDoc(), &rNewHint);
                 return false;
             }
             else
@@ -655,7 +655,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             // Split pOther if necessary:
             if ( nOtherStart < nThisStart && nThisStart < nOtherEnd )
             {
-                SwTextAttr* pNewAttr = MakeTextAttr( *rNode.GetDoc(),
+                SwTextAttr* pNewAttr = MakeTextAttr( rNode.GetDoc(),
                         pOther->GetAttr(), nOtherStart, nThisStart );
                 if ( RES_TXTATR_CHARFMT == pOther->Which() )
                 {
@@ -675,7 +675,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             // Split pOther if necessary:
             if ( nOtherStart < nThisEnd && nThisEnd < nOtherEnd )
             {
-                SwTextAttr* pNewAttr = MakeTextAttr( *rNode.GetDoc(),
+                SwTextAttr* pNewAttr = MakeTextAttr( rNode.GetDoc(),
                         pOther->GetAttr(), nOtherStart, nThisEnd );
                 if ( RES_TXTATR_CHARFMT == pOther->Which() )
                 {
@@ -699,7 +699,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
     }
 
 #ifdef DBG_UTIL
-    if( !rNode.GetDoc()->IsInReading() )
+    if( !rNode.GetDoc().IsInReading() )
         CHECK_NOTMERGED; // ignore flags not set properly yet, don't check them
 #endif
 
@@ -782,7 +782,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
                     // #i90311#
                     // Do not remove existing character format hint during XML import
-                    if ( !rNode.GetDoc()->IsInXMLImport() &&
+                    if ( !rNode.GetDoc().IsInXMLImport() &&
                          ( !( SetAttrMode::DONTREPLACE & nMode ) ||
                            bNoLengthAttribute ||
                            bSameCharFormat ) )
@@ -825,7 +825,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     // Create new AutoStyle
                     if ( aNewSet.Count() )
                     {
-                        pNewAttr = MakeTextAttr( *rNode.GetDoc(),
+                        pNewAttr = MakeTextAttr( rNode.GetDoc(),
                                 aNewSet, nPorStart, nPorEnd );
                         Insert( pNewAttr );
                         NoteInHistory( pNewAttr, true );
@@ -844,7 +844,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             }
             else
             {
-                pNewAttr = MakeTextAttr( *rNode.GetDoc(), rNewHint.GetAttr(),
+                pNewAttr = MakeTextAttr( rNode.GetDoc(), rNewHint.GetAttr(),
                         nPorStart, nPorEnd );
                 static_txtattr_cast<SwTextCharFormat*>(pNewAttr)->SetSortNumber(nCharStyleCount);
             }
@@ -899,7 +899,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
                 // Create new AutoStyle
                 if ( aNewSet.Count() )
-                    pNewAttr = MakeTextAttr( *rNode.GetDoc(), aNewSet,
+                    pNewAttr = MakeTextAttr( rNode.GetDoc(), aNewSet,
                             nPorStart, nPorEnd );
             }
             else
@@ -956,7 +956,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 }
                 else if ( pNewStyle )
                 {
-                    pNewAttr = MakeTextAttr( *rNode.GetDoc(), *pNewStyle,
+                    pNewAttr = MakeTextAttr( rNode.GetDoc(), *pNewStyle,
                             nPorStart, nPorEnd );
                 }
             }
@@ -1150,14 +1150,14 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         return;
 
     // some things need to be done before deleting the formatting attribute
-    SwDoc* pDoc = GetDoc();
+    SwDoc& rDoc = GetDoc();
     switch( pAttr->Which() )
     {
     case RES_TXTATR_FLYCNT:
         {
             SwFrameFormat* pFormat = pAttr->GetFlyCnt().GetFrameFormat();
             if( pFormat )      // set to 0 by Undo?
-                pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+                rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
         }
         break;
 
@@ -1173,7 +1173,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
     case RES_TXTATR_FIELD:
     case RES_TXTATR_ANNOTATION:
     case RES_TXTATR_INPUTFIELD:
-        if( !pDoc->IsInDtor() )
+        if( !rDoc.IsInDtor() )
         {
             SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
             SwFieldType* pFieldType = pAttr->GetFormatField().GetField()->GetTyp();
@@ -1185,7 +1185,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
             // certain fields must update the SwDoc's calculation flags
 
             // Certain fields (like HiddenParaField) must trigger recalculation of visible flag
-            if (GetDoc()->FieldCanHideParaWeight(pFieldType->Which()))
+            if (GetDoc().FieldCanHideParaWeight(pFieldType->Which()))
                 SetCalcHiddenParaField();
 
             switch( pFieldType->Which() )
@@ -1198,8 +1198,8 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
             case SwFieldIds::HiddenText:
             case SwFieldIds::DbNumSet:
             case SwFieldIds::DbNextSet:
-                if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() && GetNodes().IsDocNodes() )
-                    pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
+                if( !rDoc.getIDocumentFieldsAccess().IsNewFieldLst() && GetNodes().IsDocNodes() )
+                    rDoc.getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
                 break;
             case SwFieldIds::Dde:
                 if (GetNodes().IsDocNodes() && pTextField->GetpTextNode())
@@ -1232,7 +1232,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         SwFormatMeta & rFormatMeta( static_cast<SwFormatMeta &>(pTextMeta->GetAttr()) );
         if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
         {
-            if (SwDocShell* pDocSh = pDoc->GetDocShell())
+            if (SwDocShell* pDocSh = rDoc.GetDocShell())
             {
                 static constexpr OUStringLiteral metaNS(u"urn:bails");
                 const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
@@ -1249,7 +1249,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         break;
     }
 
-    SwTextAttr::Destroy( pAttr, pDoc->GetAttrPool() );
+    SwTextAttr::Destroy( pAttr, rDoc.GetAttrPool() );
 }
 
 SwTextAttr* SwTextNode::InsertItem(
@@ -1264,7 +1264,7 @@ SwTextAttr* SwTextNode::InsertItem(
 
     SwTextAttr *const pNew =
         MakeTextAttr(
-            *GetDoc(),
+            GetDoc(),
             rAttr,
             nStart,
             nEnd,
@@ -1389,8 +1389,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         case RES_TXTATR_FTN :
             {
                 // Footnotes: create text node and put it into Inserts-section
-                SwDoc *pDoc = GetDoc();
-                SwNodes &rNodes = pDoc->GetNodes();
+                SwDoc& rDoc = GetDoc();
+                SwNodes &rNodes = rDoc.GetNodes();
 
                 // check that footnote is inserted into body or redline section
                 if( StartOfSectionIndex() < rNodes.GetEndOfAutotext().GetIndex() )
@@ -1462,12 +1462,12 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 if( !bNewFootnote )
                 {
                     // moving an existing footnote (e.g. SplitNode)
-                    for( size_t n = 0; n < pDoc->GetFootnoteIdxs().size(); ++n )
-                        if( pAttr == pDoc->GetFootnoteIdxs()[n] )
+                    for( size_t n = 0; n < rDoc.GetFootnoteIdxs().size(); ++n )
+                        if( pAttr == rDoc.GetFootnoteIdxs()[n] )
                         {
                             // assign new index by removing and re-inserting
-                            pTextFootnote = pDoc->GetFootnoteIdxs()[n];
-                            pDoc->GetFootnoteIdxs().erase( pDoc->GetFootnoteIdxs().begin() + n );
+                            pTextFootnote = rDoc.GetFootnoteIdxs()[n];
+                            rDoc.GetFootnoteIdxs().erase( rDoc.GetFootnoteIdxs().begin() + n );
                             break;
                         }
                         // if the Undo set the StartNode, the Index isn't
@@ -1482,11 +1482,11 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 // do not insert footnote in redline section into footnote array
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-                    const bool bSuccess = pDoc->GetFootnoteIdxs().insert(pTextFootnote).second;
+                    const bool bSuccess = rDoc.GetFootnoteIdxs().insert(pTextFootnote).second;
                     OSL_ENSURE( bSuccess, "FootnoteIdx not inserted." );
                 }
                 SwNodeIndex aTmpIndex( *this );
-                pDoc->GetFootnoteIdxs().UpdateFootnote( aTmpIndex);
+                rDoc.GetFootnoteIdxs().UpdateFootnote( aTmpIndex);
                 static_cast<SwTextFootnote*>(pAttr)->SetSeqRefNo();
             }
             break;
@@ -1494,7 +1494,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         case RES_TXTATR_FIELD:
                 {
                     // trigger notification for relevant fields, like HiddenParaFields
-                    if (GetDoc()->FieldCanHideParaWeight(
+                    if (GetDoc().FieldCanHideParaWeight(
                             pAttr->GetFormatField().GetField()->GetTyp()->Which()))
                     {
                         bHiddenPara = true;
@@ -1693,7 +1693,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
             pAttr->Which());
 
         m_pSwpHints->Delete( pAttr );
-        SwTextAttr::Destroy( pAttr, GetDoc()->GetAttrPool() );
+        SwTextAttr::Destroy( pAttr, GetDoc().GetAttrPool() );
         NotifyClients( nullptr, &aHint );
 
         TryDeleteSwpHints();
@@ -1769,7 +1769,7 @@ void SwTextNode::DeleteAttributes(
                     nWhich);
 
                 m_pSwpHints->DeleteAtPos( nPos );
-                SwTextAttr::Destroy( pTextHt, GetDoc()->GetAttrPool() );
+                SwTextAttr::Destroy( pTextHt, GetDoc().GetAttrPool() );
                 NotifyClients( nullptr, &aHint );
             }
         }
@@ -1942,7 +1942,7 @@ bool SwTextNode::SetAttr(
             if ( isCHRATR(nWhich) || isTXTATR(nWhich) )
             {
                 if ((RES_TXTATR_CHARFMT == nWhich) &&
-                    (GetDoc()->GetDfltCharFormat() ==
+                    (GetDoc().GetDfltCharFormat() ==
                      static_cast<const SwFormatCharFormat*>(pItem)->GetCharFormat()))
                 {
                     SwIndex aIndex( this, nStt );
@@ -1959,7 +1959,7 @@ bool SwTextNode::SetAttr(
                     else
                     {
 
-                        SwTextAttr *const pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr *const pNew = MakeTextAttr( GetDoc(),
                                 const_cast<SfxPoolItem&>(*pItem), nStt, nEnd );
                         if ( pNew )
                         {
@@ -1985,7 +1985,7 @@ bool SwTextNode::SetAttr(
 
     if ( aCharSet.Count() )
     {
-        SwTextAttr* pTmpNew = MakeTextAttr( *GetDoc(), aCharSet, nStt, nEnd );
+        SwTextAttr* pTmpNew = MakeTextAttr( GetDoc(), aCharSet, nStt, nEnd );
         if ( InsertHint( pTmpNew, nMode ) )
         {
             ++nCount;
@@ -2476,7 +2476,7 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
                 DestroyAttr(pAutoStyle);
             }
             m_pSwpHints->Insert(
-                    MakeTextAttr(*GetDoc(), aCurSet,
+                    MakeTextAttr(GetDoc(), aCurSet,
                         aCurRange->first.first, aCurRange->first.second));
         }
 
@@ -2494,7 +2494,7 @@ SwTextNode::impl_FormatToTextAttr(const SfxItemSet& i_rAttrSet)
 
 void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
 {
-    SfxItemSet aThisSet( GetDoc()->GetAttrPool(), aCharFormatSetRange );
+    SfxItemSet aThisSet( GetDoc().GetAttrPool(), aCharFormatSetRange );
     if( HasSwAttrSet() && GetpSwAttrSet()->Count() )
         aThisSet.Put( *GetpSwAttrSet() );
 
@@ -2517,7 +2517,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
         //     4     a       a      clear item in this
         //     5     a       b      convert item to attr of this
 
-        SfxItemSet aNdSet( pNd->GetDoc()->GetAttrPool(), aCharFormatSetRange );
+        SfxItemSet aNdSet( pNd->GetDoc().GetAttrPool(), aCharFormatSetRange );
         if( pNd->HasSwAttrSet() && pNd->GetpSwAttrSet()->Count() )
             aNdSet.Put( *pNd->GetpSwAttrSet() );
 
@@ -2529,7 +2529,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
         {
             SfxItemIter aIter( aThisSet );
             const SfxPoolItem* pItem = aIter.GetCurItem(), *pNdItem = nullptr;
-            SfxItemSet aConvertSet( GetDoc()->GetAttrPool(), aCharFormatSetRange );
+            SfxItemSet aConvertSet( GetDoc().GetAttrPool(), aCharFormatSetRange );
             std::vector<sal_uInt16> aClearWhichIds;
 
             do
@@ -2628,18 +2628,18 @@ bool SwpHints::CalcHiddenParaField() const
         {
             // see also SwTextFrame::IsHiddenNow()
             const SwFormatField& rField = pTextHt->GetFormatField();
-            int nCurWeight = m_rParent.GetDoc()->FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
+            int nCurWeight = m_rParent.GetDoc().FieldCanHideParaWeight(rField.GetField()->GetTyp()->Which());
             if (nCurWeight > nNewResultWeight)
             {
                 nNewResultWeight = nCurWeight;
-                bNewHiddenByParaField = m_rParent.GetDoc()->FieldHidesPara(*rField.GetField());
+                bNewHiddenByParaField = m_rParent.GetDoc().FieldHidesPara(*rField.GetField());
             }
             else if (nCurWeight == nNewResultWeight && bNewHiddenByParaField)
             {
                 // Currently, for both supported hiding types (HiddenPara, Database), "Don't hide"
                 // takes precedence - i.e., if there's a "Don't hide" field of that weight, we only
                 // care about fields of higher weight.
-                bNewHiddenByParaField = m_rParent.GetDoc()->FieldHidesPara(*rField.GetField());
+                bNewHiddenByParaField = m_rParent.GetDoc().FieldHidesPara(*rField.GetField());
             }
         }
     }
@@ -2690,7 +2690,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                 if (pHt->GetStart() == *pHt->GetEnd())
                 {
                     DeleteAtPos(i); // kill it without History!
-                    SwTextAttr::Destroy(pHt, rNode.GetDoc()->GetAttrPool());
+                    SwTextAttr::Destroy(pHt, rNode.GetDoc().GetAttrPool());
                     --i;
                     continue;
                 }
@@ -3034,10 +3034,10 @@ bool SwpHints::TryInsertHint(
             SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pHint));
             bool bDelFirst = nullptr != pTextField->GetpTextNode();
             pTextField->ChgTextNode( &rNode );
-            SwDoc* pDoc = rNode.GetDoc();
+            SwDoc& rDoc = rNode.GetDoc();
             const SwField* pField = pTextField->GetFormatField().GetField();
 
-            if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() )
+            if( !rDoc.getIDocumentFieldsAccess().IsNewFieldLst() )
             {
                 // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
@@ -3050,9 +3050,9 @@ bool SwpHints::TryInsertHint(
                 case SwFieldIds::DbNextSet:
                     {
                         if( bDelFirst )
-                            pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
+                            rDoc.getIDocumentFieldsAccess().InsDelFieldInFieldLst(false, *pTextField);
                         if( rNode.GetNodes().IsDocNodes() )
-                            pDoc->getIDocumentFieldsAccess().InsDelFieldInFieldLst(true, *pTextField);
+                            rDoc.getIDocumentFieldsAccess().InsDelFieldInFieldLst(true, *pTextField);
                     }
                     break;
                 case SwFieldIds::Dde:
@@ -3076,7 +3076,7 @@ bool SwpHints::TryInsertHint(
                         // register the field at its FieldType before setting
                         // the sequence reference number!
                         SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(
-                                    pDoc->getIDocumentFieldsAccess().InsertFieldType( *pField->GetTyp() ) );
+                                    rDoc.getIDocumentFieldsAccess().InsertFieldType( *pField->GetTyp() ) );
                         if( pFieldType != pField->GetTyp() )
                         {
                             SwFormatField* pFormatField = const_cast<SwFormatField*>(&pTextField->GetFormatField());
@@ -3091,22 +3091,22 @@ bool SwpHints::TryInsertHint(
                     break;
 
                 case SwFieldIds::Dde:
-                    if( pDoc->getIDocumentFieldsAccess().IsNewFieldLst() )
+                    if( rDoc.getIDocumentFieldsAccess().IsNewFieldLst() )
                         static_cast<SwDDEFieldType*>(pField->GetTyp())->IncRefCnt();
                     bInsFieldType = static_cast<SwDDEFieldType*>(pField->GetTyp())->IsDeleted();
                     break;
 
                 case SwFieldIds::Postit:
-                    if ( pDoc->GetDocShell() )
+                    if ( rDoc.GetDocShell() )
                     {
-                        pDoc->GetDocShell()->Broadcast( SwFormatFieldHint(
+                        rDoc.GetDocShell()->Broadcast( SwFormatFieldHint(
                             &pTextField->GetFormatField(), SwFormatFieldHintWhich::INSERTED));
                     }
                     break;
                 default: break;
                 }
                 if( bInsFieldType )
-                    pDoc->getIDocumentFieldsAccess().InsDeletedFieldType( *pField->GetTyp() );
+                    rDoc.getIDocumentFieldsAccess().InsDeletedFieldType( *pField->GetTyp() );
             }
         }
         break;
@@ -3195,7 +3195,7 @@ bool SwpHints::TryInsertHint(
         NoteInHistory(pHint, true);
         CalcFlags();
 #ifdef DBG_UTIL
-        if( !rNode.GetDoc()->IsInReading() )
+        if( !rNode.GetDoc().IsInReading() )
             CHECK;
 #endif
         // ... and notify listeners
@@ -3242,13 +3242,13 @@ bool SwpHints::TryInsertHint(
     // Portion building in not necessary during XML import.
     else if ( !bNoHintAdjustMode &&
          !pHint->IsOverlapAllowedAttr() &&
-         !rNode.GetDoc()->IsInXMLImport() &&
+         !rNode.GetDoc().IsInXMLImport() &&
          ( RES_TXTATR_AUTOFMT == nWhich ||
            RES_TXTATR_CHARFMT == nWhich ) )
     {
         assert( nWhich != RES_TXTATR_AUTOFMT ||
                 static_cast<const SwFormatAutoFormat&>(pHint->GetAttr()).GetStyleHandle()->GetPool() ==
-                &rNode.GetDoc()->GetAttrPool());
+                &rNode.GetDoc().GetAttrPool());
 
         BuildPortions( rNode, *pHint, nMode );
 
@@ -3289,7 +3289,7 @@ bool SwpHints::TryInsertHint(
     }
 
 #ifdef DBG_UTIL
-    if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
+    if( !bNoHintAdjustMode && !rNode.GetDoc().IsInReading() )
         CHECK;
 #endif
 
@@ -3338,7 +3338,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
             pTextField->ChgTextNode(nullptr);
         }
         else if (m_bHiddenByParaField
-                 && m_rParent.GetDoc()->FieldCanHideParaWeight(pFieldTyp->Which()))
+                 && m_rParent.GetDoc().FieldCanHideParaWeight(pFieldTyp->Which()))
         {
             m_bCalcHiddenParaField = true;
         }

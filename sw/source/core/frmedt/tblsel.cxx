@@ -234,11 +234,11 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
         const SwContentNode *pCntNd = rCursor.GetContentNode();
         std::pair<Point, bool> tmp(aPtPos, true);
         const SwLayoutFrame *pStart = pCntNd ?
-            pCntNd->getLayoutFrame(pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
+            pCntNd->getLayoutFrame(pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
         pCntNd = rCursor.GetContentNode(false);
         tmp.first = aMkPos;
         const SwLayoutFrame *pEnd = pCntNd ?
-            pCntNd->getLayoutFrame(pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
+            pCntNd->getLayoutFrame(pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
         if( pStart && pEnd )
             GetTableSel( pStart, pEnd, rBoxes, nullptr, eSearchType );
     }
@@ -443,12 +443,12 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     // #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-    if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )
+    if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )
             return false;
 
     std::pair<Point, bool> tmp(aNullPos, true);
     const SwLayoutFrame *const pStart = pCNd->getLayoutFrame(
-            pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     OSL_ENSURE( pStart, "without frame nothing works" );
 
@@ -458,13 +458,13 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         pCNd = aIdx.GetNodes().GoNextSection( &aIdx, false, false );
 
     // #i22135# - Robust: check, if content was found and if it's visible
-    if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )
+    if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )
     {
         return false;
     }
 
     const SwLayoutFrame *const pEnd = pCNd->getLayoutFrame(
-            pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
@@ -942,11 +942,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     const SwContentNode* pCntNd = rPam.GetContentNode();
     std::pair<Point, bool> const tmp(aPt, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     pCntNd = rPam.GetContentNode(false);
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
 
     // First, compute tables and rectangles
@@ -1460,11 +1460,11 @@ TableMergeErr CheckMergeSel( const SwPaM& rPam )
     const SwContentNode* pCntNd = rPam.GetContentNode();
     std::pair<Point, bool> tmp(aPt, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     pCntNd = rPam.GetContentNode(false);
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     GetTableSel( pStart, pEnd, aBoxes, nullptr );
     return CheckMergeSel( aBoxes );
@@ -1989,12 +1989,12 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
     const SwContentNode* pCntNd = rCursor.GetContentNode();
     std::pair<Point, bool> tmp(aPtPos, true);
     const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
     pCntNd = rCursor.GetContentNode(false);
     tmp.first = aMkPos;
     const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp)->GetUpper();
 
     SwRectFnSet aRectFnSet(pStart->GetUpper());

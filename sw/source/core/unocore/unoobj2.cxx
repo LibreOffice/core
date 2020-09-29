@@ -144,20 +144,20 @@ void CollectFrameAtNode( const SwNodeIndex& rIdx,
     // <false>: at-paragraph anchored objects are collected
 
     // search all borders, images, and OLEs that are connected to the paragraph
-    SwDoc* pDoc = rIdx.GetNode().GetDoc();
+    SwDoc& rDoc = rIdx.GetNode().GetDoc();
 
     const auto nChkType = bAtCharAnchoredObjs ? RndStdIds::FLY_AT_CHAR : RndStdIds::FLY_AT_PARA;
     const SwContentFrame* pCFrame;
     const SwContentNode* pCNd;
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+    if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
         nullptr != (pCNd = rIdx.GetNode().GetContentNode()) &&
-        nullptr != (pCFrame = pCNd->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout())) )
+        nullptr != (pCFrame = pCNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout())) )
     {
         lcl_CollectFrameAtNodeWithLayout(pCFrame, rFrames, nChkType);
     }
     else
     {
-        const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+        const SwFrameFormats& rFormats = *rDoc.GetSpzFrameFormats();
         const size_t nSize = rFormats.size();
         for ( size_t i = 0; i < nSize; i++)
         {

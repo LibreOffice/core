@@ -799,10 +799,10 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
 
 IGrammarContact* getGrammarContact( const SwTextNode& rTextNode )
 {
-    const SwDoc* pDoc = rTextNode.GetDoc();
-    if( !pDoc || pDoc->IsInDtor() )
+    const SwDoc& rDoc = rTextNode.GetDoc();
+    if (rDoc.IsInDtor())
         return nullptr;
-    return pDoc->getGrammarContact();
+    return rDoc.getGrammarContact();
 }
 
 ::sfx2::IXmlIdRegistry&

@@ -664,7 +664,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if (pAny)
                 {
-                    uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(*pTextNode->GetDoc(), pTextNode);
+                    uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
                     *pAny <<= xParagraph;
                 }
             }

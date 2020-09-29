@@ -3627,7 +3627,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
             return;
     }
     pNd->SetOLESizeInvalid(true);
-    pNd->GetDoc()->SetOLEObjModified();
+    pNd->GetDoc().SetOLEObjModified();
 }
 
 void SwXOLEListener::disposing( const lang::EventObject& rEvent )

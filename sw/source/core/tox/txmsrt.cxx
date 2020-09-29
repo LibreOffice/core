@@ -159,12 +159,12 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
             Point aPt;
             std::pair<Point, bool> tmp(aPt, false);
             const SwContentFrame *const pFrame = pNd->getLayoutFrame(
-                pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                 nullptr, &tmp);
             if( pFrame )
             {
                 SwPosition aPos( *pNd );
-                const SwDoc& rDoc = *pNd->GetDoc();
+                const SwDoc& rDoc = pNd->GetDoc();
                 bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
                 OSL_ENSURE(bResult, "where is the text node");
                 nPos = aPos.nNode.GetIndex();
@@ -515,7 +515,7 @@ SwTOXPara::SwTOXPara(SwContentNode& rNd, SwTOXElement eT, sal_uInt16 nLevel, con
     case SwTOXElement::Template:
     case SwTOXElement::OutlineLevel:
         assert(rNd.IsTextNode());
-        rNd.GetDoc()->getIDocumentMarkAccess()->getMarkForTextNode(
+        rNd.GetDoc().getIDocumentMarkAccess()->getMarkForTextNode(
             *rNd.GetTextNode(), IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
         break;
     default:
@@ -655,10 +655,10 @@ OUString SwTOXPara::GetURL() const
         {
             const SwTextNode * pTextNd = pNd->GetTextNode();
 
-            SwDoc* pDoc = const_cast<SwDoc*>( pTextNd->GetDoc() );
+            SwDoc& rDoc = const_cast<SwDoc&>( pTextNd->GetDoc() );
             // tdf#123313: this *must not* create a bookmark, its Undo would
             // be screwed! create it as preparatory step, in ctor!
-            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTextNode(
+            ::sw::mark::IMark const * const pMark = rDoc.getIDocumentMarkAccess()->getMarkForTextNode(
                                 *pTextNd,
                                 IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
             aText = "#" + pMark->GetName();

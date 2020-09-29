@@ -167,18 +167,18 @@ namespace
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode eMode = RestoreMode::All) override
         {
             SwContentNode* pCNd = rNd.GetContentNode();
-            SwDoc* pDoc = rNd.GetDoc();
+            SwDoc& rDoc = rNd.GetDoc();
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             if (eMode & RestoreMode::NonFlys)
             {
-                RestoreBkmks(pDoc, aUpdater);
-                RestoreRedlines(pDoc, aUpdater);
+                RestoreBkmks(&rDoc, aUpdater);
+                RestoreRedlines(&rDoc, aUpdater);
                 RestoreUnoCursors(aUpdater);
                 RestoreShellCursors(aUpdater);
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(pDoc, aUpdater, false);
+                RestoreFlys(&rDoc, aUpdater, false);
             }
         }
 

@@ -1799,14 +1799,14 @@ void DelBookmarks(
     if(rStt.GetIndex() > rEnd.GetIndex()
         || (rStt == rEnd && (!pSttIdx || !pEndIdx || pSttIdx->GetIndex() >= pEndIdx->GetIndex())))
         return;
-    SwDoc* const pDoc = rStt.GetNode().GetDoc();
+    SwDoc& rDoc = rStt.GetNode().GetDoc();
 
-    pDoc->getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk, pSttIdx, pEndIdx);
+    rDoc.getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk, pSttIdx, pEndIdx);
 
     // Copy all Redlines which are in the move area into an array
     // which holds all position information as offset.
     // Assignment happens after moving.
-    SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     for(SwRangeRedline* pRedl : rTable)
     {
         // Is at position?
@@ -1823,7 +1823,7 @@ void DelBookmarks(
                 bool bStt = true;
                 SwContentNode* pCNd = pRStt->nNode.GetNode().GetContentNode();
                 if( !pCNd )
-                    pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode );
+                    pCNd = rDoc.GetNodes().GoNext( &pRStt->nNode );
                 if (!pCNd)
                 {
                     bStt = false;
@@ -1853,7 +1853,7 @@ void DelBookmarks(
                 {
                     bStt = true;
                     pREnd->nNode = rEnd;
-                    pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode );
+                    pCNd = rDoc.GetNodes().GoNext( &pREnd->nNode );
                     if( !pCNd )
                     {
                         pREnd->nNode = pRStt->nNode;

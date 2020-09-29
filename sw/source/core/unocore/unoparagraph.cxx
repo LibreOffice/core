@@ -1186,7 +1186,7 @@ SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 
     if(bBelowFrameAtrEnd || bDrawingLayerRange)
     {
-        const SfxPoolItem& rDefItem = rTextNode.GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+        const SfxPoolItem& rDefItem = rTextNode.GetDoc().GetAttrPool().GetDefaultItem(pEntry->nWID);
 
         rDefItem.QueryValue(aRet, pEntry->nMemberId);
     }
@@ -1228,7 +1228,7 @@ void SAL_CALL SwXParagraph::dispose()
     if (pTextNode)
     {
         SwCursor aCursor( SwPosition( *pTextNode ), nullptr );
-        pTextNode->GetDoc()->getIDocumentContentOperations().DelFullPara(aCursor);
+        pTextNode->GetDoc().getIDocumentContentOperations().DelFullPara(aCursor);
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
         m_pImpl->m_EventListeners.disposeAndClear(ev);
     }
@@ -1408,7 +1408,7 @@ uno::Reference<frame::XModel> SwXParagraph::GetModel()
     SwTextNode *const pTextNode( m_pImpl->GetTextNode() );
     if (pTextNode)
     {
-        SwDocShell const*const pShell( pTextNode->GetDoc()->GetDocShell() );
+        SwDocShell const*const pShell( pTextNode->GetDoc().GetDocShell() );
         return pShell ? pShell->GetModel() : nullptr;
     }
     return nullptr;

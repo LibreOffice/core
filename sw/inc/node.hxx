@@ -207,8 +207,16 @@ public:
     /// Node is in which nodes-array/doc?
     inline          SwNodes& GetNodes();
     inline const  SwNodes& GetNodes() const;
-    inline            SwDoc* GetDoc();
-    inline const  SwDoc* GetDoc() const;
+
+    SwDoc& GetDoc()
+    {
+        return GetNodes().GetDoc();
+    }
+
+    const SwDoc& GetDoc() const
+    {
+        return GetNodes().GetDoc();
+    }
 
     /** Provides access to the document setting interface
      */
@@ -697,15 +705,6 @@ inline SwNodes& SwNode::GetNodes()
 inline const SwNodes& SwNode::GetNodes() const
 {
     return static_cast<SwNodes&>(GetArray());
-}
-
-inline SwDoc* SwNode::GetDoc()
-{
-    return &GetNodes().GetDoc();
-}
-inline const SwDoc* SwNode::GetDoc() const
-{
-    return &GetNodes().GetDoc();
 }
 
 inline SwFormatColl* SwContentNode::GetCondFormatColl() const

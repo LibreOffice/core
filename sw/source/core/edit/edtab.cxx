@@ -93,7 +93,7 @@ bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh )
 {
     SwTableNode *pTableNode = const_cast< SwTableNode* >( pConstTableNode );
     ConvertNestedTablesToText( pTableNode->GetTable().GetTabLines(), cCh );
-    return pTableNode->GetDoc()->TableToText( pTableNode, cCh );
+    return pTableNode->GetDoc().TableToText( pTableNode, cCh );
 }
 //End for bug #i119954#
 

@@ -445,7 +445,7 @@ MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)
 SwUndoUpdateSection::SwUndoUpdateSection(
         SwSection const& rSection, SwNodeIndex const*const pIndex,
         bool const bOnlyAttr)
-    : SwUndo( SwUndoId::CHGSECTION, pIndex->GetNode().GetDoc() )
+    : SwUndo( SwUndoId::CHGSECTION, &pIndex->GetNode().GetDoc() )
     , m_pSectionData( new SwSectionData(rSection) )
     , m_pAttrSet( ::lcl_GetAttrSet(rSection) )
     , m_nStartNode( pIndex->GetIndex() )

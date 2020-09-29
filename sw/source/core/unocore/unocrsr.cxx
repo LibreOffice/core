@@ -184,8 +184,8 @@ void SwUnoTableCursor::MakeBoxSels()
     const SwContentNode* pCNd;
     bool bMakeTableCursors = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
-            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+            nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+            nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
         bMakeTableCursors = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *this );
 
     if ( !bMakeTableCursors )

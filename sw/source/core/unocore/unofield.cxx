@@ -1290,7 +1290,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     assert(tempFormat.Which() == (static_cast<SwSetExpField const*>(tempFormat.GetField())->GetInputFlag() ? RES_TXTATR_INPUTFIELD : RES_TXTATR_FIELD));
     SwTextNode & rNode(pOldAttr->GetTextNode());
     std::shared_ptr<SwPaM> pPamForTextField;
-    IDocumentContentOperations & rIDCO(rNode.GetDoc()->getIDocumentContentOperations());
+    IDocumentContentOperations & rIDCO(rNode.GetDoc().getIDocumentContentOperations());
     SwTextField::GetPamForTextField(*pOldAttr, pPamForTextField);
     assert(pPamForTextField);
     sal_Int32 const nStart(pPamForTextField->Start()->nContent.GetIndex());
@@ -1306,7 +1306,7 @@ void SwXTextField::TransmuteLeadToInputField(SwSetExpField & rField)
     assert(static_cast<SwSetExpField const*>(rNewFormat.GetField())->GetInputFlag() == (dynamic_cast<SwTextInputField const*>(pNewAttr) != nullptr));
     if (xField.is())
     {
-        pXField->m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rNewFormat), rNode.GetDoc());
+        pXField->m_pImpl->SetFormatField(const_cast<SwFormatField*>(&rNewFormat), &rNode.GetDoc());
         const_cast<SwFormatField&>(rNewFormat).SetXTextField(xField);
     }
 }

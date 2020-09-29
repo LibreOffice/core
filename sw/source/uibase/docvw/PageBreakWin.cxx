@@ -286,7 +286,7 @@ void SwPageBreakWin::Select()
                 ? static_cast<SwTextFrame*>(pCnt)->GetTextNodeFirst()
                 : static_cast<SwNoTextFrame*>(pCnt)->GetNode();
 
-            pNd->GetDoc()->GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
+            pNd->GetDoc().GetIDocumentUndoRedo( ).StartUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
 
             SfxItemSet aSet(
                 GetEditWin()->GetView().GetWrtShell().GetAttrPool(),
@@ -295,10 +295,10 @@ void SwPageBreakWin::Select()
             aSet.Put( SwFormatPageDesc( nullptr ) );
 
             SwPaM aPaM( *pNd );
-            pNd->GetDoc()->getIDocumentContentOperations().InsertItemSet(
+            pNd->GetDoc().getIDocumentContentOperations().InsertItemSet(
                 aPaM, aSet, SetAttrMode::DEFAULT, GetPageFrame()->getRootFrame());
 
-            pNd->GetDoc()->GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
+            pNd->GetDoc().GetIDocumentUndoRedo( ).EndUndo( SwUndoId::UI_DELETE_PAGE_BREAK, nullptr );
         }
     }
 

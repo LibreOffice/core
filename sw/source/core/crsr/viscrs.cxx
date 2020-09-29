@@ -371,7 +371,7 @@ static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition
     const SwContentNode* pNode = rPosition.nNode.GetNode().GetContentNode();
     std::pair<Point, bool> const tmp(rPoint, true);
     const SwContentFrame* pFrame = pNode->getLayoutFrame(
-            pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             &rPosition, &tmp);
     SwRect aRect;
     pFrame->GetCharRect(aRect, rPosition);

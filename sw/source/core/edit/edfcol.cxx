@@ -1271,7 +1271,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     });
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
     lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent, uno::UNO_QUERY), std::move(aResults));
 }
 
@@ -1345,7 +1345,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     if (pNode == nullptr)
         return aResult;
 
-    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     return lcl_CollectParagraphClassification(xModel, xParent);
 }
@@ -1758,7 +1758,7 @@ void SwEditShell::SignParagraph()
         return;
 
     // 1. Get the text (without fields).
-    const uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
+    const uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
     const OString utf8Text = lcl_getParagraphBodyText(xParagraph);
     if (utf8Text.isEmpty())
         return;
@@ -2101,7 +2101,7 @@ static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     if (pNode == nullptr)
         return sHighestClass;
 
-    SwDocShell* pDocShell = pNode->GetDoc()->GetDocShell();
+    SwDocShell* pDocShell = pNode->GetDoc().GetDocShell();
     if (!pDocShell)
         return sHighestClass;
 

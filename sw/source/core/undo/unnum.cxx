@@ -45,7 +45,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const OUString& rReplaceRule )
-    : SwUndo( SwUndoId::INSNUM, rPos.nNode.GetNode().GetDoc() ),
+    : SwUndo( SwUndoId::INSNUM, &rPos.nNode.GetNode().GetDoc() ),
     m_aNumRule( rRule ),
     m_sReplaceRule( rReplaceRule ), m_nLRSavePos( 0 )
 {
@@ -279,7 +279,7 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
 
 SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, bool bOldNum,
                                     bool bNewNum)
-    : SwUndo( SwUndoId::NUMORNONUM, rIdx.GetNode().GetDoc() ),
+    : SwUndo( SwUndoId::NUMORNONUM, &rIdx.GetNode().GetDoc() ),
       m_nIndex( rIdx.GetIndex() ), mbNewNum(bNewNum),
       mbOldNum(bOldNum)
 {

@@ -284,14 +284,14 @@ SwHistorySetTextField::SwHistorySetTextField( const SwTextField* pTextField, sal
     , m_pField( new SwFormatField( *pTextField->GetFormatField().GetField() ) )
 {
     // only copy if not Sys-FieldType
-    SwDoc* pDoc = pTextField->GetTextNode().GetDoc();
+    SwDoc& rDoc = pTextField->GetTextNode().GetDoc();
 
     m_nFieldWhich = m_pField->GetField()->GetTyp()->Which();
     if (m_nFieldWhich == SwFieldIds::Database ||
         m_nFieldWhich == SwFieldIds::User ||
         m_nFieldWhich == SwFieldIds::SetExp ||
         m_nFieldWhich == SwFieldIds::Dde ||
-        !pDoc->getIDocumentFieldsAccess().GetSysFieldType( m_nFieldWhich ))
+        !rDoc.getIDocumentFieldsAccess().GetSysFieldType( m_nFieldWhich ))
     {
         m_pFieldType = m_pField->GetField()->GetTyp()->Copy();
         m_pField->GetField()->ChgTyp( m_pFieldType.get() ); // change field type
@@ -450,8 +450,8 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTextFootnote* pTextFootnote, sal_u
 
     // keep the old NodePos (because who knows what later will be saved/deleted
     // in SaveSection)
-    SwDoc* pDoc = const_cast<SwDoc*>(pTextFootnote->GetTextNode().GetDoc());
-    SwNode* pSaveNd = pDoc->GetNodes()[ m_nNodeIndex ];
+    SwDoc& rDoc = const_cast<SwDoc&>(pTextFootnote->GetTextNode().GetDoc());
+    SwNode* pSaveNd = rDoc.GetNodes()[ m_nNodeIndex ];
 
     // keep pointer to StartNode of FootnoteSection and reset its attribute for now
     // (as a result, its/all Frames will be deleted automatically)

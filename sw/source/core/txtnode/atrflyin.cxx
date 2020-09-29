@@ -136,7 +136,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
 {
     // for Undo, the new anchor must be known already!
 
-    SwDoc* pDoc = const_cast<SwDoc*>(pNode->GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(pNode->GetDoc());
 
     SwIndex aIdx( const_cast<SwTextNode*>(pNode), GetStart() );
     SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
@@ -167,11 +167,11 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         pFormat->DelFrames();
 
     // copy into a different document?
-    if( pDoc != pFormat->GetDoc() )
+    if( &rDoc != pFormat->GetDoc() )
     {
         // disable undo while copying attribute
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-        SwFrameFormat* pNew = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+        SwFrameFormat* pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
 
         ::sw::UndoGuard const undoGuardFormat(
             pFormat->GetDoc()->GetIDocumentUndoRedo());

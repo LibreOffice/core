@@ -866,18 +866,18 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     const SwPosition *pStt = rMark < rPoint ? &rMark : &rPoint,
                     *pEnd = &rMark == pStt ? &rPoint : &rMark;
 
-    SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
+    SwDoc& rDoc = rMark.nNode.GetNode().GetDoc();
 
     // if it's not in the doc array, probably missing some invalidation somewhere
-    assert(&rPoint.nNode.GetNodes() == &pDoc->GetNodes());
-    assert(&rMark.nNode.GetNodes() == &pDoc->GetNodes());
+    assert(&rPoint.nNode.GetNodes() == &rDoc.GetNodes());
+    assert(&rMark.nNode.GetNodes() == &rDoc.GetNodes());
 
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     // 1. Footnotes
     if( DelContentType::Ftn & nDelContentType )
     {
-        SwFootnoteIdxs& rFootnoteArr = pDoc->GetFootnoteIdxs();
+        SwFootnoteIdxs& rFootnoteArr = rDoc.GetFootnoteIdxs();
         if( !rFootnoteArr.empty() )
         {
             const SwNode* pFootnoteNd;
@@ -948,7 +948,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     if( DelContentType::Fly & nDelContentType )
     {
         sal_uInt16 nChainInsPos = m_pHistory ? m_pHistory->Count() : 0;
-        const SwFrameFormats& rSpzArr = *pDoc->GetSpzFrameFormats();
+        const SwFrameFormats& rSpzArr = *rDoc.GetSpzFrameFormats();
         if( !rSpzArr.empty() )
         {
             SwFrameFormat* pFormat;
@@ -1073,7 +1073,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
     if( !(DelContentType::Bkm & nDelContentType) )
         return;
 
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
     if( !pMarkAccess->getAllMarksCount() )
         return;
 
@@ -1357,7 +1357,7 @@ SwRedlineSaveData::SwRedlineSaveData(
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    m_nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
+    m_nRedlineCount = rSttPos.nNode.GetNode().GetDoc().getIDocumentRedlineAccess().GetRedlineTable().size();
 #endif
 }
 

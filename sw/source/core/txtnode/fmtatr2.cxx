@@ -735,7 +735,7 @@ void MetaField::GetPrefixAndSuffix(
         if (xMetaField.is())
         {
             SwTextNode * const pTextNode( GetTextNode() );
-            SwDocShell const * const pShell(pTextNode->GetDoc()->GetDocShell());
+            SwDocShell const * const pShell(pTextNode->GetDoc().GetDocShell());
             const uno::Reference<frame::XModel> xModel(
                 pShell ? pShell->GetModel() : nullptr,  uno::UNO_SET_THROW);
             getPrefixAndSuffix(xModel, xMetaField, o_pPrefix, o_pSuffix);
@@ -755,7 +755,7 @@ sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
     if (pTextNode)
     {
         double number;
-        (void) pTextNode->GetDoc()->IsNumberFormat( rContent, nNumberFormat, number );
+        (void) pTextNode->GetDoc().IsNumberFormat( rContent, nNumberFormat, number );
     }
     return nNumberFormat;
 }

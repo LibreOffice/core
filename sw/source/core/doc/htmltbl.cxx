@@ -483,11 +483,11 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     const SwStartNode *pSttNd = pCnts->GetStartNode();
                     if( pSttNd )
                     {
-                        const SwDoc *pDoc = pSttNd->GetDoc();
+                        const SwDoc& rDoc = pSttNd->GetDoc();
                         sal_uLong nIdx = pSttNd->GetIndex();
-                        while( !(pDoc->GetNodes()[nIdx])->IsEndNode() )
+                        while (!rDoc.GetNodes()[nIdx]->IsEndNode())
                         {
-                            SwTextNode *pTextNd = (pDoc->GetNodes()[nIdx])->GetTextNode();
+                            SwTextNode *pTextNd = (rDoc.GetNodes()[nIdx])->GetTextNode();
                             if( pTextNd )
                             {
                                 sal_uLong nMinNoAlignCnts = 0;
@@ -509,7 +509,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                             }
                             else
                             {
-                                SwTableNode *pTabNd = (pDoc->GetNodes()[nIdx])->GetTableNode();
+                                SwTableNode *pTabNd = (rDoc.GetNodes()[nIdx])->GetTableNode();
                                 if( pTabNd )
                                 {
                                     SwHTMLTableLayout *pChild = pTabNd->GetTable().GetHTMLTableLayout();

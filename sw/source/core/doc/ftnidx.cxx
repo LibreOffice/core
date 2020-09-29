@@ -63,21 +63,21 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
         return;
 
     // Get the NodesArray using the first foot note's StartIndex
-    SwDoc* pDoc = rStt.GetNode().GetDoc();
-    if( pDoc->IsInReading() )
+    SwDoc& rDoc = rStt.GetNode().GetDoc();
+    if( rDoc.IsInReading() )
         return ;
     SwTextFootnote* pTextFootnote;
 
-    const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
-    IDocumentRedlineAccess const& rIDRA(pDoc->getIDocumentRedlineAccess());
+    const SwEndNoteInfo& rEndInfo = rDoc.GetEndNoteInfo();
+    const SwFootnoteInfo& rFootnoteInfo = rDoc.GetFootnoteInfo();
+    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
 
     // For normal foot notes we treat per-chapter and per-document numbering
     // separately. For Endnotes we only have per-document numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
     {
         SwRootFrame const* pLayout(nullptr);
-        o3tl::sorted_vector<SwRootFrame*> layouts = pDoc->GetAllLayouts();
+        o3tl::sorted_vector<SwRootFrame*> layouts = rDoc.GetAllLayouts();
         // sw_redlinehide: here we need to know if there's *any* layout with
         // IsHideRedlines(), because then the hidden-numbers have to be updated
         for (SwRootFrame const* pTmp : layouts)
@@ -88,10 +88,10 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
             }
         }
 
-        const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        const SwNode *pChapterStartHidden(&pDoc->GetNodes().GetEndOfExtras());
+        const SwOutlineNodes& rOutlNds = rDoc.GetNodes().GetOutLineNds();
+        const SwNode *pChapterStartHidden(&rDoc.GetNodes().GetEndOfExtras());
         sal_uLong nChapterStart(pChapterStartHidden->GetIndex());
-        sal_uLong nChapterEnd(pDoc->GetNodes().GetEndOfContent().GetIndex());
+        sal_uLong nChapterEnd(rDoc.GetNodes().GetEndOfContent().GetIndex());
         sal_uLong nChapterEndHidden(nChapterEnd);
         if( !rOutlNds.empty() )
         {
@@ -270,16 +270,16 @@ void SwFootnoteIdxs::UpdateAllFootnote()
         return;
 
     // Get the NodesArray via the StartIndex of the first Footnote
-    SwDoc* pDoc = const_cast<SwDoc*>((*this)[ 0 ]->GetTextNode().GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>((*this)[ 0 ]->GetTextNode().GetDoc());
     SwTextFootnote* pTextFootnote;
-    const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
-    const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
-    IDocumentRedlineAccess const& rIDRA(pDoc->getIDocumentRedlineAccess());
+    const SwEndNoteInfo& rEndInfo = rDoc.GetEndNoteInfo();
+    const SwFootnoteInfo& rFootnoteInfo = rDoc.GetFootnoteInfo();
+    IDocumentRedlineAccess const& rIDRA(rDoc.getIDocumentRedlineAccess());
 
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
-    SwRootFrame const* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = pDoc->GetAllLayouts();
+    SwRootFrame const* pLayout = rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    o3tl::sorted_vector<SwRootFrame*> aAllLayouts = rDoc.GetAllLayouts();
     // For normal Footnotes per-chapter and per-document numbering are treated separately.
     // For Endnotes we only have document-wise numbering.
     if( FTNNUM_CHAPTER == rFootnoteInfo.m_eNum )
@@ -294,7 +294,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
             }
         }
 
-        const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
+        const SwOutlineNodes& rOutlNds = rDoc.GetNodes().GetOutLineNds();
         sal_uInt16 nNo = 1;     // Number for the Footnotes
         sal_uInt16 nNoNo = 1;
         size_t nFootnoteIdx = 0;     // Index into theFootnoteIdx array

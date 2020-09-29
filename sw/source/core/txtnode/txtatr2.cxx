@@ -114,10 +114,10 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
     if (!rFormat.GetValue().isEmpty())
     {
-        SwDoc* pDoc = GetTextNode().GetDoc();
+        SwDoc& rDoc = GetTextNode().GetDoc();
         if( !IsVisitedValid() )
         {
-            SetVisited( pDoc->IsVisitedURL( rFormat.GetValue() ) );
+            SetVisited( rDoc.IsVisitedURL( rFormat.GetValue() ) );
             SetVisitedValid( true );
         }
 
@@ -130,22 +130,22 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
         // JP 10.02.2000, Bug 72806: don't modify the doc for getting the
         //      correct charstyle.
-        bool bResetMod = !pDoc->getIDocumentState().IsModified();
+        bool bResetMod = !rDoc.getIDocumentState().IsModified();
         Link<bool,void> aOle2Lnk;
         if ( bResetMod )
         {
-            aOle2Lnk = pDoc->GetOle2Link();
-            pDoc->SetOle2Link( Link<bool,void>() );
+            aOle2Lnk = rDoc.GetOle2Link();
+            rDoc.SetOle2Link( Link<bool,void>() );
         }
 
         pRet = IsPoolUserFormat( nId )
-               ? pDoc->FindCharFormatByName( rStr )
-               : pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+               ? rDoc.FindCharFormatByName( rStr )
+               : rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
         if ( bResetMod )
         {
-            pDoc->getIDocumentState().ResetModified();
-            pDoc->SetOle2Link( aOle2Lnk );
+            rDoc.getIDocumentState().ResetModified();
+            rDoc.SetOle2Link( aOle2Lnk );
         }
     }
 
@@ -231,7 +231,7 @@ SwCharFormat* SwTextRuby::GetCharFormat()
 
     if( !rFormat.GetText().isEmpty() )
     {
-        const SwDoc* pDoc = GetTextNode().GetDoc();
+        const SwDoc& rDoc = GetTextNode().GetDoc();
         const OUString& rStr = rFormat.GetCharFormatName();
         const sal_uInt16 nId = rStr.isEmpty()
                              ? static_cast<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
@@ -239,22 +239,22 @@ SwCharFormat* SwTextRuby::GetCharFormat()
 
         // JP 10.02.2000, Bug 72806: don't modify the doc for getting the
         //              correct charstyle.
-        const bool bResetMod = !pDoc->getIDocumentState().IsModified();
+        const bool bResetMod = !rDoc.getIDocumentState().IsModified();
         Link<bool,void> aOle2Lnk;
         if( bResetMod )
         {
-            aOle2Lnk = pDoc->GetOle2Link();
-            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link<bool,void>() );
+            aOle2Lnk = rDoc.GetOle2Link();
+            const_cast<SwDoc&>(rDoc).SetOle2Link( Link<bool,void>() );
         }
 
         pRet = IsPoolUserFormat( nId )
-                ? pDoc->FindCharFormatByName( rStr )
-                : const_cast<SwDoc*>(pDoc)->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+                ? rDoc.FindCharFormatByName( rStr )
+                : const_cast<SwDoc&>(rDoc).getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
         if( bResetMod )
         {
-            const_cast<SwDoc*>(pDoc)->getIDocumentState().ResetModified();
-            const_cast<SwDoc*>(pDoc)->SetOle2Link( aOle2Lnk );
+            const_cast<SwDoc&>(rDoc).getIDocumentState().ResetModified();
+            const_cast<SwDoc&>(rDoc).SetOle2Link( aOle2Lnk );
         }
     }
 

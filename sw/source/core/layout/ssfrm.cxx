@@ -426,8 +426,8 @@ void SwContentFrame::DestroyImpl()
         pCNd = static_cast<SwTextFrame*>(this)->GetTextNodeFirst();
     }
     // IsInDtor shouldn't be happening with ViewShell owning layout
-    assert(nullptr == pCNd || !pCNd->GetDoc()->IsInDtor());
-    if (nullptr != pCNd && !pCNd->GetDoc()->IsInDtor())
+    assert(nullptr == pCNd || !pCNd->GetDoc().IsInDtor());
+    if (nullptr != pCNd && !pCNd->GetDoc().IsInDtor())
     {
         //Unregister from root if I'm still in turbo there.
         SwRootFrame *pRoot = getRootFrame();
@@ -451,7 +451,7 @@ void SwTextFrame::RegisterToNode(SwTextNode & rNode, bool const isForceNodeAsFir
     {   // nothing registered here, in particular no delete redlines (insert
         // redline might end on empty node where delete rl starts, should be ok)
         assert(m_pMergedPara->pFirstNode->GetIndex() + 1 == rNode.GetIndex());
-        assert(rNode.GetDoc()->getIDocumentRedlineAccess().GetRedlinePos(
+        assert(rNode.GetDoc().getIDocumentRedlineAccess().GetRedlinePos(
             *m_pMergedPara->pFirstNode, RedlineType::Delete) == SwRedlineTable::npos);
     }
     assert(&rNode != GetDep());

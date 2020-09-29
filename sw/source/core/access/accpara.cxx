@@ -1452,14 +1452,14 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     std::unique_ptr<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
-        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
                                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                                RES_PARATR_BEGIN, RES_PARATR_END - 1,
                                RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} ) );
     }
     else
     {
-        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
                                svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} ) );
     }
     // #i82637# - From the perspective of the a11y API the default character
@@ -1470,7 +1470,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     // get default paragraph attributes, if needed, and merge these into <pSet>
     if ( !bOnlyCharAttrs )
     {
-        SfxItemSet aParaSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+        SfxItemSet aParaSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
                              svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1,
                              RES_FRMATR_BEGIN, RES_FRMATR_END - 1>{} );
         pTextNode->SwContentNode::GetAttr( aParaSet );
@@ -1481,7 +1481,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect!" );
     if ( pTextNode->GetTextColl() )
     {
-        SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+        SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
                              svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>{} );
         SetPutRecursive( aCharSet, pTextNode->GetTextColl()->GetAttrSet() );
         pSet->Put( aCharSet );
@@ -1762,7 +1762,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
     std::unique_ptr<SfxItemSet> pSet;
     pSet.reset(
         new SfxItemSet(
-            const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+            const_cast<SwAttrPool&>(pTextNode->GetDoc().GetAttrPool()),
             svl::Items<
                 RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
                 RES_PARATR_TABSTOP, RES_PARATR_TABSTOP,

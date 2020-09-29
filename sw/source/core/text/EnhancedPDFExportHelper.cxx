@@ -236,8 +236,8 @@ bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextN
 {
     bool bRet = false;
     SwNodeIndex aIdx( rNode );
-    const SwDoc* pDoc = rNode.GetDoc();
-    const SwNodes& rNodes = pDoc->GetNodes();
+    const SwDoc& rDoc = rNode.GetDoc();
+    const SwNodes& rNodes = rDoc.GetNodes();
     const SwNode* pNode = &rNode;
     const SwNumRule* pNumRule = rNode.GetNumRule();
 

@@ -240,7 +240,7 @@ public:
     void Normalize(bool bPointFirst = true);
 
     /// @return the document (SwDoc) at which the PaM is registered
-    SwDoc* GetDoc() const   { return m_pPoint->nNode.GetNode().GetDoc(); }
+    SwDoc* GetDoc() const   { return &m_pPoint->nNode.GetNode().GetDoc(); }
 
           SwPosition& GetBound( bool bOne = true )
                             { return bOne ? m_Bound1 : m_Bound2; }

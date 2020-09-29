@@ -2536,7 +2536,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
             // bookmark is marked as hidden with conditions
             if (!pBookmark->GetHideCondition().isEmpty())
             {
-                SwDoc& rDoc = *const_cast<SwDoc*>(rNode.GetDoc());
+                SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
                 SwCalc aCalc(rDoc);
                 rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, rNode.GetIndex(), SAL_MAX_INT32);
 
