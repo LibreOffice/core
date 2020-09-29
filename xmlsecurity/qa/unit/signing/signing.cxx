@@ -57,7 +57,6 @@
 #if HAVE_FEATURE_PDFIUM
 #include <fpdf_annot.h>
 #include <fpdfview.h>
-#include <cpp/fpdf_scopers.h>
 #endif
 
 using namespace com::sun::star;
@@ -647,16 +646,16 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
-    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(/*nIndex=*/0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4
     // - Actual  : 0
     // i.e. the signature was there, but it was empty / not visible.
-    CPPUNIT_ASSERT_EQUAL(4, FPDFAnnot_GetObjectCount(pAnnot.get()));
+    CPPUNIT_ASSERT_EQUAL(4, pAnnot->getObjectCount());
 }
 #endif
 
