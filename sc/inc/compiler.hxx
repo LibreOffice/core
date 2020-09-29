@@ -287,6 +287,7 @@ private:
     std::queue<OpCode> maPendingOpCodes; // additional opcodes generated from a single symbol
 
     const CharClass* pCharClass; // which character classification is used for parseAnyToken and upper/lower
+    bool        mbCharClassesDiffer;    // whether pCharClass and current system locale's CharClass differ
     sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
