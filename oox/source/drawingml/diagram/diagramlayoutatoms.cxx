@@ -1308,7 +1308,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 fShapeWidth = fShapeHeight * fChildAspectRatio;
             }
 
-            double fSpaceFromConstraint = 0;
+            double fSpaceFromConstraint = 1.0;
             LayoutPropertyMap aPropertiesByName;
             std::map<sal_Int32, LayoutProperty> aPropertiesByType;
             LayoutProperty& rParent = aPropertiesByName[""];
@@ -1316,7 +1316,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             rParent[XML_h] = fShapeHeight;
             for (const auto& rConstr : rConstraints)
             {
-                if (rConstr.mnRefType == XML_h)
+                if (rConstr.mnRefType == XML_w || rConstr.mnRefType == XML_h)
                 {
                     if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
                         fSpaceFromConstraint = rConstr.mfFactor;
@@ -1379,7 +1379,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 aShapeWidths[i] = it->second;
             }
 
-            bool bSpaceFromConstraints = fSpaceFromConstraint != 0;
+            bool bSpaceFromConstraints = fSpaceFromConstraint != 1.0;
 
             const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
             sal_Int32 nIncX = 1;
@@ -1399,6 +1399,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
+            sal_Int32 nMaxRowWidth = 0;
             if (nCount <= fChildAspectRatio)
                 // Child aspect ratio request (width/height) is N, and we have at most N shapes.
                 // This means we don't need multiple columns.
@@ -1408,8 +1409,22 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 for ( ; nRow<nCount; nRow++)
                 {
                     nCol = std::ceil(static_cast<double>(nCount) / nRow);
-                    if ((fShapeHeight * nRow) / (fShapeWidth * nCol) >= fAspectRatio)
+                    sal_Int32 nRowWidth = 0;
+                    for (sal_Int32 i = 0; i < nCol; ++i)
                     {
+                        if (i >= nCount)
+                        {
+                            break;
+                        }
+
+                        nRowWidth += aShapeWidths[i];
+                    }
+                    if ((fShapeHeight * nRow) / nRowWidth >= fAspectRatio)
+                    {
+                        if (nRowWidth > nMaxRowWidth)
+                        {
+                            nMaxRowWidth = nRowWidth;
+                        }
                         break;
                     }
                 }
@@ -1457,35 +1472,57 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             switch(aContDir)
             {
                 case XML_sameDir:
+                {
+                sal_Int32 nRowHeight = 0;
                 for (auto & aCurrShape : rShape->getChildren())
                 {
                     aCurrShape->setPosition(aCurrPos);
-                    aCurrShape->setSize(aChildSize);
-                    aCurrShape->setChildSize(aChildSize);
+                    awt::Size aCurrSize(aChildSize);
+                    // aShapeWidths items are a portion of nMaxRowWidth. We want the same ratio,
+                    // based on the original parent width, ignoring the aspect ratio request.
+                    double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
+                    if (nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans)
+                    {
+                        // We can only work from constraints if spacing is represented by a real
+                        // child shape.
+                        aCurrSize.Width = rShape->getSize().Width * fWidthFactor;
+                    }
+                    if (fChildAspectRatio)
+                    {
+                        aCurrSize.Height = aCurrSize.Width / fChildAspectRatio;
+                    }
+                    if (aCurrSize.Height > nRowHeight)
+                    {
+                        nRowHeight = aCurrSize.Height;
+                    }
+                    aCurrShape->setSize(aCurrSize);
+                    aCurrShape->setChildSize(aCurrSize);
 
                     index++; // counts index of child, helpful for positioning.
 
                     if(index%nCol==0 || ((index/nCol)+1)!=nRow)
-                        aCurrPos.X += nIncX * (aChildSize.Width + fSpace*aChildSize.Width);
+                        aCurrPos.X += nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width);
 
                     if(++nColIdx == nCol) // condition for next row
                     {
                         // if last row, then position children according to number of shapes.
                         if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol)
                             // position first child of last row
-                            aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
+                            aCurrPos.X = nStartX + (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width))/2;
                         else
                             // if not last row, positions first child of that row
                             aCurrPos.X = nStartX;
-                        aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
+                        aCurrPos.Y += nIncY * (nRowHeight + fSpace*nRowHeight);
                         nColIdx = 0;
+                        nRowHeight = 0;
                     }
 
                     // positions children in the last row.
                     if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow)
-                        aCurrPos.X += (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
+                        aCurrPos.X += (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width));
                 }
                 break;
+                }
                 case XML_revDir:
                 for (auto & aCurrShape : rShape->getChildren())
                 {
