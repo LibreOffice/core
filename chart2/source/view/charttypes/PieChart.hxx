@@ -107,8 +107,6 @@ struct PieLabelInfo;
 
     bool                performLabelBestFitInnerPlacement( ShapeParam& rShapeParam
                                 , PieLabelInfo const & rPieLabelInfo );
-    static void         performLabelBestFitOuterPlacement( ShapeParam& rShapeParam
-                                , PieLabelInfo const & rPieLabelInfo );
 
 private: //member
     std::unique_ptr<PiePositionHelper>

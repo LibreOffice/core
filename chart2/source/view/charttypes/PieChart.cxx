@@ -389,26 +389,51 @@ void PieChart::createTextLabelShape(
          *  First off the routine try to place the label inside the related pie slice,
          *  if this is not possible the label is placed outside.
          */
-        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo)
-            && m_aAvailableOuterRect.getWidth())
+        if (!performLabelBestFitInnerPlacement(rParam, aPieLabelInfo))
         {
-            double fAngleDegree
-                = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
-            while (fAngleDegree > 360.0)
-                fAngleDegree -= 360.0;
-            while (fAngleDegree < 0.0)
-                fAngleDegree += 360.0;
+            if (m_aAvailableOuterRect.getWidth())
+            {
+                double fAngleDegree = rParam.mfUnitCircleStartAngleDegree
+                                      + rParam.mfUnitCircleWidthAngleDegree / 2.0;
+                while (fAngleDegree > 360.0)
+                    fAngleDegree -= 360.0;
+                while (fAngleDegree < 0.0)
+                    fAngleDegree += 360.0;
 
-            if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
-                fTextMaximumFrameWidth
-                    = 0.8 * (m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX());
-            else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
-                fTextMaximumFrameWidth = 0.8 * m_aAvailableOuterRect.getWidth();
-            else
-                fTextMaximumFrameWidth
-                    = 0.8 * (aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX());
+                if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
+                    fTextMaximumFrameWidth
+                        = 0.8
+                          * (m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX());
+                else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
+                    fTextMaximumFrameWidth = 0.8 * m_aAvailableOuterRect.getWidth();
+                else
+                    fTextMaximumFrameWidth
+                        = 0.8
+                          * (aPieLabelInfo.aFirstPosition.getX() - m_aAvailableOuterRect.getMinX());
 
-            nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+                nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+            }
+
+            nScreenValueOffsetInRadiusDirection = (m_nDimension != 3) ? 150 : 0;
+            aScreenPosition2D
+                = aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(
+                    eAlignment, css::chart::DataLabelPlacement::OUTSIDE,
+                    rParam.mfUnitCircleStartAngleDegree,
+                    rParam.mfUnitCircleWidthAngleDegree, rParam.mfUnitCircleInnerRadius,
+                    rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ + 0.5, 0);
+            aPieLabelInfo.aFirstPosition
+                = basegfx::B2IVector(aScreenPosition2D.X, aScreenPosition2D.Y);
+
+            //add a scaling independent Offset if requested
+            if (nScreenValueOffsetInRadiusDirection != 0)
+            {
+                basegfx::B2IVector aDirection(aScreenPosition2D.X - aOrigin.X,
+                                              aScreenPosition2D.Y - aOrigin.Y);
+                aDirection.setLength(nScreenValueOffsetInRadiusDirection);
+                aScreenPosition2D.X += aDirection.getX();
+                aScreenPosition2D.Y += aDirection.getY();
+            }
+
             uno::Reference<drawing::XShapes> xShapes(xChild->getParent(), uno::UNO_QUERY);
             xShapes->remove(aPieLabelInfo.xTextShape);
             aPieLabelInfo.xTextShape
@@ -420,7 +445,6 @@ void PieChart::createTextLabelShape(
                 return;
 
             aPieLabelInfo.xLabelGroupShape.set(xChild->getParent(), uno::UNO_QUERY);
-            performLabelBestFitOuterPlacement(rParam, aPieLabelInfo);
         }
     }
 
@@ -1606,57 +1630,6 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
               "      new position = (" << aNewPos.X << "," << aNewPos.Y << ")" );
 
     return true;
-}
-
-void PieChart::performLabelBestFitOuterPlacement(ShapeParam& rShapeParam,
-                                                 PieLabelInfo const& rPieLabelInfo)
-{
-    awt::Point aOldPos(rPieLabelInfo.xLabelGroupShape->getPosition());
-    basegfx::B2IVector aTranslationVector = rPieLabelInfo.aFirstPosition - rPieLabelInfo.aOrigin;
-    awt::Point aScreenPosition2D(aOldPos.X + aTranslationVector.getX(),
-                                 aOldPos.Y + aTranslationVector.getY());
-
-    double fAngleDegree
-        = rShapeParam.mfUnitCircleStartAngleDegree + rShapeParam.mfUnitCircleWidthAngleDegree / 2.0;
-    ::basegfx::B2IRectangle aBb(lcl_getRect(rPieLabelInfo.xLabelGroupShape));
-    double fLabelWidth = aBb.getWidth();
-    double fLabelHeight = aBb.getHeight();
-
-    while (fAngleDegree > 360.0)
-        fAngleDegree -= 360.0;
-    while (fAngleDegree < 0.0)
-        fAngleDegree += 360.0;
-
-    if (fAngleDegree <= 22.5 || fAngleDegree >= 337.5)
-        aScreenPosition2D.X += fLabelWidth / 2;
-    else if (fAngleDegree < 67.5)
-    {
-        aScreenPosition2D.X += fLabelWidth / 2;
-        aScreenPosition2D.Y -= fLabelHeight / 2;
-    }
-    else if (fAngleDegree < 112.5)
-        aScreenPosition2D.Y -= fLabelHeight / 2;
-    else if (fAngleDegree <= 157.5)
-    {
-        aScreenPosition2D.X -= fLabelWidth / 2;
-        aScreenPosition2D.Y -= fLabelHeight / 2;
-    }
-    else if (fAngleDegree <= 202.5)
-        aScreenPosition2D.X -= fLabelWidth / 2;
-    else if (fAngleDegree < 247.5)
-    {
-        aScreenPosition2D.X -= fLabelWidth / 2;
-        aScreenPosition2D.Y += fLabelHeight / 2;
-    }
-    else if (fAngleDegree < 292.5)
-        aScreenPosition2D.Y += fLabelHeight / 2;
-    else
-    {
-        aScreenPosition2D.X += fLabelWidth / 2;
-        aScreenPosition2D.Y += fLabelHeight / 2;
-    }
-
-    rPieLabelInfo.xLabelGroupShape->setPosition(aScreenPosition2D);
 }
 
 } //namespace chart
