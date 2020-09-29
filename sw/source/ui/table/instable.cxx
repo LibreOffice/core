@@ -24,6 +24,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <viewopt.hxx>
 #include <comphelper/lok.hxx>
+#include <strings.hrc>
 
 #define ROW_COL_PROD 16384
 
@@ -77,6 +78,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     , m_xLbFormat(m_xBuilder->weld_tree_view("formatlbinstable"))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "previewinstable", m_aWndPreview))
     , m_xStyleFrame(m_xBuilder->weld_frame("stylesframe"))
+    , m_xWarning(m_xBuilder->weld_label("lbwarning"))
 {
     if (comphelper::LibreOfficeKit::isActive())
         m_xStyleFrame->hide();
@@ -229,6 +231,37 @@ IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry&, rEdit, void )
 
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, weld::SpinButton&, rEdit, void )
 {
+
+    sal_Int64 rRow = m_xRowNF->get_value();
+    sal_Int64 rCol = m_xColNF->get_value();
+
+    m_xWarning->set_label(SwResId(STR_WARNING));
+
+
+
+    if (rRow > 255)
+    {
+        m_xRowNF->set_message_type(weld::EntryMessageType::Warning);
+        m_xWarning->set_visible(true);
+    }
+    else
+    {
+        m_xRowNF->set_message_type(weld::EntryMessageType::Normal);
+    }
+    if (rCol > 63)
+    {
+        m_xColNF->set_message_type(weld::EntryMessageType::Warning);
+        m_xWarning->set_visible(true);
+    }
+    else
+    {
+        m_xColNF->set_message_type(weld::EntryMessageType::Normal);
+    }
+    if (rRow <= 255 && rCol <= 63)
+    {
+        m_xWarning->set_visible(false);
+    }
+
     if(&rEdit == m_xColNF.get())
     {
         sal_Int64 nCol = m_xColNF->get_value();

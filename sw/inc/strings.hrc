@@ -24,6 +24,7 @@
 #define NNC_(Context, StringSingular, StringPlural) reinterpret_cast<char const *>(Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
 // Format names
+#define STR_WARNING                             NC_("STR_WARNING", "Warning : Large tables may adversely affect performance and compatibility")
 #define STR_POOLCHR_STANDARD                    NC_("STR_POOLCHR_STANDARD", "Default Character Style")
 #define STR_POOLCHR_FOOTNOTE                    NC_("STR_POOLCHR_FOOTNOTE", "Footnote Characters")
 #define STR_POOLCHR_PAGENO                      NC_("STR_POOLCHR_PAGENO", "Page Number")
