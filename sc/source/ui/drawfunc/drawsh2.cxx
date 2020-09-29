@@ -339,6 +339,35 @@ static void setupFillColorForChart(SfxViewShell* pShell, SfxItemSet& rSet)
                                     pShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
                                             (".uno:FillColor=" + std::to_string(nFillColor)).c_str());
                             }
+
+                            if (comphelper::LibreOfficeKit::isActive() && xInfo->hasPropertyByName("FillGradientName"))
+                            {
+                                OUString aGradientName;
+                                xPropSet->getPropertyValue("FillGradientName") >>= aGradientName;
+
+                                ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
+                                if( xChartController.is() )
+                                {
+                                    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xChartController->getModel(), css::uno::UNO_QUERY);
+
+                                    if (xFact.is())
+                                    {
+                                        css::uno::Reference<css::container::XNameAccess> xNameAccess(
+                                            xFact->createInstance("com.sun.star.drawing.GradientTable"), css::uno::UNO_QUERY);
+
+                                        if (xNameAccess.is() && xNameAccess->hasByName(aGradientName))
+                                        {
+                                            css::uno::Any aAny = xNameAccess->getByName(aGradientName);
+
+                                            XFillGradientItem aItem;
+                                            aItem.SetName(aGradientName);
+                                            aItem.PutValue(aAny, MID_FILLGRADIENT);
+
+                                            rSet.Put(aItem);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
