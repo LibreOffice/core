@@ -467,6 +467,8 @@ std::unique_ptr<PDFiumAnnotation> PDFiumAnnotation::getLinked(OString const& rKe
     return pPDFiumAnnotation;
 }
 
+int PDFiumAnnotation::getObjectCount() { return FPDFAnnot_GetObjectCount(mpAnnotation); }
+
 PDFiumTextPage::PDFiumTextPage(FPDF_TEXTPAGE pTextPage)
     : mpTextPage(pTextPage)
 {

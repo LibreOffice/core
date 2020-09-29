@@ -71,6 +71,7 @@ public:
     bool hasKey(OString const& rKey);
     OUString getString(OString const& rKey);
     std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
+    int getObjectCount();
 };
 
 class PDFiumTextPage;
