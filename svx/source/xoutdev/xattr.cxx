@@ -2036,6 +2036,24 @@ XGradient XGradient::fromJSON(const OUString& rJSON)
     return lcl_buildGradientFromStringMap(aMap);
 }
 
+css::awt::Gradient XGradient::toGradientUNO()
+{
+    css::awt::Gradient aGradient;
+
+    aGradient.Style = this->GetGradientStyle();
+    aGradient.StartColor = static_cast<sal_Int32>(this->GetStartColor());
+    aGradient.EndColor = static_cast<sal_Int32>(this->GetEndColor());
+    aGradient.Angle = static_cast<short>(this->GetAngle());
+    aGradient.Border = this->GetBorder();
+    aGradient.XOffset = this->GetXOffset();
+    aGradient.YOffset = this->GetYOffset();
+    aGradient.StartIntensity = this->GetStartIntens();
+    aGradient.EndIntensity = this->GetEndIntens();
+    aGradient.StepCount = this->GetSteps();
+
+    return aGradient;
+}
+
 XGradient::XGradient() :
     eStyle( css::awt::GradientStyle_LINEAR ),
     aStartColor( COL_BLACK ),

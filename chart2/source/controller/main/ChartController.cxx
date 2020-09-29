@@ -1112,6 +1112,10 @@ void SAL_CALL ChartController::dispatch(
             this->executeDispatch_FillColor(nColor);
         }
     }
+    else if(aCommand.startsWith("FillGradient"))
+    {
+        this->executeDispatch_FillGradient(aCommand.copy(aCommand.indexOf('=') + 1));
+    }
     else if(aCommand == "Paste")
         this->executeDispatch_Paste();
     else if(aCommand == "Copy" )
