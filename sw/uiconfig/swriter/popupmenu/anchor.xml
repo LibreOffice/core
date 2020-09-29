@@ -8,7 +8,6 @@
  *
 -->
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
-  <menu:menuitem menu:id=".uno:SetAnchorToPage" menu:style="radio"/>
   <menu:menuitem menu:id=".uno:SetAnchorToPara" menu:style="radio"/>
   <menu:menuitem menu:id=".uno:SetAnchorAtChar" menu:style="radio"/>
   <menu:menuitem menu:id=".uno:SetAnchorToChar" menu:style="radio"/>
