@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63192a76_d1a8ccbc",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "Including !bSimpleArea here is wrong, rows can be deleted also for non-contiguous selections.",
+      "range": {
+        "startLine": 247,
+        "startChar": 29,
+        "endLine": 247,
+        "endChar": 40
+      },
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb52b8be_f02cbe40",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "This looks wrong. if the selection already is not editable it also should not be deletable.",
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ec5587_ef3f8500",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "deletions",
+      "range": {
+        "startLine": 250,
+        "startChar": 34,
+        "endLine": 250,
+        "endChar": 44
+      },
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ef1df09_ac1567ae",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "Including !bSimpleArea here is wrong, columns can be deleted also for non-contiguous selections.",
+      "range": {
+        "startLine": 277,
+        "startChar": 29,
+        "endLine": 277,
+        "endChar": 40
+      },
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21c19d5f_4368daea",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "This looks wrong. if the selection already is not editable it also should not be deletable.",
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99f37281_e6f12bd4",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:53:03Z",
+      "side": 1,
+      "message": "deletions",
+      "range": {
+        "startLine": 280,
+        "startChar": 34,
+        "endLine": 280,
+        "endChar": 44
+      },
+      "revId": "58e7a6c90cb2d8ac308704de369cdaff900877af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
