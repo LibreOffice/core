@@ -360,6 +360,12 @@ void ConstraintAtom::parseConstraint(std::vector<Constraint>& rConstraints,
                 bRequireForName = false;
                 break;
         }
+        switch (maConstraint.mnPointType)
+        {
+            case XML_sibTrans:
+                bRequireForName = false;
+                break;
+        }
     }
 
     if (bRequireForName && maConstraint.msForName.isEmpty())
@@ -455,6 +461,12 @@ namespace
  */
 void ApplyConstraintToLayout(const Constraint& rConstraint, LayoutPropertyMap& rProperties)
 {
+    // TODO handle the case when we have ptType="...", not forName="...".
+    if (rConstraint.msForName.isEmpty())
+    {
+        return;
+    }
+
     const LayoutPropertyMap::const_iterator aRef = rProperties.find(rConstraint.msRefForName);
     if (aRef == rProperties.end())
         return;
@@ -1284,8 +1296,24 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
                 break;
 
-            // Parse constraints, only self spacing from height as a start.
+            // Parse constraints.
+            double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
+            double fShapeHeight = rShape->getSize().Height;
+            double fShapeWidth = rShape->getSize().Width;
+            // Check if we have a child aspect ratio. If so, need to shrink one dimension to
+            // achieve that ratio.
+            if (fChildAspectRatio && fShapeHeight
+                && fChildAspectRatio < (fShapeWidth / fShapeHeight))
+            {
+                fShapeWidth = fShapeHeight * fChildAspectRatio;
+            }
+
             double fSpaceFromConstraint = 0;
+            LayoutPropertyMap aPropertiesByName;
+            std::map<sal_Int32, LayoutProperty> aPropertiesByType;
+            LayoutProperty& rParent = aPropertiesByName[""];
+            rParent[XML_w] = fShapeWidth;
+            rParent[XML_h] = fShapeHeight;
             for (const auto& rConstr : rConstraints)
             {
                 if (rConstr.mnRefType == XML_h)
@@ -1293,7 +1321,64 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
                         fSpaceFromConstraint = rConstr.mfFactor;
                 }
+
+                auto itRefForName = aPropertiesByName.find(rConstr.msRefForName);
+                if (itRefForName == aPropertiesByName.end())
+                {
+                    continue;
+                }
+
+                auto it = itRefForName->second.find(rConstr.mnRefType);
+                if (it == itRefForName->second.end())
+                {
+                    continue;
+                }
+
+                if (rConstr.mfValue != 0.0)
+                {
+                    continue;
+                }
+
+                sal_Int32 nValue = it->second * rConstr.mfFactor;
+
+                if (rConstr.mnPointType == XML_none)
+                {
+                    aPropertiesByName[rConstr.msForName][rConstr.mnType] = nValue;
+                }
+                else
+                {
+                    aPropertiesByType[rConstr.mnPointType][rConstr.mnType] = nValue;
+                }
             }
+
+            std::vector<sal_Int32> aShapeWidths(rShape->getChildren().size());
+            for (size_t i = 0; i < rShape->getChildren().size(); ++i)
+            {
+                ShapePtr pChild = rShape->getChildren()[i];
+                if (!pChild->getDataNodeType())
+                {
+                    // TODO handle the case when the requirement applies by name, not by point type.
+                    aShapeWidths[i] = fShapeWidth;
+                    continue;
+                }
+
+                auto itNodeType = aPropertiesByType.find(pChild->getDataNodeType());
+                if (itNodeType == aPropertiesByType.end())
+                {
+                    aShapeWidths[i] = fShapeWidth;
+                    continue;
+                }
+
+                auto it = itNodeType->second.find(XML_w);
+                if (it == itNodeType->second.end())
+                {
+                    aShapeWidths[i] = fShapeWidth;
+                    continue;
+                }
+
+                aShapeWidths[i] = it->second;
+            }
+
             bool bSpaceFromConstraints = fSpaceFromConstraint != 0;
 
             const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
@@ -1314,27 +1399,19 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
             sal_Int32 nCol = 1;
             sal_Int32 nRow = 1;
-            double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
             if (nCount <= fChildAspectRatio)
                 // Child aspect ratio request (width/height) is N, and we have at most N shapes.
                 // This means we don't need multiple columns.
                 nRow = nCount;
             else
             {
-                double fShapeHeight = rShape->getSize().Height;
-                double fShapeWidth = rShape->getSize().Width;
-                // Check if we have a child aspect ratio. If so, need to shrink one dimension to
-                // achieve that ratio.
-                if (fChildAspectRatio && fShapeHeight && fChildAspectRatio < (fShapeWidth/fShapeHeight))
-                {
-                    fShapeWidth = fShapeHeight * fChildAspectRatio;
-                }
-
                 for ( ; nRow<nCount; nRow++)
                 {
-                    nCol = (nCount+nRow-1) / nRow;
-                    if ((fShapeHeight / nCol) / (fShapeWidth / nRow) >= fAspectRatio)
+                    nCol = std::ceil(static_cast<double>(nCount) / nRow);
+                    if ((fShapeHeight * nRow) / (fShapeWidth * nCol) >= fAspectRatio)
+                    {
                         break;
+                    }
                 }
             }
 
