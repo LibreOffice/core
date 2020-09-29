@@ -2276,7 +2276,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         const sal_Int32 nMkContent = rPaM.GetMark()->nContent.GetIndex();
 
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
+        pContentStore->Save( m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
 
         SwTextNode * pOrigNode = pTNd;
         assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
@@ -2290,7 +2290,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
             {
                 if (!pContentStore->Empty())
                 {
-                    pContentStore->Restore(&m_rDoc, pOrigNode->GetIndex()-1, 0, true, eMode);
+                    pContentStore->Restore(m_rDoc, pOrigNode->GetIndex()-1, 0, true, eMode);
                 }
             });
         pTNd = pTNd->SplitContentNode(rPos, &restoreFunc)->GetTextNode();
@@ -3216,14 +3216,14 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     }
 
     const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-    pContentStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
+    pContentStore->Save( m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
     assert(pNode->IsTextNode());
     std::function<void (SwTextNode *, sw::mark::RestoreMode)> restoreFunc(
         [&](SwTextNode *const, sw::mark::RestoreMode const eMode)
         {
             if (!pContentStore->Empty())
             {   // move all bookmarks, TOXMarks, FlyAtCnt
-                pContentStore->Restore(&m_rDoc, rPos.nNode.GetIndex()-1, 0, true, eMode);
+                pContentStore->Restore(m_rDoc, rPos.nNode.GetIndex()-1, 0, true, eMode);
             }
             if (eMode & sw::mark::RestoreMode::NonFlys)
             {

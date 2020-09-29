@@ -322,7 +322,7 @@ bool SwNodes::InsBoxen( SwTableNode* pTableNd,
             // Handle Outline numbering correctly!
             SwTextNode* pTNd = new SwTextNode(
                             SwNodeIndex( *pSttNd->EndOfSectionNode() ),
-                            GetDoc()->GetDfltTextFormatColl(),
+                            GetDoc().GetDfltTextFormatColl(),
                             pAutoAttr );
             pTNd->ChgFormatColl( pTextColl );
         }
@@ -1010,7 +1010,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
     SwTableNode * pTableNd = new SwTableNode( rRange.aStart );
     new SwEndNode( rRange.aEnd, *pTableNd );
 
-    SwDoc* pDoc = GetDoc();
+    SwDoc& rDoc = GetDoc();
     std::vector<sal_uInt16> aPosArr;
     SwTable& rTable = pTableNd->GetTable();
     SwTableBox* pBox;
@@ -1065,7 +1065,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwPosition aCntPos( aSttIdx, SwIndex( pTextNd ));
 
         const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-        pContentStore->Save(pDoc, aSttIdx.GetIndex(), SAL_MAX_INT32);
+        pContentStore->Save(rDoc, aSttIdx.GetIndex(), SAL_MAX_INT32);
 
         if( T2T_PARA != cCh )
         {
@@ -1124,7 +1124,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
     lcl_BalanceTable(rTable, nMaxBoxes, *pTableNd, *pBoxFormat, *pTextColl,
             pUndo, &aPosArr);
-    lcl_SetTableBoxWidths(rTable, nMaxBoxes, *pBoxFormat, *pDoc, &aPosArr);
+    lcl_SetTableBoxWidths(rTable, nMaxBoxes, *pBoxFormat, rDoc, &aPosArr);
 
     return pTableNd;
 }
@@ -1385,7 +1385,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     //!! Thus no real problem here...
     new SwEndNode( aInsertIndex, *pTableNd );
 
-    SwDoc* pDoc = GetDoc();
+    SwDoc& rDoc = GetDoc();
     SwTable& rTable = pTableNd->GetTable();
     SwTableBox* pBox;
     sal_uInt16 nLines, nMaxBoxes = 0;
@@ -1443,7 +1443,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         nLines++;
     }
 
-    lcl_SetTableBoxWidths2(rTable, nMaxBoxes, *pBoxFormat, *pDoc);
+    lcl_SetTableBoxWidths2(rTable, nMaxBoxes, *pBoxFormat, rDoc);
 
     return pTableNd;
 }
@@ -1538,7 +1538,7 @@ static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
     }
     else
     {
-        SwDoc* pDoc = pDelPara->rNds.GetDoc();
+        SwDoc& rDoc = pDelPara->rNds.GetDoc();
         SwNodeRange aDelRg( *pBox->GetSttNd(), 0,
                             *pBox->GetSttNd()->EndOfSectionNode() );
         // Delete the Section
@@ -1559,26 +1559,26 @@ static void lcl_DelBox( SwTableBox* pBox, DelTabPara* pDelPara )
                 pDelPara->pLastNd->InsertText( OUString(pDelPara->cCh), aCntIdx,
                     SwInsertFlags::EMPTYEXPAND );
                 if( pDelPara->pUndo )
-                    pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
+                    pDelPara->pUndo->AddBoxPos( rDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
                 const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
                 const sal_Int32 nOldTextLen = aCntIdx.GetIndex();
-                pContentStore->Save(pDoc, nNdIdx, SAL_MAX_INT32);
+                pContentStore->Save(rDoc, nNdIdx, SAL_MAX_INT32);
 
                 pDelPara->pLastNd->JoinNext();
 
                 if( !pContentStore->Empty() )
-                    pContentStore->Restore( pDoc, pDelPara->pLastNd->GetIndex(), nOldTextLen );
+                    pContentStore->Restore( rDoc, pDelPara->pLastNd->GetIndex(), nOldTextLen );
             }
             else if( pDelPara->pUndo )
             {
                 ++aDelRg.aStart;
-                pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
+                pDelPara->pUndo->AddBoxPos( rDoc, nNdIdx, aDelRg.aEnd.GetIndex() );
             }
         }
         else if( pDelPara->pUndo )
-            pDelPara->pUndo->AddBoxPos( *pDoc, aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
+            pDelPara->pUndo->AddBoxPos( rDoc, aDelRg.aStart.GetIndex(), aDelRg.aEnd.GetIndex() );
         --aDelRg.aEnd;
         pDelPara->pLastNd = aDelRg.aEnd.GetNode().GetTextNode();
 
@@ -1687,7 +1687,7 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
 
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
-    const SwFrameFormats& rFlyArr = *GetDoc()->GetSpzFrameFormats();
+    const SwFrameFormats& rFlyArr = *GetDoc().GetSpzFrameFormats();
     for( auto pFly : rFlyArr )
     {
         SwFrameFormat *const pFormat = pFly;
@@ -3541,7 +3541,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
-    GetDoc()->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( &rDelTable );
+    GetDoc().getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( &rDelTable );
 
     // Sync the TableFormat's Width
     {

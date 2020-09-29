@@ -571,7 +571,7 @@ private:
 
 bool UndoManager::impl_DoUndoRedo(UndoOrRedoType undoOrRedo)
 {
-    SwDoc & rDoc(*GetUndoNodes().GetDoc());
+    SwDoc & rDoc(GetUndoNodes().GetDoc());
 
     UnoActionContext c(& rDoc); // exception-safe StartAllAction/EndAllAction
 

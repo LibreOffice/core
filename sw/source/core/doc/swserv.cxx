@@ -215,7 +215,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     if( nSttNd && nEndNd )
     {
         // Get LinkManager
-        const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc().getIDocumentLinksAdministration().GetLinkManager().GetLinks();
 
         // To avoid recursions: convert ServerType!
         SwServerObject::ServerModes eSave = m_eType;

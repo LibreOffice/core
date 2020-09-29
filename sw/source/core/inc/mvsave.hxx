@@ -78,8 +78,8 @@ namespace sw::mark
 
             virtual void Clear() =0;
             virtual bool Empty() =0;
-            virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
-            virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode = RestoreMode::All) =0;
+            virtual void Save(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
+            virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode = RestoreMode::All) =0;
             virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode = RestoreMode::All) =0;
             virtual ~ContentIdxStore() {};
             static std::shared_ptr<ContentIdxStore> Create();

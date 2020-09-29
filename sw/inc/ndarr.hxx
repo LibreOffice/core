@@ -299,8 +299,8 @@ public:
                                 bool const bCreateFrames = true);
 
     /// Which Doc contains the nodes-array?
-            SwDoc* GetDoc()         { return &m_rMyDoc; }
-    const   SwDoc* GetDoc() const   { return &m_rMyDoc; }
+            SwDoc& GetDoc()         { return m_rMyDoc; }
+    const   SwDoc& GetDoc() const   { return m_rMyDoc; }
 
     /** Search previous / next content node or table node with frames.
      If no end is given begin with the FrameIndex, else start search

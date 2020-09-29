@@ -118,9 +118,9 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
     // declare all fields as invalid, updating will happen
     // in the idle-handler of the doc
-    if( GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
-        rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
+    if( GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
+        &rNds.GetDoc() != &GetDoc() )
+        rNds.GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
 
     // NEVER include nodes from the RedLineArea
     sal_uLong nNd = rInsPos.GetIndex();
@@ -182,9 +182,9 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
     }
     else
     {
-        bool bSavePersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds));
-        bool bRestPersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this));
-        SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : nullptr;
+        bool bSavePersData(GetDoc().GetIDocumentUndoRedo().IsUndoNodes(rNds));
+        bool bRestPersData(GetDoc().GetIDocumentUndoRedo().IsUndoNodes(*this));
+        SwDoc* pDestDoc = &rNds.GetDoc() != &GetDoc() ? &rNds.GetDoc() : nullptr;
         OSL_ENSURE(!pDestDoc, "SwNodes::ChgNode(): "
             "the code to handle text fields here looks broken\n"
             "if the target is in a different document.");
@@ -255,7 +255,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                     if( pHts && pHts->Count() )
                     {
                         bool const bToUndo = !pDestDoc &&
-                            GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
+                            GetDoc().GetIDocumentUndoRedo().IsUndoNodes(rNds);
                         for( size_t i = pHts->Count(); i; )
                         {
                             SwTextAttr * const pAttr = pHts->Get( --i );
@@ -266,12 +266,12 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
                             case RES_TXTATR_INPUTFIELD:
                                 {
                                     SwTextField* pTextField = static_txtattr_cast<SwTextField*>(pAttr);
-                                    rNds.GetDoc()->getIDocumentFieldsAccess().InsDelFieldInFieldLst( !bToUndo, *pTextField );
+                                    rNds.GetDoc().getIDocumentFieldsAccess().InsDelFieldInFieldLst( !bToUndo, *pTextField );
 
                                     const SwFieldType* pTyp = pTextField->GetFormatField().GetField()->GetTyp();
                                     if ( SwFieldIds::Postit == pTyp->Which() )
                                     {
-                                        rNds.GetDoc()->GetDocShell()->Broadcast(
+                                        rNds.GetDoc().GetDocShell()->Broadcast(
                                             SwFormatFieldHint(
                                                 &pTextField->GetFormatField(),
                                                 ( pTextField->GetFormatField().IsFieldInDoc()
@@ -338,13 +338,13 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
 
     // declare all fields as invalid, updating will happen
     // in the idle-handler of the doc
-    GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
-    if( rNds.GetDoc() != GetDoc() )
-        rNds.GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
+    GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
+    if( &rNds.GetDoc() != &GetDoc() )
+        rNds.GetDoc().getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
 
     if( bNewFrames )
-        bNewFrames = &GetDoc()->GetNodes() == &rNds &&
-                    GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        bNewFrames = &GetDoc().GetNodes() == &rNds &&
+                    GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
 
     if( !bNewFrames )
         return;
@@ -571,8 +571,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
-                                    rNodes))
+                        if (GetDoc().GetIDocumentUndoRedo().IsUndoNodes(rNodes))
                         {
                             SwFrameFormat* pTableFormat = pTableNd->GetTable().GetFrameFormat();
                             pTableFormat->GetNotifier().Broadcast(SfxHint(SfxHintId::Dying));
@@ -605,7 +604,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // create EndNode
                             new SwEndNode( aIdx, *pTmp );
                         }
-                        else if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
+                        else if (GetDoc().GetIDocumentUndoRedo().IsUndoNodes(
                                     rNodes))
                         {
                             // use placeholder in UndoNodes array
@@ -667,7 +666,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         pSctNd->NodesArrChgd();
                         ++nSectNdCnt;
                         // tdf#132326 do not let frames survive in undo nodes
-                        if (!GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
+                        if (!GetDoc().GetIDocumentUndoRedo().IsUndoNodes(rNodes))
                         {
                             bNewFrames = false;
                         }
@@ -678,7 +677,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
         case SwNodeType::Section:
             if( !nLevel &&
-                GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
+                GetDoc().GetIDocumentUndoRedo().IsUndoNodes(rNodes))
             {
                 // here, a SectionDummyNode needs to be inserted at the current position
                 if( nInsPos ) // move everything until here
@@ -811,7 +810,7 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case SwNodeType::PlaceHolder:
-            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
+            if (GetDoc().GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 if( &rNodes == this ) // inside UndoNodesArray
                 {
@@ -1526,7 +1525,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             // Also, a selection is invalidated.
             pEnd->nContent = pStt->nContent;
             rPam.DeleteMark();
-            GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
+            GetDoc().GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
             return;
         }
@@ -1645,7 +1644,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     // Also, a selection is invalidated.
     *pEnd = *pStt;
     rPam.DeleteMark();
-    GetDoc()->GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
+    GetDoc().GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
 }
 
@@ -1842,7 +1841,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
             break;
 
         case SwNodeType::PlaceHolder:
-            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
+            if (GetDoc().GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 // than a SectionNode (start/end) is needed at the current
                 // InsPos; if so skip it, otherwise ignore current node
@@ -2031,7 +2030,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( SwNodeIndex& rFrameIdx,
     SwNode* pFrameNd = nullptr;
 
     // no layout -> skip
-    if( GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         SwNode* pSttNd = &rFrameIdx.GetNode();
 

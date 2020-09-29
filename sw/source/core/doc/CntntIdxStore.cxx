@@ -140,28 +140,28 @@ namespace
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCursorEntries.empty() && m_aShellCursorEntries.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) override
+        virtual void Save(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) override
         {
-            SaveBkmks(pDoc, nNode, nContent);
-            SaveRedlines(pDoc, nNode, nContent);
-            SaveFlys(pDoc, nNode, nContent, bSaveFlySplit);
-            SaveUnoCursors(pDoc, nNode, nContent);
-            SaveShellCursors(pDoc, nNode, nContent);
+            SaveBkmks(&rDoc, nNode, nContent);
+            SaveRedlines(&rDoc, nNode, nContent);
+            SaveFlys(&rDoc, nNode, nContent, bSaveFlySplit);
+            SaveUnoCursors(&rDoc, nNode, nContent);
+            SaveShellCursors(&rDoc, nNode, nContent);
         }
-        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode eMode = RestoreMode::All) override
+        virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode eMode = RestoreMode::All) override
         {
-            SwContentNode* pCNd = pDoc->GetNodes()[ nNode ]->GetContentNode();
+            SwContentNode* pCNd = rDoc.GetNodes()[ nNode ]->GetContentNode();
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             if (eMode & RestoreMode::NonFlys)
             {
-                RestoreBkmks(pDoc, aUpdater);
-                RestoreRedlines(pDoc, aUpdater);
+                RestoreBkmks(&rDoc, aUpdater);
+                RestoreRedlines(&rDoc, aUpdater);
                 RestoreUnoCursors(aUpdater);
                 RestoreShellCursors(aUpdater);
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(pDoc, aUpdater, bAuto);
+                RestoreFlys(&rDoc, aUpdater, bAuto);
             }
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode eMode = RestoreMode::All) override
