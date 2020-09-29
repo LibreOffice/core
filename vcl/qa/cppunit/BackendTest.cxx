@@ -711,6 +711,64 @@ public:
         CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(6, 6)));
     }
 
+    void testDrawAlphaBitmapMirrored()
+    {
+        // Normal virtual device.
+        ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+        // Virtual device with alpha.
+        ScopedVclPtr<VirtualDevice> alphaDevice
+            = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+        device->SetOutputSizePixel(Size(20, 20));
+        device->SetBackground(Wallpaper(COL_BLACK));
+        device->Erase();
+        alphaDevice->SetOutputSizePixel(Size(20, 20));
+        alphaDevice->SetBackground(Wallpaper(COL_BLACK));
+        alphaDevice->Erase();
+        Bitmap bitmap(Size(4, 4), 24);
+        AlphaMask alpha(Size(4, 4));
+        bitmap.Erase(COL_LIGHTBLUE);
+        {
+            BitmapScopedWriteAccess writeAccess(bitmap);
+            writeAccess->SetPixel(3, 3, COL_LIGHTRED);
+        }
+        // alpha 127 will make COL_LIGHTRED -> COL_RED and the same for blue
+        alpha.Erase(127);
+        // Normal device.
+        device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
+        device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
+        exportDevice("/tmp/draw_alpha_bitmap_mirrored_01.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(18, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(17, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, device->GetPixel(Point(3, 2)));
+        device->Erase();
+        device->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
+        device->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
+        exportDevice("/tmp/draw_alpha_bitmap_mirrored_02.png", device);
+        CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(18, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(17, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, device->GetPixel(Point(3, 2)));
+        device->Erase();
+        // Now with alpha device.
+        alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap));
+        alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap));
+        exportDevice("/tmp/draw_alpha_bitmap_mirrored_03.png", alphaDevice);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(18, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(17, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, alphaDevice->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, alphaDevice->GetPixel(Point(3, 2)));
+        alphaDevice->Erase();
+        alphaDevice->DrawBitmapEx(Point(5, 5), Size(-4, -4), BitmapEx(bitmap, alpha));
+        alphaDevice->DrawBitmapEx(Point(15, 15), Size(4, 4), BitmapEx(bitmap, alpha));
+        exportDevice("/tmp/draw_alpha_bitmap_mirrored_04.png", alphaDevice);
+        CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(18, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(17, 18)));
+        CPPUNIT_ASSERT_EQUAL(COL_RED, alphaDevice->GetPixel(Point(2, 2)));
+        CPPUNIT_ASSERT_EQUAL(COL_BLUE, alphaDevice->GetPixel(Point(3, 2)));
+        alphaDevice->Erase();
+    }
+
     void testTdf124848()
     {
         ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
@@ -832,6 +890,7 @@ public:
     CPPUNIT_TEST(testRadialGradientOfs);
 
     CPPUNIT_TEST(testDrawBlendExtended);
+    CPPUNIT_TEST(testDrawAlphaBitmapMirrored);
 
     CPPUNIT_TEST(testTdf124848);
     CPPUNIT_TEST(testTdf136171);
