@@ -1151,8 +1151,8 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    ScRange rRange;
-    rMark.GetMarkArea(rRange);
+    ScRange aRange;
+    rMark.GetMarkArea(aRange);
     SCTAB nMax = maTabs.size();
     for (const auto& rTab : rMark)
     {
@@ -1163,7 +1163,7 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
             maTabs[rTab]->Fill(nCol1, nRow1, nCol2, nRow2,
                             nFillCount, eFillDir, eFillCmd, eFillDateCmd,
                             nStepValue, nMaxValue, pProgress);
-            RefreshAutoFilter(rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rTab);
+            RefreshAutoFilter(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rTab);
         }
     }
 }
