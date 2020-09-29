@@ -223,8 +223,10 @@ IMPL_LINK_NOARG(ToolbarPopupContainer, FocusHdl, weld::Widget&, void)
 }
 
 InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
-                                         std::unique_ptr<WeldToolbarPopup> xPopup)
-    : ToolbarPopup(rFrame, pParent, "InterimDockParent", "svx/ui/interimdockparent.ui")
+                                         std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable)
+    : ToolbarPopup(rFrame, pParent,
+                   !bTearable ? OString("InterimDockParent") : OString("InterimTearableParent"),
+                   !bTearable ? OUString("svx/ui/interimdockparent.ui") : OUString("svx/ui/interimtearableparent.ui"))
     , m_xBox(get("box"))
     , m_xBuilder(Application::CreateInterimBuilder(m_xBox.get(), "svx/ui/interimparent.ui"))
     , m_xContainer(m_xBuilder->weld_container("container"))
