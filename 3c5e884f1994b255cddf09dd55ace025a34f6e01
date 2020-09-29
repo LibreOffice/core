@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b68eee56_53a850e8",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2979,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-29T10:02:41Z",
+      "side": 1,
+      "message": "Remove this, because it seems, MacOS Jenkins build doesn\u0027t support this C++17 feature, yet (see https://en.cppreference.com/w/cpp/utility/optional/operator_bool)",
+      "range": {
+        "startLine": 2979,
+        "startChar": 29,
+        "endLine": 2979,
+        "endChar": 41
+      },
+      "revId": "3c5e884f1994b255cddf09dd55ace025a34f6e01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7485ad4_bd50ef9e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2979,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-09-29T10:02:41Z",
+      "side": 1,
+      "message": "the same (similar C++17 feature: https://en.cppreference.com/w/cpp/utility/optional/value)",
+      "range": {
+        "startLine": 2979,
+        "startChar": 54,
+        "endLine": 2979,
+        "endChar": 62
+      },
+      "revId": "3c5e884f1994b255cddf09dd55ace025a34f6e01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
