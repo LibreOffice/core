@@ -29,8 +29,8 @@ then
             GDBCOMMANDFILE=$(mktemp)
             printf "info registers\nthread apply all backtrace full\n" \
                 >"$GDBCOMMANDFILE"
-            gdb -iex "add-auto-load-safe-path ${INSTDIR?}" -x "$GDBCOMMANDFILE" --batch "$guess" \
-                "$COREFILE" && found=x
+            PYTHONWARNINGS=default gdb -iex "add-auto-load-safe-path ${INSTDIR?}" \
+                -x "$GDBCOMMANDFILE" --batch "$guess" "$COREFILE" && found=x
             rm "$GDBCOMMANDFILE"
             echo
         fi
