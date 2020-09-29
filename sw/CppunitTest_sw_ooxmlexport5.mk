@@ -11,4 +11,13 @@
 
 $(eval $(call sw_ooxmlexport_test,5))
 
+$(eval $(call gb_CppunitTest_use_libraries,sw_ooxmlexport5, \
+    gie \
+))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,sw_ooxmlexport5, \
+    svt \
+    svx \
+))
+
 # vim: set noet sw=4 ts=4:
