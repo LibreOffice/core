@@ -1618,15 +1618,20 @@ void SdImportTestSmartArt::testSnakeRows()
     std::set<sal_Int32> aYPositions;
     for (sal_Int32 nChild = 0; nChild < xDiagram->getCount(); ++nChild)
     {
+        if (nChild == 0)
+        {
+            // Ignore background shape, we check how many rows actual children use.
+            continue;
+        }
         uno::Reference<drawing::XShape> xChild(xDiagram->getByIndex(nChild), uno::UNO_QUERY);
         aYPositions.insert(xChild->getPosition().Y);
     }
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 3
-    // - Actual  : 4
-    // i.e. one more unwanted row appeared. This is better, but the ideal would be just 2 rows.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aYPositions.size());
+    // - Expected: 2
+    // - Actual  : 3
+    // i.e. an unwanted row appeared.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aYPositions.size());
 
     xDocShRef->DoClose();
 }
