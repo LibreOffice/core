@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5ae5d65_ddadfdd9",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2396,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-29T17:47:12Z",
+      "side": 1,
+      "message": "Based on comment 15 in the bug report, this exclusion of all else should be correct.",
+      "range": {
+        "startLine": 2396,
+        "startChar": 17,
+        "endLine": 2396,
+        "endChar": 43
+      },
+      "revId": "7aaddb0b2222a2c10d6488e1f9a19fc1c5598fa3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
