@@ -1484,6 +1484,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     // GPU-accelerated drawing with SkShader should be fast enough to not need caching.
     if (isGPU())
         return image;
+    if (targetSize.IsEmpty())
+        return image;
     if (alphaBitmap && alphaBitmap->IsFullyOpaqueAsAlpha())
         alphaBitmap = nullptr; // the alpha can be ignored
     // Probably not much point in caching of just doing a copy.
