@@ -931,6 +931,7 @@ void GtkSalFrame::InitCommon()
     m_pDropTarget       = nullptr;
     m_pDragSource       = nullptr;
     m_bGeometryIsProvisional = false;
+    m_bIconSetWhileUnmapped = false;
     m_bTooltipBlocked   = false;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_pSalMenu          = nullptr;
@@ -1244,6 +1245,28 @@ void GtkSalFrame::SetTitle( const OUString& rTitle )
     }
 }
 
+void GtkSalFrame::SetIcon(const char* appicon)
+{
+    gtk_window_set_icon_name(GTK_WINDOW(m_pWindow), appicon);
+
+#if defined(GDK_WINDOWING_WAYLAND)
+    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
+    {
+        static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
+                                             dlsym(nullptr, "gdk_wayland_window_set_application_id"));
+        if (set_application_id)
+        {
+            GdkWindow* gdkWindow = gtk_widget_get_window(m_pWindow);
+            set_application_id(gdkWindow, appicon);
+
+            // gdk_wayland_window_set_application_id doesn't seem to work before
+            // the window is mapped, so set this for real when/if we are mapped
+            m_bIconSetWhileUnmapped = !gtk_widget_get_mapped(m_pWindow);
+        }
+    }
+#endif
+}
+
 void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 {
     if( (m_nStyle & (SalFrameStyleFlags::PLUG|SalFrameStyleFlags::SYSTEMCHILD|SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::INTRO|SalFrameStyleFlags::OWNERDRAWDECORATION))
@@ -1267,20 +1290,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
     else
         appicon = g_strdup ("libreoffice-startcenter");
 
-    gtk_window_set_icon_name (GTK_WINDOW (m_pWindow), appicon);
-
-#if defined(GDK_WINDOWING_WAYLAND)
-    if (DLSYM_GDK_IS_WAYLAND_DISPLAY(getGdkDisplay()))
-    {
-        static auto set_application_id = reinterpret_cast<void (*) (GdkWindow*, const char*)>(
-                                             dlsym(nullptr, "gdk_wayland_window_set_application_id"));
-        if (set_application_id)
-        {
-            GdkWindow* gdkWindow = gtk_widget_get_window(m_pWindow);
-            set_application_id(gdkWindow, appicon);
-        }
-    }
-#endif
+    SetIcon(appicon);
 
     g_free (appicon);
 }
@@ -3170,6 +3180,9 @@ void GtkSalFrame::signalSetFocus(GtkWindow*, GtkWidget* pWidget, gpointer frame)
 gboolean GtkSalFrame::signalMap(GtkWidget *, GdkEvent*, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    if (pThis->m_bIconSetWhileUnmapped)
+        pThis->SetIcon(gtk_window_get_icon_name(GTK_WINDOW(pThis->m_pWindow)));
 
     pThis->CallCallbackExc( SalEvent::Resize, nullptr );
     pThis->TriggerPaintEvent();
