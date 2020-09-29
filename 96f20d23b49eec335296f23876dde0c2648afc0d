@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "969396cd_32ca06f5",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-09-29T17:42:26Z",
+      "side": 1,
+      "message": "I remember Miklos telling me that OSL_ENSURE should be changed. osl/diagnose.h says OSL_ENSURE has been used for true assertions as well as for logged warnings, so it maps to SAL_WARN. Since I don\u0027t know whether this really ought to be a real assert, should I just leave it ambiguous as OSL_ENSURE, for someone more knowledgeable than I to eventually clean it up?\n\nI\u0027m going to back-track and set it back to OSL_ENSURE.",
+      "range": {
+        "startLine": 503,
+        "startChar": 8,
+        "endLine": 503,
+        "endChar": 19
+      },
+      "revId": "96f20d23b49eec335296f23876dde0c2648afc0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
