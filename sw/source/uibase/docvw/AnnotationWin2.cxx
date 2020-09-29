@@ -807,7 +807,7 @@ void SwAnnotationWin::SetPosAndSize()
         SwContentNode* pContentNd = nullptr;
         if (pTextNode)
         {
-            SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
+            SwNodes& rNds = pTextNode->GetDoc().GetNodes();
             pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
         }
         if (pContentNd)

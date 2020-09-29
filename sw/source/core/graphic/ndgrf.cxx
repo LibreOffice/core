@@ -183,7 +183,7 @@ bool SwGrfNode::ReRead(
         }
         else // no name anymore, so remove link
         {
-            GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
+            GetDoc().getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
             mxLink.clear();
         }
 
@@ -202,7 +202,7 @@ bool SwGrfNode::ReRead(
 
             if( mxLink.is() )
             {
-                if( getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
+                if( getLayoutFrame( GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
@@ -277,11 +277,11 @@ SwGrfNode::~SwGrfNode()
     // #i73788#
     mpThreadConsumer.reset();
 
-    SwDoc* pDoc = GetDoc();
+    SwDoc& rDoc = GetDoc();
     if( mxLink.is() )
     {
         OSL_ENSURE( !mbInSwapIn, "DTOR: I am still in SwapIn" );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
+        rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
         mxLink->Disconnect();
     }
     else
@@ -518,7 +518,7 @@ bool SwGrfNode::SavePersistentData()
     if( mxLink.is() )
     {
         OSL_ENSURE( !mbInSwapIn, "SavePersistentData: I am still in SwapIn" );
-        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
+        GetDoc().getIDocumentLinksAdministration().GetLinkManager().Remove( mxLink.get() );
         return true;
     }
 
@@ -810,7 +810,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
     OUString sGrfNm;
     sfx2::LinkManager::GetDisplayNames( mxLink.get(), nullptr, &sGrfNm );
     OUString sReferer;
-    SfxObjectShell * sh = GetDoc()->GetPersist();
+    SfxObjectShell * sh = GetDoc().GetPersist();
     if (sh != nullptr && sh->HasName())
     {
         sReferer = sh->GetMedium()->GetName();

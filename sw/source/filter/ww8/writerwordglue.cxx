@@ -519,14 +519,10 @@ namespace sw
             const OUString &rText = rTextNd.GetText();
 
             bool bParaIsRTL = false;
-            OSL_ENSURE(rTextNd.GetDoc(), "No document for node?, suspicious");
-            if (rTextNd.GetDoc())
+            if (SvxFrameDirection::Horizontal_RL_TB ==
+                rTextNd.GetDoc().GetTextDirection(SwPosition(rTextNd)))
             {
-                if (SvxFrameDirection::Horizontal_RL_TB ==
-                    rTextNd.GetDoc()->GetTextDirection(SwPosition(rTextNd)))
-                {
-                    bParaIsRTL = true;
-                }
+                bParaIsRTL = true;
             }
 
             using namespace ::com::sun::star::i18n;

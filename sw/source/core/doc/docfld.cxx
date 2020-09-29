@@ -990,7 +990,7 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
 void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFieldWhich )
 {
     const SwTextNode& rTextNd = rTField.GetTextNode();
-    const SwDoc& rDoc = *rTextNd.GetDoc();
+    const SwDoc& rDoc = rTextNd.GetDoc();
 
     // always the first! (in tab headline, header-/footer)
     Point aPt;
@@ -1042,7 +1042,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
 
 void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 {
-    const SwDoc& rDoc = *rSectNd.GetDoc();
+    const SwDoc& rDoc = rSectNd.GetDoc();
     std::unique_ptr<SetGetExpField> pNew;
 
     if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )

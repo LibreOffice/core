@@ -83,8 +83,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         return ERROR_GENERAL;
     }
 
-    SwDoc* pDoc = m_pContentNode->GetDoc();
-    if( pDoc->IsInDtor() || ChkNoDataFlag() )
+    SwDoc& rDoc = m_pContentNode->GetDoc();
+    if( rDoc.IsInDtor() || ChkNoDataFlag() )
     {
         return SUCCESS;
     }
@@ -112,7 +112,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             {
                 SwCallMouseEvent aCallEvent;
                 aCallEvent.Set( EVENT_OBJECT_IMAGE, pFormat );
-                pDoc->CallEvent( nEvent, aCallEvent );
+                rDoc.CallEvent( nEvent, aCallEvent );
             }
         }
         return SUCCESS; // That's it!
@@ -136,9 +136,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         Graphic aGrf;
 
         // tdf#124698 if any auth dialog is needed, find what the parent window should be
-        weld::Window* pDlgParent = GetFrameWeld(pDoc);
+        weld::Window* pDlgParent = GetFrameWeld(&rDoc);
 
-        if (pDoc->getIDocumentLinksAdministration().GetLinkManager().GetGraphicFromAny(rMimeType, rValue, aGrf, pDlgParent) &&
+        if (rDoc.getIDocumentLinksAdministration().GetLinkManager().GetGraphicFromAny(rMimeType, rValue, aGrf, pDlgParent) &&
             ( GraphicType::Default != aGrf.GetType() ||
               GraphicType::Default != rGrfObj.GetType() ) )
         {
@@ -179,9 +179,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rOrigGrfSize )
 {
     bool bRet = false;
-    SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell *pSh = pGrfNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     std::unique_ptr<CurrShell> pCurr;
-    if ( pGrfNd->GetDoc()->GetEditShell() )
+    if ( pGrfNd->GetDoc().GetEditShell() )
         pCurr.reset(new CurrShell( pSh ));
 
     Size aSz = rOrigGrfSize;
@@ -224,7 +224,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
             {
                 // If the graphic is anchored in a table, we need to recalculate
                 // the table rows
-                const SwDoc *pDoc = pGrfNd->GetDoc();
+                const SwDoc& rDoc = pGrfNd->GetDoc();
                 const SwPosition* pAPos = pFormat->GetAnchor().GetContentAnchor();
                 SwTableNode *pTableNd;
                 if (pAPos && nullptr != (pTableNd = pAPos->nNode.GetNode().FindTableNode()))
@@ -235,7 +235,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rO
                     if( pLayout )
                     {
                         const sal_uInt16 nBrowseWidth =
-                                    pLayout->GetBrowseWidthByTable( *pDoc );
+                                    pLayout->GetBrowseWidthByTable( rDoc );
                         if ( nBrowseWidth )
                         {
                             pLayout->Resize( nBrowseWidth, true, true,
@@ -299,7 +299,7 @@ bool SwBaseLink::SwapIn( bool bWaitForData, bool bNativFormat )
 
 void SwBaseLink::Closed()
 {
-    if( m_pContentNode && !m_pContentNode->GetDoc()->IsInDtor() )
+    if( m_pContentNode && !m_pContentNode->GetDoc().IsInDtor() )
     {
         // Delete the connection
         if( m_pContentNode->IsGrfNode() )

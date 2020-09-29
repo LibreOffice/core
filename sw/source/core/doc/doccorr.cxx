@@ -88,8 +88,8 @@ void PaMCorrAbs( const SwPaM& rRange,
     SwPosition const aStart( *rRange.Start() );
     SwPosition const aEnd( *rRange.End() );
     SwPosition const aNewPos( rNewPos );
-    SwDoc *const pDoc = aStart.nNode.GetNode().GetDoc();
-    SwCursorShell *const pShell = pDoc->GetEditShell();
+    SwDoc& rDoc = aStart.nNode.GetNode().GetDoc();
+    SwCursorShell *const pShell = rDoc.GetEditShell();
 
     if( pShell )
     {
@@ -120,8 +120,8 @@ void PaMCorrAbs( const SwPaM& rRange,
         }
     }
 
-    pDoc->cleanupUnoCursorTable();
-    for(const auto& pWeakUnoCursor : pDoc->mvUnoCursorTable)
+    rDoc.cleanupUnoCursorTable();
+    for(const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {
         auto pUnoCursor(pWeakUnoCursor.lock());
         if(!pUnoCursor)
@@ -243,11 +243,11 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 {
     const SwNode* pOldNode = &rOldNode.GetNode();
     SwPosition aNewPos( rNewPos );
-    const SwDoc* pDoc = pOldNode->GetDoc();
+    const SwDoc& rDoc = pOldNode->GetDoc();
 
     const sal_Int32 nCntIdx = rNewPos.nContent.GetIndex() + nOffset;
 
-    SwCursorShell const* pShell = pDoc->GetEditShell();
+    SwCursorShell const* pShell = rDoc.GetEditShell();
     if( pShell )
     {
         for(const SwViewShell& rShell : pShell->GetRingContainer())
@@ -278,8 +278,8 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
        }
     }
 
-    pDoc->cleanupUnoCursorTable();
-    for(const auto& pWeakUnoCursor : pDoc->mvUnoCursorTable)
+    rDoc.cleanupUnoCursorTable();
+    for(const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {
         auto pUnoCursor(pWeakUnoCursor.lock());
         if(!pUnoCursor)

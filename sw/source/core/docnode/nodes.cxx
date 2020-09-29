@@ -53,7 +53,7 @@ static sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
  *
  * creates the base sections (PostIts, Inserts, AutoText, RedLines, Content)
  *
- * @param pDocument TODO: provide documentation
+ * @param rDocument TODO: provide documentation
  */
 SwNodes::SwNodes( SwDoc& rDocument )
     : m_vIndices(nullptr), m_rMyDoc( rDocument )
@@ -1483,9 +1483,9 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             if( rNodes.IsDocNodes() )
             {
-                SwDoc* const pInsDoc = pDestNd->GetDoc();
-                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
-                pInsDoc->getIDocumentContentOperations().SplitNode( rPos, false );
+                SwDoc& rInsDoc = pDestNd->GetDoc();
+                ::sw::UndoGuard const ug(rInsDoc.GetIDocumentUndoRedo());
+                rInsDoc.getIDocumentContentOperations().SplitNode( rPos, false );
             }
             else
             {
@@ -1512,8 +1512,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
         if( bCopyCollFormat )
         {
-            SwDoc* const pInsDoc = pDestNd->GetDoc();
-            ::sw::UndoGuard const undoGuard(pInsDoc->GetIDocumentUndoRedo());
+            SwDoc& rInsDoc = pDestNd->GetDoc();
+            ::sw::UndoGuard const undoGuard(rInsDoc.GetIDocumentUndoRedo());
             pSrcNd->CopyCollFormat( *pDestNd );
             bCopyCollFormat = false;
         }
@@ -1548,9 +1548,9 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 // if no text is attached to the TextNode, split it
                 if( rNodes.IsDocNodes() )
                 {
-                    SwDoc* const pInsDoc = pDestNd->GetDoc();
-                    ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
-                    pInsDoc->getIDocumentContentOperations().SplitNode( rPos, false );
+                    SwDoc& rInsDoc = pDestNd->GetDoc();
+                    ::sw::UndoGuard const ug(rInsDoc.GetIDocumentUndoRedo());
+                    rInsDoc.getIDocumentContentOperations().SplitNode( rPos, false );
                 }
                 else
                 {
@@ -1598,8 +1598,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
         if (pDestNd && bCopyCollFormat)
         {
-            SwDoc* const pInsDoc = pDestNd->GetDoc();
-            ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
+            SwDoc& rInsDoc = pDestNd->GetDoc();
+            ::sw::UndoGuard const ug(rInsDoc.GetIDocumentUndoRedo());
             pEndSrcNd->CopyCollFormat( *pDestNd );
         }
     }
@@ -1652,7 +1652,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 void SwNodes::CopyNodes( const SwNodeRange& rRange,
             const SwNodeIndex& rIndex, bool bNewFrames, bool bTableInsDummyNode ) const
 {
-    SwDoc* pDoc = rIndex.GetNode().GetDoc();
+    SwDoc& rDoc = rIndex.GetNode().GetDoc();
 
     SwNode * pCurrentNode;
     if( rIndex == 0 ||
@@ -1717,8 +1717,8 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         {
         case SwNodeType::Table:
             // Does it copy a table in(to) a footnote?
-            if( aInsPos < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
-                    pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex()
+            if( aInsPos < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+                    rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
                     < aInsPos.GetIndex() )
             {
                 const long nDistance =
@@ -1761,7 +1761,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
             {
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwTableNode* pTableNd = static_cast<SwTableNode*>(pCurrentNode)->
-                                        MakeCopy( pDoc, aInsPos );
+                                        MakeCopy( &rDoc, aInsPos );
                 const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
@@ -1788,7 +1788,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 // copy of the whole section, so create a new SectionNode
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwSectionNode* pSectNd = static_cast<SwSectionNode*>(pCurrentNode)->
-                                    MakeCopy( pDoc, aInsPos );
+                                    MakeCopy( &rDoc, aInsPos );
 
                 const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
@@ -1826,7 +1826,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
             {
                 // create a section at the original InsertPosition
                 SwNodeRange aTmpRg( aOrigInsPos, 1, aInsPos );
-                pDoc->GetNodes().SectionDown( &aTmpRg,
+                rDoc.GetNodes().SectionDown( &aTmpRg,
                         pCurrentNode->m_pStartOfSection->GetStartNodeType() );
             }
             break;
@@ -1836,7 +1836,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         case SwNodeType::Ole:
             {
                  static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
-                                            pDoc, aInsPos, bNewFrames);
+                                            &rDoc, aInsPos, bNewFrames);
             }
             break;
 

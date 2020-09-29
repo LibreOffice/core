@@ -66,7 +66,7 @@ void SwNoTextNode::NewAttrSet( SwAttrPool& rPool )
     aNewAttrSet.Put( aFormatColl );
 
     aNewAttrSet.SetParent( &GetFormatColl()->GetAttrSet() );
-    mpAttrSet = GetDoc()->GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_NOTXT );
+    mpAttrSet = GetDoc().GetIStyleAccess().getAutomaticStyle( aNewAttrSet, IStyleAccess::AUTO_STYLE_NOTXT );
 }
 
 /// Dummies for loading/saving of persistent data

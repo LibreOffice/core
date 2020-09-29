@@ -1030,7 +1030,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             cCh = 0x09;
 
             // Get the separator's position from the first Node, in order for the Boxes to be set accordingly
-            SwTextFrameInfo aFInfo( static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pTextNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )) );
+            SwTextFrameInfo aFInfo( static_cast<SwTextFrame*>(pTextNd->getLayoutFrame( pTextNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() )) );
             if( aFInfo.IsOneLine() ) // only makes sense in this case
             {
                 OUString const& rText(pTextNd->GetText());
@@ -2488,13 +2488,10 @@ void SwTableNode::SetNewTable( std::unique_ptr<SwTable> pNewTable, bool bNewFram
 
 void SwTableNode::RemoveRedlines()
 {
-    SwDoc* pDoc = GetDoc();
-    if (pDoc)
-    {
-        SwTable& rTable = GetTable();
-        if ( pDoc->getIDocumentRedlineAccess().HasExtraRedlineTable() )
-            pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(*pDoc, rTable, true, RedlineType::Any);
-    }
+    SwDoc& rDoc = GetDoc();
+    SwTable& rTable = GetTable();
+    if (rDoc.getIDocumentRedlineAccess().HasExtraRedlineTable())
+        rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable().DeleteAllTableRedlines(rDoc, rTable, true, RedlineType::Any);
 }
 
 void SwDoc::GetTabCols( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
@@ -4215,7 +4212,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
         return;
 
     const SfxPoolItem* pFormatItem = nullptr;
-    SfxItemSet rSet( pTextNode->GetDoc()->GetAttrPool(),
+    SfxItemSet rSet( pTextNode->GetDoc().GetAttrPool(),
                 svl::Items<RES_PARATR_BEGIN, RES_PARATR_END - 1>{});
     pTextNode->SwContentNode::GetAttr( rSet );
     if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFormatItem ) )
@@ -4336,7 +4333,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
-        rtl::Reference<SwDoc> xCpyDoc( const_cast<SwDoc*>(pSrcTableNd->GetDoc()) );
+        rtl::Reference<SwDoc> xCpyDoc(&const_cast<SwDoc&>(pSrcTableNd->GetDoc()));
         bool bDelCpyDoc = xCpyDoc == this;
 
         if( bDelCpyDoc )

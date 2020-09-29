@@ -1527,7 +1527,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTextNode* pTextNd )
     {
         //mask deleted redlines
         OUString sNodeText(pTextNd->GetText());
-        const SwDoc& rDoc = *pTextNd->GetDoc();
+        const SwDoc& rDoc = pTextNd->GetDoc();
         const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
         if ( bShowChg )
         {

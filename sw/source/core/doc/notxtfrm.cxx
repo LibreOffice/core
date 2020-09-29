@@ -774,7 +774,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         if ( GetNode()->GetNodeType() == SwNodeType::Grf )
                         {
                             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
-                            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+                            SwViewShell *pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
 
                             if(pVSh)
                             {
@@ -818,7 +818,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
             SwRect aRect( getFrameArea() );
 
-            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+            SwViewShell *pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
             if( !pVSh )
                 break;
 

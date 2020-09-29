@@ -514,7 +514,7 @@ bool SwHTMLParser::InsertEmbed()
         Size aTwipSize(pDevice->PixelToLogic(aSize, MapMode(MapUnit::MapTwip)));
         SwFormatFrameSize aFrameSize(SwFrameSize::Fixed, aTwipSize.Width(), aTwipSize.Height());
         aAttrSet.Put(aFrameSize);
-        pOLENode->GetDoc()->SetFlyFrameAttr(*pFormat, aAttrSet);
+        pOLENode->GetDoc().SetFlyFrameAttr(*pFormat, aAttrSet);
         return true;
     }
 

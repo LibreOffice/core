@@ -523,7 +523,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         SwSectionNode* pSectNd = GetFormat()->GetSectionNode();
         if( pSectNd )
-            pSectNd->GetDoc()->GetFootnoteIdxs().UpdateFootnote(SwNodeIndex( *pSectNd ));
+            pSectNd->GetDoc().GetFootnoteIdxs().UpdateFootnote(SwNodeIndex( *pSectNd ));
     }
 }
 
@@ -593,7 +593,7 @@ void SwSection::SetLinkFileName(const OUString& rNew)
 void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
-    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc().getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( auto n = rLnks.size(); n; )
     {
         sfx2::SvBaseLink& rBLnk = *rLnks[--n];
@@ -1089,19 +1089,13 @@ void SwSectionFormats::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Method to break section links inside a linked section
 static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
-    if ( !rSectNd.GetDoc() )
-    {
-        OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
-        return;
-    }
-
     if ( !rSectNd.GetSection().IsConnected() )
     {
         OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
         return;
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
-    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc().getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for ( auto n = rLnks.size(); n > 0; )
     {
         SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
@@ -1125,8 +1119,8 @@ static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 
 static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
-    SwDoc* pDoc = rSectNd.GetDoc();
-    SwDocShell* pDShell = pDoc->GetDocShell();
+    SwDoc& rDoc = rSectNd.GetDoc();
+    SwDocShell* pDShell = rDoc.GetDocShell();
     if( !pDShell || !pDShell->GetMedium() )
         return ;
 
@@ -1135,7 +1129,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     uno::Any aValue;
     aValue <<= sName; // Arbitrary name
 
-    const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rDoc.getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( auto n = rLnks.size(); n; )
     {
         SwBaseLink* pBLink;

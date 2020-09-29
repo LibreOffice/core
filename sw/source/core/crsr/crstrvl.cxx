@@ -644,7 +644,7 @@ static void lcl_MakeFieldLst(
             std::pair<Point, bool> const tmp(aPt, false);
             const SwContentFrame* pCFrame =
                 rTextNode.getLayoutFrame(
-                    rTextNode.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    rTextNode.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                     nullptr, &tmp);
             if ( pCFrame != nullptr
                  && ( bInReadOnly || !pCFrame->IsProtected() ) )
@@ -1900,7 +1900,7 @@ bool SwContentAtPos::IsInProtectSect() const
     if( pNd->IsInProtectSect() )
         return true;
 
-    const SwContentFrame* pFrame = pNd->getLayoutFrame(pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr);
+    const SwContentFrame* pFrame = pNd->getLayoutFrame(pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr);
     return pFrame && pFrame->IsProtected() ;
 }
 

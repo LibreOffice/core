@@ -128,13 +128,13 @@ void SwChapterField::ChangeExpansion(const SwFrame & rFrame,
                                       const SwContentNode* pContentNode,
                                       bool bSrchNum )
 {
-    SwDoc* pDoc = const_cast<SwDoc*>(pContentNode->GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(pContentNode->GetDoc());
 
     const SwTextNode* pTextNode = dynamic_cast<const SwTextNode*>(pContentNode);
     if (!pTextNode || !rFrame.IsInDocBody())
     {
-        SwPosition aDummyPos( pDoc->GetNodes().GetEndOfContent() );
-        pTextNode = GetBodyTextNode( *pDoc, aDummyPos, rFrame );
+        SwPosition aDummyPos( rDoc.GetNodes().GetEndOfContent() );
+        pTextNode = GetBodyTextNode( rDoc, aDummyPos, rFrame );
     }
 
     if ( pTextNode )
@@ -152,7 +152,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
     rState.sPost.clear();
     rState.sPre.clear();
 
-    SwDoc* pDoc = const_cast<SwDoc*>(rTextNd.GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(rTextNd.GetDoc());
     const SwTextNode *pTextNd = rTextNd.FindOutlineNodeOfLevel(rState.nLevel, pLayout);
     if( !pTextNd )
         return;
@@ -171,7 +171,7 @@ void SwChapterField::ChangeExpansion(const SwTextNode &rTextNd, bool bSrchNum,
 
                 if (nPrevLvl < rState.nLevel)
                     rState.nLevel = nPrevLvl;
-                else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
+                else if( SVX_NUM_NUMBER_NONE != rDoc.GetOutlineNumRule()
                         ->Get( rState.nLevel ).GetNumberingType() )
                 {
                     pTextNd = pONd;

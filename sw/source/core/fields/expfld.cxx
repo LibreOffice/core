@@ -346,7 +346,7 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
 
     // determine document (or is there an easier way?)
     const SwTextNode* pTextNode = &rField.GetTextNode();
-    SwDoc& rDoc = *const_cast<SwDoc*>(pTextNode->GetDoc());
+    SwDoc& rDoc = const_cast<SwDoc&>(pTextNode->GetDoc());
 
     // create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( rDoc.GetNodes() ) );

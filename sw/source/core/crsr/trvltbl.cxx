@@ -369,7 +369,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
     if ( !pCNd )
         return false;
 
-    SwContentFrame* pFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+    SwContentFrame* pFrame = pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
 
     if ( nullptr == pFrame || pCNd->FindTableNode() != pTableNd ||
         (!bInReadOnly && pFrame->IsProtected() ) )
@@ -401,7 +401,7 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, bool bInReadOnly )
                 return false;
 
             // check if we have found a suitable table cell:
-            pFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+            pFrame = pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
 
             if ( nullptr != pFrame && pCNd->FindTableNode() == pTableNd &&
                 (bInReadOnly || !pFrame->IsProtected() ) )
@@ -441,7 +441,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
     if ( !pCNd )
         return false;
 
-    SwContentFrame* pFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+    SwContentFrame* pFrame = pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
 
     if( nullptr == pFrame || pCNd->FindTableNode() != pTableNd ||
         (!bInReadOnly && pFrame->IsProtected() ))
@@ -462,7 +462,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, bool bInReadOnly  )
             if ( !pCNd )
                 return false;
 
-            pFrame = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+            pFrame = pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
 
             if( nullptr != pFrame && pCNd->FindTableNode() == pTableNd &&
                 (bInReadOnly || !pFrame->IsProtected() ) )

@@ -93,7 +93,7 @@ static bool lcl_SetNewFlyPos( const SwNode& rNode, SwFormatAnchor& rAnchor,
         const SwContentNode *pCntNd = rNode.GetContentNode();
         std::pair<Point, bool> const tmp(rPt, false);
         const SwContentFrame* pCFrame = pCntNd ? pCntNd->getLayoutFrame(
-            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pCntNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             nullptr, &tmp) : nullptr;
         const SwPageFrame *pPg = pCFrame ? pCFrame->FindPageFrame() : nullptr;
 

@@ -361,7 +361,7 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
                 SwUserFieldType* pType = static_cast<SwUserFieldType*>(mpField->GetTyp());
                 if(!pType->IsValid())
                 {
-                    SwCalc aCalc( *pTextNd->GetDoc() );
+                    SwCalc aCalc( pTextNd->GetDoc() );
                     pType->GetValue( aCalc );
                 }
                 bExpand = true;
@@ -452,9 +452,9 @@ void SwTextField::ExpandTextField(const bool bForceNotify) const
     OSL_ENSURE( m_pTextNode, "SwTextField: where is my TextNode?" );
 
     const SwField* pField = GetFormatField().GetField();
-    const OUString aNewExpand( pField->ExpandField(m_pTextNode->GetDoc()->IsClipBoard(),
+    const OUString aNewExpand( pField->ExpandField(m_pTextNode->GetDoc().IsClipBoard(),
         // can't do any better than this here...
-        m_pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) );
+        m_pTextNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()) );
 
     const SwFieldIds nWhich = pField->GetTyp()->Which();
     const bool bSameExpandSimpleNotification
@@ -593,7 +593,7 @@ void SwTextField::DeleteTextField( const SwTextField& rTextField )
         GetPamForTextField(rTextField, pPamForTextField);
         if (pPamForTextField != nullptr)
         {
-            rTextField.GetTextNode().GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPamForTextField);
+            rTextField.GetTextNode().GetDoc().getIDocumentContentOperations().DeleteAndJoin(*pPamForTextField);
         }
     }
 }
@@ -681,7 +681,7 @@ void SwTextInputField::UpdateFieldContent()
     assert(pInputField || pExpField);
 
     // trigger update of fields for scenarios in which the Input Field's content is part of e.g. a table formula
-    GetTextNode().GetDoc()->getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
+    GetTextNode().GetDoc().getIDocumentFieldsAccess().GetUpdateFields().SetFieldsDirty(true);
 }
 
 void SwTextInputField::UpdateTextNodeContent( const OUString& rNewContent )

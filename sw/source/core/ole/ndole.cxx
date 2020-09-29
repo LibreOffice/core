@@ -255,13 +255,13 @@ bool SwOLENode::RestorePersistentData()
     if ( maOLEObj.m_xOLERef.is() )
     {
         // If a SvPersist instance already exists, we use it
-        SfxObjectShell* p = GetDoc()->GetPersist();
+        SfxObjectShell* p = GetDoc().GetPersist();
         if( !p )
         {
             // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
             // What happens to this document?
             OSL_ENSURE( false, "Why are we creating a DocShell here?" );
-            p = new SwDocShell( GetDoc(), SfxObjectCreateMode::INTERNAL );
+            p = new SwDocShell( &GetDoc(), SfxObjectCreateMode::INTERNAL );
             p->DoInitNew();
         }
 
@@ -310,7 +310,7 @@ bool SwOLENode::SavePersistentData()
         comphelper::EmbeddedObjectContainer* pCnt = maOLEObj.m_xOLERef.GetContainer();
 
 #if OSL_DEBUG_LEVEL > 0
-        SfxObjectShell* p = GetDoc()->GetPersist();
+        SfxObjectShell* p = GetDoc().GetPersist();
         OSL_ENSURE( p, "No document!" );
         if( p )
         {
@@ -439,7 +439,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx, bool) 
     // We insert it at SvPersist level
     // TODO/LATER: check if using the same naming scheme for all apps works here
     OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
-    SfxObjectShell* pSrc = GetDoc()->GetPersist();
+    SfxObjectShell* pSrc = GetDoc().GetPersist();
 
     pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
         pSrc->GetEmbeddedObjectContainer(),
@@ -502,7 +502,7 @@ bool SwOLENode::IsOLEObjectDeleted() const
 {
     if( maOLEObj.m_xOLERef.is() )
     {
-        SfxObjectShell* p = GetDoc()->GetPersist();
+        SfxObjectShell* p = GetDoc().GetPersist();
         if( p ) // Must be there
         {
             return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( maOLEObj.m_aName );
@@ -570,7 +570,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
 
 void SwOLENode::BreakFileLink_Impl()
 {
-    SfxObjectShell* pPers = GetDoc()->GetPersist();
+    SfxObjectShell* pPers = GetDoc().GetPersist();
 
     if ( !pPers )
         return;
@@ -595,7 +595,7 @@ void SwOLENode::DisconnectFileLink_Impl()
 {
     if ( mpObjectLink )
     {
-        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( mpObjectLink );
+        GetDoc().getIDocumentLinksAdministration().GetLinkManager().Remove( mpObjectLink );
         mpObjectLink = nullptr;
     }
 }
@@ -616,7 +616,7 @@ void SwOLENode::CheckFileLink_Impl()
                 // this is a file link so the model link manager should handle it
                 mpObjectLink = new SwEmbedObjectLink( this );
                 maLinkURL = aLinkURL;
-                GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
+                GetDoc().getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, sfx2::SvBaseLinkObjectType::ClientOle, aLinkURL );
                 mpObjectLink->Connect();
             }
         }
@@ -653,7 +653,7 @@ void SwOLENode::SetChanged()
     }
 
     const SwRect aFrameArea(pFrame->getFrameArea());
-    SwViewShell* pVSh(GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell());
+    SwViewShell* pVSh(GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell());
 
     if(nullptr == pVSh)
     {
@@ -812,13 +812,13 @@ SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
         m_xListener.clear();
     }
 
-    if( m_pOLENode && !m_pOLENode->GetDoc()->IsInDtor() )
+    if( m_pOLENode && !m_pOLENode->GetDoc().IsInDtor() )
     {
         // if the model is not currently in destruction it means that this object should be removed from the model
         comphelper::EmbeddedObjectContainer* pCnt = m_xOLERef.GetContainer();
 
 #if OSL_DEBUG_LEVEL > 0
-        SfxObjectShell* p = m_pOLENode->GetDoc()->GetPersist();
+        SfxObjectShell* p = m_pOLENode->GetDoc().GetPersist();
         OSL_ENSURE( p, "No document!" );
         if( p )
         {
@@ -865,16 +865,16 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     if ( !m_aName.isEmpty() )
         return;
 
-    SwDoc* pDoc = pNode->GetDoc();
+    SwDoc& rDoc = pNode->GetDoc();
 
     // If there's already a SvPersist instance, we use it
-    SfxObjectShell* p = pDoc->GetPersist();
+    SfxObjectShell* p = rDoc.GetPersist();
     if( !p )
     {
         // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
         // What happens to the document?
         OSL_ENSURE( false, "Why are we creating a DocShell here??" );
-        p = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
+        p = new SwDocShell( &rDoc, SfxObjectCreateMode::INTERNAL );
         p->DoInitNew();
     }
 
@@ -914,7 +914,7 @@ uno::Reference < embed::XEmbeddedObject > const & SwOLEObj::GetOleRef()
 {
     if( !m_xOLERef.is() )
     {
-        SfxObjectShell* p = m_pOLENode->GetDoc()->GetPersist();
+        SfxObjectShell* p = m_pOLENode->GetDoc().GetPersist();
         assert(p && "No SvPersist present");
 
         OUString sDocumentBaseURL = p->getDocumentBaseURL();
@@ -973,8 +973,8 @@ bool SwOLEObj::UnloadObject()
     bool bRet = true;
     if ( m_pOLENode )
     {
-        const SwDoc* pDoc = m_pOLENode->GetDoc();
-        bRet = UnloadObject( m_xOLERef.GetObject(), pDoc, m_xOLERef.GetViewAspect() );
+        const SwDoc& rDoc = m_pOLENode->GetDoc();
+        bRet = UnloadObject( m_xOLERef.GetObject(), &rDoc, m_xOLERef.GetViewAspect() );
     }
 
     return bRet;

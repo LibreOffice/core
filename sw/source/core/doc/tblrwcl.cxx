@@ -215,7 +215,7 @@ struct CpyPara
     bool bCpyContent;
 
     CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, CpyTabFrames& rFrameArr )
-        : pDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
+        : pDoc( &pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
         pInsLine(nullptr), pInsBox(nullptr), nOldSize(0), nNewSize(0),
         nMinLeft(ULONG_MAX), nMaxRight(0),
         nCpyCnt(nCopies), nInsPos(0),
@@ -733,7 +733,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
             if( pUndo && pUndo->IsDelBox() )
                 static_cast<SwUndoTableNdsChg*>(pUndo)->SaveSection( pSttNd );
             else
-                pSttNd->GetDoc()->getIDocumentContentOperations().DeleteSection( pSttNd );
+                pSttNd->GetDoc().getIDocumentContentOperations().DeleteSection( pSttNd );
         }
 
         // Also delete the Line?

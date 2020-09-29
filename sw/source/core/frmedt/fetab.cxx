@@ -1019,7 +1019,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
     std::pair<Point, bool> const tmp(aTmpPt, false);
     pNd = rPos.nNode.GetNode().GetContentNode();
     if( nullptr != pNd )
-        pFrame = pNd->getLayoutFrame(pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
+        pFrame = pNd->getLayoutFrame(pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
     else
         pFrame = nullptr;
 

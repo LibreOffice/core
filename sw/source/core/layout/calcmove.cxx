@@ -1040,7 +1040,7 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
 bool SwTextNode::IsCollapse() const
 {
-    if (GetDoc()->GetDocumentSettingManager().get( DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA )
+    if (GetDoc().GetDocumentSettingManager().get( DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA )
         &&  GetText().isEmpty())
     {
         sal_uLong nIdx=GetIndex();
@@ -1050,7 +1050,7 @@ bool SwTextNode::IsCollapse() const
         // The paragraph is collapsed only if the NdAfter is the end of a cell
         bool bInTable = FindTableNode( ) != nullptr;
 
-        SwSortedObjs* pObjs = getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
+        SwSortedObjs* pObjs = getLayoutFrame( GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
         const size_t nObjs = ( pObjs != nullptr ) ? pObjs->size( ) : 0;
 
         return pNdBefore!=nullptr && pNdAfter!=nullptr && nObjs == 0 && bInTable;

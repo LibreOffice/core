@@ -506,15 +506,15 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 
 static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTextNode& rTextNode )
 {
-    const SwDoc* pDoc = rTextNode.GetDoc();
-    SwRedlineTable::size_type nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( rTextNode, RedlineType::Any );
+    const SwDoc& rDoc = rTextNode.GetDoc();
+    SwRedlineTable::size_type nRedlPos = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rTextNode, RedlineType::Any );
 
     if( SwRedlineTable::npos != nRedlPos )
     {
         const sal_uLong nNdIdx = rTextNode.GetIndex();
-        for( ; nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
+        for( ; nRedlPos < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
         {
-            const SwRangeRedline* pTmp = pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
+            const SwRangeRedline* pTmp = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
             if( RedlineType::Delete == pTmp->GetType() ||
                 RedlineType::Insert == pTmp->GetType() )
             {

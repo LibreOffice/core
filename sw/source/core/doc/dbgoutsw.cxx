@@ -416,29 +416,26 @@ static OUString lcl_AnchoredFrames(const SwNode & rNode)
 {
     OUStringBuffer aResult("[");
 
-    const SwDoc * pDoc = rNode.GetDoc();
-    if (pDoc)
+    const SwDoc& rDoc = rNode.GetDoc();
+    const SwFrameFormats * pFrameFormats = rDoc.GetSpzFrameFormats();
+
+    if (pFrameFormats)
     {
-        const SwFrameFormats * pFrameFormats = pDoc->GetSpzFrameFormats();
-
-        if (pFrameFormats)
+        bool bFirst = true;
+        for (SwFrameFormats::const_iterator i(pFrameFormats->begin());
+             i != pFrameFormats->end(); ++i)
         {
-            bool bFirst = true;
-            for (SwFrameFormats::const_iterator i(pFrameFormats->begin());
-                 i != pFrameFormats->end(); ++i)
+            const SwFormatAnchor & rAnchor = (*i)->GetAnchor();
+            const SwPosition * pPos = rAnchor.GetContentAnchor();
+
+            if (pPos && &pPos->nNode.GetNode() == &rNode)
             {
-                const SwFormatAnchor & rAnchor = (*i)->GetAnchor();
-                const SwPosition * pPos = rAnchor.GetContentAnchor();
+                if (! bFirst)
+                    aResult.append(", ");
 
-                if (pPos && &pPos->nNode.GetNode() == &rNode)
-                {
-                    if (! bFirst)
-                        aResult.append(", ");
-
-                    if (*i)
-                        aResult.append(lcl_dbg_out(**i));
-                    bFirst = false;
-                }
+                if (*i)
+                    aResult.append(lcl_dbg_out(**i));
+                bFirst = false;
             }
         }
     }

@@ -421,13 +421,13 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
 
     m_nStartIndex = m_nEndIndex = m_nPosition = m_nChgCnt = 0;
     m_nPropFont = 0;
-    SwDoc* pDoc = rTextNode.GetDoc();
+    SwDoc& rDoc = rTextNode.GetDoc();
     const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
     // sw_redlinehide: this is a Ring - pExtInp is the first PaM that's inside
     // the node.  It's not clear whether there can be more than 1 PaM in the
     // Ring, and this code doesn't handle that case; neither did the old code.
-    const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
+    const SwExtTextInput* pExtInp = rDoc.GetExtTextInput( rTextNode );
     if (!pExtInp && m_pMergedPara)
     {
         SwTextNode const* pNode(&rTextNode);
@@ -436,7 +436,7 @@ void SwAttrIter::CtorInitAttrIter(SwTextNode & rTextNode,
             if (rExtent.pNode != pNode)
             {
                 pNode = rExtent.pNode;
-                pExtInp = pDoc->GetExtTextInput(*pNode);
+                pExtInp = rDoc.GetExtTextInput(*pNode);
                 if (pExtInp)
                     break;
             }
@@ -504,7 +504,7 @@ SwRedlineItr::SwRedlineItr( const SwTextNode& rTextNd, SwFont& rFnt,
                             Mode const mode,
                             const std::vector<ExtTextInputAttr> *pArr,
                             SwPosition const*const pExtInputStart)
-    : m_rDoc( *rTextNd.GetDoc() )
+    : m_rDoc( rTextNd.GetDoc() )
     , m_rAttrHandler( rAH )
     , m_nNdIdx( rTextNd.GetIndex() )
     , m_nFirst( nRed )

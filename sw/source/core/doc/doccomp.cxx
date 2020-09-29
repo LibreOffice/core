@@ -1282,7 +1282,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
     {
         SwTextNode& rDstNd = *const_cast<SwTextNode*>(m_rNode.GetTextNode());
         const SwTextNode& rSrcNd = *rLine.GetNode().GetTextNode();
-        SwDoc* pDstDoc = rDstNd.GetDoc();
+        SwDoc& rDstDoc = rDstNd.GetDoc();
 
         int nLcsLen = 0;
 
@@ -1376,14 +1376,14 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
 
             if ( nSrcFrom < nSrcTo )
             {
-                bool bUndo = pDstDoc->GetIDocumentUndoRedo().DoesUndo();
-                pDstDoc->GetIDocumentUndoRedo().DoUndo( false );
+                bool bUndo = rDstDoc.GetIDocumentUndoRedo().DoesUndo();
+                rDstDoc.GetIDocumentUndoRedo().DoUndo( false );
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
                 aCpyPam.GetPoint()->nContent = nSrcTo;
                 aCpyPam.GetDoc()->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
                     SwCopyFlags::CheckPosInFly);
-                pDstDoc->GetIDocumentUndoRedo().DoUndo( bUndo );
+                rDstDoc.GetIDocumentUndoRedo().DoUndo( bUndo );
 
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing.get() );
                 if( !rpDelRing )

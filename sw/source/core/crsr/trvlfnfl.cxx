@@ -138,7 +138,7 @@ bool SwCursor::GotoFootnoteAnchor()
     if( pSttNd )
     {
         // search in all footnotes in document for this StartIndex
-        const SwFootnoteIdxs& rFootnoteArr = pSttNd->GetDoc()->GetFootnoteIdxs();
+        const SwFootnoteIdxs& rFootnoteArr = pSttNd->GetDoc().GetFootnoteIdxs();
         for( size_t n = 0; n < rFootnoteArr.size(); ++n )
         {
             const SwTextFootnote* pTextFootnote = rFootnoteArr[ n ];

@@ -85,17 +85,14 @@ using namespace ::com::sun::star::smarttags;
 
 namespace
 {
-    void DetectAndMarkMissingDictionaries( SwDoc* pDoc,
+    void DetectAndMarkMissingDictionaries( SwDoc& rDoc,
                                            const uno::Reference< XSpellChecker1 >& xSpell,
                                            const LanguageType eActLang )
     {
-        if( !pDoc )
-            return;
-
         if( xSpell.is() && !xSpell->hasLanguage( eActLang.get() ) )
-            pDoc->SetMissingDictionaries( true );
+            rDoc.SetMissingDictionaries( true );
         else
-            pDoc->SetMissingDictionaries( false );
+            rDoc.SetMissingDictionaries( false );
     }
 }
 
@@ -141,7 +138,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
 {
     sal_Int32 nNumOfMaskedRedlines = 0;
 
-    const SwDoc& rDoc = *rNode.GetDoc();
+    const SwDoc& rDoc = rNode.GetDoc();
 
     for ( SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, RedlineType::Any ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
     {
@@ -186,7 +183,7 @@ lcl_MaskRedlinesAndHiddenText( const SwTextNode& rNode, OUStringBuffer& rText,
     sal_Int32 nRedlinesMasked = 0;
     sal_Int32 nHiddenCharsMasked = 0;
 
-    const SwDoc& rDoc = *rNode.GetDoc();
+    const SwDoc& rDoc = rNode.GetDoc();
     const bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
 
     // If called from word count or from spell checking, deleted redlines
@@ -495,7 +492,7 @@ void SwTextNode::RstTextAttr(
 
                     if ( pStyleHandle )
                     {
-                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( GetDoc(),
                                 *pStyleHandle, nAttrStart, nAttrEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -510,7 +507,7 @@ void SwTextNode::RstTextAttr(
 
                     if ( pStyleHandle && nAttrStart < nEnd )
                     {
-                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( GetDoc(),
                                 *pStyleHandle, nAttrStart, nEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -538,7 +535,7 @@ void SwTextNode::RstTextAttr(
 
                     if ( pStyleHandle )
                     {
-                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( GetDoc(),
                             *pStyleHandle, nStt, nAttrEnd );
                         newAttributes.push_back(pNew);
                     }
@@ -560,14 +557,14 @@ void SwTextNode::RstTextAttr(
 
                     if ( pStyleHandle && nStt < nEnd )
                     {
-                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( GetDoc(),
                             *pStyleHandle, nStt, nEnd );
                         newAttributes.push_back(pNew);
                     }
 
                     if( nEnd < nTmpEnd )
                     {
-                        SwTextAttr* pNew = MakeTextAttr( *GetDoc(),
+                        SwTextAttr* pNew = MakeTextAttr( GetDoc(),
                             pHt->GetAttr(), nEnd, nTmpEnd );
                         if ( pNew )
                         {
@@ -1075,7 +1072,7 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
     if (!pFont)
         aRanges[2] = aRanges[3] = 0;    // clear entries with font WhichId
 
-    SwEditShell *pEditShell = GetDoc()->GetEditShell();
+    SwEditShell *pEditShell = GetDoc().GetEditShell();
     SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
     aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
@@ -1091,7 +1088,7 @@ void SwTextNode::SetLanguageAndFont( const SwPaM &rPaM,
         aSet.Put( aFontItem );
     }
 
-    GetDoc()->getIDocumentContentOperations().InsertItemSet( rPaM, aSet );
+    GetDoc().getIDocumentContentOperations().InsertItemSet( rPaM, aSet );
     // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
     //                     <- because since there is no selection the flag to garbage
     //                     <- collect all attributes is set, and therefore attributes spanned
@@ -1178,7 +1175,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
                 aCurPaM.GetPoint()->nContent = nBegin + nLen;
 
                 // check script type of selected text
-                SwEditShell *pEditShell = GetDoc()->GetEditShell();
+                SwEditShell *pEditShell = GetDoc().GetEditShell();
                 pEditShell->Push();             // save current cursor on stack
                 pEditShell->SetSelection( aCurPaM );
                 bool bIsAsianScript = (SvtScriptType::ASIAN == pEditShell->GetScriptType());
@@ -1306,7 +1303,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
     if( bFresh )
     {
         uno::Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
-        SwDoc* pDoc = pNode->GetDoc();
+        SwDoc& rDoc = pNode->GetDoc();
 
         SwScanner aScanner( *pNode, pNode->GetText(), nullptr, ModelToViewHelper(),
                             WordType::DICTIONARY_WORD, nBegin, nEnd);
@@ -1320,7 +1317,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
             // get next language for next word, consider language attributes
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
-            DetectAndMarkMissingDictionaries( pDoc, xSpell, eActLang );
+            DetectAndMarkMissingDictionaries( rDoc, xSpell, eActLang );
 
             bool bSpell = xSpell.is() && xSpell->hasLanguage( static_cast<sal_uInt16>(eActLang) );
             if( bSpell && !rWord.isEmpty() )
@@ -1358,7 +1355,7 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.getLength() )
                 {
-                    rACW.InsertWord( rWord, *pDoc );
+                    rACW.InsertWord( rWord, rDoc );
                 }
             }
         }
@@ -1475,11 +1472,11 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
         uno::Reference<text::XTextMarkup> const xTextMarkup =
              new SwXTextMarkup(pNode, aConversionMap);
 
-        css::uno::Reference< css::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
+        css::uno::Reference< css::frame::XController > xController = pNode->GetDoc().GetDocShell()->GetController();
 
         SwPosition start(*pNode, nBegin);
         SwPosition end  (*pNode, nEnd);
-        Reference< css::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(*pNode->GetDoc(), start, &end);
+        Reference< css::text::XTextRange > xRange = SwXTextRange::CreateXTextRange(pNode->GetDoc(), start, &end);
 
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
 
@@ -1539,7 +1536,7 @@ void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
     if (!nActPos)
         nActPos = COMPLETE_STRING;
 
-    SwDoc* pDoc = pNode->GetDoc();
+    SwDoc& rDoc = pNode->GetDoc();
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     sal_Int32  nBegin = 0;
@@ -1563,7 +1560,7 @@ void SwTextFrame::CollectAutoCmplWrds(SwTextNode & rNode, sal_Int32 nActPos)
                 if( nActPos < nBegin || ( nBegin + nLen ) < nActPos )
                 {
                     if( rACW.GetMinWordLen() <= rWord.getLength() )
-                        rACW.InsertWord( rWord, *pDoc );
+                        rACW.InsertWord( rWord, rDoc );
                 }
                 else
                     bACWDirty = true;
@@ -1627,7 +1624,7 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
                 tmp.second = true;
             }
             return static_cast<SwTextFrame*>(this->getLayoutFrame(
-                this->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                this->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                 nullptr, pPoint ? &tmp : nullptr));
         });
     if (!pFrame)

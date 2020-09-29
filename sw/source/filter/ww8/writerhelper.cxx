@@ -542,13 +542,9 @@ namespace sw
                     rTextNode.GetActualListLevel());
             }
 
-            OSL_ENSURE(rTextNode.GetDoc(), "No document for node?, suspicious");
-            if (!rTextNode.GetDoc())
-                return nullptr;
-
             if (
                 rTextNode.IsNumbered() && rTextNode.IsCountedInList() &&
-                nullptr != (pRule = rTextNode.GetDoc()->GetOutlineNumRule())
+                nullptr != (pRule = rTextNode.GetDoc().GetOutlineNumRule())
                 )
             {
                 return GetNumFormatFromSwNumRuleLevel(*pRule,

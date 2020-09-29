@@ -98,12 +98,12 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
         if (pCNd && pCNd->getLayoutFrame(pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr))
             pFormat->MakeFrames();
     }
-    sw::CheckAnchoredFlyConsistency(*rStartPos.nNode.GetNode().GetDoc());
+    sw::CheckAnchoredFlyConsistency(rStartPos.nNode.GetNode().GetDoc());
 }
 
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
 {
-    SwFrameFormats& rFormats = *rRg.aStart.GetNode().GetDoc()->GetSpzFrameFormats();
+    SwFrameFormats& rFormats = *rRg.aStart.GetNode().GetDoc().GetSpzFrameFormats();
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
     {
         SwFrameFormat *const pFormat = rFormats[n];
@@ -128,13 +128,13 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
             rFormats.erase( rFormats.begin() + n-- );
         }
     }
-    sw::CheckAnchoredFlyConsistency(*rRg.aStart.GetNode().GetDoc());
+    sw::CheckAnchoredFlyConsistency(rRg.aStart.GetNode().GetDoc());
 }
 
 void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
                        SaveFlyArr& rArr, bool bMoveAllFlys )
 {
-    SwFrameFormats& rFormats = *rPam.GetPoint()->nNode.GetNode().GetDoc()->GetSpzFrameFormats();
+    SwFrameFormats& rFormats = *rPam.GetPoint()->nNode.GetNode().GetDoc().GetSpzFrameFormats();
     SwFrameFormat* pFormat;
     const SwFormatAnchor* pAnchor;
 
@@ -195,7 +195,7 @@ void SaveFlyInRange( const SwPaM& rPam, const SwPosition& rInsPos,
             }
         }
     }
-    sw::CheckAnchoredFlyConsistency(*rPam.GetPoint()->nNode.GetNode().GetDoc());
+    sw::CheckAnchoredFlyConsistency(rPam.GetPoint()->nNode.GetNode().GetDoc());
 }
 
 /// Delete and move all Flys at the paragraph, that are within the selection.
@@ -214,8 +214,8 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
     SwPosition const& rStart = mark <= point ? mark : point;
     SwPosition const& rEnd   = mark <= point ? point : mark;
 
-    SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
-    SwFrameFormats& rTable = *pDoc->GetSpzFrameFormats();
+    SwDoc& rDoc = rMkNdIdx.GetNode().GetDoc();
+    SwFrameFormats& rTable = *rDoc.GetSpzFrameFormats();
     for ( auto i = rTable.size(); i; )
     {
         SwFrameFormat *pFormat = rTable[--i];
@@ -246,7 +246,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     i = std::distance(rTable.begin(), rTable.find( pFormat ));
             }
 
-            pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+            rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
 
             // DelLayoutFormat can also trigger the deletion of objects.
             if (i > rTable.size())
@@ -263,17 +263,17 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
     : mnSaveContent( nCnt )
 {
     SwNode& rNd = rInsIdx.GetNode();
-    SwDoc* pDest = rNd.GetDoc();
-    if( pDest->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+    SwDoc& rDest = rNd.GetDoc();
+    if( rDest.getIDocumentRedlineAccess().GetRedlineTable().empty() )
         return;
 
     SwRedlineTable::size_type nFndPos;
     const SwPosition* pEnd;
     SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetContentNode(), nCnt ));
-    pDest->getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
+    rDest.getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );
     const SwRangeRedline* pRedl;
     while( nFndPos--
-          && *( pEnd = ( pRedl = pDest->getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
+          && *( pEnd = ( pRedl = rDest.getIDocumentRedlineAccess().GetRedlineTable()[ nFndPos ] )->End() ) == aSrcPos
           && *pRedl->Start() < aSrcPos )
     {
         if( !mpSaveIndex )
@@ -783,7 +783,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     {
         // sw_redlinehide: this will be called once per node for merged nodes;
         // the fully deleted ones won't have frames so are skipped.
-        SwContentFrame* pContentFrame = pNode->getLayoutFrame( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwContentFrame* pContentFrame = pNode->getLayoutFrame( pNode->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
         if( pContentFrame && !static_cast<SwTextFrame*>(pContentFrame)->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();
@@ -799,7 +799,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
                 }
                 long nStat = nPageNr >= *pPageSt ? nPageNr - *pPageSt + 1
                                          : nPageNr + *pPageCnt - *pPageSt + 1;
-                ::SetProgressState( nStat, pNode->GetDoc()->GetDocShell() );
+                ::SetProgressState( nStat, pNode->GetDoc().GetDocShell() );
             }
             pHyphArgs->SetRange( rpNd );
             if( pNode->Hyphenate( *pHyphArgs ) )

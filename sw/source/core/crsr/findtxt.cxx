@@ -505,7 +505,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
 
             }
 
-            SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
+            SwDocShell *const pDocShell = pNode->GetDoc().GetDocShell();
             SwWrtShell *const pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
             SwPostItMgr *const pPostItMgr = pWrtShell ? pWrtShell->GetPostItMgr() : nullptr;
 
@@ -557,7 +557,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                 if (!bEndedTextEdit && !(pSearchItem && pSearchItem->GetCommand() == SvxSearchCmd::FIND_ALL))
                 {
                     // If there are any shapes anchored to this node, search there.
-                    SwPaM aPaM(pNode->GetDoc()->GetNodes().GetEndOfContent());
+                    SwPaM aPaM(pNode->GetDoc().GetNodes().GetEndOfContent());
                     if (pLayout)
                     {
                         *aPaM.GetPoint() = pFrame->MapViewToModelPos(nStart.GetFrameIndex());
@@ -582,7 +582,7 @@ bool FindTextImpl(SwPaM & rSearchPam,
                         aPaM.GetMark()->nNode = rTextNode.GetIndex() + 1;
                     }
                     aPaM.GetMark()->nContent.Assign(aPaM.GetMark()->nNode.GetNode().GetTextNode(), 0);
-                    if (pNode->GetDoc()->getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
+                    if (pNode->GetDoc().getIDocumentDrawModelAccess().Search(aPaM, *xSearchItem) && pSdrView)
                     {
                         if (SdrObject* pObject = pSdrView->GetTextEditObject())
                         {

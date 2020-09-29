@@ -177,7 +177,7 @@ bool SwPosition::operator!=(const SwPosition &rPos) const
 
 SwDoc * SwPosition::GetDoc() const
 {
-    return nNode.GetNode().GetDoc();
+    return &nNode.GetNode().GetDoc();
 }
 
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -560,7 +560,7 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
         tmp.second = false;
     }
     if( nullptr != ( pNd = pPos->nNode.GetNode().GetContentNode() ) &&
-        nullptr != (pCFrame = pNd->getLayoutFrame(pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pPos, pLayPos ? &tmp : nullptr)) &&
+        nullptr != (pCFrame = pNd->getLayoutFrame(pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), pPos, pLayPos ? &tmp : nullptr)) &&
         nullptr != ( pPg = pCFrame->FindPageFrame() ))
         return pPg->GetPhyPageNum();
     return 0;
@@ -603,7 +603,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         Point aTmpPt;
         std::pair<Point, bool> const tmp(aTmpPt, false);
         pFrame = pNd->getLayoutFrame(
-            pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
             GetPoint(), &tmp);
     }
 
@@ -649,7 +649,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             Point aTmpPt;
             std::pair<Point, bool> const tmp(aTmpPt, false);
             pFrame = pNd->getLayoutFrame(
-                pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                 GetMark(), &tmp);
         }
 

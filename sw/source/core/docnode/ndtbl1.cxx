@@ -130,9 +130,9 @@ static void lcl_GetStartEndCell( const SwCursor& rCursor,
     SwContentNode* pMarkNd  = rCursor.GetContentNode(false);
 
     std::pair<Point, bool> tmp(aPtPos, true);
-    SwFrame *const pPointFrame = pPointNd ? pPointNd->getLayoutFrame(pPointNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
+    SwFrame *const pPointFrame = pPointNd ? pPointNd->getLayoutFrame(pPointNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
     tmp.first = aMkPos;
-    SwFrame *const pMarkFrame = pMarkNd ? pMarkNd->getLayoutFrame(pMarkNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
+    SwFrame *const pMarkFrame = pMarkNd ? pMarkNd->getLayoutFrame(pMarkNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
 
     prStart = pPointFrame ? pPointFrame->GetUpper() : nullptr;
     prEnd   = pMarkFrame  ? pMarkFrame->GetUpper() : nullptr;
@@ -820,7 +820,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
     SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
     if( pTableLayout )
     {
-        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
         SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
 
         pTableLayout->BordersChanged(
@@ -916,7 +916,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
     SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
     if( pTableLayout )
     {
-        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
         SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
 
         pTableLayout->BordersChanged(
@@ -1183,7 +1183,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
     if( pTableLayout )
     {
-        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() );
+        SwContentFrame* pFrame = rCursor.GetContentNode()->getLayoutFrame( rCursor.GetContentNode()->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() );
         SwTabFrame* pTabFrame = pFrame->ImplFindTabFrame();
 
         pTableLayout->Resize(

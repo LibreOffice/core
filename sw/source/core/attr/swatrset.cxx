@@ -299,7 +299,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
-            SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFormat->GetDoc();
+            SwDoc *pDstDoc = pCNd ? &pCNd->GetDoc() : pFormat->GetDoc();
 
             // Does the NumRule has to be copied?
             if( pSrcDoc != pDstDoc &&

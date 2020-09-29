@@ -345,7 +345,7 @@ void SwNodeNum::UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
     aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ISCOUNTED );
     aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_NUMRULE );
     SwPaM aPam( *pTextNode );
-    pTextNode->GetDoc()->ResetAttrs( aPam, false,
+    pTextNode->GetDoc().ResetAttrs( aPam, false,
                                     aResetAttrsArray,
                                     false );
 }
