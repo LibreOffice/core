@@ -230,7 +230,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 // update the glyphid-array with the glyphs in this range
                 pStartGlyphs[i] = -static_cast<int>(aGlyphIdArray.size());
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
-                const size_t nRemainingSize = pEndValidArea - pGlyphIdPtr;
+                const size_t nRemainingSize = pEndValidArea >= pGlyphIdPtr ? pEndValidArea - pGlyphIdPtr : 0;
                 const size_t nMaxPossibleRecords = nRemainingSize/2;
                 if (nMaxPossibleRecords == 0) {  // no sane font should trigger this
                     SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
