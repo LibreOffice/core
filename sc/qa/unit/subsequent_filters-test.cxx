@@ -75,6 +75,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 
+#include <comphelper/scopeguard.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 #include <cellsuno.hxx>
@@ -271,6 +273,7 @@ public:
     void testHiddenRowsColumnsXLSXML();
     void testColumnWidthRowHeightXLSXML();
     void testCharacterSetXLSXML();
+    void testTdf137091();
     void testTdf62268();
     void testTdf35636();
     void testVBAMacroFunctionODS();
@@ -442,6 +445,7 @@ public:
     CPPUNIT_TEST(testColumnWidthRowHeightXLSXML);
     CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
+    CPPUNIT_TEST(testTdf137091);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
@@ -4755,6 +4759,28 @@ void ScFiltersTest::testCondFormatFormulaListenerXLSX()
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf137091()
+{
+    // Set the system locale to Turkish
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("tr-TR");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
+    ScDocShellRef xDocSh = loadDoc("tdf137091.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 28/4
+    // - Actual  : Err:507
+    CPPUNIT_ASSERT_EQUAL(OUString("28/4"), rDoc.GetString(ScAddress(2,1,0)));
     xDocSh->DoClose();
 }
 
