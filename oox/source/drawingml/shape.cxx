@@ -1433,6 +1433,12 @@ Reference< XShape > const & Shape::createAndInsert(
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
 
+        if (get3DProperties().maCameraRotation.mnRevolution.has())
+        {
+            // a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
+            mnRotation -= get3DProperties().maCameraRotation.mnRevolution.get();
+        }
+
         PropertySet aPropertySet(mxShape);
         if ( !bUseRotationTransform && mnRotation != 0 )
         {
