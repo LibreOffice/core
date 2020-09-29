@@ -2579,8 +2579,8 @@ void Chart2ImportTest::testTdf134225()
     awt::Point aLabelPosition2 = xDataPointLabel2->getPosition();
 
     // Check the distance between the position of the 1st data point label and the second one
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1800, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2123, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1669, sal_Int32(aLabelPosition2.X - aLabelPosition1.X), 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2166, sal_Int32(aLabelPosition2.Y - aLabelPosition1.Y), 30);
 #endif
 }
 
