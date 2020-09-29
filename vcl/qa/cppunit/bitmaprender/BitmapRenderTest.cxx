@@ -101,6 +101,22 @@ void BitmapRenderTest::testTdf113918()
     CPPUNIT_ASSERT(aColor.GetGreen() > 100);
 }
 
+#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
+
+namespace
+{
+int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
+{
+    int deltaR = std::abs(aColor1.GetRed() - aColor2.GetRed());
+    int deltaG = std::abs(aColor1.GetGreen() - aColor2.GetGreen());
+    int deltaB = std::abs(aColor1.GetBlue() - aColor2.GetBlue());
+
+    return std::max(std::max(deltaR, deltaG), deltaB);
+}
+}
+
+#endif
+
 void BitmapRenderTest::testDrawAlphaBitmapEx()
 {
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -141,27 +157,13 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0xFF), pVDev->GetPixel(Point(0, 0)));
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xFF, 0xFF, 0x00), pVDev->GetPixel(Point(1, 1)));
 
-// sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.
-#if !defined(_WIN32)
+#if defined(_WIN32) || defined(MACOSX) || defined(IOS)
+    // sometimes on Windows we get rounding error in blending so let's ignore this on Windows for now.
+    CPPUNIT_ASSERT_LESS(2, deltaColor(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2))));
+#else
     CPPUNIT_ASSERT_EQUAL(Color(0x00, 0x7F, 0xFF, 0x7F), pVDev->GetPixel(Point(2, 2)));
 #endif
 }
-
-#ifdef _WIN32
-
-namespace
-{
-int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
-{
-    int deltaR = std::abs(aColor1.GetRed() - aColor2.GetRed());
-    int deltaG = std::abs(aColor1.GetGreen() - aColor2.GetGreen());
-    int deltaB = std::abs(aColor1.GetBlue() - aColor2.GetBlue());
-
-    return std::max(std::max(deltaR, deltaG), deltaB);
-}
-}
-
-#endif
 
 void BitmapRenderTest::testAlphaVirtualDevice()
 {
