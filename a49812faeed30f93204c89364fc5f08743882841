@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e937d0d8_86a55e24",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "Formats seem to be identical to et_EE locale data (if not, please ignore this comment).\n\nInstead of duplicating all format data use the ref\u003d\"et_EE\" inheritance mechanism with replaceFrom\u003d\"[CURRENCY]\" and replaceTo\u003d\"[$kr-675]\". For that to work the et_EE.xml file needs to be changed to use replaceFrom\u003d\"[CURRENCY]\" and replaceTo\u003d\"[$kr-425]\" and the currency formats be edited to use [CURRENCY] instead of [$kr-425]",
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58066b24_d7692f5e",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "Reusing the Estonian et-EE 0x0425 LCID is wrong, it must be the 0x0675 defined for LANGUAGE_USER_VORO, so [$kr-675]",
+      "range": {
+        "startLine": 93,
+        "startChar": 29,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31d555d3_e84c83ee",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "Instead of duplicating data this can be\n\n \u003cLC_CURRENCY ref\u003d\"et_EE\" /\u003e",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 2
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdd72c45_e51a9375",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "This should be ref\u003d\"et_EE\" instead.",
+      "range": {
+        "startLine": 429,
+        "startChar": 27,
+        "endLine": 429,
+        "endChar": 32
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "572d5c5d_813d6485",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "This should be ref\u003d\"et_EE\" instead.",
+      "range": {
+        "startLine": 446,
+        "startChar": 26,
+        "endLine": 446,
+        "endChar": 31
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e514281_a432aafb",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-09-29T22:37:44Z",
+      "side": 1,
+      "message": "This should be ref\u003d\"et_EE\" instead.",
+      "range": {
+        "startLine": 447,
+        "startChar": 33,
+        "endLine": 447,
+        "endChar": 38
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
