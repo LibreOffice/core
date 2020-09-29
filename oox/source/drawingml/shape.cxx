@@ -1461,11 +1461,14 @@ Reference< XShape > const & Shape::createAndInsert(
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();
 
+        // tdf#133037: a bit hackish: force Shape to rotate in the opposite direction the camera would rotate
+        const sal_Int32 nCameraRotation = get3DProperties().maCameraRotation.mnRevolution.get(0);
+
         PropertySet aPropertySet(mxShape);
-        if ( !bUseRotationTransform && mnRotation != 0 )
+        if ( !bUseRotationTransform && (mnRotation != 0 || nCameraRotation != 0) )
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
-            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle36000( mnRotation / -600 ) ) ) );
+            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( NormAngle36000( (mnRotation - nCameraRotation) / -600 ) ) ) );
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
         }
