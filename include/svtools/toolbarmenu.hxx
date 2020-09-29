@@ -93,7 +93,7 @@ private:
     std::unique_ptr<WeldToolbarPopup> m_xPopup;
 public:
     InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
-                        std::unique_ptr<WeldToolbarPopup> xPopup);
+                        std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable = false);
     virtual void dispose() override;
     virtual ~InterimToolbarPopup() override;
 

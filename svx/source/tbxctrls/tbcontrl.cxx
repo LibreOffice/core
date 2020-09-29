@@ -3270,7 +3270,11 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createVclPopupWindow( vcl::Window* p
         xPopover->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
 
     mxInterimPopover = VclPtr<InterimToolbarPopup>::Create(getFrameInterface(), pParent,
-        std::move(xPopover));
+        std::move(xPopover), true);
+
+    auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(m_aCommandURL, m_sModuleName);
+    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+    mxInterimPopover->SetText(aWindowTitle);
 
     mxInterimPopover->Show();
 
