@@ -59,6 +59,7 @@ class SwInsTableDlg : public SfxDialogController
     std::unique_ptr<weld::TreeView> m_xLbFormat;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
     std::unique_ptr<weld::Frame> m_xStyleFrame;
+    std::unique_ptr<weld::Label> m_xWarning;
 
     // Returns 255 if mapping is not possible.
     // This means there cannot be more than 255 autotable style.
