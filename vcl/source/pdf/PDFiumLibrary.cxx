@@ -432,6 +432,11 @@ bool PDFiumAnnotation::hasKey(OString const& rKey)
     return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());
 }
 
+int PDFiumAnnotation::getValueType(OString const& rKey)
+{
+    return FPDFAnnot_GetValueType(mpAnnotation, rKey.getStr());
+}
+
 OUString PDFiumAnnotation::getString(OString const& rKey)
 {
     OUString rString;
@@ -472,6 +477,17 @@ std::unique_ptr<PDFiumAnnotation> PDFiumAnnotation::getLinked(OString const& rKe
 }
 
 int PDFiumAnnotation::getObjectCount() { return FPDFAnnot_GetObjectCount(mpAnnotation); }
+
+std::unique_ptr<PDFiumPageObject> PDFiumAnnotation::getObject(int nIndex)
+{
+    std::unique_ptr<PDFiumPageObject> pPDFiumPageObject;
+    FPDF_PAGEOBJECT pPageObject = FPDFAnnot_GetObject(mpAnnotation, nIndex);
+    if (pPageObject)
+    {
+        pPDFiumPageObject = std::make_unique<PDFiumPageObject>(pPageObject);
+    }
+    return pPDFiumPageObject;
+}
 
 PDFiumTextPage::PDFiumTextPage(FPDF_TEXTPAGE pTextPage)
     : mpTextPage(pTextPage)
