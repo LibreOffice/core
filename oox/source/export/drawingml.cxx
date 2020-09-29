@@ -1708,7 +1708,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 {
     SAL_INFO("oox.shape",  "write shape transformation");
 
-    sal_Int32 nRotation=0;
+    sal_Int32 nRotation = 0;
+    sal_Int32 nCameraRotation = 0;
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
@@ -1745,6 +1746,33 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
         if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
             xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
+        // tdf#133037: restore original rotate angle before output
+        if (xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBagProps;
+            xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
+            auto p3DEffectProps = std::find_if(std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+                [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
+            if (p3DEffectProps != std::cend(aGrabBagProps))
+            {
+                uno::Sequence<beans::PropertyValue> a3DEffectProps;
+                p3DEffectProps->Value >>= a3DEffectProps;
+                auto pCameraProps = std::find_if(std::cbegin(a3DEffectProps), std::cend(a3DEffectProps),
+                    [](const PropertyValue& rProp) { return rProp.Name == "Camera"; });
+                if (pCameraProps != std::cend(a3DEffectProps))
+                {
+                    uno::Sequence<beans::PropertyValue> aCameraProps;
+                    pCameraProps->Value >>= aCameraProps;
+                    auto pZRotationProp = std::find_if(std::cbegin(aCameraProps), std::cend(aCameraProps),
+                        [](const PropertyValue& rProp) { return rProp.Name == "rotRev"; });
+                    if (pZRotationProp != std::cend(aCameraProps))
+                    {
+                        pZRotationProp->Value >>= nCameraRotation;
+                        nCameraRotation = NormAngle36000(nCameraRotation / -600);
+                    }
+                }
+            }
+        }
     }
 
     // OOXML flips shapes before rotating them.
@@ -1752,7 +1780,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         nRotation = nRotation * -1 + 36000;
 
     WriteTransformation(tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation), IsGroupShape( rXShape ));
+            bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
 }
 
 void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool bIsField, sal_Int32 nElement,

@@ -265,6 +265,31 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
     CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testCameraRotationRevolution)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "camera-rotation-revolution.docx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape0(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xShape1(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps0(xShape0, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShapeProps1(xShape1, uno::UNO_QUERY);
+    sal_Int32 nRotateAngle0;
+    sal_Int32 nRotateAngle1;
+    xShapeProps0->getPropertyValue("RotateAngle") >>= nRotateAngle0;
+    xShapeProps1->getPropertyValue("RotateAngle") >>= nRotateAngle1;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8000
+    // - Actual  : 0
+    // so the camera rotation would not have been factored into how the shape is displayed
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8000), nRotateAngle0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(27000), nRotateAngle1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
