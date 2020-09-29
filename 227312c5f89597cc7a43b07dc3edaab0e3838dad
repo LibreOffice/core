@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "235aa626_45c00781",
+        "filename": "sw/source/core/access/AccessibilityCheck.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-09-29T06:03:52Z",
+      "side": 1,
+      "message": "This comment is still reverted - it\u0027s \"headings are not allowed in tables\"",
+      "range": {
+        "startLine": 694,
+        "startChar": 4,
+        "endLine": 694,
+        "endChar": 44
+      },
+      "revId": "227312c5f89597cc7a43b07dc3edaab0e3838dad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
