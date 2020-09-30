@@ -371,7 +371,6 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
     if (!xDetection.is())
         return ERRCODE_ABORT;
 
-    OUString sTypeName;
     try
     {
         // open the stream one times only ...
@@ -380,6 +379,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
         OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
         uno::Reference< io::XInputStream > xInStream = rMedium.GetInputStream();
         OUString aFilterName;
+        OUString sTypeName;
 
         // stream exists => deep detection (with preselection ... if possible)
         if (xInStream.is())

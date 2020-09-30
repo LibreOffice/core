@@ -287,13 +287,13 @@ void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
 static bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
 {
     bool bRet = false;
-    OUString sAnchor;
 
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                              Reference< css::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
+        OUString sAnchor;
         if ( aCnt.getPropertyValue("AnchorName") >>= sAnchor )
         {
 

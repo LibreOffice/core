@@ -213,10 +213,9 @@ public:
                 xDocSettingsSupplier->createInstance( "com.sun.star.document.Settings" ),
                 uno::UNO_QUERY_THROW );
 
-            OUString aLoadReadonlyString( "LoadReadonly" );
-
             try
             {
+                OUString aLoadReadonlyString( "LoadReadonly" );
                 m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
                 m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( bReadOnly ) );
                 m_bReadOnlySupported = true;
