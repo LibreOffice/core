@@ -320,4 +320,58 @@ class chartDataLabels(UITestCase):
     self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
     self.ui_test.close_doc()
 
+   def test_tdf136573(self):
+    calc_doc = self.ui_test.load_file(get_url_for_data_file("dataLabels.ods"))
+    xCalcDoc = self.xUITest.getTopFocusWindow()
+    gridwin = xCalcDoc.getChild("grid_window")
+
+    #Change units to cms
+    self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+    xDialogOpt = self.xUITest.getTopFocusWindow()
+
+    xPages = xDialogOpt.getChild("pages")
+    xEntry = xPages.getChild('3')
+    xEntry.executeAction("EXPAND", tuple())
+    xGeneralEntry = xEntry.getChild('0')
+    xGeneralEntry.executeAction("SELECT", tuple())
+    xunitlb = xDialogOpt.getChild("unitlb")
+    props = {"TEXT": "Centimeter"}
+    actionProps = mkPropertyValues(props)
+    xunitlb.executeAction("SELECT", actionProps)
+    xOKBtn = xDialogOpt.getChild("ok")
+    self.ui_test.close_dialog_through_button(xOKBtn)
+
+    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    gridwin.executeAction("ACTIVATE", tuple())
+    xChartMainTop = self.xUITest.getTopFocusWindow()
+    xChartMain = xChartMainTop.getChild("chart_window")
+
+    # Select the first label
+    xDataLabel = xChartMain.getChild("CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0")
+    xDataLabel.executeAction("SELECT", tuple())
+
+    self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("0.43", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("2.84", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xCanBtn = xDialog.getChild("cancel")
+    xCanBtn.executeAction("CLICK", tuple())
+
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+
+    self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    # Check the position has changed after moving the label using the arrows keys
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("0.33", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("2.74", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xCanBtn = xDialog.getChild("ok")
+    xCanBtn.executeAction("CLICK", tuple())
+
+    self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
