@@ -1311,6 +1311,19 @@ void Window::InvalidateSizeCache()
     pWindowImpl->mnOptimalHeightCache = -1;
 }
 
+static bool HasParentDockingWindow(const vcl::Window* pWindow)
+{
+    while( pWindow )
+    {
+        if( pWindow->IsDockingWindow() )
+            return true;
+
+        pWindow = pWindow->GetParent();
+    }
+
+    return pWindow && pWindow->IsDockingWindow();
+}
+
 void Window::queue_resize(StateChangedType eReason)
 {
     if (IsDisposed())
@@ -1346,7 +1359,8 @@ void Window::queue_resize(StateChangedType eReason)
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         Size aSize = GetSizePixel();
-        if (!aSize.IsEmpty() && GetParentDialog() && !pParent->IsInInitShow())
+        if (!aSize.IsEmpty() && !pParent->IsInInitShow()
+            && (GetParentDialog() || HasParentDockingWindow(this)))
             LogicInvalidate(nullptr);
     }
 }
