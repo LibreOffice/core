@@ -101,8 +101,8 @@ void SwXBookmark::Impl::registerInMark(SwXBookmark& rThis,
         {
             pMarkBase->SetXBookmark(xBookmark);
         }
-        assert(m_pDoc == nullptr || m_pDoc == pBkmk->GetMarkPos().GetDoc());
-        m_pDoc = pBkmk->GetMarkPos().GetDoc();
+        assert(m_pDoc == nullptr || m_pDoc == &pBkmk->GetMarkPos().GetDoc());
+        m_pDoc = &pBkmk->GetMarkPos().GetDoc();
     }
     else if (m_pRegisteredBookmark)
     {

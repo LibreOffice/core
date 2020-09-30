@@ -323,14 +323,14 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, bool bFlg )
-    : SwUndo( SwUndoId::SETNUMRULESTART, rPos.GetDoc() ),
+    : SwUndo( SwUndoId::SETNUMRULESTART, &rPos.GetDoc() ),
     m_nIndex( rPos.nNode.GetIndex() ), m_nOldStart( USHRT_MAX ),
     m_nNewStart( USHRT_MAX ), m_bSetStartValue( false ), m_bFlag( bFlg )
 {
 }
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt )
-    : SwUndo(SwUndoId::SETNUMRULESTART, rPos.GetDoc())
+    : SwUndo(SwUndoId::SETNUMRULESTART, &rPos.GetDoc())
     , m_nIndex(rPos.nNode.GetIndex())
     , m_nOldStart(USHRT_MAX)
     , m_nNewStart(nStt)

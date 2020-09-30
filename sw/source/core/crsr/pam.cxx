@@ -175,9 +175,9 @@ bool SwPosition::operator!=(const SwPosition &rPos) const
         || (nContent != rPos.nContent);
 }
 
-SwDoc * SwPosition::GetDoc() const
+SwDoc& SwPosition::GetDoc() const
 {
-    return &nNode.GetNode().GetDoc();
+    return nNode.GetNode().GetDoc();
 }
 
 void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const

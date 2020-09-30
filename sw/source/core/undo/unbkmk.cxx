@@ -32,7 +32,7 @@
 
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
             const ::sw::mark::IMark& rBkmk )
-    : SwUndo( nUndoId, rBkmk.GetMarkPos().GetDoc() )
+    : SwUndo( nUndoId, &rBkmk.GetMarkPos().GetDoc() )
     , m_pHistoryBookmark(new SwHistoryBookmark(rBkmk, true, rBkmk.IsExpanded()))
 {
 }
@@ -148,7 +148,7 @@ void SwUndoRenameBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoInsNoTextFieldmark::SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
-    : SwUndo(SwUndoId::INSERT, rFieldmark.GetMarkPos().GetDoc())
+    : SwUndo(SwUndoId::INSERT, &rFieldmark.GetMarkPos().GetDoc())
     , m_pHistoryNoTextFieldmark(new SwHistoryNoTextFieldmark(rFieldmark))
 {
 }
@@ -164,7 +164,7 @@ void SwUndoInsNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoDelNoTextFieldmark::SwUndoDelNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
-    : SwUndo(SwUndoId::DELETE, rFieldmark.GetMarkPos().GetDoc())
+    : SwUndo(SwUndoId::DELETE, &rFieldmark.GetMarkPos().GetDoc())
     , m_pHistoryNoTextFieldmark(new SwHistoryNoTextFieldmark(rFieldmark))
 {
 }
@@ -182,7 +182,7 @@ void SwUndoDelNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoInsTextFieldmark::SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
-    : SwUndo(SwUndoId::INSERT, rFieldmark.GetMarkPos().GetDoc())
+    : SwUndo(SwUndoId::INSERT, &rFieldmark.GetMarkPos().GetDoc())
     , m_pHistoryTextFieldmark(new SwHistoryTextFieldmark(rFieldmark))
 {
 }
@@ -198,7 +198,7 @@ void SwUndoInsTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoDelTextFieldmark::SwUndoDelTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
-    : SwUndo(SwUndoId::DELETE, rFieldmark.GetMarkPos().GetDoc())
+    : SwUndo(SwUndoId::DELETE, &rFieldmark.GetMarkPos().GetDoc())
     , m_pHistoryTextFieldmark(new SwHistoryTextFieldmark(rFieldmark))
 {
 }

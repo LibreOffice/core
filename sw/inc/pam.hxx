@@ -47,7 +47,7 @@ struct SAL_WARN_UNUSED SW_DLLPUBLIC SwPosition
 
        @return the document this position is in.
     */
-    SwDoc * GetDoc() const;
+    SwDoc& GetDoc() const;
 
     bool operator < (const SwPosition &) const;
     bool operator > (const SwPosition &) const;

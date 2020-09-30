@@ -536,7 +536,7 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex()
     if ( pCrSr )
     {
         SwPosition* pStart = pCrSr->Start();
-        pRedline = pStart->GetDoc()->getIDocumentRedlineAccess().GetRedline(*pStart, nullptr);
+        pRedline = pStart->GetDoc().getIDocumentRedlineAccess().GetRedline(*pStart, nullptr);
     }
 
     return pRedline;

@@ -538,7 +538,7 @@ SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFormatId )
 }
 
 SwUndoResetAttr::SwUndoResetAttr( const SwPosition& rPos, sal_uInt16 nFormatId )
-    : SwUndo( SwUndoId::RESETATTR, rPos.GetDoc() )
+    : SwUndo( SwUndoId::RESETATTR, &rPos.GetDoc() )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFormatId )
 {
@@ -1017,7 +1017,7 @@ void SwUndoEndNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoDontExpandFormat::SwUndoDontExpandFormat( const SwPosition& rPos )
-    : SwUndo( SwUndoId::DONTEXPAND, rPos.GetDoc() )
+    : SwUndo( SwUndoId::DONTEXPAND, &rPos.GetDoc() )
     , m_nNodeIndex( rPos.nNode.GetIndex() )
     , m_nContentIndex( rPos.nContent.GetIndex() )
 {
