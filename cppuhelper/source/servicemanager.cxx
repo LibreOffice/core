@@ -327,6 +327,7 @@ void Parser::handleComponent() {
 void Parser::handleImplementation() {
     OUString attrName;
     OUString attrConstructor;
+    bool attrSingleInstance = false;
     xmlreader::Span name;
     int nsId;
     while (reader_.nextAttribute(&nsId, &name)) {
@@ -366,6 +367,19 @@ void Parser::handleImplementation() {
                      + ": <implementation> has \"constructor\" attribute but"
                         " <component> has no \"environment\" attribute");
             }
+        } else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE
+                   && name.equals(RTL_CONSTASCII_STRINGPARAM("single-instance")))
+        {
+            if (attrSingleInstance) {
+                throw css::registry::InvalidRegistryException(
+                    reader_.getUrl()
+                    + ": <implementation> has multiple \"single-instance\" attributes");
+            }
+            if (!reader_.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
+                throw css::registry::InvalidRegistryException(
+                    reader_.getUrl() + ": <implementation> has bad \"single-instance\" attribute");
+            }
+            attrSingleInstance = true;
         } else {
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected element attribute \""
@@ -380,7 +394,7 @@ void Parser::handleImplementation() {
     implementation_ =
         std::make_shared<cppuhelper::ServiceManager::Data::Implementation>(
             attrName, attrLoader_, attrUri_, attrEnvironment_, attrConstructor,
-            attrPrefix_, alienContext_, reader_.getUrl());
+            attrPrefix_, attrSingleInstance, alienContext_, reader_.getUrl());
     if (!data_->namedImplementations.emplace(attrName, implementation_).
         second)
     {
@@ -647,17 +661,16 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
     bool singletonRequest)
 {
     css::uno::Reference<css::uno::XInterface> inst;
-    if (constructorFn) {
-        inst.set(
-            constructorFn(context.get(), css::uno::Sequence<css::uno::Any>()),
-            SAL_NO_ACQUIRE);
-    } else if (factory1.is()) {
-            inst = factory1->createInstanceWithContext(context);
+    if (isSingleInstance) {
+        osl::MutexGuard g(mutex);
+        if (!singleInstance.is()) {
+            singleInstance = doCreateInstance(context);
+        }
+        inst = singleInstance;
     } else {
-        assert(factory2.is());
-        inst = factory2->createInstance();
+        inst = doCreateInstance(context);
     }
-    updateDisposeSingleton(singletonRequest, inst);
+    updateDisposeInstance(singletonRequest, inst);
     return inst;
 }
 
@@ -667,8 +680,43 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     bool singletonRequest, css::uno::Sequence<css::uno::Any> const & arguments)
 {
     css::uno::Reference<css::uno::XInterface> inst;
+    if (isSingleInstance) {
+        osl::MutexGuard g(mutex);
+        if (!singleInstance.is()) {
+            singleInstance = doCreateInstanceWithArguments(context, arguments);
+        }
+        inst = singleInstance;
+    } else {
+        inst = doCreateInstanceWithArguments(context, arguments);
+    }
+    updateDisposeInstance(singletonRequest, inst);
+    return inst;
+}
+
+css::uno::Reference<css::uno::XInterface>
+cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
+    css::uno::Reference<css::uno::XComponentContext> const & context)
+{
     if (constructorFn) {
-        inst.set(constructorFn(context.get(), arguments), SAL_NO_ACQUIRE);
+        return css::uno::Reference<css::uno::XInterface>(
+            constructorFn(context.get(), css::uno::Sequence<css::uno::Any>()),
+            SAL_NO_ACQUIRE);
+    } else if (factory1.is()) {
+        return factory1->createInstanceWithContext(context);
+    } else {
+        assert(factory2.is());
+        return factory2->createInstance();
+    }
+}
+
+css::uno::Reference<css::uno::XInterface>
+cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
+    css::uno::Reference<css::uno::XComponentContext> const & context,
+    css::uno::Sequence<css::uno::Any> const & arguments)
+{
+    if (constructorFn) {
+        css::uno::Reference<css::uno::XInterface> inst(
+            constructorFn(context.get(), arguments), SAL_NO_ACQUIRE);
         //HACK: The constructor will either observe arguments and return inst
         // that does not implement XInitialization (or null), or ignore
         // arguments and return inst that implements XInitialization; this
@@ -679,18 +727,17 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
         if (init.is()) {
             init->initialize(arguments);
         }
+        return inst;
     } else if (factory1.is()) {
-        inst = factory1->createInstanceWithArgumentsAndContext(
+        return factory1->createInstanceWithArgumentsAndContext(
             arguments, context);
     } else {
         assert(factory2.is());
-        inst = factory2->createInstanceWithArguments(arguments);
+        return factory2->createInstanceWithArguments(arguments);
     }
-    updateDisposeSingleton(singletonRequest, inst);
-    return inst;
 }
 
-void cppuhelper::ServiceManager::Data::Implementation::updateDisposeSingleton(
+void cppuhelper::ServiceManager::Data::Implementation::updateDisposeInstance(
     bool singletonRequest,
     css::uno::Reference<css::uno::XInterface> const & instance)
 {
@@ -702,15 +749,15 @@ void cppuhelper::ServiceManager::Data::Implementation::updateDisposeSingleton(
     // the implementation hands out different instances):
     if (singletonRequest) {
         osl::MutexGuard g(mutex);
-        disposeSingleton.clear();
+        disposeInstance.clear();
         dispose = false;
-    } else if (!singletons.empty()) {
+    } else if (shallDispose()) {
         css::uno::Reference<css::lang::XComponent> comp(
             instance, css::uno::UNO_QUERY);
         if (comp.is()) {
             osl::MutexGuard g(mutex);
             if (dispose) {
-                disposeSingleton = comp;
+                disposeInstance = comp;
             }
         }
     }
@@ -840,20 +887,20 @@ void cppuhelper::ServiceManager::disposing() {
         for (const auto& rEntry : data_.namedImplementations)
         {
             assert(rEntry.second);
-            if (!rEntry.second->singletons.empty()) {
+            if (rEntry.second->shallDispose()) {
                 osl::MutexGuard g2(rEntry.second->mutex);
-                if (rEntry.second->disposeSingleton.is()) {
-                    sngls.push_back(rEntry.second->disposeSingleton);
+                if (rEntry.second->disposeInstance.is()) {
+                    sngls.push_back(rEntry.second->disposeInstance);
                 }
             }
         }
         for (const auto& rEntry : data_.dynamicImplementations)
         {
             assert(rEntry.second);
-            if (!rEntry.second->singletons.empty()) {
+            if (rEntry.second->shallDispose()) {
                 osl::MutexGuard g2(rEntry.second->mutex);
-                if (rEntry.second->disposeSingleton.is()) {
-                    sngls.push_back(rEntry.second->disposeSingleton);
+                if (rEntry.second->disposeInstance.is()) {
+                    sngls.push_back(rEntry.second->disposeInstance);
                 }
             }
             if (rEntry.second->component.is()) {
@@ -1395,7 +1442,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(OUString const & uri) {
         std::shared_ptr< Data::Implementation > impl =
             std::make_shared<Data::Implementation>(
                 name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
-                readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "",
+                readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "", false,
                 css::uno::Reference< css::uno::XComponentContext >(), uri);
         if (!data_.namedImplementations.emplace(name, impl).second)
         {

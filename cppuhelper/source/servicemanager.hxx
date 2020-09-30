@@ -74,11 +74,13 @@ public:
                 OUString const & theUri, OUString const & theEnvironment,
                 OUString const & theConstructorName,
                 OUString const & thePrefix,
+                bool theIsSingleInstance,
                 css::uno::Reference< css::uno::XComponentContext > const &
                     theAlienContext,
                 OUString const & theRdbFile):
                 name(theName), loader(theLoader), uri(theUri), environment(theEnvironment),
                 constructorName(theConstructorName), prefix(thePrefix),
+                isSingleInstance(theIsSingleInstance),
                 alienContext(theAlienContext), rdbFile(theRdbFile),
                 constructorFn(nullptr), status(STATUS_NEW), dispose(true)
             {}
@@ -91,7 +93,7 @@ public:
                     theFactory2,
                 css::uno::Reference< css::lang::XComponent > const &
                     theComponent):
-                name(theName), constructorFn(nullptr),
+                name(theName), isSingleInstance(false), constructorFn(nullptr),
                 factory1(theFactory1), factory2(theFactory2),
                 component(theComponent), status(STATUS_LOADED), dispose(true)
             { assert(theFactory1.is() || theFactory2.is()); }
@@ -110,6 +112,8 @@ public:
                     context,
                 bool singletonRequest,
                 css::uno::Sequence<css::uno::Any> const & arguments);
+
+            bool shallDispose() const { return isSingleInstance || !singletons.empty(); }
 
             enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
@@ -130,6 +134,7 @@ public:
             OUString environment;
             OUString constructorName;
             OUString prefix;
+            bool isSingleInstance;
             css::uno::Reference< css::uno::XComponentContext > alienContext;
             OUString rdbFile;
             std::vector< OUString > services;
@@ -141,11 +146,19 @@ public:
             Status status;
 
             osl::Mutex mutex;
-            css::uno::Reference< css::lang::XComponent > disposeSingleton;
+            css::uno::Reference<css::uno::XInterface> singleInstance;
+            css::uno::Reference< css::lang::XComponent > disposeInstance;
             bool dispose;
 
         private:
-            void updateDisposeSingleton(
+            css::uno::Reference<css::uno::XInterface> doCreateInstance(
+                css::uno::Reference<css::uno::XComponentContext> const & context);
+
+            css::uno::Reference<css::uno::XInterface> doCreateInstanceWithArguments(
+                css::uno::Reference<css::uno::XComponentContext> const & context,
+                css::uno::Sequence<css::uno::Any> const & arguments);
+
+            void updateDisposeInstance(
                 bool singletonRequest,
                 css::uno::Reference<css::uno::XInterface> const & instance);
         };
