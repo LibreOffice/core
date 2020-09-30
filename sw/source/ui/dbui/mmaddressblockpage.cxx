@@ -1404,7 +1404,7 @@ void AddressMultiLineEdit::UpdateFields()
     m_aSelectionLink.Call(false);
 }
 
-void AddressMultiLineEdit::EditViewSelectionChange() const
+void AddressMultiLineEdit::EditViewSelectionChange()
 {
     WeldEditView::EditViewSelectionChange();
     m_aSelectionLink.Call(true);
@@ -1541,7 +1541,7 @@ namespace
     };
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::GetDropTarget() const
+css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::GetDropTarget()
 {
     if (!m_xDropTarget.is())
     {
@@ -1549,7 +1549,7 @@ css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::G
         DropTargetListener* pProxy = new DropTargetListener(xRealDropTarget, m_pParentDialog);
         uno::Reference<css::datatransfer::dnd::XDropTargetListener> xListener(pProxy);
         xRealDropTarget->addDropTargetListener(xListener);
-        const_cast<AddressMultiLineEdit*>(this)->m_xDropTarget = uno::Reference<css::datatransfer::dnd::XDropTarget>(pProxy);
+        m_xDropTarget = uno::Reference<css::datatransfer::dnd::XDropTarget>(pProxy);
     }
     return m_xDropTarget;
 }

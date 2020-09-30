@@ -5577,6 +5577,11 @@ public:
         m_xDrawingArea->SetPointer(ePointerStyle);
     }
 
+    virtual void set_input_context(const InputContext& rInputContext) override
+    {
+        m_xDrawingArea->SetInputContext(rInputContext);
+    }
+
     virtual a11yref get_accessible_parent() override
     {
         vcl::Window* pParent = m_xDrawingArea->GetParent();
