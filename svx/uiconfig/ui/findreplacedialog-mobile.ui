@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="FindReplaceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes" context="findreplacedialog|FindReplaceDialog">Find &amp; Replace</property>
+    <property name="title" translatable="yes" context="findreplacedialog-mobile|FindReplaceDialog">Find &amp; Replace</property>
     <property name="resizable">False</property>
     <property name="default_width">0</property>
     <property name="default_height">0</property>
@@ -138,7 +138,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="yes" context="findreplacedialog|label4">_Find:</property>
+                            <property name="label" translatable="yes" context="findreplacedialog-mobile|label4">_Find:</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0.40000000596046448</property>
@@ -192,7 +192,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="matchcase">
-                                <property name="label" translatable="yes" context="findreplacedialog|matchcase">Ma_tch case</property>
+                                <property name="label" translatable="yes" context="findreplacedialog-mobile|matchcase">Ma_tch case</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -208,7 +208,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="searchformatted">
-                                <property name="label" translatable="yes" context="findreplacedialog|searchformatted">For_matted display</property>
+                                <property name="label" translatable="yes" context="findreplacedialog-mobile|searchformatted">For_matted display</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -228,7 +228,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkCheckButton" id="wholewords">
-                                    <property name="label" translatable="yes" context="findreplacedialog|wholewords">Whole wor_ds only</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|wholewords">Whole wor_ds only</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -246,7 +246,7 @@
                                   <object class="GtkLabel" id="entirecells">
                                     <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="label" translatable="yes" context="findreplacedialog|entirecells">_Entire cells</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|entirecells">_Entire cells</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
@@ -264,7 +264,7 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="allsheets">
-                                <property name="label" translatable="yes" context="findreplacedialog|allsheets">All _sheets</property>
+                                <property name="label" translatable="yes" context="findreplacedialog-mobile|allsheets">All _sheets</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="no_show_all">True</property>
@@ -303,7 +303,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label1">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="findreplacedialog|label1">_Search For</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|label1">_Search For</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -388,7 +388,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="label" translatable="yes" context="findreplacedialog|label5">Re_place:</property>
+                            <property name="label" translatable="yes" context="findreplacedialog-mobile|label5">Re_place:</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <attributes>
@@ -428,7 +428,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label2">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="findreplacedialog|label2">Re_place With</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|label2">Re_place With</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -454,7 +454,7 @@
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="searchall">
-                    <property name="label" translatable="yes" context="findreplacedialog|searchall">Find _All</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|searchall">Find _All</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -468,7 +468,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="backsearch">
-                    <property name="label" translatable="yes" context="findreplacedialog|backsearch">Find Pre_vious</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|backsearch">Find Pre_vious</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -482,7 +482,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="search">
-                    <property name="label" translatable="yes" context="findreplacedialog|search">Find Ne_xt</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|search">Find Ne_xt</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
@@ -498,7 +498,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="replace">
-                    <property name="label" translatable="yes" context="findreplacedialog|replace">_Replace</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|replace">_Replace</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -512,7 +512,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="replaceall">
-                    <property name="label" translatable="yes" context="findreplacedialog|replaceall">Replace A_ll</property>
+                    <property name="label" translatable="yes" context="findreplacedialog-mobile|replaceall">Replace A_ll</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
@@ -668,7 +668,7 @@
                                 <property name="column_homogeneous">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="selection">
-                                    <property name="label" translatable="yes" context="findreplacedialog|selection">C_urrent selection only</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|selection">C_urrent selection only</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
@@ -683,7 +683,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="regexp">
-                                    <property name="label" translatable="yes" context="findreplacedialog|regexp">Re_gular expressions</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|regexp">Re_gular expressions</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
@@ -705,7 +705,7 @@
                                     <property name="layout_style">spread</property>
                                     <child>
                                       <object class="GtkButton" id="attributes">
-                                        <property name="label" translatable="yes" context="findreplacedialog|attributes">Attribut_es...</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|attributes">Attribut_es...</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
@@ -719,7 +719,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="format">
-                                        <property name="label" translatable="yes" context="findreplacedialog|format">For_mat...</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|format">For_mat...</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
@@ -733,7 +733,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="noformat">
-                                        <property name="label" translatable="yes" context="findreplacedialog|noformat">_No Format</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|noformat">_No Format</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
@@ -754,7 +754,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="layout">
-                                    <property name="label" translatable="yes" context="findreplacedialog|layout">Search for st_yles</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|layout">Search for st_yles</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
@@ -769,7 +769,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="includediacritics">
-                                    <property name="label" translatable="yes" context="findreplacedialog|includediacritics">Diac_ritic-sensitive</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|includediacritics">Diac_ritic-sensitive</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -784,7 +784,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="includekashida">
-                                    <property name="label" translatable="yes" context="findreplacedialog|includekashida">_Kashida-sensitive</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|includekashida">_Kashida-sensitive</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -799,7 +799,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="matchcharwidth">
-                                    <property name="label" translatable="yes" context="findreplacedialog|matchcharwidth">Match character _width</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|matchcharwidth">Match character _width</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -819,7 +819,7 @@
                                     <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="similarity">
-                                        <property name="label" translatable="yes" context="findreplacedialog|similarity">S_imilarity search</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|similarity">S_imilarity search</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -835,7 +835,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="similaritybtn">
-                                        <property name="label" translatable="yes" context="findreplacedialog|similaritybtn">Similarities...</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|similaritybtn">Similarities...</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
@@ -862,7 +862,7 @@
                                     <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="soundslike">
-                                        <property name="label" translatable="yes" context="findreplacedialog|soundslike">Sounds like (_Japanese)</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|soundslike">Sounds like (_Japanese)</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -878,7 +878,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="soundslikebtn">
-                                        <property name="label" translatable="yes" context="findreplacedialog|soundslikebtn">Sounds...</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|soundslikebtn">Sounds...</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
@@ -904,7 +904,7 @@
                                     <property name="can_focus">False</property>
                                     <child>
                                       <object class="GtkCheckButton" id="wildcard">
-                                        <property name="label" translatable="yes" context="findreplacedialog|wildcard">Wil_dcards</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|wildcard">Wil_dcards</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
@@ -920,7 +920,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="notes">
-                                        <property name="label" translatable="yes" context="findreplacedialog|notes">_Comments</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|notes">_Comments</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
@@ -942,7 +942,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="replace_backwards">
-                                    <property name="label" translatable="yes" context="findreplacedialog|replace_backwards">Replace _backwards</property>
+                                    <property name="label" translatable="yes" context="findreplacedialog-mobile|replace_backwards">Replace _backwards</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
@@ -978,7 +978,7 @@
                                       <object class="GtkLabel" id="searchinlabel">
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
-                                        <property name="label" translatable="yes" context="findreplacedialog|searchinlabel">Search i_n:</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|searchinlabel">Search i_n:</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                       </object>
@@ -993,9 +993,9 @@
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
                                         <items>
-                                          <item translatable="yes" context="findreplacedialog|calcsearchin">Formulas</item>
-                                          <item translatable="yes" context="findreplacedialog|calcsearchin">Values</item>
-                                          <item translatable="yes" context="findreplacedialog|calcsearchin">Notes</item>
+                                          <item translatable="yes" context="findreplacedialog-mobile|calcsearchin">Formulas</item>
+                                          <item translatable="yes" context="findreplacedialog-mobile|calcsearchin">Values</item>
+                                          <item translatable="yes" context="findreplacedialog-mobile|calcsearchin">Notes</item>
                                         </items>
                                       </object>
                                       <packing>
@@ -1020,7 +1020,7 @@
                                       <object class="GtkLabel" id="searchdir">
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
-                                        <property name="label" translatable="yes" context="findreplacedialog|searchdir">Direction:</property>
+                                        <property name="label" translatable="yes" context="findreplacedialog-mobile|searchdir">Direction:</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                       </object>
@@ -1037,7 +1037,7 @@
                                         <property name="spacing">15</property>
                                         <child>
                                           <object class="GtkRadioButton" id="rows">
-                                            <property name="label" translatable="yes" context="findreplacedialog|rows">Ro_ws</property>
+                                            <property name="label" translatable="yes" context="findreplacedialog-mobile|rows">Ro_ws</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="no_show_all">True</property>
@@ -1057,7 +1057,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkRadioButton" id="cols">
-                                            <property name="label" translatable="yes" context="findreplacedialog|cols">Colum_ns</property>
+                                            <property name="label" translatable="yes" context="findreplacedialog-mobile|cols">Colum_ns</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="no_show_all">True</property>
@@ -1104,7 +1104,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="findreplacedialog|label3">Other _options</property>
+                        <property name="label" translatable="yes" context="findreplacedialog-mobile|label3">Other _options</property>
                         <property name="use_underline">True</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>

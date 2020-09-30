@@ -12,7 +12,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="tsbshow">
-        <property name="label" translatable="yes" context="erroralerttabpage|tsbshow">Show error _message when invalid values are entered</property>
+        <property name="label" translatable="yes" context="erroralerttabpage-mobile|tsbshow">Show error _message when invalid values are entered</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -40,7 +40,7 @@
           <object class="GtkLabel" id="action_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="erroralerttabpage|action_label">_Action:</property>
+            <property name="label" translatable="yes" context="erroralerttabpage-mobile|action_label">_Action:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">actionCB</property>
             <property name="xalign">0</property>
@@ -54,7 +54,7 @@
           <object class="GtkLabel" id="title_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="erroralerttabpage|title_label">_Title:</property>
+            <property name="label" translatable="yes" context="erroralerttabpage-mobile|title_label">_Title:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">erroralert_title</property>
             <property name="xalign">0</property>
@@ -101,7 +101,7 @@
           <object class="GtkLabel" id="errormsg_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="erroralerttabpage|errormsg_label">_Error message:</property>
+            <property name="label" translatable="yes" context="erroralerttabpage-mobile|errormsg_label">_Error message:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">errorMsg</property>
             <property name="xalign">0</property>
@@ -114,7 +114,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browseBtn">
-            <property name="label" translatable="yes" context="erroralerttabpage|browseBtn">_Browse...</property>
+            <property name="label" translatable="yes" context="erroralerttabpage-mobile|browseBtn">_Browse...</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="use_underline">True</property>
@@ -130,9 +130,9 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
-              <item translatable="yes" context="erroralerttabpage|actionCB">Stop</item>
-              <item translatable="yes" context="erroralerttabpage|actionCB">Warning</item>
-              <item translatable="yes" context="erroralerttabpage|actionCB">Information</item>
+              <item translatable="yes" context="erroralerttabpage-mobile|actionCB">Stop</item>
+              <item translatable="yes" context="erroralerttabpage-mobile|actionCB">Warning</item>
+              <item translatable="yes" context="erroralerttabpage-mobile|actionCB">Information</item>
             </items>
           </object>
           <packing>

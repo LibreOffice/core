@@ -12,7 +12,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="tsbhelp">
-        <property name="label" translatable="yes" context="validationhelptabpage|tsbhelp">_Show input help when cell is selected</property>
+        <property name="label" translatable="yes" context="validationhelptabpage-mobile|tsbhelp">_Show input help when cell is selected</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -52,7 +52,7 @@
           <object class="GtkLabel" id="title_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="validationhelptabpage|title_label">_Title:</property>
+            <property name="label" translatable="yes" context="validationhelptabpage-mobile|title_label">_Title:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">title</property>
             <property name="xalign">0</property>
@@ -66,7 +66,7 @@
           <object class="GtkLabel" id="inputhelp_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="validationhelptabpage|inputhelp_label">_Input help:</property>
+            <property name="label" translatable="yes" context="validationhelptabpage-mobile|inputhelp_label">_Input help:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">inputhelp</property>
             <property name="xalign">0</property>
