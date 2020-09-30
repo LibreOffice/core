@@ -1320,6 +1320,19 @@ void Window::InvalidateSizeCache()
     pWindowImpl->mnOptimalHeightCache = -1;
 }
 
+static bool HasParentDockingWindow(const vcl::Window* pWindow)
+{
+    while( pWindow )
+    {
+        if( pWindow->IsDockingWindow() )
+            return true;
+
+        pWindow = pWindow->GetParent();
+    }
+
+    return pWindow && pWindow->IsDockingWindow();
+}
+
 void Window::queue_resize(StateChangedType eReason)
 {
     if (IsDisposed())
@@ -1355,7 +1368,12 @@ void Window::queue_resize(StateChangedType eReason)
     if (VclPtr<vcl::Window> pParent = GetParentWithLOKNotifier())
     {
         Size aSize = GetSizePixel();
-        if (aSize.getWidth() > 0 && aSize.getHeight() > 0 && GetParentDialog()
+
+        // Form controls (VCL controls inside document window) was causing
+        // infinite loop of calls, so call it only for widgets having as a parent
+        // dialog or docking window (eg. sidebar)
+        if (aSize.getWidth() > 0 && aSize.getHeight() > 0
+            && (GetParentDialog() || HasParentDockingWindow(this))
             && !pParent->IsInInitShow())
             LogicInvalidate(nullptr);
     }
