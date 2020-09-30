@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "480669bf_8538f66b",
+        "filename": "compilerplugins/clang/reducevarscope.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-30T14:18:53Z",
+      "side": 1,
+      "message": "Isn\u0027t this broken by design?  For many of the \"OK\" types, there is a chance that some code takes the address of the object or of a sub-object and holds on to it past the reduced lifetime of the object.  That would include obvious code like operator\u0026 within the variable\u0027s scope (which is not checked for?), well-known code like OUString::getStr within the variable\u0027s scope, but also code invisible to the plugin like with\n\n  struct xy { int x, y; };\n  int * f(xy const \u0026 w); // defined in other TU, returning pointer into w\n  xy z;\n  int * p;\n  if (...) {\n    // must not move z here\n    p \u003d f(z);\n  }\n  ... *p ...",
+      "revId": "5247b14049fbeb0193d677ea0d2200b6682c47b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
