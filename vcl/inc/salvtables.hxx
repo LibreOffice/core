@@ -1125,6 +1125,7 @@ private:
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+    DECL_LINK(GetSurroundingHdl, OUString&, int);
     DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
 
     // SalInstanceWidget has a generic listener for all these
@@ -1156,6 +1157,9 @@ public:
     virtual void set_cursor(PointerStyle ePointerStyle) override;
 
     virtual void set_input_context(const InputContext& rInputContext) override;
+
+    virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect,
+                                                int nExtTextInputWidth) override;
 
     virtual a11yref get_accessible_parent() override;
 

@@ -25,6 +25,8 @@ class SVX_DLLPUBLIC WeldEditView : public weld::CustomWidgetController, public E
 public:
     WeldEditView();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual int GetSurroundingText(OUString& rSurrounding) override;
+    virtual bool DeleteSurroundingText(const Selection& rRange) override;
 
     void SetText(const OUString& rStr) { m_xEditEngine->SetText(rStr); }
 
@@ -76,6 +78,13 @@ protected:
     virtual void EditViewInputContext(const InputContext& rInputContext) override
     {
         SetInputContext(rInputContext);
+    }
+
+    virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override
+    {
+        OutputDevice& rRefDevice = EditViewOutputDevice();
+        SetCursorRect(rRefDevice.LogicToPixel(rRect),
+                      rRefDevice.LogicToPixel(Size(nExtTextInputWidth, 0)).Width());
     }
 };
 
