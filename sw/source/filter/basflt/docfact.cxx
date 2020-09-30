@@ -26,19 +26,15 @@ SwDocFac::SwDocFac( SwDoc *pDc )
 {
 }
 
-
 SwDocFac::~SwDocFac() COVERITY_NOEXCEPT_FALSE
 {
 }
 
-
-SwDoc *SwDocFac::GetDoc()
+SwDoc& SwDocFac::GetDoc()
 {
-    if( !mxDoc.is() )
-    {
+    if(!mxDoc.is())
         mxDoc = new SwDoc;
-    }
-    return mxDoc.get();
+    return *mxDoc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

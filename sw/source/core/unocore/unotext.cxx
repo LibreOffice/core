@@ -131,7 +131,8 @@ const SwDoc * SwXText::GetDoc() const
 {
     return m_pImpl->m_pDoc;
 }
-      SwDoc * SwXText::GetDoc()
+
+SwDoc * SwXText::GetDoc()
 {
     return m_pImpl->m_pDoc;
 }
