@@ -2369,9 +2369,9 @@ void SwContentTree::ToggleToRoot()
     {
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         bool bEntry = m_xTreeView->get_cursor(xEntry.get());
-        const SwContentType* pCntType;
         if (bEntry)
         {
+            const SwContentType* pCntType;
             if (lcl_IsContentType(*xEntry, *m_xTreeView))
             {
                 assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));

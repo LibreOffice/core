@@ -1104,7 +1104,6 @@ void DocxExport::WriteSettings()
     bool bWriterWantsToProtect = false;
     bool bWriterWantsToProtectForm = false;
     bool bWriterWantsToProtectRedline = false;
-    bool bHasRedlineProtectionKey = false;
     bool bHasDummyRedlineProtectionKey = false;
     bool bReadOnlyStatusUnchanged = true;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -1117,7 +1116,7 @@ void DocxExport::WriteSettings()
     {
         uno::Sequence<sal_Int8> aKey;
         xPropSet->getPropertyValue( "RedlineProtectionKey" ) >>= aKey;
-        bHasRedlineProtectionKey = aKey.hasElements();
+        bool bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
         if ( bHasRedlineProtectionKey && !bHasDummyRedlineProtectionKey )
             bWriterWantsToProtect = bWriterWantsToProtectRedline = true;

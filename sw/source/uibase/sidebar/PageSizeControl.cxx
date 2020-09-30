@@ -120,10 +120,10 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
         }
 
         bool bLandscape = false;
-        const SfxPoolItem* pItem;
         const SvxSizeItem* pSize = nullptr;
         if ( SfxViewFrame::Current() )
         {
+            const SfxPoolItem* pItem;
             SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
             bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
             SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
