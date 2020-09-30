@@ -151,25 +151,46 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         return;
 
     SfxItemSet aTxFrmSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
-    SwFormatAnchor aNewAnch = pFormat->GetAnchor();
+    SwFormatAnchor aNewAnch(pFormat->GetAnchor());
 
     if (pShape->GetAnchor().GetContentAnchor())
         aNewAnch.SetAnchor(pShape->GetAnchor().GetContentAnchor());
     if (pShape->GetAnchor().GetPageNum() > 0)
         aNewAnch.SetPageNum(pShape->GetAnchor().GetPageNum());
-
     aNewAnch.SetType(pShape->GetAnchor().GetAnchorId());
-    aTxFrmSet.Put(aNewAnch);
 
     SwFormatVertOrient aVOri(pFormat->GetVertOrient());
     SwFormatHoriOrient aHOri(pFormat->GetHoriOrient());
-    aVOri.SetVertOrient(pShape->GetVertOrient().GetVertOrient());
-    aHOri.SetHoriOrient(pShape->GetHoriOrient().GetHoriOrient());
     aVOri.SetRelationOrient(pShape->GetVertOrient().GetRelationOrient());
     aHOri.SetRelationOrient(pShape->GetHoriOrient().GetRelationOrient());
+
+    auto aRect = getTextRectangle(pShape, false);
+    aHOri.SetPos(pShape->GetHoriOrient().GetPos() + aRect.getX());
+    aVOri.SetPos(pShape->GetVertOrient().GetPos() + aRect.getY());
+
+    // If we have as-char anchored shape, the frame cannot be as-char
+    // anchored, so let's make its position manually...
+    if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    {
+        aNewAnch.SetType(RndStdIds::FLY_AT_CHAR);
+        aHOri.SetRelationOrient(text::RelOrientation::CHAR);
+        aHOri.SetPos(pShape->GetHoriOrient().GetPos() + aRect.getX());
+        aVOri.SetRelationOrient(text::RelOrientation::CHAR);
+        aVOri.SetPos(pShape->GetVertOrient().GetPos() + aRect.getY());
+    }
+
+    // Hack: If the shape anchored to page, first time it has wrong value,
+    // so let's correct it. (Later it have to be fixed correctly.)
+    if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE &&
+        aVOri.GetRelationOrient() == text::RelOrientation::FRAME)
+    {
+        aVOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+    }
+
+    //Apply the positioning settings
+    aTxFrmSet.Put(aNewAnch);
     aTxFrmSet.Put(aVOri);
     aTxFrmSet.Put(aHOri);
-
     if (aTxFrmSet.Count())
         pFormat->SetFormatAttr(aTxFrmSet);
 }
@@ -745,6 +766,13 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
                     && rShape.GetAnchor().GetPageNum() != 0)
                     aOrient.SetRelationOrient(rShape.GetVertOrient().GetRelationOrient());
+                // Hack: If the shape anchored to page, first time it has wrong value,
+                // so let's correct it. (Later it have to be fixed correctly.)
+                if (rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
+                    && aOrient.GetRelationOrient() == text::RelOrientation::FRAME)
+                {
+                    aOrient.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                }
                 aTextBoxSet.Put(aOrient);
 
                 // restore height (shrunk for extending beyond the page bottom - tdf#91260)
