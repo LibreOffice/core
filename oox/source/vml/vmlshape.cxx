@@ -1129,6 +1129,21 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
     }
 
+    // tdf#105875 handle rotation
+    // Note: must rotate before flip!
+    if (!maTypeModel.maRotation.isEmpty())
+    {
+        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
+        {
+            // -1 is required because the direction of MSO rotation is the opposite of ours
+            // 100 is required because in this part of the code the angle is in a hundredth of
+            // degrees.
+            auto nAngle = -1 * 100.0 * maTypeModel.maRotation.toDouble();
+            double nHRad = nAngle * F_PI18000;
+            pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle, sin(nHRad), cos(nHRad));
+        }
+    }
+
     // Handle horizontal and vertical flip.
     if (!maTypeModel.maFlip.isEmpty())
     {
@@ -1151,17 +1166,6 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         }
     }
 
-    // Hacky way of ensuring the shape is correctly sized/positioned
-    try
-    {
-        // E.g. SwXFrame::setPosition() unconditionally throws
-        xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
-        xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
-    }
-    catch (const ::css::uno::Exception&)
-    {
-        // TODO: try some other way to ensure size/position
-    }
     return xShape;
 }
 

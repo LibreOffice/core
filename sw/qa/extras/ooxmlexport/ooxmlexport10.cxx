@@ -1347,6 +1347,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77236_MissingSolidFill, "tdf77236_MissingSolidFi
     assertXPath(pXmlDoc, "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotationWithFlip, "tdf105875_VmlShapeRotationWithFlip.docx")
+{
+    // tdf#105875: check whether the rotation of the VML bezier shape is ok (with flip too)
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "left", "16407");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "top", "906");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "width", "560");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "height", "823");
+
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "left", "14622");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top", "908");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "width", "560");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "height", "823");
+
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "left", "12701");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "top", "908");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "width", "560");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "height", "823");
+
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[4]/bounds", "left", "11076");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[4]/bounds", "top", "1002");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[4]/bounds", "width", "560");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[4]/bounds", "height", "823");
+
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[5]/bounds", "left", "9379");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[5]/bounds", "top", "1058");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[5]/bounds", "width", "883");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[5]/bounds", "height", "312");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
