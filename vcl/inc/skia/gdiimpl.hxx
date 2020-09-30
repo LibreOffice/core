@@ -24,6 +24,7 @@
 
 #include <salgdiimpl.hxx>
 #include <salgeom.hxx>
+#include <vcl/skia/interface.hxx>
 
 #include <SkSurface.h>
 #include <SkRegion.h>
@@ -37,7 +38,7 @@ class GenericSalLayout;
 class SkFont;
 class SkiaSalBitmap;
 
-class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
+class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl, public SkiaOutDevInterface
 {
 public:
     SkiaSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider* pProvider);
@@ -196,6 +197,11 @@ public:
                                   const SalGradient& rGradient) override;
 
     virtual bool supportsOperation(OutDevSupportType eType) const override;
+
+    virtual SkiaOutDevInterface* GetSkiaInterface() const override
+    {
+        return const_cast<SkiaSalGraphicsImpl*>(this);
+    }
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;

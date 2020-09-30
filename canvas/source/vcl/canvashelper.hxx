@@ -24,9 +24,14 @@
 #include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 
+#include <config_features.h>
+
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
 
+#if HAVE_FEATURE_SKIA
+class SkiaOutDevInterface;
+#endif
 
 namespace vclcanvas
 {
@@ -303,6 +308,19 @@ namespace vclcanvas
                               const css::rendering::RenderState&                                       renderState,
                               const css::uno::Reference< css::rendering::XCanvasFont >&   xFont ) const;
 
+#if HAVE_FEATURE_SKIA
+        void initSkia( OutputDevice& outputDevice );
+        void init2ndSkia( OutputDevice& outputDevice );
+
+        bool implDrawBitmapSkia( const css::rendering::XCanvas* rCanvas,
+                                 const css::uno::Reference< css::rendering::XBitmap >& xBitmap,
+                                 const css::rendering::ViewState& viewState,
+                                 const css::rendering::RenderState& renderState,
+                                 bool  bModulateColors );
+
+        SkiaOutDevInterface* mpSkiaInterface = nullptr;
+        SkiaOutDevInterface* mp2ndSkiaInterface = nullptr;
+#endif
     };
 }
 

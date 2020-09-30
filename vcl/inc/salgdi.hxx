@@ -439,6 +439,10 @@ public:
 
 #endif // ENABLE_CAIRO_CANVAS
 
+#if HAVE_FEATURE_SKIA
+    SkiaOutDevInterface*        GetSkiaInterface() const { return GetImpl()->GetSkiaInterface(); }
+#endif
+
 protected:
     virtual bool                setClipRegion( const vcl::Region& ) = 0;
 

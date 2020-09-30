@@ -293,6 +293,7 @@ namespace vcl {
 VCL_DLLPUBLIC void DrawFocusRect(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
 typedef struct _cairo_surface cairo_surface_t;
+class SkiaOutDevInterface;
 
 /**
 * Some things multiple-inherit from VclAbstractDialog and OutputDevice,
@@ -428,6 +429,8 @@ public:
     /// Return native handle for underlying surface
     css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
     css::uno::Any               GetSystemGfxDataAny() const;
+
+    SkiaOutDevInterface*        GetSkiaInterface() const;
 
     void                        SetRefPoint();
     void                        SetRefPoint( const Point& rRefPoint );
