@@ -209,6 +209,8 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_type_serializer_test \
     $(call gb_Helper_optional, PDFIUM, \
         CppunitTest_vcl_pdfium_library_test) \
+    $(if $(filter SKIA,$(BUILD_TYPE)), \
+        CppunitTest_vcl_skia) \
 ))
 
 ifeq ($(USING_X11),TRUE)
