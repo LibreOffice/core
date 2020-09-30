@@ -1673,7 +1673,7 @@ void SwHTMLTableLayout::Resize_( sal_uInt16 nAbsAvail, bool bRecalc )
     if( bRecalc )
         AutoLayoutPass1();
 
-    SwRootFrame *pRoot = GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout();
+    SwRootFrame *pRoot = GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout();
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
         pRoot->StartAllAction();
 
@@ -1705,15 +1705,15 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
     if( m_bMustNotRecalc && !bForce )
         bRecalc = false;
 
-    const SwDoc *pDoc = GetDoc();
+    const SwDoc& rDoc = GetDoc();
 
     // If there is a layout, the root frame's size instead of the
     // VisArea's size was potentially passed.
     // If we're not in a frame we need to calculate the table for the VisArea,
     // because switching from relative to absolute wouldn't work.
-    if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
+    if( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() && rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->GetViewOptions()->getBrowseMode() )
     {
-        const sal_uInt16 nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
+        const sal_uInt16 nVisAreaWidth = GetBrowseWidthByVisArea( rDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrameFormat() )
             nAbsAvail = nVisAreaWidth;
     }
