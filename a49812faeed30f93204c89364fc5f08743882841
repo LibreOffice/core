@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "4a96493a_323ef0fc",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T11:02:06Z",
+      "side": 1,
+      "message": "Oh, I misunderstood - I thought you meant the above LC_CTYPE section.\nAs for LC_FORMAT section, there are lots of different date formats from et_EE, so can\u0027t reference it.",
+      "parentUuid": "be08d914_59f1374d",
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58066b24_d7692f5e",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
