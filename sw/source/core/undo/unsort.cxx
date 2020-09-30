@@ -42,7 +42,7 @@ SwSortUndoElement::~SwSortUndoElement()
 }
 
 SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
-    : SwUndo(SwUndoId::SORT_TXT, rRg.GetDoc())
+    : SwUndo(SwUndoId::SORT_TXT, &rRg.GetDoc())
     , SwUndRng(rRg)
     , m_nTableNode(0)
 {
@@ -233,7 +233,7 @@ void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
     if(!m_pSortOptions->bTable)
     {
         SwPaM *const pPam = & rContext.GetRepeatPaM();
-        SwDoc& rDoc = *pPam->GetDoc();
+        SwDoc& rDoc = pPam->GetDoc();
 
         if( !rDoc.IsIdxInTable( pPam->Start()->nNode ) )
             rDoc.SortText(*pPam, *m_pSortOptions);

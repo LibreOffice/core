@@ -527,7 +527,7 @@ void IDocumentMarkAccess::DeleteFieldmarkCommand(::sw::mark::IFieldmark const& r
     }
     SwPaM pam(sw::mark::FindFieldSep(rMark), rMark.GetMarkStart());
     ++pam.GetPoint()->nContent; // skip CH_TXT_ATR_FIELDSTART
-    pam.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(pam);
+    pam.GetDoc().getIDocumentContentOperations().DeleteAndJoin(pam);
 }
 
 namespace sw::mark

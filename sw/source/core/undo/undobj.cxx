@@ -139,7 +139,7 @@ void SwUndo::RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward ) )
             {
-                rPam.GetPoint()->nNode = rPam.GetDoc()->GetNodes().GetEndOfPostIts();
+                rPam.GetPoint()->nNode = rPam.GetDoc().GetNodes().GetEndOfPostIts();
                 rPam.GetPoint()->nContent.Assign( nullptr, 0 );
             }
         }
@@ -728,7 +728,7 @@ void SwUndoSaveContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     sal_uLong* pEndNdIdx )
 {
-    SwDoc& rDoc = *rPaM.GetDoc();
+    SwDoc& rDoc = rPaM.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNoTextNode* pCpyNd = rPaM.GetNode().GetNoTextNode();
@@ -1367,7 +1367,7 @@ SwRedlineSaveData::~SwRedlineSaveData()
 
 void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
 {
-    SwDoc& rDoc = *rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     SwRangeRedline* pRedl = new SwRangeRedline( *this, rPam );
 
     if( GetMvSttIdx() )
@@ -1406,9 +1406,9 @@ bool SwUndo::FillSaveData(
 
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
-    const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rTable = rRange.GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
-    rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
+    rRange.GetDoc().getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTable.size(); ++n )
     {
         SwRangeRedline* pRedl = rTable[n];
@@ -1426,7 +1426,7 @@ bool SwUndo::FillSaveData(
     }
     if( !rSData.empty() && bDelRange )
     {
-        rRange.GetDoc()->getIDocumentRedlineAccess().DeleteRedline( rRange, false, RedlineType::Any );
+        rRange.GetDoc().getIDocumentRedlineAccess().DeleteRedline( rRange, false, RedlineType::Any );
     }
     return !rSData.empty();
 }
@@ -1438,9 +1438,9 @@ bool SwUndo::FillSaveDataForFormat(
     rSData.clear();
 
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
-    const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rTable = rRange.GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
-    rRange.GetDoc()->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
+    rRange.GetDoc().getIDocumentRedlineAccess().GetRedline( *pStt, &n );
     for ( ; n < rTable.size(); ++n )
     {
         SwRangeRedline* pRedl = rTable[n];

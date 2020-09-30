@@ -206,9 +206,9 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     //! in some cases when this function is called the pDoc pointer member may have become
     //! invalid/deleted thus we obtain the document pointer from rPaM where it should always
     //! be valid.
-    SwDoc *pDoc2 = rPam.GetDoc();
+    SwDoc& rDoc2 = rPam.GetDoc();
 
-    UnoActionContext aCont(pDoc2);
+    UnoActionContext aCont(&rDoc2);
     SwFormatRefMark aRefMark(m_sMarkName);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
 
@@ -225,7 +225,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
     }
 
-    pDoc2->getIDocumentContentOperations().InsertPoolItem( rPam, aRefMark, nInsertFlags );
+    rDoc2.getIDocumentContentOperations().InsertPoolItem( rPam, aRefMark, nInsertFlags );
 
     if( bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
@@ -431,7 +431,7 @@ void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
                 m_pImpl->m_sMarkName = rName;
                 //create a new one
                 m_pImpl->InsertRefMark( aPam, nullptr );
-                m_pImpl->m_pDoc = aPam.GetDoc();
+                m_pImpl->m_pDoc = &aPam.GetDoc();
             }
         }
     }

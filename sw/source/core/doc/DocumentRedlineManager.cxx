@@ -367,17 +367,17 @@ namespace
         if (pToNode != nullptr && pFromNode != nullptr && pToNode != pFromNode)
         {
             const SwPaM aPam(*pToNode);
-            SwDoc* pDoc = aPam.GetDoc();
+            SwDoc& rDoc = aPam.GetDoc();
             // using Undo, copy paragraph style
             SwTextFormatColl* pFromColl = pFromNode->GetTextColl();
             SwTextFormatColl* pToColl = pToNode->GetTextColl();
             if (bCopy && pFromColl != pToColl)
-                pDoc->SetTextFormatColl(aPam, pFromColl);
+                rDoc.SetTextFormatColl(aPam, pFromColl);
 
             // using Undo, remove direct paragraph formatting of the "To" paragraph,
             // and apply here direct paragraph formatting of the "From" paragraph
             SfxItemSet aTmp(
-                pDoc->GetAttrPool(),
+                rDoc.GetAttrPool(),
                 svl::Items<
                     RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
                     RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
@@ -401,7 +401,7 @@ namespace
             }
 
             if (bCopy && !bSameSet)
-                pDoc->getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
+                rDoc.getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
             else if (!bCopy && (!bSameSet || pFromColl != pToColl))
                 return new SwRedlineExtraData_FormatColl( pFromColl->GetName(), USHRT_MAX, &aTmp2 );
         }
@@ -480,7 +480,7 @@ namespace
             break;
         case RedlineType::Delete:
             {
-                SwDoc& rDoc = *pRedl->GetDoc();
+                SwDoc& rDoc = pRedl->GetDoc();
                 const SwPosition *pDelStt = nullptr, *pDelEnd = nullptr;
                 bool bDelRedl = false;
                 switch( eCmp )
@@ -582,7 +582,7 @@ namespace
     {
         bool bRet = true;
         SwRangeRedline* pRedl = rArr[ rPos ];
-        SwDoc& rDoc = *pRedl->GetDoc();
+        SwDoc& rDoc = pRedl->GetDoc();
         SwPosition *pRStt = nullptr, *pREnd = nullptr;
         SwComparePosition eCmp = SwComparePosition::Outside;
         if( pSttRng && pEndRng )
@@ -909,11 +909,11 @@ namespace
         SwPosition* pStt = rPam.Start(),
                   * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
                                                    : rPam.GetPoint();
-        SwDoc* pDoc = rPam.GetDoc();
+        SwDoc& rDoc = rPam.GetDoc();
         if( !pStt->nContent.GetIndex() &&
-            !pDoc->GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsContentNode() )
+            !rDoc.GetNodes()[ pStt->nNode.GetIndex() - 1 ]->IsContentNode() )
         {
-            const SwRangeRedline* pRedl = pDoc->getIDocumentRedlineAccess().GetRedline( *pStt, nullptr );
+            const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pStt, nullptr );
             if( pRedl )
             {
                 const SwPosition* pRStt = pRedl->Start();
@@ -923,10 +923,10 @@ namespace
             }
         }
         if( pEnd->nNode.GetNode().IsContentNode() &&
-            !pDoc->GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsContentNode() &&
+            !rDoc.GetNodes()[ pEnd->nNode.GetIndex() + 1 ]->IsContentNode() &&
             pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetContentNode()->Len()    )
         {
-            const SwRangeRedline* pRedl = pDoc->getIDocumentRedlineAccess().GetRedline( *pEnd, nullptr );
+            const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pEnd, nullptr );
             if( pRedl )
             {
                 const SwPosition* pREnd = pRedl->End();

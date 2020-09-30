@@ -2046,7 +2046,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         else if (pCursor)
             pDoc = pCursor->GetDoc();
         else if (pPortion)
-            pDoc = pPortion->GetCursor().GetDoc();
+            pDoc = &pPortion->GetCursor().GetDoc();
         else if (pParagraph && pParagraph->GetTextNode())
             pDoc = &pParagraph->GetTextNode()->GetDoc();
 

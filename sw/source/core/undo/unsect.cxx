@@ -77,7 +77,7 @@ SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
         SfxItemSet const*const pSet,
         std::pair<SwTOXBase const*, sw::RedlineMode> const*const pTOXBase)
-    : SwUndo( SwUndoId::INSSECTION, rPam.GetDoc() ), SwUndRng( rPam )
+    : SwUndo( SwUndoId::INSSECTION, &rPam.GetDoc() ), SwUndRng( rPam )
     , m_pSectionData(new SwSectionData(rNewData))
     , m_pTOXBase( pTOXBase
         ? std::make_unique<std::pair<SwTOXBase *, sw::RedlineMode>>(
@@ -89,7 +89,7 @@ SwUndoInsSection::SwUndoInsSection(
     , m_bSplitAtEnd(false)
     , m_bUpdateFootnote(false)
 {
-    SwDoc& rDoc = *rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlData.reset(new SwRedlineData( RedlineType::Insert,

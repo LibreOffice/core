@@ -340,7 +340,7 @@ struct UndoTransliterate_Data
 SwUndoTransliterate::SwUndoTransliterate(
     const SwPaM& rPam,
     const utl::TransliterationWrapper& rTrans )
-    : SwUndo( SwUndoId::TRANSLITERATE, rPam.GetDoc() ), SwUndRng( rPam ), m_nType( rTrans.getType() )
+    : SwUndo( SwUndoId::TRANSLITERATE, &rPam.GetDoc() ), SwUndRng( rPam ), m_nType( rTrans.getType() )
 {
 }
 

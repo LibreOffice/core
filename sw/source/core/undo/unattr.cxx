@@ -531,7 +531,7 @@ void SwUndoFormatResetAttr::RedoImpl(::sw::UndoRedoContext &)
 }
 
 SwUndoResetAttr::SwUndoResetAttr( const SwPaM& rRange, sal_uInt16 nFormatId )
-    : SwUndo( SwUndoId::RESETATTR, rRange.GetDoc() ), SwUndRng( rRange )
+    : SwUndo( SwUndoId::RESETATTR, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_pHistory( new SwHistory )
     , m_nFormatId( nFormatId )
 {
@@ -645,8 +645,8 @@ void SwUndoResetAttr::SetAttrs( const std::set<sal_uInt16> &rAttrs )
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
                         const SetAttrMode nFlags )
-    : SwUndo( SwUndoId::INSATTR, rRange.GetDoc() ), SwUndRng( rRange )
-    , m_AttrSet( rRange.GetDoc()->GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} )
+    : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
+    , m_AttrSet( rRange.GetDoc().GetAttrPool(), {{rAttr.Which(), rAttr.Which()}} )
     , m_pHistory( new SwHistory )
     , m_nNodeIndex( ULONG_MAX )
     , m_nInsertFlags( nFlags )
@@ -665,7 +665,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
                         const SetAttrMode nFlags )
-    : SwUndo( SwUndoId::INSATTR, rRange.GetDoc() ), SwUndRng( rRange )
+    : SwUndo( SwUndoId::INSATTR, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_AttrSet( rSet )
     , m_pHistory( new SwHistory )
     , m_nNodeIndex( ULONG_MAX )
@@ -687,19 +687,19 @@ SwUndoAttr::~SwUndoAttr()
 
 void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, bool bIsContent )
 {
-    SwDoc* pDoc = rPam.GetDoc();
-    if ( pDoc->getIDocumentRedlineAccess().IsRedlineOn() ) {
+    SwDoc& rDoc = rPam.GetDoc();
+    if ( rDoc.getIDocumentRedlineAccess().IsRedlineOn() ) {
         m_pRedlineData.reset( new SwRedlineData( bIsContent
                               ? RedlineType::Insert
                               : RedlineType::Format,
-                              pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+                              rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
     }
 
     m_pRedlineSaveData.reset( new SwRedlineSaveDatas );
     if ( !FillSaveDataForFormat( rPam, *m_pRedlineSaveData ))
         m_pRedlineSaveData.reset();
 
-    SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+    SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     if ( bIsContent ) {
         m_nNodeIndex = rPam.GetPoint()->nNode.GetIndex();
     }
@@ -885,7 +885,7 @@ void SwUndoDefaultAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
     const SwPaM& rPam, bool bFlag, bool bMod )
-    : SwUndo( bFlag ? SwUndoId::INC_LEFTMARGIN : SwUndoId::DEC_LEFTMARGIN, rPam.GetDoc() )
+    : SwUndo( bFlag ? SwUndoId::INC_LEFTMARGIN : SwUndoId::DEC_LEFTMARGIN, &rPam.GetDoc() )
     , SwUndRng( rPam )
     , m_pHistory( new SwHistory )
     , m_bModulus( bMod )
@@ -927,7 +927,7 @@ void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
 SwUndoChangeFootNote::SwUndoChangeFootNote(
     const SwPaM& rRange, const OUString& rText,
         bool const bIsEndNote)
-    : SwUndo( SwUndoId::CHGFTN, rRange.GetDoc() ), SwUndRng( rRange )
+    : SwUndo( SwUndoId::CHGFTN, &rRange.GetDoc() ), SwUndRng( rRange )
     , m_pHistory( new SwHistory() )
     , m_Text( rText )
     , m_bEndNote( bIsEndNote )

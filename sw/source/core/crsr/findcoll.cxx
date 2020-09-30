@@ -59,7 +59,7 @@ int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnM
         nRet = FIND_NOT_FOUND;
     else if( pReplColl )
     {
-        rCursor.GetDoc()->SetTextFormatColl(rCursor,
+        rCursor.GetDoc().SetTextFormatColl(rCursor,
             const_cast<SwTextFormatColl*>(pReplColl), true, false, m_pLayout);
         nRet = FIND_NO_RING;
     }
@@ -78,12 +78,12 @@ sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositi
                           SwRootFrame const*const pLayout)
 {
     // switch off OLE-notifications
-    SwDoc* pDoc = GetDoc();
-    Link<bool,void> aLnk( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link<bool,void>() );
+    SwDoc& rDoc = GetDoc();
+    Link<bool,void> aLnk( rDoc.GetOle2Link() );
+    rDoc.SetOle2Link( Link<bool,void>() );
 
     bool const bStartUndo =
-        pDoc->GetIDocumentUndoRedo().DoesUndo() && pReplFormatColl;
+        rDoc.GetIDocumentUndoRedo().DoesUndo() && pReplFormatColl;
     if (bStartUndo)
     {
         SwRewriter aRewriter;
@@ -91,21 +91,21 @@ sal_uLong SwCursor::FindFormat( const SwTextFormatColl& rFormatColl, SwDocPositi
         aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
         aRewriter.AddRule(UndoArg3, pReplFormatColl->GetName());
 
-        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE_STYLE,
+        rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE_STYLE,
                 &aRewriter );
     }
 
     SwFindParaFormatColl aSwFindParaFormatColl(rFormatColl, pReplFormatColl, pLayout);
 
     sal_uLong nRet = FindAll( aSwFindParaFormatColl, nStart, nEnd, eFndRngs, bCancel );
-    pDoc->SetOle2Link( aLnk );
+    rDoc.SetOle2Link( aLnk );
 
     if( nRet && pReplFormatColl )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
+        rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::END, nullptr);
     }
     return nRet;
 }

@@ -502,7 +502,7 @@ public:
 
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
         OUString const& rIns, bool const bRegExp)
-    : SwUndo( SwUndoId::REPLACE, rPam.GetDoc() )
+    : SwUndo( SwUndoId::REPLACE, &rPam.GetDoc() )
     , m_pImpl(std::make_unique<Impl>(rPam, rIns, bRegExp))
 {
 }
@@ -769,7 +769,7 @@ void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )
-    : SwUndo( SwUndoId::REREAD, rPam.GetDoc() ), mnPosition( rPam.GetPoint()->nNode.GetIndex() )
+    : SwUndo( SwUndoId::REREAD, &rPam.GetDoc() ), mnPosition( rPam.GetPoint()->nNode.GetIndex() )
 {
     SaveGraphicData( rGrfNd );
 }

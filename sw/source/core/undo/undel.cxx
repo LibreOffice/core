@@ -173,7 +173,7 @@ SwUndoDelete::SwUndoDelete(
     SwPaM& rPam,
     bool bFullPara,
     bool bCalledByTableCpy )
-    : SwUndo(SwUndoId::DELETE, rPam.GetDoc()),
+    : SwUndo(SwUndoId::DELETE, &rPam.GetDoc()),
     SwUndRng( rPam ),
     m_nNode(0),
     m_nNdDiff(0),
@@ -193,9 +193,9 @@ SwUndoDelete::SwUndoDelete(
 
     m_bCacheComment = false;
 
-    SwDoc * pDoc = rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
 
-    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+    if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         m_pRedlSaveData.reset(new SwRedlineSaveDatas);
         if( !FillSaveData( rPam, *m_pRedlSaveData ))
@@ -220,13 +220,13 @@ SwUndoDelete::SwUndoDelete(
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint(),
                         DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         DelBookmarks(pStt->nNode, pEnd->nNode);
     }
     else
     {
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         if (m_nEndNode - m_nSttNode > 1) // check for fully selected nodes
         {
             SwNodeIndex const start(pStt->nNode, +1);
@@ -252,7 +252,7 @@ SwUndoDelete::SwUndoDelete(
     }
     else if (m_pRedlSaveData)
     {
-        DelFullParaMoveFrames(*pDoc, *this, *m_pRedlSaveData);
+        DelFullParaMoveFrames(rDoc, *this, *m_pRedlSaveData);
     }
 
     bool bMoveNds = *pStt != *pEnd      // any area still existent?
@@ -298,12 +298,12 @@ SwUndoDelete::SwUndoDelete(
 
     if( bMoveNds )      // Do Nodes exist that need to be moved?
     {
-        SwNodes& rNds = pDoc->GetUndoManager().GetUndoNodes();
-        SwNodes& rDocNds = pDoc->GetNodes();
+        SwNodes& rNds = rDoc.GetUndoManager().GetUndoNodes();
+        SwNodes& rDocNds = rDoc.GetNodes();
         SwNodeRange aRg( rDocNds, m_nSttNode - m_nNdDiff,
                          rDocNds, m_nEndNode - m_nNdDiff );
         if( !bFullPara && !pEndTextNd &&
-            &aRg.aEnd.GetNode() != &pDoc->GetNodes().GetEndOfContent() )
+            &aRg.aEnd.GetNode() != &rDoc.GetNodes().GetEndOfContent() )
         {
             SwNode* pNode = aRg.aEnd.GetNode().StartOfSectionNode();
             if( pNode->GetIndex() >= m_nSttNode - m_nNdDiff )
@@ -332,8 +332,8 @@ SwUndoDelete::SwUndoDelete(
                     ++m_nReplaceDummy;
                     SwNodeRange aMvRg( *pEndTextNd, 0, *pEndTextNd, 1 );
                     SwPosition aSplitPos( *pEndTextNd );
-                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
+                    ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+                    rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aEnd );
                     --aRg.aEnd;
                 }
@@ -356,8 +356,8 @@ SwUndoDelete::SwUndoDelete(
                 {
                     SwNodeRange aMvRg( *pSttTextNd, 0, *pSttTextNd, 1 );
                     SwPosition aSplitPos( *pSttTextNd );
-                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-                    pDoc->getIDocumentContentOperations().SplitNode( aSplitPos, false );
+                    ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
+                    rDoc.getIDocumentContentOperations().SplitNode( aSplitPos, false );
                     rDocNds.MoveNodes( aMvRg, rDocNds, aRg.aStart );
                     --aRg.aStart;
                 }
@@ -406,7 +406,7 @@ SwUndoDelete::SwUndoDelete(
             }
         }
         if( m_nSectDiff || m_nReplaceDummy )
-            lcl_MakeAutoFrames( *pDoc->GetSpzFrameFormats(),
+            lcl_MakeAutoFrames( *rDoc.GetSpzFrameFormats(),
                 m_bJoinNext ? pEndTextNd->GetIndex() : pSttTextNd->GetIndex() );
     }
     else
@@ -1157,7 +1157,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwPaM & rPam = AddUndoRedoPaM(rContext);
-    SwDoc& rDoc = *rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
 
     if( m_pRedlSaveData )
     {
@@ -1297,7 +1297,7 @@ void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
         return;
 
     SwPaM & rPam = rContext.GetRepeatPaM();
-    SwDoc& rDoc = *rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     if( !rPam.HasMark() )
     {

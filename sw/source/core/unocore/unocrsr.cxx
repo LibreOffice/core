@@ -34,8 +34,8 @@ SwUnoCursor::SwUnoCursor( const SwPosition &rPos )
 
 SwUnoCursor::~SwUnoCursor()
 {
-    SwDoc* pDoc = GetDoc();
-    if( !pDoc->IsInDtor() )
+    SwDoc& rDoc = GetDoc();
+    if( !rDoc.IsInDtor() )
     {
         assert(!m_aNotifier.HasListeners());
     }
@@ -69,8 +69,8 @@ bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 {
     if (m_bRemainInSection)
     {
-        SwDoc* pDoc = GetDoc();
-        SwNodeIndex aOldIdx( *pDoc->GetNodes()[ GetSavePos()->nNode ] );
+        SwDoc& rDoc = GetDoc();
+        SwNodeIndex aOldIdx( *rDoc.GetNodes()[ GetSavePos()->nNode ] );
         SwNodeIndex& rPtIdx = GetPoint()->nNode;
         SwStartNode *pOldSttNd = aOldIdx.GetNode().StartOfSectionNode(),
                     *pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
@@ -116,7 +116,7 @@ bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                             rPtIdx.Assign( *pInvalidNode->EndOfSectionNode(), 1 );
 
                             if( !rPtIdx.GetNode().IsContentNode() &&
-                                ( !pDoc->GetNodes().GoNextSection( &rPtIdx ) ||
+                                ( !rDoc.GetNodes().GoNextSection( &rPtIdx ) ||
                                   rPtIdx > pOldSttNd->EndOfSectionIndex() ) )
                                 break;
                         }
@@ -172,7 +172,7 @@ bool SwUnoTableCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
-        bRet = !(pTNd == GetDoc()->GetNodes()[ GetSavePos()->nNode ]->
+        bRet = !(pTNd == GetDoc().GetNodes()[ GetSavePos()->nNode ]->
                 FindTableNode() && (!HasMark() ||
                 pTNd == GetMark()->nNode.GetNode().FindTableNode() ));
     }
@@ -186,7 +186,7 @@ void SwUnoTableCursor::MakeBoxSels()
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
             nullptr != ( pCNd = GetContentNode() ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) &&
             nullptr != ( pCNd = GetContentNode(false) ) && pCNd->getLayoutFrame( pCNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout() ) )
-        bMakeTableCursors = GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *this );
+        bMakeTableCursors = GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *this );
 
     if ( !bMakeTableCursors )
     {

@@ -46,8 +46,8 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
 
 SwExtTextInput::~SwExtTextInput()
 {
-    SwDoc *const pDoc = GetDoc();
-    if (pDoc->IsInDtor()) { return; /* #i58606# */ }
+    SwDoc& rDoc = GetDoc();
+    if (rDoc.IsInDtor()) { return; /* #i58606# */ }
 
     SwTextNode* pTNd = GetPoint()->nNode.GetNode().GetTextNode();
     if( !pTNd )
@@ -60,8 +60,8 @@ SwExtTextInput::~SwExtTextInput()
         return;
 
     // Prevent IME edited text being grouped with non-IME edited text.
-    bool bKeepGroupUndo = pDoc->GetIDocumentUndoRedo().DoesGroupUndo();
-    pDoc->GetIDocumentUndoRedo().DoGroupUndo(false);
+    bool bKeepGroupUndo = rDoc.GetIDocumentUndoRedo().DoesGroupUndo();
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(false);
     if( nEndCnt < nSttCnt )
     {
         std::swap(nSttCnt, nEndCnt);
@@ -84,10 +84,10 @@ SwExtTextInput::~SwExtTextInput()
             if( m_bInsText )
             {
                 rIdx = nSttCnt;
-                pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::OVERWRITE, nullptr );
-                pDoc->getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
-                pDoc->getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
-                pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::OVERWRITE, nullptr );
+                rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::OVERWRITE, nullptr );
+                rDoc.getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
+                rDoc.getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
+                rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::OVERWRITE, nullptr );
             }
         }
         else
@@ -96,7 +96,7 @@ SwExtTextInput::~SwExtTextInput()
             if( m_bInsText )
             {
                 rIdx = nSttCnt;
-                pDoc->getIDocumentContentOperations().Overwrite( *this, sText );
+                rDoc.getIDocumentContentOperations().Overwrite( *this, sText );
             }
         }
     }
@@ -106,10 +106,10 @@ SwExtTextInput::~SwExtTextInput()
 
         if( m_bInsText )
         {
-            pDoc->getIDocumentContentOperations().InsertString( *this, sText );
+            rDoc.getIDocumentContentOperations().InsertString( *this, sText );
         }
     }
-    pDoc->GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
+    rDoc.GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
     if (m_eInputLanguage == LANGUAGE_DONTKNOW)
         return;
 
@@ -128,7 +128,7 @@ SwExtTextInput::~SwExtTextInput()
         SvxLanguageItem aLangItem( m_eInputLanguage, nWhich );
         rIdx = nSttCnt;
         GetMark()->nContent = nEndCnt;
-        pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
+        rDoc.getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
     }
 }
 

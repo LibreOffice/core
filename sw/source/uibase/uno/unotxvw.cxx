@@ -1683,13 +1683,13 @@ IMPLEMENT_FORWARD_XINTERFACE2(SwXTextViewCursor,SwXTextViewCursor_Base,OTextCurs
 const SwDoc*        SwXTextViewCursor::GetDoc() const
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return   rSh.GetCursor() ? rSh.GetCursor()->GetDoc() : nullptr;
+    return   rSh.GetCursor() ? &rSh.GetCursor()->GetDoc() : nullptr;
 }
 
 SwDoc*  SwXTextViewCursor::GetDoc()
 {
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    return   rSh.GetCursor() ? rSh.GetCursor()->GetDoc() : nullptr;
+    return   rSh.GetCursor() ? &rSh.GetCursor()->GetDoc() : nullptr;
 }
 
 const SwPaM*    SwXTextViewCursor::GetPaM() const

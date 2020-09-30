@@ -185,7 +185,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pRanges)
     {
         SwUnoCursor const* pUnoCursor = pRanges->GetCursor();
-        if (pUnoCursor && pUnoCursor->GetDoc() == &rTargetDoc)
+        if (pUnoCursor && &pUnoCursor->GetDoc() == &rTargetDoc)
         {
             o_rpPaM = lcl_createPamCopy(*pUnoCursor);
         }
@@ -256,7 +256,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     if (pCellRange)
     {
         SwUnoCursor const*const pUnoCursor(pCellRange->GetTableCursor());
-        if (pUnoCursor && pUnoCursor->GetDoc() == &rTargetDoc)
+        if (pUnoCursor && &pUnoCursor->GetDoc() == &rTargetDoc)
         {
             // probably can't copy it to o_rpPaM for this since it's
             // a SwTableCursor
@@ -545,7 +545,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
                     const uno::Reference< text::XDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
-                            *rPam.GetDoc(), &rMark);
+                            rPam.GetDoc(), &rMark);
                     (*pAny) <<= xRef;
                 }
             }
@@ -563,7 +563,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     const uno::Reference< text::XDocumentIndex > xRef =
-                        SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
+                        SwXDocumentIndex::CreateXDocumentIndex(rPam.GetDoc(),
                             static_cast<SwTOXBaseSection *>(pBase));
                     (*pAny) <<= xRef;
                 }
@@ -576,7 +576,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
             const SwPosition *pPos = rPam.Start();
             const SwTextNode *pTextNd =
-                rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
+                rPam.GetDoc().GetNodes()[pPos->nNode.GetIndex()]->GetTextNode();
             const SwTextAttr* pTextAttr = pTextNd
                 ? pTextNd->GetFieldTextAttrAt( pPos->nContent.GetIndex(), true )
                 : nullptr;
@@ -585,7 +585,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     uno::Reference<text::XTextField> const xField(
-                        SwXTextField::CreateXTextField(rPam.GetDoc(),
+                        SwXTextField::CreateXTextField(&rPam.GetDoc(),
                            &pTextAttr->GetFormatField()));
                     *pAny <<= xField;
                 }
@@ -686,7 +686,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     if( pAny )
                     {
                         const uno::Reference< text::XFootnote > xFootnote =
-                            SwXFootnote::CreateXFootnote(*rPam.GetDoc(),
+                            SwXFootnote::CreateXFootnote(rPam.GetDoc(),
                                     &const_cast<SwFormatFootnote&>(rFootnote));
                         *pAny <<= xFootnote;
                     }
@@ -712,7 +712,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {   // hmm... can only return 1 here
                     const SwFormatRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference<XTextContent> const xRef =
-                        SwXReferenceMark::CreateXReferenceMark(*rPam.GetDoc(),
+                        SwXReferenceMark::CreateXReferenceMark(rPam.GetDoc(),
                                 const_cast<SwFormatRefMark*>(&rRef));
                     *pAny <<= xRef;
                 }
@@ -832,7 +832,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
         auto pSwNum = comphelper::getUnoTunnelImplementation<SwXNumberingRules>(xIndexReplace);
         if(pSwNum)
         {
-            SwDoc* pDoc = rPam.GetDoc();
+            SwDoc& rDoc = rPam.GetDoc();
             if(pSwNum->GetNumRule())
             {
                 SwNumRule aRule(*pSwNum->GetNumRule());
@@ -856,11 +856,11 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         {
 
                             // get CharStyle and set the rule
-                            const size_t nChCount = pDoc->GetCharFormats()->size();
+                            const size_t nChCount = rDoc.GetCharFormats()->size();
                             SwCharFormat* pCharFormat = nullptr;
                             for(size_t nCharFormat = 0; nCharFormat < nChCount; ++nCharFormat)
                             {
-                                SwCharFormat& rChFormat = *((*(pDoc->GetCharFormats()))[nCharFormat]);
+                                SwCharFormat& rChFormat = *((*(rDoc.GetCharFormats()))[nCharFormat]);
                                 if(rChFormat.GetName() == pNewCharStyles[i])
                                 {
                                     pCharFormat = &rChFormat;
@@ -870,7 +870,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                             if(!pCharFormat)
                             {
-                                SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
+                                SfxStyleSheetBasePool* pPool = rDoc.GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
                                 pBase = pPool->Find(pNewCharStyles[i], SfxStyleFamily::Char);
                             // shall it really be created?
@@ -890,7 +890,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                       )
                     {
                         const SvxFontListItem* pFontListItem =
-                                static_cast<const SvxFontListItem* >(pDoc->GetDocShell()
+                                static_cast<const SvxFontListItem* >(rDoc.GetDocShell()
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                         const FontList*  pList = pFontListItem->GetFontList();
 
@@ -901,51 +901,51 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     }
                     aRule.Set( i, aFormat );
                 }
-                UnoActionContext aAction(pDoc);
+                UnoActionContext aAction(&rDoc);
 
                 if( rPam.GetNext() != &rPam )           // Multiple selection?
                 {
-                    pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+                    rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for ( size_t n = 0; n < aRangeArr.Count(); ++n )
                     {
                         // no start of a new list
-                        pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
+                        rDoc.SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                     }
-                    pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+                    rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
                 }
                 else
                 {
                     // no start of a new list
-                    pDoc->SetNumRule( rPam, aRule, false );
+                    rDoc.SetNumRule( rPam, aRule, false );
                 }
 
             }
             else if(!pSwNum->GetCreatedNumRuleName().isEmpty())
             {
-                UnoActionContext aAction( pDoc );
-                SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
+                UnoActionContext aAction( &rDoc );
+                SwNumRule* pRule = rDoc.FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if ( !pRule )
                     throw RuntimeException();
                 // no start of a new list
-                pDoc->SetNumRule( rPam, *pRule, false );
+                rDoc.SetNumRule( rPam, *pRule, false );
             }
             else
             {
                 // #i103817#
                 // outline numbering
-                UnoActionContext aAction(pDoc);
-                SwNumRule* pRule = pDoc->GetOutlineNumRule();
+                UnoActionContext aAction(&rDoc);
+                SwNumRule* pRule = rDoc.GetOutlineNumRule();
                 if(!pRule)
                     throw RuntimeException();
-                pDoc->SetNumRule( rPam, *pRule, false );
+                rDoc.SetNumRule( rPam, *pRule, false );
             }
         }
     }
     else if ( rValue.getValueType() == cppu::UnoType<void>::get() )
     {
-        rPam.GetDoc()->DelNumRules(rPam);
+        rPam.GetDoc().DelNumRules(rPam);
     }
 }
 
@@ -967,7 +967,7 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 {
     if (!rPaM.GetContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    SwRootFrame* pLayout = rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrame* pLayout = rPaM.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout();
     // Consider the position inside the content node, since the node may span over multiple pages
     // with different page styles.
     SwContentFrame* pFrame = rPaM.GetContentNode()->getLayoutFrame(pLayout, rPaM.GetPoint());
@@ -985,7 +985,7 @@ void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
 // reset special properties of the cursor
 void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
-    SwDoc* pDoc = rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
@@ -994,19 +994,19 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
         break;
         case FN_UNO_NUM_START_VALUE  :
         {
-            UnoActionContext aAction(pDoc);
+            UnoActionContext aAction(&rDoc);
 
             if( rPam.GetNext() != &rPam )           // Multiple selection?
             {
-                pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+                rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( size_t n = 0; n < aRangeArr.Count(); ++n )
-                    pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+                    rDoc.SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
+                rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
             }
             else
-                pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
+                rDoc.SetNodeNumStart( *rPam.GetPoint(), 0 );
         }
 
         break;
@@ -1018,7 +1018,7 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
         {
             std::set<sal_uInt16> aWhichIds;
             aWhichIds.insert( RES_TXTATR_CHARFMT);
-            pDoc->ResetAttrs(rPam, true, aWhichIds);
+            rDoc.ResetAttrs(rPam, true, aWhichIds);
         }
         break;
     }
@@ -1028,8 +1028,8 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
 {
     std::unique_ptr<SfxMedium> pMed;
-    SwDoc* pDoc = pUnoCursor->GetDoc();
-    SwDocShell* pDocSh = pDoc->GetDocShell();
+    SwDoc& rDoc = pUnoCursor->GetDoc();
+    SwDocShell* pDocSh = rDoc.GetDocShell();
     utl::MediaDescriptor aMediaDescriptor( rOptions );
     OUString sFileName = rURL;
     OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
@@ -1128,10 +1128,10 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     if( !pRead )
         return;
 
-    UnoActionContext aContext(pDoc);
+    UnoActionContext aContext(&rDoc);
 
     if(pUnoCursor->HasMark())
-        pDoc->getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
+        rDoc.getIDocumentContentOperations().DeleteAndJoin(*pUnoCursor);
 
     SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
     sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
@@ -1229,7 +1229,7 @@ void makeRedline( SwPaM const & rPaM,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
-    IDocumentRedlineAccess* pRedlineAccess = &rPaM.GetDoc()->getIDocumentRedlineAccess();
+    IDocumentRedlineAccess& rRedlineAccess = rPaM.GetDoc().getIDocumentRedlineAccess();
 
     RedlineType eType;
     if      ( rRedlineType == "Insert" )
@@ -1250,7 +1250,7 @@ void makeRedline( SwPaM const & rPaM,
     std::size_t nAuthor = 0;
     OUString sAuthor;
     if( aPropMap.getValue("RedlineAuthor") >>= sAuthor )
-        nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
+        nAuthor = rRedlineAccess.InsertRedlineAuthor(sAuthor);
 
     OUString sComment;
     SwRedlineData aRedlineData( eType, nAuthor );
@@ -1288,7 +1288,7 @@ void makeRedline( SwPaM const & rPaM,
         // Check if there are any properties
         if (aRevertProperties.hasElements())
         {
-            SwDoc *const pDoc = rPaM.GetDoc();
+            SwDoc& rDoc = rPaM.GetDoc();
 
             // Build set of attributes we want to fetch
             std::vector<sal_uInt16> aWhichPairs;
@@ -1334,7 +1334,7 @@ void makeRedline( SwPaM const & rPaM,
                 sal_uInt16 nStylePoolId = USHRT_MAX;
                 OUString sParaStyleName;
                 aWhichPairs.push_back(0); // terminate
-                SfxItemSet aItemSet(pDoc->GetAttrPool(), aWhichPairs.data());
+                SfxItemSet aItemSet(rDoc.GetAttrPool(), aWhichPairs.data());
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
                 {
@@ -1348,7 +1348,7 @@ void makeRedline( SwPaM const & rPaM,
                         {
                             aItemSet.Put( SwNumRuleItem( xNumberingRules->getName() ));
                             // keep it during export
-                            SwNumRule* pRule = pDoc->FindNumRulePtr(
+                            SwNumRule* pRule = rDoc.FindNumRulePtr(
                                         xNumberingRules->getName());
                             if (pRule)
                                 pRule->SetUsedByRedline(true);
@@ -1373,13 +1373,13 @@ void makeRedline( SwPaM const & rPaM,
     }
 
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
-    RedlineFlags nPrevMode = pRedlineAccess->GetRedlineFlags( );
+    RedlineFlags nPrevMode = rRedlineAccess.GetRedlineFlags( );
     // xRedlineExtraData is copied here
     pRedline->SetExtraData( xRedlineExtraData.get() );
 
-    pRedlineAccess->SetRedlineFlags_intern(RedlineFlags::On);
-    auto const result(pRedlineAccess->AppendRedline(pRedline, false));
-    pRedlineAccess->SetRedlineFlags_intern( nPrevMode );
+    rRedlineAccess.SetRedlineFlags_intern(RedlineFlags::On);
+    auto const result(rRedlineAccess.AppendRedline(pRedline, false));
+    rRedlineAccess.SetRedlineFlags_intern( nPrevMode );
     if (IDocumentRedlineAccess::AppendResult::IGNORED == result)
         throw lang::IllegalArgumentException();
 }

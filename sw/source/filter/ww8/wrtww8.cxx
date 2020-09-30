@@ -2911,7 +2911,7 @@ void MSWordExportBase::WriteText()
             ++m_pCurPam->GetPoint()->nNode;
 
         sal_uLong nPos = m_pCurPam->GetPoint()->nNode.GetIndex();
-        ::SetProgressState( nPos, m_pCurPam->GetDoc()->GetDocShell() );
+        ::SetProgressState( nPos, m_pCurPam->GetDoc().GetDocShell() );
     }
 
     SAL_INFO( "sw.ww8.level2", "</WriteText>" );

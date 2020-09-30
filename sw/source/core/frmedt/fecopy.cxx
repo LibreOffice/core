@@ -804,7 +804,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
                     ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
                                SwPosition(rInsPos.nNode));
-                    aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+                    aPaM.GetDoc().MakeUniqueNumRules(aPaM);
                 }
             }
             SaveTableBoxContent( &rInsPos );
@@ -1045,7 +1045,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bNestedTable )
                     SwPaM aPaM(SwPosition(aIndexBefore),
                            SwPosition(rInsPos.nNode));
 
-                    aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+                    aPaM.GetDoc().MakeUniqueNumRules(aPaM);
 
                     // Update the rsid of each pasted text node.
                     SwNodes &rDestNodes = GetDoc()->GetNodes();

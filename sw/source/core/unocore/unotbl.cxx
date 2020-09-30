@@ -1487,7 +1487,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTabl
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     StartListening(m_pFrameFormat->GetNotifier());
-    m_pUnoCursor = pTableSelection->GetDoc()->CreateUnoCursor(*pTableSelection->GetPoint(), true);
+    m_pUnoCursor = pTableSelection->GetDoc().CreateUnoCursor(*pTableSelection->GetPoint(), true);
     if(pTableSelection->HasMark())
     {
         m_pUnoCursor->SetMark();
@@ -1561,7 +1561,7 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand)
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
     return rTableCursor.UpDown(true, Count, nullptr, 0,
-        *rUnoCursor.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+        *rUnoCursor.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
 }
 
 sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand)
@@ -1571,7 +1571,7 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand)
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     lcl_CursorSelect(rTableCursor, bExpand);
     return rTableCursor.UpDown(false, Count, nullptr, 0,
-        *rUnoCursor.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+        *rUnoCursor.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
 }
 
 void SwXTextTableCursor::gotoStart(sal_Bool bExpand)
@@ -1605,8 +1605,8 @@ sal_Bool SwXTextTableCursor::mergeRange()
     rTableCursor.MakeBoxSels();
     bool bResult;
     {
-        UnoActionContext aContext(rUnoCursor.GetDoc());
-        bResult = TableMergeErr::Ok == rTableCursor.GetDoc()->MergeTable(rTableCursor);
+        UnoActionContext aContext(&rUnoCursor.GetDoc());
+        bResult = TableMergeErr::Ok == rTableCursor.GetDoc().MergeTable(rTableCursor);
     }
     if(bResult)
     {
@@ -1632,8 +1632,8 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     rTableCursor.MakeBoxSels();
     bool bResult;
     {
-        UnoActionContext aContext(rUnoCursor.GetDoc());
-        bResult = rTableCursor.GetDoc()->SplitTable(rTableCursor.GetSelectedBoxes(), !Horizontal, Count);
+        UnoActionContext aContext(&rUnoCursor.GetDoc());
+        bResult = rTableCursor.GetDoc().SplitTable(rTableCursor.GetSelectedBoxes(), !Horizontal, Count);
     }
     rTableCursor.MakeBoxSels();
     return bResult;
@@ -1661,7 +1661,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     }
     auto& rTableCursor = dynamic_cast<SwUnoTableCursor&>(rUnoCursor);
     rTableCursor.MakeBoxSels();
-    SwDoc* pDoc = rUnoCursor.GetDoc();
+    SwDoc& rDoc = rUnoCursor.GetDoc();
     switch(pEntry->nWID)
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
@@ -1669,7 +1669,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
             std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
             SwDoc::GetBoxAttr(rUnoCursor, aBrush);
             aBrush->PutValue(aValue, pEntry->nMemberId);
-            pDoc->SetBoxAttr(rUnoCursor, *aBrush);
+            rDoc.SetBoxAttr(rUnoCursor, *aBrush);
 
         }
         break;
@@ -1677,7 +1677,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         {
             SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
             aNumberFormat.PutValue(aValue, 0);
-            pDoc->SetBoxAttr(rUnoCursor, aNumberFormat);
+            rDoc.SetBoxAttr(rUnoCursor, aNumberFormat);
         }
         break;
         case FN_UNO_PARA_STYLE:
@@ -1685,7 +1685,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         break;
         default:
         {
-            SfxItemSet aItemSet(pDoc->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
+            SfxItemSet aItemSet(rDoc.GetAttrPool(), {{pEntry->nWID, pEntry->nWID}});
             SwUnoCursorHelper::GetCursorAttr(rTableCursor.GetSelRing(),
                     aItemSet);
 
@@ -1737,7 +1737,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         break;
         default:
         {
-            SfxItemSet aSet(rTableCursor.GetDoc()->GetAttrPool(),
+            SfxItemSet aSet(rTableCursor.GetDoc().GetAttrPool(),
                 svl::Items<RES_CHRATR_BEGIN, RES_FRMATR_END-1,
                 RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER>{});
             SwUnoCursorHelper::GetCursorAttr(rTableCursor.GetSelRing(), aSet);
@@ -3383,7 +3383,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
         throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-    SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
+    SwDoc& rDoc = m_pImpl->m_pTableCursor->GetDoc();
     SwUnoTableCursor& rCursor(dynamic_cast<SwUnoTableCursor&>(*m_pImpl->m_pTableCursor));
     {
         // HACK: remove pending actions for selecting old style tables
@@ -3397,13 +3397,13 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             std::unique_ptr<SfxPoolItem> aBrush(std::make_unique<SvxBrushItem>(RES_BACKGROUND));
             SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
             aBrush->PutValue(aValue, pEntry->nMemberId);
-            pDoc->SetBoxAttr(*m_pImpl->m_pTableCursor, *aBrush);
+            rDoc.SetBoxAttr(*m_pImpl->m_pTableCursor, *aBrush);
 
         }
         break;
         case RES_BOX :
         {
-            SfxItemSet aSet(pDoc->GetAttrPool(),
+            SfxItemSet aSet(rDoc.GetAttrPool(),
                             svl::Items<RES_BOX, RES_BOX,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
             SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
@@ -3431,14 +3431,14 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             SvxBoxItem aBoxItem(aSet.Get(RES_BOX));
             static_cast<SfxPoolItem&>(aBoxItem).PutValue(aValue, pEntry->nMemberId);
             aSet.Put(aBoxItem);
-            pDoc->SetTabBorders(*m_pImpl->m_pTableCursor, aSet);
+            rDoc.SetTabBorders(*m_pImpl->m_pTableCursor, aSet);
         }
         break;
         case RES_BOXATR_FORMAT:
         {
             SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
             static_cast<SfxPoolItem&>(aNumberFormat).PutValue(aValue, 0);
-            pDoc->SetBoxAttr(rCursor, aNumberFormat);
+            rDoc.SetBoxAttr(rCursor, aNumberFormat);
         }
         break;
         case FN_UNO_RANGE_ROW_LABEL:
@@ -3466,12 +3466,12 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             sal_Int16 nAlign = -1;
             aValue >>= nAlign;
             if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
-                pDoc->SetBoxAlign( rCursor, nAlign );
+                rDoc.SetBoxAlign( rCursor, nAlign );
         }
         break;
         default:
         {
-            SfxItemSet aItemSet( pDoc->GetAttrPool(), {{pEntry->nWID, pEntry->nWID}} );
+            SfxItemSet aItemSet( rDoc.GetAttrPool(), {{pEntry->nWID, pEntry->nWID}} );
             SwUnoCursorHelper::GetCursorAttr(rCursor.GetSelRing(),
                     aItemSet);
 
@@ -3510,8 +3510,8 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             break;
             case RES_BOX :
             {
-                SwDoc *const pDoc = m_pImpl->m_pTableCursor->GetDoc();
-                SfxItemSet aSet(pDoc->GetAttrPool(),
+                SwDoc& rDoc = m_pImpl->m_pTableCursor->GetDoc();
+                SfxItemSet aSet(rDoc.GetAttrPool(),
                                 svl::Items<RES_BOX, RES_BOX,
                                 SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>{});
                 aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
@@ -3552,7 +3552,7 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             default:
             {
                 SfxItemSet aSet(
-                    m_pImpl->m_pTableCursor->GetDoc()->GetAttrPool(),
+                    m_pImpl->m_pTableCursor->GetDoc().GetAttrPool(),
                     svl::Items<
                         RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                         RES_UNKNOWNATR_CONTAINER,
@@ -3979,7 +3979,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCursor->Move( fnMoveForward, GoInNode );
     {
         // remove actions - TODO: why?
-        UnoActionRemoveContext aRemoveContext(pUnoCursor->GetDoc());
+        UnoActionRemoveContext aRemoveContext(&pUnoCursor->GetDoc());
     }
     pFrameFormat->GetDoc()->InsertRow(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);
 }
@@ -4134,7 +4134,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
 
     {
         // remove actions - TODO: why?
-        UnoActionRemoveContext aRemoveContext(pUnoCursor->GetDoc());
+        UnoActionRemoveContext aRemoveContext(&pUnoCursor->GetDoc());
     }
 
     pFrameFormat->GetDoc()->InsertCol(*pUnoCursor, static_cast<sal_uInt16>(nCount), bAppend);

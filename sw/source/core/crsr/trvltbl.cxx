@@ -500,7 +500,7 @@ bool GotoPrevTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
     }
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
+    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() &&
             nullptr == ( pTableNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
@@ -569,7 +569,7 @@ bool GotoNextTable( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosTable
         aIdx.Assign( *pTableNd->EndOfSectionNode(), 1 );
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
+    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() < nLastNd &&
                 nullptr == ( pTableNd = aIdx.GetNode().GetTableNode()) )

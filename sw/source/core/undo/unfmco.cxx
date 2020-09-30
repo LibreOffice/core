@@ -27,7 +27,7 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
                               const SwFormatColl* pColl,
                               const bool bReset,
                               const bool bResetListAttrs )
-    : SwUndo( SwUndoId::SETFMTCOLL, rRange.GetDoc() ),
+    : SwUndo( SwUndoId::SETFMTCOLL, &rRange.GetDoc() ),
       SwUndRng( rRange ),
       mpHistory( new SwHistory ),
       mbReset( bReset ),
