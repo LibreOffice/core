@@ -108,6 +108,336 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 }
 
 namespace oox::drawingml {
+void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr& rShape,
+                                   const std::vector<Constraint>& rConstraints)
+{
+    if (rShape->getChildren().empty() || rShape->getSize().Width == 0
+        || rShape->getSize().Height == 0)
+        return;
+
+    // Parse constraints.
+    double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
+    double fShapeHeight = rShape->getSize().Height;
+    double fShapeWidth = rShape->getSize().Width;
+    // Check if we have a child aspect ratio. If so, need to shrink one dimension to
+    // achieve that ratio.
+    if (fChildAspectRatio && fShapeHeight && fChildAspectRatio < (fShapeWidth / fShapeHeight))
+    {
+        fShapeWidth = fShapeHeight * fChildAspectRatio;
+    }
+
+    double fSpaceFromConstraint = 1.0;
+    LayoutPropertyMap aPropertiesByName;
+    std::map<sal_Int32, LayoutProperty> aPropertiesByType;
+    LayoutProperty& rParent = aPropertiesByName[""];
+    rParent[XML_w] = fShapeWidth;
+    rParent[XML_h] = fShapeHeight;
+    for (const auto& rConstr : rConstraints)
+    {
+        if (rConstr.mnRefType == XML_w || rConstr.mnRefType == XML_h)
+        {
+            if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
+                fSpaceFromConstraint = rConstr.mfFactor;
+        }
+
+        auto itRefForName = aPropertiesByName.find(rConstr.msRefForName);
+        if (itRefForName == aPropertiesByName.end())
+        {
+            continue;
+        }
+
+        auto it = itRefForName->second.find(rConstr.mnRefType);
+        if (it == itRefForName->second.end())
+        {
+            continue;
+        }
+
+        if (rConstr.mfValue != 0.0)
+        {
+            continue;
+        }
+
+        sal_Int32 nValue = it->second * rConstr.mfFactor;
+
+        if (rConstr.mnPointType == XML_none)
+        {
+            aPropertiesByName[rConstr.msForName][rConstr.mnType] = nValue;
+        }
+        else
+        {
+            aPropertiesByType[rConstr.mnPointType][rConstr.mnType] = nValue;
+        }
+    }
+
+    std::vector<sal_Int32> aShapeWidths(rShape->getChildren().size());
+    for (size_t i = 0; i < rShape->getChildren().size(); ++i)
+    {
+        ShapePtr pChild = rShape->getChildren()[i];
+        if (!pChild->getDataNodeType())
+        {
+            // TODO handle the case when the requirement applies by name, not by point type.
+            aShapeWidths[i] = fShapeWidth;
+            continue;
+        }
+
+        auto itNodeType = aPropertiesByType.find(pChild->getDataNodeType());
+        if (itNodeType == aPropertiesByType.end())
+        {
+            aShapeWidths[i] = fShapeWidth;
+            continue;
+        }
+
+        auto it = itNodeType->second.find(XML_w);
+        if (it == itNodeType->second.end())
+        {
+            aShapeWidths[i] = fShapeWidth;
+            continue;
+        }
+
+        aShapeWidths[i] = it->second;
+    }
+
+    bool bSpaceFromConstraints = fSpaceFromConstraint != 1.0;
+
+    const sal_Int32 nDir = rMap.count(XML_grDir) ? rMap.find(XML_grDir)->second : XML_tL;
+    sal_Int32 nIncX = 1;
+    sal_Int32 nIncY = 1;
+    bool bHorizontal = true;
+    switch (nDir)
+    {
+        case XML_tL:
+            nIncX = 1;
+            nIncY = 1;
+            break;
+        case XML_tR:
+            nIncX = -1;
+            nIncY = 1;
+            break;
+        case XML_bL:
+            nIncX = 1;
+            nIncY = -1;
+            bHorizontal = false;
+            break;
+        case XML_bR:
+            nIncX = -1;
+            nIncY = -1;
+            bHorizontal = false;
+            break;
+    }
+
+    sal_Int32 nCount = rShape->getChildren().size();
+    // Defaults in case not provided by constraints.
+    double fSpace = bSpaceFromConstraints ? fSpaceFromConstraint : 0.3;
+    double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
+
+    sal_Int32 nCol = 1;
+    sal_Int32 nRow = 1;
+    sal_Int32 nMaxRowWidth = 0;
+    if (nCount <= fChildAspectRatio)
+        // Child aspect ratio request (width/height) is N, and we have at most N shapes.
+        // This means we don't need multiple columns.
+        nRow = nCount;
+    else
+    {
+        for (; nRow < nCount; nRow++)
+        {
+            nCol = std::ceil(static_cast<double>(nCount) / nRow);
+            sal_Int32 nRowWidth = 0;
+            for (sal_Int32 i = 0; i < nCol; ++i)
+            {
+                if (i >= nCount)
+                {
+                    break;
+                }
+
+                nRowWidth += aShapeWidths[i];
+            }
+            if ((fShapeHeight * nRow) / nRowWidth >= fAspectRatio)
+            {
+                if (nRowWidth > nMaxRowWidth)
+                {
+                    nMaxRowWidth = nRowWidth;
+                }
+                break;
+            }
+        }
+    }
+
+    SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
+
+    sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol - 1) * fSpace);
+    awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
+    if (nCol == 1 && nRow > 1)
+    {
+        // We have a single column, so count the height based on the parent height, not
+        // based on width.
+        // Space occurs inside children; also double amount of space is needed outside (on
+        // both sides), if the factor comes from a constraint.
+        sal_Int32 nNumSpaces = -1;
+        if (bSpaceFromConstraints)
+            nNumSpaces += 4;
+        sal_Int32 nHeight = rShape->getSize().Height / (nRow + (nRow + nNumSpaces) * fSpace);
+
+        if (fChildAspectRatio > 1)
+        {
+            // Shrink width if the aspect ratio requires it.
+            nWidth = std::min(rShape->getSize().Width,
+                              static_cast<sal_Int32>(nHeight * fChildAspectRatio));
+            aChildSize = awt::Size(nWidth, nHeight);
+        }
+
+        bHorizontal = false;
+    }
+
+    awt::Point aCurrPos(0, 0);
+    if (nIncX == -1)
+        aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
+    if (nIncY == -1)
+        aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
+    else if (bSpaceFromConstraints)
+    {
+        if (!bHorizontal)
+        {
+            // Initial vertical offset to have upper spacing (outside, so double amount).
+            aCurrPos.Y = aChildSize.Height * fSpace * 2;
+        }
+    }
+
+    sal_Int32 nStartX = aCurrPos.X;
+    sal_Int32 nColIdx = 0, index = 0;
+
+    const sal_Int32 aContDir
+        = rMap.count(XML_contDir) ? rMap.find(XML_contDir)->second : XML_sameDir;
+
+    switch (aContDir)
+    {
+        case XML_sameDir:
+        {
+            sal_Int32 nRowHeight = 0;
+            for (auto& aCurrShape : rShape->getChildren())
+            {
+                aCurrShape->setPosition(aCurrPos);
+                awt::Size aCurrSize(aChildSize);
+                // aShapeWidths items are a portion of nMaxRowWidth. We want the same ratio,
+                // based on the original parent width, ignoring the aspect ratio request.
+                double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
+                bool bWidthsFromConstraints
+                    = nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans;
+                if (bWidthsFromConstraints)
+                {
+                    // We can only work from constraints if spacing is represented by a real
+                    // child shape.
+                    aCurrSize.Width = rShape->getSize().Width * fWidthFactor;
+                }
+                if (fChildAspectRatio)
+                {
+                    aCurrSize.Height = aCurrSize.Width / fChildAspectRatio;
+
+                    // Child shapes are not allowed to leave their parent.
+                    aCurrSize.Height = std::min<sal_Int32>(
+                        aCurrSize.Height, rShape->getSize().Height / (nRow + (nRow - 1) * fSpace));
+                }
+                if (aCurrSize.Height > nRowHeight)
+                {
+                    nRowHeight = aCurrSize.Height;
+                }
+                aCurrShape->setSize(aCurrSize);
+                aCurrShape->setChildSize(aCurrSize);
+
+                index++; // counts index of child, helpful for positioning.
+
+                if (index % nCol == 0 || ((index / nCol) + 1) != nRow)
+                    aCurrPos.X += nIncX * (aCurrSize.Width + fSpace * aCurrSize.Width);
+
+                if (++nColIdx == nCol) // condition for next row
+                {
+                    // if last row, then position children according to number of shapes.
+                    if ((index + 1) % nCol != 0 && (index + 1) >= 3
+                        && ((index + 1) / nCol + 1) == nRow && nCount != nRow * nCol)
+                    {
+                        // position first child of last row
+                        if (bWidthsFromConstraints)
+                        {
+                            aCurrPos.X = nStartX;
+                        }
+                        else
+                        {
+                            // Can assume that all child shape has the same width.
+                            aCurrPos.X
+                                = nStartX
+                                  + (nIncX * (aCurrSize.Width + fSpace * aCurrSize.Width)) / 2;
+                        }
+                    }
+                    else
+                        // if not last row, positions first child of that row
+                        aCurrPos.X = nStartX;
+                    aCurrPos.Y += nIncY * (nRowHeight + fSpace * nRowHeight);
+                    nColIdx = 0;
+                    nRowHeight = 0;
+                }
+
+                // positions children in the last row.
+                if (index % nCol != 0 && index >= 3 && ((index / nCol) + 1) == nRow)
+                    aCurrPos.X += (nIncX * (aCurrSize.Width + fSpace * aCurrSize.Width));
+            }
+            break;
+        }
+        case XML_revDir:
+            for (auto& aCurrShape : rShape->getChildren())
+            {
+                aCurrShape->setPosition(aCurrPos);
+                aCurrShape->setSize(aChildSize);
+                aCurrShape->setChildSize(aChildSize);
+
+                index++; // counts index of child, helpful for positioning.
+
+                /*
+                   index%col -> tests node is at last column
+                   ((index/nCol)+1)!=nRow) -> tests node is at last row or not
+                   ((index/nCol)+1)%2!=0 -> tests node is at row which is multiple of 2, important for revDir
+                   num!=nRow*nCol -> tests how last row nodes should be spread.
+                   */
+
+                if ((index % nCol == 0 || ((index / nCol) + 1) != nRow)
+                    && ((index / nCol) + 1) % 2 != 0)
+                    aCurrPos.X += (aChildSize.Width + fSpace * aChildSize.Width);
+                else if (index % nCol != 0
+                         && ((index / nCol) + 1) != nRow) // child other than placed at last column
+                    aCurrPos.X -= (aChildSize.Width + fSpace * aChildSize.Width);
+
+                if (++nColIdx == nCol) // condition for next row
+                {
+                    // if last row, then position children according to number of shapes.
+                    if ((index + 1) % nCol != 0 && (index + 1) >= 4
+                        && ((index + 1) / nCol + 1) == nRow && nCount != nRow * nCol
+                        && ((index / nCol) + 1) % 2 == 0)
+                        // position first child of last row
+                        aCurrPos.X -= aChildSize.Width * 3 / 2;
+                    else if ((index + 1) % nCol != 0 && (index + 1) >= 4
+                             && ((index + 1) / nCol + 1) == nRow && nCount != nRow * nCol
+                             && ((index / nCol) + 1) % 2 != 0)
+                        aCurrPos.X = nStartX
+                                     + (nIncX * (aChildSize.Width + fSpace * aChildSize.Width)) / 2;
+                    else if (((index / nCol) + 1) % 2 != 0)
+                        aCurrPos.X = nStartX;
+
+                    aCurrPos.Y += nIncY * (aChildSize.Height + fSpace * aChildSize.Height);
+                    nColIdx = 0;
+                }
+
+                // positions children in the last row.
+                if (index % nCol != 0 && index >= 3 && ((index / nCol) + 1) == nRow
+                    && ((index / nCol) + 1) % 2 == 0)
+                    //if row%2=0 then start from left else
+                    aCurrPos.X -= (nIncX * (aChildSize.Width + fSpace * aChildSize.Width));
+                else if (index % nCol != 0 && index >= 3 && ((index / nCol) + 1) == nRow
+                         && ((index / nCol) + 1) % 2 != 0)
+                    // start from right
+                    aCurrPos.X += (nIncX * (aChildSize.Width + fSpace * aChildSize.Width));
+            }
+            break;
+    }
+}
 
 IteratorAttr::IteratorAttr( )
     : mnCnt( -1 )
@@ -1291,306 +1621,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
 
         case XML_snake:
         {
-            // find optimal grid to layout children that have fixed aspect ratio
-
-            if (rShape->getChildren().empty() || rShape->getSize().Width == 0 || rShape->getSize().Height == 0)
-                break;
-
-            // Parse constraints.
-            double fChildAspectRatio = rShape->getChildren()[0]->getAspectRatio();
-            double fShapeHeight = rShape->getSize().Height;
-            double fShapeWidth = rShape->getSize().Width;
-            // Check if we have a child aspect ratio. If so, need to shrink one dimension to
-            // achieve that ratio.
-            if (fChildAspectRatio && fShapeHeight
-                && fChildAspectRatio < (fShapeWidth / fShapeHeight))
-            {
-                fShapeWidth = fShapeHeight * fChildAspectRatio;
-            }
-
-            double fSpaceFromConstraint = 1.0;
-            LayoutPropertyMap aPropertiesByName;
-            std::map<sal_Int32, LayoutProperty> aPropertiesByType;
-            LayoutProperty& rParent = aPropertiesByName[""];
-            rParent[XML_w] = fShapeWidth;
-            rParent[XML_h] = fShapeHeight;
-            for (const auto& rConstr : rConstraints)
-            {
-                if (rConstr.mnRefType == XML_w || rConstr.mnRefType == XML_h)
-                {
-                    if (rConstr.mnType == XML_sp && rConstr.msForName.isEmpty())
-                        fSpaceFromConstraint = rConstr.mfFactor;
-                }
-
-                auto itRefForName = aPropertiesByName.find(rConstr.msRefForName);
-                if (itRefForName == aPropertiesByName.end())
-                {
-                    continue;
-                }
-
-                auto it = itRefForName->second.find(rConstr.mnRefType);
-                if (it == itRefForName->second.end())
-                {
-                    continue;
-                }
-
-                if (rConstr.mfValue != 0.0)
-                {
-                    continue;
-                }
-
-                sal_Int32 nValue = it->second * rConstr.mfFactor;
-
-                if (rConstr.mnPointType == XML_none)
-                {
-                    aPropertiesByName[rConstr.msForName][rConstr.mnType] = nValue;
-                }
-                else
-                {
-                    aPropertiesByType[rConstr.mnPointType][rConstr.mnType] = nValue;
-                }
-            }
-
-            std::vector<sal_Int32> aShapeWidths(rShape->getChildren().size());
-            for (size_t i = 0; i < rShape->getChildren().size(); ++i)
-            {
-                ShapePtr pChild = rShape->getChildren()[i];
-                if (!pChild->getDataNodeType())
-                {
-                    // TODO handle the case when the requirement applies by name, not by point type.
-                    aShapeWidths[i] = fShapeWidth;
-                    continue;
-                }
-
-                auto itNodeType = aPropertiesByType.find(pChild->getDataNodeType());
-                if (itNodeType == aPropertiesByType.end())
-                {
-                    aShapeWidths[i] = fShapeWidth;
-                    continue;
-                }
-
-                auto it = itNodeType->second.find(XML_w);
-                if (it == itNodeType->second.end())
-                {
-                    aShapeWidths[i] = fShapeWidth;
-                    continue;
-                }
-
-                aShapeWidths[i] = it->second;
-            }
-
-            bool bSpaceFromConstraints = fSpaceFromConstraint != 1.0;
-
-            const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
-            sal_Int32 nIncX = 1;
-            sal_Int32 nIncY = 1;
-            bool bHorizontal = true;
-            switch (nDir)
-            {
-                case XML_tL: nIncX =  1; nIncY =  1; break;
-                case XML_tR: nIncX = -1; nIncY =  1; break;
-                case XML_bL: nIncX =  1; nIncY = -1; bHorizontal = false; break;
-                case XML_bR: nIncX = -1; nIncY = -1; bHorizontal = false; break;
-            }
-
-            sal_Int32 nCount = rShape->getChildren().size();
-            // Defaults in case not provided by constraints.
-            double fSpace = bSpaceFromConstraints ? fSpaceFromConstraint : 0.3;
-            double fAspectRatio = 0.54; // diagram should not spill outside, earlier it was 0.6
-
-            sal_Int32 nCol = 1;
-            sal_Int32 nRow = 1;
-            sal_Int32 nMaxRowWidth = 0;
-            if (nCount <= fChildAspectRatio)
-                // Child aspect ratio request (width/height) is N, and we have at most N shapes.
-                // This means we don't need multiple columns.
-                nRow = nCount;
-            else
-            {
-                for ( ; nRow<nCount; nRow++)
-                {
-                    nCol = std::ceil(static_cast<double>(nCount) / nRow);
-                    sal_Int32 nRowWidth = 0;
-                    for (sal_Int32 i = 0; i < nCol; ++i)
-                    {
-                        if (i >= nCount)
-                        {
-                            break;
-                        }
-
-                        nRowWidth += aShapeWidths[i];
-                    }
-                    if ((fShapeHeight * nRow) / nRowWidth >= fAspectRatio)
-                    {
-                        if (nRowWidth > nMaxRowWidth)
-                        {
-                            nMaxRowWidth = nRowWidth;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            SAL_INFO("oox.drawingml", "Snake layout grid: " << nCol << "x" << nRow);
-
-            sal_Int32 nWidth = rShape->getSize().Width / (nCol + (nCol-1)*fSpace);
-            awt::Size aChildSize(nWidth, nWidth * fAspectRatio);
-            if (nCol == 1 && nRow > 1)
-            {
-                // We have a single column, so count the height based on the parent height, not
-                // based on width.
-                // Space occurs inside children; also double amount of space is needed outside (on
-                // both sides), if the factor comes from a constraint.
-                sal_Int32 nNumSpaces = -1;
-                if (bSpaceFromConstraints)
-                    nNumSpaces += 4;
-                sal_Int32 nHeight
-                    = rShape->getSize().Height / (nRow + (nRow + nNumSpaces) * fSpace);
-
-                if (fChildAspectRatio > 1)
-                {
-                    // Shrink width if the aspect ratio requires it.
-                    nWidth = std::min(rShape->getSize().Width,
-                                      static_cast<sal_Int32>(nHeight * fChildAspectRatio));
-                    aChildSize = awt::Size(nWidth, nHeight);
-                }
-
-                bHorizontal = false;
-            }
-
-            awt::Point aCurrPos(0, 0);
-            if (nIncX == -1)
-                aCurrPos.X = rShape->getSize().Width - aChildSize.Width;
-            if (nIncY == -1)
-                aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
-            else if (bSpaceFromConstraints)
-            {
-                if (!bHorizontal)
-                {
-                    // Initial vertical offset to have upper spacing (outside, so double amount).
-                    aCurrPos.Y = aChildSize.Height * fSpace * 2;
-                }
-            }
-
-            sal_Int32 nStartX = aCurrPos.X;
-            sal_Int32 nColIdx = 0,index = 0;
-
-            const sal_Int32 aContDir = maMap.count(XML_contDir) ? maMap.find(XML_contDir)->second : XML_sameDir;
-
-            switch(aContDir)
-            {
-                case XML_sameDir:
-                {
-                sal_Int32 nRowHeight = 0;
-                for (auto & aCurrShape : rShape->getChildren())
-                {
-                    aCurrShape->setPosition(aCurrPos);
-                    awt::Size aCurrSize(aChildSize);
-                    // aShapeWidths items are a portion of nMaxRowWidth. We want the same ratio,
-                    // based on the original parent width, ignoring the aspect ratio request.
-                    double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
-                    bool bWidthsFromConstraints = nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans;
-                    if (bWidthsFromConstraints)
-                    {
-                        // We can only work from constraints if spacing is represented by a real
-                        // child shape.
-                        aCurrSize.Width = rShape->getSize().Width * fWidthFactor;
-                    }
-                    if (fChildAspectRatio)
-                    {
-                        aCurrSize.Height = aCurrSize.Width / fChildAspectRatio;
-
-                        // Child shapes are not allowed to leave their parent.
-                        aCurrSize.Height = std::min<sal_Int32>(aCurrSize.Height, rShape->getSize().Height / (nRow + (nRow-1)*fSpace));
-                    }
-                    if (aCurrSize.Height > nRowHeight)
-                    {
-                        nRowHeight = aCurrSize.Height;
-                    }
-                    aCurrShape->setSize(aCurrSize);
-                    aCurrShape->setChildSize(aCurrSize);
-
-                    index++; // counts index of child, helpful for positioning.
-
-                    if(index%nCol==0 || ((index/nCol)+1)!=nRow)
-                        aCurrPos.X += nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width);
-
-                    if(++nColIdx == nCol) // condition for next row
-                    {
-                        // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol)
-                        {
-                            // position first child of last row
-                            if (bWidthsFromConstraints)
-                            {
-                                aCurrPos.X = nStartX;
-                            }
-                            else
-                            {
-                                // Can assume that all child shape has the same width.
-                                aCurrPos.X = nStartX + (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width))/2;
-                            }
-                        }
-                        else
-                            // if not last row, positions first child of that row
-                            aCurrPos.X = nStartX;
-                        aCurrPos.Y += nIncY * (nRowHeight + fSpace*nRowHeight);
-                        nColIdx = 0;
-                        nRowHeight = 0;
-                    }
-
-                    // positions children in the last row.
-                    if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow)
-                        aCurrPos.X += (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width));
-                }
-                break;
-                }
-                case XML_revDir:
-                for (auto & aCurrShape : rShape->getChildren())
-                {
-                    aCurrShape->setPosition(aCurrPos);
-                    aCurrShape->setSize(aChildSize);
-                    aCurrShape->setChildSize(aChildSize);
-
-                    index++; // counts index of child, helpful for positioning.
-
-                    /*
-                    index%col -> tests node is at last column
-                    ((index/nCol)+1)!=nRow) -> tests node is at last row or not
-                    ((index/nCol)+1)%2!=0 -> tests node is at row which is multiple of 2, important for revDir
-                    num!=nRow*nCol -> tests how last row nodes should be spread.
-                    */
-
-                    if((index%nCol==0 || ((index/nCol)+1)!=nRow) && ((index/nCol)+1)%2!=0)
-                        aCurrPos.X +=  (aChildSize.Width + fSpace*aChildSize.Width);
-                    else if( index%nCol!=0 && ((index/nCol)+1)!=nRow) // child other than placed at last column
-                        aCurrPos.X -= (aChildSize.Width + fSpace*aChildSize.Width);
-
-                    if(++nColIdx == nCol) // condition for next row
-                    {
-                        // if last row, then position children according to number of shapes.
-                        if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2==0)
-                            // position first child of last row
-                            aCurrPos.X -= aChildSize.Width*3/2;
-                        else if((index+1)%nCol!=0 && (index+1)>=4 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol && ((index/nCol)+1)%2!=0)
-                            aCurrPos.X = nStartX + (nIncX * (aChildSize.Width + fSpace*aChildSize.Width))/2;
-                        else if(((index/nCol)+1)%2!=0)
-                            aCurrPos.X = nStartX;
-
-                        aCurrPos.Y += nIncY * (aChildSize.Height + fSpace*aChildSize.Height);
-                        nColIdx = 0;
-                    }
-
-                    // positions children in the last row.
-                    if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow && ((index/nCol)+1)%2==0)
-                        //if row%2=0 then start from left else
-                        aCurrPos.X -= (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
-                    else if(index%nCol!=0 && index>=3 && ((index/nCol)+1)==nRow && ((index/nCol)+1)%2!=0)
-                        // start from right
-                        aCurrPos.X += (nIncX * (aChildSize.Width + fSpace*aChildSize.Width));
-                }
-                break;
-            }
+            SnakeAlg::layoutShapeChildren(maMap, rShape, rConstraints);
             break;
         }
 
