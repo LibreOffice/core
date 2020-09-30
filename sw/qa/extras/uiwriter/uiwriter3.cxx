@@ -29,6 +29,8 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <fmtfsize.hxx>
+#include <fmtornt.hxx>
 
 namespace
 {
@@ -1338,6 +1340,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     xCellA1.set(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT(xCellA1->getString().endsWith("test1"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf84691)
+{
+    // Load the desired test document
+    load(DATA_DIRECTORY, "tdf84691.odt");
+    // get the document model
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    // check successibility of getting the pointer
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the Writer's shell
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    // Check if it is not captured
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Get the all frame formats vector of the doc
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    // Check if it is not success (if it is empty)
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    // We have one shape so get the first one
+    auto pShape = rFrmFormats.front();
+    // check the success
+    CPPUNIT_ASSERT(pShape);
+
+    // Add textbox to the shape
+    SwTextBoxHelper::create(pShape);
+    // Get the new textbox
+    auto pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    // success?
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    // check for nullptr
+    CPPUNIT_ASSERT(pShape->FindSdrObject());
+    CPPUNIT_ASSERT(pTxBxFrm->FindSdrObject());
+
+    // Get the rectangle of the shape and the textbox
+    const Point aShFrmPos(pShape->GetHoriOrient().GetPos(), pShape->GetVertOrient().GetPos());
+    const Point aTxFrmPos(pTxBxFrm->GetHoriOrient().GetPos(), pTxBxFrm->GetVertOrient().GetPos());
+    const auto aTxBxRect = tools::Rectangle(aTxFrmPos, pTxBxFrm->GetFrameSize().GetSize());
+    const auto aShapeRect
+        = tools::Rectangle(aShFrmPos, pShape->FindRealSdrObject()->GetLogicRect().GetSize());
+
+    // Did we obtained the rectangles?
+    CPPUNIT_ASSERT(!aShapeRect.IsEmpty());
+    CPPUNIT_ASSERT(!aTxBxRect.IsEmpty());
+
+    // Check if the rectangle of the textbox is inside of the rectangle of the shape.
+    // Without the fix, it were outside, now it should be inside. If not, this will fail.
+    CPPUNIT_ASSERT_MESSAGE("The textbox is outside of the shape!", aShapeRect.IsInside(aTxBxRect));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
