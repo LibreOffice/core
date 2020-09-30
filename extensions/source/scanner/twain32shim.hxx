@@ -11,6 +11,7 @@
 #pragma once
 
 #include <prewin.h>
+#include <Shlobj.h>
 #include <postwin.h>
 #include <exception>
 #include <string>
