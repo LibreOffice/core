@@ -719,6 +719,12 @@ long WinSalGraphics::GetGraphicsWidth() const
     return mpImpl->GetGraphicsWidth();
 }
 
+void WinSalGraphics::Flush()
+{
+    if(WinSalGraphicsImplBase* impl = dynamic_cast<WinSalGraphicsImplBase*>(GetImpl()))
+        impl->Flush();
+}
+
 void WinSalGraphics::ResetClipRegion()
 {
     mpImpl->ResetClipRegion();

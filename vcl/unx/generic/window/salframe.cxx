@@ -2303,6 +2303,8 @@ void X11SalFrame::SetTitle( const OUString& rTitle )
 
 void X11SalFrame::Flush()
 {
+    if( pGraphics_ )
+        pGraphics_->Flush();
     XFlush( GetDisplay()->GetDisplay() );
 }
 

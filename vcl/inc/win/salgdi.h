@@ -222,6 +222,7 @@ public:
     bool isScreen() const;
 
     void setHWND(HWND hWnd);
+    void Flush();
 
 protected:
     virtual bool        setClipRegion( const vcl::Region& ) override;

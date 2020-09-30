@@ -61,6 +61,8 @@ void WinSkiaSalGraphicsImpl::DeInit()
 
 void WinSkiaSalGraphicsImpl::freeResources() {}
 
+void WinSkiaSalGraphicsImpl::Flush() { performFlush(); }
+
 void WinSkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;
