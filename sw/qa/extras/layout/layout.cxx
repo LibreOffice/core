@@ -1137,6 +1137,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
+{
+    //Check the padding of the textbox
+    SwDoc* pDoc = createDoc("tdf137025.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    //Check the layout xml
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject/DefaultProperties/SfxItemSet/SfxInt32Item[3]", "value", "567");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject/DefaultProperties/SfxItemSet/SfxInt32Item[4]", "value", "1134");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject/DefaultProperties/SfxItemSet/SfxInt32Item[5]", "value", "1701");
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject/DefaultProperties/SfxItemSet/SfxInt32Item[6]", "value", "2268");
+
+    //Check the textbox import too
+    uno::Reference<beans::XPropertySet> xShapeProps(getShape(1), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(long(1000), xShapeProps->getPropertyValue("TextLeftDistance").get<long>());
+    CPPUNIT_ASSERT_EQUAL(long(2000), xShapeProps->getPropertyValue("TextRightDistance").get<long>());
+    CPPUNIT_ASSERT_EQUAL(long(3000), xShapeProps->getPropertyValue("TextUpperDistance").get<long>());
+    CPPUNIT_ASSERT_EQUAL(long(4001), xShapeProps->getPropertyValue("TextLowerDistance").get<long>());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 {
     // Load a document that has a fly anchored in the footer.
