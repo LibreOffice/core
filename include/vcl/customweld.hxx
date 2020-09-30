@@ -92,6 +92,10 @@ public:
     {
         m_pDrawingArea->set_input_context(rInputContext);
     }
+    void SetCursorRect(const tools::Rectangle& rCursorRect, int nExtTextInputWidth)
+    {
+        m_pDrawingArea->im_context_set_cursor_location(rCursorRect, nExtTextInputWidth);
+    }
     void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
                                   sal_uInt8 eDNDConstants)
     {

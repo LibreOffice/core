@@ -77,6 +77,13 @@ protected:
     {
         SetInputContext(rInputContext);
     }
+
+    virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override
+    {
+        OutputDevice& rRefDevice = EditViewOutputDevice();
+        SetCursorRect(rRefDevice.LogicToPixel(rRect),
+                      rRefDevice.LogicToPixel(Size(nExtTextInputWidth, 0)).Width());
+    }
 };
 
 #endif // INCLUDED_SVX_WELDEDITVIEW_HXX

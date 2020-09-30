@@ -662,6 +662,13 @@ void SdrObjEditView::EditViewInputContext(const InputContext& rInputContext)
     pTextEditWin->SetInputContext(rInputContext);
 }
 
+void SdrObjEditView::EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth)
+{
+    if (!pTextEditWin)
+        return;
+    pTextEditWin->SetCursorRect(&rRect, nExtTextInputWidth);
+}
+
 void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
 {
     if (!comphelper::LibreOfficeKit::isActive())

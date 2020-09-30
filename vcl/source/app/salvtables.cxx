@@ -5852,6 +5852,12 @@ void SalInstanceDrawingArea::set_input_context(const InputContext& rInputContext
     m_xDrawingArea->SetInputContext(rInputContext);
 }
 
+void SalInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth)
+{
+    tools::Rectangle aCursorRect = m_xDrawingArea->PixelToLogic(rCursorRect);
+    m_xDrawingArea->SetCursorRect(&aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
+}
+
 a11yref SalInstanceDrawingArea::get_accessible_parent()
 {
     vcl::Window* pParent = m_xDrawingArea->GetParent();
