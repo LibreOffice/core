@@ -761,9 +761,9 @@ void PPTXAnimationExport::WriteAnimationCondList(const Any& rAny, sal_Int32 nTok
 
 void PPTXAnimationExport::WriteAnimationCond(const Cond& rCond)
 {
-    sal_Int32 nId = -1;
     if (rCond.mpEvent)
     {
+        sal_Int32 nId = -1;
         if (rCond.mxShape.is())
         {
             mpFS->startElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,

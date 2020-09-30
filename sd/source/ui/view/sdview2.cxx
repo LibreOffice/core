@@ -307,12 +307,12 @@ void View::DoPaste (::sd::Window* pWindow)
     }
     else
     {
-        sal_Int8    nDnDAction = DND_ACTION_COPY;
         Point aPos = pWindow->GetVisibleCenter();
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
         if (pDrViewSh != nullptr)
         {
+            sal_Int8    nDnDAction = DND_ACTION_COPY;
             if( !InsertData( aDataHelper, aPos, nDnDAction, false ) )
             {
                 INetBookmark    aINetBookmark( "", "" );

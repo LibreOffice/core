@@ -924,10 +924,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else if(mpDrawView)
             {
-                sal_Int8 nAction = DND_ACTION_COPY;
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
                 if (aDataHelper.GetTransferable().is())
                 {
+                    sal_Int8 nAction = DND_ACTION_COPY;
                     mpDrawView->InsertData( aDataHelper,
                                             GetActiveWindow()->PixelToLogic( ::tools::Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
                                             nAction, false, SotClipboardFormatId::STRING);

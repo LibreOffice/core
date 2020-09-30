@@ -111,7 +111,6 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     if( pDlg->Execute() != RET_OK )
         return;
 
-    OUString aPage;
     long    nValue32;
     bool    bValue;
     bool    bValuesChanged = false;
@@ -129,7 +128,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     if (!rPresentationSettings.mbAll)
     {
-        aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
+        OUString aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
         if( aPage != rPresentationSettings.maPresPage )
         {
             bValuesChanged = true;
