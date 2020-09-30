@@ -50,7 +50,7 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "skia"; }
 
-    const vcl::Region& getClipRegion() const;
+    virtual const vcl::Region& getClipRegion() const override;
     virtual bool setClipRegion(const vcl::Region&) override;
 
     //
@@ -202,6 +202,10 @@ public:
     {
         return const_cast<SkiaSalGraphicsImpl*>(this);
     }
+
+    // SkiaOutDevInterface
+    virtual bool drawBitmap(const BitmapEx& bitmap, const SkPaint& paint, const SkMatrix& matrix,
+                            double alphaModulation, SlowHandling slowHandling) override;
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
