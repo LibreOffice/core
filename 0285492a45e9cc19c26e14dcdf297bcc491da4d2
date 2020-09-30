@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d90f19c_dbb6f215",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-30T21:05:21Z",
+      "side": 1,
+      "message": "this uses pUndoObject after it has been std::move\u0027d in line 1521 above (see \u003chttps://lists.freedesktop.org/archives/libreoffice/2020-September/086018.html\u003e \"llvm/clang static analyzer reports\")",
+      "range": {
+        "startLine": 1523,
+        "startChar": 61,
+        "endLine": 1523,
+        "endChar": 72
+      },
+      "revId": "0285492a45e9cc19c26e14dcdf297bcc491da4d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
