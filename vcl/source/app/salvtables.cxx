@@ -5815,6 +5815,7 @@ SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, Sal
     m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
     m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
     m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
+    m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
     m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
 }
 
@@ -5850,6 +5851,12 @@ void SalInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
 void SalInstanceDrawingArea::set_input_context(const InputContext& rInputContext)
 {
     m_xDrawingArea->SetInputContext(rInputContext);
+}
+
+void SalInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth)
+{
+    tools::Rectangle aCursorRect = m_xDrawingArea->PixelToLogic(rCursorRect);
+    m_xDrawingArea->SetCursorRect(&aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
 }
 
 a11yref SalInstanceDrawingArea::get_accessible_parent()
@@ -5902,6 +5909,7 @@ void SalInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataConta
 
 SalInstanceDrawingArea::~SalInstanceDrawingArea()
 {
+    m_xDrawingArea->SetGetSurroundingHdl(Link<OUString&, int>());
     m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
     m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
     m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
@@ -5970,6 +5978,11 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
 {
     return m_aCommandHdl.Call(rEvent);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, GetSurroundingHdl, OUString&, rSurrounding, int)
+{
+    return m_aGetSurroundingHdl.Call(rSurrounding);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)

@@ -13105,7 +13105,10 @@ public:
     }
 };
 
-    AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
+// IMHandler
+class IMHandler;
+
+AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
 
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
 {
@@ -13114,6 +13117,7 @@ private:
     a11yref m_xAccessible;
     AtkObject *m_pAccessible;
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
+    std::unique_ptr<IMHandler> m_xIMHandler;
     cairo_surface_t* m_pSurface;
     gulong m_nDrawSignalId;
     gulong m_nStyleUpdatedSignalId;
@@ -13187,7 +13191,7 @@ private:
     }
     virtual bool signal_popup_menu(const CommandEvent& rCEvt) override
     {
-        return m_aCommandHdl.Call(rCEvt);
+        return signal_command(rCEvt);
     }
     bool signal_scroll(GdkEventScroll* pEvent)
     {
@@ -13246,7 +13250,8 @@ public:
         {
             GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
             m_pAccessible = atk_object_wrapper_new(m_xAccessible, gtk_widget_get_accessible(pParent), pDefaultAccessible);
-            g_object_ref(m_pAccessible);
+            if (m_pAccessible)
+                g_object_ref(m_pAccessible);
         }
         return m_pAccessible;
     }
@@ -13277,9 +13282,18 @@ public:
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
     }
 
-    virtual void set_input_context(const InputContext& /*rInputContext*/) override
+    virtual void set_input_context(const InputContext& rInputContext) override;
+
+    virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth) override;
+
+    int im_context_get_surrounding(OUString& rSurroundingText)
     {
-        // TODO follow up for the gtk case
+        return signal_im_context_get_surrounding(rSurroundingText);
+    }
+
+    bool im_context_delete_surrounding(const Selection& rRange)
+    {
+        return signal_im_context_delete_surrounding(rRange);
     }
 
     virtual void queue_draw() override
@@ -13381,6 +13395,11 @@ public:
         return *m_xDevice;
     }
 
+    bool signal_command(const CommandEvent& rCEvt)
+    {
+        return m_aCommandHdl.Call(rCEvt);
+    }
+
     virtual void click(const Point& rPos) override
     {
         MouseEvent aEvent(rPos);
@@ -13388,6 +13407,238 @@ public:
         m_aMouseReleaseHdl.Call(aEvent);
     }
 };
+
+class IMHandler
+{
+private:
+    GtkInstanceDrawingArea* m_pArea;
+    GtkIMContext* m_pIMContext;
+    OUString m_sPreeditText;
+    gulong m_nFocusInSignalId;
+    gulong m_nFocusOutSignalId;
+    bool m_bExtTextInput;
+
+public:
+    IMHandler(GtkInstanceDrawingArea* pArea)
+        : m_pArea(pArea)
+        , m_pIMContext(gtk_im_multicontext_new())
+        , m_nFocusInSignalId(g_signal_connect(m_pArea->getWidget(), "focus-in-event", G_CALLBACK(signalFocusIn), this))
+        , m_nFocusOutSignalId(g_signal_connect(m_pArea->getWidget(), "focus-out-event", G_CALLBACK(signalFocusOut), this))
+        , m_bExtTextInput(false)
+    {
+        g_signal_connect(m_pIMContext, "preedit-start", G_CALLBACK(signalIMPreeditStart), this);
+        g_signal_connect(m_pIMContext, "preedit-end", G_CALLBACK(signalIMPreeditEnd), this);
+        g_signal_connect(m_pIMContext, "commit", G_CALLBACK(signalIMCommit), this);
+        g_signal_connect(m_pIMContext, "preedit-changed", G_CALLBACK(signalIMPreeditChanged), this);
+        g_signal_connect(m_pIMContext, "retrieve-surrounding", G_CALLBACK(signalIMRetrieveSurrounding), this);
+        g_signal_connect(m_pIMContext, "delete-surrounding", G_CALLBACK(signalIMDeleteSurrounding), this);
+
+        GtkWidget* pWidget = m_pArea->getWidget();
+        if (!gtk_widget_get_realized(pWidget))
+            gtk_widget_realize(pWidget);
+        GdkWindow* pWin = gtk_widget_get_window(pWidget);
+        gtk_im_context_set_client_window(m_pIMContext, pWin);
+        gtk_im_context_focus_in(m_pIMContext);
+    }
+
+    void signalFocus(bool bIn)
+    {
+        if (bIn)
+            gtk_im_context_focus_in(m_pIMContext);
+        else
+            gtk_im_context_focus_out(m_pIMContext);
+    }
+
+    static gboolean signalFocusIn(GtkWidget*, GdkEvent*, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        pThis->signalFocus(true);
+        return false;
+    }
+
+    static gboolean signalFocusOut(GtkWidget*, GdkEvent*, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        pThis->signalFocus(false);
+        return false;
+    }
+
+    ~IMHandler()
+    {
+        EndExtTextInput();
+
+        g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusOutSignalId);
+        g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusInSignalId);
+
+        // first give IC a chance to deinitialize
+        gtk_im_context_set_client_window(m_pIMContext, nullptr);
+        // destroy old IC
+        g_object_unref(m_pIMContext);
+    }
+
+    void updateIMSpotLocation()
+    {
+        CommandEvent aCEvt(Point(), CommandEventId::CursorPos);
+        // we expect set_cursor_location to get triggered by this
+        m_pArea->signal_command(aCEvt);
+    }
+
+    void set_cursor_location(const tools::Rectangle& rRect)
+    {
+        GdkRectangle aArea{static_cast<int>(rRect.Left()), static_cast<int>(rRect.Top()),
+                           static_cast<int>(rRect.GetWidth()), static_cast<int>(rRect.GetHeight())};
+        gtk_im_context_set_cursor_location(m_pIMContext, &aArea);
+    }
+
+    static void signalIMCommit(GtkIMContext* /*pContext*/, gchar* pText, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        // at least editeng expects to have seen a start before accepting a commit
+        pThis->StartExtTextInput();
+
+        OUString sText(pText, strlen(pText), RTL_TEXTENCODING_UTF8);
+        CommandExtTextInputData aData(sText, nullptr, sText.getLength(), 0, false);
+        CommandEvent aCEvt(Point(), CommandEventId::ExtTextInput, false, &aData);
+        pThis->m_pArea->signal_command(aCEvt);
+
+        pThis->updateIMSpotLocation();
+
+        pThis->EndExtTextInput();
+
+        pThis->m_sPreeditText.clear();
+    }
+
+    static void signalIMPreeditChanged(GtkIMContext* pIMContext, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        sal_Int32 nCursorPos(0);
+        sal_uInt8 nCursorFlags(0);
+        std::vector<ExtTextInputAttr> aInputFlags;
+        OUString sText = GtkSalFrame::GetPreeditDetails(pIMContext, aInputFlags, nCursorPos, nCursorFlags);
+
+        // change from nothing to nothing -> do not start preedit e.g. this
+        // will activate input into a calc cell without user input
+        if (sText.isEmpty() && pThis->m_sPreeditText.isEmpty())
+            return;
+
+        pThis->m_sPreeditText = sText;
+
+        CommandExtTextInputData aData(sText, aInputFlags.data(), nCursorPos, nCursorFlags, false);
+        CommandEvent aCEvt(Point(), CommandEventId::ExtTextInput, false, &aData);
+        pThis->m_pArea->signal_command(aCEvt);
+
+        pThis->updateIMSpotLocation();
+    }
+
+    static gboolean signalIMRetrieveSurrounding(GtkIMContext* pContext, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        OUString sSurroundingText;
+        int nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
+
+        if (nCursorIndex != -1)
+        {
+            OString sUTF = OUStringToOString(sSurroundingText, RTL_TEXTENCODING_UTF8);
+            OUString sCursorText(sSurroundingText.copy(0, nCursorIndex));
+            gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
+                OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
+        }
+
+        return true;
+    }
+
+    static gboolean signalIMDeleteSurrounding(GtkIMContext*, gint nOffset, gint nChars,
+        gpointer im_handler)
+    {
+        bool bRet = false;
+
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        OUString sSurroundingText;
+        sal_Int32 nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
+
+        if (nCursorIndex != -1)
+        {
+            // Note that offset and n_chars are in characters not in bytes
+            // which differs from the usage other places in GtkIMContext
+
+            if (nOffset > 0)
+            {
+                while (nCursorIndex < sSurroundingText.getLength())
+                    sSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+            }
+            else if (nOffset < 0)
+            {
+                while (nCursorIndex > 0)
+                    sSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+            }
+
+            sal_Int32 nCursorEndIndex(nCursorIndex);
+            sal_Int32 nCount(0);
+            while (nCount < nChars && nCursorEndIndex < sSurroundingText.getLength())
+                ++nCount;
+
+            bRet = pThis->m_pArea->im_context_delete_surrounding(Selection(nCursorIndex, nCursorEndIndex));
+        }
+
+        return bRet;
+    }
+
+    void StartExtTextInput()
+    {
+        if (m_bExtTextInput)
+            return;
+        CommandEvent aCEvt(Point(), CommandEventId::StartExtTextInput);
+        m_pArea->signal_command(aCEvt);
+        m_bExtTextInput = true;
+    }
+
+    static void signalIMPreeditStart(GtkIMContext*, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        pThis->StartExtTextInput();
+        pThis->updateIMSpotLocation();
+    }
+
+    void EndExtTextInput()
+    {
+        if (!m_bExtTextInput)
+            return;
+        CommandEvent aCEvt(Point(), CommandEventId::EndExtTextInput);
+        m_pArea->signal_command(aCEvt);
+        m_bExtTextInput = false;
+    }
+
+    static void signalIMPreeditEnd(GtkIMContext*, gpointer im_handler)
+    {
+        IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        pThis->updateIMSpotLocation();
+        pThis->EndExtTextInput();
+    }
+};
+
+void GtkInstanceDrawingArea::set_input_context(const InputContext& rInputContext)
+{
+    bool bUseIm(rInputContext.GetOptions() & InputContextFlags::Text);
+    if (!bUseIm)
+    {
+        m_xIMHandler.reset();
+        return;
+    }
+    // create a new im context
+    if (!m_xIMHandler)
+        m_xIMHandler.reset(new IMHandler(this));
+}
+
+void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int /*nExtTextInputWidth*/)
+{
+    if (!m_xIMHandler)
+        return;
+    m_xIMHandler->set_cursor_location(rCursorRect);
+}
 
 }
 
