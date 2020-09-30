@@ -583,6 +583,10 @@ void SwXTextDocument::disconnectController(const Reference< frame::XController >
 
 void SwXTextDocument::dispose()
 {
+    // Delete UnoActionContexts before deleting the SwDoc, as the first has unowned pointers to the
+    // second.
+    maActionArr.clear();
+
     SfxBaseModel::dispose();
 }
 
