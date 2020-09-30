@@ -164,7 +164,6 @@ sw/uiconfig/swriter/ui/tocentriespage.ui://GtkLabel[@id='typeft'] orphan-label
 sw/uiconfig/swriter/ui/tocentriespage.ui://GtkLabel[@id='label15'] orphan-label
 sw/uiconfig/swriter/ui/tocentriespage.ui://GtkLabel[@id='label16'] orphan-label
 sw/uiconfig/swriter/ui/tocentriespage.ui://GtkLabel[@id='label17'] orphan-label
-sw/uiconfig/swriter/ui/tocentriespage.ui://GtkComboBoxText[@id='key3lb'] no-labelled-by
 sw/uiconfig/swriter/ui/tocindexpage.ui://GtkButton[@id='styles'] missing-label-for
 sw/uiconfig/swriter/ui/tablecolumnpage.ui://GtkSpinButton[@id='spacefmt'] no-labelled-by
 sw/uiconfig/swriter/ui/tablepreviewdialog.ui://GtkLabel[@id='description'] orphan-label
