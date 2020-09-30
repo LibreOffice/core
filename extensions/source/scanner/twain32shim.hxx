@@ -12,6 +12,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_SCANNER_TWAIN32SHIM_HXX
 
 #include <prewin.h>
+#include <Shlobj.h>
 #include <postwin.h>
 #include <exception>
 #include <string>
