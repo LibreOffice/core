@@ -430,7 +430,7 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
 
         if (true)
 #else
-#if defined SYSTEM_NSS
+#if defined SYSTEM_NSS || defined ANDROID
         OUString rootModule("libnssckbi" SAL_DLLEXTENSION);
 #else
         OUString rootModule("${LO_LIB_DIR}/libnssckbi" SAL_DLLEXTENSION);
