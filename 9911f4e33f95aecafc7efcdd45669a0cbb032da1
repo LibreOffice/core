@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1c0de35_ad615388",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-09-30T20:18:37Z",
+      "side": 1,
+      "message": "Adding a few reviewers who might know whether the various users of that \"lo_get_constructor_map machinery\" are indeed unaffected by this change.",
+      "revId": "9911f4e33f95aecafc7efcdd45669a0cbb032da1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
