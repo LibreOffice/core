@@ -1032,7 +1032,7 @@ namespace
 void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const Image& rImage )
 {
 #if GLIB_CHECK_VERSION(2,38,0)
-    if (!!rImage && mbHasNullItemIcon)
+    if (!rImage && mbHasNullItemIcon)
         return;
 
     SolarMutexGuard aGuard;
