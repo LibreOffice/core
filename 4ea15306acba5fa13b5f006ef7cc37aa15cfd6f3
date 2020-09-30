@@ -269,6 +269,30 @@
       "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f8547d3_ecb61f2f",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:50:27Z",
+      "side": 1,
+      "message": "\"all 4 grid rows\" should read \"all 4 grid columns\"",
+      "parentUuid": "33811b78_fd7b4131",
+      "range": {
+        "startLine": 230,
+        "startChar": 28,
+        "endLine": 230,
+        "endChar": 68
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
