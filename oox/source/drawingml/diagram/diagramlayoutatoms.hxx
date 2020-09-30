@@ -201,6 +201,14 @@ private:
 
 typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
 
+/// Finds optimal grid to layout children that have fixed aspect ratio.
+class SnakeAlg
+{
+public:
+    static void layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr& rShape,
+                                    const std::vector<Constraint>& rConstraints);
+};
+
 class ForEachAtom
     : public LayoutAtom
 {
