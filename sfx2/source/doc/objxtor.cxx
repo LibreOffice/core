@@ -916,12 +916,9 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
     if ( aFact.startsWith( aPrefix ) )
         aFact = aFact.copy( aPrefix.getLength() );
     sal_Int32 nPos = aFact.indexOf( '?' );
-    OUString aParam;
     if ( nPos != -1 )
     {
-        aParam = aFact.copy( nPos );
         aFact = aFact.copy( 0, nPos );
-        aParam = aParam.copy(1);
     }
     aFact = aFact.replaceAll("4", "");
     aFact = aFact.toAsciiLowerCase();

@@ -580,9 +580,9 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     OUString const & i_rPath,
     OUString const & i_rBaseURI)
 {
-    OUString dir;
-    OUString rest;
     try {
+        OUString dir;
+        OUString rest;
         if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
         if (dir.isEmpty()) {
             if (!i_xStorage->isStreamElement(i_rPath)) {

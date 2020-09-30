@@ -1878,7 +1878,6 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                                                  const INetURLObject& aDest,
                                                  const Reference< css::ucb::XCommandEnvironment >& xComEnv )
 {
-    bool bResult = false;
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aOriginalContent;
 
@@ -1924,6 +1923,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         bool bTransactStarted = false;
         const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
         bool bOverWrite = !pOverWrite || pOverWrite->GetValue();
+        bool bResult = false;
 
         try
         {

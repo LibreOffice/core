@@ -1273,11 +1273,11 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
     }
     else if (aEvent.FeatureURL.Path == "LanguageStatus")
     {
-        OUString sValue;
         css::uno::Sequence< OUString > aSeq;
 
         if (aEvent.IsEnabled)
         {
+            OUString sValue;
             if (aEvent.State >>= sValue)
             {
                 aBuffer.append(sValue);

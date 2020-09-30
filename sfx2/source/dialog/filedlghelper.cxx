@@ -1322,16 +1322,9 @@ static void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
         lLastURLs.push_back(url);
 }
 
-void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList, const std::shared_ptr<const SfxFilter>& pFilter)
+void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker, std::vector<OUString>& rpURLList)
 {
     rpURLList.clear();
-
-    OUString sExtension;
-    if (pFilter)
-    {
-        sExtension = pFilter->GetDefaultExtension ();
-        sExtension = sExtension.replaceAll("*", "").replaceAll(".", "");
-    }
 
     // a) the new way (optional!)
     uno::Reference< XFilePicker3 > xPickNew(xPicker, UNO_QUERY);
@@ -1493,7 +1486,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
         std::shared_ptr<const SfxFilter> pCurrentFilter = getCurentSfxFilter();
 
         // fill the rpURLList
-        implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
+        implGetAndCacheFiles( mxFileDlg, rpURLList );
         if ( rpURLList.empty() )
             return ERRCODE_ABORT;
 
@@ -1968,13 +1961,13 @@ void FileDialogHelper_Impl::saveConfig()
     if ( mbHasPreview )
     {
         SvtViewOptions aDlgOpt( EViewType::Dialog, IMPGRF_CONFIGNAME );
-        OUString aUserData(GRF_CONFIG_STR);
 
         try
         {
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bool bValue = false;
             aValue >>= bValue;
+            OUString aUserData(GRF_CONFIG_STR);
             SetToken( aUserData, 1, ' ', OUString::number( static_cast<sal_Int32>(bValue) ) );
 
             INetURLObject aObj( getPath() );

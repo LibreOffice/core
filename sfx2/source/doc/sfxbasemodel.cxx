@@ -3505,11 +3505,10 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
 
     for ( sal_Int32 i = 0; i < rToolbarDefinition->getCount(); i++ )
     {
-        sal_Int32 nIndex( -1 );
-        OUString aCommand;
-
         if ( rToolbarDefinition->getByIndex( i ) >>= aSeqPropValue )
         {
+            OUString aCommand;
+            sal_Int32 nIndex( -1 );
             GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
             if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
             {

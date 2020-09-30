@@ -63,9 +63,9 @@ static void NotebookbarAddonValues(
             bool isBigImage = true;
             for (const auto& rProp : rExtensionVal)
             {
-                OUString sImage;
                 if (rProp.Name == MERGE_NOTEBOOKBAR_URL)
                 {
+                    OUString sImage;
                     rProp.Value >>= sImage;
                     aImage = Image(framework::AddonsOptions().GetImageFromURL(sImage, isBigImage));
                 }
