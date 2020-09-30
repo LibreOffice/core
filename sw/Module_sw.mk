@@ -113,6 +113,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_uibase_shells \
     CppunitTest_sw_uibase_dochdl \
     CppunitTest_sw_uibase_frmdlg \
+    CppunitTest_sw_uibase_uno \
     CppunitTest_sw_core_accessibilitycheck \
     CppunitTest_sw_core_layout \
     CppunitTest_sw_core_frmedt \
