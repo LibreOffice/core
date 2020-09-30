@@ -37,6 +37,7 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
     m_xDrawingArea->connect_style_updated(LINK(this, CustomWeld, DoStyleUpdated));
     m_xDrawingArea->connect_command(LINK(this, CustomWeld, DoCommand));
     m_xDrawingArea->connect_query_tooltip(LINK(this, CustomWeld, DoRequestHelp));
+    m_xDrawingArea->connect_im_context_get_surrounding(LINK(this, CustomWeld, DoGetSurrounding));
     m_rWidgetController.SetDrawingArea(m_xDrawingArea.get());
 }
 
@@ -93,6 +94,11 @@ IMPL_LINK(CustomWeld, DoCommand, const CommandEvent&, rPos, bool)
 IMPL_LINK(CustomWeld, DoRequestHelp, tools::Rectangle&, rHelpArea, OUString)
 {
     return m_rWidgetController.RequestHelp(rHelpArea);
+}
+
+IMPL_LINK(CustomWeld, DoGetSurrounding, OUString&, rSurrounding, int)
+{
+    return m_rWidgetController.GetSurroundingText(rSurrounding);
 }
 }
 
