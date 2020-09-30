@@ -1086,9 +1086,8 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
                     SdrHdl* pH2=maHdlList.GetHdl(SdrHdlKind::Ref2);
                     bool b90=false;
                     bool b45=false;
-                    Point aDif;
                     if (pH1!=nullptr && pH2!=nullptr) {
-                        aDif=pH2->GetPos()-pH1->GetPos();
+                        Point aDif = pH2->GetPos()-pH1->GetPos();
                         b90=(aDif.X()==0) || aDif.Y()==0;
                         b45=b90 || (std::abs(aDif.X())==std::abs(aDif.Y()));
                     }

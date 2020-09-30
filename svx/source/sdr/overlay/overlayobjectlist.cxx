@@ -108,7 +108,7 @@ namespace sdr::overlay
 
         bool OverlayObjectList::isHitPixel(const Point& rDiscretePosition) const
         {
-            sal_uInt32 nDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL;
+            constexpr sal_uInt32 nDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL;
             if(!maVector.empty())
             {
                 OverlayObject* pCandidate = maVector.front().get();

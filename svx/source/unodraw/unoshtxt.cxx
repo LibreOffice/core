@@ -439,9 +439,9 @@ void SvxTextEditSourceImpl::SetupOutliner()
         return;
 
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-    tools::Rectangle aPaintRect;
     if( pTextObj )
     {
+        tools::Rectangle aPaintRect;
         tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
         pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
 
@@ -460,9 +460,9 @@ void SvxTextEditSourceImpl::UpdateOutliner()
         return;
 
     SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-    tools::Rectangle aPaintRect;
     if( pTextObj )
     {
+        tools::Rectangle aPaintRect;
         tools::Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
         pTextObj->UpdateOutlinerFormatting( *mpOutliner, aPaintRect );
 

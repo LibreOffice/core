@@ -2083,8 +2083,8 @@ void SdrObjCustomShape::DragCreateObject( SdrDragStat& rStat )
 
     std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
-    sal_uInt32 const nDefaultObjectSizeWidth = 3000;      // default width from SDOptions ?
-    sal_uInt32 const nDefaultObjectSizeHeight= 3000;
+    constexpr sal_uInt32 nDefaultObjectSizeWidth = 3000;      // default width from SDOptions ?
+    constexpr sal_uInt32 nDefaultObjectSizeHeight= 3000;
 
     if ( ImpVerticalSwitch( *this ) )
     {
