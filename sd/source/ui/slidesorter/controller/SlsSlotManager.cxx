@@ -826,13 +826,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
     // page view and layout
     SdPage* pPage      = nullptr;
-    SdPage* pFirstPage = nullptr;
-    sal_uInt16 nFirstPage;
-    sal_Int32 nPageCount;
-    sal_Int32 nActivePageCount;
     sal_uInt16 nSelectedPages = mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
-    OUString aPageStr;
-    OUString aLayoutStr;
 
     //Set number of slides
     if (nSelectedPages > 0)
@@ -841,12 +835,13 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        OUString aPageStr;
         if (pDescriptor)
         {
             pPage = pDescriptor->GetPage();
-            nFirstPage = (pPage->GetPageNum()/2) + 1;
-            nPageCount = mrSlideSorter.GetModel().GetPageCount();
-            nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
+            sal_uInt16 nFirstPage = (pPage->GetPageNum()/2) + 1;
+            sal_Int32 nPageCount = mrSlideSorter.GetModel().GetPageCount();
+            sal_Int32 nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
 
             aPageStr = (nPageCount == nActivePageCount) ? SdResId(STR_SD_PAGE_COUNT) : SdResId(STR_SD_PAGE_COUNT_CUSTOM);
 
@@ -860,8 +855,8 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     //Set layout
     if (nSelectedPages == 1 && pPage != nullptr)
     {
-        pFirstPage = pPage;
-        aLayoutStr = pFirstPage->GetLayoutName();
+        SdPage* pFirstPage = pPage;
+        OUString aLayoutStr = pFirstPage->GetLayoutName();
         sal_Int32 nIndex = aLayoutStr.indexOf( SD_LT_SEPARATOR );
         if( nIndex != -1 )
             aLayoutStr = aLayoutStr.copy(0, nIndex);

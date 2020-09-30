@@ -166,7 +166,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_CASEMAP:
             {
                 sal_uInt16 stretchX = 100;
-                sal_uInt16 stretchY = 100;
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, false );
 
@@ -187,6 +186,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             mpViewShell->GetActiveWindow());
                     }
 
+                    sal_uInt16 stretchY = 100;
                     if( pOutliner )
                         pOutliner->GetGlobalCharStretching( stretchX, stretchY );
 

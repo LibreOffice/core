@@ -1693,11 +1693,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 bool bIsFontwork = false;
                 bool bIsHatching = false;
                 css::uno::Any aAny;
-                css::drawing::FillStyle eFS;
                 if ( GetPropertyValue( aAny, mXPropSet, "IsFontwork", true ) )
                     aAny >>= bIsFontwork;
                 if ( GetPropertyValue( aAny, mXPropSet, "FillStyle", true ) )
                 {
+                    css::drawing::FillStyle eFS;
                     aAny >>= eFS;
                     bIsHatching = eFS == css::drawing::FillStyle_HATCH;
                 }

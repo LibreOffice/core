@@ -545,16 +545,14 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
         {
             ESelection aSelection( pConvertPara[nStartPos], pConvertPos[nStartPos],
                              pConvertPara[nEndPos], pConvertPos[nEndPos] );
-            SvxUnoTextRange *pRange;
 
             SvxUnoTextBase* pParent = comphelper::getUnoTunnelImplementation<SvxUnoTextBase>( xParent );
 
             if(pParent)
             {
-                pRange = new SvxUnoTextRange( *pParent );
+                SvxUnoTextRange *pRange = new SvxUnoTextRange( *pParent );
                 xFound = pRange;
                 pRange->SetSelection(aSelection);
-
             }
         }
         else
