@@ -137,7 +137,7 @@ endef
 ifeq ($(CPUNAME),ARM64)
 gb_AsmObject_get_source = $(1)/$(2).S
 
-# Code needs a preprozessor step .S -> .asm -> .o
+# Code needs a preprocessor step .S -> .asm -> .o
 define gb_AsmObject__command
 $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
