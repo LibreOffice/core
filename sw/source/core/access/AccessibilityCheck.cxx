@@ -695,7 +695,7 @@ public:
 class TableHeadingCheck : public NodeCheck
 {
 private:
-    // Boolean indicaing if heading-in-table warning is already triggered.
+    // Boolean indicating if heading-in-table warning is already triggered.
     bool bPrevPassed;
 
 public:
