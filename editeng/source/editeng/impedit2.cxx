@@ -478,11 +478,12 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 if ( nInputEnd > rLine.GetEnd() )
                     nInputEnd = rLine.GetEnd();
                 tools::Rectangle aR2 = PaMtoEditCursor( EditPaM( aPaM.GetNode(), nInputEnd ), GetCursorFlags::EndOfLine );
-                if (vcl::Window* pWindow = pView->GetWindow())
-                {
-                    tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
-                    pWindow->SetCursorRect( &aRect, aR2.Left()-aR1.Right() );
-                }
+                tools::Rectangle aRect = pView->GetImpEditView()->GetWindowPos( aR1 );
+                auto nExtTextInputWidth = aR2.Left() - aR1.Right();
+                if (EditViewCallbacks* pEditViewCallbacks = pView->getEditViewCallbacks())
+                    pEditViewCallbacks->EditViewCursorRect(aRect, nExtTextInputWidth);
+                else if (vcl::Window* pWindow = pView->GetWindow())
+                    pWindow->SetCursorRect(&aRect, nExtTextInputWidth);
             }
         }
         else

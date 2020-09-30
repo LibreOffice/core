@@ -111,6 +111,9 @@ public:
     // Triggered to update InputEngine context information
     virtual void EditViewInputContext(const InputContext& rInputContext) = 0;
 
+    // Triggered to update InputEngine cursor position
+    virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) = 0;
+
     // implemented if drag and drop support is wanted
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
     {
