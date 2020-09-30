@@ -331,11 +331,6 @@ rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttr
     return m_pImpl->getFlyFillAttrList();
 }
 
-sax_fastparser::FastAttributeList* DocxSdrExport::getFlyWrapAttrList()
-{
-    return m_pImpl->getFlyWrapAttrList();
-}
-
 sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
 {
     return m_pImpl->getBodyPrAttrList();

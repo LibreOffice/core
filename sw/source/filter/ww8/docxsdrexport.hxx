@@ -70,7 +70,6 @@ public:
     bool IsParagraphHasDrawing() const;
     void setParagraphHasDrawing(bool bParagraphHasDrawing);
     rtl::Reference<sax_fastparser::FastAttributeList>& getFlyFillAttrList();
-    sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.
     sax_fastparser::FastAttributeList* getBodyPrAttrList();

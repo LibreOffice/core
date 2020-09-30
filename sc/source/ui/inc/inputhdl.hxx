@@ -238,7 +238,6 @@ public:
 
     bool            TakesReturn() const     { return ( nTipVisible != nullptr ); }
 
-    bool            GetModified() const { return bModified; }
     void            SetModified()       { bModified = true; }
 
     bool            GetSelIsRef() const     { return bSelIsRef; }

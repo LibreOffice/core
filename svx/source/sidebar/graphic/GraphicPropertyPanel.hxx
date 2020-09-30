@@ -84,10 +84,6 @@ private:
     DECL_LINK( ModifyContrastHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ModifyTransHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickColorModeHdl, weld::ComboBox&, void );
-    DECL_LINK( RedHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( GreenHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( BlueHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( GammaHdl, weld::SpinButton&, void );
 
     void Initialize();
 };
