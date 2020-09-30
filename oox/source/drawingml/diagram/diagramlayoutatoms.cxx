@@ -1384,12 +1384,13 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             const sal_Int32 nDir = maMap.count(XML_grDir) ? maMap.find(XML_grDir)->second : XML_tL;
             sal_Int32 nIncX = 1;
             sal_Int32 nIncY = 1;
+            bool bHorizontal = true;
             switch (nDir)
             {
                 case XML_tL: nIncX =  1; nIncY =  1; break;
                 case XML_tR: nIncX = -1; nIncY =  1; break;
-                case XML_bL: nIncX =  1; nIncY = -1; break;
-                case XML_bR: nIncX = -1; nIncY = -1; break;
+                case XML_bL: nIncX =  1; nIncY = -1; bHorizontal = false; break;
+                case XML_bR: nIncX = -1; nIncY = -1; bHorizontal = false; break;
             }
 
             sal_Int32 nCount = rShape->getChildren().size();
@@ -1453,6 +1454,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                                       static_cast<sal_Int32>(nHeight * fChildAspectRatio));
                     aChildSize = awt::Size(nWidth, nHeight);
                 }
+
+                bHorizontal = false;
             }
 
             awt::Point aCurrPos(0, 0);
@@ -1461,8 +1464,13 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
             if (nIncY == -1)
                 aCurrPos.Y = rShape->getSize().Height - aChildSize.Height;
             else if (bSpaceFromConstraints)
-                // Initial vertical offset to have upper spacing (outside, so double amount).
-                aCurrPos.Y = aChildSize.Height * fSpace * 2;
+            {
+                if (!bHorizontal)
+                {
+                    // Initial vertical offset to have upper spacing (outside, so double amount).
+                    aCurrPos.Y = aChildSize.Height * fSpace * 2;
+                }
+            }
 
             sal_Int32 nStartX = aCurrPos.X;
             sal_Int32 nColIdx = 0,index = 0;
@@ -1481,7 +1489,8 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     // aShapeWidths items are a portion of nMaxRowWidth. We want the same ratio,
                     // based on the original parent width, ignoring the aspect ratio request.
                     double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
-                    if (nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans)
+                    bool bWidthsFromConstraints = nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans;
+                    if (bWidthsFromConstraints)
                     {
                         // We can only work from constraints if spacing is represented by a real
                         // child shape.
@@ -1490,6 +1499,9 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     if (fChildAspectRatio)
                     {
                         aCurrSize.Height = aCurrSize.Width / fChildAspectRatio;
+
+                        // Child shapes are not allowed to leave their parent.
+                        aCurrSize.Height = std::min<sal_Int32>(aCurrSize.Height, rShape->getSize().Height / (nRow + (nRow-1)*fSpace));
                     }
                     if (aCurrSize.Height > nRowHeight)
                     {
@@ -1507,8 +1519,18 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     {
                         // if last row, then position children according to number of shapes.
                         if((index+1)%nCol!=0 && (index+1)>=3 && ((index+1)/nCol+1)==nRow && nCount!=nRow*nCol)
+                        {
                             // position first child of last row
-                            aCurrPos.X = nStartX + (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width))/2;
+                            if (bWidthsFromConstraints)
+                            {
+                                aCurrPos.X = nStartX;
+                            }
+                            else
+                            {
+                                // Can assume that all child shape has the same width.
+                                aCurrPos.X = nStartX + (nIncX * (aCurrSize.Width + fSpace*aCurrSize.Width))/2;
+                            }
+                        }
                         else
                             // if not last row, positions first child of that row
                             aCurrPos.X = nStartX;
