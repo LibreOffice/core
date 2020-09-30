@@ -840,11 +840,11 @@ static void lcl_DoHyperlinkResult( const OutputDevice* pDev, const tools::Rectan
 {
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >( pDev->GetExtOutDevData() );
 
-    OUString aCellText;
     OUString aURL;
     if (rCell.meType == CELLTYPE_FORMULA)
     {
         ScFormulaCell* pFCell = rCell.mpFormula;
+        OUString aCellText;
         if ( pFCell->IsHyperLinkCell() )
             pFCell->GetURLResult( aURL, aCellText );
     }

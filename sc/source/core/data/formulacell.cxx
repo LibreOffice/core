@@ -1711,10 +1711,9 @@ bool ScFormulaCell::Interpret(SCROW nStartOffset, SCROW nEndOffset)
                     /* TODO: does this even make sense anymore? The last cell
                      * added above with rRecursionHelper.Insert() should always
                      * be 'this', shouldn't it? */
-                    ScFormulaCell* pLastCell = nullptr;
                     if (rRecursionHelper.GetList().size() > 1)
                     {
-                        pLastCell = rRecursionHelper.GetList().back().pCell;
+                        ScFormulaCell* pLastCell = rRecursionHelper.GetList().back().pCell;
                         if (pLastCell != this)
                         {
                             rDocument.IncInterpretLevel();
@@ -2128,7 +2127,6 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                 StackVar eNewCellResultType = aNewResult.GetCellResultType();
                 if (eNewCellResultType != svError || cMatrixFlag == ScMatrixMode::Reference)
                 {
-                    double fVal;
                     if (eNewCellResultType != svDouble)
                     {
                         bSetFormat = false;
@@ -2136,7 +2134,7 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
                     }
                     else
                     {
-                        fVal = aNewResult.GetDouble();
+                        double fVal = aNewResult.GetDouble();
                         if (fVal != 1.0 && fVal != 0.0)
                         {
                             bSetFormat = false;

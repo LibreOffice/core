@@ -1989,7 +1989,6 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             else if (!bOverflow)
                             {
                                 nStringValue = static_cast<sal_Int32>(nVal);
-                                OUString aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {
                                     setSuffixCell(
@@ -1999,6 +1998,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 }
                                 else
                                 {
+                                    OUString aStr;
                                     if (nHeadNoneTail == 2 && nStringValue >= 0) // Put back the '+'
                                         aStr = aValue + "+";
                                     else

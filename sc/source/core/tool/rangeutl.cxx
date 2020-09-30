@@ -109,8 +109,6 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 
     bool    bStrOk = false;
     OUString  aTempAreaStr(rAreaStr);
-    OUString  aStartPosStr;
-    OUString  aEndPosStr;
 
     if ( -1 == aTempAreaStr.indexOf(':') )
     {
@@ -123,13 +121,13 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
         && -1 != aTempAreaStr.indexOf('.') )
     {
         ScRefAddress    aStartPos;
-        ScRefAddress    aEndPos;
 
-        aStartPosStr = aTempAreaStr.copy( 0,           nColonPos  );
-        aEndPosStr   = aTempAreaStr.copy( nColonPos+1 );
+        OUString aStartPosStr = aTempAreaStr.copy( 0,           nColonPos  );
+        OUString aEndPosStr   = aTempAreaStr.copy( nColonPos+1 );
 
         if ( ConvertSingleRef( *pDoc, aStartPosStr, 0, aStartPos, rDetails ) )
         {
+            ScRefAddress aEndPos;
             if ( ConvertSingleRef( *pDoc, aEndPosStr, aStartPos.Tab(), aEndPos, rDetails ) )
             {
                 aStartPos.SetRelCol( false );

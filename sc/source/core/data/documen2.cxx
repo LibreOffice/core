@@ -1210,10 +1210,9 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
-        ScChangeActionType eType;
         if ( pAction->IsVisible() )
         {
-            eType = pAction->GetType();
+            ScChangeActionType eType = pAction->GetType();
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == cell.Tab())
             {

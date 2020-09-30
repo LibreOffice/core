@@ -67,7 +67,6 @@ namespace
     void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
-        OUString sColor;
         const SfxPoolItem* pItem = nullptr;
 
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
@@ -82,7 +81,7 @@ namespace
         }
         else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
         {
-            sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            OUString sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             if (sColor == "transparent")
                 aColor = COL_TRANSPARENT;

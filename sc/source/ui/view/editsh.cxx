@@ -949,13 +949,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    Color aColor;
-                    OUString sColor;
                     const SfxPoolItem* pColorStringItem = nullptr;
 
                     if ( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_COLOR_STR, false, &pColorStringItem ) )
                     {
-                        sColor = static_cast<const SfxStringItem*>( pColorStringItem )->GetValue();
+                        Color aColor;
+                        OUString sColor = static_cast<const SfxStringItem*>( pColorStringItem )->GetValue();
                         if ( sColor == "transparent" )
                             aColor = COL_TRANSPARENT;
                         else

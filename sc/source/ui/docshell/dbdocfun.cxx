@@ -737,9 +737,9 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
     bool bKeepSub = false;                          // repeat existing partial results?
-    ScSubTotalParam aSubTotalParam;
     if (rQueryParam.GetEntry(0).bDoQuery)           // not at cancellation
     {
+        ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );    // partial results exist?
 
         if ( aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly )
