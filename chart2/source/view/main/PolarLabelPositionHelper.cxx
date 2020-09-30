@@ -129,26 +129,22 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
         bool bOutside = nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE;
 
-        if(fAngleDegree==0.0)
-            rAlignment = LABEL_ALIGN_CENTER;
-        else if(fAngleDegree<=22.5)
+        if (fAngleDegree <= 5 || fAngleDegree >= 355)
             rAlignment = bOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
-        else if(fAngleDegree<67.5)
+        else if (fAngleDegree < 85)
             rAlignment = bOutside ? LABEL_ALIGN_RIGHT_TOP : LABEL_ALIGN_LEFT_BOTTOM;
-        else if(fAngleDegree<112.5)
+        else if (fAngleDegree <= 95)
             rAlignment = bOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
-        else if(fAngleDegree<=157.5)
+        else if (fAngleDegree < 175)
             rAlignment = bOutside ? LABEL_ALIGN_LEFT_TOP : LABEL_ALIGN_RIGHT_BOTTOM;
-        else if(fAngleDegree<=202.5)
+        else if (fAngleDegree <= 185)
             rAlignment = bOutside ? LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
-        else if(fAngleDegree<247.5)
+        else if (fAngleDegree < 265)
             rAlignment = bOutside ? LABEL_ALIGN_LEFT_BOTTOM : LABEL_ALIGN_RIGHT_TOP;
-        else if(fAngleDegree<292.5)
+        else if (fAngleDegree <= 275)
             rAlignment = bOutside ? LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
-        else if(fAngleDegree<337.5)
-            rAlignment = bOutside ? LABEL_ALIGN_RIGHT_BOTTOM : LABEL_ALIGN_LEFT_TOP;
         else
-            rAlignment = bOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
+            rAlignment = bOutside ? LABEL_ALIGN_RIGHT_BOTTOM : LABEL_ALIGN_LEFT_TOP;
     }
     else
     {

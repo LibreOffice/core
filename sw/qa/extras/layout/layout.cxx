@@ -2969,6 +2969,26 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130242)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf137154)
+{
+    SwDoc* pDoc = createDoc("tdf137154.docx");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    sal_Int32 nX1 = getXPath(pXmlDoc, "//textarray[1]", "x").toInt32(); // first data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32(); // fourth data label
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 10865
+    // - Actual  : 10252
+    // - Delta   : 50
+    // i.e. the first data label appeared too close to the pie.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(nX4, nX1, 50);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf130380)
 {
     SwDoc* pDoc = createDoc("tdf130380.docx");
