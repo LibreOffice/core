@@ -5516,42 +5516,42 @@ if test -n "$ENABLE_PCH"; then
 fi
 AC_SUBST(BUILDING_PCH_WITH_OBJ)
 
-PCH_MODULES_CODEGEN=
-PCH_NO_MODULES_CODEGEN=
+PCH_CODEGEN=
+PCH_NO_CODEGEN=
 if test -n "$BUILDING_PCH_WITH_OBJ"; then
-    AC_MSG_CHECKING([whether $CC supports -Xclang -fmodules-codegen])
+    AC_MSG_CHECKING([whether $CC supports -fpch-codegen])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Xclang -fmodules-codegen"
+    CFLAGS="$CFLAGS -Werror -fpch-codegen"
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],
         [
-        PCH_MODULES_CODEGEN="-Xclang -fmodules-codegen"
-        PCH_NO_MODULES_CODEGEN="-Xclang -fno-modules-codegen"
+        PCH_CODEGEN="-fpch-codegen"
+        PCH_NO_CODEGEN="-fno-pch-codegen"
         ],[])
     CFLAGS=$save_CFLAGS
-    if test -n "$PCH_MODULES_CODEGEN"; then
+    if test -n "$PCH_CODEGEN"; then
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
     fi
     CFLAGS=$save_CFLAGS
 fi
-AC_SUBST(PCH_MODULES_CODEGEN)
-AC_SUBST(PCH_NO_MODULES_CODEGEN)
-PCH_MODULES_DEBUGINFO=
+AC_SUBST(PCH_CODEGEN)
+AC_SUBST(PCH_NO_CODEGEN)
+PCH_DEBUGINFO=
 if test -n "$BUILDING_PCH_WITH_OBJ"; then
-    AC_MSG_CHECKING([whether $CC supports -Xclang -fmodules-debuginfo])
+    AC_MSG_CHECKING([whether $CC supports -fpch-debuginfo])
     save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS -Werror -Xclang -fmodules-debuginfo"
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ PCH_MODULES_DEBUGINFO="-Xclang -fmodules-debuginfo" ],[])
+    CFLAGS="$CFLAGS -Werror -fpch-debuginfo"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ PCH_DEBUGINFO="-fpch-debuginfo" ],[])
     CFLAGS=$save_CFLAGS
-    if test -n "$PCH_MODULES_DEBUGINFO"; then
+    if test -n "$PCH_DEBUGINFO"; then
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
     fi
     CFLAGS=$save_CFLAGS
 fi
-AC_SUBST(PCH_MODULES_DEBUGINFO)
+AC_SUBST(PCH_DEBUGINFO)
 
 TAB=`printf '\t'`
 

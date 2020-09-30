@@ -114,11 +114,11 @@ ifneq ($(BUILDING_PCH_WITH_OBJ),)
 gb_LinkTarget_LDFLAGS += $(LD_GC_SECTIONS)
 gb_PrecompiledHeader_pch_with_obj += -ffunction-sections -fdata-sections
 # Enable generating more shared code and debuginfo in the PCH object file.
-gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_MODULES_DEBUGINFO)
+gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_DEBUGINFO)
 ifeq ($(ENABLE_OPTIMIZED),)
 # -fmodules-codegen appears to be worth it only if not optimizing, otherwise optimizing all the functions emitted
 # in the PCH object file may take way too long, especially given that many of those may get thrown away
-gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_MODULES_CODEGEN)
+gb_PrecompiledHeader_extra_pch_cxxflags += $(PCH_CODEGEN)
 endif
 endif
 

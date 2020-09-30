@@ -29,7 +29,7 @@ $(eval $(call gb_Library_add_defs,skia,\
 ifeq ($(ENABLE_SKIA_DEBUG),)
 $(eval $(call gb_Library_add_cxxflags,skia, \
     $(gb_COMPILEROPTFLAGS) \
-    $(PCH_NO_MODULES_CODEGEN) \
+    $(PCH_NO_CODEGEN) \
 ))
 endif
 
