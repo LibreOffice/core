@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_add_exception_objects,twain32shim,\
 ))
 
 $(eval $(call gb_Executable_use_system_win32_libs,twain32shim,\
+    Ole32 \
     shell32 \
 ))
 
