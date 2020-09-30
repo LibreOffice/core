@@ -3137,7 +3137,7 @@ void ScViewFunc::ShowTable( const std::vector<OUString>& rNames )
     }
 }
 
-void ScViewFunc::HideTable( const ScMarkData& rMark )
+void ScViewFunc::HideTable( const ScMarkData& rMark, OUString aTabNameToSelect )
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -3171,6 +3171,14 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
                     undoTabs.push_back(nTab);
             }
         }
+
+        if (!aTabNameToSelect.isEmpty())
+        {
+            SCTAB nActiveTab;
+            rDoc.GetTable(aTabNameToSelect, nActiveTab);
+            SetTabNo(nActiveTab);
+        }
+
         if (bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoShowHideTab>( pDocSh, undoTabs, false ) );
