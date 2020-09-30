@@ -10,10 +10,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <prewin.h>
-#include <cpp/fpdf_scopers.h>
-#include <postwin.h>
-
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -132,16 +128,16 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
     // Last page.
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
     // i.e. the signature was there, but it was on the first page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
-    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
-    CPPUNIT_ASSERT_EQUAL(4, FPDFAnnot_GetObjectCount(pAnnot.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(4, pAnnot->getObjectCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
