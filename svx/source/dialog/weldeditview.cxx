@@ -1427,6 +1427,31 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
         m_xAccessible->Init(m_xEditEngine.get(), m_xEditView.get());
 }
 
+int WeldEditView::GetSurroundingText(OUString& rSurrounding)
+{
+    rSurrounding = m_xEditView->GetSurroundingText();
+    int nRet = m_xEditView->GetSurroundingTextSelection().Min();
+    fprintf(stderr, "nRet is %d\n", nRet);
+    return nRet;
+}
+
+bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
+{
+    bool bRes(false);
+    EditEngine* pEditEngine = m_xEditView->GetEditEngine();
+    if (pEditEngine)
+    {
+        ESelection aSel(m_xEditView->GetSelection());
+        aSel.nEndPara = aSel.nStartPara;
+        aSel.nStartPos = rRange.Min();
+        aSel.nEndPos = rRange.Max();
+        pEditEngine->QuickDelete(aSel);
+        pEditEngine->QuickFormatDoc();
+        bRes = true;
+    }
+    return bRes;
+}
+
 void WeldEditView::GetFocus()
 {
     m_xEditView->ShowCursor();

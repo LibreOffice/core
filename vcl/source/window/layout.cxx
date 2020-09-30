@@ -2857,6 +2857,23 @@ void VclDrawingArea::StartDrag(sal_Int8, const Point&)
     xContainer->StartDrag(this, m_nDragAction);
 }
 
+OUString VclDrawingArea::GetSurroundingText() const
+{
+    OUString sSurroundingText;
+    if (m_aGetSurroundingHdl.Call(sSurroundingText) != -1)
+        return sSurroundingText;
+    return Control::GetSurroundingText();
+}
+
+Selection VclDrawingArea::GetSurroundingTextSelection() const
+{
+    OUString sSurroundingText;
+    int nCursor = m_aGetSurroundingHdl.Call(sSurroundingText);
+    if (nCursor != -1)
+        return Selection(nCursor, nCursor);
+    return Control::GetSurroundingTextSelection();
+}
+
 VclHPaned::~VclHPaned()
 {
 }

@@ -92,6 +92,12 @@ public:
     {
         m_pDrawingArea->set_input_context(rInputContext);
     }
+    void SetCursorRect(const tools::Rectangle& rCursorRect, int nExtTextInputWidth)
+    {
+        m_pDrawingArea->im_context_set_cursor_location(rCursorRect, nExtTextInputWidth);
+    }
+    virtual int GetSurroundingText(OUString& /*rSurrounding*/) { return -1; }
+    virtual bool DeleteSurroundingText(const Selection& /*rRange*/) { return false; }
     void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
                                   sal_uInt8 eDNDConstants)
     {
@@ -140,6 +146,7 @@ private:
     DECL_LINK(DoCommand, const CommandEvent&, bool);
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
     DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
+    DECL_LINK(DoGetSurrounding, OUString&, int);
 
 public:
     CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
