@@ -37,9 +37,7 @@
     <service name="com.sun.star.sdb.TableDefinition"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.ODatabaseContext"
-    constructor="com_sun_star_comp_dba_ODatabaseContext_get_implementation">
-     <!-- fake singleton so the servicemanager calls dispose() on us so we can clean up the global -->
-    <singleton name="com.sun.star.comp.dba.theODatabaseContext"/>
+    constructor="com_sun_star_comp_dba_ODatabaseContext_get_implementation" single-instance="true">
     <service name="com.sun.star.sdb.DatabaseContext"/>
   </implementation>
   <implementation name="com.sun.star.comp.dba.ODatabaseDocument"
