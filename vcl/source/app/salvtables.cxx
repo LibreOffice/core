@@ -5847,6 +5847,11 @@ void SalInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
     m_xDrawingArea->SetPointer(ePointerStyle);
 }
 
+void SalInstanceDrawingArea::set_input_context(const InputContext& rInputContext)
+{
+    m_xDrawingArea->SetInputContext(rInputContext);
+}
+
 a11yref SalInstanceDrawingArea::get_accessible_parent()
 {
     vcl::Window* pParent = m_xDrawingArea->GetParent();

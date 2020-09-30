@@ -1155,6 +1155,8 @@ public:
 
     virtual void set_cursor(PointerStyle ePointerStyle) override;
 
+    virtual void set_input_context(const InputContext& rInputContext) override;
+
     virtual a11yref get_accessible_parent() override;
 
     virtual a11yrelationset get_accessible_relation_set() override;

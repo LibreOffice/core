@@ -46,8 +46,9 @@ typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 enum class PointerStyle;
 class CommandEvent;
-class KeyEvent;
 class Formatter;
+class InputContext;
+class KeyEvent;
 class MouseEvent;
 class SvNumberFormatter;
 class TransferDataContainer;
@@ -2065,6 +2066,8 @@ public:
         = 0;
 
     virtual void set_cursor(PointerStyle ePointerStyle) = 0;
+
+    virtual void set_input_context(const InputContext& rInputContext) = 0;
 
     // use return here just to generate matching VirtualDevices
     virtual OutputDevice& get_ref_device() = 0;

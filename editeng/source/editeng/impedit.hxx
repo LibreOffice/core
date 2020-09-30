@@ -295,19 +295,19 @@ private:
     // incarnation has to handle that. Used e.g. to represent the edited text
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
-    const EditViewCallbacks* mpEditViewCallbacks;
+    EditViewCallbacks* mpEditViewCallbacks;
     std::unique_ptr<LOKSpecialPositioning> mpLOKSpecialPositioning;
     bool mbBroadcastLOKViewCursor:1;
     bool mbSuppressLOKMessages:1;
 
-    const EditViewCallbacks* getEditViewCallbacks() const
+    EditViewCallbacks* getEditViewCallbacks() const
     {
         return mpEditViewCallbacks;
     }
 
     void lokSelectionCallback(std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible);
 
-    void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
+    void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks)
     {
         mpEditViewCallbacks = pEditViewCallbacks;
     }

@@ -142,8 +142,8 @@ class AddressMultiLineEdit : public WeldEditView
 
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xDropTarget;
 
-    virtual void EditViewSelectionChange() const override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() const override;
+    virtual void EditViewSelectionChange() override;
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;

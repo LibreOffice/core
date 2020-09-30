@@ -65,9 +65,10 @@ class SVXCORE_DLLPUBLIC SdrObjEditView : public SdrGlueEditView, public EditView
 
     // Now derived from EditViewCallbacks and overriding these callbacks to
     // allow own EditText visualization
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override;
-    virtual void EditViewSelectionChange() const override;
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
+    virtual void EditViewSelectionChange() override;
     virtual OutputDevice& EditViewOutputDevice() const override;
+    virtual void EditViewInputContext(const InputContext& rInputContext) override;
 
     // The OverlayObjects used for visualizing active TextEdit (currently
     // using TextEditOverlayObject, but not limited to it
@@ -159,7 +160,7 @@ public:
 
     // used to call the old ImpPaintOutlinerView. Will be replaced when the
     // outliner will be displayed on the overlay in edit mode.
-    void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
+    void TextEditDrawing(SdrPaintWindow& rPaintWindow);
 
     // Actionhandling for macromode
     virtual bool IsAction() const override;

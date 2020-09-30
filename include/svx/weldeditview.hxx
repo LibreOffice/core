@@ -64,22 +64,18 @@ protected:
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
 
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw_area(rRect.Left(), rRect.Top(), rRect.GetWidth(),
-                                      rRect.GetHeight());
-    }
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) override { Invalidate(rRect); }
 
-    virtual void EditViewSelectionChange() const override
-    {
-        weld::DrawingArea* pDrawingArea = GetDrawingArea();
-        pDrawingArea->queue_draw();
-    }
+    virtual void EditViewSelectionChange() override { Invalidate(); }
 
     virtual OutputDevice& EditViewOutputDevice() const override
     {
         return GetDrawingArea()->get_ref_device();
+    }
+
+    virtual void EditViewInputContext(const InputContext& rInputContext) override
+    {
+        SetInputContext(rInputContext);
     }
 };
 
