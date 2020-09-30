@@ -1284,52 +1284,53 @@ void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SvxAbstractSplitTableDialog> xDlg(pFact->CreateSvxSplitTableDialog(rReq.GetFrameWeld(), false, 99));
+    VclPtr<SvxAbstractSplitTableDialog> xDlg(pFact->CreateSvxSplitTableDialog(rReq.GetFrameWeld(), false, 99));
 
-    if( !xDlg->Execute() )
-        return;
+    xDlg->StartExecuteAsync([xDlg, this](int) {
+        const sal_Int32 nCount = xDlg->GetCount() - 1;
 
-    const sal_Int32 nCount = xDlg->GetCount() - 1;
+        if( nCount < 1 )
+            return;
 
-    if( nCount < 1 )
-        return;
+        CellPos aStart, aEnd;
+        getSelectedCells( aStart, aEnd );
+        Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow ) ), UNO_QUERY_THROW );
+        const sal_Int32 nRowCount = mxTable->getRowCount();
+        const sal_Int32 nColCount = mxTable->getColumnCount();
+        SdrTableObj& rTableObj(*mxTableObj);
 
-    CellPos aStart, aEnd;
-    getSelectedCells( aStart, aEnd );
-    Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( aStart.mnCol, aStart.mnRow, aEnd.mnCol, aEnd.mnRow ) ), UNO_QUERY_THROW );
-    const sal_Int32 nRowCount = mxTable->getRowCount();
-    const sal_Int32 nColCount = mxTable->getColumnCount();
-    SdrTableObj& rTableObj(*mxTableObj);
+        if( rTableObj.IsTextEditActive() )
+            mrView.SdrEndTextEdit(true);
 
-    if( rTableObj.IsTextEditActive() )
-        mrView.SdrEndTextEdit(true);
+        TableModelNotifyGuard aGuard( mxTable.get() );
+        SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
+        const bool bUndo(rModel.IsUndoEnabled());
 
-    TableModelNotifyGuard aGuard( mxTable.get() );
-    SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
-    const bool bUndo(rModel.IsUndoEnabled());
+        if( bUndo )
+        {
+            rModel.BegUndo( SvxResId(STR_TABLE_SPLIT) );
+            rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
+        }
 
-    if( bUndo )
-    {
-        rModel.BegUndo( SvxResId(STR_TABLE_SPLIT) );
-        rModel.AddUndo(rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj));
-    }
+        if( xDlg->IsHorizontal() )
+        {
+            xRange->split( 0, nCount );
+        }
+        else
+        {
+            xRange->split( nCount, 0 );
+        }
 
-    if( xDlg->IsHorizontal() )
-    {
-        xRange->split( 0, nCount );
-    }
-    else
-    {
-        xRange->split( nCount, 0 );
-    }
+        if( bUndo )
+            rModel.EndUndo();
 
-    if( bUndo )
-        rModel.EndUndo();
+        aEnd.mnRow += mxTable->getRowCount() - nRowCount;
+        aEnd.mnCol += mxTable->getColumnCount() - nColCount;
 
-    aEnd.mnRow += mxTable->getRowCount() - nRowCount;
-    aEnd.mnCol += mxTable->getColumnCount() - nColCount;
+        setSelectedCells( aStart, aEnd );
 
-    setSelectedCells( aStart, aEnd );
+        xDlg->disposeOnce();
+    });
 }
 
 void SvxTableController::DistributeColumns(const bool bOptimize, const bool bMinimize)

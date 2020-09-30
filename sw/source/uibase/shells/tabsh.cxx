@@ -982,23 +982,28 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                SwWrtShell* pSh = &rSh;
                 const tools::Long nMaxVert = rSh.GetAnyCurRect( CurRectType::Frame ).Width() / MINLAY;
-                ScopedVclPtr<SvxAbstractSplitTableDialog> pDlg(pFact->CreateSvxSplitTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
+                VclPtr<SvxAbstractSplitTableDialog> pDlg(pFact->CreateSvxSplitTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
                 if(rSh.IsSplitVerticalByDefault())
                     pDlg->SetSplitVerticalByDefault();
-                if( pDlg->Execute() == RET_OK )
-                {
-                    nCount = pDlg->GetCount();
-                    bHorizontal = pDlg->IsHorizontal();
-                    bProportional = pDlg->IsProportional();
-                    rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
-                    rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
-                    rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
+                pDlg->StartExecuteAsync([pDlg, pSh](int nResult) {
+                    if (nResult == RET_OK)
+                    {
+                        tools::Long nCount2 = pDlg->GetCount();
+                        bool bHorizontal2 = pDlg->IsHorizontal();
+                        bool bProportional2 = pDlg->IsProportional();
 
-                    // tdf#60242: remember choice for next time
-                    bool bVerticalWasChecked = !pDlg->IsHorizontal();
-                    rSh.SetSplitVerticalByDefault(bVerticalWasChecked);
-                }
+                        // tdf#60242: remember choice for next time
+                        bool bVerticalWasChecked = !pDlg->IsHorizontal();
+                        pSh->SetSplitVerticalByDefault(bVerticalWasChecked);
+
+                        if ( nCount2 > 1 )
+                            pSh->SplitTab(!bHorizontal2, static_cast< sal_uInt16 >( nCount2-1 ), bProportional2 );
+                    }
+
+                    pDlg->disposeOnce();
+                });
             }
 
             if ( nCount>1 )
