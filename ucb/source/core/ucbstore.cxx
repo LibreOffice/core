@@ -45,6 +45,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
 #include <tools/diagnose_ex.h>
 #include "ucbstore.hxx"
@@ -58,9 +59,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace comphelper;
 using namespace cppu;
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<UcbStore> g_Instance;
 
 static OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
@@ -160,14 +158,6 @@ UcbStore::~UcbStore()
 {
 }
 
-// XComponent
-void SAL_CALL UcbStore::dispose()
-{
-    UcbStore_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
-}
-
 OUString SAL_CALL UcbStore::getImplementationName()
 {
     return "com.sun.star.comp.ucb.UcbStore";
@@ -187,11 +177,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbStore_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (!g_Instance)
-        g_Instance.set(new UcbStore(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new UcbStore(context)));
 }
 
 

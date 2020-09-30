@@ -48,9 +48,6 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UcbContentProviderProxyFactory() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

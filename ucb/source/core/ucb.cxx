@@ -39,9 +39,9 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
-#include <rtl/ref.hxx>
 #include "identify.hxx"
 #include "ucbcmds.hxx"
 
@@ -54,9 +54,6 @@ using namespace com::sun::star::ucb;
 using namespace ucb_impl;
 using namespace com::sun::star;
 using namespace ucbhelper;
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<UniversalContentBroker> g_Instance;
 
 namespace {
 
@@ -254,9 +251,6 @@ void SAL_CALL UniversalContentBroker::dispose()
 
     if ( m_xNotifier.is() )
         m_xNotifier->removeChangesListener( this );
-
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
 }
 
 
@@ -302,11 +296,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UniversalContentBroker_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (!g_Instance)
-        g_Instance.set(new UniversalContentBroker(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new UniversalContentBroker(context)));
 }
 
 

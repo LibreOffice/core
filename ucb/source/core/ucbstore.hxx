@@ -55,9 +55,6 @@ public:
     explicit UcbStore( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~UcbStore() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
