@@ -323,6 +323,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="style">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -346,6 +347,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="color">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

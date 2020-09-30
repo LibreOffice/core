@@ -543,6 +543,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="listLB_COLOR">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
