@@ -701,14 +701,6 @@ public:
     sal_uInt16 GetFontDesc() const { return mnFontDesc; }
 
     /**
-     * Sets the font type to fontdesc.
-     * Definitions are on format.hxx.
-     * @param fontdesc
-     * @return
-     */
-    void SetFontDesc(sal_uInt16 fontdesc) { mnFontDesc=fontdesc; }
-
-    /**
      * Sets the node text to rText.
      * @param rText
      * @return

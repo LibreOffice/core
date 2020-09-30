@@ -538,19 +538,14 @@ public:
     void                    SetOptions( const ScViewOptions& rOpt );
 
     bool    IsGridMode      () const            { return maOptions.GetOption(VOPT_GRID); }
-    void    SetGridMode     ( bool bNewMode )   { maOptions.SetOption(VOPT_GRID, bNewMode); }
     bool    IsSyntaxMode    () const            { return maOptions.GetOption(VOPT_SYNTAX); }
     void    SetSyntaxMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_SYNTAX, bNewMode); }
     bool    IsHeaderMode    () const            { return maOptions.GetOption(VOPT_HEADER); }
     void    SetHeaderMode   ( bool bNewMode )   { maOptions.SetOption(VOPT_HEADER, bNewMode); }
     bool    IsTabMode       () const            { return maOptions.GetOption(VOPT_TABCONTROLS); }
-    void    SetTabMode      ( bool bNewMode )   { maOptions.SetOption(VOPT_TABCONTROLS, bNewMode); }
     bool    IsVScrollMode   () const            { return maOptions.GetOption(VOPT_VSCROLL); }
-    void    SetVScrollMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_VSCROLL, bNewMode); }
     bool    IsHScrollMode   () const            { return maOptions.GetOption(VOPT_HSCROLL); }
-    void    SetHScrollMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_HSCROLL, bNewMode); }
     bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
-    void    SetOutlineMode  ( bool bNewMode )   { maOptions.SetOption(VOPT_OUTLINER, bNewMode); }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }

@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -33,7 +33,7 @@ def normalizeTypeParams( line ):
 # primary input loop
 # --------------------------------------------------------------------------------------------
 
-with io.open("workdir/loplugin.unusedmethods.log", "rb", buffering=16*1024*1024) as txt:
+with io.open("workdir/loplugin.unusedmethods.log", "r", buffering=16*1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":
@@ -69,7 +69,7 @@ with io.open("workdir/loplugin.unusedmethods.log", "rb", buffering=16*1024*1024)
 
 # Invert the definitionToSourceLocationMap.
 sourceLocationToDefinitionMap = {}
-for k, v in definitionToSourceLocationMap.iteritems():
+for k, v in definitionToSourceLocationMap.items():
     sourceLocationToDefinitionMap[v] = sourceLocationToDefinitionMap.get(v, [])
     sourceLocationToDefinitionMap[v].append(k)
 
