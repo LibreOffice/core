@@ -1279,10 +1279,9 @@ void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SvxAbstractSplitTableDialog> xDlg(pFact->CreateSvxSplitTableDialog(rReq.GetFrameWeld(), false, 99));
+    VclPtr<SvxAbstractSplitTableDialog> xDlg(pFact->CreateSvxSplitTableDialog(rReq.GetFrameWeld(), false, 99));
 
-    if( xDlg->Execute() )
-    {
+    xDlg->StartExecuteAsync([xDlg, this](int) {
         const sal_Int32 nCount = xDlg->GetCount() - 1;
 
         if( nCount < 1 )
@@ -1324,7 +1323,9 @@ void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
         aEnd.mnCol += mxTable->getColumnCount() - nColCount;
 
         setSelectedCells( aStart, aEnd );
-    }
+
+        xDlg->disposeOnce();
+    });
 }
 
 void SvxTableController::DistributeColumns(const bool bOptimize, const bool bMinimize)
