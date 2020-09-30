@@ -2,6 +2,115 @@
   "comments": [
     {
       "key": {
+        "uuid": "0b0c07cc_25303099",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "Perhaps a bit more descriptive name for the define, STR_\u003cwarning_purpose\u003e_WARNING and move to the Miscellaneous section below. (see comment concerning this string in inserttable.ui as you may decide this is not needed)",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 143
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "635f458f_cdfb8d40",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "I think this can be made a weld::Entry by using connect_changed instead of connect_value_changed which will handle both spin button and key input changes. (see m_xRowNF and m_xColNF connect_value_changed set in constructor)",
+      "range": {
+        "startLine": 232,
+        "startChar": 46,
+        "endLine": 232,
+        "endChar": 56
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8faea47d_4edaaa23",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "look at using get_text() converted toInt64",
+      "range": {
+        "startLine": 235,
+        "startChar": 31,
+        "endLine": 235,
+        "endChar": 40
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43cba290_12d924d6",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "same as above comment",
+      "range": {
+        "startLine": 236,
+        "startChar": 31,
+        "endLine": 236,
+        "endChar": 40
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d088aaee_65ac8d22",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "This can be set in the constructor. Maybe better is to assign in inserttable.ui\nAlso consider set_label_type(weld::LabelType::Warning) which can be set for this in constructor as well. I don\u0027t think it can be set directly in .ui.",
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60af607b_f2290a83",
         "filename": "sw/source/ui/table/instable.cxx",
         "patchSetId": 1
@@ -18,6 +127,29 @@
         "startChar": 4,
         "endLine": 248,
         "endChar": 9
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516e3b36_6aabe015",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "Try to rework this so show() and hide() (set_visible(true/false) aren\u0027t done unless required.",
+      "range": {
+        "startLine": 240,
+        "startChar": 4,
+        "endLine": 262,
+        "endChar": 5
       },
       "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
@@ -48,6 +180,29 @@
     },
     {
       "key": {
+        "uuid": "0b4f0718_27111a34",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "If assigning text to this label in the code a more descriptive name than \"5\" would really be nice :) Maybe better is to just include the label text in the label property which would eliminate the need to set it in the code.",
+      "range": {
+        "startLine": 227,
+        "startChar": 51,
+        "endLine": 227,
+        "endChar": 57
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9cefd49a_1cd76821",
         "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
         "patchSetId": 1
@@ -64,6 +219,52 @@
         "startChar": 53,
         "endLine": 228,
         "endChar": 57
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29b42047_afb0a20b",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "Probably don\u0027t want to show this until warning message is valid",
+      "range": {
+        "startLine": 228,
+        "startChar": 1,
+        "endLine": 228,
+        "endChar": 68
+      },
+      "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33811b78_fd7b4131",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-09-30T06:46:36Z",
+      "side": 1,
+      "message": "Look to see if this is needed after setting the packing property \"width\" to span all 4 grid rows.",
+      "range": {
+        "startLine": 230,
+        "startChar": 28,
+        "endLine": 230,
+        "endChar": 68
       },
       "revId": "4ea15306acba5fa13b5f006ef7cc37aa15cfd6f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
