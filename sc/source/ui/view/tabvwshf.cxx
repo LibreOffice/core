@@ -107,7 +107,25 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( rDoc.IsDocEditable() )
                 {
                     ScMarkData& rMark = rViewData.GetMarkData();
-                    HideTable( rMark );
+                    SCTAB nActiveTab = -1;
+                    // For the cases when user right clicks on a non-active tab and hides it. This case is possible for Online.
+                    if (pReqArgs)
+                    {
+                        const SfxPoolItem *pItem;
+                        if( pReqArgs->HasItem( FID_TABLE_HIDE, &pItem ) )
+                        {
+                            SCTAB nTabNumber = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+                            // Does selected sheets (tabs) list include the sheet to be hidden?
+                            std::set<SCTAB>::iterator it = rMark.GetSelectedTabs().find(nTabNumber);
+                            if (it == rMark.GetSelectedTabs().end())
+                            {
+                                // No it doesn't, so we won't shift the selected tab. Let's remember its position.
+                                nActiveTab = GetViewData().GetTabNo();
+                            }
+                            rMark.SelectOneTable(nTabNumber);
+                        }
+                    }
+                    HideTable( rMark, nActiveTab );
                 }
             }
             break;
