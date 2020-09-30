@@ -1615,14 +1615,12 @@ void SdImportTestSmartArt::testSnakeRows()
         m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-snake-rows.pptx"), PPTX);
 
     uno::Reference<drawing::XShapes> xDiagram(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // Collect position of the background and the real child shapes. First row and background has
+    // the same top position, unless some unexpected spacing happens, since this is a
+    // "left-to-right, then top-to-bottom" snake direction.
     std::set<sal_Int32> aYPositions;
     for (sal_Int32 nChild = 0; nChild < xDiagram->getCount(); ++nChild)
     {
-        if (nChild == 0)
-        {
-            // Ignore background shape, we check how many rows actual children use.
-            continue;
-        }
         uno::Reference<drawing::XShape> xChild(xDiagram->getByIndex(nChild), uno::UNO_QUERY);
         aYPositions.insert(xChild->getPosition().Y);
     }
