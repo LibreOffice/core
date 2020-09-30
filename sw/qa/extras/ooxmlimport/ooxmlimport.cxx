@@ -759,7 +759,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
     OUString aTop = parseDump("/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // This was 6272, i.e. the shape was moved up (incorrect position) to be
     // inside the page rectangle.
-    CPPUNIT_ASSERT_EQUAL(OUString("6674"), aTop);
+    CPPUNIT_ASSERT_EQUAL(OUString("6731"), aTop);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf105975, "105975.docx")
