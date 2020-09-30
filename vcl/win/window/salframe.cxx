@@ -2187,6 +2187,10 @@ void WinSalFrame::SetPointerPos( long nX, long nY )
 
 void WinSalFrame::Flush()
 {
+    if(mpLocalGraphics)
+        mpLocalGraphics->Flush();
+    if(mpThreadGraphics)
+        mpThreadGraphics->Flush();
     GdiFlush();
 }
 

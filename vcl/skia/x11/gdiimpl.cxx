@@ -129,6 +129,8 @@ void X11SkiaSalGraphicsImpl::DeInit()
 
 void X11SkiaSalGraphicsImpl::freeResources() {}
 
+void X11SkiaSalGraphicsImpl::Flush() { performFlush(); }
+
 void X11SkiaSalGraphicsImpl::performFlush()
 {
     SkiaZone zone;

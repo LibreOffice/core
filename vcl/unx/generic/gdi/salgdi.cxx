@@ -500,6 +500,12 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+void X11SalGraphics::Flush()
+{
+    if( X11GraphicsImpl* x11Impl = dynamic_cast< X11GraphicsImpl* >( mxImpl.get()))
+        x11Impl->Flush();
+}
+
 #if ENABLE_CAIRO_CANVAS
 
 bool X11SalGraphics::SupportsCairo() const

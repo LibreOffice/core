@@ -37,6 +37,8 @@ public:
 
     virtual void ClearDevFontCache(){};
 
+    virtual void Flush(){};
+
     // Implementation for WinSalGraphics::DrawTextLayout().
     // Returns true if handled, if false, then WinSalGraphics will handle it itself.
     virtual bool DrawTextLayout(const GenericSalLayout&) { return false; }

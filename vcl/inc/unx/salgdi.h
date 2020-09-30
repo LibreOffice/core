@@ -98,6 +98,8 @@ public:
 
     const SalX11Screen&             GetScreenNumber() const { return m_nXScreen; }
 
+    void                            Flush();
+
     // override all pure virtual methods
     virtual void                    GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16              GetBitCount() const override;
