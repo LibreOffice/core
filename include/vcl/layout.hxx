@@ -25,7 +25,6 @@
 #include <set>
 
 class ScrollBar;
-class ScrollBar;
 class ScrollBarBox;
 class Splitter;
 
