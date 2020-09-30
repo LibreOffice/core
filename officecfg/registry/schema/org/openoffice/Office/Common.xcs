@@ -3424,7 +3424,7 @@
         <info>
           <desc>Activates "Built-in help is not installed" pop-up</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="HelpStyleSheet" oor:type="xs:string" oor:nillable="false">
         <info>
