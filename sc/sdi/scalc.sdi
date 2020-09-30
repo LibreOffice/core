@@ -2593,7 +2593,7 @@ SfxVoidItem GoUpToStartOfDataSel SID_CURSORBLKUP_SEL
 
 
 SfxVoidItem Hide FID_TABLE_HIDE
-(SfxStringItem aTableName FID_TABLE_HIDE)
+(SfxInt16Item nTabNumber FID_TABLE_HIDE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

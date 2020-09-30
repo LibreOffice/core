@@ -285,7 +285,7 @@ public:
                                         const OUString& rSource );
 
     void            ShowTable( const std::vector<OUString>& rNames );
-    void            HideTable( const ScMarkData& rMark );
+    void            HideTable( const ScMarkData& rMark, SCTAB nTabToSelect = -1);
 
     void            MakeScenario(const OUString& rName, const OUString& rComment,
                                  const Color& rColor, ScScenarioFlags nFlags);
