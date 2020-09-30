@@ -13277,6 +13277,11 @@ public:
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(m_pDrawingArea)), pCursor);
     }
 
+    virtual void set_input_context(const InputContext& /*rInputContext*/) override
+    {
+        // TODO follow up for the gtk case
+    }
+
     virtual void queue_draw() override
     {
         gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));

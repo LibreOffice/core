@@ -612,7 +612,7 @@ void TextEditOverlayObject::checkSelectionChange()
 // callback from the active EditView, forward to evtl. existing instances of the
 // TextEditOverlayObject(s). This will additionally update the selection which
 // is an integral part of the text visualization
-void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&) const
+void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&)
 {
     if (!IsTextEdit())
         return;
@@ -636,7 +636,7 @@ void SdrObjEditView::EditViewInvalidate(const tools::Rectangle&) const
 // callback from the active EditView, forward to evtl. existing instances of the
 // TextEditOverlayObject(s). This cvall *only* updates the selection visualization
 // which is e.g. used when only the selection is changed, but not the text
-void SdrObjEditView::EditViewSelectionChange() const
+void SdrObjEditView::EditViewSelectionChange()
 {
     if (!IsTextEdit())
         return;
@@ -655,7 +655,14 @@ void SdrObjEditView::EditViewSelectionChange() const
 
 OutputDevice& SdrObjEditView::EditViewOutputDevice() const { return *pTextEditWin; }
 
-void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
+void SdrObjEditView::EditViewInputContext(const InputContext& rInputContext)
+{
+    if (!pTextEditWin)
+        return;
+    pTextEditWin->SetInputContext(rInputContext);
+}
+
+void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow)
 {
     if (!comphelper::LibreOfficeKit::isActive())
     {

@@ -304,10 +304,10 @@ static void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
 // change/update the Selection visualization for enhanced mechanisms
 void ImpEditView::SelectionChanged()
 {
-    if (getEditViewCallbacks())
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
     {
         // use callback to tell about change in selection visualisation
-        getEditViewCallbacks()->EditViewSelectionChange();
+        pCallbacks->EditViewSelectionChange();
     }
 }
 
@@ -832,12 +832,12 @@ void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
 
 void ImpEditView::InvalidateAtWindow(const tools::Rectangle& rRect)
 {
-    if (getEditViewCallbacks())
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
     {
         // do not invalidate and trigger a global repaint, but forward
         // the need for change to the applied EditViewCallback, can e.g.
         // be used to visualize the active edit text in an OverlayObject
-        getEditViewCallbacks()->EditViewInvalidate(rRect);
+        pCallbacks->EditViewInvalidate(rRect);
     }
     else
     {
@@ -1411,11 +1411,12 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         {
             SvxFont aFont;
             pEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
-            if (vcl::Window* pWindow = GetWindow())
-            {
-                InputContextFlags const nContextFlags = InputContextFlags::Text | InputContextFlags::ExtText;
-                pWindow->SetInputContext( InputContext( aFont, nContextFlags ) );
-            }
+
+            InputContext aInputContext(aFont, InputContextFlags::Text | InputContextFlags::ExtText);
+            if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+                pCallbacks->EditViewInputContext(aInputContext);
+            else if (auto xWindow = GetWindow())
+                xWindow->SetInputContext(aInputContext);
         }
     }
     else
@@ -2579,8 +2580,8 @@ void ImpEditView::AddDragAndDropListeners()
         return;
 
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
-    if (getEditViewCallbacks())
-        xDropTarget = getEditViewCallbacks()->GetDropTarget();
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        xDropTarget = pCallbacks->GetDropTarget();
     else if (GetWindow())
         xDropTarget = GetWindow()->GetDropTarget();
 
@@ -2611,8 +2612,8 @@ void ImpEditView::RemoveDragAndDropListeners()
         return;
 
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> xDropTarget;
-    if (getEditViewCallbacks())
-        xDropTarget = getEditViewCallbacks()->GetDropTarget();
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        xDropTarget = pCallbacks->GetDropTarget();
     else if (GetWindow())
         xDropTarget = GetWindow()->GetDropTarget();
 

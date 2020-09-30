@@ -12,6 +12,8 @@
 
 #include <vcl/weld.hxx>
 
+class InputContext;
+
 namespace weld
 {
 class VCL_DLLPUBLIC CustomWidgetController
@@ -86,6 +88,10 @@ public:
     void SetPointer(PointerStyle ePointerStyle) { m_pDrawingArea->set_cursor(ePointerStyle); }
     void SetHelpId(const OString& rHelpId) { m_pDrawingArea->set_help_id(rHelpId); }
     void SetAccessibleName(const OUString& rName) { m_pDrawingArea->set_accessible_name(rName); }
+    void SetInputContext(const InputContext& rInputContext)
+    {
+        m_pDrawingArea->set_input_context(rInputContext);
+    }
     void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
                                   sal_uInt8 eDNDConstants)
     {
