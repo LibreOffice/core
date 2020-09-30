@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <config_skia.h>
 
 #include <tools/debug.hxx>
 #include <vcl/gdimtf.hxx>
@@ -265,6 +266,20 @@ css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSur
 }
 
 #endif // ENABLE_CAIRO_CANVAS
+
+#if HAVE_FEATURE_SKIA
+SkiaOutDevInterface* OutputDevice::GetSkiaInterface() const
+{
+    if (!mpGraphics && !AcquireGraphics())
+        return nullptr;
+    return mpGraphics->GetSkiaInterface();
+}
+#else
+SkiaOutDevInterface* OutputDevice::GetSkiaInterface() const
+{
+    return nullptr;
+}
+#endif
 
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {

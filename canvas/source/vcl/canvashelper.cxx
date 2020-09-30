@@ -142,6 +142,9 @@ namespace vclcanvas
             mpProtectedOutDevProvider.reset();
 
         mpOutDevProvider = rOutDev;
+#if HAVE_FEATURE_SKIA
+        initSkia( mpOutDevProvider->getOutDev());
+#endif
     }
 
     void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
@@ -149,6 +152,9 @@ namespace vclcanvas
         mp2ndOutDevProvider = rOutDev;
         mp2ndOutDevProvider->getOutDev().EnableMapMode( false );
         mp2ndOutDevProvider->getOutDev().SetAntialiasing( AntialiasingFlags::Enable );
+#if HAVE_FEATURE_SKIA
+        init2ndSkia( mp2ndOutDevProvider->getOutDev());
+#endif
     }
 
     void CanvasHelper::clear()
@@ -663,6 +669,11 @@ namespace vclcanvas
                                       mpDevice,
                                       4,
                                       bModulateColors ? 3 : 0 );
+
+#if HAVE_FEATURE_SKIA
+        if( implDrawBitmapSkia( pCanvas, xBitmap, viewState, renderState, bModulateColors))
+            return nullptr;
+#endif
 
         if( mpOutDevProvider )
         {

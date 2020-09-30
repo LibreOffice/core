@@ -29,6 +29,8 @@
 #include <vcl/region.hxx>
 #include <vcl/vclenum.hxx>
 
+#include <config_features.h>
+
 #include <com/sun/star/drawing/LineCap.hpp>
 
 class SalGraphics;
@@ -38,6 +40,7 @@ class Gradient;
 class OpenGLContext;
 class SalVirtualDevice;
 struct SalGradient;
+class SkiaOutDevInterface;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
@@ -206,6 +209,10 @@ public:
     virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) = 0;
 
     virtual bool supportsOperation(OutDevSupportType eType) const = 0;
+
+#if HAVE_FEATURE_SKIA
+    virtual SkiaOutDevInterface* GetSkiaInterface() const { return nullptr; }
+#endif
 };
 
 #endif

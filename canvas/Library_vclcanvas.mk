@@ -29,6 +29,7 @@ $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas
 $(eval $(call gb_Library_use_externals,vclcanvas,\
 	boost_headers \
 	epoxy \
+	$(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vclcanvas))
@@ -66,6 +67,8 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/textlayout \
 	canvas/source/vcl/canvashelper_texturefill \
 	canvas/source/vcl/windowoutdevholder \
+	$(if $(filter SKIA,$(BUILD_TYPE)), \
+		canvas/source/vcl/canvashelper_skia) \
 ))
 
 # vim: set noet sw=4 ts=4:
