@@ -55,6 +55,7 @@ class SfxItemSet;
 namespace vcl { class Cursor; }
 namespace vcl { class Font; }
 class FontList;
+class InputContext;
 class OutputDevice;
 enum class TransliterationFlags;
 enum class PointerStyle;
@@ -97,18 +98,21 @@ public:
     // call this when text visualization changed in any way. It
     // will also update selection, so no need to call this self
     // additionally (but will also do no harm)
-    virtual void EditViewInvalidate(const tools::Rectangle& rRect) const = 0;
+    virtual void EditViewInvalidate(const tools::Rectangle& rRect) = 0;
 
     // call this when only selection is changed. Text change will
     // then *not* be checked and not be reacted on. Still, when
     // only the selection is changed, this is useful and faster
-    virtual void EditViewSelectionChange() const = 0;
+    virtual void EditViewSelectionChange() = 0;
 
     // return the OutputDevice that the EditView will draw to
     virtual OutputDevice& EditViewOutputDevice() const = 0;
 
+    // Triggered to update InputEngine context information
+    virtual void EditViewInputContext(const InputContext& rInputContext) = 0;
+
     // implemented if drag and drop support is wanted
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() const
+    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
     {
         return nullptr;
     }
@@ -140,8 +144,8 @@ public:
                     ~EditView();
 
     // set EditViewCallbacks for external handling of Repaints/Visualization
-    void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks);
-    const EditViewCallbacks* getEditViewCallbacks() const;
+    void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks);
+    EditViewCallbacks* getEditViewCallbacks() const;
 
     void            SetEditEngine( EditEngine* pEditEngine );
     EditEngine*     GetEditEngine() const;

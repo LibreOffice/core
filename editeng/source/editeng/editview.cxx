@@ -169,12 +169,12 @@ EditView::~EditView()
 {
 }
 
-void EditView::setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
+void EditView::setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks)
 {
     pImpEditView->setEditViewCallbacks(pEditViewCallbacks);
 }
 
-const EditViewCallbacks* EditView::getEditViewCallbacks() const
+EditViewCallbacks* EditView::getEditViewCallbacks() const
 {
     return pImpEditView->getEditViewCallbacks();
 }
@@ -207,7 +207,7 @@ tools::Rectangle EditView::GetInvalidateRect() const
 
 void EditView::InvalidateWindow(const tools::Rectangle& rClipRect)
 {
-    if (const EditViewCallbacks* pEditViewCallbacks = pImpEditView->getEditViewCallbacks())
+    if (EditViewCallbacks* pEditViewCallbacks = pImpEditView->getEditViewCallbacks())
     {
         // do not invalidate and trigger a global repaint, but forward
         // the need for change to the applied EditViewCallback, can e.g.
