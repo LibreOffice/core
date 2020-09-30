@@ -827,7 +827,6 @@ IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
     if (!aViewData.IsHScrollMode())
         return;
 
-    const long nOverlap = 0;    // ScrollBar::GetWindowOverlapPixel();
     long nSize = pTabControl->GetSplitSize();
 
     if (aViewData.GetHSplitMode() != SC_SPLIT_FIX)
@@ -841,7 +840,7 @@ IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
 
     if ( nSize != pTabControl->GetSizePixel().Width() )
     {
-        pTabControl->SetSizePixel( Size( nSize+nOverlap,
+        pTabControl->SetSizePixel( Size( nSize,
                                     pTabControl->GetSizePixel().Height() ) );
         RepeatResize();
     }
@@ -1530,8 +1529,6 @@ void ScTabView::DoHSplit(long nSplitPos)
 
     long nMinPos;
     long nMaxPos;
-    SCCOL nOldDelta;
-    SCCOL nNewDelta;
 
     nMinPos = SPLIT_MARGIN;
     if ( pRowBar[SC_SPLIT_BOTTOM] && pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width() >= nMinPos )
@@ -1561,10 +1558,10 @@ void ScTabView::DoHSplit(long nSplitPos)
     }
     else
     {
-        nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
+        SCCOL nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
         long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
         if ( nLeftWidth < 0 ) nLeftWidth = 0;
-        nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
+        SCCOL nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
                         static_cast<sal_uInt16>(nLeftWidth) );
         ScDocument& rDoc = aViewData.GetDocument();
         if ( nNewDelta > rDoc.MaxCol() )
@@ -1596,7 +1593,6 @@ void ScTabView::DoVSplit(long nSplitPos)
     long nMinPos;
     long nMaxPos;
     SCROW nOldDelta;
-    SCROW nNewDelta;
 
     nMinPos = SPLIT_MARGIN;
     if ( pColBar[SC_SPLIT_LEFT] && pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height() >= nMinPos )
@@ -1637,7 +1633,7 @@ void ScTabView::DoVSplit(long nSplitPos)
         aViewData.SetPosY( SC_SPLIT_TOP, nOldDelta );
         long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
         if ( nTopHeight < 0 ) nTopHeight = 0;
-        nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
+        SCROW nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
                         static_cast<sal_uInt16>(nTopHeight) );
         ScDocument& rDoc = aViewData.GetDocument();
         if ( nNewDelta > rDoc.MaxRow() )

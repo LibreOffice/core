@@ -125,8 +125,6 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                     uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
                     OUString sPropButtonType( "ButtonType" );
-                    OUString sPropTargetURL( "TargetURL" );
-                    OUString sPropLabel( "Label" );
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
@@ -135,6 +133,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
                         if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                         {
                             // URL
+                            OUString sPropTargetURL( "TargetURL" );
                             if(xInfo->hasPropertyByName( sPropTargetURL ))
                             {
                                 aAny = xPropSet->getPropertyValue( sPropTargetURL );
@@ -157,6 +156,7 @@ ScDrawTransferObj::ScDrawTransferObj( std::unique_ptr<SdrModel> pClipModel, ScDo
 
                                     // Label
                                     OUString aLabel;
+                                    OUString sPropLabel( "Label" );
                                     if(xInfo->hasPropertyByName( sPropLabel ))
                                     {
                                         aAny = xPropSet->getPropertyValue( sPropLabel );

@@ -39,7 +39,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
 {
     TokenId                     eParam[ 256 ];
     sal_Int32                   nPass;
-    TokenId                     nBuf0, nBuf1;
+    TokenId                     nBuf0;
 
     bool                        bAddIn = false;
 
@@ -234,7 +234,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nCnt, const char* pExtString )
     }
     else if( eOc == ocFind )
     {
-        nBuf1 = aPool.Store();
+        TokenId nBuf1 = aPool.Store();
         DecToken( nBuf1 );
         aPool << nBuf1;
     }

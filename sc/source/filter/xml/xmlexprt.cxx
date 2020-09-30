@@ -3348,7 +3348,6 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     bool bIsChart( false );
-    OUString sPropCLSID ("CLSID");
     if (xShapeProps.is())
     {
         sal_Int32 nZOrder = 0;
@@ -3357,6 +3356,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, OUString::number(nZOrder));
         }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
+        OUString sPropCLSID ("CLSID");
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
         {
             OUString sCLSID;
@@ -3546,11 +3546,11 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
     AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_NAME, rAreaLink.sFilter );
     if( !rAreaLink.sFilterOptions.isEmpty() )
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
-    OUStringBuffer sValue;
     AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_COLUMN_SPANNED, OUString::number(rAreaLink.GetColCount()) );
     AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, OUString::number(rAreaLink.GetRowCount()) );
     if( rAreaLink.nRefresh )
     {
+        OUStringBuffer sValue;
         ::sax::Converter::convertDuration( sValue,
                 static_cast<double>(rAreaLink.nRefresh) / 86400 );
         AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sValue.makeStringAndClear() );
@@ -3819,7 +3819,6 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
         }
         if (bIsIterationEnabled || nIterationCount != 100 || !::rtl::math::approxEqual(fIterationEpsilon, 0.001))
         {
-            OUStringBuffer sBuffer;
             if (bIsIterationEnabled)
                 AddAttribute(XML_NAMESPACE_TABLE, XML_STATUS, XML_ENABLE);
             if (nIterationCount != 100)
@@ -3828,6 +3827,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
             }
             if (!::rtl::math::approxEqual(fIterationEpsilon, 0.001))
             {
+                OUStringBuffer sBuffer;
                 ::sax::Converter::convertDouble(sBuffer,
                         fIterationEpsilon);
                 AddAttribute(XML_NAMESPACE_TABLE, XML_MAXIMUM_DIFFERENCE, sBuffer.makeStringAndClear());

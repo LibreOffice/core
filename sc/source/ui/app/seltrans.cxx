@@ -108,7 +108,6 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             }
             if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
             {
-                ScRange aRange;
                 ScViewData& rViewData = pView->GetViewData();
                 const ScMarkData& rMark = rViewData.GetMarkData();
                 //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
@@ -116,6 +115,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
                 // Also allow simple filtered area.
                 if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                 {
+                    ScRange aRange;
                     ScMarkType eMarkType = rViewData.GetSimpleArea( aRange );
                     if (eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED)
                     {

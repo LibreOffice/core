@@ -2767,10 +2767,9 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
                     }
 
                     //  collect items in pNewPattern, apply with one call after the loop
-
-                    sal_uInt16 nFirstItem, nSecondItem;
                     try
                     {
+                        sal_uInt16 nFirstItem, nSecondItem;
                         lcl_SetCellProperty( *pEntry, pValues[i], *pOldPattern, rDoc, nFirstItem, nSecondItem );
 
                         //  put only affected items into new set
