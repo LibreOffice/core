@@ -5706,7 +5706,7 @@ void Test::testAnchoredRotatedShape()
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != nullptr);
     m_pDoc->SetRowHeightRange( 0, MAXROW, 0, sc::HMMToTwips( 1000 ) );
-    const long TOLERANCE = 30; //30 hmm
+    constexpr long TOLERANCE = 30; //30 hmm
     for ( SCCOL nCol = 0; nCol < MAXCOL; ++nCol )
         m_pDoc->SetColWidth( nCol, 0, sc::HMMToTwips( 1000 ) );
     {

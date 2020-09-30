@@ -3447,7 +3447,7 @@ void ScInterpreter::ScMacro()
             sal_Int32 nDim = pDimArray ? pDimArray->GetDims32() : 0;
             if ( 1 <= nDim && nDim <= 2 )
             {
-                sal_Int32 nCs, nCe, nRs, nRe;
+                sal_Int32 nCs, nCe, nRs;
                 SCSIZE nC, nR;
                 SCCOL nColIdx;
                 SCROW nRowIdx;
@@ -3462,6 +3462,7 @@ void ScInterpreter::ScMacro()
                 }
                 else
                 {   // array( rows, cols )
+                    sal_Int32 nRe;
                     pDimArray->GetDim32( 1, nRs, nRe );
                     nR = static_cast<SCSIZE>(nRe - nRs + 1);
                     pDimArray->GetDim32( 2, nCs, nCe );
@@ -3711,10 +3712,9 @@ void ScInterpreter::ScColRowNameAuto()
         // maybe get previous limit by using defined ColRowNameRange
         if (aAbs.aEnd.Row() > nRow2)
             aAbs.aEnd.SetRow(nRow2);
-        SCROW nMyRow;
         if ( aPos.Col() == nStartCol )
         {
-            nMyRow = aPos.Row();
+            SCROW nMyRow = aPos.Row();
             if ( nStartRow <= nMyRow && nMyRow <= aAbs.aEnd.Row())
             {   //Formula in the same column and within the range
                 if ( nMyRow == nStartRow )
@@ -3737,10 +3737,9 @@ void ScInterpreter::ScColRowNameAuto()
         // maybe get previous limit by using defined ColRowNameRange
         if (aAbs.aEnd.Col() > nCol2)
             aAbs.aEnd.SetCol(nCol2);
-        SCCOL nMyCol;
         if ( aPos.Row() == nStartRow )
         {
-            nMyCol = aPos.Col();
+            SCCOL nMyCol = aPos.Col();
             if (nStartCol <= nMyCol && nMyCol <= aAbs.aEnd.Col())
             {   //Formula in the same column and within the range
                 if ( nMyCol == nStartCol )

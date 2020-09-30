@@ -2891,9 +2891,9 @@ void ScViewFunc::MoveTable(
                 nDestTab1++;
             }
         }
-        OUString sName;
         if (!bNewDoc && bUndo)
         {
+            OUString sName;
             rDestDoc.GetName(nDestTab, sName);
             pDestShell->GetUndoManager()->AddUndoAction(
                             std::make_unique<ScUndoImportTab>( pDestShell, nDestTab,

@@ -521,7 +521,7 @@ void OP_VerAlign123(LotusContext& /*rContext*/, sal_uInt8 nAlignPattern, SfxItem
 
 void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
-    sal_uInt16 nCode,nPatternId;
+    sal_uInt16 nCode;
 
     ScPatternAttr aPattern(rContext.rDoc.GetPool());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
@@ -531,6 +531,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     if ( nCode == 0x0fd2 )
     {
+        sal_uInt16 nPatternId;
         r.ReadUInt16( nPatternId );
 
         sal_uInt8 Hor_Align, Ver_Align, temp;

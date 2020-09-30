@@ -139,9 +139,9 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesTall()
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall)
 {
-    sal_uInt16 scaleToPageY = 0;
     try
     {
+        sal_uInt16 scaleToPageY = 0;
         bool aValue;
         if( fitToPagesTall.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesTall >>= aValue))
         {
@@ -162,9 +162,9 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesWide()
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide)
 {
-    sal_uInt16 scaleToPageX = 0;
     try
     {
+        sal_uInt16 scaleToPageX = 0;
         bool aValue = false;
         if( fitToPagesWide.getValueTypeClass() != uno::TypeClass_BOOLEAN || (fitToPagesWide >>= aValue))
         {

@@ -742,7 +742,6 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         xStorage = pMedium->GetOutputStorage();
 
     OUString sFileName;
-    OUString sTextMediaType("text/xml");
     if (pMedium)
         sFileName = pMedium->GetName();
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
@@ -807,6 +806,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             }
         }
 
+        OUString sTextMediaType("text/xml");
         bool bMetaRet(pObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
         bool bStylesRet (false);
         bool bDocRet(false);

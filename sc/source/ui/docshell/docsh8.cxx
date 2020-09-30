@@ -777,12 +777,12 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
     SCROW nDocRow = 0;
     ScFieldEditEngine aEditEngine(&m_aDocument, m_aDocument.GetEditPool());
     OUString aString;
-    OUString aTabName;
 
     try
     {
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
+        OUString aTabName;
         ErrCode nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
