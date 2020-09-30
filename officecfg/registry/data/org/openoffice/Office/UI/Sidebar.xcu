@@ -43,7 +43,7 @@
 
       <node oor:name="InspectorDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Styles Inspector</value>
+          <value xml:lang="en-US">Style Inspector</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>InspectorDeck</value>
@@ -397,7 +397,7 @@
 
       <node oor:name="InspectorTextPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Styles Inspector</value>
+          <value xml:lang="en-US">Style Inspector</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
