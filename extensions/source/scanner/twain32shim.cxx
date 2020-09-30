@@ -254,7 +254,20 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if (TWAINState::DSMunloaded == m_nCurState)
     {
-        if ((m_hMod = LoadLibraryW(L"TWAIN_32.DLL")))
+        m_hMod = LoadLibraryW(L"TWAIN_32.DLL");
+        if (!m_hMod)
+        {
+            // Windows directory might not be in DLL search path sometimes, so try the full path
+            PWSTR sPath;
+            if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Windows, 0, nullptr, &sPath)))
+            {
+                std::wstring sPathAndFile = sPath;
+                CoTaskMemFree(sPath);
+                sPathAndFile += L"\\TWAIN_32.DLL";
+                m_hMod = LoadLibraryW(sPathAndFile.c_str());
+            }
+        }
+        if (m_hMod)
         {
             m_nCurState = TWAINState::DSMloaded;
 
