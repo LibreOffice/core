@@ -1923,6 +1923,8 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
     }
 }
 
+SkiaOutDevInterface::~SkiaOutDevInterface() {}
+
 #ifdef DBG_UTIL
 void SkiaSalGraphicsImpl::dump(const char* file) const
 {
