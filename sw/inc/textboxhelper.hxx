@@ -69,6 +69,9 @@ public:
     /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet);
 
+    /// Copy shape attributes to the text frame
+    static void updateTextBoxMargin(SdrObject* pObj);
+
     /**
      * If we have an associated TextFrame, then return that.
      *
@@ -94,6 +97,9 @@ public:
      *              Valid types are RES_DRAWFRMFMT and RES_FLYFRMFMT.
      */
     static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
+
+    /// Returns true if the SdrObject has a SwTextFrame otherwise false
+    static bool hasTextFrame(const SdrObject* pObj);
 
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(const SwDoc& rDoc);

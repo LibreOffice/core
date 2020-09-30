@@ -42,6 +42,8 @@
 #include <rootfrm.hxx>
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <textboxhelper.hxx>
+#include <unoframe.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
@@ -811,6 +813,71 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
         assertXPath(pXmlDoc, "/root/page[1]/header/txt[3]/anchored/fly[1]/txt[3]/Text[2]",
                     "Portion", "hi");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
+{
+    // Check the padding of the textbox
+    SwDoc* pDoc = createDoc("tdf137025.docx");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the layout xml
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
+                "/DefaultProperties/SfxItemSet/SfxInt32Item[3]",
+                "value", "567");
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
+                "/DefaultProperties/SfxItemSet/SfxInt32Item[4]",
+                "value", "1134");
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
+                "/DefaultProperties/SfxItemSet/SfxInt32Item[5]",
+                "value", "1701");
+    assertXPath(pXmlDoc,
+                "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObject"
+                "/DefaultProperties/SfxItemSet/SfxInt32Item[6]",
+                "value", "2268");
+
+    // Check the textbox-shape import too
+    auto xShp = getShape(1);
+    CPPUNIT_ASSERT(xShp);
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShp, uno::UNO_QUERY);
+
+    SwFrameFormat* pFrameFormat = SwTextBoxHelper::getOtherTextBoxFormat(xShp);
+    CPPUNIT_ASSERT(pFrameFormat);
+
+    // The shape has these values to copy to the associated text frame after modification::
+    const long nLPaddng = xShapeProps->getPropertyValue("TextLeftDistance").get<long>();
+    const long nRPaddng = xShapeProps->getPropertyValue("TextRightDistance").get<long>();
+    const long nTPaddng = xShapeProps->getPropertyValue("TextUpperDistance").get<long>();
+    const long nBPaddng = xShapeProps->getPropertyValue("TextLowerDistance").get<long>();
+
+    CPPUNIT_ASSERT_EQUAL(long(1000), nLPaddng);
+    CPPUNIT_ASSERT_EQUAL(long(2000), nRPaddng);
+    CPPUNIT_ASSERT_EQUAL(long(3000), nTPaddng);
+    CPPUNIT_ASSERT_EQUAL(long(4001), nBPaddng);
+
+    // TODO: modify shape distance via UNO with text frame synchronization
+    // Check the textbox as well:
+    auto xTxFrm = SwXTextFrame::CreateXTextFrame(*pFrameFormat->GetDoc(), pFrameFormat);
+    CPPUNIT_ASSERT(xTxFrm);
+    uno::Reference<beans::XPropertySet> xFrameProps(xTxFrm, uno::UNO_QUERY);
+
+    const long nFrameLeftPaddng = xFrameProps->getPropertyValue("LeftBorderDistance").get<long>();
+    const long nFrameRightPaddng = xFrameProps->getPropertyValue("RightBorderDistance").get<long>();
+    const long nFrameTopPaddng = xFrameProps->getPropertyValue("TopBorderDistance").get<long>();
+    const long nFrameBottomPaddng
+        = xFrameProps->getPropertyValue("BottomBorderDistance").get<long>();
+
+    // Check if the shape and frame have different setting
+    CPPUNIT_ASSERT_EQUAL(nLPaddng, nFrameLeftPaddng);
+    CPPUNIT_ASSERT_EQUAL(nRPaddng, nFrameRightPaddng);
+    CPPUNIT_ASSERT_EQUAL(nTPaddng, nFrameTopPaddng);
+    CPPUNIT_ASSERT_EQUAL(nBPaddng, nFrameBottomPaddng);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
