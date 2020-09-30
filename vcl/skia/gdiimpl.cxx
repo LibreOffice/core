@@ -37,6 +37,8 @@
 #include <GrBackendSurface.h>
 #include <SkTextBlob.h>
 #include <SkRSXform.h>
+#include <SkColorFilter.h>
+#include <SkColorMatrix.h>
 
 #include <numeric>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -516,6 +518,8 @@ bool SkiaSalGraphicsImpl::setClipRegion(const vcl::Region& region)
 
 void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region)
 {
+    if (region.IsNull())
+        return; // clip region already as large as possible
     SkiaZone zone;
     SkPath path;
     // Always use region rectangles, regardless of what the region uses internally.
@@ -532,7 +536,7 @@ void SkiaSalGraphicsImpl::setCanvasClipRegion(SkCanvas* canvas, const vcl::Regio
 
 void SkiaSalGraphicsImpl::ResetClipRegion()
 {
-    setClipRegion(vcl::Region(tools::Rectangle(0, 0, GetWidth(), GetHeight())));
+    setClipRegion(vcl::Region(true)); // null region => no clipping
 }
 
 const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegion; }
@@ -1921,6 +1925,87 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
         default:
             return false;
     }
+}
+
+bool SkiaSalGraphicsImpl::drawBitmap(const BitmapEx& bitmap, const SkPaint& paint_,
+                                     const SkMatrix& matrix, double alphaModulation,
+                                     SlowHandling slowHandling)
+{
+    std::shared_ptr<SalBitmap> sourceBitmap = bitmap.GetBitmap().ImplGetSalBitmap();
+    std::shared_ptr<SalBitmap> alphaBitmap;
+    if (bitmap.IsAlpha())
+        alphaBitmap = bitmap.GetAlpha().ImplGetSalBitmap();
+    else
+        alphaBitmap = bitmap.GetMask().ImplGetSalBitmap();
+    assert(dynamic_cast<const SkiaSalBitmap*>(sourceBitmap.get()));
+    assert(!alphaBitmap || dynamic_cast<const SkiaSalBitmap*>(alphaBitmap.get()));
+
+    const SkiaSalBitmap& rSkiaBitmap = static_cast<const SkiaSalBitmap&>(*sourceBitmap.get());
+    const SkiaSalBitmap* pSkiaAlphaBitmap = static_cast<const SkiaSalBitmap*>(alphaBitmap.get());
+    if (pSkiaAlphaBitmap && pSkiaAlphaBitmap->IsFullyOpaqueAsAlpha())
+        pSkiaAlphaBitmap = nullptr; // the alpha can be ignored
+
+    SkiaZone zone;
+    preDraw();
+    SAL_INFO("vcl.skia.trace",
+             "interfacedrawbitmap(" << this << "): " << sourceBitmap->GetSize() << ":" << matrix);
+    SkPaint paint(paint_);
+    if (!::rtl::math::approxEqual(alphaModulation, 1.0))
+    {
+        if (slowHandling == FailIfSlow && !isGPU())
+            return false; // vclcanvas caches results, that should be more efficient
+        // Modulate the color by the given alpha.
+        // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
+        SkColorMatrix modulateByAlpha(1, 0, 0, 0, 0, // R column
+                                      0, 1, 0, 0, 0, // G column
+                                      0, 0, 1, 0, 0, // B column
+                                      0, 0, 0, alphaModulation, 0); // A column
+        paint.setColorFilter(SkColorFilters::Matrix(modulateByAlpha));
+    }
+    SkRect bitmapSourceRect
+        = SkRect::MakeWH(sourceBitmap->GetSize().Width(), sourceBitmap->GetSize().Height());
+    if (mXorMode)
+    {
+        if (matrix.rectStaysRect())
+            addXorRegion(matrix.mapRect(bitmapSourceRect));
+        else
+            addXorRegion(SkRect::MakeWH(GetWidth(), GetHeight())); // can't tell, use whole area
+    }
+    SkCanvas* canvas = getDrawCanvas();
+    SkAutoCanvasRestore autoRestore(canvas, true);
+    paint.setFilterQuality(kHigh_SkFilterQuality); // TODO?
+    sk_sp<SkImage> image;
+    if (slowHandling == FailIfSlow && !isGPU() && !matrix.isScaleTranslate())
+        return false; // TODO try to cache even this case here?
+    if (matrix.isScaleTranslate())
+    {
+        // This maps to another rectangle, try to cache the result.
+        // TODO: Try to do this for all transformations, like drawTransformedBitmap() does?
+        SkRect rect = matrix.mapRect(bitmapSourceRect);
+        image = mergeCacheBitmaps(rSkiaBitmap, pSkiaAlphaBitmap, Size(rect.width(), rect.height()));
+        if (image)
+            canvas->drawImage(image, rect.x(), rect.y(), &paint);
+    }
+    if (!image)
+    {
+        canvas->concat(matrix);
+        if (pSkiaAlphaBitmap)
+        {
+            paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
+                                             rSkiaBitmap.GetSkShader(),
+                                             pSkiaAlphaBitmap->GetAlphaSkShader()));
+            canvas->drawRect(bitmapSourceRect, paint);
+        }
+        else if (rSkiaBitmap.PreferSkShader())
+        {
+            paint.setShader(rSkiaBitmap.GetSkShader());
+            canvas->drawRect(bitmapSourceRect, paint);
+        }
+        else
+            canvas->drawImage(rSkiaBitmap.GetSkImage(), 0, 0, &paint);
+    }
+    postDraw();
+    return true;
 }
 
 SkiaOutDevInterface::~SkiaOutDevInterface() {}

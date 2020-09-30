@@ -10,12 +10,15 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/skia/SkiaHelper.hxx>
+#include <vcl/skia/interface.hxx>
 #include <skia/salbmp.hxx>
 #include <bitmapwriteaccess.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <SkPaint.h>
 
 // This tests backends that use Skia (i.e. intentionally not the svp one, which is the default.)
 // Note that you still may need to actually set for Skia to be used (see vcl/README.vars).
@@ -32,10 +35,12 @@ public:
 
     void testBitmapErase();
     void testDrawShaders();
+    void testInterfaceDrawBitmap();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
     CPPUNIT_TEST(testDrawShaders);
+    CPPUNIT_TEST(testInterfaceDrawBitmap);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -166,6 +171,59 @@ void SkiaTest::testDrawShaders()
     CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(69 - diff, 100)));
     CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(70 + diff, 100)));
     CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50, 100)));
+    device->Erase();
+}
+
+void SkiaTest::testInterfaceDrawBitmap()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT);
+    device->SetOutputSizePixel(Size(20, 20));
+    device->SetBackground(Wallpaper(COL_WHITE));
+    device->Erase();
+    Bitmap bitmap(Size(10, 10), 24);
+    bitmap.Erase(COL_RED);
+    AlphaMask alpha(Size(10, 10));
+    alpha.Erase(64);
+    SkiaOutDevInterface* interface = device->GetSkiaInterface();
+    CPPUNIT_ASSERT(interface);
+    SkPaint paint;
+    SkMatrix matrix;
+
+    matrix = SkMatrix::Translate(5, 5);
+    CPPUNIT_ASSERT(interface->drawBitmap(BitmapEx(bitmap), paint, matrix, 1));
+    //savePNG("/tmp/b1.png", device);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(5, 5)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(14, 14)));
+    device->Erase();
+
+    matrix = SkMatrix::Translate(5, 5) * SkMatrix::Scale(0.5, 0.5);
+    CPPUNIT_ASSERT(interface->drawBitmap(BitmapEx(bitmap), paint, matrix, 1));
+    //savePNG("/tmp/b2.png", device);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(5, 5)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(9, 9)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(10, 10)));
+    device->Erase();
+
+    matrix = SkMatrix::RotateDeg(45);
+    CPPUNIT_ASSERT(interface->drawBitmap(BitmapEx(bitmap), paint, matrix, 1));
+    //savePNG("/tmp/b3.png", device);
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(0, 1)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(1, 0)));
+    CPPUNIT_ASSERT_EQUAL(COL_RED, device->GetPixel(Point(0, 10)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(10, 10)));
+    device->Erase();
+
+    matrix = SkMatrix();
+    CPPUNIT_ASSERT(interface->drawBitmap(BitmapEx(bitmap), paint, matrix, 0.25));
+    //savePNG("/tmp/b4.png", device);
+    Color resultRed(COL_RED.GetRed() * 1 / 4 + 191, 191, 191); // 1/4 red, 3/4 white (191 ~= 192)
+    CPPUNIT_ASSERT_EQUAL(resultRed, device->GetPixel(Point(0, 0)));
+    CPPUNIT_ASSERT_EQUAL(resultRed, device->GetPixel(Point(9, 9)));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, device->GetPixel(Point(10, 10)));
     device->Erase();
 }
 
