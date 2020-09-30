@@ -1151,17 +1151,19 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         }
     }
 
-    // Hacky way of ensuring the shape is correctly sized/positioned
-    try
+    // tdf#105875
+    if (!maTypeModel.maRotation.isEmpty())
     {
-        // E.g. SwXFrame::setPosition() unconditionally throws
-        xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
-        xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
+        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
+        {
+            // -1 is required because the direction of MSO rotation is the opposite of ours
+            // 100 is required because in this part of the code the angle is in a hundredth of degrees
+            auto nAngle = maTypeModel.maRotation.toInt32() * -100;
+            double a = nAngle * F_PI18000;
+            pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle, sin(a), cos(a));
+        }
     }
-    catch (const ::css::uno::Exception&)
-    {
-        // TODO: try some other way to ensure size/position
-    }
+
     return xShape;
 }
 
