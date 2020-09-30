@@ -20,9 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sdbc.OSDBCDriverManager"
-    constructor="connectivity_OSDBCDriverManager_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.sdbc.theOSDBCDriverManager"/>
+    constructor="connectivity_OSDBCDriverManager_get_implementation" single-instance="true">
     <service name="com.sun.star.sdbc.DriverManager"/>
   </implementation>
 </component>
