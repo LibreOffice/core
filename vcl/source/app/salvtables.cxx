@@ -5501,6 +5501,7 @@ private:
     DECL_LINK(StyleUpdatedHdl, VclDrawingArea&, void);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
+    DECL_LINK(GetSurroundingHdl, OUString&, int);
     DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
 
     // SalInstanceWidget has a generic listener for all these
@@ -5545,6 +5546,7 @@ public:
         m_xDrawingArea->SetStyleUpdatedHdl(LINK(this, SalInstanceDrawingArea, StyleUpdatedHdl));
         m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
         m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
+        m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
         m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
     }
 
@@ -5580,6 +5582,12 @@ public:
     virtual void set_input_context(const InputContext& rInputContext) override
     {
         m_xDrawingArea->SetInputContext(rInputContext);
+    }
+
+    virtual void im_context_set_cursor_location(const tools::Rectangle& rCursorRect, int nExtTextInputWidth) override
+    {
+        tools::Rectangle aCursorRect = m_xDrawingArea->PixelToLogic(rCursorRect);
+        m_xDrawingArea->SetCursorRect(&aCursorRect, m_xDrawingArea->PixelToLogic(Size(nExtTextInputWidth, 0)).Width());
     }
 
     virtual a11yref get_accessible_parent() override
@@ -5632,6 +5640,7 @@ public:
 
     virtual ~SalInstanceDrawingArea() override
     {
+        m_xDrawingArea->SetGetSurroundingHdl(Link<OUString&, int>());
         m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
         m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
         m_xDrawingArea->SetStyleUpdatedHdl(Link<VclDrawingArea&, void>());
@@ -5696,6 +5705,11 @@ IMPL_LINK_NOARG(SalInstanceDrawingArea, StyleUpdatedHdl, VclDrawingArea&, void)
 IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
 {
     return m_aCommandHdl.Call(rEvent);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, GetSurroundingHdl, OUString&, rSurrounding, int)
+{
+    return m_aGetSurroundingHdl.Call(rSurrounding);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)
