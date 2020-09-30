@@ -1347,6 +1347,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77236_MissingSolidFill, "tdf77236_MissingSolidFi
     assertXPath(pXmlDoc, "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotation, "tdf105875_VmlShapeRotation.docx")
+{
+    // tdf#105875: check whether the rotation of the VML bezier shape is ok
+    // We can check the width and height because the test shape is rotated with 90 degrees.
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "312");
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "height", "883");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
