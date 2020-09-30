@@ -86,6 +86,12 @@ public:
     void dump(const char* file) const;
 #endif
 
+    // These are to be used only by unittests.
+    bool unittestHasBuffer() const { return mBuffer.get(); }
+    bool unittestHasImage() const { return mImage.get(); }
+    bool unittestHasAlphaImage() const { return mAlphaImage.get(); }
+    bool unittestHasEraseColor() const { return mEraseColorSet; }
+
 private:
     // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage().
     void ResetCachedData();
