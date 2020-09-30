@@ -117,6 +117,15 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
+                                                     const SkMatrix& matrix)
+{
+    return stream << "[" << matrix[0] << " " << matrix[1] << " " << matrix[2] << "]"
+                  << "[" << matrix[3] << " " << matrix[4] << " " << matrix[5] << "]"
+                  << "[" << matrix[6] << " " << matrix[7] << " " << matrix[8] << "]";
+}
+
+template <typename charT, typename traits>
+inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      const SkImage& image)
 {
     // G - on GPU
