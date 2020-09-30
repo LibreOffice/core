@@ -234,9 +234,9 @@ namespace sw
     void CopyBookmarks(const SwPaM& rPam, SwPosition& rCpyPam)
     {
         const SwDoc& rSrcDoc = rPam.GetDoc();
-        SwDoc* pDestDoc =  rCpyPam.GetDoc();
+        SwDoc& rDestDoc =  rCpyPam.GetDoc();
         const IDocumentMarkAccess* const pSrcMarkAccess = rSrcDoc.getIDocumentMarkAccess();
-        ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDestDoc.GetIDocumentUndoRedo());
 
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
         SwPosition const*const pCpyStt = &rCpyPam;
@@ -283,14 +283,14 @@ namespace sw
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
-            ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(
+            ::sw::mark::IMark* const pNewMark = rDestDoc.getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 pMark->GetName(),
                 IDocumentMarkAccess::GetType(*pMark),
                 ::sw::mark::InsertMode::CopyText);
             // Explicitly try to get exactly the same name as in the source
             // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
-            pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
+            rDestDoc.getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
 
             // copying additional attributes for bookmarks or fieldmarks
             ::sw::mark::IBookmark* const pNewBookmark =

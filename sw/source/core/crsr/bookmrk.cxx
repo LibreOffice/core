@@ -455,16 +455,14 @@ namespace sw::mark
 
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
     {
-        SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        assert(pDoc);
-        return pDoc->GetXmlIdRegistry();
+        SwDoc& rDoc( GetMarkPos().GetDoc() );
+        return rDoc.GetXmlIdRegistry();
     }
 
     bool Bookmark::IsInClipboard() const
     {
-        SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        assert(pDoc);
-        return pDoc->IsClipBoard();
+        SwDoc& rDoc( GetMarkPos().GetDoc() );
+        return rDoc.IsClipBoard();
     }
 
     bool Bookmark::IsInUndo() const
@@ -474,17 +472,15 @@ namespace sw::mark
 
     bool Bookmark::IsInContent() const
     {
-        SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        assert(pDoc);
-        return !pDoc->IsInHeaderFooter( GetMarkPos().nNode );
+        SwDoc& rDoc( GetMarkPos().GetDoc() );
+        return !rDoc.IsInHeaderFooter( GetMarkPos().nNode );
     }
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
-        SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        assert(pDoc);
+        SwDoc& rDoc( GetMarkPos().GetDoc() );
         const uno::Reference< rdf::XMetadatable> xMeta(
-                SwXBookmark::CreateXBookmark(*pDoc, this), uno::UNO_QUERY);
+                SwXBookmark::CreateXBookmark(rDoc, this), uno::UNO_QUERY);
         return xMeta;
     }
 
@@ -626,9 +622,8 @@ namespace sw::mark
         {
             (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] <<= checked;
             // mark document as modified
-            SwDoc *const pDoc( GetMarkPos().GetDoc() );
-            if ( pDoc )
-                pDoc->getIDocumentState().SetModified();
+            SwDoc& rDoc( GetMarkPos().GetDoc() );
+            rDoc.getIDocumentState().SetModified();
         }
     }
 

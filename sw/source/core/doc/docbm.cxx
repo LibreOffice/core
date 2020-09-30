@@ -812,7 +812,7 @@ namespace sw::mark
         ::sw::mark::IMark* const io_pMark,
         const SwPaM& rPaM)
     {
-        assert(io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
+        assert(&io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::repositionMark(..)>"
             " - Mark is not in my doc.");
         MarkBase* const pMarkBase = dynamic_cast< MarkBase* >(io_pMark);
@@ -839,7 +839,7 @@ namespace sw::mark
         ::sw::mark::IMark* io_pMark,
         const OUString& rNewName )
     {
-        assert(io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
+        assert(&io_pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::renameMark(..)>"
             " - Mark is not in my doc.");
         if ( io_pMark->GetName() == rNewName )
@@ -1288,7 +1288,7 @@ namespace sw::mark
 
     void MarkManager::deleteMark(const IMark* const pMark)
     {
-        assert(pMark->GetMarkPos().GetDoc() == &m_rDoc &&
+        assert(&pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark

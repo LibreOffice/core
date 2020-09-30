@@ -78,11 +78,10 @@ namespace sw::mark
 
     const SwFormatField* AnnotationMark::GetAnnotationFormatField() const
     {
-        SwDoc* pDoc = GetMarkPos().GetDoc();
-        assert(pDoc != nullptr);
+        SwDoc& rDoc = GetMarkPos().GetDoc();
 
         const auto sName = GetName();
-        SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFieldType( SwFieldIds::Postit, OUString(), false );
+        SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFieldType( SwFieldIds::Postit, OUString(), false );
         std::vector<SwFormatField*> vFields;
         pType->GatherFields(vFields);
         auto ppFound = std::find_if(vFields.begin(), vFields.end(), [&sName](SwFormatField* pF)

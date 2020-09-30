@@ -223,7 +223,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
                             const SwTableAutoFormat* pTAFormat,
                             const std::vector<sal_uInt16> *pColArr,
                             const OUString & rName)
-    : SwUndo( SwUndoId::INSTABLE, rPos.GetDoc() ),
+    : SwUndo( SwUndoId::INSTABLE, &rPos.GetDoc() ),
     m_aInsTableOptions( rInsTableOpts ),
     m_nStartNode( rPos.nNode.GetIndex() ), m_nRows( nRw ), m_nColumns( nCl ), m_nAdjust( nAdj )
 {

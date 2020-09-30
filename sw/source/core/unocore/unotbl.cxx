@@ -1074,11 +1074,8 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                     return uno::Any();
 
                 SwPosition aPos(*pTableNode);
-                SwDoc* pDoc = aPos.GetDoc();
-                if (!pDoc)
-                    return uno::Any();
-
-                m_xParentText = sw::CreateParentXText(*pDoc, aPos);
+                SwDoc& rDoc = aPos.GetDoc();
+                m_xParentText = sw::CreateParentXText(rDoc, aPos);
             }
 
             return uno::makeAny(m_xParentText);
