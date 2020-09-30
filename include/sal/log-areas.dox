@@ -54,6 +54,7 @@ certain functionality.
 @li @c canvas.directx
 @li @c canvas.null
 @li @c canvas.ogl
+@li @c canvas.skia Canvas Skia-based code
 @li @c canvas.vcl
 
 @section chart2
