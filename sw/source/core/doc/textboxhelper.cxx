@@ -210,6 +210,17 @@ bool SwTextBoxHelper::isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType)
     return pOtherFormat->GetAttrSet().HasItem(RES_CNTNT) && pOtherFormat->GetContent() == rContent;
 }
 
+bool SwTextBoxHelper::hasTextFrame(const SdrObject* pObj)
+{
+    if (!pObj)
+        return false;
+
+    uno::Reference<drawing::XShape> xShape(pObj->getWeakUnoShape(), uno::UNO_QUERY);
+    if (!xShape)
+        return false;
+    return SwTextBoxHelper::getOtherTextBoxFormat(xShape);
+}
+
 sal_Int32 SwTextBoxHelper::getCount(SdrPage const* pPage)
 {
     sal_Int32 nRet = 0;
@@ -807,6 +818,29 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
 
     if (aTextBoxSet.Count())
         pFormat->GetDoc()->SetFlyFrameAttr(*pFormat, aTextBoxSet);
+}
+
+void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
+{
+    if (!pObj)
+        return;
+    uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+    if (!xShape)
+        return;
+    uno::Reference<beans::XPropertySet> const xPropertySet(xShape, uno::UNO_QUERY);
+
+    auto pParentFormat = getOtherTextBoxFormat(getOtherTextBoxFormat(xShape), RES_FLYFRMFMT);
+    if (!pParentFormat)
+        return;
+
+    syncProperty(pParentFormat, UNO_NAME_TEXT_LEFTDIST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_LEFTDIST));
+    syncProperty(pParentFormat, UNO_NAME_TEXT_RIGHTDIST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_RIGHTDIST));
+    syncProperty(pParentFormat, UNO_NAME_TEXT_UPPERDIST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST));
+    syncProperty(pParentFormat, UNO_NAME_TEXT_LOWERDIST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_LOWERDIST));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
