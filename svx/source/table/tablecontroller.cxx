@@ -2229,9 +2229,10 @@ void SvxTableController::selectAll()
 {
     if( mxTable.is() )
     {
-        CellPos aPos1, aPos2( mxTable->getColumnCount()-1, mxTable->getRowCount()-1 );
+        CellPos aPos2( mxTable->getColumnCount()-1, mxTable->getRowCount()-1 );
         if( (aPos2.mnCol >= 0) && (aPos2.mnRow >= 0) )
         {
+            CellPos aPos1;
             setSelectedCells( aPos1, aPos2 );
         }
     }

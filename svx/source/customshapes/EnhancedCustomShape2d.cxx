@@ -2757,11 +2757,9 @@ void EnhancedCustomShape2d::AdaptObjColor(
         default:
         case drawing::FillStyle_SOLID:
         {
-            Color aFillColor;
-
             if ( nColorCount || 0.0 != dBrightness )
             {
-                aFillColor = GetColorData(
+                Color aFillColor = GetColorData(
                     rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
                     std::min(nColorIndex, nColorCount-1),
                     dBrightness );
