@@ -1655,17 +1655,21 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     if (rPosAry.mnSrcWidth != rPosAry.mnDestWidth || rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
         paint.setFilterQuality(kHigh_SkFilterQuality);
     SkCanvas* canvas = getDrawCanvas();
-    // SkCanvas::drawShader() cannot do rectangles, so clip to destination and use a matrix
-    // to map from source.
-    SkMatrix matrix;
+    // Scaling needs to be done explicitly using a matrix.
     SkAutoCanvasRestore autoRestore(canvas, true);
-    canvas->clipRect(destinationRect);
-    matrix.set(SkMatrix::kMScaleX, 1.0 * rPosAry.mnDestWidth / rPosAry.mnSrcWidth);
-    matrix.set(SkMatrix::kMScaleY, 1.0 * rPosAry.mnDestHeight / rPosAry.mnSrcHeight);
-    matrix.set(SkMatrix::kMTransX, rPosAry.mnDestX - rPosAry.mnSrcX);
-    matrix.set(SkMatrix::kMTransY, rPosAry.mnDestY - rPosAry.mnSrcY);
+    SkMatrix matrix = SkMatrix::Translate(rPosAry.mnDestX, rPosAry.mnDestY)
+                      * SkMatrix::Scale(1.0 * rPosAry.mnDestWidth / rPosAry.mnSrcWidth,
+                                        1.0 * rPosAry.mnDestHeight / rPosAry.mnSrcHeight)
+                      * SkMatrix::Translate(-rPosAry.mnSrcX, -rPosAry.mnSrcY);
+    assert(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY)
+           == SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY));
+    assert(matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight)
+           == SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
+                            rPosAry.mnDestY + rPosAry.mnDestHeight));
     canvas->concat(matrix);
-    canvas->drawPaint(paint);
+    SkRect sourceRect
+        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
+    canvas->drawRect(sourceRect, paint);
     postDraw();
 }
 
@@ -1737,19 +1741,15 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         paint.setFilterQuality(kHigh_SkFilterQuality);
         if (pSkiaAlphaBitmap)
         {
-            // SkCanvas::drawPaint() cannot do rectangles, so clip (is transformed by the matrix too).
-            canvas->clipRect(SkRect::MakeWH(aSize.Width(), aSize.Height()));
             paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
                                              rSkiaBitmap.GetSkShader(),
                                              pSkiaAlphaBitmap->GetAlphaSkShader()));
-            canvas->drawPaint(paint);
+            canvas->drawRect(SkRect::MakeWH(aSize.Width(), aSize.Height()), paint);
         }
         else if (rSkiaBitmap.PreferSkShader())
         {
-            // SkCanvas::drawPaint() cannot do rectangles, so clip (is transformed by the matrix too).
-            canvas->clipRect(SkRect::MakeWH(aSize.Width(), aSize.Height()));
             paint.setShader(rSkiaBitmap.GetSkShader());
-            canvas->drawPaint(paint);
+            canvas->drawRect(SkRect::MakeWH(aSize.Width(), aSize.Height()), paint);
         }
         else
         {
