@@ -261,15 +261,15 @@ private:
     // incarnation has to handle that. Used e.g. to represent the edited text
     // in Draw/Impress in an OverlayObject which avoids evtl. expensive full
     // repaints of the EditView(s)
-    const EditViewCallbacks* mpEditViewCallbacks;
+    EditViewCallbacks* mpEditViewCallbacks;
     bool mbBroadcastLOKViewCursor;
 
-    const EditViewCallbacks* getEditViewCallbacks() const
+    EditViewCallbacks* getEditViewCallbacks() const
     {
         return mpEditViewCallbacks;
     }
 
-    void setEditViewCallbacks(const EditViewCallbacks* pEditViewCallbacks)
+    void setEditViewCallbacks(EditViewCallbacks* pEditViewCallbacks)
     {
         mpEditViewCallbacks = pEditViewCallbacks;
     }
