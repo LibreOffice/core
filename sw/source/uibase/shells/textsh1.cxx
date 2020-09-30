@@ -1182,7 +1182,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR2:
         {
             Color aSet;
-            OUString sColor;
             const SfxPoolItem* pColorStringItem = nullptr;
             bool bHasItem = false;
 
@@ -1193,7 +1192,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
-                sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
                 aSet = Color(sColor.toInt32(16));
                 bHasItem = true;
             }
@@ -1220,12 +1219,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_EXT:
         {
             Color aSet;
-            OUString sColor;
             const SfxPoolItem* pColorStringItem = nullptr;
 
             if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             {
-                sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
+                OUString sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
                 if (sColor == "transparent")
                     aSet = COL_TRANSPARENT;
                 else
@@ -2053,10 +2051,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_OUTLINE_RULE_INDEX:
         {
             SwNumRule* pCurRule = const_cast<SwNumRule*>(GetShell().GetNumRuleAtCurrCursorPos());
-            sal_uInt16  nActNumLvl = USHRT_MAX;
             if( pCurRule )
             {
-                nActNumLvl = GetShell().GetNumLevel();
+                sal_uInt16 nActNumLvl = GetShell().GetNumLevel();
                 if( nActNumLvl < MAXLEVEL )
                 {
                     nActNumLvl = 1<<nActNumLvl;

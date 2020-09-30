@@ -295,11 +295,11 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
 bool SwFieldPortion::Format( SwTextFormatInfo &rInf )
 {
     // Scope wegen aDiffText::DTOR!
-    TextFrameIndex nRest;
     bool bFull = false;
     bool bEOL = false;
     TextFrameIndex const nTextRest = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
     {
+        TextFrameIndex nRest;
         SwFieldSlot aDiffText( &rInf, this );
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
         aLayoutModeModifier.SetAuto();

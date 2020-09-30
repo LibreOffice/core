@@ -4443,11 +4443,10 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
 
 void SwDoc::UnProtectCells( const OUString& rName )
 {
-    bool bChgd = false;
     SwTableFormat* pFormat = FindTableFormatByName( rName );
     if( pFormat )
     {
-        bChgd = UnProtectTableCells( *SwTable::FindTable( pFormat ) );
+        bool bChgd = UnProtectTableCells( *SwTable::FindTable( pFormat ) );
         if( bChgd )
             getIDocumentState().SetModified();
     }
