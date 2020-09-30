@@ -1347,6 +1347,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf77236_MissingSolidFill, "tdf77236_MissingSolidFi
     assertXPath(pXmlDoc, "//mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotationWithFlip, "tdf105875_VmlShapeRotationWithFlip.docx")
+{
+    // tdf#105875: check whether the rotation of the VML bezier shape is ok (with flip too)
+    // TODO: fix export too
+    if (mbExported)
+        return;
+
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPropertySet->getPropertyValue("RotateAngle").get<sal_Int32>());
+    }
+
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(2), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(220 * 100), xPropertySet->getPropertyValue("RotateAngle").get<sal_Int32>(), 1);
+    }
+
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(3), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(320 * 100), xPropertySet->getPropertyValue("RotateAngle").get<sal_Int32>(), 1);
+    }
+
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(4), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(140 * 100), xPropertySet->getPropertyValue("RotateAngle").get<sal_Int32>(), 1);
+    }
+
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(getShape(5), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(40 * 100), xPropertySet->getPropertyValue("RotateAngle").get<sal_Int32>(), 1);
+    }
+
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
