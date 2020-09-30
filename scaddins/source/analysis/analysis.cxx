@@ -24,10 +24,10 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
-#include <rtl/ref.hxx>
 #include <sal/macros.h>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -42,10 +42,6 @@
 using namespace                 ::com::sun::star;
 using namespace sca::analysis;
 using namespace std;
-
-static osl::Mutex g_InstanceMutex;
-static rtl::Reference<AnalysisAddIn> g_Instance;
-static bool g_Disposed;
 
 OUString AnalysisAddIn::GetFuncDescrStr(const char** pResId, sal_uInt16 nStrIndex)
 {
@@ -70,14 +66,6 @@ AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xC
 
 AnalysisAddIn::~AnalysisAddIn()
 {
-}
-
-void AnalysisAddIn::dispose()
-{
-    AnalysisAddIn_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceMutex);
-    g_Instance.clear();
-    g_Disposed = true;
 }
 
 sal_Int32 AnalysisAddIn::getDateMode(
@@ -1069,13 +1057,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_AnalysisAddIn_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceMutex);
-    if (g_Disposed)
-        return nullptr;
-    if (!g_Instance)
-        g_Instance.set(new AnalysisAddIn(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new AnalysisAddIn(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

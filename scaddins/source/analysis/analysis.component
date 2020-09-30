@@ -20,10 +20,8 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.sheet.addin.AnalysisImpl"
-    constructor="scaddins_AnalysisAddIn_get_implementation">
+    constructor="scaddins_AnalysisAddIn_get_implementation" single-instance="true">
     <service name="com.sun.star.sheet.AddIn"/>
     <service name="com.sun.star.sheet.addin.Analysis"/>
-    <!-- fake singleton so that the servicemanager calls dispose() on the component and we can free the global var -->
-    <singleton name="com.sun.star.sheet.addin.theAnalysis"/>
   </implementation>
 </component>

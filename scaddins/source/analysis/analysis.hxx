@@ -78,9 +78,6 @@ public:
 
     virtual                     ~AnalysisAddIn() override;
 
-    // XComponent
-    virtual void SAL_CALL       dispose() override;
-
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     double                      FactDouble( sal_Int32 nNum );
