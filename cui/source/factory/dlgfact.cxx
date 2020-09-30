@@ -1602,7 +1602,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDia
 
 VclPtr<SvxAbstractSplitTableDialog> AbstractDialogFactory_Impl::CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical)
 {
-    return VclPtr<SvxSplitTableDlg>::Create( pParent, bIsTableVertical, nMaxVertical, 99 );
+    return VclPtr<SvxAbstractSplitTableDialog_Impl>::Create( std::make_shared<SvxSplitTableDlg>(pParent, bIsTableVertical, nMaxVertical, 99 ));
 }
 
 std::shared_ptr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvxNewTableDialog(weld::Window* pParent)
