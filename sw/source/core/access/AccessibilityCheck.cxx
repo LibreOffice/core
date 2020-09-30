@@ -94,7 +94,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                       sfx::AccessibilityIssueID::NO_ALT_OLE);
-            pIssue->setDoc(&pNoTextNode->GetDoc());
+            pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::OLE);
             pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
         }
@@ -102,7 +102,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                       sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
-            pIssue->setDoc(&pNoTextNode->GetDoc());
+            pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::GRAPHIC);
             pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
         }
@@ -136,7 +136,7 @@ private:
         OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
         auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                   sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT);
-        pIssue->setDoc(&rDoc);
+        pIssue->setDoc(rDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
         pIssue->setObjectID(sName);
     }
@@ -527,7 +527,7 @@ public:
         pIssue->setIssueObject(IssueObject::TEXT);
         pIssue->setNode(pTextNode);
         SwDoc& rDocument = pTextNode->GetDoc();
-        pIssue->setDoc(&rDocument);
+        pIssue->setDoc(rDocument);
         pIssue->setStart(pTextAttr->GetStart());
         pIssue->setEnd(pTextAttr->GetAnyEnd());
     }

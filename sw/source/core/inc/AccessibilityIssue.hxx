@@ -41,7 +41,7 @@ public:
     AccessibilityIssue(sfx::AccessibilityIssueID eIssueID = sfx::AccessibilityIssueID::UNSPECIFIED);
 
     void setIssueObject(IssueObject eIssueObject);
-    void setDoc(SwDoc* pDoc);
+    void setDoc(SwDoc& rDoc);
     void setObjectID(OUString const& rID);
     void setNode(SwNode* pNode) { m_pNode = pNode; }
 

@@ -26,7 +26,7 @@ AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID)
 
 void AccessibilityIssue::setIssueObject(IssueObject eIssueObject) { m_eIssueObject = eIssueObject; }
 
-void AccessibilityIssue::setDoc(SwDoc* pDoc) { m_pDoc = pDoc; }
+void AccessibilityIssue::setDoc(SwDoc& rDoc) { m_pDoc = &rDoc; }
 
 void AccessibilityIssue::setObjectID(OUString const& rID) { m_sObjectID = rID; }
 
