@@ -29,16 +29,12 @@
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ref.hxx>
 
 #include <algorithm>
 #include <iterator>
 #include <vector>
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<drivermanager::OSDBCDriverManager> g_Instance;
-static bool g_Disposed = false;
 
 namespace drivermanager
 {
@@ -257,15 +253,6 @@ OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _r
 
 OSDBCDriverManager::~OSDBCDriverManager()
 {
-}
-
-// XComponent
-void SAL_CALL OSDBCDriverManager::dispose()
-{
-    OSDBCDriverManager_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
-    g_Disposed = true;
 }
 
 void OSDBCDriverManager::bootstrapDrivers()
@@ -671,13 +658,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_OSDBCDriverManager_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (g_Disposed)
-        return nullptr;
-    if (!g_Instance)
-        g_Instance.set(new drivermanager::OSDBCDriverManager(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(
+        static_cast<cppu::OWeakObject*>(new drivermanager::OSDBCDriverManager(context)));
 }
 
 
