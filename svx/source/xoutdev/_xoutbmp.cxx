@@ -112,7 +112,6 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
         OUString        aExt;
         GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
         ErrCode         nErr = ERRCODE_GRFILTER_FILTERERROR;
-        sal_uInt16      nFilter = GRFILTER_FORMAT_NOTFOUND;
         bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
@@ -221,7 +220,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             if( bWriteTransGrf )
                 aFilter = FORMAT_GIF;
 
-            nFilter = rFilter.GetExportFormatNumberForShortName( aFilter );
+            sal_uInt16 nFilter = rFilter.GetExportFormatNumberForShortName( aFilter );
 
             if( GRFILTER_FORMAT_NOTFOUND == nFilter )
             {

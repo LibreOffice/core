@@ -200,11 +200,9 @@ bool SvxXMLXTableExportComponent::save(
     bool bRet = false;
     std::unique_ptr<SfxMedium> pMedium;
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper;
-    sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
     INetURLObject aURLObj( rURL );
     bool bToStorage = aURLObj.GetProtocol() == INetProtocol::NotValid; // a relative path
-
     bool bSaveAsStorage = xTable->getElementType() == cppu::UnoType<awt::XBitmap>::get();
 
     if( pOptName )
@@ -220,6 +218,7 @@ bool SvxXMLXTableExportComponent::save(
         uno::Reference < io::XOutputStream > xOut;
         uno::Reference<embed::XStorage > xSubStorage;
         uno::Reference<XGraphicStorageHandler> xGraphicStorageHandler;
+        const sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
         if( !bToStorage || !xStorage.is() )
         { // local URL -> SfxMedium route

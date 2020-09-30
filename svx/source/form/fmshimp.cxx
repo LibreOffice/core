@@ -3082,7 +3082,6 @@ void FmXFormShell::CreateExternalView_Lock()
     // the frame the external view is displayed in
     bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< css::frame::XFrame> xExternalViewFrame;
-    OUString sFrameName("_beamer");
 
     Reference<runtime::XFormController> xCurrentNavController(getNavController_Lock());
         // the creation of the "partwindow" may cause a deactivate of the document which will result in our nav controller to be set to NULL
@@ -3123,6 +3122,7 @@ void FmXFormShell::CreateExternalView_Lock()
     // load the component for external form views
     if (!bAlreadyExistent)
     {
+        OUString sFrameName("_beamer");
         URL aWantToDispatch;
         aWantToDispatch.Complete = FMURL_COMPONENT_FORMGRIDVIEW;
 
