@@ -256,7 +256,7 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
         return nResult;
     }
 
-    m_pDoc = rPaM.GetDoc();
+    m_pDoc = &rPaM.GetDoc();
     m_pOrigFileName = pFName;
     m_pImpl->m_pStream = &rStrm;
 
@@ -495,7 +495,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
 {
     SetStream(nullptr);
     m_pStg = &rStg;
-    m_pDoc = rPaM.GetDoc();
+    m_pDoc = &rPaM.GetDoc();
     m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified
@@ -518,7 +518,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >&
     SetStream(nullptr);
     m_pStg = nullptr;
     m_xStg = rStg;
-    m_pDoc = rPaM.GetDoc();
+    m_pDoc = &rPaM.GetDoc();
     m_pOrigFileName = pFName;
 
     // Copy PaM, so that it can be modified

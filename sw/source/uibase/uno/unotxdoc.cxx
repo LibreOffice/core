@@ -226,15 +226,15 @@ static std::unique_ptr<SwPrintUIOptions> lcl_GetPrintUIOptions(
     return std::make_unique<SwPrintUIOptions>( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
-static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc* pDoc)
+static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc& rDoc)
 {
-    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName( rCollName );
+    SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rCollName );
     if( !pColl )
     {
         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
             rCollName, SwGetPoolIdFromName::TxtColl );
         if( USHRT_MAX != nId )
-            pColl = pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
+            pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
     }
     return pColl;
 }

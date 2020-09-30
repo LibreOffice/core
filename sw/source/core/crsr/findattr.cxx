@@ -1057,7 +1057,7 @@ static bool FindAttrsImpl(SwPaM & rSearchPam,
 
     // check which text/char attributes are searched
     SwAttrCheckArr aCmpArr( rSet, bSrchForward, bNoColls );
-    SfxItemSet aOtherSet( rSearchPam.GetDoc()->GetAttrPool(),
+    SfxItemSet aOtherSet( rSearchPam.GetDoc().GetAttrPool(),
                             svl::Items<RES_PARATR_BEGIN, RES_GRFATR_END-1>{} );
     aOtherSet.Put( rSet, false );   // got all invalid items
 
@@ -1347,7 +1347,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             xRepl = sw::ReplaceBackReferences(*pSearchOpt, &rCursor, m_pLayout);
         sw::ReplaceImpl(rCursor,
                 xRepl ? *xRepl : pSearchOpt->replaceString, bRegExp,
-                *m_rCursor.GetDoc(), m_pLayout);
+                m_rCursor.GetDoc(), m_pLayout);
 
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
@@ -1372,7 +1372,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
         // they are not in ReplaceSet
         if( !pSet->Count() )
         {
-            rCursor.GetDoc()->getIDocumentContentOperations().InsertItemSet(
+            rCursor.GetDoc().getIDocumentContentOperations().InsertItemSet(
                     rCursor, *pReplSet, SetAttrMode::DEFAULT, m_pLayout);
         }
         else
@@ -1392,7 +1392,7 @@ int SwFindParaAttr::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
                 pItem = aIter.NextItem();
             } while (pItem);
             aSet.Put( *pReplSet );
-            rCursor.GetDoc()->getIDocumentContentOperations().InsertItemSet(
+            rCursor.GetDoc().getIDocumentContentOperations().InsertItemSet(
                     rCursor, aSet, SetAttrMode::DEFAULT, m_pLayout);
         }
 
@@ -1417,30 +1417,30 @@ sal_uLong SwCursor::FindAttrs( const SfxItemSet& rSet, bool bNoCollections,
                           SwRootFrame const*const pLayout)
 {
     // switch off OLE-notifications
-    SwDoc* pDoc = GetDoc();
-    Link<bool,void> aLnk( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link<bool,void>() );
+    SwDoc& rDoc = GetDoc();
+    Link<bool,void> aLnk( rDoc.GetOle2Link() );
+    rDoc.SetOle2Link( Link<bool,void>() );
 
     bool bReplace = ( pSearchOpt && ( !pSearchOpt->replaceString.isEmpty() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
-    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
+    bool const bStartUndo = rDoc.GetIDocumentUndoRedo().DoesUndo() && bReplace;
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
+        rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
     }
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this, pLayout );
 
     sal_uLong nRet = FindAll( aSwFindParaAttr, nStart, nEnd, eFndRngs, bCancel );
-    pDoc->SetOle2Link( aLnk );
+    rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, nullptr );
+        rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, nullptr );
     }
 
     return nRet;

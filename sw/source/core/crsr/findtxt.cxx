@@ -976,7 +976,7 @@ int SwFindParaText::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnMove,
             xRepl = sw::ReplaceBackReferences(m_rSearchOpt, &rCursor, m_pLayout);
         bool const bReplaced = sw::ReplaceImpl(rCursor,
                 xRepl ? *xRepl : m_rSearchOpt.replaceString,
-                bRegExp, *m_rCursor.GetDoc(), m_pLayout);
+                bRegExp, m_rCursor.GetDoc(), m_pLayout);
 
         m_rCursor.SaveTableBoxContent( rCursor.GetPoint() );
 
@@ -1016,14 +1016,14 @@ sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
                           SwRootFrame const*const pLayout)
 {
     // switch off OLE-notifications
-    SwDoc* pDoc = GetDoc();
-    Link<bool,void> aLnk( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link<bool,void>() );
+    SwDoc& rDoc = GetDoc();
+    Link<bool,void> aLnk( rDoc.GetOle2Link() );
+    rDoc.SetOle2Link( Link<bool,void>() );
 
-    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
+    bool const bStartUndo = rDoc.GetIDocumentUndoRedo().DoesUndo() && bReplace;
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
+        rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::REPLACE, nullptr );
     }
 
     bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
@@ -1031,15 +1031,15 @@ sal_uLong SwCursor::Find_Text( const i18nutil::SearchOptions2& rSearchOpt, bool 
         eFndRngs = static_cast<FindRanges>(eFndRngs | FindRanges::InSel);
     SwFindParaText aSwFindParaText(rSearchOpt, bSearchInNotes, bReplace, *this, pLayout);
     sal_uLong nRet = FindAll( aSwFindParaText, nStart, nEnd, eFndRngs, bCancel );
-    pDoc->SetOle2Link( aLnk );
+    rDoc.SetOle2Link( aLnk );
     if( nRet && bReplace )
-        pDoc->getIDocumentState().SetModified();
+        rDoc.getIDocumentState().SetModified();
 
     if (bStartUndo)
     {
         SwRewriter rewriter(MakeUndoReplaceRewriter(
                 nRet, rSearchOpt.searchString, rSearchOpt.replaceString));
-        pDoc->GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, & rewriter );
+        rDoc.GetIDocumentUndoRedo().EndUndo( SwUndoId::REPLACE, & rewriter );
     }
     return nRet;
 }

@@ -1125,7 +1125,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
-            aCursor.GetDoc()->ResetAttrs(aCursor, true, aWhichIds);
+            aCursor.GetDoc().ResetAttrs(aCursor, true, aWhichIds);
         }
         else
         {
@@ -1133,7 +1133,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
             // to paragraph boundaries
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
-            auto pTemp( aCursor.GetDoc()->CreateUnoCursor(aStart) );
+            auto pTemp( aCursor.GetDoc().CreateUnoCursor(aStart) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {
                 pTemp->MovePara(GoCurrPara, fnParaStart);
@@ -1150,7 +1150,7 @@ SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
             }
 
 
-            pTemp->GetDoc()->ResetAttrs(*pTemp, true, aWhichIds);
+            pTemp->GetDoc().ResetAttrs(*pTemp, true, aWhichIds);
         }
     }
     else

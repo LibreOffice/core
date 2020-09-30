@@ -1381,7 +1381,7 @@ bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                 SwPaM aCpyPam( rSrcNd, nSrcFrom );
                 aCpyPam.SetMark();
                 aCpyPam.GetPoint()->nContent = nSrcTo;
-                aCpyPam.GetDoc()->getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
+                aCpyPam.GetDoc().getIDocumentContentOperations().CopyRange( aCpyPam, *aPam.GetPoint(),
                     SwCopyFlags::CheckPosInFly);
                 rDstDoc.GetIDocumentUndoRedo().DoUndo( bUndo );
 
@@ -1942,24 +1942,24 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
 sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 {
     sal_uInt16 nIns = 0;
-    SwDoc* pDoc = pDestRedl->GetDoc();
+    SwDoc& rDoc = pDestRedl->GetDoc();
 
     if( RedlineType::Insert == pDestRedl->GetType() )
     {
         // the part was inserted so copy it from the SourceDoc
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
         const sal_Int32 nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
 
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
-        pSrcRedl->GetDoc()->getIDocumentContentOperations().CopyRange(
+        pSrcRedl->GetDoc().getIDocumentContentOperations().CopyRange(
                 *const_cast<SwPaM*>(static_cast<const SwPaM*>(pSrcRedl)),
                 *pDestRedl->GetPoint(), SwCopyFlags::CheckPosInFly);
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 
         pDestRedl->SetMark();
         ++aSaveNd;
@@ -1979,10 +1979,10 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         SwRedlineTable::size_type n = 0;
 
             // find the first redline for StartPos
-        if( !pDoc->getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n )
+        if( !rDoc.getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n )
             --n;
 
-        const SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        const SwRedlineTable& rRedlineTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         for( ; n < rRedlineTable.size(); ++n )
         {
             SwRangeRedline* pRedl = rRedlineTable[ n ];
@@ -2020,14 +2020,14 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                         *pCpyRedl->GetPoint() = *pRStt;
 
                         std::unique_ptr<SwUndoCompDoc> pUndo;
-                        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+                        if (rDoc.GetIDocumentUndoRedo().DoesUndo())
                             pUndo.reset(new SwUndoCompDoc( *pCpyRedl ));
 
                         // now modify doc: append redline, undo (and count)
-                        pDoc->getIDocumentRedlineAccess().AppendRedline( pCpyRedl, true );
+                        rDoc.getIDocumentRedlineAccess().AppendRedline( pCpyRedl, true );
                         if( pUndo )
                         {
-                            pDoc->GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
+                            rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
                         }
                         ++nIns;
 
@@ -2056,15 +2056,15 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
     if( pDestRedl )
     {
         std::unique_ptr<SwUndoCompDoc> pUndo;
-        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+        if (rDoc.GetIDocumentUndoRedo().DoesUndo())
             pUndo.reset(new SwUndoCompDoc( *pDestRedl ));
 
         // now modify doc: append redline, undo (and count)
         IDocumentRedlineAccess::AppendResult const result(
-            pDoc->getIDocumentRedlineAccess().AppendRedline(pDestRedl, true));
+            rDoc.getIDocumentRedlineAccess().AppendRedline(pDestRedl, true));
         if( pUndo )
         {
-            pDoc->GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
+            rDoc.GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
         ++nIns;
 

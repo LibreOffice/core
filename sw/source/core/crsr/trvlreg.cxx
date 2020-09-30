@@ -38,7 +38,7 @@ bool GotoPrevRegion( SwPaM& rCurrentCursor, SwMoveFnCollection const & fnPosRegi
         aIdx.Assign( *pNd, - 1 );
 
     SwNodeIndex aOldIdx = aIdx;
-    sal_uLong nLastNd = rCurrentCursor.GetDoc()->GetNodes().Count() - 1;
+    sal_uLong nLastNd = rCurrentCursor.GetDoc().GetNodes().Count() - 1;
     do {
         while( aIdx.GetIndex() )
         {
@@ -245,7 +245,7 @@ bool SwCursorShell::MoveRegion( SwWhichRegion fnWhichRegion, SwMoveFnCollection 
 bool SwCursor::GotoRegion( const OUString& rName )
 {
     bool bRet = false;
-    const SwSectionFormats& rFormats = GetDoc()->GetSections();
+    const SwSectionFormats& rFormats = GetDoc().GetSections();
     for( SwSectionFormats::size_type n = rFormats.size(); n; )
     {
         const SwSectionFormat* pFormat = rFormats[ --n ];

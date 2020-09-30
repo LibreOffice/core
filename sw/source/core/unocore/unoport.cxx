@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 {
-    m_pUnoCursor = pPortionCursor->GetDoc()->CreateUnoCursor(*pPortionCursor->GetPoint());
+    m_pUnoCursor = pPortionCursor->GetDoc().CreateUnoCursor(*pPortionCursor->GetPoint());
     if (pPortionCursor->HasMark())
     {
         m_pUnoCursor->SetMark();
@@ -356,7 +356,7 @@ void SwXTextPortion::GetPropertyValue(
                 if(!pSet)
                 {
                     pSet = std::make_unique<SfxItemSet>(
-                        pUnoCursor->GetDoc()->GetAttrPool(),
+                        pUnoCursor->GetDoc().GetAttrPool(),
                         svl::Items<
                             RES_CHRATR_BEGIN, RES_FRMATR_END - 1,
                             RES_UNKNOWNATR_CONTAINER,

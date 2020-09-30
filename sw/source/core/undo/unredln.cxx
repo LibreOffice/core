@@ -35,12 +35,12 @@
 #include <docedt.hxx>
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
-    : SwUndo( SwUndoId::REDLINE, rRange.GetDoc() ), SwUndRng( rRange ),
+    : SwUndo( SwUndoId::REDLINE, &rRange.GetDoc() ), SwUndRng( rRange ),
     mnUserId( nUsrId ),
     mbHiddenRedlines( false )
 {
     // consider Redline
-    SwDoc& rDoc = *rRange.GetDoc();
+    SwDoc& rDoc = rRange.GetDoc();
     if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         switch( mnUserId )
@@ -380,28 +380,28 @@ void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, bool bIns )
-    : SwUndo( SwUndoId::COMPAREDOC, rRg.GetDoc() ), SwUndRng( rRg ),
+    : SwUndo( SwUndoId::COMPAREDOC, &rRg.GetDoc() ), SwUndRng( rRg ),
     m_bInsert( bIns )
 {
-    SwDoc* pDoc = rRg.GetDoc();
-    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    SwDoc& rDoc = rRg.GetDoc();
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         RedlineType eTyp = m_bInsert ? RedlineType::Insert : RedlineType::Delete;
-        m_pRedlineData.reset( new SwRedlineData( eTyp, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
-        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+        m_pRedlineData.reset( new SwRedlineData( eTyp, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
 
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
-    : SwUndo( SwUndoId::COMPAREDOC, rRedl.GetDoc() ), SwUndRng( rRedl ),
+    : SwUndo( SwUndoId::COMPAREDOC, &rRedl.GetDoc() ), SwUndRng( rRedl ),
     // for MergeDoc the corresponding inverse is needed
     m_bInsert( RedlineType::Delete == rRedl.GetType() )
 {
-    SwDoc* pDoc = rRedl.GetDoc();
-    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    SwDoc& rDoc = rRedl.GetDoc();
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
         m_pRedlineData.reset( new SwRedlineData( rRedl.GetRedlineData() ) );
-        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
     m_pRedlineSaveDatas.reset( new SwRedlineSaveDatas );

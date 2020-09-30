@@ -2357,7 +2357,7 @@ WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
     , mnCpStart(nCpStart)
     , mnCpEnd(nCpEnd)
     , mPaM(*rPaM.GetMark(), *rPaM.GetPoint())
-    , mItemSet(rPaM.GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{})
+    , mItemSet(rPaM.GetDoc().GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_PARATR_END - 1>{})
 {
 }
 

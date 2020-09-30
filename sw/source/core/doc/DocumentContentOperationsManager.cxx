@@ -142,7 +142,7 @@ namespace
     {
         SwNodeIndex const& rStart(rSourcePaM.Start()->nNode);
         // Special handling for SwDoc::AppendDoc
-        if (rSourcePaM.GetDoc()->GetNodes().GetEndOfExtras().GetIndex() + 1
+        if (rSourcePaM.GetDoc().GetNodes().GetEndOfExtras().GetIndex() + 1
                 == rStart.GetIndex())
         {
             rDelCount = 1;
@@ -233,9 +233,9 @@ namespace sw
     // TODO: use SaveBookmark (from DelBookmarks)
     void CopyBookmarks(const SwPaM& rPam, SwPosition& rCpyPam)
     {
-        const SwDoc* pSrcDoc = rPam.GetDoc();
+        const SwDoc& rSrcDoc = rPam.GetDoc();
         SwDoc* pDestDoc =  rCpyPam.GetDoc();
-        const IDocumentMarkAccess* const pSrcMarkAccess = pSrcDoc->getIDocumentMarkAccess();
+        const IDocumentMarkAccess* const pSrcMarkAccess = rSrcDoc.getIDocumentMarkAccess();
         ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
@@ -336,12 +336,12 @@ namespace
 {
     void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
     {
-        const SwDoc* pSrcDoc = rPam.GetDoc();
-        const SwRedlineTable& rTable = pSrcDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        const SwDoc& rSrcDoc = rPam.GetDoc();
+        const SwRedlineTable& rTable = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTable();
         if( rTable.empty() )
             return;
 
-        SwDoc* pDestDoc = rCpyPam.GetDoc();
+        SwDoc& rDestDoc = rCpyPam.GetDoc();
         SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
         std::unique_ptr<SwPaM> pDelPam;
         const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
@@ -350,7 +350,7 @@ namespace
         SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
 
         SwRedlineTable::size_type n = 0;
-        pSrcDoc->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
+        rSrcDoc.getIDocumentRedlineAccess().GetRedline( *pStt, &n );
         for( ; n < rTable.size(); ++n )
         {
             const SwRangeRedline* pRedl = rTable[ n ];
@@ -405,19 +405,19 @@ namespace
         if( !pDelPam )
             return;
 
-        RedlineFlags eOld = pDestDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
+        RedlineFlags eOld = rDestDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDestDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::Ignore );
 
-        ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
+        ::sw::UndoGuard const undoGuard(rDestDoc.GetIDocumentUndoRedo());
 
         do {
-            pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
+            rDestDoc.getIDocumentContentOperations().DeleteAndJoin( *pDelPam->GetNext() );
             if( !pDelPam->IsMultiSelection() )
                 break;
             delete pDelPam->GetNext();
         } while( true );
 
-        pDestDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        rDestDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange const & rCpyRg )
@@ -508,7 +508,7 @@ namespace sw
         sal_uLong const nStartNode(rPam.Start()->nNode.GetIndex());
         sal_uLong const nEndNode(rPam.End()->nNode.GetIndex());
         SwNodes const& rNodes(rPam.GetPoint()->nNode.GetNodes());
-        IDocumentMarkAccess const& rIDMA(*rPam.GetDoc()->getIDocumentMarkAccess());
+        IDocumentMarkAccess const& rIDMA(*rPam.GetDoc().getIDocumentMarkAccess());
 
         std::stack<std::tuple<sw::mark::IFieldmark const*, bool, sal_uLong, sal_Int32>> startedFields;
 

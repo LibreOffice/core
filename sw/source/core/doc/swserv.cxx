@@ -275,7 +275,7 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 }
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
-    : m_pPam( &rPam ), m_pPos( nullptr ), m_pDoc( rPam.GetDoc() )
+    : m_pPam( &rPam ), m_pPos( nullptr ), m_pDoc( &rPam.GetDoc() )
 {
     m_nContent = rPam.GetPoint()->nContent.GetIndex();
 }

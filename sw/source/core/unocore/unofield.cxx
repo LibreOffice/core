@@ -2059,7 +2059,7 @@ void SAL_CALL SwXTextField::attach(
                         OSL_ENSURE( pField != nullptr, "<SwXTextField::attach(..)> - annotation field missing!" );
                         if ( pField != nullptr )
                         {
-                            IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc()->getIDocumentMarkAccess();
+                            IDocumentMarkAccess* pMarksAccess = aIntPam.GetDoc().getIDocumentMarkAccess();
                             pMarksAccess->makeAnnotationMark( aIntPam, pField->GetName() );
                         }
                     }

@@ -486,7 +486,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     rSh.SetRedlineComment(sCommentText);
                     GetView().AttrChangedNotify(nullptr);
-                    MaybeNotifyRedlineModification(const_cast<SwRangeRedline*>(pRedline), pRedline->GetDoc());
+                    MaybeNotifyRedlineModification(const_cast<SwRangeRedline&>(*pRedline), pRedline->GetDoc());
                     break;
                 }
 

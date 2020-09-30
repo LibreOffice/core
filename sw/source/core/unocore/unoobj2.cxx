@@ -225,7 +225,7 @@ static SwDoc * lcl_IsNewStyleTable(SwUnoTableCursor const& rCursor)
 {
     SwTableNode *const pTableNode = rCursor.GetNode().FindTableNode();
     return (pTableNode && !pTableNode->GetTable().IsNewModel())
-        ? rCursor.GetDoc()
+        ? &rCursor.GetDoc()
         : nullptr;
 }
 
@@ -257,12 +257,12 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
         const SetAttrMode nAttrMode, const bool bTableMode)
 {
     const SetAttrMode nFlags = nAttrMode | SetAttrMode::APICALL;
-    SwDoc* pDoc = rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     //StartEndAction
-    UnoActionContext aAction(pDoc);
+    UnoActionContext aAction(&rDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSATTR, nullptr);
+        rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSATTR, nullptr);
 
         for(SwPaM& rCurrent : rPam.GetRingContainer())
         {
@@ -270,15 +270,15 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
                 ( bTableMode ||
                   (*rCurrent.GetPoint() != *rCurrent.GetMark()) ))
             {
-                pDoc->getIDocumentContentOperations().InsertItemSet(rCurrent, rSet, nFlags);
+                rDoc.getIDocumentContentOperations().InsertItemSet(rCurrent, rSet, nFlags);
             }
         }
 
-        pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSATTR, nullptr);
+        rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSATTR, nullptr);
     }
     else
     {
-        pDoc->getIDocumentContentOperations().InsertItemSet( rPam, rSet, nFlags );
+        rDoc.getIDocumentContentOperations().InsertItemSet( rPam, rSet, nFlags );
     }
 
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SfxItemState::DEFAULT )
@@ -286,7 +286,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
         SwTextNode * pTmpNode = rPam.GetNode().GetTextNode();
         if ( pTmpNode )
         {
-            rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
+            rPam.GetDoc().GetNodes().UpdateOutlineNode( *pTmpNode );
         }
     }
 }
@@ -318,7 +318,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
         // all other nodes merge their values into the get set
         for (sal_uLong n = nSttNd; n <= nEndNd; ++n)
         {
-            SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
+            SwNode *const pNd = rPam.GetDoc().GetNodes()[ n ];
             switch (pNd->GetNodeType())
             {
                 case SwNodeType::Text:
@@ -527,7 +527,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
          (CursorType::SelectionInTable == m_eCursorType)))
     {
         SwPosition* pStart = rUnoCursor.Start();
-        auto aNewCursor(rUnoCursor.GetDoc()->CreateUnoCursor(*pStart));
+        auto aNewCursor(rUnoCursor.GetDoc().CreateUnoCursor(*pStart));
         // one may also go into tables here
         if (CursorType::SelectionInTable != m_eCursorType)
         {
@@ -613,7 +613,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         else
         {
             text::XText *const pText = m_xParentText.get();
-            xRef = SwXParagraph::CreateXParagraph(*rUnoCursor.GetDoc(),
+            xRef = SwXParagraph::CreateXParagraph(rUnoCursor.GetDoc(),
                 pStart->nNode.GetNode().GetTextNode(),
                 static_cast<SwXText*>(pText), nFirstContent, nLastContent);
         }
@@ -709,7 +709,7 @@ void SwXTextRange::Impl::Notify(const SfxHint& rHint)
 SwXTextRange::SwXTextRange(SwPaM const & rPam,
         const uno::Reference< text::XText > & xParent,
         const enum RangePosition eRange)
-    : m_pImpl( new SwXTextRange::Impl(*rPam.GetDoc(), eRange, nullptr, xParent) )
+    : m_pImpl( new SwXTextRange::Impl(rPam.GetDoc(), eRange, nullptr, xParent) )
 {
     SetPositions(rPam);
 }
@@ -982,7 +982,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         pCursor =
             comphelper::getUnoTunnelImplementation<OTextCursorHelper>(xTextCursor);
     }
-    if(pRange && &pRange->GetDoc() == rToFill.GetDoc())
+    if(pRange && &pRange->GetDoc() == &rToFill.GetDoc())
     {
         bRet = pRange->GetPositions(rToFill);
     }
@@ -995,10 +995,10 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         else
         {
             SwDoc* const pDoc = pCursor ? pCursor->GetDoc()
-                : (pPortion ? pPortion->GetCursor().GetDoc() : nullptr);
+                : (pPortion ? &pPortion->GetCursor().GetDoc() : nullptr);
             const SwPaM* const pUnoCursor = pCursor ? pCursor->GetPaM()
                 : (pPortion ? &pPortion->GetCursor() : nullptr);
-            if (pUnoCursor && pDoc == rToFill.GetDoc())
+            if (pUnoCursor && pDoc == &rToFill.GetDoc())
             {
                 OSL_ENSURE(!pUnoCursor->IsMultiSelection(),
                         "what to do about rings?");
@@ -1420,7 +1420,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
     {
         if (pPaM)
         {
-            m_pUnoCursor.reset(pPaM->GetDoc()->CreateUnoCursor(*pPaM->GetPoint()));
+            m_pUnoCursor.reset(pPaM->GetDoc().CreateUnoCursor(*pPaM->GetPoint()));
             ::sw::DeepCopyPaM(*pPaM, *GetCursor());
         }
         MakeRanges();
@@ -1448,7 +1448,7 @@ void SwXTextRangesImpl::MakeRanges()
     {
         const uno::Reference< text::XTextRange > xRange(
                 SwXTextRange::CreateXTextRange(
-                    *rTmpCursor.GetDoc(),
+                    rTmpCursor.GetDoc(),
                     *rTmpCursor.GetPoint(), rTmpCursor.GetMark()));
         if (xRange.is())
         {
@@ -1499,22 +1499,22 @@ uno::Any SAL_CALL SwXTextRangesImpl::getByIndex(sal_Int32 nIndex)
 void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
 {
     // Start/EndAction
-    SwDoc *const pDoc = rCursor.GetDoc();
-    UnoActionContext aAction(pDoc);
-    pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
+    SwDoc& rDoc = rCursor.GetDoc();
+    UnoActionContext aAction(&rDoc);
+    rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::INSERT, nullptr);
     if (rCursor.HasMark())
     {
-        pDoc->getIDocumentContentOperations().DeleteAndJoin(rCursor);
+        rDoc.getIDocumentContentOperations().DeleteAndJoin(rCursor);
     }
     if (!rString.isEmpty())
     {
         const bool bSuccess( SwUnoCursorHelper::DocInsertStringSplitCR(
-                    *pDoc, rCursor, rString, false ) );
+                    rDoc, rCursor, rString, false ) );
         OSL_ENSURE( bSuccess, "DocInsertStringSplitCR" );
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength());
     }
-    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
+    rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
 }
 
 namespace {
@@ -1571,7 +1571,7 @@ SwXParaFrameEnumeration* SwXParaFrameEnumeration::Create(const SwPaM& rPaM, cons
 SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode,
         SwFrameFormat* const pFormat)
-    : m_pUnoCursor(rPaM.GetDoc()->CreateUnoCursor(*rPaM.GetPoint()))
+    : m_pUnoCursor(rPaM.GetDoc().CreateUnoCursor(*rPaM.GetPoint()))
 {
     if (rPaM.HasMark())
     {
@@ -1596,7 +1596,7 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
         if (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode)
         {
             //get all frames that are bound at paragraph or at character
-            for(const auto& pFlyFrame : rPaM.GetDoc()->GetAllFlyFormats(&GetCursor(), false, true))
+            for(const auto& pFlyFrame : rPaM.GetDoc().GetAllFlyFormats(&GetCursor(), false, true))
             {
                 const auto pFrameFormat = const_cast<SwFrameFormat*>(&pFlyFrame->GetFormat());
                 m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
@@ -1645,7 +1645,7 @@ bool SwXParaFrameEnumerationImpl::CreateNextObject()
         const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
         OSL_ENSURE(pIdx, "where is the index?");
         SwNode const*const pNd =
-            m_pUnoCursor->GetDoc()->GetNodes()[ pIdx->GetIndex() + 1 ];
+            m_pUnoCursor->GetDoc().GetNodes()[ pIdx->GetIndex() + 1 ];
 
         if (!pNd->IsNoTextNode())
         {

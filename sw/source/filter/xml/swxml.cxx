@@ -110,7 +110,7 @@ static void lcl_EnsureValidPam( SwPaM& rPam )
         // point is not valid, so move it into the first content
         rPam.DeleteMark();
         rPam.GetPoint()->nNode =
-            *rPam.GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
+            *rPam.GetDoc().GetNodes().GetEndOfContent().StartOfSectionNode();
         ++ rPam.GetPoint()->nNode;
         rPam.Move( fnMoveForward, GoInContent ); // go into content
     }

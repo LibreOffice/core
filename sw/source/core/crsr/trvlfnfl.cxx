@@ -67,7 +67,7 @@ bool SwCursor::GotoFootnoteText()
         SwCursorSaveState aSaveState( *this );
         GetPoint()->nNode = *static_cast<SwTextFootnote*>(pFootnote)->GetStartNode();
 
-        SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection(
+        SwContentNode* pCNd = GetDoc().GetNodes().GoNextSection(
                                             &GetPoint()->nNode,
                                             true, !IsReadOnlyAvailable() );
         if( pCNd )
@@ -188,7 +188,7 @@ static bool CmpL( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt
 
 bool SwCursor::GotoNextFootnoteAnchor()
 {
-    const SwFootnoteIdxs& rFootnoteArr = GetDoc()->GetFootnoteIdxs();
+    const SwFootnoteIdxs& rFootnoteArr = GetDoc().GetFootnoteIdxs();
     const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 
@@ -261,7 +261,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
 
 bool SwCursor::GotoPrevFootnoteAnchor()
 {
-    const SwFootnoteIdxs& rFootnoteArr = GetDoc()->GetFootnoteIdxs();
+    const SwFootnoteIdxs& rFootnoteArr = GetDoc().GetFootnoteIdxs();
     const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 

@@ -27,7 +27,7 @@
 
 // MOVE
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
-    : SwUndo( SwUndoId::MOVE, rRange.GetDoc() )
+    : SwUndo( SwUndoId::MOVE, &rRange.GetDoc() )
     , SwUndRng( rRange )
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
@@ -42,9 +42,9 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     , m_bMoveRedlines(false)
 {
     // get StartNode from footnotes before delete!
-    SwDoc* pDoc = rRange.GetDoc();
-    SwTextNode* pTextNd = pDoc->GetNodes()[ m_nSttNode ]->GetTextNode();
-    SwTextNode* pEndTextNd = pDoc->GetNodes()[ m_nEndNode ]->GetTextNode();
+    SwDoc& rDoc = rRange.GetDoc();
+    SwTextNode* pTextNd = rDoc.GetNodes()[ m_nSttNode ]->GetTextNode();
+    SwTextNode* pEndTextNd = rDoc.GetNodes()[ m_nEndNode ]->GetTextNode();
 
     m_pHistory.reset( new SwHistory );
 
@@ -290,8 +290,8 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoMove::DelFootnote( const SwPaM& rRange )
 {
     // is the current move from ContentArea into the special section?
-    SwDoc* pDoc = rRange.GetDoc();
-    sal_uLong nContentStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
+    SwDoc& rDoc = rRange.GetDoc();
+    sal_uLong nContentStt = rDoc.GetNodes().GetEndOfAutotext().GetIndex();
     if( m_nMoveDestNode < nContentStt &&
         rRange.GetPoint()->nNode.GetIndex() >= nContentStt )
     {

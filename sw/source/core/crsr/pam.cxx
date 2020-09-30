@@ -698,7 +698,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
             // (TextNd, SectNd, TextNd, EndNd, TextNd )
             if( nSttIdx + 3 < nEndIdx )
             {
-                const SwSectionFormats& rFormats = GetDoc()->GetSections();
+                const SwSectionFormats& rFormats = GetDoc().GetSections();
                 for( SwSectionFormats::size_type n = rFormats.size(); n;  )
                 {
                     const SwSectionFormat* pFormat = rFormats[ --n ];
@@ -719,9 +719,9 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         }
     }
 
-    const SwDoc *pDoc = GetDoc();
+    const SwDoc& rDoc = GetDoc();
     // Legacy text/combo/checkbox: never return read-only when inside these form fields.
-    const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    const IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
     sw::mark::IFieldmark* pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
     sw::mark::IFieldmark* pB = GetMark()  ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
     // prevent the user from accidentally deleting the field itself when modifying the text.
@@ -744,7 +744,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
                 // touches fields, or fully encloses it), then don't disable editing
                 bRet = !( ( !pA || bAtStartA ) && ( !pB || bAtStartB ) );
             }
-            if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) )
+            if( !bRet && rDoc.GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) )
             {
                 // Form protection case
                 bRet = ( pA == nullptr ) || ( pB == nullptr ) || bAtStartA || bAtStartB;
@@ -760,20 +760,20 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     if (!bRet)
     {
         // Paragraph Signatures and Classification fields are read-only.
-        if (pDoc && pDoc->GetEditShell())
-            bRet = pDoc->GetEditShell()->IsCursorInParagraphMetadataField();
+        if (rDoc.GetEditShell())
+            bRet = rDoc.GetEditShell()->IsCursorInParagraphMetadataField();
     }
 
     if (!bRet &&
-        pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
+        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS))
     {
-        if (pDoc->getIDocumentMarkAccess()->isBookmarkDeleted(*this))
+        if (rDoc.getIDocumentMarkAccess()->isBookmarkDeleted(*this))
         {
             return true;
         }
     }
     if (!bRet &&
-        pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS))
+        rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FIELDS))
     {
         SwPosition const& rStart(*Start());
         SwPosition const& rEnd(*End());
@@ -817,7 +817,7 @@ SwContentNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFnCollection const & 
         bool const bInReadOnly, SwRootFrame const*const i_pLayout)
 {
     SwRootFrame const*const pLayout(i_pLayout ? i_pLayout :
-        rPam.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+        rPam.GetDoc().getIDocumentLayoutAccess().GetCurrentLayout());
     SwContentNode * pNd = nullptr;
     if( ((*rPam.GetPoint()).*fnMove.fnCmpOp)( *rPam.GetMark() ) ||
         ( *rPam.GetPoint() == *rPam.GetMark() && rbFirst ) )

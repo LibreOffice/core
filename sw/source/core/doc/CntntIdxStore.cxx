@@ -142,11 +142,11 @@ namespace
         }
         virtual void Save(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) override
         {
-            SaveBkmks(&rDoc, nNode, nContent);
-            SaveRedlines(&rDoc, nNode, nContent);
-            SaveFlys(&rDoc, nNode, nContent, bSaveFlySplit);
-            SaveUnoCursors(&rDoc, nNode, nContent);
-            SaveShellCursors(&rDoc, nNode, nContent);
+            SaveBkmks(rDoc, nNode, nContent);
+            SaveRedlines(rDoc, nNode, nContent);
+            SaveFlys(rDoc, nNode, nContent, bSaveFlySplit);
+            SaveUnoCursors(rDoc, nNode, nContent);
+            SaveShellCursors(rDoc, nNode, nContent);
         }
         virtual void Restore(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false, RestoreMode eMode = RestoreMode::All) override
         {
@@ -154,14 +154,14 @@ namespace
             updater_t aUpdater = OffsetUpdater(pCNd, nOffset);
             if (eMode & RestoreMode::NonFlys)
             {
-                RestoreBkmks(&rDoc, aUpdater);
-                RestoreRedlines(&rDoc, aUpdater);
+                RestoreBkmks(rDoc, aUpdater);
+                RestoreRedlines(rDoc, aUpdater);
                 RestoreUnoCursors(aUpdater);
                 RestoreShellCursors(aUpdater);
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(&rDoc, aUpdater, bAuto);
+                RestoreFlys(rDoc, aUpdater, bAuto);
             }
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen, RestoreMode eMode = RestoreMode::All) override
@@ -171,27 +171,27 @@ namespace
             updater_t aUpdater = LimitUpdater(pCNd, nLen, nCorrLen);
             if (eMode & RestoreMode::NonFlys)
             {
-                RestoreBkmks(&rDoc, aUpdater);
-                RestoreRedlines(&rDoc, aUpdater);
+                RestoreBkmks(rDoc, aUpdater);
+                RestoreRedlines(rDoc, aUpdater);
                 RestoreUnoCursors(aUpdater);
                 RestoreShellCursors(aUpdater);
             }
             if (eMode & RestoreMode::Flys)
             {
-                RestoreFlys(&rDoc, aUpdater, false);
+                RestoreFlys(rDoc, aUpdater, false);
             }
         }
 
         private:
-            void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            void RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater);
-            void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
-            void RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdater);
-            void SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit);
-            void RestoreFlys(SwDoc* pDoc, updater_t const & rUpdater, bool bAuto);
-            void SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
+            void SaveBkmks(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
+            void RestoreBkmks(SwDoc& rDoc, updater_t const & rUpdater);
+            void SaveRedlines(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
+            void RestoreRedlines(SwDoc& rDoc, updater_t const & rUpdater);
+            void SaveFlys(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit);
+            void RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto);
+            void SaveUnoCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
             void RestoreUnoCursors(updater_t const & rUpdater);
-            void SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent);
+            void SaveShellCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent);
             void RestoreShellCursors(updater_t const & rUpdater);
             static const SwPosition& GetRightMarkPos(::sw::mark::IMark const * pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
@@ -227,9 +227,9 @@ namespace
 #endif
 }
 
-void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
+void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
     const IDocumentMarkAccess::const_iterator_t ppBkmkEnd = pMarkAccess->getAllMarksEnd();
     for(
         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
@@ -264,9 +264,9 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCon
     }
 }
 
-void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
+void ContentIdxStoreImpl::RestoreBkmks(SwDoc& rDoc, updater_t const & rUpdater)
 {
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
     for (const MarkEntry& aEntry : m_aBkmkEntries)
     {
         if (MarkBase *const pMark = pMarkAccess->getAllMarksBegin().get()[aEntry.m_nIdx])
@@ -283,9 +283,9 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, updater_t const & rUpdater)
     }
 }
 
-void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
+void ContentIdxStoreImpl::SaveRedlines(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    SwRedlineTable const & rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwRedlineTable const & rRedlineTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     long int nIdx = 0;
     for (const SwRangeRedline* pRdl : rRedlineTable)
     {
@@ -311,9 +311,9 @@ void ContentIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
     }
 }
 
-void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdater)
+void ContentIdxStoreImpl::RestoreRedlines(SwDoc& rDoc, updater_t const & rUpdater)
 {
-    const SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    const SwRedlineTable& rRedlTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     for (const MarkEntry& aEntry : m_aRedlineEntries)
     {
         SwPosition* const pPos = aEntry.m_bOther
@@ -323,12 +323,12 @@ void ContentIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, updater_t const & rUpdate
     }
 }
 
-void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit)
+void ContentIdxStoreImpl::SaveFlys(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit)
 {
-    SwContentNode *pNode = pDoc->GetNodes()[nNode]->GetContentNode();
+    SwContentNode *pNode = rDoc.GetNodes()[nNode]->GetContentNode();
     if( !pNode )
         return;
-    SwFrame* pFrame = pNode->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+    SwFrame* pFrame = pNode->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
     if( pFrame )
     {
         // sw_redlinehide: this looks like an invalid optimisation if merged,
@@ -338,7 +338,7 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
             return; // if we have a layout and no DrawObjs, we can skip this
     }
     MarkEntry aSave = { 0, false, 0 };
-    for (const SwFrameFormat* pFrameFormat : *pDoc->GetSpzFrameFormats())
+    for (const SwFrameFormat* pFrameFormat : *rDoc.GetSpzFrameFormats())
     {
         if ( RES_FLYFRMFMT == pFrameFormat->Which() || RES_DRAWFRMFMT == pFrameFormat->Which() )
         {
@@ -369,9 +369,9 @@ void ContentIdxStoreImpl::SaveFlys(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCont
     }
 }
 
-void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t const & rUpdater, bool bAuto)
+void ContentIdxStoreImpl::RestoreFlys(SwDoc& rDoc, updater_t const & rUpdater, bool bAuto)
 {
-    SwFrameFormats* pSpz = pDoc->GetSpzFrameFormats();
+    SwFrameFormats* pSpz = rDoc.GetSpzFrameFormats();
     for (const MarkEntry& aEntry : m_aFlyEntries)
     {
         if(!aEntry.m_bOther)
@@ -400,10 +400,10 @@ void ContentIdxStoreImpl::RestoreFlys(SwDoc* pDoc, updater_t const & rUpdater, b
     }
 }
 
-void ContentIdxStoreImpl::SaveUnoCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
+void ContentIdxStoreImpl::SaveUnoCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    pDoc->cleanupUnoCursorTable();
-    for (const auto& pWeakUnoCursor : pDoc->mvUnoCursorTable)
+    rDoc.cleanupUnoCursorTable();
+    for (const auto& pWeakUnoCursor : rDoc.mvUnoCursorTable)
     {
         auto pUnoCursor(pWeakUnoCursor.lock());
         if(!pUnoCursor)
@@ -431,9 +431,9 @@ void ContentIdxStoreImpl::RestoreUnoCursors(updater_t const & rUpdater)
     }
 }
 
-void ContentIdxStoreImpl::SaveShellCursors(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent)
+void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
-    SwCursorShell* pShell = pDoc->GetEditShell();
+    SwCursorShell* pShell = rDoc.GetEditShell();
     if( !pShell )
         return;
     for(SwViewShell& rCurShell : pShell->GetRingContainer())

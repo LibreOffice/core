@@ -1902,8 +1902,8 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         SwTOXType & rTOXType, SwTOXMark & rMark, SwPaM & rPam,
         SwXTextCursor const*const pTextCursor)
 {
-    SwDoc *const pDoc( rPam.GetDoc() );
-    UnoActionContext aAction(pDoc);
+    SwDoc& rDoc(rPam.GetDoc());
+    UnoActionContext aAction(&rDoc);
     bool bMark = *rPam.GetPoint() != *rPam.GetMark();
     // n.b.: toxmarks must have either alternative text or an extent
     if (bMark && !rMark.GetAlternativeText().isEmpty())
@@ -1928,7 +1928,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // rMark gets copied into the document pool;
     // pNewTextAttr comes back with the real format
     SwTextAttr *pNewTextAttr = nullptr;
-    pDoc->getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags,
+    rDoc.getIDocumentContentOperations().InsertPoolItem(rPam, rMark, nInsertFlags,
             /*pLayout*/nullptr, /*bExpandCharToPara*/false, &pNewTextAttr);
     if (bMark && *rPam.GetPoint() > *rPam.GetMark())
     {
@@ -1942,7 +1942,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
             nullptr);
     }
 
-    m_pDoc = pDoc;
+    m_pDoc = &rDoc;
     m_pTOXMark = &pNewTextAttr->GetTOXMark();
     m_pTOXType = &rTOXType;
     EndListeningAll();

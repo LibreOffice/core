@@ -411,21 +411,21 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
 
 // Read into an existing document
 SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), mpStrm(&rStrm), mpMedium(nullptr), mpCursor(&rPam),
+    : SwDocFac(&rPam.GetDoc()), mpStrm(&rStrm), mpMedium(nullptr), mpCursor(&rPam),
     maFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rBaseURL );
 }
 
 SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), mpStrm(nullptr), mpMedium(&rMedium),
+    : SwDocFac(&rPam.GetDoc()), mpStrm(nullptr), mpMedium(&rMedium),
     mpCursor(&rPam), maFileName(rFileName), mbSkipImages(false)
 {
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
 SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUString& rFilename, SwPaM &rPam )
-    : SwDocFac(rPam.GetDoc()), mpStrm(nullptr), mxStg( rStg ), mpMedium(nullptr), mpCursor(&rPam), maFileName(rFilename), mbSkipImages(false)
+    : SwDocFac(&rPam.GetDoc()), mpStrm(nullptr), mxStg( rStg ), mpMedium(nullptr), mpCursor(&rPam), maFileName(rFilename), mbSkipImages(false)
 {
 }
 
@@ -706,7 +706,7 @@ SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDocument)
 
 SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, bool bInWriteAll)
     : m_pStrm(&rStrm), m_pMedium(nullptr), m_pOutPam(&rPam), m_pShell(nullptr),
-    m_rDoc(*rPam.GetDoc()), m_bWriteAll(bInWriteAll)
+    m_rDoc(rPam.GetDoc()), m_bWriteAll(bInWriteAll)
 {
 }
 

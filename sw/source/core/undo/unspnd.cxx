@@ -158,8 +158,8 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 
     rPam.GetPoint()->nContent.Assign( pTNd, m_nContent );
 
-    SwDoc* pDoc = rPam.GetDoc();
-    pDoc->getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), m_bCheckTableStart );
+    SwDoc& rDoc = rPam.GetDoc();
+    rDoc.getIDocumentContentOperations().SplitNode( *rPam.GetPoint(), m_bCheckTableStart );
 
     if (m_pHistory)
     {
@@ -168,7 +168,7 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( !(( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() )) ||
         ( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
-            !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )))
+            !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )))
         return;
 
     rPam.SetMark();
@@ -176,13 +176,13 @@ void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         if( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
-            RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
-            pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
-            pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+            RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld & ~RedlineFlags::Ignore);
+            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
+            rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         }
         else
-            pDoc->getIDocumentRedlineAccess().SplitRedline( rPam );
+            rDoc.getIDocumentRedlineAccess().SplitRedline( rPam );
         rPam.Exchange();
     }
     rPam.DeleteMark();

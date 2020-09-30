@@ -63,7 +63,7 @@ GetFlysAnchoredAt(SwDoc & rDoc, sal_uLong const nSttNode)
 
 //note: parameter is SwPam just so we can init SwUndRng, the End is ignored!
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
-    : SwUndo( nUndoId, rPam.GetDoc() )
+    : SwUndo( nUndoId, &rPam.GetDoc() )
     , SwUndRng( rPam )
     , m_pTextFormatColl(nullptr)
     , m_pLastNodeColl(nullptr)
@@ -72,7 +72,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     , m_nSetPos(0)
 {
     m_pHistory.reset( new SwHistory );
-    SwDoc* pDoc = rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
 
     SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
     if( pTextNd )
@@ -88,13 +88,13 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
         // These flys will be saved in pFrameFormats array (only flys which exist BEFORE insertion!)
         // Then in SwUndoInserts::SetInsertRange the flys saved in pFrameFormats will NOT create Undos.
         // m_FlyUndos will only be filled with newly inserted flys.
-        m_pFrameFormats = sw::GetFlysAnchoredAt(*pDoc, m_nSttNode);
+        m_pFrameFormats = sw::GetFlysAnchoredAt(rDoc, m_nSttNode);
     }
     // consider Redline
-    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        m_pRedlineData.reset( new SwRedlineData( RedlineType::Insert, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
-        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+        m_pRedlineData.reset( new SwRedlineData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 }
 
@@ -139,11 +139,11 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         return;
 
     // than collect all new Flys
-    SwDoc* pDoc = rPam.GetDoc();
-    const size_t nArrLen = pDoc->GetSpzFrameFormats()->size();
+    SwDoc& rDoc = rPam.GetDoc();
+    const size_t nArrLen = rDoc.GetSpzFrameFormats()->size();
     for( size_t n = 0; n < nArrLen; ++n )
     {
-        SwFrameFormat* pFormat = (*pDoc->GetSpzFrameFormats())[n];
+        SwFrameFormat* pFormat = (*rDoc.GetSpzFrameFormats())[n];
         SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
         if (IsCreateUndoForNewFly(*pAnchor, m_nSttNode, m_nEndNode))
         {
@@ -373,7 +373,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // position cursor onto REDO section
     SwPaM& rPam(rContext.GetCursorSupplier().CreateNewShellCursor());
-    SwDoc* pDoc = rPam.GetDoc();
+    SwDoc& rDoc = rPam.GetDoc();
     rPam.DeleteMark();
     rPam.GetPoint()->nNode = m_nSttNode - m_nNodeDiff;
     SwContentNode* pCNd = rPam.GetContentNode();
@@ -388,7 +388,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     // retrieve start position for rollback
     if( ( m_nSttNode != m_nEndNode || m_nSttContent != m_nEndContent ) && m_pUndoNodeIndex)
     {
-        auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(*pDoc,
+        auto const pFlysAtInsPos(sw::GetFlysAnchoredAt(rDoc,
             rPam.GetPoint()->nNode.GetIndex()));
 
         const bool bMvBkwrd = MovePtBackward(rPam);
@@ -396,7 +396,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         // re-insert content again (first detach m_pUndoNodeIndex!)
         sal_uLong const nMvNd = m_pUndoNodeIndex->GetIndex();
         m_pUndoNodeIndex.reset();
-        MoveFromUndoNds(*pDoc, nMvNd, *rPam.GetMark());
+        MoveFromUndoNds(rDoc, nMvNd, *rPam.GetMark());
         if (m_nDeleteTextNodes != 0)
         {
             MovePtForward(rPam, bMvBkwrd);
@@ -420,7 +420,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if (pDoc->GetTextFormatColls()->IsAlive(m_pTextFormatColl))
+    if (rDoc.GetTextFormatColls()->IsAlive(m_pTextFormatColl))
     {
         SwTextNode* pTextNd = rPam.GetMark()->nNode.GetNode().GetTextNode();
         if( pTextNd )
@@ -428,7 +428,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     m_pTextFormatColl = pSavTextFormatColl;
 
-    if (m_pLastNodeColl && pDoc->GetTextFormatColls()->IsAlive(m_pLastNodeColl)
+    if (m_pLastNodeColl && rDoc.GetTextFormatColls()->IsAlive(m_pLastNodeColl)
         && rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
     {
         SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
@@ -438,7 +438,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     // tdf#108124 the SwHistoryChangeFlyAnchor/SwHistoryFlyCnt must run before
     // m_FlyUndos as they were created by DelContentIndex()
-    m_pHistory->Rollback( pDoc, m_nSetPos );
+    m_pHistory->Rollback( &rDoc, m_nSetPos );
 
     // tdf#108124 (10/25/2017)
     // During UNDO we call SwUndoInsLayFormat::UndoImpl in reverse order,
@@ -455,14 +455,14 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( m_pRedlineData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
     {
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );
-        pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld & ~RedlineFlags::Ignore );
+        rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( *m_pRedlineData, rPam ), true);
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
     else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
-            !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
-        pDoc->getIDocumentRedlineAccess().SplitRedline(rPam);
+            !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
+        rDoc.getIDocumentRedlineAccess().SplitRedline(rPam);
 }
 
 void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
@@ -470,7 +470,7 @@ void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
     SwPaM aPam( rContext.GetDoc().GetNodes().GetEndOfContent() );
     SetPaM( aPam );
     SwPaM & rRepeatPaM( rContext.GetRepeatPaM() );
-    aPam.GetDoc()->getIDocumentContentOperations().CopyRange( aPam, *rRepeatPaM.GetPoint(), SwCopyFlags::CheckPosInFly);
+    aPam.GetDoc().getIDocumentContentOperations().CopyRange( aPam, *rRepeatPaM.GetPoint(), SwCopyFlags::CheckPosInFly);
 }
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )

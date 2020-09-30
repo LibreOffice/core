@@ -797,7 +797,7 @@ void SwXMLImport::endDocument()
         {
             SwTextNode* pCurrNd;
             sal_uLong nNodeIdx = pPos->nNode.GetIndex();
-            pDoc = pPaM->GetDoc();
+            pDoc = &pPaM->GetDoc();
 
             OSL_ENSURE( pPos->nNode.GetNode().IsContentNode(),
                         "insert position is not a content node" );

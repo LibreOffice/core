@@ -1284,7 +1284,7 @@ SwPasteContext::~SwPasteContext()
 
                 aPropertyValue.Name = "TextRange";
                 const uno::Reference<text::XTextRange> xTextRange = SwXTextRange::CreateXTextRange(
-                    *m_pPaM->GetDoc(), *m_pPaM->GetPoint(), m_pPaM->GetMark());
+                    m_pPaM->GetDoc(), *m_pPaM->GetPoint(), m_pPaM->GetMark());
                 aPropertyValue.Value <<= xTextRange;
                 break;
             }

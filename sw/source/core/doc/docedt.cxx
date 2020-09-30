@@ -364,7 +364,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 
     if( pTextNd && pTextNd->CanJoinNext( &aIdx ) )
     {
-        SwDoc* pDoc = rPam.GetDoc();
+        SwDoc& rDoc = rPam.GetDoc();
         if( bJoinPrev )
         {
             // We do not need to handle xmlids in this case, because
@@ -373,7 +373,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             {
                 // If PageBreaks are deleted/set, it must not be added to the Undo history!
                 // Also, deleting the Node is not added to the Undo history!
-                ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+                ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
                 /* PageBreaks, PageDesc, ColumnBreaks */
                 // If we need to change something about the logic to copy the PageBreaks,
@@ -398,7 +398,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 if( pOldTextNd->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
-                    SfxItemSet aSet( pDoc->GetAttrPool(), aBreakSetRange );
+                    SfxItemSet aSet( rDoc.GetAttrPool(), aBreakSetRange );
                     const SfxItemSet* pSet = pOldTextNd->GetpSwAttrSet();
                     if( SfxItemState::SET == pSet->GetItemState( RES_BREAK,
                         false, &pItem ) )
@@ -412,17 +412,17 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pOldTextNd->FormatToTextAttr( pTextNd );
 
                 const std::shared_ptr< sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
-                pContentStore->Save(*pDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
+                pContentStore->Save(rDoc, aOldIdx.GetIndex(), SAL_MAX_INT32);
 
                 SwIndex aAlphaIdx(pTextNd);
                 pOldTextNd->CutText( pTextNd, aAlphaIdx, SwIndex(pOldTextNd),
                                     pOldTextNd->Len() );
                 SwPosition aAlphaPos( aIdx, aAlphaIdx );
-                pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
+                rDoc.CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
 
                 // move all Bookmarks/TOXMarks
                 if( !pContentStore->Empty() )
-                    pContentStore->Restore( *pDoc, aIdx.GetIndex() );
+                    pContentStore->Restore( rDoc, aIdx.GetIndex() );
 
                 // If the passed PaM is not in the Cursor ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)
@@ -438,7 +438,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             {
                 sw::MoveDeletedPrevFrames(*pOldTextNd, *pTextNd);
             }
-            pDoc->GetNodes().Delete( aOldIdx );
+            rDoc.GetNodes().Delete( aOldIdx );
             sw::CheckResetRedlineMergeFlag(*pTextNd,
                     eOldMergeFlag == SwNode::Merge::NonFirst
                         ? sw::Recreate::Predecessor
@@ -469,13 +469,13 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 if( pDelNd->HasSwAttrSet() )
                 {
                     // only copy the character attributes
-                    SfxItemSet aTmpSet( pDoc->GetAttrPool(), aCharFormatSetRange );
+                    SfxItemSet aTmpSet( rDoc.GetAttrPool(), aCharFormatSetRange );
                     aTmpSet.Put( *pDelNd->GetpSwAttrSet() );
                     pTextNd->SetAttr( aTmpSet );
                 }
             }
 
-            pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, true );
+            rDoc.CorrRel( aIdx, *rPam.GetPoint(), 0, true );
             // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound().nContent.GetIdxReg() )
             {
@@ -817,7 +817,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
                             SwPaM *pPam, const Point &rCursorPos,
                              sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
-    OSL_ENSURE(this == pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
+    OSL_ENSURE(this == &pPam->GetDoc(), "SwDoc::Hyphenate: strangers in the night");
 
     if( *pPam->GetPoint() > *pPam->GetMark() )
         pPam->Exchange();

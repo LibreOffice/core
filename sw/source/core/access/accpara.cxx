@@ -1650,7 +1650,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     }
 
     // retrieve character attributes for the created PaM <pPaM>
-    SfxItemSet aSet( pPaM->GetDoc()->GetAttrPool(),
+    SfxItemSet aSet( pPaM->GetDoc().GetAttrPool(),
                      svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
     // #i82637#
     // From the perspective of the a11y API the character attributes, which
@@ -1661,7 +1661,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         if ( pTextNode->HasSwAttrSet() )
         {
-            SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
+            SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc().GetAttrPool(),
                                                      svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
             aAutomaticParaStyleCharAttrs.Put( *(pTextNode->GetpSwAttrSet()), false );
             aSet.Put( aAutomaticParaStyleCharAttrs );
@@ -1669,7 +1669,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     }
     // get character attributes at <pPaM> and merge these into <aSet>
     {
-        SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
+        SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc().GetAttrPool(),
                                     svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END -1>{} );
         SwUnoCursorHelper::GetCursorAttr(*pPaM, aCharAttrsAtPaM, true);
         aSet.Put( aCharAttrsAtPaM );

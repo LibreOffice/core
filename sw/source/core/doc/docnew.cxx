@@ -1178,7 +1178,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             SwPaM aPaM(SwPosition(aIndexBefore),
                        SwPosition(rInsPos.nNode));
 
-            aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+            aPaM.GetDoc().MakeUniqueNumRules(aPaM);
 
             // Update the rsid of each pasted text node
             SwNodes &rDestNodes = GetNodes();

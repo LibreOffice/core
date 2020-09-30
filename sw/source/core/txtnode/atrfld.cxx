@@ -230,16 +230,16 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
 
         // replace field content by text
         SwPaM* pPaM = pFieldHint->m_pPaM;
-        SwDoc* pDoc = pPaM->GetDoc();
+        SwDoc& rDoc = pPaM->GetDoc();
         const SwTextNode& rTextNode = mpTextField->GetTextNode();
         pPaM->GetPoint()->nNode = rTextNode;
         pPaM->GetPoint()->nContent.Assign( const_cast<SwTextNode*>(&rTextNode), mpTextField->GetStart() );
 
-        OUString const aEntry(mpField->ExpandField(pDoc->IsClipBoard(), pFieldHint->m_pLayout));
+        OUString const aEntry(mpField->ExpandField(rDoc.IsClipBoard(), pFieldHint->m_pLayout));
         pPaM->SetMark();
         pPaM->Move( fnMoveForward );
-        pDoc->getIDocumentContentOperations().DeleteRange( *pPaM );
-        pDoc->getIDocumentContentOperations().InsertString( *pPaM, aEntry );
+        rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
+        rDoc.getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     } else if (const auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>( &rHint ))
     {
         if( !mpTextField )

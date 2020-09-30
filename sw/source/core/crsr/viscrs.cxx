@@ -842,7 +842,7 @@ void SwShellTableCursor::FillRects()
     SwRegionRects aReg( GetShell()->VisArea() );
     if (comphelper::LibreOfficeKit::isActive())
         aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->getFrameArea();
-    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNodes& rNds = GetDoc().GetNodes();
     SwFrame* pEndFrame = nullptr;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
@@ -908,7 +908,7 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
     if (m_SelectedBoxes.empty() || m_bParked || !GetPoint()->nNode.GetIndex())
         return false;
 
-    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNodes& rNds = GetDoc().GetNodes();
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         SwNodeIndex aIdx( *m_SelectedBoxes[n]->GetSttNd() );

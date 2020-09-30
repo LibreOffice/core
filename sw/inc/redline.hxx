@@ -262,7 +262,7 @@ public:
     void MaybeNotifyRedlinePositionModification(long nTop);
 };
 
-void MaybeNotifyRedlineModification(SwRangeRedline* pRedline, SwDoc* pDoc);
+void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc);
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
 class SW_DLLPUBLIC SwExtraRedline

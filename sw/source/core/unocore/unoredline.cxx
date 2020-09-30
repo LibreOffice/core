@@ -210,7 +210,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
             if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
             {
                 SwUnoCursor& rUnoCursor = GetCursor();
-                uno::Reference<text::XText> xRet = new SwXRedlineText(rUnoCursor.GetDoc(), *pNodeIdx);
+                uno::Reference<text::XText> xRet = new SwXRedlineText(&rUnoCursor.GetDoc(), *pNodeIdx);
                 aRet <<= xRet;
             }
             else {
@@ -232,8 +232,8 @@ bool SwXRedlinePortion::Validate()
 {
     SwUnoCursor& rUnoCursor = GetCursor();
     //search for the redline
-    SwDoc* pDoc = rUnoCursor.GetDoc();
-    const SwRedlineTable& rRedTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    SwDoc& rDoc = rUnoCursor.GetDoc();
+    const SwRedlineTable& rRedTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
     bool bFound = false;
     for(size_t nRed = 0; nRed < rRedTable.size() && !bFound; nRed++)
     {
@@ -277,7 +277,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_IS_IN_HEADER_FOOTER)
     {
-        aRet <<= rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
+        aRet <<= rRedline.GetDoc().IsInHeaderFooter( rRedline.GetPoint()->nNode );
     }
     else if (rPropertyName == UNO_NAME_MERGE_LAST_PARA)
     {
@@ -321,7 +321,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     {
         if ( 1 < ( pNodeIdx->GetNode().EndOfSectionIndex() - pNodeIdx->GetNode().GetIndex() ) )
         {
-            uno::Reference<text::XText> xRet = new SwXRedlineText(rRedline.GetDoc(), *pNodeIdx);
+            uno::Reference<text::XText> xRet = new SwXRedlineText(&rRedline.GetDoc(), *pNodeIdx);
             pRet[nPropIdx].Name = UNO_NAME_REDLINE_TEXT;
             pRet[nPropIdx++].Value <<= xRet;
         }

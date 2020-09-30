@@ -81,7 +81,7 @@ struct PercentHdl
     }
 
     explicit PercentHdl( const SwPaM& rPam )
-        : pDSh( rPam.GetDoc()->GetDocShell() )
+        : pDSh( rPam.GetDoc().GetDocShell() )
     {
         sal_uLong nStt, nEnd;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
@@ -183,7 +183,7 @@ void SwCursor::RestoreState()
 bool SwCursor::IsNoContent() const
 {
     return GetPoint()->nNode.GetIndex() <
-            GetDoc()->GetNodes().GetEndOfExtras().GetIndex();
+            GetDoc().GetNodes().GetEndOfExtras().GetIndex();
 }
 
 bool SwCursor::IsSelOvrCheck(SwCursorSelOverFlags)
@@ -194,7 +194,7 @@ bool SwCursor::IsSelOvrCheck(SwCursorSelOverFlags)
 // extracted from IsSelOvr()
 bool SwTableCursor::IsSelOvrCheck(SwCursorSelOverFlags eFlags)
 {
-    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNodes& rNds = GetDoc().GetNodes();
     // check sections of nodes array
     if( (SwCursorSelOverFlags::CheckNodeSection & eFlags)
         && HasMark() )
@@ -223,8 +223,8 @@ namespace
 
 bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 {
-    SwDoc* pDoc = GetDoc();
-    SwNodes& rNds = pDoc->GetNodes();
+    SwDoc& rDoc = GetDoc();
+    SwNodes& rNds = rDoc.GetNodes();
 
     bool bSkipOverHiddenSections = IsSkipOverHiddenSections();
     bool bSkipOverProtectSections = IsSkipOverProtectSections();
@@ -236,7 +236,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
     if (m_vSavePos.back().nNode != GetPoint()->nNode.GetIndex() &&
         // (1997) in UI-ReadOnly everything is allowed
-        ( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() ))
+        ( !rDoc.GetDocShell() || !rDoc.GetDocShell()->IsReadOnlyUI() ))
     {
         // check new sections
         SwNodeIndex& rPtIdx = GetPoint()->nNode;
@@ -308,7 +308,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
                 nEndIdx = nTmp;
             }
 
-            const SwSectionFormats& rFormats = pDoc->GetSections();
+            const SwSectionFormats& rFormats = rDoc.GetSections();
             for( SwSectionFormats::size_type n = 0; n < rFormats.size(); ++n )
             {
                 const SwSectionFormat* pFormat = rFormats[n];
@@ -336,7 +336,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
     const SwNode* pNd = &GetPoint()->nNode.GetNode();
     if( pNd->IsContentNode() && !dynamic_cast<SwUnoCursor*>(this) )
     {
-        const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+        const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
         if ( (SwCursorSelOverFlags::ChangePos & eFlags)   //allowed to change position if it's a bad one
             && pFrame && pFrame->isFrameAreaDefinitionValid()
             && !pFrame->getFrameArea().Height()     //a bad zero height position
@@ -357,7 +357,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
             if( !pFrame )
             {
                 bGoNxt = !bGoNxt;
-                pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
+                pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
                 while ( pFrame && 0 == pFrame->getFrameArea().Height() )
                 {
                     pFrame = bGoNxt ? pFrame->GetNextContentFrame()
@@ -434,7 +434,7 @@ bool SwCursor::IsSelOvr( SwCursorSelOverFlags eFlags )
 
     pNd = &GetMark()->nNode.GetNode();
     if( pNd->IsContentNode()
-        && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
+        && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )
         && !dynamic_cast<SwUnoCursor*>(this) )
     {
         DeleteMark();
@@ -717,18 +717,18 @@ SetPrevCursor:
 /// Return <true> if cursor can be set to this position
 bool SwCursor::IsAtValidPos( bool bPoint ) const
 {
-    const SwDoc* pDoc = GetDoc();
+    const SwDoc& rDoc = GetDoc();
     const SwPosition* pPos = bPoint ? GetPoint() : GetMark();
     const SwNode* pNd = &pPos->nNode.GetNode();
 
-    if( pNd->IsContentNode() && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
+    if( pNd->IsContentNode() && !static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ) &&
         !dynamic_cast<const SwUnoCursor*>(this) )
     {
         return false;
     }
 
     // #i45129# - in UI-ReadOnly everything is allowed
-    if( !pDoc->GetDocShell() || !pDoc->GetDocShell()->IsReadOnlyUI() )
+    if( !rDoc.GetDocShell() || !rDoc.GetDocShell()->IsReadOnlyUI() )
         return true;
 
     const bool bCursorInReadOnly = IsReadOnlyAvailable();
@@ -763,8 +763,8 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
                         SwPaM& aRegion, FindRanges eFndRngs,
                         bool bInReadOnly, bool& bCancel )
 {
-    SwDoc* pDoc = pCurrentCursor->GetDoc();
-    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    SwDoc& rDoc = pCurrentCursor->GetDoc();
+    bool const bDoesUndo = rDoc.GetIDocumentUndoRedo().DoesUndo();
     int nFndRet = 0;
     sal_uLong nFound = 0;
     const bool bSrchBkwrd = &fnMove == &fnMoveBackward;
@@ -780,7 +780,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
         while( pCurrentCursor != ( pTmpCursor = pTmpCursor->GetNext() ))
             ++nCursorCnt;
         if( nCursorCnt && !bIsUnoCursor )
-            pPHdl.reset(new PercentHdl( 0, nCursorCnt, pDoc->GetDocShell() ));
+            pPHdl.reset(new PercentHdl( 0, nCursorCnt, rDoc.GetDocShell() ));
     }
     else
         pSaveCursor = pSaveCursor->GetPrev();
@@ -829,14 +829,14 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
             }
 
             if ((coSrchRplcThreshold == nFound)
-                && pDoc->GetIDocumentUndoRedo().DoesUndo()
+                && rDoc.GetIDocumentUndoRedo().DoesUndo()
                 && rParas.IsReplaceMode())
             {
                 short nRet = pCurrentCursor->MaxReplaceArived();
                 if( RET_YES == nRet )
                 {
-                    pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-                    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                    rDoc.GetIDocumentUndoRedo().DelAllUndoObj();
+                    rDoc.GetIDocumentUndoRedo().DoUndo(false);
                 }
                 else
                 {
@@ -880,7 +880,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurrentCurso
     if( nFound && !pFndRing ) // if no ring should be created
         pFndRing = pCurrentCursor->Create();
 
-    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
+    rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     return nFound;
 }
 
@@ -890,7 +890,7 @@ static bool lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( rSttNd.GetIndex() + 1 == rEndNd.GetIndex() )
         return false;
 
-    SwNodes& rNds = rPam.GetDoc()->GetNodes();
+    SwNodes& rNds = rPam.GetDoc().GetNodes();
     rPam.DeleteMark();
     SwContentNode* pCNd;
     if( !bFirst )
@@ -922,7 +922,7 @@ static bool lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
     if( rEndNd.GetIndex() + 1 == rSttNd.GetIndex() )
         return false;
 
-    SwNodes& rNds = rPam.GetDoc()->GetNodes();
+    SwNodes& rNds = rPam.GetDoc().GetNodes();
     rPam.DeleteMark();
     SwContentNode* pCNd;
     if( !bFirst )
@@ -966,7 +966,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
     std::unique_ptr<SvxSearchItem> xSearchItem;
 
     SwCursor* pFndRing = nullptr;
-    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNodes& rNds = GetDoc().GetNodes();
 
     // search in sections?
     if( FindRanges::InSel & eFndRngs )
@@ -1106,7 +1106,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 {
     bool bIsStart = true;
     SwContentNode* pCNd = nullptr;
-    SwNodes& rNds = GetDoc()->GetNodes();
+    SwNodes& rNds = GetDoc().GetNodes();
 
     switch( ePos )
     {
@@ -1431,7 +1431,7 @@ bool SwCursor::SelectWordWT( SwViewShell const * pViewShell, sal_Int16 nWordType
     if (pTextNd)
     {
         // Should we select the whole fieldmark?
-        const IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+        const IDocumentMarkAccess* pMarksAccess = GetDoc().getIDocumentMarkAccess( );
         sw::mark::IFieldmark const*const pMark(pMarksAccess->getFieldmarkFor(*GetPoint()));
         if (pMark && (IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
                       || IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
@@ -1708,7 +1708,7 @@ SwCursor::DoSetBidiLevelLeftRight(
             Point aPt;
             std::pair<Point, bool> const tmp(aPt, true);
             pSttFrame = rTNd.getLayoutFrame(
-                    GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                     GetPoint(), &tmp);
             if( pSttFrame )
             {
@@ -1854,7 +1854,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                     SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                     rPtIdx = aNewIdx;
 
-                    GetDoc()->GetNodes().GoNextSection( &rPtIdx, false, false );
+                    GetDoc().GetNodes().GoNextSection( &rPtIdx, false, false );
                     SwContentNode* pContentNode = GetContentNode();
                     if ( pContentNode )
                     {
@@ -1887,7 +1887,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                 SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
                 rPtIdx = aNewIdx;
 
-                GetDoc()->GetNodes().GoNextSection( &rPtIdx, false, false );
+                GetDoc().GetNodes().GoNextSection( &rPtIdx, false, false );
                 SwContentNode* pContentNode = GetContentNode();
                 if ( pContentNode )
                 {
@@ -1907,7 +1907,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
             Point aPt;
             std::pair<Point, bool> const tmp(aPt, true);
             const SwContentFrame* pEndFrame = rTmpNode.GetTextNode()->getLayoutFrame(
-                GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(),
                 GetPoint(), &tmp);
             if ( pEndFrame )
             {
@@ -2073,7 +2073,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             //Update cursor to change nUpDownX.
             if ( aOldPos.nContent.GetIndex() == nOffset )
             {
-                GetDoc()->GetEditShell()->UpdateCursor();
+                GetDoc().GetEditShell()->UpdateCursor();
                 bRet = false;
             }
             else{
@@ -2200,7 +2200,7 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
 
     ++rPtIdx;
     if( !rPtIdx.GetNode().IsContentNode() )
-        GetDoc()->GetNodes().GoNextSection( &rPtIdx, true, false );
+        GetDoc().GetNodes().GoNextSection( &rPtIdx, true, false );
     GetPoint()->nContent.Assign( GetContentNode(), 0 );
 
     return !IsInProtectTable( true );
@@ -2216,7 +2216,7 @@ bool SwCursor::GotoTable( const OUString& rName )
     bool bRet = false;
     if ( !HasMark() )
     {
-        SwTable* pTmpTable = SwTable::FindTable( GetDoc()->FindTableFormatByName( rName ) );
+        SwTable* pTmpTable = SwTable::FindTable( GetDoc().FindTableFormatByName( rName ) );
         if( pTmpTable )
         {
             // a table in a normal nodes array
@@ -2391,7 +2391,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pCurrentCursor )
         SwSelBoxes aTmp(m_SelectedBoxes);
 
         // compare old and new ones
-        SwNodes& rNds = pCurrentCursor->GetDoc()->GetNodes();
+        SwNodes& rNds = pCurrentCursor->GetDoc().GetNodes();
         const SwStartNode* pSttNd;
         SwPaM* pCur = pCurrentCursor;
         do {

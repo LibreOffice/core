@@ -37,7 +37,7 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
-    : SwUndo( SwUndoId::INSNUM, rPam.GetDoc() ), SwUndRng( rPam ),
+    : SwUndo( SwUndoId::INSNUM, &rPam.GetDoc() ), SwUndRng( rPam ),
     m_aNumRule( rRule ),
     m_nLRSavePos( 0 )
 {
@@ -153,7 +153,7 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 }
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
-    : SwUndo( SwUndoId::DELNUM, rPam.GetDoc() ), SwUndRng( rPam )
+    : SwUndo( SwUndoId::DELNUM, &rPam.GetDoc() ), SwUndRng( rPam )
 {
     m_aNodes.reserve( std::min<sal_uLong>(m_nEndNode - m_nSttNode, 255) );
     m_pHistory.reset( new SwHistory );
@@ -203,7 +203,7 @@ void SwUndoDelNum::AddNode( const SwTextNode& rNd )
 }
 
 SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, bool bIsOutlMv )
-    : SwUndo( bIsOutlMv ? SwUndoId::OUTLINE_UD : SwUndoId::MOVENUM, rPam.GetDoc() ),
+    : SwUndo( bIsOutlMv ? SwUndoId::OUTLINE_UD : SwUndoId::MOVENUM, &rPam.GetDoc() ),
     SwUndRng( rPam ),
     m_nNewStart( 0 ), m_nOffset( nOff )
 {
@@ -252,7 +252,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
-    : SwUndo( nOff > 0 ? SwUndoId::NUMUP : SwUndoId::NUMDOWN, rPam.GetDoc() ),
+    : SwUndo( nOff > 0 ? SwUndoId::NUMUP : SwUndoId::NUMDOWN, &rPam.GetDoc() ),
       SwUndRng( rPam ),
       m_nOffset( nOff )
 {

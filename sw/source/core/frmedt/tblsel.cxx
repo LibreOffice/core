@@ -137,7 +137,7 @@ void GetTableSelCrs( const SwTableCursor& rTableCursor, SwSelBoxes& rBoxes )
     if (rTableCursor.IsChgd() || !rTableCursor.GetSelectedBoxesCount())
     {
         SwTableCursor* pTCursor = const_cast<SwTableCursor*>(&rTableCursor);
-        pTCursor->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *pTCursor );
+        pTCursor->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout()->MakeTableCursors( *pTCursor );
     }
 
     if (rTableCursor.GetSelectedBoxesCount())
@@ -903,7 +903,7 @@ bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     if( bRet )
     {
         // now check for paragraph bound flies
-        const SwFrameFormats& rFormats = *rPam.GetDoc()->GetSpzFrameFormats();
+        const SwFrameFormats& rFormats = *rPam.GetDoc().GetSpzFrameFormats();
         sal_uLong nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
