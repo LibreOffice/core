@@ -304,15 +304,11 @@ SwTransferable::~SwTransferable()
     m_eBufferType = TransferBufferType::NONE;
 }
 
-static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
+static SwDoc& lcl_GetDoc(SwDocFac & rDocFac)
 {
-    SwDoc *const pDoc = rDocFac.GetDoc();
-    OSL_ENSURE( pDoc, "Document not found" );
-    if (pDoc)
-    {
-        pDoc->SetClipBoard( true );
-    }
-    return pDoc;
+    SwDoc& rDoc = rDocFac.GetDoc();
+    rDoc.SetClipBoard( true );
+    return rDoc;
 }
 
 void SwTransferable::ObjectReleased()
@@ -348,7 +344,7 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
     uno::Reference < embed::XEmbeddedObject > xObj;
     if( m_pClpDocFac )
     {
-        SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc()->GetDfltGrfFormatColl() );
+        SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc().GetDfltGrfFormatColl() );
         for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( SwNodeType::Ole == pNd->GetNodeType() )
             {
@@ -364,7 +360,7 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
 {
     if( m_pClpDocFac )
     {
-        SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc()->GetDfltGrfFormatColl() );
+        SwIterator<SwContentNode,SwFormatColl> aIter( *m_pClpDocFac->GetDoc().GetDfltGrfFormatColl() );
         for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( SwNodeType::Ole == pNd->GetNodeType() )
             {
@@ -429,15 +425,15 @@ sal_Bool SAL_CALL SwTransferable::isComplex()
     // Copy into a new Doc so we don't mess with the existing one.
     //FIXME: We *should* be able to avoid this and improve the performance.
     m_pClpDocFac.reset(new SwDocFac);
-    SwDoc* const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+    SwDoc& rTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
-    pTmpDoc->getIDocumentFieldsAccess()
+    rTmpDoc.getIDocumentFieldsAccess()
         .LockExpFields(); // never update fields - leave text as it is
-    lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+    lclOverWriteDoc(*m_pWrtShell, rTmpDoc);
 
     sal_Int32 nTextLength = 0;
     const SwNode* pEndOfContent = &m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent();
-    SwNodes& aNodes = pTmpDoc->GetNodes();
+    SwNodes& aNodes = rTmpDoc.GetNodes();
     for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
     {
         SwNode& rNd = *aNodes[nIndex];
@@ -504,16 +500,16 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
 
         m_pClpDocFac.reset(new SwDocFac);
-        SwDoc *const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+        SwDoc& rTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
-        pTmpDoc->getIDocumentFieldsAccess().LockExpFields();     // never update fields - leave text as it is
-        lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+        rTmpDoc.getIDocumentFieldsAccess().LockExpFields();     // never update fields - leave text as it is
+        lclOverWriteDoc(*m_pWrtShell, rTmpDoc);
 
         // in CORE a new one was created (OLE-objects copied!)
-        m_aDocShellRef = pTmpDoc->GetTmpDocShell();
+        m_aDocShellRef = rTmpDoc.GetTmpDocShell();
         if( m_aDocShellRef.Is() )
             SwTransferable::InitOle( m_aDocShellRef );
-        pTmpDoc->SetTmpDocShell( nullptr );
+        rTmpDoc.SetTmpDocShell( nullptr );
 
         if( nSelectionType & SelectionType::Text && !m_pWrtShell->HasMark() )
         {
@@ -589,35 +585,35 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         case SotClipboardFormatId::DRAWING:
             {
-                SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-                bOK = SetObject( pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
+                SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+                bOK = SetObject( rDoc.getIDocumentDrawModelAccess().GetDrawModel(),
                                 SWTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
             }
             break;
 
         case SotClipboardFormatId::STRING:
         {
-            SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
+            SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject( &rDoc, SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
         }
         break;
         case SotClipboardFormatId::RTF:
         {
-            SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+            SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject( &rDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
         }
         break;
         case SotClipboardFormatId::RICHTEXT:
         {
-            SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RICHTEXT, rFlavor );
+            SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject( &rDoc, SWTRANSFER_OBJECTTYPE_RICHTEXT, rFlavor );
         }
         break;
 
         case SotClipboardFormatId::HTML:
         {
-            SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+            SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+            bOK = SetObject( &rDoc, SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
         }
             break;
 
@@ -660,8 +656,8 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         case SotClipboardFormatId::EMBED_SOURCE:
             if( !m_aDocShellRef.Is() )
             {
-                SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-                SwDocShell* pNewDocSh = new SwDocShell( pDoc,
+                SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+                SwDocShell* pNewDocSh = new SwDocShell( &rDoc,
                                          SfxObjectCreateMode::EMBEDDED );
                 m_aDocShellRef = pNewDocSh;
                 m_aDocShellRef->DoInitNew();
@@ -895,8 +891,8 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             m_pOrigGraphic = m_pClpBitmap.get();
 
         m_pClpDocFac.reset(new SwDocFac);
-        SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-        m_pWrtShell->Copy( pDoc );
+        SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+        m_pWrtShell->Copy( &rDoc );
 
 #if HAVE_FEATURE_DESKTOP
         if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmapEx().IsEmpty())
@@ -921,10 +917,10 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     else if ( nSelection == SelectionType::Ole )
     {
         m_pClpDocFac.reset(new SwDocFac);
-        SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-        m_aDocShellRef = new SwDocShell( pDoc, SfxObjectCreateMode::EMBEDDED);
+        SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+        m_aDocShellRef = new SwDocShell( &rDoc, SfxObjectCreateMode::EMBEDDED);
         m_aDocShellRef->DoInitNew();
-        m_pWrtShell->Copy( pDoc );
+        m_pWrtShell->Copy(&rDoc);
 
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
 
@@ -973,13 +969,13 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         if( m_pWrtShell->IsAddMode() && m_pWrtShell->SwCursorShell::HasSelection() )
             m_pWrtShell->CreateCursor();
 
-        SwDoc *const pTmpDoc = lcl_GetDoc(*m_pClpDocFac);
+        SwDoc& rTmpDoc = lcl_GetDoc(*m_pClpDocFac);
 
-        pTmpDoc->getIDocumentFieldsAccess().LockExpFields();     // Never update fields - leave text as is
-        lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
+        rTmpDoc.getIDocumentFieldsAccess().LockExpFields();     // Never update fields - leave text as is
+        lclOverWriteDoc(*m_pWrtShell, rTmpDoc);
 
         {
-            IDocumentMarkAccess* const pMarkAccess = pTmpDoc->getIDocumentMarkAccess();
+            IDocumentMarkAccess* const pMarkAccess = rTmpDoc.getIDocumentMarkAccess();
             std::vector< ::sw::mark::IMark* > vDdeMarks;
             // find all DDE-Bookmarks
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
@@ -995,10 +991,10 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         }
 
         // a new one was created in CORE (OLE objects copied!)
-        m_aDocShellRef = pTmpDoc->GetTmpDocShell();
+        m_aDocShellRef = rTmpDoc.GetTmpDocShell();
         if( m_aDocShellRef.Is() )
             SwTransferable::InitOle( m_aDocShellRef );
-        pTmpDoc->SetTmpDocShell( nullptr );
+        rTmpDoc.SetTmpDocShell( nullptr );
 
         if( m_pWrtShell->IsObjSelected() )
             m_eBufferType = TransferBufferType::Drawing;
@@ -1150,8 +1146,8 @@ void SwTransferable::CalculateAndCopy()
     OUString aStr( m_pWrtShell->Calculate() );
 
     m_pClpDocFac.reset(new SwDocFac);
-    SwDoc *const pDoc = lcl_GetDoc(*m_pClpDocFac);
-    m_pWrtShell->Copy(pDoc, & aStr);
+    SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
+    m_pWrtShell->Copy(&rDoc, & aStr);
     m_eBufferType = TransferBufferType::Document;
     AddFormat( SotClipboardFormatId::STRING );
 
@@ -1165,22 +1161,22 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
     SwWait aWait( *m_pWrtShell->GetView().GetDocShell(), true );
 
     m_pClpDocFac.reset(new SwDocFac);
-    SwDoc *const pCDoc = lcl_GetDoc(*m_pClpDocFac);
+    SwDoc& rCDoc = lcl_GetDoc(*m_pClpDocFac);
 
-    SwNodes& rNds = pCDoc->GetNodes();
+    SwNodes& rNds = rCDoc.GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwContentNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to 1st ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->getIDocumentFieldsAccess().LockExpFields();   // never update fields - leave text as it is
+    rCDoc.getIDocumentFieldsAccess().LockExpFields();   // never update fields - leave text as it is
 
-    pCDoc->InsertGlossary( rGlossary, rStr, aPam );
+    rCDoc.InsertGlossary( rGlossary, rStr, aPam );
 
     // a new one was created in CORE (OLE-Objects copied!)
-    m_aDocShellRef = pCDoc->GetTmpDocShell();
+    m_aDocShellRef = rCDoc.GetTmpDocShell();
     if( m_aDocShellRef.Is() )
         SwTransferable::InitOle( m_aDocShellRef );
-    pCDoc->SetTmpDocShell( nullptr );
+    rCDoc.SetTmpDocShell( nullptr );
 
     m_eBufferType = TransferBufferType::Document;
 
@@ -3755,7 +3751,7 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     bool bRet = true;
     // m_pWrtShell is nullptr when the source document is closed already.
     if (!m_pWrtShell || lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
-        bRet = rShell.Paste(m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
+        bRet = rShell.Paste(&m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
 
     if( bKillPaMs )
         rShell.KillPams();

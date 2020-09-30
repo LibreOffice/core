@@ -393,7 +393,7 @@ void SwDocShell::AddLink()
     if (!m_xDoc)
     {
         SwDocFac aFactory;
-        m_xDoc = aFactory.GetDoc();
+        m_xDoc = &aFactory.GetDoc();
         m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr );
     }
     m_xDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc

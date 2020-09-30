@@ -33,7 +33,7 @@ public:
     ~SwDocFac() COVERITY_NOEXCEPT_FALSE;
 
     /// Document is created after calling Read(...).
-    SwDoc*  GetDoc();
+    SwDoc&  GetDoc();
 };
 
 #endif

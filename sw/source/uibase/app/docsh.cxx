@@ -222,7 +222,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
-    pRdr->GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr);
+    pRdr->GetDoc().getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr);
 
     // Restore the pool default if reading a saved document.
     m_xDoc->RemoveAllFormatLanguageDependencies();
@@ -230,10 +230,10 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     ErrCode nErr = pRdr->Read( *pRead );
 
     // Maybe put away one old Doc
-    if (m_xDoc.get() != pRdr->GetDoc())
+    if (m_xDoc.get() != &pRdr->GetDoc())
     {
         RemoveLink();
-        m_xDoc = pRdr->GetDoc();
+        m_xDoc = &pRdr->GetDoc();
 
         AddLink();
 
