@@ -1217,13 +1217,12 @@ bool SwFieldMgr::InsertField(
 
             // extract DBName from rData.m_sPar1. Format: DBName.TableName.CommandType.ExpStrg
             sal_Int32 nTablePos = rData.m_sPar1.indexOf(DB_DELIM);
-            sal_Int32 nCmdTypePos = -1;
             sal_Int32 nExpPos = -1;
 
             if (nTablePos>=0)
             {
                 aDBData.sDataSource = rData.m_sPar1.copy(0, nTablePos++);
-                nCmdTypePos = rData.m_sPar1.indexOf(DB_DELIM, nTablePos);
+                sal_Int32 nCmdTypePos = rData.m_sPar1.indexOf(DB_DELIM, nTablePos);
                 if (nCmdTypePos>=0)
                 {
                     aDBData.sCommand = rData.m_sPar1.copy(nTablePos, nCmdTypePos++ - nTablePos);

@@ -181,11 +181,11 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
     //const sal_uInt18 WW8_ID_HLINK               = 0x01B8;
-    const sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
-    const sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
+    constexpr sal_uInt32 WW8_HLINK_BODY             = 0x00000001;   /// Contains file link or URL.
+    constexpr sal_uInt32 WW8_HLINK_ABS              = 0x00000002;   /// Absolute path.
     //const sal_uInt32 WW8_HLINK_DESCR            = 0x00000014;   /// Description.
-    const sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
-    const sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
+    constexpr sal_uInt32 WW8_HLINK_MARK             = 0x00000008;   /// Text mark.
+    constexpr sal_uInt32 WW8_HLINK_FRAME            = 0x00000080;   /// Target frame.
     //const sal_uInt32 WW8_HLINK_UNC              = 0x00000100;   /// UNC path.
     SvMemoryStream tmpStrm;
     OUString tmpTextMark;
@@ -1986,8 +1986,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
             {
                 const SvxShadowItem* pSI = static_cast<const SvxShadowItem*>(pShadItem);
 
-                const sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
-                const sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
+                constexpr sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
+                constexpr sal_uInt32 nShadowType = 131074;   // shadow type of ms word. need to set the default value.
 
                 Color  nColor = pSI->GetColor();
                 sal_Int32 nOffX = pSI->GetWidth() * nCstScale;

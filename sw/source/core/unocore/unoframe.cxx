@@ -2462,7 +2462,6 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        bool bNextFrame;
         if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
         {
             SwDoc* pDoc = pFormat->GetDoc();
@@ -2521,7 +2520,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         }
         else
         {
-            bNextFrame = rPropertyName == UNO_NAME_CHAIN_NEXT_NAME;
+            bool bNextFrame = rPropertyName == UNO_NAME_CHAIN_NEXT_NAME;
             if( bNextFrame || rPropertyName == UNO_NAME_CHAIN_PREV_NAME )
             {
                 SwDoc* pDoc = pFormat->GetDoc();

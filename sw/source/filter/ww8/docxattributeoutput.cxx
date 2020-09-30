@@ -2136,82 +2136,79 @@ void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
 
 void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
 {
-    bool bWriteCombChars(false);
-
     // Write the Field instruction
+    if ( bWriteRun )
     {
-        if ( bWriteRun )
+        bool bWriteCombChars(false);
+        m_pSerializer->startElementNS(XML_w, XML_r);
+
+        if (rInfos.eType == ww::eEQ)
+            bWriteCombChars = true;
+
+        DoWriteFieldRunProperties( pNode, nPos, bWriteCombChars );
+    }
+
+    sal_Int32 nIdx { rInfos.sCmd.isEmpty() ? -1 : 0 };
+    while ( nIdx >= 0 )
+    {
+        OUString sToken = rInfos.sCmd.getToken( 0, '\t', nIdx );
+        if ( rInfos.eType ==  ww::eCREATEDATE
+          || rInfos.eType ==  ww::eSAVEDATE
+          || rInfos.eType ==  ww::ePRINTDATE
+          || rInfos.eType ==  ww::eDATE
+          || rInfos.eType ==  ww::eTIME )
         {
-            m_pSerializer->startElementNS(XML_w, XML_r);
-
-            if (rInfos.eType == ww::eEQ)
-                bWriteCombChars = true;
-
-            DoWriteFieldRunProperties( pNode, nPos, bWriteCombChars );
+           sToken = sToken.replaceAll("NNNN", "dddd");
+           sToken = sToken.replaceAll("NN", "ddd");
         }
-
-        sal_Int32 nIdx { rInfos.sCmd.isEmpty() ? -1 : 0 };
-        while ( nIdx >= 0 )
+        else if ( rInfos.eType == ww::eEquals )
         {
-            OUString sToken = rInfos.sCmd.getToken( 0, '\t', nIdx );
-            if ( rInfos.eType ==  ww::eCREATEDATE
-              || rInfos.eType ==  ww::eSAVEDATE
-              || rInfos.eType ==  ww::ePRINTDATE
-              || rInfos.eType ==  ww::eDATE
-              || rInfos.eType ==  ww::eTIME )
+            // Use original OOXML formula, if it exists and its conversion hasn't been changed
+            bool bIsChanged = true;
+            if ( pNode->GetTableBox() )
             {
-               sToken = sToken.replaceAll("NNNN", "dddd");
-               sToken = sToken.replaceAll("NN", "ddd");
-            }
-            else if ( rInfos.eType == ww::eEquals )
-            {
-                // Use original OOXML formula, if it exists and its conversion hasn't been changed
-                bool bIsChanged = true;
-                if ( pNode->GetTableBox() )
+                if ( const SfxGrabBagItem* pItem = pNode->GetTableBox()->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG) )
                 {
-                    if ( const SfxGrabBagItem* pItem = pNode->GetTableBox()->GetFrameFormat()->GetAttrSet().GetItem<SfxGrabBagItem>(RES_FRMATR_GRABBAG) )
+                    OUString sActualFormula = sToken.trim();
+                    const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
+                    std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find("CellFormulaConverted");
+                    if ( aStoredFormula != rGrabBag.end() && sActualFormula.indexOf('=') == 0 &&
+                                    sActualFormula.copy(1).trim() == aStoredFormula->second.get<OUString>().trim() )
                     {
-                        OUString sActualFormula = sToken.trim();
-                        const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
-                        std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find("CellFormulaConverted");
-                        if ( aStoredFormula != rGrabBag.end() && sActualFormula.indexOf('=') == 0 &&
-                                        sActualFormula.copy(1).trim() == aStoredFormula->second.get<OUString>().trim() )
+                        aStoredFormula = rGrabBag.find("CellFormula");
+                        if ( aStoredFormula != rGrabBag.end() )
                         {
-                            aStoredFormula = rGrabBag.find("CellFormula");
-                            if ( aStoredFormula != rGrabBag.end() )
-                            {
-                                sToken = " =" + aStoredFormula->second.get<OUString>();
-                                bIsChanged = false;
-                            }
+                            sToken = " =" + aStoredFormula->second.get<OUString>();
+                            bIsChanged = false;
                         }
                     }
                 }
-
-                if ( bIsChanged )
-                {
-                    UErrorCode nErr(U_ZERO_ERROR);
-                    icu::UnicodeString sInput(sToken.getStr());
-                    // remove < and > around cell references, e.g. <A1> to A1, <A1:B2> to A1:B2
-                    icu::RegexMatcher aMatcher("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
-                    sInput = aMatcher.replaceAll(icu::UnicodeString("$1"), nErr);
-                    // convert MEAN to AVERAGE
-                    icu::RegexMatcher aMatcher2("\\bMEAN\\b", sInput, UREGEX_CASE_INSENSITIVE, nErr);
-                    sToken = aMatcher2.replaceAll(icu::UnicodeString("AVERAGE"), nErr).getTerminatedBuffer();
-                }
             }
 
-            // Write the Field command
-            DoWriteCmd( sToken );
-
-            // Replace tabs by </instrText><tab/><instrText>
-            if ( nIdx > 0 ) // Is another token expected?
-                RunText( "\t" );
+            if ( bIsChanged )
+            {
+                UErrorCode nErr(U_ZERO_ERROR);
+                icu::UnicodeString sInput(sToken.getStr());
+                // remove < and > around cell references, e.g. <A1> to A1, <A1:B2> to A1:B2
+                icu::RegexMatcher aMatcher("<([A-Z]{1,3}[0-9]+(:[A-Z]{1,3}[0-9]+)?)>", sInput, 0, nErr);
+                sInput = aMatcher.replaceAll(icu::UnicodeString("$1"), nErr);
+                // convert MEAN to AVERAGE
+                icu::RegexMatcher aMatcher2("\\bMEAN\\b", sInput, UREGEX_CASE_INSENSITIVE, nErr);
+                sToken = aMatcher2.replaceAll(icu::UnicodeString("AVERAGE"), nErr).getTerminatedBuffer();
+            }
         }
 
-        if ( bWriteRun )
-        {
-            m_pSerializer->endElementNS( XML_w, XML_r );
-        }
+        // Write the Field command
+        DoWriteCmd( sToken );
+
+        // Replace tabs by </instrText><tab/><instrText>
+        if ( nIdx > 0 ) // Is another token expected?
+            RunText( "\t" );
+    }
+
+    if ( bWriteRun )
+    {
+        m_pSerializer->endElementNS( XML_w, XML_r );
     }
 }
 
@@ -5106,11 +5103,10 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         m_pSerializer->startElementNS(XML_a, XML_blip, FSNS(XML_r, nImageType), aRelId);
 
     pItem = nullptr;
-    GraphicDrawMode nMode = GraphicDrawMode::Standard;
 
     if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
     {
-        nMode = static_cast<GraphicDrawMode>(static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue());
+        GraphicDrawMode nMode = static_cast<GraphicDrawMode>(static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue());
         if (nMode == GraphicDrawMode::Greys)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl);
         else if (nMode == GraphicDrawMode::Mono) //black/white has a 0,5 threshold in LibreOffice
@@ -5270,9 +5266,9 @@ bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode ,const sal_Int
     if( !SotExchange::IsMath(aObjName) )
         return false;
 
-    PostponedMathObjects aPostponedMathObject;
     try
     {
+        PostponedMathObjects aPostponedMathObject;
         aPostponedMathObject.pMathObject = const_cast<SwOLENode*>( &rOLENode);
         aPostponedMathObject.nMathObjAlignment = nAlign;
         m_aPostponedMaths.push_back(aPostponedMathObject);
@@ -5613,10 +5609,9 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
     if ( sDrawAspect == "Content" )
     {
-        awt::Size aSize;
         try
         {
-            aSize = xObj->getVisualAreaSize( rNode.GetAspect() );
+            awt::Size aSize = xObj->getVisualAreaSize( rNode.GetAspect() );
 
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rNode.GetAspect() ) );
             Size aOriginalSize( OutputDevice::LogicToLogic(Size( aSize.Width, aSize.Height),

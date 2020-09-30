@@ -127,12 +127,12 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     SetFieldUnit( *m_xWidthHeightField, lcl_GetFieldUnit() );
 
     bool bLandscape = false;
-    const SfxPoolItem* pItem;
     const SvxSizeItem* pSize = nullptr;
     const SvxLongLRSpaceItem* pLRItem = nullptr;
     const SvxLongULSpaceItem* pULItem = nullptr;
     if ( SfxViewFrame::Current() )
     {
+        const SfxPoolItem* pItem;
         SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
         bLandscape = static_cast<const SvxPageItem*>( pItem )->IsLandscape();
         m_bMirrored = static_cast<const SvxPageItem*>( pItem )->GetPageUsage() == SvxPageUsage::Mirror;

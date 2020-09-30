@@ -524,15 +524,13 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
     SwFEShell* pFEShell = dynamic_cast<const SwFEShell*>( pCursorShell) !=  nullptr
                                 ? static_cast<SwFEShell*>( pCursorShell )
                             : nullptr;
-    OUString sValue;
-    sal_uInt16 nPage, nLogPage;
-    OUString sDisplay;
-
     if( pFEShell )
     {
+        OUString sDisplay;
+        sal_uInt16 nPage, nLogPage;
         pFEShell->GetPageNumber(-1,true,nPage,nLogPage,sDisplay);
 
-        sValue = "page-name:" + sDisplay +
+        OUString sValue = "page-name:" + sDisplay +
             ";page-number:" +
             OUString::number( nPage ) +
             ";total-pages:" +

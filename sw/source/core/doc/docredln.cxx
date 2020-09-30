@@ -656,7 +656,7 @@ SwRedlineTable::size_type SwRedlineTable::FindPrevOfSeqNo( size_type nSttPos ) c
 /// We can limit the search using look ahead (0 searches the whole array).
 SwRedlineTable::size_type SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const
 {
-    auto const nLookahead = 20;
+    auto constexpr nLookahead = 20;
     size_type nRet = npos;
     if( nSeqNo && nSttPos < size() )
     {
@@ -679,7 +679,7 @@ SwRedlineTable::size_type SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, size
 
 SwRedlineTable::size_type SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const
 {
-    auto const nLookahead = 20;
+    auto constexpr nLookahead = 20;
     size_type nRet = npos;
     if( nSeqNo && nSttPos < size() )
     {
