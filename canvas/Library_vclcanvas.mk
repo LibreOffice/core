@@ -29,6 +29,7 @@ $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas
 $(eval $(call gb_Library_use_externals,vclcanvas,\
 	boost_headers \
 	epoxy \
+	$(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vclcanvas))
@@ -57,6 +58,7 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/canvascustomsprite \
 	canvas/source/vcl/canvasfont \
 	canvas/source/vcl/canvashelper \
+	canvas/source/vcl/canvashelper_skia \
 	canvas/source/vcl/devicehelper \
 	canvas/source/vcl/impltools \
 	canvas/source/vcl/spritecanvas \
