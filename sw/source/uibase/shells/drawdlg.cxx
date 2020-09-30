@@ -39,6 +39,7 @@
 #include <svx/xflftrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <comphelper/lok.hxx>
+#include <textboxhelper.hxx>
 
 using namespace com::sun::star::drawing;
 
@@ -69,6 +70,13 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 {
                     pSh->StartAction();
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
+                    auto vMarkedObjs = pView->GetMarkedObjects();
+                    for (auto pObj : vMarkedObjs)
+                    {
+                        // If the shape has textframe, set its params as well.
+                        if (SwTextBoxHelper::hasTextFrame(pObj))
+                            SwTextBoxHelper::updateTextBoxMargin(pObj);
+                    }
                     rReq.Done(*(pDlg->GetOutputItemSet()));
                     pSh->EndAction();
                 }
