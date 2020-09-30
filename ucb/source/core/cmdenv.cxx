@@ -20,8 +20,8 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <rtl/ref.hxx>
 
 #include "cmdenv.hxx"
 
@@ -32,10 +32,6 @@
  *************************************************************************/
 using namespace com::sun::star;
 using namespace ucb_cmdenv;
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<UcbCommandEnvironment> g_Instance;
-
 
 // UcbCommandEnvironment Implementation.
 
@@ -49,15 +45,6 @@ UcbCommandEnvironment::UcbCommandEnvironment() : UcbCommandEnvironment_Base(m_aM
 UcbCommandEnvironment::~UcbCommandEnvironment()
 {
 }
-
-// XComponent
-void SAL_CALL UcbCommandEnvironment::dispose()
-{
-    UcbCommandEnvironment_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
-}
-
 
 // XInitialization methods.
 
@@ -124,11 +111,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbCommandEnvironment_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (!g_Instance)
-        g_Instance.set(new UcbCommandEnvironment());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new UcbCommandEnvironment()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

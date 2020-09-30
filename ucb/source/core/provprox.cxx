@@ -25,15 +25,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <rtl/ref.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<UcbContentProviderProxyFactory> g_Instance;
 
 // UcbContentProviderProxyFactory Implementation.
 
@@ -48,14 +45,6 @@ UcbContentProviderProxyFactory::UcbContentProviderProxyFactory(
 // virtual
 UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 {
-}
-
-// XComponent
-void SAL_CALL UcbContentProviderProxyFactory::dispose()
-{
-    UcbContentProviderProxyFactory_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
 }
 
 // XServiceInfo methods.
@@ -80,11 +69,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbContentProviderProxyFactory_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (!g_Instance)
-        g_Instance.set(new UcbContentProviderProxyFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(
+        static_cast<cppu::OWeakObject*>(new UcbContentProviderProxyFactory(context)));
 }
 
 

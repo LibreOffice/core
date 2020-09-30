@@ -44,9 +44,6 @@ public:
     explicit UcbCommandEnvironment();
     virtual ~UcbCommandEnvironment() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     // XInitialization
     virtual void SAL_CALL
     initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;

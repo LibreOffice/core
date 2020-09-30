@@ -20,37 +20,27 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.ucb.CommandEnvironment"
-    constructor="ucb_UcbCommandEnvironment_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.ucb.theCommandEnvironment"/>
+    constructor="ucb_UcbCommandEnvironment_get_implementation" single-instance="true">
     <service name="com.sun.star.ucb.CommandEnvironment"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.UcbContentProviderProxyFactory"
-    constructor="ucb_UcbContentProviderProxyFactory_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.ucb.theUcbContentProviderProxyFactory"/>
+    constructor="ucb_UcbContentProviderProxyFactory_get_implementation" single-instance="true">
     <service name="com.sun.star.ucb.ContentProviderProxyFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.UcbPropertiesManager"
-    constructor="ucb_UcbPropertiesManager_get_implementation">
+    constructor="ucb_UcbPropertiesManager_get_implementation" single-instance="true">
     <service name="com.sun.star.ucb.PropertiesManager"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.UcbStore"
-    constructor="ucb_UcbStore_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.ucb.theUcbStore"/>
+    constructor="ucb_UcbStore_get_implementation" single-instance="true">
     <service name="com.sun.star.ucb.Store"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.UniversalContentBroker"
-    constructor="ucb_UniversalContentBroker_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.ucb.theUniversalContentBroker"/>
+    constructor="ucb_UniversalContentBroker_get_implementation" single-instance="true">
     <service name="com.sun.star.ucb.UniversalContentBroker"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.SimpleFileAccess"
     constructor="ucb_OFileAccess_get_implementation">
-    <!-- fake singleton so the servicemanager shuts us down and we can clean up our global instance var -->
-    <singleton name="com.sun.star.comp.ucb.theSimpleFileAccess"/>
     <service name="com.sun.star.ucb.SimpleFileAccess"/>
   </implementation>
 </component>

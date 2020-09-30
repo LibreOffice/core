@@ -34,8 +34,8 @@
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <rtl/ref.hxx>
 
 #include "ucbprops.hxx"
 
@@ -216,9 +216,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbPropertiesManager_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<UcbPropertiesManager> g_Instance(new UcbPropertiesManager());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new UcbPropertiesManager()));
 }
 
 // XPropertySetInfo methods.
