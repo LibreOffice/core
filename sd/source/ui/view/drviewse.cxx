@@ -1500,8 +1500,11 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         ::tools::Rectangle aRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
         aPos = aRect.Center();
         aPos = GetActiveWindow()->PixelToLogic(aPos);
-        aPos.AdjustX( -(aSize.Width() / 2) );
-        aPos.AdjustY( -(aSize.Height() / 2) );
+
+        if (aPos.getX() - (aSize.Width() / 2) >= 0)
+            aPos.AdjustX( -(aSize.Width() / 2) );
+        if (aPos.getY() - (aSize.Height() / 2) >= 0)
+            aPos.AdjustY( -(aSize.Height() / 2) );
 
         ::tools::Rectangle aLogicRect(aPos, aSize);
         pRectObj->SetLogicRect(aLogicRect);
