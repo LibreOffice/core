@@ -82,8 +82,6 @@ class CWinClipboard final
 
     static void WINAPI onClipboardContentChanged();
 
-    void SAL_CALL disposing() override;
-
 public:
     CWinClipboard(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                   const OUString& aClipboardName);
