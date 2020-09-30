@@ -54,6 +54,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/weak.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <svl/filenotation.hxx>
@@ -84,10 +85,6 @@ using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
 using ::com::sun::star::ucb::InteractiveIOException;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
-
-static osl::Mutex g_InstanceGuard;
-static rtl::Reference<dbaccess::ODatabaseContext> g_Instance;
-static bool g_Disposed = false;
 
 namespace dbaccess
 {
@@ -265,14 +262,6 @@ void ODatabaseContext::disposing()
             // dispose()
         obj->dispose();
     }
-}
-
-void ODatabaseContext::dispose()
-{
-    DatabaseAccessContext_Base::dispose();
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    g_Instance.clear();
-    g_Disposed = true;
 }
 
 // XNamingService
@@ -762,13 +751,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseContext_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    osl::MutexGuard aGuard(g_InstanceGuard);
-    if (g_Disposed)
-        return nullptr;
-    if (!g_Instance)
-        g_Instance.set(new dbaccess::ODatabaseContext(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new dbaccess::ODatabaseContext(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

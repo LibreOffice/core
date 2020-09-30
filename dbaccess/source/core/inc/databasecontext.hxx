@@ -115,9 +115,6 @@ public:
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
-    // XComponent
-    virtual void SAL_CALL dispose() override;
-
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< css::uno::Any >& _rArguments ) override;
