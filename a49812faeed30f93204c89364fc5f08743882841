@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "09c44977_fb251f28",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "TimeAM (\"i.l\") is different from et_EE (\"e.l\").",
+      "parentUuid": "e937d0d8_86a55e24",
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58066b24_d7692f5e",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "d8713b38_17499fb9",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58066b24_d7692f5e",
+      "range": {
+        "startLine": 93,
+        "startChar": 29,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31d555d3_e84c83ee",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2020-09-29T22:37:44Z",
       "side": 1,
       "message": "Instead of duplicating data this can be\n\n \u003cLC_CURRENCY ref\u003d\"et_EE\" /\u003e",
+      "range": {
+        "startLine": 413,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 2
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09339d79_d0845d3f",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "The second CurrencyName (\"kruuń\") is different from et_EE (\"kroon\").",
+      "parentUuid": "31d555d3_e84c83ee",
       "range": {
         "startLine": 413,
         "startChar": 0,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "8f91b494_4b501005",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fdd72c45_e51a9375",
+      "range": {
+        "startLine": 429,
+        "startChar": 27,
+        "endLine": 429,
+        "endChar": 32
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "572d5c5d_813d6485",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "af767639_46896eb1",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "572d5c5d_813d6485",
+      "range": {
+        "startLine": 446,
+        "startChar": 26,
+        "endLine": 446,
+        "endChar": 31
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e514281_a432aafb",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
@@ -131,6 +245,30 @@
       "revId": "a49812faeed30f93204c89364fc5f08743882841",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "473e78b1_c2b8ec30",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1002628
+      },
+      "writtenOn": "2020-09-30T07:00:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0e514281_a432aafb",
+      "range": {
+        "startLine": 447,
+        "startChar": 33,
+        "endLine": 447,
+        "endChar": 38
+      },
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
