@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # This file is part of the LibreOffice project.
 #
@@ -15,8 +15,8 @@ import re
 
 DEFAULT_WARNING_STR = 'Lint assertion failed'
 
-POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkMessageDialog', 'GtkBox', 'GtkFrame', 'GtkGrid']
-IGNORED_TOP_LEVEL_WIDGETS = ['GtkAdjustment', 'GtkImage', 'GtkListStore', 'GtkSizeGroup', 'GtkMenu', 'GtkTextBuffer']
+POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkMessageDialog', 'GtkBox', 'GtkFrame', 'GtkGrid', 'GtkAssistant']
+IGNORED_TOP_LEVEL_WIDGETS = ['GtkAdjustment', 'GtkImage', 'GtkListStore', 'GtkSizeGroup', 'GtkMenu', 'GtkTextBuffer', 'GtkTreeStore']
 BORDER_WIDTH = '6'
 BUTTON_BOX_SPACING = '12'
 ALIGNMENT_TOP_PADDING = '6'
@@ -34,12 +34,13 @@ def check_top_level_widget(element):
     # check widget type
     widget_type = element.attrib['class']
     lint_assert(widget_type in POSSIBLE_TOP_LEVEL_WIDGETS,
-                "Top level widget should be 'GtkDialog', 'GtkFrame', 'GtkBox', or 'GtkGrid'")
+                "Top level widget should be 'GtkDialog', 'GtkFrame', 'GtkBox', or 'GtkGrid', but is " + widget_type)
 
     # check border_width property
     border_width_properties = element.findall("property[@name='border_width']")
-    if len(border_width_properties) < 1:
-        lint_assert(False, "No border_width set on top level widget. Should probably be " + BORDER_WIDTH)
+    # This one fires so often I don't think it's useful
+    #if len(border_width_properties) < 1:
+    #    lint_assert(False, "No border_width set on top level widget. Should probably be " + BORDER_WIDTH)
     if len(border_width_properties) == 1:
         border_width = border_width_properties[0]
         if widget_type == "GtkMessageDialog":
@@ -50,13 +51,13 @@ def check_top_level_widget(element):
                         "Top level 'border_width' property should be " + BORDER_WIDTH)
 
 def check_button_box_spacing(element):
-    spacing = element.findall("property[@name='spacing']")[0]
-    lint_assert(spacing.text == BUTTON_BOX_SPACING,
+    spacing = element.findall("property[@name='spacing']")
+    lint_assert(len(spacing) > 0 and spacing[0].text == BUTTON_BOX_SPACING,
                 "Button box 'spacing' should be " + BUTTON_BOX_SPACING)
 
 def check_message_box_spacing(element):
-    spacing = element.findall("property[@name='spacing']")[0]
-    lint_assert(spacing.text == MESSAGE_BOX_SPACING,
+    spacing = element.findall("property[@name='spacing']")
+    lint_assert(len(spacing) > 0 and spacing[0].text == MESSAGE_BOX_SPACING,
                 "Button box 'spacing' should be " + MESSAGE_BOX_SPACING)
 
 def check_radio_buttons(root):
@@ -106,7 +107,7 @@ def check_title_labels(root):
         words = re.split(r'[^a-zA-Z0-9:_-]', title.text)
         first = True
         for word in words:
-            if word[0].islower() and (word not in IGNORED_WORDS or first):
+            if len(word) and word[0].islower() and (word not in IGNORED_WORDS or first):
                 lint_assert(False, "The word '" + word + "' should be capitalized")
             first = False
 
@@ -118,7 +119,12 @@ def main():
     lint_assert('domain' in root.attrib, "interface needs to specific translation domain")
 
     top_level_widgets = [element for element in root.findall('object') if element.attrib['class'] not in IGNORED_TOP_LEVEL_WIDGETS]
-    assert len(top_level_widgets) == 1
+    lint_assert( len(top_level_widgets) <= 1, "should be only one top-level widget for us to analyze, found " + str(len(top_level_widgets)))
+    if len(top_level_widgets) > 1:
+        return
+    # eg. one file contains only a Menu, which we don't check
+    if len(top_level_widgets) == 0:
+        return
 
     top_level_widget = top_level_widgets[0]
     check_top_level_widget(top_level_widget)
