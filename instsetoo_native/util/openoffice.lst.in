@@ -71,7 +71,6 @@ LibreOffice
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
-            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active          1
         compression     5
@@ -123,7 +122,6 @@ LibreOfficeDev
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
-            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active          1
         compression     5
@@ -164,7 +162,6 @@ LibreOffice_SDK
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
-            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -209,7 +206,6 @@ LibreOfficeDev_SDK
             STARTCENTER_ADDFEATURE_URL https://extensions.libreoffice.org/
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
-            DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5

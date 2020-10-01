@@ -35,9 +35,6 @@ STARTCENTER_ADDFEATURE_URL      URL in start center to link to extension website
 STARTCENTER_INFO_URL            URL in start center to link to product homepage
 STARTCENTER_TEMPLREP_URL        URL in start center to link to templates website
 
-DICT_REPO_URL                   specifies a repository URL where users can 
-                                download additional dictionaries
-
 UPDATEURL                       URL for the application update functionality
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
