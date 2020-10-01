@@ -382,8 +382,8 @@ protected:
     virtual bool CheckSdOD(sal_Int32 nStart,sal_Int32 nEnd) override;
 
 public:
-    SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
-        : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
+    SwWW8FltControlStack(SwDoc& rDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
+        : SwFltControlStack( rDo, nFieldFl ), rReader( rReader_ ),
         nToggleAttrFlags(0), nToggleBiDiAttrFlags(0)
     {}
 
@@ -427,8 +427,8 @@ public:
 class SwWW8FltAnchorStack : public SwFltControlStack
 {
 public:
-    SwWW8FltAnchorStack(SwDoc* pDo, sal_uLong nFieldFl)
-        : SwFltControlStack( pDo, nFieldFl ) {}
+    SwWW8FltAnchorStack(SwDoc& rDo, sal_uLong nFieldFl)
+        : SwFltControlStack( rDo, nFieldFl ) {}
     void AddAnchor(const SwPosition& rPos,SwFrameFormat *pFormat);
     void Flush();
 private:
@@ -459,8 +459,8 @@ namespace SwWW8
 class SwWW8ReferencedFltEndStack : public SwFltEndStack
 {
 public:
-    SwWW8ReferencedFltEndStack( SwDoc* pDo, sal_uLong nFieldFl )
-        : SwFltEndStack( pDo, nFieldFl )
+    SwWW8ReferencedFltEndStack( SwDoc& rDo, sal_uLong nFieldFl )
+        : SwFltEndStack( rDo, nFieldFl )
         , aReferencedTOCBookmarks()
     {}
 
@@ -475,8 +475,8 @@ protected:
 class SwWW8FltRefStack final : public SwFltEndStack
 {
 public:
-    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl )
+    SwWW8FltRefStack(SwDoc& rDo, sal_uLong nFieldFl)
+        : SwFltEndStack( rDo, nFieldFl )
         , aFieldVarNames()
     {}
     bool IsFootnoteEdnBkmField(const SwFormatField& rFormatField, sal_uInt16& rBkmNo);

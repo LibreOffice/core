@@ -102,8 +102,8 @@ public:
 
     enum class RegionMode { NoCheck = 0, CheckNodes = 1<<0, CheckFieldmark = 1<<1 };
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
-    SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, RegionMode eCheck) const;
-    SW_DLLPUBLIC static bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion,
+    SW_DLLPUBLIC bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion, RegionMode eCheck) const;
+    SW_DLLPUBLIC static bool MakeRegion(SwDoc& rDoc, SwPaM& rRegion,
         RegionMode eCheck, const SwFltPosition &rMkPos, const SwFltPosition &rPtPos, bool bIsParaEnd=false,
         sal_uInt16 nWhich=0);
 
@@ -132,7 +132,7 @@ private:
     bool bSdODChecked;
 
 protected:
-    SwDoc* pDoc;
+    SwDoc& rDoc;
     bool bIsEndStack;
 
     virtual void SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry& rEntry);
@@ -158,7 +158,7 @@ public:
         ALLOW_FLD_CR
     };
 
-    SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl);
+    SwFltControlStack(SwDoc& rDo, sal_uLong nFieldFl);
     virtual ~SwFltControlStack();
 
     bool IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
@@ -299,8 +299,8 @@ public:
 class SwFltEndStack : public SwFltControlStack
 {
 public:
-    SwFltEndStack(SwDoc* pDo, sal_uLong nFieldFl)
-        :SwFltControlStack(pDo, nFieldFl)
+    SwFltEndStack(SwDoc& rDo, sal_uLong nFieldFl)
+        :SwFltControlStack(rDo, nFieldFl)
     {
         bIsEndStack = true;
     }
