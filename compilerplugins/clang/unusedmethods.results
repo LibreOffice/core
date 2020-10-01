@@ -1530,18 +1530,6 @@ sw/source/core/text/txtpaint.hxx:78
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
 sw/source/filter/ww8/docxsdrexport.hxx:73
     class sax_fastparser::FastAttributeList * DocxSdrExport::getFlyWrapAttrList()
-sw/source/uibase/inc/numfmtlb.hxx:130
-    _Bool SwNumFormatTreeView::get_value_changed_from_saved() const
-sw/source/uibase/inc/numfmtlb.hxx:131
-    void SwNumFormatTreeView::save_value()
-sw/source/uibase/inc/numfmtlb.hxx:132
-    void SwNumFormatTreeView::show()
-sw/source/uibase/inc/numfmtlb.hxx:133
-    void SwNumFormatTreeView::hide()
-sw/source/uibase/inc/numfmtlb.hxx:139
-    void SwNumFormatTreeView::set_sensitive(_Bool)
-sw/source/uibase/inc/numfmtlb.hxx:140
-    void SwNumFormatTreeView::connect_changed(const class Link<class weld::TreeView &, void> &)
 sw/source/uibase/inc/swcont.hxx:85
     _Bool SwContent::operator==(const class SwContent &) const
 test/source/sheet/xsubtotalfield.cxx:28
