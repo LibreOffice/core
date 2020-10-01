@@ -139,6 +139,9 @@ public:
     ~PDFiumTextPage();
 
     FPDF_TEXTPAGE getPointer() { return mpTextPage; }
+
+    int countChars();
+    unsigned int getUnicode(int index);
 };
 
 class VCL_DLLPUBLIC PDFiumPage final
@@ -176,6 +179,9 @@ public:
 
     /// Get bitmap checksum of the page, without annotations/commenting.
     BitmapChecksum getChecksum();
+
+    double getWidth();
+    double getHeight();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
@@ -196,6 +202,8 @@ public:
     int getPageCount();
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex);
+
+    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
 };
 
 struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
