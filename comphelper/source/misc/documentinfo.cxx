@@ -66,7 +66,6 @@ namespace comphelper {
         if ( !_rxDocument.is() )
             return sTitle;
 
-        OUString sDocURL;
         try
         {
             // 1. ask the model and the controller for their XTitle::getTitle
@@ -81,7 +80,7 @@ namespace comphelper {
 
             // work around a problem with embedded objects, which sometimes return
             // private:object as URL
-            sDocURL = _rxDocument->getURL();
+            OUString sDocURL = _rxDocument->getURL();
             if ( sDocURL.startsWithIgnoreAsciiCase( "private:" ) )
                 sDocURL.clear();
 
