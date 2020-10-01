@@ -129,7 +129,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     mpOutlineRule->SetAutoRule( true );
 
     // test whether the optional CharFormats are defined in this Document
-    mpOutlineRule->CheckCharFormats( this );
+    mpOutlineRule->CheckCharFormats( *this );
 
     // notify text nodes, which are registered at the outline style, about the
     // changed outline style
@@ -813,7 +813,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
     if( !nChgFormatLevel )         // Nothing has been changed?
     {
         const bool bInvalidateNumRule( pOld->IsContinusNum() != rRule.IsContinusNum() );
-        pOld->CheckCharFormats( &rDoc );
+        pOld->CheckCharFormats( rDoc );
         pOld->SetContinusNum( rRule.IsContinusNum() );
 
         if ( bInvalidateNumRule )
@@ -844,7 +844,7 @@ static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
         if ( nChgFormatLevel & ( 1 << n ) )
             pOld->Set( n, rRule.GetNumFormat( n ) );
 
-    pOld->CheckCharFormats( &rDoc );
+    pOld->CheckCharFormats( rDoc );
     pOld->SetInvalidRule( true );
     pOld->SetContinusNum( rRule.IsContinusNum() );
 
@@ -2464,7 +2464,7 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
             pNew->SetPoolHlpFileId( UCHAR_MAX );
             pNew->SetDefaultListId( OUString() );
         }
-        pNew->CheckCharFormats( this );
+        pNew->CheckCharFormats( *this );
     }
     else
     {
