@@ -171,7 +171,7 @@ bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
         {
             // bookmark isn't known yet
             // start at the last known position
-            sal_Int32 nCurPos = 0,nLastBookmark = 1;
+            sal_Int32 nCurPos = 0;
             if ( m_aBookmarksPositions.empty() )
             {
                 bDataFound = m_pHelper->move(IResultSetHelper::FIRST, 0, _bRetrieveData );
@@ -185,7 +185,7 @@ bool OSkipDeletedSet::moveAbsolute(sal_Int32 _nPos,bool _bRetrieveData)
             } // if ( m_aBookmarksPositions.empty() )
             else
             {
-                nLastBookmark   = (*m_aBookmarksPositions.rbegin())/*->first*/;
+                sal_Int32 nLastBookmark = *m_aBookmarksPositions.rbegin()/*->first*/;
                 nCurPos         = /*(**/m_aBookmarksPositions.size()/*->second*/;
                 nNewPos         = nNewPos - nCurPos;
                 bDataFound      = m_pHelper->move(IResultSetHelper::BOOKMARK, nLastBookmark, _bRetrieveData);

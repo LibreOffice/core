@@ -104,10 +104,10 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     catch(const Exception&)
     { // we don't want our result destroy here
     }
-    SQLULEN nCurType = 0;
+
     try
     {
-        nCurType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
+        SQLULEN nCurType = getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_CURSOR_TYPE);
         SQLUINTEGER nValueLen = m_pStatement->getCursorProperties(nCurType,false);
         if( (nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS ||
             (nValueLen & SQL_CA2_CRC_EXACT) != SQL_CA2_CRC_EXACT)

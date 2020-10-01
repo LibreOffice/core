@@ -66,11 +66,11 @@ namespace connectivity
             {
                 OSQLParser aParser( m_xContext );
                 OUString sErrorMessage;
-                OUString sNewSql;
                 std::unique_ptr<OSQLParseNode> pNode = aParser.parseTree(sErrorMessage,_sText);
                 if(pNode)
                 {   // special handling for parameters
                     OSQLParseNode::substituteParameterNames(pNode.get());
+                    OUString sNewSql;
                     pNode->parseNodeToStr( sNewSql, xConnection );
                     sRet = sNewSql;
                 }
