@@ -127,17 +127,10 @@ public:
     virtual void set_id(int nPos, const OUString& rId) override { mxControl->set_id(nPos, rId); }
     OUString        get_selected_text() const { return mxControl->get_selected_text(); }
     bool            get_visible() const { return mxControl->get_visible(); }
-    bool            get_value_changed_from_saved() const { return mxControl->get_value_changed_from_saved(); }
-    void            save_value() { return mxControl->save_value(); }
-    void            show() { mxControl->show(); }
-    void            hide() { mxControl->hide(); }
     int             get_selected_index() const { return mxControl->get_selected_index(); }
     void            set_visible(bool bVisible) { mxControl->set_visible(bVisible); }
     void            select(int nPos) { mxControl->select(nPos); }
     void            connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { mxControl->connect_row_activated(rLink); }
-
-    void            set_sensitive(bool bSensitive) { mxControl->set_sensitive(bSensitive); }
-    void            connect_changed(const Link<weld::TreeView&, void>& rLink) { mxControl->connect_changed(rLink); }
 };
 
 #endif
