@@ -62,7 +62,6 @@ class SFX2_DLLPUBLIC SfxInfoBarWindow final : public InterimItemWindow
 private:
     OUString m_sId;
     InfobarType m_eType;
-    Size m_aSize;
     Size m_aMessageSize;
     Size m_aOrigMessageSize;
     bool m_bLayingOut;
