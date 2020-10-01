@@ -235,7 +235,6 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
         {
             MenuBar::MenuBarButtonCallbackArg aArg;
             aArg.nId = it->first;
-            aArg.bHighlight = (m_aCloseBtn->GetHighlightItemId() == it->first);
             it->second.m_aSelectLink.Call( aArg );
         }
     }
@@ -248,7 +247,6 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
 
     MenuBar::MenuBarButtonCallbackArg aArg;
     aArg.nId = 0xffff;
-    aArg.bHighlight = (rEvent.GetId() == VclEventId::ToolboxHighlight);
     if( rEvent.GetId() == VclEventId::ToolboxHighlight )
         aArg.nId = m_aCloseBtn->GetHighlightItemId();
     else if( rEvent.GetId() == VclEventId::ToolboxHighlightOff )
@@ -1231,7 +1229,6 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
     {
         MenuBar::MenuBarButtonCallbackArg aArg;
         aArg.nId = it->first;
-        aArg.bHighlight = true;
         return it->second.m_aSelectLink.Call( aArg );
     }
     return false;
