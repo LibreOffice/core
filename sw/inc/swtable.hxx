@@ -168,6 +168,7 @@ private:
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
                         const SwTableBox *pStart, bool bCurRowOnly );
+    void ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox);
 
 public:
 
@@ -340,6 +341,9 @@ public:
 #endif
 
     bool HasLayout() const;
+
+    bool CanConvertSubtables() const;
+    void ConvertSubtables();
 };
 
 /// SwTableLine is one table row in the document model.
