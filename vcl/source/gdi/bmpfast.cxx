@@ -462,7 +462,8 @@ static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
-    SAL_WARN_IF( rMskBuffer.mnFormat != ScanlineFormat::N8BitPal, "vcl.gdi", "FastBmp BlendImage: unusual MSKFMT" );
+    SAL_WARN_IF(( rMskBuffer.mnFormat & ~ScanlineFormat::TopDown ) != ScanlineFormat::N8BitPal,
+        "vcl.gdi", "FastBmp BlendImage: unusual MSKFMT" );
 
     const int nSrcLinestep = rSrcBuffer.mnScanlineSize;
     int nMskLinestep = rMskBuffer.mnScanlineSize;
