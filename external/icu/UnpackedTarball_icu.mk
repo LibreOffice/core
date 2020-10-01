@@ -41,9 +41,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-khmerbreakengine.patch.1 \
 	external/icu/strict_ansi.patch \
 	external/icu/icu4c-link-scrptrun.patch.2 \
-	$(if $(CROSS_COMPILING),\
-		$(if $(filter WNT_ARM64,$(OS)_$(CPUNAME)),external/icu/icu4c-win-arm64.patch.1) \
-	)\
+	external/icu/icu4c-windows-cygwin-cross.patch.1 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,icu,source/data/brkitr/khmerdict.dict,external/icu/khmerdict.dict))
