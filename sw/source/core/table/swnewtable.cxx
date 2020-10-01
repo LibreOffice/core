@@ -2104,6 +2104,251 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
     }
 }
 
+#if 1
+/**
+  This is kind of similar to InsertSpannedRow()/InsertRow() but that one would
+  recursively copy subtables, which would kind of defeat the purpose;
+  this function directly moves the subtable rows's cells into the newly
+  created rows.  For the non-subtable boxes, covered-cells are created.
+
+  Outer row heights are adjusted to match the inner row heights, and the
+  last row's height is tweaked to ensure the sum of the heights is at least
+  the original outer row's minimal height.
+
+  This currently can't handle more than 1 subtable in a row;
+  the inner rows of all subtables would need to be sorted by their height
+  to create the correct outer row structure, which is tricky and probably
+  requires a layout for the typical variable-height case.
+
+ */
+void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
+{
+    SwDoc *const pDoc(GetFrameFormat()->GetDoc());
+    SwTableLine *const pSourceLine(GetTabLines()[nRow]);
+    SwTableBox *const pSubTableBox(pSourceLine->GetTabBoxes()[nBox]);
+    assert(!pSubTableBox->GetTabLines().empty());
+    // are relative (%) heights possible? apparently not
+    SwFormatFrameSize const outerSize(pSourceLine->GetFrameFormat()->GetFrameSize());
+    long minHeights(0);
+    {
+        SwFormatFrameSize const* pSize(nullptr);
+        SwFrameFormat const& rSubLineFormat(*pSubTableBox->GetTabLines()[0]->GetFrameFormat());
+        if (rSubLineFormat.GetItemState(RES_FRM_SIZE, true,
+            reinterpret_cast<SfxPoolItem const**>(&pSize)) == SfxItemState::SET)
+        {   // for first row, apply height from inner row to outer row.
+            // in case the existing outer row height was larger than the entire
+            // subtable, the last inserted row needs to be tweaked (below)
+            pSourceLine->GetFrameFormat()->SetFormatAttr(*pSize);
+            if (pSize->GetHeightSizeType() != SwFrameSize::Variable)
+            {
+                minHeights += pSize->GetHeight();
+            }
+        }
+    }
+    for (size_t i = 1; i < pSubTableBox->GetTabLines().size(); ++i)
+    {
+        SwTableLine *const pSubLine(pSubTableBox->GetTabLines()[i]);
+        SwTableLine *const pNewLine = new SwTableLine(
+            static_cast<SwTableLineFormat*>(pSourceLine->GetFrameFormat()),
+            pSourceLine->GetTabBoxes().size() - 1 + pSubLine->GetTabBoxes().size(),
+            nullptr);
+        SwFrameFormat const& rSubLineFormat(*pSubLine->GetFrameFormat());
+        SwFormatFrameSize const* pSize(nullptr);
+        if (rSubLineFormat.GetItemState(RES_FRM_SIZE, true,
+            reinterpret_cast<SfxPoolItem const**>(&pSize)) == SfxItemState::SET)
+        {   // for rows 2..N, copy inner row height to outer row
+            pNewLine->ClaimFrameFormat();
+            pNewLine->GetFrameFormat()->SetFormatAttr(*pSize);
+            if (pSize->GetHeightSizeType() != SwFrameSize::Variable)
+            {
+                minHeights += pSize->GetHeight();
+            }
+        }
+        // ensure the sum of the lines is at least as high as the outer line was
+        if (i == pSubTableBox->GetTabLines().size() - 1
+            && outerSize.GetHeightSizeType() != SwFrameSize::Variable
+            && minHeights < outerSize.GetHeight())
+        {
+            SwFormatFrameSize lastSize(pNewLine->GetFrameFormat()->GetFrameSize());
+            lastSize.SetHeight(lastSize.GetHeight() + outerSize.GetHeight() - minHeights);
+            if (lastSize.GetHeightSizeType() == SwFrameSize::Variable)
+            {
+                lastSize.SetHeightSizeType(SwFrameSize::Minimum);
+            }
+            pNewLine->GetFrameFormat()->SetFormatAttr(lastSize);
+        }
+        SfxPoolItem const* pRowBrush(nullptr);
+        rSubLineFormat.GetItemState(RES_BACKGROUND, true, &pRowBrush);
+        GetTabLines().insert(GetTabLines().begin() + nRow + i, pNewLine);
+        for (size_t j = 0; j < pSourceLine->GetTabBoxes().size(); ++j)
+        {
+            if (j == nBox)
+            {
+                for (size_t k = 0; k < pSubLine->GetTabBoxes().size(); ++k)
+                {
+                    // move box k to new outer row
+                    SwTableBox *const pSourceBox(pSubLine->GetTabBoxes()[k]);
+                    assert(pSourceBox->getRowSpan() == 1);
+                    ::InsTableBox(pDoc, GetTableNode(), pNewLine,
+                        static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
+                        pSourceBox, j+k, 1);
+                    // insert dummy text node...
+                    pDoc->GetNodes().MakeTextNode(
+                            SwNodeIndex(*pSourceBox->GetSttNd(), +1),
+                            pDoc->GetDfltTextFormatColl());
+                    SwNodeRange const content(*pSourceBox->GetSttNd(), +2,
+                            *pSourceBox->GetSttNd()->EndOfSectionNode());
+                    SwTableBox *const pNewBox(pNewLine->GetTabBoxes()[j+k]);
+                    SwNodeIndex const insPos(*pNewBox->GetSttNd(), 1);
+                    // MoveNodes would delete the box SwStartNode/SwEndNode
+                    // without the dummy node
+                    pDoc->GetNodes().MoveNodes(content, pDoc->GetNodes(), insPos, false);
+                    // delete the empty node that was bundled in the new box
+                    pDoc->GetNodes().Delete(insPos);
+                    if (pRowBrush)
+                    {
+                        SfxPoolItem const* pCellBrush(nullptr);
+                        if (pNewBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pCellBrush) != SfxItemState::SET)
+                        {   // set inner row background on inner cell
+                            pNewBox->ClaimFrameFormat();
+                            pNewBox->GetFrameFormat()->SetFormatAttr(*pRowBrush);
+                        }
+                    }
+                }
+                // TODO: there's a whole lot of border code in lcl_CpyCol, is that relevant???
+            }
+            else
+            {
+                // covered cell for box j
+                // bump row span
+                SwTableBox *const pSourceBox(pSourceLine->GetTabBoxes()[j]);
+                assert(pSourceBox->GetTabLines().empty()); // checked for that
+                sal_uInt16 const nInsPos(j < nBox ? j : j + pSubLine->GetTabBoxes().size() - 1);
+                ::InsTableBox(pDoc, GetTableNode(), pNewLine,
+                    static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
+                    pSourceBox, nInsPos, 1);
+                // N rows in subtable, N-1 rows inserted:
+                // -1 -> -N ; -(N-1) ... -1
+                // -2 -> -(N+1) ; -N .. -2
+                //  1 -> N ; -(N-1) .. -1
+                //  2 -> N+1 ; -N .. -2
+                long newSourceRowSpan(pSourceBox->getRowSpan());
+                long newBoxRowSpan;
+                if (newSourceRowSpan < 0)
+                {
+                    newSourceRowSpan -= pSubTableBox->GetTabLines().size() - 1;
+                    newBoxRowSpan = newSourceRowSpan + i;
+                }
+                else
+                {
+                    newSourceRowSpan += pSubTableBox->GetTabLines().size() - 1;
+                    newBoxRowSpan = -(newSourceRowSpan - i);
+                }
+                pNewLine->GetTabBoxes()[nInsPos]->setRowSpan(newBoxRowSpan);
+                if (i == pSubTableBox->GetTabLines().size() - 1)
+                {   // only last iteration
+                    pSourceBox->setRowSpan(newSourceRowSpan);
+                }
+            }
+        }
+    }
+    // delete inner rows 2..N
+    for (size_t i = 1; i < pSubTableBox->GetTabLines().size(); ++i)
+    {
+        SwTableLine *const pSubLine(pSubTableBox->GetTabLines()[1]);
+        while (!pSubLine->GetTabBoxes().empty())
+        {
+            SwTableBox *const pBox(pSubLine->GetTabBoxes()[0]);
+            DeleteBox_(*this, pBox, nullptr, false, false, nullptr);
+        }
+    }
+    // fix row spans in lines preceding nRow
+    lcl_ChangeRowSpan(*this, pSubTableBox->GetTabLines().size() - 1, nRow - 1, false);
+    // note: the first line of the inner table remains; caller will call GCLines() to remove it
+}
+
+bool SwTable::CanConvertSubtables() const
+{
+    for (SwTableLine const*const pLine : GetTabLines())
+    {
+        bool haveSubtable(false);
+        for (SwTableBox const*const pBox : pLine->GetTabBoxes())
+        {
+            if (!pBox->GetTabLines().empty())
+            {
+                if (haveSubtable)
+                {
+                    // can't handle 2 subtable in a row yet
+                    return false;
+                }
+                haveSubtable = true;
+                for (SwTableLine const*const pInnerLine : pBox->GetTabLines())
+                {
+                    // bitmap row background will look different
+                    SwFrameFormat const& rRowFormat(*pInnerLine->GetFrameFormat());
+                    std::unique_ptr<SvxBrushItem> pBrush(rRowFormat.makeBackgroundBrushItem());
+                    assert(pBrush);
+                    if (pBrush->GetGraphicObject() != nullptr)
+                    {
+                        /* TODO: all cells could override this?
+                        for (SwTableBox & rInnerBox : rInnerLine.GetTabBoxes())
+                        */
+                        if (1 < pInnerLine->GetTabBoxes().size()) // except if only 1 cell?
+                        {
+                            return false;
+                        }
+                    }
+                    for (SwTableBox const*const pInnerBox : pInnerLine->GetTabBoxes())
+                    {
+                        if (!pInnerBox->GetTabLines().empty())
+                        {
+                            return false; // nested subtable :(
+                        }
+                    }
+                }
+            }
+        }
+        // TODO: check for formulas ... argh these could be behind this table so this needs to move to endDocument()
+        // TODO: check for charts???
+    }
+    return true;
+}
+
+void SwTable::ConvertSubtables()
+{
+                    //  for each row 1..N
+                    //  1. copy row height to new SwTabLine
+                    //  2. insert preceding covered cells
+                    //  3. insert cells in inner row
+                    //  4. copy row background to inner cells unless overridden
+                    //  5. move inner cell node content into target cell nodes
+                    //  6. delete source cell nodes
+                    //  7. insert trailing covered cells
+    for (size_t i = 0; i < GetTabLines().size(); ++i)
+    {
+        SwTableLine *const pLine(GetTabLines()[i]);
+        for (size_t j = 0; j < pLine->GetTabBoxes().size(); ++j)
+        {
+            SwTableBox *const pBox(pLine->GetTabBoxes()[j]);
+            SwTableLines & rInnerLines(pBox->GetTabLines());
+            if (!rInnerLines.empty())
+            {
+#if 0
+                SwSelBoxes aBoxes;
+                lcl_FillSelBoxes(aBoxes, *pLine); // ???
+#endif
+                ConvertSubtableBox(i, j);
+            }
+        }
+    }
+    GCLines();
+    m_bNewModel = true;
+    // TODO: re-sort bookmarks etc for moved nodes
+    // assume that there aren't any node indexes to the deleted box start/end nodes
+    CHECK_TABLE( *this )
+}
+#endif
+
 #ifdef DBG_UTIL
 
 namespace {

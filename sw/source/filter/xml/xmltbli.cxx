@@ -2772,6 +2772,14 @@ void SwXMLTableContext::MakeTable()
         SwNodeIndex aIdx( *m_pTableNode->EndOfSectionNode(), 1 );
         m_pTableNode->MakeOwnFrames(&aIdx);
     }
+
+#if 1
+    if (!m_pTableNode->GetTable().IsNewModel()
+        && m_pTableNode->GetTable().CanConvertSubtables())
+    {
+        m_pTableNode->GetTable().ConvertSubtables();
+    }
+#endif
 }
 
 void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
