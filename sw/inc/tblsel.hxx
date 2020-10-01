@@ -160,8 +160,8 @@ class FndBox_
     FndLines_t m_Lines;
     FndLine_* m_pUpper;
 
-    SwTableLine *m_pLineBefore;   // For deleting/restoring the layout.
-    SwTableLine *m_pLineBehind;
+    SwTableLine *m_pLineBefore; ///< For deleting/restoring the layout.
+    SwTableLine *m_pLineBehind; ///< For deleting/restoring the layout.
 
     FndBox_(FndBox_ const&) = delete;
     FndBox_& operator=(FndBox_ const&) = delete;
@@ -224,6 +224,10 @@ struct FndPara
         : rBoxes(rPara.rBoxes), pFndLine(pFL), pFndBox(rPara.pFndBox) {}
 };
 
+/** This creates a structure mirroring the SwTable structure that contains all
+    rows and non-leaf boxes (as pointers to SwTableBox/SwTableLine, not copies),
+    plus the leaf boxes that are selected by pFndPara->rBoxes
+ */
 SW_DLLPUBLIC void ForEach_FndLineCopyCol(SwTableLines& rLines, FndPara* pFndPara );
 
 #endif // INCLUDED_SW_INC_TBLSEL_HXX

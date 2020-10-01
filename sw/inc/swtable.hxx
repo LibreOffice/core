@@ -310,7 +310,9 @@ public:
     // Search in format for registered table.
     static SwTable * FindTable( SwFrameFormat const*const pFormat );
 
-    // Clean up structure a bit.
+    // Clean up structure of subtables a bit:
+    // convert row with 1 box with subtable; box with subtable with 1 row;
+    // by removing the subtable (both recursively)
     void GCLines();
 
     // Returns the table node via m_TabSortContentBoxes or pTableNode.
