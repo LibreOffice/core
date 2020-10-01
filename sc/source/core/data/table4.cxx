@@ -216,7 +216,9 @@ double approxDiff( double a, double b )
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             FillCmd& rCmd, FillDateCmd& rDateCmd,
                             double& rInc, sal_uInt16& rMinDigits,
-                            ScUserListData*& rListData, sal_uInt16& rListIndex)
+                            ScUserListData*& rListData, sal_uInt16& rListIndex,
+                            bool bHasFiltered, bool& rSkipOverlappedCells,
+                            std::vector<sal_Int32>& rNonOverlappedCellIdx)
 {
     OSL_ENSURE( nCol1==nCol2 || nRow1==nRow2, "FillAnalyse: invalid range" );
 
@@ -224,6 +226,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     rMinDigits = 0;
     rListData = nullptr;
     rCmd = FILL_SIMPLE;
+    rSkipOverlappedCells = false;
     if ( nScFillModeMouseModifier & KEY_MOD1 )
         return ;        // Ctrl-key: Copy
 
@@ -242,6 +245,100 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         nAddY = 0;
         nCount = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
     }
+
+    // Try to analyse the merged cells only if there are no filtered rows in the destination area
+    // Else fallback to the old way to avoid regression.
+    // Filling merged cells into an area with filtered (hidden) rows, is a very complex task
+    // that is not implemented, but not even decided how to do, even excel can't handle that well
+    if (!bHasFiltered)
+    {
+        bool bHasOverlappedCells = false;
+        bool bSkipOverlappedCells = true;
+        SCCOL nColAkt = nCol1;
+        SCROW nRowAkt = nRow1;
+
+        // collect cells that are not empty or not overlapped
+        rNonOverlappedCellIdx.resize(nCount);
+        SCSIZE nValueCount = 0;
+        for (SCSIZE i = 0; i < nCount; ++i)
+        {
+            const ScPatternAttr* pPattern = GetPattern(nColAkt, nRowAkt);
+            bool bOverlapped
+                = pPattern->GetItemSet().GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET
+                  && pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped();
+
+            if (bOverlapped)
+                bHasOverlappedCells = true;
+
+            if (!bOverlapped || GetCellValue(nColAkt, nRowAkt).meType != CELLTYPE_NONE)
+            {
+                rNonOverlappedCellIdx[nValueCount++] = i;
+                // if there is at least 1 non empty overlapped cell, then no cell should be skipped
+                if (bOverlapped)
+                    bSkipOverlappedCells = false;
+            }
+
+            nColAkt += nAddX;
+            nRowAkt += nAddY;
+        }
+        rNonOverlappedCellIdx.resize(nValueCount);
+
+        // if all the values are overlapped CELLTYPE_NONE, then there is no need to analyse it.
+        if (nValueCount == 0)
+            return;
+
+        // if there is no overlapped cells, there is nothing to skip
+        if (!bHasOverlappedCells)
+            bSkipOverlappedCells = false;
+
+        if (bSkipOverlappedCells)
+        {
+            nColAkt = nCol1 + rNonOverlappedCellIdx[0] * nAddX;
+            nRowAkt = nRow1 + rNonOverlappedCellIdx[0] * nAddY;
+            ScRefCellValue aPrevCell, aAktCell;
+            aAktCell = GetCellValue(nColAkt, nRowAkt);
+            CellType eCellType = aAktCell.meType;
+            if (eCellType == CELLTYPE_VALUE)
+            {
+                // TODO: Check / handle special cases of number formats: like date, boolean
+                bool bVal = true;
+                if (nValueCount >= 2)
+                {
+                    for (SCSIZE i = 1; i < nValueCount && bVal; i++)
+                    {
+                        aPrevCell = aAktCell;
+                        nColAkt = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
+                        nRowAkt = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
+                        aAktCell = GetCellValue(nColAkt, nRowAkt);
+                        if (aAktCell.meType == CELLTYPE_VALUE)
+                        {
+                            double nDiff = approxDiff(aAktCell.mfValue, aPrevCell.mfValue);
+                            if (i == 1)
+                                rInc = nDiff;
+                            if (!::rtl::math::approxEqual(nDiff, rInc, 13))
+                                bVal = false;
+                        }
+                        else
+                            bVal = false;
+                    }
+                    if (bVal)
+                    {
+                        rCmd = FILL_LINEAR;
+                        rSkipOverlappedCells = true;
+                        return;
+                    }
+                }
+            }
+            else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
+            {
+                // TODO: check / handle if it is a sequence of userlist string
+                // or if the strings are composition of a number sequence and a constant string
+            }
+        }
+    }
+
+    //if it is not a FILL_LINEAR - CELLTYPE_VALUE - with merged cells [without hidden values]
+    //then do it in the old way
 
     SCCOL nCol = nCol1;
     SCROW nRow = nRow1;
@@ -795,14 +892,18 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
+        bool nSkipOverlappedCells;
+        std::vector<sal_Int32> aNonOverlappedCellIdx;
         if (bVertical)
             FillAnalyse(static_cast<SCCOL>(nCol),nRow1,
                     static_cast<SCCOL>(nCol),nRow2, eFillCmd,eDateCmd,
-                    nInc,nMinDigits, pListData,nListIndex);
+                    nInc, nMinDigits, pListData, nListIndex,
+                    bHasFiltered, nSkipOverlappedCells, aNonOverlappedCellIdx);
         else
             FillAnalyse(nCol1,static_cast<SCROW>(nRow),
                     nCol2,static_cast<SCROW>(nRow), eFillCmd,eDateCmd,
-                    nInc,nMinDigits, pListData,nListIndex);
+                    nInc, nMinDigits, pListData, nListIndex,
+                    bHasFiltered, nSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if (pListData)
         {
@@ -860,12 +961,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        pProgress );
+                        pProgress, nSkipOverlappedCells, &aNonOverlappedCellIdx);
             else
                 FillSeries( nCol1, static_cast<SCROW>(nRow), nCol2,
                         static_cast<SCROW>(nRow), nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        pProgress );
+                        pProgress, nSkipOverlappedCells, &aNonOverlappedCellIdx);
             if (pProgress)
                 nProgress = pProgress->GetState();
         }
@@ -919,8 +1020,15 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
+        bool nSkipOverlappedCells;
+        std::vector<sal_Int32> aNonOverlappedCellIdx;
 
-        FillAnalyse(nCol1,nRow1, nCol2,nRow2, eFillCmd,eDateCmd, nInc,nMinDigits, pListData,nListIndex);
+        // Todo: update this function to calculate with merged cell fills,
+        //       after FillAnalyse / FillSeries fully handle them.
+        // Now FillAnalyse called as if there are filtered rows, so it will work in the old way.
+        FillAnalyse(nCol1, nRow1, nCol2, nRow2, eFillCmd, eDateCmd,
+                    nInc, nMinDigits, pListData, nListIndex,
+                    true, nSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if ( pListData )                            // user defined list
         {
@@ -1693,7 +1801,8 @@ inline bool isOverflow( const double& rVal, const double& rMax, const double& rS
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
-                    bool bAttribs, ScProgress* pProgress )
+                    bool bAttribs, ScProgress* pProgress,
+                    bool bSkipOverlappedCells, std::vector<sal_Int32>* pNonOverlappedCellIdx )
 {
     // The term 'inner' here refers to the loop in the filling direction i.e.
     // when filling vertically, the inner position is the row position whereas
@@ -1718,9 +1827,12 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOLROW nIEnd;
     SCCOLROW nISource;
     ScRange aFillRange;
+    sal_uLong nFillerCount;
+    std::vector<bool> aIsNonEmptyCell;
 
     if (bVertical)
     {
+        nFillerCount = (nRow2 - nRow1) + 1;
         nFillCount += (nRow2 - nRow1);
         if (nFillCount == 0)
             return;
@@ -1745,6 +1857,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
     else
     {
+        nFillerCount = (nCol2 - nCol1) + 1;
         nFillCount += (nCol2 - nCol1);
         if (nFillCount == 0)
             return;
@@ -1781,6 +1894,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         // at least as long as the area to be filled and does not end earlier,
         // so we can treat it as entire area for performance reasons at least
         // in the vertical case.
+        // This is not exact in case of merged cell fills with skipping overlapped parts, but
+        // it is still a good upper estimation.
         ScCellValue aSrcCell;
         if (bVertical)
             aSrcCell = aCol[static_cast<SCCOL>(nOStart)].GetCellValue(static_cast<SCROW>(nISource));
@@ -1841,6 +1956,34 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         // Source cell value. We need to clone the value since it may be inserted repeatedly.
         ScCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
 
+        // Maybe another source cell need to be searched, if the fill is going trough merged cells,
+        // where overlapped parts does not contain any information, so they can be skipped.
+        if (bSkipOverlappedCells)
+        {
+            // create a vector to make it easier to decide if a cell need to be filled, or skipped.
+            aIsNonEmptyCell.resize(nFillerCount, false);
+
+            SCCOLROW nfirstValueIdx;
+            if (bPositive)
+            {
+                nfirstValueIdx = nISource + (*pNonOverlappedCellIdx)[0];
+                for (auto i : (*pNonOverlappedCellIdx))
+                    aIsNonEmptyCell[i] = true;
+            }
+            else
+            {
+                nfirstValueIdx = nISource - (nFillerCount - 1 - (*pNonOverlappedCellIdx).back());
+                for (auto i : (*pNonOverlappedCellIdx))
+                    aIsNonEmptyCell[nFillerCount - 1 - i] = true;
+            }
+
+            //Set the real source cell
+            if (bVertical)
+                aSrcCell = aCol[nOStart].GetCellValue(static_cast<SCROW>(nfirstValueIdx));
+            else
+                aSrcCell = aCol[nfirstValueIdx].GetCellValue(static_cast<SCROW>(nOStart));
+        }
+
         const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
         const ScCondFormatItem& rCondFormatItem = pSrcPattern->GetItem(ATTR_CONDITIONAL);
         const ScCondFormatIndexes& rCondFormatIndex = rCondFormatItem.GetCondFormatData();
@@ -1899,14 +2042,24 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                 bool bError = false;
                 bool bOverflow = false;
+                bool bNonEmpty = true;
 
                 sal_uInt16 nDayOfMonth = 0;
+                sal_Int32 nFillerIdx = 0;
+                if (bSkipOverlappedCells && !aIsNonEmptyCell[0])
+                    --nIndex;
                 rInner = nIStart;
                 while (true)
                 {
+                    if (bSkipOverlappedCells)
+                    {
+                        nFillerIdx = (nFillerIdx + 1) % nFillerCount;
+                        bNonEmpty = aIsNonEmptyCell[nFillerIdx];
+                    }
+
                     if(!ColHidden(nCol) && !RowHidden(nRow))
                     {
-                        if (!bError)
+                        if (!bError && bNonEmpty)
                         {
                             switch (eFillCmd)
                             {
@@ -1943,7 +2096,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                         if (bError)
                             aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::NoValue);
-                        else if (!bOverflow)
+                        else if (!bOverflow && bNonEmpty)
                             aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal);
 
                         if (bAttribs && !bEntireArea && !bOverflow)
