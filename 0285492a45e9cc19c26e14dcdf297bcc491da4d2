@@ -22,6 +22,30 @@
       "revId": "0285492a45e9cc19c26e14dcdf297bcc491da4d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1daf1c_b1f19657",
+        "filename": "svx/source/table/tablecontroller.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2020-10-01T05:46:13Z",
+      "side": 1,
+      "message": "Ooops",
+      "parentUuid": "6d90f19c_dbb6f215",
+      "range": {
+        "startLine": 1523,
+        "startChar": 61,
+        "endLine": 1523,
+        "endChar": 72
+      },
+      "revId": "0285492a45e9cc19c26e14dcdf297bcc491da4d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
