@@ -79,8 +79,6 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
          */
         bool            bHitTestInsideRect = false;
         FloatingWindow* pFloat = pSVData->mpWinData->mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, bHitTestInsideRect );
-        FloatingWindow* pLastLevelFloat;
-        FloatWinPopupFlags nPopupFlags;
         if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
             if ( bMouseLeave )
@@ -102,7 +100,7 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                 {
                     if ( !pFloat )
                     {
-                        pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
+                        FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
                         pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                         return true;
                     }
@@ -125,8 +123,8 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     }
                     else
                     {
-                        pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
-                        nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
+                        FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
+                        FloatWinPopupFlags nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         if ( !(nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) )
                         {
                             pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
@@ -139,8 +137,8 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
             {
                 if ( !pFloat )
                 {
-                    pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
-                    nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
+                    FloatingWindow* pLastLevelFloat = pSVData->mpWinData->mpFirstFloat->ImplFindLastLevelFloat();
+                    FloatWinPopupFlags nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                     if ( nPopupFlags & FloatWinPopupFlags::AllMouseButtonClose )
                     {
                         if ( (nPopupFlags & FloatWinPopupFlags::NoMouseUpClose) &&

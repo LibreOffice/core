@@ -1651,8 +1651,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
     // Request for position or size change
     if (pState->mnMask & FRAMESTATE_MASK_GEOMETRY)
     {
-        tools::Rectangle aPosSize;
-
         /* #i44325#
          * if maximized, set restore size and guess maximized size from last time
          * in state change below maximize window
@@ -1692,6 +1690,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         else
         {
             bool bDoAdjust = false;
+            tools::Rectangle aPosSize;
             // initialize with current geometry
             if ((pState->mnMask & FRAMESTATE_MASK_GEOMETRY) != FRAMESTATE_MASK_GEOMETRY)
                 GetPosSize (aPosSize);

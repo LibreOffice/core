@@ -1359,11 +1359,11 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCont
 bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, long& rArrowSpacing)
 {
     ImplControlValue aVal;
-    tools::Rectangle aNativeBounds;
-    tools::Rectangle aNativeContent;
     tools::Rectangle aCtrlRegion(tools::Rectangle(Point(), Size(100, 15)));
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::SubmenuArrow))
     {
+        tools::Rectangle aNativeContent;
+        tools::Rectangle aNativeBounds;
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::SubmenuArrow,
                                                   aCtrlRegion, ControlState::ENABLED,
                                                   aVal, aNativeBounds, aNativeContent))
