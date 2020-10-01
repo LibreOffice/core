@@ -49,7 +49,6 @@ using namespace ::xmloff::token;
 void XMLTextParagraphExport::exportStyleAttributes(
         const css::uno::Reference< css::style::XStyle > & rStyle )
 {
-    OUString sName;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo(
             xPropSet->getPropertySetInfo());
@@ -91,6 +90,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
         if( PropertyState_DIRECT_VALUE ==
                 xPropState->getPropertyState( gsPageDescName  ) )
         {
+            OUString sName;
             xPropSet->getPropertyValue( gsPageDescName ) >>= sName;
             // fix for #i5551#  if( sName.getLength() > 0 )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,

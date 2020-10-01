@@ -135,11 +135,10 @@ bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
 
 bool XMLCharHeightDiffHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    OUStringBuffer aOut;
-
     float nRel = 0;
     if( (rValue >>= nRel) && (nRel != 0) )
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertMeasure( aOut, static_cast<sal_Int32>(nRel),
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT );
         rStrExpValue = aOut.makeStringAndClear();
