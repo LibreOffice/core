@@ -714,7 +714,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
                     std::unique_ptr<long[]> pDXAry;
-                    sal_Int32 nDXAryLen = 0;
                     if (nAryLen > 0)
                     {
                         const size_t nMinRecordSize = sizeof(sal_Int32);
@@ -728,7 +727,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                         sal_Int32 nStrLen( aStr.getLength() );
 
-                        nDXAryLen = std::max(nAryLen, nStrLen);
+                        sal_Int32 nDXAryLen = std::max(nAryLen, nStrLen);
 
                         if (nDXAryLen < nLen)
                         {

@@ -355,7 +355,6 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     }
 
     DecorationView aDecoView(&rRenderContext);
-    DrawButtonFlags nStyle;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     bool bEnabled = IsEnabled();
 
@@ -449,7 +448,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 
     if (bEnabled)
     {
-        nStyle = DrawButtonFlags::NONE;
+        DrawButtonFlags nStyle = DrawButtonFlags::NONE;
         if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
             nStyle |= DrawButtonFlags::Pressed;
         aDecoView.DrawButton(maThumbRect, nStyle);

@@ -179,9 +179,7 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
 bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 {
     sal_uInt32  n32 = 0;
-    sal_uInt16  n16 = 0;
     bool    bRet = false;
-    sal_uInt8   cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
     rStm.SetEndian( SvStreamEndian::LITTLE );
@@ -189,6 +187,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 
     if ( n32 == 0x38464947 )
     {
+        sal_uInt16  n16 = 0;
         rStm.ReadUInt16( n16 );
         if ( ( n16 == 0x6137 ) || ( n16 == 0x6139 ) )
         {
@@ -198,6 +197,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
             if ( bExtendedInfo )
             {
                 sal_uInt16 nTemp16 = 0;
+                sal_uInt8  cByte = 0;
 
                 // Pixel width
                 rStm.ReadUInt16( nTemp16 );
@@ -455,14 +455,6 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
     {
         nFormat = GraphicFileFormat::PCX;
 
-        sal_uInt16  nTemp16;
-        sal_uInt16  nXmin;
-        sal_uInt16  nXmax;
-        sal_uInt16  nYmin;
-        sal_uInt16  nYmax;
-        sal_uInt16  nDPIx;
-        sal_uInt16  nDPIy;
-
         rStm.SeekRel( 1 );
 
         // compression
@@ -471,6 +463,14 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
         bRet = (cByte==0 || cByte ==1);
         if (bRet)
         {
+            sal_uInt16  nTemp16;
+            sal_uInt16  nXmin;
+            sal_uInt16  nXmax;
+            sal_uInt16  nYmin;
+            sal_uInt16  nYmax;
+            sal_uInt16  nDPIx;
+            sal_uInt16  nDPIy;
+
             // Bits/Pixel
             rStm.ReadUChar( cByte );
             nBitsPerPixel = cByte;
@@ -986,14 +986,13 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 {
     sal_uInt32  n32 = 0;
     bool    bRet = false;
-    sal_uInt8   cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
     rStm.SetEndian( SvStreamEndian::LITTLE );
     rStm.ReadUInt32( n32 );
     if ( n32 == 0x44475653 )
     {
-        cByte = 0;
+        sal_uInt8 cByte = 0;
         rStm.ReadUChar( cByte );
         if ( cByte == 0x49 )
         {
