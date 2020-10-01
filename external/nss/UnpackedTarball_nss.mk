@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/clang-cl.patch.0 \
     external/nss/nss.vs2015.patch \
     external/nss/nss.vs2015.pdb.patch \
+    external/nss/nss-restore-manual-pre-dependencies.patch.1 \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \
     $(if $(filter ANDROID,$(OS)), \
