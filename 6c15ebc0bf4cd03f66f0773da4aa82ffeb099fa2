@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0024a34_7684b0b3",
+        "filename": "svtools/uiconfig/ui/thineditcontrol.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-01T14:45:56Z",
+      "side": 1,
+      "message": "I think the rule would need to be tweaked to only complain about a missing label if there is neither label or image. We have a few of these \"gear menus\" that are supposed to be label-less",
+      "revId": "6c15ebc0bf4cd03f66f0773da4aa82ffeb099fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
