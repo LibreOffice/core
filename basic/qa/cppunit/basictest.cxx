@@ -48,11 +48,11 @@ void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         sal_uInt64 size;
-        sal_uInt64 size_read;
         if(aFile.getSize(size) == osl::FileBase::E_None)
         {
             void* buffer = calloc(1, size+1);
             CPPUNIT_ASSERT(buffer);
+            sal_uInt64 size_read;
             if(aFile.read( buffer, size, size_read) == osl::FileBase::E_None)
             {
                 if(size == size_read)
