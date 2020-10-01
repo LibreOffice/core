@@ -360,6 +360,21 @@ static bool lcl_MergeGCBox(SwTableBox* pTableBox, GCLinePara* pPara)
             for( auto pTabBox : pCpyLine->GetTabBoxes() )
                 pTabBox->SetUpper( pInsLine );
 
+            SfxPoolItem const* pRowBrush(nullptr);
+            pCpyLine->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pRowBrush);
+            if (pRowBrush)
+            {
+                for (auto pBox : pCpyLine->GetTabBoxes())
+                {
+                    SfxPoolItem const* pCellBrush(nullptr);
+                    if (pBox->GetFrameFormat()->GetItemState(RES_BACKGROUND, true, &pCellBrush) != SfxItemState::SET)
+                    {   // set inner row background on inner cell
+                        pBox->ClaimFrameFormat();
+                        pBox->GetFrameFormat()->SetFormatAttr(*pRowBrush);
+                    }
+                }
+            }
+
             // remove the old box from its parent line
             it = pInsLine->GetTabBoxes().erase( it );
             // insert the nested line's boxes in its place
