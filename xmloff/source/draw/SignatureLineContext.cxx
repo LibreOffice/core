@@ -68,7 +68,6 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
         xPropSet->setPropertyValue("SignatureLineUnsignedImage", Any(xUnsignedGraphic));
 
     Reference<XGraphic> xGraphic;
-    bool bIsSigned(false);
     try
     {
         // Get the document signatures
@@ -97,6 +96,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_uInt16 nPrf
             [&xAttrList](const DocumentSignatureInformation& rSignatureInfo) {
                 return rSignatureInfo.SignatureLineId == xAttrList->getValueByName("loext:id");
             });
+        bool bIsSigned(false);
         if (pSignatureInfo != xSignatureInfo.end())
         {
             bIsSigned = true;

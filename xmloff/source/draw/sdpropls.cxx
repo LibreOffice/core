@@ -878,11 +878,11 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    OUStringBuffer aOut;
     bool bValue;
 
     if (rValue >>= bValue)
     {
+        OUStringBuffer aOut;
         ::sax::Converter::convertBool( aOut, bValue );
         rStrExpValue = aOut.makeStringAndClear();
 

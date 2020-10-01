@@ -613,14 +613,13 @@ Reference < XAutoStyleFamily > SvXMLStylesContext::GetAutoStyles( XmlStyleFamily
     if( XmlStyleFamily::TEXT_TEXT == nFamily || XmlStyleFamily::TEXT_PARAGRAPH == nFamily)
     {
         bool bPara = XmlStyleFamily::TEXT_PARAGRAPH == nFamily;
-        OUString sName;
         if( !bPara && mxTextAutoStyles.is() )
             xAutoStyles = mxTextAutoStyles;
         else if( bPara && mxParaAutoStyles.is() )
             xAutoStyles = mxParaAutoStyles;
         else
         {
-            sName = bPara ? OUStringLiteral( u"ParagraphStyles" ): OUStringLiteral( u"CharacterStyles" );
+            OUStringLiteral sName = bPara ? OUStringLiteral( u"ParagraphStyles" ): OUStringLiteral( u"CharacterStyles" );
             Reference< XAutoStylesSupplier > xAutoStylesSupp(   GetImport().GetModel(), UNO_QUERY );
             Reference< XAutoStyles > xAutoStyleFamilies = xAutoStylesSupp->getAutoStyles();
             if (xAutoStyleFamilies->hasByName(sName))

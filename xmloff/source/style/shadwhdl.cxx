@@ -120,7 +120,6 @@ bool XMLShadowPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
 bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     bool bRet = false;
-    OUStringBuffer aOut;
     table::ShadowFormat aShadow;
 
     if( rValue >>= aShadow )
@@ -150,8 +149,8 @@ bool XMLShadowPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
         nX *= aShadow.ShadowWidth;
         nY *= aShadow.ShadowWidth;
 
+        OUStringBuffer aOut;
         ::sax::Converter::convertColor( aOut, aShadow.Color );
-
         aOut.append( ' ' );
         rUnitConverter.convertMeasureToXML( aOut, nX );
         aOut.append( ' ' );
