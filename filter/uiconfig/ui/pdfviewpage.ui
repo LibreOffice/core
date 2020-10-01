@@ -69,7 +69,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="outline">
-                        <property name="label" translatable="yes" context="pdfviewpage|outline">_Bookmarks and page</property>
+                        <property name="label" translatable="yes" context="pdfviewpage|outline">_Outline and page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

@@ -321,7 +321,7 @@
                     <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="allbookmarks">
-                        <property name="label" translatable="yes" context="pdfuserinterfacepage|allbookmarks">_All bookmark levels</property>
+                        <property name="label" translatable="yes" context="pdfuserinterfacepage|allbookmarks">Show _All</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -342,7 +342,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="visiblebookmark">
-                        <property name="label" translatable="yes" context="pdfuserinterfacepage|visiblebookmark">_Visible bookmark levels:</property>
+                        <property name="label" translatable="yes" context="pdfuserinterfacepage|visiblebookmark">_Visible levels:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -395,7 +395,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="pdfuserinterfacepage|label4">Bookmarks</property>
+                <property name="label" translatable="yes" context="pdfuserinterfacepage|label4">Collapse Outlines</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
