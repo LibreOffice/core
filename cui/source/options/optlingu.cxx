@@ -30,6 +30,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/dispatchcommand.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -871,6 +872,7 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     m_xLinguOptionsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     m_xLinguOptionsCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
+    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxLinguTabPage, OnLinkClick));
     if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
@@ -1535,6 +1537,12 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
     }
 }
 
+IMPL_STATIC_LINK_NOARG(SvxLinguTabPage, OnLinkClick, weld::LinkButton&, bool)
+{
+    comphelper::dispatchCommand(".uno:MoreDictionaries", {});
+    return true;
+}
+
 SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& rData)
     : GenericDialogController(pParent, "cui/ui/editmodulesdialog.ui", "EditModulesDialog")
     , sSpell(CuiResId(RID_SVXSTR_SPELL))
@@ -1568,6 +1576,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xPrioUpPB->set_sensitive( false );
     m_xPrioDownPB->set_sensitive( false );
 
+    m_xMoreDictsLink->connect_activate_link(LINK(this, SvxEditModulesDlg, OnLinkClick));
     if (officecfg::Office::Security::Hyperlinks::Open::get() == SvtExtendedSecurityOptions::OPEN_NEVER)
         m_xMoreDictsLink->hide();
 
@@ -1959,6 +1968,12 @@ IMPL_LINK_NOARG(SvxEditModulesDlg, BackHdl_Impl, weld::Button&, void)
 {
     rLinguData = *pDefaultLinguData;
     LangSelectHdl_Impl(nullptr);
+}
+
+IMPL_STATIC_LINK_NOARG(SvxEditModulesDlg, OnLinkClick, weld::LinkButton&, bool)
+{
+    comphelper::dispatchCommand(".uno:MoreDictionaries", {});
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
