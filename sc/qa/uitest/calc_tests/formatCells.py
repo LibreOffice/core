@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
@@ -299,21 +300,9 @@ class formatCell(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
+
         #set points pt measurement
-        #Make sure that tools-options-LibreOffice Calc-General-Point
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General /point
-        xunitlb = xDialogOpt.getChild("unitlb")
-        props = {"TEXT": "Point"}
-        actionProps = mkPropertyValues(props)
-        xunitlb.executeAction("SELECT", actionProps)
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Point")
 
         #select cell A1
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))

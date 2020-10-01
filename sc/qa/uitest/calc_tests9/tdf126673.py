@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -24,21 +25,7 @@ class tdf126673(UITestCase):
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
 
-        #set cm Tools-options-StarOffice Calc-General
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialogOpt = self.xUITest.getTopFocusWindow()
-
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Calc
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General /cm
-        xunitlb = xDialogOpt.getChild("unitlb")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xunitlb.executeAction("SELECT", actionProps)
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         #select A2
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A2"}))

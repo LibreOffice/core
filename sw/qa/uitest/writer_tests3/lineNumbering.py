@@ -11,6 +11,7 @@ from uitest.path import get_srcdir_url
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 
 class WriterLineNumbering(UITestCase):
 
@@ -18,19 +19,7 @@ class WriterLineNumbering(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set centimeters
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:LineNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()

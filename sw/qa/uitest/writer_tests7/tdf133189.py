@@ -6,22 +6,8 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, select_pos
+from uitest.uihelper.common import change_measurement_unit
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
-def change_metric_units(self, unit):
-    self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-    xDialogOpt = self.xUITest.getTopFocusWindow()
-    xPages = xDialogOpt.getChild("pages")
-    xWriterEntry = xPages.getChild('3')
-    xWriterEntry.executeAction("EXPAND", tuple())
-    xWriterGeneralEntry = xWriterEntry.getChild('0')
-    xWriterGeneralEntry.executeAction("SELECT", tuple())
-    xMetric = xDialogOpt.getChild("metric")
-    props = {"TEXT": unit}
-    actionProps = mkPropertyValues(props)
-    xMetric.executeAction("SELECT", actionProps)
-    xOKBtn = xDialogOpt.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
 
 class tdf133189(UITestCase):
     def test_tdf133189(self):
@@ -40,7 +26,7 @@ class tdf133189(UITestCase):
         xPaperMargin = xWriterEdit.getChild('marginLB')
 
         #change measurement to Inches
-        change_metric_units(self, 'Inch')
+        change_measurement_unit(self, 'Inch')
 
         self.ui_test.execute_dialog_through_command(".uno:PageDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -71,7 +57,7 @@ class tdf133189(UITestCase):
         self.assertEqual(get_state_as_dict(xPaperHeight)['Text'], "8.00″")
 
         #change measurement again to Centimeters
-        change_metric_units(self, 'Centimeter')
+        change_measurement_unit(self, 'Centimeter')
 
         self.ui_test.wait_until_property_is_updated(xPaperMargin, "SelectEntryText", "Normal (1.90 cm)")
         # tdf#129267

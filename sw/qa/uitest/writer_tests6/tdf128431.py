@@ -6,6 +6,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import select_pos, get_state_as_dict
+from uitest.uihelper.common import change_measurement_unit
 from com.sun.star.uno import RuntimeException
 from com.sun.star.awt.GradientStyle import LINEAR
 from com.sun.star.drawing.HatchStyle import SINGLE
@@ -21,21 +22,7 @@ class tdf128431(UITestCase):
         self.ui_test.create_doc_in_start_center("writer")
         document = self.ui_test.get_component()
 
-        #set cm Tools-options-StarOffice Writer-General
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:PageDialog")
         xDialog = self.xUITest.getTopFocusWindow()
