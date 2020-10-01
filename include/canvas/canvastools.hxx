@@ -43,6 +43,11 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
+namespace vcl
+{
+    class Region;
+}
+
 namespace com::sun::star::geometry
 {
     struct RealSize2D;
@@ -549,6 +554,9 @@ namespace canvas
                         const css::rendering::RenderState& renderState,
                         OutputDevice& rOutDev,
                         OutputDevice* p2ndOutDev=nullptr);
+
+        CANVASTOOLS_DLLPUBLIC vcl::Region stateToClipRegion(const css::rendering::ViewState& viewState,
+                        const css::rendering::RenderState& renderState);
 
         CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32& rEmphasisMark);
