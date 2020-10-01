@@ -29,8 +29,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 				$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
-				    $(if $(GNUMAKE_WIN_NATIVE),--enable-native-make)) \
-				--disable-extras \
+					$(if $(GNUMAKE_WIN_NATIVE),--enable-native-make) \
+					--disable-tools --disable-extras) \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 	,source)
 	$(call gb_Trace_EndRange,icu,EXTERNAL)
@@ -73,7 +73,6 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 		./configure \
 			--disable-layout --disable-samples \
 			$(if $(filter FUZZERS,$(BUILD_TYPE)),--disable-release) \
-			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
 			$(if $(filter iOS ANDROID,$(OS)),--disable-dyload) \
 			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
@@ -81,7 +80,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)\
-				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
+				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
+				--disable-tools --disable-extras) \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 		$(if $(filter MACOSX,$(OS)), \
 			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl \
