@@ -350,8 +350,8 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
 
 BitmapChecksum PDFiumPage::getChecksum()
 {
-    size_t nPageWidth = FPDF_GetPageWidth(mpPage);
-    size_t nPageHeight = FPDF_GetPageHeight(mpPage);
+    size_t nPageWidth = getWidth();
+    size_t nPageHeight = getHeight();
     FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
     if (!pPdfBitmap)
     {
@@ -375,6 +375,10 @@ BitmapChecksum PDFiumPage::getChecksum()
     }
     return aBitmap.GetChecksum();
 }
+
+double PDFiumPage::getWidth() { return FPDF_GetPageWidth(mpPage); }
+
+double PDFiumPage::getHeight() { return FPDF_GetPageHeight(mpPage); }
 
 PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
     : mpPathSegment(pPathSegment)
@@ -478,6 +482,13 @@ PDFiumTextPage::~PDFiumTextPage()
 {
     if (mpTextPage)
         FPDFText_ClosePage(mpTextPage);
+}
+
+int PDFiumTextPage::countChars() { return FPDFText_CountChars(mpTextPage); }
+
+unsigned int PDFiumTextPage::getUnicode(int index)
+{
+    return FPDFText_GetUnicode(mpTextPage, index);
 }
 
 } // end vcl::pdf

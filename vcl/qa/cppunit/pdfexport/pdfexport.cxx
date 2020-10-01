@@ -39,8 +39,8 @@
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
 #include <fpdf_doc.h>
+#include <fpdf_annot.h>
 #include <fpdfview.h>
-#include <cpp/fpdf_scopers.h>
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
@@ -68,7 +68,7 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
     // Export the document as PDF, then parse it with PDFium.
-    ScopedFPDFDocument exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
     std::shared_ptr<vcl::pdf::PDFium> mpPDFium;
 
 public:
@@ -186,7 +186,7 @@ PdfExportTest::PdfExportTest()
     maTempFile.EnableKillingFile();
 }
 
-ScopedFPDFDocument PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
+std::unique_ptr<vcl::pdf::PDFiumDocument> PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
 {
     // Import the bugdoc and export as PDF.
     mxComponent = loadFromDesktop(rURL);
@@ -198,8 +198,9 @@ ScopedFPDFDocument PdfExportTest::exportAndParse(const OUString& rURL, const utl
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
     return pPdfDocument;
 }
@@ -339,26 +340,26 @@ void PdfExportTest::testTdf105461()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
             continue;
 
-        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
-        if (Color(nRed, nGreen, nBlue) == COL_YELLOW)
+        if (pPdfPageObject->getFillColor() == COL_YELLOW)
             ++nYellowPathCount;
     }
 
@@ -392,29 +393,29 @@ void PdfExportTest::testTdf107868()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     if (!pPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
         return;
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // Make sure there is no filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     int nWhitePathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
             continue;
 
-        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
-        if (Color(nRed, nGreen, nBlue) == COL_WHITE)
+        if (pPdfPageObject->getFillColor() == COL_WHITE)
             ++nWhitePathCount;
     }
 
@@ -653,12 +654,14 @@ void PdfExportTest::testSofthyphenPos()
         // running, there is no printer defined, etc.
         return;
     }
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // tdf#96892 incorrect fractional part of font size caused soft-hyphen to
@@ -667,13 +670,13 @@ void PdfExportTest::testSofthyphenPos()
     // there are 3 texts currently, for line 1, soft-hyphen, line 2
     bool haveText(false);
 
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, FPDFPageObj_GetType(pPdfPageObject));
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_TEXT, pPdfPageObject->getType());
         haveText = true;
-        double const size(FPDFTextObj_GetFontSize(pPdfPageObject));
+        double const size = pPdfPageObject->getFontSize();
         CPPUNIT_ASSERT_DOUBLES_EQUAL(11.05, size, 1E-06);
     }
 
@@ -887,12 +890,14 @@ void PdfExportTest::testTdf108963()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // FIXME: strangely this fails on some Win systems after a pdfium update, expected: 793.7; actual: 793
@@ -900,64 +905,60 @@ void PdfExportTest::testTdf108963()
     // Test page size (28x15.75 cm, was 1/100th mm off, tdf#112690)
     // bad: MediaBox[0 0 793.672440944882 446.428346456693]
     // good: MediaBox[0 0 793.700787401575 446.456692913386]
-    const double aWidth = FPDF_GetPageWidth(pPdfPage.get());
+    const double aWidth = pPdfPage->getWidth();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(793.7, aWidth, 0.01);
-    const double aHeight = FPDF_GetPageHeight(pPdfPage.get());
+    const double aHeight = pPdfPage->getHeight();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(446.46, aHeight, 0.01);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPdfPageObject = pPdfPage->getObject(i);
+        if (pPdfPageObject->getType() != FPDF_PAGEOBJ_PATH)
             continue;
 
-        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
-        FPDFPageObj_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
-        if (Color(nRed, nGreen, nBlue) == COL_YELLOW)
+        if (pPdfPageObject->getFillColor() == COL_YELLOW)
         {
             ++nYellowPathCount;
             // The path described a yellow rectangle, but it was not rotated.
-            int nSegments = FPDFPath_CountSegments(pPdfPageObject);
+            int nSegments = pPdfPageObject->getPathSegmentCount();
             CPPUNIT_ASSERT_EQUAL(5, nSegments);
-            FPDF_PATHSEGMENT pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 0);
-            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_MOVETO, FPDFPathSegment_GetType(pSegment));
-            float fX = 0;
-            float fY = 0;
-            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
-            CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(fY * 1000)));
-            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+            std::unique_ptr<vcl::pdf::PDFiumPathSegment> pSegment = pPdfPageObject->getPathSegment(0);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_MOVETO, pSegment->getType());
+            basegfx::B2DPoint aPoint = pSegment->getPoint();
+            CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(aPoint.getX() * 1000)));
+            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(aPoint.getY() * 1000)));
+            CPPUNIT_ASSERT(!pSegment->isClosed());
 
-            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 1);
-            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
-            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
-            CPPUNIT_ASSERT_EQUAL(275102, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(267618, static_cast<int>(round(fY * 1000)));
-            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+            pSegment = pPdfPageObject->getPathSegment(1);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, pSegment->getType());
+            aPoint = pSegment->getPoint();
+            CPPUNIT_ASSERT_EQUAL(275102, static_cast<int>(round(aPoint.getX() * 1000)));
+            CPPUNIT_ASSERT_EQUAL(267618, static_cast<int>(round(aPoint.getY() * 1000)));
+            CPPUNIT_ASSERT(!pSegment->isClosed());
 
-            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 2);
-            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
-            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
-            CPPUNIT_ASSERT_EQUAL(287518, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(251829, static_cast<int>(round(fY * 1000)));
-            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+            pSegment = pPdfPageObject->getPathSegment(2);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, pSegment->getType());
+            aPoint = pSegment->getPoint();
+            CPPUNIT_ASSERT_EQUAL(287518, static_cast<int>(round(aPoint.getX() * 1000)));
+            CPPUNIT_ASSERT_EQUAL(251829, static_cast<int>(round(aPoint.getY() * 1000)));
+            CPPUNIT_ASSERT(!pSegment->isClosed());
 
-            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 3);
-            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
-            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
-            CPPUNIT_ASSERT_EQUAL(257839, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(228472, static_cast<int>(round(fY * 1000)));
-            CPPUNIT_ASSERT(!FPDFPathSegment_GetClose(pSegment));
+            pSegment = pPdfPageObject->getPathSegment(3);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, pSegment->getType());
+            aPoint = pSegment->getPoint();
+            CPPUNIT_ASSERT_EQUAL(257839, static_cast<int>(round(aPoint.getX() * 1000)));
+            CPPUNIT_ASSERT_EQUAL(228472, static_cast<int>(round(aPoint.getY() * 1000)));
+            CPPUNIT_ASSERT(!pSegment->isClosed());
 
-            pSegment = FPDFPath_GetPathSegment(pPdfPageObject, 4);
-            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, FPDFPathSegment_GetType(pSegment));
-            FPDFPathSegment_GetPoint(pSegment, &fX, &fY);
-            CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(fX * 1000)));
-            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(fY * 1000)));
-            CPPUNIT_ASSERT(FPDFPathSegment_GetClose(pSegment));
+            pSegment = pPdfPageObject->getPathSegment(4);
+            CPPUNIT_ASSERT_EQUAL(FPDF_SEGMENT_LINETO, pSegment->getType());
+            aPoint = pSegment->getPoint();
+            CPPUNIT_ASSERT_EQUAL(245395, static_cast<int>(round(aPoint.getX() * 1000)));
+            CPPUNIT_ASSERT_EQUAL(244261, static_cast<int>(round(aPoint.getY() * 1000)));
+            CPPUNIT_ASSERT(pSegment->isClosed());
         }
     }
 
@@ -1135,30 +1136,30 @@ void PdfExportTest::testTdf115117_1a()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
-    auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
     CPPUNIT_ASSERT(pPdfTextPage);
 
     // Extract the text from the page. This pdfium API is a bit higher level
     // than we want and might apply heuristic that give false positive, but it
     // is a good approximation in addition to the check in testTdf115117_1().
-    int nChars = FPDFText_CountChars(pPdfTextPage);
+    int nChars = pPdfTextPage->countChars();
     CPPUNIT_ASSERT_EQUAL(44, nChars);
 
     std::vector<sal_uInt32> aChars(nChars);
     for (int i = 0; i < nChars; i++)
-        aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
+        aChars[i] = pPdfTextPage->getUnicode(i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(OUString("ti ti test ti\r\nti test fi fl ffi ffl test fi"), aActualText);
-
-    FPDFText_ClosePage(pPdfTextPage);
 #endif
 }
 
@@ -1181,28 +1182,28 @@ void PdfExportTest::testTdf115117_2a()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
-    auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
     CPPUNIT_ASSERT(pPdfTextPage);
 
-    int nChars = FPDFText_CountChars(pPdfTextPage);
+    int nChars = pPdfTextPage->countChars();
     CPPUNIT_ASSERT_EQUAL(13, nChars);
 
     std::vector<sal_uInt32> aChars(nChars);
     for (int i = 0; i < nChars; i++)
-        aChars[i] = FPDFText_GetUnicode(pPdfTextPage, i);
+        aChars[i] = pPdfTextPage->getUnicode(i);
     OUString aActualText(aChars.data(), aChars.size());
     CPPUNIT_ASSERT_EQUAL(
         OUString(u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644"), aActualText);
-
-    FPDFText_ClosePage(pPdfTextPage);
 #endif
 }
 
@@ -1494,23 +1495,24 @@ void PdfExportTest::testTdf105954()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // There is a single image on the page.
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     CPPUNIT_ASSERT_EQUAL(1, nPageObjectCount);
 
     // Check width of the image.
-    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), /*index=*/0);
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(/*index=*/0);
     FPDF_IMAGEOBJ_METADATA aMeta;
-    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject, pPdfPage.get(), &aMeta));
+    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject->getPointer(), pPdfPage->getPointer(), &aMeta));
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
     CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
@@ -1522,22 +1524,22 @@ void PdfExportTest::testTdf128630()
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf128630.odp";
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    ScopedFPDFDocument pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Assert the aspect ratio of the only bitmap on the page.
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
-        FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+        FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
         CPPUNIT_ASSERT(pBitmap);
         int nWidth = FPDFBitmap_GetWidth(pBitmap);
         int nHeight = FPDFBitmap_GetHeight(pBitmap);
@@ -1559,38 +1561,38 @@ void PdfExportTest::testTdf106702()
     auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has two pages.
-    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     // First page already has the correct image position.
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
     int nExpected = 0;
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
         nExpected = fTop;
         break;
     }
 
     // Second page had an incorrect image position.
-    pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage);
     int nActual = 0;
-    nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
         nActual = fTop;
         break;
     }
@@ -1617,38 +1619,38 @@ void PdfExportTest::testTdf113143()
     auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has two pages.
-    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     // First has the original (larger) image.
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
     int nLarger = 0;
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
         nLarger = fRight - fLeft;
         break;
     }
 
     // Second page has the scaled (smaller) image.
-    pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage);
     int nSmaller = 0;
-    nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
         nSmaller = fRight - fLeft;
         break;
     }
@@ -1675,32 +1677,32 @@ void PdfExportTest::testTdf115262()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
     auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
-    CPPUNIT_ASSERT_EQUAL(8, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(8, pPdfDocument->getPageCount());
 
     // Get the 6th page.
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/5));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/5);
     CPPUNIT_ASSERT(pPdfPage);
 
     // Look up the position of the first image and the 400th row.
-    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
+    int nPageObjectCount = pPdfPage->getObjectCount();
     int nFirstImageTop = 0;
     int nRowTop = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
         float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
-        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+        FPDFPageObj_GetBounds(pPageObject->getPointer(), &fLeft, &fBottom, &fRight, &fTop);
 
-        if (FPDFPageObj_GetType(pPageObject) == FPDF_PAGEOBJ_IMAGE)
+        if (pPageObject->getType() == FPDF_PAGEOBJ_IMAGE)
         {
             nFirstImageTop = fTop;
         }
-        else if (FPDFPageObj_GetType(pPageObject) == FPDF_PAGEOBJ_TEXT)
+        else if (pPageObject->getType() == FPDF_PAGEOBJ_TEXT)
         {
-            unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+            unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 0);
             std::vector<sal_Unicode> aText(nTextSize);
-            FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+            FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
 #if defined OSL_BIGENDIAN
             // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
             for (auto & j: aText) {
@@ -1716,7 +1718,6 @@ void PdfExportTest::testTdf115262()
     // bottom-right-corner-based PDF coordinates).
     // This was: expected less than 144, actual is 199.
     CPPUNIT_ASSERT_LESS(nFirstImageTop, nRowTop);
-    FPDFText_ClosePage(pTextPage);
 }
 
 void PdfExportTest::testTdf121962()
@@ -1725,23 +1726,23 @@ void PdfExportTest::testTdf121962()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
 
     // Make sure the table sum is displayed as "0", not faulty expression.
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_TEXT)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
             continue;
-        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 0);
         std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
 #if defined OSL_BIGENDIAN
         // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
         for (auto & j: aText) {
@@ -1751,8 +1752,6 @@ void PdfExportTest::testTdf121962()
         OUString sText(aText.data(), nTextSize / 2 - 1);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
-
-    FPDFText_ClosePage(pTextPage);
 }
 
 void PdfExportTest::testTdf115967()
@@ -1761,25 +1760,25 @@ void PdfExportTest::testTdf115967()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Get the first page
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
+    std::unique_ptr<vcl::pdf::PDFiumTextPage> pTextPage = pPdfPage->getTextPage();
 
     // Make sure the elements inside a formula in a RTL document are exported
     // LTR ( m=750abc ) and not RTL ( m=057cba )
-    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nPageObjectCount = pPdfPage->getObjectCount();
     OUString sText;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
-        if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_TEXT)
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
+        if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
             continue;
-        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 2);
+        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 2);
         std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+        FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
 #if defined OSL_BIGENDIAN
         // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
         for (auto & j: aText) {
@@ -1790,8 +1789,6 @@ void PdfExportTest::testTdf115967()
         sText += sChar.trim();
     }
     CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
-
-    FPDFText_ClosePage(pTextPage);
 }
 
 void PdfExportTest::testTdf121615()
@@ -1866,12 +1863,13 @@ void PdfExportTest::testTocLink()
 
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // Ensure there is a link on the first page (in the ToC).
@@ -1879,7 +1877,7 @@ void PdfExportTest::testTocLink()
     FPDF_LINK pLinkAnnot = nullptr;
     // Without the accompanying fix in place, this test would have failed, as FPDFLink_Enumerate()
     // returned false, as the page contained no links.
-    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot));
+    CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot));
 }
 
 void PdfExportTest::testReduceSmallImage()
@@ -1897,18 +1895,19 @@ void PdfExportTest::testReduceSmallImage()
     // Parse the PDF: get the image.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-    FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
-    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
 
     // Make sure we don't scale down a tiny bitmap.
-    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
     CPPUNIT_ASSERT(pBitmap);
     int nWidth = FPDFBitmap_GetWidth(pBitmap);
     int nHeight = FPDFBitmap_GetHeight(pBitmap);
@@ -1952,18 +1951,19 @@ void PdfExportTest::testReduceImage()
     // Parse the PDF: get the image.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
-    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, FPDFPageObj_GetType(pPageObject));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
 
     // Make sure we don't scale down a bitmap.
-    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject);
+    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
     CPPUNIT_ASSERT(pBitmap);
     int nWidth = FPDFBitmap_GetWidth(pBitmap);
     int nHeight = FPDFBitmap_GetHeight(pBitmap);
@@ -1976,11 +1976,11 @@ void PdfExportTest::testReduceImage()
     CPPUNIT_ASSERT_EQUAL(160, nHeight);
 }
 
-bool HasLinksOnPage(ScopedFPDFPage& pPdfPage)
+bool HasLinksOnPage(std::unique_ptr<vcl::pdf::PDFiumPage>& pPdfPage)
 {
     int nStartPos = 0;
     FPDF_LINK pLinkAnnot = nullptr;
-    return FPDFLink_Enumerate(pPdfPage.get(), &nStartPos, &pLinkAnnot);
+    return FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot);
 }
 
 void PdfExportTest::testLinkWrongPage()
@@ -1989,13 +1989,13 @@ void PdfExportTest::testLinkWrongPage()
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "link-wrong-page.odp";
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
-    ScopedFPDFDocument pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has 2 pages.
-    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
 
     // First page should have 1 link (2nd slide, 1st was hidden).
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // Without the accompanying fix in place, this test would have failed, as the link of the first
@@ -2003,7 +2003,7 @@ void PdfExportTest::testLinkWrongPage()
     CPPUNIT_ASSERT(HasLinksOnPage(pPdfPage));
 
     // Second page should have no links (3rd slide).
-    ScopedFPDFPage pPdfPage2(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage2);
     CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
 }
@@ -2014,14 +2014,13 @@ void PdfExportTest::testLargePage()
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "6m-wide.odg";
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
-    ScopedFPDFDocument pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has 1 page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     // Check the value (not the unit) of the page size.
     FS_SIZEF aSize;
-    FPDF_GetPageSizeByIndexF(pPdfDocument.get(), 0, &aSize);
+    FPDF_GetPageSizeByIndexF(pPdfDocument->getPointer(), 0, &aSize);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 8503.94
     // - Actual  : 17007.875
@@ -2059,20 +2058,21 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     // Parse the export result.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
 
     // Make sure that the page -> form -> form has a child image.
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_CountObjects(pPdfPage.get()));
-    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), 0);
-    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pPageObject));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, pPageObject->getType());
     // 2: white background and the actual object.
-    CPPUNIT_ASSERT_EQUAL(2, FPDFFormObj_CountObjects(pPageObject));
-    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, 1);
+    CPPUNIT_ASSERT_EQUAL(2, FPDFFormObj_CountObjects(pPageObject->getPointer()));
+    FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject->getPointer(), 1);
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_FORM, FPDFPageObj_GetType(pFormObject));
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -2118,11 +2118,12 @@ void PdfExportTest::testDefaultVersion()
     // Parse the export result.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = 0;
-    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    FPDF_GetFileVersion(pPdfDocument->getPointer(), &nFileVersion);
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
 }
 
@@ -2144,11 +2145,12 @@ void PdfExportTest::testVersion15()
     // Parse the export result.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
     int nFileVersion = 0;
-    FPDF_GetFileVersion(pPdfDocument.get(), &nFileVersion);
+    FPDF_GetFileVersion(pPdfDocument->getPointer(), &nFileVersion);
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 
@@ -2300,27 +2302,28 @@ void PdfExportTest::testFormFontName()
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    ScopedFPDFDocument pPdfDocument(
-        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aMemory.GetData(), aMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
-    ScopedFPDFPage pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
     CPPUNIT_ASSERT(pPdfPage);
 
     // The page has one annotation.
-    CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
-    ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnot = pPdfPage->getAnnotation(0);
 
     // Examine the default appearance.
-    CPPUNIT_ASSERT(FPDFAnnot_HasKey(pAnnot.get(), "DA"));
-    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot.get(), "DA"));
-    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot.get(), "DA", nullptr, 0);
+    CPPUNIT_ASSERT(pAnnot->hasKey("DA"));
+    CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot->getPointer(), "DA"));
+    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot->getPointer(), "DA", nullptr, 0);
     CPPUNIT_ASSERT_EQUAL(std::size_t(0), nDALength % 2);
     std::vector<sal_Unicode> aDABuf(nDALength / 2);
     FPDFAnnot_GetStringValue(
-        pAnnot.get(), "DA", reinterpret_cast<FPDF_WCHAR *>(aDABuf.data()), nDALength);
+        pAnnot->getPointer(), "DA", reinterpret_cast<FPDF_WCHAR *>(aDABuf.data()), nDALength);
 #if defined OSL_BIGENDIAN
     // The data returned by FPDFAnnot_GetStringValue is documented to always be UTF-16LE:
     for (auto & i: aDABuf) {
