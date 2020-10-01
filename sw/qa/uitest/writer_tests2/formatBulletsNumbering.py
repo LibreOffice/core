@@ -12,6 +12,7 @@ import time
 from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 
 class formatBulletsNumbering(UITestCase):
 
@@ -20,19 +21,7 @@ class formatBulletsNumbering(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Millimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Millimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -190,19 +179,7 @@ class formatBulletsNumbering(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Millimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Millimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -243,19 +220,7 @@ class formatBulletsNumbering(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set millimeters
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Millimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Millimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:BulletsAndNumberingDialog")
         xDialog = self.xUITest.getTopFocusWindow()

@@ -12,6 +12,7 @@ import time
 from uitest.debug import sleep
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 
 class formatParagraph(UITestCase):
 
@@ -310,19 +311,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog")
         xDialog = self.xUITest.getTopFocusWindow()
@@ -511,19 +500,7 @@ class formatParagraph(UITestCase):
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
 
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General - set centimeter
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog")
         xDialog = self.xUITest.getTopFocusWindow()

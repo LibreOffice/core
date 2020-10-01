@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -28,20 +29,8 @@ class chartGrid(UITestCase):
     gridwin = xCalcDoc.getChild("grid_window")
     document = self.ui_test.get_component()
 
-    self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog, set centimeters
-    xDialog = self.xUITest.getTopFocusWindow()
+    change_measurement_unit(self, "Centimeter")
 
-    xPages = xDialog.getChild("pages")
-    xCalcEntry = xPages.getChild('3')                 # calc
-    xCalcEntry.executeAction("EXPAND", tuple())
-    xCalcGeneralEntry = xCalcEntry.getChild('0')
-    xCalcGeneralEntry.executeAction("SELECT", tuple())          #General
-    xMetric = xDialog.getChild("unitlb")
-    props = {"TEXT": "Centimeter"}
-    actionProps = mkPropertyValues(props)
-    xMetric.executeAction("SELECT", actionProps)
-    xOKBtn = xDialog.getChild("ok")
-    self.ui_test.close_dialog_through_button(xOKBtn)
     #X Axis Major Grid
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())

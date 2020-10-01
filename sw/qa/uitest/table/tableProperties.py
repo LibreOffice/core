@@ -11,6 +11,7 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
+from uitest.uihelper.common import change_measurement_unit
 from uitest.debug import sleep
 import org.libreoffice.unotest
 import pathlib
@@ -24,21 +25,8 @@ class tableProperties(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("tableToText.odt"))
         document = self.ui_test.get_component()
         xWriterDoc = self.xUITest.getTopFocusWindow()
-        #set cm
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")  #optionsdialog
-        xDialog = self.xUITest.getTopFocusWindow()
 
-        xPages = xDialog.getChild("pages")
-        xWriterEntry = xPages.getChild('3')                 # Writer
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())          #General
-        xMetric = xDialog.getChild("metric")
-        props = {"TEXT": "Centimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialog.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Centimeter")
 
         #dialog Table Properties - Table
         self.ui_test.execute_dialog_through_command(".uno:TableDialog")
