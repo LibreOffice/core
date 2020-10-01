@@ -459,10 +459,9 @@ void ChartAreaPanel::updateData()
         GraphicObject aBitmap = getXBitmapFromName(mxModel, aBitmapName);
         XFillBitmapItem aBitmapItem(aBitmapName, aBitmap);
         std::unique_ptr<XFillBitmapItem> pBitmapItem;
-        DrawModelWrapper* pModelWrapper = nullptr;
         try
         {
-            pModelWrapper = getDrawModelWrapper(mxModel);
+            DrawModelWrapper* pModelWrapper = getDrawModelWrapper(mxModel);
             if (pModelWrapper)
             {
                 pBitmapItem = aBitmapItem.checkForUniqueItem(&pModelWrapper->getSdrModel());
