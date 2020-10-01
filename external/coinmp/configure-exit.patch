@@ -1,0 +1,33 @@
+--- Cgl/configure
++++ Cgl/configure
+@@ -3501,8 +3501,6 @@
+ fi
+ for ac_declaration in \
+    '' \
+-   'extern "C" void std::exit (int) throw (); using std::exit;' \
+-   'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+    'extern "C" void exit (int);' \
+    'void exit (int);'
+--- Clp/configure
++++ Clp/configure
+@@ -3528,8 +3528,6 @@
+ fi
+ for ac_declaration in \
+    '' \
+-   'extern "C" void std::exit (int) throw (); using std::exit;' \
+-   'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+    'extern "C" void exit (int);' \
+    'void exit (int);'
+--- CoinUtils/configure
++++ CoinUtils/configure
+@@ -3527,8 +3527,6 @@
+ fi
+ for ac_declaration in \
+    '' \
+-   'extern "C" void std::exit (int) throw (); using std::exit;' \
+-   'extern "C" void std::exit (int); using std::exit;' \
+    'extern "C" void exit (int) throw ();' \
+    'extern "C" void exit (int);' \
+    'void exit (int);'
