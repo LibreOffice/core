@@ -19,4 +19,29 @@ def select_pos(ui_object, pos):
 def select_text(ui_object, from_pos, to):
     ui_object.executeAction("SELECT", mkPropertyValues({"FROM": from_pos, "TO": to}))
 
+def change_measurement_unit(UITestCase, unit):
+    UITestCase.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+    xDialogOpt = UITestCase.xUITest.getTopFocusWindow()
+
+    xPages = xDialogOpt.getChild("pages")
+    xAppEntry = xPages.getChild('3')
+    xAppEntry.executeAction("EXPAND", tuple())
+    xGeneralEntry = xAppEntry.getChild('0')
+    xGeneralEntry.executeAction("SELECT", tuple())
+
+    # Calc
+    if 'unitlb' in xDialogOpt.getChildren():
+        xUnit = xDialogOpt.getChild("unitlb")
+
+    # Writer
+    elif 'metric' in xDialogOpt.getChildren():
+        xUnit = xDialogOpt.getChild("metric")
+
+    props = {"TEXT": unit}
+    actionProps = mkPropertyValues(props)
+    xUnit.executeAction("SELECT", actionProps)
+
+    xOKBtn = xDialogOpt.getChild("ok")
+    UITestCase.ui_test.close_dialog_through_button(xOKBtn)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

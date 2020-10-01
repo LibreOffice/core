@@ -8,6 +8,7 @@ from uitest.framework import UITestCase
 from uitest.path import get_srcdir_url
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import change_measurement_unit
 
 def get_url_for_data_file(file_name):
     return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
@@ -18,19 +19,7 @@ class tdf99711(UITestCase):
         writer_doc = self.ui_test.load_file(get_url_for_data_file("shape.odt"))
 
         #set measurement to millimeters
-        self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
-        xDialogOpt = self.xUITest.getTopFocusWindow()
-        xPages = xDialogOpt.getChild("pages")
-        xWriterEntry = xPages.getChild('3')
-        xWriterEntry.executeAction("EXPAND", tuple())
-        xWriterGeneralEntry = xWriterEntry.getChild('0')
-        xWriterGeneralEntry.executeAction("SELECT", tuple())
-        xMetric = xDialogOpt.getChild("metric")
-        props = {"TEXT": "Millimeter"}
-        actionProps = mkPropertyValues(props)
-        xMetric.executeAction("SELECT", actionProps)
-        xOKBtn = xDialogOpt.getChild("ok")
-        self.ui_test.close_dialog_through_button(xOKBtn)
+        change_measurement_unit(self, "Millimeter")
 
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
