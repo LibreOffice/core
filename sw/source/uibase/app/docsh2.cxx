@@ -756,7 +756,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 xDocSh->DoInitNew();
 
                 bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
-                m_xDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
+                m_xDoc->Summary(*pSmryDoc, nLevel, nPara, bImpress);
                 if( bImpress )
                 {
                     WriterRef xWrt;

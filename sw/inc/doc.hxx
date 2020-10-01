@@ -650,7 +650,7 @@ public:
     // Glossary Document
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTextGlssry; }
 
-    void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress );
+    void Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress);
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
