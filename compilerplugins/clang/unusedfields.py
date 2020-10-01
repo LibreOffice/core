@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 import sys
 import re
@@ -27,7 +27,7 @@ def parseFieldInfo( tokens ):
     else:
         return (normalizeTypeParams(tokens[1]), "")
 
-with io.open("workdir/loplugin.unusedfields.log", "rb", buffering=1024*1024) as txt:
+with io.open("workdir/loplugin.unusedfields.log", "r", buffering=1024*1024) as txt:
     for line in txt:
         tokens = line.strip().split("\t")
         if tokens[0] == "definition:":

@@ -1,9 +1,3 @@
-avmedia/source/vlc/wrapper/Types.hxx:37
-    libvlc_event_t type int
-avmedia/source/vlc/wrapper/Types.hxx:51
-    libvlc_track_description_t i_id int
-avmedia/source/vlc/wrapper/Types.hxx:53
-    libvlc_track_description_t p_next struct libvlc_track_description_t *
 basegfx/source/polygon/b2dtrapezoid.cxx:205
     basegfx::trapezoidhelper::(anonymous namespace)::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/source/inc/expr.hxx:92
@@ -70,18 +64,6 @@ connectivity/inc/sdbcx/VUser.hxx:52
     connectivity::sdbcx::OUser m_pGroups std::unique_ptr<OGroups>
 connectivity/qa/connectivity/resource/sharedresources_test.cxx:53
     connectivity_test::SharedResourcesTest m_aResource ::connectivity::SharedResources
-connectivity/source/drivers/evoab2/EApi.h:125
-    (anonymous) po char *
-connectivity/source/drivers/evoab2/EApi.h:127
-    (anonymous) street char *
-connectivity/source/drivers/evoab2/EApi.h:128
-    (anonymous) locality char *
-connectivity/source/drivers/evoab2/EApi.h:129
-    (anonymous) region char *
-connectivity/source/drivers/evoab2/EApi.h:130
-    (anonymous) code char *
-connectivity/source/drivers/evoab2/EApi.h:131
-    (anonymous) country char *
 connectivity/source/drivers/firebird/Driver.hxx:47
     connectivity::firebird::FirebirdDriver m_firebirdTMPDirectory ::utl::TempFile
 connectivity/source/drivers/firebird/Driver.hxx:48
@@ -108,15 +90,15 @@ connectivity/source/inc/TConnection.hxx:55
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:44
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:1649
+cppcanvas/source/mtfrenderer/textaction.cxx:1651
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:36
     (anonymous namespace)::Mapping m_from uno::Environment
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:37
     (anonymous namespace)::Mapping m_to uno::Environment
-cppu/source/helper/purpenv/Proxy.hxx:36
+cppu/source/helper/purpenv/Proxy.hxx:35
     Proxy m_from css::uno::Environment
-cppu/source/helper/purpenv/Proxy.hxx:37
+cppu/source/helper/purpenv/Proxy.hxx:36
     Proxy m_to css::uno::Environment
 cppu/source/uno/cascade_mapping.cxx:42
     (anonymous namespace)::MediatorMapping m_from uno::Environment
@@ -168,58 +150,56 @@ cui/source/options/optcolor.cxx:255
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:65
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
-dbaccess/source/core/api/RowSetBase.hxx:85
+dbaccess/source/core/api/RowSetBase.hxx:84
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
-dbaccess/source/core/api/RowSetBase.hxx:96
+dbaccess/source/core/api/RowSetBase.hxx:95
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
 dbaccess/source/core/dataaccess/documentcontainer.cxx:66
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
-dbaccess/source/core/inc/ContentHelper.hxx:103
+dbaccess/source/core/inc/ContentHelper.hxx:102
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
-dbaccess/source/filter/hsqldb/parseschema.hxx:35
+dbaccess/source/filter/hsqldb/parseschema.hxx:34
     dbahsql::SchemaParser m_PrimaryKeys std::map<OUString, std::vector<OUString> >
 dbaccess/source/ui/control/tabletree.cxx:132
     dbaui::(anonymous namespace)::OViewSetter m_aEqualFunctor ::comphelper::UStringMixEqual
-dbaccess/source/ui/inc/charsetlistbox.hxx:44
+dbaccess/source/ui/inc/charsetlistbox.hxx:43
     dbaui::CharSetListBox m_aCharSets class dbaui::OCharsetDisplay
-dbaccess/source/ui/inc/sqledit.hxx:41
+dbaccess/source/ui/inc/sqledit.hxx:40
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
-dbaccess/source/ui/inc/WCopyTable.hxx:259
+dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
 drawinglayer/inc/processor3d/defaultprocessor3d.hxx:87
     drawinglayer::processor3d::DefaultProcessor3D maDrawinglayerOpt const class SvtOptionsDrawinglayer
 drawinglayer/source/processor2d/vclprocessor2d.hxx:77
     drawinglayer::processor2d::VclProcessor2D maDrawinglayerOpt const class SvtOptionsDrawinglayer
-editeng/source/editeng/impedit.hxx:504
+editeng/source/editeng/impedit.hxx:505
     ImpEditEngine maColorConfig svtools::ColorConfig
-embeddedobj/source/inc/commonembobj.hxx:104
+embeddedobj/source/inc/commonembobj.hxx:103
     OCommonEmbeddedObject m_aClassName class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:125
+embeddedobj/source/inc/oleembobj.hxx:124
     OleEmbeddedObject m_pOleComponent class OleComponent *
-embeddedobj/source/inc/oleembobj.hxx:145
+embeddedobj/source/inc/oleembobj.hxx:144
     OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
-embeddedobj/source/inc/oleembobj.hxx:167
+embeddedobj/source/inc/oleembobj.hxx:166
     OleEmbeddedObject m_bHasSizeToSet _Bool
-embeddedobj/source/inc/oleembobj.hxx:168
+embeddedobj/source/inc/oleembobj.hxx:167
     OleEmbeddedObject m_aSizeToSet css::awt::Size
-embeddedobj/source/inc/oleembobj.hxx:169
+embeddedobj/source/inc/oleembobj.hxx:168
     OleEmbeddedObject m_nAspectToSet sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:174
+embeddedobj/source/inc/oleembobj.hxx:173
     OleEmbeddedObject m_bGotStatus _Bool
-embeddedobj/source/inc/oleembobj.hxx:175
+embeddedobj/source/inc/oleembobj.hxx:174
     OleEmbeddedObject m_nStatus sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:176
+embeddedobj/source/inc/oleembobj.hxx:175
     OleEmbeddedObject m_nStatusAspect sal_Int64
-embeddedobj/source/inc/oleembobj.hxx:184
+embeddedobj/source/inc/oleembobj.hxx:183
     OleEmbeddedObject m_aLinkURL class rtl::OUString
-embeddedobj/source/inc/oleembobj.hxx:190
+embeddedobj/source/inc/oleembobj.hxx:189
     OleEmbeddedObject m_bFromClipboard _Bool
 extensions/source/propctrlr/eformshelper.hxx:61
     pcr::EFormsHelper m_aSubmissionUINames pcr::MapStringToPropertySet
 extensions/source/propctrlr/eformshelper.hxx:63
     pcr::EFormsHelper m_aBindingUINames pcr::MapStringToPropertySet
-extensions/source/update/check/updatehdl.hxx:86
-    UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/eps/eps.cxx:114
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 filter/source/graphicfilter/icgm/cgm.hxx:58
@@ -326,6 +306,8 @@ include/sfx2/sidebar/ResourceManager.hxx:110
     sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
 include/svl/ondemand.hxx:55
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
+include/svx/galleryobjectcollection.hxx:52
+    GalleryObjectCollection m_aInvalidURL class INetURLObject
 include/svx/graphctl.hxx:52
     GraphCtrl xVD ScopedVclPtrInstance<class VirtualDevice>
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:49
@@ -341,7 +323,7 @@ include/svx/svdoedge.hxx:160
 include/svx/svdpntv.hxx:154
     SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
 include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo2/include/unoidl/unoidl.hxx:443:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /home/noel/libo/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:445
@@ -369,9 +351,9 @@ include/vcl/opengl/OpenGLContext.hxx:48
 include/vcl/opengl/OpenGLContext.hxx:167
     OpenGLContext mpLastFramebuffer class OpenGLFramebuffer *
 io/source/stm/odata.cxx:558
-    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
-io/source/stm/odata.cxx:558
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
+io/source/stm/odata.cxx:558
+    io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:47
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:86
@@ -419,7 +401,7 @@ sc/inc/attarray.hxx:68
 sc/inc/compiler.hxx:129
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:130
-    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo2/sc/inc/compiler.hxx:127:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /home/noel/libo/sc/inc/compiler.hxx:127:9)
 sc/inc/compiler.hxx:135
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -500,6 +482,8 @@ sd/source/ui/inc/unopage.hxx:165
     SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
 sd/source/ui/inc/unopage.hxx:226
     SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
+sd/source/ui/remotecontrol/DiscoveryService.hxx:37
+    sd::DiscoveryService zService class sd::ZeroconfService *
 sd/source/ui/sidebar/MasterPageContainer.cxx:142
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated class Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:143
@@ -583,7 +567,7 @@ sw/inc/breakit.hxx:38
 sw/inc/calc.hxx:203
     SwCalc m_aSysLocale class SvtSysLocale
 sw/inc/dpage.hxx:35
-    SwDPage pGridLst std::unique_ptr<SdrPageGridFrameList>
+    SwDPage m_pGridLst std::unique_ptr<SdrPageGridFrameList>
 sw/inc/hints.hxx:230
     SwAttrSetChg m_bDelSet _Bool
 sw/inc/shellio.hxx:147
@@ -632,7 +616,7 @@ sw/source/uibase/dbui/mmconfigitem.cxx:116
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:79
     SwInsertField_Data m_aDBDataSource css::uno::Any
-toolkit/source/awt/vclxtoolkit.cxx:436
+toolkit/source/awt/vclxtoolkit.cxx:440
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:74
     OOoMountOperationClass parent_class GMountOperationClass
@@ -726,8 +710,16 @@ vcl/inc/salwtype.hxx:210
     SalSurroundingTextSelectionChangeEvent mnEnd sal_uLong
 vcl/inc/salwtype.hxx:216
     SalQueryCharPositionEvent mnCharPos sal_uLong
+vcl/inc/svdata.hxx:311
+    ImplSVNWFData mnMenuFormatBorderX int
+vcl/inc/svdata.hxx:312
+    ImplSVNWFData mnMenuFormatBorderY int
 vcl/inc/svdata.hxx:315
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
+vcl/inc/svdata.hxx:316
+    ImplSVNWFData mbDockingAreaSeparateTB _Bool
+vcl/inc/svdata.hxx:333
+    ImplSVNWFData mbRolloverMenubar _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<sal_uInt16>
 vcl/inc/unx/saldisp.hxx:281
@@ -952,12 +944,6 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1045
-    vcl::(anonymous namespace)::subHeader2 firstCode sal_uInt16
-vcl/source/fontsubset/sft.cxx:1046
-    vcl::(anonymous namespace)::subHeader2 entryCount sal_uInt16
-vcl/source/fontsubset/sft.cxx:1047
-    vcl::(anonymous namespace)::subHeader2 idDelta sal_uInt16
 vcl/source/gdi/dibtools.cxx:53
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30
 vcl/source/gdi/dibtools.cxx:54
@@ -992,7 +978,7 @@ vcl/source/gdi/dibtools.cxx:119
     (anonymous namespace)::DIBV5Header nV5ProfileSize sal_uInt32
 vcl/source/gdi/dibtools.cxx:120
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
-vcl/source/gdi/pdfwriter_impl.hxx:267
+vcl/source/gdi/pdfwriter_impl.hxx:268
     vcl::pdf::TransparencyEmit m_pSoftMaskStream std::unique_ptr<SvMemoryStream>
 vcl/source/treelist/headbar.cxx:41
     ImplHeadItem maHelpId class rtl::OString
