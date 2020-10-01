@@ -151,6 +151,7 @@ gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type duplicate-mnemonic
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_UIConfig__gla11y_command)
+($SRCDIR)/bin/lint-ui.py
 endef
 
 $(call gb_UIConfig_get_a11yerrors_target,%) : $(gb_UIConfig_LXML_TARGET) $(call gb_ExternalExecutable_get_dependencies,python) $(gb_UIConfig_gla11y_SCRIPT)
