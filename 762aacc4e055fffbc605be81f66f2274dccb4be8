@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17e2bb0a_78e9cb93",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-01T12:42:57Z",
+      "side": 1,
+      "message": "indeed, see \u003chttp://git.savannah.gnu.org/gitweb/?p\u003dautoconf.git;a\u003dcommit;h\u003da71c24a704ec0570ba99be909fffbc044d50908b\u003e \"* NEWS: AC_PROG_CC and AC_PROG_CXX no longer declare \u0027exit\u0027.\"",
+      "range": {
+        "startLine": 110,
+        "startChar": 39,
+        "endLine": 111,
+        "endChar": 15
+      },
+      "revId": "762aacc4e055fffbc605be81f66f2274dccb4be8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
