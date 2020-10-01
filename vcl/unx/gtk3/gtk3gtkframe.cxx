@@ -4138,45 +4138,27 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* 
     }
 }
 
-void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_handler )
+OUString GtkSalFrame::GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags)
 {
-    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
-
     char*           pText           = nullptr;
     PangoAttrList*  pAttrs          = nullptr;
     gint            nCursorPos      = 0;
 
-    gtk_im_context_get_preedit_string( pThis->m_pIMContext,
+    gtk_im_context_get_preedit_string( pIMContext,
                                        &pText,
                                        &pAttrs,
                                        &nCursorPos );
-    if( pText && ! *pText ) // empty string
-    {
-        // change from nothing to nothing -> do not start preedit
-        // e.g. this will activate input into a calc cell without
-        // user input
-        if( pThis->m_aInputEvent.maText.getLength() == 0 )
-        {
-            g_free( pText );
-            pango_attr_list_unref( pAttrs );
-            return;
-        }
-    }
 
-    pThis->m_bPreeditJustChanged = true;
-
-    bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != nullptr;
     gint nUtf8Len = pText ? strlen(pText) : 0;
-    pThis->m_aInputEvent.maText             = pText ? OUString(pText, nUtf8Len, RTL_TEXTENCODING_UTF8) : OUString();
-    const OUString& rText = pThis->m_aInputEvent.maText;
+    OUString sText = pText ? OUString(pText, nUtf8Len, RTL_TEXTENCODING_UTF8) : OUString();
 
     std::vector<sal_Int32> aUtf16Offsets;
-    for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < rText.getLength(); rText.iterateCodePoints(&nUtf16Offset))
+    for (sal_Int32 nUtf16Offset = 0; nUtf16Offset < sText.getLength(); sText.iterateCodePoints(&nUtf16Offset))
         aUtf16Offsets.push_back(nUtf16Offset);
 
     sal_Int32 nUtf32Len = aUtf16Offsets.size();
         // from the above loop filling aUtf16Offsets, we know that its size() fits into sal_Int32
-    aUtf16Offsets.push_back(rText.getLength());
+    aUtf16Offsets.push_back(sText.getLength());
 
     // sanitize the CurPos which is in utf-32
     if (nCursorPos < 0)
@@ -4184,10 +4166,10 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
     else if (nCursorPos > nUtf32Len)
         nCursorPos = nUtf32Len;
 
-    pThis->m_aInputEvent.mnCursorPos = aUtf16Offsets[nCursorPos];
-    pThis->m_aInputEvent.mnCursorFlags = 0;
+    rCursorPos = aUtf16Offsets[nCursorPos];
+    rCursorFlags = 0;
 
-    pThis->m_aInputFlags = std::vector<ExtTextInputAttr>( std::max( 1, static_cast<int>(rText.getLength()) ), ExtTextInputAttr::NONE );
+    rInputFlags.resize(std::max(1, static_cast<int>(sText.getLength())), ExtTextInputAttr::NONE);
 
     PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do
@@ -4230,7 +4212,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             {
                 case PANGO_ATTR_BACKGROUND:
                     sal_attr |= ExtTextInputAttr::Highlight;
-                    pThis->m_aInputEvent.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
+                    rCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     break;
                 case PANGO_ATTR_UNDERLINE:
                     sal_attr |= ExtTextInputAttr::Underline;
@@ -4252,21 +4234,47 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         // rhbz#1648281 apply over our utf-16 range derived from the input utf-32 range
         for (sal_Int32 i = aUtf16Offsets[nUtf32Start]; i < aUtf16Offsets[nUtf32End]; ++i)
         {
-            SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
+            SAL_WARN_IF(i >= static_cast<int>(rInputFlags.size()),
                 "vcl.gtk3", "pango attrib out of range. Broken range: "
                 << aUtf16Offsets[nUtf32Start] << "," << aUtf16Offsets[nUtf32End] << " Legal range: 0,"
-                << pThis->m_aInputFlags.size());
-            if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
+                << rInputFlags.size());
+            if (i >= static_cast<int>(rInputFlags.size()))
                 continue;
-            pThis->m_aInputFlags[i] |= sal_attr;
+            rInputFlags[i] |= sal_attr;
         }
     } while (pango_attr_iterator_next (iter));
     pango_attr_iterator_destroy(iter);
 
-    pThis->m_aInputEvent.mpTextAttr = pThis->m_aInputFlags.data();
-
     g_free( pText );
     pango_attr_list_unref( pAttrs );
+
+    return sText;
+}
+
+void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pIMContext, gpointer im_handler )
+{
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
+
+    sal_Int32 nCursorPos(0);
+    sal_uInt8 nCursorFlags(0);
+    std::vector<ExtTextInputAttr> aInputFlags;
+    OUString sText = GtkSalFrame::GetPreeditDetails(pIMContext, aInputFlags, nCursorPos, nCursorFlags);
+    if (sText.isEmpty() && pThis->m_aInputEvent.maText.isEmpty())
+    {
+        // change from nothing to nothing -> do not start preedit
+        // e.g. this will activate input into a calc cell without
+        // user input
+        return;
+    }
+
+    pThis->m_bPreeditJustChanged = true;
+
+    bool bEndPreedit = sText.isEmpty() && pThis->m_aInputEvent.mpTextAttr != nullptr;
+    pThis->m_aInputEvent.maText = sText;
+    pThis->m_aInputEvent.mnCursorPos = nCursorPos;
+    pThis->m_aInputEvent.mnCursorFlags = nCursorFlags;
+    pThis->m_aInputFlags = aInputFlags;
+    pThis->m_aInputEvent.mpTextAttr = pThis->m_aInputFlags.data();
 
     SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
