@@ -16,6 +16,24 @@
       "revId": "9911f4e33f95aecafc7efcdd45669a0cbb032da1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51019756_8eb9234d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-01T07:36:09Z",
+      "side": 1,
+      "message": "This matches my understanding. The DISABLE_DYNLOADING case replaces the dlopen() call with a lookup in a table that holds function pointers, there should be no other difference.",
+      "parentUuid": "f1c0de35_ad615388",
+      "revId": "9911f4e33f95aecafc7efcdd45669a0cbb032da1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
