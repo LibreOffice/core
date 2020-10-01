@@ -950,6 +950,22 @@ void SwXMLImport::endDocument()
         }
     }
 
+#if 1
+    if (!pDoc) { pDoc = SwImport::GetDocFromXMLImport(*this); }
+    for (sal_uLong i = 0; i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTableNode *const pTableNode = pDoc->GetNodes()[i]->GetTableNode())
+        {
+            if (!pTableNode->GetTable().IsNewModel()
+                && pTableNode->GetTable().CanConvertSubtables())
+            {
+                pTableNode->GetTable().ConvertSubtables();
+            }
+        }
+        // don't skip to the end; nested tables could have subtables too...
+    }
+#endif
+
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
     ClearTextImport();
