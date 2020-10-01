@@ -16,6 +16,24 @@
       "revId": "5247b14049fbeb0193d677ea0d2200b6682c47b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac13bc9_79033af6",
+        "filename": "compilerplugins/clang/reducevarscope.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-01T07:05:51Z",
+      "side": 1,
+      "message": "Yes, this plugin should not be on by default, it will require inspection at each site.\nWhich is not too hard - I made the plugin spit out info messages for each use-site of the plugin, so inspection of those is normally enough to see if anything is likely to go wrong.",
+      "parentUuid": "480669bf_8538f66b",
+      "revId": "5247b14049fbeb0193d677ea0d2200b6682c47b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
