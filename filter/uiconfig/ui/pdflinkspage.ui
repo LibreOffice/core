@@ -29,7 +29,7 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="export">
-                    <property name="label" translatable="yes" context="pdflinkspage|export">Export bookmarks as named destinations</property>
+                    <property name="label" translatable="yes" context="pdflinkspage|export">Export outlines as named destinations</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
