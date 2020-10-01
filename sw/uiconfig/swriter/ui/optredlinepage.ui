@@ -89,6 +89,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="insertcolor">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -226,6 +227,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="deletedcolor">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -363,6 +365,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="changedcolor">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -456,6 +459,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkMenuButton" id="markcolor">
+                    <property name="label" translatable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
