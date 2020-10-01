@@ -1219,14 +1219,14 @@ const SwFormatINetFormat* SwDoc::FindINetAttr( const OUString& rName ) const
     return nullptr;
 }
 
-void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
+void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
-    if( !pExtDoc || rOutNds.empty() )
+    if (rOutNds.empty())
         return;
 
     ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );
-    SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
+    SwNodeIndex aEndOfDoc( rExtDoc.GetNodes().GetEndOfContent(), -1 );
     for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
     {
         ::SetProgressState( static_cast<long>(i), GetDocShell() );
@@ -1253,10 +1253,10 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
         SwNodeRange aRange( *rOutNds[ i ], 0, *rOutNds[ i ], nEndOfs );
         GetNodes().Copy_( aRange, aEndOfDoc );
     }
-    const SwTextFormatColls *pColl = pExtDoc->GetTextFormatColls();
+    const SwTextFormatColls *pColl = rExtDoc.GetTextFormatColls();
     for( SwTextFormatColls::size_type i = 0; i < pColl->size(); ++i )
         (*pColl)[ i ]->ResetFormatAttr( RES_PAGEDESC, RES_BREAK );
-    SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
+    SwNodeIndex aIndx( rExtDoc.GetNodes().GetEndOfExtras() );
     ++aEndOfDoc;
     while( aIndx < aEndOfDoc )
     {
@@ -1275,14 +1275,14 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
                             !pMyColl->IsAssignedToListLevelOfOutlineStyle()
                             ? RES_POOLCOLL_HEADLINE2
                             : RES_POOLCOLL_HEADLINE1 );
-                pMyColl = pExtDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
+                pMyColl = rExtDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nHeadLine );
                 pNd->ChgFormatColl( pMyColl );
             }
             if( !pNd->Len() &&
                 pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
             {
                 bDelete = true;
-                pExtDoc->GetNodes().Delete( aIndx );
+                rExtDoc.GetNodes().Delete( aIndx );
             }
         }
         if( !bDelete )
