@@ -73,6 +73,54 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
     CPPUNIT_ASSERT_EQUAL(8, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136728)
+{
+#if !defined(_WIN32) // FIXME: For some reason, jenkins win build hangs here
+
+    load(DATA_DIRECTORY, "tdf136728.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(39, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Cut();
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    TransferableDataHelper aHelper(xTransfer.get());
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(39, getPages());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    SwTransferable::Paste(*pWrtShell, aHelper);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(39, getPages());
+
+    dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
+
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134227)
 {
     load(DATA_DIRECTORY, "tdf134227.docx");
