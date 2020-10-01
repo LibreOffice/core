@@ -526,6 +526,7 @@ public:
     static SalWheelMouseEvent   GetWheelEvent(GdkEventScroll& rEvent);
     static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
+    static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
