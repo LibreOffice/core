@@ -1123,22 +1123,18 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 }
 
 
-void SfxUndoManager::RemoveOldestUndoActions(sal_Int32 nNumToDelete)
+void SfxUndoManager::RemoveOldestUndoAction()
 {
     UndoManagerGuard aGuard( *m_xData );
 
-    if ( ImplIsInListAction_Lock() && ( m_xData->pUndoArray->nCurUndoAction == 1 ) )
+    if ( IsInListAction() && ( m_xData->pUndoArray->nCurUndoAction == 1 ) )
     {
         assert(!"SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
         return;
     }
 
-    while (nNumToDelete>0 && !m_xData->pUndoArray->maUndoActions.empty())
-    {
-        aGuard.markForDeletion( m_xData->pUndoArray->Remove( 0 ) );
-        --m_xData->pUndoArray->nCurUndoAction;
-        --nNumToDelete;
-    }
+    aGuard.markForDeletion( m_xData->pUndoArray->Remove( 0 ) );
+    --m_xData->pUndoArray->nCurUndoAction;
     ImplCheckEmptyActions();
 }
 
