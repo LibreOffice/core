@@ -114,11 +114,6 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
     if( aCID.isEmpty() )
         return;
 
-    awt::Size aSelectedSize;
-    ExplicitValueProvider* pProvider( comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ) );
-    if( pProvider )
-        aSelectedSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
-
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
 
     UndoGuard aUndoGuard(
@@ -181,8 +176,13 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
 
         if(pOutItemSet || pArgs)
         {
-            awt::Rectangle aObjectRect;
-            lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
+            awt::Rectangle aOldObjectRect;
+            ExplicitValueProvider* pProvider(comphelper::getUnoTunnelImplementation<ExplicitValueProvider>( m_xChartView ));
+            if( pProvider )
+                aOldObjectRect = pProvider->getRectangleOfObject(aCID);
+
+            awt::Rectangle aNewObjectRect;
+            lcl_getPositionAndSizeFromItemSet( aItemSet, aNewObjectRect, ToSize(aOldObjectRect) );
             awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
             awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
@@ -194,7 +194,7 @@ void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence
             }
 
             bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
-                        , aObjectRect, awt::Rectangle(), aPageRect );
+                        , aNewObjectRect, aOldObjectRect, aPageRect );
             if( bMoved || bChanged )
                 aUndoGuard.commit();
         }
