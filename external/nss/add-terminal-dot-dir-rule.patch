@@ -1,0 +1,16 @@
+diff -r 9213848965f6 coreconf/rules.mk
+--- a/nss/nss/coreconf/rules.mk	Wed Sep 02 10:45:48 2020 -0700
++++ b/nss/nss/coreconf/rules.mk	Wed Sep 30 18:20:44 2020 +0200
+@@ -47,6 +47,12 @@
+ 		IGNORE_DIRS=1 $(MAKE) -C $@ $(MAKECMDGOALS) ; \
+ 	fi
+ 	@$(CLICK_STOPWATCH)
++
++# prevent $(MAKE) to do anthing further, if there was a "." in $(DIRS)
++ifneq (,$(filter .,$(DIRS)))
++%::
++	# empty terminal rule triggered
++endif
+ endif
+ endif
+ 
