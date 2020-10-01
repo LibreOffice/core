@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a67329b6_97e72ecc",
+        "filename": "vcl/source/font/fontcharmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-01T08:38:53Z",
+      "side": 1,
+      "message": "... both pEndValidArea and pGlyphIdPtr are based on pCmap so this could only be false in case of pointer overflow which is already UB - it would be better to check before adding the values that it will overflow?",
+      "revId": "ebafb8740b999dc3f508a93526d4f6ef5c3d3446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
