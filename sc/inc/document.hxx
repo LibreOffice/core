@@ -1178,7 +1178,7 @@ public:
      * @return pointer to the double value stored in a numeric cell, or NULL
      *         if the cell at specified position is not a numeric cell.
      */
-    double* GetValueCell( const ScAddress& rPos );
+    SC_DLLPUBLIC double*                      GetValueCell( const ScAddress& rPos );
 
     SC_DLLPUBLIC svl::SharedStringPool&       GetSharedStringPool();
     const svl::SharedStringPool&              GetSharedStringPool() const;
