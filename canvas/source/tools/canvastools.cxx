@@ -1235,10 +1235,8 @@ namespace canvas::tools
                                    nColorSteps ) );
         }
 
-        void clipOutDev(const rendering::ViewState& viewState,
-                        const rendering::RenderState& renderState,
-                        OutputDevice& rOutDev,
-                        OutputDevice* p2ndOutDev)
+        vcl::Region stateToClipRegion(const rendering::ViewState& viewState,
+                                      const rendering::RenderState& renderState)
         {
             // accumulate non-empty clips into one region
             vcl::Region aClipRegion(true);
@@ -1288,6 +1286,16 @@ namespace canvas::tools
                     aClipRegion.SetEmpty();
                 }
             }
+
+            return aClipRegion;
+        }
+
+        void clipOutDev(const rendering::ViewState& viewState,
+                        const rendering::RenderState& renderState,
+                        OutputDevice& rOutDev,
+                        OutputDevice* p2ndOutDev)
+        {
+            vcl::Region aClipRegion = stateToClipRegion( viewState, renderState );
 
             // setup accumulated clip region. Note that setting an
             // empty clip region denotes "clip everything" on the
