@@ -12,6 +12,8 @@
 #include <comphelper/processfactory.hxx>
 
 #include <docsh.hxx>
+#include <docfunc.hxx>
+#include <cellmergeoption.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
 #include <viewfunc.hxx>
@@ -42,6 +44,7 @@ public:
     void testTdf53431_fillOnAutofilter();
     void testTdf40993_fillMergedCells();
     void testTdf43958_clickSelectOnMergedCells();
+    void testTdf88782_autofillLinearNumbersInMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -52,6 +55,7 @@ public:
     CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
     CPPUNIT_TEST(testTdf43958_clickSelectOnMergedCells);
+    CPPUNIT_TEST(testTdf88782_autofillLinearNumbersInMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -618,6 +622,62 @@ void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
     lcl_clickAndCheckCurrentArea(2, 6, 2, 6);    // C7
     lcl_clickAndCheckCurrentArea(2, 7, 2, 7);    // C8
     lcl_clickAndCheckCurrentArea(2, 8, 2, 8);    // C9
+}
+
+void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf88782_AutofillLinearNumbersInMergedCells.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // merge the yellow cells
+    ScCellMergeOption aMergeOptions(9, 11, 10, 13);     //J12:K14
+    aMergeOptions.maTabs.insert(0);
+    xDocSh->GetDocFunc().MergeCells(aMergeOptions, false, true, true, false);
+
+    // fillauto numbers, these areas contains mostly merged cells
+    pView->FillAuto(FILL_TO_BOTTOM, 1, 8, 3, 14, 7);    // B9:D15 ->  B9:D22
+    pView->FillAuto(FILL_TO_BOTTOM, 5, 8, 7, 17, 10);   // F9:H18 ->  F9:H28
+    pView->FillAuto(FILL_TO_BOTTOM, 9, 8, 10, 13, 6);   // J9:K14 ->  J9:K20
+    pView->FillAuto(FILL_TO_RIGHT, 9, 30, 16, 35, 8);   //J31:Q36 -> J31:Y36
+    pView->FillAuto(FILL_TO_LEFT, 9, 30, 16, 35, 8);    //J31:Q36 -> B31:Q36
+
+    // compare the results of fill-down with the reference stored in the test file
+    // this compare the whole area blindly, for concrete test cases, check the test file
+    // the test file have instructions / explanations, so that is easy to understand
+    for (int nCol = 1; nCol <= 10; nCol++) {
+        for (int nRow = 8; nRow <= 27; nRow++) {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol + 22, nRow, 0));
+            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
+            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol + 22, nRow, 0));
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            if (pValue2 != nullptr)
+                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);   //cells with number value
+            else
+                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);     //empty cells
+        }
+    }
+
+    // compare the results of fill-right and left with the reference stored in the test file
+    for (int nCol = 1; nCol <= 24; nCol++) {
+        for (int nRow = 30; nRow <= 35; nRow++) {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 16, 0));
+            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
+            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol, nRow + 16, 0));
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            if (pValue2 != nullptr)
+                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);
+            else
+                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);
+        }
+    }
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
