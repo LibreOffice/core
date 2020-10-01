@@ -191,7 +191,8 @@ public:
 
     void            ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd );
 
-    bool            MergeCells( const ScCellMergeOption& rOption, bool bContents,
+    SC_DLLPUBLIC bool
+                    MergeCells( const ScCellMergeOption& rOption, bool bContents,
                                         bool bRecord, bool bApi, bool bEmptyMergedCells = false );
     bool            UnmergeCells( const ScRange& rRange, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );
     bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord, ScUndoRemoveMerge* pUndoRemoveMerge );

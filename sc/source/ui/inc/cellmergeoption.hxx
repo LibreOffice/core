@@ -24,9 +24,9 @@ struct ScCellMergeOption
     bool mbCenter;
 
     explicit ScCellMergeOption(const ScRange& rRange);
-    explicit ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow,
-                               SCCOL nEndCol, SCROW nEndRow,
-                               bool bCenter = false);
+    SC_DLLPUBLIC explicit ScCellMergeOption(SCCOL nStartCol, SCROW nStartRow,
+                                            SCCOL nEndCol, SCROW nEndRow,
+                                            bool bCenter = false);
 
     ScRange getSingleRange(SCTAB nTab) const;
     ScRange getFirstSingleRange() const;
