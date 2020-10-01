@@ -460,7 +460,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::CursorPos )
     {
-        if ( mpIMEInfos && mpIMEInfos->nLen )
+        if (mpIMEInfos)
         {
             EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
             tools::Rectangle aR1 = PaMtoEditCursor( aPaM );
@@ -529,7 +529,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::QueryCharPosition )
     {
-        if ( mpIMEInfos && mpIMEInfos->nLen )
+        if (mpIMEInfos)
         {
             EditPaM aPaM( pView->pImpEditView->GetEditSelection().Max() );
             if ( !IsFormatted() )
