@@ -1,0 +1,83 @@
+Revert of upstream:
+
+changeset:   15608:744881490c78
+user:        Jan-Marek Glogowski <glogow@fbihome.de>
+date:        Wed May 13 19:00:40 2020 +0000
+summary:     Bug 1637083 Replace pre-dependency with shell hack r=rrelyea
+
+--- b/nss/coreconf/rules.mk	Wed May 13 19:00:40 2020 +0000
++++ a/nss/coreconf/rules.mk	Tue May 12 21:33:43 2020 +0000
+@@ -31,21 +31,10 @@
+ USE_NT_C_SYNTAX=1
+ endif
+ 
+-# For whatever reason, "." can't be handled using make conditionals.
+-# Based on automake's SUBDIRS "." handling.
+ ifdef DIRS
+ ifndef IGNORE_DIRS
+-ifneq (,$(filter .,$(DIRS)))
+-TARGETS = $(NULL)
+-ALL_TRASH = $(NULL)
+-endif
+-
+ $(DIRS):
++	$(IGNORE_ERROR)@$(MAKE) -C $@ $(MAKECMDGOALS)
+-	$(IGNORE_ERROR)@if [ "$@" != "." ]; then \
+-		$(MAKE) -C $@ $(MAKECMDGOALS) ; \
+-	else \
+-		IGNORE_DIRS=1 $(MAKE) -C $@ $(MAKECMDGOALS) ; \
+-	fi
+ 	@$(CLICK_STOPWATCH)
+ endif
+ endif
+@@ -84,9 +73,7 @@
+ check: $(DIRS)
+ 
+ clean clobber: $(DIRS)
+-ifneq (,$(ALL_TRASH))
+ 	rm -rf $(ALL_TRASH)
+-endif
+ 
+ realclean clobber_all: $(DIRS)
+ 	rm -rf $(wildcard *.OBJ) dist $(ALL_TRASH)
+--- b/nss/lib/ckfw/builtins/manifest.mn	Wed May 13 19:00:40 2020 +0000
++++ a/nss/lib/ckfw/builtins/manifest.mn	Tue May 12 21:33:43 2020 +0000
+@@ -5,9 +5,7 @@
+ 
+ CORE_DEPTH = ../../..
+ 
++DIRS = testlib
+-DIRS = . testlib
+-
+-testlib: .
+ 
+ MODULE = nss
+ 
+--- b/nss/lib/ckfw/manifest.mn	Wed May 13 19:00:40 2020 +0000
++++ a/nss/lib/ckfw/manifest.mn	Tue May 12 21:33:43 2020 +0000
+@@ -5,9 +5,7 @@
+ 
+ CORE_DEPTH = ../..
+ 
++DIRS = builtins
+-DIRS = . builtins
+-
+-builtins: .
+ 
+ PRIVATE_EXPORTS = \
+ 	ck.h		  \
+--- b/nss/manifest.mn	Wed May 13 19:00:40 2020 +0000
++++ a/nss/manifest.mn	Tue May 12 21:33:43 2020 +0000
+@@ -23,6 +23,12 @@
+ 	# no real way to encode these in any sensible way
+ 	$(MAKE) -C coreconf/nsinstall program
+ 	$(MAKE) export
++	# pre-build child dir -> parent dir dependencies
++	# ckfw/builtins -> ckfw
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw libs
++	# ckfw/builtins/testlib -> ckfw/builtins + base
++	$(MAKE) -C lib/base libs
++	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
+ 
+ all: prepare_build
+ 	$(MAKE) libs
