@@ -1299,7 +1299,7 @@ const SwNumFormat* SwWW8FltControlStack::GetNumFormatFromStack(const SwPosition 
         if (rTextNode.IsCountedInList())
         {
             OUString sName(static_cast<const SfxStringItem*>(pItem)->GetValue());
-            const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
+            const SwNumRule *pRule = rDoc.FindNumRulePtr(sName);
             if (pRule)
                 pRet = GetNumFormatFromSwNumRuleLevel(*pRule, rTextNode.GetActualListLevel());
         }
@@ -1383,14 +1383,14 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     paragraph indent to be relative to the new paragraph indent
                 */
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr.get()) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
                     {
-                        SwNode* pNode = pDoc->GetNodes()[ nStart ];
+                        SwNode* pNode = rDoc.GetNodes()[ nStart ];
                         if (!pNode || !pNode->IsTextNode())
                             continue;
 
@@ -1449,7 +1449,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         case RES_TXTATR_INETFMT:
             {
                 SwPaM aRegion(rTmpPos);
-                if (rEntry.MakeRegion(pDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
+                if (rEntry.MakeRegion(rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck))
                 {
                     SwFrameFormat *pFrame;
                     // If we have just one single inline graphic then
@@ -1467,7 +1467,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                     else
                     {
-                        pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
+                        rDoc.getIDocumentContentOperations().InsertPoolItem(aRegion, *rEntry.pAttr);
                     }
                 }
             }
@@ -1486,7 +1486,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
     {
         SwContentNode const*const pNd = rPos.nNode.GetNode().GetContentNode();
         if (!pNd)
-            pItem = &pDoc->GetAttrPool().GetDefaultItem(nWhich);
+            pItem = &rDoc.GetAttrPool().GetDefaultItem(nWhich);
         else
         {
             /*
@@ -1511,7 +1511,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFormatAttr(const SwPosition& rPos,
             if (pNd->IsTextNode())
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
-                m_xScratchSet.reset(new SfxItemSet(pDoc->GetAttrPool(), {{nWhich, nWhich}}));
+                m_xScratchSet.reset(new SfxItemSet(rDoc.GetAttrPool(), {{nWhich, nWhich}}));
                 if (pNd->GetTextNode()->GetParaAttr(*m_xScratchSet, nPos, nPos))
                     pItem = m_xScratchSet->GetItem(nWhich);
             }
@@ -1564,7 +1564,7 @@ bool SwWW8FltRefStack::IsFootnoteEdnBkmField(
         && ((REF_FOOTNOTE == (nSubType = pField->GetSubType())) || (REF_ENDNOTE  == nSubType))
         && !static_cast<const SwGetRefField*>(pField)->GetSetRefName().isEmpty())
     {
-        const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        const IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
         IDocumentMarkAccess::const_iterator_t ppBkmk =
             pMarkAccess->findMark( static_cast<const SwGetRefField*>(pField)->GetSetRefName() );
         if(ppBkmk != pMarkAccess->getAllMarksEnd())
@@ -1602,7 +1602,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 sal_uInt16 nBkmNo;
                 if( IsFootnoteEdnBkmField(rFormatField, nBkmNo) )
                 {
-                    ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
+                    ::sw::mark::IMark const * const pMark = rDoc.getIDocumentMarkAccess()->getAllMarksBegin()[nBkmNo];
 
                     const SwPosition& rBkMrkPos = pMark->GetMarkPos();
 
@@ -1624,7 +1624,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 }
             }
 
-            pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
+            rDoc.getIDocumentContentOperations().InsertPoolItem(aPaM, *rEntry.pAttr);
             MoveAttrs(*aPaM.GetPoint());
         }
         break;
@@ -2041,12 +2041,12 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     pRdr->m_pPrevNumRule = nullptr;
     pRdr->m_nCurrentColl = 0;
 
-    pRdr->m_xCtrlStck.reset(new SwWW8FltControlStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags,
+    pRdr->m_xCtrlStck.reset(new SwWW8FltControlStack(pRdr->m_rDoc, pRdr->m_nFieldFlags,
         *pRdr));
 
     pRdr->m_xRedlineStack.reset(new sw::util::RedlineStack(pRdr->m_rDoc));
 
-    pRdr->m_xAnchorStck.reset(new SwWW8FltAnchorStack(&pRdr->m_rDoc, pRdr->m_nFieldFlags));
+    pRdr->m_xAnchorStck.reset(new SwWW8FltAnchorStack(pRdr->m_rDoc, pRdr->m_nFieldFlags));
 
     // Save the attribute manager: we need this as the newly created PLCFx Manager
     // access the same FKPs as the old one and their Start-End position changes.
@@ -5034,7 +5034,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
     m_pPaM = mpCursor.get();
 
-    m_xCtrlStck.reset(new SwWW8FltControlStack(&m_rDoc, m_nFieldFlags, *this));
+    m_xCtrlStck.reset(new SwWW8FltControlStack(m_rDoc, m_nFieldFlags, *this));
 
     m_xRedlineStack.reset(new sw::util::RedlineStack(m_rDoc));
 
@@ -5042,10 +5042,10 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         RefFieldStck: Keeps track of bookmarks which may be inserted as
         variables instead.
     */
-    m_xReffedStck.reset(new SwWW8ReferencedFltEndStack(&m_rDoc, m_nFieldFlags));
-    m_xReffingStck.reset(new SwWW8FltRefStack(&m_rDoc, m_nFieldFlags));
+    m_xReffedStck.reset(new SwWW8ReferencedFltEndStack(m_rDoc, m_nFieldFlags));
+    m_xReffingStck.reset(new SwWW8FltRefStack(m_rDoc, m_nFieldFlags));
 
-    m_xAnchorStck.reset(new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags));
+    m_xAnchorStck.reset(new SwWW8FltAnchorStack(m_rDoc, m_nFieldFlags));
 
     size_t nPageDescOffset = m_rDoc.GetPageDescCnt();
 

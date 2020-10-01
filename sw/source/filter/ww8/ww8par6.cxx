@@ -2478,7 +2478,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
         //frame, which makes no sense, restore them after the frame is
         //closed
         m_xSFlyPara->xOldAnchorStck = std::move(m_xAnchorStck);
-        m_xAnchorStck.reset(new SwWW8FltAnchorStack(&m_rDoc, m_nFieldFlags));
+        m_xAnchorStck.reset(new SwWW8FltAnchorStack(m_rDoc, m_nFieldFlags));
 
         if (m_xSFlyPara->pFlyFormat)
             MoveInsideFly(m_xSFlyPara->pFlyFormat);
@@ -3424,7 +3424,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
         SwFltPosition aPtPos(*m_pPaM->GetPoint());
 
         SwFrameFormat *pFlyFormat = nullptr;
-        if (SwFltStackEntry::MakeRegion(&m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck, aMkPos, aPtPos)
+        if (SwFltStackEntry::MakeRegion(m_rDoc, aRegion, SwFltStackEntry::RegionMode::NoCheck, aMkPos, aPtPos)
             && nullptr != (pFlyFormat = ContainsSingleInlineGraphic(aRegion)))
         {
             m_xCtrlStck->DeleteAndDestroy(nPos);
