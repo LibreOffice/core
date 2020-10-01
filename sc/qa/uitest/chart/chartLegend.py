@@ -95,4 +95,60 @@ class chartLegend(UITestCase):
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
     self.ui_test.close_doc()
+
+   def test_legends_move_with_arrows_keys(self):
+
+    calc_doc = self.ui_test.load_file(get_url_for_data_file("dataLabels.ods"))
+    xCalcDoc = self.xUITest.getTopFocusWindow()
+    gridwin = xCalcDoc.getChild("grid_window")
+
+    #Change units to cms
+    self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog")
+    xDialogOpt = self.xUITest.getTopFocusWindow()
+
+    xPages = xDialogOpt.getChild("pages")
+    xEntry = xPages.getChild('3')
+    xEntry.executeAction("EXPAND", tuple())
+    xGeneralEntry = xEntry.getChild('0')
+    xGeneralEntry.executeAction("SELECT", tuple())
+    xunitlb = xDialogOpt.getChild("unitlb")
+    props = {"TEXT": "Centimeter"}
+    actionProps = mkPropertyValues(props)
+    xunitlb.executeAction("SELECT", actionProps)
+    xOKBtn = xDialogOpt.getChild("ok")
+    self.ui_test.close_dialog_through_button(xOKBtn)
+
+    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    gridwin.executeAction("ACTIVATE", tuple())
+    xChartMainTop = self.xUITest.getTopFocusWindow()
+    xChartMain = xChartMainTop.getChild("chart_window")
+
+    # Select the legends
+    xLegends = xChartMain.getChild("CID/D=0:Legend=")
+    xLegends.executeAction("SELECT", tuple())
+
+    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("4.61", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("1.54", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+
+    self.ui_test.execute_dialog_through_action(xLegends, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    # Check the position has changed after moving the label using the arrows keys
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
+    self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
