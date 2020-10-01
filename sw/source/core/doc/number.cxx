@@ -512,18 +512,18 @@ SwNumRule::~SwNumRule()
     maParagraphStyleList.clear();
 }
 
-void SwNumRule::CheckCharFormats( SwDoc* pDoc )
+void SwNumRule::CheckCharFormats( SwDoc& rDoc )
 {
     for(auto& rpNumFormat : maFormats)
     {
         if( rpNumFormat )
         {
             SwCharFormat* pFormat = rpNumFormat->GetCharFormat();
-            if( pFormat && pFormat->GetDoc() != pDoc )
+            if( pFormat && pFormat->GetDoc() != &rDoc )
             {
                 // copy
                 SwNumFormat* pNew = new SwNumFormat( *rpNumFormat );
-                pNew->SetCharFormat( pDoc->CopyCharFormat( *pFormat ) );
+                pNew->SetCharFormat( rDoc.CopyCharFormat( *pFormat ) );
                 rpNumFormat.reset(pNew);
             }
         }

@@ -218,7 +218,7 @@ public:
 
     /** Tests whether the CharFormats are from the given doc
        and copies them if appropriate. */
-    void CheckCharFormats( SwDoc* pDoc );
+    void CheckCharFormats( SwDoc& rDoc );
 
     const OUString& GetName() const { return msName; }
 
