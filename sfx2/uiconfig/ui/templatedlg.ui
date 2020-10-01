@@ -338,6 +338,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuButton" id="action_menu">
+                        <property name="label" translatable="no"></property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="tooltip_text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>

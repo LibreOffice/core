@@ -194,6 +194,7 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="buttonGear">
+                    <property name="label" translateable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
