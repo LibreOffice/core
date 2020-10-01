@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9708070b_1f25a25e",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-01T10:06:55Z",
+      "side": 1,
+      "message": "avoid lines broken into multiple lines in gerrit view: they exceed the allowed limit",
+      "range": {
+        "startLine": 1160,
+        "startChar": 15,
+        "endLine": 1160,
+        "endChar": 102
+      },
+      "revId": "17f8310fef05bf0a14980405ed66b7bd81fb135b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9f6bc38_246a83f9",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-01T10:06:55Z",
+      "side": 1,
+      "message": "unnecessary rounding of degrees?",
+      "range": {
+        "startLine": 1161,
+        "startChar": 49,
+        "endLine": 1161,
+        "endChar": 56
+      },
+      "revId": "17f8310fef05bf0a14980405ed66b7bd81fb135b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
