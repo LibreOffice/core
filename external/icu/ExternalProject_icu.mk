@@ -29,7 +29,6 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 				$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 					--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
-					$(if $(GNUMAKE_WIN_NATIVE),--enable-native-make) \
 					--disable-tools --disable-extras) \
 		&& $(MAKE) $(if $(CROSS_COMPILING),DATASUBDIR=data) $(if $(verbose),VERBOSE=1) \
 	,source)
@@ -67,6 +66,7 @@ icu_LDFLAGS:=" \
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
+		autoconf && \
 		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS=$(icu_CFLAGS) \
 		CXXFLAGS=$(icu_CXXFLAGS) LDFLAGS=$(icu_LDFLAGS) \
 		PYTHONWARNINGS="default" \
