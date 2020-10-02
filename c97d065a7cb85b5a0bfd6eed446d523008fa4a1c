@@ -33,6 +33,24 @@
       "revId": "c97d065a7cb85b5a0bfd6eed446d523008fa4a1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a20237a_5ac6e621",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-02T08:23:20Z",
+      "side": 1,
+      "message": "fixes for those 2 here:\nhttps://gerrit.libreoffice.org/c/core/+/103818",
+      "parentUuid": "9ac9a542_343c3a4b",
+      "revId": "c97d065a7cb85b5a0bfd6eed446d523008fa4a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
