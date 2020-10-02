@@ -250,7 +250,6 @@ sal_uInt32 SvParser<T>::GetNextChar()
 
     if( RTL_TEXTENCODING_UCS2 == eSrcEnc )
     {
-        sal_Unicode cUC = USHRT_MAX;
         unsigned char c1, c2;
 
         rInput.ReadUChar( c1 ).ReadUChar( c2 );
@@ -262,6 +261,7 @@ sal_uInt32 SvParser<T>::GetNextChar()
         bErr = !rInput.good();
         if( !bErr )
         {
+            sal_Unicode cUC = USHRT_MAX;
             if( bUCS2BSrcEnc )
                 cUC = (sal_Unicode(c1) << 8) | c2;
             else
