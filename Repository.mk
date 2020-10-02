@@ -78,7 +78,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
-	$(if $(filter MSC,$(COM)),climaker) \
+	$(if $(filter MSC,$(COM)),$(if $(filter-out ARM64,$(CPUNAME)),climaker)) \
 	cppumaker \
 	idlc \
 	javamaker \
@@ -839,7 +839,7 @@ $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_share_readme \
 	odk_share_readme_generated \
-	$(if $(filter WNT,$(OS)),odk_cli) \
+	$(if $(filter WNT,$(OS)),$(if $(filter-out ARM64,$(CPUNAME)),odk_cli)) \
 	odk_config \
 	$(if $(filter WNT,$(OS)),odk_config_win) \
 	odk_docs \

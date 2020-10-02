@@ -9,14 +9,17 @@
 
 $(eval $(call gb_Module_Module,unoidl))
 
+# Executable_unoidl-check: !CROSS || ODK => !(CROSS && !ODK)
+
 $(eval $(call gb_Module_add_targets,unoidl, \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         Executable_unoidl-read) \
+    $(if $(and $(CROSS_COMPILING),$(filter-out ODK,$(BUILD_TYPE))),, \
+        Executable_unoidl-check) \
     Library_unoidl \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,unoidl, \
-    Executable_unoidl-check \
     Executable_unoidl-write \
 ))
 
