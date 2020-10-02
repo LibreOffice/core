@@ -9,7 +9,7 @@
 
 #include <sal/config.h>
 
-#include "GlowPropertyPanel.hxx"
+#include "EffectPropertyPanel.hxx"
 
 #include <sfx2/dispatch.hxx>
 #include <svx/colorbox.hxx>
@@ -23,63 +23,78 @@
 
 namespace svx::sidebar
 {
-GlowPropertyPanel::GlowPropertyPanel(vcl::Window* pParent,
-                                     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                     SfxBindings* pBindings)
-    : PanelLayout(pParent, "GlowPropertyPanel", "svx/ui/sidebarglow.ui", rxFrame)
+EffectPropertyPanel::EffectPropertyPanel(vcl::Window* pParent,
+                                         const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                         SfxBindings* pBindings)
+    : PanelLayout(pParent, "EffectPropertyPanel", "svx/ui/sidebareffect.ui", rxFrame)
     , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
     , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
     , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
+    , mxFTTransparency(m_xBuilder->weld_label("transparency"))
+    , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
     , mpBindings(pBindings)
     , mxGlowRadius(m_xBuilder->weld_metric_spin_button("LB_GLOW_RADIUS", FieldUnit::POINT))
     , mxLBGlowColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_GLOW_COLOR"), GetFrameWeld()))
     , mxGlowTransparency(
           m_xBuilder->weld_metric_spin_button("LB_GLOW_TRANSPARENCY", FieldUnit::PERCENT))
-    , mxFTRadius(m_xBuilder->weld_label("radius"))
+    , mxFTRadiusSoftEdge(m_xBuilder->weld_label("radiussoftedge"))
+    , mxFTRadiusGlow(m_xBuilder->weld_label("radiusglow"))
     , mxFTColor(m_xBuilder->weld_label("color"))
-    , mxFTTransparency(m_xBuilder->weld_label("transparency"))
+    , mxSoftEdgeRadius(m_xBuilder->weld_metric_spin_button("SB_SOFTEDGE_RADIUS", FieldUnit::POINT))
 {
     Initialize();
 }
 
-GlowPropertyPanel::~GlowPropertyPanel() { disposeOnce(); }
+EffectPropertyPanel::~EffectPropertyPanel() { disposeOnce(); }
 
-void GlowPropertyPanel::dispose()
+void EffectPropertyPanel::dispose()
 {
-    mxFTRadius.reset();
     mxGlowRadius.reset();
-    mxFTColor.reset();
     mxLBGlowColor.reset();
-    mxFTTransparency.reset();
     mxGlowTransparency.reset();
+    mxFTRadiusSoftEdge.reset();
+    mxFTColor.reset();
+    mxFTTransparency.reset();
+    mxSoftEdgeRadius.reset();
+    mxFTRadiusGlow.reset();
 
+    PanelLayout::dispose();
     maGlowColorController.dispose();
     maGlowRadiusController.dispose();
     maGlowTransparencyController.dispose();
-    PanelLayout::dispose();
+    maSoftEdgeRadiusController.dispose();
 }
 
-void GlowPropertyPanel::Initialize()
+void EffectPropertyPanel::Initialize()
 {
-    mxLBGlowColor->SetSelectHdl(LINK(this, GlowPropertyPanel, ModifyGlowColorHdl));
-    mxGlowRadius->connect_value_changed(LINK(this, GlowPropertyPanel, ModifyGlowRadiusHdl));
+    mxGlowRadius->connect_value_changed(LINK(this, EffectPropertyPanel, ModifyGlowRadiusHdl));
+    mxLBGlowColor->SetSelectHdl(LINK(this, EffectPropertyPanel, ModifyGlowColorHdl));
     mxGlowTransparency->connect_value_changed(
-        LINK(this, GlowPropertyPanel, ModifyGlowTransparencyHdl));
+        LINK(this, EffectPropertyPanel, ModifyGlowTransparencyHdl));
+    mxSoftEdgeRadius->connect_value_changed(
+        LINK(this, EffectPropertyPanel, ModifySoftEdgeRadiusHdl));
 }
 
-IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowColorHdl, ColorListBox&, void)
+IMPL_LINK_NOARG(EffectPropertyPanel, ModifySoftEdgeRadiusHdl, weld::MetricSpinButton&, void)
+{
+    SdrMetricItem aItem(SDRATTR_SOFTEDGE_RADIUS, mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH));
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::RECORD,
+                                             { &aItem });
+}
+
+IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowColorHdl, ColorListBox&, void)
 {
     XColorItem aItem(SDRATTR_GLOW_COLOR, mxLBGlowColor->GetSelectEntryColor());
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowRadiusHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowRadiusHdl, weld::MetricSpinButton&, void)
 {
     SdrMetricItem aItem(SDRATTR_GLOW_RADIUS, mxGlowRadius->get_value(FieldUnit::MM_100TH));
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::RECORD, { &aItem });
 }
 
-IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void)
+IMPL_LINK_NOARG(EffectPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void)
 {
     SdrPercentItem aItem(SDRATTR_GLOW_TRANSPARENCY,
                          mxGlowTransparency->get_value(FieldUnit::PERCENT));
@@ -87,7 +102,7 @@ IMPL_LINK_NOARG(GlowPropertyPanel, ModifyGlowTransparencyHdl, weld::MetricSpinBu
                                              { &aItem });
 }
 
-void GlowPropertyPanel::UpdateControls()
+void EffectPropertyPanel::UpdateControls()
 {
     const bool bEnabled = mxGlowRadius->get_value(FieldUnit::MM_100TH) != 0;
     mxLBGlowColor->set_sensitive(bEnabled);
@@ -96,11 +111,23 @@ void GlowPropertyPanel::UpdateControls()
     mxFTTransparency->set_sensitive(bEnabled);
 }
 
-void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
-                                         const SfxPoolItem* pState)
+void EffectPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
+                                           const SfxPoolItem* pState)
 {
     switch (nSID)
     {
+        case SID_ATTR_SOFTEDGE_RADIUS:
+        {
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                const SdrMetricItem* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState);
+                if (pRadiusItem)
+                {
+                    mxSoftEdgeRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
+                }
+            }
+        }
+        break;
         case SID_ATTR_GLOW_COLOR:
         {
             if (eState >= SfxItemState::DEFAULT)
@@ -141,21 +168,21 @@ void GlowPropertyPanel::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
 }
 
 VclPtr<vcl::Window>
-GlowPropertyPanel::Create(vcl::Window* pParent,
-                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                          SfxBindings* pBindings)
+EffectPropertyPanel::Create(vcl::Window* pParent,
+                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                            SfxBindings* pBindings)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no parent Window given to GlowPropertyPanel::Create", nullptr, 0);
+            "no parent Window given to EffectPropertyPanel::Create", nullptr, 0);
     if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to GlowPropertyPanel::Create",
+        throw css::lang::IllegalArgumentException("no XFrame given to EffectPropertyPanel::Create",
                                                   nullptr, 1);
     if (pBindings == nullptr)
         throw css::lang::IllegalArgumentException(
-            "no SfxBindings given to GlowPropertyPanel::Create", nullptr, 2);
+            "no SfxBindings given to EffectPropertyPanel::Create", nullptr, 2);
 
-    return VclPtr<GlowPropertyPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<EffectPropertyPanel>::Create(pParent, rxFrame, pBindings);
 }
 }
 
