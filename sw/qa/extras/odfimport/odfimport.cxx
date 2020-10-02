@@ -40,6 +40,8 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 #include <comphelper/propertysequence.hxx>
 
@@ -1109,6 +1111,32 @@ DECLARE_ODFIMPORT_TEST(testTdf134971, "tdf134971a.odt")
             "Standard"), uno::UNO_QUERY);
     xStyle1->getPropertyValue("CharFontName") >>= sString;
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), sString);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteFirstParaDirectFormat)
+{
+    // Create a new document.
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    {
+        // Set some direct formatting on the first paragraph, but leave paragraph adjust at its
+        // default (left).
+        uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+        xParagraph->setPropertyValue("PageNumberOffset", uno::makeAny(static_cast<sal_Int16>(0)));
+    }
+
+    // Paste from ODT.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<document::XDocumentInsertable> xCursor(xText->createTextCursorByRange(xText->getStart()), uno::UNO_QUERY);
+    xCursor->insertDocumentFromURL(m_directories.getURLFromSrc(mpTestDocumentPath) + "paste-first-para-direct-format.odt", {});
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3 (center)
+    // - Actual  : 0 (left)
+    // i.e. the inserted document's first paragraph's paragraph formatting was lost.
+    uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(style::ParagraphAdjust_CENTER),
+                         getProperty<sal_Int16>(xParagraph, "ParaAdjust"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
