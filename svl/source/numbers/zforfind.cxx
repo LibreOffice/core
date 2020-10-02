@@ -3698,7 +3698,6 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                                            const SvNumberformat* pFormat,   // maybe a number format to match against
                                            SvNumInputOptions eInputOptions )
 {
-    OUString aString;
     bool res; // return value
     sal_uInt16 k;
     eSetType = F_Type; // old type set
@@ -3714,7 +3713,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     else
     {
         // NoMoreUpperNeeded, all comparisons on UpperCase
-        aString = pFormatter->GetCharClass()->uppercase( rString );
+        OUString aString = pFormatter->GetCharClass()->uppercase( rString );
         // convert native number to ASCII if necessary
         TransformInput(pFormatter, aString);
         res = IsNumberFormatMain( aString, pFormat );
