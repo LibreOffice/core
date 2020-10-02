@@ -144,16 +144,16 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
 {
     // if exist any Foot-/End-Notes then get from the EndNoteInfo struct
     // the CharFormats. They will create it!
-    if ( !m_rExport.m_pDoc->GetFootnoteIdxs().empty() )
+    if ( !m_rExport.m_rDoc.GetFootnoteIdxs().empty() )
     {
-        m_rExport.m_pDoc->GetEndNoteInfo().GetAnchorCharFormat( *m_rExport.m_pDoc );
-        m_rExport.m_pDoc->GetEndNoteInfo().GetCharFormat( *m_rExport.m_pDoc );
-        m_rExport.m_pDoc->GetFootnoteInfo().GetAnchorCharFormat( *m_rExport.m_pDoc );
-        m_rExport.m_pDoc->GetFootnoteInfo().GetCharFormat( *m_rExport.m_pDoc );
+        m_rExport.m_rDoc.GetEndNoteInfo().GetAnchorCharFormat( m_rExport.m_rDoc );
+        m_rExport.m_rDoc.GetEndNoteInfo().GetCharFormat( m_rExport.m_rDoc );
+        m_rExport.m_rDoc.GetFootnoteInfo().GetAnchorCharFormat( m_rExport.m_rDoc );
+        m_rExport.m_rDoc.GetFootnoteInfo().GetCharFormat( m_rExport.m_rDoc );
     }
-    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_pDoc->GetCharFormats()->size() - 1 +
-                                         m_rExport.m_pDoc->GetTextFormatColls()->size() - 1 +
-                                         (bListStyles ? m_rExport.m_pDoc->GetNumRuleTable().size() - 1 : 0);
+    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_rDoc.GetCharFormats()->size() - 1 +
+                                         m_rExport.m_rDoc.GetTextFormatColls()->size() - 1 +
+                                         (bListStyles ? m_rExport.m_rDoc.GetNumRuleTable().size() - 1 : 0);
 
     // somewhat generous ( free for up to 15 )
     m_pFormatA.reset( new SwFormat*[ nAlloc ] );
@@ -281,7 +281,7 @@ void MSWordStyles::BuildStylesTable()
 {
     m_nUsedSlots = WW8_RESERVED_SLOTS;  // reserved slots for standard, headingX, and others
 
-    const SwCharFormats& rArr = *m_rExport.m_pDoc->GetCharFormats();       // first CharFormat
+    const SwCharFormats& rArr = *m_rExport.m_rDoc.GetCharFormats();       // first CharFormat
     // the default character style ( 0 ) will not be outputted !
     for( size_t n = 1; n < rArr.size(); n++ )
     {
@@ -289,7 +289,7 @@ void MSWordStyles::BuildStylesTable()
         m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
     }
 
-    const SwTextFormatColls& rArr2 = *m_rExport.m_pDoc->GetTextFormatColls();   // then TextFormatColls
+    const SwTextFormatColls& rArr2 = *m_rExport.m_rDoc.GetTextFormatColls();   // then TextFormatColls
     // the default character style ( 0 ) will not be outputted !
     for( size_t n = 1; n < rArr2.size(); n++ )
     {
@@ -307,7 +307,7 @@ void MSWordStyles::BuildStylesTable()
     if (!m_bListStyles)
         return;
 
-    const SwNumRuleTable& rNumRuleTable = m_rExport.m_pDoc->GetNumRuleTable();
+    const SwNumRuleTable& rNumRuleTable = m_rExport.m_rDoc.GetNumRuleTable();
     for (size_t i = 0; i < rNumRuleTable.size(); ++i)
     {
         const SwNumRule* pNumRule = rNumRuleTable[i];
@@ -466,7 +466,7 @@ void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
     const SfxItemPool& rPool = *rFormat.GetAttrSet().GetPool();
     for( n = nStt; n < nEnd; ++n )
         aFlags[ n - RES_CHRATR_BEGIN ] = nullptr != rPool.GetPoolDefaultItem( n )
-            || SfxItemState::SET == m_rExport.m_pDoc->GetDfltTextFormatColl()->GetItemState( n, false );
+            || SfxItemState::SET == m_rExport.m_rDoc.GetDfltTextFormatColl()->GetItemState( n, false );
 
     // static defaults, that differs between WinWord and SO
     if( bPap )
@@ -981,7 +981,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     : mbDocumentIsProtected( false )
 {
     const SwSectionFormat *pFormat = nullptr;
-    rExport.m_pCurrentPageDesc = &rExport.m_pDoc->GetPageDesc( 0 );
+    rExport.m_pCurrentPageDesc = &rExport.m_rDoc.GetPageDesc( 0 );
 
     const SfxPoolItem* pI;
     const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
@@ -1139,7 +1139,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPD,
 void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
 {
     sal_uInt8 nInfoFlags = 0;
-    const SwFootnoteInfo& rInfo = rWrt.m_pDoc->GetFootnoteInfo();
+    const SwFootnoteInfo& rInfo = rWrt.m_rDoc.GetFootnoteInfo();
     if( !rInfo.m_aErgoSum.isEmpty() )  nInfoFlags |= 0x02;
     if( !rInfo.m_aQuoVadis.isEmpty() ) nInfoFlags |= 0x04;
 
@@ -1189,7 +1189,7 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
 
     // Endnote Info
     rDop.rncEdn = 0;                        // rncEdn: Don't Restart
-    const SwEndNoteInfo& rEndInfo = rWrt.m_pDoc->GetEndNoteInfo();
+    const SwEndNoteInfo& rEndInfo = rWrt.m_rDoc.GetEndNoteInfo();
     rDop.nfcEdnRef = WW8Export::GetNumId( rEndInfo.m_aFormat.GetNumberingType() );
     rDop.nEdn = rEndInfo.m_nFootnoteOffset + 1;
     rDop.epc = rWrt.m_bEndAtTextEnd ? 3 : 0;
@@ -1329,8 +1329,8 @@ void WW8AttributeOutput::StartSection()
 
 void WW8AttributeOutput::SectFootnoteEndnotePr()
 {
-    const SwFootnoteInfo& rInfo = m_rWW8Export.m_pDoc->GetFootnoteInfo();
-    const SwEndNoteInfo& rEndNoteInfo = m_rWW8Export.m_pDoc->GetEndNoteInfo();
+    const SwFootnoteInfo& rInfo = m_rWW8Export.m_rDoc.GetFootnoteInfo();
+    const SwEndNoteInfo& rEndNoteInfo = m_rWW8Export.m_rDoc.GetEndNoteInfo();
     m_rWW8Export.InsUInt16( NS_sprm::SRncFtn::val );
     switch( rInfo.m_eNum )
     {
@@ -1597,7 +1597,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     const SwPageDesc* pPd = rSepInfo.pPageDesc;
 
     if ( rSepInfo.pSectionFormat && !pPd )
-        pPd = &m_pDoc->GetPageDesc( 0 );
+        pPd = &m_rDoc.GetPageDesc( 0 );
 
     m_pCurrentPageDesc = pPd;
 
@@ -1615,7 +1615,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     AttrOutput().SectionFormProtection( rSepInfo.IsProtected() );
 
     // line numbers
-    const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
+    const SwLineNumberInfo& rLnNumInfo = m_rDoc.GetLineNumberInfo();
     if ( rLnNumInfo.IsPaintLineNumbers() )
         AttrOutput().SectionLineNumbering( rSepInfo.nLnNumRestartNo, rLnNumInfo );
 

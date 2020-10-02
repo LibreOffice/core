@@ -453,19 +453,19 @@ static void WriteDop( WW8Export& rWrt )
     WW8Dop& rDop = *rWrt.pDop;
 
     // i#78951#, store the value of unknown compatibility options
-    rDop.SetCompatibilityOptions( rWrt.m_pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions1());
-    rDop.SetCompatibilityOptions2( rWrt.m_pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions2());
+    rDop.SetCompatibilityOptions( rWrt.m_rDoc.getIDocumentSettingAccess().Getn32DummyCompatibilityOptions1());
+    rDop.SetCompatibilityOptions2( rWrt.m_rDoc.getIDocumentSettingAccess().Getn32DummyCompatibilityOptions2());
 
-    rDop.fNoLeading = !rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING);
-    rDop.fUsePrinterMetrics = !rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE);
+    rDop.fNoLeading = !rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING);
+    rDop.fUsePrinterMetrics = !rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::USE_VIRTUAL_DEVICE);
 
     // write default TabStop
     const SvxTabStopItem& rTabStop =
-        DefaultItemGet<SvxTabStopItem>(*rWrt.m_pDoc, RES_PARATR_TABSTOP);
+        DefaultItemGet<SvxTabStopItem>(rWrt.m_rDoc, RES_PARATR_TABSTOP);
     rDop.dxaTab = static_cast<sal_uInt16>(rTabStop[0].GetTabPos());
 
     // Zoom factor and type
-    SwViewShell *pViewShell(rWrt.m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
+    SwViewShell *pViewShell(rWrt.m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell)
     {
         switch ( pViewShell->GetViewOptions()->GetZoomType() )
@@ -483,14 +483,14 @@ static void WriteDop( WW8Export& rWrt )
     // for the DocStat fields)
     rDop.fWCFootnoteEdn = true; // because they are included in StarWriter
 
-    const SwDocStat& rDStat = rWrt.m_pDoc->getIDocumentStatistics().GetDocStat();
+    const SwDocStat& rDStat = rWrt.m_rDoc.getIDocumentStatistics().GetDocStat();
     rDop.cWords = rDStat.nWord;
     rDop.cCh = rDStat.nChar;
     rDop.cPg = static_cast< sal_Int16 >(rDStat.nPage);
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
-    SwDocShell *pDocShell(rWrt.m_pDoc->GetDocShell());
+    SwDocShell *pDocShell(rWrt.m_rDoc.GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     uno::Reference<document::XDocumentProperties> xDocProps;
     uno::Reference<beans::XPropertySet> xProps;
@@ -502,7 +502,7 @@ static void WriteDop( WW8Export& rWrt )
     }
 
     if ((rWrt.pSepx && rWrt.pSepx->DocumentIsProtected()) ||
-        rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM ) ||
+        rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM ) ||
         rDop.lKeyProtDoc != 0)
     {
         rDop.fProtEnabled =  true;
@@ -543,9 +543,9 @@ static void WriteDop( WW8Export& rWrt )
     rDop.cParasFootnoteEdn   = rDStat.nPara;
     rDop.cLinesFootnoteEdn   = rDStat.nPara;
 
-    rDop.fDontUseHTMLAutoSpacing = rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX);
+    rDop.fDontUseHTMLAutoSpacing = rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX);
 
-    rDop.fExpShRtn = !rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
+    rDop.fExpShRtn = !rWrt.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK); // #i56856#
 
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
@@ -671,7 +671,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.m_reserved1=8;rTypo.m_reserved1>0;rTypo.m_reserved1-=2)
     {
-        pForbidden = m_pDoc->getIDocumentSettingAccess().getForbiddenCharacters(rTypo.GetConvertedLang(),
+        pForbidden = m_rDoc.getIDocumentSettingAccess().getForbiddenCharacters(rTypo.GetConvertedLang(),
             false);
         if (nullptr != pForbidden)
         {
@@ -741,7 +741,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     const IDocumentSettingAccess& rIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
     rTypo.m_fKerningPunct = sal_uInt16(rIDocumentSettingAccess.get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
-    rTypo.m_iJustification = sal_uInt16(m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType());
+    rTypo.m_iJustification = sal_uInt16(m_rDoc.getIDocumentSettingAccess().getCharacterCompressionType());
 }
 
 // It can only be found something with this method, if it is used within
@@ -754,7 +754,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
         // if write an EditEngine text, then the WhichIds are greater than
         // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
-        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
+        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, m_rDoc, nWhich);
         if (nWhich && SfxItemState::SET != m_pISet->GetItemState(nWhich, true, &pItem))
             pItem = nullptr;
     }
@@ -776,7 +776,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
         // if write an EditEngine text, then the WhichIds are greater than
         // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
-        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
+        nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, m_rDoc, nWhich);
         OSL_ENSURE(nWhich != 0, "All broken, Impossible");
         return m_pISet->Get(nWhich);
     }
@@ -1495,7 +1495,7 @@ void WW8Export::AppendBookmarkEndWithCorrection( const OUString& rName )
 
 std::unique_ptr<SvxBrushItem> MSWordExportBase::getBackground()
 {
-    const SwFrameFormat &rFormat = m_pDoc->GetPageDesc(0).GetMaster();
+    const SwFrameFormat &rFormat = m_rDoc.GetPageDesc(0).GetMaster();
     std::unique_ptr<SvxBrushItem> aBrush = std::make_unique<SvxBrushItem>(RES_BACKGROUND);
     SfxItemState eState = rFormat.GetBackgroundState(aBrush);
 
@@ -1513,38 +1513,35 @@ int MSWordExportBase::CollectGrfsOfBullets()
 {
     m_vecBulletPic.clear();
 
-    if ( m_pDoc )
+    size_t nCountRule = m_rDoc.GetNumRuleTable().size();
+    for (size_t n = 0; n < nCountRule; ++n)
     {
-        size_t nCountRule = m_pDoc->GetNumRuleTable().size();
-        for (size_t n = 0; n < nCountRule; ++n)
+        const SwNumRule &rRule = *( m_rDoc.GetNumRuleTable().at(n) );
+        sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
+        for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
         {
-            const SwNumRule &rRule = *( m_pDoc->GetNumRuleTable().at(n) );
-            sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
-            for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
+            const SwNumFormat &rFormat = rRule.Get(nLvl);
+            if (SVX_NUM_BITMAP != rFormat.GetNumberingType())
             {
-                const SwNumFormat &rFormat = rRule.Get(nLvl);
-                if (SVX_NUM_BITMAP != rFormat.GetNumberingType())
+                continue;
+            }
+            const Graphic *pGraf = rFormat.GetBrush()? rFormat.GetBrush()->GetGraphic():nullptr;
+            if ( pGraf )
+            {
+                bool bHas = false;
+                for (const Graphic* p : m_vecBulletPic)
                 {
-                    continue;
+                    if (p->GetChecksum() == pGraf->GetChecksum())
+                    {
+                        bHas = true;
+                        break;
+                    }
                 }
-                const Graphic *pGraf = rFormat.GetBrush()? rFormat.GetBrush()->GetGraphic():nullptr;
-                if ( pGraf )
+                if (!bHas)
                 {
-                    bool bHas = false;
-                    for (const Graphic* p : m_vecBulletPic)
-                    {
-                        if (p->GetChecksum() == pGraf->GetChecksum())
-                        {
-                            bHas = true;
-                            break;
-                        }
-                    }
-                    if (!bHas)
-                    {
-                        Size aSize(pGraf->GetPrefSize());
-                        if (0 != aSize.Height() && 0 != aSize.Width())
-                           m_vecBulletPic.push_back(pGraf);
-                    }
+                    Size aSize(pGraf->GetPrefSize());
+                    if (0 != aSize.Height() && 0 != aSize.Width())
+                       m_vecBulletPic.push_back(pGraf);
                 }
             }
         }
@@ -1870,11 +1867,11 @@ void MSWordExportBase::SetCurPam(sal_uLong nStt, sal_uLong nEnd)
 {
     m_nCurStart = nStt;
     m_nCurEnd = nEnd;
-    m_pCurPam = Writer::NewUnoCursor( *m_pDoc, nStt, nEnd );
+    m_pCurPam = Writer::NewUnoCursor( m_rDoc, nStt, nEnd );
 
     // Recognize tables in special cases
     if ( nStt != m_pCurPam->GetMark()->nNode.GetIndex() &&
-         m_pDoc->GetNodes()[ nStt ]->IsTableNode() )
+         m_rDoc.GetNodes()[ nStt ]->IsTableNode() )
     {
         m_pCurPam->GetMark()->nNode = nStt;
     }
@@ -2389,7 +2386,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
             pBoxFormat = pTabBox1->GetFrameFormat();
 
         sal_uInt16 nFlags =
-            lcl_TCFlags(*m_rWW8Export.m_pDoc, pTabBox1, *aItRowSpans);
+            lcl_TCFlags(m_rWW8Export.m_rDoc, pTabBox1, *aItRowSpans);
         m_rWW8Export.InsUInt16( nFlags );
 
         static sal_uInt8 aNullBytes[] = { 0x0, 0x0 };
@@ -2466,7 +2463,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
             const SwFrameFormat* pParentFormat =
                 GetExport().m_pParentFrame ?
                 &(GetExport().m_pParentFrame->GetFrameFormat()) :
-                    GetExport().m_pDoc->GetPageDesc(0).GetPageFormatOfNode(*pTextNd, false);
+                    GetExport().m_rDoc.GetPageDesc(0).GetPageFormatOfNode(*pTextNd, false);
             aRect = pParentFormat->FindLayoutRect(true);
             nPageSize = aRect.Width();
             if ( 0 == nPageSize )
@@ -2857,7 +2854,7 @@ void MSWordExportBase::WriteText()
                     }
                     // No need to create a "fake" section if this is the end of the document,
                     // except to emulate balanced columns.
-                    else if ( nColumnCount < 2 && aIdx == m_pDoc->GetNodes().GetEndOfContent() )
+                    else if ( nColumnCount < 2 && aIdx == m_rDoc.GetNodes().GetEndOfContent() )
                         bNeedExportBreakHere = false;
                 }
 
@@ -2923,7 +2920,7 @@ void WW8Export::WriteMainText()
 
     pFib->m_fcMin = Strm().Tell();
 
-    m_pCurPam->GetPoint()->nNode = m_pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    m_pCurPam->GetPoint()->nNode = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
     WriteText();
 
@@ -3003,7 +3000,7 @@ void WW8Export::WriteFkpPlcUsw()
     m_pFieldTextBxs->Write( *this );             // Fields ( Textboxes )
     m_pFieldHFTextBxs->Write( *this );           // Fields ( Head/Foot-Textboxes )
 
-    if (m_pEscher || m_pDoc->ContainsMSVBasic())
+    if (m_pEscher || m_rDoc.ContainsMSVBasic())
     {
         /*
          Every time MS 2000 creates an escher stream there is always
@@ -3053,7 +3050,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     // Write SttbfAssoc
     WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
-        (m_pDoc->getIDocumentExternalData().getExternalData(::sw::tExternalDataType::STTBF_ASSOC).get());
+        (m_rDoc.getIDocumentExternalData().getExternalData(::sw::tExternalDataType::STTBF_ASSOC).get());
 
     if ( pSttbfAssoc )                      // #i106057#
     {
@@ -3066,7 +3063,7 @@ void WW8Export::WriteFkpPlcUsw()
 
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
-          (m_pDoc->getIDocumentExternalData().getExternalData(::sw::tExternalDataType::FIB).get());
+          (m_rDoc.getIDocumentExternalData().getExternalData(::sw::tExternalDataType::FIB).get());
 
     if ( pFibData )
     {
@@ -3141,7 +3138,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
         // If we can find the outline this bookmark refers to
         // save the name of the bookmark and the
         // node index number of where it points to
-        if( m_pDoc->GotoOutline( aPos, aName ) )
+        if( m_rDoc.GotoOutline( aPos, aName ) )
         {
             nIdx = aPos.nNode.GetIndex();
             noBookmark = true;
@@ -3151,7 +3148,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     {
         SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Grf);
+        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
             nIdx = pIdx->GetNext()->GetIndex();
@@ -3162,7 +3159,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     {
         SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Text);
+        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Text);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
             nIdx = pIdx->GetIndex() + 1;
@@ -3173,7 +3170,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     {
         SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
-        const SwFlyFrameFormat* pFormat = m_pDoc->FindFlyByName(aName, SwNodeType::Ole);
+        const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole);
         if (pFormat && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
         {
             nIdx = pIdx->GetNext()->GetIndex();
@@ -3184,7 +3181,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     {
         SwNodeIndex* pIdx;
         OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
-        for (const SwSectionFormat* pFormat : m_pDoc->GetSections())
+        for (const SwSectionFormat* pFormat : m_rDoc.GetSections())
         {
             if (aName == pFormat->GetSection()->GetSectionName()
                 && nullptr != (pIdx = const_cast<SwNodeIndex*>(pFormat->GetContent().GetContentIdx())))
@@ -3198,7 +3195,7 @@ void MSWordExportBase::AddLinkTarget(const OUString& rURL)
     else if( sCmp == "table" )
     {
         OUString aName(BookmarkToWriter(aURL.copy(0, nPos)));
-        const SwTable* pTable = SwTable::FindTable(m_pDoc->FindTableFormatByName(aName));
+        const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(aName));
         if (pTable)
         {
             SwTableNode* pTableNode = const_cast<SwTableNode*>(pTable->GetTabSortBoxes()[1]->GetSttNd()->FindTableNode());
@@ -3288,7 +3285,7 @@ namespace
 ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
 {
     m_nCharFormatStart = DEFAULT_STYLES_COUNT;
-    m_nFormatCollStart = m_nCharFormatStart + m_pDoc->GetCharFormats()->size() - 1;
+    m_nFormatCollStart = m_nCharFormatStart + m_rDoc.GetCharFormats()->size() - 1;
 
     m_bStyDef = m_bBreakBefore = m_bOutKF =
         m_bOutFlyFrameAttrs = m_bOutPageDescs = m_bOutTable = m_bOutFirstPage =
@@ -3325,21 +3322,21 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
         m_pOLEExp.reset(new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags ));
     }
 
-    if ( !m_pOCXExp && m_pDoc->GetDocShell() )
-        m_pOCXExp.reset(new SwMSConvertControls(m_pDoc->GetDocShell(), m_pCurPam.get()));
+    if ( !m_pOCXExp && m_rDoc.GetDocShell() )
+        m_pOCXExp.reset(new SwMSConvertControls(m_rDoc.GetDocShell(), m_pCurPam.get()));
 
     // #i81405# - Collect anchored objects before changing the redline mode.
-    m_aFrames = GetFrames( *m_pDoc, bWriteAll? nullptr : m_pOrigPam );
+    m_aFrames = GetFrames( m_rDoc, bWriteAll? nullptr : m_pOrigPam );
 
-    m_nOrigRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
+    m_nOrigRedlineFlags = m_rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
 
-    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwRootFrame const*const pLayout(m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout());
     m_bOrigShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
 
-    if ( !m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+    if ( !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         //restored to original state by SwWriter::Write
-        m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags |
+        m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags |
                                                          RedlineFlags::ShowDelete |
                                                          RedlineFlags::ShowInsert);
     }
@@ -3347,14 +3344,14 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     // fix the SwPositions in m_aFrames after SetRedlineFlags
     UpdateFramePositions(m_aFrames);
 
-    m_aFontHelper.InitFontTable(*m_pDoc);
+    m_aFontHelper.InitFontTable(m_rDoc);
     GatherChapterFields();
 
-    CollectOutlineBookmarks(*m_pDoc);
+    CollectOutlineBookmarks(m_rDoc);
 
     // make unique OrdNums (Z-Order) for all drawing-/fly Objects
-    if ( m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
-        m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
+    if ( m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
+        m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
     ErrCode err = ExportDocument_Impl();
 
@@ -3365,10 +3362,10 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     // ooo103014-1.odt to .doc
     // park m_pOrigPam as well, as needed for exporting abi9915-1.odt to doc
     m_pOrigPam->DeleteMark();
-    *m_pOrigPam->GetPoint() = SwPosition(m_pDoc->GetNodes().GetEndOfContent());
+    *m_pOrigPam->GetPoint() = SwPosition(m_rDoc.GetNodes().GetEndOfContent());
     static_cast<SwPaM&>(*m_pCurPam) = *m_pOrigPam;
 
-    m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);
+    m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(m_nOrigRedlineFlags);
 
     return err;
 }
@@ -3503,14 +3500,14 @@ ErrCode WW8Export::ExportDocument_Impl()
     pDop.reset(new WW8Dop);
 
     pDop->fRevMarking = bool( RedlineFlags::On & m_nOrigRedlineFlags );
-    SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwRootFrame const*const pLayout(m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout());
     pDop->fRMView = pLayout == nullptr || !pLayout->IsHideRedlines();
     pDop->fRMPrint = pDop->fRMView;
 
     // set AutoHyphenation flag if found in default para style
     const SfxPoolItem* pItem;
     SwTextFormatColl* pStdTextFormatColl =
-        m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
+        m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
     if (pStdTextFormatColl && SfxItemState::SET == pStdTextFormatColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {
@@ -3645,7 +3642,7 @@ void WW8Export::PrepareStorage()
     tools::SvRef<SotStorageStream> xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->WriteBytes(pData, sizeof(pData));
 
-    SwDocShell* pDocShell = m_pDoc->GetDocShell ();
+    SwDocShell* pDocShell = m_rDoc.GetDocShell ();
     OSL_ENSURE(pDocShell, "no SwDocShell");
 
     if (!pDocShell)        return;
@@ -3793,7 +3790,7 @@ ErrCode SwWW8Writer::WriteStorageImpl()
     ErrCode err = ERRCODE_NONE;
     {
         bool bDot = mpMedium->GetFilter()->GetName().endsWith("Vorlage");
-        WW8Export aExport(this, m_pDoc, m_pCurrentPam, m_pOrigPam, bDot);
+        WW8Export aExport(this, *m_pDoc, m_pCurrentPam, m_pOrigPam, bDot);
         m_pExport = &aExport;
         err = aExport.ExportDocument( m_bWriteAll );
         m_pExport = nullptr;
@@ -3817,7 +3814,7 @@ ErrCode SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
     return nRet;
 }
 
-MSWordExportBase::MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam )
+MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam )
     : m_aMainStg(sMainStream)
     , m_pISet(nullptr)
     , m_pPiece(nullptr)
@@ -3870,7 +3867,7 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCurso
     , m_bExportModeRTF(false)
     , m_bFontSizeWritten(false)
     , m_bAddFootnoteTab(false)
-    , m_pDoc(pDocument)
+    , m_rDoc(rDocument)
     , m_nCurStart(pCurrentPam->GetPoint()->nNode.GetIndex())
     , m_nCurEnd(pCurrentPam->GetMark()->nNode.GetIndex())
     , m_pCurPam(pCurrentPam)
@@ -3893,9 +3890,9 @@ MSWordExportBase::~MSWordExportBase()
 }
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,
-        SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam,
+        SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam,
         bool bDot )
-    : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam )
+    : MSWordExportBase( rDocument, pCurrentPam, pOriginalPam )
     , pTableStrm(nullptr)
     , pDataStrm(nullptr)
     , m_bDot(bDot)
@@ -4019,7 +4016,7 @@ void WW8Export::RestoreMacroCmds()
 {
     pFib->m_fcCmds = pTableStrm->Tell();
 
-    uno::Reference < embed::XStorage > xSrcRoot(m_pDoc->GetDocShell()->GetStorage());
+    uno::Reference < embed::XStorage > xSrcRoot(m_rDoc.GetDocShell()->GetStorage());
     try
     {
         uno::Reference < io::XStream > xSrcStream =

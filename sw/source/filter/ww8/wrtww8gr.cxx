@@ -131,10 +131,10 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
-            *m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
+            *m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(),
             rStorageName,
             xObjStg,
-            m_pDoc->GetDocStorage(),
+            m_rDoc.GetDocStorage(),
             aGraph,
             aRect,
             tools::Rectangle(),
@@ -150,7 +150,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
             if ( xObj.is() )
             {
                 std::unique_ptr<SvStream> pGraphicStream;
-                comphelper::EmbeddedObjectContainer aCnt( m_pDoc->GetDocStorage() );
+                comphelper::EmbeddedObjectContainer aCnt( m_rDoc.GetDocStorage() );
                 try
                 {
                     uno::Reference< embed::XEmbedPersist > xPersist(
@@ -319,7 +319,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
 void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
-    uno::Reference< embed::XStorage > xDocStg = m_pDoc->GetDocStorage();
+    uno::Reference< embed::XStorage > xDocStg = m_rDoc.GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
     tools::SvRef<SotStorage> xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, StreamMode::READ );
 
@@ -405,7 +405,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
             {
                 const SwTextNode* pTextNd = static_cast<const SwTextNode*>(m_pOutFormatNode);
                 SwPosition aPos(*pTextNd);
-                bVert = m_pDoc->IsInVerticalText(aPos);
+                bVert = m_rDoc.IsInVerticalText(aPos);
             }
             if (!bVert)
             {

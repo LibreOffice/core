@@ -225,7 +225,7 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
                  if (pINetItem)
                  {
                      const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
-                     const SwCharFormat* pINetFormat = m_pDoc->FindCharFormatByName(
+                     const SwCharFormat* pINetFormat = m_rDoc.FindCharFormatByName(
                          static_cast<const SwFormatINetFormat&>(*pINetItem).GetINetFormat());
                      ww8::PoolItems aCharItems, aINetItems;
                      GetPoolItems(pFormat->GetAttrSet(), aCharItems, false);
@@ -366,7 +366,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
 void MSWordExportBase::GatherChapterFields()
 {
     //If the header/footer contains a chapter field
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter );
+    SwFieldType* pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::Chapter );
     pType->GatherNodeIndex(m_aChapterFieldLocs);
 }
 
@@ -722,7 +722,7 @@ void WW8AttributeOutput::OutlineNumbering(sal_uInt8 nLvl)
     m_rWW8Export.pO->push_back( nLvl );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlfo::val );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO,
-        1 + m_rWW8Export.GetNumberingId(*m_rWW8Export.m_pDoc->GetOutlineNumRule()) );
+        1 + m_rWW8Export.GetNumberingId(*m_rWW8Export.m_rDoc.GetOutlineNumRule()) );
 }
 
 // #i77805#
@@ -774,7 +774,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
             {
                 //if outline numbered
                 // if Write StyleDefinition then write the OutlineRule
-                const SwNumFormat& rNFormat = m_pDoc->GetOutlineNumRule()->Get( static_cast<sal_uInt16>( nLvl ) );
+                const SwNumFormat& rNFormat = m_rDoc.GetOutlineNumRule()->Get( static_cast<sal_uInt16>( nLvl ) );
                 if ( m_bStyDef )
                     AttrOutput().OutlineNumbering(static_cast<sal_uInt8>(nLvl));
 
@@ -828,7 +828,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
             {
                 const SwFrameFormat &rFrameFormat = m_pParentFrame->GetFrameFormat();
 
-                SfxItemSet aSet(m_pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
+                SfxItemSet aSet(m_rDoc.GetAttrPool(), svl::Items<RES_FRMATR_BEGIN,
                     RES_FRMATR_END-1,
                     XATTR_FILL_FIRST, XATTR_FILL_LAST>{});
                 aSet.Set(rFrameFormat.GetAttrSet());
@@ -891,7 +891,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
 
 bool MSWordExportBase::HasRefToAttr(const OUString& rName)
 {
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
+    SwFieldType* pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
     std::vector<SwGetRefField*> vpRFields;
     pType->GatherRefFields(vpRFields, REF_SETREFATTR);
     return std::any_of(vpRFields.begin(), vpRFields.end(),
@@ -900,7 +900,7 @@ bool MSWordExportBase::HasRefToAttr(const OUString& rName)
 
 bool MSWordExportBase::HasRefToFootOrEndnote(const bool isEndNote, const sal_uInt16 nSeqNo)
 {
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
+    SwFieldType* pType = m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::GetRef);
     std::vector<SwGetRefField*> vpRFields;
     pType->GatherRefFields(vpRFields, isEndNote ? REF_ENDNOTE : REF_FOOTNOTE);
     return std::any_of(vpRFields.begin(), vpRFields.end(),
@@ -945,7 +945,7 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 {
     if (bIsRTL)
     {
-        if( m_rWW8Export.m_pDoc->GetDocumentType() != SwDoc::DOCTYPE_MSWORD )
+        if( m_rWW8Export.m_rDoc.GetDocumentType() != SwDoc::DOCTYPE_MSWORD )
         {
             m_rWW8Export.InsUInt16( NS_sprm::CFBiDi::val );
             m_rWW8Export.pO->push_back( sal_uInt8(1) );
@@ -1601,8 +1601,8 @@ void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
     }
 
     const SwCharFormat* pFormat = IsPoolUserFormat( nId )
-                    ? m_rWW8Export.m_pDoc->FindCharFormatByName( rStr )
-                    : m_rWW8Export.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+                    ? m_rWW8Export.m_rDoc.FindCharFormatByName( rStr )
+                    : m_rWW8Export.m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
     m_rWW8Export.InsUInt16( NS_sprm::CIstd::val );
 
@@ -2002,7 +2002,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
             {
                 const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
                 const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
-                const SwFieldTypes* pFieldTypes = GetExport().m_pDoc->getIDocumentFieldsAccess().GetFieldTypes();
+                const SwFieldTypes* pFieldTypes = GetExport().m_rDoc.getIDocumentFieldsAccess().GetFieldTypes();
                 bool bHaveFullBkm = false;
                 bool bHaveLabelAndNumberBkm = false;
                 bool bHaveCaptionOnlyBkm = false;
@@ -2042,7 +2042,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                                 sal_Int32 nRefTextPos = 0;
                                 if(nSeparatorPos < aText.getLength())
                                 {
-                                    nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), *GetExport().m_pDoc, nSeparatorPos);
+                                    nRefTextPos = SwGetExpField::GetReferenceTextPos(pHt->GetFormatField(), GetExport().m_rDoc, nSeparatorPos);
                                     if(nRefTextPos != nSeparatorPos)
                                     {
                                         if(!bRunSplittedAtSep)
@@ -2178,7 +2178,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         if( GetExport().AddSectionBreaksForTOX() )
                         {
                             SwSection *pParent = rSect.GetParent();
-                            WW8_SepInfo rInfo(&GetExport( ).m_pDoc->GetPageDesc(0),
+                            WW8_SepInfo rInfo(&GetExport().m_rDoc.GetPageDesc(0),
                                 pParent ? pParent->GetFormat() : nullptr, 0/*nRstLnNum*/);
                             GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, false, &rInfo );
                         }
@@ -2313,7 +2313,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // non-standard style for that level, i.e. ignore headline
                         // styles 1-9 and find the lowest valid outline level
                         sal_uInt8 nPosOfLowestNonStandardLvl = MAXLEVEL;
-                        const SwTextFormatColls& rColls = *GetExport().m_pDoc->GetTextFormatColls();
+                        const SwTextFormatColls& rColls = *GetExport().m_rDoc.GetTextFormatColls();
                         for( n = rColls.size(); n; )
                         {
                             const SwTextFormatColl* pColl = rColls[ --n ];
@@ -2383,7 +2383,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                     const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
                                     if( !sStyle.isEmpty() )
                                     {
-                                        SwTextFormatColl* pColl = GetExport().m_pDoc->FindTextFormatCollByName(sStyle);
+                                        SwTextFormatColl* pColl = GetExport().m_rDoc.FindTextFormatCollByName(sStyle);
                                         if (pColl)
                                         {
                                             if (!pColl->IsAssignedToListLevelOfOutlineStyle() || pColl->GetAssignedOutlineStyleLevel() < nTOXLvl)
@@ -2495,7 +2495,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
 
             if ( 0 < nCol )
             {
-                WW8_SepInfo rInfo( &GetExport( ).m_pDoc->GetPageDesc( 0 ), rSect.GetFormat(), 0/*nRstLnNum*/ );
+                WW8_SepInfo rInfo( &GetExport().m_rDoc.GetPageDesc( 0 ), rSect.GetFormat(), 0/*nRstLnNum*/ );
                 GetExport( ).AttrOutput().SectionBreak( msword::PageBreak, false, &rInfo );
             }
         }
@@ -2510,7 +2510,7 @@ bool MSWordExportBase::GetNumberFormat(const SwField& rField, OUString& rStr)
 {
     // Returns a date or time format string by using the US NfKeywordTable
     bool bHasFormat = false;
-    SvNumberFormatter* pNFormatr = m_pDoc->GetNumberFormatter();
+    SvNumberFormatter* pNFormatr = m_rDoc.GetNumberFormatter();
     sal_uInt32 nFormatIdx = rField.GetFormat();
     const SvNumberformat* pNumFormat = pNFormatr->GetEntry( nFormatIdx );
     if( pNumFormat )
@@ -2796,7 +2796,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::DatabaseName:
         {
-            SwDBData aData = GetExport().m_pDoc->GetDBData();
+            SwDBData aData = GetExport().m_rDoc.GetDBData();
             const OUString sStr = FieldString(ww::eDATABASE)
                 + aData.sDataSource
                 + OUStringChar(DB_DELIM)
@@ -3354,12 +3354,12 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
     // sprmCIstd
     const SwEndNoteInfo* pInfo;
     if( rFootnote.IsEndNote() )
-        pInfo = &m_pDoc->GetEndNoteInfo();
+        pInfo = &m_rDoc.GetEndNoteInfo();
     else
-        pInfo = &m_pDoc->GetFootnoteInfo();
+        pInfo = &m_rDoc.GetFootnoteInfo();
     const SwCharFormat* pCFormat = pOutArr
-                                ? pInfo->GetAnchorCharFormat( *m_pDoc )
-                                : pInfo->GetCharFormat( *m_pDoc );
+                                ? pInfo->GetAnchorCharFormat( m_rDoc )
+                                : pInfo->GetCharFormat( m_rDoc );
     SwWW8Writer::InsUInt16( aAttrArr, NS_sprm::CIstd::val );
     SwWW8Writer::InsUInt16( aAttrArr, GetId( pCFormat ) );
 
@@ -3393,10 +3393,10 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
         {
             std::unique_ptr<ww::bytes> pOld = std::move(pO);
             pO = std::move(pOwnOutArr);
-            SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_FONT,
+            SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_FONT,
                                                   RES_CHRATR_FONT>{} );
 
-            pCFormat = pInfo->GetCharFormat( *m_pDoc );
+            pCFormat = pInfo->GetCharFormat( m_rDoc );
 
             pTextFootnote->GetTextNode().GetParaAttr(aSet,
                 pTextFootnote->GetStart(), pTextFootnote->GetStart() + 1, true);
@@ -3471,7 +3471,7 @@ void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
 void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
 {
     WW8_WrPlcFootnoteEdn* pFootnoteEnd;
-    if ( rFootnote.IsEndNote() || GetExport().m_pDoc->GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER )
+    if ( rFootnote.IsEndNote() || GetExport().m_rDoc.GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER )
         pFootnoteEnd = m_rWW8Export.pEdn.get();
     else
         pFootnoteEnd = m_rWW8Export.pFootnote.get();
@@ -3544,7 +3544,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
         ParaNumRule_Impl(pTextNd, 0, 0);
         return;
     }
-    const SwNumRule* pRule = GetExport().m_pDoc->FindNumRulePtr(
+    const SwNumRule* pRule = GetExport().m_rDoc.FindNumRulePtr(
                                     rNumRule.GetValue() );
     if (!pRule)
         return;
@@ -3584,11 +3584,11 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                     )
                 {
                     SwList const*const pList(
-                        GetExport().m_pDoc->getIDocumentListsAccess().getListByName(listId));
+                        GetExport().m_rDoc.getIDocumentListsAccess().getListByName(listId));
                     if (pList)
                     {
                         SwNumRule const*const pAbstractRule(
-                            GetExport().m_pDoc->FindNumRulePtr(
+                            GetExport().m_rDoc.FindNumRulePtr(
                                 pList->GetDefaultListStyleName()));
                         assert(pAbstractRule);
                         if (pAbstractRule == pRule && !pTextNd->IsListRestart())
@@ -3841,8 +3841,8 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                 [[fallthrough]];
             case SvxBreak::ColumnAfter:
             case SvxBreak::ColumnBoth:
-                if ( GetExport().m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK )
-                     || GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 )
+                if ( GetExport().m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK )
+                     || GetExport().Sections().CurrentNumberOfColumns( GetExport().m_rDoc ) > 1 )
                 {
                     nC = msword::ColumnBreak;
                 }
@@ -4547,7 +4547,7 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
 {
     const SwFrameFormat* pFormat = m_pCurrentPageDesc ? &m_pCurrentPageDesc->GetMaster()
-        : &m_pDoc->GetPageDesc(0).GetMaster();
+        : &m_rDoc.GetPageDesc(0).GetMaster();
 
     const SvxLRSpaceItem& rLR = pFormat->GetLRSpace();
     SwTwips nPageSize = pFormat->GetFrameSize().GetWidth();
@@ -4609,7 +4609,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
 
     // get the page width without borders !!
 
-    const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
+    const SwFrameFormat* pFormat = GetExport( ).m_pCurrentPageDesc ? &GetExport( ).m_pCurrentPageDesc->GetMaster() : &const_cast<const SwDoc&>(GetExport().m_rDoc).GetPageDesc(0).GetMaster();
     const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
     SwTwips nPageSize;
     if ( frameDirection.GetValue() == SvxFrameDirection::Vertical_RL_TB || frameDirection.GetValue() == SvxFrameDirection::Vertical_LR_TB )
@@ -4730,7 +4730,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 OSL_ENSURE( pSet, "No attrset for lineheight :-(" );
                 if ( pSet )
                 {
-                    nSpace = nSpace + static_cast<short>( AttrSetToLineHeight( GetExport().m_pDoc->getIDocumentSettingAccess(),
+                    nSpace = nSpace + static_cast<short>( AttrSetToLineHeight( GetExport().m_rDoc.getIDocumentSettingAccess(),
                         *pSet, *Application::GetDefaultDevice(), nScript ) );
                 }
             }
@@ -4791,7 +4791,7 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
         if (dynamic_cast<const SwTextNode*>(m_rWW8Export.m_pOutFormatNode) != nullptr)
         {
             SwPosition aPos(*static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode));
-            nDirection = m_rWW8Export.m_pDoc->GetTextDirection(aPos);
+            nDirection = m_rWW8Export.m_rDoc.GetTextDirection(aPos);
         }
         else if (dynamic_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode) != nullptr)
         {
@@ -5525,7 +5525,7 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
 const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTextNode& rNode, RedlineType aRedlineType)
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for(SwRangeRedline* pRedl : GetExport().m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
+    for(SwRangeRedline* pRedl : GetExport().m_rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {
         // Only check redlines that are of type 'Delete'
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )

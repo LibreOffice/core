@@ -82,7 +82,7 @@ bool DocxExportFilter::exportDocument()
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
-        DocxExport aExport(this, pDoc, pCurPam, &aPam, bDocm, isExportTemplate());
+        DocxExport aExport(*this, *pDoc, pCurPam, aPam, bDocm, isExportTemplate());
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 

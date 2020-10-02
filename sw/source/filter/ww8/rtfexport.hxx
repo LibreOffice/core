@@ -148,8 +148,8 @@ protected:
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
-    RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument, std::shared_ptr<SwUnoCursor>& pCurrentPam,
-              SwPaM* pOriginalPam, Writer* pWriter, bool bOutOutlineOnly = false);
+    RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument, std::shared_ptr<SwUnoCursor>& pCurrentPam,
+              SwPaM& rOriginalPam, Writer* pWriter, bool bOutOutlineOnly = false);
 
     RtfExport(const RtfExport&) = delete;
 

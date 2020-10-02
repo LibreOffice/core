@@ -77,7 +77,7 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDes
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
-        RtfExport aExport(this, pDoc, pCurPam, &aPam, nullptr);
+        RtfExport aExport(this, *pDoc, pCurPam, aPam, nullptr);
         aExport.ExportDocument(true);
     }
 
