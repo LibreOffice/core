@@ -348,12 +348,13 @@ ErrCode SwASCIIParser::ReadChars()
             else
             {
                 pStt = pLastStt = reinterpret_cast<sal_Unicode*>(pArr.get());
-                pEnd = reinterpret_cast<sal_Unicode*>(pArr.get() + lGCount);
+                auto nChars = lGCount / 2;
+                pEnd = pStt + nChars;
 
                 if( bSwapUnicode )
                 {
                     char* pF = pArr.get(), *pN = pArr.get() + 1;
-                    for( sal_uLong n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
+                    for( sal_uLong n = 0; n < nChars; ++n, pF += 2, pN += 2 )
                     {
                         char c = *pF;
                         *pF = *pN;
