@@ -82,9 +82,9 @@ OUString ApplyLreOrRleEmbedding( const OUString &rText )
     if (nLen == 0)
         return OUString();
 
-    const sal_Unicode cLRE_Embedding  = 0x202A;      // the start char of an LRE embedding
-    const sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
-    const sal_Unicode cPopDirectionalFormat = 0x202C;   // the unicode PDF (POP_DIRECTIONAL_FORMAT) char that terminates an LRE/RLE embedding
+    constexpr sal_Unicode cLRE_Embedding  = 0x202A;      // the start char of an LRE embedding
+    constexpr sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
+    constexpr sal_Unicode cPopDirectionalFormat = 0x202C;   // the unicode PDF (POP_DIRECTIONAL_FORMAT) char that terminates an LRE/RLE embedding
 
     // check if there are already embedding characters at the strings start
     // if so change nothing
