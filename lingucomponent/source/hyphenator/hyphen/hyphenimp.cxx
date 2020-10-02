@@ -22,6 +22,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
@@ -803,9 +804,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_Hyphenator_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<Hyphenator> g_Instance(new Hyphenator());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new Hyphenator()));
 }
 
 

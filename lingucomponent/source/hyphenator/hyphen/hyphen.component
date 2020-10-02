@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.lingu.LibHnjHyphenator"
-    constructor="lingucomponent_Hyphenator_get_implementation">
+    constructor="lingucomponent_Hyphenator_get_implementation" single-instance="true">
     <service name="com.sun.star.linguistic2.Hyphenator"/>
   </implementation>
 </component>

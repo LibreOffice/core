@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -635,9 +636,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_SpellChecker_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<SpellChecker> g_Instance(new SpellChecker());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new SpellChecker()));
 }
 
 
