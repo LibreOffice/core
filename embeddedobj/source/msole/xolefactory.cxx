@@ -28,6 +28,7 @@
 #include <oleembobj.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 
 using namespace ::com::sun::star;
 
@@ -244,9 +245,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OleEmbeddedObjectFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<OleEmbeddedObjectFactory> g_Instance(new OleEmbeddedObjectFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OleEmbeddedObjectFactory(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

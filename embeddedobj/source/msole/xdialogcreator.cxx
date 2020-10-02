@@ -35,6 +35,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 
 #include "xdialogcreator.hxx"
 #include <oleembobj.hxx>
@@ -323,9 +324,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_MSOLEDialogObjectCreator_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<MSOLEDialogObjectCreator> g_Instance(new MSOLEDialogObjectCreator(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new MSOLEDialogObjectCreator(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

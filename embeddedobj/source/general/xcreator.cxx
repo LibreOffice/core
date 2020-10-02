@@ -28,9 +28,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <rtl/ref.hxx>
 
 #include <xcreator.hxx>
 #include <dummyobject.hxx>
@@ -410,9 +410,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_UNOEmbeddedObjectCreator_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<UNOEmbeddedObjectCreator> g_Instance(new UNOEmbeddedObjectCreator(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new UNOEmbeddedObjectCreator(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
