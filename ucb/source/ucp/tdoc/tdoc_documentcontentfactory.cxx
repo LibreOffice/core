@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
+#include <cppuhelper/weak.hxx>
 
 #include "tdoc_documentcontentfactory.hxx"
 
@@ -109,9 +109,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_tdoc_DocumentContentFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<DocumentContentFactory> g_Instance(new DocumentContentFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DocumentContentFactory(context)));
 }
 
 

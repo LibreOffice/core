@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/macros.hxx>
 #include "hierarchyprovider.hxx"
@@ -115,9 +116,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyContentProvider_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<HierarchyContentProvider> g_Instance(new HierarchyContentProvider(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new HierarchyContentProvider(context)));
 }
 
 // XContentProvider methods.
