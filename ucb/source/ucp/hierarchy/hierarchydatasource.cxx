@@ -31,6 +31,7 @@
 
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -39,7 +40,6 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <ucbhelper/macros.hxx>
-#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
@@ -212,9 +212,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_HierarchyDataSource_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<HierarchyDataSource> g_Instance(new HierarchyDataSource(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new HierarchyDataSource(context)));
 }
 
 

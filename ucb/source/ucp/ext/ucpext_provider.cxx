@@ -21,6 +21,7 @@
 #include "ucpext_content.hxx"
 
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -164,9 +165,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_ext_ContentProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<ucb::ucp::ext::ContentProvider> g_Instance(new ucb::ucp::ext::ContentProvider(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ucb::ucp::ext::ContentProvider(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

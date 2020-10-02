@@ -20,6 +20,7 @@
 #include "sortdynres.hxx"
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
@@ -436,9 +437,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_SortedDynamicResultSetFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<SortedDynamicResultSetFactory> g_Instance(new SortedDynamicResultSetFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new SortedDynamicResultSetFactory(context)));
 }
 
 // SortedDynamicResultSetFactory methods.

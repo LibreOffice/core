@@ -27,6 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/weak.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"
 #include "ftploaderthread.hxx"
@@ -238,9 +239,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_ftp_FTPContentProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<FTPContentProvider> g_Instance(new FTPContentProvider(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new FTPContentProvider(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

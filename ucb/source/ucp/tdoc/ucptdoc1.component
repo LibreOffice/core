@@ -24,7 +24,7 @@
     <service name="com.sun.star.ucb.TransientDocumentsContentProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory"
-    constructor="ucb_tdoc_DocumentContentFactory_get_implementation">
+    constructor="ucb_tdoc_DocumentContentFactory_get_implementation" single-instance="true">
     <service name="com.sun.star.frame.TransientDocumentsDocumentContentFactory"/>
   </implementation>
 </component>

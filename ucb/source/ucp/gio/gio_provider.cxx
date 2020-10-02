@@ -21,6 +21,7 @@
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include "gio_provider.hxx"
@@ -127,17 +128,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_gio_ContentProvider_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static bool bDisabled = isDisabled();
-    if (bDisabled)
+    if (isDisabled())
         return nullptr;
-    static rtl::Reference<gio::ContentProvider> g_Instance = [&]() {
-        #if !GLIB_CHECK_VERSION(2,36,0)
-            g_type_init();
-        #endif
-        return new gio::ContentProvider(context);
-    }();
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+#if !GLIB_CHECK_VERSION(2,36,0)
+    g_type_init();
+#endif
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new gio::ContentProvider(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
