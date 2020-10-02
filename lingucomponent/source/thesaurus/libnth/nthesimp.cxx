@@ -20,6 +20,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -570,9 +571,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_Thesaurus_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<Thesaurus> g_Instance(new Thesaurus());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new Thesaurus()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
