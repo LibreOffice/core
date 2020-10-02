@@ -26,6 +26,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/useroptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -784,9 +785,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_DicList_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<DicList> g_Instance(new DicList());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new DicList()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

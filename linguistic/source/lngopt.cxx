@@ -23,11 +23,11 @@
 #include <linguistic/misc.hxx>
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
-#include <rtl/ref.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -427,9 +427,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LinguProps_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<LinguProps> g_Instance(new LinguProps());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new LinguProps()));
 }
 
 

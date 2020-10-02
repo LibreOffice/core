@@ -48,12 +48,12 @@
 #include <osl/conditn.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/ref.hxx>
 
 #include <map>
 
@@ -1174,9 +1174,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_GrammarCheckingIterator_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<GrammarCheckingIterator> g_Instance(new GrammarCheckingIterator());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new GrammarCheckingIterator()));
 }
 
 

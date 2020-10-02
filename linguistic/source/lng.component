@@ -24,19 +24,19 @@
     <service name="com.sun.star.linguistic2.ConversionDictionaryList"/>
   </implementation>
   <implementation name="com.sun.star.lingu2.DicList"
-    constructor="linguistic_DicList_get_implementation">
+    constructor="linguistic_DicList_get_implementation" single-instance="true">
     <service name="com.sun.star.linguistic2.DictionaryList"/>
   </implementation>
   <implementation name="com.sun.star.lingu2.LinguProps"
-    constructor="linguistic_LinguProps_get_implementation">
+    constructor="linguistic_LinguProps_get_implementation" single-instance="true">
     <service name="com.sun.star.linguistic2.LinguProperties"/>
   </implementation>
   <implementation name="com.sun.star.lingu2.LngSvcMgr"
-    constructor="linguistic_LngSvcMgr_get_implementation">
+    constructor="linguistic_LngSvcMgr_get_implementation" single-instance="true">
     <service name="com.sun.star.linguistic2.LinguServiceManager"/>
   </implementation>
   <implementation name="com.sun.star.lingu2.ProofreadingIterator"
-    constructor="linguistic_GrammarCheckingIterator_get_implementation">
+    constructor="linguistic_GrammarCheckingIterator_get_implementation" single-instance="true">
     <service name="com.sun.star.linguistic2.ProofreadingIterator"/>
   </implementation>
 </component>
