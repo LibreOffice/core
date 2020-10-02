@@ -21,6 +21,9 @@
 #include <tools/color.hxx>
 #include <vcl/alpha.hxx>
 #include <bitmapwriteaccess.hxx>
+#include <salinst.hxx>
+#include <svdata.hxx>
+#include <salbmp.hxx>
 #include <sal/log.hxx>
 
 AlphaMask::AlphaMask() = default;
@@ -140,6 +143,12 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
 
 void AlphaMask::BlendWith(const Bitmap& rOther)
 {
+    std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
+    if (xImpBmp->Create(*ImplGetSalBitmap()) && xImpBmp->AlphaBlendWith(*rOther.ImplGetSalBitmap()))
+    {
+        ImplSetSalBitmap(xImpBmp);
+        return;
+    }
     AlphaMask aOther(rOther); // to 8 bits
     Bitmap::ScopedReadAccess pOtherAcc(aOther);
     AlphaScopedWriteAccess pAcc(*this);
