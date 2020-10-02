@@ -12,9 +12,9 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <rtl/ref.hxx>
 
 #include <sax/tools/documenthandleradapter.hxx>
 
@@ -197,9 +197,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_OdfFlatXml_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<OdfFlatXml> g_Instance(new OdfFlatXml(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OdfFlatXml(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
