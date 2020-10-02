@@ -25,6 +25,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/svapp.hxx>
 
 namespace dbaccess
 {
@@ -141,21 +142,25 @@ namespace dbaccess
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
-                //TODO: a protocol is missing how to join with the thread before
-                // exit(3), to ensure the thread is no longer relying on any
-                // infrastructure while that infrastructure is being shut down
-                // in atexit handlers; simply calling join here leads to
-                // deadlock, as this thread holds the solar mutex while the
-                // other thread is typically blocked waiting for the solar mutex
-                // For now, use newAutoJoinAsyncEventNotifier which is
-                // better than nothing.
-            m_pEventBroadcaster.reset();
         }
+
+        auto xEventBroadcaster = std::move(m_pEventBroadcaster);
+        assert(!m_pEventBroadcaster);
 
         lang::EventObject aEvent( m_rDocument );
         aGuard.clear();
         // <-- SYNCHRONIZED
 
+        if (xEventBroadcaster)
+        {
+            comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
+            // unblock threads blocked on that so we can join
+            sal_uInt32 nLockCount = (rSolarMutex.IsCurrentThread()) ? rSolarMutex.release(true) : 0;
+            xEventBroadcaster->join();
+            if (nLockCount)
+                rSolarMutex.acquire(nLockCount);
+            xEventBroadcaster.reset();
+        }
         m_aLegacyEventListeners.disposeAndClear( aEvent );
         m_aDocumentEventListeners.disposeAndClear( aEvent );
 
