@@ -76,6 +76,17 @@ def check_top_level_widget(element):
             lint_assert(border_width.text == BORDER_WIDTH,
                         "Top level 'border_width' property should be " + BORDER_WIDTH, border_width)
 
+    # check that any widget which has 'has-default' also has 'can-default'
+    for widget in element.findall('.//object'):
+        if not widget.attrib['class']:
+            continue
+        widget_type = widget.attrib['class']
+        has_defaults = widget.findall("./property[@name='has_default']")
+        if len(has_defaults) > 0 and has_defaults[0].text == "True":
+            can_defaults = widget.findall("./property[@name='can_default']")
+            lint_assert(len(can_defaults)>0 and can_defaults[0].text == "True",
+                "has_default without can_default in " + widget_type + " with id = '" + widget.attrib['id'] + "'", widget)
+
 def check_button_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")
     lint_assert(len(spacing) > 0 and spacing[0].text == BUTTON_BOX_SPACING,
@@ -120,7 +131,6 @@ def check_check_buttons(root):
         assert len(radio_underlines) <= 1
         if len(radio_underlines) < 1:
             lint_assert(False, "No use_underline in GtkCheckButton with id = '" + radio.attrib['id'] + "'", radio)
-
 
 def check_frames(root):
     frames = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkFrame']
