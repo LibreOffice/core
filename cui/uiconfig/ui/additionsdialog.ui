@@ -2,6 +2,11 @@
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
+  <object class="GtkImage" id="imageGear">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">cmd/sc_menubar.png</property>
+  </object>
   <object class="GtkMenu" id="additionsmenu">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -194,21 +199,15 @@
                 </child>
                 <child>
                   <object class="GtkMenuButton" id="buttonGear">
-                    <property name="label" translateable="no"></property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="margin_left">1</property>
+                    <property name="image">imageGear</property>
+                    <property name="always_show_image">True</property>
                     <property name="popup">additionsmenu</property>
                     <property name="use_popover">False</property>
-                    <child>
-                      <object class="GtkImage" id="imageGear">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">cmd/sc_menubar.png</property>
-                      </object>
-                    </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="buttonGear-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="additionsdialog|buttonGear">Gear Menu</property>
