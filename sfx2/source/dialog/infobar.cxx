@@ -439,6 +439,8 @@ bool SfxInfoBarContainerWindow::isInfobarEnabled(const OUString& sId)
         return officecfg::Office::UI::Infobar::Enabled::GetInvolved::get();
     if (sId == "hyphenationmissing")
         return officecfg::Office::UI::Infobar::Enabled::HyphenationMissing::get();
+    if (sId == "whatsnew")
+        return officecfg::Office::UI::Infobar::Enabled::WhatsNew::get();
 
     return true;
 }
