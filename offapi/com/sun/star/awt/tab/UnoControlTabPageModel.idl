@@ -30,6 +30,49 @@ module com {  module sun {  module star {  module awt { module tab {
 published service UnoControlTabPageModel
 {
     interface XTabPageModel;
+
+    /** specifies the text that is displayed in the caption bar of the dialog.
+     */
+    [optional, property] string Title;
+
+    /** specifies the help text of the dialog.
+     */
+    [optional, property] string HelpText;
+
+    /** specifies the help URL of the dialog.
+     */
+    [optional, property] string HelpURL;
+
+    /** specifies that a horizontal scrollbar should be added to the dialog
+        @since LibreOffice 7.1
+     */
+    [optional, property] boolean HScroll;
+
+    /** specifies that a vertical scrollbar should be added to the dialog
+        @since LibreOffice 7.1
+     */
+    [optional, property] boolean VScroll;
+
+    /** specifies the horizontal position of the scrolled dialog content
+        @since LibreOffice 7.1
+     */
+    [optional, property] long ScrollLeft;
+
+    /** specifies the vertical position of the scrolled dialog content
+        @since LibreOffice 7.1
+     */
+    [optional, property] long ScrollTop;
+
+    /** specifies the total width of the scrollable dialog content
+        @since LibreOffice 7.1
+     */
+    [optional, property] long ScrollWidth;
+
+    /** specifies the total height of the scrollable dialog content
+        @since LibreOffice 7.1
+     */
+    [optional, property] long ScrollHeight;
+
 };
 
 
