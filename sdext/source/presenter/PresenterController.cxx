@@ -273,10 +273,9 @@ void PresenterController::GetSlides (const sal_Int32 nOffset)
     // Get the current slide from the slide show controller.
     mxCurrentSlide = nullptr;
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
-    sal_Int32 nSlideIndex = -1;
     try
     {
-        nSlideIndex = mxSlideShowController->getCurrentSlideIndex() + nOffset;
+        sal_Int32 nSlideIndex = mxSlideShowController->getCurrentSlideIndex() + nOffset;
         if (mxSlideShowController->isPaused())
             nSlideIndex = -1;
 
@@ -571,12 +570,12 @@ const Reference<drawing::XDrawPage>& PresenterController::GetCurrentSlide() cons
 bool PresenterController::HasTransition (Reference<drawing::XDrawPage> const & rxPage)
 {
     bool bTransition = false;
-    sal_uInt16 aTransitionType = 0;
     if( rxPage.is() )
     {
         Reference<beans::XPropertySet> xSlidePropertySet (rxPage, UNO_QUERY);
         try
         {
+            sal_uInt16 aTransitionType = 0;
             xSlidePropertySet->getPropertyValue("TransitionType") >>= aTransitionType;
             if (aTransitionType > 0)
             {
