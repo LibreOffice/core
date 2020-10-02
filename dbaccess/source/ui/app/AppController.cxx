@@ -2338,10 +2338,9 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                 if ( nAction != DND_ACTION_NONE )
                 {
                     auto xHitEntry = pView->getEntry(_rEvt.maPosPixel);
-                    OUString sName;
                     if (xHitEntry)
                     {
-                        sName = pView->getQualifiedName(xHitEntry.get());
+                        OUString sName = pView->getQualifiedName(xHitEntry.get());
                         if ( !sName.isEmpty() )
                         {
                             Reference< XHierarchicalNameAccess > xContainer(getElements(pView->getElementType()),UNO_QUERY);

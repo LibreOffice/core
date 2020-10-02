@@ -1314,7 +1314,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
     OUString sReturn;
     if(m_pTables && m_pTables->getCount() > 1)
     {
-        OUString aCatalog,aSchema,aTable,aComposedName,aColumnName;
+        OUString aCatalog,aSchema,aTable,aColumnName;
         if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_CATALOGNAME))
             column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
         if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_SCHEMANAME))
@@ -1343,7 +1343,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
         }
         else
         {
-            aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
+            OUString aComposedName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, false, ::dbtools::EComposeRule::InDataManipulation );
 
             // Is this the right case for the table name?
             // Else, look for it with different case, if applicable.

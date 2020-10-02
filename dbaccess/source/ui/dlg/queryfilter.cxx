@@ -282,12 +282,12 @@ bool DlgFilterCrit::getCondition(const weld::ComboBox& _rField,const weld::Combo
     bool bHaving = false;
     try
     {
-        OUString sTableName;
         _rFilter.Name = _rField.get_active_text();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
         if ( xColumn.is() )
         {
             bool bFunction = false;
+            OUString sTableName;
             Reference< XPropertySetInfo > xInfo = xColumn->getPropertySetInfo();
             if ( xInfo->hasPropertyByName(PROPERTY_REALNAME) )
             {
