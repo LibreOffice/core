@@ -40,7 +40,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
@@ -843,9 +842,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 eventattacher_EventAttacher(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const& )
 {
-    static rtl::Reference<comp_EventAttacher::EventAttacherImpl> instance(new comp_EventAttacher::EventAttacherImpl(context));
-    instance->acquire();
-    return static_cast<cppu::OWeakObject*>(instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new comp_EventAttacher::EventAttacherImpl(context)));
 }
 
 
