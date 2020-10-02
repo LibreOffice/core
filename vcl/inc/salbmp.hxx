@@ -90,6 +90,11 @@ public:
     {
         return false;
     }
+    // Optimized case for AlphaMask::BlendWith().
+    virtual bool            AlphaBlendWith( const SalBitmap& /*rSalBmp*/ )
+    {
+        return false;
+    }
 
     void GetChecksum(BitmapChecksum& rChecksum) const
     {

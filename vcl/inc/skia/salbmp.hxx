@@ -60,6 +60,7 @@ public:
     virtual bool InterpretAs8Bit() override;
     virtual bool ConvertToGreyscale() override;
     virtual bool Erase(const Color& color) override;
+    virtual bool AlphaBlendWith(const SalBitmap& rSalBmp) override;
 
     const BitmapPalette& Palette() const { return mPalette; }
 
