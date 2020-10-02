@@ -23,9 +23,9 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc* pDoc)
-    : SvxUnoDrawPool(pDoc->getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER)
-    , m_pDoc(pDoc)
+SwSvxUnoDrawPool::SwSvxUnoDrawPool(SwDoc& rDoc)
+    : SvxUnoDrawPool(rDoc.getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER)
+    , m_rDoc(rDoc)
 {
 }
 
@@ -35,18 +35,13 @@ SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
 
 SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
 {
-    if(m_pDoc)
-    {
-
-        // DVO, OD 01.10.2003 #i18732# - return item pool of writer document;
-        // it contains draw model item pool as secondary pool.
-        //SdrModel* pModel = m_pDoc->MakeDrawModel();
-        //return &pModel->GetItemPool();
-        // #i52858# - method name changed
-        m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        return &(m_pDoc->GetAttrPool());
-    }
-    return nullptr;
+    // DVO, OD 01.10.2003 #i18732# - return item pool of writer document;
+    // it contains draw model item pool as secondary pool.
+    //SdrModel* pModel = m_rDoc.MakeDrawModel();
+    //return &pModel->GetItemPool();
+    // #i52858# - method name changed
+    m_rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+    return &(m_rDoc.GetAttrPool());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
