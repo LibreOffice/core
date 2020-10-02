@@ -263,8 +263,6 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
                                  "has-secondary-backward-stepper", &has_backward2, nullptr );
-    gint       buttonWidth;
-    gint       buttonHeight;
 
     gint nFirst = 0;
     gint nSecond = 0;
@@ -274,103 +272,46 @@ tools::Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, tools
     if ( has_backward )  nFirst  += 1;
     if ( has_backward2 ) nSecond += 1;
 
-    if (gtk_check_version(3, 20, 0) == nullptr)
+    Size aSize;
+    if (nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight)
     {
-        Size aSize;
-        if (nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight)
-        {
-            QuerySize(mpHScrollbarStyle, aSize);
-            QuerySize(mpHScrollbarContentsStyle, aSize);
-            QuerySize(mpHScrollbarButtonStyle, aSize);
-        }
-        else
-        {
-            QuerySize(mpVScrollbarStyle, aSize);
-            QuerySize(mpVScrollbarContentsStyle, aSize);
-            QuerySize(mpVScrollbarButtonStyle, aSize);
-        }
-
-        if (nPart == ControlPart::ButtonUp)
-        {
-            aSize.setHeight( aSize.Height() * nFirst );
-            buttonRect.setX(aAreaRect.Left());
-            buttonRect.setY(aAreaRect.Top());
-        }
-        else if (nPart == ControlPart::ButtonLeft)
-        {
-            aSize.setWidth( aSize.Width() * nFirst );
-            buttonRect.setX(aAreaRect.Left());
-            buttonRect.setY(aAreaRect.Top());
-        }
-        else if (nPart == ControlPart::ButtonDown)
-        {
-            aSize.setHeight( aSize.Height() * nSecond );
-            buttonRect.setX(aAreaRect.Left());
-            buttonRect.setY(aAreaRect.Top() + aAreaRect.GetHeight() - aSize.Height());
-        }
-        else if (nPart == ControlPart::ButtonRight)
-        {
-            aSize.setWidth( aSize.Width() * nSecond );
-            buttonRect.setX(aAreaRect.Left() + aAreaRect.GetWidth() - aSize.Width());
-            buttonRect.setY(aAreaRect.Top());
-        }
-
-        buttonRect.SetSize(aSize);
-
-        return buttonRect;
-    }
-
-    gint slider_width;
-    gint stepper_size;
-    gint stepper_spacing;
-    gint trough_border;
-
-    // Grab some button style attributes
-    gtk_style_context_get_style( pScrollbarStyle,
-                                 "slider-width", &slider_width,
-                                 "stepper-size", &stepper_size,
-                                 "trough-border", &trough_border,
-                                 "stepper-spacing", &stepper_spacing, nullptr );
-
-    if ( ( nPart == ControlPart::ButtonUp ) || ( nPart == ControlPart::ButtonDown ) )
-    {
-        buttonWidth = slider_width + 2 * trough_border;
-        buttonHeight = stepper_size + trough_border + stepper_spacing;
+        QuerySize(mpHScrollbarStyle, aSize);
+        QuerySize(mpHScrollbarContentsStyle, aSize);
+        QuerySize(mpHScrollbarButtonStyle, aSize);
     }
     else
     {
-        buttonWidth = stepper_size + trough_border + stepper_spacing;
-        buttonHeight = slider_width + 2 * trough_border;
+        QuerySize(mpVScrollbarStyle, aSize);
+        QuerySize(mpVScrollbarContentsStyle, aSize);
+        QuerySize(mpVScrollbarButtonStyle, aSize);
     }
 
-    if ( nPart == ControlPart::ButtonUp )
+    if (nPart == ControlPart::ButtonUp)
     {
-        buttonHeight *= nFirst;
-        buttonHeight -= 1;
-        buttonRect.setX( aAreaRect.Left() );
-        buttonRect.setY( aAreaRect.Top() );
+        aSize.setHeight( aSize.Height() * nFirst );
+        buttonRect.setX(aAreaRect.Left());
+        buttonRect.setY(aAreaRect.Top());
     }
-    else if ( nPart == ControlPart::ButtonLeft )
+    else if (nPart == ControlPart::ButtonLeft)
     {
-        buttonWidth *= nFirst;
-        buttonWidth -= 1;
-        buttonRect.setX( aAreaRect.Left() );
-        buttonRect.setY( aAreaRect.Top() );
+        aSize.setWidth( aSize.Width() * nFirst );
+        buttonRect.setX(aAreaRect.Left());
+        buttonRect.setY(aAreaRect.Top());
     }
-    else if ( nPart == ControlPart::ButtonDown )
+    else if (nPart == ControlPart::ButtonDown)
     {
-        buttonHeight *= nSecond;
-        buttonRect.setX( aAreaRect.Left() );
-        buttonRect.setY( aAreaRect.Top() + aAreaRect.GetHeight() - buttonHeight );
+        aSize.setHeight( aSize.Height() * nSecond );
+        buttonRect.setX(aAreaRect.Left());
+        buttonRect.setY(aAreaRect.Top() + aAreaRect.GetHeight() - aSize.Height());
     }
-    else if ( nPart == ControlPart::ButtonRight )
+    else if (nPart == ControlPart::ButtonRight)
     {
-        buttonWidth *= nSecond;
-        buttonRect.setX( aAreaRect.Left() + aAreaRect.GetWidth() - buttonWidth );
-        buttonRect.setY( aAreaRect.Top() );
+        aSize.setWidth( aSize.Width() * nSecond );
+        buttonRect.setX(aAreaRect.Left() + aAreaRect.GetWidth() - aSize.Width());
+        buttonRect.setY(aAreaRect.Top());
     }
 
-    buttonRect.SetSize( Size( buttonWidth, buttonHeight ) );
+    buttonRect.SetSize(aSize);
 
     return buttonRect;
 }
@@ -381,9 +322,6 @@ static GtkWidget* gSpinBox;
 static GtkWidget* gEntryBox;
 static GtkWidget* gComboBox;
 static GtkWidget* gListBox;
-static GtkWidget* gMenuBarWidget;
-static GtkWidget* gMenuItemMenuBarWidget;
-static GtkWidget* gCheckMenuItemWidget;
 static GtkWidget* gTreeViewWidget;
 
 namespace
@@ -460,332 +398,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     ControlPart nPart,
                                     const ImplControlValue& rValue )
 {
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        assert(rValue.getType() == ControlType::Scrollbar);
-        const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
-        tools::Rectangle        scrollbarRect;
-        GtkStateFlags    stateFlags;
-        GtkOrientation    scrollbarOrientation;
-        tools::Rectangle        thumbRect = rScrollbarVal.maThumbRect;
-        tools::Rectangle        button11BoundRect = rScrollbarVal.maButton1Rect;   // backward
-        tools::Rectangle        button22BoundRect = rScrollbarVal.maButton2Rect;   // forward
-        tools::Rectangle        button12BoundRect = rScrollbarVal.maButton1Rect;   // secondary forward
-        tools::Rectangle        button21BoundRect = rScrollbarVal.maButton2Rect;   // secondary backward
-        gdouble          arrow1Angle;                                        // backward
-        gdouble          arrow2Angle;                                        // forward
-        tools::Rectangle        arrowRect;
-        gint            slider_width = 0;
-        gint            stepper_size = 0;
-
-        // make controlvalue rectangles relative to area
-        thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
-        button11BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
-        button22BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
-        button12BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
-        button21BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
-
-        // Find the overall bounding rect of the control
-        scrollbarRect = rControlRectangle;
-        if (scrollbarRect.IsEmpty())
-            return;
-
-        gint slider_side;
-        Size aSize;
-        if (nPart == ControlPart::DrawBackgroundHorz)
-        {
-            QuerySize(mpHScrollbarStyle, aSize);
-            QuerySize(mpHScrollbarContentsStyle, aSize);
-            QuerySize(mpHScrollbarTroughStyle, aSize);
-            QuerySize(mpHScrollbarSliderStyle, aSize);
-            slider_side = aSize.Height();
-            gtk_style_context_get(mpHScrollbarButtonStyle,
-                                  gtk_style_context_get_state(mpHScrollbarButtonStyle),
-                                  "min-height", &slider_width,
-                                  "min-width", &stepper_size, nullptr);
-        }
-        else
-        {
-            QuerySize(mpVScrollbarStyle, aSize);
-            QuerySize(mpVScrollbarContentsStyle, aSize);
-            QuerySize(mpVScrollbarTroughStyle, aSize);
-            QuerySize(mpVScrollbarSliderStyle, aSize);
-            slider_side = aSize.Width();
-            gtk_style_context_get(mpVScrollbarButtonStyle,
-                                  gtk_style_context_get_state(mpVScrollbarButtonStyle),
-                                  "min-width", &slider_width,
-                                  "min-height", &stepper_size, nullptr);
-        }
-
-        gboolean has_forward;
-        gboolean has_forward2;
-        gboolean has_backward;
-        gboolean has_backward2;
-
-        gtk_style_context_get_style( context,
-                                     "has-forward-stepper", &has_forward,
-                                     "has-secondary-forward-stepper", &has_forward2,
-                                     "has-backward-stepper", &has_backward,
-                                     "has-secondary-backward-stepper", &has_backward2, nullptr );
-
-        if ( nPart == ControlPart::DrawBackgroundHorz )
-        {
-            // Center vertically in the track
-            scrollbarRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
-            scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), slider_side ) );
-            thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
-            thumbRect.SetSize( Size( thumbRect.GetWidth(), slider_side ) );
-
-            scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
-            arrow1Angle = G_PI * 3 / 2;
-            arrow2Angle = G_PI / 2;
-
-            if ( has_backward )
-            {
-                button12BoundRect.Move( stepper_size,
-                                        (scrollbarRect.GetHeight() - slider_width) / 2 );
-            }
-
-            button11BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
-            button11BoundRect.SetSize( Size( stepper_size, slider_width ) );
-            button12BoundRect.SetSize( Size( stepper_size, slider_width ) );
-
-            if ( has_backward2 )
-            {
-                button22BoundRect.Move( stepper_size, (scrollbarRect.GetHeight() - slider_width) / 2 );
-                button21BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
-            }
-            else
-            {
-                button22BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
-            }
-
-            button21BoundRect.SetSize( Size( stepper_size, slider_width ) );
-            button22BoundRect.SetSize( Size( stepper_size, slider_width ) );
-        }
-        else
-        {
-            // Center horizontally in the track
-            scrollbarRect.Move( (scrollbarRect.GetWidth() - slider_side) / 2, 0 );
-            scrollbarRect.SetSize( Size( slider_side, scrollbarRect.GetHeight() ) );
-            thumbRect.Move( (scrollbarRect.GetWidth() - slider_side) / 2, 0 );
-            thumbRect.SetSize( Size( slider_side, thumbRect.GetHeight() ) );
-
-            scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
-            arrow1Angle = 0;
-            arrow2Angle = G_PI;
-
-            if ( has_backward )
-            {
-                button12BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2,
-                                        stepper_size );
-            }
-            button11BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
-            button11BoundRect.SetSize( Size( slider_width, stepper_size ) );
-            button12BoundRect.SetSize( Size( slider_width, stepper_size ) );
-
-            if ( has_backward2 )
-            {
-                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, stepper_size );
-                button21BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
-            }
-            else
-            {
-                button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
-            }
-
-            button21BoundRect.SetSize( Size( slider_width, stepper_size ) );
-            button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
-        }
-
-        bool has_slider = !thumbRect.IsEmpty();
-
-        // ----------------- CONTENTS
-        GtkStyleContext* pScrollbarContentsStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                  mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
-
-        gtk_render_background(gtk_widget_get_style_context(gCacheWindow), cr, 0, 0,
-                              scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-        gtk_render_background(context, cr, 0, 0,
-                              scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-        gtk_render_frame(context, cr, 0, 0,
-                         scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-        gtk_render_background(pScrollbarContentsStyle, cr, 0, 0,
-                              scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-        gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
-                         scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-        bool backwardButtonInsensitive =
-            rScrollbarVal.mnCur == rScrollbarVal.mnMin;
-        bool forwardButtonInsensitive = rScrollbarVal.mnMax == 0 ||
-            rScrollbarVal.mnCur + rScrollbarVal.mnVisibleSize >= rScrollbarVal.mnMax;
-
-        // ----------------- BUTTON 1
-        if ( has_backward )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton1State);
-            if ( backwardButtonInsensitive )
-                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
-
-            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
-
-            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
-
-            gtk_render_background(pScrollbarButtonStyle, cr,
-                                  button11BoundRect.Left(), button11BoundRect.Top(),
-                                  button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
-            gtk_render_frame(pScrollbarButtonStyle, cr,
-                             button11BoundRect.Left(), button11BoundRect.Top(),
-                             button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
-
-            // ----------------- ARROW 1
-            NWCalcArrowRect( button11BoundRect, arrowRect );
-            gtk_render_arrow(pScrollbarButtonStyle, cr,
-                             arrow1Angle,
-                             arrowRect.Left(), arrowRect.Top(),
-                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-        }
-        if ( has_forward2 )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
-            if ( forwardButtonInsensitive )
-                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
-
-            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
-
-            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
-
-            gtk_render_background(pScrollbarButtonStyle, cr,
-                                  button12BoundRect.Left(), button12BoundRect.Top(),
-                                  button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
-            gtk_render_frame(pScrollbarButtonStyle, cr,
-                             button12BoundRect.Left(), button12BoundRect.Top(),
-                             button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
-
-            // ----------------- ARROW 1
-            NWCalcArrowRect( button12BoundRect, arrowRect );
-            gtk_render_arrow(pScrollbarButtonStyle, cr,
-                             arrow2Angle,
-                             arrowRect.Left(), arrowRect.Top(),
-                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-        }
-        // ----------------- BUTTON 2
-
-        if ( has_forward )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
-            if ( forwardButtonInsensitive )
-                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
-
-            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
-
-            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
-
-            gtk_render_background(pScrollbarButtonStyle, cr,
-                           button22BoundRect.Left(), button22BoundRect.Top(),
-                           button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
-            gtk_render_frame(pScrollbarButtonStyle, cr,
-                           button22BoundRect.Left(), button22BoundRect.Top(),
-                           button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
-
-            // ----------------- ARROW 2
-            NWCalcArrowRect( button22BoundRect, arrowRect );
-            gtk_render_arrow(pScrollbarButtonStyle, cr,
-                             arrow2Angle,
-                             arrowRect.Left(), arrowRect.Top(),
-                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-        }
-
-        if ( has_backward2 )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton1State);
-            if ( backwardButtonInsensitive )
-                stateFlags = GTK_STATE_FLAG_INSENSITIVE;
-
-            GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                     mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
-
-            gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
-
-            gtk_render_background(pScrollbarButtonStyle, cr,
-                                  button21BoundRect.Left(), button21BoundRect.Top(),
-                                  button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
-            gtk_render_frame(pScrollbarButtonStyle, cr,
-                             button21BoundRect.Left(), button21BoundRect.Top(),
-                             button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
-
-            // ----------------- ARROW 2
-            NWCalcArrowRect( button21BoundRect, arrowRect );
-            gtk_render_arrow(pScrollbarButtonStyle, cr,
-                             arrow1Angle,
-                             arrowRect.Left(), arrowRect.Top(),
-                             MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
-        }
-
-        // ----------------- TROUGH
-        // trackrect matches that of ScrollBar::ImplCalc
-        tools::Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
-        if (nPart == ControlPart::DrawBackgroundHorz)
-        {
-            tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
-            tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
-            if (!aBtn1Rect.IsWidthEmpty())
-                aTrackRect.SetLeft( aBtn1Rect.Right() );
-            if (!aBtn2Rect.IsWidthEmpty())
-                aTrackRect.SetRight( aBtn2Rect.Left() );
-        }
-        else
-        {
-            tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
-            tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
-            if (!aBtn1Rect.IsHeightEmpty())
-                aTrackRect.SetTop( aBtn1Rect.Bottom() + 1 );
-            if (!aBtn2Rect.IsHeightEmpty())
-                aTrackRect.SetBottom( aBtn2Rect.Top() );
-        }
-
-        GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                  mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
-        gtk_render_background(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
-                              aTrackRect.GetWidth(), aTrackRect.GetHeight() );
-        gtk_render_frame(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
-                         aTrackRect.GetWidth(), aTrackRect.GetHeight() );
-
-        // ----------------- THUMB
-        if ( has_slider )
-        {
-            stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
-            if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-                stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
-
-            GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                      mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
-
-            gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
-
-            GtkBorder margin;
-            gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
-
-            gtk_render_background(pScrollbarSliderStyle, cr,
-                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                              thumbRect.GetWidth() - margin.left - margin.right,
-                              thumbRect.GetHeight() - margin.top - margin.bottom);
-
-            gtk_render_frame(pScrollbarSliderStyle, cr,
-                              thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                              thumbRect.GetWidth() - margin.left - margin.right,
-                              thumbRect.GetHeight() - margin.top - margin.bottom);
-        }
-
-        return;
-    }
-
-    OSL_ASSERT( rValue.getType() == ControlType::Scrollbar );
+    assert(rValue.getType() == ControlType::Scrollbar);
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
     tools::Rectangle        scrollbarRect;
     GtkStateFlags    stateFlags;
@@ -800,7 +413,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     tools::Rectangle        arrowRect;
     gint            slider_width = 0;
     gint            stepper_size = 0;
-    gint            trough_border = 0;
 
     // make controlvalue rectangles relative to area
     thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
@@ -811,17 +423,36 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
     // Find the overall bounding rect of the control
     scrollbarRect = rControlRectangle;
-    scrollbarRect.SetSize( Size( scrollbarRect.GetWidth() + 1,
-                                 scrollbarRect.GetHeight() + 1 ) );
-
-    if ( (scrollbarRect.GetWidth() <= 1) || (scrollbarRect.GetHeight() <= 1) )
+    if (scrollbarRect.IsEmpty())
         return;
 
-    // Grab some button style attributes
-    gtk_style_context_get_style( context,
-                                 "slider_width", &slider_width,
-                                 "stepper_size", &stepper_size,
-                                 "trough_border", &trough_border, nullptr );
+    gint slider_side;
+    Size aSize;
+    if (nPart == ControlPart::DrawBackgroundHorz)
+    {
+        QuerySize(mpHScrollbarStyle, aSize);
+        QuerySize(mpHScrollbarContentsStyle, aSize);
+        QuerySize(mpHScrollbarTroughStyle, aSize);
+        QuerySize(mpHScrollbarSliderStyle, aSize);
+        slider_side = aSize.Height();
+        gtk_style_context_get(mpHScrollbarButtonStyle,
+                              gtk_style_context_get_state(mpHScrollbarButtonStyle),
+                              "min-height", &slider_width,
+                              "min-width", &stepper_size, nullptr);
+    }
+    else
+    {
+        QuerySize(mpVScrollbarStyle, aSize);
+        QuerySize(mpVScrollbarContentsStyle, aSize);
+        QuerySize(mpVScrollbarTroughStyle, aSize);
+        QuerySize(mpVScrollbarSliderStyle, aSize);
+        slider_side = aSize.Width();
+        gtk_style_context_get(mpVScrollbarButtonStyle,
+                              gtk_style_context_get_state(mpVScrollbarButtonStyle),
+                              "min-width", &slider_width,
+                              "min-height", &stepper_size, nullptr);
+    }
+
     gboolean has_forward;
     gboolean has_forward2;
     gboolean has_backward;
@@ -832,13 +463,14 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                  "has-secondary-forward-stepper", &has_forward2,
                                  "has-backward-stepper", &has_backward,
                                  "has-secondary-backward-stepper", &has_backward2, nullptr );
-    gint magic = trough_border ? 1 : 0;
-    gint slider_side = slider_width + (trough_border * 2);
 
     if ( nPart == ControlPart::DrawBackgroundHorz )
     {
+        // Center vertically in the track
         scrollbarRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
         scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), slider_side ) );
+        thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
+        thumbRect.SetSize( Size( thumbRect.GetWidth(), slider_side ) );
 
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         arrow1Angle = G_PI * 3 / 2;
@@ -846,39 +478,34 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
         if ( has_backward )
         {
-            button12BoundRect.Move( stepper_size - trough_border,
+            button12BoundRect.Move( stepper_size,
                                     (scrollbarRect.GetHeight() - slider_width) / 2 );
         }
 
-        button11BoundRect.Move( trough_border, (scrollbarRect.GetHeight() - slider_width) / 2 );
+        button11BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
         button11BoundRect.SetSize( Size( stepper_size, slider_width ) );
         button12BoundRect.SetSize( Size( stepper_size, slider_width ) );
 
         if ( has_backward2 )
         {
-            button22BoundRect.Move( stepper_size+(trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
-            button21BoundRect.Move( (trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
+            button22BoundRect.Move( stepper_size, (scrollbarRect.GetHeight() - slider_width) / 2 );
+            button21BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
         }
         else
         {
-            button22BoundRect.Move( (trough_border+1)/2, (scrollbarRect.GetHeight() - slider_width) / 2 );
+            button22BoundRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
         }
 
         button21BoundRect.SetSize( Size( stepper_size, slider_width ) );
         button22BoundRect.SetSize( Size( stepper_size, slider_width ) );
-
-        thumbRect.SetBottom( thumbRect.Top() + slider_width - 1 );
-        // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
-        // but if the VCL gives us a size smaller than the theme's default thumb size,
-        // honor the VCL size
-        thumbRect.AdjustRight(magic );
-        // Center vertically in the track
-        thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
     }
     else
     {
+        // Center horizontally in the track
         scrollbarRect.Move( (scrollbarRect.GetWidth() - slider_side) / 2, 0 );
         scrollbarRect.SetSize( Size( slider_side, scrollbarRect.GetHeight() ) );
+        thumbRect.Move( (scrollbarRect.GetWidth() - slider_side) / 2, 0 );
+        thumbRect.SetSize( Size( slider_side, thumbRect.GetHeight() ) );
 
         scrollbarOrientation = GTK_ORIENTATION_VERTICAL;
         arrow1Angle = 0;
@@ -887,30 +514,24 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         if ( has_backward )
         {
             button12BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2,
-                                    stepper_size + trough_border );
+                                    stepper_size );
         }
-        button11BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, trough_border );
+        button11BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
         button11BoundRect.SetSize( Size( slider_width, stepper_size ) );
         button12BoundRect.SetSize( Size( slider_width, stepper_size ) );
 
         if ( has_backward2 )
         {
-            button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, stepper_size+(trough_border+1)/2 );
-            button21BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, (trough_border+1)/2 );
+            button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, stepper_size );
+            button21BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
         }
         else
         {
-            button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, (trough_border+1)/2 );
+            button22BoundRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
         }
 
         button21BoundRect.SetSize( Size( slider_width, stepper_size ) );
         button22BoundRect.SetSize( Size( slider_width, stepper_size ) );
-
-        thumbRect.SetRight( thumbRect.Left() + slider_width - 1 );
-
-        thumbRect.AdjustBottom(magic );
-        // Center horizontally in the track
-        thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
 
     bool has_slider = !thumbRect.IsEmpty();
@@ -931,40 +552,6 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                           scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
     gtk_render_frame(pScrollbarContentsStyle, cr, 0, 0,
                      scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-    // ----------------- TROUGH
-    GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                              mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
-    gtk_render_background(pScrollbarTroughStyle, cr, 0, 0,
-                          scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-    gtk_render_frame(pScrollbarTroughStyle, cr, 0, 0,
-                     scrollbarRect.GetWidth(), scrollbarRect.GetHeight() );
-
-    // ----------------- THUMB
-    if ( has_slider )
-    {
-        stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
-        if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
-            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
-
-        GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                                  mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
-
-        gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
-
-        GtkBorder margin;
-        gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
-
-        gtk_render_background(pScrollbarSliderStyle, cr,
-                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                          thumbRect.GetWidth() - margin.left - margin.right,
-                          thumbRect.GetHeight() - margin.top - margin.bottom);
-
-        gtk_render_frame(pScrollbarSliderStyle, cr,
-                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
-                          thumbRect.GetWidth() - margin.left - margin.right,
-                          thumbRect.GetHeight() - margin.top - margin.bottom);
-    }
 
     bool backwardButtonInsensitive =
         rScrollbarVal.mnCur == rScrollbarVal.mnMin;
@@ -1023,6 +610,33 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
     }
     // ----------------- BUTTON 2
+
+    if ( has_forward )
+    {
+        stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
+        if ( forwardButtonInsensitive )
+            stateFlags = GTK_STATE_FLAG_INSENSITIVE;
+
+        GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                                 mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
+
+        gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
+
+        gtk_render_background(pScrollbarButtonStyle, cr,
+                       button22BoundRect.Left(), button22BoundRect.Top(),
+                       button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+        gtk_render_frame(pScrollbarButtonStyle, cr,
+                       button22BoundRect.Left(), button22BoundRect.Top(),
+                       button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+
+        // ----------------- ARROW 2
+        NWCalcArrowRect( button22BoundRect, arrowRect );
+        gtk_render_arrow(pScrollbarButtonStyle, cr,
+                         arrow2Angle,
+                         arrowRect.Left(), arrowRect.Top(),
+                         MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
+    }
+
     if ( has_backward2 )
     {
         stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton1State);
@@ -1048,31 +662,61 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          arrowRect.Left(), arrowRect.Top(),
                          MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
     }
-    if ( !has_forward )
-        return;
 
-    stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnButton2State);
-    if ( forwardButtonInsensitive )
-        stateFlags = GTK_STATE_FLAG_INSENSITIVE;
+    // ----------------- TROUGH
+    // trackrect matches that of ScrollBar::ImplCalc
+    tools::Rectangle aTrackRect(Point(0, 0), scrollbarRect.GetSize());
+    if (nPart == ControlPart::DrawBackgroundHorz)
+    {
+        tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonLeft, aTrackRect);
+        tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonRight, aTrackRect);
+        if (!aBtn1Rect.IsWidthEmpty())
+            aTrackRect.SetLeft( aBtn1Rect.Right() );
+        if (!aBtn2Rect.IsWidthEmpty())
+            aTrackRect.SetRight( aBtn2Rect.Left() );
+    }
+    else
+    {
+        tools::Rectangle aBtn1Rect = NWGetScrollButtonRect(ControlPart::ButtonUp, aTrackRect);
+        tools::Rectangle aBtn2Rect = NWGetScrollButtonRect(ControlPart::ButtonDown, aTrackRect);
+        if (!aBtn1Rect.IsHeightEmpty())
+            aTrackRect.SetTop( aBtn1Rect.Bottom() + 1 );
+        if (!aBtn2Rect.IsHeightEmpty())
+            aTrackRect.SetBottom( aBtn2Rect.Top() );
+    }
 
-    GtkStyleContext* pScrollbarButtonStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
-                                             mpVScrollbarButtonStyle : mpHScrollbarButtonStyle;
+    GtkStyleContext* pScrollbarTroughStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                              mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
+    gtk_render_background(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+                          aTrackRect.GetWidth(), aTrackRect.GetHeight() );
+    gtk_render_frame(pScrollbarTroughStyle, cr, aTrackRect.Left(), aTrackRect.Top(),
+                     aTrackRect.GetWidth(), aTrackRect.GetHeight() );
 
-    gtk_style_context_set_state(pScrollbarButtonStyle, stateFlags);
+    // ----------------- THUMB
+    if ( has_slider )
+    {
+        stateFlags = NWConvertVCLStateToGTKState(rScrollbarVal.mnThumbState);
+        if ( rScrollbarVal.mnThumbState & ControlState::PRESSED )
+            stateFlags = static_cast<GtkStateFlags>(stateFlags | GTK_STATE_FLAG_PRELIGHT);
 
-    gtk_render_background(pScrollbarButtonStyle, cr,
-                   button22BoundRect.Left(), button22BoundRect.Top(),
-                   button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
-    gtk_render_frame(pScrollbarButtonStyle, cr,
-                   button22BoundRect.Left(), button22BoundRect.Top(),
-                   button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
+        GtkStyleContext* pScrollbarSliderStyle = scrollbarOrientation == GTK_ORIENTATION_VERTICAL ?
+                                                  mpVScrollbarSliderStyle : mpHScrollbarSliderStyle;
 
-    // ----------------- ARROW 2
-    NWCalcArrowRect( button22BoundRect, arrowRect );
-    gtk_render_arrow(pScrollbarButtonStyle, cr,
-                     arrow2Angle,
-                     arrowRect.Left(), arrowRect.Top(),
-                     MIN(arrowRect.GetWidth(), arrowRect.GetHeight()) );
+        gtk_style_context_set_state(pScrollbarSliderStyle, stateFlags);
+
+        GtkBorder margin;
+        gtk_style_context_get_margin(pScrollbarSliderStyle, stateFlags, &margin);
+
+        gtk_render_background(pScrollbarSliderStyle, cr,
+                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                          thumbRect.GetWidth() - margin.left - margin.right,
+                          thumbRect.GetHeight() - margin.top - margin.bottom);
+
+        gtk_render_frame(pScrollbarSliderStyle, cr,
+                          thumbRect.Left() + margin.left, thumbRect.Top() + margin.top,
+                          thumbRect.GetWidth() - margin.left - margin.right,
+                          thumbRect.GetHeight() - margin.top - margin.bottom);
+    }
 }
 
 void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
@@ -1191,16 +835,9 @@ tools::Rectangle GtkSalGraphics::NWGetComboBoxButtonRect(ControlType nType,
         gtk_style_context_get_padding(mpButtonStyle, gtk_style_context_get_state(mpButtonStyle), &padding);
 
     gint nArrowWidth = FALLBACK_ARROW_SIZE;
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        gtk_style_context_get(mpComboboxButtonArrowStyle,
-            gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-            "min-width", &nArrowWidth, nullptr);
-    }
-    else
-    {
-        nArrowWidth = nArrowWidth * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
-    }
+    gtk_style_context_get(mpComboboxButtonArrowStyle,
+        gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+        "min-width", &nArrowWidth, nullptr);
 
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
     if( nPart == ControlPart::ButtonDown )
@@ -1253,33 +890,17 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         aEditBoxRect.SetPos( Point( areaRect.Left() + buttonRect.GetWidth(), areaRect.Top() ) );
 
     gint arrow_width = FALLBACK_ARROW_SIZE, arrow_height = FALLBACK_ARROW_SIZE;
-    if (gtk_check_version(3, 20, 0) == nullptr)
+    if (nType == ControlType::Combobox)
     {
-        if (nType == ControlType::Combobox)
-        {
-            gtk_style_context_get(mpComboboxButtonArrowStyle,
-                gtk_style_context_get_state(mpComboboxButtonArrowStyle),
-                "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
-        }
-        else if (nType == ControlType::Listbox)
-        {
-            gtk_style_context_get(mpListboxButtonArrowStyle,
-                gtk_style_context_get_state(mpListboxButtonArrowStyle),
-                "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
-        }
+        gtk_style_context_get(mpComboboxButtonArrowStyle,
+            gtk_style_context_get_state(mpComboboxButtonArrowStyle),
+            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
     }
-    else
+    else if (nType == ControlType::Listbox)
     {
-        if (nType == ControlType::Combobox)
-        {
-            arrow_width = arrow_width * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
-            arrow_height = arrow_height * gtk_style_context_get_scale (mpComboboxButtonArrowStyle);
-        }
-        else if (nType == ControlType::Listbox)
-        {
-            arrow_width = arrow_width * gtk_style_context_get_scale (mpListboxButtonArrowStyle);
-            arrow_height = arrow_height * gtk_style_context_get_scale (mpListboxButtonArrowStyle);
-        }
+        gtk_style_context_get(mpListboxButtonArrowStyle,
+            gtk_style_context_get_state(mpListboxButtonArrowStyle),
+            "min-width", &arrow_width, "min-height", &arrow_height, nullptr);
     }
 
     arrowRect.SetSize(Size(arrow_width, arrow_height));
@@ -1347,36 +968,36 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     }
 }
 
-static void appendComboEntry(GtkWidgetPath* pSiblingsPath, gtk_widget_path_iter_set_object_nameFunc set_object_name)
+static void appendComboEntry(GtkWidgetPath* pSiblingsPath)
 {
     gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_ENTRY);
-    set_object_name(pSiblingsPath, -1, "entry");
+    gtk_widget_path_iter_set_object_name(pSiblingsPath, -1, "entry");
     gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
 }
 
-static void appendComboButton(GtkWidgetPath* pSiblingsPath, gtk_widget_path_iter_set_object_nameFunc set_object_name)
+static void appendComboButton(GtkWidgetPath* pSiblingsPath)
 {
     gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_BUTTON);
-    set_object_name(pSiblingsPath, -1, "button");
+    gtk_widget_path_iter_set_object_name(pSiblingsPath, -1, "button");
     gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
 }
 
-static GtkWidgetPath* buildLTRComboSiblingsPath(gtk_widget_path_iter_set_object_nameFunc set_object_name)
+static GtkWidgetPath* buildLTRComboSiblingsPath()
 {
     GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
 
-    appendComboEntry(pSiblingsPath, set_object_name);
-    appendComboButton(pSiblingsPath, set_object_name);
+    appendComboEntry(pSiblingsPath);
+    appendComboButton(pSiblingsPath);
 
     return pSiblingsPath;
 }
 
-static GtkWidgetPath* buildRTLComboSiblingsPath(gtk_widget_path_iter_set_object_nameFunc set_object_name)
+static GtkWidgetPath* buildRTLComboSiblingsPath()
 {
     GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
 
-    appendComboButton(pSiblingsPath, set_object_name);
-    appendComboEntry(pSiblingsPath, set_object_name);
+    appendComboButton(pSiblingsPath);
+    appendComboEntry(pSiblingsPath);
 
     return pSiblingsPath;
 }
@@ -1402,7 +1023,7 @@ GtkStyleContext* GtkSalGraphics::makeContext(GtkWidgetPath *pPath, GtkStyleConte
     return context;
 }
 
-GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widget_path_iter_set_object_nameFunc set_object_name)
+GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
 {
     switch (ePart)
     {
@@ -1410,7 +1031,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "window");
+            gtk_widget_path_iter_set_object_name(path, -1, "window");
             gtk_widget_path_iter_add_class(path, -1, "background");
             return makeContext(path, nullptr);
         }
@@ -1418,14 +1039,14 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-            set_object_name(path, -1, "button");
+            gtk_widget_path_iter_set_object_name(path, -1, "button");
             return makeContext(path, nullptr);
         }
         case GtkControlPart::LinkButton:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-            set_object_name(path, -1, "button");
+            gtk_widget_path_iter_set_object_name(path, -1, "button");
             gtk_widget_path_iter_add_class(path, -1, "link");
             return makeContext(path, nullptr);
         }
@@ -1433,28 +1054,28 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-            set_object_name(path, -1, "checkbutton");
+            gtk_widget_path_iter_set_object_name(path, -1, "checkbutton");
             return makeContext(path, nullptr);
         }
         case GtkControlPart::CheckButtonCheck:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpCheckButtonStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-            set_object_name(path, -1, "check");
+            gtk_widget_path_iter_set_object_name(path, -1, "check");
             return makeContext(path, mpCheckButtonStyle);
         }
         case GtkControlPart::RadioButton:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
-            set_object_name(path, -1, "radiobutton");
+            gtk_widget_path_iter_set_object_name(path, -1, "radiobutton");
             return makeContext(path, nullptr);
         }
         case GtkControlPart::RadioButtonRadio:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpRadioButtonStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
-            set_object_name(path, -1, "radio");
+            gtk_widget_path_iter_set_object_name(path, -1, "radio");
             return makeContext(path, mpRadioButtonStyle);
         }
         case GtkControlPart::ComboboxBoxButtonBoxArrow:
@@ -1462,7 +1083,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpComboboxButtonBoxStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-            set_object_name(path, -1, "arrow");
+            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
             return makeContext(path, mpComboboxButtonBoxStyle);
         }
         case GtkControlPart::ListboxBoxButtonBoxArrow:
@@ -1470,14 +1091,14 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpListboxButtonBoxStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
             gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-            set_object_name(path, -1, "arrow");
+            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
             return makeContext(path, mpListboxButtonBoxStyle);
         }
         case GtkControlPart::Entry:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
-            set_object_name(path, -1, "entry");
+            gtk_widget_path_iter_set_object_name(path, -1, "entry");
             return makeContext(path, nullptr);
         }
         case GtkControlPart::Combobox:
@@ -1485,14 +1106,14 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "combobox");
+            gtk_widget_path_iter_set_object_name(path, -1, "combobox");
             return makeContext(path, nullptr);
         }
         case GtkControlPart::ComboboxBox:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpComboboxStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_set_object_name(path, -1, "box");
             gtk_widget_path_iter_add_class(path, -1, "horizontal");
             gtk_widget_path_iter_add_class(path, -1, "linked");
             return makeContext(path, mpComboboxStyle);
@@ -1501,7 +1122,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpListboxStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_set_object_name(path, -1, "box");
             gtk_widget_path_iter_add_class(path, -1, "horizontal");
             gtk_widget_path_iter_add_class(path, -1, "linked");
             return makeContext(path, mpListboxStyle);
@@ -1512,12 +1133,12 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             GtkWidgetPath* pSiblingsPath;
             if (AllSettings::GetLayoutRTL())
             {
-                pSiblingsPath = buildRTLComboSiblingsPath(set_object_name);
+                pSiblingsPath = buildRTLComboSiblingsPath();
                 gtk_widget_path_append_with_siblings(path, pSiblingsPath, 1);
             }
             else
             {
-                pSiblingsPath = buildLTRComboSiblingsPath(set_object_name);
+                pSiblingsPath = buildLTRComboSiblingsPath();
                 gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
             }
             gtk_widget_path_unref(pSiblingsPath);
@@ -1529,12 +1150,12 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             GtkWidgetPath* pSiblingsPath;
             if (AllSettings::GetLayoutRTL())
             {
-                pSiblingsPath = buildRTLComboSiblingsPath(set_object_name);
+                pSiblingsPath = buildRTLComboSiblingsPath();
                 gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
             }
             else
             {
-                pSiblingsPath = buildLTRComboSiblingsPath(set_object_name);
+                pSiblingsPath = buildLTRComboSiblingsPath();
                 gtk_widget_path_append_with_siblings(path, pSiblingsPath, 1);
             }
             gtk_widget_path_unref(pSiblingsPath);
@@ -1546,7 +1167,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
             GtkWidgetPath* pSiblingsPath = gtk_widget_path_new();
 
             gtk_widget_path_append_type(pSiblingsPath, GTK_TYPE_BUTTON);
-            set_object_name(pSiblingsPath, -1, "button");
+            gtk_widget_path_iter_set_object_name(pSiblingsPath, -1, "button");
             gtk_widget_path_iter_add_class(pSiblingsPath, -1, "combo");
 
             gtk_widget_path_append_with_siblings(path, pSiblingsPath, 0);
@@ -1557,7 +1178,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpComboboxButtonStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_set_object_name(path, -1, "box");
             gtk_widget_path_iter_add_class(path, -1, "horizontal");
             return makeContext(path, mpComboboxButtonStyle);
         }
@@ -1565,7 +1186,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpListboxButtonStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "box");
+            gtk_widget_path_iter_set_object_name(path, -1, "box");
             gtk_widget_path_iter_add_class(path, -1, "horizontal");
             return makeContext(path, mpListboxButtonStyle);
         }
@@ -1573,7 +1194,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-            set_object_name(path, -1, "spinbutton");
+            gtk_widget_path_iter_set_object_name(path, -1, "spinbutton");
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, mpWindowStyle);
         }
@@ -1581,7 +1202,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSpinStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "entry");
+            gtk_widget_path_iter_set_object_name(path, -1, "entry");
             return makeContext(path, mpSpinStyle);
         }
         case GtkControlPart::SpinButtonUpButton:
@@ -1589,7 +1210,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSpinStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-            set_object_name(path, -1, "button");
+            gtk_widget_path_iter_set_object_name(path, -1, "button");
             gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::SpinButtonUpButton ? "up" : "down");
             return makeContext(path, mpSpinStyle);
         }
@@ -1598,7 +1219,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            set_object_name(path, -1, "scrollbar");
+            gtk_widget_path_iter_set_object_name(path, -1, "scrollbar");
             gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::ScrollbarVertical ? "vertical" : "horizontal");
             return makeContext(path, nullptr);
         }
@@ -1609,7 +1230,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
                 (ePart == GtkControlPart::ScrollbarVerticalContents) ? mpVScrollbarStyle : mpHScrollbarStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            set_object_name(path, -1, "contents");
+            gtk_widget_path_iter_set_object_name(path, -1, "contents");
             return makeContext(path, pParent);
         }
         case GtkControlPart::ScrollbarVerticalTrough:
@@ -1619,7 +1240,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
                 (ePart == GtkControlPart::ScrollbarVerticalTrough) ? mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            set_object_name(path, -1, "trough");
+            gtk_widget_path_iter_set_object_name(path, -1, "trough");
             return makeContext(path, pParent);
         }
         case GtkControlPart::ScrollbarVerticalSlider:
@@ -1629,7 +1250,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
                 (ePart == GtkControlPart::ScrollbarVerticalSlider) ? mpVScrollbarTroughStyle : mpHScrollbarTroughStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            set_object_name(path, -1, "slider");
+            gtk_widget_path_iter_set_object_name(path, -1, "slider");
             return makeContext(path, pParent);
         }
         case GtkControlPart::ScrollbarVerticalButton:
@@ -1639,14 +1260,14 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
                 (ePart == GtkControlPart::ScrollbarVerticalButton) ? mpVScrollbarStyle : mpHScrollbarStyle;
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
             gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            set_object_name(path, -1, "button");
+            gtk_widget_path_iter_set_object_name(path, -1, "button");
             return makeContext(path, pParent);
         }
         case GtkControlPart::ProgressBar:
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            set_object_name(path, -1, "progressbar");
+            gtk_widget_path_iter_set_object_name(path, -1, "progressbar");
             gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
             return makeContext(path, nullptr);
         }
@@ -1654,35 +1275,35 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            set_object_name(path, -1, "trough");
+            gtk_widget_path_iter_set_object_name(path, -1, "trough");
             return makeContext(path, mpProgressBarStyle);
         }
         case GtkControlPart::ProgressBarProgress:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarTroughStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            set_object_name(path, -1, "progress");
+            gtk_widget_path_iter_set_object_name(path, -1, "progress");
             return makeContext(path, mpProgressBarTroughStyle);
         }
         case GtkControlPart::Notebook:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            set_object_name(path, -1, "notebook");
+            gtk_widget_path_iter_set_object_name(path, -1, "notebook");
             return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::NotebookStack:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            set_object_name(path, -1, "stack");
+            gtk_widget_path_iter_set_object_name(path, -1, "stack");
             return makeContext(path, mpNotebookStyle);
         }
         case GtkControlPart::NotebookHeader:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            set_object_name(path, -1, "header");
+            gtk_widget_path_iter_set_object_name(path, -1, "header");
             gtk_widget_path_iter_add_class(path, -1, "frame");
             gtk_widget_path_iter_add_class(path, -1, "top");
             return makeContext(path, mpNotebookStyle);
@@ -1691,7 +1312,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            set_object_name(path, -1, "tabs");
+            gtk_widget_path_iter_set_object_name(path, -1, "tabs");
             gtk_widget_path_iter_add_class(path, -1, "top");
             return makeContext(path, mpNotebookHeaderStyle);
         }
@@ -1699,7 +1320,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            set_object_name(path, -1, "tab");
+            gtk_widget_path_iter_set_object_name(path, -1, "tab");
             gtk_widget_path_iter_add_class(path, -1, "top");
             return makeContext(path, mpNotebookHeaderTabsStyle);
         }
@@ -1707,7 +1328,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "label");
+            gtk_widget_path_iter_set_object_name(path, -1, "label");
             return makeContext(path, mpNotebookHeaderTabsTabStyle);
         }
         case GtkControlPart::NotebookHeaderTabsTabActiveLabel:
@@ -1717,7 +1338,7 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_new();
             gtk_widget_path_append_type(path, GTK_TYPE_FRAME);
-            set_object_name(path, -1, "frame");
+            gtk_widget_path_iter_set_object_name(path, -1, "frame");
             gtk_widget_path_iter_add_class(path, -1, "frame");
             return makeContext(path, nullptr);
         }
@@ -1725,21 +1346,21 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
-            set_object_name(path, -1, "menubar");
+            gtk_widget_path_iter_set_object_name(path, -1, "menubar");
             return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::MenuBarItem:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuBarStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            set_object_name(path, -1, "menuitem");
+            gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
             return makeContext(path, mpMenuBarStyle);
         }
         case GtkControlPart::MenuWindow:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuBarItemStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "window");
+            gtk_widget_path_iter_set_object_name(path, -1, "window");
             gtk_widget_path_iter_add_class(path, -1, "background");
             gtk_widget_path_iter_add_class(path, -1, "popup");
             return makeContext(path, mpMenuBarItemStyle);
@@ -1748,70 +1369,70 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU);
-            set_object_name(path, -1, "menu");
+            gtk_widget_path_iter_set_object_name(path, -1, "menu");
             return makeContext(path, mpMenuWindowStyle);
         }
         case GtkControlPart::MenuItem:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            set_object_name(path, -1, "menuitem");
+            gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
             return makeContext(path, mpMenuStyle);
         }
         case GtkControlPart::MenuItemLabel:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuItemStyle));
             gtk_widget_path_append_type(path, G_TYPE_NONE);
-            set_object_name(path, -1, "label");
+            gtk_widget_path_iter_set_object_name(path, -1, "label");
             return makeContext(path, mpMenuItemStyle);
         }
         case GtkControlPart::MenuItemArrow:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuItemStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            set_object_name(path, -1, "arrow");
+            gtk_widget_path_iter_set_object_name(path, -1, "arrow");
             return makeContext(path, mpMenuItemStyle);
         }
         case GtkControlPart::CheckMenuItem:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-            set_object_name(path, -1, "menuitem");
+            gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
             return makeContext(path, mpMenuStyle);
         }
         case GtkControlPart::CheckMenuItemCheck:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpCheckMenuItemStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-            set_object_name(path, -1, "check");
+            gtk_widget_path_iter_set_object_name(path, -1, "check");
             return makeContext(path, mpCheckMenuItemStyle);
         }
         case GtkControlPart::RadioMenuItem:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-            set_object_name(path, -1, "menuitem");
+            gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
             return makeContext(path, mpMenuStyle);
         }
         case GtkControlPart::RadioMenuItemRadio:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpRadioMenuItemStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-            set_object_name(path, -1, "radio");
+            gtk_widget_path_iter_set_object_name(path, -1, "radio");
             return makeContext(path, mpRadioMenuItemStyle);
         }
         case GtkControlPart::SeparatorMenuItem:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-            set_object_name(path, -1, "menuitem");
+            gtk_widget_path_iter_set_object_name(path, -1, "menuitem");
             return makeContext(path, mpMenuStyle);
         }
         case GtkControlPart::SeparatorMenuItemSeparator:
         {
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSeparatorMenuItemStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-            set_object_name(path, -1, "separator");
+            gtk_widget_path_iter_set_object_name(path, -1, "separator");
             return makeContext(path, mpSeparatorMenuItemStyle);
         }
     }
@@ -1825,365 +1446,6 @@ GtkStyleContext* GtkSalGraphics::createNewContext(GtkControlPart ePart, gtk_widg
 #ifndef GTK_STYLE_CLASS_LABEL
 #define GTK_STYLE_CLASS_LABEL "label"
 #endif
-
-GtkStyleContext* GtkSalGraphics::createOldContext(GtkControlPart ePart)
-{
-    switch (ePart)
-    {
-        case GtkControlPart::ToplevelWindow:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
-            gtk_widget_path_iter_add_class(path, -1, "background");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::Button:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, "button");
-            gtk_widget_path_iter_add_class(path, -1, "text-button");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::LinkButton:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_LINK_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, "text-button");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::CheckButton:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-            gtk_widget_path_iter_add_class(path, -1, "text-button");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::CheckButtonCheck:
-            return mpCheckButtonStyle;
-        case GtkControlPart::RadioButton:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
-            gtk_widget_path_iter_add_class(path, -1, "text-button");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::RadioButtonRadio:
-            return mpRadioButtonStyle;
-        case GtkControlPart::ComboboxBoxButtonBoxArrow:
-        case GtkControlPart::ListboxBoxButtonBoxArrow:
-        {
-            return (ePart == GtkControlPart::ComboboxBoxButtonBoxArrow)
-                ? mpComboboxButtonStyle : mpListboxButtonStyle;
-        }
-        case GtkControlPart::Entry:
-        case GtkControlPart::ComboboxBoxEntry:
-        case GtkControlPart::SpinButtonEntry:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_ENTRY);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ENTRY);
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::Combobox:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX_TEXT);
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::Listbox:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_COMBO_BOX);
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::ComboboxBoxButton:
-        case GtkControlPart::ListboxBoxButton:
-        {
-            GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ComboboxBoxButton ) ? mpComboboxStyle : mpListboxStyle;
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
-            gtk_widget_path_append_type(path, GTK_TYPE_TOGGLE_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, "the-button-in-the-combobox");
-            return makeContext(path, pParent);
-        }
-        case GtkControlPart::SpinButton:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ENTRY);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::SpinButtonUpButton:
-        case GtkControlPart::SpinButtonDownButton:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSpinStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_SPIN_BUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SPINBUTTON);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-            return makeContext(path, mpSpinStyle);
-        }
-        case GtkControlPart::ScrollbarVertical:
-        case GtkControlPart::ScrollbarHorizontal:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, ePart == GtkControlPart::ScrollbarVertical ? "vertical" : "horizontal");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::ScrollbarVerticalContents:
-        case GtkControlPart::ScrollbarHorizontalContents:
-        {
-            GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalContents) ? mpVScrollbarStyle : mpHScrollbarStyle;
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
-            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, "contents");
-            return makeContext(path, pParent);
-        }
-        case GtkControlPart::ScrollbarHorizontalTrough:
-        case GtkControlPart::ScrollbarVerticalTrough:
-        {
-            GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalTrough) ? mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
-            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
-            return makeContext(path, pParent);
-        }
-        case GtkControlPart::ScrollbarHorizontalSlider:
-        case GtkControlPart::ScrollbarVerticalSlider:
-        {
-            GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalSlider) ? mpVScrollbarContentsStyle : mpHScrollbarContentsStyle;
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
-            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SLIDER);
-            return makeContext(path, pParent);
-        }
-        case GtkControlPart::ScrollbarHorizontalButton:
-        case GtkControlPart::ScrollbarVerticalButton:
-        {
-            GtkStyleContext *pParent =
-                (ePart == GtkControlPart::ScrollbarVerticalButton) ? mpVScrollbarStyle : mpHScrollbarStyle;
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(pParent));
-            gtk_widget_path_append_type(path, GTK_TYPE_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SCROLLBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_BUTTON);
-            return makeContext(path, pParent);
-        }
-        case GtkControlPart::ProgressBar:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HORIZONTAL);
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::ProgressBarTrough:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_TROUGH);
-            return makeContext(path, mpProgressBarStyle);
-        }
-        case GtkControlPart::ProgressBarProgress:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpProgressBarTroughStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_PROGRESS_BAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_PROGRESSBAR);
-            return makeContext(path, mpProgressBarTroughStyle);
-        }
-        case GtkControlPart::Notebook:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_NOTEBOOK);
-            gtk_widget_path_iter_add_class(path, -1, "frame");
-            return makeContext(path, mpWindowStyle);
-        }
-        case GtkControlPart::NotebookStack:
-            return mpNotebookStyle;
-        case GtkControlPart::NotebookHeader:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookStyle));
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
-            gtk_widget_path_iter_add_class(path, -1, "top");
-            return makeContext(path, gtk_style_context_get_parent(mpNotebookStyle));
-        }
-        case GtkControlPart::NotebookHeaderTabs:
-            return mpNotebookHeaderStyle;
-        case GtkControlPart::NotebookHeaderTabsTab:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_NOTEBOOK);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_HEADER);
-            gtk_widget_path_iter_add_class(path, -1, "top");
-            gtk_widget_path_iter_add_region(path, -1, GTK_STYLE_REGION_TAB, static_cast<GtkRegionFlags>(GTK_REGION_EVEN | GTK_REGION_FIRST));
-            return makeContext(path, mpNotebookHeaderTabsStyle);
-        }
-        case GtkControlPart::NotebookHeaderTabsTabLabel:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
-            return makeContext(path, mpNotebookHeaderTabsTabStyle);
-        }
-        case GtkControlPart::NotebookHeaderTabsTabActiveLabel:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
-            gtk_widget_path_iter_add_class(path, -1, "active-page");
-            return makeContext(path, mpNotebookHeaderTabsTabStyle);
-        }
-        case GtkControlPart::NotebookHeaderTabsTabHoverLabel:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpNotebookHeaderTabsTabStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_LABEL);
-            gtk_widget_path_iter_add_class(path, -1, "prelight-page");
-            return makeContext(path, mpNotebookHeaderTabsTabStyle);
-        }
-        case GtkControlPart::FrameBorder:
-        {
-            GtkWidgetPath *path = gtk_widget_path_new();
-            gtk_widget_path_append_type(path, GTK_TYPE_FRAME);
-            gtk_widget_path_iter_add_class(path, -1, "frame");
-            return makeContext(path, nullptr);
-        }
-        case GtkControlPart::MenuBar:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUBAR);
-            return makeContext(path, mpWindowStyle);
-        }
-        case GtkControlPart::MenuBarItem:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuBarStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-            return makeContext(path, mpMenuBarStyle);
-        }
-        case GtkControlPart::MenuWindow:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuBarItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_POPUP);
-            gtk_widget_path_iter_add_class(path, -1, "background");
-            return makeContext(path, mpMenuBarItemStyle);
-        }
-        case GtkControlPart::Menu:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuWindowStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_MENU);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENU);
-            return makeContext(path, mpMenuWindowStyle);
-        }
-        case GtkControlPart::MenuItem:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-            return makeContext(path, mpMenuStyle);
-        }
-        case GtkControlPart::MenuItemLabel:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_LABEL);
-            return makeContext(path, mpMenuItemStyle);
-        }
-        case GtkControlPart::MenuItemArrow:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_ARROW);
-            return makeContext(path, mpMenuItemStyle);
-        }
-        case GtkControlPart::CheckMenuItem:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-            return makeContext(path, mpMenuStyle);
-        }
-        case GtkControlPart::CheckMenuItemCheck:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpCheckMenuItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_CHECK_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_CHECK);
-            return makeContext(path, mpCheckMenuItemStyle);
-        }
-        case GtkControlPart::RadioMenuItem:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-            return makeContext(path, mpMenuStyle);
-        }
-        case GtkControlPart::RadioMenuItemRadio:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpRadioMenuItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_RADIO_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_RADIO);
-            return makeContext(path, mpRadioMenuItemStyle);
-        }
-        case GtkControlPart::SeparatorMenuItem:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpMenuStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_MENUITEM);
-            return makeContext(path, mpMenuStyle);
-        }
-        case GtkControlPart::SeparatorMenuItemSeparator:
-        {
-            GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpSeparatorMenuItemStyle));
-            gtk_widget_path_append_type(path, GTK_TYPE_SEPARATOR_MENU_ITEM);
-            gtk_widget_path_iter_add_class(path, -1, GTK_STYLE_CLASS_SEPARATOR);
-            return makeContext(path, mpSeparatorMenuItemStyle);
-        }
-        case GtkControlPart::ComboboxBox:
-        case GtkControlPart::ListboxBox:
-        case GtkControlPart::ComboboxBoxButtonBox:
-        case GtkControlPart::ListboxBoxButtonBox:
-            return nullptr;
-        default:
-            break;
-    }
-
-    return mpButtonStyle;
-}
-
-GtkStyleContext* GtkSalGraphics::createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name,
-                                                    GtkControlPart ePart)
-{
-    if (set_object_name)
-        return createNewContext(ePart, set_object_name);
-    return createOldContext(ePart);
-}
-
-namespace
-{
-    GtkStateFlags ACTIVE_TAB()
-    {
-#if GTK_CHECK_VERSION(3,20,0)
-        if (gtk_check_version(3, 20, 0) == nullptr)
-            return GTK_STATE_FLAG_CHECKED;
-#endif
-        return GTK_STATE_FLAG_ACTIVE;
-    }
-}
 
 void GtkSalGraphics::PaintCheckOrRadio(cairo_t *cr, GtkStyleContext *context,
                                        const tools::Rectangle& rControlRectangle, bool bIsCheck, bool bInMenu)
@@ -2219,21 +1481,11 @@ void GtkSalGraphics::PaintRadio(cairo_t *cr, GtkStyleContext *context,
 
 static gfloat getArrowSize(GtkStyleContext* context)
 {
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        gint min_width, min_weight;
-        gtk_style_context_get_style(context, "min-width", &min_width, nullptr);
-        gtk_style_context_get_style(context, "min-height", &min_weight, nullptr);
-        gfloat arrow_size = 11 * MAX (min_width, min_weight);
-        return arrow_size;
-    }
-    else
-    {
-        gfloat arrow_scaling = 1.0;
-        gtk_style_context_get_style(context, "arrow-scaling", &arrow_scaling, nullptr);
-        gfloat arrow_size = 11 * arrow_scaling;
-        return arrow_size;
-    }
+    gint min_width, min_weight;
+    gtk_style_context_get_style(context, "min-width", &min_width, nullptr);
+    gtk_style_context_get_style(context, "min-height", &min_weight, nullptr);
+    gfloat arrow_size = 11 * MAX (min_width, min_weight);
+    return arrow_size;
 }
 
 namespace
@@ -2243,16 +1495,11 @@ namespace
         long nX = 0;
         long nY = 0;
 
-        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
-
         gint nSeparatorWidth = 1;
 
-        if (bNewStyle)
-        {
-            gtk_style_context_get(context,
-                gtk_style_context_get_state(context),
-                "min-width", &nSeparatorWidth, nullptr);
-        }
+        gtk_style_context_get(context,
+            gtk_style_context_get_state(context),
+            "min-width", &nSeparatorWidth, nullptr);
 
         gint nHalfSeparatorWidth = nSeparatorWidth / 2;
         gint nHalfRegionWidth = rControlRegion.GetWidth() / 2;
@@ -2261,15 +1508,8 @@ namespace
         nY = rControlRegion.GetHeight() > 5 ? 1 : 0;
         int nHeight = rControlRegion.GetHeight() - (2 * nY);
 
-        if (bNewStyle)
-        {
-            gtk_render_background(context, cr, nX, nY, nSeparatorWidth, nHeight);
-            gtk_render_frame(context, cr, nX, nY, nSeparatorWidth, nHeight);
-        }
-        else
-        {
-            gtk_render_line(context, cr, nX, nY, nX, nY + nHeight);
-        }
+        gtk_render_background(context, cr, nX, nY, nSeparatorWidth, nHeight);
+        gtk_render_frame(context, cr, nX, nY, nSeparatorWidth, nHeight);
     }
 
     void draw_horizontal_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
@@ -2277,16 +1517,11 @@ namespace
         long nX = 0;
         long nY = 0;
 
-        const bool bNewStyle = gtk_check_version(3, 20, 0) == nullptr;
-
         gint nSeparatorHeight = 1;
 
-        if (bNewStyle)
-        {
-            gtk_style_context_get(context,
-                gtk_style_context_get_state(context),
-                "min-height", &nSeparatorHeight, nullptr);
-        }
+        gtk_style_context_get(context,
+            gtk_style_context_get_state(context),
+            "min-height", &nSeparatorHeight, nullptr);
 
         gint nHalfSeparatorHeight = nSeparatorHeight / 2;
         gint nHalfRegionHeight = rControlRegion.GetHeight() / 2;
@@ -2295,15 +1530,8 @@ namespace
         nX = rControlRegion.GetWidth() > 5 ? 1 : 0;
         int nWidth = rControlRegion.GetWidth() - (2 * nX);
 
-        if (bNewStyle)
-        {
-            gtk_render_background(context, cr, nX, nY, nWidth, nSeparatorHeight);
-            gtk_render_frame(context, cr, nX, nY, nWidth, nSeparatorHeight);
-        }
-        else
-        {
-            gtk_render_line(context, cr, nX, nY, nX + nWidth, nY);
-        }
+        gtk_render_background(context, cr, nX, nY, nWidth, nSeparatorHeight);
+        gtk_render_frame(context, cr, nX, nY, nWidth, nSeparatorHeight);
     }
 }
 
@@ -2320,7 +1548,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 {
     RenderType renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::BackgroundAndFrame;
     GtkStyleContext *context = nullptr;
-    const gchar *styleClass = nullptr;
     GdkPixbuf *pixbuf = nullptr;
     bool bInMenu = false;
 
@@ -2369,13 +1596,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RenderType::BackgroundAndFrame;
             break;
         case ControlPart::MenuItemCheckMark:
-            if (gtk_check_version(3, 20, 0) == nullptr)
-                context = mpCheckMenuItemCheckStyle;
-            else
-            {
-                context = gtk_widget_get_style_context(gCheckMenuItemWidget);
-                styleClass = GTK_STYLE_CLASS_CHECK;
-            }
+            context = mpCheckMenuItemCheckStyle;
             renderType = RenderType::Check;
             nType = ControlType::Checkbox;
             if (nState & ControlState::PRESSED)
@@ -2384,13 +1605,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             }
             break;
         case ControlPart::MenuItemRadioMark:
-            if (gtk_check_version(3, 20, 0) == nullptr)
-                context = mpRadioMenuItemRadioStyle;
-            else
-            {
-                context = gtk_widget_get_style_context(gCheckMenuItemWidget);
-                styleClass = GTK_STYLE_CLASS_RADIO;
-            }
+            context = mpRadioMenuItemRadioStyle;
             renderType = RenderType::Radio;
             nType = ControlType::Radiobutton;
             if (nState & ControlState::PRESSED)
@@ -2404,13 +1619,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RenderType::MenuSeparator;
             break;
         case ControlPart::SubmenuArrow:
-            if (gtk_check_version(3, 20, 0) == nullptr)
-                context = mpMenuItemArrowStyle;
-            else
-            {
-                context = gtk_widget_get_style_context(gCheckMenuItemWidget);
-                styleClass = GTK_STYLE_CLASS_ARROW;
-            }
+            context = mpMenuItemArrowStyle;
             renderType = RenderType::Arrow;
             break;
         case ControlPart::Entire:
@@ -2485,7 +1694,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case ControlType::TabItem:
         context = mpNotebookHeaderTabsTabStyle;
         if (nState & ControlState::SELECTED)
-            flags = static_cast<GtkStateFlags>(flags | ACTIVE_TAB());
+            flags = static_cast<GtkStateFlags>(flags | GTK_STATE_FLAG_CHECKED);
         renderType = RenderType::TabItem;
         break;
     case ControlType::WindowBackground:
@@ -2561,11 +1770,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     StyleContextSave aContextState;
     aContextState.save(context);
     style_context_set_state(context, flags);
-
-    if (styleClass)
-    {
-        gtk_style_context_add_class(context, styleClass);
-    }
 
     // apply background in style, if explicitly set
     // note: for more complex controls that use multiple styles for their elements,
@@ -2698,16 +1902,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
     case RenderType::TabItem:
     {
-        if (gtk_check_version(3, 20, 0) != nullptr)
-        {
-            gint initial_gap(0);
-            gtk_style_context_get_style(mpNotebookStyle,
-                                    "initial-gap", &initial_gap,
-                                    nullptr);
+        gint initial_gap(0);
+        gtk_style_context_get_style(mpNotebookStyle,
+                                "initial-gap", &initial_gap,
+                                nullptr);
 
-            nX += initial_gap/2;
-            nWidth -= initial_gap;
-        }
+        nX += initial_gap/2;
+        nWidth -= initial_gap;
         tools::Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
         render_common(mpNotebookHeaderTabsTabStyle, cr, aRect, flags);
         break;
@@ -2716,10 +1917,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     }
 
-    if (styleClass)
-    {
-        gtk_style_context_remove_class(context, styleClass);
-    }
     if (pBgCssProvider)
     {
         gtk_style_context_remove_provider(context, GTK_STYLE_PROVIDER(pBgCssProvider));
@@ -3260,7 +2457,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     {
         GtkStyleContext *pCStyle = mpNotebookHeaderTabsTabActiveLabelStyle;
         aContextState.save(pCStyle);
-        style_context_set_state(pCStyle, ACTIVE_TAB());
+        style_context_set_state(pCStyle, GTK_STATE_FLAG_CHECKED);
         gtk_style_context_get_color(pCStyle, gtk_style_context_get_state(pCStyle), &text_color);
         aTextColor = getColor( text_color );
         aStyleSet.SetTabHighlightTextColor(aTextColor);
@@ -3310,44 +2507,27 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     gint min_slider_length = 21;
 
     // Grab some button style attributes
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        Size aSize;
-        QuerySize(mpHScrollbarStyle, aSize);
-        QuerySize(mpHScrollbarContentsStyle, aSize);
-        QuerySize(mpHScrollbarTroughStyle, aSize);
-        QuerySize(mpHScrollbarSliderStyle, aSize);
+    Size aSize;
+    QuerySize(mpHScrollbarStyle, aSize);
+    QuerySize(mpHScrollbarContentsStyle, aSize);
+    QuerySize(mpHScrollbarTroughStyle, aSize);
+    QuerySize(mpHScrollbarSliderStyle, aSize);
 
-        gboolean has_forward, has_forward2, has_backward, has_backward2;
-        gtk_style_context_get_style(mpHScrollbarStyle,
-                                    "has-forward-stepper", &has_forward,
-                                    "has-secondary-forward-stepper", &has_forward2,
-                                    "has-backward-stepper", &has_backward,
-                                    "has-secondary-backward-stepper", &has_backward2, nullptr);
-        if (has_forward || has_backward || has_forward2 || has_backward2)
-            QuerySize(mpHScrollbarButtonStyle, aSize);
+    gboolean has_forward, has_forward2, has_backward, has_backward2;
+    gtk_style_context_get_style(mpHScrollbarStyle,
+                                "has-forward-stepper", &has_forward,
+                                "has-secondary-forward-stepper", &has_forward2,
+                                "has-backward-stepper", &has_backward,
+                                "has-secondary-backward-stepper", &has_backward2, nullptr);
+    if (has_forward || has_backward || has_forward2 || has_backward2)
+        QuerySize(mpHScrollbarButtonStyle, aSize);
 
-        aStyleSet.SetScrollBarSize(aSize.Height());
+    aStyleSet.SetScrollBarSize(aSize.Height());
 
-        gtk_style_context_get(mpVScrollbarSliderStyle, gtk_style_context_get_state(mpVScrollbarSliderStyle),
-                              "min-height", &min_slider_length,
-                              nullptr);
-        aStyleSet.SetMinThumbSize(min_slider_length);
-    }
-    else
-    {
-        gint slider_width = 14;
-        gint trough_border = 1;
-
-        gtk_style_context_get_style(mpVScrollbarStyle,
-                                    "slider-width", &slider_width,
-                                    "trough-border", &trough_border,
-                                    "min-slider-length", &min_slider_length,
-                                    nullptr);
-        aStyleSet.SetScrollBarSize(slider_width + 2*trough_border);
-        gint magic = trough_border ? 1 : 0;
-        aStyleSet.SetMinThumbSize(min_slider_length - magic);
-    }
+    gtk_style_context_get(mpVScrollbarSliderStyle, gtk_style_context_get_state(mpVScrollbarSliderStyle),
+                          "min-height", &min_slider_length,
+                          nullptr);
+    aStyleSet.SetMinThumbSize(min_slider_length);
 
     // preferred icon style
     gchar* pIconThemeName = nullptr;
@@ -3560,9 +2740,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
      * gtk apps create a lot of widgets at startup, so, it shouldn't be
      * too slow */
-    gtk_widget_path_iter_set_object_nameFunc set_object_name =
-        reinterpret_cast<gtk_widget_path_iter_set_object_nameFunc>(osl_getAsciiFunctionSymbol(nullptr,
-            "gtk_widget_path_iter_set_object_name"));
 
     gCacheWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gDumbContainer = gtk_fixed_new();
@@ -3573,13 +2750,13 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gEntryBox = gtk_entry_new();
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gEntryBox);
 
-    mpWindowStyle = createStyleContext(set_object_name, GtkControlPart::ToplevelWindow);
-    mpEntryStyle = createStyleContext(set_object_name, GtkControlPart::Entry);
+    mpWindowStyle = createStyleContext(GtkControlPart::ToplevelWindow);
+    mpEntryStyle = createStyleContext(GtkControlPart::Entry);
 
     getStyleContext(&mpTextViewStyle, gtk_text_view_new());
 
-    mpButtonStyle = createStyleContext(set_object_name, GtkControlPart::Button);
-    mpLinkButtonStyle = createStyleContext(set_object_name, GtkControlPart::LinkButton);
+    mpButtonStyle = createStyleContext(GtkControlPart::Button);
+    mpLinkButtonStyle = createStyleContext(GtkControlPart::LinkButton);
 
     GtkWidget* pToolbar = gtk_toolbar_new();
     mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
@@ -3594,91 +2771,79 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
     mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
 
-    mpVScrollbarStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarVertical);
-    mpVScrollbarContentsStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarVerticalContents);
-    mpVScrollbarTroughStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarVerticalTrough);
-    mpVScrollbarSliderStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarVerticalSlider);
-    mpVScrollbarButtonStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarVerticalButton);
-    mpHScrollbarStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarHorizontal);
-    mpHScrollbarContentsStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarHorizontalContents);
-    mpHScrollbarTroughStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarHorizontalTrough);
-    mpHScrollbarSliderStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarHorizontalSlider);
-    mpHScrollbarButtonStyle = createStyleContext(set_object_name, GtkControlPart::ScrollbarHorizontalButton);
+    mpVScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarVertical);
+    mpVScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarVerticalContents);
+    mpVScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarVerticalTrough);
+    mpVScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarVerticalSlider);
+    mpVScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarVerticalButton);
+    mpHScrollbarStyle = createStyleContext(GtkControlPart::ScrollbarHorizontal);
+    mpHScrollbarContentsStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalContents);
+    mpHScrollbarTroughStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalTrough);
+    mpHScrollbarSliderStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalSlider);
+    mpHScrollbarButtonStyle = createStyleContext(GtkControlPart::ScrollbarHorizontalButton);
 
-    mpCheckButtonStyle = createStyleContext(set_object_name, GtkControlPart::CheckButton);
-    mpCheckButtonCheckStyle = createStyleContext(set_object_name, GtkControlPart::CheckButtonCheck);
+    mpCheckButtonStyle = createStyleContext(GtkControlPart::CheckButton);
+    mpCheckButtonCheckStyle = createStyleContext(GtkControlPart::CheckButtonCheck);
 
-    mpRadioButtonStyle = createStyleContext(set_object_name, GtkControlPart::RadioButton);
-    mpRadioButtonRadioStyle = createStyleContext(set_object_name, GtkControlPart::RadioButtonRadio);
+    mpRadioButtonStyle = createStyleContext(GtkControlPart::RadioButton);
+    mpRadioButtonRadioStyle = createStyleContext(GtkControlPart::RadioButtonRadio);
 
     /* Spinbutton */
     gSpinBox = gtk_spin_button_new(nullptr, 0, 0);
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gSpinBox);
-    mpSpinStyle = createStyleContext(set_object_name, GtkControlPart::SpinButton);
-    mpSpinUpStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonUpButton);
-    mpSpinDownStyle = createStyleContext(set_object_name, GtkControlPart::SpinButtonDownButton);
+    mpSpinStyle = createStyleContext(GtkControlPart::SpinButton);
+    mpSpinUpStyle = createStyleContext(GtkControlPart::SpinButtonUpButton);
+    mpSpinDownStyle = createStyleContext(GtkControlPart::SpinButtonDownButton);
 
     /* NoteBook */
-    mpNotebookStyle = createStyleContext(set_object_name, GtkControlPart::Notebook);
-    mpNotebookStackStyle = createStyleContext(set_object_name, GtkControlPart::NotebookStack);
-    mpNotebookHeaderStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeader);
-    mpNotebookHeaderTabsStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabs);
-    mpNotebookHeaderTabsTabStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTab);
-    mpNotebookHeaderTabsTabLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabLabel);
-    mpNotebookHeaderTabsTabActiveLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabActiveLabel);
-    mpNotebookHeaderTabsTabHoverLabelStyle = createStyleContext(set_object_name, GtkControlPart::NotebookHeaderTabsTabHoverLabel);
+    mpNotebookStyle = createStyleContext(GtkControlPart::Notebook);
+    mpNotebookStackStyle = createStyleContext(GtkControlPart::NotebookStack);
+    mpNotebookHeaderStyle = createStyleContext(GtkControlPart::NotebookHeader);
+    mpNotebookHeaderTabsStyle = createStyleContext(GtkControlPart::NotebookHeaderTabs);
+    mpNotebookHeaderTabsTabStyle = createStyleContext(GtkControlPart::NotebookHeaderTabsTab);
+    mpNotebookHeaderTabsTabLabelStyle = createStyleContext(GtkControlPart::NotebookHeaderTabsTabLabel);
+    mpNotebookHeaderTabsTabActiveLabelStyle = createStyleContext(GtkControlPart::NotebookHeaderTabsTabActiveLabel);
+    mpNotebookHeaderTabsTabHoverLabelStyle = createStyleContext(GtkControlPart::NotebookHeaderTabsTabHoverLabel);
 
     /* Combobox */
     gComboBox = gtk_combo_box_text_new_with_entry();
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gComboBox);
-    mpComboboxStyle = createStyleContext(set_object_name, GtkControlPart::Combobox);
-    mpComboboxBoxStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBox);
-    mpComboboxEntryStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxEntry);
-    mpComboboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxButton);
-    mpComboboxButtonBoxStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxButtonBox);
-    mpComboboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::ComboboxBoxButtonBoxArrow);
+    mpComboboxStyle = createStyleContext(GtkControlPart::Combobox);
+    mpComboboxBoxStyle = createStyleContext(GtkControlPart::ComboboxBox);
+    mpComboboxEntryStyle = createStyleContext(GtkControlPart::ComboboxBoxEntry);
+    mpComboboxButtonStyle = createStyleContext(GtkControlPart::ComboboxBoxButton);
+    mpComboboxButtonBoxStyle = createStyleContext(GtkControlPart::ComboboxBoxButtonBox);
+    mpComboboxButtonArrowStyle = createStyleContext(GtkControlPart::ComboboxBoxButtonBoxArrow);
 
     /* Listbox */
     gListBox = gtk_combo_box_text_new();
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(gListBox), "sample");
     gtk_container_add(GTK_CONTAINER(gDumbContainer), gListBox);
-    mpListboxStyle = createStyleContext(set_object_name, GtkControlPart::Listbox);
-    mpListboxBoxStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBox);
-    mpListboxButtonStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBoxButton);
-    mpListboxButtonBoxStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBoxButtonBox);
-    mpListboxButtonArrowStyle = createStyleContext(set_object_name, GtkControlPart::ListboxBoxButtonBoxArrow);
+    mpListboxStyle = createStyleContext(GtkControlPart::Listbox);
+    mpListboxBoxStyle = createStyleContext(GtkControlPart::ListboxBox);
+    mpListboxButtonStyle = createStyleContext(GtkControlPart::ListboxBoxButton);
+    mpListboxButtonBoxStyle = createStyleContext(GtkControlPart::ListboxBoxButtonBox);
+    mpListboxButtonArrowStyle = createStyleContext(GtkControlPart::ListboxBoxButtonBoxArrow);
 
-    /* Menu bar */
-    gMenuBarWidget = gtk_menu_bar_new();
-    gMenuItemMenuBarWidget = gtk_menu_item_new_with_label( "b" );
-    gtk_menu_shell_append(GTK_MENU_SHELL(gMenuBarWidget), gMenuItemMenuBarWidget);
-    gtk_container_add(GTK_CONTAINER(gDumbContainer), gMenuBarWidget);
-
-    mpMenuBarStyle = createStyleContext(set_object_name, GtkControlPart::MenuBar);
-    mpMenuBarItemStyle = createStyleContext(set_object_name, GtkControlPart::MenuBarItem);
+    mpMenuBarStyle = createStyleContext(GtkControlPart::MenuBar);
+    mpMenuBarItemStyle = createStyleContext(GtkControlPart::MenuBarItem);
 
     /* Menu */
-    mpMenuWindowStyle = createStyleContext(set_object_name, GtkControlPart::MenuWindow);
-    mpMenuStyle = createStyleContext(set_object_name, GtkControlPart::Menu);
-    GtkWidget *menu = gtk_menu_new();
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(gMenuItemMenuBarWidget), menu);
+    mpMenuWindowStyle = createStyleContext(GtkControlPart::MenuWindow);
+    mpMenuStyle = createStyleContext(GtkControlPart::Menu);
 
-    /* Menu Items */
-    gCheckMenuItemWidget = gtk_check_menu_item_new_with_label("M");
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), gCheckMenuItemWidget);
-
-    mpMenuItemStyle = createStyleContext(set_object_name, GtkControlPart::MenuItem);
-    mpMenuItemLabelStyle = createStyleContext(set_object_name, GtkControlPart::MenuItemLabel);
-    mpMenuItemArrowStyle = createStyleContext(set_object_name, GtkControlPart::MenuItemArrow);
-    mpCheckMenuItemStyle = createStyleContext(set_object_name, GtkControlPart::CheckMenuItem);
-    mpCheckMenuItemCheckStyle = createStyleContext(set_object_name, GtkControlPart::CheckMenuItemCheck);
-    mpRadioMenuItemStyle = createStyleContext(set_object_name, GtkControlPart::RadioMenuItem);
-    mpRadioMenuItemRadioStyle = createStyleContext(set_object_name, GtkControlPart::RadioMenuItemRadio);
-    mpSeparatorMenuItemStyle = createStyleContext(set_object_name, GtkControlPart::SeparatorMenuItem);
-    mpSeparatorMenuItemSeparatorStyle = createStyleContext(set_object_name, GtkControlPart::SeparatorMenuItemSeparator);
+    mpMenuItemStyle = createStyleContext(GtkControlPart::MenuItem);
+    mpMenuItemLabelStyle = createStyleContext(GtkControlPart::MenuItemLabel);
+    mpMenuItemArrowStyle = createStyleContext(GtkControlPart::MenuItemArrow);
+    mpCheckMenuItemStyle = createStyleContext(GtkControlPart::CheckMenuItem);
+    mpCheckMenuItemCheckStyle = createStyleContext(GtkControlPart::CheckMenuItemCheck);
+    mpRadioMenuItemStyle = createStyleContext(GtkControlPart::RadioMenuItem);
+    mpRadioMenuItemRadioStyle = createStyleContext(GtkControlPart::RadioMenuItemRadio);
+    mpSeparatorMenuItemStyle = createStyleContext(GtkControlPart::SeparatorMenuItem);
+    mpSeparatorMenuItemSeparatorStyle = createStyleContext(GtkControlPart::SeparatorMenuItemSeparator);
 
     /* Frames */
-    mpFrameOutStyle = mpFrameInStyle = createStyleContext(set_object_name, GtkControlPart::FrameBorder);
+    mpFrameOutStyle = mpFrameInStyle = createStyleContext(GtkControlPart::FrameBorder);
     getStyleContext(&mpFixedHoriLineStyle, gtk_separator_new(GTK_ORIENTATION_HORIZONTAL));
     getStyleContext(&mpFixedVertLineStyle, gtk_separator_new(GTK_ORIENTATION_VERTICAL));
 
@@ -3705,9 +2870,9 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     mpTreeHeaderButtonStyle = gtk_widget_get_style_context(pTreeHeaderCellWidget);
 
     /* Progress Bar */
-    mpProgressBarStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBar);
-    mpProgressBarTroughStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBarTrough);
-    mpProgressBarProgressStyle = createStyleContext(set_object_name, GtkControlPart::ProgressBarProgress);
+    mpProgressBarStyle = createStyleContext(GtkControlPart::ProgressBar);
+    mpProgressBarTroughStyle = createStyleContext(GtkControlPart::ProgressBarTrough);
+    mpProgressBarProgressStyle = createStyleContext(GtkControlPart::ProgressBarProgress);
 
     gtk_widget_show_all(gDumbContainer);
 }

@@ -94,8 +94,6 @@ enum class GtkControlPart
     SeparatorMenuItemSeparator,
 };
 
-typedef void (*gtk_widget_path_iter_set_object_nameFunc)(GtkWidgetPath *, guint, const char*);
-
 class GtkSalGraphics : public SvpSalGraphics
 {
     GtkSalFrame * const mpFrame;
@@ -134,9 +132,7 @@ public:
 
     virtual OUString getRenderBackendName() const override { return "gtk3svp"; }
 
-    GtkStyleContext* createStyleContext(gtk_widget_path_iter_set_object_nameFunc set_object_name, GtkControlPart ePart);
-    GtkStyleContext* createNewContext(GtkControlPart ePart, gtk_widget_path_iter_set_object_nameFunc set_object_name);
-    GtkStyleContext* createOldContext(GtkControlPart ePart);
+    GtkStyleContext* createStyleContext(GtkControlPart ePart);
     GtkStyleContext* makeContext(GtkWidgetPath *pPath, GtkStyleContext *pParent);
 private:
     GtkWidget              *mpWindow;
