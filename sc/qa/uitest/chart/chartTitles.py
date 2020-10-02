@@ -27,6 +27,13 @@ class chartTitles(UITestCase):
     gridwin = xCalcDoc.getChild("grid_window")
     document = self.ui_test.get_component()
 
+    xCS = document.Sheets[0].Charts[0].getEmbeddedObject().FirstDiagram.CoordinateSystems[0]
+
+    self.assertFalse(document.Sheets[0].Charts[0].getEmbeddedObject().HasMainTitle)
+    self.assertFalse(document.Sheets[0].Charts[0].getEmbeddedObject().HasSubTitle)
+    self.assertIsNone(xCS.getAxisByDimension(0, 0).TitleObject)
+    self.assertIsNone(xCS.getAxisByDimension(1, 0).TitleObject)
+
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
     gridwin.executeAction("ACTIVATE", tuple())
     xChartMainTop = self.xUITest.getTopFocusWindow()
@@ -51,6 +58,15 @@ class chartTitles(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.assertTrue(document.Sheets[0].Charts[0].getEmbeddedObject().HasMainTitle)
+    self.assertTrue(document.Sheets[0].Charts[0].getEmbeddedObject().HasSubTitle)
+    self.assertEqual("A", document.Sheets[0].Charts[0].getEmbeddedObject().Title.String)
+    self.assertEqual("B", document.Sheets[0].Charts[0].getEmbeddedObject().SubTitle.String)
+    self.assertEqual("C", xCS.getAxisByDimension(0, 0).TitleObject.Text[0].String)
+    self.assertEqual("D", xCS.getAxisByDimension(1, 0).TitleObject.Text[0].String)
+    self.assertEqual("E", xCS.getAxisByDimension(0, 1).TitleObject.Text[0].String)
+    self.assertEqual("F", xCS.getAxisByDimension(1, 1).TitleObject.Text[0].String)
 
     #reopen and verify InsertMenuTitles dialog
     gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
