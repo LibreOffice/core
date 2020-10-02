@@ -21,7 +21,7 @@
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
+#include <cppuhelper/weak.hxx>
 #include "MMozillaBootstrap.hxx"
 #include "MNSProfileDiscover.hxx"
 
@@ -132,9 +132,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_moz_MozillaBootstrap_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<MozillaBootstrap> pMozillaBootstrap(new connectivity::mozab::MozillaBootstrap());
-    pMozillaBootstrap->acquire();
-    return static_cast<cppu::OWeakObject*>(pMozillaBootstrap.get());
+    return cppu::acquire(
+        static_cast<cppu::OWeakObject*>(new connectivity::mozab::MozillaBootstrap()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,8 @@
  ************************************************************************/
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <rtl/ref.hxx>
 
 #include "pq_driver.hxx"
 
@@ -143,10 +143,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_pq_sdbc_driver_get_implementation(
     css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<pq_sdbc_driver::Driver> g_Driver(new pq_sdbc_driver::Driver(context));
-
-    g_Driver->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Driver.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new pq_sdbc_driver::Driver(context)));
 }
 
 
