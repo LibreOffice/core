@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
 
 #include "xfactory.hxx"
@@ -287,9 +288,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OStorageFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<OStorageFactory> g_Instance(new OStorageFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OStorageFactory(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
