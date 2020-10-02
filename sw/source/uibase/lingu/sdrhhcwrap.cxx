@@ -111,7 +111,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
     const auto n = nDocIndex;
 
     std::list<SdrTextObj*> aTextObjs;
-    SwDrawContact::GetTextObjectsFromFormat( aTextObjs, pView->GetDocShell()->GetDoc() );
+    SwDrawContact::GetTextObjectsFromFormat(aTextObjs, *pView->GetDocShell()->GetDoc());
     for (auto const& textObj : aTextObjs)
     {
         pTextObj = textObj;
