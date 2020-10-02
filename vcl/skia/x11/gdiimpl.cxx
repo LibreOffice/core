@@ -91,10 +91,14 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     switch (renderMethod)
     {
         case SkiaHelper::RenderRaster:
-            // TODO The Skia Xlib code actually requires the non-native color type to work properly.
+            // Make sure we ask for color type that matches the X11 visual. If red mask
+            // is larger value than blue mask, then on little endian this means blue is first.
+            // This should also preferably match SK_R32_SHIFT set in config_skia.h, as that
+            // improves performance, the common setup seems to be BGRA (possibly because of
+            // choosing OpenGL-capable visual).
             displayParams.fColorType
-                = (displayParams.fColorType == kBGRA_8888_SkColorType ? kRGBA_8888_SkColorType
-                                                                      : kBGRA_8888_SkColorType);
+                = (visual->red_mask > visual->blue_mask ? kBGRA_8888_SkColorType
+                                                        : kRGBA_8888_SkColorType);
             return sk_app::window_context_factory::MakeRasterForXlib(winInfo, displayParams);
         case SkiaHelper::RenderVulkan:
             return sk_app::window_context_factory::MakeVulkanForXlib(winInfo, displayParams);
