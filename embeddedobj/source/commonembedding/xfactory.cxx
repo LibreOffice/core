@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <comphelper/documentconstants.hxx>
 
 #include "xfactory.hxx"
@@ -367,9 +368,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<OOoEmbeddedObjectFactory> g_Instance(new OOoEmbeddedObjectFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OOoEmbeddedObjectFactory(context)));
 }
 
 
@@ -413,8 +412,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<OOoSpecialEmbeddedObjectFactory> g_Instance(new OOoSpecialEmbeddedObjectFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new OOoSpecialEmbeddedObjectFactory(context)));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

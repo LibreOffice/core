@@ -20,17 +20,20 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.embed.EmbeddedObjectCreator"
-	constructor="embeddedobj_UNOEmbeddedObjectCreator_get_implementation">
+	constructor="embeddedobj_UNOEmbeddedObjectCreator_get_implementation"
+	single-instance="true">
     <service name="com.sun.star.comp.embed.EmbeddedObjectCreator"/>
     <service name="com.sun.star.embed.EmbeddedObjectCreator"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.OOoEmbeddedObjectFactory"
-	constructor="embeddedobj_OOoEmbeddedObjectFactory_get_implementation">
+	constructor="embeddedobj_OOoEmbeddedObjectFactory_get_implementation"
+	single-instance="true">
     <service name="com.sun.star.comp.embed.OOoEmbeddedObjectFactory"/>
     <service name="com.sun.star.embed.OOoEmbeddedObjectFactory"/>
   </implementation>
   <implementation name="com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"
-	constructor="embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation">
+	constructor="embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation"
+	single-instance="true">
     <service name="com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"/>
     <service name="com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"/>
   </implementation>
