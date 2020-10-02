@@ -469,6 +469,52 @@ void SkiaSalBitmap::EraseInternal(const Color& color)
     mEraseColor = color;
 }
 
+bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
+{
+    const SkiaSalBitmap* otherBitmap = dynamic_cast<const SkiaSalBitmap*>(&rSalBmp);
+    if (!otherBitmap)
+        return false;
+    if (mSize != otherBitmap->mSize)
+        return false;
+    // We're called from AlphaMask, which should ensure 8bit.
+    assert(GetBitCount() == 8 && mPalette.IsGreyPalette8Bit());
+    // If neither bitmap have Skia images, then AlphaMask::BlendWith() will be faster,
+    // as it will operate on mBuffer pixel buffers, while for Skia we'd need to convert it.
+    // If one has and one doesn't, do it using Skia, under the assumption that after this
+    // the resulting Skia image will be needed for drawing.
+    if (!(mImage || mEraseColorSet) && !(otherBitmap->mImage || otherBitmap->mEraseColorSet))
+        return false;
+    // This is for AlphaMask, which actually stores the alpha as the pixel values.
+    // I.e. take value of the color channel (one of them, if >8bit, they should be the same).
+    if (mEraseColorSet && otherBitmap->mEraseColorSet)
+    {
+        const sal_uInt16 nGrey1 = mEraseColor.GetRed();
+        const sal_uInt16 nGrey2 = otherBitmap->mEraseColor.GetRed();
+        const sal_uInt8 nGrey = static_cast<sal_uInt8>(nGrey1 + nGrey2 - nGrey1 * nGrey2 / 255);
+        mEraseColor = Color(nGrey, nGrey, nGrey);
+        SAL_INFO("vcl.skia.trace",
+                 "alphablendwith(" << this << ") : with erase color " << otherBitmap);
+        return true;
+    }
+    std::unique_ptr<SkiaSalBitmap> otherBitmapAllocated;
+    if (otherBitmap->GetBitCount() != 8 || !otherBitmap->mPalette.IsGreyPalette8Bit())
+    { // Convert/interpret as 8bit if needed.
+        otherBitmapAllocated = std::make_unique<SkiaSalBitmap>();
+        if (!otherBitmapAllocated->Create(*otherBitmap) || !otherBitmapAllocated->InterpretAs8Bit())
+            return false;
+        otherBitmap = otherBitmapAllocated.get();
+    }
+    sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+    SkPaint paint;
+    paint.setBlendMode(SkBlendMode::kSrc); // set as is
+    surface->getCanvas()->drawImage(GetSkImage(), 0, 0, &paint);
+    paint.setBlendMode(SkBlendMode::kScreen); // src+dest - src*dest/255 (in 0..1)
+    surface->getCanvas()->drawImage(otherBitmap->GetSkImage(), 0, 0, &paint);
+    ResetToSkImage(SkiaHelper::makeCheckedImageSnapshot(surface));
+    SAL_INFO("vcl.skia.trace", "alphablendwith(" << this << ") : with image " << otherBitmap);
+    return true;
+}
+
 SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
 {
 #ifdef DBG_UTIL
