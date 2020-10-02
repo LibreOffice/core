@@ -11,6 +11,7 @@
 #include <boost/lexical_cast.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <sal/log.hxx>
 #include "vlcmanager.hxx"
 #include "vlcplayer.hxx"
@@ -127,9 +128,7 @@ com_sun_star_comp_media_Manager_VLC_get_implementation(
     // Experimental for now - code is neither elegant nor well tested.
     if (!officecfg::Office::Common::Misc::ExperimentalMode::get(context))
         return nullptr;
-    static uno::Reference< uno::XInterface > manager( *new ::avmedia::vlc::Manager );
-    manager->acquire();
-    return manager.get();
+    return cppu::acquire(static_cast<cppu::OWeakObject *>(new ::avmedia::vlc::Manager));
 }
 
 
