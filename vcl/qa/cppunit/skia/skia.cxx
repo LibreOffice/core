@@ -32,10 +32,12 @@ public:
 
     void testBitmapErase();
     void testDrawShaders();
+    void testInterpretAs8Bit();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
     CPPUNIT_TEST(testDrawShaders);
+    CPPUNIT_TEST(testInterpretAs8Bit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -76,8 +78,7 @@ void SkiaTest::testBitmapErase()
     CPPUNIT_ASSERT(!skiaBitmap->unittestHasAlphaImage());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
     // Reading a pixel will create pixel data.
-    BitmapReadAccess access(bitmap);
-    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), access.GetColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), BitmapReadAccess(bitmap).GetColor(0, 0));
     skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
     CPPUNIT_ASSERT(skiaBitmap->unittestHasBuffer());
     CPPUNIT_ASSERT(!skiaBitmap->unittestHasImage());
@@ -97,12 +98,10 @@ void SkiaTest::testDrawShaders()
     Bitmap bitmap(Size(10, 10), 24);
     bitmap.Erase(COL_RED);
     SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
-    CPPUNIT_ASSERT(skiaBitmap);
     CPPUNIT_ASSERT(skiaBitmap->PreferSkShader());
     AlphaMask alpha(Size(10, 10));
     alpha.Erase(64);
     SkiaSalBitmap* skiaAlpha = dynamic_cast<SkiaSalBitmap*>(alpha.ImplGetSalBitmap().get());
-    CPPUNIT_ASSERT(skiaAlpha);
     CPPUNIT_ASSERT(skiaAlpha->PreferSkShader());
 
     device->DrawBitmap(Point(5, 5), bitmap);
@@ -143,7 +142,6 @@ void SkiaTest::testDrawShaders()
     bitmapLarge.Erase(COL_RED);
     SkiaSalBitmap* skiaBitmapLarge
         = dynamic_cast<SkiaSalBitmap*>(bitmapLarge.ImplGetSalBitmap().get());
-    CPPUNIT_ASSERT(skiaBitmapLarge);
     CPPUNIT_ASSERT(skiaBitmapLarge->PreferSkShader());
     AlphaMask alphaLarge(Size(100, 100));
     alphaLarge.Erase(64);
@@ -169,6 +167,38 @@ void SkiaTest::testDrawShaders()
     CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(70 + diff, 100 - diff)));
     CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50 + diff, 100 - diff)));
     device->Erase();
+}
+
+void SkiaTest::testInterpretAs8Bit()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    Bitmap bitmap(Size(10, 10), 24);
+    // Test with erase color.
+    bitmap.Erase(Color(33, 33, 33));
+    SkiaSalBitmap* skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), bitmap.GetBitCount());
+    bitmap.Convert(BmpConversion::N8BitNoConversion);
+    skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap->unittestHasEraseColor());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(33), BitmapReadAccess(bitmap).GetPixelIndex(0, 0));
+
+    // Test with image.
+    bitmap = Bitmap(Size(10, 10), 24);
+    bitmap.Erase(Color(34, 34, 34));
+    BitmapReadAccess(bitmap).GetColor(0, 0); // Create pixel data, reset erase color.
+    skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    skiaBitmap->GetSkImage();
+    CPPUNIT_ASSERT(!skiaBitmap->unittestHasEraseColor());
+    CPPUNIT_ASSERT(skiaBitmap->unittestHasImage());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), bitmap.GetBitCount());
+    bitmap.Convert(BmpConversion::N8BitNoConversion);
+    skiaBitmap = dynamic_cast<SkiaSalBitmap*>(bitmap.ImplGetSalBitmap().get());
+    CPPUNIT_ASSERT(skiaBitmap->unittestHasImage());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), bitmap.GetBitCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(34), BitmapReadAccess(bitmap).GetPixelIndex(0, 0));
 }
 
 } // namespace

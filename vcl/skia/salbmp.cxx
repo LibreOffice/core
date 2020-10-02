@@ -412,6 +412,14 @@ bool SkiaSalBitmap::InterpretAs8Bit()
 #endif
     if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
         return true;
+    if (mEraseColorSet)
+    {
+        mBitCount = 8;
+        ComputeScanlineSize();
+        mPalette = Bitmap::GetGreyPalette(256);
+        SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ") with erase color");
+        return true;
+    }
     // This is usually used by AlphaMask, the point is just to treat
     // the content as an alpha channel. This is often used
     // by the horrible separate-alpha-outdev hack, where the bitmap comes
@@ -421,15 +429,16 @@ bool SkiaSalBitmap::InterpretAs8Bit()
     // just treat the SkImage as being for 8bit bitmap. EnsureBitmapData()
     // will do the conversion if needed, but the normal case will be
     // GetAlphaSkImage() creating kAlpha_8_SkColorType SkImage from it.
-    if (!mBuffer && mImage)
+    if (mImage)
     {
         mBitCount = 8;
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
         ResetToSkImage(mImage); // keep mImage, it will be interpreted as 8bit if needed
-        SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ")");
+        SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ") with image");
         return true;
     }
+    SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ") with pixel data, ignoring");
     return false;
 }
 
