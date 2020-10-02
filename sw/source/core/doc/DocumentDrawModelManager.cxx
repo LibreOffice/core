@@ -77,7 +77,7 @@ void DocumentDrawModelManager::InitDrawModel()
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SwDrawModel. We always have two layers and one page.
-    mpDrawModel.reset( new SwDrawModel( &m_rDoc ) );
+    mpDrawModel.reset(new SwDrawModel(m_rDoc));
 
     mpDrawModel->EnableUndo( m_rDoc.GetIDocumentUndoRedo().DoesUndo() );
 

@@ -35,7 +35,7 @@ private:
     void InitControls();
 
 public:
-    DateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc* pDoc);
+    DateFormFieldDialog(weld::Widget* pParent, sw::mark::IDateFieldmark* pDateField, SwDoc& rDoc);
     virtual ~DateFormFieldDialog() override;
 
     virtual short run() override
