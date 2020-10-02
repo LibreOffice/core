@@ -1735,15 +1735,15 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
     OUString sFillGradientName;
     xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
 
-    awt::Gradient aGradient;
-    awt::Gradient aTransparenceGradient;
     uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     try
     {
         uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
         uno::Any rGradientValue = xGradient->getByName( sFillGradientName );
+        awt::Gradient aGradient;
         if( rGradientValue >>= aGradient )
         {
+            awt::Gradient aTransparenceGradient;
             mpFS->startElementNS(XML_a, XML_gradFill);
             OUString sFillTransparenceGradientName;
             if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
@@ -2282,11 +2282,11 @@ void ChartExport::exportSeries( const Reference<chart2::XChartType>& xChartType,
                 sal_Int32 nSeqIdx=0;
                 for( ; nSeqIdx<aSeqCnt.getLength(); ++nSeqIdx )
                 {
-                    OUString aRole;
                     Reference< chart2::data::XDataSequence > xTempValueSeq( aSeqCnt[nSeqIdx]->getValues() );
                     if( nMainSequenceIndex==-1 )
                     {
                         Reference< beans::XPropertySet > xSeqProp( xTempValueSeq, uno::UNO_QUERY );
+                        OUString aRole;
                         if( xSeqProp.is())
                             xSeqProp->getPropertyValue("Role") >>= aRole;
                         // "main" sequence
@@ -3237,9 +3237,9 @@ void ChartExport::_exportAxis(
         mAny >>= bDisplayUnits;
         if(bDisplayUnits)
         {
-            OUString aVal;
             if(GetProperty( xAxisProp, "BuiltInUnit" ))
             {
+                OUString aVal;
                 mAny >>= aVal;
                 if(!aVal.isEmpty())
                 {
