@@ -1475,7 +1475,6 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
     else
     {
         bool    bSetSize( false );
-        awt::Point aDockPos;
         ::Point aPixelPos;
         ::Size  aSize;
 
@@ -1492,6 +1491,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
 
             if ( isDefaultPos( rElement.m_aDockedData.m_aPos ))
             {
+                awt::Point aDockPos;
                 implts_findNextDockingPos( rElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
                 rElement.m_aDockedData.m_aPos = aDockPos;
             }
@@ -2390,8 +2390,6 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
 {
     sal_Int32 nDiff(0);
     sal_Int32 nRCSpace( rRowColumnWindowData.nSpace );
-    sal_Int32 nTopDockingAreaSize(0);
-    sal_Int32 nBottomDockingAreaSize(0);
     sal_Int32 nContainerClientSize(0);
 
     if ( rRowColumnWindowData.aRowColumnWindows.empty() )
@@ -2404,8 +2402,8 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
     }
     else
     {
-        nTopDockingAreaSize    = implts_getTopBottomDockingAreaSizes().Width();
-        nBottomDockingAreaSize = implts_getTopBottomDockingAreaSizes().Height();
+        sal_Int32 nTopDockingAreaSize    = implts_getTopBottomDockingAreaSizes().Width();
+        sal_Int32 nBottomDockingAreaSize = implts_getTopBottomDockingAreaSizes().Height();
         nContainerClientSize   = ( rContainerSize.Height() - nTopDockingAreaSize - nBottomDockingAreaSize );
         nDiff = nContainerClientSize - rRowColumnWindowData.nVarSize;
     }
@@ -2608,7 +2606,6 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
     }
 
     vcl::Window*                        pDockingAreaWindow( nullptr );
-    ToolBox*                       pToolBox( nullptr );
     uno::Reference< awt::XWindow > xWindow( rUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
     uno::Reference< awt::XWindow > xDockingAreaWindow;
     ::tools::Rectangle                    aTrackingRect( rTrackingRect );
@@ -2632,6 +2629,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
         SolarMutexGuard aGuard;
         pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
         VclPtr<vcl::Window> pDockWindow = VCLUnoHelper::GetWindow( xWindow );
+        ToolBox* pToolBox( nullptr );
         if ( pDockWindow && pDockWindow->GetType() == WindowType::TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pDockWindow.get());
 
@@ -2966,8 +2964,8 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
     const ::tools::Rectangle& rRowColRect,
     const Point&       rMousePos )
 {
-    const sal_Int32 nHorzVerticalRegionSize        = 6;
-    const sal_Int32 nHorzVerticalMoveRegion        = 4;
+    constexpr sal_Int32 nHorzVerticalRegionSize        = 6;
+    constexpr sal_Int32 nHorzVerticalMoveRegion        = 4;
 
     if ( rRowColRect.IsInside( rMousePos ))
     {
@@ -3064,10 +3062,9 @@ framework::ToolbarLayoutManager::DockingOperation ToolbarLayoutManager::implts_d
         aReadGuard.clear();
 
         sal_Int32 nDockPosY( 0 );
-        vcl::Window* pDockingAreaWindow( nullptr );
         {
             SolarMutexGuard aGuard;
-            pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
+            vcl::Window* pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
             VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             nDockPosY = pDockingAreaWindow->ScreenToOutputPixel( pContainerWindow->OutputToScreenPixel( ::Point( 0, nPosY ))).Y();
         }
@@ -3254,14 +3251,6 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
     uno::Reference< awt::XWindow2 > xWindow( e.Source, uno::UNO_QUERY );
     aReadGuard.clear();
 
-    vcl::Window* pContainerWindow( nullptr );
-    ::Point aMousePos;
-    {
-        SolarMutexGuard aGuard;
-        pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow ).get();
-        aMousePos = pContainerWindow->ScreenToOutputPixel( ::Point( e.MousePos.X, e.MousePos.Y ));
-    }
-
     UIElement aUIElement = implts_findToolbar( e.Source );
 
     if ( aUIElement.m_xUIElement.is() && xWindow.is() )
@@ -3296,8 +3285,8 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
 
 awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent& e )
 {
-    const sal_Int32 MAGNETIC_DISTANCE_UNDOCK = 25;
-    const sal_Int32 MAGNETIC_DISTANCE_DOCK   = 20;
+    constexpr sal_Int32 MAGNETIC_DISTANCE_UNDOCK = 25;
+    constexpr sal_Int32 MAGNETIC_DISTANCE_DOCK   = 20;
 
     SolarMutexClearableGuard aReadLock;
     awt::DockingData                       aDockingData;
@@ -3310,7 +3299,6 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
     uno::Reference< awt::XWindow2 >        xContainerWindow( m_xContainerWindow );
     UIElement                              aUIDockingElement( m_aDockUIElement );
 
-    DockingOperation                       eDockingOperation( DOCKOP_ON_COLROW );
     bool                                   bDockingInProgress( m_bDockingInProgress );
     aReadLock.clear();
 
@@ -3323,9 +3311,9 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
         {
             SolarMutexGuard aGuard;
 
+            DockingOperation eDockingOperation( DOCKOP_ON_COLROW );
             ui::DockingArea eDockingArea( ui::DockingArea(-1) ); // none
             sal_Int32 nMagneticZone( aUIDockingElement.m_bFloating ? MAGNETIC_DISTANCE_DOCK : MAGNETIC_DISTANCE_UNDOCK );
-            awt::Rectangle aNewTrackingRect;
             ::tools::Rectangle aTrackingRect( e.TrackingRectangle.X, e.TrackingRectangle.Y,
                                        ( e.TrackingRectangle.X + e.TrackingRectangle.Width ),
                                        ( e.TrackingRectangle.Y + e.TrackingRectangle.Height ));
@@ -3405,9 +3393,8 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
                 implts_calcDockingPosSize( aUIDockingElement, eDockingOperation, aNewDockingRect, aMousePos );
 
                 ::Point aScreenPos = pContainerWindow->OutputToScreenPixel( aNewDockingRect.TopLeft() );
-                aNewTrackingRect = awt::Rectangle( aScreenPos.X(), aScreenPos.Y(),
+                aDockingData.TrackingRectangle = awt::Rectangle( aScreenPos.X(), aScreenPos.Y(),
                                                    aNewDockingRect.getWidth(), aNewDockingRect.getHeight() );
-                aDockingData.TrackingRectangle = aNewTrackingRect;
             }
             else if (pToolBox)
             {

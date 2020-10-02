@@ -1420,7 +1420,6 @@ void AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopu
 bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, Sequence< PropertyValue >& aToolBarItem )
 {
     bool             bResult = false;
-    OUString         aTitle;
     OUString         aURL;
     OUString         aAddonToolBarItemTreeNode( aToolBarItemNodeName + m_aPathDelimiter );
 
@@ -1429,6 +1428,7 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
     // A toolbar item must have a command URL
     if (( aToolBarItemNodePropValues[ OFFSET_TOOLBARITEM_URL ] >>= aURL ) && !aURL.isEmpty() )
     {
+        OUString         aTitle;
         if ( aURL == SEPARATOR_URL )
         {
             // A separator toolbar item only needs a URL
@@ -1473,7 +1473,6 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
 bool AddonsOptions_Impl::ReadNotebookBarItem( const OUString& aNotebookBarItemNodeName, Sequence< PropertyValue >& aNotebookBarItem )
 {
     bool             bResult = false;
-    OUString         aTitle;
     OUString         aURL;
     OUString         aAddonNotebookBarItemTreeNode( aNotebookBarItemNodeName + m_aPathDelimiter );
 
@@ -1482,6 +1481,7 @@ bool AddonsOptions_Impl::ReadNotebookBarItem( const OUString& aNotebookBarItemNo
     // A toolbar item must have a command URL
     if (( aNotebookBarItemNodePropValues[ OFFSET_NOTEBOOKBARITEM_URL ] >>= aURL ) && !aURL.isEmpty() )
     {
+        OUString         aTitle;
         if ( aURL == SEPARATOR_URL )
         {
             // A separator toolbar item only needs a URL
