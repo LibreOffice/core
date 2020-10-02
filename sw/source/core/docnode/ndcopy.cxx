@@ -56,7 +56,7 @@ struct MapTableFrameFormat
 
 typedef std::vector<MapTableFrameFormat> MapTableFrameFormats;
 
-SwContentNode* SwTextNode::MakeCopy(SwDoc* pDoc, const SwNodeIndex& rIdx, bool const bNewFrames) const
+SwContentNode* SwTextNode::MakeCopy(SwDoc& rDoc, const SwNodeIndex& rIdx, bool const bNewFrames) const
 {
     // the Copy-Textnode is the Node with the Text, the Copy-Attrnode is the
     // node with the collection and hard attributes. Normally is the same
@@ -67,7 +67,7 @@ SwContentNode* SwTextNode::MakeCopy(SwDoc* pDoc, const SwNodeIndex& rIdx, bool c
 
     // Copy the formats to the other document
     SwTextFormatColl* pColl = nullptr;
-    if( pDoc->IsInsOnlyTextGlossary() )
+    if( rDoc.IsInsOnlyTextGlossary() )
     {
         SwNodeIndex aIdx( rIdx, -1 );
         if( aIdx.GetNode().IsTextNode() )
@@ -77,9 +77,9 @@ SwContentNode* SwTextNode::MakeCopy(SwDoc* pDoc, const SwNodeIndex& rIdx, bool c
         }
     }
     if( !pColl )
-        pColl = pDoc->CopyTextColl( *GetTextColl() );
+        pColl = rDoc.CopyTextColl( *GetTextColl() );
 
-    SwTextNode* pTextNd = pDoc->GetNodes().MakeTextNode(rIdx, pColl, bNewFrames);
+    SwTextNode* pTextNd = rDoc.GetNodes().MakeTextNode(rIdx, pColl, bNewFrames);
 
     // METADATA: register copy
     pTextNd->RegisterAsCopyOf(*pCpyTextNd);
@@ -126,7 +126,7 @@ namespace {
 
 struct CopyTable
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
     sal_uLong m_nOldTableSttIdx;
     MapTableFrameFormats& m_rMapArr;
     SwTableLine* m_pInsLine;
@@ -134,9 +134,9 @@ struct CopyTable
     SwTableNode *m_pTableNd;
     const SwTable *m_pOldTable;
 
-    CopyTable(SwDoc* pDc, MapTableFrameFormats& rArr, sal_uLong nOldStt,
+    CopyTable(SwDoc& rDc, MapTableFrameFormats& rArr, sal_uLong nOldStt,
                SwTableNode& rTableNd, const SwTable* pOldTable)
-        : m_pDoc(pDc), m_nOldTableSttIdx(nOldStt), m_rMapArr(rArr),
+        : m_rDoc(rDc), m_nOldTableSttIdx(nOldStt), m_rMapArr(rArr),
           m_pInsLine(nullptr), m_pInsBox(nullptr), m_pTableNd(&rTableNd), m_pOldTable(pOldTable)
     {}
 };
@@ -161,12 +161,12 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
             const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->PtrToBoxNm(pCT->m_pOldTable);
         }
 
-        pBoxFormat = pCT->m_pDoc->MakeTableBoxFormat();
+        pBoxFormat = pCT->m_rDoc.MakeTableBoxFormat();
         pBoxFormat->CopyAttrs( *pBox->GetFrameFormat() );
 
         if( pBox->GetSttIdx() )
         {
-            SvNumberFormatter* pN = pCT->m_pDoc->GetNumberFormatter(false);
+            SvNumberFormatter* pN = pCT->m_rDoc.GetNumberFormatter(false);
             if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == pBoxFormat->
                 GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
             {
@@ -219,7 +219,7 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
 
     if( pLineFormat == pLine->GetFrameFormat() ) // Create a new one?
     {
-        pLineFormat = pCT->m_pDoc->MakeTableLineFormat();
+        pLineFormat = pCT->m_rDoc.MakeTableLineFormat();
         pLineFormat->CopyAttrs( *pLine->GetFrameFormat() );
         pCT->m_rMapArr.emplace_back(pLine->GetFrameFormat(), pLineFormat);
     }
@@ -240,31 +240,31 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
         lcl_CopyTableBox(rpBox, pCT);
 }
 
-SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
 {
     // In which array are we? Nodes? UndoNodes?
     SwNodes& rNds = const_cast<SwNodes&>(GetNodes());
 
     {
-        if( rIdx < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
-            rIdx >= pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() )
+        if( rIdx < rDoc.GetNodes().GetEndOfInserts().GetIndex() &&
+            rIdx >= rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex() )
             return nullptr;
     }
 
     // Copy the TableFrameFormat
     OUString sTableName( GetTable().GetFrameFormat()->GetName() );
-    if( !pDoc->IsCopyIsMove() )
+    if( !rDoc.IsCopyIsMove() )
     {
-        const SwFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
+        const SwFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();
         for( size_t n = rTableFormats.size(); n; )
             if( rTableFormats[ --n ]->GetName() == sTableName )
             {
-                sTableName = pDoc->GetUniqueTableName();
+                sTableName = rDoc.GetUniqueTableName();
                 break;
             }
     }
 
-    SwFrameFormat* pTableFormat = pDoc->MakeTableFrameFormat( sTableName, pDoc->GetDfltFrameFormat() );
+    SwFrameFormat* pTableFormat = rDoc.MakeTableFrameFormat( sTableName, rDoc.GetDfltFrameFormat() );
     pTableFormat->CopyAttrs( *GetTable().GetFrameFormat() );
     SwTableNode* pTableNd = new SwTableNode( rIdx );
     SwEndNode* pEndNd = new SwEndNode( rIdx, *pTableNd );
@@ -284,9 +284,9 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // Is the field type available in the new document?
         pDDEType = const_cast<SwDDETable*>(pSwDDETable)->GetDDEFieldType();
         if( pDDEType->IsDeleted() )
-            pDoc->getIDocumentFieldsAccess().InsDeletedFieldType( *pDDEType );
+            rDoc.getIDocumentFieldsAccess().InsDeletedFieldType( *pDDEType );
         else
-            pDDEType = static_cast<SwDDEFieldType*>(pDoc->getIDocumentFieldsAccess().InsertFieldType( *pDDEType ));
+            pDDEType = static_cast<SwDDEFieldType*>(rDoc.getIDocumentFieldsAccess().InsertFieldType( *pDDEType ));
         OSL_ENSURE( pDDEType, "unknown FieldType" );
 
         // Swap the table pointers in the node
@@ -311,7 +311,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         aRg.aStart.Assign( *pTableNd, 1 );
         aRg.aEnd.Assign( *pTableNd->EndOfSectionNode() );
-        pDoc->GetNodes().SectionDown( &aRg, SwTableBoxStartNode );
+        rDoc.GetNodes().SectionDown( &aRg, SwTableBoxStartNode );
     }
 
     // Delete all frames from the copied area, they will be created
@@ -319,7 +319,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pTableNd->DelFrames();
 
     MapTableFrameFormats aMapArr;
-    CopyTable aPara( pDoc, aMapArr, GetIndex(), *pTableNd, &GetTable() );
+    CopyTable aPara( rDoc, aMapArr, GetIndex(), *pTableNd, &GetTable() );
 
     for( const SwTableLine* pLine : GetTable().GetTabLines() )
         lcl_CopyTableLine( pLine, &aPara );

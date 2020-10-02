@@ -423,16 +423,16 @@ Size SwOLENode::GetTwipSize() const
     return const_cast<SwOLENode*>(this)->maOLEObj.GetObject().GetSize( &aMapMode );
 }
 
-SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx, bool) const
+SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx, bool) const
 {
     // If there's already a SvPersist instance, we use it
-    SfxObjectShell* pPersistShell = pDoc->GetPersist();
+    SfxObjectShell* pPersistShell = rDoc.GetPersist();
     if( !pPersistShell )
     {
         // TODO/LATER: is EmbeddedObjectContainer not enough?
-        // the created document will be closed by pDoc ( should use SfxObjectShellLock )
-        pPersistShell = new SwDocShell( pDoc, SfxObjectCreateMode::INTERNAL );
-        pDoc->SetTmpDocShell( pPersistShell );
+        // the created document will be closed by rDoc ( should use SfxObjectShellLock )
+        pPersistShell = new SwDocShell( &rDoc, SfxObjectCreateMode::INTERNAL );
+        rDoc.SetTmpDocShell( pPersistShell );
         pPersistShell->DoInitNew();
     }
 
@@ -448,8 +448,8 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx, bool) 
         pSrc->getDocumentBaseURL(),
         pPersistShell->getDocumentBaseURL());
 
-    SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
-                                    pDoc->GetDfltGrfFormatColl(),
+    SwOLENode* pOLENd = rDoc.GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
+                                    rDoc.GetDfltGrfFormatColl(),
                                     GetpSwAttrSet() );
 
     pOLENd->SetChartTableName( GetChartTableName() );
@@ -459,7 +459,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx, bool) 
     pOLENd->SetAspect( GetAspect() ); // the replacement image must be already copied
 
     pOLENd->SetOLESizeInvalid( true );
-    pDoc->SetOLEPrtNotifyPending();
+    rDoc.SetOLEPrtNotifyPending();
 
     return pOLENd;
 }

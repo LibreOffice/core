@@ -647,7 +647,7 @@ insertion behind (true) or before (false) the selected boxes
 
 */
 
-bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
     sal_uInt16 nCnt, bool bBehind )
 {
     if( m_aLines.empty() || !nCnt )
@@ -700,7 +700,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         if( bBehind )
             ++nInsPos;
         SwTableBoxFormat* pBoxFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
-        ::InsTableBox( pDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
+        ::InsTableBox( rDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
         long nRowSpan = pBox->getRowSpan();
         long nDiff = i - nLastLine;
         bool bNewSpan = false;
@@ -1164,7 +1164,7 @@ static void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
     overlapped cells only. This is a preparation for an upcoming split.
 */
 
-void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt )
+void SwTable::InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt )
 {
     CHECK_TABLE( *this )
     OSL_ENSURE( nCnt && nRowIdx < GetTabLines().size(), "Wrong call of InsertSpannedRow" );
@@ -1181,7 +1181,7 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         aFSz.SetHeight( nNewHeight );
         pFrameFormat->SetFormatAttr( aFSz );
     }
-    InsertRow_( pDoc, aBoxes, nCnt, true );
+    InsertRow_( &rDoc, aBoxes, nCnt, true );
     const size_t nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -1402,7 +1402,7 @@ static sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes
 /** SwTable::NewSplitRow(..) splits all selected boxes horizontally.
 */
 
-bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+bool SwTable::NewSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                            bool bSameHeight )
 {
     CHECK_TABLE( *this )
@@ -1410,7 +1410,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     FndBox_ aFndBox( nullptr, nullptr );
     aFndBox.SetTableLines( rBoxes, *this );
 
-    if( bSameHeight && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( bSameHeight && rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         SwSplitLines aRowLines;
         SwSplitLines aSplitLines;
@@ -1423,7 +1423,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         {
             while( pSplit != aSplitLines.end() && *pSplit < rCurr )
             {
-                InsertSpannedRow( pDoc, nFirst, 1 );
+                InsertSpannedRow( rDoc, nFirst, 1 );
                 SwTableLine* pRow = GetTabLines()[ nFirst ];
                 SwFrameFormat* pRowFormat = pRow->ClaimFrameFormat();
                 SwFormatFrameSize aFSz( pRowFormat->GetFrameSize() );
@@ -1458,7 +1458,7 @@ bool SwTable::NewSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         SwLineOffsetArray::reverse_iterator pCurr( aLineOffs.rbegin() );
         while( pCurr != aLineOffs.rend() )
         {
-            InsertSpannedRow( pDoc, pCurr->first, pCurr->second );
+            InsertSpannedRow( rDoc, pCurr->first, pCurr->second );
             ++pCurr;
         }
     }

@@ -43,7 +43,7 @@ void sw_LineSetHeadCondColl( const SwTableLine* pLine );
 void CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 
-void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
+void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
                 SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                 SwTableBox* pBox, sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
 

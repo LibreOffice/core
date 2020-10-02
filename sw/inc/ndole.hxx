@@ -114,7 +114,7 @@ public:
     virtual ~SwOLENode() override;
 
     /// Is in ndcopy.cxx.
-    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const override;
+    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const override;
 
     virtual Size GetTwipSize() const override;
 

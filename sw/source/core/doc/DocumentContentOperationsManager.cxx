@@ -4820,7 +4820,7 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                             rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
-                        pDestTextNd = pSttTextNd->MakeCopy(&rDoc, aInsPos, true)->GetTextNode();
+                        pDestTextNd = pSttTextNd->MakeCopy(rDoc, aInsPos, true)->GetTextNode();
                         bCopyOk = true;
                     }
                     aDestIdx.Assign( pDestTextNd, 0 );
