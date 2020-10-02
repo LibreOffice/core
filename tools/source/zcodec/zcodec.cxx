@@ -331,7 +331,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     if ( mbStatus &&  mbGzLib )
     {
-        sal_uInt8 n1, n2, j, nMethod, nFlags;
+        sal_uInt8 j, nMethod, nFlags;
         for (int i : gz_magic)   // gz - magic number
         {
             inStream.ReadUChar( j );
@@ -349,6 +349,7 @@ void ZCodec::InitDecompress(SvStream & inStream)
         /* skip the extra field */
         if ( nFlags & GZ_EXTRA_FIELD )
         {
+            sal_uInt8 n1, n2;
             inStream.ReadUChar( n1 ).ReadUChar( n2 );
             inStream.SeekRel( n1 + ( n2 << 8 ) );
         }

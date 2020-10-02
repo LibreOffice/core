@@ -226,9 +226,9 @@ FetchResult CachedContentResultSetStub::impl_fetchHelper(
     if( !nOldOriginal_Pos )
         bOldOriginal_AfterLast = m_xResultSetOrigin->isAfterLast();
     sal_Int32 nN = 1;
-    bool bValidNewPos = false;
     try
     {
+        bool bValidNewPos = false;
         try
         {
             /*if( nOldOriginal_Pos != nRowStartPosition )*/
