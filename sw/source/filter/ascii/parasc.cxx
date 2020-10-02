@@ -255,7 +255,7 @@ ErrCode SwASCIIParser::ReadChars()
         aEmpty.GetLanguage() == rOpt.GetLanguage() &&
         aEmpty.GetParaFlags() == rOpt.GetParaFlags())
     {
-        sal_uLong nLen, nOrig;
+        sal_Size nLen, nOrig;
         nOrig = nLen = rInput.ReadBytes(pArr.get(), ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         LineEnd eLineEnd;
@@ -297,7 +297,7 @@ ErrCode SwASCIIParser::ReadChars()
     }
 
     std::unique_ptr<sal_Unicode[]> aWork;
-    sal_uLong nArrOffset = 0;
+    sal_Size nArrOffset = 0;
 
     do {
         if( pStt >= pEnd )
@@ -306,7 +306,7 @@ ErrCode SwASCIIParser::ReadChars()
                 InsertText( OUString( pLastStt ));
 
             // Read a new block
-            sal_uLong lGCount;
+            sal_Size lGCount;
             if( ERRCODE_NONE != rInput.GetError() || 0 == (lGCount =
                         rInput.ReadBytes( pArr.get() + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
@@ -318,7 +318,7 @@ ErrCode SwASCIIParser::ReadChars()
             to convert this cycle includes them. If we found 0 following bytes
             then we ignore the previous partial character.
             */
-            lGCount+=nArrOffset;
+            lGCount += nArrOffset;
 
             if( hConverter )
             {
@@ -354,7 +354,7 @@ ErrCode SwASCIIParser::ReadChars()
                 if( bSwapUnicode )
                 {
                     char* pF = pArr.get(), *pN = pArr.get() + 1;
-                    for( sal_uLong n = 0; n < nChars; ++n, pF += 2, pN += 2 )
+                    for (sal_Size n = 0; n < nChars; ++n, pF += 2, pN += 2)
                     {
                         char c = *pF;
                         *pF = *pN;
