@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "0bdcfe3e_07088ab1",
+        "filename": "i18npool/source/localedata/data/vro_EE.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-10-02T14:30:07Z",
+      "side": 1,
+      "message": "Ah, ok, I overlooked those, sorry for fuzz. Thanks.",
+      "parentUuid": "4a96493a_323ef0fc",
+      "revId": "a49812faeed30f93204c89364fc5f08743882841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58066b24_d7692f5e",
         "filename": "i18npool/source/localedata/data/vro_EE.xml",
         "patchSetId": 3
