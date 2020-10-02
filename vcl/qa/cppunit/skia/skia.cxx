@@ -163,11 +163,11 @@ void SkiaTest::testDrawShaders()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, deviceLarge->GetPixel(Point(110, 110)));
     // Don't test colors near the edge between the colors, smoothscaling affects them.
     const int diff = 3;
-    CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(50, 89 - diff)));
-    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50, 90 + diff)));
-    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(69 - diff, 100)));
-    CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(70 + diff, 100)));
-    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50, 100)));
+    CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(50 + diff, 89 - diff)));
+    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50 + diff, 90 + diff)));
+    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(69 - diff, 100 - diff)));
+    CPPUNIT_ASSERT_EQUAL(resultRed, deviceLarge->GetPixel(Point(70 + diff, 100 - diff)));
+    CPPUNIT_ASSERT_EQUAL(resultBlue, deviceLarge->GetPixel(Point(50 + diff, 100 - diff)));
     device->Erase();
 }
 
