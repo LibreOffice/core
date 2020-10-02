@@ -1720,7 +1720,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkPaint paint;
-        paint.setFilterQuality(kHigh_SkFilterQuality);
+        if (!matrix.isTranslate())
+            paint.setFilterQuality(kHigh_SkFilterQuality);
         canvas->drawImage(imageToDraw, 0, 0, &paint);
     }
     else
@@ -1737,7 +1738,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
         SkAutoCanvasRestore autoRestore(canvas, true);
         canvas->concat(matrix);
         SkPaint paint;
-        paint.setFilterQuality(kHigh_SkFilterQuality);
+        if (!matrix.isTranslate())
+            paint.setFilterQuality(kHigh_SkFilterQuality);
         if (pSkiaAlphaBitmap)
         {
             paint.setShader(SkShaders::Blend(SkBlendMode::kDstOut, // VCL alpha is one-minus-alpha.
