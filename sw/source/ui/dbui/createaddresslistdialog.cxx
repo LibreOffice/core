@@ -47,17 +47,25 @@ struct SwAddressFragment
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Entry> m_xEntry;
+    weld::Container* m_pGrid;
 
     SwAddressFragment(weld::Container* pGrid, int nLine)
         : m_xBuilder(Application::CreateBuilder(pGrid, "modules/swriter/ui/addressfragment.ui"))
         , m_xLabel(m_xBuilder->weld_label("label"))
         , m_xEntry(m_xBuilder->weld_entry("entry"))
+        , m_pGrid(pGrid)
     {
         m_xLabel->set_grid_left_attach(0);
         m_xLabel->set_grid_top_attach(nLine);
 
         m_xEntry->set_grid_left_attach(1);
         m_xEntry->set_grid_top_attach(nLine);
+    }
+
+    virtual ~SwAddressFragment()
+    {
+        m_pGrid->move(m_xEntry.get(), nullptr);
+        m_pGrid->move(m_xLabel.get(), nullptr);
     }
 };
 
