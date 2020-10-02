@@ -23,6 +23,8 @@
 #include <vector>
 #include <set>
 
+#include <sfx2/dllapi.h>
+
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XModel; }
 namespace sfx2::sidebar { class DeckDescriptor; }
@@ -37,7 +39,7 @@ class ContextList;
     methods so that the sidebar can easily decide which content panels
     to display for a certain context.
 */
-class ResourceManager
+class SFX2_DLLPUBLIC ResourceManager
 {
 public:
 

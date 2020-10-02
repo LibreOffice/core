@@ -3827,12 +3827,14 @@
           <value>true</value>
         </prop>
       </node>
-      <node oor:name=".uno:InspectorDeck" oor:op="replace">
+      <node oor:name=".uno:SidebarDeck.WriterPageDeck" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Inspector Deck</value>
+          <value xml:lang="en-US">WriterPageDeck</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>0</value>
+      </node>
+      <node oor:name=".uno:SidebarDeck.InspectorDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">InspectorDeck</value>
         </prop>
       </node>
     </node>

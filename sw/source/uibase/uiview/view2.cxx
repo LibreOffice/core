@@ -539,14 +539,6 @@ void SwView::Execute(SfxRequest &rReq)
     bool bIgnore = false;
     switch( nSlot )
     {
-        case SID_INSPECTOR_DECK:
-        {
-            OUString deckId;
-            if (nSlot == SID_INSPECTOR_DECK)
-                deckId = "InspectorDeck";
-            ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetViewFrame());
-        }
-        break;
         case SID_CREATE_SW_DRAWVIEW:
             m_pWrtShell->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
             break;
