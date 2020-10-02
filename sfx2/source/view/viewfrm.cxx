@@ -133,6 +133,8 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
+#include <sfx2/sidebar/SidebarController.hxx>
+
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
@@ -3102,6 +3104,18 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
 {
     // Evaluate Parameter
     sal_uInt16 nSID = rReq.GetSlot();
+
+    if (nSID == SID_SIDEBAR_DECK)
+    {
+        const SfxStringItem* pDeckIdItem = rReq.GetArg<SfxStringItem>(SID_SIDEBAR_DECK);
+        if (pDeckIdItem)
+        {
+            const OUString aDeckId(pDeckIdItem->GetValue());
+            ::sfx2::sidebar::Sidebar::ToggleDeck(aDeckId, this);
+        }
+        rReq.Done();
+        return;
+    }
 
     const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(nSID);
     if ( nSID == SID_VIEW_DATA_SOURCE_BROWSER )
