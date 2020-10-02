@@ -1761,7 +1761,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
             {
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwTableNode* pTableNd = static_cast<SwTableNode*>(pCurrentNode)->
-                                        MakeCopy( &rDoc, aInsPos );
+                                        MakeCopy( rDoc, aInsPos );
                 const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
@@ -1788,7 +1788,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 // copy of the whole section, so create a new SectionNode
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwSectionNode* pSectNd = static_cast<SwSectionNode*>(pCurrentNode)->
-                                    MakeCopy( &rDoc, aInsPos );
+                                    MakeCopy( rDoc, aInsPos );
 
                 const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
@@ -1836,7 +1836,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
         case SwNodeType::Ole:
             {
                  static_cast<SwContentNode*>(pCurrentNode)->MakeCopy(
-                                            &rDoc, aInsPos, bNewFrames);
+                                            rDoc, aInsPos, bNewFrames);
             }
             break;
 

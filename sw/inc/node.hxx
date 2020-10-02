@@ -425,7 +425,7 @@ public:
        There are differences between text node and formula node. */
     virtual sal_Int32 Len() const;
 
-    virtual SwContentNode* MakeCopy(SwDoc*, const SwNodeIndex&, bool bNewFrames) const = 0;
+    virtual SwContentNode* MakeCopy(SwDoc&, const SwNodeIndex&, bool bNewFrames) const = 0;
 
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const override;
@@ -517,7 +517,7 @@ public:
        The content frames that are created are put into the respective layout. */
     void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
-    SwTableNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+    SwTableNode* MakeCopy( SwDoc&, const SwNodeIndex& ) const;
     void SetNewTable( std::unique_ptr<SwTable> , bool bNewFrames=true );
 
     // Removes redline objects that relate to this table from the 'Extra Redlines' table
@@ -565,7 +565,7 @@ public:
        The content frames created are put into the respective layout. */
     void MakeFramesForAdjacentContentNode(const SwNodeIndex & rIdx);
 
-    SwSectionNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
+    SwSectionNode* MakeCopy( SwDoc&, const SwNodeIndex& ) const;
 
     /// Set pointer in format of section on itself.
     void NodesArrChgd();

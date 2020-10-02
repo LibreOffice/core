@@ -283,18 +283,16 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
 
 }
 
-static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
+static bool lcl_CopySelToDoc(SwDoc& rInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
-    OSL_ENSURE( pInsDoc, "no InsDoc");
-
-    SwNodes& rNds = pInsDoc->GetNodes();
+    SwNodes& rNds = rInsDoc.GetNodes();
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwContentNode * pNd = aIdx.GetNode().GetContentNode();
     SwPosition aPos(aIdx, SwIndex(pNd, pNd ? pNd->Len() : 0));
 
     bool bRet = false;
-    pInsDoc->getIDocumentFieldsAccess().LockExpFields();
+    rInsDoc.getIDocumentFieldsAccess().LockExpFields();
     {
         SwDoc *const pDoc(pxCursor ? pxCursor->GetDoc() : &pxRange->GetDoc());
         SwPaM aPam(pDoc->GetNodes());
@@ -315,9 +313,9 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
             || bRet;
     }
 
-    pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
-    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
-        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
+    rInsDoc.getIDocumentFieldsAccess().UnlockExpFields();
+    if( !rInsDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
+        rInsDoc.getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
     return bRet;
 }
@@ -380,7 +378,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
             if( pGlosGroup->BeginPutDoc( sShortName, sLongName ) )
             {
                 pGDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
-                lcl_CopySelToDoc( pGDoc, pxCursor, pxRange );
+                lcl_CopySelToDoc(*pGDoc, pxCursor, pxRange);
                 pGDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern(RedlineFlags::NONE);
                 nRet = pGlosGroup->PutDoc();
             }

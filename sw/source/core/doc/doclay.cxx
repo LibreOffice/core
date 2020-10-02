@@ -395,7 +395,7 @@ SwFlyFrameFormat* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rS
                 }
                 else
                 {
-                    rTable.MakeCopy( this, aPos, *pSelBoxes );
+                    rTable.MakeCopy(*this, aPos, *pSelBoxes);
                     // Don't delete a part of a table with row span!!
                     // You could delete the content instead -> ToDo
                     //rTable.DeleteSel( this, *pSelBoxes, 0, 0, true, true );

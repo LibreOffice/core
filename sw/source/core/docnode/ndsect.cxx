@@ -1196,13 +1196,13 @@ void SwSectionNode::DelFrames(SwRootFrame const*const /*FIXME TODO*/, bool const
     }
 }
 
-SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
+SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
 {
     // In which array am I: Nodes, UndoNodes?
     const SwNodes& rNds = GetNodes();
 
     // Copy the SectionFrameFormat
-    SwSectionFormat* pSectFormat = pDoc->MakeSectionFormat();
+    SwSectionFormat* pSectFormat = rDoc.MakeSectionFormat();
     pSectFormat->CopyAttrs( *GetSection().GetFormat() );
 
     std::unique_ptr<SwTOXBase> pTOXBase;
@@ -1211,7 +1211,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         OSL_ENSURE( dynamic_cast< const SwTOXBaseSection* >( &GetSection() ) !=  nullptr , "no TOXBaseSection!" );
         SwTOXBaseSection const& rTBS(
             dynamic_cast<SwTOXBaseSection const&>(GetSection()));
-        pTOXBase.reset( new SwTOXBase(rTBS, pDoc) );
+        pTOXBase.reset( new SwTOXBase(rTBS, &rDoc) );
     }
 
     SwSectionNode *const pSectNd =
@@ -1225,14 +1225,14 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     if (SectionType::ToxContent != GetSection().GetType())
     {
         // Keep the Name for Move
-        if( &rNds.GetDoc() == pDoc && pDoc->IsCopyIsMove() )
+        if( &rNds.GetDoc() == &rDoc && rDoc.IsCopyIsMove() )
         {
             pNewSect->SetSectionName( GetSection().GetSectionName() );
         }
         else
         {
             const OUString sSectionName(GetSection().GetSectionName());
-            pNewSect->SetSectionName(pDoc->GetUniqueSectionName( &sSectionName ));
+            pNewSect->SetSectionName(rDoc.GetUniqueSectionName( &sSectionName ));
         }
     }
 
@@ -1256,14 +1256,14 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
 
     // Copy the Links/Server
     if( pNewSect->IsLinkType() ) // Add the Link
-        pNewSect->CreateLink( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
+        pNewSect->CreateLink( rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() ? LinkCreateType::Connect : LinkCreateType::NONE );
 
     // If we copy from the Undo as Server, enter it again
     if (m_pSection->IsServer()
-        && pDoc->GetIDocumentUndoRedo().IsUndoNodes(rNds))
+        && rDoc.GetIDocumentUndoRedo().IsUndoNodes(rNds))
     {
         pNewSect->SetRefObject( m_pSection->GetObject() );
-        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( pNewSect->GetObject() );
+        rDoc.getIDocumentLinksAdministration().GetLinkManager().InsertServer( pNewSect->GetObject() );
     }
 
     // METADATA: copy xml:id; must be done after insertion of node
