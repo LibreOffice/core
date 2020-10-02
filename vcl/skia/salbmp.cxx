@@ -282,7 +282,7 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
         --mWriteAccessCount;
 #endif
         mPalette = pBuffer->maPalette;
-        ResetCachedData();
+        ResetToBuffer();
         InvalidateChecksum();
     }
     // Are there any more ground movements underneath us ?
@@ -315,6 +315,13 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
 
     SAL_INFO("vcl.skia.trace", "scale(" << this << "): " << mSize << "/" << mBitCount << "->"
                                         << newSize << ":" << static_cast<int>(nScaleFlag));
+
+    if (mEraseColorSet)
+    { // Simple.
+        mSize = mPixelsSize = newSize;
+        EraseInternal(mEraseColor);
+        return true;
+    }
 
     // The idea here is that the actual scaling will be delayed until the result
     // is actually needed. Usually the scaled bitmap will be drawn somewhere,
@@ -355,8 +362,10 @@ bool SkiaSalBitmap::Scale(const double& rScaleX, const double& rScaleY, BmpScale
     // by mSize != mPixelsSize
     mSize = newSize;
     // Do not reset cached data if mImage is possibly the only data we have.
-    if (mBuffer)
-        ResetCachedData();
+    if (mImage)
+        ResetToSkImage(mImage);
+    else
+        ResetToBuffer();
     // The rest will be handled when the scaled bitmap is actually needed,
     // such as in EnsureBitmapData() or GetSkImage().
     return true;
@@ -417,6 +426,7 @@ bool SkiaSalBitmap::InterpretAs8Bit()
         mBitCount = 8;
         ComputeScanlineSize();
         mPalette = Bitmap::GetGreyPalette(256);
+        EraseInternal(mEraseColor);
         SAL_INFO("vcl.skia.trace", "interpretas8bit(" << this << ") with erase color");
         return true;
     }
@@ -447,10 +457,16 @@ bool SkiaSalBitmap::Erase(const Color& color)
     // Optimized variant, just remember the color and apply it when needed,
     // which may save having to do format conversions (e.g. GetSkImage()
     // may directly erase the SkImage).
+    EraseInternal(color);
+    SAL_INFO("vcl.skia.trace", "erase(" << this << ")");
+    return true;
+}
+
+void SkiaSalBitmap::EraseInternal(const Color& color)
+{
     ResetAllData();
     mEraseColorSet = true;
     mEraseColor = color;
-    return true;
 }
 
 SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
@@ -810,7 +826,7 @@ bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
     return SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)) == 0;
 }
 
-void SkiaSalBitmap::EraseInternal()
+void SkiaSalBitmap::PerformErase()
 {
     if (mPixelsSize.IsEmpty())
         return;
@@ -851,7 +867,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             CreateBitmapData();
         // Unset now, so that repeated call will return mBuffer.
         mEraseColorSet = false;
-        EraseInternal();
+        PerformErase();
         verify();
         SAL_INFO("vcl.skia.trace",
                  "ensurebitmapdata(" << this << ") from erase color " << mEraseColor);
@@ -908,7 +924,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         if (ConserveMemory())
         {
             SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): dropping images");
-            ResetCachedData();
+            ResetToBuffer();
         }
         SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): from alpha image");
         return;
@@ -1035,7 +1051,7 @@ void SkiaSalBitmap::EnsureBitmapData()
     if (ConserveMemory())
     {
         SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << "): dropping images");
-        ResetCachedData();
+        ResetToBuffer();
     }
     SAL_INFO("vcl.skia.trace", "ensurebitmapdata(" << this << ")");
 }
@@ -1057,13 +1073,14 @@ void SkiaSalBitmap::EnsureBitmapUniqueData()
     }
 }
 
-void SkiaSalBitmap::ResetCachedData()
+void SkiaSalBitmap::ResetToBuffer()
 {
     SkiaZone zone;
     // This should never be called to drop mImage if that's the only data we have.
     assert(mBuffer || !mImage);
     mImage.reset();
     mAlphaImage.reset();
+    mEraseColorSet = false;
 }
 
 void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
@@ -1072,6 +1089,7 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
     mBuffer.reset();
     mImage = image;
     mAlphaImage.reset();
+    mEraseColorSet = false;
 }
 
 void SkiaSalBitmap::ResetAllData()
@@ -1080,12 +1098,14 @@ void SkiaSalBitmap::ResetAllData()
     mBuffer.reset();
     mImage.reset();
     mAlphaImage.reset();
+    mEraseColorSet = false;
 }
 
 void SkiaSalBitmap::ResetCachedDataBySize()
 {
     SkiaZone zone;
     assert(mSize == mPixelsSize);
+    assert(!mEraseColorSet);
     if (mImage && (mImage->width() != mSize.getWidth() || mImage->height() != mSize.getHeight()))
         mImage.reset();
     if (mAlphaImage
