@@ -24,6 +24,8 @@ $(eval $(call gb_Library_set_include,vclcanvas,\
     -I$(SRCDIR)/canvas/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,vclcanvas,canvas/inc/pch/precompiled_vclcanvas))
+
 $(eval $(call gb_Library_set_componentfile,vclcanvas,canvas/source/vcl/vclcanvas))
 
 $(eval $(call gb_Library_use_externals,vclcanvas,\
