@@ -42,6 +42,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 
 #include "lngsvcmgr.hxx"
 #include <linguistic/misc.hxx>
@@ -1837,9 +1838,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LngSvcMgr_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<LngSvcMgr> g_Instance(new LngSvcMgr());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new LngSvcMgr()));
 }
 
 
