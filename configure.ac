@@ -2097,7 +2097,9 @@ AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home=<absolute path to JDK home>],
         [If you have installed JDK 9 or later on your system please supply the
          path here. Note that this is not the location of the java command but the
-         location of the entire distribution.]),
+         location of the entire distribution. In case of cross-compiling, this
+         is the JDK of the host os. Use --with-build-platform-configure-options
+         to point to a different build platform JDK.]),
 ,)
 
 AC_ARG_WITH(help,
@@ -4949,12 +4951,8 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
     if test -n "$ENABLE_JAVA"; then
-        if test "$_os" != "iOS" -a "$_os" != "Android"; then
-            if ! echo "$with_build_platform_configure_options" | grep -q -- '--with-jdk-home='; then
-                AC_MSG_ERROR([Missing build JDK (see --with-build-platform-configure-options, --with-jdk-home and use 'cygpath -ms' on Windows)!])
-            fi
-        else
-            test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
+        if test -z "$with_jdk_home"; then
+            AC_MSG_ERROR([Missing host JDK! This can't be detected for the build OS, so you have to specify it with --with-jdk-home!])
         fi
     else
         sub_conf_opts="$sub_conf_opts --without-java"
@@ -7841,11 +7839,11 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
                 JAVA_CLASSPATH_NOT_SET=TRUE
             fi
 
-            AC_MSG_RESULT([found (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
             if test "$_os" = "WINNT"; then
                 JAVA_HOME=`echo $JAVA_HOME | $SED "s,\.[[eE]][[xX]][[eE]]$,,"`
             fi
+            AC_MSG_RESULT([found $JAVA_HOME (JDK $_jdk)])
 
             # set to limit VM usage for JunitTests
             JAVAIFLAGS=-Xmx64M
