@@ -541,15 +541,6 @@ AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
 
 } // extern "C"
 
-#if !GTK_CHECK_VERSION(3, 20, 0)
-enum GdkDragCancelReason
-{
-  GDK_DRAG_CANCEL_NO_TARGET,
-  GDK_DRAG_CANCEL_USER_CANCELLED,
-  GDK_DRAG_CANCEL_ERROR
-};
-#endif
-
 #if !GTK_CHECK_VERSION(3, 22, 0)
 enum GdkAnchorHints
 {

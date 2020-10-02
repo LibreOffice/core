@@ -528,12 +528,7 @@ void GtkSalData::Init()
           "min-height: 18px;"
           "min-width: 18px;"
           "}";
-        static const gchar olddata[] = "button.small-button, toolbar.small-button button { "
-          "padding: 0;"
-          "margin-left: 0px;"
-          "margin-right: 0px;"
-          "}";
-        gtk_css_provider_load_from_data(pSmallButtonProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+        gtk_css_provider_load_from_data(pSmallButtonProvider, data, -1, nullptr);
 
         gtk_style_context_add_provider_for_screen(pScreen, GTK_STYLE_PROVIDER(pSmallButtonProvider),
             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
