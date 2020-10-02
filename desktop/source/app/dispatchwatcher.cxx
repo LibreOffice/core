@@ -216,10 +216,10 @@ void scriptCat(const Reference< XModel >& xDoc )
             {
                 OUString &rObjectName = aObjectNames[j];
 
-                OUString aCodeString;
                 try
                 {
                     Any aCode = xContainer->getByName( rObjectName );
+                    OUString aCodeString;
 
                     if (! (aCode >>= aCodeString ) )
                         std::cout << "[" << rObjectName << "] - error fetching code\n";

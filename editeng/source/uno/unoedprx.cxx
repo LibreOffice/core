@@ -953,7 +953,6 @@ sal_Int32 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_Int32 nLine
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
 
-    SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
     sal_Int32 nCurrLine;
     sal_Int32 nCurrIndex, nLastIndex;
@@ -967,6 +966,7 @@ sal_Int32 SvxAccessibleTextAdapter::GetLineLen( sal_Int32 nPara, sal_Int32 nLine
     aEndIndex.SetEEIndex( nPara, nCurrIndex, *this );
     if( nLine > 0 )
     {
+        SvxAccessibleTextIndex aStartIndex;
         aStartIndex.SetEEIndex( nPara, nLastIndex, *this );
 
         return aEndIndex.GetIndex() - aStartIndex.GetIndex();
