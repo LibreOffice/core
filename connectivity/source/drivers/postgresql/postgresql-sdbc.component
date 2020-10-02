@@ -11,7 +11,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.connectivity.pq.Driver.noext"
-    constructor="connectivity_pq_sdbc_driver_get_implementation">
+    constructor="connectivity_pq_sdbc_driver_get_implementation" single-instance="true">
     <service name="com.sun.star.sdbc.Driver"/>
   </implementation>
 </component>
