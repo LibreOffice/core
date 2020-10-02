@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <sal/log.hxx>
-#include <rtl/ref.hxx>
 
 #include <uno/dispatcher.h>
 #include <uno/data.h>
@@ -33,7 +32,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
@@ -876,10 +875,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_invocation_adapter_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<stoc_invadp::FactoryImpl> g_Instance(new stoc_invadp::FactoryImpl(context));
-
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new stoc_invadp::FactoryImpl(context)));
 }
 
 

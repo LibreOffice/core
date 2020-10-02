@@ -20,7 +20,6 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <uno/dispatcher.hxx>
 #include <uno/data.h>
@@ -31,6 +30,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
@@ -401,21 +401,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_FactoryImpl_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    Reference< XInterface > xRet;
-    static osl::Mutex s_mutex;
-    // note: don't use ::osl::Mutex::getGlobalMutex() here, it deadlocks
-    //       with getImplHelperInitMutex()
-    ::osl::MutexGuard guard(s_mutex);
-    static WeakReference < XInterface > rwInstance;
-    xRet = rwInstance;
-
-    if (! xRet.is())
-    {
-        xRet = static_cast< ::cppu::OWeakObject * >(new FactoryImpl);
-        rwInstance = xRet;
-    }
-    xRet->acquire();
-    return xRet.get();
+    return cppu::acquire(static_cast< ::cppu::OWeakObject * >(new FactoryImpl));
 }
 
 

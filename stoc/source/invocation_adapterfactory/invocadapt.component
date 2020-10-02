@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.InvocationAdapterFactory"
-    constructor="stoc_invocation_adapter_get_implementation">
+    constructor="stoc_invocation_adapter_get_implementation" single-instance="true">
     <service name="com.sun.star.script.InvocationAdapterFactory"/>
   </implementation>
 </component>
