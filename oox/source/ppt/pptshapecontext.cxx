@@ -68,14 +68,13 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
             OptValue< sal_Int32 > oSubType( rAttribs.getToken( XML_type) );
             sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
-            sal_Int32 nSubTypeIndex;
             oox::drawingml::ShapePtr pTmpPlaceholder;
 
             mpShapePtr->setSubType( nSubType );
 
             if( rAttribs.hasAttribute( XML_idx ) )
             {
-                nSubTypeIndex = rAttribs.getString( XML_idx ).get().toInt32();
+                sal_Int32 nSubTypeIndex = rAttribs.getString( XML_idx ).get().toInt32();
                 mpShapePtr->setSubTypeIndex( nSubTypeIndex );
 
                 if(!oSubType.has() && pMasterPersist)
