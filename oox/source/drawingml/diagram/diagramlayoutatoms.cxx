@@ -321,11 +321,11 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr
                 awt::Size aCurrSize(aChildSize);
                 // aShapeWidths items are a portion of nMaxRowWidth. We want the same ratio,
                 // based on the original parent width, ignoring the aspect ratio request.
-                double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
                 bool bWidthsFromConstraints
                     = nCount >= 2 && rShape->getChildren()[1]->getDataNodeType() == XML_sibTrans;
-                if (bWidthsFromConstraints)
+                if (bWidthsFromConstraints && nMaxRowWidth)
                 {
+                    double fWidthFactor = static_cast<double>(aShapeWidths[index]) / nMaxRowWidth;
                     // We can only work from constraints if spacing is represented by a real
                     // child shape.
                     aCurrSize.Width = rShape->getSize().Width * fWidthFactor;
