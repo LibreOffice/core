@@ -222,11 +222,27 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
              if (nWhich == RES_TXTATR_CHARFMT)
              {
                  const SfxPoolItem* pINetItem = SearchPoolItems(rItems, RES_TXTATR_INETFMT);
+
                  if (pINetItem)
                  {
+                     const SwFormatINetFormat& rINet = static_cast<const SwFormatINetFormat&>(*pINetItem);
+
+                     if ( rINet.GetValue().isEmpty() )
+                         continue;
+
+                     const sal_uInt16 nId = rINet.GetINetFormatId();
+                     const OUString& rStr = rINet.GetINetFormat();
+
+                     if (rStr.isEmpty())
+                     {
+                         SAL_WARN("sw.ww8", "MSWordExportBase::ExportPoolItemsToCHP(..) - missing unvisited character format at hyperlink attribute" );
+                     }
+
+                     const SwCharFormat* pINetFormat = IsPoolUserFormat( nId )
+                        ? m_pDoc->FindCharFormatByName( rStr )
+                        : m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+
                      const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
-                     const SwCharFormat* pINetFormat = m_pDoc->FindCharFormatByName(
-                         static_cast<const SwFormatINetFormat&>(*pINetItem).GetINetFormat());
                      ww8::PoolItems aCharItems, aINetItems;
                      GetPoolItems(pFormat->GetAttrSet(), aCharItems, false);
                      GetPoolItems(pINetFormat->GetAttrSet(), aINetItems, false);
