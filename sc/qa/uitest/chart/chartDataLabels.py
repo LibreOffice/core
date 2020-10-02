@@ -343,8 +343,9 @@ class chartDataLabels(UITestCase):
     self.assertEqual("0.5", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
     self.assertEqual("2.89", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-    xCanBtn = xDialog.getChild("cancel")
-    xCanBtn.executeAction("CLICK", tuple())
+    # Use OK button in order to test tdf#137165
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
 
     xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
     xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
@@ -356,8 +357,8 @@ class chartDataLabels(UITestCase):
     self.assertEqual("0.4", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
     self.assertEqual("2.79", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-    xCanBtn = xDialog.getChild("ok")
-    xCanBtn.executeAction("CLICK", tuple())
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
 
     self.ui_test.close_doc()
 
