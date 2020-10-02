@@ -313,6 +313,30 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <value xml:lang="en-US" install:module="unxwnt">.uno:OptionsTreeDialog</value>
         </prop>
       </node>
+      <node oor:name="1_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:SidebarDeck.PropertyDeck</value>
+        </prop>
+      </node>
+      <node oor:name="2_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
+        </prop>
+      </node>
+      <node oor:name="3_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
+        </prop>
+      </node>
+      <node oor:name="4_MOD1_MOD2" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Modules">
       <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -550,6 +574,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.ScFunctionsDeck</value>
+          </prop>
+        </node>
         <node oor:name="O_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -1548,6 +1578,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.ShapesDeck</value>
+          </prop>
+        </node>
         <node oor:name="1_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2795,6 +2831,30 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         </node>
       </node>
       <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.ShapesDeck</value>
+          </prop>
+        </node>
+        <node oor:name="6_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.SdSlideTransitionDeck</value>
+          </prop>
+        </node>
+        <node oor:name="7_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.SdCustomAnimationDeck</value>
+          </prop>
+        </node>
+        <node oor:name="8_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.SdMasterPagesDeck</value>
+          </prop>
+        </node>
         <node oor:name="PAGEDOWN" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5858,6 +5918,18 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Grow</value>
           </prop>
         </node>
+        <node oor:name="5_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.WriterPageDeck</value>
+          </prop>
+        </node>
+        <node oor:name="6_MOD1_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.InspectorDeck</value>
+          </prop>
+        </node>
         <node oor:name="ADD_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5912,12 +5984,6 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:JustifyPara</value>
             <value xml:lang="en-US">.uno:Bold</value>
             <value xml:lang="es">vnd.sun.star.findbar:FocusToFindbar</value>
-          </prop>
-        </node>
-        <node oor:name="5_MOD1_MOD2" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:InspectorDeck</value>
           </prop>
         </node>
         <node oor:name="B_MOD1_MOD2" oor:op="replace">

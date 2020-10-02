@@ -1011,8 +1011,6 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     GroupId = SfxGroupId::Format;
 ]
 
-
-
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
 ()
 [
@@ -4282,6 +4280,22 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
     GroupId = ;
 ]
 
+SfxVoidItem SidebarDeck SID_SIDEBAR_DECK
+(SfxStringItem SidebarDeck SID_SIDEBAR_DECK)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
 
 SfxTemplateItem StyleApply SID_STYLE_APPLY
 (SfxStringItem Template SID_STYLE_APPLY,SfxUInt16Item Family SID_STYLE_FAMILY,SfxStringItem FamilyName SID_STYLE_FAMILYNAME,SfxStringItem Style SID_APPLY_STYLE)

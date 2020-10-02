@@ -82,7 +82,8 @@ enum class SfxCfgKind
     GROUP_SCRIPTCONTAINER    = 3,
     FUNCTION_SCRIPT          = 4,
     GROUP_STYLES             = 5,
-    GROUP_ALLFUNCTIONS       = 6
+    GROUP_ALLFUNCTIONS       = 6,
+    GROUP_SIDEBARDECKS       = 7
 };
 
 struct SfxGroupInfo_Impl

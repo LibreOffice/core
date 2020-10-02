@@ -2917,6 +2917,11 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarDeck.ScFunctionsDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">ScFunctionsDeck</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

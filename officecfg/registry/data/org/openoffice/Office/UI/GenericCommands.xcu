@@ -5426,6 +5426,9 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         <prop oor:name="TooltipLabel" oor:type="xs:string">
           <value xml:lang="en-US">Open Clip Art and Media Gallery</value>
         </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:Sidebar.GalleryDeck</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
         </prop>
@@ -7349,6 +7352,26 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarDeck.PropertyDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">PropertyDeck</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarDeck.StyleListDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">StyleListDeck</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarDeck.GalleryDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">GalleryDeck</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarDeck.NavigatorDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">NavigatorDeck</value>
         </prop>
       </node>
     </node>
