@@ -53,7 +53,6 @@ void DialogSaveTest::test()
     // be locked anyway:
     SolarMutexReleaser rel;
 
-    const OUString sStandard("Standard");
     const OUString aFileName(m_directories.getURLFromWorkdir("CppunitTest/testNolibSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
@@ -66,6 +65,7 @@ void DialogSaveTest::test()
         uno::Reference< script::XStorageBasedLibraryContainer > xStorDlgLib(xDocScr->getDialogLibraries());
         CPPUNIT_ASSERT(xStorDlgLib.is());
         uno::Reference< script::XLibraryContainer > xDlgLib(xStorDlgLib, UNO_QUERY_THROW);
+        const OUString sStandard("Standard");
         xBasLib->loadLibrary(sStandard);
         xDlgLib->loadLibrary(sStandard);
         CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(sStandard));

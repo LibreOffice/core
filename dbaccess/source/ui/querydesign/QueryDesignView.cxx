@@ -238,7 +238,6 @@ namespace
         bool bErg = false;
 
         OUString aTableRange,aColumnName;
-        sal_uInt16 nCntAccount;
         ::connectivity::OSQLParseTreeIterator& rParseIter = static_cast<OQueryController&>(_pView->getController()).getParseIterator();
         rParseIter.getColumnRange( pColumnRef, aColumnName, aTableRange );
 
@@ -249,6 +248,7 @@ namespace
         }
         if ( !bErg )
         {
+            sal_uInt16 nCntAccount;
             bErg = static_cast<OQueryTableView*>(_pView->getTableView())->FindTableFromField(aColumnName, _rDragInfo, nCntAccount);
             if ( !bErg )
                 bErg = _pView->HasFieldByAliasName(aColumnName, _rDragInfo);
