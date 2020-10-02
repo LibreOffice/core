@@ -252,7 +252,8 @@ void SnakeAlg::layoutShapeChildren(const AlgAtom::ParamMap& rMap, const ShapePtr
 
                 nRowWidth += aShapeWidths[i];
             }
-            if ((fShapeHeight * nRow) / nRowWidth >= fAspectRatio)
+            double fTotalShapesHeight = fShapeHeight * nRow;
+            if (nRowWidth && fTotalShapesHeight / nRowWidth >= fAspectRatio)
             {
                 if (nRowWidth > nMaxRowWidth)
                 {
