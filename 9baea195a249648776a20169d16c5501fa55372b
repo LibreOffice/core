@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb2ebf67_ee2261f3",
+        "filename": "sw/source/core/unocore/unoframe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-02T14:19:01Z",
+      "side": 1,
+      "message": "Please, copy also the important notice about the dirty hack to mess UNO:\n\n    // Hack to support hidden property to transfer textDirection",
+      "revId": "9baea195a249648776a20169d16c5501fa55372b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
