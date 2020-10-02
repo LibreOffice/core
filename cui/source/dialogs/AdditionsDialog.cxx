@@ -20,6 +20,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
@@ -529,15 +530,15 @@ AdditionsDialog::getInstalledExtensions()
     }
     catch (const deployment::DeploymentException&)
     {
-        SAL_WARN("cui.dialogs", "Deployment Exception");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
     }
     catch (const ucb::CommandFailedException&)
     {
-        SAL_WARN("cui.dialogs", "Command Failed Exception");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
     }
     catch (const ucb::CommandAbortedException&)
     {
-        SAL_WARN("cui.dialogs", "Command Aborted Exception");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
     }
     catch (const lang::IllegalArgumentException& e)
     {
@@ -783,31 +784,31 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     }
     catch (const ucb::CommandFailedException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension CommandFailedException occurred.");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const ucb::CommandAbortedException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension CommandAbortedException occurred.");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const deployment::DeploymentException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension DeploymentException occurred.");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const lang::IllegalArgumentException)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension IllegalArgumentException occurred.");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }
     catch (const css::uno::Exception)
     {
-        SAL_WARN("cui.dialogs", "Additions: addExtension Exception occurred.");
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "");
         m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
         m_xButtonInstall->set_sensitive(true);
     }

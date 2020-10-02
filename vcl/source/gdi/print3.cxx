@@ -28,6 +28,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <printdlg.hxx>
 #include <svdata.hxx>
@@ -261,7 +262,7 @@ static OUString queryFile( Printer const * pPrinter )
     }
     catch (const css::lang::IllegalArgumentException&)
     {
-        SAL_WARN( "vcl.gdi", "caught IllegalArgumentException when registering filter" );
+        TOOLS_WARN_EXCEPTION( "vcl.gdi", "caught IllegalArgumentException when registering filter" );
     }
 
     if( xFilePicker->execute() == css::ui::dialogs::ExecutableDialogResults::OK )

@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <memory>
 #include <vector>
 #include "webdavdatasupplier.hxx"
@@ -378,7 +379,7 @@ bool DataSupplier::getData()
         }
         catch ( DAVException & )
         {
-            SAL_WARN( "ucb.ucp.webdav", "Running PROPFIND: DAVException" );
+            TOOLS_WARN_EXCEPTION( "ucb.ucp.webdav", "Running PROPFIND: DAVException" );
             m_pImpl->m_bThrowException = true;
         }
 

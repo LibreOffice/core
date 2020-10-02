@@ -425,7 +425,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             }
             catch(const uno::Exception&)
             {
-                SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::StartElement" );
+                TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::StartElement" );
             }
         }
     }
@@ -844,7 +844,7 @@ void SchXMLChartContext::EndElement()
             catch(const uno::Exception&)
             {
                 //try to fallback to internal data
-                SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
+                TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
@@ -859,7 +859,7 @@ void SchXMLChartContext::EndElement()
                         }
                         catch(const uno::Exception&)
                         {
-                            SAL_WARN("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
+                            TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
                     }
                 }
@@ -1015,7 +1015,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
     }
     catch(const uno::Exception&)
     {
-        SAL_WARN("xmloff.chart", "Exception while merging series for stock chart" );
+        TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception while merging series for stock chart" );
     }
 }
 

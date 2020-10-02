@@ -2030,7 +2030,7 @@ void ToolbarSaveInData::SetSystemStyle(
     catch ( uno::Exception& )
     {
         // do nothing, a default value is returned
-        SAL_WARN("cui.customize", "Exception setting toolbar style");
+        TOOLS_WARN_EXCEPTION("cui.customize", "Exception setting toolbar style");
     }
 }
 

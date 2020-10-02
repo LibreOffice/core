@@ -181,7 +181,7 @@ namespace svt
             }
             catch( CommandAbortedException& )
             {
-                SAL_WARN( "svtools.contnr", "createCursor: CommandAbortedException" );
+                TOOLS_WARN_EXCEPTION( "svtools.contnr", "");
             }
             catch( Exception& )
             {

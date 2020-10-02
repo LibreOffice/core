@@ -1630,9 +1630,9 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
                        || xMetaInf->hasByName("packagesignatures.xml");
             }
         }
-        catch (const css::io::IOException& rException)
+        catch (const css::io::IOException&)
         {
-            SAL_WARN("sfx.doc", "HasSignatureStream: failed to open META-INF: " << rException.Message);
+            TOOLS_WARN_EXCEPTION("sfx.doc", "HasSignatureStream: failed to open META-INF");
         }
     }
 

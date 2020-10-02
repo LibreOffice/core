@@ -73,6 +73,7 @@
 #include <sfx2/viewsh.hxx>
 #include <editeng/editview.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/diagnose_ex.h>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;
@@ -1935,7 +1936,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
     }
     catch( Exception& )
     {
-        SAL_WARN( "svx", "sdr::table::SvxTableController::MergeRange(), exception caught!" );
+        TOOLS_WARN_EXCEPTION( "svx", "" );
     }
 }
 

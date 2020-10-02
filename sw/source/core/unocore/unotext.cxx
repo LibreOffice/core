@@ -36,6 +36,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cmdid.h>
 #include <unotextbodyhf.hxx>
@@ -2075,10 +2076,9 @@ lcl_ApplyCellProperties(
             {
                 xCellPS->setPropertyValue(rName, rValue);
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN( "sw.uno", "Exception when getting PropertyState: "
-                        + rName + ". Message: " + e.Message );
+                TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when getting PropertyState: " << rName );
             }
         }
     }
@@ -2182,10 +2182,9 @@ SwXText::convertToTable(
             {
                 xPrSet->setPropertyValue(rTableProperty.Name, rTableProperty.Value);
             }
-            catch (const uno::Exception& e)
+            catch (const uno::Exception&)
             {
-                SAL_WARN( "sw.uno", "Exception when setting property: "
-                    + rTableProperty.Name + ". Message: " + e.Message );
+                TOOLS_WARN_EXCEPTION( "sw.uno", "Exception when setting property: " << rTableProperty.Name  );
             }
         }
 

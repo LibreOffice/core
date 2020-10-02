@@ -27,6 +27,7 @@
 #include <sal/log.hxx>
 #include <uno/mapping.hxx>
 #include <algorithm>
+#include <tools/diagnose_ex.h>
 
 namespace connectivity::hsqldb
 {
@@ -308,7 +309,7 @@ namespace connectivity::hsqldb
                         }
                         catch(const Exception& e)
                         {
-                            SAL_WARN( "connectivity.hsqldb", "[HSQLDB-SDBC] caught an exception while opening a stream\n"
+                            TOOLS_WARN_EXCEPTION( "connectivity.hsqldb", "[HSQLDB-SDBC] caught an exception while opening a stream\n"
                                 "Name: " << sName
                                 << "\nMode: 0x" <<  ( _nMode < 16 ? "0" : "")
                                 << std::hex << _nMode );

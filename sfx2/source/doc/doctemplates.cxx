@@ -961,10 +961,10 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
                 }
                 catch( PropertyExistException& ) {}
                 catch( IllegalTypeException& ) {
-                    SAL_WARN( "sfx.doc", "IllegalTypeException" );
+                    TOOLS_WARN_EXCEPTION( "sfx.doc", "" );
                 }
                 catch( IllegalArgumentException& ) {
-                    SAL_WARN( "sfx.doc", "IllegalArgumentException" );
+                    TOOLS_WARN_EXCEPTION( "sfx.doc", "" );
                 }
             }
         }
@@ -2308,7 +2308,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
     }
     catch (ContentCreationException&)
     {
-        SAL_WARN( "sfx.doc", "addHierGroup: ContentCreationException" );
+        TOOLS_WARN_EXCEPTION( "sfx.doc", "" );
     }
     catch (Exception&) {}
 

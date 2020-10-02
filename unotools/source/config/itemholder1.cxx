@@ -59,8 +59,7 @@ ItemHolder1::ItemHolder1()
         if(bMessage)
         {
             bMessage = false;
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "unotools", "CreateInstance with arguments exception: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION( "unotools", "CreateInstance with arguments");
         }
     }
 #else

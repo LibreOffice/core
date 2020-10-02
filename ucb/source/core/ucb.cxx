@@ -42,6 +42,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/macros.hxx>
+#include <tools/diagnose_ex.h>
 #include "identify.hxx"
 #include "ucbcmds.hxx"
 
@@ -847,14 +848,14 @@ bool UniversalContentBroker::getContentProviderData(
     }
     catch (const uno::RuntimeException&)
     {
-        SAL_WARN( "ucb", "caught RuntimeException!" );
+        TOOLS_WARN_EXCEPTION( "ucb", "" );
         return false;
     }
     catch (const uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
-        SAL_WARN( "ucb", "caught Exception!" );
+        TOOLS_WARN_EXCEPTION( "ucb", "" );
         return false;
     }
 
