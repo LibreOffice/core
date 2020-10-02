@@ -1430,7 +1430,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             sw::mark::DateFieldmark& rDateField = dynamic_cast<sw::mark::DateFieldmark&>(*pFieldBM);
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), &rDateField, GetView().GetDocShell()->GetDoc()));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateDateFormFieldDialog(rWrtSh.GetView().GetFrameWeld(), &rDateField, *GetView().GetDocShell()->GetDoc()));
             if (pDlg->Execute() == RET_OK)
             {
                 rDateField.Invalidate();
