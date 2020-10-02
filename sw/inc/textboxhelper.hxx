@@ -96,7 +96,7 @@ public:
     static bool isTextBox(const SwFrameFormat* pFormat, sal_uInt16 nType);
 
     /// Count number of shapes in the document, excluding TextBoxes.
-    static sal_Int32 getCount(const SwDoc* pDoc);
+    static sal_Int32 getCount(const SwDoc& rDoc);
     /// Count number of shapes on the page, excluding TextBoxes.
     static sal_Int32 getCount(SdrPage const* pPage);
     /// Get a shape by index, excluding TextBoxes.

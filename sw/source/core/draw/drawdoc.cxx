@@ -31,21 +31,19 @@
 using namespace com::sun::star;
 
 // Constructor
-SwDrawModel::SwDrawModel(SwDoc *const pDoc)
-:   FmFormModel(
-        &pDoc->GetAttrPool(),
-        pDoc->GetDocShell())
-    , m_pDoc( pDoc )
+SwDrawModel::SwDrawModel(SwDoc& rDoc)
+    : FmFormModel(&rDoc.GetAttrPool(), rDoc.GetDocShell())
+    , m_rDoc(rDoc)
 {
     SetScaleUnit( MapUnit::MapTwip );
     SetSwapGraphics();
 
     // use common InitDrawModelAndDocShell which will set the associations as needed,
     // including SvxColorTableItem  with WhichID SID_COLOR_TABLE
-    InitDrawModelAndDocShell(m_pDoc->GetDocShell(), this);
+    InitDrawModelAndDocShell(m_rDoc.GetDocShell(), this);
 
     // copy all the default values to the SdrModel
-    SfxItemPool* pSdrPool = m_pDoc->GetAttrPool().GetSecondaryPool();
+    SfxItemPool* pSdrPool = m_rDoc.GetAttrPool().GetSecondaryPool();
     if( pSdrPool )
     {
         const sal_uInt16 aWhichRanges[] =
@@ -55,7 +53,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                 0
             };
 
-        SfxItemPool& rDocPool = m_pDoc->GetAttrPool();
+        SfxItemPool& rDocPool = m_rDoc.GetAttrPool();
         sal_uInt16 nEdtWhich, nSlotId;
         const SfxPoolItem* pItem;
         for( const sal_uInt16* pRangeArr = aWhichRanges;
@@ -74,9 +72,9 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
                 }
     }
 
-    SetForbiddenCharsTable(m_pDoc->GetDocumentSettingManager().getForbiddenCharacterTable());
+    SetForbiddenCharsTable(m_rDoc.GetDocumentSettingManager().getForbiddenCharacterTable());
     // Implementation for asian compression
-    SetCharCompressType( m_pDoc->GetDocumentSettingManager().getCharacterCompressionType() );
+    SetCharCompressType( m_rDoc.GetDocumentSettingManager().getCharacterCompressionType() );
 }
 
 // Destructor
@@ -104,7 +102,7 @@ SdrPage* SwDrawModel::AllocPage(bool bMasterPage)
 
 uno::Reference<embed::XStorage> SwDrawModel::GetDocumentStorage() const
 {
-    return m_pDoc->GetDocStorage();
+    return m_rDoc.GetDocStorage();
 }
 
 uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
