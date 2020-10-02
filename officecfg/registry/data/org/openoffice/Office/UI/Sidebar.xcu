@@ -589,12 +589,12 @@
         </prop>
       </node>
 
-      <node oor:name="GlowPropertyPanel" oor:op="replace">
+      <node oor:name="EffectPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Glow</value>
+          <value xml:lang="en-US">Effect</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>GlowPropertyPanel</value>
+          <value>EffectPropertyPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -608,33 +608,7 @@
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SvxPanelFactory/GlowPropertyPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
-        </prop>
-      </node>
-
-      <node oor:name="SoftEdgePropertyPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Soft Edge</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>SoftEdgePropertyPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>PropertyDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Calc,           Draw,       hidden  ;
-            DrawImpress,    Draw,       hidden  ;
-            DrawImpress,    Graphic,    hidden  ;
-            WriterVariants, Draw,       hidden  ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SvxPanelFactory/SoftEdgePropertyPanel</value>
+          <value>private:resource/toolpanel/SvxPanelFactory/EffectPropertyPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
