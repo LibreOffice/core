@@ -96,6 +96,14 @@ def check_radio_buttons(root):
         if len(radio_underlines) < 1:
             lint_assert(False, "No use_underline in GtkRadioButton with id = '" + radio.attrib['id'] + "'", radio)
 
+def check_adjustments(root):
+    adjustments = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkAdjustment']
+    for adjusment in adjustments:
+        uppers = radio.findall("./property[@name='upper']")
+        assert len(uppers) <= 1
+        if len(uppers) < 1:
+            lint_assert(False, "No upper in GtkAdjustment with id = '" + radio.attrib['id'] + "'", radio)
+
 def check_menu_buttons(root):
     buttons = [element for element in root.findall('.//object') if element.attrib['class'] == "GtkMenuButton"]
     for button in buttons:
