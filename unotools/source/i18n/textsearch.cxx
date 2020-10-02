@@ -34,6 +34,7 @@
 #include <unotools/textsearch.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
@@ -258,7 +259,7 @@ bool TextSearch::SearchForward( const OUString &rStr,
     }
     catch ( Exception& )
     {
-        SAL_WARN( "unotools.i18n", "SearchForward: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return bRet;
 }
@@ -298,7 +299,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
     }
     catch ( Exception& )
     {
-        SAL_WARN( "unotools.i18n", "SearchBackward: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return bRet;
 }

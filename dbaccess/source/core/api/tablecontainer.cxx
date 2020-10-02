@@ -77,7 +77,7 @@ namespace
                 }
                 catch(const Exception&)
                 {
-                    SAL_WARN("dbaccess", "lcl_isPropertySetDefaulted: Exception caught!" );
+                    TOOLS_WARN_EXCEPTION("dbaccess", "" );
                 }
             }
             return ( pIter == pEnd );

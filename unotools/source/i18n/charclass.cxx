@@ -122,7 +122,7 @@ bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isAlpha: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -144,7 +144,7 @@ bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -161,7 +161,7 @@ bool CharClass::isLetter( const OUString& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isLetter: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -183,7 +183,7 @@ bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isDigit: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -200,7 +200,7 @@ bool CharClass::isNumeric( const OUString& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isNumeric: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -222,7 +222,7 @@ bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isAlphaNumeric: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -244,7 +244,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -261,7 +261,7 @@ bool CharClass::isLetterNumeric( const OUString& rStr ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "isLetterNumeric: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return false;
 }
@@ -278,7 +278,7 @@ OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nC
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "titlecase: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return rStr.copy( nPos, nCount );
 }
@@ -295,7 +295,7 @@ OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "uppercase: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return rStr.copy( nPos, nCount );
 }
@@ -312,7 +312,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "lowercase: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return rStr.copy( nPos, nCount );
 }
@@ -329,7 +329,7 @@ sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getType: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return 0;
 }
@@ -346,7 +346,7 @@ css::i18n::DirectionProperty CharClass::getCharacterDirection( const OUString& r
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getCharacterDirection: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return css::i18n::DirectionProperty_LEFT_TO_RIGHT;
 }
@@ -363,7 +363,7 @@ css::i18n::UnicodeScript CharClass::getScript( const OUString& rStr, sal_Int32 n
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getScript: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return UnicodeScript_kBasicLatin;
 }
@@ -380,7 +380,7 @@ sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) co
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getCharacterType: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return 0;
 }
@@ -397,7 +397,7 @@ sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_In
     }
     catch ( const Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getStringType: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return 0;
 }

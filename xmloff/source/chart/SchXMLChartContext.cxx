@@ -105,7 +105,7 @@ void lcl_MoveDataToCandleStickSeries(
     }
     catch(const uno::Exception&)
     {
-        SAL_WARN("xmloff.chart", "Exception caught while moving data to candlestick series" );
+        TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception caught while moving data to candlestick series" );
     }
 }
 

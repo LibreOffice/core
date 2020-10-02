@@ -520,7 +520,7 @@ void CreateCategories(
     }
     catch( uno::Exception & )
     {
-        SAL_WARN("xmloff.chart", "Exception caught while creating Categories" );
+        TOOLS_WARN_EXCEPTION("xmloff.chart", "Exception caught while creating Categories" );
     }
 }
 
