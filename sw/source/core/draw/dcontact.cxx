@@ -728,9 +728,9 @@ SwDrawContact::~SwDrawContact()
     }
 }
 
-void SwDrawContact::GetTextObjectsFromFormat(std::list<SdrTextObj*>& o_rTextObjects, SwDoc* pDoc)
+void SwDrawContact::GetTextObjectsFromFormat(std::list<SdrTextObj*>& o_rTextObjects, SwDoc& rDoc)
 {
-    for(auto& rpFly : *pDoc->GetSpzFrameFormats())
+    for(auto& rpFly : *rDoc.GetSpzFrameFormats())
     {
         if(dynamic_cast<const SwDrawFrameFormat*>(rpFly))
             rpFly->CallSwClientNotify(sw::CollectTextObjectsHint(o_rTextObjects));
