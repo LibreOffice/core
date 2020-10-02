@@ -12,7 +12,6 @@ include $(SRCDIR)/odk/build-examples_common.mk
 $(eval $(call gb_Module_Module,odk))
 
 $(eval $(call gb_Module_add_targets,odk,\
-	$(if $(filter WNT,$(OS)),Package_cli) \
 	$(if $(DOXYGEN),\
 		CustomTarget_doxygen \
 		GeneratedPackage_odk_doxygen \
@@ -34,6 +33,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,odk,\
+	$(if $(filter-out ARM64,$(CPUNAME)),Package_cli) \
 	CustomTarget_config_win \
 	Package_config_win \
 ))
