@@ -3229,8 +3229,8 @@ void SwContentTree::UpdateTracking()
         // assure outline content type is expanded
         // this assumes outline content type is first in treeview
         std::unique_ptr<weld::TreeIter> xFirstEntry(m_xTreeView->make_iterator());
-        m_xTreeView->get_iter_first(*xFirstEntry);
-        m_xTreeView->expand_row(*xFirstEntry);
+        if (m_xTreeView->get_iter_first(*xFirstEntry))
+            m_xTreeView->expand_row(*xFirstEntry);
 
         m_xTreeView->all_foreach([this, nActPos](weld::TreeIter& rEntry){
             bool bRet = false;
