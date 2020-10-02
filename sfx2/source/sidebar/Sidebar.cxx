@@ -42,13 +42,15 @@ void Sidebar::ToggleDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame)
         pViewFrame->ShowChildWindow(SID_SIDEBAR);
 
     if (SidebarController* pController =
-            SidebarController::GetSidebarControllerForFrame(pViewFrame->GetFrame().GetFrameInterface()))
+            SidebarController::GetSidebarControllerForFrame(
+                pViewFrame->GetFrame().GetFrameInterface()))
     {
         if (bInitiallyVisible && pController->IsDeckVisible(rsDeckId))
         {
             // close the sidebar if it was already visible and showing this sidebar deck
             const util::URL aURL(Tools::GetURL(".uno:Sidebar"));
-            css::uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
+            css::uno::Reference<frame::XDispatch> xDispatch(
+                        Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
             if (xDispatch.is())
                 xDispatch->dispatch(aURL, css::uno::Sequence<beans::PropertyValue>());
         }
