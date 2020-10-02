@@ -24,7 +24,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <unotools/tempfile.hxx>
@@ -155,9 +155,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svl_FSStorageFactory_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<FSStorageFactory> g_Instance(new FSStorageFactory(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new FSStorageFactory(context)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
