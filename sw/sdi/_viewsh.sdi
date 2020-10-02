@@ -18,6 +18,10 @@
 
 interface BaseTextEditView
 {
+    SID_WRITERPAGE_DECK
+    [
+        ExecMethod = Execute;
+    ]
     SID_ZOOM_IN
     [
         ExecMethod = Execute ;

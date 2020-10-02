@@ -230,6 +230,10 @@
     // FREE
 #define SID_CUSTOM_ANIMATION_PANEL          (SID_SD_START+183)
 #define SID_MASTER_SLIDES_PANEL             (SID_SD_START+184)
+#define SID_SHAPES_DECK                     (SID_SD_START+185)
+#define SID_SLIDETRANSITION_DECK            (SID_SD_START+186)
+#define SID_CUSTOMANIMATION_DECK            (SID_SD_START+187)
+#define SID_MASTERPAGES_DECK                (SID_SD_START+188)
     // FREE
 // and even more...
 #define ID_VAL_ENDINTENS                    (SID_SD_START+197)

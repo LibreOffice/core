@@ -6468,3 +6468,19 @@ SfxVoidItem AutoSum SID_AUTO_SUM
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Intern;
 ]
+
+SfxVoidItem ScFunctionsDeck SID_FUNCTIONS_DECK
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
