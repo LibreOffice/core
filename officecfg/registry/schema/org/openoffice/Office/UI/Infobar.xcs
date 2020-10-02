@@ -48,6 +48,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="WhatsNew" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Whether an Infobar is shown when the major version number has changed</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
