@@ -156,14 +156,14 @@ private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &) = delete;
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
-    bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
+    bool OldSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
     bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
                    SwUndoTableMerge* );
-    bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
+    bool NewSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
     std::unique_ptr<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
-    void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
+    void InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
     bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
-    bool NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
+    bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
     void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const long nOld, const long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -232,25 +232,25 @@ public:
         return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pUndo ) :
                              OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
-    bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+    bool SplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                    bool bSameHeight )
     {
-        return m_bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
-                           OldSplitRow( pDoc, rBoxes, nCnt, bSameHeight );
+        return m_bNewModel ? NewSplitRow( rDoc, rBoxes, nCnt, bSameHeight ) :
+                           OldSplitRow( rDoc, rBoxes, nCnt, bSameHeight );
     }
     bool PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         SwSelBoxes& rMerged, SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo );
     void ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const;
     void PrepareDeleteCol( long nMin, long nMax );
 
-    bool InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
+    bool InsertCol( SwDoc&, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );
-    bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
+    bool SplitCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { FindSuperfluousRows_( rBoxes, nullptr, nullptr ); }
@@ -275,7 +275,7 @@ public:
     const SwTableBox* GetTableBox( const OUString& rName,
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.
-    bool MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
+    bool MakeCopy( SwDoc&, const SwPosition&, const SwSelBoxes&,
                     bool bCpyName = false ) const;
     // Copy table in this
     bool InsTable( const SwTable& rCpyTable, const SwNodeIndex&,

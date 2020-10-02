@@ -152,7 +152,7 @@ static OUString& lcl_DelTabsAtSttEnd( OUString& rText )
     return rText;
 }
 
-void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
+void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
                         SwTableLine* pLine, SwTableBoxFormat* pBoxFrameFormat,
                         SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt )
@@ -161,7 +161,7 @@ void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
     SwNodeIndex aIdx( *pBox->GetSttNd(), +1 );
     SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
     if( !pCNd )
-        pCNd = pDoc->GetNodes().GoNext( &aIdx );
+        pCNd = rDoc.GetNodes().GoNext( &aIdx );
     OSL_ENSURE( pCNd, "Box with no content node" );
 
     if( pCNd->IsTextNode() )
@@ -173,19 +173,19 @@ void InsTableBox( SwDoc* pDoc, SwTableNode* pTableNd,
                 aAttrSet.Put( SvxColorItem( *pBox->GetSaveUserColor(), RES_CHRATR_COLOR ));
             else
                 aAttrSet.ClearItem( RES_CHRATR_COLOR );
-            pDoc->GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
+            rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
                                     static_cast<SwTextNode*>(pCNd)->GetTextColl(),
                                     &aAttrSet, nInsPos, nCnt );
         }
         else
-            pDoc->GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
+            rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
                                     static_cast<SwTextNode*>(pCNd)->GetTextColl(),
                                     pCNd->GetpSwAttrSet(),
                                     nInsPos, nCnt );
     }
     else
-        pDoc->GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
-                pDoc->GetDfltTextFormatColl(), nullptr,
+        rDoc.GetNodes().InsBoxen( pTableNd, pLine, pBoxFrameFormat,
+                rDoc.GetDfltTextFormatColl(), nullptr,
                 nInsPos, nCnt );
 
     long nRowSpan = pBox->getRowSpan();
