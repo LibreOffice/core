@@ -272,14 +272,15 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
     }
     catch (const beans::UnknownPropertyException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: UnknownPropertyException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
-    catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: WrappedTargetException caught" );
+    catch (const css::lang::WrappedTargetException &)
+    {
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const RuntimeException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::ReadConfigDefaults_Impl: RuntimeException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
 }
 
@@ -303,14 +304,15 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
     }
     catch (const beans::UnknownPropertyException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
-    catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+    catch (const css::lang::WrappedTargetException &)
+    {
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const RuntimeException &)
     {
-        SAL_WARN("cui.options", "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
 }
 
@@ -396,19 +398,19 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
         xChangesBatch->commitChanges();
     }
     catch (const css::lang::IllegalArgumentException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const beans::UnknownPropertyException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const beans::PropertyVetoException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const css::lang::WrappedTargetException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
     catch (const RuntimeException &) {
-        SAL_WARN("cui.options", "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
+        TOOLS_WARN_EXCEPTION("cui.options", "" );
     }
 
     return bModified;

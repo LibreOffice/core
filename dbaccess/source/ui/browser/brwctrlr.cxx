@@ -1859,7 +1859,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             }
             catch(Exception&)
             {
-                SAL_WARN("dbaccess.ui", "Exception caught!");
+                TOOLS_WARN_EXCEPTION("dbaccess.ui", "" );
             }
             break;
         case SID_FM_DELETEROWS:

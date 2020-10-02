@@ -400,7 +400,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source )
         }
         catch(const Exception&)
         {
-            SAL_WARN("connectivity.cpool", "Exception caught");
+            TOOLS_WARN_EXCEPTION("connectivity.cpool", "");
         }
     }
 }

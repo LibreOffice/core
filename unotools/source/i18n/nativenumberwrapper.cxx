@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/i18n/NativeNumberSupplier2.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 
@@ -49,7 +50,7 @@ NativeNumberWrapper::getNativeNumberString(
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getNativeNumberString: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return OUString();
 }
@@ -69,7 +70,7 @@ NativeNumberWrapper::getNativeNumberStringParams(
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "unotools.i18n", "getNativeNumberStringParams: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return OUString();
 }
@@ -86,7 +87,7 @@ NativeNumberWrapper::convertToXmlAttributes(
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "unotools.i18n", "convertToXmlAttributes: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return i18n::NativeNumberXmlAttributes();
 }
@@ -102,7 +103,7 @@ NativeNumberWrapper::convertFromXmlAttributes(
     }
     catch ( const uno::Exception& )
     {
-        SAL_WARN( "unotools.i18n", "convertFromXmlAttributes: Exception caught!" );
+        TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
     }
     return 0;
 }

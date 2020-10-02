@@ -62,7 +62,7 @@ OUString TransliterationWrapper::transliterate(const OUString& rStr, LanguageTyp
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
+            TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
         }
     }
     return sRet;
@@ -80,7 +80,7 @@ OUString TransliterationWrapper::transliterate( const OUString& rStr,
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
+            TOOLS_WARN_EXCEPTION("unotools.i18n", "" );
         }
     }
     return sRet;
