@@ -180,12 +180,11 @@ DeactivateRC SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XGradient> pXGradient;
-    OUString      aString;
     size_t nPos = m_xGradientLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_xGradientLB->GetSelectItemPos();
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
         pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
-        aString = m_xGradientLB->GetItemText( m_xGradientLB->GetSelectedItemId() );
+        OUString aString = m_xGradientLB->GetItemText( m_xGradientLB->GetSelectedItemId() );
         rSet->Put( XFillGradientItem( aString, *pXGradient ) );
     }
     else
