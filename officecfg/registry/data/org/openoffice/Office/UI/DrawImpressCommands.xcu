@@ -440,7 +440,7 @@
       </node>
       <node oor:name=".uno:NewRouting" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Reset Routing</value>
+          <value xml:lang="en-US">Reset line skew</value>
         </prop>
       </node>
       <node oor:name=".uno:DuplicatePage" oor:op="replace">
