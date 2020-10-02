@@ -786,7 +786,15 @@ void SwXMLImport::endDocument()
                 if (!pTextNode->GetText().isEmpty())
                     pDelNd->FormatToTextAttr( pTextNode );
                 else
+                {
                     pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
+                    if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                    {
+                        // MergeListsAtDocumentInsertPosition() will deal with lists below, copy
+                        // paragraph direct formatting otherwise.
+                        pDelNd->CopyCollFormat(*pTextNode);
+                    }
+                }
                 pTextNode->JoinNext();
             }
         }
