@@ -172,9 +172,7 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
 
 namespace {
 
-struct PythonInit
-{
-PythonInit() {
+void pythonInit() {
     if ( Py_IsInitialized()) // may be inited by getComponentContext() already
         return;
 
@@ -228,7 +226,6 @@ PythonInit() {
     // PyThreadAttach below.
     PyThreadState_Delete(tstate);
 }
-};
 
 }
 
@@ -236,8 +233,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 pyuno_Loader_get_implementation(
     css::uno::XComponentContext* ctx , css::uno::Sequence<css::uno::Any> const&)
 {
-    // tdf#114815 thread-safe static to init python only once
-    static PythonInit s_Init;
+    // tdf#114815 init python only once, via single-instace="true" in pythonloader.component
+    pythonInit();
 
     Reference< XInterface > ret;
 
