@@ -6809,11 +6809,12 @@ void DomainMapper_Impl::ExecuteFrameConversion()
 {
     if( m_xFrameStartRange.is() && m_xFrameEndRange.is() && !m_bDiscardHeaderFooter )
     {
+        std::vector<sal_Int32> redPos, redLen;
         try
         {
             uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( GetTopTextAppend(), uno::UNO_QUERY_THROW );
             // convert redline ranges to cursor movement and character length
-            std::vector<sal_Int32> redPos, redLen;
+
             for( size_t i = 0; i < aFramedRedlines.size(); i+=3)
             {
                 uno::Reference< text::XTextRange > xRange;
@@ -6863,7 +6864,20 @@ void DomainMapper_Impl::ExecuteFrameConversion()
         }
 
         m_bIsActualParagraphFramed = false;
-        aFramedRedlines.clear();
+
+        if (redPos.size() == aFramedRedlines.size()/3)
+        {
+            for( sal_Int32 i = aFramedRedlines.size() - 1; i >= 0; --i)
+            {
+                // keep redlines of floating tables to process them in CloseSectionGroup()
+                if ( redPos[i/3] != -1 )
+                {
+                    aFramedRedlines.erase(aFramedRedlines.begin() + i);
+                }
+            }
+        }
+        else
+            aFramedRedlines.clear();
     }
     m_xFrameStartRange = nullptr;
     m_xFrameEndRange = nullptr;
