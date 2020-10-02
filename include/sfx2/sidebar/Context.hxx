@@ -20,9 +20,11 @@
 
 #include <rtl/ustring.hxx>
 
+#include <sfx2/dllapi.h>
+
 namespace sfx2::sidebar
 {
-class Context
+class SFX2_DLLPUBLIC Context
 {
 public:
     OUString msApplication;

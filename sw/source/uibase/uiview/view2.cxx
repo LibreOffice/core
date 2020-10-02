@@ -537,10 +537,13 @@ void SwView::Execute(SfxRequest &rReq)
     bool bIgnore = false;
     switch( nSlot )
     {
+        case SID_WRITERPAGE_DECK:
         case SID_INSPECTOR_DECK:
         {
             OUString deckId;
-            if (nSlot == SID_INSPECTOR_DECK)
+            if (nSlot == SID_WRITERPAGE_DECK)
+                deckId = "WriterPageDeck";
+            else if (nSlot == SID_INSPECTOR_DECK)
                 deckId = "InspectorDeck";
             ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetViewFrame());
         }

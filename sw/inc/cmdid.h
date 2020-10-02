@@ -867,6 +867,7 @@
 #define SID_ATTR_PAGE_FOOTER_LAYOUT     (FN_SIDEBAR + 10)
 #define SID_ATTR_PAGE_MARGIN            (FN_SIDEBAR + 11)
 
+#define SID_WRITERPAGE_DECK             (FN_SIDEBAR + 12)
 #define SID_INSPECTOR_DECK              (FN_SIDEBAR + 13)
 
 //Member IDs for Fill / SetVariable of items

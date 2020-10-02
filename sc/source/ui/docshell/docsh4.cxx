@@ -110,6 +110,8 @@ using namespace ::com::sun::star;
 
 #include <svx/xdef.hxx>
 
+#include <sfx2/sidebar/Sidebar.hxx>
+
 void ScDocShell::AllowLinkUpdate()
 {
     m_aDocument.SetLinkFormulaNeedingCheck(false);
@@ -194,6 +196,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
+        case SID_FUNCTIONS_DECK:
+        {
+            OUString deckId;
+            if (nSlot == SID_FUNCTIONS_DECK)
+                deckId = "ScFunctionsDeck";
+            ::sfx2::sidebar::Sidebar::ToggleDeck(deckId, GetFrame());
+        }
+        break;
         case SID_SC_SETTEXT:
         {
             const SfxPoolItem* pColItem;
