@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.sheet.addin.DateFunctionsImpl"
-    constructor="scaddins_ScaDateAddIn_get_implementation">
+    constructor="scaddins_ScaDateAddIn_get_implementation" single-instance="true">
     <service name="com.sun.star.sheet.AddIn"/>
     <service name="com.sun.star.sheet.addin.DateFunctions"/>
   </implementation>

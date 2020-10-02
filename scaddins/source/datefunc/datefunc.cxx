@@ -23,9 +23,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ref.hxx>
 #include <unotools/resmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <algorithm>
@@ -91,9 +91,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaDateAddIn_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<ScaDateAddIn> g_Instance(new ScaDateAddIn());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new ScaDateAddIn()));
 }
 
 
