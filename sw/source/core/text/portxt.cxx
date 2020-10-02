@@ -583,7 +583,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
             return TextFrameIndex(0);
     }
 
-    if ( InExpGrp() )
+    if ( InExpGrp() || PortionType::InputField == GetWhichPor() )
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
@@ -620,7 +620,7 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
             return 0;
     }
 
-    if ( InExpGrp() )
+    if ( InExpGrp() || PortionType::InputField == GetWhichPor() )
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
@@ -717,13 +717,13 @@ void SwTextInputFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
 bool SwTextInputFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const
 {
     sal_Int32 nIdx(rInf.GetIdx());
-    sal_Int32 nLen(rInf.GetLen());
+    sal_Int32 nLen(GetLen());
     if ( rInf.GetChar( rInf.GetIdx() ) == CH_TXT_ATR_INPUTFIELDSTART )
     {
         ++nIdx;
         --nLen;
     }
-    if (rInf.GetChar(rInf.GetIdx() + rInf.GetLen() - TextFrameIndex(1)) == CH_TXT_ATR_INPUTFIELDEND)
+    if (rInf.GetChar(rInf.GetIdx() + GetLen() - TextFrameIndex(1)) == CH_TXT_ATR_INPUTFIELDEND)
     {
         --nLen;
     }
