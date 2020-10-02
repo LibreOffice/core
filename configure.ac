@@ -699,6 +699,12 @@ cygwin*|interix*)
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
+
+    if test "$host_cpu" = "aarch64"; then
+        enable_gpgmepp=no
+        enable_coinmp=no
+        enable_firebird_sdbc=no
+    fi
     ;;
 
 darwin*|macos*) # macOS
