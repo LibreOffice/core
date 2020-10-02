@@ -93,8 +93,8 @@ public:
     bool unittestHasEraseColor() const { return mEraseColorSet; }
 
 private:
-    // Reset the cached images allocated in GetSkImage()/GetAlphaSkImage().
-    void ResetCachedData();
+    // Reset the state to pixel data (resets cached images allocated in GetSkImage()/GetAlphaSkImage()).
+    void ResetToBuffer();
     // Sets the data only as SkImage (will be converted as needed).
     void ResetToSkImage(sk_sp<SkImage> image);
     // Resets all data that does not match mSize.
@@ -111,7 +111,10 @@ private:
     void CreateBitmapData();
     // Should be called whenever mPixelsSize or mBitCount is set/changed.
     bool ComputeScanlineSize();
-    void EraseInternal();
+    // Sets bitmap to be erased on demand.
+    void EraseInternal(const Color& color);
+    // Sets pixels to the erase color.
+    void PerformErase();
     SkBitmap GetAsSkBitmap() const;
     bool ConserveMemory() const;
     void verify() const
