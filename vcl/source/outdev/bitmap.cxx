@@ -1088,8 +1088,8 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     }
     else if (mpAlphaVDev)
     {
-        aAlphaBitmap = Bitmap(rBitmapEx.GetSizePixel(), 8);
-        aAlphaBitmap.Erase(COL_BLACK);
+        aAlphaBitmap = AlphaMask(rBitmapEx.GetSizePixel());
+        aAlphaBitmap.Erase(COL_BLACK); // opaque
     }
 
     SalBitmap* pSalAlphaBmp = aAlphaBitmap.ImplGetSalBitmap().get();
@@ -1105,8 +1105,8 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     if (mpAlphaVDev)
     {
         // Merge bitmap alpha to alpha device
-        Bitmap aBlack(rBitmapEx.GetSizePixel(), 8);
-        aBlack.Erase(COL_BLACK);
+        AlphaMask aBlack(rBitmapEx.GetSizePixel());
+        aBlack.Erase(0); // opaque
         mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aBlack, aAlphaBitmap));
     }
 
