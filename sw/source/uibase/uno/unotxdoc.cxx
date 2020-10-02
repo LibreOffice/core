@@ -4356,7 +4356,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable 
             break;
             case  SwCreateDrawTable::Defaults:
                 if(!xDrawDefaults.is())
-                    xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(m_pDoc));
+                    xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(*m_pDoc));
                 xRet = xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 0

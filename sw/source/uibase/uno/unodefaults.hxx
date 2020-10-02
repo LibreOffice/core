@@ -25,9 +25,9 @@ class SwDoc;
 
 class SwSvxUnoDrawPool : public SvxUnoDrawPool
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 public:
-    SwSvxUnoDrawPool(SwDoc* pDoc);
+    SwSvxUnoDrawPool(SwDoc& rDoc);
     virtual ~SwSvxUnoDrawPool() throw() override;
 
     virtual SfxItemPool* getModelPool( bool bReadOnly ) throw() override;
