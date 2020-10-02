@@ -110,7 +110,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="mmsendmails|label1">Connection status</property>
+                    <property name="label" translatable="yes" context="mmsendmails|label1">Connection Status</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -303,7 +303,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="mmsendmails|label2">Transfer status</property>
+                    <property name="label" translatable="yes" context="mmsendmails|label2">Transfer Status</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

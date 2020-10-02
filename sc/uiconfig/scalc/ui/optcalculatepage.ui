@@ -65,7 +65,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optcalculatepage|label4">CPU threading settings</property>
+            <property name="label" translatable="yes" context="optcalculatepage|label4">CPU Threading Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -600,7 +600,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optcalculatepage|label5">Formulas wildcards</property>
+            <property name="label" translatable="yes" context="optcalculatepage|label5">Formulas Wildcards</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

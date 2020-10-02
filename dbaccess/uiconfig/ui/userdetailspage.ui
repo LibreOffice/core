@@ -210,7 +210,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="userdetailspage|charsetheader">Data conversion</property>
+            <property name="label" translatable="yes" context="userdetailspage|charsetheader">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -163,7 +163,7 @@ def check_title_labels(root):
         words = re.split(r'[^a-zA-Z0-9:_-]', title.text)
         first = True
         for word in words:
-            if len(word) and word[0].islower() and (word not in IGNORED_WORDS or first):
+            if len(word) and word[0].islower() and (word not in IGNORED_WORDS) and not first:
                 lint_assert(False, "The word '" + word + "' should be capitalized", label)
             first = False
 

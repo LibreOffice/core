@@ -1316,7 +1316,7 @@
                                               <object class="GtkLabel" id="lbLayoutExpander">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
-                                                <property name="label" translatable="yes" context="printdialog|layoutexpander">m_ore</property>
+                                                <property name="label" translatable="yes" context="printdialog|layoutexpander">M_ore</property>
                                                 <property name="use_underline">True</property>
                                               </object>
                                             </child>

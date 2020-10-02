@@ -175,7 +175,7 @@
           <object class="GtkLabel" id="lingumodulesft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optlingupage|lingumodulesft">_Available language modules</property>
+            <property name="label" translatable="yes" context="optlingupage|lingumodulesft">_Available Language Modules</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">lingumodules</property>
             <property name="xalign">0</property>
@@ -347,7 +347,7 @@
           <object class="GtkLabel" id="lingudictsft">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optlingupage|lingudictsft">_User-defined dictionaries</property>
+            <property name="label" translatable="yes" context="optlingupage|lingudictsft">_User-defined Dictionaries</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">lingudicts</property>
             <property name="xalign">0</property>

@@ -355,7 +355,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optfltrembedpage|label5">Lock files</property>
+            <property name="label" translatable="yes" context="optfltrembedpage|label5">Lock Files</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

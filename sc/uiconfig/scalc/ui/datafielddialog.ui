@@ -364,7 +364,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="datafielddialog|label3">Displayed value</property>
+                    <property name="label" translatable="yes" context="datafielddialog|label3">Displayed Value</property>
                   </object>
                 </child>
                 <child internal-child="accessible">

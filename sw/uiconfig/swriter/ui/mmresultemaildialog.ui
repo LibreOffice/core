@@ -353,7 +353,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="mmresultemaildialog|label2">Email options</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|label2">Email Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -501,7 +501,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="mmresultemaildialog|label1">Send records</property>
+                <property name="label" translatable="yes" context="mmresultemaildialog|label1">Send Records</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

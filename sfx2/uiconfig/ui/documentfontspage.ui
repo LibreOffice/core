@@ -70,7 +70,7 @@
           <object class="GtkLabel" id="fontEmbeddingLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="documentfontspage|fontEmbeddingLabel">Font embedding</property>
+            <property name="label" translatable="yes" context="documentfontspage|fontEmbeddingLabel">Font Embedding</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

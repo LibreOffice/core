@@ -272,7 +272,7 @@
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="sanedialog|label1">Scan area</property>
+                        <property name="label" translatable="yes" context="sanedialog|label1">Scan Area</property>
                         <property name="xalign">0</property>
                       </object>
                     </child>

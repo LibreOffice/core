@@ -166,7 +166,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="mmresultprintdialog|label2">Printer options</property>
+                <property name="label" translatable="yes" context="mmresultprintdialog|label2">Printer Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -321,7 +321,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="mmresultprintdialog|label1">Print records</property>
+                <property name="label" translatable="yes" context="mmresultprintdialog|label1">Print Records</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

@@ -188,7 +188,7 @@
           <object class="GtkLabel" id="formatf">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="numberingformatpage|formatf">_Format code</property>
+            <property name="label" translatable="yes" context="numberingformatpage|formatf">_Format Code</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">formatted</property>
             <attributes>
