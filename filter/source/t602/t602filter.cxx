@@ -610,7 +610,6 @@ sal_Int16 T602ImportFilter::readnum(unsigned char *ch, bool show)
 unsigned char T602ImportFilter::Setformat602(const char *cmd)
 {
     unsigned char ch;
-    sal_Int16 i;
 
     ch = Readchar602();
 
@@ -637,7 +636,7 @@ unsigned char T602ImportFilter::Setformat602(const char *cmd)
     else if (cmd[0]=='P' && cmd[1]=='L')  format602.pl = readnum(&ch,false);
     else if (cmd[0]=='P' && cmd[1]=='A') { if(pst.pars) par602(true); }
     else if (cmd[0]=='C' && cmd[1]=='P') {
-        i = readnum(&ch,false);
+        sal_Int16 i = readnum(&ch,false);
         if ((i+pst.pars/2) > (format602.pl-format602.mt-format602.mb))
             if(pst.pars) par602(true);
     }

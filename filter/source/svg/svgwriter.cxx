@@ -342,7 +342,7 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
     if( rFont == rCurFont )
         return;
 
-    OUString  aFontStyle, aTextDecoration;
+    OUString  aFontStyle;
     sal_Int32        nFontWeight;
 
     rCurFont = rFont;
@@ -387,6 +387,7 @@ void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 
     if( mrExport.IsUseNativeTextDecoration() )
     {
+        OUString aTextDecoration;
         if( rFont.GetUnderline() != LINESTYLE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
         {
             if( rFont.GetUnderline() != LINESTYLE_NONE )
@@ -1122,9 +1123,6 @@ bool SVGTextWriter::nextTextPortion()
     mbIsPlaceholderShape = false;
     if( mrTextPortionEnumeration.is() && mrTextPortionEnumeration->hasMoreElements() )
     {
-#if OSL_DEBUG_LEVEL > 0
-        OUString sInfo;
-#endif
         Reference< XPropertySet > xPortionPropSet( mrTextPortionEnumeration->nextElement(), UNO_QUERY );
         Reference< XPropertySetInfo > xPortionPropInfo( xPortionPropSet->getPropertySetInfo() );
         Reference < XTextRange > xPortionTextRange( xPortionPropSet, UNO_QUERY);
@@ -1132,6 +1130,7 @@ bool SVGTextWriter::nextTextPortion()
                 && xPortionPropInfo->hasPropertyByName( "TextPortionType" ) )
         {
 #if OSL_DEBUG_LEVEL > 0
+            OUString sInfo;
             OUString sPortionType;
             if( xPortionPropSet->getPropertyValue( "TextPortionType" ) >>= sPortionType )
             {
@@ -2788,7 +2787,6 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
     bool bCached = false;
     Graphic aGraphic;
-    bool bPNG = false;
     bool bJPG = false;
     if (pShape)
     {
@@ -2798,6 +2796,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
             const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
             if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
             {
+                bool bPNG = false;
                 GfxLink aGfxLink = aGraphic.GetGfxLink();
                 if (aGfxLink.GetType() == GfxLinkType::NativePng)
                 {
