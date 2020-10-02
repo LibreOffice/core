@@ -327,12 +327,11 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     else if ( rHeader.getTct() == 0x0a )
     {
         aProp.Name = "CommandURL";
-        OUString sMenuBar("private:resource/menubar/");
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
         {
-            sMenuBar += pMenu->Name();
+            OUString sMenuBar = "private:resource/menubar/" + pMenu->Name();
             aProp.Value <<= sMenuBar; // name of popup
         }
         nStyle |= ui::ItemStyle::DROP_DOWN;

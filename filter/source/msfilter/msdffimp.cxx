@@ -1117,10 +1117,11 @@ static void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyRe
     sal_uInt32 nPos = rIn.Tell();
     if ( rProperties.IsProperty( DFF_Prop_fillShadeColors ) )
     {
-        sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
+        sal_uInt16 i = 0, nNumElem = 0;
         bool bOk = false;
         if (rProperties.SeekToContent(DFF_Prop_fillShadeColors, rIn))
         {
+            sal_uInt16 nNumElemReserved = 0, nSize = 0;
             rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemReserved ).ReadUInt16( nSize );
             //sanity check that the stream is long enough to fulfill nNumElem * 2 sal_Int32s
             bOk = rIn.remainingSize() / (2*sizeof(sal_Int32)) >= nNumElem;
@@ -2394,11 +2395,11 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         {
             css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
             sal_uInt16 nNumElemVert = 0;
-            sal_uInt16 nNumElemMemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
 
             if ( SeekToContent( DFF_Prop_connectorPoints, rIn ) )
             {
+                sal_uInt16 nNumElemMemVert = 0;
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
                 // If this value is 0xFFF0 then this record is an array of truncated 8 byte elements. Only the 4
                 // low-order bytes are recorded
@@ -2783,7 +2784,6 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
     //So below var is defined.
     sal_Int32 nChgColors = 0;
     sal_Int32 nAngle = GetPropertyValue( DFF_Prop_fillAngle, 0 );
-    sal_Int32 nRotateAngle = 0;
     if(nAngle >= 0)
         nChgColors ^= 1;
 
@@ -2796,7 +2796,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet, sal_uInt32 eMSO_F
     //Rotate angle
     if ( mbRotateGranientFillWithAngle )
     {
-        nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
+        sal_Int32 nRotateAngle = GetPropertyValue( DFF_Prop_Rotation, 0 );
         if(nRotateAngle)//fixed point number
             nRotateAngle = ( static_cast<sal_Int16>( nRotateAngle >> 16) * 100L ) + ( ( ( nRotateAngle & 0x0000ffff) * 100L ) >> 16 );
         nRotateAngle = ( nRotateAngle + 5 ) / 10 ;//round up
@@ -3760,7 +3760,6 @@ static void lcl_ApplyCropping( const DffPropSet& rPropSet, SfxItemSet* pSet, Gra
 SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, const DffObjData& rObjData )
 {
     SdrObject*  pRet = nullptr;
-    OUString    aFileName;
     OUString    aLinkFileName, aLinkFilterName;
     tools::Rectangle   aVisArea;
 
@@ -3771,6 +3770,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
     // Graphic linked
     bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
     {
+        OUString aFileName;
         Graphic aGraf;  // be sure this graphic is deleted before swapping out
         if( SeekToContent( DFF_Prop_pibName, rSt ) )
             aFileName = MSDFFReadZString( rSt, GetPropertyValue( DFF_Prop_pibName, 0 ), true );
@@ -4596,7 +4596,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         // result in wrong positions in Writer and Calc, see tdf#124029.
                         // We workaround this problem, by setting a suitable viewBox.
                         bool bIsImportPPT(GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_PPT);
-                        css::awt::Rectangle aViewBox_LO; // in LO coordinate system
                         if (bIsImportPPT || aPieRect_MS.getWidth() == 0 ||  aPieRect_MS.getHeight() == 0)
                         { // clear item, so that default from EnhancedCustomShapeGeometry is used
                             aGeometryItem.ClearPropertyValue(sViewBox);
@@ -4605,6 +4604,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             double fX((aPieRect_MS.getMinX() - aEllipseRect_MS.getMinX()) / 2.0);
                             double fY((aPieRect_MS.getMinY() - aEllipseRect_MS.getMinY()) / 2.0);
+                            css::awt::Rectangle aViewBox_LO; // in LO coordinate system
                             aViewBox_LO.X = static_cast<sal_Int32>(fX);
                             aViewBox_LO.Y = static_cast<sal_Int32>(fY);
                             aViewBox_LO.Width = static_cast<sal_Int32>(aPieRect_MS.getWidth() / 2.0);
@@ -5797,7 +5797,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
     if (!nOffsDggL)
         return;
 
-    sal_uInt32 nDummy, nOldPos = rStCtrl.Tell();
+    sal_uInt32 nOldPos = rStCtrl.Tell();
 
     if (nOffsDggL == rStCtrl.Seek(nOffsDggL))
     {
@@ -5809,6 +5809,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
         {
             aDggAtomHd.SeekToContent( rStCtrl );
             sal_uInt32 nCurMaxShapeId;
+            sal_uInt32 nDummy;
             rStCtrl.ReadUInt32( nCurMaxShapeId )
                    .ReadUInt32( mnIdClusters )
                    .ReadUInt32( nDummy )
@@ -7144,9 +7145,6 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
                      return xObj;
             }
 
-            // TODO/LATER: ViewAspect must be passed from outside!
-            sal_Int64 nViewAspect = embed::Aspects::MSOLE_CONTENT;
-
             // JP 26.10.2001: Bug 93374 / 91928 the writer
             // objects need the correct visarea needs the
             // correct visarea, but this is not true for
@@ -7158,6 +7156,8 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             // TODO/LATER: it might make sense in future to set the size stored in internal object
             if( !pName && ( sStarName == "swriter" || sStarName == "scalc" ) )
             {
+                // TODO/LATER: ViewAspect must be passed from outside!
+                sal_Int64 nViewAspect = embed::Aspects::MSOLE_CONTENT;
                 MapMode aMapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );
                 Size aSz;
                 if ( rVisArea.IsEmpty() )
@@ -7337,9 +7337,9 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                 if ( nAspect != embed::Aspects::MSOLE_ICON )
                 {
                     // working with visual area can switch the object to running state
-                    awt::Size aAwtSz;
                     try
                     {
+                        awt::Size aAwtSz;
                         // the provided visual area should be used, if there is any
                         if ( rVisArea.IsEmpty() )
                         {
