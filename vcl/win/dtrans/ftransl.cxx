@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
+#include <cppuhelper/weak.hxx>
 #include "ImplHelper.hxx"
 
 #include <shlobj.h>
@@ -540,8 +540,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 dtrans_CDataFormatTranslatorUNO_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<CDataFormatTranslatorUNO> g_Instance(new CDataFormatTranslatorUNO(context));
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new CDataFormatTranslatorUNO(context)));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
