@@ -490,7 +490,7 @@ void OfaTreeOptionsDialog::InitWidgets()
     aSize.setHeight((weld::GetMinimumEditHeight() + 6) * 14);
 #endif
     xTabBox->set_size_request(aSize.Width(), aSize.Height());
-    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 30, aSize.Height());
+    xTreeLB->set_size_request(xTreeLB->get_approximate_digit_width() * 35, aSize.Height());
 }
 
 // Ctor() with Frame -----------------------------------------------------
