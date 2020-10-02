@@ -1121,7 +1121,7 @@
                       <object class="GtkLabel" id="14">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="no">Zoom factor</property>
+                        <property name="label" translatable="no">Zoom Factor</property>
                       </object>
                     </child>
                   </object>
@@ -1257,7 +1257,7 @@
                       <object class="GtkLabel" id="21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="no">View layout</property>
+                        <property name="label" translatable="no">View Layout</property>
                       </object>
                     </child>
                   </object>
@@ -1815,7 +1815,7 @@
                       <object class="GtkLabel" id="label32">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="no">Position and spacing</property>
+                        <property name="label" translatable="no">Position and Spacing</property>
                       </object>
                     </child>
                   </object>

@@ -394,7 +394,7 @@
               <object class="GtkLabel" id="label15">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="optviewpage|label1">Icon size</property>
+                <property name="label" translatable="yes" context="optviewpage|label1">Icon Size</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -473,7 +473,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="optviewpage|label1">Icon style</property>
+                <property name="label" translatable="yes" context="optviewpage|label1">Icon Style</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

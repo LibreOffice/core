@@ -135,7 +135,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="optcompatpage|label2">Global compatibility options</property>
+            <property name="label" translatable="yes" context="optcompatpage|label2">Global Compatibility Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

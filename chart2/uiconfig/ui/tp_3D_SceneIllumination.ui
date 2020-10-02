@@ -308,7 +308,7 @@
               <object class="GtkLabel" id="FT_LIGHTSOURCE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_LIGHTSOURCE">_Light source</property>
+                <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_LIGHTSOURCE">_Light Source</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">BTN_LIGHT_1</property>
                 <property name="xalign">0</property>
@@ -391,7 +391,7 @@
               <object class="GtkLabel" id="FT_AMBIENTLIGHT">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_AMBIENTLIGHT">_Ambient light</property>
+                <property name="label" translatable="yes" context="tp_3D_SceneIllumination|FT_AMBIENTLIGHT">_Ambient Light</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_AMBIENTLIGHT</property>
                 <property name="xalign">0</property>
