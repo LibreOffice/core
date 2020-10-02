@@ -66,7 +66,7 @@ struct DocxSettingsData
 class DocxExport : public MSWordExportBase
 {
     /// Pointer to the filter that owns us.
-    DocxExportFilter *m_pFilter;
+    DocxExportFilter& m_rFilter;
 
     /// Fast serializer for the document output.
     ::sax_fastparser::FSHelperPtr m_pDocumentFS;
@@ -117,8 +117,8 @@ class DocxExport : public MSWordExportBase
 
 public:
 
-    DocxExportFilter& GetFilter() { return *m_pFilter; };
-    const DocxExportFilter& GetFilter() const { return *m_pFilter; };
+    DocxExportFilter& GetFilter() { return m_rFilter; };
+    const DocxExportFilter& GetFilter() const { return m_rFilter; };
 
     const ww8::Frame* GetFloatingTableFrame() const { return m_pFloatingTableFrame; }
 
@@ -273,8 +273,8 @@ public:
     void WriteMainText();
 
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
-    DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument,
-            std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam,
+    DocxExport( DocxExportFilter& rFilter, SwDoc& rDocument,
+            std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM& rOriginalPam,
                bool bDocm, bool bTemplate);
 
     /// Destructor.

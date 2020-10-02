@@ -331,9 +331,9 @@ static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutpu
 {
     const auto& rExport = rDocxAttributeOutput.GetExport();
     // iterate though all SpzFrameFormats and check whether they are anchored to the current text node
-    for( sal_uInt16 nCnt = rExport.m_pDoc->GetSpzFrameFormats()->size(); nCnt; )
+    for( sal_uInt16 nCnt = rExport.m_rDoc.GetSpzFrameFormats()->size(); nCnt; )
     {
-        const SwFrameFormat* pFrameFormat = (*rExport.m_pDoc->GetSpzFrameFormats())[ --nCnt ];
+        const SwFrameFormat* pFrameFormat = (*rExport.m_rDoc.GetSpzFrameFormats())[ --nCnt ];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         const SwPosition* pPosition = rAnchor.GetContentAnchor();
 
@@ -2800,8 +2800,8 @@ bool DocxAttributeOutput::FootnoteEndnoteRefTag()
 
     // output the character style for MS Word's benefit
     const SwEndNoteInfo& rInfo = m_footnoteEndnoteRefTag == XML_footnoteRef ?
-        m_rExport.m_pDoc->GetFootnoteInfo() : m_rExport.m_pDoc->GetEndNoteInfo();
-    const SwCharFormat* pCharFormat = rInfo.GetCharFormat( *m_rExport.m_pDoc );
+        m_rExport.m_rDoc.GetFootnoteInfo() : m_rExport.m_rDoc.GetEndNoteInfo();
+    const SwCharFormat* pCharFormat = rInfo.GetCharFormat( m_rExport.m_rDoc );
     if ( pCharFormat )
     {
         const OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat)));
@@ -4151,7 +4151,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
             // if no compatibilityMode is defined (which now should only happen on a new export to .docx),
             // LO uses a higher compatibility than 2010's 14.
-            sal_Int32 nMode = lcl_getWordCompatibilityMode( *m_rExport.m_pDoc );
+            sal_Int32 nMode = lcl_getWordCompatibilityMode( m_rExport.m_rDoc );
 
             const SwFrameFormat* pFrameFormat = pTableTextNodeInfoInner->getTableBox()->GetFrameFormat();
             if ((0 < nMode && nMode <= 14) && m_tableReference->m_nTableDepth == 0)
@@ -4306,7 +4306,7 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableLine * pTabLine = pTabBox->GetUpper();
 
     // search next Redline
-    const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable();
+    const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
     for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize(); ++nCurRedlinePos )
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
@@ -4350,7 +4350,7 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
 
     // search next Redline
-    const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetExtraRedlineTable();
+    const SwExtraRedlineTable& aExtraRedlineTable = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetExtraRedlineTable();
     for(sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < aExtraRedlineTable.GetSize(); ++nCurRedlinePos )
     {
         SwExtraRedline* pExtraRedline = aExtraRedlineTable.GetRedline(nCurRedlinePos);
@@ -4548,7 +4548,7 @@ DocxStringTokenMap const aExceptionTokens[] = {
 void DocxAttributeOutput::LatentStyles()
 {
     // Do we have latent styles available?
-    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
@@ -4781,7 +4781,7 @@ void DocxAttributeOutput::DocDefaults( )
     StartStyleProperties(false, 0);
 
     for (int i = int(RES_CHRATR_BEGIN); i < int(RES_CHRATR_END); ++i)
-        OutputDefaultItem(m_rExport.m_pDoc->GetDefault(i));
+        OutputDefaultItem(m_rExport.m_rDoc.GetDefault(i));
 
     EndStyleProperties(false);
 
@@ -4793,7 +4793,7 @@ void DocxAttributeOutput::DocDefaults( )
     StartStyleProperties(true, 0);
 
     for (int i = int(RES_PARATR_BEGIN); i < int(RES_PARATR_END); ++i)
-        OutputDefaultItem(m_rExport.m_pDoc->GetDefault(i));
+        OutputDefaultItem(m_rExport.m_rDoc.GetDefault(i));
 
     EndStyleProperties(true);
 
@@ -5505,7 +5505,7 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
     if (!xControlModel.is())
         return false;
 
-    uno::Reference< css::frame::XModel > xModel( m_rExport.m_pDoc->GetDocShell() ? m_rExport.m_pDoc->GetDocShell()->GetModel() : nullptr );
+    uno::Reference< css::frame::XModel > xModel( m_rExport.m_rDoc.GetDocShell() ? m_rExport.m_rDoc.GetDocShell()->GetModel() : nullptr );
     if (!xModel.is())
         return false;
 
@@ -5554,7 +5554,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OSL_ASSERT(pFlyFrameFormat);
 
     // get interoperability information about embedded objects
-    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     auto pProp = std::find_if(aGrabBag.begin(), aGrabBag.end(),
@@ -6135,7 +6135,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         // Write paragraph properties.
         StartParagraphProperties();
         aAttrIter.OutParaAttr(false);
-        SfxItemSet aParagraphMarkerProperties(m_rExport.m_pDoc->GetAttrPool());
+        SfxItemSet aParagraphMarkerProperties(m_rExport.m_rDoc.GetAttrPool());
         EndParagraphProperties(aParagraphMarkerProperties, nullptr, nullptr, nullptr);
 
         do {
@@ -6521,7 +6521,7 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, bool bBreakAfter, const WW
                 // document: the last section is written explicitly in
                 // DocxExport::WriteMainText(), don't duplicate that here.
                 SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetNode());
-                SwNodeIndex aLastNode(m_rExport.m_pDoc->GetNodes().GetEndOfContent(), -1);
+                SwNodeIndex aLastNode(m_rExport.m_rDoc.GetNodes().GetEndOfContent(), -1);
                 bool bEmit = aCurrentNode != aLastNode;
 
                 if (!bEmit)
@@ -6981,7 +6981,7 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
 
 void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, FontPitch pitch )
 {
-    if( !m_rExport.m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
+    if( !m_rExport.m_rDoc.getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
         return; // no font embedding with this document
     EmbedFontStyle( name, XML_embedRegular, family, ITALIC_NONE, WEIGHT_NORMAL, pitch );
     EmbedFontStyle( name, XML_embedBold, family, ITALIC_NONE, WEIGHT_BOLD, pitch );
@@ -8122,10 +8122,10 @@ void DocxAttributeOutput::WriteAnnotationMarks_Impl( std::vector< OUString >& rS
 void DocxAttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
 {
     const SwEndNoteInfo& rInfo = rFootnote.IsEndNote()?
-        m_rExport.m_pDoc->GetEndNoteInfo(): m_rExport.m_pDoc->GetFootnoteInfo();
+        m_rExport.m_rDoc.GetEndNoteInfo(): m_rExport.m_rDoc.GetFootnoteInfo();
 
     // footnote/endnote run properties
-    const SwCharFormat* pCharFormat = rInfo.GetAnchorCharFormat( *m_rExport.m_pDoc );
+    const SwCharFormat* pCharFormat = rInfo.GetAnchorCharFormat( m_rExport.m_rDoc );
 
     OString aStyleId(m_rExport.m_pStyles->GetStyleId(m_rExport.GetId(pCharFormat)));
 
@@ -8134,7 +8134,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
     // remember the footnote/endnote to
     // 1) write the footnoteReference/endnoteReference in EndRunProperties()
     // 2) be able to dump them all to footnotes.xml/endnotes.xml
-    if ( !rFootnote.IsEndNote() && m_rExport.m_pDoc->GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER )
+    if ( !rFootnote.IsEndNote() && m_rExport.m_rDoc.GetFootnoteInfo().m_ePos != FTNPOS_CHAPTER )
         m_pFootnotesList->add( rFootnote );
     else
         m_pEndnotesList->add( rFootnote );
@@ -8210,7 +8210,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     SwTwips nHeight(0);
     if (bFootnotes)
     {
-        const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_pDoc->GetPageDesc(0).GetFootnoteInfo();
+        const SwPageFootnoteInfo& rFootnoteInfo = m_rExport.m_rDoc.GetPageDesc(0).GetFootnoteInfo();
         // Request separator only if both width and thickness are non-zero.
         bSeparator = rFootnoteInfo.GetLineStyle() != SvxBorderLineStyle::NONE
                   && rFootnoteInfo.GetLineWidth() > 0
@@ -8338,9 +8338,9 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
 void DocxAttributeOutput::SectFootnoteEndnotePr()
 {
     if( HasFootnotes())
-        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.m_pDoc->GetFootnoteInfo(), 0 );
+        WriteFootnoteEndnotePr( m_pSerializer, XML_footnotePr, m_rExport.m_rDoc.GetFootnoteInfo(), 0 );
     if( HasEndnotes())
-        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.m_pDoc->GetEndNoteInfo(), 0 );
+        WriteFootnoteEndnotePr( m_pSerializer, XML_endnotePr, m_rExport.m_rDoc.GetEndNoteInfo(), 0 );
 }
 
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
@@ -8519,7 +8519,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
     // But in ODT, zero position could be page margins or paragraph indent according to used settings.
     long tabsOffset = 0;
-    if (m_rExport.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
+    if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
         tabsOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
 
     // clear unused inherited tabs - otherwise the style will add them back in
@@ -9839,7 +9839,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
       m_bIgnoreNextFill(false),
-      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_pDoc, pSerializer)),
+      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(&rExport.m_rDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),

@@ -272,7 +272,7 @@ void RtfAttributeOutput::EndParagraph(ww8::WW8TableNodeInfoInner::Pointer_t pTex
 {
     bool bLastPara = false;
     if (m_rExport.m_nTextTyp == TXT_FTN || m_rExport.m_nTextTyp == TXT_EDN
-        || m_rExport.m_pDoc->IsClipBoard())
+        || m_rExport.m_rDoc.IsClipBoard())
     {
         // We're ending a paragraph that is the last paragraph of a footnote or endnote, or of clipboard.
         bLastPara
@@ -1364,8 +1364,8 @@ void RtfAttributeOutput::SectionType(sal_uInt8 nBreakCode)
 
 void RtfAttributeOutput::SectFootnoteEndnotePr()
 {
-    WriteFootnoteEndnotePr(true, m_rExport.m_pDoc->GetFootnoteInfo());
-    WriteFootnoteEndnotePr(false, m_rExport.m_pDoc->GetEndNoteInfo());
+    WriteFootnoteEndnotePr(true, m_rExport.m_rDoc.GetFootnoteInfo());
+    WriteFootnoteEndnotePr(false, m_rExport.m_rDoc.GetEndNoteInfo());
 }
 
 void RtfAttributeOutput::WriteFootnoteEndnotePr(bool bFootnote, const SwEndNoteInfo& rInfo)
@@ -2849,7 +2849,7 @@ void RtfAttributeOutput::TextFootnote_Impl(const SwFormatFootnote& rFootnote)
     m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
     m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FOOTNOTE);
-    if (rFootnote.IsEndNote() || m_rExport.m_pDoc->GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER)
+    if (rFootnote.IsEndNote() || m_rExport.m_rDoc.GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER)
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FTNALT);
     m_aRun->append(' ');
     WriteTextFootnoteNumStr(rFootnote);
@@ -2932,7 +2932,7 @@ void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 {
     long nOffset = 0;
     // Tabs are absolute by default.
-    if (m_rExport.m_pDoc->getIDocumentSettingAccess().get(
+    if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(
             DocumentSettingId::TABS_RELATIVE_TO_INDENT))
         nOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
 

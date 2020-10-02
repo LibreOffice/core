@@ -44,7 +44,7 @@ SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
 {
     const OUString sPrefix("WW8TempExport" + OUString::number( m_nUniqueList++ ));
     SwNumRule* pMyNumRule =
-            new SwNumRule( m_pDoc->GetUniqueNumRuleName( &sPrefix ),
+            new SwNumRule( m_rDoc.GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     m_pUsedNumTable->push_back( pMyNumRule );
 
@@ -113,7 +113,7 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
     if ( !m_pUsedNumTable )
     {
         m_pUsedNumTable.reset(new SwNumRuleTable);
-        m_pUsedNumTable->insert( m_pUsedNumTable->begin(), m_pDoc->GetNumRuleTable().begin(), m_pDoc->GetNumRuleTable().end() );
+        m_pUsedNumTable->insert( m_pUsedNumTable->begin(), m_rDoc.GetNumRuleTable().begin(), m_rDoc.GetNumRuleTable().end() );
         // Check, if the outline rule is already inserted into <pUsedNumTable>.
         // If yes, do not insert it again.
         bool bOutlineRuleAdded( false );
@@ -124,7 +124,7 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
             {
                 m_pUsedNumTable->erase( m_pUsedNumTable->begin() + n );
             }
-            else if ( &rRule == m_pDoc->GetOutlineNumRule() )
+            else if ( &rRule == m_rDoc.GetOutlineNumRule() )
             {
                 bOutlineRuleAdded = true;
             }
@@ -133,7 +133,7 @@ sal_uInt16 MSWordExportBase::GetNumberingId( const SwNumRule& rNumRule )
         if ( !bOutlineRuleAdded )
         {
             // still need to paste the OutlineRule
-            SwNumRule* pR = m_pDoc->GetOutlineNumRule();
+            SwNumRule* pR = m_rDoc.GetOutlineNumRule();
             m_pUsedNumTable->push_back( pR );
         }
     }
@@ -545,7 +545,7 @@ void MSWordExportBase::NumberingLevel(
     const SfxItemSet* pOutSet = nullptr;
 
     // cbGrpprlChpx
-    SfxItemSet aSet( m_pDoc->GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
+    SfxItemSet aSet( m_rDoc.GetAttrPool(), svl::Items<RES_CHRATR_BEGIN,
                                           RES_CHRATR_END>{} );
     if (rFormat.GetCharFormat() || bWriteBullet)
     {

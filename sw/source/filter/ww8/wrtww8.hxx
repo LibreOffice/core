@@ -565,7 +565,7 @@ public:
     bool m_bFontSizeWritten;
     bool m_bAddFootnoteTab;     // only one aesthetic spacing tab per footnote
 
-    SwDoc *m_pDoc;
+    SwDoc& m_rDoc;
     sal_uLong m_nCurStart, m_nCurEnd;
     std::shared_ptr<SwUnoCursor> & m_pCurPam;
     SwPaM *m_pOrigPam;
@@ -906,7 +906,7 @@ protected:
     std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 public:
-    MSWordExportBase( SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam );
+    MSWordExportBase(SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam);
     virtual ~MSWordExportBase();
 
     // TODO move as much as possible here from WW8Export! ;-)
@@ -1147,7 +1147,7 @@ public:
 
     /// Setup the exporter.
     WW8Export( SwWW8Writer *pWriter,
-            SwDoc *pDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM *pOriginalPam,
+            SwDoc& rDocument, std::shared_ptr<SwUnoCursor> & pCurrentPam, SwPaM* pOriginalPam,
             bool bDot );
     virtual ~WW8Export() override;
 

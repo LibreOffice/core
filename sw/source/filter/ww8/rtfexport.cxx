@@ -203,9 +203,9 @@ static bool IsExportNumRule(const SwNumRule& rRule)
 
 void RtfExport::BuildNumbering()
 {
-    const SwNumRuleTable& rListTable = m_pDoc->GetNumRuleTable();
+    const SwNumRuleTable& rListTable = m_rDoc.GetNumRuleTable();
 
-    SwNumRule* pOutlineRule = m_pDoc->GetOutlineNumRule();
+    SwNumRule* pOutlineRule = m_rDoc.GetOutlineNumRule();
     if (IsExportNumRule(*pOutlineRule))
         GetNumberingId(*pOutlineRule);
 
@@ -254,7 +254,7 @@ void RtfExport::WriteNumbering()
 
 void RtfExport::WriteRevTab()
 {
-    int nRevAuthors = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size();
+    int nRevAuthors = m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size();
 
     if (nRevAuthors < 1)
         return;
@@ -262,7 +262,7 @@ void RtfExport::WriteRevTab()
     // RTF always seems to use Unknown as the default first entry
     GetRedline("Unknown");
 
-    for (SwRangeRedline* pRedl : m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
+    for (SwRangeRedline* pRedl : m_rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {
         GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
@@ -403,7 +403,7 @@ void RtfExport::WriteStyles()
 
 void RtfExport::WriteFootnoteSettings()
 {
-    const SwPageFootnoteInfo& rFootnoteInfo = m_pDoc->GetPageDesc(0).GetFootnoteInfo();
+    const SwPageFootnoteInfo& rFootnoteInfo = m_rDoc.GetPageDesc(0).GetFootnoteInfo();
     // Request a separator only in case the width is larger than zero.
     bool bSeparator = double(rFootnoteInfo.GetWidth()) > 0;
 
@@ -454,7 +454,7 @@ void RtfExport::WriteMainText()
     else
     {
         m_pCurPam->GetPoint()->nNode
-            = m_pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+            = m_rDoc.GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
     }
 
     WriteText();
@@ -472,7 +472,7 @@ void RtfExport::WriteInfo()
         .WriteChar('}');
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_INFO);
 
-    SwDocShell* pDocShell(m_pDoc->GetDocShell());
+    SwDocShell* pDocShell(m_rDoc.GetDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
     if (pDocShell)
     {
@@ -538,7 +538,7 @@ void RtfExport::WriteUserProps()
     Strm().WriteChar('{').WriteCharPtr(
         OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_USERPROPS);
 
-    SwDocShell* pDocShell(m_pDoc->GetDocShell());
+    SwDocShell* pDocShell(m_rDoc.GetDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
     if (pDocShell)
     {
@@ -549,7 +549,7 @@ void RtfExport::WriteUserProps()
     else
     {
         // Clipboard document, read metadata from the meta field manager.
-        sw::MetaFieldManager& rManager = m_pDoc->GetMetaFieldManager();
+        sw::MetaFieldManager& rManager = m_rDoc.GetMetaFieldManager();
         xDocProps.set(rManager.getDocumentProperties());
     }
 
@@ -632,7 +632,7 @@ void RtfExport::WriteUserProps()
 void RtfExport::WritePageDescTable()
 {
     // Write page descriptions (page styles)
-    std::size_t nSize = m_pDoc->GetPageDescCnt();
+    std::size_t nSize = m_rDoc.GetPageDescCnt();
     if (!nSize)
         return;
 
@@ -644,7 +644,7 @@ void RtfExport::WritePageDescTable()
         .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCTBL);
     for (std::size_t n = 0; n < nSize; ++n)
     {
-        const SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(n);
+        const SwPageDesc& rPageDesc = m_rDoc.GetPageDesc(n);
 
         Strm()
             .WriteCharPtr(SAL_NEWLINE_STRING)
@@ -658,7 +658,7 @@ void RtfExport::WritePageDescTable()
         // search for the next page description
         std::size_t i = nSize;
         while (i)
-            if (rPageDesc.GetFollow() == &m_pDoc->GetPageDesc(--i))
+            if (rPageDesc.GetFollow() == &m_rDoc.GetPageDesc(--i))
                 break;
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PGDSCNXT);
         OutULong(i).WriteChar(' ');
@@ -684,7 +684,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         .WriteChar('1')
         .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_DEFF);
-    OutULong(m_aFontHelper.GetId(m_pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
+    OutULong(m_aFontHelper.GetId(m_rDoc.GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteCharPtr("\\adeflang1025");
 
@@ -714,7 +714,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     OutULong(1);
 
     // Zoom
-    SwViewShell* pViewShell(m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell());
+    SwViewShell* pViewShell(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
     if (pViewShell && pViewShell->GetViewOptions()->GetZoomType() == SvxZoomType::PERCENT)
     {
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_VIEWSCALE);
@@ -724,7 +724,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     if (RedlineFlags::On & m_nOrigRedlineFlags)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVISIONS);
     // Mirror margins?
-    if ((UseOnPage::Mirror & m_pDoc->GetPageDesc(0).ReadUseOn()) == UseOnPage::Mirror)
+    if ((UseOnPage::Mirror & m_rDoc.GetPageDesc(0).ReadUseOn()) == UseOnPage::Mirror)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
     // Init sections
     m_pSections = new MSWordSections(*this);
@@ -736,7 +736,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     // enable it on a per-section basis. OTOH don't always enable it as it
     // breaks moving of drawings - so write it only in case there is really a
     // protected section in the document.
-    for (auto const& pSectionFormat : m_pDoc->GetSections())
+    for (auto const& pSectionFormat : m_rDoc.GetSections())
     {
         if (!pSectionFormat->IsInUndo() && pSectionFormat->GetProtect().IsContentProtected())
         {
@@ -749,13 +749,13 @@ ErrCode RtfExport::ExportDocument_Impl()
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMSHADE);
 
     // size and empty margins of the page
-    if (m_pDoc->GetPageDescCnt())
+    if (m_rDoc.GetPageDescCnt())
     {
         // Seeking the first SwFormatPageDesc. If no set, the default is valid
         const SwFormatPageDesc* pSttPgDsc = nullptr;
         {
             const SwNode& rSttNd
-                = *m_pDoc->GetNodes()[m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2];
+                = *m_rDoc.GetNodes()[m_rDoc.GetNodes().GetEndOfExtras().GetIndex() + 2];
             const SfxItemSet* pSet = nullptr;
 
             if (rSttNd.IsContentNode())
@@ -772,7 +772,7 @@ ErrCode RtfExport::ExportDocument_Impl()
                 pSttPgDsc = &pSet->Get(RES_PAGEDESC);
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = nullptr;
-                else if (m_pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
+                else if (m_rDoc.FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
                 {
                     Strm()
                         .WriteChar('{')
@@ -782,8 +782,7 @@ ErrCode RtfExport::ExportDocument_Impl()
                 }
             }
         }
-        const SwPageDesc& rPageDesc
-            = pSttPgDsc ? *pSttPgDsc->GetPageDesc() : m_pDoc->GetPageDesc(0);
+        const SwPageDesc& rPageDesc = pSttPgDsc ? *pSttPgDsc->GetPageDesc() : m_rDoc.GetPageDesc(0);
         const SwFrameFormat& rFormatPage = rPageDesc.GetMaster();
 
         {
@@ -838,7 +837,7 @@ ErrCode RtfExport::ExportDocument_Impl()
     }
 
     // line numbering
-    const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
+    const SwLineNumberInfo& rLnNumInfo = m_rDoc.GetLineNumberInfo();
     if (rLnNumInfo.IsPaintLineNumbers())
     {
         sal_uLong nLnNumRestartNo = 0;
@@ -850,7 +849,7 @@ ErrCode RtfExport::ExportDocument_Impl()
 
     {
         // write the footnotes and endnotes-out Info
-        const SwFootnoteInfo& rFootnoteInfo = m_pDoc->GetFootnoteInfo();
+        const SwFootnoteInfo& rFootnoteInfo = m_rDoc.GetFootnoteInfo();
 
         const char* pOut = FTNPOS_CHAPTER == rFootnoteInfo.m_ePos ? OOO_STRING_SVTOOLS_RTF_ENDDOC
                                                                   : OOO_STRING_SVTOOLS_RTF_FTNBJ;
@@ -896,7 +895,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         }
         Strm().WriteCharPtr(pOut);
 
-        const SwEndNoteInfo& rEndNoteInfo = m_pDoc->GetEndNoteInfo();
+        const SwEndNoteInfo& rEndNoteInfo = m_rDoc.GetEndNoteInfo();
 
         Strm()
             .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_AENDDOC)
@@ -930,7 +929,7 @@ ErrCode RtfExport::ExportDocument_Impl()
         Strm().WriteCharPtr(pOut);
     }
 
-    if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX))
+    if (!m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX))
         // RTF default is true, so write compat flag if this should be false.
         Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_HTMAUTSP);
 
@@ -1021,10 +1020,10 @@ void RtfExport::AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat
     AttrOutput().SectionBreak(msword::PageBreak, false, m_pSections->CurrentSectionInfo());
 }
 
-RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc* pDocument,
-                     std::shared_ptr<SwUnoCursor>& pCurrentPam, SwPaM* pOriginalPam,
+RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument,
+                     std::shared_ptr<SwUnoCursor>& pCurrentPam, SwPaM& rOriginalPam,
                      Writer* pWriter, bool bOutOutlineOnly)
-    : MSWordExportBase(pDocument, pCurrentPam, pOriginalPam)
+    : MSWordExportBase(rDocument, pCurrentPam, &rOriginalPam)
     , m_pFilter(pFilter)
     , m_pWriter(pWriter)
     , m_pSections(nullptr)
@@ -1169,7 +1168,7 @@ void RtfExport::OutColorTable()
 {
     // Build the table from rPool since the colors provided to
     // RtfAttributeOutput callbacks are too late.
-    const SfxItemPool& rPool = m_pDoc->GetAttrPool();
+    const SfxItemPool& rPool = m_rDoc.GetAttrPool();
 
     // MSO Word uses a default color table with 16 colors (which is used e.g. for highlighting)
     InsColor(COL_BLACK);
@@ -1460,7 +1459,7 @@ ErrCode SwRTFWriter::WriteStream()
     std::shared_ptr<SwUnoCursor> pCurPam(m_pDoc->CreateUnoCursor(*m_pCurrentPam->End(), false));
     pCurPam->SetMark();
     *pCurPam->GetPoint() = *m_pCurrentPam->Start();
-    RtfExport aExport(nullptr, m_pDoc, pCurPam, m_pCurrentPam.get(), this, m_bOutOutlineOnly);
+    RtfExport aExport(nullptr, *m_pDoc, pCurPam, *m_pCurrentPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
     return ERRCODE_NONE;
 }

@@ -582,7 +582,7 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
     const ww8::Frame &rFrameFormat)
 {
     //Require nasty bidi swap
-    if (SvxFrameDirection::Horizontal_RL_TB != m_pDoc->GetTextDirection(rFrameFormat.GetPosition()))
+    if (SvxFrameDirection::Horizontal_RL_TB != m_rDoc.GetTextDirection(rFrameFormat.GetPosition()))
         return;
 
     SwTwips nWidth = rRight - rLeft;
@@ -828,8 +828,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                 OSL_ENSURE(false, "Unsupported surround type for export");
                 break;
         }
-        if (pObj && (pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId() ||
-                pObj->GetLayer() == rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
+        if (pObj && (pObj->GetLayer() == rWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId() ||
+                pObj->GetLayer() == rWrt.m_rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId()))
         {
             nFlags |= 0x4000;
         }
@@ -956,10 +956,10 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
     {
         // no Layout for this format, then recalc the ordnum
         SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(&rFormat);
-        nOrdNum = std::distance(m_pDoc->GetSpzFrameFormats()->begin(),
-                                m_pDoc->GetSpzFrameFormats()->find( pFormat ) );
+        nOrdNum = std::distance(m_rDoc.GetSpzFrameFormats()->begin(),
+                                m_rDoc.GetSpzFrameFormats()->find( pFormat ) );
 
-        const SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        const SwDrawModel* pModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             nOrdNum += pModel->GetPage( 0 )->GetObjCount();
     }
@@ -1142,7 +1142,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
     m_rExport.m_pOutFormatNode = nullptr;
 
     const SfxItemPool* pSrcPool = pEditPool;
-    const SfxItemPool& rDstPool = m_rExport.m_pDoc->GetAttrPool();
+    const SfxItemPool& rDstPool = m_rExport.m_rDoc.GetAttrPool();
 
     nTmpSwPos = nSwPos;
     // Did we already produce a <w:sz> element?
@@ -1212,7 +1212,7 @@ bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {
     nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
-        m_rExport.m_pDoc->GetAttrPool(), nWhich);
+        m_rExport.m_rDoc.GetAttrPool(), nWhich);
     if (nWhich)
     {
         for (const auto& rTextAtr : aTextAtrArr)
@@ -1233,7 +1233,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     if (!pRet)
     {
         SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
-        nWhich = GetSetWhichFromSwDocWhich(aSet, *m_rExport.m_pDoc, nWhich);
+        nWhich = GetSetWhichFromSwDocWhich(aSet, m_rExport.m_rDoc, nWhich);
         OSL_ENSURE(nWhich, "Impossible, catastrophic failure imminent");
         pRet = &aSet.Get(nWhich);
     }
@@ -1245,7 +1245,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
 //set any items which are not already set, but differ from "Normal".
 void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet)
 {
-    SwTextFormatColl* pC = m_rExport.m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool
+    SwTextFormatColl* pC = m_rExport.m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool
         (RES_POOLCOLL_STANDARD, false);
 
     SfxWhichIter aWhichIter(rSet);
@@ -1253,7 +1253,7 @@ void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemS
     {
         if (SfxItemState::SET != rSet.GetItemState(nEEWhich, false))
         {
-            sal_uInt16 nSwWhich = sw::hack::TransformWhichBetweenPools(m_rExport.m_pDoc->GetAttrPool(),
+            sal_uInt16 nSwWhich = sw::hack::TransformWhichBetweenPools(m_rExport.m_rDoc.GetAttrPool(),
                 *pEditPool, nEEWhich);
             if (!nSwWhich)
                 continue;
@@ -1286,7 +1286,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
     const SfxItemPool* pSrcPool = pEditPool,
-                     * pDstPool = &m_rExport.m_pDoc->GetAttrPool();
+                     * pDstPool = &m_rExport.m_rDoc.GetAttrPool();
 
     do
     {
@@ -1454,7 +1454,7 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 
 void WW8Export::CreateEscher()
 {
-    SfxItemState eBackSet = m_pDoc->GetPageDesc(0).GetMaster().
+    SfxItemState eBackSet = m_rDoc.GetPageDesc(0).GetMaster().
         GetItemState(RES_BACKGROUND);
     if (m_pHFSdrObjs->size() || m_pSdrObjs->size() || SfxItemState::SET == eBackSet)
     {
@@ -2137,7 +2137,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eS
 void SwBasicEscherEx::Init()
 {
     MapUnit eMap = MapUnit::MapTwip;
-    if (SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
+    if (SwDrawModel *pModel = rWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel())
     {
         // PPT works only with units of 576DPI
         // WW however is using twips, i.e 1440DPI.
@@ -2153,7 +2153,7 @@ void SwBasicEscherEx::Init()
     mnEmuMul = aFact.GetNumerator();
     mnEmuDiv = aFact.GetDenominator();
 
-    SetHellLayerId(rWrt.m_pDoc->getIDocumentDrawModelAccess().GetHellId());
+    SetHellLayerId(rWrt.m_rDoc.getIDocumentDrawModelAccess().GetHellId());
 }
 
 sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)
@@ -2179,7 +2179,7 @@ sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax)
 
 SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 {
-    return rWrt.m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId();
+    return rWrt.m_rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId();
 }
 
 void SwBasicEscherEx::WritePictures()
@@ -2298,7 +2298,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                       nSecondShapeId );
 
             EscherPropertyContainer aPropOpt;
-            const SwFrameFormat &rFormat = rWrt.m_pDoc->GetPageDesc(0).GetMaster();
+            const SwFrameFormat &rFormat = rWrt.m_rDoc.GetPageDesc(0).GetMaster();
             const SfxPoolItem* pItem = nullptr;
             SfxItemState eState = rFormat.GetItemState(RES_BACKGROUND, true,
                 &pItem);
@@ -2927,7 +2927,7 @@ void SwEscherEx::WriteOCXControl( const SwFrameFormat& rFormat, sal_uInt32 nShap
 
     OpenContainer( ESCHER_SpContainer );
 
-    SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    SwDrawModel *pModel = rWrt.m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
     OutputDevice *pDevice = Application::GetDefaultDevice();
     OSL_ENSURE(pModel && pDevice, "no model or device");
 
