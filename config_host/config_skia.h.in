@@ -51,6 +51,10 @@ are the same.
 // those tests needed updating, which presumably has never happened.
 #define SK_DRAWBITMAPRECT_FAST_OFFSET 1
 
+// Default to BGRA. Skia already defaults to that on Windows, and it seems
+// the default X11 visual is actually also BGRA.
+#define SK_R32_SHIFT 16
+
 // Enable Skia's internal checks depending on DBG_UTIL mode. ENABLE_SKIA_DEBUG
 // controls whether to build with or without optimizations (set in Makefile).
 #ifdef DBG_UTIL
