@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.sheet.addin.PricingFunctionsImpl"
-    constructor="scaddins_ScaPricingAddIn_get_implementation">
+    constructor="scaddins_ScaPricingAddIn_get_implementation" single-instance="true">
     <service name="com.sun.star.sheet.AddIn"/>
     <service name="com.sun.star.sheet.addin.PricingFunctions"/>
   </implementation>
