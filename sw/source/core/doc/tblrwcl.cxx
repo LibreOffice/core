@@ -202,7 +202,7 @@ namespace {
 struct CpyPara
 {
     std::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;
-    SwDoc* pDoc;
+    SwDoc& rDoc;
     SwTableNode* pTableNd;
     CpyTabFrames& rTabFrameArr;
     SwTableLine* pInsLine;
@@ -215,7 +215,7 @@ struct CpyPara
     bool bCpyContent;
 
     CpyPara( SwTableNode* pNd, sal_uInt16 nCopies, CpyTabFrames& rFrameArr )
-        : pDoc( &pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
+        : rDoc( pNd->GetDoc() ), pTableNd( pNd ), rTabFrameArr(rFrameArr),
         pInsLine(nullptr), pInsBox(nullptr), nOldSize(0), nNewSize(0),
         nMinLeft(ULONG_MAX), nMaxRight(0),
         nCpyCnt(nCopies), nInsPos(0),
@@ -223,7 +223,7 @@ struct CpyPara
         nDelBorderFlag(0), bCpyContent( true )
         {}
     CpyPara( const CpyPara& rPara, SwTableLine* pLine )
-        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTableNd(rPara.pTableNd),
+        : pWidths( rPara.pWidths ), rDoc(rPara.rDoc), pTableNd(rPara.pTableNd),
         rTabFrameArr(rPara.rTabFrameArr), pInsLine(pLine), pInsBox(rPara.pInsBox),
         nOldSize(0), nNewSize(rPara.nNewSize), nMinLeft( rPara.nMinLeft ),
         nMaxRight( rPara.nMaxRight ), nCpyCnt(rPara.nCpyCnt), nInsPos(0),
@@ -231,7 +231,7 @@ struct CpyPara
         nDelBorderFlag( rPara.nDelBorderFlag ), bCpyContent( rPara.bCpyContent )
         {}
     CpyPara( const CpyPara& rPara, SwTableBox* pBox )
-        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTableNd(rPara.pTableNd),
+        : pWidths( rPara.pWidths ), rDoc(rPara.rDoc), pTableNd(rPara.pTableNd),
         rTabFrameArr(rPara.rTabFrameArr), pInsLine(rPara.pInsLine), pInsBox(pBox),
         nOldSize(rPara.nOldSize), nNewSize(rPara.nNewSize),
         nMinLeft( rPara.nMinLeft ), nMaxRight( rPara.nMaxRight ),
@@ -335,7 +335,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
     }
     else
     {
-        ::InsTableBox( pCpyPara->pDoc, pCpyPara->pTableNd, pCpyPara->pInsLine,
+        ::InsTableBox( pCpyPara->rDoc, pCpyPara->pTableNd, pCpyPara->pInsLine,
                     aFindFrame.pNewFrameFormat, pBox, pCpyPara->nInsPos++ );
 
         const FndBoxes_t& rFndBxs = rFndBox.GetUpper()->GetBoxes();
@@ -448,7 +448,7 @@ static SwRowFrame* GetRowFrame( SwTableLine& rLine )
     return nullptr;
 }
 
-bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
+bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -457,7 +457,7 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
 
     bool bRes = true;
     if( IsNewModel() )
-        bRes = NewInsertCol( pDoc, rBoxes, nCnt, bBehind );
+        bRes = NewInsertCol( rDoc, rBoxes, nCnt, bBehind );
     else
     {
         // Find all Boxes/Lines
@@ -497,12 +497,12 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         bRes = true;
     }
 
-    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
+    SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
-    pDoc->UpdateCharts( GetFrameFormat()->GetName() );
+    rDoc.UpdateCharts( GetFrameFormat()->GetName() );
 
-    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
+    rDoc.GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
 
     return bRes;
 }
@@ -1005,10 +1005,10 @@ bool SwTable::DeleteSel(
     return true;
 }
 
-bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                         bool bSameHeight )
 {
-    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
+    OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid values" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTableNd )
         return false;
@@ -1016,7 +1016,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
+    rDoc.getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
 
@@ -1073,7 +1073,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             sal_uLong nSttNd = pLastBox->GetSttIdx() + 1,
                     nEndNd = pLastBox->GetSttNd()->EndOfSectionIndex();
             while( nSttNd < nEndNd )
-                if( !pDoc->GetNodes()[ nSttNd++ ]->IsTextNode() )
+                if( !rDoc.GetNodes()[ nSttNd++ ]->IsTextNode() )
                 {
                     bMoveNodes = false;
                     break;
@@ -1104,7 +1104,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             }
             else
             {
-                ::InsTableBox( pDoc, pTableNd, pNewLine, pCpyBoxFrameFormat,
+                ::InsTableBox( rDoc, pTableNd, pNewLine, pCpyBoxFrameFormat,
                                 pLastBox, 0 );
 
                 if( bChkBorder )
@@ -1125,8 +1125,8 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                         SwNodeRange aRg( *pLastBox->GetSttNd(), +2, *pEndNd );
                         pLastBox = pNewLine->GetTabBoxes()[0];  // reset
                         SwNodeIndex aInsPos( *pLastBox->GetSttNd(), 1 );
-                        pDoc->GetNodes().MoveNodes(aRg, pDoc->GetNodes(), aInsPos, false);
-                        pDoc->GetNodes().Delete( aInsPos ); // delete the empty one
+                        rDoc.GetNodes().MoveNodes(aRg, rDoc.GetNodes(), aInsPos, false);
+                        rDoc.GetNodes().Delete( aInsPos ); // delete the empty one
                     }
                 }
             }
@@ -1148,9 +1148,9 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     return true;
 }
 
-bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
+bool SwTable::SplitCol(SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt)
 {
-    OSL_ENSURE( pDoc && !rBoxes.empty() && nCnt, "No valid values" );
+    OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid values" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
     if( !pTableNd )
         return false;
@@ -1158,7 +1158,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
+    rDoc.getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout>());    // Delete HTML Layout
     SwSelBoxes aSelBoxes(rBoxes);
@@ -1219,10 +1219,10 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 
         // Insert the Boxes at the Position
         for( sal_uInt16 i = 1; i < nCnt; ++i )
-            ::InsTableBox( pDoc, pTableNd, pInsLine, aFindFrame.pNewFrameFormat,
+            ::InsTableBox( rDoc, pTableNd, pInsLine, aFindFrame.pNewFrameFormat,
                         pSelBox, nBoxPos + i ); // insert after
 
-        ::InsTableBox( pDoc, pTableNd, pInsLine, pLastBoxFormat,
+        ::InsTableBox( rDoc, pTableNd, pInsLine, pLastBoxFormat,
                     pSelBox, nBoxPos + nCnt );  // insert after
 
         // Special treatment for the Border:
@@ -1849,7 +1849,7 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
         if(DoCopyIt)
         {
             // It doesn't exist yet, so copy it
-            aFindFrame.pNewFrameFormat = pCpyPara->pDoc->MakeTableBoxFormat();
+            aFindFrame.pNewFrameFormat = pCpyPara->rDoc.MakeTableBoxFormat();
             aFindFrame.pNewFrameFormat->CopyAttrs( *rFndBox.GetBox()->GetFrameFormat() );
             if( !pCpyPara->bCpyContent )
                 aFindFrame.pNewFrameFormat->ResetFormatAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
@@ -1874,9 +1874,9 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
         else
         {
             // Create an empty Box
-            pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTableNd, pCpyPara->pInsLine,
+            pCpyPara->rDoc.GetNodes().InsBoxen( pCpyPara->pTableNd, pCpyPara->pInsLine,
                             aFindFrame.pNewFrameFormat,
-                            pCpyPara->pDoc->GetDfltTextFormatColl(),
+                            pCpyPara->rDoc.GetDfltTextFormatColl(),
                             nullptr, pCpyPara->nInsPos );
             pBox = pCpyPara->pInsLine->GetTabBoxes()[ pCpyPara->nInsPos ];
             if( bDummy )
@@ -1888,13 +1888,13 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
 
                 // We can also copy formulas and values, if we copy the content
                 {
-                    SfxItemSet aBoxAttrSet( pCpyPara->pDoc->GetAttrPool(),
+                    SfxItemSet aBoxAttrSet( pCpyPara->rDoc.GetAttrPool(),
                                             svl::Items<RES_BOXATR_FORMAT, RES_BOXATR_VALUE>{} );
                     aBoxAttrSet.Put(rFndBox.GetBox()->GetFrameFormat()->GetAttrSet());
                     if( aBoxAttrSet.Count() )
                     {
                         const SfxPoolItem* pItem;
-                        SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( false );
+                        SvNumberFormatter* pN = pCpyPara->rDoc.GetNumberFormatter( false );
                         if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == aBoxAttrSet.
                             GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                         {
@@ -1913,7 +1913,7 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
 
                 pFromDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly(aCpyRg, aInsIdx, nullptr, false);
                 // Delete the initial TextNode
-                pCpyPara->pDoc->GetNodes().Delete( aInsIdx );
+                pCpyPara->rDoc.GetNodes().Delete( aInsIdx );
             }
             ++pCpyPara->nInsPos;
         }
@@ -1942,7 +1942,7 @@ lcl_CopyLineToDoc(const FndLine_& rFndLine, CpyPara *const pCpyPara)
     if( itFind == pCpyPara->rTabFrameArr.end() )
     {
         // It doesn't exist yet, so copy it
-        aFindFrame.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pCpyPara->pDoc->MakeTableLineFormat());
+        aFindFrame.pNewFrameFormat = reinterpret_cast<SwTableBoxFormat*>(pCpyPara->rDoc.MakeTableLineFormat());
         aFindFrame.pNewFrameFormat->CopyAttrs( *rFndLine.GetLine()->GetFrameFormat() );
         pCpyPara->rTabFrameArr.insert( aFindFrame );
     }
@@ -2042,7 +2042,7 @@ void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
     }
 }
 
-bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
+bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
                         const SwSelBoxes& rSelBoxes,
                         bool bCpyName ) const
 {
@@ -2058,13 +2058,13 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     // First copy the PoolTemplates for the Table, so that the Tables are
     // actually copied and have valid values.
     SwDoc* pSrcDoc = GetFrameFormat()->GetDoc();
-    if( pSrcDoc != pInsDoc )
+    if( pSrcDoc != &rInsDoc )
     {
-        pInsDoc->CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
-        pInsDoc->CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
+        rInsDoc.CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE ) );
+        rInsDoc.CopyTextColl( *pSrcDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TABLE_HDLN ) );
     }
 
-    SwTable* pNewTable = const_cast<SwTable*>(pInsDoc->InsertTable(
+    SwTable* pNewTable = const_cast<SwTable*>(rInsDoc.InsertTable(
             SwInsertTableOptions( SwInsertTableFlags::HeadlineNoBorder, 1 ),
             rPos, 1, 1, GetFrameFormat()->GetHoriOrient().GetHoriOrient(),
             nullptr, nullptr, false, IsNewModel() ));
@@ -2084,7 +2084,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     {
         // A DDE-Table is being copied
         // Does the new Document actually have it's FieldType?
-        SwFieldType* pFieldType = pInsDoc->getIDocumentFieldsAccess().InsertFieldType(
+        SwFieldType* pFieldType = rInsDoc.getIDocumentFieldsAccess().InsertFieldType(
                                     *pSwDDETable->GetDDEFieldType() );
         OSL_ENSURE( pFieldType, "unknown FieldType" );
 
@@ -2107,7 +2107,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         pSrcDoc->getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
     }
 
-    SwTableNumFormatMerge aTNFM( *pSrcDoc, *pInsDoc );
+    SwTableNumFormatMerge aTNFM(*pSrcDoc, rInsDoc);
 
     // Also copy Names or enforce a new unique one
     if( bCpyName )

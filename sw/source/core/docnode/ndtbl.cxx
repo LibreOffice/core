@@ -1750,7 +1750,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
-        bRet = rTable.InsertCol( this, rBoxes, nCnt, bBehind );
+        bRet = rTable.InsertCol(*this, rBoxes, nCnt, bBehind);
         if (bRet)
         {
             getIDocumentState().SetModified();
@@ -2197,9 +2197,9 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
         if (bVert)
-            bRet = rTable.SplitCol( this, rBoxes, nCnt );
+            bRet = rTable.SplitCol(*this, rBoxes, nCnt);
         else
-            bRet = rTable.SplitRow( this, rBoxes, nCnt, bSameHeight );
+            bRet = rTable.SplitRow(*this, rBoxes, nCnt, bSameHeight);
 
         if (bRet)
         {
@@ -4305,7 +4305,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-            bRet = pSrcTableNd->GetTable().MakeCopy( this, rInsPos, rBoxes,
+            bRet = pSrcTableNd->GetTable().MakeCopy( *this, rInsPos, rBoxes,
                                                 bCpyName );
         }
 
@@ -4342,7 +4342,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             xCpyDoc = new SwDoc;
 
             SwPosition aPos( SwNodeIndex( xCpyDoc->GetNodes().GetEndOfContent() ));
-            if( !pSrcTableNd->GetTable().MakeCopy( xCpyDoc.get(), aPos, rBoxes, true ))
+            if( !pSrcTableNd->GetTable().MakeCopy( *xCpyDoc, aPos, rBoxes, true ))
             {
                 xCpyDoc.clear();
 
