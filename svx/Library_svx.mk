@@ -199,8 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/area/AreaPropertyPanel \
     svx/source/sidebar/area/AreaPropertyPanelBase \
     svx/source/sidebar/area/AreaTransparencyGradientPopup \
-    svx/source/sidebar/glow/GlowPropertyPanel \
-    svx/source/sidebar/softedge/SoftEdgePropertyPanel \
+    svx/source/sidebar/effect/EffectPropertyPanel \
     svx/source/sidebar/shadow/ShadowPropertyPanel \
     svx/source/sidebar/graphic/GraphicPropertyPanel \
     svx/source/sidebar/line/LinePropertyPanel \
