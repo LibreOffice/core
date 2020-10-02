@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd681ebf_7891726c",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-02T08:17:25Z",
+      "side": 1,
+      "message": "this one is a has an image (deliberate gear-menu) so doesn\u0027t need a label",
+      "revId": "c97d065a7cb85b5a0bfd6eed446d523008fa4a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ac9a542_343c3a4b",
+        "filename": "cui/uiconfig/ui/menuassignpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-02T08:17:25Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "c97d065a7cb85b5a0bfd6eed446d523008fa4a1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
