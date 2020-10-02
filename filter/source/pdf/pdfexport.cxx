@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/poly.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/mapmod.hxx>
@@ -232,10 +233,9 @@ bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                                 Graphic bgraph(bmp);
                                 aMtf = bgraph.GetGDIMetaFile();
                             }
-                            catch(const Exception& e)
+                            catch(const Exception&)
                             {
-                                SAL_WARN("filter.pdf", "Something went wrong while converting metafile to bitmap. Exception: "
-                                         << e.Message);
+                                TOOLS_WARN_EXCEPTION("filter.pdf", "Something went wrong while converting metafile to bitmap");
                             }
                         }
 

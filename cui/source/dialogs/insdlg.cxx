@@ -40,6 +40,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/image.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
@@ -94,7 +95,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl, weld::Button&, void)
     }
     catch( const IllegalArgumentException& )
     {
-        SAL_WARN( "cui.dialogs", "caught IllegalArgumentException when registering filter" );
+        TOOLS_WARN_EXCEPTION("cui.dialogs", "caught IllegalArgumentException when registering filter" );
     }
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )

@@ -41,6 +41,7 @@
 #include <comphelper/types.hxx>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>
+#include <tools/diagnose_ex.h>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -1468,7 +1469,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
         }
         catch (Exception&)
         {
-            SAL_WARN( "connectivity.drivers","OResultSet::setBoundedColumns: caught an Exception!");
+            TOOLS_WARN_EXCEPTION( "connectivity.drivers","");
         }
     }
     // in this case we got more select columns as columns exist in the table

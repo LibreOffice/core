@@ -51,8 +51,7 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = false;
-            css::uno::Any ex( cppu::getCaughtException() );
-            SAL_WARN( "svl", "CreateInstance with arguments exception: " << exceptionToString(ex));
+            TOOLS_WARN_EXCEPTION( "svl", "" );
         }
     }
 #else

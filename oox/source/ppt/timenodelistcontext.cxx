@@ -21,6 +21,7 @@
 
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
@@ -333,7 +334,7 @@ namespace oox::ppt {
                 }
                 catch( RuntimeException& )
                 {
-                    SAL_WARN("oox.ppt", "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
+                    TOOLS_WARN_EXCEPTION("oox.ppt", "OOX: Exception in CmdTimeNodeContext::endFastElement()" );
                 }
             }
 

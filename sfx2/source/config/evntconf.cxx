@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
 #include <svl/macitem.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <sfx2/objsh.hxx>
 #include <eventsupplier.hxx>
@@ -189,11 +190,11 @@ static void PropagateEvent_Impl( SfxObjectShell const *pDoc, const OUString& aEv
         }
         catch( const css::lang::IllegalArgumentException& )
         {
-            SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
+            TOOLS_WARN_EXCEPTION( "sfx.config", "PropagateEvents_Impl: caught IllegalArgumentException" );
         }
         catch( const css::container::NoSuchElementException& )
         {
-            SAL_WARN( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
+            TOOLS_WARN_EXCEPTION( "sfx.config", "PropagateEvents_Impl: caught NoSuchElementException" );
         }
     }
     else {

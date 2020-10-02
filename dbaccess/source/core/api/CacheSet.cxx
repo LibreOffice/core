@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 using namespace comphelper;
 
@@ -120,7 +121,7 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        SAL_WARN("dbaccess", "Exception occurred");
+        TOOLS_WARN_EXCEPTION("dbaccess", "");
     }
     catch(...)
     {

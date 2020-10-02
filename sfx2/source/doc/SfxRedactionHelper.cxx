@@ -45,6 +45,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
@@ -294,7 +295,7 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
     }
     catch (css::uno::Exception&)
     {
-        SAL_WARN("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
+        TOOLS_WARN_EXCEPTION("sfx.doc", "Exception while trying to show the Redaction Toolbar!");
     }
 }
 

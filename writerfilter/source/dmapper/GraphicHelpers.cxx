@@ -32,6 +32,7 @@
 #include <sal/log.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <tools/diagnose_ex.h>
 
 #include <iostream>
 
@@ -300,7 +301,7 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
             return itemZOrder + itemZOrderOffset;
     }
     catch (const uno::RuntimeException&) {
-        SAL_WARN("writerfilter", "Exception when getting item z-order");
+        TOOLS_WARN_EXCEPTION("writerfilter", "Exception when getting item z-order");
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );
     return 0; // this should not(?) happen

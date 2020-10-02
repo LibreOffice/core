@@ -1326,9 +1326,9 @@ LibLODocument_Impl::~LibLODocument_Impl()
     {
         mxComponent->dispose();
     }
-    catch (const css::lang::DisposedException& rException)
+    catch (const css::lang::DisposedException&)
     {
-        SAL_WARN("lok", "failed to dispose document:" << rException.Message);
+        TOOLS_WARN_EXCEPTION("lok", "failed to dispose document");
     }
 }
 

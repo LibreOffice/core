@@ -49,6 +49,7 @@
 #include <sal/log.hxx>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 
 // service names
@@ -1039,9 +1040,9 @@ void XMLDatabaseDisplayImportContext::EndElement()
                             // success!
                             return;
                         }
-                        catch (const lang::IllegalArgumentException& rException)
+                        catch (const lang::IllegalArgumentException&)
                         {
-                            SAL_WARN("xmloff.text", "Failed to insert text content: " << rException.Message);
+                            TOOLS_WARN_EXCEPTION("xmloff.text", "Failed to insert text content");
                         }
                     }
                 }

@@ -25,6 +25,7 @@
 
 #include <svx/unopage.hxx>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <drawingml/colorchoicecontext.hxx>
 #include <drawingml/misccontexts.hxx>
@@ -222,7 +223,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             catch(SAXException& /* e */ )
             {
-                SAL_WARN("oox", "OOX: SAXException in XML_buAutoNum");
+                TOOLS_WARN_EXCEPTION("oox", "OOX: SAXException in XML_buAutoNum");
             }
             break;
         }
@@ -234,7 +235,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             }
             catch(SAXException& /* e */)
             {
-                SAL_WARN("oox", "OOX: SAXException in XML_buChar");
+                TOOLS_WARN_EXCEPTION("oox", "OOX: SAXException in XML_buChar");
             }
             break;
         case A_TOKEN( buBlip ):         // CT_TextBlipBullet

@@ -34,6 +34,7 @@
 #include <comphelper/seqstream.hxx>
 #include <connectivity/dbexception.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -1174,7 +1175,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
         }
         catch (const Exception&)
         {
-            SAL_WARN("dbaccess", "firePropertyChange: Exception on column " << i);
+            TOOLS_WARN_EXCEPTION("dbaccess", "firePropertyChange: Exception on column " << i);
         }
         ++i;
     }

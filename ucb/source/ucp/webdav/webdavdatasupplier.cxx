@@ -33,6 +33,7 @@
 #include "SerfUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
+#include <tools/diagnose_ex.h>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
@@ -357,7 +358,7 @@ bool DataSupplier::getData()
         }
         catch ( DAVException & )
         {
-            SAL_WARN( "ucb.ucp.webdav", "PROPFIND : DAVException" );
+            TOOLS_WARN_EXCEPTION( "ucb.ucp.webdav", "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = true;
         }
 

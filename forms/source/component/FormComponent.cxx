@@ -2259,8 +2259,7 @@ void OBoundControlModel::reset()
 
     catch( const SQLException& )
     {
-        DBG_UNHANDLED_EXCEPTION("forms.component");
-        SAL_WARN("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
+        TOOLS_WARN_EXCEPTION("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
     }
 
     // #i24495# - don't count the insert row as "invalid"

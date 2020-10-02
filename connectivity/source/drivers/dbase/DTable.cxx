@@ -28,6 +28,7 @@
 #include <dbase/DConnection.hxx>
 #include <dbase/DColumns.hxx>
 #include <tools/config.hxx>
+#include <tools/diagnose_ex.h>
 #include <dbase/DIndex.hxx>
 #include <dbase/DIndexes.hxx>
 #include <comphelper/processfactory.hxx>
@@ -2241,7 +2242,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     }
     catch(const Exception&)
     {
-        SAL_WARN( "connectivity.drivers","ODbaseTable::alterColumn: Exception occurred!");
+        TOOLS_WARN_EXCEPTION( "connectivity.drivers","");
         throw;
     }
 }
