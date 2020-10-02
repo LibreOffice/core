@@ -114,6 +114,7 @@
 #define RID_SVXSTR_HANJA                            NC_("RID_SVXSTR_HANJA", "Hanja")
 #define RID_SVXSTR_BASICMACROS                      NC_("RID_SVXSTR_BASICMACROS", "BASIC Macros")
 #define RID_SVXSTR_GROUP_STYLES                     NC_("RID_SVXSTR_GROUP_STYLES", "Styles")
+#define RID_SVXSTR_GROUP_SIDEBARDECKS               NC_("RID_SVXSTR_GROUP_SIDEBARDECKS", "Sidebar Decks")
 
 #define RID_SVXSTR_EVENT_STARTAPP                   NC_("RID_SVXSTR_EVENT_STARTAPP", "Start Application")
 #define RID_SVXSTR_EVENT_CLOSEAPP                   NC_("RID_SVXSTR_EVENT_CLOSEAPP", "Close Application")

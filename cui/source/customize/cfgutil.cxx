@@ -55,6 +55,9 @@
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
+#include <sfx2/sidebar/ResourceManager.hxx>
+#include <sfx2/sidebar/Context.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -346,6 +349,7 @@ struct SvxConfigGroupBoxResource_Impl
     OUString m_sMacros;
     OUString m_sDlgMacros;
     OUString m_aStrGroupStyles;
+    OUString m_aStrGroupSidebarDecks;
 
     SvxConfigGroupBoxResource_Impl();
 };
@@ -355,7 +359,8 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
     m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
-    m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES))
+    m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES)),
+    m_aStrGroupSidebarDecks(CuiResId(RID_SVXSTR_GROUP_SIDEBARDECKS))
 {
 }
 
@@ -676,13 +681,18 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         }
     }
 
-    // add styles
+    // add styles and sidebar decks
     if ( bEventMode )
     {
         aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         OUString sStyle(xImp->m_aStrGroupStyles);
         OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
         m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, true, nullptr);
+
+        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SIDEBARDECKS, 0));
+        OUString sSidebarDecks(xImp->m_aStrGroupSidebarDecks);
+        sId = OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get()));
+        m_xTreeView->insert(nullptr, -1, &sSidebarDecks, &sId, nullptr, nullptr, false, nullptr);
     }
 
     m_xTreeView->thaw();
@@ -930,6 +940,31 @@ void CuiConfigGroupListBox::GroupSelected()
                     m_pFunctionListBox->append(sId, pStyle->sLabel);
                 }
             }
+            break;
+        }
+
+        case SfxCfgKind::GROUP_SIDEBARDECKS:
+        {
+            sfx2::sidebar::ResourceManager aResourceManager;
+            sfx2::sidebar::Context aContext(m_sModuleLongName, OUString());
+            sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks;
+            aResourceManager.GetMatchingDecks(aDecks, aContext, false, m_xFrame->getController());
+
+            for (auto const& rDeck : aDecks)
+            {
+                const OUString sCommand = ".uno:SidebarDeck." + rDeck.msId;
+                m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                                                       SfxCfgKind::GROUP_SIDEBARDECKS, 0,
+                                                       nullptr));
+                m_pFunctionListBox->aArr.back()->sCommand = sCommand;
+                m_pFunctionListBox->aArr.back()->sLabel = rDeck.msId;
+                m_pFunctionListBox->aArr.back()->sTooltip =
+                        vcl::CommandInfoProvider::GetCommandShortcut(sCommand, m_xFrame);
+                m_pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(
+                                                 m_pFunctionListBox->aArr.back().get())),
+                                           rDeck.msId);
+            }
+
             break;
         }
 
