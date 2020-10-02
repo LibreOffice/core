@@ -20,7 +20,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="org.openoffice.comp.pyuno.Loader"
-    constructor="pyuno_Loader_get_implementation">
+    constructor="pyuno_Loader_get_implementation" single-instance="true">
     <service name="com.sun.star.loader.Python"/>
   </implementation>
 </component>
