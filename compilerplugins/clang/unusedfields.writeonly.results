@@ -770,12 +770,12 @@ svx/source/sdr/attribute/sdrtextattribute.cxx:49
     drawinglayer::attribute::ImpSdrTextAttribute maPropertiesVersion sal_uInt32
 svx/source/sdr/attribute/sdrtextattribute.cxx:63
     drawinglayer::attribute::ImpSdrTextAttribute mbWrongSpell _Bool
-svx/source/sidebar/glow/GlowPropertyPanel.hxx:40
-    svx::sidebar::GlowPropertyPanel maGlowColorController sfx2::sidebar::ControllerItem
-svx/source/sidebar/glow/GlowPropertyPanel.hxx:41
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:40
+    svx::sidebar::EffectPropertyPanel maGlowColorController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:41
     svx::sidebar::GlowPropertyPanel maGlowRadiusController sfx2::sidebar::ControllerItem
-svx/source/sidebar/glow/GlowPropertyPanel.hxx:42
-    svx::sidebar::GlowPropertyPanel maGlowTransparencyController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:42
+    svx::sidebar::EffectPropertyPanel maGlowTransparencyController sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:83
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:84
@@ -816,8 +816,8 @@ svx/source/sidebar/possize/PosSizePropertyPanel.hxx:117
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/possize/PosSizePropertyPanel.hxx:119
     svx::sidebar::PosSizePropertyPanel mxAlignDispatch2 std::unique_ptr<ToolbarUnoDispatcher>
-svx/source/sidebar/softedge/SoftEdgePropertyPanel.hxx:41
-    svx::sidebar::SoftEdgePropertyPanel maSoftEdgeRadiusController sfx2::sidebar::ControllerItem
+svx/source/sidebar/effect/EffectPropertyPanel.hxx:41
+    svx::sidebar::EffectPropertyPanel maSoftEdgeRadiusController sfx2::sidebar::ControllerItem
 svx/source/sidebar/styles/StylesPropertyPanel.hxx:13
     svx::sidebar::StylesPropertyPanel m_xFontStyleDispatch std::unique_ptr<ToolbarUnoDispatcher>
 svx/source/sidebar/styles/StylesPropertyPanel.hxx:16
