@@ -18,7 +18,8 @@ import re
 
 DEFAULT_WARNING_STR = 'Lint assertion failed'
 
-POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkMessageDialog', 'GtkBox', 'GtkFrame', 'GtkGrid', 'GtkAssistant']
+POSSIBLE_TOP_LEVEL_WIDGETS = ['GtkDialog', 'GtkMessageDialog', 'GtkBox', 'GtkFrame', 'GtkGrid',
+    'GtkAssistant', 'GtkToolbar', 'GtkNotebook', 'GtkPopover', 'GtkWindow', 'GtkPaned', 'GtkScrolledWindow']
 IGNORED_TOP_LEVEL_WIDGETS = ['GtkAdjustment', 'GtkImage', 'GtkListStore', 'GtkSizeGroup', 'GtkMenu', 'GtkTextBuffer', 'GtkTreeStore']
 BORDER_WIDTH = '6'
 BUTTON_BOX_SPACING = '12'
