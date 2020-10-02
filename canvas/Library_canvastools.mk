@@ -24,6 +24,8 @@ $(eval $(call gb_Library_set_include,canvastools,\
     -I$(SRCDIR)/canvas/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,canvastools,canvas/inc/pch/precompiled_canvastools))
+
 $(eval $(call gb_Library_use_sdk_api,canvastools))
 
 $(eval $(call gb_Library_add_defs,canvastools,\
