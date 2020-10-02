@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -93,6 +94,47 @@ class chartTitles(UITestCase):
 
     xOKBtn = xDialog.getChild("ok")
     self.ui_test.close_dialog_through_button(xOKBtn)
+
+    self.ui_test.close_doc()
+
+   def test_title_move_with_arrows_keys(self):
+
+    calc_doc = self.ui_test.load_file(get_url_for_data_file("chartArea.ods"))
+    xCalcDoc = self.xUITest.getTopFocusWindow()
+    gridwin = xCalcDoc.getChild("grid_window")
+
+    change_measurement_unit(self, "Centimeter")
+
+    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    gridwin.executeAction("ACTIVATE", tuple())
+    xChartMainTop = self.xUITest.getTopFocusWindow()
+    xChartMain = xChartMainTop.getChild("chart_window")
+
+    # Select the title
+    xTitle = xChartMain.getChild("CID/Title=")
+    xTitle.executeAction("SELECT", tuple())
+
+    self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+
+    self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    # Check the position has changed after moving the title using the arrows keys
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("3.42", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("0.2", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xOkBtn = xDialog.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
 
     self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
