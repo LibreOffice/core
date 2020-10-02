@@ -404,7 +404,7 @@ class SAL_DLLPUBLIC_RTTI SwDrawContact final : public SwContact
 
         /** get data collection of anchored objects, handled by with contact */
 
-        static void GetTextObjectsFromFormat( std::list<SdrTextObj*>&, SwDoc* );
+        static void GetTextObjectsFromFormat( std::list<SdrTextObj*>&, SwDoc& );
         virtual void GetAnchoredObjs( std::vector<SwAnchoredObject*>& _roAnchoredObjs ) const override;
 };
 
