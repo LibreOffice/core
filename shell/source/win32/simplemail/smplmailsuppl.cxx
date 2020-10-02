@@ -18,8 +18,8 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <rtl/ref.hxx>
 #include "smplmailsuppl.hxx"
 #include "smplmailclient.hxx"
 
@@ -79,9 +79,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CSmplMailSuppl_get_implementation(
     css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
 {
-    static rtl::Reference<CSmplMailSuppl> g_Instance(new CSmplMailSuppl());
-    g_Instance->acquire();
-    return static_cast<cppu::OWeakObject*>(g_Instance.get());
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(new CSmplMailSuppl()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
