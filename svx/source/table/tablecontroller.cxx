@@ -1528,11 +1528,11 @@ void SvxTableController::changeTableEdge(const SfxRequest& rReq)
             {
                 auto pUndoObject = rModel.GetSdrUndoFactory().CreateUndoGeoObject(rTableObj);
                 rModel.BegUndo(pUndoObject->GetComment());
-                rModel.AddUndo(std::move(pUndoObject));
 
                 auto* pGeoUndo = static_cast<SdrUndoGeoObj*>(pUndoObject.get());
                 if (pGeoUndo)
                     pGeoUndo->SetSkipChangeLayout(true);
+                rModel.AddUndo(std::move(pUndoObject));
             }
             tools::Rectangle aBoundRect;
             if (rTableObj.GetUserCall())
