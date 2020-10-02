@@ -26,14 +26,14 @@ class SwDoc;
 class SwDrawModel final : public FmFormModel
 {
 private:
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 
 public:
-    SwDrawModel( SwDoc* pDoc );
+    SwDrawModel(SwDoc& rDoc);
     virtual ~SwDrawModel() override;
 
-    const SwDoc& GetDoc() const { return *m_pDoc; }
-          SwDoc& GetDoc()       { return *m_pDoc; }
+    const SwDoc& GetDoc() const { return m_rDoc; }
+          SwDoc& GetDoc()       { return m_rDoc; }
     /// Put needed items for XPropertyList entries from the DrawModel.
     void PutAreaListItems(SfxItemSet& rSet) const;
 

@@ -1558,7 +1558,7 @@ void SwUiWriterTest::testFdo82191()
     pWrtShell->Paste(&aClipboard);
 
     // This was one: the textbox of the shape wasn't copied.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(pDoc));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(*pDoc));
 }
 
 void SwUiWriterTest::testCommentedWord()

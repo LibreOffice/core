@@ -223,10 +223,10 @@ sal_Int32 SwTextBoxHelper::getCount(SdrPage const* pPage)
     return nRet;
 }
 
-sal_Int32 SwTextBoxHelper::getCount(const SwDoc* pDoc)
+sal_Int32 SwTextBoxHelper::getCount(const SwDoc& rDoc)
 {
     sal_Int32 nRet = 0;
-    const SwFrameFormats& rSpzFrameFormats = *pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rSpzFrameFormats = *rDoc.GetSpzFrameFormats();
     for (const auto pFormat : rSpzFrameFormats)
     {
         if (isTextBox(pFormat, RES_FLYFRMFMT))
