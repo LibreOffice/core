@@ -34,7 +34,7 @@ com_sun_star_comp_configuration_DefaultProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
     osl::MutexGuard guard(*configmgr::lock());
-    static css::uno::Reference< css::uno::XInterface > singleton(
+    css::uno::Reference< css::uno::XInterface > singleton(
         configmgr::configuration_provider::createDefault(context));
     singleton->acquire();
     return singleton.get();

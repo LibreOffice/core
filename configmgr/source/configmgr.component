@@ -28,7 +28,8 @@
     <service name="com.sun.star.configuration.ConfigurationRegistry"/>
   </implementation>
   <implementation name="com.sun.star.comp.configuration.DefaultProvider"
-    constructor="com_sun_star_comp_configuration_DefaultProvider_get_implementation">
+    constructor="com_sun_star_comp_configuration_DefaultProvider_get_implementation"
+    single-instance="true">
     <service name="com.sun.star.configuration.DefaultProvider"/>
     <singleton name="com.sun.star.configuration.theDefaultProvider"/>
   </implementation>
