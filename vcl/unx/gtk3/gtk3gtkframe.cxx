@@ -2039,42 +2039,16 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bKeyboardAlso, bool bOwnerEvents
     if (!m_pWindow)
         return;
 
-#if GTK_CHECK_VERSION(3, 20, 0)
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
-        if (bGrab)
-        {
-            GdkSeatCapabilities eCapability = bKeyboardAlso ? GDK_SEAT_CAPABILITY_ALL : GDK_SEAT_CAPABILITY_ALL_POINTING;
-            gdk_seat_grab(pSeat, gtk_widget_get_window(getMouseEventWidget()), eCapability,
-                          bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
-        }
-        else
-        {
-            gdk_seat_ungrab(pSeat);
-        }
-        return;
-    }
-#endif
-
-    //else older gtk3
-    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
-    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-    GdkDevice* pKeyboard = bKeyboardAlso ? gdk_device_get_associated_device(pPointer) : nullptr;
-    GdkWindow* pWindow = gtk_widget_get_window(getMouseEventWidget());
-    guint32 nCurrentTime = gtk_get_current_event_time();
+    GdkSeat* pSeat = gdk_display_get_default_seat(getGdkDisplay());
     if (bGrab)
     {
-        gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE,
-                        bOwnerEvents, GDK_ALL_EVENTS_MASK, m_pCurrentCursor, nCurrentTime);
-        if (pKeyboard)
-            gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
+        GdkSeatCapabilities eCapability = bKeyboardAlso ? GDK_SEAT_CAPABILITY_ALL : GDK_SEAT_CAPABILITY_ALL_POINTING;
+        gdk_seat_grab(pSeat, gtk_widget_get_window(getMouseEventWidget()), eCapability,
+                      bOwnerEvents, nullptr, nullptr, nullptr, nullptr);
     }
     else
     {
-        gdk_device_ungrab(pPointer, nCurrentTime);
-        if (pKeyboard)
-            gdk_device_ungrab(pKeyboard, nCurrentTime);
+        gdk_seat_ungrab(pSeat);
     }
 }
 
@@ -4612,13 +4586,8 @@ GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
     GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
     event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(pWidget)));
 
-#if GTK_CHECK_VERSION(3, 20, 0)
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
-        gdk_event_set_device(event, gdk_seat_get_keyboard(seat));
-    }
-#endif
+    GdkSeat *seat = gdk_display_get_default_seat(gtk_widget_get_display(pWidget));
+    gdk_event_set_device(event, gdk_seat_get_keyboard(seat));
 
     event->key.send_event = 1 /* TRUE */;
     event->key.time = gtk_get_current_event_time();

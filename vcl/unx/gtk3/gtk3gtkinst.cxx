@@ -3337,29 +3337,20 @@ namespace
     GtkWidget* image_new_from_virtual_device(const VirtualDevice& rImageSurface)
     {
         GtkWidget* pImage = nullptr;
-        if (gtk_check_version(3, 20, 0) == nullptr)
-        {
-            cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
+        cairo_surface_t* surface = get_underlying_cairo_surface(rImageSurface);
 
-            Size aSize(rImageSurface.GetOutputSizePixel());
-            cairo_surface_t* target = cairo_surface_create_similar(surface,
-                                                                   cairo_surface_get_content(surface),
-                                                                   aSize.Width(),
-                                                                   aSize.Height());
+        Size aSize(rImageSurface.GetOutputSizePixel());
+        cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                               cairo_surface_get_content(surface),
+                                                               aSize.Width(),
+                                                               aSize.Height());
 
-            cairo_t* cr = cairo_create(target);
-            cairo_set_source_surface(cr, surface, 0, 0);
-            cairo_paint(cr);
-            cairo_destroy(cr);
-            pImage = gtk_image_new_from_surface(target);
-            cairo_surface_destroy(target);
-        }
-        else
-        {
-            GdkPixbuf* pixbuf = getPixbuf(rImageSurface);
-            pImage = gtk_image_new_from_pixbuf(pixbuf);
-            g_object_unref(pixbuf);
-        }
+        cairo_t* cr = cairo_create(target);
+        cairo_set_source_surface(cr, surface, 0, 0);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+        pImage = gtk_image_new_from_surface(target);
+        cairo_surface_destroy(target);
         return pImage;
     }
 
@@ -6402,8 +6393,7 @@ public:
         GtkStyleContext *pNotebookContext = gtk_widget_get_style_context(GTK_WIDGET(m_pOverFlowNotebook));
         GtkCssProvider *pProvider = gtk_css_provider_new();
         static const gchar data[] = "header.top > tabs > tab:checked { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; min-height: 0; min-width: 0; }";
-        static const gchar olddata[] = "tab.top:active { box-shadow: none; padding: 0 0 0 0; margin: 0 0 0 0; border-image: none; border-image-width: 0 0 0 0; background-image: none; background-color: transparent; border-radius: 0 0 0 0; border-width: 0 0 0 0; border-style: none; border-color: transparent; opacity: 0; }";
-        gtk_css_provider_load_from_data(pProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+        gtk_css_provider_load_from_data(pProvider, data, -1, nullptr);
         gtk_style_context_add_provider(pNotebookContext, GTK_STYLE_PROVIDER(pProvider),
                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
@@ -6980,43 +6970,16 @@ public:
 void do_grab(GtkWidget* pWidget)
 {
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
-#if GTK_CHECK_VERSION(3, 20, 0)
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
-        gdk_seat_grab(pSeat, gtk_widget_get_window(pWidget),
-                      GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
-        return;
-    }
-#endif
-    //else older gtk3
-    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
-    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-    GdkWindow* pWindow = gtk_widget_get_window(pWidget);
-    guint32 nCurrentTime = gtk_get_current_event_time();
-    gdk_device_grab(pPointer, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
-    if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
-        gdk_device_grab(pKeyboard, pWindow, GDK_OWNERSHIP_NONE, true, GDK_ALL_EVENTS_MASK, nullptr, nCurrentTime);
+    GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+    gdk_seat_grab(pSeat, gtk_widget_get_window(pWidget),
+                  GDK_SEAT_CAPABILITY_ALL, true, nullptr, nullptr, nullptr, nullptr);
 }
 
 void do_ungrab(GtkWidget* pWidget)
 {
     GdkDisplay *pDisplay = gtk_widget_get_display(pWidget);
-#if GTK_CHECK_VERSION(3, 20, 0)
-    if (gtk_check_version(3, 20, 0) == nullptr)
-    {
-        GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
-        gdk_seat_ungrab(pSeat);
-        return;
-    }
-#endif
-    //else older gtk3
-    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(pDisplay);
-    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-    guint32 nCurrentTime = gtk_get_current_event_time();
-    gdk_device_ungrab(pPointer, nCurrentTime);
-    if (GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer))
-        gdk_device_ungrab(pKeyboard, nCurrentTime);
+    GdkSeat* pSeat = gdk_display_get_default_seat(pDisplay);
+    gdk_seat_ungrab(pSeat);
 }
 
 GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu)
@@ -7376,16 +7339,7 @@ public:
     {
         ensure_image_widget();
         if (pDevice)
-        {
-            if (gtk_check_version(3, 20, 0) == nullptr)
-                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-            else
-            {
-                GdkPixbuf* pixbuf = getPixbuf(*pDevice);
-                gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-                g_object_unref(pixbuf);
-            }
-        }
+            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
         else
             gtk_image_set_from_surface(m_pImage, nullptr);
     }
@@ -7927,12 +7881,7 @@ private:
                       "margin-right: 0px;"
                       "min-width: 4px;"
                       "}";
-                    const gchar olddata[] = "* { "
-                      "padding: 0;"
-                      "margin-left: 0px;"
-                      "margin-right: 0px;"
-                      "}";
-                    gtk_css_provider_load_from_data(m_pMenuButtonProvider, gtk_check_version(3, 20, 0) == nullptr ? data : olddata, -1, nullptr);
+                    gtk_css_provider_load_from_data(m_pMenuButtonProvider, data, -1, nullptr);
                 }
 
                 gtk_style_context_add_provider(pButtonContext,
@@ -8501,19 +8450,10 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override
     {
-        if (gtk_check_version(3, 20, 0) == nullptr)
-        {
-            if (pDevice)
-                gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
-            else
-                gtk_image_set_from_surface(m_pImage, nullptr);
-            return;
-        }
-
-        GdkPixbuf* pixbuf = pDevice ? getPixbuf(*pDevice) : nullptr;
-        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
-        if (pixbuf)
-            g_object_unref(pixbuf);
+        if (pDevice)
+            gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
+        else
+            gtk_image_set_from_surface(m_pImage, nullptr);
     }
 
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override
