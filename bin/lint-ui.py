@@ -10,6 +10,9 @@
 # a consistent look for dialogs
 
 import sys
+# Force python XML parser not faster C accelerators
+# because we can't hook the C implementation
+sys.modules['_elementtree'] = None
 import xml.etree.ElementTree as ET
 import re
 
@@ -26,9 +29,31 @@ MESSAGE_BORDER_WIDTH = '12'
 
 IGNORED_WORDS = ['the', 'of', 'to', 'for', 'a', 'and', 'as', 'from', 'on', 'into', 'by', 'at', 'or', 'do', 'in', 'when']
 
-def lint_assert(predicate, warning=DEFAULT_WARNING_STR):
+# Hook the XML parser and add line number attributes
+class LineNumberingParser(ET.XMLParser):
+    def _start(self, *args, **kwargs):
+        # Here we assume the default XML parser which is expat
+        # and copy its element position attributes into output Elements
+        element = super(self.__class__, self)._start(*args, **kwargs)
+        element._start_line_number = self.parser.CurrentLineNumber
+        element._start_column_number = self.parser.CurrentColumnNumber
+        element._start_byte_index = self.parser.CurrentByteIndex
+        return element
+
+    def _end(self, *args, **kwargs):
+        element = super(self.__class__, self)._end(*args, **kwargs)
+        element._end_line_number = self.parser.CurrentLineNumber
+        element._end_column_number = self.parser.CurrentColumnNumber
+        element._end_byte_index = self.parser.CurrentByteIndex
+        return element
+
+
+def lint_assert(predicate, warning=DEFAULT_WARNING_STR, node=None):
     if not predicate:
-        print("    * " + warning)
+        if not(node is None):
+            print(sys.argv[1] + ":" + str(node._start_line_number) + ": " + warning)
+        else:
+            print(sys.argv[1] + ": " + warning)
 
 def check_top_level_widget(element):
     # check widget type
@@ -45,20 +70,22 @@ def check_top_level_widget(element):
         border_width = border_width_properties[0]
         if widget_type == "GtkMessageDialog":
             lint_assert(border_width.text == MESSAGE_BORDER_WIDTH,
-                        "Top level 'border_width' property should be " + MESSAGE_BORDER_WIDTH)
+                        "Top level 'border_width' property should be " + MESSAGE_BORDER_WIDTH, border_width)
         else:
             lint_assert(border_width.text == BORDER_WIDTH,
-                        "Top level 'border_width' property should be " + BORDER_WIDTH)
+                        "Top level 'border_width' property should be " + BORDER_WIDTH, border_width)
 
 def check_button_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")
     lint_assert(len(spacing) > 0 and spacing[0].text == BUTTON_BOX_SPACING,
-                "Button box 'spacing' should be " + BUTTON_BOX_SPACING)
+                "Button box 'spacing' should be " + BUTTON_BOX_SPACING,
+                element)
 
 def check_message_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")
     lint_assert(len(spacing) > 0 and spacing[0].text == MESSAGE_BOX_SPACING,
-                "Button box 'spacing' should be " + MESSAGE_BOX_SPACING)
+                "Button box 'spacing' should be " + MESSAGE_BOX_SPACING,
+                element)
 
 def check_radio_buttons(root):
     radios = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkRadioButton']
@@ -66,7 +93,7 @@ def check_radio_buttons(root):
         radio_underlines = radio.findall("./property[@name='use_underline']")
         assert len(radio_underlines) <= 1
         if len(radio_underlines) < 1:
-            lint_assert(False, "No use_underline in GtkRadioButton with id = '" + radio.attrib['id'] + "'")
+            lint_assert(False, "No use_underline in GtkRadioButton with id = '" + radio.attrib['id'] + "'", radio)
 
 def check_menu_buttons(root):
     buttons = [element for element in root.findall('.//object') if element.attrib['class'] == "GtkMenuButton"]
@@ -75,7 +102,7 @@ def check_menu_buttons(root):
         images = button.findall("./property[@name='image']")
         assert(len(labels) <= 1)
         if len(labels) < 1 and len(images) < 1:
-            lint_assert(False, "No label in GtkMenuButton with id = '" + button.attrib['id'] + "'")
+            lint_assert(False, "No label in GtkMenuButton with id = '" + button.attrib['id'] + "'", button)
 
 def check_check_buttons(root):
     radios = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkCheckButton']
@@ -83,7 +110,7 @@ def check_check_buttons(root):
         radio_underlines = radio.findall("./property[@name='use_underline']")
         assert len(radio_underlines) <= 1
         if len(radio_underlines) < 1:
-            lint_assert(False, "No use_underline in GtkCheckButton with id = '" + radio.attrib['id'] + "'")
+            lint_assert(False, "No use_underline in GtkCheckButton with id = '" + radio.attrib['id'] + "'", radio)
 
 
 def check_frames(root):
@@ -92,7 +119,7 @@ def check_frames(root):
         frame_alignments = frame.findall("./child/object[@class='GtkAlignment']")
         assert len(frame_alignments) <= 1
         if len(frame_alignments) < 1:
-            lint_assert(False, "No GtkAlignment in GtkFrame with id = '" + frame.attrib['id'] + "'")
+            lint_assert(False, "No GtkAlignment in GtkFrame with id = '" + frame.attrib['id'] + "'", frame)
         if len(frame_alignments) == 1:
             alignment = frame_alignments[0]
             check_alignment_top_padding(alignment)
@@ -101,28 +128,27 @@ def check_alignment_top_padding(alignment):
     top_padding_properties = alignment.findall("./property[@name='top_padding']")
     assert len(top_padding_properties) <= 1
     if len(top_padding_properties) < 1:
-        lint_assert(False, "No GtkAlignment 'top_padding' set. Should probably be " + ALIGNMENT_TOP_PADDING)
+        lint_assert(False, "No GtkAlignment 'top_padding' set. Should probably be " + ALIGNMENT_TOP_PADDING, alignment)
     if len(top_padding_properties) == 1:
         top_padding = top_padding_properties[0]
         lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
-                    "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING)
+                    "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING, alignment)
 
 def check_title_labels(root):
     labels = root.findall(".//child[@type='label']")
-    titles = [label.find(".//property[@name='label']") for label in labels]
-    for title in titles:
+    for label in labels:
+        title = label.find(".//property[@name='label']")
         if title is None:
             continue
         words = re.split(r'[^a-zA-Z0-9:_-]', title.text)
         first = True
         for word in words:
             if len(word) and word[0].islower() and (word not in IGNORED_WORDS or first):
-                lint_assert(False, "The word '" + word + "' should be capitalized")
+                lint_assert(False, "The word '" + word + "' should be capitalized", label)
             first = False
 
 def main():
-    print(" == " + sys.argv[1] + " ==")
-    tree = ET.parse(sys.argv[1])
+    tree = ET.parse(sys.argv[1], parser=LineNumberingParser())
     root = tree.getroot()
 
     lint_assert('domain' in root.attrib, "interface needs to specific translation domain")
