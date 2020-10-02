@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "24f5dfc9_f32e8722",
+        "filename": "sc/qa/unit/copy_paste_test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 641,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-02T15:49:01Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 641,
+        "startChar": 44,
+        "endLine": 641,
+        "endChar": 45
+      },
+      "revId": "6890aed450e8ef66e807854854eb7631ff3b1c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebf40d7f_3595c27f",
+        "filename": "sc/source/ui/inc/cellmergeoption.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-02T15:49:01Z",
+      "side": 1,
+      "message": "it\u0027s better to avoid of cosmetic changes",
+      "range": {
+        "startLine": 28,
+        "startChar": 31,
+        "endLine": 28,
+        "endChar": 44
+      },
+      "revId": "6890aed450e8ef66e807854854eb7631ff3b1c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0dcee60b_bdd34eca",
+        "filename": "sc/source/ui/inc/cellmergeoption.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-02T15:49:01Z",
+      "side": 1,
+      "message": "it\u0027s better to avoid of cosmetic changes",
+      "range": {
+        "startLine": 29,
+        "startChar": 31,
+        "endLine": 29,
+        "endChar": 44
+      },
+      "revId": "6890aed450e8ef66e807854854eb7631ff3b1c4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
