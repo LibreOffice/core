@@ -63,7 +63,12 @@ namespace svt { namespace uno
 
             TabPage* pTabPage( getTabPage() );
             if ( pTabPage )
+            {
                 pTabPage->SetStyle( pTabPage->GetStyle() | WB_CHILDDLGCTRL | WB_DIALOGCONTROL );
+                Size sizeOutput = pTabPage->GetOutputSizePixel();
+                pTabPage->SetScrollHeight(sizeOutput.Height());
+                pTabPage->SetScrollWidth(sizeOutput.Width());
+            }
         }
         catch( const Exception& )
         {
@@ -100,6 +105,11 @@ namespace svt { namespace uno
                 const Reference< XControl > xPageControl( m_xWizardPage->getWindow(), UNO_QUERY_THROW );
                 xPageWindow.set( xPageControl->getPeer(), UNO_QUERY_THROW );
                 pPageWindow = VCLUnoHelper::GetWindow( xPageWindow );
+            }
+            else
+            {
+                Reference< XControl> ctrl(m_xWizardPage->getWindow(), UNO_QUERY_THROW);
+                pPageWindow = VCLUnoHelper::GetWindow(ctrl->getPeer());
             }
 
             OSL_ENSURE( pPageWindow, "WizardPageController::getTabPage: unable to find the Window implementation for the page's window!" );
