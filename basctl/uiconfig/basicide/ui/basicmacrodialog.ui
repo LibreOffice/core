@@ -65,6 +65,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="can_default">True</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -78,7 +79,6 @@
                 <property name="label">gtk-help</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -135,7 +135,6 @@
                               <object class="GtkTreeView" id="macros">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore2</property>
@@ -210,7 +209,6 @@
                               <object class="GtkTreeView" id="libraries">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="vexpand">True</property>
                                 <property name="model">liststore1</property>
@@ -351,7 +349,6 @@
                         <property name="label" translatable="yes" context="basicmacrodialog|assign">Assign...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="assign-atkobject">
@@ -370,7 +367,6 @@
                         <property name="label" translatable="yes" context="basicmacrodialog|edit">Edit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edit-atkobject">
@@ -389,7 +385,6 @@
                         <property name="label" translatable="yes" context="basicmacrodialog|delete">_Delete</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="delete-atkobject">
@@ -407,7 +402,6 @@
                       <object class="GtkButton" id="new">
                         <property name="label" translatable="yes" context="basicmacrodialog|new">_New</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
@@ -427,7 +421,6 @@
                         <property name="label" translatable="yes" context="basicmacrodialog|organize">Organizer...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="organize-atkobject">
@@ -445,7 +438,6 @@
                       <object class="GtkButton" id="newlibrary">
                         <property name="label" translatable="yes" context="basicmacrodialog|newlibrary">New Library</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
@@ -464,7 +456,6 @@
                       <object class="GtkButton" id="newmodule">
                         <property name="label" translatable="yes" context="basicmacrodialog|newmodule">New Module</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
                         <property name="use_underline">True</property>
                         <child internal-child="accessible">
