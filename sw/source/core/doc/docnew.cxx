@@ -889,7 +889,7 @@ SfxObjectShell* SwDoc::CreateCopy( bool bCallInitNew, bool bEmpty ) const
     // we have to use pointer here, since the callee has to decide whether
     // SfxObjectShellLock or SfxObjectShellRef should be used sometimes the
     // object will be returned with refcount set to 0 ( if no DoInitNew is done )
-    SfxObjectShell* pRetShell = new SwDocShell( xRet.get(), SfxObjectCreateMode::STANDARD );
+    SfxObjectShell* pRetShell = new SwDocShell( *xRet, SfxObjectCreateMode::STANDARD );
     if( bCallInitNew )
     {
         // it could happen that DoInitNew creates model,

@@ -261,7 +261,7 @@ bool SwOLENode::RestorePersistentData()
             // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
             // What happens to this document?
             OSL_ENSURE( false, "Why are we creating a DocShell here?" );
-            p = new SwDocShell( &GetDoc(), SfxObjectCreateMode::INTERNAL );
+            p = new SwDocShell( GetDoc(), SfxObjectCreateMode::INTERNAL );
             p->DoInitNew();
         }
 
@@ -431,7 +431,7 @@ SwContentNode* SwOLENode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx, bool) 
     {
         // TODO/LATER: is EmbeddedObjectContainer not enough?
         // the created document will be closed by rDoc ( should use SfxObjectShellLock )
-        pPersistShell = new SwDocShell( &rDoc, SfxObjectCreateMode::INTERNAL );
+        pPersistShell = new SwDocShell( rDoc, SfxObjectCreateMode::INTERNAL );
         rDoc.SetTmpDocShell( pPersistShell );
         pPersistShell->DoInitNew();
     }
@@ -874,7 +874,7 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         // TODO/LATER: Isn't an EmbeddedObjectContainer sufficient here?
         // What happens to the document?
         OSL_ENSURE( false, "Why are we creating a DocShell here??" );
-        p = new SwDocShell( &rDoc, SfxObjectCreateMode::INTERNAL );
+        p = new SwDocShell( rDoc, SfxObjectCreateMode::INTERNAL );
         p->DoInitNew();
     }
 

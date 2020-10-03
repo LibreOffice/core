@@ -645,7 +645,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     SwWrtShell& rOldSh = m_pView->GetWrtShell();
     SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess().getPrinter( false );
     SwDocShell* pDocSh;
-    SfxObjectShellLock xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SfxObjectCreateMode::STANDARD ) );
+    SfxObjectShellLock xDocSh( pDocSh = new SwDocShell(SfxObjectCreateMode::STANDARD) );
     xDocSh->DoInitNew();
     SwDoc *const pTempDoc( pDocSh->GetDoc() );
     // #i103634#, #i112425#: do not expand numbering and fields on PDF export

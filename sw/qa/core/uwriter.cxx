@@ -2113,7 +2113,7 @@ void SwDocTest::setUp()
 
     SwGlobals::ensure();
     m_pDoc = new SwDoc;
-    m_xDocShRef = new SwDocShell(m_pDoc, SfxObjectCreateMode::EMBEDDED);
+    m_xDocShRef = new SwDocShell(*m_pDoc, SfxObjectCreateMode::EMBEDDED);
     m_xDocShRef->DoInitNew();
 }
 
