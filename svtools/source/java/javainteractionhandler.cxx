@@ -34,6 +34,8 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
@@ -144,6 +146,10 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
                                                              VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND)));
 #endif
             xWarningBox->set_title(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
+            xWarningBox->set_primary_text(
+                sPrimTex.concat(", https://hub.libreoffice.org/InstallJava"));
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            xWarningBox->set_primary_text(sPrimTex.concat("?LOlocale=" + aLang));
             nResult = xWarningBox->run();
         }
         else
