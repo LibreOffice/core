@@ -1,0 +1,155 @@
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index 98b3e4f0a..c1471220b 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -493,6 +493,65 @@ FPDFAnnot_RemoveInkList(FPDF_ANNOTATION annot) {
+   return true;
+ }
+
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetInkStrokeCount(FPDF_ANNOTATION annot)
++{
++  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
++    return -1;
++
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++
++  CPDF_Array* inklist = pAnnotDict->GetArrayFor("InkList");
++  if (!inklist)
++    return 0;
++
++  return static_cast<int>(inklist->size());
++}
++
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetInkStrokePointCount(FPDF_ANNOTATION annot, int index)
++{
++  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
++    return -1;
++
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++
++  CPDF_Array* pInkList = pAnnotDict->GetArrayFor("InkList");
++  if (!pInkList)
++    return 0;
++
++  CPDF_Array* pInkPoints = pInkList->GetArrayAt(index);
++  if (!pInkPoints)
++    return 0;
++
++  return static_cast<int>(pInkPoints->size() / 2);
++}
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
++                             FS_POINTF* points)
++{
++  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_INK)
++    return false;
++
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++
++  CPDF_Array* pInkList = pAnnotDict->GetArrayFor("InkList");
++  if (!pInkList)
++    return false;
++  CPDF_Array* pInkPoints = pInkList->GetArrayAt(index);
++  if (!pInkPoints)
++    return false;
++
++  for (int i = 0; i < pInkPoints->size(); i += 2) {
++      int pointIndex = i / 2;
++      points[pointIndex].x = pInkPoints->GetNumberAt(i);
++      points[pointIndex].y = pInkPoints->GetNumberAt(i + 1);
++  }
++
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFAnnot_AppendObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
+   CPDF_AnnotContext* pAnnot = CPDFAnnotContextFromFPDFAnnotation(annot);
+@@ -806,6 +865,48 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetRect(FPDF_ANNOTATION annot,
+   return true;
+ }
+
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetVerticesCount(FPDF_ANNOTATION annot)
++{
++  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYGON &&
++      FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYLINE) {
++    return -1;
++  }
++
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++
++  CPDF_Array* pVertices = pAnnotDict->GetArrayFor("Vertices");
++
++  if (!pVertices)
++    return 0;
++
++  return static_cast<int>(pVertices->size() / 2);
++}
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, FS_POINTF* points)
++{
++  if (FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYGON &&
++      FPDFAnnot_GetSubtype(annot) != FPDF_ANNOT_POLYLINE) {
++    return false;
++  }
++
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++
++  CPDF_Array* pVertices = pAnnotDict->GetArrayFor("Vertices");
++
++  if (!pVertices)
++    return false;
++
++  for (int i = 0; i < pVertices->size(); i += 2) {
++      int pointIndex = i / 2;
++      points[pointIndex].x = pVertices->GetNumberAt(i);
++      points[pointIndex].y = pVertices->GetNumberAt(i + 1);
++  }
++
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_HasKey(FPDF_ANNOTATION annot,
+                                                      FPDF_BYTESTRING key) {
+   CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index 9561d8416..2176450c8 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -222,6 +222,16 @@ FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_AddInkStroke(FPDF_ANNOTATION annot,
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFAnnot_RemoveInkList(FPDF_ANNOTATION annot);
+
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetInkStrokeCount(FPDF_ANNOTATION annot);
++
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetInkStrokePointCount(FPDF_ANNOTATION annot, int index);
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
++                             FS_POINTF* points);
++
+ // Experimental API.
+ // Add |obj| to |annot|. |obj| must have been created by
+ // FPDFPageObj_CreateNew{Path|Rect}() or FPDFPageObj_New{Text|Image}Obj(), and
+@@ -394,6 +404,12 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetRect(FPDF_ANNOTATION annot,
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetRect(FPDF_ANNOTATION annot,
+                                                       FS_RECTF* rect);
+
++FPDF_EXPORT int FPDF_CALLCONV
++FPDFAnnot_GetVerticesCount(FPDF_ANNOTATION annot);
++
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetVertices(FPDF_ANNOTATION annot, FS_POINTF* points);
++
+ // Experimental API.
+ // Check if |annot|'s dictionary has |key| as a key.
+ //
+--
+2.26.2

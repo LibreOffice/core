@@ -77,6 +77,8 @@ public:
     std::unique_ptr<PDFiumAnnotation> getLinked(OString const& rKey);
     int getObjectCount();
     std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
+    std::vector<std::vector<basegfx::B2DPoint>> getInkStrokes();
+    std::vector<basegfx::B2DPoint> getVertices();
 };
 
 class PDFiumTextPage;
