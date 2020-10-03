@@ -334,6 +334,10 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Freehand Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnotation->getInkStrokes().size());
+        auto const& aInkStrokes = pAnnotation->getInkStrokes();
+        auto const& aPoints = aInkStrokes[0];
+        CPPUNIT_ASSERT_EQUAL(size_t(74), aPoints.size());
     }
 
     {
@@ -353,6 +357,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"));
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Polygon Text"), aContentsString);
+        auto const& aVertices = pAnnotation->getVertices();
+        CPPUNIT_ASSERT_EQUAL(size_t(3), aVertices.size());
     }
 
     {
