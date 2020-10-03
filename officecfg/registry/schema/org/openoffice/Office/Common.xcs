@@ -2131,6 +2131,11 @@
           <desc>Specifies the URL used with the UNO command WhatsNew (SID_WHATSNEW).</desc>
         </info>
       </prop>
+      <prop oor:name="InstallJavaURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used for Install Java message box.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->
