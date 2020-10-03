@@ -195,6 +195,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
     , nInitFormat(ULONG_MAX)
+    , m_nLbFormatSelPosEdComment(SELPOS_NONE)
     , bLegacyAutomaticCurrency(false)
     , sAutomaticLangEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
     , m_xFtCategory(m_xBuilder->weld_label("categoryft"))
@@ -1166,6 +1167,18 @@ IMPL_LINK(SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, weld::ComboBox&, rLb
 
 void SvxNumberFormatTabPage::SelFormatHdl_Impl(weld::Widget* pLb)
 {
+    if (m_nLbFormatSelPosEdComment != SELPOS_NONE)
+    {
+        // Click handler is called before focus change handler, so finish
+        // comment editing of previous format, otherwise a new format will have
+        // the old comment displayed after LostFocusHdl_Impl() is called
+        // later. Also, clicking into another category invalidates the format
+        // list and SvxNumberFormatShell::SetComment4Entry() could either
+        // access a wrong format from aCurEntryList[nEntry] or crash there if
+        // the new vector has less elements.
+        LostFocusHdl_Impl(*pLb);
+    }
+
     if (pLb == m_xCbSourceFormat.get())
     {
         EnableBySourceFormat_Impl();    // enable/disable everything else
@@ -1424,6 +1437,10 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
     {
         if (!m_xEdComment->get_visible())
         {
+            if (!m_xIbAdd->get_sensitive())
+                // Editing for existing format.
+                m_nLbFormatSelPosEdComment = m_xLbFormat->get_selected_index();
+
             m_xEdComment->set_text(m_xFtComment->get_label());
             m_xEdComment->show();
             m_xFtComment->hide();
@@ -1432,6 +1449,7 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
         else
         {
             m_xEdFormat->grab_focus();
+            m_xFtComment->set_label( m_xEdComment->get_text());
             m_xEdComment->hide();
             m_xFtComment->show();
         }
@@ -1600,13 +1618,22 @@ IMPL_LINK_NOARG(SvxNumberFormatTabPage, LostFocusHdl_Impl, weld::Widget&, void)
 {
     if (!pNumFmtShell)
         return;
-    m_xFtComment->set_label(m_xEdComment->get_text());
+
+    const bool bAddSensitive = m_xIbAdd->get_sensitive();
+    if (bAddSensitive || m_nLbFormatSelPosEdComment != SELPOS_NONE)
+        // Comment editing was possible.
+        m_xFtComment->set_label(m_xEdComment->get_text());
+
     m_xEdComment->hide();
     m_xFtComment->show();
-    if(!m_xIbAdd->get_sensitive())
+    if (m_nLbFormatSelPosEdComment != SELPOS_NONE)
     {
-        sal_uInt16 nSelPos = m_xLbFormat->get_selected_index();
-        pNumFmtShell->SetComment4Entry(nSelPos, m_xEdComment->get_text());
+        // Save edited comment of existing format.
+        pNumFmtShell->SetComment4Entry( m_nLbFormatSelPosEdComment, m_xEdComment->get_text());
+        m_nLbFormatSelPosEdComment = SELPOS_NONE;
+    }
+    if (!bAddSensitive)
+    {
         // String for user defined, if present
         OUString sEntry = m_xLbCategory->n_children() > 1 ? m_xLbCategory->get_text(1) : OUString();
         m_xEdComment->set_text(sEntry);
