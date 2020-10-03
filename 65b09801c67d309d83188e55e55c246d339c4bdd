@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9038913_01448603",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-03T06:06:32Z",
+      "side": 1,
+      "message": "This should be the hub mentioned in the bug\u0027s comment 10:\n\nhttps://hub.libreoffice.org/InstallJava",
+      "range": {
+        "startLine": 150,
+        "startChar": 35,
+        "endLine": 150,
+        "endChar": 94
+      },
+      "revId": "65b09801c67d309d83188e55e55c246d339c4bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb6c5417_904d21aa",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-03T06:06:32Z",
+      "side": 1,
+      "message": "I don\u0027t know the details how the \"LOlocale parameter\" is passed to the hub URI, but likely not just concatenating the lang id to the URI: it should at least be separated by \u0027?\u0027, to not become something like\n\n    https://wiki.documentfoundation.org/Faq/General/InstallJavade\n\nand also we should not filter some subset of languages here: presumably we should use the \u0027language-territory\u0027 code here, and rely on the hub to do the magic of falling back for existing/absent translations.",
+      "range": {
+        "startLine": 152,
+        "startChar": 12,
+        "endLine": 152,
+        "endChar": 81
+      },
+      "revId": "65b09801c67d309d83188e55e55c246d339c4bdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
