@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_INC_ANNOTATION_HXX
-#define INCLUDED_SD_INC_ANNOTATION_HXX
+#pragma once
 
 #include <sal/config.h>
 #include <sal/types.h>
@@ -55,7 +54,5 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
 void LOKCommentNotifyAll(CommentNotificationType nType,
         css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
