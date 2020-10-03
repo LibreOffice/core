@@ -338,9 +338,9 @@ SwDocShell::SwDocShell( const SfxModelFlags i_nSfxCreationFlags )
 }
 
 // Ctor / Dtor
-SwDocShell::SwDocShell( SwDoc *const pD, SfxObjectCreateMode const eMode )
+SwDocShell::SwDocShell( SwDoc& rD, SfxObjectCreateMode const eMode )
     : SfxObjectShell(eMode)
-    , m_xDoc(pD)
+    , m_xDoc(&rD)
     , m_IsInUpdateFontList(false)
     , m_pStyleManager(new svx::CommonStyleManager(*this))
     , m_pView(nullptr)

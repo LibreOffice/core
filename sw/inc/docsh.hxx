@@ -177,7 +177,7 @@ public:
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );
     SwDocShell( SfxModelFlags i_nSfxCreationFlags );
-    SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode );
+    SwDocShell( SwDoc& rDoc, SfxObjectCreateMode eMode );
     virtual ~SwDocShell() override;
 
     /// OLE 2.0-notification.

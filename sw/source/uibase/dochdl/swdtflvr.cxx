@@ -657,7 +657,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             if( !m_aDocShellRef.Is() )
             {
                 SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
-                SwDocShell* pNewDocSh = new SwDocShell( &rDoc,
+                SwDocShell* pNewDocSh = new SwDocShell( rDoc,
                                          SfxObjectCreateMode::EMBEDDED );
                 m_aDocShellRef = pNewDocSh;
                 m_aDocShellRef->DoInitNew();
@@ -918,7 +918,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     {
         m_pClpDocFac.reset(new SwDocFac);
         SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
-        m_aDocShellRef = new SwDocShell( &rDoc, SfxObjectCreateMode::EMBEDDED);
+        m_aDocShellRef = new SwDocShell(rDoc, SfxObjectCreateMode::EMBEDDED);
         m_aDocShellRef->DoInitNew();
         m_pWrtShell->Copy(&rDoc);
 
