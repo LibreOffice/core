@@ -3122,11 +3122,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf134146)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 14
-    // - Actual  : 13
+
+    const sal_Int32 nTitleLines
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Horizontal\")])").toInt32();
+
+    // Without the accompanying fix in place, this test would have failed.
     // i.e. the Y axis title didn't break to multiple lines.
-    assertXPath(pXmlDoc, "//textarray", 14);
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), nTitleLines);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf136061)
