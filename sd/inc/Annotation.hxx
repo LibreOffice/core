@@ -23,7 +23,15 @@
 #include <sal/types.h>
 #include <memory>
 
-class SdPage;
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/propertysetmixin.hxx>
+
+#include "drawdoc.hxx"
+#include "sdpage.hxx"
+#include "textapi.hxx"
+
 class SdrUndoAction;
 
 namespace com::sun::star::office {
@@ -53,6 +61,71 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
 
 void LOKCommentNotifyAll(CommentNotificationType nType,
         css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
+
+class Annotation : private ::cppu::BaseMutex,
+                   public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
+                   public ::cppu::PropertySetMixin<css::office::XAnnotation>
+{
+public:
+    explicit Annotation( const css::uno::Reference<css::uno::XComponentContext>& context, SdPage* pPage );
+    Annotation(const Annotation&) = delete;
+    Annotation& operator=(const Annotation&) = delete;
+
+    static sal_uInt32 m_nLastId;
+
+    SdPage* GetPage() const { return mpPage; }
+    SdrModel* GetModel() { return (mpPage != nullptr) ? &mpPage->getSdrModelFromSdrPage() : nullptr; }
+    sal_uInt32 GetId() const { return m_nId; }
+
+    // XInterface:
+    virtual css::uno::Any SAL_CALL queryInterface(css::uno::Type const & type) override;
+    virtual void SAL_CALL acquire() throw () override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::acquire(); }
+    virtual void SAL_CALL release() throw () override { ::cppu::WeakComponentImplHelper<css::office::XAnnotation>::release(); }
+
+    // css::beans::XPropertySet:
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const css::uno::Any & aValue) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString & PropertyName) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener> & xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener> & aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
+
+    // css::office::XAnnotation:
+    virtual css::uno::Any SAL_CALL getAnchor() override;
+    virtual css::geometry::RealPoint2D SAL_CALL getPosition() override;
+    virtual void SAL_CALL setPosition(const css::geometry::RealPoint2D & the_value) override;
+    virtual css::geometry::RealSize2D SAL_CALL getSize() override;
+    virtual void SAL_CALL setSize(const css::geometry::RealSize2D& _size) override;
+    virtual OUString SAL_CALL getAuthor() override;
+    virtual void SAL_CALL setAuthor(const OUString & the_value) override;
+    virtual OUString SAL_CALL getInitials() override;
+    virtual void SAL_CALL setInitials(const OUString & the_value) override;
+    virtual css::util::DateTime SAL_CALL getDateTime() override;
+    virtual void SAL_CALL setDateTime(const css::util::DateTime & the_value) override;
+    virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
+
+    void createChangeUndo();
+
+private:
+    // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
+
+    // override WeakComponentImplHelperBase::disposing()
+    // This function is called upon disposing the component,
+    // if your component needs special work when it becomes
+    // disposed, do it here.
+    virtual void SAL_CALL disposing() override;
+
+    sal_uInt32 m_nId;
+    SdPage* mpPage;
+    css::geometry::RealPoint2D m_Position;
+    css::geometry::RealSize2D m_Size;
+    OUString m_Author;
+    OUString m_Initials;
+    css::util::DateTime m_DateTime;
+    rtl::Reference<TextApiObject> m_TextRange;
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
