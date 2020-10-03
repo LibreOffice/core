@@ -182,9 +182,11 @@ void LifecycleTest::testPostDispose()
 
 class FocusCrashPostDispose : public TabControl
 {
+    bool bGotFocus;
 public:
     explicit FocusCrashPostDispose(vcl::Window *pParent) :
-        TabControl(pParent, 0)
+        TabControl(pParent, 0),
+        bGotFocus(false)
     {
     }
     virtual bool PreNotify( NotifyEvent& ) override
@@ -197,11 +199,16 @@ public:
     }
     virtual void GetFocus() override
     {
-        CPPUNIT_FAIL("get focus");
+        bGotFocus = true;
     }
     virtual void LoseFocus() override
     {
         CPPUNIT_FAIL("this should never be called");
+    }
+
+    bool GotFocus() const
+    {
+        return bGotFocus;
     }
 };
 
@@ -214,7 +221,7 @@ void LifecycleTest::testFocus()
     // process asynchronous ToTop
     Scheduler::ProcessTaskScheduling();
     // FIXME: really awful to test focus issues without showing windows.
-    // CPPUNIT_ASSERT(xChild->HasFocus());
+    CPPUNIT_ASSERT(xChild->GotFocus());
 }
 
 template <class vcl_type>
