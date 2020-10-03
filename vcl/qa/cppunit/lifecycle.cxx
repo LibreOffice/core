@@ -197,7 +197,6 @@ public:
     }
     virtual void GetFocus() override
     {
-        CPPUNIT_FAIL("get focus");
     }
     virtual void LoseFocus() override
     {
