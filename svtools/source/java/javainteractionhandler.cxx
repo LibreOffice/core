@@ -34,6 +34,8 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
@@ -126,24 +128,29 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         if( !g_JavaEvents.bNotFoundHandled )
         {
            // No suitable JRE found
+            OUString sPrimTex;
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            OUString urlLink = "https://hub.libreoffice.org/InstallJava?LOlocale=" + aLang;
             g_JavaEvents.bNotFoundHandled = true;
-#if defined( MACOSX )
-            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
-                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND_MAC)));
-#elif defined( _WIN32 )
-            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
-                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND_WIN)));
-            OUString sPrimTex = xWarningBox->get_primary_text();
-#if defined( _WIN64 )
-            xWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "64" ));
+#if defined(MACOSX)
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(
+                nullptr, VclMessageType::Warning, VclButtonsType::Ok,SvtResId(STR_WARNING_JAVANOTFOUND_MAC)));
+#elif defined(_WIN32)
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(
+                nullptr, VclMessageType::Warning, VclButtonsType::Ok,SvtResId(STR_WARNING_JAVANOTFOUND_WIN)));
 #else
-            xWarningBox->set_primary_text(sPrimTex.replaceAll( "%BITNESS", "32" ));
+            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(
+                nullptr, VclMessageType::Warning, VclButtonsType::Ok,SvtResId(STR_WARNING_JAVANOTFOUND)));
 #endif
+            sPrimTex = xWarningBox->get_primary_text();
+#if defined(_WIN64)
+            sPrimTex.replaceAll("%BITNESS", "64");
 #else
-            std::unique_ptr<weld::MessageDialog> xWarningBox(Application::CreateMessageDialog(nullptr,
-                                                             VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND)));
+            sPrimTex.replaceAll("%BITNESS", "32");
 #endif
+            sPrimTex.replaceAll("%FAQLINK", urlLink);
             xWarningBox->set_title(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
+            xWarningBox->set_primary_text(sPrimTex);
             nResult = xWarningBox->run();
         }
         else
