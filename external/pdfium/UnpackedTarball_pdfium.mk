@@ -14,6 +14,8 @@ pdfium_patches += build.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
 pdfium_patches += c++20-comparison.patch
+pdfium_patches += AnnotationInkAndVertices.patch.1
+
 # Work around <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94141> "c++20 rewritten operator==
 # recursive call mixing friend and external operators for template class" in GCC with
 # --with-latest-c++:
