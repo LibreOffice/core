@@ -261,9 +261,9 @@
 
 #define STR_SVT_DEFAULT_SERVICE_LABEL           NC_("STR_SVT_DEFAULT_SERVICE_LABEL", "$user$'s $service$")
 
-#define STR_WARNING_JAVANOTFOUND                NC_("STR_WARNING_JAVANOTFOUND", "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.")
-#define STR_WARNING_JAVANOTFOUND_WIN            NC_("STR_WARNING_JAVANOTFOUND_WIN", "%PRODUCTNAME requires a %BITNESS-bit Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME.")
-#define STR_WARNING_JAVANOTFOUND_MAC            NC_("STR_WARNING_JAVANOTFOUND_MAC", "%PRODUCTNAME requires Oracle's Java Development Kit (JDK) on macOS 10.10 or greater to perform this task. Please install them and restart %PRODUCTNAME.")
+#define STR_WARNING_JAVANOTFOUND                NC_("STR_WARNING_JAVANOTFOUND", "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME. %FAQLINK")
+#define STR_WARNING_JAVANOTFOUND_WIN            NC_("STR_WARNING_JAVANOTFOUND_WIN", "%PRODUCTNAME requires a %BITNESS-bit Java runtime environment (JRE) to perform this task. Please install a JRE and restart %PRODUCTNAME. %FAQLINK")
+#define STR_WARNING_JAVANOTFOUND_MAC            NC_("STR_WARNING_JAVANOTFOUND_MAC", "%PRODUCTNAME requires Oracle's Java Development Kit (JDK) on macOS 10.10 or greater to perform this task. Please install them and restart %PRODUCTNAME. %FAQLINK")
 #define STR_WARNING_INVALIDJAVASETTINGS_MAC     NC_("STR_WARNING_INVALIDJAVASETTINGS_MAC", "The %PRODUCTNAME configuration has been changed. Under %PRODUCTNAME - Preferences - %PRODUCTNAME - Advanced, select the Java runtime environment you want to have used by %PRODUCTNAME.")
 #define STR_WARNING_INVALIDJAVASETTINGS         NC_("STR_WARNING_INVALIDJAVASETTINGS", "The %PRODUCTNAME configuration has been changed. Under Tools - Options - %PRODUCTNAME - Advanced, select the Java runtime environment you want to have used by %PRODUCTNAME.")
 #define STR_ERROR_JVMCREATIONFAILED_MAC         NC_("STR_ERROR_JVMCREATIONFAILED_MAC", "%PRODUCTNAME requires a Java runtime environment (JRE) to perform this task. The selected JRE is defective. Please select another version or install a new JRE and select it under %PRODUCTNAME - Preferences - %PRODUCTNAME - Advanced.")
