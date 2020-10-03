@@ -34,6 +34,8 @@
 #include <svtools/restartdialog.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/javainteractionhandler.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
@@ -144,6 +146,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
                                                              VclMessageType::Warning, VclButtonsType::Ok, SvtResId(STR_WARNING_JAVANOTFOUND)));
 #endif
             xWarningBox->set_title(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
+            xWarningBox->set_primary_text(
+                sPrimTex.concat(", https://wiki.documentfoundation.org/Faq/General/InstallJava"));
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            if (aLang == "cs" || aLang == "da" || aLang == "de" || aLang == "it")
+                xWarningBox->set_primary_text(sPrimTex.concat(aLang));
             nResult = xWarningBox->run();
         }
         else
