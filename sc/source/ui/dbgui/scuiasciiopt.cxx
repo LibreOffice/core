@@ -394,28 +394,31 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, const OUString& aDatNa
             UErrorCode uerr = U_ZERO_ERROR;
             UCharsetDetector* ucd = ucsdet_open( &uerr );
             ucsdet_setText( ucd, reinterpret_cast<const char*>(bytes), nRead, &uerr );
-            const UCharsetMatch* match = ucsdet_detect( ucd, &uerr );
-            const char* pEncodingName = ucsdet_getName( match, &uerr );
 
-            if ( U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName) )
+            if ( const UCharsetMatch* match = ucsdet_detect(ucd, &uerr) )
             {
-                ePreselectUnicode = RTL_TEXTENCODING_UTF8; // UTF-8
-                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UTF8 );
+                const char* pEncodingName = ucsdet_getName( match, &uerr );
+
+                if ( U_SUCCESS(uerr) && !strcmp("UTF-8", pEncodingName) )
+                {
+                    ePreselectUnicode = RTL_TEXTENCODING_UTF8; // UTF-8
+                    mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UTF8 );
+                }
+                else if ( U_SUCCESS(uerr) && !strcmp("UTF-16LE", pEncodingName) )
+                {
+                    ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16LE
+                    mpDatStream->SetEndian( SvStreamEndian::LITTLE );
+                    mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
+                }
+                else if ( U_SUCCESS(uerr) && !strcmp("UTF-16BE", pEncodingName) )
+                {
+                    ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16BE
+                    mpDatStream->SetEndian( SvStreamEndian::BIG );
+                    mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
+                }
+                else // other
+                    mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
             }
-            else if ( U_SUCCESS(uerr) && !strcmp("UTF-16LE", pEncodingName) )
-            {
-                ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16LE
-                mpDatStream->SetEndian( SvStreamEndian::LITTLE );
-                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
-            }
-            else if ( U_SUCCESS(uerr) && !strcmp("UTF-16BE", pEncodingName) )
-            {
-                ePreselectUnicode = RTL_TEXTENCODING_UNICODE; // UTF-16BE
-                mpDatStream->SetEndian(SvStreamEndian::BIG);
-                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_UNICODE );
-            }
-            else // other
-                mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
 
             ucsdet_close( ucd );
         }
