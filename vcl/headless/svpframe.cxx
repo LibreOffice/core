@@ -131,7 +131,7 @@ void SvpSalFrame::GetFocus()
             s_pFocusFrame->LoseFocus();
         // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
         s_pFocusFrame = this;
-        m_pInstance->PostEvent( this, nullptr, SalEvent::GetFocus );
+        CallCallback( SalEvent::GetFocus, nullptr );
     }
 }
 
@@ -140,7 +140,7 @@ void SvpSalFrame::LoseFocus()
     if( s_pFocusFrame == this )
     {
         // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
-        m_pInstance->PostEvent( this, nullptr, SalEvent::LoseFocus );
+        CallCallback( SalEvent::LoseFocus, nullptr );
         s_pFocusFrame = nullptr;
     }
 }
