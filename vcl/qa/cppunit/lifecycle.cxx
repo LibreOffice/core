@@ -195,10 +195,6 @@ public:
     {
         return false;
     }
-    virtual void GetFocus() override
-    {
-        CPPUNIT_FAIL("get focus");
-    }
     virtual void LoseFocus() override
     {
         CPPUNIT_FAIL("this should never be called");
@@ -211,10 +207,7 @@ void LifecycleTest::testFocus()
     ScopedVclPtrInstance< FocusCrashPostDispose > xChild(xWin);
     xWin->Show();
     xChild->GrabFocus();
-    // process asynchronous ToTop
-    Scheduler::ProcessTaskScheduling();
-    // FIXME: really awful to test focus issues without showing windows.
-    // CPPUNIT_ASSERT(xChild->HasFocus());
+    CPPUNIT_ASSERT(xChild->HasFocus());
 }
 
 template <class vcl_type>
