@@ -638,11 +638,7 @@ bool ScGridWindow::UpdateVisibleRange()
     }
 
     // Store the current visible range.
-    bool bChanged = maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
-    if (bChanged)
-        ResetAutoSpell();
-
-    return bChanged;
+    return maVisibleRange.set(nPosX, nPosY, nXRight, nYBottom);
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )

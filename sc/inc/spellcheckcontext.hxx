@@ -10,50 +10,53 @@
 #ifndef INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 #define INCLUDED_SC_INC_SPELLCHECKCONTEXT_HXX
 
+#include <i18nlangtag/lang.h>
 #include <editeng/misspellrange.hxx>
 #include "types.hxx"
 
-#include <unordered_map>
+#include <memory>
 #include <vector>
 
-namespace sc {
+class ScDocument;
+class ScTabEditEngine;
 
-struct SpellCheckContext
+namespace sc
 {
-    struct CellPos
-    {
-        struct Hash
-        {
-            size_t operator() (const CellPos& rPos) const;
-        };
+/**
+ * Class shared between grid windows to cache
+ * spelling results.
+ */
+class SpellCheckContext
+{
+    class SpellCheckCache;
+    struct SpellCheckStatus;
+    struct SpellCheckResult;
 
-        SCCOL mnCol;
-        SCROW mnRow;
+    std::unique_ptr<SpellCheckCache> mpCache;
+    std::unique_ptr<SpellCheckResult> mpResult;
+    ScDocument* pDoc;
+    std::unique_ptr<ScTabEditEngine> mpEngine;
+    std::unique_ptr<SpellCheckStatus> mpStatus;
+    SCTAB mnTab;
+    LanguageType meLanguage;
 
-        CellPos();
-        CellPos(SCCOL nCol, SCROW nRow);
+public:
+    SpellCheckContext(ScDocument* pDocument, SCTAB nTab);
+    ~SpellCheckContext();
 
-        void setInvalid();
-        bool isValid() const;
-        void reset();
-
-        bool operator== (const CellPos& r) const;
-    };
-
-    typedef std::unordered_map<CellPos, std::vector<editeng::MisspellRanges>, CellPos::Hash> CellMapType;
-
-    CellPos maPos;
-    CellMapType maMisspellCells;
-
-    SpellCheckContext();
-
-    bool isMisspelled( SCCOL nCol, SCROW nRow ) const;
-    const std::vector<editeng::MisspellRanges>* getMisspellRanges( SCCOL nCol, SCROW nRow ) const;
-    void setMisspellRanges( SCCOL nCol, SCROW nRow, const std::vector<editeng::MisspellRanges>* pRanges );
+    bool isMisspelled(SCCOL nCol, SCROW nRow) const;
+    const std::vector<editeng::MisspellRanges>* getMisspellRanges(SCCOL nCol, SCROW nRow) const;
+    void setMisspellRanges(SCCOL nCol, SCROW nRow,
+                           const std::vector<editeng::MisspellRanges>* pRanges);
 
     void reset();
-};
+    void resetForContentChange();
 
+private:
+    void ensureResults(SCCOL nCol, SCROW nRow);
+    void resetCache(bool bContentChangeOnly = false);
+    void setup();
+};
 }
 
 #endif
