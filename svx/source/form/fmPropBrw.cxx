@@ -249,7 +249,7 @@ OUString FmPropBrw::getCurrentPage() const
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmPropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        TOOLS_WARN_EXCEPTION("svx.form", "caught an exception while retrieving the current page!");
     }
     return sCurrentPage;
 }
@@ -268,7 +268,7 @@ void FmPropBrw::implDetachController()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmPropBrw::implDetachController: caught an exception while resetting the component!" );
+            TOOLS_WARN_EXCEPTION("svx.form", "caught an exception while resetting the component!");
         }
     }
 
@@ -296,7 +296,7 @@ void FmPropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
+            TOOLS_WARN_EXCEPTION("svx.form", "caught an exception while asking the controller!");
         }
     }
 
@@ -347,7 +347,7 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "FmPropBrw::implSetNewSelection: caught an unexpected exception!" );
+        TOOLS_WARN_EXCEPTION("svx.form", "");
         return;
     }
 
@@ -558,7 +558,8 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                        TOOLS_WARN_EXCEPTION("svx.form",
+                                             "caught an exception while setting the initial page!");
                     }
                 }
 
@@ -573,7 +574,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     catch (Exception&)
     {
-        OSL_FAIL("FmPropBrw::StateChanged: Exception occurred!");
+        TOOLS_WARN_EXCEPTION("svx.form", "");
     }
 }
 

@@ -1057,8 +1057,8 @@ void DbTextField::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCur
     }
     catch( const Exception& )
     {
-        DBG_UNHANDLED_EXCEPTION("svx");
-        OSL_FAIL( "DbTextField::Init: caught an exception while determining the multi-line capabilities!" );
+        TOOLS_WARN_EXCEPTION("svx",
+                             "caught an exception while determining the multi-line capabilities!");
     }
 
     m_bIsSimpleEdit = !bIsMultiLine;

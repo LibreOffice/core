@@ -21,6 +21,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <libxml/xmlwriter.h>
 
@@ -96,7 +97,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPo
     }
     catch( Exception& )
     {
-        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     return basegfx::B2ITuple( width, height );
@@ -143,7 +144,7 @@ bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, base
     }
     catch( Exception& )
     {
-        OSL_FAIL( "TableLayouter::getCellSize(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     return false;
 }
@@ -475,7 +476,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableLayouter::findMergeOrigin(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     return false;
 }
@@ -945,7 +946,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "sdr::table::TableLayouter::getCell(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     return xCell;
 }
@@ -1198,7 +1199,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableLayouter::DistributeColumns(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 
@@ -1282,7 +1283,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 

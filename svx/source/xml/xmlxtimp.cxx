@@ -226,7 +226,7 @@ void SvxXMLTableImportContext::importMarker( const uno::Reference< XFastAttribut
     }
     catch (const Exception&)
     {
-        OSL_FAIL("SvxXMLTableImportContext::importMarker(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 
@@ -239,7 +239,7 @@ void SvxXMLTableImportContext::importDash( const uno::Reference< XFastAttributeL
     }
     catch (const Exception&)
     {
-        OSL_FAIL("SvxXMLTableImportContext::importDash(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 
@@ -252,7 +252,7 @@ void SvxXMLTableImportContext::importHatch( const uno::Reference< XFastAttribute
     }
     catch (const Exception&)
     {
-        OSL_FAIL("SvxXMLTableImportContext::importHatch(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 
@@ -265,7 +265,7 @@ void SvxXMLTableImportContext::importGradient( const uno::Reference< XFastAttrib
     }
     catch (const Exception&)
     {
-        OSL_FAIL("SvxXMLTableImportContext::importGradient(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 
@@ -285,7 +285,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttribut
     }
     catch (const Exception&)
     {
-        OSL_FAIL("SvxXMLTableImportContext::importBitmap(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 

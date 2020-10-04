@@ -1617,7 +1617,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
+                    TOOLS_WARN_EXCEPTION("svx.form", "");
                 }
 
             }
@@ -1656,7 +1656,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
+                    TOOLS_WARN_EXCEPTION("svx.form", "");
                 }
 
             }
@@ -3045,7 +3045,7 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL("FmXFormShell::stopFiltering: Exception occurred!");
+                    TOOLS_WARN_EXCEPTION("svx.form", "");
                 }
 
                 if (!isRowSetAlive(xFormSet))

@@ -346,7 +346,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
     catch (Exception&)
     {
-        OSL_FAIL("FmGridHeader::ExecuteDrop: caught an exception while creatin' the column !");
+        TOOLS_WARN_EXCEPTION("svx", "caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(xStatement);
         return DND_ACTION_NONE;
     }
@@ -482,7 +482,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         }
         catch (const Exception&)
         {
-            OSL_FAIL("FmGridHeader::ExecuteDrop: Exception occurred!");
+            TOOLS_WARN_EXCEPTION("svx", "");
         }
 
         assert(aPossibleTypes.size() == aImgResId.size());
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
     }
     catch (Exception&)
     {
-        OSL_FAIL("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
+        TOOLS_WARN_EXCEPTION("svx", "caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
         ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
         return;
@@ -1182,7 +1182,7 @@ void FmGridControl::DeleteSelectedRows()
         }
         catch(const Exception&)
         {
-            OSL_FAIL("Exception caught while deleting rows!");
+            TOOLS_WARN_EXCEPTION("svx", "Exception caught while deleting rows!");
         }
         // adapt to the data cursor
         AdjustDataSource(true);

@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 #include <AccessibleTableShape.hxx>
@@ -312,7 +313,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
     }
     catch( const Exception& )
     {
-        OSL_FAIL("svx::AccessibleTableShape::modified(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 
@@ -345,7 +346,7 @@ void AccessibleTableShape::Init()
     }
     catch( Exception& )
     {
-        OSL_FAIL("AccessibleTableShape::init(), exception caught?");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 
     AccessibleTableShape_Base::Init();

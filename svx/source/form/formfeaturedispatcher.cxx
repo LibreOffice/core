@@ -107,12 +107,15 @@ namespace svx
                 }
                 catch( const DisposedException& )
                 {
-                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a DisposedException - removing the listener!" );
+                    TOOLS_WARN_EXCEPTION("svx.form",
+                                         "caught a DisposedException - removing the listener!");
                     aIter.remove( );
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OSingleFeatureDispatcher::notifyStatus: caught a generic exception while notifying a single listener!" );
+                    TOOLS_WARN_EXCEPTION(
+                        "svx.form",
+                        "caught a generic exception while notifying a single listener!");
                 }
             }
         }

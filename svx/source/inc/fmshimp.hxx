@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/form/runtime/FeatureState.hpp>
+#include <tools/diagnose_ex.h>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/shell.hxx>
@@ -56,7 +57,7 @@
 typedef std::vector< css::uno::Reference< css::form::XForm > > FmFormArray;
 
 // catch database exceptions if they occur
-#define DO_SAFE(statement) try { statement; } catch( const Exception& ) { OSL_FAIL("unhandled exception (I tried to move a cursor (or something like that).)"); }
+#define DO_SAFE(statement) try { statement; } catch( const Exception& ) { TOOLS_WARN_EXCEPTION("svx", "unhandled exception (I tried to move a cursor (or something like that).)"); }
 
 enum class LoopGridsSync {
     DISABLE_SYNC     = 1,

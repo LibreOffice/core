@@ -28,6 +28,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star::uno;
@@ -228,7 +229,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
     return false;
 }
@@ -257,7 +258,7 @@ void SAL_CALL CellCursor::merge(  )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::CellCursor::merge(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 
     if( bUndo )
@@ -522,7 +523,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::CellCursor::split(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
         throw NoSupportException();
     }
 

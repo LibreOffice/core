@@ -41,7 +41,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -102,7 +101,7 @@ void displayException(const Any& _rExcept, vcl::Window* _pParent)
     }
     catch(const Exception&)
     {
-        OSL_FAIL("displayException: could not display the error message!");
+        TOOLS_WARN_EXCEPTION("svx.form", "could not display the error message!");
     }
 }
 

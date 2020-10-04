@@ -1462,7 +1462,7 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
     }
     catch (const Exception&)
     {
-        OSL_FAIL("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
+        TOOLS_WARN_EXCEPTION("svx.form", "caught an exception while creating the control !");
     }
 
 

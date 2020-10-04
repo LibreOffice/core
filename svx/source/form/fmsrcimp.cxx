@@ -696,7 +696,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
     }
     catch (const Exception&)
     {
-        OSL_FAIL("Exception occurred!");
+        TOOLS_WARN_EXCEPTION("svx.form", "");
     }
 
 }

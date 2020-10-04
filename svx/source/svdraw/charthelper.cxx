@@ -18,7 +18,7 @@
  */
 
 #include <svx/charthelper.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable2.hpp>
@@ -132,7 +132,7 @@ void ChartHelper::AdaptDefaultsForChart(
     }
     catch( const uno::Exception & )
     {
-        OSL_FAIL( "Exception caught in AdaptDefaultsForChart" );
+        TOOLS_WARN_EXCEPTION("svx.svdraw", "");
     }
 }
 

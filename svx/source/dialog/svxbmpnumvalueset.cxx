@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
+#include <sal/config.h>
+
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <tools/diagnose_ex.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <editeng/numitem.hxx>
@@ -242,7 +244,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
+                        TOOLS_WARN_EXCEPTION("svx.dialog", "");
                     }
                 }
                 // start just next to the left edge
@@ -315,7 +317,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     catch(Exception&)
                     {
-                        OSL_FAIL("Exception in DefaultNumberingProvider::makeNumberingString");
+                        TOOLS_WARN_EXCEPTION("svx.dialog", "");
                     }
 
                     aLeft.AdjustY( -(pDev->GetTextHeight()/2) );
@@ -373,7 +375,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                 static bool bAssert = false;
                 if(!bAssert)
                 {
-                    OSL_FAIL("exception in ::UserDraw");
+                    TOOLS_WARN_EXCEPTION("svx.dialog", "");
                     bAssert = true;
                 }
             }

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -175,7 +178,7 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
         xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
     } catch ( const uno::Exception & )
     {
-        OSL_FAIL( "exception setting stream metadata" );
+        TOOLS_WARN_EXCEPTION("svx", "exception setting stream metadata");
     }
 }
 
