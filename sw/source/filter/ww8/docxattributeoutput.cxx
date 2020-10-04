@@ -9839,7 +9839,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
       m_bIgnoreNextFill(false),
-      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(&rExport.m_rDoc, pSerializer)),
+      m_pTableStyleExport(std::make_shared<DocxTableStyleExport>(rExport.m_rDoc, pSerializer)),
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),

@@ -275,13 +275,13 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
 }
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam )
-    : m_pPam( &rPam ), m_pPos( nullptr ), m_pDoc( &rPam.GetDoc() )
+    : m_pPam( &rPam ), m_pPos( nullptr ), m_rDoc( rPam.GetDoc() )
 {
     m_nContent = rPam.GetPoint()->nContent.GetIndex();
 }
 
-SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
-    : m_pPam( nullptr ), m_pPos( &rPos ), m_pDoc( pDc )
+SwDataChanged::SwDataChanged( SwDoc& rDc, const SwPosition& rPos )
+    : m_pPam( nullptr ), m_pPos( &rPos ), m_rDoc( rDc )
 {
     m_nContent = rPos.nContent.GetIndex();
 }
@@ -289,10 +289,10 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
 SwDataChanged::~SwDataChanged()
 {
     // JP 09.04.96: Only if the Layout is available (thus during input)
-    if( !m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( !m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
-    const ::sfx2::SvLinkSources& rServers = m_pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
+    const ::sfx2::SvLinkSources& rServers = m_rDoc.getIDocumentLinksAdministration().GetLinkManager().GetServers();
 
     ::sfx2::SvLinkSources aTemp(rServers);
     for( const auto& rpLinkSrc : aTemp )
@@ -312,7 +312,7 @@ SwDataChanged::~SwDataChanged()
         if( !refObj->HasDataLinks() )
         {
             // Then remove from the list
-            m_pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
+            m_rDoc.getIDocumentLinksAdministration().GetLinkManager().RemoveServer( rpLinkSrc );
         }
     }
 }

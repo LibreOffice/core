@@ -1581,7 +1581,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             const SwNumRule& rR = *rArr[ n ];
             SwNumRule* pNew = FindNumRulePtr( rR.GetName());
             if( pNew )
-                pNew->CopyNumRule( this, rR );
+                pNew->CopyNumRule(*this, rR);
             else
             {
                 if( !rR.IsAutoRule() )

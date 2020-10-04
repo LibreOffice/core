@@ -853,17 +853,17 @@ OUString SwNumRule::MakeParagraphStyleListString() const
     A kind of copy constructor, so that the num formats are attached to the
     right CharFormats of a Document.
     Copies the NumFormats and returns itself. */
-SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
+SwNumRule& SwNumRule::CopyNumRule( SwDoc& rDoc, const SwNumRule& rNumRule )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
     {
         Set( n, rNumRule.maFormats[ n ].get() );
         if( maFormats[ n ] && maFormats[ n ]->GetCharFormat() &&
-            !pDoc->GetCharFormats()->IsAlive(maFormats[n]->GetCharFormat()))
+            !rDoc.GetCharFormats()->IsAlive(maFormats[n]->GetCharFormat()))
         {
             // If we copy across different Documents, then copy the
             // corresponding CharFormat into the new Document.
-            maFormats[n]->SetCharFormat( pDoc->CopyCharFormat( *maFormats[n]->
+            maFormats[n]->SetCharFormat( rDoc.CopyCharFormat( *maFormats[n]->
                                         GetCharFormat() ) );
         }
     }

@@ -214,7 +214,7 @@ public:
     /** A kind of copy-constructor to make sure the num formats are
        attached to the correctCharFormats of a document!!
        (Copies the NumFormats and returns itself). */
-    SwNumRule& CopyNumRule( SwDoc*, const SwNumRule& );
+    SwNumRule& CopyNumRule( SwDoc&, const SwNumRule& );
 
     /** Tests whether the CharFormats are from the given doc
        and copies them if appropriate. */
