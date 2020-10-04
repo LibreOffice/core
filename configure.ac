@@ -63,8 +63,9 @@ PathFormat()
 {
     # Args: $1: A pathname. On Cygwin, in either the Unix or the Windows format.
     #
-    # Return value: $formatted_path. The pathname in Windows format, but using forward slashes instead
-    # of backslashes, using 8.3 pathnames if necessary.
+    # Return value: $formatted_path and $formatted_path_unix. The former is the pathname in Windows
+    # format, but using forward slashes instead of backslashes, using 8.3 pathname components if
+    # necessary. The latter is the pathname in Unix format, but still using 8.3 components.
     #
     # Errors out if 8.3 names are needed but aren't present for some of the path component.
 
@@ -85,7 +86,11 @@ PathFormat()
     # /usr/bin/find.exe => C:/cygwin64/bin/find.exe
 
     formatted_path="$1"
-    if test "$build_os" = "cygwin"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+        if test "$build_os" = "wsl"; then
+            formatted_path=$(echo "$formatted_path" | tr -d '\r')
+        fi
+
         pf_conv_to_dos=
         # spaces,parentheses,brackets,braces are problematic in pathname
         # so are backslashes
@@ -95,7 +100,14 @@ PathFormat()
             ;;
         esac
         if test "$pf_conv_to_dos" = "yes"; then
-            if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+            if test "$build_os" = "wsl"; then
+                case "$formatted_path" in
+                    /*)
+                        formatted_path=$(wslpath -w "$formatted_path")
+                        ;;
+                esac
+                formatted_path=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 "$formatted_path")
+            elif test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 formatted_path=`cygpath -sm "$formatted_path"`
             else
                 formatted_path=`cygpath -d "$formatted_path"`
@@ -115,7 +127,11 @@ PathFormat()
                     formatted_path="$new_formatted_path"
                 fi
             fi
-            formatted_path=`cygpath -m "$formatted_path"`
+            if test "$build_os" = "wsl"; then
+                formatted_path=$(wslpath -m $(wslpath "$formatted_path"))
+            else
+                formatted_path=`cygpath -m "$formatted_path"`
+            fi
             if test $? -ne 0;  then
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
@@ -124,6 +140,13 @@ PathFormat()
         if test "$fp_count_space" != "0"; then
             AC_MSG_ERROR([converted path "$formatted_path" still contains spaces. Short filenames (8.3 filenames) support was disabled on this system?])
         fi
+    fi
+    if test "$build_os" = "wsl"; then
+        # WSL can't run Windows binaries from Windows pathnames
+        formatted_path_unix=$(wslpath "$formatted_path")
+    else
+        # But Cygwin can
+        formatted_path_unix="$formatted_path"
     fi
 }
 
@@ -345,10 +368,18 @@ fi
 win_short_path_for_make()
 {
     local_short_path="$1"
-    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-        cygpath -sm "$local_short_path"
+    if test "$build_os" = "wsl"; then
+        if test "$GNUMAKE_WIN_NATIVE" = "TRUE"; then
+            wslpath -w "$local_short_path"
+        else
+            echo $local_short_path
+        fi
     else
-        cygpath -u "$(cygpath -d "$local_short_path")"
+        if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+            cygpath -sm "$local_short_path"
+        else
+            cygpath -u "$(cygpath -d "$local_short_path")"
+        fi
     fi
 }
 
@@ -642,6 +673,14 @@ INSTROOTBASESUFFIX=
 INSTROOTCONTENTSUFFIX=
 SDKDIRNAME=sdk
 
+# Check for WSL (version 2, at least)
+if test "`wslsys -v 2>/dev/null`" != ""; then
+    host_os=wsl
+    host="$host_cpu-$host_vendor-$host_os"
+    build_os=$host_os
+    build="$host"
+fi
+
 HOST_PLATFORM="$host"
 
 host_cpu_for_clang="$host_cpu"
@@ -698,7 +737,7 @@ gnu)
     _os=GNU
      ;;
 
-cygwin*|interix*)
+cygwin*|interix*|wsl)
 
     # When building on Windows normally with MSVC under Cygwin,
     # configure thinks that the host platform (the platform the
@@ -2578,7 +2617,7 @@ dnl ===================================================================
 pathmunge ()
 {
     if test -n "$1"; then
-        if test "$build_os" = "cygwin"; then
+        if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
             if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 PathFormat "$1"
                 new_path=`cygpath -sm "$formatted_path"`
@@ -3361,7 +3400,12 @@ reg_get_value()
     # Return value: $regvalue
     unset regvalue
 
-    local _regentry="/proc/registry${1}/${2}"
+    if test "$build_os" = "wsl"; then
+        regvalue=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --read-registry $1 "$2")
+        return
+    fi
+
+    local _regentry="/proc/registry${1}/HKEY_LOCAL_MACHINE/${2}"
     if test -f "$_regentry"; then
         # Stop bash complaining about \0 bytes in input, as it can't handle them.
         # Registry keys read via /proc/registry* are always \0 terminated!
@@ -3385,7 +3429,7 @@ reg_get_value_64()
 }
 
 case "$host_os" in
-cygwin*)
+cygwin*|wsl)
     COM=MSC
     USING_X11=
     OS=WNT
@@ -3534,11 +3578,11 @@ win_get_env_from_vsvars32bat()
 
 find_ucrt()
 {
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
+    reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
     if test -n "$regvalue"; then
         PathFormat "$regvalue"
         UCRTSDKDIR=$formatted_path
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
+        reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
         UCRTVERSION=$regvalue
         # Rest if not exist
         if ! test -d "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"; then
@@ -3574,10 +3618,14 @@ find_msvc()
     unset vctest vcnum vcnumwithdot vcbuildnumber
 
     vs_versions_to_check "$1"
-    vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
+    if test "$build_os" = wsl; then
+        vswhere="$PROGRAMFILESX86"
+    else
+        vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
+    fi
     vswhere+="\\Microsoft Visual Studio\\Installer\\vswhere.exe"
     PathFormat "$vswhere"
-    vswhere=$formatted_path
+    vswhere=$formatted_path_unix
     for ver in $vsversions; do
         vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         # Fall back to all MS products (this includes VC++ Build Tools)
@@ -3587,7 +3635,7 @@ find_msvc()
         fi
         if test -n "$vswhereoutput"; then
             PathFormat "$vswhereoutput"
-            vctest=$formatted_path
+            vctest=$formatted_path_unix
             break
         fi
     done
@@ -3633,8 +3681,13 @@ test_cl_exe()
 
     # The compiles has to find its shared libraries
     OLD_PATH="$PATH"
-    TEMP_PATH=`cygpath -d "$2"`
-    PATH="`cygpath -u "$TEMP_PATH"`:$PATH"
+    if test "$build_os" = "wsl"; then
+        TEMP_PATH=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 $(wslpath -w "$2"))
+        PATH="`wslpath "$TEMP_PATH"`:$PATH"
+    else
+        TEMP_PATH=`cygpath -d "$2"`
+        PATH="`cygpath -u "$TEMP_PATH"`:$PATH"
+    fi
 
     if ! "$CL_EXE_PATH" -? </dev/null >/dev/null 2>&1; then
         AC_MSG_ERROR([no compiler (cl.exe) in $2])
@@ -3711,7 +3764,7 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
     # Find the proper version of MSBuild.exe to use based on the VS version
-    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
+    reg_get_value_32 SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
     if test -n "$regvalue" ; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
@@ -5855,7 +5908,7 @@ find_csc()
 
     unset csctest
 
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+    reg_get_value_32 "SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
     if test -n "$regvalue"; then
         csctest=$regvalue
         return
@@ -5870,7 +5923,7 @@ find_al()
 
     # We need this check to detect 4.6.1 or above.
     for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
+        reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
             return
@@ -5878,7 +5931,7 @@ find_al()
     done
 
     for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+        reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
         if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
             altest=$regvalue
             return
@@ -5893,7 +5946,7 @@ find_dotnetsdk46()
     unset frametest
 
     for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
+        reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
             return
@@ -5910,7 +5963,7 @@ find_winsdk_version()
 
     case "$1" in
     8.0|8.0A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        reg_get_value_32 "SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=win8
@@ -5918,7 +5971,7 @@ find_winsdk_version()
         fi
         ;;
     8.1|8.1A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
+        reg_get_value_32 "SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
             winsdklibsubdir=winv6.3
@@ -5926,10 +5979,10 @@ find_winsdk_version()
         fi
         ;;
     10.0)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
+        reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
         if test -n "$regvalue"; then
             winsdktest=$regvalue
-            reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
+            reg_get_value_32 "SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/ProductVersion"
             if test -n "$regvalue"; then
                 winsdkbinsubdir="$regvalue".0
                 winsdklibsubdir=$winsdkbinsubdir
@@ -5980,7 +6033,7 @@ find_msms()
 
     msmdir=
     for ver in 14.0 15.0; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+        reg_get_value_32 SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             for f in ${my_msm_files}; do
                 if test -e "$regvalue/${f}"; then
@@ -7757,10 +7810,10 @@ if test "$ENABLE_JAVA" != ""; then
         if test -z "$with_jdk_home"; then
             dnl See <https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-EEED398E-AE37-4D12-
             dnl AB10-49F82F720027> section "Windows Registry Key Changes":
-            reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/CurrentVersion"
+            reg_get_value "$WIN_HOST_BITS" "SOFTWARE/JavaSoft/JDK/CurrentVersion"
             if test -n "$regvalue"; then
                 ver=$regvalue
-                reg_get_value "$WIN_HOST_BITS" "HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
+                reg_get_value "$WIN_HOST_BITS" "SOFTWARE/JavaSoft/JDK/$ver/JavaHome"
                 reg_jdk_home=$regvalue
             fi
 
