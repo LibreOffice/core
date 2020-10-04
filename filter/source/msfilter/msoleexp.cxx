@@ -30,12 +30,12 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <osl/diagnose.h>
 #include <comphelper/classids.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <tools/diagnose_ex.h>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
@@ -250,7 +250,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                     }
                     catch( const uno::Exception& )
                     {
-                        OSL_FAIL( "Unexpected exception while getting visual area size!" );
+                        TOOLS_WARN_EXCEPTION(
+                            "filter.ms", "Unexpected exception while getting visual area size!");
                         aSize.Width = 5000;
                         aSize.Height = 5000;
                     }

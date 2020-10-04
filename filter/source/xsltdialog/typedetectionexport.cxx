@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include "typedetectionexport.hxx"
 #include "xmlfiltercommon.hxx"
@@ -197,7 +197,7 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::doExport exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -227,7 +227,7 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::addProperty exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -258,7 +258,7 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "TypeDetectionExporter::addLocaleProperty exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 

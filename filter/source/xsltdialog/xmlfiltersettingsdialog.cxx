@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/resmgr.hxx>
@@ -105,7 +106,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "XMLFilterSettingsDialog::XMLFilterSettingsDialog exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -374,7 +375,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterSettingsDialog::createUniqueInterfaceName exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     OUString aInterfaceName( rInterfaceName );
@@ -416,7 +417,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+            TOOLS_WARN_EXCEPTION("filter.xslt", "");
             bOk = false;
         }
     }
@@ -536,7 +537,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+            TOOLS_WARN_EXCEPTION("filter.xslt", "");
             bOk = false;
         }
     }
@@ -594,7 +595,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
                 bOk = false;
             }
         }
@@ -609,7 +610,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
                 bOk = false;
             }
         }
@@ -623,7 +624,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
                 bOk = false;
             }
         }
@@ -637,7 +638,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
                 bOk = false;
             }
 
@@ -650,7 +651,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "XMLFilterSettingsDialog::insertOrEdit exception caught!" );
+                    TOOLS_WARN_EXCEPTION("filter.xslt", "");
                 }
 
             }
@@ -821,7 +822,7 @@ void XMLFilterSettingsDialog::onDelete()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::onDelete exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
             }
         }
     }
@@ -1116,7 +1117,7 @@ void XMLFilterSettingsDialog::initFilterList()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterSettingsDialog::initFilterList exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
             }
 
         }
@@ -1378,7 +1379,7 @@ bool copyStreams( const Reference< XInputStream >& xIS, const Reference< XOutput
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "copyStreams() exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     return false;
