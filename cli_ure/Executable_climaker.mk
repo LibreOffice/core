@@ -14,9 +14,13 @@ $(eval $(call gb_Executable_use_package,climaker,\
 ))
 
 $(eval $(call gb_Executable_add_cxxclrflags,climaker,\
-	-LN \
 	-wd4715 \
+	-clr:netcore -LN -AI $(DOTNET_RTLIBDIR) \
 ))
+#	-LN -AI C:/PROGRA~1/dotnet/shared/MICROS~1.APP/500-RC~1.14/ -AI $(DOTNET_RTLIBDIR) \
+#	-LN -AI$(DOTNET_RTLIBDIR) -clr:nostdlib \
+#	$(if $(DOTNET_RTLIBDIR),-clr:netcore -AI$(DOTNET_RTLIBDIR),-LN) \
+#	-LN -AI$(DOTNET_RTLIBDIR) -clr:nostdimport,nostdlib \
 
 $(eval $(call gb_Executable_add_ldflags,climaker,\
 		-ignore:4248 \
@@ -35,7 +39,7 @@ $(eval $(call gb_Executable_use_libraries,climaker,\
 ))
 
 $(eval $(call gb_Executable_use_system_win32_libs,climaker,\
-	mscoree \
+	$(if $(DOTNET_RTLIBDIR),,mscoree) \
 	msvcmrt \
 ))
 

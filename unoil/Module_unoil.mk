@@ -17,11 +17,9 @@ $(eval $(call gb_Module_add_targets,unoil,\
 endif
 
 ifeq ($(COM),MSC)
-ifneq ($(CPUNAME),ARM64)
 $(eval $(call gb_Module_add_targets,unoil,\
     CliUnoApi_oootypes \
 ))
-endif
 endif
 
 # vim:set noet sw=4 ts=4:

@@ -78,7 +78,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out ARM64,$(CPUNAME)),climaker)) \
+	$(if $(filter MSC,$(COM)),climaker) \
 	cppumaker \
 	idlc \
 	javamaker \
@@ -546,7 +546,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno_uno \
-	$(if $(filter MSC,$(COM)),$(if $(filter-out ARM64,$(CPUNAME)),cli_uno)) \
+	$(if $(filter MSC,$(COM)),cli_uno) \
 	i18nlangtag \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
@@ -839,7 +839,7 @@ $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	odk_share_readme \
 	odk_share_readme_generated \
-	$(if $(filter WNT,$(OS)),$(if $(filter-out ARM64,$(CPUNAME)),odk_cli)) \
+	$(if $(filter WNT,$(OS)),odk_cli) \
 	odk_config \
 	$(if $(filter WNT,$(OS)),odk_config_win) \
 	odk_docs \

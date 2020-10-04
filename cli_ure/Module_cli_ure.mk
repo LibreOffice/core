@@ -10,7 +10,6 @@
 $(eval $(call gb_Module_Module,cli_ure))
 
 ifeq ($(COM),MSC)
-ifneq ($(CPUNAME),ARM64)
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliLibrary_cli_basetypes \
 	CliLibrary_cli_ure \
@@ -22,7 +21,6 @@ $(eval $(call gb_Module_add_targets,cli_ure,\
 	Library_cli_uno \
 	Package_cli_basetypes_copy \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:

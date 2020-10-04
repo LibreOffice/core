@@ -2225,6 +2225,21 @@ AC_ARG_WITH(visual-studio,
          installed. Currently only 2019 (default) is supported.]),
 ,)
 
+AC_ARG_WITH(dotnet-sdk-home,
+    AS_HELP_STRING([--dotnet-sdk-home=<abs path>],
+                   [Specify the .NET SDK home directory containing dotnet.exe.]),
+,)
+
+AC_ARG_WITH(dotnet-sdk-runtime,
+    AS_HELP_STRING([--dotnet-sdk-runtime=<version>],
+                   [Override the .NET SDK runtime version to use (see dotnet.exe --list-runtimes).]),
+,)
+
+AC_ARG_WITH(dotnet-sdk-version,
+    AS_HELP_STRING([--dotnet-sdk-version=<version>],
+                   [Override the .NET SDK version to use (see dotnet.exe --list-sdks).]),
+,)
+
 AC_ARG_WITH(windows-sdk,
     AS_HELP_STRING([--with-windows-sdk=<8.0(A)/8.1(A)/10.0>],
         [Specify which Windows SDK, or "Windows Kit", version to use
@@ -4992,6 +5007,10 @@ if test "$cross_compiling" = "yes"; then
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
+    test -n "$with_dotnet_sdk_home" && sub_conf_opts="$sub_conf_opts --with-dotnet-sdk-home=$with_dotnet_sdk_home"
+    test -n "$with_dotnet_sdk_version" && sub_conf_opts="$sub_conf_opts --with-dotnet-sdk-version=$with_dotnet_sdk_version"
+    test -n "$with_dotnet_sdk_runtime" && sub_conf_opts="$sub_conf_opts --with-dotnet-sdk-runtime=$with_dotnet_sdk_runtime"
+
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
 
     # Don't bother having configure look for stuff not needed for the build platform anyway
@@ -5082,9 +5101,12 @@ if test "$cross_compiling" = "yes"; then
 "
     # these overwrite host config with build config
     OVERWRITING_SETTINGS="
+        AL
         ANT
         ANT_HOME
         ANT_LIB
+        CSC
+        DOTNET_RTLIBDIR
         HSQLDB_USE_JDBC_4_1
         JAVA_CLASSPATH_NOT_SET
         JAVA_SOURCE_VER
@@ -5893,22 +5915,153 @@ find_al()
             return
         fi
     done
-
-
 }
 
 find_dotnetsdk46()
 {
     unset frametest
 
+    dnl Check mscoree.lib / .NET Framework dir
+    AC_MSG_CHECKING([for .NET Framework 4])
+
     for ver in 4.8 4.7.2 4.7.1 4.7 4.6.2 4.6.1 4.6; do
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
         if test -n "$regvalue"; then
             frametest=$regvalue
-            return
+            break
         fi
     done
+
+    PathFormat "$frametest"
+    frametest="$formatted_path"
+    if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+        DOTNET_FRAMEWORK_HOME="$frametest"
+    else
+        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+            DOTNET_FRAMEWORK_HOME="$winsdktest"
+        fi
+    fi
+    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
+        AC_MSG_ERROR([mscoree.lib not found])
+    fi
+    AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
+
+    dnl Check csc.exe
+    AC_MSG_CHECKING([for csc.exe])
+    find_csc
+    if test -f "$csctest/csc.exe"; then
+        CSC_PATH="$csctest"
+    fi
+    if test ! -f "$CSC_PATH/csc.exe"; then
+        AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
+    else
+        AC_MSG_RESULT([$CSC_PATH/csc.exe])
+    fi
+
+
+    dnl Check al.exe
+    AC_MSG_CHECKING([for al.exe])
+    if test -n "$winsdkbinsubdir" \
+        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
+    then
+        AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
+    elif test -f "$winsdktest/Bin/$WIN_BUILD_ARCH/al.exe"; then
+        AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
+    elif test -f "$winsdktest/Bin/al.exe"; then
+        AL_PATH="$winsdktest/Bin"
+    fi
+
+    if test -z "$AL_PATH"; then
+        find_al
+        if test -f "$altest/bin/al.exe"; then
+            AL_PATH="$altest/bin"
+        elif test -f "$altest/al.exe"; then
+            AL_PATH="$altest"
+        fi
+    fi
+    if test ! -f "$AL_PATH/al.exe"; then
+        AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
+    else
+        AC_MSG_RESULT([$AL_PATH/al.exe])
+    fi
+
+    AL_PATH=`win_short_path_for_make "$AL_PATH"`
+    PathFormat "$AL_PATH"
+    AL_PATH="$formatted_path"
+    AL=al
+
+    CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
+    PathFormat "$CSC_PATH"
+    CSC_PATH="$formatted_path"
+    CSC=csc
+
+    PathFormat "$DOTNET_FRAMEWORK_HOME"
+    DOTNET_FRAMEWORK_HOME="$formatted_path"
 }
+
+find_dotnetsdk5()
+{
+    AC_MSG_CHECKING([for .NET SDK 5+])
+
+    if test -z "$with_dotnet_sdk_home"; then
+        if test "$CPUNAME" = "ARM64"; then
+            AC_MSG_ERROR([Please specify the path using --with-dotnet-sdk-home.])
+        else
+            AC_MSG_RESULT([not specified])
+        fi
+        return 1
+    fi
+
+    PathFormat "$(win_short_path_for_make "$with_dotnet_sdk_home")"
+    if test ! -f "${formatted_path}/dotnet.exe"; then
+        AC_MSG_ERROR([No dotnet.exe in $formatted_path])
+    fi
+    dotnet_sdk_home="$formatted_path"
+    DOTNET="${formatted_path}/dotnet.exe"
+    AC_MSG_RESULT([using ${DOTNET}])
+
+    AC_MSG_CHECKING([.NET SDK 5+ versions])
+    if test -z "$with_dotnet_sdk_version"; then
+        dnet_sdkver="$($DOTNET --list-sdks 2>&1 | sort -r | head -n 1)"
+        dnet_sdkver="${dnet_sdkver%% *}"
+    else
+        dnet_sdkver="$with_dotnet_sdk_version"
+    fi
+
+    PathFormat "${dotnet_sdk_home}/sdk/${dnet_sdkver}"
+    if ! test -d "$formatted_path"; then
+        "$DOTNET" --list-sdks
+        AC_MSG_ERROR([Specified or automatic SDK version directory missing! Use --with-dotnet-sdk-version with one of the listed versions.])
+    fi
+
+    PathFormat "$(win_short_path_for_make "${formatted_path}/Roslyn/bincore/csc.dll")"
+    CSC="${DOTNET} ${formatted_path}"
+    if ! ${CSC} -? </dev/null >/dev/null 2>&1; then
+        AC_MSG_ERROR([no working compiler (csc.dll) for ${formatted_path}])
+    fi
+
+    if test -z "$with_dotnet_sdk_runtime"; then
+        dnet_runver="$($DOTNET --list-runtimes 2>&1 | sed -ne 's/^Microsoft.NETCore.App //p' | sort -r | head -n 1)"
+        dnet_runver="${dnet_runver%% *}"
+    else
+        dnet_runver="$with_dotnet_sdk_runtime"
+    fi
+
+    PathFormat "$(win_short_path_for_make "${dotnet_sdk_home}/packs/Microsoft.NETCore.App.Ref/${dnet_runver}/ref/net5.0/")"
+    if ! test -d "$formatted_path"; then
+        "$DOTNET" --list-runtimes 2>&1 | grep "^Microsoft.NETCore.App "
+        AC_MSG_ERROR([Specified or automatic runtime version directory missing! Use --with-dotnet-sdk-runtime with one of the listed versions.])
+    fi
+    DOTNET_RTLIBDIR="${formatted_path}"
+
+    AC_MSG_RESULT([using sdk: $dnet_sdkver runtime: ${dnet_runver}])
+
+    # al is long deprecated and not available since .NET 5
+    AL=$CSC
+
+    return 0
+}
+AC_SUBST([DOTNET_RTLIBDIR])
 
 find_winsdk_version()
 {
@@ -6234,79 +6387,17 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_ERROR([Some (all?) Windows Installer tools in the Windows SDK are missing, please install.])
     fi
 
-    dnl Check csc.exe
-    AC_MSG_CHECKING([for csc.exe])
-    find_csc
-    if test -f "$csctest/csc.exe"; then
-        CSC_PATH="$csctest"
-    fi
-    if test ! -f "$CSC_PATH/csc.exe"; then
-        AC_MSG_ERROR([csc.exe not found as $CSC_PATH/csc.exe])
-    else
-        AC_MSG_RESULT([$CSC_PATH/csc.exe])
-    fi
-
-    CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
-
-    dnl Check al.exe
-    AC_MSG_CHECKING([for al.exe])
-    find_winsdk
-    if test -n "$winsdkbinsubdir" \
-        -a -f "$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH/al.exe"
-    then
-        AL_PATH="$winsdktest/Bin/$winsdkbinsubdir/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest/Bin/$WIN_BUILD_ARCH/al.exe"; then
-        AL_PATH="$winsdktest/Bin/$WIN_BUILD_ARCH"
-    elif test -f "$winsdktest/Bin/al.exe"; then
-        AL_PATH="$winsdktest/Bin"
-    fi
-
-    if test -z "$AL_PATH"; then
-        find_al
-        if test -f "$altest/bin/al.exe"; then
-            AL_PATH="$altest/bin"
-        elif test -f "$altest/al.exe"; then
-            AL_PATH="$altest"
-        fi
-    fi
-    if test ! -f "$AL_PATH/al.exe"; then
-        AC_MSG_ERROR([al.exe not found as $AL_PATH/al.exe])
-    else
-        AC_MSG_RESULT([$AL_PATH/al.exe])
-    fi
-
-    AL_PATH=`win_short_path_for_make "$AL_PATH"`
-
-    dnl Check mscoree.lib / .NET Framework dir
-    AC_MSG_CHECKING(.NET Framework)
-    find_dotnetsdk46
-    PathFormat "$frametest"
-    frametest="$formatted_path"
-    if test -f "$frametest/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-        DOTNET_FRAMEWORK_HOME="$frametest"
-    else
-        find_winsdk
-        if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-            DOTNET_FRAMEWORK_HOME="$winsdktest"
-        fi
-    fi
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WIN_BUILD_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WIN_BUILD_ARCH/mscoree.lib"; then
-        AC_MSG_ERROR([mscoree.lib not found])
-    fi
-    AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
-
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
 
-    PathFormat "$AL_PATH"
-    AL_PATH="$formatted_path"
-
-    PathFormat "$DOTNET_FRAMEWORK_HOME"
-    DOTNET_FRAMEWORK_HOME="$formatted_path"
-
-    PathFormat "$CSC_PATH"
-    CSC_PATH="$formatted_path"
+    if test "$cross_compiling" != yes; then
+        if ! find_dotnetsdk5 ; then
+            find_dotnetsdk46
+        fi
+    fi
 fi
+AC_SUBST([AL])
+AC_SUBST([CSC])
 
 dnl ===================================================================
 dnl Check if stdc headers are available excluding MSVC.

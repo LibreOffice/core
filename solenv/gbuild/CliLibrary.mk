@@ -35,7 +35,7 @@ gb_CliLibrary__get_generated_source = $(WORKDIR)/$(1).cs
 
 # csc has silly problems handling files passed on command line
 define gb_CliLibrary__command
-	csc \
+	$(CSC) \
 		$(call gb_CliLibrary__get_csflags) \
 		$(CLI_CSCFLAGS) \
 		-target:library \
@@ -44,6 +44,7 @@ define gb_CliLibrary__command
 			-debug:pdbonly \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/Library/$(notdir $(1)))) \
 		-keyfile:$(CLI_KEYFILE) \
+		$(if $(DOTNET_RTLIBDIR),-lib:$(DOTNET_RTLIBDIR) -reference:System.Runtime.dll -reference:System.Threading.dll -reference:mscorlib.dll -reference:System.Console.dll) \
 		-reference:System.dll \
 		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \
 		$(subst /,\,$(CLI_SOURCES)) \

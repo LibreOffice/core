@@ -35,7 +35,7 @@ $(eval $(call gb_Library_use_libraries,cli_cppuhelper,\
 $(eval $(call gb_Library_use_system_win32_libs,cli_cppuhelper,\
 	advapi32 \
 	delayimp \
-	mscoree \
+	$(if $(DOTNET_RTLIBDIR),,mscoree) \
 	msvcmrt \
 ))
 

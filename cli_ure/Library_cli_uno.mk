@@ -21,7 +21,7 @@ $(eval $(call gb_Library_use_libraries,cli_uno,\
 ))
 
 $(eval $(call gb_Library_use_system_win32_libs,cli_uno,\
-	mscoree \
+	$(if $(DOTNET_RTLIBDIR),,mscoree) \
 	msvcmrt \
 ))
 
