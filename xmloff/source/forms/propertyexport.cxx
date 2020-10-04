@@ -30,6 +30,7 @@
 #include <sax/tools/converter.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -678,7 +679,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OPropertyExport::dbg_implCheckProperty: caught an exception, could not check the property!");
+            TOOLS_WARN_EXCEPTION("xmloff", "could not check the property!");
         }
     }
 #endif // DBG_UTIL - dbg_implCheckProperty

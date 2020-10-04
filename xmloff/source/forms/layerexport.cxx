@@ -214,7 +214,8 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_FAIL("OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
+                TOOLS_WARN_EXCEPTION("xmloff",
+                                     "caught an exception ... skipping the current element!");
                 continue;
             }
         }
