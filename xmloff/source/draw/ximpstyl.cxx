@@ -28,8 +28,8 @@
 #include "ximpnote.hxx"
 #include <xmlsdtypes.hxx>
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -1052,7 +1052,7 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext const & rMas
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL( "xmloff::SdXMLStylesContext::SetMasterPageStyles(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1069,7 +1069,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetGraphicStyles(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1083,7 +1083,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "xmloff::SdXMLStylesContext::ImpSetCellStyles(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 

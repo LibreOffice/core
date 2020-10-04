@@ -38,8 +38,8 @@
 #include "ximpstyl.hxx"
 #include <xmloff/prstylei.hxx>
 #include <PropertySetMerger.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -385,7 +385,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
         }
         catch(const uno::Exception&)
         {
-            OSL_FAIL("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception caught!");
+            TOOLS_WARN_EXCEPTION("xmloff.draw", "");
         }
     }
 
@@ -445,7 +445,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
     }
     catch (const uno::Exception&)
     {
-        OSL_FAIL( "SdXMLGenericPageContext::SetStyle(): uno::Exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -638,7 +638,8 @@ void SdXMLGenericPageContext::SetNavigationOrder()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception caught while importing shape navigation order!");
+        TOOLS_WARN_EXCEPTION("xmloff.draw",
+                             "unexpected exception caught while importing shape navigation order!");
     }
 }
 

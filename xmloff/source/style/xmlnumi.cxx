@@ -38,7 +38,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <tools/fontenum.hxx>
 #include <tools/color.hxx>
@@ -986,7 +986,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "SvxXMLListStyleContext::FillUnoNumRule - Exception caught" );
+        TOOLS_WARN_EXCEPTION("xmloff.style", "" );
     }
 }
 

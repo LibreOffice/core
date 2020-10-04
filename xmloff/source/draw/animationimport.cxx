@@ -51,6 +51,7 @@
 #include <comphelper/string.hxx>
 
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <sax/tools/converter.hxx>
 
 #include <vector>
@@ -61,7 +62,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <osl/diagnose.h>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmlsdtypes.hxx>
 
@@ -194,7 +194,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 
     Any aAny;
@@ -529,7 +529,7 @@ AnimationNodeContext::AnimationNodeContext(
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1180,7 +1180,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1345,7 +1345,7 @@ void AnimationNodeContext::postProcessRootNode( const Reference< XAnimationNode 
     }
     catch (const Exception&)
     {
-        OSL_FAIL("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 

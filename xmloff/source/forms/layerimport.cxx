@@ -42,6 +42,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <rtl/strbuf.hxx>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 
 namespace xmloff
@@ -406,7 +407,8 @@ void OFormLayerXMLImport_Impl::endPage()
     }
     catch(Exception&)
     {
-        OSL_FAIL("OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
+        TOOLS_WARN_EXCEPTION("xmloff.forms",
+                             "unable to knit the control references (caught an exception)!");
     }
 
     // now that we have all children of the forms collection, attach the events
@@ -500,7 +502,8 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
+                TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                     "caught an exception while binding to a cell!");
             }
         }
         m_aCellValueBindings.clear();
@@ -524,7 +527,8 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
+                TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                     "caught an exception while binding to a cell range!");
             }
         }
         m_aCellRangeListSources.clear();

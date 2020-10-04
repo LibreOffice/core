@@ -30,8 +30,8 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <sax/tools/converter.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -584,7 +584,7 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "exception caught while importing animation information!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "exception caught while importing animation information!");
     }
 }
 

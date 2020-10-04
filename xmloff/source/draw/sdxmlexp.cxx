@@ -47,7 +47,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlaustp.hxx>
@@ -1404,7 +1404,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
     }
     catch(const Exception&)
     {
-        OSL_FAIL( "SdXMLExport::ImpPrepDrawPageHeaderFooterDecls(), unexpected exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 
     return aSettings;
@@ -1979,7 +1979,7 @@ void SdXMLExport::exportPresentationSettings()
     }
     catch(const uno::Exception&)
     {
-        OSL_FAIL( "uno::Exception while exporting <presentation:settings>" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "while exporting <presentation:settings>");
     }
 }
 
@@ -2490,7 +2490,8 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SdXMLExport::collectAnnotationAutoStyles(), exception caught during export of annotation auto styles");
+        TOOLS_WARN_EXCEPTION("xmloff.draw",
+                             "exception caught during export of annotation auto styles");
     }
 }
 
@@ -2582,7 +2583,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SdXMLExport::exportAnnotations(), exception caught during export of annotations");
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "exception caught during export of annotations");
     }
 }
 

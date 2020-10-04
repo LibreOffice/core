@@ -36,7 +36,7 @@
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 
@@ -171,7 +171,7 @@ RDFaExportHelper::AddRDFa(
     }
     catch (uno::Exception &)
     {
-        OSL_FAIL("AddRDFa: exception");
+        TOOLS_WARN_EXCEPTION("xmloff.core", "");
     }
 }
 

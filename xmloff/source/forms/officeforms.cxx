@@ -106,7 +106,8 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OFormsRootImport::StartElement: caught an exception while setting the document properties!");
+            TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                 "caught an exception while setting the document properties!");
         }
     }
 
@@ -166,7 +167,8 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_FAIL("OFormsRootExport::addModelAttributes: caught an exception while retrieving the document properties!");
+            TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                 "caught an exception while retrieving the document properties!");
         }
     }
 

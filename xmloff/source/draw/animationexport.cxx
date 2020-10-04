@@ -55,7 +55,6 @@
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -664,7 +663,7 @@ void AnimationsExporterImpl::prepareTransitionNode()
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), Exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -739,7 +738,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::prepareNode(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -978,7 +977,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 
     // if something goes wrong, its always a good idea to clear the attribute list
@@ -1052,7 +1051,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportContainer(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1356,7 +1355,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAnimate(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1391,7 +1390,7 @@ void AnimationsExporterImpl::exportAudio( const Reference< XAudio >& xAudio )
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportAudio(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1421,7 +1420,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::exportCommand(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1443,7 +1442,7 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporterImpl::getParagraphTarget(), RuntimeException caught!" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 
     Reference< XInterface > xRef;
@@ -1693,7 +1692,7 @@ void AnimationsExporter::prepare( const Reference< XAnimationNode >& xRootNode )
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporter::prepare(), exception caught" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 
@@ -1729,7 +1728,7 @@ void AnimationsExporter::exportAnimations( const Reference< XAnimationNode >& xR
     }
     catch (const RuntimeException&)
     {
-        OSL_FAIL( "xmloff::AnimationsExporter::exportAnimations(), exception caught" );
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 

@@ -38,8 +38,8 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using com::sun::star::uno::Reference;
@@ -111,7 +111,7 @@ void SchemaRestrictionContext::CreateDataType()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "exception during type creation" );
+        TOOLS_WARN_EXCEPTION("xmloff", "exception during type creation");
     }
     SAL_WARN_IF( !mxDataType.is(), "xmloff", "can't create type" );
 }

@@ -26,7 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "layerexp.hxx"
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 using ::com::sun::star::uno::Reference;
 
@@ -120,7 +120,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         }
         catch( Exception& )
         {
-            OSL_FAIL("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
+            TOOLS_WARN_EXCEPTION("xmloff.draw", "exception caught during export of one layer!");
         }
     }
 }
