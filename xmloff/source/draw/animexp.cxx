@@ -26,7 +26,7 @@
 
 #include <sax/tools/converter.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <list>
 #include <comphelper/extract.hxx>
@@ -281,7 +281,8 @@ void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
     }
     catch (const Exception&)
     {
-        OSL_FAIL("exception caught while collection animation information!");
+        TOOLS_WARN_EXCEPTION("xmloff.draw",
+                             "exception caught while collection animation information!");
     }
 }
 
@@ -406,7 +407,8 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
     }
     catch (const Exception&)
     {
-        OSL_FAIL("exception caught while collection animation information!");
+        TOOLS_WARN_EXCEPTION("xmloff.draw",
+                             "exception caught while collection animation information!");
     }
 }
 

@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -166,7 +167,7 @@ void SdXMLLayerContext::EndElement()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SdXMLLayerContext::EndElement(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.draw", "");
     }
 }
 

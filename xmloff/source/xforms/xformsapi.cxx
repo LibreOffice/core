@@ -32,8 +32,8 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -289,7 +289,7 @@ OUString xforms_getBasicTypeName(
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "exception during type creation" );
+        TOOLS_WARN_EXCEPTION("xmloff", "exception during type creation");
     }
     return sTypeName;
 }

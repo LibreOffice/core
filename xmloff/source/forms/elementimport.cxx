@@ -925,8 +925,8 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-            OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the class id!" );
+            TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                 "caught an exception while retrieving the class id!");
         }
 
         const char* pValueProperty = nullptr;
@@ -959,8 +959,9 @@ namespace xmloff
                 }
                 catch( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-                    OSL_FAIL( "OControlImport::EndElement: caught an exception while retrieving the current value property!" );
+                    TOOLS_WARN_EXCEPTION(
+                        "xmloff.forms",
+                        "caught an exception while retrieving the current value property!");
                 }
             }
         }
@@ -977,8 +978,8 @@ namespace xmloff
             }
             catch( const Exception& )
             {
-                DBG_UNHANDLED_EXCEPTION("xmloff.forms");
-                OSL_FAIL( "OControlImport::EndElement: caught an exception while restoring the value property!" );
+                TOOLS_WARN_EXCEPTION("xmloff.forms",
+                                     "caught an exception while restoring the value property!");
             }
         }
 

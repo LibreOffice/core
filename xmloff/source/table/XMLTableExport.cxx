@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>
@@ -247,7 +246,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         catch(const Exception&)
         {
-            OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+            TOOLS_WARN_EXCEPTION("xmloff.table", "exception during column style collection!");
         }
 
         Reference< XIndexAccess > xIndexAccessRows( xColumnRowRange->getRows(), UNO_QUERY_THROW );
@@ -316,12 +315,12 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         catch(const Exception&)
         {
-            OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+            TOOLS_WARN_EXCEPTION("xmloff.table", "exception during column style collection!");
         }
     }
     catch(const Exception&)
     {
-        OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.table", "exception caught!");
     }
  }
 
@@ -384,8 +383,8 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
      }
      catch(const Exception&)
-    {
-         OSL_FAIL( "XMLTableExport::exportTable(), exception caught!" );
+     {
+         TOOLS_WARN_EXCEPTION("xmloff.table", "" );
      }
  }
 
@@ -446,7 +445,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     }
     catch (const Exception&)
     {
-        OSL_FAIL( "exception while exporting a table cell" );
+        TOOLS_WARN_EXCEPTION("xmloff.table", "exception while exporting a table cell");
     }
 
     // table:number-columns-repeated
@@ -640,7 +639,7 @@ void XMLTableExport::exportTableTemplates()
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL("xmloff::XMLTableExport::exportTableTemplates(), exception caught!");
+                    TOOLS_WARN_EXCEPTION("xmloff.table", "");
                 }
 
                 pElements++;

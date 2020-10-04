@@ -45,7 +45,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "table.hxx"
 
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <memory>
@@ -337,7 +336,7 @@ void XMLTableImport::finishStyles()
             }
             catch( Exception& )
             {
-                OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
+                TOOLS_WARN_EXCEPTION("xmloff.table", "");
             }
 
             if( xTemplate.is() )
@@ -351,12 +350,12 @@ void XMLTableImport::finishStyles()
         }
         catch( Exception& )
         {
-            OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
+            TOOLS_WARN_EXCEPTION("xmloff.table", "");
         }
     }
     catch( Exception& )
     {
-        OSL_FAIL("xmloff::XMLTableImport::finishStyles(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
 }
 
@@ -421,7 +420,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportColumn( sal_uInt16 /*nPrefix*
     }
     catch( Exception& )
     {
-        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
 
     return nullptr;
@@ -462,7 +461,7 @@ void XMLTableImportContext::InitColumns()
     }
     catch( Exception& )
     {
-        OSL_FAIL("xmloff::XMLTableImportContext::ImportTableColumn(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
 }
 
@@ -563,7 +562,7 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, con
     }
     catch( Exception& )
     {
-        OSL_FAIL("xmloff::XMLTableImportContext::ImportCell(), exception caught!");
+        TOOLS_WARN_EXCEPTION("xmloff.table", "");
     }
 
     return nullptr;
@@ -605,7 +604,7 @@ void XMLTableImportContext::EndElement()
         }
         catch( Exception& )
         {
-            OSL_FAIL("XMLTableImportContext::EndElement(), exception caught while merging cells!");
+            TOOLS_WARN_EXCEPTION("xmloff.table", "");
         }
     }
 }
