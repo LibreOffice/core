@@ -116,7 +116,6 @@ void ScModule::InitInterface_Impl()
 ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule("sc", {pFact}),
     m_aIdleTimer("sc ScModule IdleTimer"),
-    m_aSpellIdle("sc ScModule SpellIdle"),
     m_pDragData(new ScDragData),
     m_pSelTransfer( nullptr ),
     m_pMessagePool( nullptr ),
@@ -142,8 +141,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                        ErrCodeArea::Sc,
                                        ErrCodeArea::Sc,
                                        GetResLocale()) );
-
-    m_aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
 
     m_aIdleTimer.SetTimeout(SC_IDLE_MIN);
     m_aIdleTimer.SetInvokeHandler( LINK( this, ScModule, IdleHandler ) );
@@ -1818,16 +1815,11 @@ IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
     }
 
     bool bMore = false;
-    bool bAutoSpell = false;
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(SfxObjectShell::Current());
 
     if ( pDocSh )
     {
         ScDocument& rDoc = pDocSh->GetDocument();
-        bAutoSpell = rDoc.GetDocOptions().IsAutoSpell();
-        if (pDocSh->IsReadOnly())
-            bAutoSpell = false;
-
         sc::DocumentLinkManager& rLinkMgr = rDoc.GetDocLinkManager();
         bool bLinks = rLinkMgr.idleCheckLinks();
         bool bWidth = rDoc.IdleCalcTextWidth();
@@ -1840,19 +1832,6 @@ IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
             lcl_CheckNeedsRepaint( pDocSh );
     }
 
-    if (bAutoSpell)
-    {
-        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-        if (pViewSh)
-        {
-            bool bSpell = pViewSh->ContinueOnlineSpelling();
-            if (bSpell)
-            {
-                m_aSpellIdle.Start();
-                bMore = true;
-            }
-        }
-    }
 
     sal_uInt64 nOldTime = m_aIdleTimer.GetTimeout();
     sal_uInt64 nNewTime = nOldTime;
@@ -1878,22 +1857,6 @@ IMPL_LINK_NOARG(ScModule, IdleHandler, Timer *, void)
 
 
     m_aIdleTimer.Start();
-}
-
-IMPL_LINK_NOARG(ScModule, SpellTimerHdl, Timer *, void)
-{
-    if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
-    {
-        m_aSpellIdle.Start();
-        return; // Later again ...
-    }
-
-    ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
-    if (pViewSh)
-    {
-        if (pViewSh->ContinueOnlineSpelling())
-            m_aSpellIdle.Start();
-    }
 }
 
 /**

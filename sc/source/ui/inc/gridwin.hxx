@@ -36,7 +36,7 @@ namespace editeng {
 }
 
 namespace sc {
-    struct SpellCheckContext;
+    class SpellCheckContext;
 }
 
 namespace sdr { namespace overlay { class OverlayManager; } }
@@ -428,9 +428,9 @@ public:
 
     void CursorChanged();
     void DrawLayerCreated();
-    bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
+    void ResetAutoSpellForContentChange();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     const std::vector<editeng::MisspellRanges>* GetAutoSpellData( SCCOL nPosX, SCROW nPosY );
     bool InsideVisibleRange( SCCOL nPosX, SCROW nPosY );
