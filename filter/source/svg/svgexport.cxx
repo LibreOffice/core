@@ -46,6 +46,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
@@ -607,9 +608,9 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
                 }
                 catch( ... )
                 {
+                    TOOLS_WARN_EXCEPTION("filter.svg", "");
                     delete mpSVGDoc;
                     mpSVGDoc = nullptr;
-                    SAL_WARN("filter.svg", "Exception caught");
                 }
 
                 if( nullptr != pSdrModel )
@@ -669,9 +670,9 @@ bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm
             }
             catch( ... )
             {
+                TOOLS_WARN_EXCEPTION("filter.svg", "");
                 delete mpSVGDoc;
                 mpSVGDoc = nullptr;
-                OSL_FAIL( "Exception caught" );
             }
 
             delete mpSVGWriter;

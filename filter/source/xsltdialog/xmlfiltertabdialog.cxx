@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/fileurl.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/file.hxx>
@@ -100,7 +101,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterTabDialog::onOk exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
             }
         }
     }
@@ -158,7 +159,7 @@ bool XMLFilterTabDialog::onOk()
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "XMLFilterTabDialog::onOk exception caught!" );
+                TOOLS_WARN_EXCEPTION("filter.xslt", "");
             }
         }
     }
