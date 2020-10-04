@@ -834,18 +834,18 @@ namespace
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
-    void lcl_RestoreRedlines(SwDoc* pDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
+    void lcl_RestoreRedlines(SwDoc& rDoc, const SwPosition& rPos, SaveRedlines_t& rArr)
     {
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
         for(SaveRedline & rSvRedLine : rArr)
         {
             rSvRedLine.SetPos( rPos );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
+            rDoc.getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
         }
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
@@ -931,22 +931,22 @@ namespace
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
-    void lcl_RestoreRedlines(SwDoc *const pDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
+    void lcl_RestoreRedlines(SwDoc& rDoc, sal_uInt32 const nInsPos, SaveRedlines_t& rArr)
     {
-        RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
+        RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
         for(SaveRedline & rSvRedLine : rArr)
         {
             rSvRedLine.SetPos( nInsPos );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
+            rDoc.getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
             if (rSvRedLine.pRedl->GetType() == RedlineType::Delete)
             {
-                UpdateFramesForAddDeleteRedline(*pDoc, *rSvRedLine.pRedl);
+                UpdateFramesForAddDeleteRedline(rDoc, *rSvRedLine.pRedl);
             }
         }
 
-        pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
+        rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
     bool lcl_SaveFootnote( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
@@ -1215,7 +1215,7 @@ namespace //local functions originally from docfmt.cxx
     // Is used in SwDoc::Insert(..., SwFormatHint &rHt)
 
     bool lcl_InsAttr(
-        SwDoc *const pDoc,
+        SwDoc& rDoc,
         const SwPaM &rRg,
         const SfxItemSet& rChgSet,
         const SetAttrMode nFlags,
@@ -1269,7 +1269,7 @@ namespace //local functions originally from docfmt.cxx
         if ( !bCharAttr && !bOtherAttr )
         {
             SfxItemSet* pTmpCharItemSet = new SfxItemSet(
-                pDoc->GetAttrPool(),
+                rDoc.GetAttrPool(),
                 svl::Items<
                     RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                     RES_TXTATR_AUTOFMT, RES_TXTATR_CHARFMT,
@@ -1277,7 +1277,7 @@ namespace //local functions originally from docfmt.cxx
                         RES_TXTATR_UNKNOWN_CONTAINER>{});
 
             SfxItemSet* pTmpOtherItemSet = new SfxItemSet(
-                pDoc->GetAttrPool(),
+                rDoc.GetAttrPool(),
                 svl::Items<
                     RES_PARATR_BEGIN, RES_GRFATR_END - 1,
                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1,
@@ -1351,7 +1351,7 @@ namespace //local functions originally from docfmt.cxx
 
                 SwNumFormat aNumFormat = pNumRule->Get(static_cast<sal_uInt16>(nLevel));
                 SwCharFormat * pCharFormat =
-                    pDoc->FindCharFormatByName(aNumFormat.GetCharFormatName());
+                    rDoc.FindCharFormatByName(aNumFormat.GetCharFormatName());
 
                 if (pCharFormat)
                 {
@@ -1371,7 +1371,7 @@ namespace //local functions originally from docfmt.cxx
             // Attributes without an end do not have a range
             if ( !bCharAttr && !bOtherAttr )
             {
-                SfxItemSet aTextSet( pDoc->GetAttrPool(),
+                SfxItemSet aTextSet( rDoc.GetAttrPool(),
                             svl::Items<RES_TXTATR_NOEND_BEGIN, RES_TXTATR_NOEND_END-1>{} );
                 aTextSet.Put( rChgSet );
                 if( aTextSet.Count() )
@@ -1380,8 +1380,8 @@ namespace //local functions originally from docfmt.cxx
                     bRet = history.InsertItems(
                         aTextSet, rSt.GetIndex(), rSt.GetIndex(), nFlags, /*ppNewTextAttr*/nullptr ) || bRet;
 
-                    if (bRet && (pDoc->getIDocumentRedlineAccess().IsRedlineOn() || (!pDoc->getIDocumentRedlineAccess().IsIgnoreRedline()
-                                    && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty())))
+                    if (bRet && (rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+                                    && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())))
                     {
                         SwPaM aPam( pStt->nNode, pStt->nContent.GetIndex()-1,
                                     pStt->nNode, pStt->nContent.GetIndex() );
@@ -1389,10 +1389,10 @@ namespace //local functions originally from docfmt.cxx
                         if( pUndo )
                             pUndo->SaveRedlineData( aPam, true );
 
-                        if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-                            pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aPam ), true);
+                        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+                            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, aPam ), true);
                         else
-                            pDoc->getIDocumentRedlineAccess().SplitRedline( aPam );
+                            rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
                     }
                 }
             }
@@ -1403,7 +1403,7 @@ namespace //local functions originally from docfmt.cxx
                 // CharFormat and URL attributes are treated separately!
                 // TEST_TEMP ToDo: AutoFormat!
                 SfxItemSet aTextSet(
-                    pDoc->GetAttrPool(),
+                    rDoc.GetAttrPool(),
                     svl::Items<
                         RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
                         RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
@@ -1420,8 +1420,8 @@ namespace //local functions originally from docfmt.cxx
                     bRet = history.InsertItems( aTextSet, nInsCnt, nEnd, nFlags, ppNewTextAttr )
                            || bRet;
 
-                    if (bRet && (pDoc->getIDocumentRedlineAccess().IsRedlineOn() || (!pDoc->getIDocumentRedlineAccess().IsIgnoreRedline()
-                                    && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty())))
+                    if (bRet && (rDoc.getIDocumentRedlineAccess().IsRedlineOn() || (!rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
+                                    && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())))
                     {
                         // Was text content inserted? (RefMark/TOXMarks without an end)
                         bool bTextIns = nInsCnt != rSt.GetIndex();
@@ -1431,13 +1431,13 @@ namespace //local functions originally from docfmt.cxx
                         if( pUndo )
                             pUndo->SaveRedlineData( aPam, bTextIns );
 
-                        if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
-                            pDoc->getIDocumentRedlineAccess().AppendRedline(
+                        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
+                            rDoc.getIDocumentRedlineAccess().AppendRedline(
                                 new SwRangeRedline(
                                     bTextIns ? RedlineType::Insert : RedlineType::Format, aPam ),
                                     true);
                         else if( bTextIns )
-                            pDoc->getIDocumentRedlineAccess().SplitRedline( aPam );
+                            rDoc.getIDocumentRedlineAccess().SplitRedline( aPam );
                     }
                 }
             }
@@ -1533,20 +1533,20 @@ namespace //local functions originally from docfmt.cxx
                 sal_uInt16 nPoolId=0;
                 if( SfxItemState::SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
                                     false, reinterpret_cast<const SfxPoolItem**>(&pRule) ) &&
-                    !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
+                    !rDoc.FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                     SwGetPoolIdFromName::NumRule )) )
-                    pDoc->getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
+                    rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool( nPoolId );
             }
         }
 
-        SfxItemSet firstSet(pDoc->GetAttrPool(),
+        SfxItemSet firstSet(rDoc.GetAttrPool(),
                 svl::Items<RES_PAGEDESC, RES_BREAK>{});
         if (pOtherSet && pOtherSet->Count())
         {   // actually only RES_BREAK is possible here...
             firstSet.Put(*pOtherSet);
         }
-        SfxItemSet propsSet(pDoc->GetAttrPool(),
+        SfxItemSet propsSet(rDoc.GetAttrPool(),
             svl::Items<RES_PARATR_BEGIN, RES_PAGEDESC,
                        RES_BREAK+1, RES_FRMATR_END,
                        XATTR_FILL_FIRST, XATTR_FILL_LAST+1>{});
@@ -1622,13 +1622,13 @@ namespace //local functions originally from docfmt.cxx
                 bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags, /*ppNewTextAttr*/nullptr )
                     || bRet;
 
-                if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+                if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
                 {
                     SwPaM aPam( *pNode, nMkPos, *pNode, nPtPos );
 
                     if( pUndo )
                         pUndo->SaveRedlineData( aPam, false );
-                    pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Format, aPam ), true);
+                    rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Format, aPam ), true);
                 }
             }
             if( pOtherSet && pOtherSet->Count() )
@@ -1638,7 +1638,7 @@ namespace //local functions originally from docfmt.cxx
                 // modify/correct entries inside of the given SfxItemSet
                 SfxItemSet aTempLocalCopy(*pOtherSet);
 
-                pDoc->CheckForUniqueItemForLineFillNameOrIndex(aTempLocalCopy);
+                rDoc.CheckForUniqueItemForLineFillNameOrIndex(aTempLocalCopy);
                 bRet = lcl_ApplyOtherSet(*pNode, pHistory, aTempLocalCopy, firstSet, propsSet, pLayout) || bRet;
             }
 
@@ -1646,18 +1646,18 @@ namespace //local functions originally from docfmt.cxx
             return bRet;
         }
 
-        if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() && pCharSet && pCharSet->Count() )
+        if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() && pCharSet && pCharSet->Count() )
         {
             if( pUndo )
                 pUndo->SaveRedlineData( rRg, false );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Format, rRg ), true);
+            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Format, rRg ), true);
         }
 
         /* now if range */
         sal_uLong nNodes = 0;
 
-        SwNodeIndex aSt( pDoc->GetNodes() );
-        SwNodeIndex aEnd( pDoc->GetNodes() );
+        SwNodeIndex aSt( rDoc.GetNodes() );
+        SwNodeIndex aEnd( rDoc.GetNodes() );
         SwIndex aCntEnd( pEnd->nContent );
 
         if( pNode )
@@ -1761,7 +1761,7 @@ namespace //local functions originally from docfmt.cxx
         {
             ::sw::DocumentContentOperationsManager::ParaRstFormat aPara(
                     pStt, pEnd, pHistory, pCharSet, pLayout);
-            pDoc->GetNodes().ForEach( aSt, aEnd, ::sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
+            rDoc.GetNodes().ForEach( aSt, aEnd, ::sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
         }
 
         bool bCreateSwpHints = pCharSet && (
@@ -1836,7 +1836,7 @@ namespace //local functions originally from docfmt.cxx
             sal_uLong nEnd = aEndPos.nNode.GetIndex();
             for(; nStart <= nEnd; ++nStart)
             {
-                SwNode* pNd = pDoc->GetNodes()[ nStart ];
+                SwNode* pNd = rDoc.GetNodes()[ nStart ];
                 if (!pNd || !pNd->IsTextNode())
                     continue;
                 SwTextNode *pCurrentNd = pNd->GetTextNode();
@@ -2413,7 +2413,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     // restore redlines (if DOC_MOVEREDLINES is used)
     if( !aSaveRedl.empty() )
     {
-        lcl_RestoreRedlines( &m_rDoc, *aSavePam.Start(), aSaveRedl );
+        lcl_RestoreRedlines( m_rDoc, *aSavePam.Start(), aSaveRedl );
     }
 
     if( bUpdateFootnote )
@@ -2559,7 +2559,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     }
 
     if( !aSaveRedl.empty() )
-        lcl_RestoreRedlines( &m_rDoc, aIdx.GetIndex(), aSaveRedl );
+        lcl_RestoreRedlines( m_rDoc, aIdx.GetIndex(), aSaveRedl );
 
     if( pUndo )
     {
@@ -3393,7 +3393,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
-    const bool bRet = lcl_InsAttr(&m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara, ppNewTextAttr);
+    const bool bRet = lcl_InsAttr(m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), pLayout, bExpandCharToPara, ppNewTextAttr);
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
@@ -3418,7 +3418,7 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
         pUndoAttr.reset(new SwUndoAttr( rRg, rSet, nFlags ));
     }
 
-    bool bRet = lcl_InsAttr(&m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout, /*bExpandCharToPara*/false, /*ppNewTextAttr*/nullptr );
+    bool bRet = lcl_InsAttr(m_rDoc, rRg, rSet, nFlags, pUndoAttr.get(), pLayout, /*bExpandCharToPara*/false, /*ppNewTextAttr*/nullptr );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {

@@ -27,15 +27,15 @@
 
 using namespace ::com::sun::star;
 
-SwMacroFieldType::SwMacroFieldType(SwDoc* pDocument)
-    : SwFieldType( SwFieldIds::Macro ),
-      m_pDoc(pDocument)
+SwMacroFieldType::SwMacroFieldType(SwDoc& rDocument)
+    : SwFieldType( SwFieldIds::Macro )
+    , m_rDoc(rDocument)
 {
 }
 
 std::unique_ptr<SwFieldType> SwMacroFieldType::Copy() const
 {
-    return std::make_unique<SwMacroFieldType>(m_pDoc);
+    return std::make_unique<SwMacroFieldType>(m_rDoc);
 }
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,

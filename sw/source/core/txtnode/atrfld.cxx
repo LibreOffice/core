@@ -720,10 +720,9 @@ SwTextAnnotationField::~SwTextAnnotationField()
     auto pPostItField = dynamic_cast<const SwPostItField*>(GetFormatField().GetField());
     assert(pPostItField);
 
-    SwDoc* pDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
-    assert(pDoc != nullptr);
+    SwDoc& rDoc = static_cast<const SwPostItFieldType*>(pPostItField->GetTyp())->GetDoc();
 
-    IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t pMark = pMarksAccess->findAnnotationMark( pPostItField->GetName() );
     return pMark != pMarksAccess->getAnnotationMarksEnd()
            ? *pMark

@@ -392,16 +392,16 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
+SwFileNameFieldType::SwFileNameFieldType(SwDoc& rDocument)
     : SwFieldType( SwFieldIds::Filename )
+    , m_rDoc(rDocument)
 {
-    m_pDoc = pDocument;
 }
 
 OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
 {
     OUString aRet;
-    const SwDocShell* pDShell = m_pDoc->GetDocShell();
+    const SwDocShell* pDShell = m_rDoc.GetDocShell();
     if( pDShell && pDShell->HasName() )
     {
         const INetURLObject& rURLObj = pDShell->GetMedium()->GetURLObject();
@@ -452,7 +452,7 @@ OUString SwFileNameFieldType::Expand(sal_uLong nFormat) const
 
 std::unique_ptr<SwFieldType> SwFileNameFieldType::Copy() const
 {
-    return std::make_unique<SwFileNameFieldType>(m_pDoc);
+    return std::make_unique<SwFileNameFieldType>(m_rDoc);
 }
 
 SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFormat)
@@ -564,10 +564,10 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
+SwTemplNameFieldType::SwTemplNameFieldType(SwDoc& rDocument)
     : SwFieldType( SwFieldIds::TemplateName )
+    , m_rDoc(rDocument)
 {
-    m_pDoc = pDocument;
 }
 
 OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
@@ -575,7 +575,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
     OSL_ENSURE( nFormat < FF_END, "Expand: no valid Format!" );
 
     OUString aRet;
-    SwDocShell *pDocShell(m_pDoc->GetDocShell());
+    SwDocShell *pDocShell(m_rDoc.GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -622,7 +622,7 @@ OUString SwTemplNameFieldType::Expand(sal_uLong nFormat) const
 
 std::unique_ptr<SwFieldType> SwTemplNameFieldType::Copy() const
 {
-    return std::make_unique<SwTemplNameFieldType>(m_pDoc);
+    return std::make_unique<SwTemplNameFieldType>(m_rDoc);
 }
 
 SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFormat)
@@ -705,16 +705,17 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
-    : SwFieldType( SwFieldIds::DocStat ), m_nNumberingType( SVX_NUM_ARABIC )
+SwDocStatFieldType::SwDocStatFieldType(SwDoc& rDocument)
+    : SwFieldType(SwFieldIds::DocStat)
+    , m_rDoc(rDocument)
+    , m_nNumberingType(SVX_NUM_ARABIC)
 {
-    m_pDoc = pDocument;
 }
 
 OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) const
 {
     sal_uInt32 nVal = 0;
-    const SwDocStat& rDStat = m_pDoc->getIDocumentStatistics().GetDocStat();
+    const SwDocStat& rDStat = m_rDoc.getIDocumentStatistics().GetDocStat();
     switch( nSubType )
     {
         case DS_TBL:  nVal = rDStat.nTable;   break;
@@ -724,8 +725,8 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
         case DS_WORD: nVal = rDStat.nWord;  break;
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
-            if( m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
-                const_cast<SwDocStat &>(rDStat).nPage = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
+            if( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )
+                const_cast<SwDocStat &>(rDStat).nPage = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFormat )
                 nFormat = m_nNumberingType;
@@ -742,7 +743,7 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
 
 std::unique_ptr<SwFieldType> SwDocStatFieldType::Copy() const
 {
-    return std::make_unique<SwDocStatFieldType>(m_pDoc);
+    return std::make_unique<SwDocStatFieldType>(m_rDoc);
 }
 
 /**
@@ -1319,17 +1320,15 @@ OUString SwHiddenTextField::ExpandImpl(SwRootFrame const*const) const
 }
 
 /// get current field value and cache it
-void SwHiddenTextField::Evaluate(SwDoc* pDoc)
+void SwHiddenTextField::Evaluate(SwDoc& rDoc)
 {
-    OSL_ENSURE(pDoc, "got no document");
-
     if( SwFieldTypesEnum::ConditionalText != m_nSubType )
         return;
 
 #if !HAVE_FEATURE_DBCONNECTIVITY
-    (void) pDoc;
+    (void) rDoc;
 #else
-    SwDBManager* pMgr = pDoc->GetDBManager();
+    SwDBManager* pMgr = rDoc.GetDBManager();
 #endif
     m_bValid = false;
     OUString sTmpName = (m_bCanToggle && !m_bIsHidden) ? m_aTRUEText : m_aFALSEText;
@@ -1356,7 +1355,7 @@ void SwHiddenTextField::Evaluate(SwDoc* pDoc)
         if( pMgr)
         {
             sal_Int32 nIdx{ 0 };
-            OUString sDBName( GetDBName( sTmpName, pDoc ));
+            OUString sDBName( GetDBName( sTmpName, rDoc ));
             OUString sDataSource(sDBName.getToken(0, DB_DELIM, nIdx));
             OUString sDataTableOrQuery(sDBName.getToken(0, DB_DELIM, nIdx));
             if( pMgr->IsInMerge() && !sDBName.isEmpty() &&
@@ -1514,7 +1513,7 @@ OUString SwHiddenTextField::GetColumnName(const OUString& rName)
     return rName;
 }
 
-OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
+OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc& rDoc)
 {
     sal_Int32 nPos = rName.indexOf(DB_DELIM);
     if( nPos>=0 )
@@ -1525,7 +1524,7 @@ OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc *pDoc)
             return rName.copy(0, nPos);
     }
 
-    SwDBData aData = pDoc->GetDBData();
+    SwDBData aData = rDoc.GetDBData();
     return aData.sDataSource + OUStringChar(DB_DELIM) + aData.sCommand;
 }
 
@@ -1708,14 +1707,14 @@ OUString SwHiddenParaField::GetPar1() const
 
 // PostIt field type
 
-SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
+SwPostItFieldType::SwPostItFieldType(SwDoc& rDoc)
     : SwFieldType( SwFieldIds::Postit )
-    , mpDoc(pDoc)
+    , mrDoc(rDoc)
 {}
 
 std::unique_ptr<SwFieldType> SwPostItFieldType::Copy() const
 {
-    return std::make_unique<SwPostItFieldType>(mpDoc);
+    return std::make_unique<SwPostItFieldType>(mrDoc);
 }
 
 // PostIt field
@@ -1856,8 +1855,8 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             if ( !m_xTextObject.is() )
             {
                 SwPostItFieldType* pGetType = static_cast<SwPostItFieldType*>(GetTyp());
-                SwDoc* pDoc = pGetType->GetDoc();
-                auto pObj = std::make_unique<SwTextAPIEditSource>( pDoc );
+                SwDoc& rDoc = pGetType->GetDoc();
+                auto pObj = std::make_unique<SwTextAPIEditSource>( &rDoc );
                 const_cast <SwPostItField*> (this)->m_xTextObject = new SwTextAPIObject( std::move(pObj) );
             }
 
@@ -2154,14 +2153,14 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // relative page numbers - query field
 
-SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
-    : SwFieldType( SwFieldIds::RefPageGet ), m_pDoc( pDc ), m_nNumberingType( SVX_NUM_ARABIC )
+SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc& rDc )
+    : SwFieldType( SwFieldIds::RefPageGet ), m_rDoc( rDc ), m_nNumberingType( SVX_NUM_ARABIC )
 {
 }
 
 std::unique_ptr<SwFieldType> SwRefPageGetFieldType::Copy() const
 {
-    std::unique_ptr<SwRefPageGetFieldType> pNew(new SwRefPageGetFieldType( m_pDoc ));
+    std::unique_ptr<SwRefPageGetFieldType> pNew(new SwRefPageGetFieldType( m_rDoc ));
     pNew->m_nNumberingType = m_nNumberingType;
     return pNew;
 }
@@ -2186,7 +2185,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
     {
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame const* pLayoutRLHidden(nullptr);
-        for (SwRootFrame const*const pLay : m_pDoc->GetAllLayouts())
+        for (SwRootFrame const*const pLay : m_rDoc.GetAllLayouts())
         {
             if (pLay->IsHideRedlines())
             {
@@ -2211,7 +2210,7 @@ void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* 
 bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
         SwRootFrame const*const pLayout)
 {
-    IDocumentRedlineAccess const& rIDRA(m_pDoc->getIDocumentRedlineAccess());
+    IDocumentRedlineAccess const& rIDRA(m_rDoc.getIDocumentRedlineAccess());
     std::vector<SwFormatField*> vFields;
     GatherFields(vFields);
     for(auto pFormatField: vFields)
@@ -2243,8 +2242,8 @@ bool SwRefPageGetFieldType::MakeSetList(SetGetExpFields& rTmpLst,
             else
             {
                 //  create index for determination of the TextNode
-                SwPosition aPos( m_pDoc->GetNodes().GetEndOfPostIts() );
-                bool const bResult = GetBodyTextNode( *m_pDoc, aPos, *pFrame );
+                SwPosition aPos( m_rDoc.GetNodes().GetEndOfPostIts() );
+                bool const bResult = GetBodyTextNode( m_rDoc, aPos, *pFrame );
                 OSL_ENSURE(bResult, "where is the Field?");
                 pNew.reset( new SetGetExpField( aPos.nNode, pTField,
                                             &aPos.nContent ) );
@@ -2266,7 +2265,7 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
     // then search the correct RefPageSet field
     SwTextNode* pTextNode = &pTextField->GetTextNode();
     if( pTextNode->StartOfSectionIndex() >
-        m_pDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
         SwNodeIndex aIdx( *pTextNode );
         SetGetExpField aEndField( aIdx, pTextField );
@@ -2351,9 +2350,9 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
 {
     // only fields in Footer, Header, FootNote, Flys
     SwRefPageGetFieldType* pGetType = static_cast<SwRefPageGetFieldType*>(GetTyp());
-    SwDoc* pDoc = pGetType->GetDoc();
+    SwDoc& rDoc = pGetType->GetDoc();
     if( pField->GetTextNode().StartOfSectionIndex() >
-        pDoc->GetNodes().GetEndOfExtras().GetIndex() )
+        rDoc.GetNodes().GetEndOfExtras().GetIndex() )
         return;
 
     SwRootFrame const& rLayout(*rFrame.getRootFrame());
@@ -2368,8 +2367,8 @@ void SwRefPageGetField::ChangeExpansion(const SwFrame& rFrame,
         return ;
 
     //  create index for determination of the TextNode
-    SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
-    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode(*pDoc, aPos, rFrame));
+    SwPosition aPos( SwNodeIndex( rDoc.GetNodes() ) );
+    SwTextNode* pTextNode = const_cast<SwTextNode*>(GetBodyTextNode(rDoc, aPos, rFrame));
 
     // If no layout exists, ChangeExpansion is called for header and
     // footer lines via layout formatting without existing TextNode.
@@ -2447,19 +2446,19 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // field type to jump to and edit
 
-SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
-    : SwFieldType( SwFieldIds::JumpEdit ), m_pDoc( pD ), m_aDep( *this )
+SwJumpEditFieldType::SwJumpEditFieldType( SwDoc& rD )
+    : SwFieldType( SwFieldIds::JumpEdit ), m_rDoc( rD ), m_aDep( *this )
 {
 }
 
 std::unique_ptr<SwFieldType> SwJumpEditFieldType::Copy() const
 {
-    return std::make_unique<SwJumpEditFieldType>( m_pDoc );
+    return std::make_unique<SwJumpEditFieldType>( m_rDoc );
 }
 
 SwCharFormat* SwJumpEditFieldType::GetCharFormat()
 {
-    SwCharFormat* pFormat = m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
+    SwCharFormat* pFormat = m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( RES_POOLCHR_JUMPEDIT );
     m_aDep.StartListening(pFormat);
     return pFormat;
 }

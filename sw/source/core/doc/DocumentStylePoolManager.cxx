@@ -170,13 +170,13 @@ namespace
         }
     }
 
-    void lcl_SetHeadline( SwDoc* pDoc, SwTextFormatColl* pColl,
+    void lcl_SetHeadline( SwDoc& rDoc, SwTextFormatColl* pColl,
                             SfxItemSet& rSet,
                             sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, bool bItalic )
     {
         SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
         SvxFontHeightItem aHItem(240, 100, RES_CHRATR_FONTSIZE);
-        const bool bHTMLMode = pDoc->GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE);
+        const bool bHTMLMode = rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE);
         if( bHTMLMode )
             aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
         else
@@ -200,7 +200,7 @@ namespace
             pColl->AssignToListLevelOfOutlineStyle(nLevel);
             if( !bHTMLMode )
             {
-                SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
+                SwNumRule * pOutlineRule = rDoc.GetOutlineNumRule();
                 const SwNumFormat& rNFormat = pOutlineRule->Get( nLevel );
 
                 if ( rNFormat.GetPositionAndSpaceMode() ==
@@ -220,10 +220,10 @@ namespace
                 pColl->SetFormatAttr(aItem);
             }
         }
-        pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
+        pColl->SetNextTextFormatColl( *rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
     }
 
-    void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
+    void lcl_SetRegister( SwDoc& rDoc, SfxItemSet& rSet, sal_uInt16 nFact,
                             bool bHeader, bool bTab )
     {
         SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -238,7 +238,7 @@ namespace
         }
         if( bTab )
         {
-            long nRightMargin = lcl_GetRightMargin( *pDoc );
+            long nRightMargin = lcl_GetRightMargin( rDoc );
             SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( nRightMargin - nLeft,
                                         SvxTabAdjust::Right,
@@ -247,7 +247,7 @@ namespace
         }
     }
 
-    void lcl_SetNumBul( SwDoc* pDoc, SwTextFormatColl* pColl,
+    void lcl_SetNumBul( SwDoc& rDoc, SwTextFormatColl* pColl,
                             SfxItemSet& rSet,
                             sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                             SwTwips nUpper, SwTwips nLower )
@@ -263,12 +263,12 @@ namespace
         rSet.Put( aUL );
 
         if( pColl )
-            pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nNxt ));
+            pColl->SetNextTextFormatColl( *rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nNxt ));
     }
 
-    void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
+    void lcl_PutStdPageSizeIntoItemSet( SwDoc& rDoc, SfxItemSet& rSet )
     {
-        SwPageDesc* pStdPgDsc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+        SwPageDesc* pStdPgDsc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_STANDARD );
         SwFormatFrameSize aFrameSz( pStdPgDsc->GetMaster().GetFrameSize() );
         if( pStdPgDsc->GetLandscape() )
         {
@@ -826,70 +826,70 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SvxULSpaceItem aUL( PT_12, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 0, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 0, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE2:        // Heading 2
             {
                 SvxULSpaceItem aUL( PT_10, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 1, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 1, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE3:        // Heading 3
             {
                 SvxULSpaceItem aUL( PT_7, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 2, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 2, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE4:        // Heading 4
             {
                 SvxULSpaceItem aUL( PT_6, PT_6, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 3, true );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 3, true );
             }
             break;
         case RES_POOLCOLL_HEADLINE5:        // Heading 5
             {
                 SvxULSpaceItem aUL( PT_6, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 4, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 4, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE6:        // Heading 6
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 5, true );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 5, true );
             }
             break;
         case RES_POOLCOLL_HEADLINE7:        // Heading 7
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 6, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 6, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE8:        // Heading 8
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 7, true );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 7, true );
             }
             break;
         case RES_POOLCOLL_HEADLINE9:        // Heading 9
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 8, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 8, false );
             }
             break;
         case RES_POOLCOLL_HEADLINE10:       // Heading 10
             {
                 SvxULSpaceItem aUL( PT_3, PT_3, RES_UL_SPACE );
                 aSet.Put( aUL );
-                lcl_SetHeadline( &m_rDoc, pNewColl, aSet, nOutLvlBits, 9, false );
+                lcl_SetHeadline( m_rDoc, pNewColl, aSet, nOutLvlBits, 9, false );
             }
             break;
 
@@ -997,7 +997,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         // User defined indexes:
         case RES_POOLCOLL_TOX_USERH:            // Header
-            lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, true, false );
             {
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
@@ -1005,39 +1005,39 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
         case RES_POOLCOLL_TOX_USER1:            // 1st level
-            lcl_SetRegister( &m_rDoc, aSet, 0, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 0, false, true );
             break;
         case RES_POOLCOLL_TOX_USER2:            // 2nd level
-            lcl_SetRegister( &m_rDoc, aSet, 1, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 1, false, true );
             break;
         case RES_POOLCOLL_TOX_USER3:            // 3rd level
-            lcl_SetRegister( &m_rDoc, aSet, 2, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 2, false, true );
             break;
         case RES_POOLCOLL_TOX_USER4:            // 4th level
-            lcl_SetRegister( &m_rDoc, aSet, 3, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 3, false, true );
             break;
         case RES_POOLCOLL_TOX_USER5:            // 5th level
-            lcl_SetRegister( &m_rDoc, aSet, 4, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 4, false, true );
             break;
         case RES_POOLCOLL_TOX_USER6:            // 6th level
-            lcl_SetRegister( &m_rDoc, aSet, 5, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 5, false, true );
             break;
         case RES_POOLCOLL_TOX_USER7:            // 7th level
-            lcl_SetRegister( &m_rDoc, aSet, 6, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 6, false, true );
             break;
         case RES_POOLCOLL_TOX_USER8:            // 8th level
-            lcl_SetRegister( &m_rDoc, aSet, 7, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 7, false, true );
             break;
         case RES_POOLCOLL_TOX_USER9:            // 9th level
-            lcl_SetRegister( &m_rDoc, aSet, 8, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 8, false, true );
             break;
         case RES_POOLCOLL_TOX_USER10:           // 10th level
-            lcl_SetRegister( &m_rDoc, aSet, 9, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 9, false, true );
             break;
 
         // Index
         case RES_POOLCOLL_TOX_IDXH:         // Header
-            lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, true, false );
             {
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
@@ -1045,21 +1045,21 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
         case RES_POOLCOLL_TOX_IDX1:         // 1st level
-            lcl_SetRegister( &m_rDoc, aSet, 0, false, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, false, false );
             break;
         case RES_POOLCOLL_TOX_IDX2:         // 2nd level
-            lcl_SetRegister( &m_rDoc, aSet, 1, false, false );
+            lcl_SetRegister( m_rDoc, aSet, 1, false, false );
             break;
         case RES_POOLCOLL_TOX_IDX3:         // 3rd level
-            lcl_SetRegister( &m_rDoc, aSet, 2, false, false );
+            lcl_SetRegister( m_rDoc, aSet, 2, false, false );
             break;
         case RES_POOLCOLL_TOX_IDXBREAK:     // Separator
-            lcl_SetRegister( &m_rDoc, aSet, 0, false, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, false, false );
             break;
 
         // Table of Content
         case RES_POOLCOLL_TOX_CNTNTH:       // Header
-            lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, true, false );
             {
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
@@ -1067,41 +1067,41 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             }
             break;
         case RES_POOLCOLL_TOX_CNTNT1:       // 1st level
-            lcl_SetRegister( &m_rDoc, aSet, 0, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 0, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT2:       // 2nd level
-            lcl_SetRegister( &m_rDoc, aSet, 1, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 1, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT3:       // 3rd level
-            lcl_SetRegister( &m_rDoc, aSet, 2, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 2, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT4:       // 4th level
-            lcl_SetRegister( &m_rDoc, aSet, 3, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 3, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT5:       // 5th level
-            lcl_SetRegister( &m_rDoc, aSet, 4, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 4, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT6:       // 6th level
-            lcl_SetRegister( &m_rDoc, aSet, 5, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 5, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT7:       // 7th level
-            lcl_SetRegister( &m_rDoc, aSet, 6, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 6, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT8:       // 8th level
-            lcl_SetRegister( &m_rDoc, aSet, 7, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 7, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT9:       // 9th level
-            lcl_SetRegister( &m_rDoc, aSet, 8, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 8, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT10:      // 10th level
-            lcl_SetRegister( &m_rDoc, aSet, 9, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 9, false, true );
             break;
 
         case RES_POOLCOLL_TOX_ILLUSH:
         case RES_POOLCOLL_TOX_OBJECTH:
         case RES_POOLCOLL_TOX_TABLESH:
         case RES_POOLCOLL_TOX_AUTHORITIESH:
-            lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
+            lcl_SetRegister( m_rDoc, aSet, 0, true, false );
             {
                 SwFormatLineNumber aLN;
                 aLN.SetCountLines( false );
@@ -1112,198 +1112,198 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_OBJECT1:
         case RES_POOLCOLL_TOX_TABLES1:
         case RES_POOLCOLL_TOX_AUTHORITIES1:
-            lcl_SetRegister( &m_rDoc, aSet, 0, false, true );
+            lcl_SetRegister( m_rDoc, aSet, 0, false, true );
         break;
 
         case RES_POOLCOLL_NUM_LEVEL1S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL1:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL1E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL1,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 0 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_NUM_NONUM1:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM1,
                             0, SwNumRule::GetNumIndent( 0 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL2S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL2:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL2E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL2,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 1 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_NUM_NONUM2:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM2,
                             0, SwNumRule::GetNumIndent( 1 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL3S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL3:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL3E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL3,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 2 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_NUM_NONUM3:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM3,
                             0, SwNumRule::GetNumIndent( 2 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL4S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL4:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL4E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL4,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 3 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_NUM_NONUM4:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM4,
                             0, SwNumRule::GetNumIndent( 3 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL5S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL5:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_NUM_LEVEL5E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_LEVEL5,
                             lNumberFirstLineOffset, SwNumRule::GetNumIndent( 4 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_NUM_NONUM5:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_NUM_NONUM5,
                             0, SwNumRule::GetNumIndent( 4 ), 0, PT_6 );
             break;
 
         case RES_POOLCOLL_BULLET_LEVEL1S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL1:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL1E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL1,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 0 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_BULLET_NONUM1:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM1,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM1,
                             0, SwNumRule::GetBullIndent( 0 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL2E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL2,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 1 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_BULLET_NONUM2:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM2,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM2,
                             0, SwNumRule::GetBullIndent( 1 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL3E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL3,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 2 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_BULLET_NONUM3:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM3,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM3,
                             0, SwNumRule::GetBullIndent( 2 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL4E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL4,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 3 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_BULLET_NONUM4:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM4,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM4,
                             0, SwNumRule::GetBullIndent( 3 ), 0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5S:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
                             PT_12, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
                             0, PT_6 );
             break;
         case RES_POOLCOLL_BULLET_LEVEL5E:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_LEVEL5,
                             lBulletFirstLineOffset, SwNumRule::GetBullIndent( 4 ),
                             0, PT_12 );
             break;
         case RES_POOLCOLL_BULLET_NONUM5:
-            lcl_SetNumBul( &m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM5,
+            lcl_SetNumBul( m_rDoc, pNewColl, aSet, RES_POOLCOLL_BULLET_NONUM5,
                             0, SwNumRule::GetBullIndent( 4 ), 0, PT_6 );
             break;
 
@@ -1772,7 +1772,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     case RES_POOLPAGE_FIRST:        // "First Page"
     case RES_POOLPAGE_REGISTER:     // "Index"
         {
-            lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
+            lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             pNewPgDsc->SetUseOn( UseOnPage::All );
@@ -1783,7 +1783,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     case RES_POOLPAGE_LEFT:         // "Left Page"
         {
-            lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
+            lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
@@ -1795,7 +1795,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
         break;
     case RES_POOLPAGE_RIGHT:        // "Right Page"
         {
-            lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
+            lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
@@ -1821,7 +1821,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
 
     case RES_POOLPAGE_HTML:         // "HTML"
         {
-            lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
+            lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aLR.SetRight( GetMetricVal( CM_1 ));
             aUL.SetUpper( static_cast<sal_uInt16>(aLR.GetRight()) );
             aUL.SetLower( static_cast<sal_uInt16>(aLR.GetRight()) );
@@ -1835,7 +1835,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     case RES_POOLPAGE_FOOTNOTE:     // "Footnote"
     case RES_POOLPAGE_ENDNOTE:      // "Endnote"
         {
-            lcl_PutStdPageSizeIntoItemSet( &m_rDoc, aSet );
+            lcl_PutStdPageSizeIntoItemSet( m_rDoc, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             pNewPgDsc->SetUseOn( UseOnPage::All );

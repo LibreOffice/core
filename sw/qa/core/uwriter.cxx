@@ -220,7 +220,7 @@ void SwDocTest::testFileNameFields()
 
     const INetURLObject &rUrlObj = m_xDocShRef->GetMedium()->GetURLObject();
 
-    SwFileNameFieldType aNameField(m_pDoc);
+    SwFileNameFieldType aNameField(*m_pDoc);
 
     {
         OUString sResult(aNameField.Expand(FF_NAME));
