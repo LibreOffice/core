@@ -117,10 +117,8 @@ protected:
 
 class SC_DLLPUBLIC ScEditEngineDefaulter : public ScEnginePoolHelper, public EditEngine
 {
-private:
-    using EditEngine::SetText;
-
 public:
+    using EditEngine::SetText;
                     /// bDeleteEnginePool: Engine becomes the owner of the pool
                     /// and deletes it on destruction
                     ScEditEngineDefaulter( SfxItemPool* pEnginePool,
