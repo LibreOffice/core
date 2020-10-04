@@ -20,7 +20,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include "typedetectionimport.hxx"
 #include "xmlfiltercommon.hxx"
@@ -62,7 +62,7 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
     }
     catch( const Exception& /* e */ )
     {
-        OSL_FAIL( "TypeDetectionImporter::doImport exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
