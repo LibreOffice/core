@@ -11480,7 +11480,7 @@ CLANG_CXXFLAGS_INTRINSICS_AVX512=
 CLANG_CXXFLAGS_INTRINSICS_F16C=
 CLANG_CXXFLAGS_INTRINSICS_FMA=
 
-if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
+if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT" -a "$CPUNAME" = "ARM64" \); then
     if test -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
         AC_MSG_CHECKING([for Clang])
         AC_MSG_RESULT([$CLANG_CC / $CLANG_CXX])
