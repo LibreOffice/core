@@ -226,21 +226,9 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
                  if (pINetItem)
                  {
                      const SwFormatINetFormat& rINet = static_cast<const SwFormatINetFormat&>(*pINetItem);
-
-                     if ( rINet.GetValue().isEmpty() )
+                     const SwCharFormat* pINetFormat = GetSwCharFormat(rINet, m_rDoc);
+                     if (!pINetFormat)
                          continue;
-
-                     const sal_uInt16 nId = rINet.GetINetFormatId();
-                     const OUString& rStr = rINet.GetINetFormat();
-
-                     if (rStr.isEmpty())
-                     {
-                         OSL_ENSURE( false, "MSWordExportBase::ExportPoolItemsToCHP(..) - missing unvisited character format at hyperlink attribute" );
-                     }
-
-                     const SwCharFormat* pINetFormat = IsPoolUserFormat( nId )
-                        ? m_rDoc.FindCharFormatByName( rStr )
-                        : m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
                      const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
                      ww8::PoolItems aCharItems, aINetItems;
@@ -1604,10 +1592,12 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
     m_rWW8Export.InsUInt16( 0x0000);
 }
 
-void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
+namespace sw { namespace util {
+
+const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc)
 {
-    if ( rINet.GetValue().isEmpty() )
-        return;
+    if (rINet.GetValue().isEmpty())
+        return nullptr;
 
     const sal_uInt16 nId = rINet.GetINetFormatId();
     const OUString& rStr = rINet.GetINetFormat();
@@ -1616,9 +1606,18 @@ void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
         OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
     }
 
-    const SwCharFormat* pFormat = IsPoolUserFormat( nId )
-                    ? m_rWW8Export.m_rDoc.FindCharFormatByName( rStr )
-                    : m_rWW8Export.m_rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+    return IsPoolUserFormat( nId )
+               ? rDoc.FindCharFormatByName( rStr )
+               : rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+}
+
+} }
+
+void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
+{
+    const SwCharFormat* pFormat = GetSwCharFormat(rINet, m_rWW8Export.m_rDoc);
+    if (!pFormat)
+        return;
 
     m_rWW8Export.InsUInt16( NS_sprm::CIstd::val );
 
