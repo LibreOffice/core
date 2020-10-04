@@ -598,9 +598,9 @@ public:
     void            SetDrawBrushSet( std::unique_ptr<SfxItemSet> pNew, bool bLock );
     void            ResetBrushDocument();
 
-    bool ContinueOnlineSpelling();
     void EnableAutoSpell( bool bEnable );
     void ResetAutoSpell();
+    void ResetAutoSpellForContentChange();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );
     /// @see ScModelObj::getRowColumnHeaders().
     OUString getRowColumnHeaders(const tools::Rectangle& rRectangle);

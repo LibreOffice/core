@@ -958,6 +958,9 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         ScDrawLayer::SetGlobalDrawPersist(nullptr);
     }
 
+    // TODO: position this call better for performance.
+    ResetAutoSpellForContentChange();
+
     SCCOL nStartCol;
     SCROW nStartRow;
     SCTAB nStartTab;
@@ -1449,7 +1452,6 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         nPaint, nExtFlags);
     // AdjustBlockHeight has already been called above
 
-    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aUserRange, rMark);
 
@@ -1547,6 +1549,9 @@ bool ScViewFunc::PasteMultiRangesFromClip(
             return false;
     }
 
+    // TODO: position this call better for performance.
+    ResetAutoSpellForContentChange();
+
     bool bRowInfo = ( aMarkedRange.aStart.Col()==0 && aMarkedRange.aEnd.Col()==pClipDoc->MaxCol() );
     ScDocumentUniquePtr pUndoDoc;
     if (pDoc->IsUndoEnabled())
@@ -1627,7 +1632,6 @@ bool ScViewFunc::PasteMultiRangesFromClip(
         pUndoMgr->LeaveListAction();
     }
 
-    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aMarkedRange, aMark);
     return true;
@@ -1698,6 +1702,9 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         if (!checkDestRangeForOverwrite(aRanges, pDoc, aMark, GetViewData().GetDialogParent()))
             return false;
     }
+
+    // TODO: position this call better for performance.
+    ResetAutoSpellForContentChange();
 
     ScDocumentUniquePtr pUndoDoc;
     if (pDoc->IsUndoEnabled())
@@ -1787,7 +1794,6 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         pUndoMgr->LeaveListAction();
     }
 
-    ResetAutoSpell();
     aModificator.SetDocumentModified();
     PostPasteFromClip(aRanges, aMark);
 
@@ -1830,6 +1836,8 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 {
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     HideAllCursors();
+
+    ResetAutoSpellForContentChange();
 
     bool bSuccess = true;
     SCTAB nDestTab = rDestPos.Tab();
@@ -1902,7 +1910,6 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
         pDocSh->UpdateOle(&GetViewData());
         SelectionChanged();
-        ResetAutoSpell();
     }
     return bSuccess;
 }

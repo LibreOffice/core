@@ -1612,12 +1612,12 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
         bool bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, false, bPartOfPaste );
         if (bSuccess)
         {
+            ResetAutoSpellForContentChange();
             bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
 
             pDocSh->UpdateOle(&GetViewData());
             CellContentChanged();
-            ResetAutoSpell();
 
             if ( bInsertCols || bInsertRows )
             {
@@ -1689,9 +1689,9 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
         }
 
+        ResetAutoSpellForContentChange();
         pDocSh->UpdateOle(&GetViewData());
         CellContentChanged();
-        ResetAutoSpell();
 
         if ( eCmd == DelCellCmd::Rows || eCmd == DelCellCmd::Cols )
         {
@@ -1836,6 +1836,8 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
     WaitObject aWait( GetFrameWin() );      // important for TrackFormulas in UpdateReference
 
+    ResetAutoSpellForContentChange();
+
     ScDocumentUniquePtr pUndoDoc;
     std::unique_ptr<ScRefUndoData> pUndoData;
     if (bRecord)
@@ -1919,7 +1921,6 @@ void ScViewFunc::DeleteMulti( bool bRows )
         }
     }
 
-    ResetAutoSpell();
     aModificator.SetDocumentModified();
 
     CellContentChanged();
