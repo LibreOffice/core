@@ -46,6 +46,30 @@
       "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8ee9f03_1eb26b83",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-04T12:29:01Z",
+      "side": 1,
+      "message": "Thanks! So would this \"work\", but without any information for anything other than UNO exceptions? If so, can we possibly use std::current_exception for everything else inside the macro (or implementing method), and make the necessary additional output there (like \"if dynamic_cast to std::exception, then output exceptionptr-\u003ewhat, else output \u0027unknown exception\u0027\")?",
+      "parentUuid": "d6bbd6f2_61ee50fd",
+      "range": {
+        "startLine": 611,
+        "startChar": 20,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
