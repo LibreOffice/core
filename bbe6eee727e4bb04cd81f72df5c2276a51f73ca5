@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0014a89f_13e5668d",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-04T21:31:06Z",
+      "side": 1,
+      "message": "OSL logging macros are obsolete; I suppose you should use SAL_WARN etc. instead...",
+      "range": {
+        "startLine": 238,
+        "startChar": 25,
+        "endLine": 238,
+        "endChar": 35
+      },
+      "revId": "bbe6eee727e4bb04cd81f72df5c2276a51f73ca5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
