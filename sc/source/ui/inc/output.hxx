@@ -31,7 +31,7 @@
 #include <optional>
 
 namespace sc {
-    struct SpellCheckContext;
+    class SpellCheckContext;
 }
 
 namespace editeng {

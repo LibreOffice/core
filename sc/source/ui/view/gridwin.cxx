@@ -466,6 +466,10 @@ void ScGridWindow::dispose()
     mpDPFieldPopup.disposeAndClear();
     aComboButton.SetOutputDevice(nullptr);
 
+    if (mpSpellCheckCxt)
+        mpSpellCheckCxt->reset();
+    mpSpellCheckCxt.reset();
+
     vcl::Window::dispose();
 }
 
@@ -5497,191 +5501,10 @@ void ScGridWindow::DrawLayerCreated()
     ImpCreateOverlayObjects();
 }
 
-namespace {
-
-struct SpellCheckStatus
-{
-    bool mbModified;
-
-    SpellCheckStatus() : mbModified(false) {};
-
-    DECL_LINK( EventHdl, EditStatus&, void );
-};
-
-IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus&, rStatus, void)
-{
-    EditStatusFlags nStatus = rStatus.GetStatusWord();
-    if (nStatus & EditStatusFlags::WRONGWORDCHANGED)
-        mbModified = true;
-}
-
-}
-
-bool ScGridWindow::ContinueOnlineSpelling()
-{
-    if (!mpSpellCheckCxt)
-        return false;
-
-    if (!mpSpellCheckCxt->maPos.isValid())
-        return false;
-
-    ScDocument& rDoc = mrViewData.GetDocument();
-    ScDPCollection* pDPs = nullptr;
-    if (rDoc.HasPivotTable())
-        pDPs = rDoc.GetDPCollection();
-
-    SCTAB nTab = mrViewData.GetTabNo();
-    SpellCheckStatus aStatus;
-
-    ScHorizontalCellIterator aIter(
-        rDoc, nTab, maVisibleRange.mnCol1, mpSpellCheckCxt->maPos.mnRow, maVisibleRange.mnCol2, maVisibleRange.mnRow2);
-
-    ScRangeList aPivotRanges = pDPs ? pDPs->GetAllTableRanges(nTab) : ScRangeList();
-
-    SCCOL nCol;
-    SCROW nRow;
-    ScRefCellValue* pCell = aIter.GetNext(nCol, nRow);
-    SCROW nEndRow = 0;
-    bool bHidden = pCell && rDoc.RowHidden(nRow, nTab, nullptr, &nEndRow);
-    bool bSkip = pCell && (nRow < mpSpellCheckCxt->maPos.mnRow || bHidden);
-    while (bSkip)
-    {
-        pCell = aIter.GetNext(nCol, nRow);
-        if (pCell && nRow > nEndRow)
-        {
-            bHidden = rDoc.RowHidden(nRow, nTab, nullptr, &nEndRow);
-        }
-        bSkip = pCell && (nRow < mpSpellCheckCxt->maPos.mnRow || bHidden);
-    }
-
-    SCCOL nEndCol = 0;
-    bHidden = pCell && rDoc.ColHidden(nCol, nTab, nullptr, &nEndCol);
-    bSkip = pCell && (nCol < mpSpellCheckCxt->maPos.mnCol || bHidden);
-    while (bSkip)
-    {
-        pCell = aIter.GetNext(nCol, nRow);
-        if (pCell && nCol > nEndCol)
-        {
-            bHidden = rDoc.ColHidden(nCol, nTab, nullptr, &nEndCol);
-        }
-        bSkip = pCell && (nCol < mpSpellCheckCxt->maPos.mnCol || bHidden);
-    }
-
-    std::unique_ptr<ScTabEditEngine> pEngine;
-
-    // Check only up to 256 cells at a time.
-    size_t nTotalCellCount = 0;
-    size_t nTextCellCount = 0;
-    bool bSpellCheckPerformed = false;
-
-    while (pCell)
-    {
-        ++nTotalCellCount;
-
-        if (aPivotRanges.In(ScAddress(nCol, nRow, nTab)))
-        {
-            // Don't spell check within pivot tables.
-            if (nTotalCellCount >= 255)
-                break;
-
-            pCell = aIter.GetNext(nCol, nRow);
-            continue;
-        }
-
-        CellType eType = pCell->meType;
-        if (eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT)
-        {
-            ++nTextCellCount;
-
-            // NB: For spell-checking, we currently only use the primary
-            // language; not CJK nor CTL.
-            const ScPatternAttr* pPattern = rDoc.GetPattern(nCol, nRow, nTab);
-            LanguageType nCellLang = pPattern->GetItem(ATTR_FONT_LANGUAGE).GetValue();
-
-            if (nCellLang == LANGUAGE_SYSTEM)
-                nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
-
-            if (nCellLang == LANGUAGE_NONE)
-            {
-                // No need to spell check this cell.
-                pCell = aIter.GetNext(nCol, nRow);
-                continue;
-            }
-
-            if (!pEngine)
-            {
-                //  ScTabEditEngine is needed
-                //  because MapMode must be set for some old documents
-                pEngine.reset(new ScTabEditEngine(&rDoc));
-                pEngine->SetControlWord(
-                    pEngine->GetControlWord() | (EEControlBits::ONLINESPELLING | EEControlBits::ALLOWBIGOBJS));
-                pEngine->SetStatusEventHdl(LINK(&aStatus, SpellCheckStatus, EventHdl));
-                //  Delimiters here like in inputhdl.cxx !!!
-                pEngine->SetWordDelimiters(
-                            ScEditUtil::ModifyDelimiters(pEngine->GetWordDelimiters()));
-
-                uno::Reference<linguistic2::XSpellChecker1> xXSpellChecker1(LinguMgr::GetSpellChecker());
-                pEngine->SetSpeller(xXSpellChecker1);
-                pEngine->SetDefaultLanguage(ScGlobal::GetEditDefaultLanguage());
-            }
-
-            pEngine->SetDefaultItem(SvxLanguageItem(nCellLang, EE_CHAR_LANGUAGE));
-
-            if (eType == CELLTYPE_STRING)
-                pEngine->SetTextCurrentDefaults(pCell->mpString->getString());
-            else
-                pEngine->SetTextCurrentDefaults(*pCell->mpEditText);
-
-            aStatus.mbModified = false;
-            pEngine->CompleteOnlineSpelling();
-            if (aStatus.mbModified)
-            {
-                std::vector<editeng::MisspellRanges> aRanges;
-                pEngine->GetAllMisspellRanges(aRanges);
-                if (!aRanges.empty())
-                {
-                    sc::SpellCheckContext::CellPos aPos(nCol, nRow);
-                    mpSpellCheckCxt->maMisspellCells.emplace(aPos, aRanges);
-                }
-
-                // Broadcast for re-paint.
-                ScPaintHint aHint(ScRange(nCol, nRow, nTab), PaintPartFlags::Grid);
-                aHint.SetPrintFlag(false);
-                rDoc.GetDocumentShell()->Broadcast(aHint);
-            }
-
-            bSpellCheckPerformed = true;
-        }
-
-        if (nTotalCellCount >= 255 || nTextCellCount >= 1)
-            break;
-
-        pCell = aIter.GetNext(nCol, nRow);
-    }
-
-    if (pCell)
-        // Move to the next cell position for the next iteration.
-        pCell = aIter.GetNext(nCol, nRow);
-
-    if (pCell)
-    {
-        // This will become the first cell position for the next time.
-        mpSpellCheckCxt->maPos.mnCol = nCol;
-        mpSpellCheckCxt->maPos.mnRow = nRow;
-    }
-    else
-    {
-        // No more cells to spell check.
-        mpSpellCheckCxt->maPos.setInvalid();
-    }
-
-    return bSpellCheckPerformed;
-}
-
 void ScGridWindow::EnableAutoSpell( bool bEnable )
 {
     if (bEnable)
-        mpSpellCheckCxt.reset(new sc::SpellCheckContext);
+        mpSpellCheckCxt.reset(new sc::SpellCheckContext(&mrViewData.GetDocument(), mrViewData.GetTabNo()));
     else
         mpSpellCheckCxt.reset();
 }
@@ -5689,19 +5512,18 @@ void ScGridWindow::EnableAutoSpell( bool bEnable )
 void ScGridWindow::ResetAutoSpell()
 {
     if (mpSpellCheckCxt)
-    {
         mpSpellCheckCxt->reset();
-        mpSpellCheckCxt->maPos.mnCol = maVisibleRange.mnCol1;
-        mpSpellCheckCxt->maPos.mnRow = maVisibleRange.mnRow1;
-    }
+}
+
+void ScGridWindow::ResetAutoSpellForContentChange()
+{
+    if (mpSpellCheckCxt)
+        mpSpellCheckCxt->resetForContentChange();
 }
 
 void ScGridWindow::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges )
 {
     if (!mpSpellCheckCxt)
-        return;
-
-    if (!maVisibleRange.isInside(nPosX, nPosY))
         return;
 
     mpSpellCheckCxt->setMisspellRanges(nPosX, nPosY, pRanges);
