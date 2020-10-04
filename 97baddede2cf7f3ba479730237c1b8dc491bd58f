@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89bd013e_3aa101a7",
+        "filename": "sw/source/core/text/atrhndl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-10-04T10:19:08Z",
+      "side": 1,
+      "message": "This should be removed",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 48
+      },
+      "revId": "97baddede2cf7f3ba479730237c1b8dc491bd58f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfeb9348_fd1082b8",
+        "filename": "sw/source/core/text/atrhndl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-10-04T10:19:08Z",
+      "side": 1,
+      "message": "You can remove the extra line",
+      "revId": "97baddede2cf7f3ba479730237c1b8dc491bd58f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

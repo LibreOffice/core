@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3efead71_5ab4d2d3",
+        "filename": "sw/source/core/text/guess.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-10-04T10:19:08Z",
+      "side": 1,
+      "message": "It should be removed",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 46
+      },
+      "revId": "dbfdcfb972a52f48df1e7154a1ad214c6c3fd3df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15f3c3d6_57b1ef38",
+        "filename": "sw/source/core/text/guess.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2020-10-04T10:19:08Z",
+      "side": 1,
+      "message": "No need of this extra line",
+      "revId": "dbfdcfb972a52f48df1e7154a1ad214c6c3fd3df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
