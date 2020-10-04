@@ -56,7 +56,7 @@ public:
     virtual void finishGrammarCheck( SwTextNode& rTextNode ) override;
 protected:
     // virtual function of SwClient
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) override;
 };
 
 }
@@ -142,18 +142,14 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTextNode& rTextNode, bool 
     return pRet;
 }
 
-void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
+void SwGrammarContact::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( !pOld || pOld->Which() != RES_OBJECTDYING )
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy || pLegacy->GetWhich() != RES_OBJECTDYING)
         return;
-
-    const SwPtrMsgPoolItem *pDead = static_cast<const SwPtrMsgPoolItem *>(pOld);
-    if( pDead->pObject == GetRegisteredIn() )
-    {    // if my current paragraph dies, I throw the proxy list away
-        aTimer.Stop();
-        EndListeningAll();
-        mpProxyList.reset();
-    }
+    aTimer.Stop();
+    EndListeningAll();
+    mpProxyList.reset();
 }
 
 void SwGrammarContact::finishGrammarCheck( SwTextNode& rTextNode )
