@@ -205,6 +205,13 @@ dnl ===================================================================
 dnl checks build and host OSes
 dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
+
+# Check for WSL (version 2, at least).
+if test "`wslsys -v 2>/dev/null`" != ""; then
+    ac_cv_host="x86_64-pc-wsl"
+    ac_cv_build="$ac_cv_host"
+fi
+
 AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for product name])
