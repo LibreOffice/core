@@ -18,8 +18,8 @@
  */
 
 
-#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -134,7 +134,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_FAIL( "Caught WrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "Caught WrappedTargetException!");
         }
     }
 
@@ -611,11 +611,11 @@ bool OfficeDocumentsManager::isBasicIDE(
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( frame::UnknownModuleException const & )
         {
-            OSL_FAIL( "Caught UnknownModuleException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
 
         if ( !aModule.isEmpty() )

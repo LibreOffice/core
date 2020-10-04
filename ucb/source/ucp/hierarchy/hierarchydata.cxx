@@ -28,7 +28,7 @@
  *************************************************************************/
 #include "hierarchydata.hxx"
 
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -244,7 +244,7 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
     {
         // getByHierarchicalName
 
-        OSL_FAIL( "HierarchyEntry::getData - caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     return false;
 }
@@ -428,8 +428,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
     {
         // replaceByName, insertByName
 
-        OSL_FAIL(
-            "HierarchyEntry::setData - caught IllegalArgumentException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     catch ( uno::RuntimeException const & )
     {
@@ -439,29 +438,25 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
     {
         // replaceByName, getByName
 
-        OSL_FAIL(
-            "HierarchyEntry::setData - caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     catch ( container::ElementExistException const & )
     {
         // insertByName
 
-        OSL_FAIL(
-            "HierarchyEntry::setData - caught ElementExistException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     catch ( lang::WrappedTargetException const & )
     {
         // replaceByName, insertByName, getByName, commitChanges
 
-        OSL_FAIL(
-            "HierarchyEntry::setData - caught WrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
     catch ( uno::Exception const & )
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL(
-            "HierarchyEntry::setData - caught Exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
 
     return false;
@@ -583,7 +578,7 @@ bool HierarchyEntry::move(
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL( "HierarchyEntry::move - caught Exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -620,14 +615,14 @@ bool HierarchyEntry::move(
     {
         // getByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::WrappedTargetException const & )
     {
         // getByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -644,7 +639,7 @@ bool HierarchyEntry::move(
     {
         // getByName, removeByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -720,29 +715,28 @@ bool HierarchyEntry::move(
     {
         // replaceByName, insertByName, getByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // replaceByName, insertByName
 
-        OSL_FAIL(
-            "HierarchyEntry::move - caught IllegalArgumentException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // insertByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught ElementExistException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::WrappedTargetException const & )
     {
         // replaceByName, insertByName, getByName
 
-        OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -853,7 +847,7 @@ bool HierarchyEntry::remove()
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL( "HierarchyEntry::remove - caught Exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
 
     return false;
@@ -912,12 +906,11 @@ bool HierarchyEntry::first( iterator const & it )
         {
             // getByHierarchicalName
 
-            OSL_FAIL(
-                "HierarchyEntry::first - caught NoSuchElementException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( uno::Exception const & )
         {
-            OSL_FAIL( "HierarchyEntry::first - caught Exception!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
     }
 
@@ -1034,8 +1027,7 @@ HierarchyEntry::getRootReadAccess()
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
-                            "caught Exception!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             }
         }
     }

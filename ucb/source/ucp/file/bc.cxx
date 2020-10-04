@@ -20,7 +20,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
@@ -419,7 +419,7 @@ BaseContent::getContentType()
             }
             catch (const sdbc::SQLException&)
             {
-                OSL_FAIL( "BaseContent::getContentType - Caught SQLException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp.file", "");
             }
         }
     }
@@ -532,7 +532,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
     }
     catch (const sdbc::SQLException&)
     {
-        OSL_FAIL( "BaseContent::createNewContent - Caught SQLException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp.file", "");
         return Reference< XContent >();
     }
 
@@ -1031,7 +1031,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
     catch (const sdbc::SQLException&)
     {
-        OSL_FAIL( "BaseContent::insert - Caught SQLException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp.file", "");
         contentTypeSet = false;
     }
 

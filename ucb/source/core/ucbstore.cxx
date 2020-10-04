@@ -27,7 +27,7 @@
 #include <memory>
 #include <unordered_map>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -958,7 +958,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - caught Exception!" );
+        TOOLS_WARN_EXCEPTION("ucb", "");
         return Reference< XInterface >();
     }
 
