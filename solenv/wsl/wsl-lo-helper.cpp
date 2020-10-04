@@ -98,8 +98,6 @@ int wmain(int argc, wchar_t** argv)
         wchar_t result[1000];
         DWORD count = sizeof(result);
 
-        fprintf(stderr, "==%S==\n", path);
-
         wchar_t* last_backslash = wcsrchr(path, L'\\');
         if (last_backslash == NULL)
         {
