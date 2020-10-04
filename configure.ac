@@ -61,6 +61,29 @@ FilterLibs()
 
 PathFormat()
 {
+    # Args: $1: A pathname. On Cygwin, in either the Unix or the Windows format.
+    #
+    # Return value: $formatted_path. The pathname in Windows format, but using forward slashes instead
+    # of backslashes, using 8.3 pathnames if necessary.
+    #
+    # Errors out if 8.3 names are needed but aren't present for some of the path component.
+
+    # Examples:
+    #
+    # /home/tml/lo/master-optimised => C:/cygwin64/home/tml/lo/master-optimised
+    #
+    # C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe => C:/PROGRA~2/MICROS~3/INSTAL~1/vswhere.exe
+    #
+    # C:\Program Files (x86)\Microsoft Visual Studio\2019\Community => C:/PROGRA~2/MICROS~3/2019/COMMUN~1
+    #
+    # C:/PROGRA~2/WI3CF2~1/10/Include/10.0.18362.0/ucrt => C:/PROGRA~2/WI3CF2~1/10/Include/10.0.18362.0/ucrt
+    #
+    # /cygdrive/c/PROGRA~2/WI3CF2~1/10 => C:/PROGRA~2/WI3CF2~1/10
+    #
+    # C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\ => C:/PROGRA~2/WI3CF2~1/NETFXSDK/4.8/
+    #
+    # /usr/bin/find.exe => C:/cygwin64/bin/find.exe
+
     formatted_path="$1"
     if test "$build_os" = "cygwin"; then
         pf_conv_to_dos=
