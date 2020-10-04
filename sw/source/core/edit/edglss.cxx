@@ -64,7 +64,7 @@ sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const OUString& rName
     if( rBlks.BeginPutDoc( rShortName, rName ) )
     {
         rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::DeleteRedlines );
-        CopySelToDoc( pGDoc );
+        CopySelToDoc(*pGDoc);
         rBlks.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
         return rBlks.PutDoc();
     }
@@ -151,11 +151,9 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 }
 
 /// copy all selections to the doc
-bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
+bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
 {
-    OSL_ENSURE( pInsDoc, "no Ins.Document"  );
-
-    SwNodes& rNds = pInsDoc->GetNodes();
+    SwNodes& rNds = rInsDoc.GetNodes();
 
     SwNodeIndex aIdx( rNds.GetEndOfContent(), -1 );
     SwContentNode *const pContentNode = aIdx.GetNode().GetContentNode();
@@ -165,7 +163,7 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
     bool bRet = false;
     CurrShell aCurr( this );
 
-    pInsDoc->getIDocumentFieldsAccess().LockExpFields();
+    rInsDoc.getIDocumentFieldsAccess().LockExpFields();
 
     if( IsTableMode() )
     {
@@ -184,7 +182,7 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
             if( bCpyTableNm )
             {
                 const OUString rTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
-                const SwFrameFormats& rTableFormats = *pInsDoc->GetTableFrameFormats();
+                const SwFrameFormats& rTableFormats = *rInsDoc.GetTableFrameFormats();
                 for( auto n = rTableFormats.size(); n; )
                     if( rTableFormats[ --n ]->GetName() == rTableName )
                     {
@@ -192,7 +190,7 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTable( aPos, aBoxes, nullptr, bCpyTableNm );
+            bRet = rInsDoc.InsCopyOfTable( aPos, aBoxes, nullptr, bCpyTableNm );
         }
         else
             bRet = false;
@@ -200,8 +198,8 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
     else
     {
         bool bColSel = GetCursor_()->IsColumnSelection();
-        if( bColSel && pInsDoc->IsClipBoard() )
-            pInsDoc->SetColumnSelection( true );
+        if( bColSel && rInsDoc.IsClipBoard() )
+            rInsDoc.SetColumnSelection( true );
         bool bSelectAll = StartsWithTable() && ExtendedSelectedAll();
         {
             for(SwPaM& rPaM : GetCursor()->GetRingContainer())
@@ -251,9 +249,9 @@ bool SwEditShell::CopySelToDoc( SwDoc* pInsDoc )
         }
     }
 
-    pInsDoc->getIDocumentFieldsAccess().UnlockExpFields();
-    if( !pInsDoc->getIDocumentFieldsAccess().IsExpFieldsLocked() )
-        pInsDoc->getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
+    rInsDoc.getIDocumentFieldsAccess().UnlockExpFields();
+    if( !rInsDoc.getIDocumentFieldsAccess().IsExpFieldsLocked() )
+        rInsDoc.getIDocumentFieldsAccess().UpdateExpFields(nullptr, true);
 
     return bRet;
 }

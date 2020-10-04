@@ -158,7 +158,7 @@ class SwXAutoStylesEnumerator final : public cppu::WeakImplHelper< css::containe
 {
     std::unique_ptr<SwAutoStylesEnumImpl> m_pImpl;
 public:
-    SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam );
+    SwXAutoStylesEnumerator( SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStylesEnumerator() override;
 
     //XEnumeration

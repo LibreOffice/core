@@ -293,7 +293,7 @@ void SwNumFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( pFormat && !pFormat->GetDoc()->IsInDtor() )
-        UpdateNumNodes( const_cast<SwDoc*>(pFormat->GetDoc()) );
+        UpdateNumNodes( *const_cast<SwDoc*>(pFormat->GetDoc()) );
     else
         CheckRegistration( pOld );
 }
@@ -314,13 +314,13 @@ void    SwNumFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 
-void SwNumFormat::UpdateNumNodes( SwDoc* pDoc )
+void SwNumFormat::UpdateNumNodes( SwDoc& rDoc )
 {
-    bool bDocIsModified = pDoc->getIDocumentState().IsModified();
+    bool bDocIsModified = rDoc.getIDocumentState().IsModified();
     bool bFnd = false;
-    for( SwNumRuleTable::size_type n = pDoc->GetNumRuleTable().size(); !bFnd && n; )
+    for( SwNumRuleTable::size_type n = rDoc.GetNumRuleTable().size(); !bFnd && n; )
     {
-        const SwNumRule* pRule = pDoc->GetNumRuleTable()[ --n ];
+        const SwNumRule* pRule = rDoc.GetNumRuleTable()[ --n ];
         for( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
             if( pRule->GetNumFormat( i ) == this )
             {
@@ -336,7 +336,7 @@ void SwNumFormat::UpdateNumNodes( SwDoc* pDoc )
     }
 
     if( bFnd && !bDocIsModified )
-        pDoc->getIDocumentState().ResetModified();
+        rDoc.getIDocumentState().ResetModified();
 }
 
 const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const

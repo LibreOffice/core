@@ -52,7 +52,7 @@ class SW_DLLPUBLIC SwNumFormat final : public SvxNumberFormat, public SwClient
     std::unique_ptr<SwFormatVertOrient> m_pVertOrient;
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     m_cGrfBulletCP;
-    SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
+    SAL_DLLPRIVATE void UpdateNumNodes(SwDoc& rDoc);
 
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;

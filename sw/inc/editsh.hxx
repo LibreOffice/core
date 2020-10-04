@@ -200,7 +200,7 @@ public:
        If table is copied into table, move all cursors away from it.
        Copy and Paste must be in FEShell because of FlyFrames!
        Copy all selections to the document. */
-    bool CopySelToDoc( SwDoc* pInsDoc );
+    bool CopySelToDoc( SwDoc& rInsDoc );
 
     void SplitNode( bool bAutoFormat = false, bool bCheckTableStart = true );
     bool AppendTextNode();

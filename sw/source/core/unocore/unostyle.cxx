@@ -3373,14 +3373,14 @@ class SwAutoStylesEnumImpl
 {
     std::vector<std::shared_ptr<SfxItemSet>> mAutoStyles;
     std::vector<std::shared_ptr<SfxItemSet>>::iterator aIter;
-    SwDoc* pDoc;
+    SwDoc& rDoc;
     IStyleAccess::SwAutoStyleFamily eFamily;
 public:
-    SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
+    SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
     bool hasMoreElements() { return aIter != mAutoStyles.end(); }
     std::shared_ptr<SfxItemSet> const & nextElement() { return *(aIter++); }
     IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
-    SwDoc* getDoc() const { return pDoc; }
+    SwDoc& getDoc() const { return rDoc; }
 };
 
 SwXAutoStyles::SwXAutoStyles(SwDocShell& rDocShell) :
@@ -3732,7 +3732,7 @@ uno::Reference< container::XEnumeration > SwXAutoStyleFamily::createEnumeration(
     if( !m_pDocShell )
         throw uno::RuntimeException();
     return uno::Reference< container::XEnumeration >
-        (new SwXAutoStylesEnumerator( m_pDocShell->GetDoc(), m_eFamily ));
+        (new SwXAutoStylesEnumerator( *m_pDocShell->GetDoc(), m_eFamily ));
 }
 
 uno::Type SwXAutoStyleFamily::getElementType(  )
@@ -3745,14 +3745,14 @@ sal_Bool SwXAutoStyleFamily::hasElements(  )
     return false;
 }
 
-SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam )
-: pDoc( pInitDoc ), eFamily( eFam )
+SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAutoStyleFamily eFam )
+: rDoc( rInitDoc ), eFamily( eFam )
 {
     // special case for ruby auto styles:
     if ( IStyleAccess::AUTO_STYLE_RUBY == eFam )
     {
         std::set< std::pair< sal_uInt16, text::RubyAdjust > > aRubyMap;
-        SwAttrPool& rAttrPool = pDoc->GetAttrPool();
+        SwAttrPool& rAttrPool = rDoc.GetAttrPool();
 
         // do this in two phases otherwise we invalidate the iterators when we insert into the pool
         std::vector<const SwFormatRuby*> vRubyItems;
@@ -3775,17 +3775,17 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
     }
     else
     {
-        pDoc->GetIStyleAccess().getAllStyles( mAutoStyles, eFamily );
+        rDoc.GetIStyleAccess().getAllStyles( mAutoStyles, eFamily );
     }
 
     aIter = mAutoStyles.begin();
 }
 
-SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam )
-: m_pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
+SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFam )
+: m_pImpl( new SwAutoStylesEnumImpl( rDoc, eFam ) )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
+    StartListening(rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
 }
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
@@ -3813,7 +3813,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
     if( m_pImpl->hasMoreElements() )
     {
         std::shared_ptr<SfxItemSet> pNextSet = m_pImpl->nextElement();
-        uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(m_pImpl->getDoc(),
+        uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(&m_pImpl->getDoc(),
                                                         pNextSet, m_pImpl->getFamily());
         aRet <<= xAutoStyle;
     }
