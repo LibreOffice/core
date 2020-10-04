@@ -39,6 +39,7 @@
 #include <editeng/svxrtf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
@@ -352,7 +353,7 @@ void SdrTableRTFParser::FillTable()
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::SdrTableRTFParser::InsertCell(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 }
 

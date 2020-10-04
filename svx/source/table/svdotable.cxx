@@ -53,6 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <libxml/xmlwriter.h>
 #include <rtl/ustrbuf.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/UnitConversion.hxx>
 
 #include <boost/property_tree/ptree.hpp>
@@ -316,7 +317,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
         }
         catch( Exception& )
         {
-            OSL_FAIL( "SdrTableObj::CropTableModelToSelection(), exception caught!" );
+            TOOLS_WARN_EXCEPTION("svx.table", "");
         }
     }
 
@@ -453,7 +454,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
     }
     catch( Exception& )
     {
-        OSL_FAIL("svx::SdrTableObjImpl::operator=(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 
     // set that TableStyle
@@ -656,7 +657,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
     }
     catch( Exception& )
     {
-        OSL_FAIL( "svx::SdrTableObjImpl::DragEdge(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 
@@ -762,7 +763,7 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     }
     catch( Exception& )
     {
-        OSL_FAIL( "svx::SdrTableObjImpl::getCell(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
     return xCell;
 }
@@ -1600,7 +1601,7 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
     }
     catch( Exception& )
     {
-        OSL_FAIL("SdrTableObj::setActiveCell(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 

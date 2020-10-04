@@ -56,6 +56,7 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/svdpool.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using ::editeng::SvxBorderLine;
@@ -440,7 +441,7 @@ void Cell::dispose()
         }
         catch( Exception& )
         {
-            OSL_FAIL("Cell::dispose(), exception caught!");
+            TOOLS_WARN_EXCEPTION("svx.table", "");
         }
         mxTable.clear();
     }
@@ -1307,11 +1308,11 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         }
         catch( UnknownPropertyException& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
+            TOOLS_WARN_EXCEPTION("svx.table", "unknown property!");
         }
         catch( Exception& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
+            TOOLS_WARN_EXCEPTION("svx.table", "");
         }
     }
 }
@@ -1336,11 +1337,11 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         }
         catch( UnknownPropertyException& )
         {
-            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
+            TOOLS_WARN_EXCEPTION("svx.table", "unknown property!");
         }
         catch( Exception& )
         {
-            OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
+            TOOLS_WARN_EXCEPTION("svx.table", "");
         }
         pValue++;
     }

@@ -23,6 +23,7 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
@@ -105,7 +106,7 @@ void SdrTableRtfExporter::Write()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     // export rows
@@ -119,7 +120,7 @@ void SdrTableRtfExporter::Write()
     }
     catch( Exception& )
     {
-        OSL_FAIL("SdrTableRtfExporter::Write(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     mrStrm.WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );

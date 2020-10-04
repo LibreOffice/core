@@ -19,8 +19,8 @@
 #include <memory>
 #include <sal/config.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
-#include <osl/diagnose.h>
 #include <svx/rubydialog.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -346,7 +346,7 @@ void SvxRubyDialog::Activate()
             }
             catch (const Exception&)
             {
-                OSL_FAIL("exception in style access");
+                TOOLS_WARN_EXCEPTION("svx.dialog", "exception in style access");
             }
             if (!sCharStyleSelect.isEmpty())
                 m_xCharStyleLB->set_active_text(sCharStyleSelect);
@@ -535,7 +535,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, weld::Button&, void)
         }
         catch (const Exception&)
         {
-            OSL_FAIL("Exception caught");
+            TOOLS_WARN_EXCEPTION("svx.dialog", "");
         }
     }
 }

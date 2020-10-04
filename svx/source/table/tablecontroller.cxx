@@ -1144,7 +1144,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                 }
                 catch( Exception& )
                 {
-                    OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+                    TOOLS_WARN_EXCEPTION("svx.table", "");
                 }
             }
 
@@ -1154,7 +1154,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
     }
     catch( Exception& )
     {
-        OSL_FAIL( "svx::SvxTableController::SetTableStyle(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 
@@ -1936,7 +1936,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
     }
     catch( Exception& )
     {
-        TOOLS_WARN_EXCEPTION( "svx", "" );
+        TOOLS_WARN_EXCEPTION( "svx.table", "" );
     }
 }
 
@@ -1956,7 +1956,7 @@ void SvxTableController::checkCell( CellPos& rPos )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::SvxTableController::checkCell(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 
@@ -1976,7 +1976,7 @@ void SvxTableController::findMergeOrigin( CellPos& rPos )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::SvxTableController::findMergeOrigin(), exception caught!" );
+        TOOLS_WARN_EXCEPTION("svx.table", "");
     }
 }
 

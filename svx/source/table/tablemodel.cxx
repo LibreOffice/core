@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 #include <libxml/xmlwriter.h>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cell.hxx>
 #include "cellcursor.hxx"
@@ -663,7 +664,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableModel::insertColumns(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     updateColumns();
     setModified(true);
@@ -769,7 +770,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableModel::removeColumns(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     updateColumns();
@@ -827,7 +828,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableModel::insertRows(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     if( bUndo )
         rModel.EndUndo();
@@ -925,7 +926,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
     }
     catch( Exception& )
     {
-        OSL_FAIL("sdr::table::TableModel::removeRows(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
 
     updateRows();
@@ -987,7 +988,7 @@ void TableModel::optimize()
                 }
                 catch( Exception& )
                 {
-                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
+                    TOOLS_WARN_EXCEPTION("svx", "");
                 }
 
                 removeColumns( nCol, 1 );
@@ -1024,7 +1025,7 @@ void TableModel::optimize()
                 }
                 catch( Exception& )
                 {
-                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
+                    TOOLS_WARN_EXCEPTION("svx", "");
                 }
 
                 removeRows( nRow, 1 );

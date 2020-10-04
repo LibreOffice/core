@@ -495,7 +495,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
+                        TOOLS_WARN_EXCEPTION("svx.form",
+                                             "exception while getting a sibling's DSS !");
                     }
 
                 }
@@ -526,7 +527,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
+                        TOOLS_WARN_EXCEPTION("svx.form",
+                                             "exception while getting a destination DSS !");
                     }
 
                 }

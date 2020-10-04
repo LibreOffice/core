@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
@@ -41,7 +42,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <vcl/metaact.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
@@ -1290,7 +1290,7 @@ Graphic SvxGetGraphicForShape( SdrObject& rShape )
     }
     catch( Exception& )
     {
-        OSL_FAIL("SvxGetGraphicForShape(), exception caught!");
+        TOOLS_WARN_EXCEPTION("svx", "");
     }
     return aGraphic;
 }
