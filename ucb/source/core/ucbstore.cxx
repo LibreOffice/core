@@ -47,7 +47,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <tools/diagnose_ex.h>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
