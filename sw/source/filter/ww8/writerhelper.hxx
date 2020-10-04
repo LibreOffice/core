@@ -650,6 +650,8 @@ namespace sw
             */
             explicit SetLayer(const SwDoc &rDoc);
         };
+
+        const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc);
     }
 
     namespace hack

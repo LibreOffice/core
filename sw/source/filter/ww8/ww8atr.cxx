@@ -226,21 +226,9 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
                  if (pINetItem)
                  {
                      const SwFormatINetFormat& rINet = static_cast<const SwFormatINetFormat&>(*pINetItem);
-
-                     if ( rINet.GetValue().isEmpty() )
+                     const SwCharFormat* pINetFormat = GetSwCharFormat(rINet, *m_pDoc);
+                     if (!pINetFormat)
                          continue;
-
-                     const sal_uInt16 nId = rINet.GetINetFormatId();
-                     const OUString& rStr = rINet.GetINetFormat();
-
-                     if (rStr.isEmpty())
-                     {
-                         SAL_WARN("sw.ww8", "MSWordExportBase::ExportPoolItemsToCHP(..) - missing unvisited character format at hyperlink attribute" );
-                     }
-
-                     const SwCharFormat* pINetFormat = IsPoolUserFormat( nId )
-                        ? m_pDoc->FindCharFormatByName( rStr )
-                        : m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
 
                      const SwCharFormat* pFormat = static_cast<const SwFormatCharFormat&>(*pItem).GetCharFormat();
                      ww8::PoolItems aCharItems, aINetItems;
@@ -1645,25 +1633,36 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
     m_rWW8Export.InsUInt16( 0x0000);
 }
 
+namespace sw { namespace util {
+
+const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc)
+{
+    if (rINet.GetValue().isEmpty())
+        return nullptr;
+
+    const sal_uInt16 nId = rINet.GetINetFormatId();
+    const OUString& rStr = rINet.GetINetFormat();
+    if (rStr.isEmpty())
+    {
+        OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
+    }
+
+    return IsPoolUserFormat( nId )
+               ? rDoc.FindCharFormatByName( rStr )
+               : rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+}
+
+} }
+
 void WW8AttributeOutput::TextINetFormat( const SwFormatINetFormat& rINet )
 {
-    if ( !rINet.GetValue().isEmpty() )
-    {
-        const sal_uInt16 nId = rINet.GetINetFormatId();
-        const OUString& rStr = rINet.GetINetFormat();
-        if (rStr.isEmpty())
-        {
-            OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
-        }
+    const SwCharFormat* pFormat = GetSwCharFormat(rINet, *m_rWW8Export.m_pDoc);
+    if (!pFormat)
+        return;
 
-        const SwCharFormat* pFormat = IsPoolUserFormat( nId )
-                        ? m_rWW8Export.m_pDoc->FindCharFormatByName( rStr )
-                        : m_rWW8Export.m_pDoc->getIDocumentStylePoolAccess().GetCharFormatFromPool( nId );
+    m_rWW8Export.InsUInt16( NS_sprm::sprmCIstd );
 
-        m_rWW8Export.InsUInt16( NS_sprm::sprmCIstd );
-
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pFormat ) );
-    }
+    m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pFormat ) );
 }
 
 // #i43956# - add optional parameter <pLinkStr>
