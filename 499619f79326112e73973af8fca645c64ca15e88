@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65604cee_22b70d9c",
+        "filename": "bin/lint-ui.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-04T13:21:48Z",
+      "side": 1,
+      "message": "I imagine the mentions of \"radio\" in the block should be instead \"adjustment\"",
+      "revId": "499619f79326112e73973af8fca645c64ca15e88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
