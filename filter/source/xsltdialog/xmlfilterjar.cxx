@@ -37,6 +37,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <svl/urihelper.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
@@ -186,7 +187,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
                     {
                     // in case of same named import / export XSLT the latter
                     // is ignored
-                        OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
+                        TOOLS_WARN_EXCEPTION("filter.xslt", "same named xslt filter exception!");
                     }
 
                     if( !filter->maImportTemplate.isEmpty() )
@@ -220,7 +221,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     osl::File::remove( rPackageURL );
@@ -289,7 +290,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL,
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::savePackage exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -360,7 +361,7 @@ bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& x
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterJarHelper::copyFile exception caught" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
     return false;
 }

@@ -239,6 +239,7 @@ certain functionality.
 @li @c filter.tga
 @li @c filter.tiff
 @li @c filter.xmlfa
+@li @c filter.xmlfd
 @li @c filter.xslt - xslt import/export
 
 @section oox
