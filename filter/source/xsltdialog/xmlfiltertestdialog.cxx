@@ -42,6 +42,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <osl/file.hxx>
 #include <unotools/tempfile.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -128,7 +129,7 @@ static bool checkComponent( Reference< XComponent > const & rxComponent, const O
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "checkComponent exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     return false;
@@ -169,7 +170,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(weld::Window* pParent,
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::XMLFilterTestDialog exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -182,7 +183,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::~XMLFilterTestDialog exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -399,7 +400,7 @@ void XMLFilterTestDialog::onExportBrowse()
     }
     catch(const Exception&)
     {
-        OSL_FAIL("XMLFilterTestDialog::onExportBrowse exception caught!");
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     initDialog();
@@ -503,7 +504,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::doExport exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -619,7 +620,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     }
     catch(const Exception&)
     {
-        OSL_FAIL("XMLFilterTestDialog::import caught an exception" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 }
 
@@ -694,7 +695,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "XMLFilterTestDialog::getFrontMostDocument exception caught!" );
+        TOOLS_WARN_EXCEPTION("filter.xslt", "");
     }
 
     return xRet;

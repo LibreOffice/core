@@ -18,12 +18,12 @@
  */
 
 #include "filterdetect.hxx"
-#include <osl/diagnose.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/inettype.hxx>
@@ -197,7 +197,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
     }
     catch (const Exception &)
     {
-        OSL_FAIL( "An Exception occurred while opening File stream" );
+        TOOLS_WARN_EXCEPTION("filter.xmlfd", "An Exception occurred while opening File stream");
     }
 
     if (!sTypeName.isEmpty())
