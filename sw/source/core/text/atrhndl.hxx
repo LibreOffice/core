@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
-#define INCLUDED_SW_SOURCE_CORE_TEXT_ATRHNDL_HXX
-
+#pragma once
 #define NUM_ATTRIBUTE_STACKS 44
 
 #include <memory>
@@ -116,6 +114,5 @@ inline const SwFont* SwAttrHandler::GetFont() const
     return m_pFnt.get();
 };
 
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
