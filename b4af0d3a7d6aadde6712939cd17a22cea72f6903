@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c91552b_f96123af",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-04T09:54:33Z",
+      "side": 1,
+      "message": "I\u0027m unsure if this is OK here, or should I introduce a catch for Exception\u0026, or just skip this?",
+      "range": {
+        "startLine": 611,
+        "startChar": 20,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
