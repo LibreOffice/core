@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "245a409c_eb8fe72e",
+        "filename": "sc/source/ui/undo/undoblk3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-10-04T10:44:30Z",
+      "side": 1,
+      "message": "This is wrong. You can\u0027t simply swap the find\u0026replace strings and expect the result would be identical as before the find\u0026replace to be undone. For one, the reversion may find hits that were not a result of the find\u0026replace but now would replace those as well. Second, this wouldn\u0027t work at all if the find string would contain wildcards or be a regular expression.",
+      "revId": "7a344ffa0201ad9d9ef82cc745589b4967e24d89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
