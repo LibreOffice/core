@@ -98,13 +98,13 @@ static void lcl_BitMaskToAny(uno::Any & o_rValue,
 }
 
 static void
-lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
+lcl_ReAssignTOXType(SwDoc& rDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
 {
-    const sal_uInt16 nUserCount = pDoc->GetTOXTypeCount( TOX_USER );
+    const sal_uInt16 nUserCount = rDoc.GetTOXTypeCount( TOX_USER );
     const SwTOXType* pNewType = nullptr;
     for(sal_uInt16 nUser = 0; nUser < nUserCount; nUser++)
     {
-        const SwTOXType* pType = pDoc->GetTOXType( TOX_USER, nUser );
+        const SwTOXType* pType = rDoc.GetTOXType( TOX_USER, nUser );
         if (pType->GetTypeName()==rNewName)
         {
             pNewType = pType;
@@ -114,7 +114,7 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     if(!pNewType)
     {
         SwTOXType aNewType(TOX_USER, rNewName);
-        pNewType = pDoc->InsertTOXType( aNewType );
+        pNewType = rDoc.InsertTOXType( aNewType );
     }
 
     rTOXBase.RegisterToTOXType( *const_cast<SwTOXType*>(pNewType) );
@@ -594,7 +594,7 @@ SwXDocumentIndex::setPropertyValue(
             {
                 if (rTOXBase.GetTOXType()->GetTypeName() != sNewName)
                 {
-                    lcl_ReAssignTOXType(pSectionFormat->GetDoc(),
+                    lcl_ReAssignTOXType(*pSectionFormat->GetDoc(),
                             rTOXBase, sNewName);
                 }
             }
@@ -1332,7 +1332,7 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
     if ((TOX_USER == pTOXType->GetType()) &&
         m_pImpl->m_pProps->GetTypeName() != pTOXType->GetTypeName())
     {
-        lcl_ReAssignTOXType(pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
+        lcl_ReAssignTOXType(*pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
     }
     //TODO: apply Section attributes (columns and background)
     SwTOXBaseSection *const pTOX =

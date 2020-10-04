@@ -67,7 +67,7 @@ OUString SwDateTimeField::ExpandImpl(SwRootFrame const*const) const
     if (!(IsFixed()))
     {
         DateTime aDateTime( DateTime::SYSTEM );
-        fVal = GetDateTime(GetDoc(), aDateTime);
+        fVal = GetDateTime(*GetDoc(), aDateTime);
     }
     else
         fVal = GetValue();
@@ -115,12 +115,12 @@ OUString SwDateTimeField::GetPar2() const
 
 void SwDateTimeField::SetDateTime(const DateTime& rDT)
 {
-    SetValue(GetDateTime(GetDoc(), rDT));
+    SetValue(GetDateTime(*GetDoc(), rDT));
 }
 
-double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
+double SwDateTimeField::GetDateTime(SwDoc& rDoc, const DateTime& rDT)
 {
-    SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+    SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
     const Date& rNullDate = pFormatter->GetNullDate();
 
     double fResult = rDT - DateTime(rNullDate);
@@ -133,7 +133,7 @@ double SwDateTimeField::GetValue() const
     if (IsFixed())
         return SwValueField::GetValue();
     else
-        return GetDateTime(GetDoc(), DateTime( DateTime::SYSTEM ));
+        return GetDateTime(*GetDoc(), DateTime( DateTime::SYSTEM ));
 }
 
 Date SwDateTimeField::GetDate() const
