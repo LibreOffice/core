@@ -28,7 +28,7 @@
 
 #include <string_view>
 
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -2186,13 +2186,13 @@ bool Content::loadData( ContentProvider const * pProvider,
         catch ( lang::IllegalArgumentException const & )
         {
             // an illegal argument is provided
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             return false;
         }
         catch ( embed::InvalidStorageException const & )
         {
             // this storage is in invalid state for any reason
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             return false;
         }
     }
@@ -2247,17 +2247,17 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
         }
         catch ( beans::PropertyVetoException const & )
         {
-            OSL_FAIL( "Caught PropertyVetoException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             return false;
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             return false;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            OSL_FAIL( "Caught WrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             return false;
         }
 
@@ -2302,21 +2302,21 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
             catch ( io::NotConnectedException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_FAIL( "Caught NotConnectedException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::BufferSizeExceededException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_FAIL( "Caught BufferSizeExceededException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
                 closeOutputStream( xOut );
                 return false;
             }
             catch ( io::IOException const & )
             {
                 // readSomeBytes, writeBytes
-                OSL_FAIL( "Caught IOException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
                 closeOutputStream( xOut );
                 return false;
             }
@@ -2370,37 +2370,37 @@ void Content::renameData(
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for any reason
-        OSL_FAIL( "Caught InvalidStorageException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_FAIL( "Caught IllegalArgumentException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with old name in this storage
-        OSL_FAIL( "Caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
     catch ( container::ElementExistException const & )
     {
         // an element with new name already exists in this storage
-        OSL_FAIL( "Caught ElementExistException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_FAIL( "Caught IOException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_FAIL( "Caught StorageWrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return;
     }
 
@@ -2434,31 +2434,31 @@ bool Content::removeData()
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for any reason
-        OSL_FAIL( "Caught InvalidStorageException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_FAIL( "Caught IllegalArgumentException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_FAIL( "Caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_FAIL( "Caught IOException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_FAIL( "Caught StorageWrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -2499,37 +2499,37 @@ bool Content::copyData( const Uri & rSourceUri, const OUString & rNewName )
     catch ( embed::InvalidStorageException const & )
     {
         // this storage is in invalid state for any reason
-        OSL_FAIL( "Caught InvalidStorageException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::IllegalArgumentException const & )
     {
         // an illegal argument is provided
-        OSL_FAIL( "Caught IllegalArgumentException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( container::NoSuchElementException const & )
     {
         // there is no element with this name in this storage
-        OSL_FAIL( "Caught NoSuchElementException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( container::ElementExistException const & )
     {
         // there is no element with this name in this storage
-        OSL_FAIL( "Caught ElementExistException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( io::IOException const & )
     {
         // in case of io errors during renaming
-        OSL_FAIL( "Caught IOException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_FAIL( "Caught StorageWrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -2551,12 +2551,12 @@ bool Content::commitStorage( const uno::Reference< embed::XStorage > & xStorage 
     }
     catch ( io::IOException const & )
     {
-        OSL_FAIL( "Caught IOException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
     catch ( lang::WrappedTargetException const & )
     {
-        OSL_FAIL( "Caught WrappedTargetException!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         return false;
     }
 
@@ -2577,15 +2577,15 @@ bool Content::closeOutputStream(
         }
         catch ( io::NotConnectedException const & )
         {
-            OSL_FAIL( "Caught NotConnectedException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::BufferSizeExceededException const & )
         {
-            OSL_FAIL( "Caught BufferSizeExceededException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
-            OSL_FAIL( "Caught IOException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
     }
     return false;

@@ -26,7 +26,7 @@
 
  *************************************************************************/
 
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
@@ -88,7 +88,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "Storage::Storage: Caught exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -478,7 +478,7 @@ OutputStream::OutputStream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
 
     OSL_ENSURE( m_xAggProxy.is(),
@@ -643,7 +643,7 @@ Stream::Stream(
     }
     catch ( uno::Exception const & )
     {
-        OSL_FAIL( "OutputStream::OutputStream: Caught exception!" );
+        TOOLS_WARN_EXCEPTION("ucb.ucp", "");
     }
 
     OSL_ENSURE( m_xAggProxy.is(),

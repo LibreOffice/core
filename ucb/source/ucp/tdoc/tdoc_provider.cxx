@@ -24,7 +24,7 @@
 
  *************************************************************************/
 
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/embed/InvalidStorageException.hpp>
 #include <com/sun/star/embed/StorageWrappedTargetException.hpp>
@@ -330,11 +330,11 @@ ContentProvider::queryStorage( const OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
@@ -343,7 +343,7 @@ ContentProvider::queryStorage( const OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
     }
     return uno::Reference< embed::XStorage >();
@@ -369,11 +369,11 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
@@ -382,7 +382,7 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
     }
 
@@ -402,19 +402,19 @@ ContentProvider::queryInputStream( const OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
-            OSL_FAIL( "Caught IOException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -440,11 +440,11 @@ ContentProvider::queryOutputStream( const OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
@@ -453,7 +453,7 @@ ContentProvider::queryOutputStream( const OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -478,11 +478,11 @@ ContentProvider::queryStream( const OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_FAIL( "Caught InvalidStorageException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_FAIL( "Caught IllegalArgumentException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
         catch ( io::IOException const & )
         {
@@ -491,7 +491,7 @@ ContentProvider::queryStream( const OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+            TOOLS_WARN_EXCEPTION("ucb.ucp", "");
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -535,11 +535,11 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( embed::InvalidStorageException const & )
             {
-                OSL_FAIL( "Caught InvalidStorageException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             }
             catch ( lang::IllegalArgumentException const & )
             {
-                OSL_FAIL( "Caught IllegalArgumentException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             }
             catch ( io::IOException const & )
             {
@@ -548,7 +548,7 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( embed::StorageWrappedTargetException const & )
             {
-                OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
+                TOOLS_WARN_EXCEPTION("ucb.ucp", "");
             }
         }
     }

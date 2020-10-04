@@ -29,7 +29,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <memory>
 
 using namespace com::sun::star::beans;
@@ -1284,7 +1284,7 @@ void SortedResultSet::Initialize(
     }
     catch (const SQLException&)
     {
-        OSL_FAIL( "SortedResultSet::Initialize() : Got unexpected SQLException" );
+        TOOLS_WARN_EXCEPTION("ucb", "");
     }
 
     // when we have fetched all the elements, we can create the
@@ -1632,7 +1632,7 @@ void SortedResultSet::ResortModified( EventList* pList )
     }
     catch (const SQLException&)
     {
-        OSL_FAIL( "SortedResultSet::ResortModified() : Got unexpected SQLException" );
+        TOOLS_WARN_EXCEPTION("ucb", "");
     }
 
     m_ModList.clear();
@@ -1665,7 +1665,7 @@ void SortedResultSet::ResortNew( EventList* pList )
     }
     catch (const SQLException&)
     {
-        OSL_FAIL( "SortedResultSet::ResortNew() : Got unexpected SQLException" );
+        TOOLS_WARN_EXCEPTION("ucb", "");
     }
 }
 
