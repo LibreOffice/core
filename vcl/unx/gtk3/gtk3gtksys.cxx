@@ -186,46 +186,11 @@ bool GtkSalSystem::IsUnifiedDisplay()
     return gdk_display_get_n_screens (mpDisplay) == 1;
 }
 
-namespace {
-int _fallback_get_primary_monitor (GdkScreen *pScreen)
-{
-    // Use monitor name as primacy heuristic
-    int max = gdk_screen_get_n_monitors (pScreen);
-    for (int i = 0; i < max; ++i)
-    {
-        char *name = gdk_screen_get_monitor_plug_name (pScreen, i);
-        bool bLaptop = (name && !g_ascii_strncasecmp (name, "LVDS", 4));
-        g_free (name);
-        if (bLaptop)
-            return i;
-    }
-    return 0;
-}
-
-int _get_primary_monitor (GdkScreen *pScreen)
-{
-    static int (*get_fn) (GdkScreen *) = nullptr;
-    get_fn = gdk_screen_get_primary_monitor;
-    // Perhaps we have a newer gtk+ with this symbol:
-    if (!get_fn)
-    {
-        get_fn = reinterpret_cast<int(*)(GdkScreen*)>(osl_getAsciiFunctionSymbol(nullptr,
-            "gdk_screen_get_primary_monitor"));
-    }
-    if (!get_fn)
-        get_fn = _fallback_get_primary_monitor;
-    if (get_fn)
-        return get_fn (pScreen);
-    else
-        return 0;
-}
-} // end anonymous namespace
-
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
     GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
     int idx = getScreenIdxFromPtr (pDefault);
-    return idx + _get_primary_monitor (pDefault);
+    return idx + gdk_screen_get_primary_monitor(pDefault);
 }
 
 tools::Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
