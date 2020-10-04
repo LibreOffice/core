@@ -198,9 +198,9 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwFileNameFieldType final : public SwFieldType
 {
-    SwDoc *m_pDoc;
+    SwDoc& m_rDoc;
 public:
-    SwFileNameFieldType(SwDoc*);
+    SwFileNameFieldType(SwDoc&);
 
     OUString                Expand(sal_uLong) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
@@ -224,9 +224,9 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwTemplNameFieldType final : public SwFieldType
 {
-    SwDoc *m_pDoc;
+    SwDoc& m_rDoc;
 public:
-    SwTemplNameFieldType(SwDoc*);
+    SwTemplNameFieldType(SwDoc&);
 
     OUString                Expand(sal_uLong) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
@@ -246,11 +246,11 @@ public:
 // Document statistics
 class SAL_DLLPUBLIC_RTTI SwDocStatFieldType final : public SwFieldType
 {
-    SwDoc*          m_pDoc;
+    SwDoc&          m_rDoc;
     SvxNumType      m_nNumberingType;
 
 public:
-    SwDocStatFieldType(SwDoc*);
+    SwDocStatFieldType(SwDoc&);
     OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
@@ -320,11 +320,11 @@ public:
 
     virtual OUString    GetFieldName() const override;
 
-    void                Evaluate(SwDoc*);
+    void                Evaluate(SwDoc& rDoc);
 
     void         SetValue(bool bHidden)  { m_bIsHidden = bHidden; }
     static OUString     GetColumnName(const OUString& rName);
-    static OUString     GetDBName(const OUString& rName, SwDoc *pDoc);
+    static OUString     GetDBName(const OUString& rName, SwDoc& rDoc);
 
     /// Condition
     virtual void        SetPar1(const OUString& rStr) override;
@@ -377,10 +377,10 @@ public:
 
 class SAL_DLLPUBLIC_RTTI SwMacroFieldType final : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 
 public:
-    SwMacroFieldType(SwDoc*);
+    SwMacroFieldType(SwDoc&);
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };
@@ -426,15 +426,15 @@ public:
 class SAL_DLLPUBLIC_RTTI SwPostItFieldType final : public SwFieldType
 {
 private:
-    SwDoc* mpDoc;
+    SwDoc& mrDoc;
 public:
-    SwPostItFieldType(SwDoc* pDoc);
+    SwPostItFieldType(SwDoc& rDoc);
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
-    SwDoc* GetDoc() const
+    SwDoc& GetDoc() const
     {
-        return mpDoc;
+        return mrDoc;
     };
 };
 
@@ -604,7 +604,7 @@ public:
 // Relative page numbers - query field.
 class SwRefPageGetFieldType final : public SwFieldType
 {
-    SwDoc*          m_pDoc;
+    SwDoc&          m_rDoc;
     sal_Int16       m_nNumberingType;
 
     void UpdateField(SwTextField const * pTextField,
@@ -613,10 +613,10 @@ class SwRefPageGetFieldType final : public SwFieldType
     /// overwritten to update all RefPageGet fields
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem * ) override;
 public:
-    SwRefPageGetFieldType( SwDoc* pDoc );
+    SwRefPageGetFieldType( SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
     bool MakeSetList(SetGetExpFields& rTmpLst, SwRootFrame const* pLayout);
-    SwDoc*  GetDoc() const                  { return m_pDoc; }
+    SwDoc&  GetDoc() const                  { return m_rDoc; }
 };
 
 // Query relative page numbering.
@@ -641,11 +641,11 @@ public:
 // Field to jump to and edit.
 class SwJumpEditFieldType final : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
     sw::WriterMultiListener m_aDep;
 
 public:
-    SwJumpEditFieldType( SwDoc* pDoc );
+    SwJumpEditFieldType( SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     SwCharFormat* GetCharFormat();
@@ -678,9 +678,9 @@ public:
 
 class SwScriptFieldType final : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 public:
-    SwScriptFieldType( SwDoc* pDoc );
+    SwScriptFieldType( SwDoc& rDoc );
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 };

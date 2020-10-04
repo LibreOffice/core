@@ -1068,7 +1068,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             {
                 pHField->SetValue( bValue );
                 // evaluate field
-                pHField->Evaluate(&m_rDoc);
+                pHField->Evaluate(m_rDoc);
             }
         }
         break;
@@ -1084,7 +1084,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
         case SwFieldIds::DbSetNumber:
 #if HAVE_FEATURE_DBCONNECTIVITY
         {
-            const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pField))->Evaluate(&m_rDoc);
+            const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pField))->Evaluate(m_rDoc);
             aCalc.VarChange( sDBNumNm, static_cast<const SwDBSetNumberField*>(pField)->GetSetNumber());
             pField->ExpandField(m_rDoc.IsClipBoard(), nullptr);
         }
@@ -1764,28 +1764,28 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     mpFieldTypes->emplace_back( new SwChapterFieldType );
     mpFieldTypes->emplace_back( new SwPageNumberFieldType );
     mpFieldTypes->emplace_back( new SwAuthorFieldType );
-    mpFieldTypes->emplace_back( new SwFileNameFieldType(&m_rDoc) );
+    mpFieldTypes->emplace_back( new SwFileNameFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwDBNameFieldType(&m_rDoc) );
     mpFieldTypes->emplace_back( new SwGetExpFieldType(&m_rDoc) );
     mpFieldTypes->emplace_back( new SwGetRefFieldType( &m_rDoc ) );
     mpFieldTypes->emplace_back( new SwHiddenTextFieldType );
-    mpFieldTypes->emplace_back( new SwPostItFieldType(&m_rDoc) );
-    mpFieldTypes->emplace_back( new SwDocStatFieldType(&m_rDoc) );
+    mpFieldTypes->emplace_back( new SwPostItFieldType(m_rDoc) );
+    mpFieldTypes->emplace_back( new SwDocStatFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwDocInfoFieldType(&m_rDoc) );
     mpFieldTypes->emplace_back( new SwInputFieldType( &m_rDoc ) );
     mpFieldTypes->emplace_back( new SwTableFieldType( &m_rDoc ) );
-    mpFieldTypes->emplace_back( new SwMacroFieldType(&m_rDoc) );
+    mpFieldTypes->emplace_back( new SwMacroFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwHiddenParaFieldType );
     mpFieldTypes->emplace_back( new SwDBNextSetFieldType );
     mpFieldTypes->emplace_back( new SwDBNumSetFieldType );
     mpFieldTypes->emplace_back( new SwDBSetNumberFieldType );
-    mpFieldTypes->emplace_back( new SwTemplNameFieldType(&m_rDoc) );
-    mpFieldTypes->emplace_back( new SwTemplNameFieldType(&m_rDoc) );
+    mpFieldTypes->emplace_back( new SwTemplNameFieldType(m_rDoc) );
+    mpFieldTypes->emplace_back( new SwTemplNameFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwExtUserFieldType );
     mpFieldTypes->emplace_back( new SwRefPageSetFieldType );
-    mpFieldTypes->emplace_back( new SwRefPageGetFieldType( &m_rDoc ) );
-    mpFieldTypes->emplace_back( new SwJumpEditFieldType( &m_rDoc ) );
-    mpFieldTypes->emplace_back( new SwScriptFieldType( &m_rDoc ) );
+    mpFieldTypes->emplace_back( new SwRefPageGetFieldType(m_rDoc) );
+    mpFieldTypes->emplace_back( new SwJumpEditFieldType(m_rDoc) );
+    mpFieldTypes->emplace_back( new SwScriptFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwCombinedCharFieldType );
     mpFieldTypes->emplace_back( new SwDropDownFieldType );
 
@@ -1833,9 +1833,9 @@ void DocumentFieldsManager::UpdateDBNumFields( SwDBNameInfField& rDBField, SwCal
     {
         // Edit a certain database
         if( SwFieldIds::DbNextSet == nFieldType )
-            static_cast<SwDBNextSetField&>(rDBField).Evaluate(&m_rDoc);
+            static_cast<SwDBNextSetField&>(rDBField).Evaluate(m_rDoc);
         else
-            static_cast<SwDBNumSetField&>(rDBField).Evaluate(&m_rDoc);
+            static_cast<SwDBNumSetField&>(rDBField).Evaluate(m_rDoc);
 
         SwDBData aTmpDBData( rDBField.GetDBData(&m_rDoc) );
 

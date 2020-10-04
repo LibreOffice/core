@@ -25,13 +25,13 @@
 
 using namespace ::com::sun::star;
 
-SwScriptFieldType::SwScriptFieldType( SwDoc* pD )
-    : SwFieldType( SwFieldIds::Script ), m_pDoc( pD )
+SwScriptFieldType::SwScriptFieldType( SwDoc& rD )
+    : SwFieldType( SwFieldIds::Script ), m_rDoc( rD )
 {}
 
 std::unique_ptr<SwFieldType> SwScriptFieldType::Copy() const
 {
-    return std::make_unique<SwScriptFieldType>( m_pDoc );
+    return std::make_unique<SwScriptFieldType>( m_rDoc );
 }
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
