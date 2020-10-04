@@ -30,10 +30,10 @@
  
  CORE_DEPTH = ../../..
  
--DIRS = . testlib
+-DIRS = testlib
 +DIRS =
  
- testlib: .
+ MODULE = nss
  
 --- a/a/nss/lib/nss/nssinit.c
 +++ a/a/nss/lib/nss/nssinit.c
