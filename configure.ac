@@ -43,6 +43,8 @@ LO_PATH= # used by path_munge to construct a PATH variable
 
 FilterLibs()
 {
+    # Return value: $filteredlibs
+
     filteredlibs=
     for f in $1; do
         case "$f" in
@@ -132,7 +134,11 @@ AbsolutePath()
     # There appears to be no simple and portable method to get an absolute and
     # canonical path, so we try creating the directory if does not exist and
     # utilizing the shell and pwd.
-    rel="$1"
+
+    # Args: $1: A possibly relative pathname
+    # Return value: $absolute_path
+
+    local rel="$1"
     absolute_path=""
     test ! -e "$rel" && mkdir -p "$rel"
     if test -d "$rel" ; then
@@ -344,11 +350,11 @@ fi
 
 win_short_path_for_make()
 {
-    local_short_path="$1"
+    local short_path="$1"
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-        cygpath -sm "$local_short_path"
+        cygpath -sm "$short_path"
     else
-        cygpath -u "$(cygpath -d "$local_short_path")"
+        cygpath -u "$(cygpath -d "$short_path")"
     fi
 }
 
@@ -2579,6 +2585,7 @@ dnl ===================================================================
 
 pathmunge ()
 {
+    local new_path
     if test -n "$1"; then
         if test "$build_os" = "cygwin"; then
             if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
@@ -2596,7 +2603,6 @@ pathmunge ()
         else
             add_lopath_before "$new_path"
         fi
-        unset new_path
     fi
 }
 
@@ -5893,8 +5899,6 @@ find_al()
             return
         fi
     done
-
-
 }
 
 find_dotnetsdk46()
@@ -5976,8 +5980,12 @@ find_winsdk()
 
 find_msms()
 {
+    # Return value: $msmdir
+
     AC_MSG_CHECKING([for MSVC merge modules directory])
-    my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
+    local my_msm_files=Microsoft_VC${VCVER}_CRT_x86.msm
+    local my_msm_dir
+
     case "$VCVER" in
         160)
         my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
@@ -6048,6 +6056,8 @@ find_msms()
 
 find_msvc_x64_dlls()
 {
+    # Return value: $msvcdllpath, $msvcdlls
+
     AC_MSG_CHECKING([for MSVC x64 DLL path])
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     case "$VCVER" in
