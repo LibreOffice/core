@@ -30,7 +30,7 @@
 #include <o3tl/deleter.hxx>
 
 namespace sc {
-    struct SpellCheckContext;
+    class SpellCheckContext;
 }
 
 namespace editeng {

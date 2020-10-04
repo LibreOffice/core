@@ -2235,21 +2235,6 @@ void ScTabView::EnableRefInput(bool bFlag)
             p->EnableInput(bFlag, false);
 }
 
-bool ScTabView::ContinueOnlineSpelling()
-{
-    bool bChanged = false;
-    for (VclPtr<ScGridWindow> & pWin : pGridWin)
-    {
-        if (!pWin || !pWin->IsVisible())
-            continue;
-
-        if (pWin->ContinueOnlineSpelling())
-            bChanged = true;
-    }
-
-    return bChanged;
-}
-
 void ScTabView::EnableAutoSpell( bool bEnable )
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
@@ -2269,6 +2254,17 @@ void ScTabView::ResetAutoSpell()
             continue;
 
         pWin->ResetAutoSpell();
+    }
+}
+
+void ScTabView::ResetAutoSpellForContentChange()
+{
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+    {
+        if (!pWin)
+            continue;
+
+        pWin->ResetAutoSpellForContentChange();
     }
 }
 
