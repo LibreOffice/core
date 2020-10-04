@@ -22,6 +22,30 @@
       "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6bbd6f2_61ee50fd",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-04T12:23:30Z",
+      "side": 1,
+      "message": "TOOLS_WARN_EXCEPTION will do the right thing for any of the UNO exception classes, but won\u0027t print anything useful for std::exception derived types, and I\u0027m not sure if that is even possible there because we transport the exception data in a css::uno::Any class.\n\nSo, this change is definitely an improvement, but if you want the ultimate in exception printing, we need to split the cases into\n  * UNO\n  * std::exception\n  * everything else",
+      "parentUuid": "8c91552b_f96123af",
+      "range": {
+        "startLine": 611,
+        "startChar": 20,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
