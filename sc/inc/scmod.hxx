@@ -81,7 +81,6 @@ class SfxDialogController;
 class SAL_DLLPUBLIC_RTTI ScModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
     Timer               m_aIdleTimer;
-    Idle                m_aSpellIdle;
     std::unique_ptr<ScDragData> m_pDragData;
     ScSelectionTransferObj* m_pSelTransfer;
     ScMessagePool*      m_pMessagePool;
@@ -131,7 +130,6 @@ public:
                         // moved by the application
 
     DECL_LINK( IdleHandler, Timer*, void ); // Timer instead of idle
-    DECL_LINK( SpellTimerHdl, Timer*, void );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
     void                Execute( SfxRequest& rReq );

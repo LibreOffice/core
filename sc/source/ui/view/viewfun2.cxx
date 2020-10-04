@@ -1477,6 +1477,10 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
 void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                    SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount )
 {
+    const ScDocument* pDoc = &GetViewData().GetDocument();
+    SCTAB nTab = GetViewData().GetTabNo();
+    CellType eCellType;
+
     ScGridWindow* pWin = GetActiveWin();
     if ( pWin->InsideVisibleRange(nStartCol, nStartRow) && pWin->InsideVisibleRange(nEndCol, nEndRow) )
     {
@@ -1487,6 +1491,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_BOTTOM:
                     for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
                     {
+                        pDoc->GetCellType(nColItr, nStartRow, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        if (eCellType != CELLTYPE_EDIT)
+                            continue;
+
                         const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nColItr, nStartRow);
                         if ( !pRanges )
                             continue;
@@ -1497,6 +1505,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_TOP:
                     for ( SCCOL nColItr = nStartCol; nColItr <= nEndCol; ++nColItr )
                     {
+                        pDoc->GetCellType(nColItr, nEndRow, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        if (eCellType != CELLTYPE_EDIT)
+                            continue;
+
                         const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nColItr, nEndRow);
                         if ( !pRanges )
                             continue;
@@ -1507,6 +1519,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_RIGHT:
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
+                        pDoc->GetCellType(nStartCol, nRowItr, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        if (eCellType != CELLTYPE_EDIT)
+                            continue;
+
                         const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nStartCol, nRowItr);
                         if ( !pRanges )
                             continue;
@@ -1517,6 +1533,10 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
                 case FILL_TO_LEFT:
                     for ( SCROW nRowItr = nStartRow; nRowItr <= nEndRow; ++nRowItr )
                     {
+                        pDoc->GetCellType(nEndCol, nRowItr, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                        if (eCellType != CELLTYPE_EDIT)
+                            continue;
+
                         const std::vector<editeng::MisspellRanges>* pRanges = pWin->GetAutoSpellData(nEndCol, nRowItr);
                         if ( !pRanges )
                             continue;
@@ -1533,11 +1553,19 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
         SCCOL nColRepeatSize = nEndCol - nStartCol + 1;
         SCROW nTillRow = 0;
         SCCOL nTillCol = 0;
-        std::vector<std::vector<MisspellRangesType>> aSourceSpellRanges(nRowRepeatSize, std::vector<MisspellRangesType>(nColRepeatSize));
+        std::vector<std::vector<MisspellRangesType>> aSourceSpellRanges(nRowRepeatSize, std::vector<MisspellRangesType>(nColRepeatSize, nullptr));
 
         for ( SCROW nRowIdx = 0; nRowIdx < nRowRepeatSize; ++nRowIdx )
+        {
             for ( SCCOL nColIdx = 0; nColIdx < nColRepeatSize; ++nColIdx )
+            {
+                pDoc->GetCellType(nStartCol + nColIdx, nStartRow + nRowIdx, nTab, eCellType); // We need this optimization only for EditTextObject source cells
+                if (eCellType != CELLTYPE_EDIT)
+                    continue;
+
                 aSourceSpellRanges[nRowIdx][nColIdx] = pWin->GetAutoSpellData( nStartCol + nColIdx, nStartRow + nRowIdx );
+            }
+        }
 
         switch( eDir )
         {
@@ -1603,7 +1631,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
         }
     }
     else
-        pWin->ResetAutoSpell();
+        pWin->ResetAutoSpellForContentChange();
 
 }
 

@@ -225,7 +225,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, bool bRecord, bool bPaint )
         MarkRange( aDestRange );
     }
 
-    ResetAutoSpell();
+    ResetAutoSpellForContentChange();
 }
 
 //  filters
