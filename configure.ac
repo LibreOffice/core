@@ -207,6 +207,14 @@ dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
 AC_CANONICAL_HOST
 
+# Check for WSL (version 2, at least).
+if test "`wslsys -v 2>/dev/null`" != ""; then
+    host_os=wsl
+    host="$host_cpu-$host_vendor-$host_os"
+    build_os=$host_os
+    build="$host"
+fi
+
 AC_MSG_CHECKING([for product name])
 PRODUCTNAME="AC_PACKAGE_NAME"
 if test -n "$with_product_name" -a "$with_product_name" != no; then
