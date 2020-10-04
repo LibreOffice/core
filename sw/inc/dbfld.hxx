@@ -167,7 +167,7 @@ public:
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
-    void                    Evaluate(SwDoc const *);
+    void                    Evaluate(const SwDoc&);
     inline void             SetCondValid(bool bCond);
     inline bool             IsCondValid() const;
 
@@ -209,7 +209,7 @@ public:
 
     inline bool             IsCondValid() const;
     inline void             SetCondValid(bool bCond);
-    void                    Evaluate(SwDoc const *);
+    void                    Evaluate(const SwDoc&);
 
     // Condition
     virtual OUString        GetPar1() const override;
@@ -271,7 +271,7 @@ public:
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
-    void            Evaluate(SwDoc const *);
+    void            Evaluate(const SwDoc&);
 
     inline long     GetSetNumber() const;
     inline void     SetSetNumber(long nNum);

@@ -573,9 +573,9 @@ std::unique_ptr<SwField> SwDBNextSetField::Copy() const
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
-void SwDBNextSetField::Evaluate(SwDoc const * pDoc)
+void SwDBNextSetField::Evaluate(const SwDoc& rDoc)
 {
-    SwDBManager* pMgr = pDoc->GetDBManager();
+    SwDBManager* pMgr = rDoc.GetDBManager();
     const SwDBData& rData = GetDBData();
     if( !m_bCondValid ||
             !pMgr || !pMgr->IsDataSourceOpen(rData.sDataSource, rData.sCommand, false))
@@ -659,9 +659,9 @@ std::unique_ptr<SwField> SwDBNumSetField::Copy() const
     return std::unique_ptr<SwField>(pTmp.release());
 }
 
-void SwDBNumSetField::Evaluate(SwDoc const * pDoc)
+void SwDBNumSetField::Evaluate(const SwDoc& rDoc)
 {
-    SwDBManager* pMgr = pDoc->GetDBManager();
+    SwDBManager* pMgr = rDoc.GetDBManager();
     const SwDBData& aTmpData = GetDBData();
 
     if( m_bCondValid && pMgr && pMgr->IsInMerge() &&
@@ -807,9 +807,9 @@ OUString SwDBSetNumberField::ExpandImpl(SwRootFrame const*const) const
     return FormatNumber(m_nNumber, static_cast<SvxNumType>(GetFormat()));
 }
 
-void SwDBSetNumberField::Evaluate(SwDoc const * pDoc)
+void SwDBSetNumberField::Evaluate(const SwDoc& rDoc)
 {
-    SwDBManager* pMgr = pDoc->GetDBManager();
+    SwDBManager* pMgr = rDoc.GetDBManager();
 
     const SwDBData& aTmpData = GetDBData();
     if (!pMgr || !pMgr->IsInMerge() ||
