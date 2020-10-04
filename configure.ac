@@ -205,6 +205,108 @@ dnl ===================================================================
 dnl checks build and host OSes
 dnl do this before argument processing to allow for platform dependent defaults
 dnl ===================================================================
+
+# Check for WSL (version 2, at least). But if --host is explicitly specified (to really do build for
+# Linux on WSL) trust that.
+if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
+    ac_cv_host="x86_64-pc-wsl"
+    ac_cv_build="$ac_cv_host"
+
+    # Emulation of Cygwin's cygpath command for WSL.
+    cygpath()
+    {
+        if test -n "$UNITTEST_WSL_CYGPATH"; then
+            echo -n cygpath "$@" "==> "
+        fi
+
+        # Cygwin's real cygpath has a plethora of options but we use only a few here.
+        local args="$@"
+        local opt
+        local opt_d opt_m opt_u opt_w opt_l opt_s opt_p
+        OPTIND=1
+
+        while getopts dmuwlsp opt; do
+            case "$opt" in
+                \?)
+                    AC_MSG_ERROR([Unimplemented cygpath emulation option in invocation: cygpath $args])
+                    ;;
+                ?)
+                    eval opt_$opt=yes
+                    ;;
+            esac
+        done
+
+        shift $((OPTIND-1))
+
+        if test $# -ne 1; then
+            AC_MSG_ERROR([Invalid cygpath emulation invocation: Pathname missing]);
+        fi
+
+        local input="$1"
+
+        local result
+
+        if test -n "$opt_d" -o -n "$opt_m" -o -n "$opt_w"; then
+            # Print Windows path, possibly in 8.3 form (-d) or with forward slashes (-m)
+
+            if test -n "$opt_u"; then
+                AC_MSG_ERROR([Invalid cygpath invocation: Both Windows and Unix path output requested])
+            fi
+
+            case "$input" in
+                [[a-zA-Z]]:\\* | \\*)
+                    # Already in Windows format
+                    ;;
+                /*)
+                    input=$(wslpath -w "$input")
+                    ;;
+                *)
+                    AC_MSG_ERROR([Invalid cygpath invocation: Path '$input' is not absolute])
+                    ;;
+            esac
+            if test -n "$opt_d" -o -n "$opt_s"; then
+                input=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 "$input")
+            fi
+            if test -n "$opt_m"; then
+                input="${input//\\//}"
+            fi
+            echo "$input"
+        else
+            # Print Unix path
+
+            case "$input" in
+                [[a-zA-Z]]:\\* | \\*)
+                    wslpath -u "$input"
+                    ;;
+                /)
+                    echo "$input"
+                    ;;
+                *)
+                    AC_MSG_ERROR([Invalid cygpath invocation: Path '$input' is not absolute])
+                    ;;
+            esac
+        fi
+    }
+
+    if test -n "$UNITTEST_WSL_CYGPATH"; then
+        BUILDDIR=.
+
+        cygpath -d /usr/lib64/ld-linux-x86-64.so.2
+        cygpath -w /usr/lib64/ld-linux-x86-64.so.2
+        cygpath -m /usr/lib64/ld-linux-x86-64.so.2
+        cygpath -m -s /usr/lib64/ld-linux-x86-64.so.2
+        cygpath -d /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -w /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -ws /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -m /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -ms /mnt/c/windows/system32/AboutSettingsHandlers.dll
+
+        cygpath -u 'c:\windows\system32\AboutSettingsHandlers.dll'
+
+        exit 0
+    fi
+fi
+
 AC_CANONICAL_HOST
 
 AC_MSG_CHECKING([for product name])
