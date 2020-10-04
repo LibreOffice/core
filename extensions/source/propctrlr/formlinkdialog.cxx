@@ -215,7 +215,8 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "FormLinkDialog::commitLinkPairs: caught an exception while setting the properties!" );
+            TOOLS_WARN_EXCEPTION("extensions.propctrlr",
+                                 "caught an exception while setting the properties!");
         }
     }
 

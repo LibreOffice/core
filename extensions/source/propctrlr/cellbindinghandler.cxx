@@ -163,7 +163,9 @@ namespace pcr
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
+                    TOOLS_WARN_EXCEPTION(
+                        "extensions.propctrlr",
+                        "ListCellRange: caught an exception while resetting the string items!");
                 }
             }
         }

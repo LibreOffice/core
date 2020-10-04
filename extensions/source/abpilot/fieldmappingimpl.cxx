@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/weld.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #include <strings.hrc>
@@ -31,7 +32,6 @@
 #include <unotools/confignode.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 
 
 namespace abp
@@ -102,7 +102,8 @@ namespace abp
             }
             catch(const Exception&)
             {
-                OSL_FAIL("fieldmapping::invokeDialog: caught an exception while executing the dialog!");
+                TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                     "caught an exception while executing the dialog!");
             }
             return false;
         }
@@ -196,7 +197,8 @@ namespace abp
             }
             catch( const Exception& )
             {
-                OSL_FAIL("fieldmapping::defaultMapping: code is assumed to throw no exceptions!");
+                TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                     "code is assumed to throw no exceptions!");
                     // the config nodes we're using herein should not do this...
             }
         }
