@@ -318,7 +318,13 @@ bool generateBytes(std::vector<sal_uInt8> & rBytes, sal_Int32 nSize)
 
 bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
 {
-    std::vector<sal_uInt8> hashFinal(mInfo.hashSize, 0);
+    std::vector<sal_uInt8>& encryptedHashValue = mInfo.encryptedVerifierHashValue;
+    size_t encryptedHashValueSize = encryptedHashValue.size();
+    size_t nHashValueSize = mInfo.hashSize;
+    if (nHashValueSize > encryptedHashValueSize)
+        return false;
+
+    std::vector<sal_uInt8> hashFinal(nHashValueSize, 0);
     calculateHashFinal(rPassword, hashFinal);
 
     std::vector<sal_uInt8>& encryptedHashInput = mInfo.encryptedVerifierHashInput;
@@ -327,14 +333,13 @@ bool AgileEngine::decryptAndCheckVerifierHash(OUString const & rPassword)
     std::vector<sal_uInt8> hashInput(nSaltSize, 0);
     calculateBlock(constBlock1, hashFinal, encryptedHashInput, hashInput);
 
-    std::vector<sal_uInt8>& encryptedHashValue = mInfo.encryptedVerifierHashValue;
-    std::vector<sal_uInt8> hashValue(encryptedHashValue.size(), 0);
+    std::vector<sal_uInt8> hashValue(encryptedHashValueSize, 0);
     calculateBlock(constBlock2, hashFinal, encryptedHashValue, hashValue);
 
-    std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
+    std::vector<sal_uInt8> hash(nHashValueSize, 0);
     hashCalc(hash, hashInput, mInfo.hashAlgorithm);
 
-    return (hash.size() <= hashValue.size() && std::equal(hash.begin(), hash.end(), hashValue.begin()));
+    return std::equal(hash.begin(), hash.end(), hashValue.begin());
 }
 
 void AgileEngine::decryptEncryptionKey(OUString const & rPassword)
