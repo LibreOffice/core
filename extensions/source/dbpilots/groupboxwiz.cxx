@@ -20,10 +20,10 @@
 #include "groupboxwiz.hxx"
 #include "commonpagesdbp.hxx"
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include "optiongrouplayouter.hxx"
 #include <helpids.h>
 #include <o3tl/safeint.hxx>
-#include <osl/diagnose.h>
 
 #define GBW_STATE_OPTIONLIST        0
 #define GBW_STATE_DEFAULTOPTION     1
@@ -159,7 +159,8 @@ namespace dbp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OGroupBoxWizard::createRadios: caught an exception while creating the radio shapes!");
+            TOOLS_WARN_EXCEPTION("extensions.dbpilots",
+                                 "caught an exception while creating the radio shapes!");
         }
 
         return OControlWizard::onFinish();

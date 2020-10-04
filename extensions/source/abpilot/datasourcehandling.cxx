@@ -153,7 +153,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "lcl_implCreateAndSetURL: caught an exception while creating the data source!" );
+            TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                 "caught an exception while creating the data source!");
         }
 
         return aReturn;
@@ -387,7 +388,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                 "caught an exception while creating the data source!");
         }
     }
 
@@ -404,7 +406,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::registerDataSource: caught an exception while creating the data source!" );
+            TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                 "caught an exception while creating the data source!");
         }
     }
 
@@ -436,7 +439,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL( "ODataSource::remove: caught an exception while creating the data source!" );
+            TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                 "caught an exception while creating the data source!");
         }
     }
 
@@ -551,7 +555,7 @@ namespace abp
         catch( const SQLException& e ) { aError <<= e; }
         catch( const Exception& )
         {
-            OSL_FAIL( "ODataSource::connect: caught a generic exception!" );
+            TOOLS_WARN_EXCEPTION("extensions.abpilot", "");
         }
 
 
@@ -580,7 +584,8 @@ namespace abp
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "ODataSource::connect: caught an exception while trying to display the error!" );
+                TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                     "caught an exception while trying to display the error!");
             }
         }
 
