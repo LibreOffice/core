@@ -70,7 +70,8 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "XSDValidationHelper::XSDValidationHelper: caught an exception while examining the introspectee!" );
+            TOOLS_WARN_EXCEPTION("extensions.propctrlr",
+                                 "caught an exception while examining the introspectee!");
         }
     }
 

@@ -42,7 +42,6 @@
 #include <connectivity/conncleanup.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <tools/urlobj.hxx>
-#include <osl/diagnose.h>
 
 #define WIZARD_SIZE_X   60
 #define WIZARD_SIZE_Y   23
@@ -555,7 +554,9 @@ namespace dbp
                     }
                     catch(const Exception&)
                     {
-                        OSL_FAIL("OControlWizard::initContext: unexpected exception while gathering column information!");
+                        TOOLS_WARN_EXCEPTION(
+                            "extensions.dbpilots",
+                            "unexpected exception while gathering column information!");
                     }
                     m_aContext.aTypes.emplace(*pBegin,nFieldType);
                 }

@@ -28,7 +28,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include "groupboxwiz.hxx"
 #include "dbptools.hxx"
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 
 namespace dbp
@@ -181,7 +181,8 @@ namespace dbp
         }
         catch(Exception&)
         {
-            OSL_FAIL("OOptionGroupLayouter::doLayout: caught an exception while grouping the shapes!");
+            TOOLS_WARN_EXCEPTION("extensions.dbpilots",
+                                 "caught an exception while grouping the shapes!");
         }
     }
 

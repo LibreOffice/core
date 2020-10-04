@@ -18,6 +18,7 @@
  */
 
 #include "admininvokationimpl.hxx"
+#include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -27,7 +28,6 @@
 #include <componentmodule.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/weld.hxx>
-#include <osl/diagnose.h>
 
 namespace abp
 {
@@ -103,7 +103,8 @@ namespace abp
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OAdminDialogInvokation::invokeAdministration: caught an exception while executing the dialog!");
+            TOOLS_WARN_EXCEPTION("extensions.abpilot",
+                                 "caught an exception while executing the dialog!");
         }
         return false;
     }

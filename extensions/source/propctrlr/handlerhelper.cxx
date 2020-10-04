@@ -199,7 +199,8 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "PropertyHandlerHelper::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                TOOLS_WARN_EXCEPTION("extensions.propctrlr",
+                                     "caught an exception while converting via TypeConverter!");
             }
         }
 
@@ -229,7 +230,8 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_FAIL( "PropertyHandlerHelper::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                TOOLS_WARN_EXCEPTION("extensions.propctrlr",
+                                     "caught an exception while converting via TypeConverter!");
             }
         }
 

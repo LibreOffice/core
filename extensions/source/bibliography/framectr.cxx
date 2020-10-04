@@ -342,7 +342,7 @@ bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::XForm
         }
         catch(const Exception&)
         {
-            OSL_FAIL("SaveModified: Exception occurred!");
+            TOOLS_WARN_EXCEPTION("extensions.biblio", "");
         }
     }
     return bResult;
@@ -397,7 +397,8 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch(const Exception&)
             {
-                OSL_FAIL("Exception caught while changing the data source");
+                TOOLS_WARN_EXCEPTION("extensions.biblio",
+                                     "Exception caught while changing the data source");
             }
         }
     }
@@ -494,7 +495,8 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             }
             catch(const Exception&)
             {
-                OSL_FAIL("Exception in last() or moveToInsertRow()");
+                TOOLS_WARN_EXCEPTION("extensions.biblio",
+                                     "Exception in last() or moveToInsertRow()");
             }
         }
     }
@@ -553,7 +555,8 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     }
                     catch(const Exception&)
                     {
-                        OSL_FAIL("DeleteRecord: exception caught!");
+                        TOOLS_WARN_EXCEPTION("extensions.biblio",
+                                             "DeleteRecord: exception caught!");
                     }
                 }
             }

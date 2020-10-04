@@ -92,7 +92,7 @@ static Reference< XConnection > getConnection(const OUString& _rURL)
         }
         catch (const Exception&)
         {
-            OSL_FAIL("Exception caught in ODatabaseContext::getRegisteredObject()");
+            TOOLS_WARN_EXCEPTION("extensions.biblio", "");
         }
     }
     // build the connection from the data source
@@ -134,7 +134,7 @@ static Reference< XConnection >    getConnection(const Reference< XInterface > &
     }
     catch (const Exception&)
     {
-        OSL_FAIL("exception in getConnection");
+        TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
 
     return xConn;
@@ -636,7 +636,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
     }
     catch (const Exception&)
     {
-        OSL_FAIL("Exception in BibDataManager::InsertFields");
+        TOOLS_WARN_EXCEPTION("extensions.biblio", "");
     }
 }
 
