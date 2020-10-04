@@ -925,7 +925,7 @@ namespace pcr
 
         catch(const Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::impl_rebindToInspectee_nothrow: caught an exception !");
+            TOOLS_WARN_EXCEPTION("extensions.propctrlr", "");
         }
     }
 
@@ -1040,7 +1040,7 @@ namespace pcr
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::doInspection : caught an exception !");
+            TOOLS_WARN_EXCEPTION("extensions.propctrlr", "");
         }
     }
 
@@ -1338,7 +1338,7 @@ namespace pcr
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
+            TOOLS_WARN_EXCEPTION("extensions.propctrlr", "");
         }
 
         m_sCommittingProperty.clear();

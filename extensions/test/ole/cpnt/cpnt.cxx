@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 #include <uno/environment.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -353,7 +353,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * /*pServiceManager*/, 
         }
         catch(InvalidRegistryException &)
         {
-            OSL_FAIL( "### InvalidRegistryException!");
+            TOOLS_WARN_EXCEPTION("extensions.olebridge", "");
         }
     }
     return sal_False;
