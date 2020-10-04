@@ -28,12 +28,12 @@ using namespace oox;
 struct DocxTableStyleExport::Impl
 {
 private:
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
     sax_fastparser::FSHelperPtr m_pSerializer;
 
 public:
-    Impl(SwDoc* pDoc)
-        : m_pDoc(pDoc)
+    Impl(SwDoc& rDoc)
+        : m_rDoc(rDoc)
     {
     }
 
@@ -46,7 +46,7 @@ public:
 
     const sax_fastparser::FSHelperPtr& getSerializer() const { return m_pSerializer; }
 
-    SwDoc* getDoc() const { return m_pDoc; }
+    SwDoc& getDoc() const { return m_rDoc; }
 
     /// Handles a boolean value.
     void handleBoolean(const OUString& aValue, sal_Int32 nToken);
@@ -126,7 +126,7 @@ void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?
     uno::Reference<beans::XPropertySet> xPropertySet(
-        m_pImpl->getDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+        m_pImpl->getDoc().GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue("InteropGrabBag") >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;
@@ -738,9 +738,9 @@ void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSer
     m_pImpl->setSerializer(pSerializer);
 }
 
-DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc,
+DocxTableStyleExport::DocxTableStyleExport(SwDoc& rDoc,
                                            const sax_fastparser::FSHelperPtr& pSerializer)
-    : m_pImpl(std::make_unique<Impl>(pDoc))
+    : m_pImpl(std::make_unique<Impl>(rDoc))
 {
     m_pImpl->setSerializer(pSerializer);
 }

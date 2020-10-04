@@ -3120,7 +3120,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
     {
         // BUG 26675: Send DataChanged before deleting, so that we notice which objects are in scope.
         //            After that they can be before/after the position.
-        SwDataChanged aTmp( &m_rDoc, rPos );
+        SwDataChanged aTmp( m_rDoc, rPos );
     }
 
     SwUndoSplitNode* pUndo = nullptr;

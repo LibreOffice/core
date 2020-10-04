@@ -130,12 +130,12 @@ class SwDataChanged
 {
     const SwPaM* m_pPam;
     const SwPosition* m_pPos;
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
     sal_Int32 m_nContent;
 
 public:
     SwDataChanged( const SwPaM& rPam );
-    SwDataChanged( SwDoc* pDoc, const SwPosition& rPos );
+    SwDataChanged( SwDoc& rDoc, const SwPosition& rPos );
     ~SwDataChanged();
 
     sal_Int32 GetContent() const { return m_nContent; }
