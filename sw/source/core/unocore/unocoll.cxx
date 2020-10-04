@@ -1056,7 +1056,7 @@ namespace
         protected:
             virtual ~SwXFrameEnumeration() override {};
         public:
-            SwXFrameEnumeration(const SwDoc* const pDoc);
+            SwXFrameEnumeration(const SwDoc& rDoc);
 
             //XEnumeration
             virtual sal_Bool SAL_CALL hasMoreElements() override;
@@ -1070,12 +1070,12 @@ namespace
 }
 
 template<FlyCntType T>
-SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
+SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc& rDoc)
     : m_aFrames()
 {
     SolarMutexGuard aGuard;
-    const SwFrameFormats* const pFormats = pDoc->GetSpzFrameFormats();
-    if(pFormats->empty())
+    const SwFrameFormats* const pFormats = rDoc.GetSpzFrameFormats();
+    if (pFormats->empty())
         return;
     // #i104937#
     const size_t nSize = pFormats->size();
@@ -1090,7 +1090,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         const SwNodeIndex* pIdx =  pFormat->GetContent().GetContentIdx();
         if(!pIdx || !pIdx->GetNodes().IsDocNodes())
             continue;
-        const SwNode* pNd = pDoc->GetNodes()[ pIdx->GetIndex() + 1 ];
+        const SwNode* pNd = rDoc.GetNodes()[ pIdx->GetIndex() + 1 ];
         if(UnoFrameWrap_traits<T>::filter(pNd))
             m_aFrames.push_back(lcl_UnoWrapFrame<T>(pFormat));
     }
@@ -1165,13 +1165,13 @@ uno::Reference<container::XEnumeration> SwXFrames::createEnumeration()
     {
         case FLYCNTTYPE_FRM:
             return uno::Reference< container::XEnumeration >(
-                new SwXFrameEnumeration<FLYCNTTYPE_FRM>(GetDoc()));
+                new SwXFrameEnumeration<FLYCNTTYPE_FRM>(*GetDoc()));
         case FLYCNTTYPE_GRF:
             return uno::Reference< container::XEnumeration >(
-                new SwXFrameEnumeration<FLYCNTTYPE_GRF>(GetDoc()));
+                new SwXFrameEnumeration<FLYCNTTYPE_GRF>(*GetDoc()));
         case FLYCNTTYPE_OLE:
             return uno::Reference< container::XEnumeration >(
-                new SwXFrameEnumeration<FLYCNTTYPE_OLE>(GetDoc()));
+                new SwXFrameEnumeration<FLYCNTTYPE_OLE>(*GetDoc()));
         default:
             throw uno::RuntimeException();
     }

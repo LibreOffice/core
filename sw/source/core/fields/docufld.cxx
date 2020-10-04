@@ -952,7 +952,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     else
                     {
                         // start the number formatter
-                        double fVal = SwDateTimeField::GetDateTime( GetDoc(),
+                        double fVal = SwDateTimeField::GetDateTime( *GetDoc(),
                                                     aDate);
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
@@ -968,7 +968,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     else
                     {
                         // start the number formatter
-                        double fVal = SwDateTimeField::GetDateTime( GetDoc(),
+                        double fVal = SwDateTimeField::GetDateTime( *GetDoc(),
                                                     aDate);
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
