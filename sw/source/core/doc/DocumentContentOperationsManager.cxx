@@ -2469,7 +2469,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     std::unique_ptr<SwUndoMove> pUndo;
     if ((SwMoveFlags::CREATEUNDOOBJ & eMvFlags ) && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo.reset(new SwUndoMove( &m_rDoc, rRange, rPos ));
+        pUndo.reset(new SwUndoMove( m_rDoc, rRange, rPos ));
     }
     else
     {
