@@ -905,7 +905,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     }
                     SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
                     if( pUndo )
-                        pUndo->MoveBoxContent( pDoc, aRg, rInsPosNd );
+                        pUndo->MoveBoxContent( *pDoc, aRg, rInsPosNd );
                     else
                     {
                         pDoc->getIDocumentContentOperations().MoveNodeRange( aRg, rInsPosNd,
