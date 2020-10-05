@@ -498,21 +498,10 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     {
         SAL_WARN_IF( pHelpWin == pParent, "vcl", "HelpInHelp ?!" );
 
-        if  (   (   rHelpText.isEmpty()
-                ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
-                )
-            &&  aHelpData.mbRequestingHelp
-            )
-        {
-            // remove help window if no HelpText or
-            // other help mode. but keep it if we are scrolling, ie not requesting help
-            bool bWasVisible = pHelpWin->IsVisible();
-            if ( bWasVisible )
-                bNoDelay = true; // display it quickly if we were already in quick help mode
-            pHelpWin = nullptr;
-            ImplDestroyHelpWindow( bWasVisible );
-        }
-        else
+        bool bRemoveHelp = (rHelpText.isEmpty() || (pHelpWin->GetWinStyle() != nHelpWinStyle))
+                            && aHelpData.mbRequestingHelp;
+
+        if (!bRemoveHelp && pHelpWin->GetParent() == pParent)
         {
             bool const bUpdate = (pHelpWin->GetHelpText() != rHelpText) ||
                 ((pHelpWin->GetHelpArea() != rHelpArea) && aHelpData.mbRequestingHelp);
@@ -524,6 +513,16 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
                 if( pHelpWin->IsVisible() )
                     pHelpWin->Invalidate();
             }
+        }
+        else
+        {
+            // remove help window if no HelpText or
+            // other help mode. but keep it if we are scrolling, ie not requesting help
+            bool bWasVisible = pHelpWin->IsVisible();
+            if ( bWasVisible )
+                bNoDelay = true; // display it quickly if we were already in quick help mode
+            pHelpWin = nullptr;
+            ImplDestroyHelpWindow( bWasVisible );
         }
     }
 
