@@ -126,6 +126,7 @@ public:
     bool        DeleteSucc( SCCOL nCol, SCROW nRow );
     bool        DeletePred( SCCOL nCol, SCROW nRow );
     bool        DeleteAll( ScDetectiveDelete eWhat );
+    bool        DeleteCirclesAt( SCCOL nCol, SCROW nRow );
 
     bool        MarkInvalid(bool& rOverflow);
 

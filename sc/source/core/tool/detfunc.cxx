@@ -1238,6 +1238,61 @@ bool ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
     return ( nLevelCount != 0 );
 }
 
+bool ScDetectiveFunc::DeleteCirclesAt( SCCOL nCol, SCROW nRow )
+{
+    tools::Rectangle aRect = GetDrawRect(nCol, nRow);
+    aRect.AdjustLeft(-250);
+    aRect.AdjustRight(250);
+    aRect.AdjustTop(-70);
+    aRect.AdjustBottom(70);
+
+    Point aStartCorner = aRect.TopLeft();
+    Point aEndCorner = aRect.BottomRight();
+
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();
+    if (!pModel)
+        return false;
+
+    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
+    OSL_ENSURE(pPage, "Page ?");
+
+    pPage->RecalcObjOrdNums();
+
+    const size_t nObjCount = pPage->GetObjCount();
+    size_t nDelCount = 0;
+    if (nObjCount)
+    {
+        std::unique_ptr<SdrObject*[]> ppObj(new SdrObject*[nObjCount]);
+
+        SdrObjListIter aIter(pPage, SdrIterMode::Flat);
+        SdrObject* pObject = aIter.Next();
+        while (pObject)
+        {
+            if (pObject->GetLayer() == SC_LAYER_INTERN
+                && dynamic_cast<const SdrCircObj*>(pObject) != nullptr)
+            {
+                tools::Rectangle aObjRect = static_cast<SdrCircObj*>(pObject)->GetLogicRect();
+                if (RectIsPoints(aObjRect, aStartCorner, aEndCorner))
+                    ppObj[nDelCount++] = pObject;
+            }
+
+            pObject = aIter.Next();
+        }
+
+        for (size_t i = 1; i <= nDelCount; ++i)
+            pModel->AddCalcUndo(std::make_unique<SdrUndoRemoveObj>(*ppObj[nDelCount - i]));
+
+        for (size_t i = 1; i <= nDelCount; ++i)
+            pPage->RemoveObject(ppObj[nDelCount - i]->GetOrdNum());
+
+        ppObj.reset();
+
+        Modified();
+    }
+
+    return (nDelCount != 0);
+}
+
 bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
 {
     ScDrawLayer* pModel = rDoc.GetDrawLayer();
