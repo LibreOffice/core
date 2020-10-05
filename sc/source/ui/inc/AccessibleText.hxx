@@ -37,6 +37,7 @@ class ScPreviewShell;
 class EditTextObject;
 class ScCsvViewForwarder;
 class ScAccessibleCell;
+class ScTextWnd;
 
 class ScAccessibleTextData : public SfxListener
 {
@@ -130,7 +131,9 @@ protected:
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
-                        ScAccessibleEditLineTextData(EditView* pEditView, OutputDevice* pWin);
+                        ScAccessibleEditLineTextData(EditView* pEditView,
+                                                     OutputDevice* pWin,
+                                                     ScTextWnd* pTextWnd);
     virtual             ~ScAccessibleEditLineTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
@@ -145,6 +148,7 @@ public:
 private:
     void ResetEditMode();
 
+    ScTextWnd* mpTxtWnd;
     bool mbEditEngineCreated;
 };
 

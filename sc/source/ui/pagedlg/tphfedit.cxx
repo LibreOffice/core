@@ -109,7 +109,7 @@ void ScEditWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
             break;
     }
 
-    pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr,
+    pAcc->InitAcc(nullptr, m_xEditView.get(), nullptr, nullptr,
                   sName, pDrawingArea->get_tooltip_text());
 }
 
@@ -265,7 +265,7 @@ bool ScEditWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAccessible()
 {
-    pAcc = new ScAccessibleEditControlObject(this);
+    pAcc = new ScAccessibleEditControlObject(this, ScAccessibleEditObject::EditControl);
     css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;
