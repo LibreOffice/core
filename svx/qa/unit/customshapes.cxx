@@ -520,8 +520,8 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
 
-    if (rSdrObjCustomShape.GetCameraRotation() != 90)
-        sErrors += "Wrong text camera Z rotation";
+    if (rSdrObjCustomShape.GetCameraZRotation() != 90)
+        Errors += "Wrong text camera Z rotation";
 
     basegfx::B2DHomMatrix aObjectTransform;
     basegfx::B2DPolyPolygon aObjectPolyPolygon;
