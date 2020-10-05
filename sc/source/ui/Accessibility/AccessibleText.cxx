@@ -747,75 +747,64 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
         GetBroadcaster().Broadcast(*aHint);
 }
 
-ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, OutputDevice* pWin)
-    :
-    ScAccessibleEditObjectTextData(pEditView, pWin),
-    mbEditEngineCreated(false)
+ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView,
+                                                           OutputDevice* pWin,
+                                                           ScTextWnd* pTxtWnd)
+    : ScAccessibleEditObjectTextData(pEditView, pWin)
+    , mpTxtWnd(pTxtWnd)
+    , mbEditEngineCreated(false)
 {
-    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>( pWin );
-
-    if (pTxtWnd)
-        pTxtWnd->InsertAccessibleTextData( *this );
+    if (mpTxtWnd)
+        mpTxtWnd->InsertAccessibleTextData( *this );
 }
 
 ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
 {
-    ScTextWnd* pTxtWnd = dynamic_cast< ScTextWnd* >(mpWindow.get());
-
-    if (pTxtWnd)
-    {
-        assert(!pTxtWnd->IsDisposed());
-        pTxtWnd->RemoveAccessibleTextData( *this );
-    }
+    if (mpTxtWnd)
+        mpTxtWnd->RemoveAccessibleTextData( *this );
 
     if (mbEditEngineCreated && mpEditEngine)
     {
         delete mpEditEngine;
         mpEditEngine = nullptr;    // don't access in ScAccessibleEditObjectTextData dtor!
     }
-    else if (pTxtWnd && pTxtWnd->HasEditView() && pTxtWnd->GetEditView()->GetEditEngine())
+    else if (mpTxtWnd && mpTxtWnd->HasEditView() && mpTxtWnd->GetEditView()->GetEditEngine())
     {
         //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
         //  is reset there)
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
+        mpTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     }
 }
 
 void ScAccessibleEditLineTextData::Dispose()
 {
-    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
-
-    if (pTxtWnd)
-    {
-        assert(!pTxtWnd->IsDisposed());
-        pTxtWnd->RemoveAccessibleTextData( *this );
-    }
+    if (mpTxtWnd)
+        mpTxtWnd->RemoveAccessibleTextData( *this );
 
     ResetEditMode();
     mpWindow = nullptr;
+    mpTxtWnd = nullptr;
 }
 
 ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
 {
-    return new ScAccessibleEditLineTextData(mpEditView, mpWindow);
+    return new ScAccessibleEditLineTextData(mpEditView, mpWindow, mpTxtWnd);
 }
 
 SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 {
-    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
-
-    if (pTxtWnd)
+    if (mpTxtWnd)
     {
-        if (pTxtWnd->HasEditView())
+        if (mpTxtWnd->HasEditView())
         {
-            mpEditView = pTxtWnd->GetEditView();
+            mpEditView = mpTxtWnd->GetEditView();
 
             if (mbEditEngineCreated && mpEditEngine)
                 ResetEditMode();
             mbEditEngineCreated = false;
 
-            mpEditView = pTxtWnd->GetEditView();
+            mpEditView = mpTxtWnd->GetEditView();
             ScAccessibleEditObjectTextData::GetTextForwarder(); // fill the mpForwarder
             mpEditEngine = nullptr;
         }
@@ -835,13 +824,18 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
                 mpForwarder.reset(new SvxEditEngineForwarder(*mpEditEngine));
 
-                mpEditEngine->SetText(pTxtWnd->GetTextString());
+                mpEditEngine->SetText(mpTxtWnd->GetTextString());
 
+#if 0
                 Size aSize(pTxtWnd->GetSizePixel());
-
                 aSize = pTxtWnd->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
-
                 mpEditEngine->SetPaperSize(aSize);
+#else
+                OutputDevice& rDevice = mpTxtWnd->GetDrawingArea()->get_ref_device();
+                Size aSize(rDevice.GetOutputSizePixel());
+                aSize = rDevice.PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+                mpEditEngine->SetPaperSize(aSize);
+#endif
 
                 mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleEditObjectTextData, NotifyHdl) );
             }
@@ -852,18 +846,16 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 
 SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool bCreate )
 {
-    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
-
-    if (pTxtWnd)
+    if (mpTxtWnd)
     {
-        if (!pTxtWnd->HasEditView() && bCreate)
+        if (!mpTxtWnd->HasEditView() && bCreate)
         {
-            if ( !pTxtWnd->IsInputActive() )
+            if ( !mpTxtWnd->IsInputActive() )
             {
-                pTxtWnd->StartEditEngine();
-                pTxtWnd->GrabFocus();
+                mpTxtWnd->StartEditEngine();
+                mpTxtWnd->GrabFocus();
 
-                mpEditView = pTxtWnd->GetEditView();
+                mpEditView = mpTxtWnd->GetEditView();
             }
         }
     }
@@ -873,12 +865,10 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( bool b
 
 void ScAccessibleEditLineTextData::ResetEditMode()
 {
-    ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
-
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
-    else if (pTxtWnd && pTxtWnd->HasEditView() && pTxtWnd->GetEditView()->GetEditEngine())
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
+    else if (mpTxtWnd && mpTxtWnd->HasEditView() && mpTxtWnd->GetEditView()->GetEditEngine())
+        mpTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine = nullptr;
 
     mpForwarder.reset();
@@ -891,10 +881,8 @@ void ScAccessibleEditLineTextData::TextChanged()
 {
     if (mbEditEngineCreated && mpEditEngine)
     {
-        ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>(mpWindow.get());
-
-        if (pTxtWnd)
-            mpEditEngine->SetText(pTxtWnd->GetTextString());
+        if (mpTxtWnd)
+            mpEditEngine->SetText(mpTxtWnd->GetTextString());
     }
 }
 

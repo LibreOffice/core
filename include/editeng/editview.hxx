@@ -185,6 +185,7 @@ public:
     bool            HasSelection() const;
     ESelection      GetSelection() const;
     void            SetSelection( const ESelection& rNewSel );
+    bool            IsSelectionAtPoint(const Point& rPointPixel);
     void            SelectCurrentWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     /// Returns the rectangles of the current selection in TWIPs.
     void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const;
