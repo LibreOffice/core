@@ -28,6 +28,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppcanvas/polypolygon.hxx>
+#include <osl/thread.hxx>
 
 #include <tools/debug.hxx>
 
@@ -2395,8 +2396,16 @@ void FrameSynchronization::Synchronize()
     if (mbIsActive)
     {
         // Do busy waiting for now.
-        while (maTimer.getElapsedTime() < mnNextFrameTargetTime)
-            ;
+        for(;;)
+        {
+            double remainingTime = mnNextFrameTargetTime - maTimer.getElapsedTime();
+            if(remainingTime <= 0)
+                break;
+            // Try to sleep most of it.
+            int remainingMilliseconds = remainingTime * 1000;
+            if(remainingMilliseconds > 2)
+                osl::Thread::wait(std::chrono::milliseconds(remainingMilliseconds - 2));
+        }
     }
 
     MarkCurrentFrame();
