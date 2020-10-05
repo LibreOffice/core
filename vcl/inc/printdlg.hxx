@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 
+#include <vcl/idle.hxx>
 #include <vcl/print.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -218,6 +219,11 @@ namespace vcl
         DECL_LINK( ModifyHdl, Edit&, void );
         DECL_LINK( ToggleHdl, CheckBox&, void );
         DECL_LINK( ToggleRadioHdl, RadioButton&, void );
+
+        Idle maUpdatePreviewIdle;
+        DECL_LINK(updatePreviewIdle, Timer*, void);
+        Idle maUpdatePreviewNoCacheIdle;
+        DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
         DECL_LINK( UIOption_CheckHdl, CheckBox&, void );
         DECL_LINK( UIOption_RadioHdl, RadioButton&, void );

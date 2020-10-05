@@ -529,6 +529,8 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
 , mbCollateAlwaysOff(false)
 , mbShowLayoutFrame( true )
 , mbSingleJobs( false )
+, maUpdatePreviewIdle("Print Dialog Update Preview Idle")
+, maUpdatePreviewNoCacheIdle("Print Dialog Update Preview (no cache) Idle")
 {
     get(mpOKButton, "ok");
     get(mpCancelButton, "cancel");
@@ -646,6 +648,11 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
         maNupPortraitSize = aNupSize;
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
     }
+
+    maUpdatePreviewIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdatePreviewIdle.SetInvokeHandler(LINK( this, PrintDialog, updatePreviewIdle));
+    maUpdatePreviewNoCacheIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdatePreviewNoCacheIdle.SetInvokeHandler(LINK(this, PrintDialog, updatePreviewNoCacheIdle));
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
@@ -933,6 +940,16 @@ void PrintDialog::setPreviewText()
     mpNumPagesText->SetText( aNewText );
 }
 
+IMPL_LINK_NOARG(PrintDialog, updatePreviewIdle, Timer*, void)
+{
+    preparePreview(true);
+}
+
+IMPL_LINK_NOARG(PrintDialog, updatePreviewNoCacheIdle, Timer*, void)
+{
+    preparePreview(false);
+}
+
 void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
@@ -1178,7 +1195,10 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
 
     mpNupOrderWin->setValues( aMPS.nOrder, nCols, nRows );
 
-    preparePreview( i_bMayUseCache );
+    if (i_bMayUseCache)
+        maUpdatePreviewIdle.Start();
+    else
+        maUpdatePreviewNoCacheIdle.Start();
 }
 
 void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
@@ -1822,7 +1842,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
     }
     else if ( pButton == mpPreviewBox )
     {
-        preparePreview( true );
+        maUpdatePreviewIdle.Start();
     }
     else if( pButton == mpForwardBtn )
     {
@@ -1843,7 +1863,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             checkOptionalControlDependencies();
 
             // update preview and page settings
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
         if( mpBrochureBtn->IsChecked() )
         {
@@ -1874,7 +1894,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
         maPController->setReversePrint( bChecked );
         maPController->setValue( "PrintReverse",
                                  makeAny( bChecked ) );
-        preparePreview( true );
+        maUpdatePreviewIdle.Start();
     }
     else if( pButton == mpBorderCB )
     {
@@ -1913,7 +1933,7 @@ IMPL_LINK ( PrintDialog, ClickHdl, Button*, pButton, void )
             updateOrientationBox( false );
 
             // tdf#63905 don't use cache: page size may change
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
         checkControlDependencies();
     }
@@ -1937,7 +1957,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
             mpOKButton->SetText( maPrintText );
             updatePrinterText();
             setPaperSizes();
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
         else // print to file
         {
@@ -1948,7 +1968,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
 
             setPaperSizes();
             updateOrientationBox();
-            preparePreview( true );
+            maUpdatePreviewIdle.Start();
         }
 
         setupPaperSidesBox();
@@ -1992,7 +2012,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox&, rBox, void )
         checkPaperSize( aPaperSize );
         maPController->setPaperSizeFromUser( aPaperSize );
 
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2008,7 +2028,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit&, rEdit, void )
     else if( &rEdit == mpPageEdit )
     {
         mnCurPage = sal_Int32( mpPageEdit->GetValue() - 1 );
-        preparePreview( true );
+        maUpdatePreviewIdle.Start();
     }
     else if( &rEdit == mpCopyCountField )
     {
@@ -2032,7 +2052,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2061,7 +2081,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
             checkOptionalControlDependencies();
 
             // update preview and page settings
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
     }
 }
@@ -2087,7 +2107,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2119,7 +2139,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
