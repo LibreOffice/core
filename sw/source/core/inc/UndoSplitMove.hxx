@@ -63,7 +63,7 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveContent
 
 public:
     SwUndoMove( const SwPaM&, const SwPosition& );
-    SwUndoMove( SwDoc* pDoc, const SwNodeRange&, const SwNodeIndex& );
+    SwUndoMove( SwDoc& rDoc, const SwNodeRange&, const SwNodeIndex& );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
