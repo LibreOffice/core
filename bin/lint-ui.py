@@ -98,11 +98,11 @@ def check_radio_buttons(root):
 
 def check_adjustments(root):
     adjustments = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkAdjustment']
-    for adjusment in adjustments:
-        uppers = radio.findall("./property[@name='upper']")
+    for adjustment in adjustments:
+        uppers = adjustment.findall("./property[@name='upper']")
         assert len(uppers) <= 1
         if len(uppers) < 1:
-            lint_assert(False, "No upper in GtkAdjustment with id = '" + radio.attrib['id'] + "'", radio)
+            lint_assert(False, "No upper in GtkAdjustment with id = '" + adjustment.attrib['id'] + "'", adjustment)
 
 def check_menu_buttons(root):
     buttons = [element for element in root.findall('.//object') if element.attrib['class'] == "GtkMenuButton"]
