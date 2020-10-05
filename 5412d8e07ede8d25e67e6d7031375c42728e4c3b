@@ -16,6 +16,24 @@
       "revId": "5412d8e07ede8d25e67e6d7031375c42728e4c3b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e633204_045876f6",
+        "filename": "sc/source/ui/inc/viewfunc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1002314
+      },
+      "writtenOn": "2020-10-05T12:01:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e2c431d_c674935d",
+      "revId": "5412d8e07ede8d25e67e6d7031375c42728e4c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
