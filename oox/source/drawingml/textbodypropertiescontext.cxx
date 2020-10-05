@@ -119,11 +119,6 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     {
         mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
         mrTextBodyProp.maPropertyMap.setProperty( PROP_TextVerticalAdjust, mrTextBodyProp.meVA);
-        if (mrTextBodyProp.meVA == drawing::TextVerticalAdjust_CENTER)
-        {
-            mrTextBodyProp.maPropertyMap.setProperty(PROP_TextHorizontalAdjust,
-                                                     TextHorizontalAdjust_CENTER);
-        }
     }
 
     // Push defaults
