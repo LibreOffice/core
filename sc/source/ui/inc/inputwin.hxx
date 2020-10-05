@@ -315,7 +315,7 @@ private:
     bool IsPointerAtResizePos();
 
     VclPtr<ScPosWnd>  aWndPos;
-    VclPtr<ScTextWndBase> pRuntimeWindow;
+    VclPtr<ScInputBarGroup> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
     ScTabViewShell* mpViewShell;

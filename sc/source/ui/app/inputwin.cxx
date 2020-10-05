@@ -148,7 +148,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 }
 
 
-static VclPtr<ScTextWndBase> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
+static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -494,7 +494,7 @@ void ScInputWindow::Resize()
     aTextWindow.Resize();
     Size aSize = GetSizePixel();
     aSize.setHeight(CalcWindowSizePixel().Height() + 1);
-    ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
+    ScInputBarGroup* pGroupBar = pRuntimeWindow.get();
     if (pGroupBar)
     {
         // To ensure smooth display and prevent the items in the toolbar being
@@ -745,7 +745,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
 {
     Point aPosPixel = GetPointerPosPixel();
 
-    ScInputBarGroup* pGroupBar = dynamic_cast<ScInputBarGroup*>(pRuntimeWindow.get());
+    ScInputBarGroup* pGroupBar = pRuntimeWindow.get();
 
     if (bInResize || IsPointerAtResizePos())
         SetPointer(PointerStyle::WindowSSize);
