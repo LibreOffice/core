@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee617122_e83f226b",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-05T14:24:47Z",
+      "side": 1,
+      "message": "can remove this comment now",
+      "revId": "c6b82bcdf34b819334bb34cb48bd76b3397fb82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
