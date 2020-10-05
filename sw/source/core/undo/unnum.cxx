@@ -28,9 +28,9 @@
 
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwNumRule& rNewRule,
-                            const SwDoc* pDoc,
+                            const SwDoc& rDoc,
                             SwUndoId nUndoId)
-    : SwUndo( nUndoId, pDoc ),
+    : SwUndo( nUndoId, &rDoc ),
     m_aNumRule( rNewRule ),
     m_pOldNumRule( new SwNumRule( rOldRule )), m_nLRSavePos( 0 )
 {

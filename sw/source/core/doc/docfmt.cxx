@@ -667,7 +667,7 @@ void SwDoc::DelCharFormat(size_t nFormat, bool bBroadcast)
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoCharFormatDelete>(pDel, this));
+            std::make_unique<SwUndoCharFormatDelete>(pDel, *this));
     }
 
     delete (*mpCharFormatTable)[nFormat];
@@ -704,7 +704,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoFrameFormatDelete>(pFormat, this));
+                    std::make_unique<SwUndoFrameFormatDelete>(pFormat, *this));
             }
 
             mpFrameFormatTable->erase( pFormat );
@@ -819,7 +819,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoFrameFormatCreate>(pFormat, pDerivedFrom, this));
+            std::make_unique<SwUndoFrameFormatCreate>(pFormat, pDerivedFrom, *this));
     }
 
     if (bBroadcast)
@@ -852,7 +852,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoCharFormatCreate>(pFormat, pDerivedFrom, this));
+            std::make_unique<SwUndoCharFormatCreate>(pFormat, pDerivedFrom, *this));
     }
 
     if (bBroadcast)
@@ -888,7 +888,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     {
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoTextFormatCollCreate>(pFormatColl, pDerivedFrom,
-                                                    this));
+                                                         *this));
     }
 
     if (bBroadcast)
@@ -922,7 +922,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
     {
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoCondTextFormatCollCreate>(pFormatColl, pDerivedFrom,
-                                                        this));
+                                                             *this));
     }
 
     if (bBroadcast)
@@ -963,11 +963,11 @@ void SwDoc::DelTextFormatColl(size_t nFormatColl, bool bBroadcast)
         std::unique_ptr<SwUndoTextFormatCollDelete> pUndo;
         if (RES_CONDTXTFMTCOLL == pDel->Which())
         {
-            pUndo.reset(new SwUndoCondTextFormatCollDelete(pDel, this));
+            pUndo.reset(new SwUndoCondTextFormatCollDelete(pDel, *this));
         }
         else
         {
-            pUndo.reset(new SwUndoTextFormatCollDelete(pDel, this));
+            pUndo.reset(new SwUndoTextFormatCollDelete(pDel, *this));
         }
 
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
@@ -1901,15 +1901,15 @@ void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
         switch (rFormat.Which())
         {
         case RES_CHRFMT:
-            pUndo.reset(new SwUndoRenameCharFormat(rFormat.GetName(), sNewName, this));
+            pUndo.reset(new SwUndoRenameCharFormat(rFormat.GetName(), sNewName, *this));
             eFamily = SfxStyleFamily::Char;
             break;
         case RES_TXTFMTCOLL:
-            pUndo.reset(new SwUndoRenameFormatColl(rFormat.GetName(), sNewName, this));
+            pUndo.reset(new SwUndoRenameFormatColl(rFormat.GetName(), sNewName, *this));
             eFamily = SfxStyleFamily::Para;
             break;
         case RES_FRMFMT:
-            pUndo.reset(new SwUndoRenameFrameFormat(rFormat.GetName(), sNewName, this));
+            pUndo.reset(new SwUndoRenameFrameFormat(rFormat.GetName(), sNewName, *this));
             eFamily = SfxStyleFamily::Frame;
             break;
 

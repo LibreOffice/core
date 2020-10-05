@@ -33,7 +33,7 @@ namespace com::sun::star::text { class XTextField; }
 class SwUndoParagraphSigning final : public SwUndo
 {
 private:
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
     css::uno::Reference<css::text::XTextField> m_xField;
     css::uno::Reference<css::text::XTextContent> m_xParent;
     OUString m_signature;
@@ -42,7 +42,7 @@ private:
     const bool m_bRemove;
 
 public:
-    SwUndoParagraphSigning(SwDoc* pDoc,
+    SwUndoParagraphSigning(SwDoc& rDoc,
                            const css::uno::Reference<css::text::XTextField>& xField,
                            const css::uno::Reference<css::text::XTextContent>& xParent,
                            const bool bRemove);
