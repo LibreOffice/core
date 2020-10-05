@@ -1743,7 +1743,8 @@ void SwUndoParagraphSigning::Remove()
 
 void SwEditShell::SignParagraph()
 {
-    SwDocShell* pDocShell = GetDoc()->GetDocShell();
+    SwDoc& rDoc = *GetDoc();
+    SwDocShell* pDocShell = rDoc.GetDocShell();
     if (!pDocShell || !GetCursor() || !GetCursor()->Start())
         return;
     const SwPosition* pPosStart = GetCursor()->Start();
@@ -1801,17 +1802,17 @@ void SwEditShell::SignParagraph()
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
-    GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+    rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 
     const uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParagraph, signature, aUsage);
 
     lcl_UpdateParagraphSignatureField(*GetDoc(), xModel, xParagraph, xField, utf8Text);
 
-    GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+    rDoc.GetIDocumentUndoRedo().AppendUndo(
         std::make_unique<SwUndoParagraphSigning>(GetDoc(), xField, xParagraph, true));
 
-    GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+    rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }
 
 void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDontRemove)
