@@ -22,6 +22,30 @@
       "revId": "46060c002dab9b0e3807558eaf44e77ab3d4a950",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e3396b_6d2a6b12",
+        "filename": "svx/source/sidebar/effect/EffectPropertyPanel.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2020-10-05T07:44:50Z",
+      "side": 1,
+      "message": "There is one Radius Label in the Glow and one in the SoftEdge section. The Glow Radius Label I renamed to mxFtRadiusg.\n\nIn the .ui file I can\u0027t use the same id twice.",
+      "parentUuid": "8f440bd2_c087f139",
+      "range": {
+        "startLine": 51,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 44
+      },
+      "revId": "46060c002dab9b0e3807558eaf44e77ab3d4a950",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
