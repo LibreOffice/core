@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "714bbc0c_4c1dd850",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-05T14:01:09Z",
+      "side": 1,
+      "message": "typo\n\nIt\u0027s better to change this two-line comment with\n\n//This was nullptr because of unsuccessful re-adding",
+      "range": {
+        "startLine": 1256,
+        "startChar": 21,
+        "endLine": 1256,
+        "endChar": 22
+      },
+      "revId": "53342679e1a7daa6a0cdbb386fb0b5e28e4d1810",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
