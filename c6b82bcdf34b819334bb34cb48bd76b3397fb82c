@@ -16,6 +16,24 @@
       "revId": "c6b82bcdf34b819334bb34cb48bd76b3397fb82c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b9754b1_986c0bff",
+        "filename": "slideshow/source/engine/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2020-10-05T15:22:07Z",
+      "side": 1,
+      "message": "It is still busy-waiting of sorts, and I intend to keep it that way, as I do not want to overshoot. I can probably remove the \"for now\" though :).",
+      "parentUuid": "ee617122_e83f226b",
+      "revId": "c6b82bcdf34b819334bb34cb48bd76b3397fb82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
