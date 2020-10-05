@@ -34,9 +34,9 @@ namespace
     }
 }
 
-SwUndoTOXChange::SwUndoTOXChange(const SwDoc *pDoc,
+SwUndoTOXChange::SwUndoTOXChange(const SwDoc& rDoc,
         SwTOXBaseSection const& rTOX, SwTOXBase const& rNew)
-    : SwUndo(SwUndoId::TOXCHANGE, pDoc)
+    : SwUndo(SwUndoId::TOXCHANGE, &rDoc)
     , m_Old(rTOX)
     , m_New(rNew)
     , m_nNodeIndex(GetSectionNodeIndex(rTOX))

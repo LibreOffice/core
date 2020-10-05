@@ -2672,13 +2672,13 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
                 if (pUndoOW)
                 {
                     // if CanGrouping() returns true it's already merged
-                    bMerged = pUndoOW->CanGrouping( &m_rDoc, rPt, c );
+                    bMerged = pUndoOW->CanGrouping(m_rDoc, rPt, c);
                 }
             }
             if (!bMerged)
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    std::make_unique<SwUndoOverwrite>(&m_rDoc, rPt, c) );
+                    std::make_unique<SwUndoOverwrite>(m_rDoc, rPt, c) );
             }
         }
         else
@@ -3130,7 +3130,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         // insert the Undo object (currently only for TextNode)
         if( pNode->IsTextNode() )
         {
-            pUndo = new SwUndoSplitNode( &m_rDoc, rPos, bChkTableStart );
+            pUndo = new SwUndoSplitNode( m_rDoc, rPos, bChkTableStart );
             m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         }
     }
@@ -4160,7 +4160,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
                     dynamic_cast<SwUndoDelete *>(pLastUndo) );
             if (pUndoDelete)
             {
-                bMerged = pUndoDelete->CanGrouping( &m_rDoc, rPam );
+                bMerged = pUndoDelete->CanGrouping(m_rDoc, rPam);
                 // if CanGrouping() returns true it's already merged
             }
         }

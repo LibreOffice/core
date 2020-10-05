@@ -599,7 +599,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDefaultAttr>( aOld, this ) );
+            GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoDefaultAttr>( aOld, *this ) );
         }
 
         const SfxPoolItem* pTmpItem;

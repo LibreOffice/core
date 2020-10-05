@@ -297,7 +297,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFootNoteInfo>(rOld, this) );
+        GetIDocumentUndoRedo().AppendUndo( std::make_unique<SwUndoFootNoteInfo>(rOld, *this) );
     }
 
     bool bFootnotePos  = rInfo.m_ePos != rOld.m_ePos;
@@ -369,7 +369,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
     if(GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), this ) );
+            std::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), *this ) );
     }
 
     bool bNumChg  = rInfo.m_nFootnoteOffset != GetEndNoteInfo().m_nFootnoteOffset;

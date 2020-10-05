@@ -514,7 +514,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     return true;                // move Nodes lying in between
 }
 
-bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
+bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
 {
     // Is Undo greater than one Node (that is Start and EndString)?
     if( !m_aSttStr || m_aSttStr->isEmpty() || m_aEndStr )
@@ -564,7 +564,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     // tdf#132725 - if at-char/at-para flys would be deleted, don't group!
     // DelContentIndex() would be called at the wrong time here, the indexes
     // in the stored SwHistoryTextFlyCnt would be wrong when Undo is invoked
-    if (IsFlySelectedByCursor(*pDoc, *pStt, *pEnd))
+    if (IsFlySelectedByCursor(rDoc, *pStt, *pEnd))
     {
         return false;
     }
@@ -580,7 +580,7 @@ bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         if( !bOk )
             return false;
 
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( rDelPam, false, RedlineType::Any );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( rDelPam, false, RedlineType::Any );
     }
 
     // Both 'deletes' can be consolidated, so 'move' the related character

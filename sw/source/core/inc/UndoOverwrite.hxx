@@ -41,7 +41,7 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveContent
     bool m_bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
 
 public:
-    SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
+    SwUndoOverwrite( SwDoc&, SwPosition&, sal_Unicode cIns );
 
     virtual ~SwUndoOverwrite() override;
 
@@ -62,7 +62,7 @@ public:
      */
     virtual SwRewriter GetRewriter() const override;
 
-    bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
+    bool CanGrouping( SwDoc&, SwPosition&, sal_Unicode cIns );
 };
 
 struct UndoTransliterate_Data;

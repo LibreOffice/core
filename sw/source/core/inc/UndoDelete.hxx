@@ -87,7 +87,7 @@ public:
     */
     virtual SwRewriter GetRewriter() const override;
 
-    bool CanGrouping( SwDoc*, const SwPaM& );
+    bool CanGrouping( SwDoc&, const SwPaM& );
 
     void SetTableDelLastNd()      { m_bTableDelLastNd = true; }
 

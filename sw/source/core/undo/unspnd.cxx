@@ -34,9 +34,9 @@
 
 // SPLITNODE
 
-SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
+SwUndoSplitNode::SwUndoSplitNode( SwDoc& rDoc, const SwPosition& rPos,
                                     bool bChkTable )
-    : SwUndo( SwUndoId::SPLITNODE, pDoc ), m_nNode( rPos.nNode.GetIndex() ),
+    : SwUndo( SwUndoId::SPLITNODE, &rDoc ), m_nNode( rPos.nNode.GetIndex() ),
         m_nContent( rPos.nContent.GetIndex() ),
         m_bTableFlag( false ), m_bCheckTableStart( bChkTable )
 {
@@ -53,10 +53,10 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         }
     }
     // consider Redline
-    if( pDoc->getIDocumentRedlineAccess().IsRedlineOn() )
+    if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
     {
-        m_pRedlineData.reset( new SwRedlineData( RedlineType::Insert, pDoc->getIDocumentRedlineAccess().GetRedlineAuthor() ) );
-        SetRedlineFlags( pDoc->getIDocumentRedlineAccess().GetRedlineFlags() );
+        m_pRedlineData.reset( new SwRedlineData( RedlineType::Insert, rDoc.getIDocumentRedlineAccess().GetRedlineAuthor() ) );
+        SetRedlineFlags( rDoc.getIDocumentRedlineAccess().GetRedlineFlags() );
     }
 
     m_nParRsid = pTextNd->GetParRsid();

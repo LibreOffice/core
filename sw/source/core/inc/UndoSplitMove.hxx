@@ -33,7 +33,7 @@ class SwUndoSplitNode: public SwUndo
     sal_uInt32 m_nParRsid;
 
 public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, bool bChkTable );
+    SwUndoSplitNode( SwDoc& rDoc, const SwPosition& rPos, bool bChkTable );
 
     virtual ~SwUndoSplitNode() override;
 
