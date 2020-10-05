@@ -395,7 +395,7 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode() const
     if (!pTyp)
         return nullptr;
     sal_Int32 nDummy = -1;
-    return SwGetRefFieldType::FindAnchor( pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, &nDummy );
+    return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, &nDummy );
 }
 
 // #i85090#
@@ -464,12 +464,12 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
     m_sText.clear();
     m_sTextRLHidden.clear();
 
-    SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
+    SwDoc& rDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
     // finding the reference target (the number)
     sal_Int32 nNumStart = -1;
     sal_Int32 nNumEnd = -1;
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor(
-        pDoc, m_sSetRefName, m_nSubType, m_nSeqNo, &nNumStart, &nNumEnd
+        &rDoc, m_sSetRefName, m_nSubType, m_nSeqNo, &nNumStart, &nNumEnd
     );
     // not found?
     if ( !pTextNd )
@@ -481,7 +481,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
 
     SwRootFrame const* pLayout(nullptr);
     SwRootFrame const* pLayoutRLHidden(nullptr);
-    for (SwRootFrame const*const pLay : pDoc->GetAllLayouts())
+    for (SwRootFrame const*const pLay : rDoc.GetAllLayouts())
     {
         if (pLay->IsHideRedlines())
         {
@@ -541,7 +541,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                         const sal_Int32 nFrom = bHasCat
                             ? std::max(nNumStart + 1, nCatEnd)
                             : nNumStart + 1;
-                        nStart = SwGetExpField::GetReferenceTextPos( pTextAttr->GetFormatField(), *pDoc, nFrom );
+                        nStart = SwGetExpField::GetReferenceTextPos( pTextAttr->GetFormatField(), rDoc, nFrom );
                     } else {
                         nStart = bHasCat ? std::max(nNumEnd, nCatEnd) : nNumEnd;
                     }
@@ -580,13 +580,13 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
                 // get number or numString
-                for( size_t i = 0; i < pDoc->GetFootnoteIdxs().size(); ++i )
+                for( size_t i = 0; i < rDoc.GetFootnoteIdxs().size(); ++i )
                 {
-                    SwTextFootnote* const pFootnoteIdx = pDoc->GetFootnoteIdxs()[i];
+                    SwTextFootnote* const pFootnoteIdx = rDoc.GetFootnoteIdxs()[i];
                     if( m_nSeqNo == pFootnoteIdx->GetSeqRefNo() )
                     {
-                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, nullptr);
-                        m_sTextRLHidden = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, pLayoutRLHidden);
+                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr(rDoc, nullptr);
+                        m_sTextRLHidden = pFootnoteIdx->GetFootnote().GetViewNumStr(rDoc, pLayoutRLHidden);
                         if (!m_sSetReferenceLanguage.isEmpty())
                         {
                             lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
@@ -1031,10 +1031,10 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if(!(GetTyp() && REF_SEQUENCEFLD == m_nSubType))
         return;
 
-    SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
+    SwDoc& rDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
     const OUString rPar1 = GetPar1();
     // don't convert when the name points to an existing field type
-    if(pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
+    if (rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         return;
 
     sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
@@ -1061,13 +1061,13 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         SetPar1(SwResId(pResId));
 }
 
-SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
-    : SwFieldType( SwFieldIds::GetRef ), m_pDoc( pDc )
+SwGetRefFieldType::SwGetRefFieldType( SwDoc& rDc )
+    : SwFieldType( SwFieldIds::GetRef ), m_rDoc( rDc )
 {}
 
 std::unique_ptr<SwFieldType> SwGetRefFieldType::Copy() const
 {
-    return std::make_unique<SwGetRefFieldType>( m_pDoc );
+    return std::make_unique<SwGetRefFieldType>( m_rDoc );
 }
 
 void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -1409,7 +1409,7 @@ void RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rField,
 ///    what is most desirable since it's going to be wrong anyway
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
-    if( &rDestDoc == m_pDoc )
+    if (&rDestDoc == &m_rDoc)
         return;
 
     if (rDestDoc.IsClipBoard())
@@ -1449,13 +1449,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                     aFieldMap.push_back(std::unique_ptr<RefIdsMap>(pMap));
                 }
 
-                pMap->Check( *m_pDoc, rDestDoc, rRefField, true );
+                pMap->Check(m_rDoc, rDestDoc, rRefField, true);
             }
             break;
 
         case REF_FOOTNOTE:
         case REF_ENDNOTE:
-            aFntMap.Check( *m_pDoc, rDestDoc, rRefField, false );
+            aFntMap.Check(m_rDoc, rDestDoc, rRefField, false);
             break;
         }
     }

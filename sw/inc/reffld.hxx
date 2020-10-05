@@ -64,15 +64,15 @@ enum REFERENCEMARK
 
 class SAL_DLLPUBLIC_RTTI SwGetRefFieldType final : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc& m_rDoc;
 
     /// Overlay in order to update all ref-fields.
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
 public:
-    SwGetRefFieldType(SwDoc* pDoc );
+    SwGetRefFieldType(SwDoc& rDoc );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
-    SwDoc*                  GetDoc() const { return m_pDoc; }
+    SwDoc&                  GetDoc() const { return m_rDoc; }
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 

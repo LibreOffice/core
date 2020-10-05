@@ -502,9 +502,9 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
     }
 }
 
-SwChartDataProvider::SwChartDataProvider( const SwDoc* pSwDoc ) :
+SwChartDataProvider::SwChartDataProvider( const SwDoc& rSwDoc ) :
     m_aEventListeners( GetChartMutex() ),
-    m_pDoc( pSwDoc )
+    m_pDoc( &rSwDoc )
 {
     m_bDisposed = false;
 }

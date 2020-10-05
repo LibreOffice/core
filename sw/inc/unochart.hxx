@@ -142,7 +142,7 @@ class SwChartDataProvider final :
     static OUString GetBrokenCellRangeForExport( const OUString &rCellRangeRepresentation );
 
 public:
-    SwChartDataProvider( const SwDoc* pDoc );
+    SwChartDataProvider( const SwDoc& rDoc );
     virtual ~SwChartDataProvider() override;
 
     // XDataProvider

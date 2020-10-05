@@ -274,7 +274,7 @@ class SwHistoryNoTextFieldmark : public SwHistoryHint
     public:
         SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
         virtual void SetInDoc(SwDoc* pDoc, bool) override;
-        void ResetInDoc(SwDoc* pDoc);
+        void ResetInDoc(SwDoc& rDoc);
 
     private:
         const OUString m_sType;
@@ -289,7 +289,7 @@ class SwHistoryTextFieldmark : public SwHistoryHint
     public:
         SwHistoryTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark);
         virtual void SetInDoc(SwDoc* pDoc, bool) override;
-        void ResetInDoc(SwDoc* pDoc);
+        void ResetInDoc(SwDoc& rDoc);
 
     private:
         const OUString m_sName;

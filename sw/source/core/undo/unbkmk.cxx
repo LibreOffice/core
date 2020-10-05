@@ -46,9 +46,9 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
     m_pHistoryBookmark->SetInDoc( pDoc, false );
 }
 
-void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
+void SwUndoBookmark::ResetInDoc( SwDoc& rDoc )
 {
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    IDocumentMarkAccess* const pMarkAccess = rDoc.getIDocumentMarkAccess();
     for ( IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
           ppBkmk != pMarkAccess->getAllMarksEnd();
           ++ppBkmk )
@@ -77,7 +77,7 @@ SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
 
 void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    ResetInDoc( &rContext.GetDoc() );
+    ResetInDoc( rContext.GetDoc() );
 }
 
 void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -97,7 +97,7 @@ void SwUndoDeleteBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    ResetInDoc( &rContext.GetDoc() );
+    ResetInDoc( rContext.GetDoc() );
 }
 
 SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc* pDoc )
@@ -155,7 +155,7 @@ SwUndoInsNoTextFieldmark::SwUndoInsNoTextFieldmark(const ::sw::mark::IFieldmark&
 
 void SwUndoInsNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryNoTextFieldmark->ResetInDoc(&rContext.GetDoc());
+    m_pHistoryNoTextFieldmark->ResetInDoc(rContext.GetDoc());
 }
 
 void SwUndoInsNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -178,7 +178,7 @@ void SwUndoDelNoTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoDelNoTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryNoTextFieldmark->ResetInDoc(&rContext.GetDoc());
+    m_pHistoryNoTextFieldmark->ResetInDoc(rContext.GetDoc());
 }
 
 SwUndoInsTextFieldmark::SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFieldmark)
@@ -189,7 +189,7 @@ SwUndoInsTextFieldmark::SwUndoInsTextFieldmark(const ::sw::mark::IFieldmark& rFi
 
 void SwUndoInsTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryTextFieldmark->ResetInDoc(&rContext.GetDoc());
+    m_pHistoryTextFieldmark->ResetInDoc(rContext.GetDoc());
 }
 
 void SwUndoInsTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -212,7 +212,7 @@ void SwUndoDelTextFieldmark::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoDelTextFieldmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    m_pHistoryTextFieldmark->ResetInDoc(&rContext.GetDoc());
+    m_pHistoryTextFieldmark->ResetInDoc(rContext.GetDoc());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -234,7 +234,7 @@ private:
     SAL_DLLPRIVATE bool ImpEndCreate();
 
     /// Methods for copying of draw objects.
-    SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
+    SAL_DLLPRIVATE bool CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                                 const Point& rInsPt, bool bIsMove,
                                 bool bSelectInsert );
 
@@ -255,14 +255,14 @@ public:
     virtual ~SwFEShell() override;
 
     /// Copy and Paste methods for internal clipboard.
-    void Copy( SwDoc* pClpDoc, const OUString* pNewClpText = nullptr );
-    bool Paste( SwDoc* pClpDoc, bool bNestedTable = false );
+    void Copy( SwDoc& rClpDoc, const OUString* pNewClpText = nullptr );
+    bool Paste( SwDoc& rClpDoc, bool bNestedTable = false );
 
     /// Paste some pages into another doc - used in mailmerge.
     void PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt16 nEndPage);
 
     /// Copy-Method for Drag&Drop
-    bool Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
+    bool Copy( SwFEShell&, const Point& rSttPt, const Point& rInsPt,
                bool bIsMove = false, bool bSelectInsert = true );
 
     void SelectFlyFrame( SwFlyFrame& rFrame );
