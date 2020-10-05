@@ -64,14 +64,14 @@ class SwImplEnterLeave;
 
 class SwProtocol
 {
-    static PROT nRecord;
-    static SwImplProtocol* pImpl;
-    static bool Start() { return bool( PROT::Init & nRecord ); }
+    static PROT s_nRecord;
+    static SwImplProtocol* s_pImpl;
+    static bool Start() { return bool( PROT::Init & s_nRecord ); }
 
 public:
-    static PROT Record() { return nRecord; }
-    static void SetRecord( PROT nNew ) { nRecord = nNew; }
-    static bool Record( PROT nFunc ) { return bool(( nFunc | PROT::Init ) & nRecord); }
+    static PROT Record() { return s_nRecord; }
+    static void SetRecord( PROT nNew ) { s_nRecord = nNew; }
+    static bool Record( PROT nFunc ) { return bool(( nFunc | PROT::Init ) & s_nRecord); }
     static void Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAction, void* pParam );
     static void Init();
     static void Stop();
