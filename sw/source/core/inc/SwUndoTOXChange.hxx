@@ -35,7 +35,7 @@ private:
     sal_uLong const m_nNodeIndex;
 
 public:
-    SwUndoTOXChange(const SwDoc* pDoc, SwTOXBaseSection const& rTOX, const SwTOXBase & rNew);
+    SwUndoTOXChange(const SwDoc& rDoc, SwTOXBaseSection const& rTOX, const SwTOXBase & rNew);
     virtual ~SwUndoTOXChange() override;
 
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;

@@ -201,7 +201,7 @@ class SwUndoDefaultAttr : public SwUndo
 
 public:
     // registers at the format and saves old attributes
-    SwUndoDefaultAttr( const SfxItemSet& rOldSet, const SwDoc* pDoc );
+    SwUndoDefaultAttr( const SfxItemSet& rOldSet, const SwDoc& rDoc );
 
     virtual ~SwUndoDefaultAttr() override;
 
@@ -232,7 +232,7 @@ class SwUndoFootNoteInfo : public SwUndo
     std::unique_ptr<SwFootnoteInfo> m_pFootNoteInfo;
 
 public:
-    SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc* pDoc );
+    SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc& rDoc );
 
     virtual ~SwUndoFootNoteInfo() override;
 
@@ -245,7 +245,7 @@ class SwUndoEndNoteInfo : public SwUndo
     std::unique_ptr<SwEndNoteInfo> m_pEndNoteInfo;
 
 public:
-    SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc* pDoc );
+    SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc& rDoc );
 
     virtual ~SwUndoEndNoteInfo() override;
 

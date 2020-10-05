@@ -198,7 +198,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         std::unique_ptr<SwUndoDrawGroup> pUndo;
         if (GetIDocumentUndoRedo().DoesUndo())
-            pUndo.reset(new SwUndoDrawGroup( static_cast<sal_uInt16>(rMrkList.GetMarkCount()) , this));
+            pUndo.reset(new SwUndoDrawGroup( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), *this));
 
         // #i53320#
         bool bGroupMembersNotPositioned( false );
@@ -316,7 +316,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                     SwUndoDrawUnGroup* pUndo = nullptr;
                     if( bUndo )
                     {
-                        pUndo = new SwUndoDrawUnGroup( static_cast<SdrObjGroup*>(pObj), this );
+                        pUndo = new SwUndoDrawUnGroup( static_cast<SdrObjGroup*>(pObj), *this );
                         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
                     }
 
@@ -346,7 +346,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         SwUndoDrawUnGroupConnectToLayout* pUndo = nullptr;
         if( bUndo )
         {
-            pUndo = new SwUndoDrawUnGroupConnectToLayout(this);
+            pUndo = new SwUndoDrawUnGroupConnectToLayout(*this);
             GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         }
 
@@ -417,7 +417,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             {
                 std::unique_ptr<SwUndoDrawDelete> pUndo;
                 if (GetIDocumentUndoRedo().DoesUndo())
-                    pUndo.reset(new SwUndoDrawDelete( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), this ));
+                    pUndo.reset(new SwUndoDrawDelete( static_cast<sal_uInt16>(rMrkList.GetMarkCount()), *this ));
 
                 // Destroy ContactObjects, save formats.
                 for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )

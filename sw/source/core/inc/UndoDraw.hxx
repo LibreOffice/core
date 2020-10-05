@@ -39,7 +39,7 @@ class SwSdrUndo : public SwUndo
     std::unique_ptr<SdrMarkList> m_pMarkList; // MarkList for all selected SdrObjects
 
 public:
-    SwSdrUndo( std::unique_ptr<SdrUndoAction> , const SdrMarkList* pMarkList, const SwDoc* pDoc );
+    SwSdrUndo( std::unique_ptr<SdrUndoAction> , const SdrMarkList* pMarkList, const SwDoc& rDoc );
 
     virtual ~SwSdrUndo() override;
 
@@ -56,7 +56,7 @@ class SwUndoDrawGroup : public SwUndo
     bool m_bDeleteFormat;
 
 public:
-    SwUndoDrawGroup( sal_uInt16 nCnt, const SwDoc* pDoc );
+    SwUndoDrawGroup( sal_uInt16 nCnt, const SwDoc& rDoc );
 
     virtual ~SwUndoDrawGroup() override;
 
@@ -85,7 +85,7 @@ class SwUndoDrawUnGroup : public SwUndo
     bool m_bDeleteFormat;
 
 public:
-    SwUndoDrawUnGroup( SdrObjGroup*, const SwDoc* pDoc );
+    SwUndoDrawUnGroup( SdrObjGroup*, const SwDoc& rDoc );
 
     virtual ~SwUndoDrawUnGroup() override;
 
@@ -101,7 +101,7 @@ private:
     std::vector< std::pair< SwDrawFrameFormat*, SdrObject* > > m_aDrawFormatsAndObjs;
 
 public:
-    SwUndoDrawUnGroupConnectToLayout(const SwDoc* pDoc);
+    SwUndoDrawUnGroupConnectToLayout(const SwDoc& rDoc);
 
     virtual ~SwUndoDrawUnGroupConnectToLayout() override;
 
@@ -119,7 +119,7 @@ class SwUndoDrawDelete : public SwUndo
     bool m_bDeleteFormat;
 
 public:
-    SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc* pDoc );
+    SwUndoDrawDelete( sal_uInt16 nCnt, const SwDoc& rDoc );
 
     virtual ~SwUndoDrawDelete() override;
 

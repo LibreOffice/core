@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
+SwUndoOverwrite::SwUndoOverwrite( SwDoc& rDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
-    : SwUndo(SwUndoId::OVERWRITE, pDoc),
+    : SwUndo(SwUndoId::OVERWRITE, &rDoc),
       m_bGroup( false )
 {
     SwTextNode *const pTextNd = rPos.nNode.GetNode().GetTextNode();
@@ -50,7 +50,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     m_nStartNode = rPos.nNode.GetIndex();
     m_nStartContent = rPos.nContent.GetIndex();
 
-    if( !pDoc->getIDocumentRedlineAccess().IsIgnoreRedline() && !pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty() )
+    if( !rDoc.getIDocumentRedlineAccess().IsIgnoreRedline() && !rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
@@ -61,7 +61,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         }
         if (m_nStartContent < nTextNdLen)
         {
-            pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
+            rDoc.getIDocumentRedlineAccess().DeleteRedline(aPam, false, RedlineType::Any);
         }
     }
 
@@ -99,7 +99,7 @@ SwUndoOverwrite::~SwUndoOverwrite()
 {
 }
 
-bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
+bool SwUndoOverwrite::CanGrouping( SwDoc& rDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
 // What is with only inserted characters?
@@ -140,7 +140,7 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         if( !bOk )
             return false;
 
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( aPam, false, RedlineType::Any );
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( aPam, false, RedlineType::Any );
     }
 
     // both 'overwrites' can be combined so 'move' the corresponding character
@@ -177,22 +177,22 @@ bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
 void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pCurrentPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwDoc& rDoc = rContext.GetDoc();
+    SwPaM& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    pCurrentPam->DeleteMark();
-    pCurrentPam->GetPoint()->nNode = m_nStartNode;
-    SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
+    rCurrentPam.DeleteMark();
+    rCurrentPam.GetPoint()->nNode = m_nStartNode;
+    SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
     assert(pTextNd);
-    SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
+    SwIndex& rIdx = rCurrentPam.GetPoint()->nContent;
     rIdx.Assign( pTextNd, m_nStartContent );
 
-    SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
+    SwAutoCorrExceptWord* pACEWord = rDoc.GetAutoCorrExceptWord();
     if( pACEWord )
     {
         if( 1 == m_aInsStr.getLength() && 1 == m_aDelStr.getLength() )
-            pACEWord->CheckChar( *pCurrentPam->GetPoint(), m_aDelStr[0] );
-        pDoc->SetAutoCorrExceptWord( nullptr );
+            pACEWord->CheckChar( *rCurrentPam.GetPoint(), m_aDelStr[0] );
+        rDoc.SetAutoCorrExceptWord( nullptr );
     }
 
     // If there was not only an overwrite but also an insert, delete the surplus
@@ -228,53 +228,53 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         if( pTextNd->GetpSwpHints() )
             pTextNd->ClearSwpHintsArr( false );
-        m_pHistory->TmpRollback( pDoc, 0, false );
+        m_pHistory->TmpRollback( &rDoc, 0, false );
     }
 
-    if( pCurrentPam->GetMark()->nContent.GetIndex() != m_nStartContent )
+    if( rCurrentPam.GetMark()->nContent.GetIndex() != m_nStartContent )
     {
-        pCurrentPam->SetMark();
-        pCurrentPam->GetMark()->nContent = m_nStartContent;
+        rCurrentPam.SetMark();
+        rCurrentPam.GetMark()->nContent = m_nStartContent;
     }
 
     if( m_pRedlSaveData )
-        SetSaveData( *pDoc, *m_pRedlSaveData );
+        SetSaveData( rDoc, *m_pRedlSaveData );
 }
 
 void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwPaM *const pCurrentPam = & rContext.GetRepeatPaM();
-    if( m_aInsStr.isEmpty() || pCurrentPam->HasMark() )
+    SwPaM& rCurrentPam = rContext.GetRepeatPaM();
+    if( m_aInsStr.isEmpty() || rCurrentPam.HasMark() )
         return;
 
     SwDoc & rDoc = rContext.GetDoc();
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.getIDocumentContentOperations().Overwrite(*pCurrentPam, OUString(m_aInsStr[0]));
+        rDoc.getIDocumentContentOperations().Overwrite(rCurrentPam, OUString(m_aInsStr[0]));
     }
     for( sal_Int32 n = 1; n < m_aInsStr.getLength(); ++n )
-        rDoc.getIDocumentContentOperations().Overwrite( *pCurrentPam, OUString(m_aInsStr[n]) );
+        rDoc.getIDocumentContentOperations().Overwrite(rCurrentPam, OUString(m_aInsStr[n]));
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc *const pDoc = & rContext.GetDoc();
-    SwPaM *const pCurrentPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+    SwDoc& rDoc = rContext.GetDoc();
+    SwPaM& rCurrentPam(rContext.GetCursorSupplier().CreateNewShellCursor());
 
-    pCurrentPam->DeleteMark();
-    pCurrentPam->GetPoint()->nNode = m_nStartNode;
-    SwTextNode* pTextNd = pCurrentPam->GetNode().GetTextNode();
+    rCurrentPam.DeleteMark();
+    rCurrentPam.GetPoint()->nNode = m_nStartNode;
+    SwTextNode* pTextNd = rCurrentPam.GetNode().GetTextNode();
     assert(pTextNd);
-    SwIndex& rIdx = pCurrentPam->GetPoint()->nContent;
+    SwIndex& rIdx = rCurrentPam.GetPoint()->nContent;
 
     if( m_pRedlSaveData )
     {
         rIdx.Assign( pTextNd, m_nStartContent );
-        pCurrentPam->SetMark();
-        pCurrentPam->GetMark()->nContent += m_aDelStr.getLength();
-        pDoc->getIDocumentRedlineAccess().DeleteRedline( *pCurrentPam, false, RedlineType::Any );
-        pCurrentPam->DeleteMark();
+        rCurrentPam.SetMark();
+        rCurrentPam.GetMark()->nContent += m_aDelStr.getLength();
+        rDoc.getIDocumentRedlineAccess().DeleteRedline( rCurrentPam, false, RedlineType::Any );
+        rCurrentPam.DeleteMark();
     }
     rIdx.Assign( pTextNd, !m_aDelStr.isEmpty() ? m_nStartContent+1 : m_nStartContent );
 
@@ -301,10 +301,10 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     // get back old start position from UndoNodes array
     if( m_pHistory )
         m_pHistory->SetTmpEnd( m_pHistory->Count() );
-    if( pCurrentPam->GetMark()->nContent.GetIndex() != m_nStartContent )
+    if( rCurrentPam.GetMark()->nContent.GetIndex() != m_nStartContent )
     {
-        pCurrentPam->SetMark();
-        pCurrentPam->GetMark()->nContent = m_nStartContent;
+        rCurrentPam.SetMark();
+        rCurrentPam.GetMark()->nContent = m_nStartContent;
     }
 }
 

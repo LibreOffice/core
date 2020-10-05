@@ -1709,7 +1709,7 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable )
         const SwTableNode* pTableNd = rPam.GetPoint()->nNode.GetNode().FindTableNode();
         if( pTableNd )
         {
-            std::unique_ptr<SwUndoCpyTable> pUndo(new SwUndoCpyTable(this));
+            std::unique_ptr<SwUndoCpyTable> pUndo(new SwUndoCpyTable(*this));
             pUndo->SetTableSttIdx( pTableNd->GetIndex() );
             GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
@@ -1730,7 +1730,7 @@ void SwDoc::ChangeTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoTOXChange>(this, rTOXSect, rNew));
+            std::make_unique<SwUndoTOXChange>(*this, rTOXSect, rNew));
     }
 
     rTOX = rNew;

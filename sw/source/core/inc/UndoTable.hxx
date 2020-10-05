@@ -275,7 +275,7 @@ class SwUndoTableCpyTable : public SwUndo
                 const SwPosition& rPos, bool& rJoin, bool bRedo );
 
 public:
-    SwUndoTableCpyTable(const SwDoc* pDoc);
+    SwUndoTableCpyTable(const SwDoc& rDoc);
 
     virtual ~SwUndoTableCpyTable() override;
 
@@ -296,7 +296,7 @@ class SwUndoCpyTable : public SwUndo
     sal_uLong m_nTableNode;
 
 public:
-    SwUndoCpyTable(const SwDoc* pDoc);
+    SwUndoCpyTable(const SwDoc& rDoc);
 
     virtual ~SwUndoCpyTable() override;
 
@@ -374,7 +374,7 @@ class SwUndoTableStyleMake : public SwUndo
     OUString m_sName;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
 public:
-    SwUndoTableStyleMake(const OUString& rName, const SwDoc* pDoc);
+    SwUndoTableStyleMake(const OUString& rName, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleMake() override;
 
@@ -389,7 +389,7 @@ class SwUndoTableStyleDelete : public SwUndo
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
     std::vector<SwTable*> m_rAffectedTables;
 public:
-    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc* pDoc);
+    SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleDelete() override;
 
@@ -403,7 +403,7 @@ class SwUndoTableStyleUpdate : public SwUndo
 {
     std::unique_ptr<SwTableAutoFormat> m_pOldFormat, m_pNewFormat;
 public:
-    SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc);
+    SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleUpdate() override;
 

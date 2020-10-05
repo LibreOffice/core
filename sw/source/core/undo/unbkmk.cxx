@@ -100,8 +100,8 @@ void SwUndoDeleteBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     ResetInDoc( rContext.GetDoc() );
 }
 
-SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::BOOKMARK_RENAME, pDoc )
+SwUndoRenameBookmark::SwUndoRenameBookmark( const OUString& rOldName, const OUString& rNewName, const SwDoc& rDoc )
+    : SwUndo( SwUndoId::BOOKMARK_RENAME, &rDoc )
     , m_sOldName( rOldName )
     , m_sNewName( rNewName )
 {

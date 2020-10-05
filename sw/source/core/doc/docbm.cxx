@@ -856,7 +856,7 @@ namespace sw::mark
                 if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
                 {
                     m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                            std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, &m_rDoc));
+                            std::make_unique<SwUndoRenameBookmark>(sOldName, rNewName, m_rDoc));
                 }
                 m_rDoc.getIDocumentState().SetModified();
             }
