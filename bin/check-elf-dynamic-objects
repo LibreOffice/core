@@ -124,7 +124,7 @@ local file="$1"
             allowlist="${allowlist} ${gioallowlist}"
         ;;
         */libavmediagst.so)
-            allowlist="${allowlist} ${gtk3allowlist} ${gstreamerallowlist}"
+            allowlist="${allowlist} ${gstreamerallowlist}"
         ;;
         */libvclplug_kf5lo.so|*/libkf5be1lo.so)
             if [ "$ENABLE_KF5" = TRUE ]; then
