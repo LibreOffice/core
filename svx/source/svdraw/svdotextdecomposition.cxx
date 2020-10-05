@@ -23,6 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdoashp.hxx>
 #include <textchain.hxx>
 #include <textchainflow.hxx>
 #include <svx/sdtacitm.hxx>
@@ -900,6 +901,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // use B2DRange aAnchorTextRange for calculations
     basegfx::B2DRange aAnchorTextRange(aTranslate);
+    basegfx::B2DRange aAnchorTextRange2(aTranslate);
     aAnchorTextRange.expand(aTranslate + aScale);
 
     // prepare outliner
@@ -1092,6 +1094,21 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
     const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
     basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
+
+    // Apply the camera rotation. It have to be applied after adjustment of
+    // the text (top, bottom, center, left, right).
+    basegfx::B2DVector aTranslation(0.5, 0.5);
+    aNewTransformA.translate( -aTranslation.getX(), -aTranslation.getY() );
+    aNewTransformA.rotate(basegfx::deg2rad(360.0 - 90.0 ));
+    aNewTransformA.translate( aTranslation.getX(), aTranslation.getY() );
+
+    // To move rotated text to true point we need to find center point of text.
+    //tools::Rectangle aTextRect;
+    //tools::Rectangle aAnchorRect;
+    //TakeTextRect(rOutliner, aTextRect, false, &aAnchorRect);
+    //const basegfx::B2DRange aTextRange = vcl::unotools::b2DRectangleFromRectangle(aTextRect);
+
+    //aNewTransformA.translate(aTextRange.getCenterX(), aTextRange.getCenterY());
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
