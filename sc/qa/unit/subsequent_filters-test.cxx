@@ -65,6 +65,7 @@
 #include <externalrefmgr.hxx>
 #include <stlpool.hxx>
 #include <hints.hxx>
+#include <detfunc.hxx>
 
 #include <orcusfilters.hxx>
 #include <filter.hxx>
@@ -284,6 +285,7 @@ public:
     void testShapeDisplacementOnRotationImport();
     void testTextBoxBodyUpright();
     void testTextLengthDataValidityXLSX();
+    void testDeleteCircles();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -456,6 +458,7 @@ public:
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
     CPPUNIT_TEST(testTextBoxBodyUpright);
     CPPUNIT_TEST(testTextLengthDataValidityXLSX);
+    CPPUNIT_TEST(testDeleteCircles);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5017,6 +5020,45 @@ void ScFiltersTest::testTextLengthDataValidityXLSX()
     CPPUNIT_ASSERT_EQUAL(true, bValidA2);
     CPPUNIT_ASSERT_EQUAL(true, bValidA3);
     CPPUNIT_ASSERT_EQUAL(true, bValidA4);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testDeleteCircles()
+{
+    ScDocShellRef xDocSh = loadDoc("testDeleteCircles.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load testDeleteCircles.xlsx", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE("draw page for sheet 1 should exist.", pPage);
+
+    ScRefCellValue aCellA1; // A1 = "Hello"
+    ScAddress aPosA1(0, 0, 0);
+    aCellA1.assign(rDoc, aPosA1);
+
+    // Mark invalid value
+    bool bOverflow;
+    bool bMarkInvalid = ScDetectiveFunc(rDoc, 0).MarkInvalid(bOverflow);
+    CPPUNIT_ASSERT_EQUAL(true, bMarkInvalid);
+
+    // There should be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    // The value of A1 change to Hello1.
+    rDoc.SetString(0, 0, 0, "Hello1");
+
+    // Check that the data is valid.(True if text length = 6)
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    bool bValidA1 = pData->IsDataValid(aCellA1, aPosA1);
+    // if valid, delete circle.
+    if (bValidA1)
+        ScDetectiveFunc(rDoc, 0).DeleteCirclesAt(aPosA1.Col(), aPosA1.Row());
+
+    // There should not be a circle object!
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
 
     xDocSh->DoClose();
 }
