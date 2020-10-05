@@ -66,7 +66,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
@@ -135,7 +134,6 @@
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
                     <property name="can_default">True</property>
-                    <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="collectionviewdialog|newFolderButton|tooltip_text">Create New Directory</property>
                     <property name="image">image1</property>
@@ -152,7 +150,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
-                    <property name="has_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="collectionviewdialog|upButton|tooltip_text">Up One Level</property>
                     <property name="image">image2</property>
