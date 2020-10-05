@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d9a3feb_e33809f9",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 3716,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-05T10:54:34Z",
+      "side": 0,
+      "message": "Why do we need this?",
+      "range": {
+        "startLine": 3716,
+        "startChar": 24,
+        "endLine": 3716,
+        "endChar": 60
+      },
+      "revId": "51be8b178576b492f2cfa6fbbf9870a9cf1c5172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
