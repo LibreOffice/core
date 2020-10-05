@@ -2002,12 +2002,12 @@ void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
     rDoc.MergeTable(rPam);
 }
 
-void SwUndoTableMerge::MoveBoxContent( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
+void SwUndoTableMerge::MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
-    std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( pDoc, rRg, rPos ));
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-    pDoc->getIDocumentContentOperations().MoveNodeRange( rRg, rPos, m_pSaveTable->IsNewModel() ?
+    std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( &rDoc, rRg, rPos ));
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+    rDoc.getIDocumentContentOperations().MoveNodeRange( rRg, rPos, m_pSaveTable->IsNewModel() ?
         SwMoveFlags::NO_DELFRMS :
         SwMoveFlags::DEFAULT );
     ++aTmp;
