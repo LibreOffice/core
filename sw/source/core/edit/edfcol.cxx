@@ -476,15 +476,15 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
 }
 
 /// Updates the signature field text if changed and returns true only iff updated.
-bool lcl_DoUpdateParagraphSignatureField(SwDoc* pDoc,
+bool lcl_DoUpdateParagraphSignatureField(SwDoc& rDoc,
                                          const uno::Reference<css::text::XTextField>& xField,
                                          const OUString& sDisplayText)
 {
     // Disable undo to avoid introducing noise when we edit the metadata field.
-    const bool isUndoEnabled = pDoc->GetIDocumentUndoRedo().DoesUndo();
-    pDoc->GetIDocumentUndoRedo().DoUndo(false);
-    comphelper::ScopeGuard const g([pDoc, isUndoEnabled]() {
-        pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
+    const bool isUndoEnabled = rDoc.GetIDocumentUndoRedo().DoesUndo();
+    rDoc.GetIDocumentUndoRedo().DoUndo(false);
+    comphelper::ScopeGuard const g([&rDoc, isUndoEnabled]() {
+        rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
     });
 
     try
@@ -507,7 +507,7 @@ bool lcl_DoUpdateParagraphSignatureField(SwDoc* pDoc,
 }
 
 /// Updates the signature field text if changed and returns true only iff updated.
-bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
+bool lcl_UpdateParagraphSignatureField(SwDoc& rDoc,
                                        const uno::Reference<frame::XModel>& xModel,
                                        const uno::Reference<css::text::XTextContent>& xParagraph,
                                        const uno::Reference<css::text::XTextField>& xField,
@@ -515,7 +515,7 @@ bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
 {
     const OUString sDisplayText
         = lcl_MakeParagraphSignatureFieldText(xModel, xParagraph, xField, utf8Text).second;
-    return lcl_DoUpdateParagraphSignatureField(pDoc, xField, sDisplayText);
+    return lcl_DoUpdateParagraphSignatureField(rDoc, xField, sDisplayText);
 }
 
 void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField>& xField)
@@ -607,12 +607,12 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
     css::uno::Reference<css::rdf::XResource> xNodeSubject(xTextNode, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, sKey, sValue);
 
-    return lcl_DoUpdateParagraphSignatureField(pDoc, xField, sDisplayText);
+    return lcl_DoUpdateParagraphSignatureField(*pDoc, xField, sDisplayText);
 }
 
-void lcl_ValidateParagraphSignatures(SwDoc* pDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove)
+void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove)
 {
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = rDoc.GetDocShell();
     if (!pDocShell)
         return;
 
@@ -664,15 +664,15 @@ void lcl_ValidateParagraphSignatures(SwDoc* pDoc, const uno::Reference<text::XTe
 
         if (updateDontRemove)
         {
-            lcl_UpdateParagraphSignatureField(pDoc, xModel, xParagraph, xField, utf8Text);
+            lcl_UpdateParagraphSignatureField(rDoc, xModel, xParagraph, xField, utf8Text);
         }
         else if (!lcl_MakeParagraphSignatureFieldText(xModel, xParagraph, xField, utf8Text).first)
         {
-            pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
-            pDoc->GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoParagraphSigning>(pDoc, xField, xParagraph, false));
+            rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+            rDoc.GetIDocumentUndoRedo().AppendUndo(
+                std::make_unique<SwUndoParagraphSigning>(&rDoc, xField, xParagraph, false));
             lcl_RemoveParagraphMetadataField(xField);
-            pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
+            rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
         }
     }
 }
@@ -1720,7 +1720,7 @@ void SwUndoParagraphSigning::Insert()
         });
 
     m_xField = lcl_InsertParagraphSignature(m_pDoc->GetDocShell()->GetBaseModel(), m_xParent, m_signature, m_usage);
-    lcl_DoUpdateParagraphSignatureField(m_pDoc, m_xField, m_display);
+    lcl_DoUpdateParagraphSignatureField(*m_pDoc, m_xField, m_display);
 }
 
 void SwUndoParagraphSigning::Remove()
@@ -1806,7 +1806,7 @@ void SwEditShell::SignParagraph()
     const uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<css::text::XTextField> xField = lcl_InsertParagraphSignature(xModel, xParagraph, signature, aUsage);
 
-    lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xParagraph, xField, utf8Text);
+    lcl_UpdateParagraphSignatureField(*GetDoc(), xModel, xParagraph, xField, utf8Text);
 
     GetDoc()->GetIDocumentUndoRedo().AppendUndo(
         std::make_unique<SwUndoParagraphSigning>(GetDoc(), xField, xParagraph, true));
@@ -1830,7 +1830,7 @@ void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDont
         });
 
     uno::Reference<text::XTextContent> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode);
-    lcl_ValidateParagraphSignatures(GetDoc(), xParentText, updateDontRemove);
+    lcl_ValidateParagraphSignatures(*GetDoc(), xParentText, updateDontRemove);
 }
 
 void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
@@ -1869,7 +1869,7 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        lcl_ValidateParagraphSignatures(GetDoc(), xParagraph, updateDontRemove);
+        lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, updateDontRemove);
     }
 }
 
@@ -2022,11 +2022,11 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphSignatureIdRDFName, pair.first);
 
                     const OString utf8Text = lcl_getParagraphBodyText(xParagraph);
-                    lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xParagraph, xField, utf8Text);
+                    lcl_UpdateParagraphSignatureField(*GetDoc(), xModel, xParagraph, xField, utf8Text);
                 }
             }
 
-            lcl_ValidateParagraphSignatures(GetDoc(), xParagraph, true); // Validate and Update signatures.
+            lcl_ValidateParagraphSignatures(*GetDoc(), xParagraph, true); // Validate and Update signatures.
         }
         catch (const std::exception&)
         {
