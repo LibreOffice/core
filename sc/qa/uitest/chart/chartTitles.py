@@ -117,11 +117,14 @@ class chartTitles(UITestCase):
     self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
     xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+    xPosXValue = get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value']
+    xPosYValue = get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value']
 
     xOkBtn = xDialog.getChild("ok")
     xOkBtn.executeAction("CLICK", tuple())
+
+    self.assertEqual("4.52", xPosXValue)
+    self.assertEqual("0.3", xPosYValue)
 
     xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
     xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))

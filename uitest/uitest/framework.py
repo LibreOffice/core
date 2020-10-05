@@ -13,7 +13,16 @@ from uitest.test import UITest
 
 from libreoffice.connection import PersistentConnection, OfficeConnection
 
-class UITestCase(unittest.TestCase):
+class TestCaseWrapper(unittest.TestCase):
+
+    def assertEqual(self, goal, results, msg=None):
+        try:
+            super( TestCaseWrapper, self ).assertEqual( goal, results, msg )
+        except unittest.TestCase.failureException:
+            self.ui_test.close_doc()
+            raise
+
+class UITestCase(TestCaseWrapper):
 
     def __init__(self, test_name, opts):
         unittest.TestCase.__init__(self, test_name)
