@@ -578,6 +578,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mbCollateAlwaysOff(false)
     , mbShowLayoutFrame( true )
     , mbSingleJobs( false )
+    , maUpdatePreviewIdle("Print Dialog Update Preview Idle")
+    , maUpdatePreviewNoCacheIdle("Print Dialog Update Preview (no cache) Idle")
 {
     // save printbutton text, gets exchanged occasionally with print to file
     maPrintText = mxOKButton->get_label();
@@ -647,6 +649,11 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
         // coverity[swapped_arguments : FALSE] - this is in the correct order
         maNupLandscapeSize = Size( aNupSize.Height(), aNupSize.Width() );
     }
+
+    maUpdatePreviewIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdatePreviewIdle.SetInvokeHandler(LINK( this, PrintDialog, updatePreviewIdle));
+    maUpdatePreviewNoCacheIdle.SetPriority(TaskPriority::POST_PAINT);
+    maUpdatePreviewNoCacheIdle.SetInvokeHandler(LINK(this, PrintDialog, updatePreviewNoCacheIdle));
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
@@ -901,6 +908,16 @@ void PrintDialog::setPreviewText()
     mxNumPagesText->set_label( aNewText );
 }
 
+IMPL_LINK_NOARG(PrintDialog, updatePreviewIdle, Timer*, void)
+{
+    preparePreview(true);
+}
+
+IMPL_LINK_NOARG(PrintDialog, updatePreviewNoCacheIdle, Timer*, void)
+{
+    preparePreview(false);
+}
+
 void PrintDialog::preparePreview( bool i_bMayUseCache )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
@@ -1144,7 +1161,10 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
 
     mxNupOrder->setValues( aMPS.nOrder, nCols, nRows );
 
-    preparePreview( i_bMayUseCache );
+    if (i_bMayUseCache)
+        maUpdatePreviewIdle.Start();
+    else
+        maUpdatePreviewNoCacheIdle.Start();
 }
 
 void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
@@ -1800,7 +1820,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     }
     else if ( &rButton == mxPreviewBox.get() )
     {
-        preparePreview( true );
+        maUpdatePreviewIdle.Start();
     }
     else if( &rButton == mxForwardBtn.get() )
     {
@@ -1829,7 +1849,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
             checkOptionalControlDependencies();
 
             // update preview and page settings
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
         if( mxBrochureBtn->get_active() )
         {
@@ -1860,7 +1880,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
         maPController->setReversePrint( bChecked );
         maPController->setValue( "PrintReverse",
                                  makeAny( bChecked ) );
-        preparePreview( true );
+        maUpdatePreviewIdle.Start();
     }
     else if( &rButton == mxBorderCB.get() )
     {
@@ -1900,7 +1920,7 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
             setupPaperSidesBox();
 
             // tdf#63905 don't use cache: page size may change
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
         checkControlDependencies();
     }
@@ -1924,7 +1944,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
             mxOKButton->set_label(maPrintText);
             updatePrinterText();
             setPaperSizes();
-            preparePreview(true);
+            maUpdatePreviewIdle.Start();
         }
         else // print to file
         {
@@ -1935,7 +1955,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
 
             setPaperSizes();
             updateOrientationBox();
-            preparePreview( true );
+            maUpdatePreviewIdle.Start();
         }
 
         setupPaperSidesBox();
@@ -1979,7 +1999,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         checkPaperSize( aPaperSize );
         maPController->setPaperSizeFromUser( aPaperSize );
 
-        preparePreview(true);
+        maUpdatePreviewIdle.Start();
     }
 }
 
@@ -2011,7 +2031,7 @@ IMPL_LINK_NOARG(PrintDialog, ActivateHdl, weld::Entry&, bool)
     if (nNewCurPage != mnCurPage)
     {
         mnCurPage = nNewCurPage;
-        preparePreview(true);
+        maUpdatePreviewIdle.Start();
     }
     return true;
 }
@@ -2045,7 +2065,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, weld::ToggleButton&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2074,7 +2094,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, weld::ToggleButton&, i_rBtn, void )
                 mxPageRangeEdit->grab_focus();
 
             // update preview and page settings
-            preparePreview(false);
+            maUpdatePreviewNoCacheIdle.Start();
         }
     }
 }
@@ -2100,7 +2120,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2117,7 +2137,7 @@ IMPL_LINK( PrintDialog, UIOption_SpinModifyHdl, weld::SpinButton&, i_rBox, void 
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
@@ -2134,7 +2154,7 @@ IMPL_LINK( PrintDialog, UIOption_EntryModifyHdl, weld::Entry&, i_rBox, void )
         checkOptionalControlDependencies();
 
         // update preview and page settings
-        preparePreview(false);
+        maUpdatePreviewNoCacheIdle.Start();
     }
 }
 
