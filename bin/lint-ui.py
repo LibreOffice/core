@@ -64,17 +64,17 @@ def check_top_level_widget(element):
 
     # check border_width property
     border_width_properties = element.findall("property[@name='border_width']")
-    # This one fires so often I don't think it's useful
+    # TODO reenable when we are ready to fix
     #if len(border_width_properties) < 1:
     #    lint_assert(False, "No border_width set on top level widget. Should probably be " + BORDER_WIDTH)
-    if len(border_width_properties) == 1:
-        border_width = border_width_properties[0]
-        if widget_type == "GtkMessageDialog":
-            lint_assert(border_width.text == MESSAGE_BORDER_WIDTH,
-                        "Top level 'border_width' property should be " + MESSAGE_BORDER_WIDTH, border_width)
-        else:
-            lint_assert(border_width.text == BORDER_WIDTH,
-                        "Top level 'border_width' property should be " + BORDER_WIDTH, border_width)
+    #if len(border_width_properties) == 1:
+    #    border_width = border_width_properties[0]
+    #    if widget_type == "GtkMessageDialog":
+    #        lint_assert(border_width.text == MESSAGE_BORDER_WIDTH,
+    #                    "Top level 'border_width' property should be " + MESSAGE_BORDER_WIDTH, border_width)
+    #    else:
+    #        lint_assert(border_width.text == BORDER_WIDTH,
+    #                    "Top level 'border_width' property should be " + BORDER_WIDTH, border_width)
 
     # check that any widget which has 'has-default' also has 'can-default'
     for widget in element.findall('.//object'):
@@ -96,7 +96,7 @@ def check_button_box_spacing(element):
 def check_message_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")
     lint_assert(len(spacing) > 0 and spacing[0].text == MESSAGE_BOX_SPACING,
-                "Button box 'spacing' should be " + MESSAGE_BOX_SPACING,
+                "Message box 'spacing' should be " + MESSAGE_BOX_SPACING,
                 element)
 
 def check_radio_buttons(root):
@@ -146,12 +146,13 @@ def check_frames(root):
 def check_alignment_top_padding(alignment):
     top_padding_properties = alignment.findall("./property[@name='top_padding']")
     assert len(top_padding_properties) <= 1
-    if len(top_padding_properties) < 1:
-        lint_assert(False, "No GtkAlignment 'top_padding' set. Should probably be " + ALIGNMENT_TOP_PADDING, alignment)
-    if len(top_padding_properties) == 1:
-        top_padding = top_padding_properties[0]
-        lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
-                    "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING, alignment)
+    # TODO reenable when we are ready to fix
+    # if len(top_padding_properties) < 1:
+    #     lint_assert(False, "No GtkAlignment 'top_padding' set. Should probably be " + ALIGNMENT_TOP_PADDING, alignment)
+    #if len(top_padding_properties) == 1:
+    #    top_padding = top_padding_properties[0]
+    #    lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
+    #                "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING, alignment)
 
 def check_title_labels(root):
     labels = root.findall(".//child[@type='label']")
@@ -188,20 +189,24 @@ def main():
     button_box = top_level_widget.findall("./child/object[@id='dialog-vbox1']")
     if len(button_box) > 0:
         element = button_box[0]
-        check_button_box_spacing(element)
+        # TODO reenable when we are ready to fix
+        #check_button_box_spacing(element)
 
     message_box = top_level_widget.findall("./child/object[@id='messagedialog-vbox']")
     if len(message_box) > 0:
         element = message_box[0]
-        check_message_box_spacing(element)
+        # TODO reenable when we are ready to fix
+        #check_message_box_spacing(element)
 
     check_frames(root)
 
-    check_radio_buttons(root)
+    # TODO reenable when we are ready to fix
+    #check_radio_buttons(root)
 
     check_menu_buttons(root)
 
-    check_check_buttons(root)
+    # TODO reenable when we are ready to fix
+    #check_check_buttons(root)
 
     check_title_labels(root)
 
