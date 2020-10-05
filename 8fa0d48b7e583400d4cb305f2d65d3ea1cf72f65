@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "13a8ce8f_349099f8",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 30
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "What is \"Do it now...\", where it is?",
+      "range": {
+        "startLine": 275,
+        "startChar": 101,
+        "endLine": 275,
+        "endChar": 113
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf0ede17_390c0f4f",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Please don\u0027t generate strings by concatenation of localizable strings with anything. Any localizable string must include placeholders for any variable part, like \"Execute the command %COMMAND\", and the \"%COMMAND\" must be replaced when preparing the text for display using something like\n\n    m_pLink-\u003eset_uri(CuiResId(STR_UNO_EXECUTE).replaceFirst(\"%COMMAND\", aLink));\n\nto allow the variable text be placed appropriately for different translations, not assuming that what fits en-US must fit all.",
+      "range": {
+        "startLine": 119,
+        "startChar": 25,
+        "endLine": 119,
+        "endChar": 64
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b5abdc_5af414e1",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "No need to declare explicit dummy things here. It\u0027s enough to construct such dummy values in place:\n\n    comphelper::dispatchCommand(aLink, {});",
+      "range": {
+        "startLine": 177,
+        "startChar": 8,
+        "endLine": 177,
+        "endChar": 50
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ee2ebfb_dddb052c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Please *don\u0027t* add any `using` into new code. We try to reduce such problematic code, not add new pieces. Use explicit `css::foo::` prefixes.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 40
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b21ca639_e7e4a128",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "And no need to use explicit global namespace prefix, unless there is a ambiguity. There\u0027s none with comphelper.",
+      "range": {
+        "startLine": 50,
+        "startChar": 54,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e0c6419_ad8dd832",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Why creating this variable here, instead of doing that right where it\u0027s actually used - in line 53 below? (and even avoid the variable, and use a switch on function return instead of multiple ifs)",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2280dde6_9ba2f994",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "This variable is not needed here, until it\u0027s used in line 78, where it should be declared.",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 36
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bbbd587_619cf01b",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "This variable is not needed here, until it\u0027s used below in line 79. It should not be initialized unless the \"if\" condition is true, so it\u0027s better to move it inside the \"if\" block - e.g., before line 79.",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 97
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b647a3c_476e58d2",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Current C++ allows using a better syntax for variables that are created and immediately checked in an if:\n\n    if (SfxViewFrame* pViewFrame \u003d SfxViewFrame::Current())\n    {\n        // ... use pViewFrame here\n    }\n\nThis allows to reduce the scope of the variable to the block where it\u0027s valid, and not outside.",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 55
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c87edd_44754e68",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Any variables that you create, and that do not change their values after initial initialization, should be declared const.",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 25
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4657c86b_581f5420",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "If you decide to provide the destructor that does nothing yourself, please just make it default:\n\n    ToolbarmodeDialog::~ToolbarmodeDialog() \u003d default;",
+      "range": {
+        "startLine": 131,
+        "startChar": 40,
+        "endLine": 131,
+        "endChar": 42
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30f079a0_86c09ae3",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Please don\u0027t hard-code magic numbers as much as possible. You need as many of them as there are: just use\n\n    SAL_N_ELEMENTS(m_pRadioButtons)\n\nto avoid problems when later you change the number, and forget to modify all places.\n\nAdditionally: your m_pRadioButtons and your TOOLBARMODES_ARRAY are expected to have exactly the same number of elements. But they are declared in different files, which don\u0027t know about each other. So it\u0027s good to put a static assert somewhere here in this file, that would make sure that their sizes are equal.",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c370a4dc_14d2c409",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "This is used twice - maybe better have a variable for that?",
+      "range": {
+        "startLine": 161,
+        "startChar": 35,
+        "endLine": 161,
+        "endChar": 51
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bfd68a2_f36faf24",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Here goes another run of variables declared/initialized outside of actual use place.",
+      "range": {
+        "startLine": 198,
+        "startChar": 8,
+        "endLine": 198,
+        "endChar": 40
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca37d628_a599af9b",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Not needed global namespace prefix, again",
+      "range": {
+        "startLine": 200,
+        "startChar": 14,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e03a96b_df57f7fc",
+        "filename": "vcl/Package_toolbarmode.mk",
+        "patchSetId": 30
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:21:18Z",
+      "side": 1,
+      "message": "Why the inconsistent use of tabs (above) and spaces (below)?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
