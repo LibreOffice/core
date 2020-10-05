@@ -117,7 +117,7 @@ class chartTitles(UITestCase):
     self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
     xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("4.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
     self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
     xOkBtn = xDialog.getChild("ok")
@@ -136,5 +136,7 @@ class chartTitles(UITestCase):
     xOkBtn = xDialog.getChild("ok")
     xOkBtn.executeAction("CLICK", tuple())
 
+
     self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
