@@ -75,11 +75,14 @@ void WeldEditView::makeEditEngine()
 
 void WeldEditView::Resize()
 {
-    OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
-    Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
-    Size aSize(aOutputSize);
-    m_xEditEngine->SetPaperSize(aSize);
-    m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    if (m_xEditView)
+    {
+        OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
+        Size aOutputSize(rDevice.PixelToLogic(GetOutputSizePixel()));
+        Size aSize(aOutputSize);
+        m_xEditEngine->SetPaperSize(aSize);
+        m_xEditView->SetOutputArea(tools::Rectangle(Point(0, 0), aOutputSize));
+    }
     weld::CustomWidgetController::Resize();
 }
 
