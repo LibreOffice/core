@@ -14131,7 +14131,7 @@ private:
                     while (nActive < nCount && separator_function(nActive))
                         ++nActive;
                     if (nActive < nCount)
-                        set_active_including_mru(nActive);
+                        set_active_including_mru(nActive, true);
                     bDone = true;
                 }
                 else if (nKeyMod == KEY_MOD2 && !m_bPopupActive)
@@ -14151,7 +14151,7 @@ private:
                     while (nActive >= nStartBound && separator_function(nActive))
                         --nActive;
                     if (nActive >= nStartBound)
-                        set_active_including_mru(nActive);
+                        set_active_including_mru(nActive, true);
                     bDone = true;
                 }
                 break;
@@ -14167,7 +14167,7 @@ private:
                     while (nActive < nCount && separator_function(nActive))
                         ++nActive;
                     if (nActive < nCount)
-                        set_active_including_mru(nActive);
+                        set_active_including_mru(nActive, true);
                     bDone = true;
                 }
                 break;
@@ -14182,7 +14182,7 @@ private:
                     while (nActive >= nStartBound && separator_function(nActive))
                         --nActive;
                     if (nActive >= nStartBound)
-                        set_active_including_mru(nActive);
+                        set_active_including_mru(nActive, true);
                     bDone = true;
                 }
                 break;
@@ -14329,12 +14329,12 @@ private:
             return get_active_including_mru();
     }
 
-    void set_selected_entry(int nSelect)
+    void set_typeahead_selected_entry(int nSelect)
     {
         if (m_bPopupActive)
             tree_view_set_cursor(nSelect);
         else
-            set_active_including_mru(nSelect);
+            set_active_including_mru(nSelect, true);
     }
 
     virtual vcl::StringEntryIdentifier CurrentEntry(OUString& out_entryText) const override
@@ -14364,7 +14364,7 @@ private:
         if (nSelect >= nCount)
             nSelect = nCount ? nCount-1 : -1;
 
-        set_selected_entry(nSelect);
+        set_typeahead_selected_entry(nSelect);
     }
 
     static void signalGrabBroken(GtkWidget*, GdkEventGrabBroken *pEvent, gpointer widget)
@@ -14525,7 +14525,7 @@ private:
         return tree_view_get_cursor();
     }
 
-    void set_active_including_mru(int pos)
+    void set_active_including_mru(int pos, bool bInteractive)
     {
         disable_notify_events();
 
@@ -14541,6 +14541,9 @@ private:
 
         m_bChangedByMenu = false;
         enable_notify_events();
+
+        if (bInteractive && !m_bPopupActive && !m_pEntry)
+            signal_changed();
     }
 
     int find_text_including_mru(const OUString& rStr, bool bSearchMRU) const
@@ -14923,7 +14926,7 @@ public:
     {
         if (m_nMRUCount && pos != -1)
             pos += (m_nMRUCount + 1);
-        set_active_including_mru(pos);
+        set_active_including_mru(pos, false);
     }
 
     virtual OUString get_active_text() const override
