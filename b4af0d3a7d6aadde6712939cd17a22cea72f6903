@@ -70,6 +70,30 @@
       "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f72394f5_74abd7ab",
+        "filename": "filter/source/svg/svgexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-05T06:40:15Z",
+      "side": 1,
+      "message": "That sounds like a good idea, although there are some gotchas lurking there.\n\nFor example, you can\u0027t call dynamic_cast in such a situation if there is a UNO exception in play because the dynamic_cast will SIGSEGV because the UNO bridge does not build proper RTTI tables.\n\nSo you have to check for an UNO exception first, then fall back to dynamic_cast.",
+      "parentUuid": "b8ee9f03_1eb26b83",
+      "range": {
+        "startLine": 611,
+        "startChar": 20,
+        "endLine": 611,
+        "endChar": 40
+      },
+      "revId": "b4af0d3a7d6aadde6712939cd17a22cea72f6903",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
