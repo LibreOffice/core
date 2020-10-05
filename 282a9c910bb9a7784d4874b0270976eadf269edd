@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8007c44e_8bf1dcb8",
+        "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-10-05T14:20:15Z",
+      "side": 1,
+      "message": "The main purpose it getting true text range here.",
+      "range": {
+        "startLine": 1109,
+        "startChar": 4,
+        "endLine": 1109,
+        "endChar": 81
+      },
+      "revId": "282a9c910bb9a7784d4874b0270976eadf269edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
