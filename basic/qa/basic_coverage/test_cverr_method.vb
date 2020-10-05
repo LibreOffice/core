@@ -8,24 +8,24 @@
 
 Function doUnitTest as Integer
     ' CVERR
-    If (CVerr(100) <> 100) Then
-        doUnitTest = 0
-    Else
+    If (CVerr(100) = 100) Then
         doUnitTest = 1
+    Else
+        doUnitTest = 0
     End If
 
     ' tdf#79426 - passing an error object to a function
-    if ( TestCVErr( CVErr( 2 ) ) <> 2 ) Then
-        doUnitTest = 0
-    Else
+    If (doUnitTest And TestCVErr(CVErr(2)) = 2) Then
         doUnitTest = 1
+    Else
+        doUnitTest = 0
     End If
 
     ' tdf#79426 - test with Error-Code 448 ( ERRCODE_BASIC_NAMED_NOT_FOUND )
-    if ( TestCVErr( CVErr( 448 ) ) <> 448 ) Then
-        doUnitTest = 0
-    Else
+    If (doUnitTest And TestCVErr(CVErr(448)) = 448) Then
         doUnitTest = 1
+    Else
+        doUnitTest = 0
     End If
 End Function
 
