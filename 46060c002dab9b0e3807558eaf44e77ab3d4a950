@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f440bd2_c087f139",
+        "filename": "svx/source/sidebar/effect/EffectPropertyPanel.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:36:30Z",
+      "side": 1,
+      "message": "what is this \"radiusg\"? how is it different from the previous one? and is there a control named \"radiusg\"?",
+      "range": {
+        "startLine": 51,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 44
+      },
+      "revId": "46060c002dab9b0e3807558eaf44e77ab3d4a950",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
