@@ -242,8 +242,8 @@ void ThreadPool::incBusyWorker()
 
 void ThreadPool::decBusyWorker()
 {
+    assert(mnBusyWorkers >= 1);
     --mnBusyWorkers;
-    assert(mnBusyWorkers >= 0);
 }
 
 void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoinAll)
