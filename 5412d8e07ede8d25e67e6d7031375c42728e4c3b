@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e2c431d_c674935d",
+        "filename": "sc/source/ui/inc/viewfunc.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-10-05T08:28:33Z",
+      "side": 1,
+      "message": "please use number to identify the tab eg. \"SCTAB nTab\" to avoid encoding issues",
+      "revId": "5412d8e07ede8d25e67e6d7031375c42728e4c3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
