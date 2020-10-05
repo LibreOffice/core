@@ -2005,7 +2005,7 @@ void SwUndoTableMerge::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoTableMerge::MoveBoxContent( SwDoc& rDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
-    std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( &rDoc, rRg, rPos ));
+    std::unique_ptr<SwUndoMove> pUndo(new SwUndoMove( rDoc, rRg, rPos ));
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     rDoc.getIDocumentContentOperations().MoveNodeRange( rRg, rPos, m_pSaveTable->IsNewModel() ?
         SwMoveFlags::NO_DELFRMS :
