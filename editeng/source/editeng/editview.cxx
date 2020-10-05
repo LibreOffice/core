@@ -309,6 +309,11 @@ bool EditView::HasSelection() const
     return pImpEditView->HasSelection();
 }
 
+bool EditView::IsSelectionAtPoint(const Point& rPointPixel)
+{
+    return pImpEditView->IsSelectionAtPoint(rPointPixel);
+}
+
 void EditView::DeleteSelected()
 {
     pImpEditView->DeleteSelected();
