@@ -670,7 +670,7 @@ void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTe
         {
             rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
             rDoc.GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoParagraphSigning>(&rDoc, xField, xParagraph, false));
+                std::make_unique<SwUndoParagraphSigning>(rDoc, xField, xParagraph, false));
             lcl_RemoveParagraphMetadataField(xField);
             rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
         }
@@ -1659,18 +1659,18 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     }
 }
 
-SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc* pDoc,
+SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc& rDoc,
                                                const uno::Reference<text::XTextField>& xField,
                                                const uno::Reference<text::XTextContent>& xParent,
                                                const bool bRemove)
-  : SwUndo(SwUndoId::PARA_SIGN_ADD, pDoc),
-    m_pDoc(pDoc),
+  : SwUndo(SwUndoId::PARA_SIGN_ADD, &rDoc),
+    m_rDoc(rDoc),
     m_xField(xField),
     m_xParent(xParent),
     m_bRemove(bRemove)
 {
     // Save the metadata and field content to undo/redo.
-    uno::Reference<frame::XModel> xModel = m_pDoc->GetDocShell()->GetBaseModel();
+    uno::Reference<frame::XModel> xModel = m_rDoc.GetDocShell()->GetBaseModel();
     const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, m_xField);
     const auto it = aStatements.find(ParagraphSignatureIdRDFName);
     if (it != aStatements.end())
@@ -1707,35 +1707,35 @@ void SwUndoParagraphSigning::RepeatImpl(::sw::RepeatContext&)
 void SwUndoParagraphSigning::Insert()
 {
     // Disable undo to avoid introducing noise when we edit the metadata field.
-    const bool isUndoEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
-    m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    const bool isUndoEnabled = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
+    m_rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     // Prevent validation since this will trigger a premature validation
     // upon inserting, but before setting the metadata.
-    SwEditShell* pEditSh = m_pDoc->GetEditShell();
+    SwEditShell* pEditSh = m_rDoc.GetEditShell();
     const bool bOldValidationFlag = pEditSh->SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([&] () {
             pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
+            m_rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    m_xField = lcl_InsertParagraphSignature(m_pDoc->GetDocShell()->GetBaseModel(), m_xParent, m_signature, m_usage);
-    lcl_DoUpdateParagraphSignatureField(*m_pDoc, m_xField, m_display);
+    m_xField = lcl_InsertParagraphSignature(m_rDoc.GetDocShell()->GetBaseModel(), m_xParent, m_signature, m_usage);
+    lcl_DoUpdateParagraphSignatureField(m_rDoc, m_xField, m_display);
 }
 
 void SwUndoParagraphSigning::Remove()
 {
     // Disable undo to avoid introducing noise when we edit the metadata field.
-    const bool isUndoEnabled = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
-    m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    const bool isUndoEnabled = m_rDoc.GetIDocumentUndoRedo().DoesUndo();
+    m_rDoc.GetIDocumentUndoRedo().DoUndo(false);
 
     // Prevent validation since this will trigger a premature validation
     // upon removing.
-    SwEditShell* pEditSh = m_pDoc->GetEditShell();
+    SwEditShell* pEditSh = m_rDoc.GetEditShell();
     const bool bOldValidationFlag = pEditSh->SetParagraphSignatureValidation(false);
     comphelper::ScopeGuard const g([&] () {
             pEditSh->SetParagraphSignatureValidation(bOldValidationFlag);
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
+            m_rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
     lcl_RemoveParagraphMetadataField(m_xField);
@@ -1810,7 +1810,7 @@ void SwEditShell::SignParagraph()
     lcl_UpdateParagraphSignatureField(*GetDoc(), xModel, xParagraph, xField, utf8Text);
 
     rDoc.GetIDocumentUndoRedo().AppendUndo(
-        std::make_unique<SwUndoParagraphSigning>(GetDoc(), xField, xParagraph, true));
+        std::make_unique<SwUndoParagraphSigning>(rDoc, xField, xParagraph, true));
 
     rDoc.GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }

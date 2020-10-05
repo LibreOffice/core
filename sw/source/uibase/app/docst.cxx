@@ -919,7 +919,7 @@ void SwDocShell::Edit(
                             if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                             {
                                 GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-                                    std::make_unique<SwUndoTextFormatCollCreate>(xTmp->GetCollection(), pColl, GetDoc()));
+                                    std::make_unique<SwUndoTextFormatCollCreate>(xTmp->GetCollection(), pColl, *GetDoc()));
                             }
                         }
                     }
@@ -932,7 +932,7 @@ void SwDocShell::Edit(
                             if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                             {
                                 GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-                                    std::make_unique<SwUndoCharFormatCreate>(xTmp->GetCharFormat(), pCFormat, GetDoc()));
+                                    std::make_unique<SwUndoCharFormatCreate>(xTmp->GetCharFormat(), pCFormat, *GetDoc()));
                             }
                         }
                     }
@@ -945,7 +945,7 @@ void SwDocShell::Edit(
                             if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                             {
                                 GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-                                    std::make_unique<SwUndoFrameFormatCreate>(xTmp->GetFrameFormat(), pFFormat, GetDoc()));
+                                    std::make_unique<SwUndoFrameFormatCreate>(xTmp->GetFrameFormat(), pFFormat, *GetDoc()));
                             }
                         }
                     }
@@ -1344,7 +1344,7 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                 if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                 {
                     GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-                        std::make_unique<SwUndoTextFormatCollCreate>(pColl, pDerivedFrom, GetDoc()));
+                        std::make_unique<SwUndoTextFormatCollCreate>(pColl, pDerivedFrom, *GetDoc()));
                 }
                 pCurrWrtShell->SetTextFormatColl(pColl);
                 pCurrWrtShell->EndAllAction();
@@ -1368,7 +1368,7 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                 if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
                 {
                     GetDoc()->GetIDocumentUndoRedo().AppendUndo(
-                        std::make_unique<SwUndoFrameFormatCreate>(pFrame, pFFormat, GetDoc()));
+                        std::make_unique<SwUndoFrameFormatCreate>(pFrame, pFFormat, *GetDoc()));
                 }
                 // also apply template to remove hard set attributes
                 pCurrWrtShell->SetFrameFormat(pFrame);
@@ -1394,7 +1394,7 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
                     GetDoc()->GetIDocumentUndoRedo().AppendUndo(
                         std::make_unique<SwUndoCharFormatCreate>(
                             pChar, pDerivedFrom ? pDerivedFrom : GetDoc()->GetDfltCharFormat(),
-                            GetDoc()));
+                            *GetDoc()));
                 }
                 pCurrWrtShell->SetAttrItem(aFormat);
                 pCurrWrtShell->EndAllAction();
