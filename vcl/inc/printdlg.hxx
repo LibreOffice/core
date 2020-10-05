@@ -222,6 +222,11 @@ namespace vcl
 
         Paper                                   mePaper;
 
+        Idle maUpdatePreviewIdle;
+        DECL_LINK(updatePreviewIdle, Timer*, void);
+        Idle maUpdatePreviewNoCacheIdle;
+        DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
+
         DECL_LINK( ClickHdl, weld::Button&, void );
         DECL_LINK( SelectHdl, weld::ComboBox&, void );
         DECL_LINK( ActivateHdl, weld::Entry&, bool );
