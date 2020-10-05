@@ -1579,10 +1579,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
             uno::Reference < io::XInputStream > xStrm;
-            SotClipboardFormatId nId = SOT_FORMAT_SYSTEM_START; //dummy initialize to avoid warning
             if  ( aDataHelper.GetTransferable().is() )
             {
-                nId = SotClipboardFormatId::MATHML;
+                SotClipboardFormatId nId = SotClipboardFormatId::MATHML;
                 if (aDataHelper.HasFormat(nId))
                 {
                     xStrm = aDataHelper.GetInputStream(nId, "");

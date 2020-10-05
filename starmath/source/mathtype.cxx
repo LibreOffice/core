@@ -1799,10 +1799,10 @@ void MathType::HandleAlign(sal_uInt8 nHorAlign, int &rSetAlign)
  * indicator by mathtype file format*/
 bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
 {
-    const sal_Int16 nDefaultSize = 12;
     bool bRet=false;
     if (nLstSize < 0)
     {
+        const sal_Int16 nDefaultSize = 12;
         if ((-nLstSize/32 != nDefaultSize) && (-nLstSize/32 != nCurSize))
         {
             if (rSetSize)
