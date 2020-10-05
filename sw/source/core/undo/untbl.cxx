@@ -2321,8 +2321,8 @@ UndoTableCpyTable_Entry::UndoTableCpyTable_Entry( const SwTableBox& rBox )
 {
 }
 
-SwUndoTableCpyTable::SwUndoTableCpyTable(const SwDoc* pDoc)
-    : SwUndo( SwUndoId::TBLCPYTBL, pDoc )
+SwUndoTableCpyTable::SwUndoTableCpyTable(const SwDoc& rDoc)
+    : SwUndo( SwUndoId::TBLCPYTBL, &rDoc )
 {
 }
 
@@ -2729,8 +2729,8 @@ bool SwUndoTableCpyTable::IsEmpty() const
     return !m_pInsRowUndo && m_vArr.empty();
 }
 
-SwUndoCpyTable::SwUndoCpyTable(const SwDoc* pDoc)
-    : SwUndo( SwUndoId::CPYTBL, pDoc ), m_nTableNode( 0 )
+SwUndoCpyTable::SwUndoCpyTable(const SwDoc& rDoc)
+    : SwUndo( SwUndoId::CPYTBL, &rDoc ), m_nTableNode( 0 )
 {
 }
 
@@ -3065,8 +3065,8 @@ void CheckTable( const SwTable& rTable )
 }
 #endif
 
-SwUndoTableStyleMake::SwUndoTableStyleMake(const OUString& rName, const SwDoc* pDoc)
-    : SwUndo(SwUndoId::TBLSTYLE_CREATE, pDoc),
+SwUndoTableStyleMake::SwUndoTableStyleMake(const OUString& rName, const SwDoc& rDoc)
+    : SwUndo(SwUndoId::TBLSTYLE_CREATE, &rDoc),
     m_sName(rName)
 { }
 
@@ -3098,8 +3098,8 @@ SwRewriter SwUndoTableStyleMake::GetRewriter() const
     return aResult;
 }
 
-SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc* pDoc)
-    : SwUndo(SwUndoId::TBLSTYLE_DELETE, pDoc),
+SwUndoTableStyleDelete::SwUndoTableStyleDelete(std::unique_ptr<SwTableAutoFormat> pAutoFormat, const std::vector<SwTable*>& rAffectedTables, const SwDoc& rDoc)
+    : SwUndo(SwUndoId::TBLSTYLE_DELETE, &rDoc),
     m_pAutoFormat(std::move(pAutoFormat)),
     m_rAffectedTables(rAffectedTables)
 { }
@@ -3128,8 +3128,8 @@ SwRewriter SwUndoTableStyleDelete::GetRewriter() const
     return aResult;
 }
 
-SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc* pDoc)
-    : SwUndo(SwUndoId::TBLSTYLE_UPDATE, pDoc)
+SwUndoTableStyleUpdate::SwUndoTableStyleUpdate(const SwTableAutoFormat& rNewFormat, const SwTableAutoFormat& rOldFormat, const SwDoc& rDoc)
+    : SwUndo(SwUndoId::TBLSTYLE_UPDATE, &rDoc)
     , m_pOldFormat(new SwTableAutoFormat(rOldFormat))
     , m_pNewFormat(new SwTableAutoFormat(rNewFormat))
 { }

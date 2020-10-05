@@ -837,8 +837,8 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     }
 }
 
-SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::SETDEFTATTR, pDoc )
+SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet, const SwDoc& rDoc )
+    : SwUndo( SwUndoId::SETDEFTATTR, &rDoc )
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) ) {
@@ -964,8 +964,8 @@ void SwUndoChangeFootNote::RepeatImpl(::sw::RepeatContext & rContext)
     rDoc.SetCurFootnote(rContext.GetRepeatPaM(), m_Text, m_bEndNote);
 }
 
-SwUndoFootNoteInfo::SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::FTNINFO, pDoc )
+SwUndoFootNoteInfo::SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc& rDoc )
+    : SwUndo( SwUndoId::FTNINFO, &rDoc )
     , m_pFootNoteInfo( new SwFootnoteInfo( rInfo ) )
 {
 }
@@ -990,8 +990,8 @@ void SwUndoFootNoteInfo::RedoImpl(::sw::UndoRedoContext & rContext)
     m_pFootNoteInfo.reset( pInf );
 }
 
-SwUndoEndNoteInfo::SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc* pDoc )
-    : SwUndo( SwUndoId::FTNINFO, pDoc )
+SwUndoEndNoteInfo::SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo, const SwDoc& rDoc )
+    : SwUndo( SwUndoId::FTNINFO, &rDoc )
     , m_pEndNoteInfo( new SwEndNoteInfo( rInfo ) )
 {
 }

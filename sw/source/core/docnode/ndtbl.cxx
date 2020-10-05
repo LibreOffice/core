@@ -4300,7 +4300,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo.reset(new SwUndoCpyTable(this));
+            pUndo.reset(new SwUndoCpyTable(*this));
         }
 
         {
@@ -4329,7 +4329,7 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo.reset(new SwUndoTableCpyTable(this));
+            pUndo.reset(new SwUndoTableCpyTable(*this));
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
@@ -4582,7 +4582,7 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoTableStyleMake>(rName, this));
+            std::make_unique<SwUndoTableStyleMake>(rName, *this));
     }
 
     if (bBroadcast)
@@ -4618,7 +4618,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoTableStyleDelete>(std::move(pReleasedFormat), vAffectedTables, this));
+                std::make_unique<SwUndoTableStyleDelete>(std::move(pReleasedFormat), vAffectedTables, *this));
         }
     }
 
@@ -4649,7 +4649,7 @@ void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFo
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoTableStyleUpdate>(*pFormat, aOldFormat, this));
+            std::make_unique<SwUndoTableStyleUpdate>(*pFormat, aOldFormat, *this));
     }
 }
 
