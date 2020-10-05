@@ -23,6 +23,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/sdasitm.hxx>
 #include <textchain.hxx>
 #include <textchainflow.hxx>
 #include <svx/sdtacitm.hxx>
@@ -43,6 +44,7 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/canvastools.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>
@@ -1109,6 +1111,23 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
     basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
 
+    // Apply the camera rotation. It have to be applied after adjustment of
+    // the text (top, bottom, center, left, right).
+    if(GetCameraZRotation() != 0)
+    {
+        // First find the text rect.
+        basegfx::B2DRange aTextRectangle(/*x1=*/aTranslate.getX() + aAdjustTranslate.getX(),
+                                         /*y1=*/aTranslate.getY() + aAdjustTranslate.getY(),
+                                         /*x2=*/aTranslate.getX() + aOutlinerScale.getX() - aAdjustTranslate.getX(),
+                                         /*y2=*/aTranslate.getY() + aOutlinerScale.getY() - aAdjustTranslate.getY());
+
+        // Rotate the text from the center point.
+        basegfx::B2DVector aTranslateToCenter(aTextRectangle.getWidth() / 2, aTextRectangle.getHeight() / 2);
+        aNewTransformA.translate(-aTranslateToCenter.getX(), -aTranslateToCenter.getY());
+        aNewTransformA.rotate(basegfx::deg2rad(360.0 - GetCameraZRotation() ));
+        aNewTransformA.translate(aTranslateToCenter.getX(), aTranslateToCenter.getY());
+    }
+
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
     const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
@@ -1119,6 +1138,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const basegfx::B2DHomMatrix aNewTransformB(basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
         bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0,
         fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+
 
     // create ClipRange (if needed)
     basegfx::B2DRange aClipRange;
@@ -1656,6 +1676,21 @@ void SdrTextObj::impDecomposeBlockTextPrimitiveDirect(
     impTextBreakupHandler aConverter(rOutliner);
     aConverter.decomposeBlockTextPrimitive(rNewTransformA, rNewTransformB, rClipRange);
     rTarget.append(aConverter.getPrimitive2DSequence());
+}
+
+double SdrTextObj::GetCameraZRotation() const
+{
+    const css::uno::Any* pAny;
+    double fTextCameraZRotateAngle = 0.0;
+    const SfxItemSet& rSet = GetObjectItemSet();
+    const SdrCustomShapeGeometryItem& rGeometryItem(rSet.Get(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+
+    pAny = rGeometryItem.GetPropertyValueByName("TextCameraZRotateAngle");
+
+    if ( pAny )
+        *pAny >>= fTextCameraZRotateAngle;
+
+    return fTextCameraZRotateAngle;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
