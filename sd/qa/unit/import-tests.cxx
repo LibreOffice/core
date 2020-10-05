@@ -223,6 +223,7 @@ public:
     void testTdf106638();
     void testTdf113198();
     void testShapeTextAlignment();
+    void testShapeTextAdjustLeft();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -328,6 +329,7 @@ public:
     CPPUNIT_TEST(testTdf128684);
     CPPUNIT_TEST(testTdf113198);
     CPPUNIT_TEST(testShapeTextAlignment);
+    CPPUNIT_TEST(testShapeTextAdjustLeft);
     CPPUNIT_TEST(testTdf119187);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3086,9 +3088,9 @@ void SdImportTest::testTdf113198()
         = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf113198.pptx"), PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
-    drawing::TextHorizontalAdjust eAdjust;
-    xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust;
-    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_CENTER, eAdjust);
+    sal_Int16 nParaAdjust = -1;
+    xShape->getPropertyValue("ParaAdjust") >>= nParaAdjust;
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
 }
 
 void SdImportTest::testShapeTextAlignment()
@@ -3105,6 +3107,25 @@ void SdImportTest::testShapeTextAlignment()
     // i.e. text which is meant to be left-aligned was centered at a paragraph level.
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
                          static_cast<style::ParagraphAdjust>(nParaAdjust));
+}
+
+void SdImportTest::testShapeTextAdjustLeft()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/shape-text-adjust-left.pptx"), PPTX);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetDoc()->getUnoModel(),
+                                                                   uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::TextHorizontalAdjust eAdjust;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3 (center)
+    // - Actual  : 1 (block)
+    // i.e. text was center-adjusted, not default-adjusted (~left).
+    CPPUNIT_ASSERT(xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
 }
 
 void SdImportTest::testTdf119187()
