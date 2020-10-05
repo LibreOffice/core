@@ -39,13 +39,14 @@ static sal_Sequence aEmpty_rtl_ByteSeq =
 void SAL_CALL rtl_byte_sequence_reference2One(
     sal_Sequence ** ppSequence ) SAL_THROW_EXTERN_C()
 {
-    sal_Sequence * pSequence, * pNew;
+    sal_Sequence * pSequence;
 
     OSL_ENSURE( ppSequence, "### null ptr!" );
     pSequence = *ppSequence;
 
     if (pSequence->nRefCount > 1)
     {
+        sal_Sequence *pNew;
         sal_Int32 nElements = pSequence->nElements;
         if (nElements)
         {
@@ -75,7 +76,7 @@ void SAL_CALL rtl_byte_sequence_reference2One(
 void SAL_CALL rtl_byte_sequence_realloc(
     sal_Sequence ** ppSequence, sal_Int32 nSize ) SAL_THROW_EXTERN_C()
 {
-    sal_Sequence * pSequence, * pNew;
+    sal_Sequence * pSequence;
     sal_Int32 nElements;
 
     assert(ppSequence && "### null ptr!");
@@ -87,7 +88,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
 
     if (pSequence->nRefCount > 1) // split
     {
-        pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nSize ));
+        sal_Sequence *pNew = static_cast<sal_Sequence *>(malloc( SAL_SEQUENCE_HEADER_SIZE + nSize ));
 
         if ( pNew != nullptr )
         {
