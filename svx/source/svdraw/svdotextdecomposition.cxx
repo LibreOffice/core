@@ -42,6 +42,7 @@
 #include <drawinglayer/animation/animationtiming.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/canvastools.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/flditem.hxx>
@@ -1092,6 +1093,19 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     const double fStartInY(bVerticalWriting && !bTopToBottom ? aAdjustTranslate.getY() + aOutlinerScale.getY() : aAdjustTranslate.getY());
     const basegfx::B2DTuple aAdjOffset(fStartInX, fStartInY);
     basegfx::B2DHomMatrix aNewTransformA(basegfx::utils::createTranslateB2DHomMatrix(aAdjOffset.getX(), aAdjOffset.getY()));
+
+    // Apply the camera rotation. It have to be applied after adjustment of
+    // the text (top, bottom, center, left, right).
+
+        // First find the text rect.
+    tools::Rectangle aTextRect( Point(aTranslate.getX(), aTranslate.getY()), Size(aOutlinerScale.getX(), aOutlinerScale.getY()) );
+    const basegfx::B2DRange aTextRange = vcl::unotools::b2DRectangleFromRectangle(aTextRect);
+
+        // Rotate the text from the center point.
+    basegfx::B2DVector aTranslation(aTextRange.getCenterX(), aTextRange.getCenterY());
+    aNewTransformA.translate( -aTranslation.getX(), -aTranslation.getY() );
+    aNewTransformA.rotate(basegfx::deg2rad(360.0 - 90.0 ));
+    aNewTransformA.translate( aTranslation.getX(), aTranslation.getY() );
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
