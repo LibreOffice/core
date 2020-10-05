@@ -34,6 +34,7 @@ namespace accessibility
     class AccessibleTextHelper;
 }
 class EditView;
+class ScTextWnd;
 namespace vcl { class Window; }
 
 /** @descr
@@ -59,8 +60,8 @@ public:
 
     void InitAcc(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
-        const OUString& rDescription);
+        EditView* pEditView, vcl::Window* pWin, ScTextWnd* pTextWnd,
+        const OUString& rName, const OUString& rDescription);
 
 protected:
     virtual ~ScAccessibleEditObject() override;
@@ -174,6 +175,7 @@ private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     EditView*      mpEditView;
     VclPtr<vcl::Window> mpWindow;
+    ScTextWnd* mpTextWnd;
     EditObjectType meObjectType;
     bool           mbHasFocus;
 
@@ -205,8 +207,8 @@ protected:
     virtual tools::Rectangle GetBoundingBox() const override;
 
 public:
-    ScAccessibleEditControlObject(weld::CustomWidgetController* pController)
-        : ScAccessibleEditObject(ScAccessibleEditObject::EditControl)
+    ScAccessibleEditControlObject(weld::CustomWidgetController* pController, EditObjectType eObjectType)
+        : ScAccessibleEditObject(eObjectType)
         , m_pController(pController)
     {
     }
