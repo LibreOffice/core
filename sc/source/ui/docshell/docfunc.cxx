@@ -92,6 +92,7 @@
 #include <sheetevents.hxx>
 #include <conditio.hxx>
 #include <columnspanset.hxx>
+#include <validat.hxx>
 
 #include <memory>
 #include <utility>
@@ -838,6 +839,15 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
     // notify input handler here the same way as in PutCell
     if (bApi)
         NotifyInputHandler( rPos );
+
+    const SfxUInt32Item* pItem = rDoc.GetAttr(rPos, ATTR_VALIDDATA);
+    const ScValidationData* pData = rDoc.GetValidationEntry(pItem->GetValue());
+    if (pData)
+    {
+        ScRefCellValue aCell(rDoc, rPos);
+        if (pData->IsDataValid(aCell, rPos))
+            ScDetectiveFunc(rDoc, rPos.Tab()).DeleteCirclesAt(rPos.Col(), rPos.Row());
+    }
 
     return true;
 }
