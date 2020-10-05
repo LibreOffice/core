@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2020-08-27 16:26:03 using:
+ Generated on 2020-10-05 14:50:57 using:
  ./bin/update_pch external/skia skia --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -47,7 +47,9 @@
 #include <limits.h>
 #include <limits>
 #include <locale>
+#include <map>
 #include <memory>
+#include <mutex>
 #include <new>
 #include <png.h>
 #include <queue>
@@ -164,6 +166,8 @@
 #include <include/core/SkUnPreMultiply.h>
 #include <include/core/SkVertices.h>
 #include <include/core/SkYUVAIndex.h>
+#include <include/core/SkYUVAInfo.h>
+#include <include/core/SkYUVAPixmaps.h>
 #include <include/core/SkYUVASizeInfo.h>
 #include <include/effects/Sk1DPathEffect.h>
 #include <include/effects/Sk2DPathEffect.h>
@@ -211,6 +215,7 @@
 #include <include/gpu/GrBackendDrawableInfo.h>
 #include <include/gpu/GrBackendSemaphore.h>
 #include <include/gpu/GrBackendSurface.h>
+#include <include/gpu/GrBackendSurfaceMutableState.h>
 #include <include/gpu/GrConfig.h>
 #include <include/gpu/GrContext.h>
 #include <include/gpu/GrContextOptions.h>
@@ -476,7 +481,6 @@
 #include <src/core/SkXfermodePriv.h>
 #include <src/core/SkYUVMath.h>
 #include <src/core/SkYUVPlanesCache.h>
-#include <src/core/SkZip.h>
 #include <src/effects/SkDashImpl.h>
 #include <src/effects/SkEmbossMask.h>
 #include <src/effects/SkEmbossMaskFilter.h>
@@ -501,6 +505,7 @@
 #include <src/gpu/GrCaps.h>
 #include <src/gpu/GrClientMappedBufferManager.h>
 #include <src/gpu/GrClip.h>
+#include <src/gpu/GrClipStack.h>
 #include <src/gpu/GrClipStackClip.h>
 #include <src/gpu/GrColor.h>
 #include <src/gpu/GrColorInfo.h>
@@ -563,7 +568,6 @@
 #include <src/gpu/GrRenderTargetContext.h>
 #include <src/gpu/GrRenderTargetContextPriv.h>
 #include <src/gpu/GrRenderTargetProxy.h>
-#include <src/gpu/GrRenderTargetProxyPriv.h>
 #include <src/gpu/GrRenderTask.h>
 #include <src/gpu/GrResourceAllocator.h>
 #include <src/gpu/GrResourceCache.h>
@@ -605,6 +609,7 @@
 #include <src/gpu/GrTextureProxyPriv.h>
 #include <src/gpu/GrTextureRenderTargetProxy.h>
 #include <src/gpu/GrTextureResolveRenderTask.h>
+#include <src/gpu/GrThreadSafeUniquelyKeyedProxyViewCache.h>
 #include <src/gpu/GrTracing.h>
 #include <src/gpu/GrTransferFromRenderTask.h>
 #include <src/gpu/GrTriangulator.h>
@@ -880,9 +885,11 @@
 #include <src/sksl/SkSLCompiler.h>
 #include <src/sksl/SkSLContext.h>
 #include <src/sksl/SkSLDehydrator.h>
+#include <src/sksl/SkSLErrorReporter.h>
 #include <src/sksl/SkSLGLSLCodeGenerator.h>
 #include <src/sksl/SkSLHCodeGenerator.h>
 #include <src/sksl/SkSLIRGenerator.h>
+#include <src/sksl/SkSLInliner.h>
 #include <src/sksl/SkSLLexer.h>
 #include <src/sksl/SkSLMetalCodeGenerator.h>
 #include <src/sksl/SkSLOutputStream.h>
@@ -917,8 +924,10 @@
 #include <src/sksl/ir/SkSLFunctionDeclaration.h>
 #include <src/sksl/ir/SkSLFunctionDefinition.h>
 #include <src/sksl/ir/SkSLFunctionReference.h>
+#include <src/sksl/ir/SkSLIRNode.h>
 #include <src/sksl/ir/SkSLIfStatement.h>
 #include <src/sksl/ir/SkSLIndexExpression.h>
+#include <src/sksl/ir/SkSLInlineMarker.h>
 #include <src/sksl/ir/SkSLIntLiteral.h>
 #include <src/sksl/ir/SkSLInterfaceBlock.h>
 #include <src/sksl/ir/SkSLLayout.h>

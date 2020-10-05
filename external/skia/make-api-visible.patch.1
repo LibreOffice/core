@@ -69,3 +69,16 @@ index c05a4f0acf..fc27cd2afb 100644
  
  }  // namespace window_context_factory
  
+diff --git a/include/gpu/GrRecordingContext.h b/include/gpu/GrRecordingContext.h
+index e010c37c07..bd5f10524f 100644
+--- a/include/gpu/GrRecordingContext.h
++++ b/include/gpu/GrRecordingContext.h
+@@ -31,7 +31,7 @@ class SkJSONWriter;
+ class SkString;
+ #endif
+ 
+-class GrRecordingContext : public GrImageContext {
++class SK_API GrRecordingContext : public GrImageContext {
+ public:
+     ~GrRecordingContext() override;
+ 

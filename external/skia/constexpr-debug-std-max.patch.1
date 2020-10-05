@@ -35,3 +35,35 @@ index 52dda13e29..cafe2e672a 100755
                                                 alignof(GrTextureAdjuster      ),
                                                 alignof(GrImageTextureMaker    ),
                                                 alignof(GrBitmapTextureMaker   )});
+diff --git a/src/sksl/SkSLASTNode.h b/src/sksl/SkSLASTNode.h
+index 5922cd5fb3..17a877ee21 100644
+--- a/src/sksl/SkSLASTNode.h
++++ b/src/sksl/SkSLASTNode.h
+@@ -17,6 +17,18 @@
+ 
+ namespace SkSL {
+ 
++namespace {
++template<typename T>
++constexpr T skia_max( std::initializer_list<T> list )
++{
++T max = *list.begin();
++for(auto i: list)
++    if( max < i )
++        max = i;
++return max;
++}
++}
++
+ /**
+  * Represents a node in the abstract syntax tree (AST). The AST is based directly on the parse tree;
+  * it is a parsed-but-not-yet-analyzed version of the program.
+@@ -263,7 +275,7 @@ struct ASTNode {
+     };
+ 
+     struct NodeData {
+-        char fBytes[std::max({sizeof(Token),
++        char fBytes[skia_max({sizeof(Token),
+                               sizeof(StringFragment),
+                               sizeof(bool),
+                               sizeof(SKSL_INT),

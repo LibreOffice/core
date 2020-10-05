@@ -18,3 +18,23 @@ index 6a4748f91c..50086a7780 100644
  
      bool same;
  
+diff --git a/src/ports/SkScalerContext_win_dw.cpp b/src/ports/SkScalerContext_win_dw.cpp
+index b2df467b22..385094e506 100644
+--- a/src/ports/SkScalerContext_win_dw.cpp
++++ b/src/ports/SkScalerContext_win_dw.cpp
+@@ -778,6 +778,7 @@ void SkScalerContext_DW::generateFontMetrics(SkFontMetrics* metrics) {
+     metrics->fFlags |= SkFontMetrics::kStrikeoutThicknessIsValid_Flag;
+     metrics->fFlags |= SkFontMetrics::kStrikeoutPositionIsValid_Flag;
+ 
++#if defined(NTDDI_WIN10_RS3) && NTDDI_VERSION >= NTDDI_WIN10_RS3
+     SkTScopedComPtr<IDWriteFontFace5> fontFace5;
+     if (SUCCEEDED(this->getDWriteTypeface()->fDWriteFontFace->QueryInterface(&fontFace5))) {
+         if (fontFace5->HasVariations()) {
+@@ -785,6 +786,7 @@ void SkScalerContext_DW::generateFontMetrics(SkFontMetrics* metrics) {
+             metrics->fFlags |= SkFontMetrics::kBoundsInvalid_Flag;
+         }
+     }
++#endif
+ 
+     if (this->getDWriteTypeface()->fDWriteFontFace1.get()) {
+         DWRITE_FONT_METRICS1 dwfm1;

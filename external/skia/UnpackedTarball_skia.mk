@@ -22,9 +22,7 @@ skia_patches := \
     fix-alpha-difference-copy.patch.1 \
     libvulkan-name.patch.1 \
     share-grcontext.patch.1 \
-    Wdeprecated-copy-dtor.patch.0 \
     fix-gcc-x86.patch.1	\
-    fix-sse.patch.1 \
     clang11-flax-vector-conversion.patch.0 \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
