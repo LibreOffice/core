@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "afbbf79b_a8ec804e",
+        "filename": "sw/source/core/table/swnewtable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2346,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-05T12:09:56Z",
+      "side": 1,
+      "message": "this doesn\u0027t work, it\u0027s created too late, when the first chart is loaded, after the main document is imported",
+      "range": {
+        "startLine": 2346,
+        "startChar": 52,
+        "endLine": 2346,
+        "endChar": 79
+      },
+      "revId": "027e113288cc12e7135fb5930c1799001474fd1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
