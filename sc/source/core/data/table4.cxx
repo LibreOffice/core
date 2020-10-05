@@ -254,15 +254,15 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         bool bHasOverlappedCells = false;
         bool bSkipOverlappedCells = true;
-        SCCOL nColAkt = nCol1;
-        SCROW nRowAkt = nRow1;
+        SCCOL nColAct = nCol1;
+        SCROW nRowAct = nRow1;
 
         // collect cells that are not empty or not overlapped
         rNonOverlappedCellIdx.resize(nCount);
         SCSIZE nValueCount = 0;
         for (SCSIZE i = 0; i < nCount; ++i)
         {
-            const ScPatternAttr* pPattern = GetPattern(nColAkt, nRowAkt);
+            const ScPatternAttr* pPattern = GetPattern(nColAct, nRowAct);
             bool bOverlapped
                 = pPattern->GetItemSet().GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET
                   && pPattern->GetItem(ATTR_MERGE_FLAG).IsOverlapped();
@@ -270,7 +270,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (bOverlapped)
                 bHasOverlappedCells = true;
 
-            if (!bOverlapped || GetCellValue(nColAkt, nRowAkt).meType != CELLTYPE_NONE)
+            if (!bOverlapped || GetCellValue(nColAct, nRowAct).meType != CELLTYPE_NONE)
             {
                 rNonOverlappedCellIdx[nValueCount++] = i;
                 // if there is at least 1 non empty overlapped cell, then no cell should be skipped
@@ -278,8 +278,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bSkipOverlappedCells = false;
             }
 
-            nColAkt += nAddX;
-            nRowAkt += nAddY;
+            nColAct += nAddX;
+            nRowAct += nAddY;
         }
         rNonOverlappedCellIdx.resize(nValueCount);
 
@@ -293,23 +293,100 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         if (bSkipOverlappedCells)
         {
-            nColAkt = nCol1 + rNonOverlappedCellIdx[0] * nAddX;
-            nRowAkt = nRow1 + rNonOverlappedCellIdx[0] * nAddY;
+            nColAct = nCol1 + rNonOverlappedCellIdx[0] * nAddX;
+            nRowAct = nRow1 + rNonOverlappedCellIdx[0] * nAddY;
             ScRefCellValue aPrevCell, aAktCell;
-            aAktCell = GetCellValue(nColAkt, nRowAkt);
+            aAktCell = GetCellValue(nColAct, nRowAct);
             CellType eCellType = aAktCell.meType;
             if (eCellType == CELLTYPE_VALUE)
             {
-                // TODO: Check / handle special cases of number formats: like date, boolean
+                // TODO: Check / handle special cases of number formats like boolean
                 bool bVal = true;
-                if (nValueCount >= 2)
+                SvNumFormatType nAktCellFormatType
+                    = rDocument.GetFormatTable()->GetType(GetNumberFormat(nColAct, nRowAct));
+                if (nAktCellFormatType == SvNumFormatType::DATE)
+                {
+                    if (nValueCount >= 2)
+                    {
+                        long nCmpInc = 0;
+                        FillDateCmd eType = FILL_YEAR;  // just some temporary default values
+                        long nDDiff = 0, nMDiff = 0, nYDiff = 0; // to avoid warnings
+                        Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
+                        Date aAktDate = aNullDate, aPrevDate = aNullDate;
+                        aAktDate.AddDays(aAktCell.mfValue);
+                        for (SCSIZE i = 1; i < nValueCount && bVal; i++)
+                        {
+                            aPrevCell = aAktCell;
+                            aPrevDate = aAktDate;
+                            nColAct = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
+                            nRowAct = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
+                            aAktCell = GetCellValue(nColAct, nRowAct);
+                            if (aAktCell.meType == CELLTYPE_VALUE)
+                            {
+                                aAktDate = aNullDate + static_cast<sal_Int32>(aAktCell.mfValue);
+                                if (eType != FILL_DAY) {
+                                    nDDiff = aAktDate.GetDay() - static_cast<long>(aPrevDate.GetDay());
+                                    nMDiff = aAktDate.GetMonth() - static_cast<long>(aPrevDate.GetMonth());
+                                    nYDiff = aAktDate.GetYear() - static_cast<long>(aPrevDate.GetYear());
+                                }
+                                if (i == 1)
+                                {
+                                    if (nDDiff != 0)
+                                    {
+                                        eType = FILL_DAY;
+                                        nCmpInc = aAktDate - aPrevDate;
+                                    }
+                                    else
+                                    {
+                                        eType = FILL_MONTH;
+                                        nCmpInc = nMDiff + 12 * nYDiff;
+                                    }
+                                }
+                                else if (eType == FILL_DAY)
+                                {
+                                    if (aAktDate - aPrevDate != nCmpInc)
+                                        bVal = false;
+                                }
+                                else
+                                {
+                                    if (nDDiff || (nMDiff + 12 * nYDiff != nCmpInc))
+                                        bVal = false;
+                                }
+                            }
+                            else
+                                bVal = false;   // No date is also not ok
+                        }
+                        if (bVal)
+                        {
+                            if (eType == FILL_MONTH && (nCmpInc % 12 == 0))
+                            {
+                                eType = FILL_YEAR;
+                                nCmpInc /= 12;
+                            }
+                            rCmd = FILL_DATE;
+                            rDateCmd = eType;
+                            rInc = nCmpInc;
+                            rSkipOverlappedCells = true;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        rCmd = FILL_DATE;
+                        rDateCmd = FILL_DAY;
+                        rInc = 1.0;
+                        rSkipOverlappedCells = true;
+                        return;
+                    }
+                }
+                else if (nValueCount >= 2)
                 {
                     for (SCSIZE i = 1; i < nValueCount && bVal; i++)
                     {
                         aPrevCell = aAktCell;
-                        nColAkt = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
-                        nRowAkt = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
-                        aAktCell = GetCellValue(nColAkt, nRowAkt);
+                        nColAct = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
+                        nRowAct = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
+                        aAktCell = GetCellValue(nColAct, nRowAct);
                         if (aAktCell.meType == CELLTYPE_VALUE)
                         {
                             double nDiff = approxDiff(aAktCell.mfValue, aPrevCell.mfValue);
@@ -892,18 +969,18 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
-        bool nSkipOverlappedCells;
+        bool bSkipOverlappedCells;
         std::vector<sal_Int32> aNonOverlappedCellIdx;
         if (bVertical)
             FillAnalyse(static_cast<SCCOL>(nCol),nRow1,
                     static_cast<SCCOL>(nCol),nRow2, eFillCmd,eDateCmd,
                     nInc, nMinDigits, pListData, nListIndex,
-                    bHasFiltered, nSkipOverlappedCells, aNonOverlappedCellIdx);
+                    bHasFiltered, bSkipOverlappedCells, aNonOverlappedCellIdx);
         else
             FillAnalyse(nCol1,static_cast<SCROW>(nRow),
                     nCol2,static_cast<SCROW>(nRow), eFillCmd,eDateCmd,
                     nInc, nMinDigits, pListData, nListIndex,
-                    bHasFiltered, nSkipOverlappedCells, aNonOverlappedCellIdx);
+                    bHasFiltered, bSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if (pListData)
         {
@@ -961,12 +1038,12 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 FillSeries( static_cast<SCCOL>(nCol), nRow1,
                         static_cast<SCCOL>(nCol), nRow2, nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        pProgress, nSkipOverlappedCells, &aNonOverlappedCellIdx);
+                        pProgress, bSkipOverlappedCells, &aNonOverlappedCellIdx);
             else
                 FillSeries( nCol1, static_cast<SCROW>(nRow), nCol2,
                         static_cast<SCROW>(nRow), nFillCount, eFillDir,
                         eFillCmd, eDateCmd, nInc, nEndVal, nMinDigits, false,
-                        pProgress, nSkipOverlappedCells, &aNonOverlappedCellIdx);
+                        pProgress, bSkipOverlappedCells, &aNonOverlappedCellIdx);
             if (pProgress)
                 nProgress = pProgress->GetState();
         }
@@ -1020,7 +1097,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
         sal_uInt16 nListIndex;
-        bool nSkipOverlappedCells;
+        bool bSkipOverlappedCells;
         std::vector<sal_Int32> aNonOverlappedCellIdx;
 
         // Todo: update this function to calculate with merged cell fills,
@@ -1028,7 +1105,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         // Now FillAnalyse called as if there are filtered rows, so it will work in the old way.
         FillAnalyse(nCol1, nRow1, nCol2, nRow2, eFillCmd, eDateCmd,
                     nInc, nMinDigits, pListData, nListIndex,
-                    true, nSkipOverlappedCells, aNonOverlappedCellIdx);
+                    true, bSkipOverlappedCells, aNonOverlappedCellIdx);
 
         if ( pListData )                            // user defined list
         {
@@ -1963,25 +2040,25 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             // create a vector to make it easier to decide if a cell need to be filled, or skipped.
             aIsNonEmptyCell.resize(nFillerCount, false);
 
-            SCCOLROW nfirstValueIdx;
+            SCCOLROW nFirstValueIdx;
             if (bPositive)
             {
-                nfirstValueIdx = nISource + (*pNonOverlappedCellIdx)[0];
+                nFirstValueIdx = nISource + (*pNonOverlappedCellIdx)[0];
                 for (auto i : (*pNonOverlappedCellIdx))
                     aIsNonEmptyCell[i] = true;
             }
             else
             {
-                nfirstValueIdx = nISource - (nFillerCount - 1 - (*pNonOverlappedCellIdx).back());
+                nFirstValueIdx = nISource - (nFillerCount - 1 - (*pNonOverlappedCellIdx).back());
                 for (auto i : (*pNonOverlappedCellIdx))
                     aIsNonEmptyCell[nFillerCount - 1 - i] = true;
             }
 
             //Set the real source cell
             if (bVertical)
-                aSrcCell = aCol[nOStart].GetCellValue(static_cast<SCROW>(nfirstValueIdx));
+                aSrcCell = aCol[nOStart].GetCellValue(static_cast<SCROW>(nFirstValueIdx));
             else
-                aSrcCell = aCol[nfirstValueIdx].GetCellValue(static_cast<SCROW>(nOStart));
+                aSrcCell = aCol[nFirstValueIdx].GetCellValue(static_cast<SCROW>(nOStart));
         }
 
         const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
