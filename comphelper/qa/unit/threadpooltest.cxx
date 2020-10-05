@@ -12,17 +12,22 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <tools/time.hxx>
+#include <osl/thread.hxx>
 
 #include <stdlib.h>
 #include <thread>
+#include <mutex>
 
 class ThreadPoolTest : public CppUnit::TestFixture
 {
 public:
     void testPreferredConcurrency();
+    void testWorkerUsage();
 
     CPPUNIT_TEST_SUITE(ThreadPoolTest);
     CPPUNIT_TEST(testPreferredConcurrency);
+    CPPUNIT_TEST(testWorkerUsage);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -46,6 +51,51 @@ void ThreadPoolTest::testPreferredConcurrency()
     nThreads = comphelper::ThreadPool::getPreferredConcurrency();
     CPPUNIT_ASSERT_MESSAGE("Expected no more than 4 threads", nExpected >= nThreads);
 #endif
+}
+
+namespace
+{
+class UsageTask : public comphelper::ThreadTask
+{
+public:
+    UsageTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag)
+        : ThreadTask(pTag)
+    {
+    }
+    virtual void doWork()
+    {
+        ++count;
+        mutex.lock();
+        mutex.unlock();
+    }
+    static inline int count = 0;
+    static inline std::mutex mutex;
+};
+} // namespace
+
+void ThreadPoolTest::testWorkerUsage()
+{
+    // Create tasks for each available worker. Lock a shared mutex before that to make all
+    // tasks block on it. And check that all workers have started, i.e. that the full
+    // thread pool capacity is used.
+    comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+    UsageTask::mutex.lock();
+    for (int i = 0; i < rSharedPool.getWorkerCount(); ++i)
+    {
+        rSharedPool.pushTask(std::make_unique<UsageTask>(pTag));
+        osl::Thread::wait(std::chrono::milliseconds(10)); // give it a time to start
+    }
+    sal_uInt64 startTicks = tools::Time::GetSystemTicks();
+    while (UsageTask::count != rSharedPool.getWorkerCount())
+    {
+        // Wait at most 5 seconds, that should do even on slow systems.
+        CPPUNIT_ASSERT_MESSAGE("Thread pool does not use all worker threads.",
+                               startTicks + 5000 > tools::Time::GetSystemTicks());
+        osl::Thread::wait(std::chrono::milliseconds(10));
+    }
+    UsageTask::mutex.unlock();
+    rSharedPool.waitUntilDone(pTag);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ThreadPoolTest);
