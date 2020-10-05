@@ -2198,7 +2198,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     assert(pSourceBox->getRowSpan() == 1);
                     // import filter (xmltbli.cxx) converts all box widths to absolute
                     assert(pSourceBox->GetFrameFormat()->GetFrameSize().GetWidthPercent() == 0);
-                    ::InsTableBox(pDoc, GetTableNode(), pNewLine,
+                    ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
                         static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
                         pSourceBox, j+k, 1);
                     // insert dummy text node...
@@ -2237,7 +2237,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                 SwTableBox *const pSourceBox(pSourceLine->GetTabBoxes()[j]);
                 assert(pSourceBox->GetTabLines().empty()); // checked for that
                 sal_uInt16 const nInsPos(j < nBox ? j : j + pSubLine->GetTabBoxes().size() - 1);
-                ::InsTableBox(pDoc, GetTableNode(), pNewLine,
+                ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
                     static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
                     pSourceBox, nInsPos, 1);
                 // adjust row span:
