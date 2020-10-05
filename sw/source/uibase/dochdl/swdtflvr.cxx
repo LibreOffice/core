@@ -395,7 +395,7 @@ namespace
         //by the selection, e.g. apply SwDoc::IsUsed on styles ?
         rDest.ReplaceStyles(rSrc, false);
 
-        rSrcWrtShell.Copy(&rDest);
+        rSrcWrtShell.Copy(rDest);
 
         rDest.GetMetaFieldManager().copyDocumentProperties(rSrc);
     }
@@ -892,7 +892,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 
         m_pClpDocFac.reset(new SwDocFac);
         SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
-        m_pWrtShell->Copy( &rDoc );
+        m_pWrtShell->Copy(rDoc);
 
 #if HAVE_FEATURE_DESKTOP
         if (m_pOrigGraphic && !m_pOrigGraphic->GetBitmapEx().IsEmpty())
@@ -920,7 +920,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
         m_aDocShellRef = new SwDocShell(rDoc, SfxObjectCreateMode::EMBEDDED);
         m_aDocShellRef->DoInitNew();
-        m_pWrtShell->Copy(&rDoc);
+        m_pWrtShell->Copy(rDoc);
 
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
 
@@ -1147,7 +1147,7 @@ void SwTransferable::CalculateAndCopy()
 
     m_pClpDocFac.reset(new SwDocFac);
     SwDoc& rDoc = lcl_GetDoc(*m_pClpDocFac);
-    m_pWrtShell->Copy(&rDoc, & aStr);
+    m_pWrtShell->Copy(rDoc, &aStr);
     m_eBufferType = TransferBufferType::Document;
     AddFormat( SotClipboardFormatId::STRING );
 
@@ -3751,7 +3751,7 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     bool bRet = true;
     // m_pWrtShell is nullptr when the source document is closed already.
     if (!m_pWrtShell || lcl_checkClassification(m_pWrtShell->GetDoc(), rShell.GetDoc()))
-        bRet = rShell.Paste(&m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
+        bRet = rShell.Paste(m_pClpDocFac->GetDoc(), ePasteTable == PasteTableType::PASTE_TABLE);
 
     if( bKillPaMs )
         rShell.KillPams();
@@ -3995,8 +3995,8 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         aSttPt = rSrcSh.GetObjRect().Pos();
     }
 
-    bool bRet = rSrcSh.SwFEShell::Copy( &rSh, aSttPt, rDragPt, bMove,
-                                            !bIsXSelection );
+    bool bRet = rSrcSh.SwFEShell::Copy(rSh, aSttPt, rDragPt, bMove,
+                                       !bIsXSelection);
 
     if( !bIsXSelection )
     {

@@ -373,7 +373,7 @@ void SwViewShell::FillPrtDoc( SwDoc& rPrtDoc, const SfxPrinter* pPrt)
     }
 
     // fill it with the selected content
-    pFESh->Copy( &rPrtDoc );
+    pFESh->Copy(rPrtDoc);
 
     // set the page style at the first paragraph
     {

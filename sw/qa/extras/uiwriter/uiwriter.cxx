@@ -1022,7 +1022,7 @@ void SwUiWriterTest::testExportRTF()
     // Create the clipboard document.
     rtl::Reference<SwDoc> xClpDoc(new SwDoc());
     xClpDoc->SetClipBoard(true);
-    pWrtShell->Copy(xClpDoc.get());
+    pWrtShell->Copy(*xClpDoc);
 
     // And finally export it as RTF.
     WriterRef xWrt;
@@ -1554,8 +1554,8 @@ void SwUiWriterTest::testFdo82191()
     SdrObject* pObject = pPage->GetObj(0);
     // Select it, then copy and paste.
     pWrtShell->SelectObj(Point(), 0, pObject);
-    pWrtShell->Copy(&aClipboard);
-    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Copy(aClipboard);
+    pWrtShell->Paste(aClipboard);
 
     // This was one: the textbox of the shape wasn't copied.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), SwTextBoxHelper::getCount(*pDoc));
@@ -2975,7 +2975,7 @@ void SwUiWriterTest::testTdf77342()
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //copying the selection to clipboard
-    pWrtShell->Copy(xClpDoc.get());
+    pWrtShell->Copy(*xClpDoc);
     //deleting selection mark after copy
     pCursor->DeleteMark();
     //checking that the footnotes reference fields have same values after copy operation
@@ -3005,7 +3005,7 @@ void SwUiWriterTest::testTdf77342()
     //moving cursor to the end of the document
     pWrtShell->EndOfSection();
     //pasting the copied selection at current cursor position
-    pWrtShell->Paste(xClpDoc.get());
+    pWrtShell->Paste(*xClpDoc);
     //checking the fields, both new and old, for proper values
     pWrtShell->StartOfSection();
     //old reference field 1
@@ -3077,7 +3077,7 @@ void SwUiWriterTest::testTdf77342()
     //moving the cursor to the starting of document
     pWrtShell->StartOfSection();
     //pasting the selection again at current cursor position
-    pWrtShell->Paste(xClpDoc.get());
+    pWrtShell->Paste(*xClpDoc);
     //checking the fields, both new and old, for proper values
     pWrtShell->StartOfSection();
     //new reference field 1
@@ -3230,7 +3230,7 @@ void SwUiWriterTest::testTdf63553()
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //copying the selection to clipboard
-    pWrtShell->Copy(xClpDoc.get());
+    pWrtShell->Copy(*xClpDoc);
     //deleting selection mark after copy
     pCursor->DeleteMark();
     //checking whether the sequence and reference fields have same values after copy operation
@@ -3275,7 +3275,7 @@ void SwUiWriterTest::testTdf63553()
     //moving cursor to the end of the document
     pWrtShell->EndOfSection();
     //pasting the copied selection at current cursor position
-    pWrtShell->Paste(xClpDoc.get());
+    pWrtShell->Paste(*xClpDoc);
     //checking the fields, both new and old, for proper values
     pWrtShell->StartOfSection();
     //now we have ref1-ref2-ref3-seq1-seq2-seq3-nref1-nref2-nseq1-nseq2
@@ -3341,7 +3341,7 @@ void SwUiWriterTest::testTdf63553()
     //moving the cursor to the starting of document
     pWrtShell->StartOfSection();
     //pasting the selection again at current cursor position
-    pWrtShell->Paste(xClpDoc.get());
+    pWrtShell->Paste(*xClpDoc);
     //checking the fields, both new and old, for proper values
     pWrtShell->StartOfSection();
     //now we have [nnref1-nnref2-nnseq1-nnseq2]-ref1-[ref2-ref3-seq1-seq2]-seq3-[nref1-nref2-nseq1-nseq2]
@@ -5551,9 +5551,9 @@ void SwUiWriterTest::testRedlineCopyPaste()
 
     // Select the whole content, copy, delete the original and paste the copied content
     pWrtShell->SelAll();
-    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Copy(aClipboard);
     pWrtShell->Delete();
-    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Paste(aClipboard);
 
     // With the bug this is "abzcdefgh", ie. contains the first deleted piece, too
     CPPUNIT_ASSERT_EQUAL(OUString("abcdefgh"), pTextNode->GetText());
@@ -5853,7 +5853,7 @@ void SwUiWriterTest::testTdf95699()
     SwDoc aClipboard;
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->SelAll();
-    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Copy(aClipboard);
     pMarkAccess = aClipboard.getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
     ::sw::mark::IFieldmark* pFieldMark = pMarkAccess->getFieldmarkAfter(SwPosition(pDoc->GetNodes().GetEndOfExtras()));
@@ -5871,9 +5871,9 @@ void SwUiWriterTest::testTdf104032()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->StartOfSection();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
-    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Copy(aClipboard);
     pWrtShell->EndOfSection();
-    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Paste(aClipboard);
     rUndoManager.Undo();
 }
 
@@ -6825,11 +6825,11 @@ void SwUiWriterTest::testTdf113790()
     pWrtShell->Down(/*bSelect=*/false, 4);
     pWrtShell->SelPara(nullptr);
     CPPUNIT_ASSERT_EQUAL(OUString("ABCD"), pWrtShell->GetSelText());
-    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Copy(aClipboard);
 
     // Go down to next-to-last (empty) line above "Title3"
     pWrtShell->Down(/*bSelect=*/false, 4);
-    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Paste(aClipboard);
 
     // Save it as DOCX & load it again
     reload("Office Open XML Text", "tdf113790.docx");
@@ -6964,7 +6964,7 @@ void SwUiWriterTest::testTdf115065()
 
     pWrtShell->SelTableCol();
     // The copy operation (or closing document after that) segfaulted
-    pWrtShell->Copy(pWrtShell, ptFrom, ptTo);
+    pWrtShell->Copy(*pWrtShell, ptFrom, ptTo);
 }
 
 void SwUiWriterTest::testTdf115132()

@@ -48,7 +48,7 @@ SwChartDataProvider * DocumentChartDataProviderManager::GetChartDataProvider( bo
 
     if (bCreate && !maChartDataProviderImplRef.is())
     {
-        maChartDataProviderImplRef = new SwChartDataProvider( & m_rDoc );
+        maChartDataProviderImplRef = new SwChartDataProvider(m_rDoc);
     }
     return maChartDataProviderImplRef.get();
 }

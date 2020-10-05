@@ -194,7 +194,7 @@ public:
     void SetLinkUpdMode( sal_uInt16 nMode );
 
     /// Copy content of all ranges at current position of cursor to given Shell.
-    bool Copy( SwEditShell* pDestShell );
+    bool Copy( SwEditShell& rDestShell );
 
     /** For copying via ClipBoard:
        If table is copied into table, move all cursors away from it.
