@@ -45,6 +45,7 @@ public:
     void testTdf40993_fillMergedCells();
     void testTdf43958_clickSelectOnMergedCells();
     void testTdf88782_autofillLinearNumbersInMergedCells();
+    void tdf137205_autofillDatesInMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
     CPPUNIT_TEST(testTdf43958_clickSelectOnMergedCells);
     CPPUNIT_TEST(testTdf88782_autofillLinearNumbersInMergedCells);
+    CPPUNIT_TEST(tdf137205_autofillDatesInMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -638,7 +640,7 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
     aMergeOptions.maTabs.insert(0);
     xDocSh->GetDocFunc().MergeCells(aMergeOptions, false, true, true, false);
 
-    // fillauto numbers, these areas contains mostly merged cells
+    // fillauto numbers, these areas contain mostly merged cells
     pView->FillAuto(FILL_TO_BOTTOM, 1, 8, 3, 14, 7);    // B9:D15 ->  B9:D22
     pView->FillAuto(FILL_TO_BOTTOM, 5, 8, 7, 17, 10);   // F9:H18 ->  F9:H28
     pView->FillAuto(FILL_TO_BOTTOM, 9, 8, 10, 13, 6);   // J9:K14 ->  J9:K20
@@ -676,6 +678,35 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
                 CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);
             else
                 CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);
+        }
+    }
+}
+void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137205_AutofillDatesInMergedCells.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // fillauto dates, this areas contain only merged cells
+    pView->FillAuto(FILL_TO_RIGHT, 1, 5, 4, 7, 8);   //B6:E8
+
+    // compare the results of fill-right with the reference stored in the test file
+    // this compare the whole area blindly, for concrete test cases, check the test file
+    for (int nCol = 5; nCol <= 12; nCol++) {
+        for (int nRow = 5; nRow <= 7; nRow++) {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 5, 0));
+            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
+            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol, nRow + 5, 0));
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            if (pValue2 != nullptr)
+                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);   //cells with number value
+            else
+                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);     //empty cells
         }
     }
 }
