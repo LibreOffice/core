@@ -7,6 +7,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
+from uitest.uihelper.common import change_measurement_unit
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -318,6 +319,46 @@ class chartDataLabels(UITestCase):
     self.assertTrue(xDataSeries[0].Label.ShowNumber)
     self.assertFalse(xDataSeries[0].Label.ShowNumberInPercent)
     self.assertEqual(xDataSeries[0].NumberFormat, xFormat)
+    self.ui_test.close_doc()
+
+   def test_tdf136573(self):
+    calc_doc = self.ui_test.load_file(get_url_for_data_file("dataLabels.ods"))
+    xCalcDoc = self.xUITest.getTopFocusWindow()
+    gridwin = xCalcDoc.getChild("grid_window")
+
+    change_measurement_unit(self, "Centimeter")
+
+    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    gridwin.executeAction("ACTIVATE", tuple())
+    xChartMainTop = self.xUITest.getTopFocusWindow()
+    xChartMain = xChartMainTop.getChild("chart_window")
+
+    # Select the first label
+    xDataLabel = xChartMain.getChild("CID/MultiClick/CID/D=0:CS=0:CT=0:Series=0:DataLabels=:DataLabel=0")
+    xDataLabel.executeAction("SELECT", tuple())
+
+    self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("0.5", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("2.89", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xCanBtn = xDialog.getChild("cancel")
+    xCanBtn.executeAction("CLICK", tuple())
+
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+
+    self.ui_test.execute_dialog_through_action(xDataLabel, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+
+    # Check the position has changed after moving the label using the arrows keys
+    xDialog = self.xUITest.getTopFocusWindow()
+    self.assertEqual("0.4", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+    self.assertEqual("2.79", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+
+    xCanBtn = xDialog.getChild("ok")
+    xCanBtn.executeAction("CLICK", tuple())
+
     self.ui_test.close_doc()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
