@@ -22,6 +22,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/print.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
@@ -221,6 +222,11 @@ namespace vcl
         bool                                    mbSingleJobs;
 
         Paper                                   mePaper;
+
+        Idle maUpdatePreviewIdle;
+        DECL_LINK(updatePreviewIdle, Timer*, void);
+        Idle maUpdatePreviewNoCacheIdle;
+        DECL_LINK(updatePreviewNoCacheIdle, Timer*, void);
 
         DECL_LINK( ClickHdl, weld::Button&, void );
         DECL_LINK( SelectHdl, weld::ComboBox&, void );
