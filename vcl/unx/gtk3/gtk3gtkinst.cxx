@@ -13258,13 +13258,15 @@ public:
 
     virtual void connect_mouse_press(const Link<const MouseEvent&, bool>& rLink) override
     {
-        gtk_widget_add_events(m_pWidget, GDK_BUTTON_PRESS_MASK);
+        if (!(gtk_widget_get_events(m_pWidget) & GDK_BUTTON_PRESS_MASK))
+            gtk_widget_add_events(m_pWidget, GDK_BUTTON_PRESS_MASK);
         GtkInstanceWidget::connect_mouse_press(rLink);
     }
 
     virtual void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink) override
     {
-        gtk_widget_add_events(m_pWidget, GDK_BUTTON_RELEASE_MASK);
+        if (!(gtk_widget_get_events(m_pWidget) & GDK_BUTTON_RELEASE_MASK))
+            gtk_widget_add_events(m_pWidget, GDK_BUTTON_RELEASE_MASK);
         GtkInstanceWidget::connect_mouse_release(rLink);
     }
 
