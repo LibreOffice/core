@@ -1061,7 +1061,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoNumruleDelete>(*(*mpNumRuleTable)[nPos], this));
+                std::make_unique<SwUndoNumruleDelete>(*(*mpNumRuleTable)[nPos], *this));
         }
 
         if (bBroadcast)
@@ -1092,7 +1092,7 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
     SwUndoInsNum* pUndo = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoInsNum( *pRule, rRule, this );
+        pUndo = new SwUndoInsNum( *pRule, rRule, *this );
         pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
     }
@@ -1118,7 +1118,7 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             GetIDocumentUndoRedo().AppendUndo(
-                std::make_unique<SwUndoNumruleRename>(rOldName, rNewName, this));
+                std::make_unique<SwUndoNumruleRename>(rOldName, rNewName, *this));
         }
 
         SwNumRule::tTextNodeList aTextNodeList;
@@ -2479,7 +2479,7 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            std::make_unique<SwUndoNumruleCreate>(pNew, this));
+            std::make_unique<SwUndoNumruleCreate>(pNew, *this));
     }
 
     if (bBroadcast)
