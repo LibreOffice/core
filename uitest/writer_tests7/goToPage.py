@@ -26,7 +26,7 @@ class GoToPage_dialog(UITestCase):
     xOkBtn = xDialog.getChild("ok")
     xOkBtn.executeAction("CLICK", tuple())
 
-    self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
+    self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "4")
 
     self.ui_test.execute_dialog_through_command(".uno:GotoPage")
     xDialog = self.xUITest.getTopFocusWindow()
