@@ -42,7 +42,7 @@ protected:
     SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );
 
     void SetInDoc( SwDoc* );
-    void ResetInDoc( SwDoc* );
+    void ResetInDoc( SwDoc& );
 
 public:
     virtual ~SwUndoBookmark() override;

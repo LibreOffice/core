@@ -160,12 +160,9 @@ bool SwEditShell::Delete()
     return bRet;
 }
 
-bool SwEditShell::Copy( SwEditShell* pDestShell )
+bool SwEditShell::Copy( SwEditShell& rDestShell )
 {
-    if( !pDestShell )
-        pDestShell = this;
-
-    CurrShell aCurr( pDestShell );
+    CurrShell aCurr( &rDestShell );
 
     // List of insert positions for smart insert of block selections
     std::vector< std::shared_ptr<SwPosition> > aInsertList;
@@ -179,7 +176,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
         {
             if( !pPos )
             {
-                if( pDestShell == this )
+                if( &rDestShell == this )
                 {
                     // First cursor represents the target position!!
                     rPaM.DeleteMark();
@@ -187,7 +184,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                     continue;
                 }
                 else
-                    pPos = pDestShell->GetCursor()->GetPoint();
+                    pPos = rDestShell.GetCursor()->GetPoint();
             }
             if( IsBlockMode() )
             {   // In block mode different insert positions will be calculated
@@ -207,27 +204,27 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
             // Check if a selection would be copied into itself
-            if( pDestShell->GetDoc() == GetDoc() &&
+            if( rDestShell.GetDoc() == GetDoc() &&
                 *rPaM.Start() <= *pTmp && *pTmp < *rPaM.End() )
                 return false;
         }
     }
 
-    pDestShell->StartAllAction();
+    rDestShell.StartAllAction();
     SwPosition *pPos = nullptr;
     bool bRet = false;
     bool bFirstMove = true;
-    SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
+    SwNodeIndex aSttNdIdx( rDestShell.GetDoc()->GetNodes() );
     sal_Int32 nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
     auto pNextInsert = aInsertList.begin();
 
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
+    rDestShell.GetDoc()->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         if( !pPos )
         {
-            if( pDestShell == this )
+            if( &rDestShell == this )
             {
                 // First cursor represents the target position!!
                 rPaM.DeleteMark();
@@ -235,7 +232,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
                 continue;
             }
             else
-                pPos = pDestShell->GetCursor()->GetPoint();
+                pPos = rDestShell.GetCursor()->GetPoint();
         }
         if( !bFirstMove )
         {
@@ -265,7 +262,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
             continue;
 
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
-        pDestShell->GetDoc()->MakeUniqueNumRules(aInsertPaM);
+        rDestShell.GetDoc()->MakeUniqueNumRules(aInsertPaM);
 
         bRet = true;
     }
@@ -273,7 +270,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     // Maybe nothing has been moved?
     if( !bFirstMove )
     {
-        SwPaM* pCursor = pDestShell->GetCursor();
+        SwPaM* pCursor = rDestShell.GetCursor();
         pCursor->SetMark();
         pCursor->GetPoint()->nNode = aSttNdIdx.GetIndex()+1;
         pCursor->GetPoint()->nContent.Assign( pCursor->GetContentNode(),nSttCntIdx);
@@ -282,13 +279,13 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     else
     {
         // If the cursor moved during move process, move also its GetMark
-        pDestShell->GetCursor()->SetMark();
-        pDestShell->GetCursor()->DeleteMark();
+        rDestShell.GetCursor()->SetMark();
+        rDestShell.GetCursor()->DeleteMark();
     }
 #if OSL_DEBUG_LEVEL > 0
     // check if the indices are registered in the correct nodes
     {
-        for(SwPaM& rCmp : pDestShell->GetCursor()->GetRingContainer())
+        for(SwPaM& rCmp : rDestShell.GetCursor()->GetRingContainer())
         {
             OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
                         == rCmp.GetContentNode(), "Point in wrong Node" );
@@ -299,10 +296,10 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
 #endif
 
     // close Undo container here
-    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
-    pDestShell->EndAllAction();
+    rDestShell.GetDoc()->GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
+    rDestShell.EndAllAction();
 
-    pDestShell->SaveTableBoxContent( pDestShell->GetCursor()->GetPoint() );
+    rDestShell.SaveTableBoxContent( rDestShell.GetCursor()->GetPoint() );
 
     return bRet;
 }

@@ -52,9 +52,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     SwDoc aClipboard;
     pWrtShell->SelAll();
-    pWrtShell->Copy(&aClipboard);
+    pWrtShell->Copy(aClipboard);
     pWrtShell->SttEndDoc(/*bStart=*/false);
-    pWrtShell->Paste(&aClipboard);
+    pWrtShell->Paste(aClipboard);
 
     const SwFrameFormats& rFormats = *pShell->GetDoc()->GetSpzFrameFormats();
     // Without the accompanying fix in place, this test would have failed with:
