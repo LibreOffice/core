@@ -22,6 +22,30 @@
       "revId": "51be8b178576b492f2cfa6fbbf9870a9cf1c5172",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8412a6de_452a608a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 3716,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2020-10-05T10:59:54Z",
+      "side": 0,
+      "message": "All the StartCenterThumbnails* values are used for the large preview area on the right. They don\u0027t affect the left button area. This is a custom widget and not properly themed otherwise. Fell free open an additional bug, if you thing that should be using some of the system theming too.",
+      "parentUuid": "9d9a3feb_e33809f9",
+      "range": {
+        "startLine": 3716,
+        "startChar": 24,
+        "endLine": 3716,
+        "endChar": 60
+      },
+      "revId": "51be8b178576b492f2cfa6fbbf9870a9cf1c5172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
