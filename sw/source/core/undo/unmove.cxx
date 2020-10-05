@@ -91,9 +91,9 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
         m_pHistory.reset();
 }
 
-SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
+SwUndoMove::SwUndoMove( SwDoc& rDoc, const SwNodeRange& rRg,
                         const SwNodeIndex& rMvPos )
-    : SwUndo(SwUndoId::MOVE, pDoc)
+    : SwUndo(SwUndoId::MOVE, &rDoc)
     , m_nDestStartNode(0)
     , m_nDestEndNode(0)
     , m_nInsPosNode(0)
@@ -115,7 +115,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
 // FIXME: duplication of the method body of DelFootnote below
 
     // is the current move from ContentArea into the special section?
-    sal_uLong nContentStt = pDoc->GetNodes().GetEndOfAutotext().GetIndex();
+    sal_uLong nContentStt = rDoc.GetNodes().GetEndOfAutotext().GetIndex();
     if( m_nMoveDestNode < nContentStt && rRg.aStart.GetIndex() > nContentStt )
     {
         // delete all footnotes since they are undesired there
