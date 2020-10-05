@@ -100,41 +100,46 @@ class chartTitles(UITestCase):
    def test_title_move_with_arrows_keys(self):
 
     calc_doc = self.ui_test.load_file(get_url_for_data_file("chartArea.ods"))
-    xCalcDoc = self.xUITest.getTopFocusWindow()
-    gridwin = xCalcDoc.getChild("grid_window")
+    try:
+        xCalcDoc = self.xUITest.getTopFocusWindow()
+        gridwin = xCalcDoc.getChild("grid_window")
 
-    change_measurement_unit(self, "Centimeter")
+        change_measurement_unit(self, "Centimeter")
 
-    gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-    gridwin.executeAction("ACTIVATE", tuple())
-    xChartMainTop = self.xUITest.getTopFocusWindow()
-    xChartMain = xChartMainTop.getChild("chart_window")
+        gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+        gridwin.executeAction("ACTIVATE", tuple())
+        xChartMainTop = self.xUITest.getTopFocusWindow()
+        xChartMain = xChartMainTop.getChild("chart_window")
 
-    # Select the title
-    xTitle = xChartMain.getChild("CID/Title=")
-    xTitle.executeAction("SELECT", tuple())
+        # Select the title
+        xTitle = xChartMain.getChild("CID/Title=")
+        xTitle.executeAction("SELECT", tuple())
 
-    self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+        self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("3.52", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("0.3", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+        xDialog = self.xUITest.getTopFocusWindow()
+        xPosXValue = get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value']
+        xPosYValue = get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value']
 
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xDialog.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-    xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
+        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+        xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "LEFT"}))
 
-    self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
+        self.ui_test.execute_dialog_through_action(xTitle, "COMMAND", mkPropertyValues({"COMMAND": "TransformDialog"}))
 
-    # Check the position has changed after moving the title using the arrows keys
-    xDialog = self.xUITest.getTopFocusWindow()
-    self.assertEqual("3.42", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
-    self.assertEqual("0.2", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
+        # Check the position has changed after moving the title using the arrows keys
+        xDialog = self.xUITest.getTopFocusWindow()
+        self.assertEqual("3.42", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
+        self.assertEqual("0.2", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
-    xOkBtn = xDialog.getChild("ok")
-    xOkBtn.executeAction("CLICK", tuple())
+        xOkBtn = xDialog.getChild("ok")
+        xOkBtn.executeAction("CLICK", tuple())
 
-    self.ui_test.close_doc()
+        self.assertEqual("4.52", xPosXValue)
+        self.assertEqual("0.3", xPosYValue)
+
+    finally:
+        self.ui_test.close_doc()
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
