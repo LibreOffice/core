@@ -4624,7 +4624,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if ( aSttPt != aEndPt )
                         {
                             rSh.StartUndo( SwUndoId::UI_DRAG_AND_COPY );
-                            rSh.Copy(&rSh, aSttPt, aEndPt);
+                            rSh.Copy(rSh, aSttPt, aEndPt);
                             rSh.EndUndo( SwUndoId::UI_DRAG_AND_COPY );
                         }
                     }

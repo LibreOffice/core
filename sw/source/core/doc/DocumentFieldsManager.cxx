@@ -1767,7 +1767,7 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     mpFieldTypes->emplace_back( new SwFileNameFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwDBNameFieldType(&m_rDoc) );
     mpFieldTypes->emplace_back( new SwGetExpFieldType(&m_rDoc) );
-    mpFieldTypes->emplace_back( new SwGetRefFieldType( &m_rDoc ) );
+    mpFieldTypes->emplace_back( new SwGetRefFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwHiddenTextFieldType );
     mpFieldTypes->emplace_back( new SwPostItFieldType(m_rDoc) );
     mpFieldTypes->emplace_back( new SwDocStatFieldType(m_rDoc) );

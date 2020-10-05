@@ -3396,7 +3396,7 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg() COVERITY_NOEXCEPT_FALSE
     *mpWrtShell->GetCurrentShellCursor().GetPoint() = *rNewAnchorFormat.GetContentAnchor();
 
     // Move by copying and deleting.
-    mpWrtShell->SwEditShell::Copy(mpWrtShell);
+    mpWrtShell->SwEditShell::Copy(*mpWrtShell);
     mpWrtShell->DestroyCursor();
 
     mpWrtShell->Delete();
