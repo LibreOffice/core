@@ -1058,10 +1058,10 @@ UpdateCheck::enableDownload(bool enable, bool paused)
 {
     OSL_ASSERT(nullptr == m_pThread);
 
-    State eState = DISABLED;
     if( enable )
     {
         m_pThread = new DownloadThread(m_aCondition, m_xContext, this, m_aUpdateInfo.Sources[0].URL );
+        State eState = DISABLED;
         if( !paused )
         {
             eState = DOWNLOADING;
