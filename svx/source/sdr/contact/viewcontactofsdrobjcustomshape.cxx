@@ -159,18 +159,13 @@ namespace sdr::contact
                     // #i101684# get the text range unrotated and absolute to the object range
                     const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
 
-                    // Get the text range before unrotated and independent from object range
-                    const tools::Rectangle aIndTextRect(Point(aTextRange.getMinX(), aTextRange.getMinY()), GetCustomShapeObj().GetTextSize());
-                    const basegfx::B2DRange aIndTextRange = vcl::unotools::b2DRectangleFromRectangle(aIndTextRect);
-
                     // Rotation before scaling
-                    if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)) ||
-                       !basegfx::fTools::equalZero(GetCustomShapeObj().GetCameraRotation()))
+                    if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))
                     {
                         basegfx::B2DVector aTranslation(0.5, 0.5);
                         aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
                         aTextBoxMatrix.rotate(basegfx::deg2rad(
-                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true) - GetCustomShapeObj().GetCameraRotation()));
+                            360.0 - GetCustomShapeObj().GetExtraTextRotation(true)));
                         aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                     }
                     // give text object a size
@@ -178,7 +173,6 @@ namespace sdr::contact
 
                     // check if we have a rotation/shear at all to take care of
                     const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
-                    const double fTextCameraZRotation(GetCustomShapeObj().GetCameraRotation());
                     const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                     if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
@@ -191,13 +185,13 @@ namespace sdr::contact
                                 aTextRange.getMinY() - aObjectRange.getMinimum().getY());
                         }
 
-                        if(!basegfx::fTools::equalZero(fExtraTextRotation) || !basegfx::fTools::equalZero(fTextCameraZRotation))
+                        if(!basegfx::fTools::equalZero(fExtraTextRotation))
                         {
                             basegfx::B2DVector aTranslation(
                                 ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
                                 ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
                             aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                            aTextBoxMatrix.rotate(basegfx::deg2rad(360.0 - fExtraTextRotation + fTextCameraZRotation));
+                            aTextBoxMatrix.rotate(basegfx::deg2rad(360.0 - fExtraTextRotation));
                             aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                         }
 
@@ -213,13 +207,6 @@ namespace sdr::contact
 
                         // give text it's target position
                         aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
-                    }
-                    // If text overflows from textbox we should use text info instead of textbox to relocation.
-                    else if((aTextRange.getWidth() < aIndTextRange.getWidth() ||
-                            aTextRange.getHeight() < aIndTextRange.getHeight()) &&
-                            !basegfx::fTools::equalZero(fTextCameraZRotation))
-                    {
-                        aTextBoxMatrix.translate(aIndTextRange.getCenterX(), aIndTextRange.getCenterY());
                     }
                     else
                     {
