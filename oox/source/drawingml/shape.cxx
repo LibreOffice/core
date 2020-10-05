@@ -1494,6 +1494,22 @@ Reference< XShape > const & Shape::createAndInsert(
                 xText->setString("");
                 Reference < XTextCursor > xAt = xText->createTextCursor();
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
+
+                const TextParagraphVector& rParagraphs = getTextBody()->getParagraphs();
+                if (!rParagraphs.empty())
+                {
+                    const std::shared_ptr<TextParagraph>& pParagraph = rParagraphs[0];
+                    if (pParagraph->getProperties().getParaAdjust())
+                    {
+                        style::ParagraphAdjust eAdjust = *pParagraph->getProperties().getParaAdjust();
+                        if (eAdjust == style::ParagraphAdjust_CENTER)
+                        {
+                            // If the first paragraph is centered, then set the para adjustment of
+                            // the shape itself to centered as well.
+                            aPropertySet.setAnyProperty(PROP_ParaAdjust, uno::makeAny(eAdjust));
+                        }
+                    }
+                }
             }
         }
         else if (mbTextBox)

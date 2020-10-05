@@ -25,6 +25,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -244,6 +245,24 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAlignment)
     // i.e. text which is meant to be left-aligned was centered at a paragraph level.
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_LEFT,
                          static_cast<style::ParagraphAdjust>(nParaAdjust));
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testShapeTextAdjustLeft)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "shape-text-adjust-left.pptx";
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    drawing::TextHorizontalAdjust eAdjust;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3 (center)
+    // - Actual  : 1 (block)
+    // i.e. text was center-adjusted, not default-adjusted (~left).
+    CPPUNIT_ASSERT(xShape->getPropertyValue("TextHorizontalAdjust") >>= eAdjust);
+    CPPUNIT_ASSERT_EQUAL(drawing::TextHorizontalAdjust_BLOCK, eAdjust);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
