@@ -46,6 +46,30 @@
       "revId": "46060c002dab9b0e3807558eaf44e77ab3d4a950",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63198aca_93ba89ad",
+        "filename": "svx/source/sidebar/effect/EffectPropertyPanel.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T07:46:53Z",
+      "side": 1,
+      "message": "\u003e In the .ui file I can\u0027t use the same id twice.\n\nOf course. But the two labels should be named more distinct: e.g., mxFTRadiusGlow and mxFTRadiusSoftEdge.",
+      "parentUuid": "95e3396b_6d2a6b12",
+      "range": {
+        "startLine": 51,
+        "startChar": 33,
+        "endLine": 51,
+        "endChar": 44
+      },
+      "revId": "46060c002dab9b0e3807558eaf44e77ab3d4a950",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
