@@ -24,6 +24,7 @@ $(eval $(call gb_CppunitTest_use_libraries,comphelper_threadpool_test, \
     cppuhelper \
     cppu \
     sal \
+    tl \
 ))
 
 # vim: set noet sw=4 ts=4:

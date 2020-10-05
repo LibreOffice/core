@@ -72,7 +72,7 @@ public:
     void        joinAll();
 
     /// return the number of live worker threads
-    sal_Int32   getWorkerCount() const { return mnWorkers; }
+    sal_Int32   getWorkerCount() const { return mnMaxWorkers; }
 
     /// wait until all work is completed, then join all threads
     void        shutdown();
@@ -90,12 +90,15 @@ private:
     */
     std::unique_ptr<ThreadTask> popWorkLocked( std::unique_lock< std::mutex > & rGuard, bool bWait );
     void shutdownLocked(std::unique_lock<std::mutex>&);
+    void incBusyWorker();
+    void decBusyWorker();
 
     /// signalled when all in-progress tasks are complete
     std::mutex              maMutex;
     std::condition_variable maTasksChanged;
     bool                    mbTerminate;
-    std::size_t const       mnWorkers;
+    std::size_t const       mnMaxWorkers;
+    std::size_t             mnBusyWorkers;
     std::vector< std::unique_ptr<ThreadTask> >   maTasks;
     std::vector< rtl::Reference< ThreadWorker > > maWorkers;
 };
