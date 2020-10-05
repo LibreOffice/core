@@ -304,8 +304,6 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if( OpenGLWrapper::isVCLOpenGLEnabled() )
         bForceLastEntry = true;
 #endif
-    if( SkiaHelper::isVCLSkiaEnabled() )
-        bForceLastEntry = true;
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
@@ -379,9 +377,13 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     if (bForceLastEntry && pCurrImpl != pEndImpl)
         pCurrImpl = pEndImpl-1;
 
-    while( pCurrImpl != pEndImpl )
+    for(; pCurrImpl != pEndImpl; ++pCurrImpl)
     {
         const OUString aCurrName(pCurrImpl->trim());
+
+        // Skia works only with vclcanvas.
+        if( SkiaHelper::isVCLSkiaEnabled() && !aCurrName.endsWith(".VCL"))
+            continue;
 
         // check whether given canvas service is listed in the
         // sequence of "accelerated canvas implementations"
@@ -426,8 +428,6 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                 return xCanvas;
             }
         }
-
-        ++pCurrImpl;
     }
 
     return Reference<XInterface>();
