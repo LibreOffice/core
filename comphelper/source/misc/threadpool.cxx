@@ -78,12 +78,14 @@ public:
             std::unique_ptr<ThreadTask> pTask = mpPool->popWorkLocked( aGuard, true );
             if( pTask )
             {
+                mpPool->incBusyWorker();
                 aGuard.unlock();
 
                 pTask->exec();
                 pTask.reset();
 
                 aGuard.lock();
+                mpPool->decBusyWorker();
             }
         }
     }
@@ -91,7 +93,8 @@ public:
 
 ThreadPool::ThreadPool(sal_Int32 nWorkers)
     : mbTerminate(true)
-    , mnWorkers(nWorkers)
+    , mnMaxWorkers(nWorkers)
+    , mnBusyWorkers(0)
 {
 }
 
@@ -103,6 +106,7 @@ ThreadPool::~ThreadPool()
     // still 0, but hopefully they will be more helpful on non-WNT platforms
     assert(mbTerminate);
     assert(maTasks.empty());
+    assert(mnBusyWorkers == 0);
 }
 
 struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
@@ -193,7 +197,8 @@ void ThreadPool::pushTask( std::unique_ptr<ThreadTask> pTask )
 
     mbTerminate = false;
 
-    if (maWorkers.size() < mnWorkers && maWorkers.size() <= maTasks.size())
+    // Worked on tasks are already removed from maTasks, so include the count of busy workers.
+    if (maWorkers.size() < mnMaxWorkers && maWorkers.size() <= maTasks.size() + mnBusyWorkers)
     {
         maWorkers.push_back( new ThreadWorker( this ) );
         maWorkers.back()->launch();
@@ -223,6 +228,17 @@ std::unique_ptr<ThreadTask> ThreadPool::popWorkLocked( std::unique_lock< std::mu
     } while (!mbTerminate);
 
     return nullptr;
+}
+
+void ThreadPool::incBusyWorker()
+{
+    ++mnBusyWorkers;
+}
+
+void ThreadPool::decBusyWorker()
+{
+    --mnBusyWorkers;
+    assert(mnBusyWorkers >= 0);
 }
 
 void ThreadPool::waitUntilDone(const std::shared_ptr<ThreadTaskTag>& rTag, bool bJoinAll)
@@ -285,6 +301,10 @@ void ThreadTask::exec()
     catch (const css::uno::Exception &e)
     {
         SAL_WARN("comphelper", "exception in thread worker while calling doWork(): " << e);
+    }
+    catch (...)
+    {
+        SAL_WARN("comphelper", "unknown exception in thread worker while calling doWork()");
     }
 
     pTag->onTaskWorkerDone();
