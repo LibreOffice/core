@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ba8e07c_7d1f8bea",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T05:30:20Z",
+      "side": 1,
+      "message": "These lines call set_primary_text, then the new code calls it again. *If* current solution (not using a clickable control) is to be used, then this call should be changed to only change sPrimTex, not to set control content.",
+      "range": {
+        "startLine": 141,
+        "startChar": 12,
+        "endLine": 143,
+        "endChar": 83
+      },
+      "revId": "3f9cccf87c55b0f0e9ea4a1e6c2d6402c508f02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bd9434b_eb0965cd",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T05:30:20Z",
+      "side": 1,
+      "message": "This call appends something to the end of control\u0027s text, using a comma and a space.\n\n1. In case of non-Windows, the text is yet empty, so it will start with the comma.\n2. We should not assume that how it\u0027s located in en-US text is appropriate position for any translation, so we should introduce a \"variable\" into translatable strings (to allow translations to re-locate it in the translation), and replace the variable with the URI here, like we do with \"%BITNESS\".\n3. I still believe that not using a clickable control is not very usable - I hoped Heiko could assist with creation of the clickable control here?",
+      "range": {
+        "startLine": 151,
+        "startChar": 33,
+        "endLine": 151,
+        "endChar": 35
+      },
+      "revId": "3f9cccf87c55b0f0e9ea4a1e6c2d6402c508f02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c83303f4_f1846f90",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-05T05:30:20Z",
+      "side": 1,
+      "message": "And this calls the set_primary_text again. Construction of the URI should be a one-step thing, and the resulting URI should be inserted into the string before setting the control\u0027s content.",
+      "range": {
+        "startLine": 153,
+        "startChar": 25,
+        "endLine": 153,
+        "endChar": 41
+      },
+      "revId": "3f9cccf87c55b0f0e9ea4a1e6c2d6402c508f02a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
