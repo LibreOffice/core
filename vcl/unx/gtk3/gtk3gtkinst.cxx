@@ -16024,7 +16024,7 @@ private:
             GtkImage* pImage = GTK_IMAGE(pWidget);
             const gchar* icon_name;
             gtk_image_get_icon_name(pImage, &icon_name, nullptr);
-            if (icon_name)
+            if (icon_name && strcmp(icon_name, "pan-up-symbolic") && strcmp(icon_name, "pan-down-symbolic"))
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);
@@ -16039,7 +16039,7 @@ private:
         {
             GtkToolButton* pToolButton = GTK_TOOL_BUTTON(pWidget);
             const gchar* icon_name = gtk_tool_button_get_icon_name(pToolButton);
-            if (icon_name)
+            if (icon_name && strcmp(icon_name, "pan-up-symbolic") && strcmp(icon_name, "pan-down-symbolic"))
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
                 GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);

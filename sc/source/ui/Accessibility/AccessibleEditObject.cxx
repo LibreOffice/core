@@ -63,17 +63,19 @@ ScAccessibleEditObject::ScAccessibleEditObject(
     : ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME)
     , mpEditView(pEditView)
     , mpWindow(pWin)
+    , mpTextWnd(nullptr)
     , meObjectType(eObjectType)
     , mbHasFocus(false)
     , m_pScDoc(nullptr)
 {
-    InitAcc(rxParent, pEditView, pWin, rName, rDescription);
+    InitAcc(rxParent, pEditView, pWin, nullptr, rName, rDescription);
 }
 
 ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
     : ScAccessibleContextBase(nullptr, AccessibleRole::TEXT_FRAME)
     , mpEditView(nullptr)
     , mpWindow(nullptr)
+    , mpTextWnd(nullptr)
     , meObjectType(eObjectType)
     , mbHasFocus(false)
     , m_pScDoc(nullptr)
@@ -82,12 +84,14 @@ ScAccessibleEditObject::ScAccessibleEditObject(EditObjectType eObjectType)
 
 void ScAccessibleEditObject::InitAcc(
         const uno::Reference<XAccessible>& rxParent,
-        EditView* pEditView, vcl::Window* pWin, const OUString& rName,
+        EditView* pEditView, vcl::Window* pWin,
+        ScTextWnd* pTxtWnd, const OUString& rName,
         const OUString& rDescription)
 {
     SetParent(rxParent);
     mpEditView = pEditView;
     mpWindow = pWin;
+    mpTextWnd = pTxtWnd;
 
     CreateTextHelper();
     SetName(rName);
@@ -366,7 +370,7 @@ void ScAccessibleEditObject::CreateTextHelper()
     else
     {
         pAccessibleTextData.reset
-            (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView()));
+            (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView(), mpTextWnd));
     }
 
     std::unique_ptr<ScAccessibilityEditSource> pEditSrc =
