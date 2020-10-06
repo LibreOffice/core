@@ -772,10 +772,6 @@ void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::
     aDirStream.Seek(0);
 #endif
 
-    // the stream for the compression
-    SvMemoryStream aMemoryStream(4096, 4096);
-    aMemoryStream.WriteStream(aDirStream);
-
     VBACompression aCompression(rStrm, aDirStream);
     aCompression.write();
 }
@@ -815,10 +811,6 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
     aModuleStreamDebug.WriteStream(aModuleStream);
     aModuleStream.Seek(0);
 #endif
-
-    // the stream for the compression
-    SvMemoryStream aMemoryStream(4096, 4096);
-    aMemoryStream.WriteStream(aModuleStream);
 
     VBACompression aCompression(rStrm, aModuleStream);
     aCompression.write();
