@@ -23,8 +23,10 @@ struct ScSortKeyItem
     std::unique_ptr<weld::ComboBox> m_xLbSort;
     std::unique_ptr<weld::RadioButton> m_xBtnUp;
     std::unique_ptr<weld::RadioButton> m_xBtnDown;
+    weld::Container* m_pParent;
 
     ScSortKeyItem(weld::Container* pParent);
+    ~ScSortKeyItem();
 
     void DisableField();
     void EnableField();

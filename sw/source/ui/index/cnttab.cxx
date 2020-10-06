@@ -1393,12 +1393,17 @@ public:
         , aFormToken(rToken)
         , bNextControl(false)
         , m_pParent(pTokenWin)
-        , m_xEntry(m_xBuilder->weld_entry("entry", true))
+        , m_xEntry(m_xBuilder->weld_entry("entry"))
     {
         m_xEntry->connect_changed(LINK(this, SwTOXEdit, ModifyHdl));
         m_xEntry->connect_key_press(LINK(this, SwTOXEdit, KeyInputHdl));
         m_xEntry->connect_focus_in(LINK(this, SwTOXEdit, FocusInHdl));
         m_xEntry->set_tooltip_text(m_pParent->CreateQuickHelp(rToken));
+    }
+
+    virtual ~SwTOXEdit() override
+    {
+        m_pParent->get_child_container()->move(m_xEntry.get(), nullptr);
     }
 
     virtual WindowType GetType() const override
@@ -1549,11 +1554,16 @@ public:
         , aFormToken(rToken)
         , bNextControl(false)
         , m_pParent(pTokenWin)
-        , m_xButton(m_xBuilder->weld_toggle_button("button", true))
+        , m_xButton(m_xBuilder->weld_toggle_button("button"))
     {
         m_xButton->connect_key_press(LINK(this, SwTOXButton, KeyInputHdl));
         m_xButton->connect_focus_in(LINK(this, SwTOXButton, FocusInHdl));
         m_xButton->set_tooltip_text(m_pParent->CreateQuickHelp(rToken));
+    }
+
+    virtual ~SwTOXButton() override
+    {
+        m_pParent->get_child_container()->move(m_xButton.get(), nullptr);
     }
 
     virtual WindowType GetType() const override
