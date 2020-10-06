@@ -22,6 +22,30 @@
       "revId": "282a9c910bb9a7784d4874b0270976eadf269edd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc66abfc_091c61ec",
+        "filename": "svx/source/svdraw/svdotextdecomposition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1109,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-06T10:52:46Z",
+      "side": 1,
+      "message": "Just to summerize what we were talking \"offline\", I believe the layout-level text position is in aTranslate at this point and aOutlinerScale has the scaling.",
+      "parentUuid": "8007c44e_8bf1dcb8",
+      "range": {
+        "startLine": 1109,
+        "startChar": 4,
+        "endLine": 1109,
+        "endChar": 81
+      },
+      "revId": "282a9c910bb9a7784d4874b0270976eadf269edd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
