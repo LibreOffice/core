@@ -2044,7 +2044,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
 }
 
 #ifdef DBG_UTIL
-void SalDisplay::DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const
+void SalDisplay::DbgPrintDisplayEvent(const char *pComment, const XEvent *pEvent) const
 {
     static const char* const EventNames[] =
     {

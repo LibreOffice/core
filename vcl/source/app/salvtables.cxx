@@ -3424,7 +3424,7 @@ private:
 
     void do_insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
                    const OUString* pId, const OUString* pIconName,
-                   VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                   const VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                    weld::TreeIter* pRet, bool bIsSeparator)
     {
         disable_notify_events();

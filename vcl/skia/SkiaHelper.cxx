@@ -573,7 +573,7 @@ void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createVulkanWindowCont
 }
 
 #ifdef DBG_UTIL
-void prefillSurface(sk_sp<SkSurface>& surface)
+void prefillSurface(const sk_sp<SkSurface>& surface)
 {
     // Pre-fill the surface with deterministic garbage.
     SkBitmap bitmap;

@@ -12,7 +12,7 @@
 #include <jsdialog/jsdialogbuilder.hxx>
 
 WeldedTabbedNotebookbar::WeldedTabbedNotebookbar(
-    VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
+    const VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
     const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
     : m_xBuilder(new JSInstanceBuilder(pContainerWindow, AllSettings::GetUIRootDir(), rUIFilePath,
                                        rFrame, nWindowId))

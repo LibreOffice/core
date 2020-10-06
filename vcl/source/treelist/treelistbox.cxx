@@ -507,7 +507,7 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox const * pSource, sal_Int
 */
 TriState SvTreeListBox::NotifyMoving(
     SvTreeListEntry*  pTarget,       // D&D dropping position in GetModel()
-    SvTreeListEntry*  pEntry,        // entry that we want to move, from
+    const SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
     sal_uLong&        rNewChildPos)  // position in childlist of target parent
@@ -541,7 +541,7 @@ TriState SvTreeListBox::NotifyMoving(
 
 TriState SvTreeListBox::NotifyCopying(
     SvTreeListEntry*  pTarget,       // D&D dropping position in GetModel()
-    SvTreeListEntry*  pEntry,        // entry that we want to move, from
+    const SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
     sal_uLong&        rNewChildPos)  // position in childlist of target parent
@@ -1158,7 +1158,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     xContainer->StartDrag(this, mnDragAction, GetDragFinishedHdl());
 }
 
-void SvTreeListBox::SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+void SvTreeListBox::SetDragHelper(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
 {
     m_xTransferHelper = rHelper;
     mnDragAction = eDNDConstants;
@@ -2941,7 +2941,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long
     return aRect;
 }
 
-sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, SvLBoxTab* pTab)
+sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, const SvLBoxTab* pTab)
 {
     assert(pTab);
     sal_IntPtr nPos = pTab->GetPos();

@@ -1903,7 +1903,7 @@ public:
     {
         m_xSpinButton->connect_focus_out(rLink);
     }
-    OString get_buildable_name() { return m_xSpinButton->get_buildable_name(); }
+    OString get_buildable_name() const { return m_xSpinButton->get_buildable_name(); }
     void set_help_id(const OString& rName) { m_xSpinButton->set_help_id(rName); }
     void set_position(int nCursorPos) { m_xSpinButton->set_position(nCursorPos); }
     // set the width of the underlying widget in characters, this setting is

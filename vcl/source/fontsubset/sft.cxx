@@ -2004,7 +2004,7 @@ void GetTTFontMetrics(const uint8_t *pHhea, size_t nHhea,
     }
 }
 
-bool GetTTGlobalFontHeadInfo(AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
+bool GetTTGlobalFontHeadInfo(const AbstractTrueTypeFont *ttf, int& xMin, int& yMin, int& xMax, int& yMax, sal_uInt16& macStyle)
 {
     sal_uInt32 table_size;
     const sal_uInt8* table = ttf->table(O_head, table_size);

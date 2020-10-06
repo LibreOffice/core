@@ -102,7 +102,7 @@ public:
     static TestResult checkTransformedBitmap(Bitmap& rBitmap);
     static TestResult checkBitmapExWithAlpha(Bitmap& rBitmap);
     static TestResult checkMask(Bitmap& rBitmap);
-    static TestResult checkBlend(BitmapEx& rBitmap);
+    static TestResult checkBlend(const BitmapEx& rBitmap);
 };
 
 class VCL_DLLPUBLIC OutputDeviceTestAnotherOutDev : public OutputDeviceTestCommon

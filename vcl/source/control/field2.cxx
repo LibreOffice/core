@@ -785,7 +785,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
 
 namespace
 {
-    bool ImplSetMask(OString& rEditMask, OUString& rLiteralMask)
+    bool ImplSetMask(const OString& rEditMask, OUString& rLiteralMask)
     {
         bool bSameMask      = true;
 

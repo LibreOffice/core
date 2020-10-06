@@ -106,7 +106,7 @@ public:
     void Enlarge(sal_uInt16 nCount);    // Init of arrays to the right size
 
     // if pSc is set, it is used to get the Color pointer
-    void Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc );
+    void Copy( const ImpSvNumFor& rNumFor, const ImpSvNumberformatScan* pSc );
 
     // Access to Info; call Enlarge before!
     ImpSvNumberformatInfo& Info() { return aI;}

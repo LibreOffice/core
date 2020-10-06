@@ -159,7 +159,7 @@ private:
                                             const Size& rDestSize,
                                             long nExtraData,
                                             OutputDevice* pFirstFrameOutDev );
-    void                ImplStopAnimation( OutputDevice* pOutputDevice,
+    void                ImplStopAnimation( const OutputDevice* pOutputDevice,
                                            long nExtraData );
 
     void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
@@ -206,7 +206,7 @@ public:
     bool swapIn();
     bool swapOut();
     bool isSwappedOut() const { return mbSwapOut; }
-    OUString getSwapFileURL();
+    OUString getSwapFileURL() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

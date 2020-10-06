@@ -175,7 +175,7 @@ TestResult OutputDeviceTestBitmap::checkMask(Bitmap& rBitmap)
     return checkRectangle(rBitmap);
 }
 
-TestResult OutputDeviceTestBitmap::checkBlend(BitmapEx& rBitmapEx)
+TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
 {
     const Color aBlendedColor(0xEE, 0xEE, 0x33);
 

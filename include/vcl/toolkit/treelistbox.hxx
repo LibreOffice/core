@@ -435,14 +435,14 @@ public:
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     TriState NotifyMoving(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
-        SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
+        const SvTreeListEntry*  pEntry,        // Entry to be moved from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
     // Return value: TRISTATE_TRUE == Ok, TRISTATE_FALSE == Cancel, TRISTATE_INDET == Ok and Make visible moved entry
     TriState    NotifyCopying(
         SvTreeListEntry*  pTarget,       // D'n'D DropPosition in GetModel()
-        SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
+        const SvTreeListEntry*  pEntry,        // Entry to be copied from GetSourceListBox()->GetModel()
         SvTreeListEntry*& rpNewParent,   // New TargetParent
         sal_uLong&        rNewChildPos); // The TargetParent's position in Childlist
 
@@ -631,7 +631,7 @@ public:
 
     virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nLine );
     // Respects indentation
-    sal_IntPtr      GetTabPos(const SvTreeListEntry*, SvLBoxTab*);
+    sal_IntPtr      GetTabPos(const SvTreeListEntry*, const SvLBoxTab*);
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX );
@@ -684,7 +684,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 
-    void            SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
+    void            SetDragHelper(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

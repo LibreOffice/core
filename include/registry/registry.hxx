@@ -316,7 +316,7 @@ private:
         @param pValueList points to a value list.
         @param length specifies the length of the list.
      */
-    void setValueList(Registry& registry, RegValueType valueType,
+    void setValueList(const Registry& registry, RegValueType valueType,
                       ValueType* pValueList, sal_uInt32 length)
     {
         m_length = length;

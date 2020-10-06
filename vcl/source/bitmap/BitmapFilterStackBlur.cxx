@@ -101,9 +101,12 @@ struct BlurArrays
         }
     }
 
-    long getMultiplyValue() { return static_cast<long>(constMultiplyTable[maShared.mnRadius]); }
+    long getMultiplyValue() const
+    {
+        return static_cast<long>(constMultiplyTable[maShared.mnRadius]);
+    }
 
-    long getShiftValue() { return static_cast<long>(constShiftTable[maShared.mnRadius]); }
+    long getShiftValue() const { return static_cast<long>(constShiftTable[maShared.mnRadius]); }
 };
 
 typedef void (*BlurRangeFn)(BlurSharedData const& rShared, long nStartY, long nEndY);
@@ -145,42 +148,43 @@ struct SumFunction24
         pValue1[2] = nConstant;
     }
 
-    static inline void add(long*& pValue1, sal_uInt8*& pValue2)
+    static inline void add(long*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] += pValue2[0];
         pValue1[1] += pValue2[1];
         pValue1[2] += pValue2[2];
     }
 
-    static inline void add(long*& pValue1, long*& pValue2)
+    static inline void add(long*& pValue1, const long* pValue2)
     {
         pValue1[0] += pValue2[0];
         pValue1[1] += pValue2[1];
         pValue1[2] += pValue2[2];
     }
 
-    static inline void sub(long*& pValue1, sal_uInt8*& pValue2)
+    static inline void sub(long*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] -= pValue2[0];
         pValue1[1] -= pValue2[1];
         pValue1[2] -= pValue2[2];
     }
 
-    static inline void sub(long*& pValue1, long*& pValue2)
+    static inline void sub(long*& pValue1, const long* pValue2)
     {
         pValue1[0] -= pValue2[0];
         pValue1[1] -= pValue2[1];
         pValue1[2] -= pValue2[2];
     }
 
-    static inline void assignPtr(sal_uInt8*& pValue1, sal_uInt8*& pValue2)
+    static inline void assignPtr(sal_uInt8*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] = pValue2[0];
         pValue1[1] = pValue2[1];
         pValue1[2] = pValue2[2];
     }
 
-    static inline void assignMulAndShr(sal_uInt8*& result, long*& sum, long multiply, long shift)
+    static inline void assignMulAndShr(sal_uInt8*& result, const long* sum, long multiply,
+                                       long shift)
     {
         result[0] = (multiply * sum[0]) >> shift;
         result[1] = (multiply * sum[1]) >> shift;
@@ -194,20 +198,21 @@ struct SumFunction8
 
     static inline void set(long*& pValue1, long nConstant) { pValue1[0] = nConstant; }
 
-    static inline void add(long*& pValue1, sal_uInt8*& pValue2) { pValue1[0] += pValue2[0]; }
+    static inline void add(long*& pValue1, const sal_uInt8* pValue2) { pValue1[0] += pValue2[0]; }
 
-    static inline void add(long*& pValue1, long*& pValue2) { pValue1[0] += pValue2[0]; }
+    static inline void add(long*& pValue1, const long* pValue2) { pValue1[0] += pValue2[0]; }
 
-    static inline void sub(long*& pValue1, sal_uInt8*& pValue2) { pValue1[0] -= pValue2[0]; }
+    static inline void sub(long*& pValue1, const sal_uInt8* pValue2) { pValue1[0] -= pValue2[0]; }
 
-    static inline void sub(long*& pValue1, long*& pValue2) { pValue1[0] -= pValue2[0]; }
+    static inline void sub(long*& pValue1, const long* pValue2) { pValue1[0] -= pValue2[0]; }
 
-    static inline void assignPtr(sal_uInt8*& pValue1, sal_uInt8*& pValue2)
+    static inline void assignPtr(sal_uInt8*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] = pValue2[0];
     }
 
-    static inline void assignMulAndShr(sal_uInt8*& result, long*& sum, long multiply, long shift)
+    static inline void assignMulAndShr(sal_uInt8*& result, const long* sum, long multiply,
+                                       long shift)
     {
         result[0] = (multiply * sum[0]) >> shift;
     }

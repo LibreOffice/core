@@ -51,7 +51,7 @@ public:
         , maLocaleLanguageTag(LANGUAGE_NONE)
     {}
 
-    const LanguageTag& getLanguage()
+    const LanguageTag& getLanguage() const
     {
         return maLanguageTag;
     }
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    const LanguageTag& getLocale()
+    const LanguageTag& getLocale() const
     {
         return maLocaleLanguageTag;
     }

@@ -85,17 +85,17 @@ public:
         utl::UCBContentHelper::Kill(maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
     }
 
-    INetURLObject getSwapURL()
+    INetURLObject getSwapURL() const
     {
         return maSwapURL;
     }
 
-    OUString getSwapURLString()
+    OUString getSwapURLString() const
     {
         return maSwapURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
     }
 
-    OUString const & getOriginURL() { return maOriginURL; }
+    OUString const & getOriginURL() const { return maOriginURL; }
 
     std::unique_ptr<SvStream> openOutputStream()
     {
@@ -114,7 +114,7 @@ public:
     }
 };
 
-OUString ImpGraphic::getSwapFileURL()
+OUString ImpGraphic::getSwapFileURL() const
 {
     if (mpSwapFile)
         return mpSwapFile->getSwapURL().GetMainURL(INetURLObject::DecodeMechanism::NONE);
@@ -1091,7 +1091,7 @@ void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt
         mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
 }
 
-void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nExtraData )
+void ImpGraphic::ImplStopAnimation( const OutputDevice* pOutDev, long nExtraData )
 {
     ensureAvailable();
 
