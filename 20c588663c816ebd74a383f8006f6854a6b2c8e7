@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "051af57d_4c3612d4",
+        "filename": "svx/source/sidebar/effect/EffectPropertyPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T07:46:14Z",
+      "side": 1,
+      "message": "The problem reported is that the order of the initializers here in this list is different from the order of the members in the class definition in GlowPropertyPanel.hxx.",
+      "range": {
+        "startLine": 41,
+        "startChar": 6,
+        "endLine": 43,
+        "endChar": 77
+      },
+      "revId": "20c588663c816ebd74a383f8006f6854a6b2c8e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
