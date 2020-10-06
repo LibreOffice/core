@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "90e0959e_673c785c",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T14:11:28Z",
+      "side": 1,
+      "message": "The idea is: if you include a header, you must be able to use everything that it declares. But this header didn\u0027t include necessary headers, so it could only accidentally work if it happened to be included *after* inclusion of another header with those inclusions present. If you had tried to put `#include toolbarmode.hrc` as the first line in a CXX, you would get errors.",
+      "parentUuid": "47b329c2_f9ff6059",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c035d98_fedbb2a5",
         "filename": "cui/inc/toolbarmode.hrc",
         "patchSetId": 33
