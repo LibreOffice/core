@@ -527,7 +527,7 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
     return nullptr;
 }
 
-static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextNode, std::unique_ptr<SwFont>& pNumFnt )
+static void lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextNode, const std::unique_ptr<SwFont>& pNumFnt )
 {
     if ( rInf.GetVsh()->GetLayout()->IsHideRedlines() )
         return;

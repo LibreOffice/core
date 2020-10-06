@@ -87,7 +87,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         OUString sColor;

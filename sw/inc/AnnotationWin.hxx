@@ -150,12 +150,12 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         bool            IsFollow() const { return mbIsFollow; }
         void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow; };
 
-        sal_Int32   GetMetaHeight();
+        sal_Int32   GetMetaHeight() const;
         sal_Int32   GetMinimumSizeWithMeta() const;
         sal_Int32   GetMinimumSizeWithoutMeta() const;
         sal_Int32   GetMetaButtonAreaWidth() const;
         sal_Int32   GetScrollbarWidth() const;
-        sal_Int32   GetNumFields();
+        sal_Int32   GetNumFields() const;
 
         void    SetSpellChecking();
 

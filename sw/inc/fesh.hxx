@@ -646,7 +646,7 @@ public:
     SwTable::SearchType GetTableInsertMode() const         { return m_eTableInsertMode; }
     void SetTableInsertMode( SwTable::SearchType eFlag )  { m_eTableInsertMode = eFlag; }
 
-    bool GetTableCopied()  { return m_bTableCopied; }
+    bool GetTableCopied() const { return m_bTableCopied; }
     void SetTableCopied( bool bCopied )  { m_bTableCopied = bCopied; }
 
     bool DeleteTableSel();        ///< Current selection, may be whole table.

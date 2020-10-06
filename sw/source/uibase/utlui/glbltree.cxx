@@ -387,7 +387,7 @@ void SwGlobalTree::Select()
 
 }
 
-void SwGlobalTree::MoveSelectionTo(weld::TreeIter* pDropEntry)
+void SwGlobalTree::MoveSelectionTo(const weld::TreeIter* pDropEntry)
 {
     int nSource = m_xTreeView->get_selected_index();
 

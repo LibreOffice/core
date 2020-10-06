@@ -245,7 +245,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
                            pDocSh );
 }
 
-void SwHTMLWriter::OutBasic(SwHTMLWriter & rHTMLWrt)
+void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) rHTMLWrt;

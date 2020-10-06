@@ -265,7 +265,7 @@ bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextN
     return bRet;
 }
 
-bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, SwFormatField& rField)
+bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, const SwFormatField& rField)
 {
     // 1. Check if the whole paragraph is hidden
     // 2. Move to the field

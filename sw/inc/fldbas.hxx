@@ -276,7 +276,7 @@ public:
     SwFormatField* FindFormatForField(const SwField*) const;
     SwFormatField* FindFormatForPostItId(sal_uInt32 nPostItId) const;
     void CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, IDocumentRedlineAccess const& rIDRA, bool HideRedlines);
-    bool HasHiddenInformationNotes();
+    bool HasHiddenInformationNotes() const;
     void GatherNodeIndex(std::vector<sal_uLong>& rvNodeIndex);
     void GatherRefFields(std::vector<SwGetRefField*>& rvRFields, const sal_uInt16 nTyp);
     void GatherFields(std::vector<SwFormatField*>& rvFormatFields, bool bCollectOnlyInDocNodes=true) const;

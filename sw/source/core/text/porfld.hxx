@@ -180,7 +180,7 @@ public:
     void SetBase( long nLnAscent, long nLnDescent,
         long nFlyAscent, long nFlyDescent );
 
-    void StopAnimation( OutputDevice* pOut );
+    void StopAnimation( const OutputDevice* pOut );
 
     bool IsAnimated() const { return m_bAnimated; }
     void SetAnimated( bool bNew ) { m_bAnimated = bNew; }

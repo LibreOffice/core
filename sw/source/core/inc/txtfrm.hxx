@@ -660,7 +660,7 @@ public:
     void RecalcAllLines();
 
     /// Stops the animations within numberings
-    void StopAnimation( OutputDevice *pOut );
+    void StopAnimation( const OutputDevice *pOut );
 
     /// Visit all portions for Accessibility
     void VisitPortions( SwPortionHandler& rPH ) const;

@@ -1429,14 +1429,14 @@ sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth() const
     return long(METABUTTON_AREA_WIDTH * f);
 }
 
-sal_Int32 SwAnnotationWin::GetMetaHeight()
+sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     const int fields = GetNumFields();
     return long(fields*POSTIT_META_FIELD_HEIGHT*f);
 }
 
-sal_Int32 SwAnnotationWin::GetNumFields()
+sal_Int32 SwAnnotationWin::GetNumFields() const
 {
     return IsResolved() ? 3 : 2;
 }

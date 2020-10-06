@@ -173,7 +173,7 @@ void SwFieldType::CollectPostIts(std::vector<SwFormatField*>& rvFormatFields, ID
     CallSwClientNotify(sw::CollectPostItsHint(rvFormatFields, rIDRA, bHideRedlines));
 }
 
-bool SwFieldType::HasHiddenInformationNotes()
+bool SwFieldType::HasHiddenInformationNotes() const
 {
     bool bHasHiddenInformationNotes = false;
     CallSwClientNotify(sw::HasHiddenInformationNotesHint(bHasHiddenInformationNotes));

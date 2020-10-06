@@ -1439,7 +1439,7 @@ namespace numfunc
         return SwNumberingUIBehaviorConfig::getInstance().ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 
-    bool NumDownChangesIndent(SwWrtShell& rShell)
+    bool NumDownChangesIndent(const SwWrtShell& rShell)
     {
         SwPaM* pCursor = rShell.GetCursor();
         if (!pCursor)
