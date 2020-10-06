@@ -76,23 +76,16 @@ def check_top_level_widget(element):
     #        lint_assert(border_width.text == BORDER_WIDTH,
     #                    "Top level 'border_width' property should be " + BORDER_WIDTH, border_width)
 
-    # check that
-    # (*) any widget which has 'has-default' also has 'can-default'
-    # (*) we have at most one has-default widget
-    # 'has-default' means that when ENTER is pressed, this widget is triggered, normally the OK button
-    has_default_count = 0
+    # check that any widget which has 'has-default' also has 'can-default'
     for widget in element.findall('.//object'):
         if not widget.attrib['class']:
             continue
-        child_widget_type = widget.attrib['class']
+        widget_type = widget.attrib['class']
         has_defaults = widget.findall("./property[@name='has_default']")
         if len(has_defaults) > 0 and has_defaults[0].text == "True":
-            has_default_count += 1
             can_defaults = widget.findall("./property[@name='can_default']")
             lint_assert(len(can_defaults)>0 and can_defaults[0].text == "True",
-                "has_default without can_default in " + child_widget_type + " with id = '" + widget.attrib['id'] + "'", widget)
-    lint_assert(has_default_count <= 1,
-        "more than one child with has_default=='True' in top-level widget " + widget_type, element)
+                "has_default without can_default in " + widget_type + " with id = '" + widget.attrib['id'] + "'", widget)
 
 def check_button_box_spacing(element):
     spacing = element.findall("property[@name='spacing']")
