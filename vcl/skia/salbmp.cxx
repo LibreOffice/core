@@ -391,7 +391,8 @@ bool SkiaSalBitmap::ConvertToGreyscale()
     {
         if (mBitCount == 8 && mPalette.IsGreyPalette8Bit())
             return true;
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mPixelsSize);
+        sk_sp<SkSurface> surface
+            = SkiaHelper::createSkSurface(mPixelsSize, mImage->imageInfo().alphaType());
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
         // VCL uses different coefficients for conversion to gray than Skia, so use the VCL
@@ -533,15 +534,8 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
             const size_t bytes = mPixelsSize.Height() * mScanlineSize;
             std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
             memcpy(data.get(), mBuffer.get(), bytes);
-            // The bitmap's alpha matters only if SKIA_USE_BITMAP32 is set, otherwise
-            // the alpha is in a separate bitmap.
-#if SKIA_USE_BITMAP32
-            SkAlphaType alphaType = kPremul_SkAlphaType;
-#else
-            SkAlphaType alphaType = kOpaque_SkAlphaType;
-#endif
             if (!bitmap.installPixels(
-                    SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(), alphaType),
+                    SkImageInfo::MakeS32(mPixelsSize.Width(), mPixelsSize.Height(), alphaType()),
                     data.release(), mScanlineSize,
                     [](void* addr, void*) { delete[] static_cast<sal_uInt8*>(addr); }, nullptr))
                 abort();
@@ -668,7 +662,8 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
     if (mEraseColorSet)
     {
         SkiaZone zone;
-        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+        sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(
+            mSize, mEraseColor.GetTransparency() != 0 ? kPremul_SkAlphaType : kOpaque_SkAlphaType);
         assert(surface);
         surface->getCanvas()->clear(toSkColor(mEraseColor));
         SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
@@ -699,7 +694,8 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetSkImage() const
         {
             assert(!mBuffer); // This code should be only called if only mImage holds data.
             SkiaZone zone;
-            sk_sp<SkSurface> surface = SkiaHelper::createSkSurface(mSize);
+            sk_sp<SkSurface> surface
+                = SkiaHelper::createSkSurface(mSize, mImage->imageInfo().alphaType());
             assert(surface);
             SkPaint paint;
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
@@ -870,6 +866,19 @@ bool SkiaSalBitmap::IsFullyOpaqueAsAlpha() const
     // Note that for alpha bitmaps we use the VCL "transparency" convention,
     // i.e. alpha 0 is opaque.
     return SkColorGetA(fromEraseColorToAlphaImageColor(mEraseColor)) == 0;
+}
+
+SkAlphaType SkiaSalBitmap::alphaType() const
+{
+    if (mEraseColorSet)
+        return mEraseColor.GetTransparency() != 0 ? kPremul_SkAlphaType : kOpaque_SkAlphaType;
+#if SKIA_USE_BITMAP32
+    // The bitmap's alpha matters only if SKIA_USE_BITMAP32 is set, otherwise
+    // the alpha is in a separate bitmap.
+    if (mBitCount == 32)
+        return kPremul_SkAlphaType;
+#endif
+    return kOpaque_SkAlphaType;
 }
 
 void SkiaSalBitmap::PerformErase()

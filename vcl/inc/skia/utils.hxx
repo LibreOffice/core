@@ -37,11 +37,23 @@ void disableRenderMethod(RenderMethod method);
 
 // Create SkSurface, GPU-backed if possible.
 VCL_DLLPUBLIC sk_sp<SkSurface> createSkSurface(int width, int height,
-                                               SkColorType type = kN32_SkColorType);
+                                               SkColorType type = kN32_SkColorType,
+                                               SkAlphaType alpha = kPremul_SkAlphaType);
 
-inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN32_SkColorType)
+inline sk_sp<SkSurface> createSkSurface(const Size& size, SkColorType type = kN32_SkColorType,
+                                        SkAlphaType alpha = kPremul_SkAlphaType)
 {
-    return createSkSurface(size.Width(), size.Height(), type);
+    return createSkSurface(size.Width(), size.Height(), type, alpha);
+}
+
+inline sk_sp<SkSurface> createSkSurface(int width, int height, SkAlphaType alpha)
+{
+    return createSkSurface(width, height, kN32_SkColorType, alpha);
+}
+
+inline sk_sp<SkSurface> createSkSurface(const Size& size, SkAlphaType alpha)
+{
+    return createSkSurface(size.Width(), size.Height(), kN32_SkColorType, alpha);
 }
 
 // Create SkImage, GPU-backed if possible.

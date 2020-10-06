@@ -1540,7 +1540,8 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
         assert(image->width() == targetSize.Width() && image->height() == targetSize.Height());
         return image;
     }
-    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(targetSize);
+    sk_sp<SkSurface> tmpSurface = SkiaHelper::createSkSurface(
+        targetSize, alphaBitmap ? kPremul_SkAlphaType : bitmap.alphaType());
     if (!tmpSurface)
         return nullptr;
     SkCanvas* canvas = tmpSurface->getCanvas();
