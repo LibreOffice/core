@@ -140,7 +140,8 @@ void X11SkiaSalGraphicsImpl::performFlush()
     SkiaZone zone;
     flushDrawing();
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
-    mWindowContext->swapBuffers();
+    if (mWindowContext)
+        mWindowContext->swapBuffers();
 }
 
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool temporary)
