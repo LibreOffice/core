@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f03877c_4d764219",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-06T07:59:08Z",
+      "side": 0,
+      "message": "is this really unnecessary?",
+      "range": {
+        "startLine": 1154,
+        "startChar": 1,
+        "endLine": 1164,
+        "endChar": 5
+      },
+      "revId": "b65d21596b5773d744b242716a78308d2c3714d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
