@@ -1631,7 +1631,8 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         }
     }
 
-    SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+    // tdf#123025 - split returns an array of substrings
+    SbxDimArray* pArray = new SbxDimArray( SbxSTRING );
     pArray->unoAddDim32( 0, nArraySize-1 );
 
     // insert parameter(s) into the array
