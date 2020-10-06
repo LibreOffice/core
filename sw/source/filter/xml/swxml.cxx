@@ -150,34 +150,24 @@ ErrCode ReadThroughComponent(
     aParserInput.sSystemId = rName;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
-    SAL_INFO( "sw.filter", "parser created" );
     // get filter
     const OUString aFilterName(OUString::createFromAscii(pFilterName));
-    uno::Reference< xml::sax::XDocumentHandler > xFilter(
-        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
-        UNO_QUERY);
-    SAL_WARN_IF(!xFilter.is(), "sw.filter", "Can't instantiate filter component: " << aFilterName);
-    if( !xFilter.is() )
-        return ERR_SWG_READ_ERROR;
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    uno::Reference< XInterface > xFilter =
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext);
+    assert(xFilter);
+    uno::Reference< xml::sax::XFastParser > xParser(xFilter, UNO_QUERY);
+    assert(xParser);
     SAL_INFO( "sw.filter", "" << pFilterName << " created" );
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
 
     // connect model and filter
     uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
 
-    // finally, parser the stream
+    // finally, parse the stream
     try
     {
-        if( xFastParser.is() )
-            xFastParser->parseStream( aParserInput );
-        else
-            xParser->parseStream( aParserInput );
+        xParser->parseStream( aParserInput );
     }
     catch( xml::sax::SAXParseException& r)
     {

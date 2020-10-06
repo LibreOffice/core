@@ -382,23 +382,27 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         // The Any shift operator can't be used to query the type because it
         // uses queryInterface, and the model also has a XPropertySet interface.
 
+        css::uno::Reference< XFastDocumentHandler > xFastHandler;
+        if( rArgument >>= xFastHandler )
+        {
+            SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>( xFastHandler.get() );
+            assert(pFastHandler);
+            m_xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+        }
         // document handler
-        if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( rArgument.getValueType() ) )
+        else if( cppu::UnoType<XDocumentHandler>::get().isAssignableFrom( rArgument.getValueType() ) )
         {
             m_xHandler.set( rArgument, UNO_QUERY );
-        // Type change to avoid crashing of dynamic_cast
-            if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(
-                                uno::Reference< XFastDocumentHandler >( m_xHandler, uno::UNO_QUERY ).get() ) )
-                m_xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+            assert(false);
         }
-
         // property set to transport data across
-        if( cppu::UnoType<XPropertySet>::get().isAssignableFrom( rArgument.getValueType() ) )
+        else if( cppu::UnoType<XPropertySet>::get().isAssignableFrom( rArgument.getValueType() ) )
             m_xPropSet.set( rArgument, UNO_QUERY );
-
         // xmodel
-        if( cppu::UnoType<css::frame::XModel>::get().isAssignableFrom( rArgument.getValueType() ) )
+        else if( cppu::UnoType<css::frame::XModel>::get().isAssignableFrom( rArgument.getValueType() ) )
             mxModel.set( rArgument, UNO_QUERY );
+        else
+            assert(false);
     }
 
     if( m_xPropSet.is() )

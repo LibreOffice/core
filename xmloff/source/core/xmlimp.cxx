@@ -830,10 +830,6 @@ void SvXMLImport::Characters( const OUString& rChars )
     }
 }
 
-void SAL_CALL SvXMLImport::ignorableWhitespace( const OUString& )
-{
-}
-
 void SAL_CALL SvXMLImport::processingInstruction( const OUString&,
                                        const OUString& )
 {
@@ -957,27 +953,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     const uno::Reference< xml::sax::XFastAttributeList > &)
 {
     return this;
-}
-
-// XExtendedDocumentHandler
-void SAL_CALL SvXMLImport::startCDATA()
-{
-}
-
-void SAL_CALL SvXMLImport::endCDATA()
-{
-}
-
-void SAL_CALL SvXMLImport::comment( const OUString& )
-{
-}
-
-void SAL_CALL SvXMLImport::allowLineBreak()
-{
-}
-
-void SAL_CALL SvXMLImport::unknown( const OUString& )
-{
 }
 
 void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
@@ -2295,9 +2270,8 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::characters( const OUString& aChars )
     mrImport->characters( aChars );
 }
 
-void SAL_CALL SvXMLLegacyToFastDocHandler::ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL SvXMLLegacyToFastDocHandler::ignorableWhitespace( const OUString& )
 {
-    mrImport->ignorableWhitespace( aWhitespaces );
 }
 
 void SAL_CALL SvXMLLegacyToFastDocHandler::processingInstruction( const OUString& aTarget,
