@@ -1347,8 +1347,11 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }
 
-    pFS->startElementNS(mnXmlNamespace, XML_cxnSp);
+    // tdf#99810 connector shape (cxnSp) is not valid with namespace 'wps'
+    const auto nShapeNode = (mnXmlNamespace == XML_wps ? XML_wsp : XML_cxnSp);
+    pFS->startElementNS(mnXmlNamespace, nShapeNode);
 
+<<<<<<< HEAD   (2dc62f tdf#133037 OOXML shape import: camera rotation along Z)
     // non visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_nvCxnSpPr);
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
@@ -1360,6 +1363,27 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     pFS->endElementNS( mnXmlNamespace, XML_cNvCxnSpPr );
     pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
     pFS->endElementNS( mnXmlNamespace, XML_nvCxnSpPr );
+=======
+    if (mnXmlNamespace == XML_wps)
+    {
+        // non visual connector shape drawing properties
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvCnPr);
+    }
+    else
+    {
+        // non visual shape properties
+        pFS->startElementNS(mnXmlNamespace, XML_nvCxnSpPr);
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvPr,
+            XML_id, OString::number(GetNewShapeID(xShape)),
+            XML_name, GetShapeName(xShape));
+        // non visual connector shape drawing properties
+        pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
+        WriteConnectorConnections(aConnectorEntry, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
+        pFS->endElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
+        pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
+        pFS->endElementNS(mnXmlNamespace, XML_nvCxnSpPr);
+    }
+>>>>>>> CHANGE (7b2f00 tdf#99810 DOCX export: fix lost arrow shape)
 
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
@@ -1374,7 +1398,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
     // write text
     WriteTextBox( xShape, mnXmlNamespace );
 
-    pFS->endElementNS( mnXmlNamespace, XML_cxnSp );
+    pFS->endElementNS(mnXmlNamespace, nShapeNode);
 
     return *this;
 }
