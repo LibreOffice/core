@@ -180,6 +180,52 @@
     },
     {
       "key": {
+        "uuid": "2fd8935e_7d0b9b42",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:55:22Z",
+      "side": 1,
+      "message": "leading :: here",
+      "range": {
+        "startLine": 145,
+        "startChar": 4,
+        "endLine": 145,
+        "endChar": 6
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41962690_6980a2e6",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:55:22Z",
+      "side": 1,
+      "message": "this break after return is unreachable",
+      "range": {
+        "startLine": 156,
+        "startChar": 12,
+        "endLine": 156,
+        "endChar": 18
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ac0a77_f6a45809",
         "filename": "cui/source/inc/toolbarmodedlg.hxx",
         "patchSetId": 33
