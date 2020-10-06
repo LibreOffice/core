@@ -13,11 +13,17 @@
 
 ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/sortkey.ui"))
-    , m_xFrame(m_xBuilder->weld_frame("SortKeyFrame", true))
+    , m_xFrame(m_xBuilder->weld_frame("SortKeyFrame"))
     , m_xLbSort(m_xBuilder->weld_combo_box("sortlb"))
     , m_xBtnUp(m_xBuilder->weld_radio_button("up"))
     , m_xBtnDown(m_xBuilder->weld_radio_button("down"))
+    , m_pParent(pParent)
 {
+}
+
+ScSortKeyItem::~ScSortKeyItem()
+{
+    m_pParent->move(m_xFrame.get(), nullptr);
 }
 
 void ScSortKeyItem::DisableField()
