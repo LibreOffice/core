@@ -762,19 +762,12 @@ void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::
     aDirStream.WriteUInt16(0x0010); // terminator
     aDirStream.WriteUInt32(0x00000000); // reserved
 
-    aDirStream.Seek(0);
-
 #if VBA_EXPORT_DEBUG
     const OUString aDirFileName("/tmp/vba_dir_out.bin");
     SvFileStream aDirStreamDebug(aDirFileName, StreamMode::READWRITE);
-
-    aDirStreamDebug.WriteStream(aDirStream);
     aDirStream.Seek(0);
+    aDirStreamDebug.WriteStream(aDirStream);
 #endif
-
-    // the stream for the compression
-    SvMemoryStream aMemoryStream(4096, 4096);
-    aMemoryStream.WriteStream(aDirStream);
 
     VBACompression aCompression(rStrm, aDirStream);
     aCompression.write();
@@ -807,18 +800,13 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
         aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos+1, "");
     aSourceCode = aSourceCode.replaceAll("\n", "\r\n");
     exportString(aModuleStream, aSourceCode);
-    aModuleStream.Seek(0);
 
 #if VBA_EXPORT_DEBUG
     OUString aModuleFileName("/tmp/vba_" + aElementName + "_out.bin");
     SvFileStream aModuleStreamDebug(aModuleFileName, StreamMode::READWRITE);
-    aModuleStreamDebug.WriteStream(aModuleStream);
     aModuleStream.Seek(0);
+    aModuleStreamDebug.WriteStream(aModuleStream);
 #endif
-
-    // the stream for the compression
-    SvMemoryStream aMemoryStream(4096, 4096);
-    aMemoryStream.WriteStream(aModuleStream);
 
     VBACompression aCompression(rStrm, aModuleStream);
     aCompression.write();
