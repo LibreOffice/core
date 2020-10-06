@@ -55,7 +55,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -189,13 +189,10 @@ ErrCode ReadThroughComponent(
     aParserInput.sSystemId = rName;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
-    SAL_INFO( "sd.filter", "parser created" );
-
     // get filter
     OUString aFilterName(OUString::createFromAscii(pFilterName));
-    Reference< xml::sax::XDocumentHandler > xFilter(
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    Reference< xml::sax::XFastParser > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY );
     SAL_WARN_IF(!xFilter.is(), "sd.filter", "Can't instantiate filter component: " << aFilterName);
@@ -203,24 +200,15 @@ ErrCode ReadThroughComponent(
         return SD_XML_READERROR;
     SAL_INFO( "sd.filter", "" << pFilterName << " created" );
 
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
-
     // connect model and filter
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
-
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
 
     // finally, parser the stream
     SAL_INFO( "sd.filter", "parsing stream" );
     try
     {
-        if( xFastParser.is() )
-            xFastParser->parseStream( aParserInput );
-        else
-            xParser->parseStream( aParserInput );
+        xFilter->parseStream( aParserInput );
     }
     catch (const xml::sax::SAXParseException& r)
     {
