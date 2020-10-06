@@ -9,6 +9,7 @@
  */
 
 #include <config_features.h>
+#include <o3tl/make_unique.hxx>
 
 #if HAVE_FEATURE_PDFIUM
 
@@ -50,7 +51,7 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
     FPDF_PAGE pPage = FPDF_LoadPage(mpPdfDocument, nIndex);
     if (pPage)
     {
-        pPDFiumPage = std::make_unique<PDFiumPage>(pPage);
+        pPDFiumPage = o3tl::make_unique<PDFiumPage>(pPage);
     }
     return pPDFiumPage;
 }
