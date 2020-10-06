@@ -2722,29 +2722,20 @@ cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
 # LibreLogo
-cmd/32/librelogo-right.png cmd/32/arrowshapes.circular-arrow.png
 cmd/32/librelogo-gobackward.png cmd/32/arrowshapes.down-arrow.png
 cmd/32/librelogo-goforward.png cmd/32/arrowshapes.up-arrow.png
 cmd/32/librelogo-run.png cmd/32/runbasic.png
 cmd/32/librelogo-stop.png cmd/32/basicstop.png
 cmd/32/librelogo-translate.png cmd/32/editglossary.png
-cmd/32/librelogo-home.png cmd/32/navigationbar.png
-cmd/32/librelogo-clearscreen.png cmd/32/newdoc.png
 
-cmd/lc_librelogo-right.png cmd/lc_arrowshapes.circular-arrow.png
 cmd/lc_librelogo-gobackward.png cmd/lc_arrowshapes.down-arrow.png
 cmd/lc_librelogo-goforward.png cmd/lc_arrowshapes.up-arrow.png
 cmd/lc_librelogo-run.png cmd/lc_runbasic.png
 cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
 cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
-cmd/lc_librelogo-home.png cmd/lc_navigationbar.png
-cmd/lc_librelogo-clearscreen.png cmd/lc_newdoc.png
 
-cmd/sc_librelogo-right.png cmd/sc_arrowshapes.circular-arrow.png
 cmd/sc_librelogo-gobackward.png cmd/sc_arrowshapes.down-arrow.png
 cmd/sc_librelogo-goforward.png cmd/sc_arrowshapes.up-arrow.png
 cmd/sc_librelogo-run.png cmd/sc_runbasic.png
 cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
-cmd/sc_librelogo-home.png cmd/sc_navigationbar.png
-cmd/sc_librelogo-clearscreen.png cmd/sc_newdoc.png
