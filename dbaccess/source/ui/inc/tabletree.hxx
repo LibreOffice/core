@@ -93,7 +93,7 @@ public:
         from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
         table filter it's represented by a wildcard.</p>
     */
-    void            checkWildcard(weld::TreeIter& rEntry);
+    void            checkWildcard(const weld::TreeIter& rEntry);
 
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard

@@ -237,7 +237,7 @@ void OApplicationView::paste()
         pTest->paste();
 }
 
-OUString OApplicationView::getQualifiedName(weld::TreeIter* _pEntry) const
+OUString OApplicationView::getQualifiedName(const weld::TreeIter* _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getQualifiedName( _pEntry );

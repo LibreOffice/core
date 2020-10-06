@@ -2488,7 +2488,7 @@ std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implGetConnectionEntry(wel
     return xCurrentEntry;
 }
 
-bool SbaTableQueryBrowser::implSelect(weld::TreeIter* pEntry)
+bool SbaTableQueryBrowser::implSelect(const weld::TreeIter* pEntry)
 {
     if ( !pEntry )
         return false;
@@ -2957,7 +2957,7 @@ void SbaTableQueryBrowser::impl_releaseConnection( SharedConnection& _rxConnecti
         // will implicitly dispose if we have the ownership, since xConnection is a SharedConnection
 }
 
-void SbaTableQueryBrowser::disposeConnection(weld::TreeIter* pDSEntry)
+void SbaTableQueryBrowser::disposeConnection(const weld::TreeIter* pDSEntry)
 {
     OSL_ENSURE( pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
     OSL_ENSURE( impl_isDataSourceEntry( pDSEntry ), "SbaTableQueryBrowser::disposeConnection: invalid entry (not top-level)!" );

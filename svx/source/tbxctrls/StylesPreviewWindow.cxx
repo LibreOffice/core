@@ -56,7 +56,7 @@
 
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
-    css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : SfxStatusListener(xDispatchProvider, SID_STYLE_FAMILY2, ".uno:ParaStyle")
     , m_pPreviewControl(pPreviewControl)
 {
@@ -72,7 +72,7 @@ void StyleStatusListener::StateChanged(SfxItemState /*eState*/, const SfxPoolIte
 
 StyleItemController::StyleItemController(
     const std::pair<OUString, OUString>& aStyleName,
-    css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_eStyleFamily(SfxStyleFamily::Para)
     , m_aStyleName(aStyleName)
     , m_bSelected(false)
@@ -297,7 +297,8 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 }
 
 void StyleItemController::DrawContentBackground(vcl::RenderContext& rRenderContext,
-                                                tools::Rectangle& aContentRect, Color& aColor)
+                                                const tools::Rectangle& aContentRect,
+                                                const Color& aColor)
 {
     rRenderContext.SetLineColor(aColor);
     rRenderContext.SetFillColor(aColor);
@@ -351,7 +352,7 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
-    css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : m_xUp(xBuilder.weld_toolbar("uptoolbar"))
     , m_xDown(xBuilder.weld_toolbar("downtoolbar"))
     , m_aDefaultStyles(aDefaultStyles)
@@ -489,7 +490,7 @@ IMPL_LINK(StylesPreviewWindow_Base, GoDown, const OString&, /*rItem*/, void)
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
-    css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : InterimItemWindow(pParent, "svx/ui/stylespreview.ui", "ApplyStyleBox",
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, aDefaultStyles, xDispatchProvider)

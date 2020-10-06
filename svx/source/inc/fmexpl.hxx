@@ -493,10 +493,10 @@ namespace svxform
         sal_Int8    ExecuteDrop(const ExecuteDropEvent& rEvt);
 
     private:
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const weld::TreeIter* _pTargetEntry, bool _bDnD );
 
         sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, bool _bDnD );
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const weld::TreeIter* _pTargetEntry, bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
         bool        implAllowExchange( sal_Int8 _nAction, bool* _pHasNonHidden = nullptr );
@@ -506,7 +506,7 @@ namespace svxform
         // fills m_aControlExchange in preparation of a DnD or clipboard operation
         bool        implPrepareExchange( sal_Int8 _nAction );
 
-        void        ModelHasRemoved(weld::TreeIter* _pEntry);
+        void        ModelHasRemoved(const weld::TreeIter* _pEntry);
 
         void        doPaste();
         void        doCopy();

@@ -114,7 +114,7 @@ class AdditionsItem
 {
 public:
     AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
-                  AdditionInfo& additionInfo);
+                  const AdditionInfo& additionInfo);
     bool getExtensionFile(OUString& sExtensionFile);
 
     DECL_LINK(ShowMoreHdl, weld::Button&, void);

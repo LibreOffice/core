@@ -117,7 +117,7 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
 }
 
 /// Turns an array of floats into offset + length pairs.
-bool GetByteRangesFromPDF(vcl::filter::PDFArrayElement& rArray,
+bool GetByteRangesFromPDF(const vcl::filter::PDFArrayElement& rArray,
                           std::vector<std::pair<size_t, size_t>>& rByteRanges)
 {
     size_t nByteRangeOffset = 0;

@@ -199,7 +199,7 @@ namespace dbaui
         return  ( eType == etTableOrView || eType == etQuery );
     }
 
-    void SbaTableQueryBrowser::copyEntry(weld::TreeIter& rEntry)
+    void SbaTableQueryBrowser::copyEntry(const weld::TreeIter& rEntry)
     {
         EntryType eType = getEntryType(rEntry);
         rtl::Reference<ODataClipboard> xTransfer(new ODataClipboard);

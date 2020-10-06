@@ -483,7 +483,7 @@ void SvxBmpMask::dispose()
 }
 
 /** is called by a MaskSet when it is selected */
-void SvxBmpMask::onSelect( MaskSet* pSet )
+void SvxBmpMask::onSelect( const MaskSet* pSet )
 {
     // now deselect all other value sets
     if( pSet != m_xQSet1.get() )

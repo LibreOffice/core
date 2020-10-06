@@ -111,7 +111,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType(const weld::T
     return etQueryContainer;
 }
 
-void SbaTableQueryBrowser::select(weld::TreeIter* pEntry, bool bSelect)
+void SbaTableQueryBrowser::select(const weld::TreeIter* pEntry, bool bSelect)
 {
     if (pEntry)
     {
@@ -124,7 +124,7 @@ void SbaTableQueryBrowser::select(weld::TreeIter* pEntry, bool bSelect)
     }
 }
 
-void SbaTableQueryBrowser::selectPath(weld::TreeIter* pEntry, bool bSelect)
+void SbaTableQueryBrowser::selectPath(const weld::TreeIter* pEntry, bool bSelect)
 {
     if (!pEntry)
         return;

@@ -1212,7 +1212,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 
 namespace
 {
-    FmFilterItems* getTargetItems(weld::TreeView& rTreeView, weld::TreeIter& rTarget)
+    FmFilterItems* getTargetItems(const weld::TreeView& rTreeView, const weld::TreeIter& rTarget)
     {
         FmFilterData* pData = reinterpret_cast<FmFilterData*>(rTreeView.get_id(rTarget).toUInt64());
         FmFilterItems*  pTargetItems = dynamic_cast<FmFilterItems*>(pData);

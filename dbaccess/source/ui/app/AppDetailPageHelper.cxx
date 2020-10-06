@@ -401,7 +401,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< OUString>& _aNames)
     }
 }
 
-OUString OAppDetailPageHelper::getQualifiedName(weld::TreeIter* _pEntry) const
+OUString OAppDetailPageHelper::getQualifiedName(const weld::TreeIter* _pEntry) const
 {
     int nPos = getVisibleControlIndex();
     OUString sComposedName;
@@ -633,7 +633,7 @@ namespace
 }
 
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const OUString& rImageId, weld::TreeIter* _pParent )
+                                      const OUString& rImageId, const weld::TreeIter* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );

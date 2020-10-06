@@ -106,7 +106,7 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
 }
 
 static void FillBox_Impl(weld::TreeView& rListBoxStyles, const TreeNode& rCurrent,
-                         weld::TreeIter* pParent)
+                         const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> pResult = rListBoxStyles.make_iterator();
     const OUString& rName = rCurrent.sNodeName;

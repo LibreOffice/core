@@ -154,7 +154,7 @@ namespace svxform
             @param  _pEntry
             @return the number of entries remaining in the selection.
         */
-        size_t  onEntryRemoved(weld::TreeView* pView, weld::TreeIter* _pEntry);
+        size_t  onEntryRemoved(const weld::TreeView* pView, const weld::TreeIter* _pEntry);
 
         void setFormsRoot(
             const css::uno::Reference< css::form::XForms >& _rxFormsRoot
@@ -165,7 +165,7 @@ namespace svxform
             // (it is assumed that the entries are sorted in m_aSelectedEntries with respect to the neighbor relationship)
 
 
-        void buildListFromPath(const weld::TreeView* pTreeBox, weld::TreeIter* pRoot);
+        void buildListFromPath(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot);
             // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
         void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);

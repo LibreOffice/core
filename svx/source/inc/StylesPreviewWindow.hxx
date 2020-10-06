@@ -33,8 +33,9 @@ class StyleStatusListener : public SfxStatusListener
     StylesPreviewWindow_Base* m_pPreviewControl;
 
 public:
-    StyleStatusListener(StylesPreviewWindow_Base* pPreviewControl,
-                        css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StyleStatusListener(
+        StylesPreviewWindow_Base* pPreviewControl,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
     void StateChanged(SfxItemState eState, const SfxPoolItem* pState) override;
 };
@@ -49,8 +50,9 @@ class StyleItemController : public weld::CustomWidgetController
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
 public:
-    StyleItemController(const std::pair<OUString, OUString>& aStyleName,
-                        css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StyleItemController(
+        const std::pair<OUString, OUString>& aStyleName,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
     void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
 
@@ -66,7 +68,7 @@ private:
     void DrawHighlight(vcl::RenderContext& rRenderContext, Color aFontBack);
     static void DrawSelection(vcl::RenderContext& rRenderContext);
     static void DrawContentBackground(vcl::RenderContext& rRenderContext,
-                                      tools::Rectangle& aContentRect, Color& aColor);
+                                      const tools::Rectangle& aContentRect, const Color& aColor);
 };
 
 class StylesPreviewWindow_Base
@@ -93,9 +95,9 @@ protected:
     DECL_LINK(GoDown, const OString&, void);
 
 public:
-    StylesPreviewWindow_Base(weld::Builder& xBuilder,
-                             std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
-                             css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StylesPreviewWindow_Base(
+        weld::Builder& xBuilder, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
@@ -110,9 +112,9 @@ private:
 class StylesPreviewWindow_Impl : public InterimItemWindow, public StylesPreviewWindow_Base
 {
 public:
-    StylesPreviewWindow_Impl(vcl::Window* pParent,
-                             std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
-                             css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+    StylesPreviewWindow_Impl(
+        vcl::Window* pParent, std::vector<std::pair<OUString, OUString>>& aDefaultStyles,
+        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
     ~StylesPreviewWindow_Impl();
 
     void dispose();

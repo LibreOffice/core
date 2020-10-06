@@ -681,7 +681,7 @@ OUString lcl_getDragParameterString( const OUString& rCID )
 }
 } // anonymous namespace
 
-void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxViewShell* pOtherShell)
+void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell)
 {
     SfxViewShell* pViewShell = GetSfxViewShell();
 

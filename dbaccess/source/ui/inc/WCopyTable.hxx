@@ -385,7 +385,7 @@ namespace dbaui
         void clearDestColumns();
 
         css::uno::Reference< css::beans::XPropertySet > returnTable();
-        css::uno::Reference< css::beans::XPropertySet > getTable();
+        css::uno::Reference< css::beans::XPropertySet > getTable() const;
         css::uno::Reference< css::beans::XPropertySet > createTable();
         css::uno::Reference< css::beans::XPropertySet > createView() const;
         sal_Int32 getMaxColumnNameLength() const;

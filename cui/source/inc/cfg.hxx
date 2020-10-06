@@ -458,7 +458,7 @@ protected:
 
     void InsertEntryIntoNotebookbarTabUI(const OUString& sClassId, const OUString& sUIItemId,
                                          const OUString& sUIItemCommand,
-                                         weld::TreeView& rTreeView, weld::TreeIter& rIter);
+                                         weld::TreeView& rTreeView, const weld::TreeIter& rIter);
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
                                         SvxConfigEntry* pChildData );

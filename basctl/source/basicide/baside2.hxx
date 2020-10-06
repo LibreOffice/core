@@ -206,7 +206,7 @@ private:
 
     SbxBase* ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbArrayElement);
 
-    void implEnableChildren(weld::TreeIter& rEntry, bool bEnable);
+    void implEnableChildren(const weld::TreeIter& rEntry, bool bEnable);
 
     DECL_STATIC_LINK(WatchWindow, ButtonHdl, weld::Button&, void);
     DECL_LINK(TreeListHdl, weld::TreeView&, void);

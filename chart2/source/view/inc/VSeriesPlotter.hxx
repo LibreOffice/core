@@ -242,7 +242,7 @@ public:
     void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
     void setPieLabelsAllowToMove( bool bIsPieOrDonut ) { m_bPieLabelsAllowToMove = bIsPieOrDonut; };
-    void setAvailableOuterRect( basegfx::B2IRectangle& aAvailableOuterRect ) { m_aAvailableOuterRect = aAvailableOuterRect; };
+    void setAvailableOuterRect( const basegfx::B2IRectangle& aAvailableOuterRect ) { m_aAvailableOuterRect = aAvailableOuterRect; };
 
     //return the depth for a logic 1
     double  getTransformedDepth() const;

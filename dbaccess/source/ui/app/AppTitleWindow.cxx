@@ -51,7 +51,7 @@ weld::Container* OTitleWindow::getChildContainer()
     return m_xChildContainer.get();
 }
 
-void OTitleWindow::setChildWindow(std::shared_ptr<OChildWindow>& rChild)
+void OTitleWindow::setChildWindow(const std::shared_ptr<OChildWindow>& rChild)
 {
     m_xChild = rChild;
 }

@@ -32,14 +32,14 @@ namespace chart::sidebar {
 
 namespace {
 
-SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
+SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
     SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
     return pToolBoxLineStyleControl;
 }
 
-SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rToolBoxLineStyle)
+SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rToolBoxLineStyle)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(".uno:XLineColor");
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());

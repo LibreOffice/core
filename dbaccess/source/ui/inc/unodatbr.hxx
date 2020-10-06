@@ -236,9 +236,9 @@ namespace dbaui
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
         bool isSelected(const weld::TreeIter& rEntry) const;
         // select the entry (and only the entry, not the whole path)
-        void        select(weld::TreeIter* pEntry, bool bSelect);
+        void        select(const weld::TreeIter* pEntry, bool bSelect);
         // select the path of the entry (which must be an entry without children)
-        void        selectPath(weld::TreeIter* pEntry, bool bSelect = true);
+        void        selectPath(const weld::TreeIter* pEntry, bool bSelect = true);
 
         virtual void loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame) override;
 
@@ -282,7 +282,7 @@ namespace dbaui
         void unloadAndCleanup( bool _bDisposeConnection = true );
 
         // disposes the connection associated with the given entry (which must represent a data source)
-        void        disposeConnection(weld::TreeIter* xpDSEntry);
+        void        disposeConnection(const weld::TreeIter* xpDSEntry);
 
         /// flushes and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );
@@ -337,7 +337,7 @@ namespace dbaui
         void implRemoveStatusListeners();
 
         bool implSelect(const svx::ODataAccessDescriptor& _rDescriptor, bool _bSelectDirect = false);
-        bool implSelect(weld::TreeIter* pEntry);
+        bool implSelect(const weld::TreeIter* pEntry);
 
         /// selects the entry given and loads the grid control with the object's data
         bool implSelect(
@@ -417,7 +417,7 @@ namespace dbaui
 
         bool isEntryCopyAllowed(const weld::TreeIter& rEntry) const;
 
-        void copyEntry(weld::TreeIter& rEntry);
+        void copyEntry(const weld::TreeIter& rEntry);
 
         // remove all grid columns and dispose them
         static void clearGridColumns(const css::uno::Reference< css::container::XNameContainer >& _xColContainer);

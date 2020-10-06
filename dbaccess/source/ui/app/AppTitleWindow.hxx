@@ -46,7 +46,7 @@ namespace dbaui
             @param  _pChild
                 The child window.
         */
-        void setChildWindow(std::shared_ptr<OChildWindow>& rChild);
+        void setChildWindow(const std::shared_ptr<OChildWindow>& rChild);
 
         /** gets the child window.
 

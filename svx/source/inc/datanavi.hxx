@@ -207,7 +207,7 @@ namespace svxform
         DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
         DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
-        void                        AddChildren(weld::TreeIter* _pParent,
+        void                        AddChildren(const weld::TreeIter* _pParent,
                                                 const css::uno::Reference< css::xml::dom::XNode >& _xNode);
         bool                        DoToolBoxAction(const OString& rToolBoxID);
         void                        AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet = nullptr);

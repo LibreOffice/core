@@ -125,7 +125,7 @@ namespace dbaui
         void fillNames( const css::uno::Reference< css::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const OUString& rImageId,
-                        weld::TreeIter* _pParent );
+                        const weld::TreeIter* _pParent );
 
         /** sets the detail page
             @param  rTreeView
@@ -240,7 +240,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        OUString getQualifiedName( weld::TreeIter* _pEntry ) const;
+        OUString getQualifiedName( const weld::TreeIter* _pEntry ) const;
 
         /// return the element of currently select entry
         ElementType getElementType() const;

@@ -61,7 +61,7 @@ public:
 
 namespace
 {
-    SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(ToolbarUnoDispatcher& rToolBoxColor)
+    SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
     {
         css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(".uno:XLineStyle");
         SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
