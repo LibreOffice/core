@@ -141,7 +141,11 @@ void X11SkiaSalGraphicsImpl::performFlush()
     flushDrawing();
     // TODO XPutImage() is somewhat inefficient, XShmPutImage() should be preferred.
     if (mWindowContext)
-        mWindowContext->swapBuffers();
+    {
+        if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
+            mWindowContext->swapBuffers(&mDirtyRect);
+        mDirtyRect.setEmpty();
+    }
 }
 
 std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool temporary)

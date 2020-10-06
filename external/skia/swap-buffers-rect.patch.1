@@ -1,0 +1,114 @@
+diff --git a/tools/sk_app/VulkanWindowContext.cpp b/tools/sk_app/VulkanWindowContext.cpp
+index 66670c892e..3a6804166f 100644
+--- a/tools/sk_app/VulkanWindowContext.cpp
++++ b/tools/sk_app/VulkanWindowContext.cpp
+@@ -553,7 +553,7 @@ sk_sp<SkSurface> VulkanWindowContext::getBackbufferSurface() {
+     return sk_ref_sp(surface);
+ }
+ 
+-void VulkanWindowContext::swapBuffers() {
++void VulkanWindowContext::swapBuffers(const SkIRect*) {
+ 
+     BackbufferInfo* backbuffer = fBackbuffers + fCurrentBackbufferIndex;
+     SkSurface* surface = fSurfaces[backbuffer->fImageIndex].get();
+diff --git a/tools/sk_app/VulkanWindowContext.h b/tools/sk_app/VulkanWindowContext.h
+index 07a18a46a9..aa6f95e2a1 100644
+--- a/tools/sk_app/VulkanWindowContext.h
++++ b/tools/sk_app/VulkanWindowContext.h
+@@ -48,7 +48,7 @@ public:
+     static SharedGrDirectContext getSharedGrDirectContext() { return SharedGrDirectContext( fGlobalShared ); }
+ 
+     sk_sp<SkSurface> getBackbufferSurface() override;
+-    void swapBuffers() override;
++    void swapBuffers(const SkIRect* rect = nullptr) override;
+ 
+     bool isValid() override { return fSurface != VK_NULL_HANDLE; }
+ 
+diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
+index 6920e5ba89..219330a61b 100644
+--- a/tools/sk_app/WindowContext.h
++++ b/tools/sk_app/WindowContext.h
+@@ -8,6 +8,7 @@
+ #define WindowContext_DEFINED
+ 
+ #include "include/core/SkRefCnt.h"
++#include "include/core/SkRect.h"
+ #include "include/core/SkSurfaceProps.h"
+ #include "include/gpu/GrTypes.h"
+ #include "include/gpu/GrDirectContext.h"
+@@ -29,7 +30,7 @@ public:
+ 
+     virtual sk_sp<SkSurface> getBackbufferSurface() = 0;
+ 
+-    virtual void swapBuffers() = 0;
++    virtual void swapBuffers(const SkIRect* rect = nullptr) = 0;
+ 
+     virtual bool isValid() = 0;
+ 
+diff --git a/tools/sk_app/unix/RasterWindowContext_unix.cpp b/tools/sk_app/unix/RasterWindowContext_unix.cpp
+index e8ae942308..fc06b40069 100644
+--- a/tools/sk_app/unix/RasterWindowContext_unix.cpp
++++ b/tools/sk_app/unix/RasterWindowContext_unix.cpp
+@@ -19,7 +19,7 @@ public:
+     RasterWindowContext_xlib(Display*, XWindow, int width, int height, const DisplayParams&);
+ 
+     sk_sp<SkSurface> getBackbufferSurface() override;
+-    void swapBuffers() override;
++    void swapBuffers(const SkIRect* rect) override;
+     bool isValid() override { return SkToBool(fWindow); }
+     void resize(int  w, int h) override;
+     void setDisplayParams(const DisplayParams& params) override;
+@@ -60,7 +60,7 @@ void RasterWindowContext_xlib::resize(int  w, int h) {
+ 
+ sk_sp<SkSurface> RasterWindowContext_xlib::getBackbufferSurface() { return fBackbufferSurface; }
+ 
+-void RasterWindowContext_xlib::swapBuffers() {
++void RasterWindowContext_xlib::swapBuffers(const SkIRect* rect) {
+     SkPixmap pm;
+     if (!fBackbufferSurface->peekPixels(&pm)) {
+         return;
+@@ -82,7 +82,9 @@ void RasterWindowContext_xlib::swapBuffers() {
+     if (!XInitImage(&image)) {
+         return;
+     }
+-    XPutImage(fDisplay, fWindow, fGC, &image, 0, 0, 0, 0, pm.width(), pm.height());
++    SkIRect update = rect ? *rect : SkIRect::MakeWH( pm.width(), pm.height());
++    XPutImage(fDisplay, fWindow, fGC, &image, update.x(), update.y(),
++              update.x(), update.y(), update.width(), update.height());
+ }
+ 
+ }  // anonymous namespace
+diff --git a/tools/sk_app/win/RasterWindowContext_win.cpp b/tools/sk_app/win/RasterWindowContext_win.cpp
+index 49f1f9ed17..f0db1f6f06 100644
+--- a/tools/sk_app/win/RasterWindowContext_win.cpp
++++ b/tools/sk_app/win/RasterWindowContext_win.cpp
+@@ -22,7 +22,7 @@ public:
+     RasterWindowContext_win(HWND, const DisplayParams&);
+ 
+     sk_sp<SkSurface> getBackbufferSurface() override;
+-    void swapBuffers() override;
++    void swapBuffers(const SkIRect* rect) override;
+     bool isValid() override { return SkToBool(fWnd); }
+     void resize(int w, int h) override;
+     void setDisplayParams(const DisplayParams& params) override;
+@@ -75,13 +75,17 @@ void RasterWindowContext_win::resize(int w, int h) {
+ 
+ sk_sp<SkSurface> RasterWindowContext_win::getBackbufferSurface() { return fBackbufferSurface; }
+ 
+-void RasterWindowContext_win::swapBuffers() {
++void RasterWindowContext_win::swapBuffers(const SkIRect* rect) {
+     BITMAPINFO* bmpInfo = reinterpret_cast<BITMAPINFO*>(fSurfaceMemory.get());
+     HDC dc = GetDC(fWnd);
+     SkPixmap pixmap;
+     fBackbufferSurface->peekPixels(&pixmap);
+-    StretchDIBits(dc, 0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight, pixmap.addr(), bmpInfo,
+-                  DIB_RGB_COLORS, SRCCOPY);
++    SkIRect update = rect ? *rect : SkIRect::MakeWH( fWidth, fHeight );
++    // It appears that y-axis handling is broken if it doesn't match the window size.
++    update = SkIRect::MakeXYWH( update.x(), 0, update.width(), fHeight );
++    StretchDIBits(dc, update.x(), update.y(), update.width(), update.height(),
++                  update.x(), update.y(), update.width(), update.height(),
++                  pixmap.addr(), bmpInfo, DIB_RGB_COLORS, SRCCOPY);
+     ReleaseDC(fWnd, dc);
+ }
+ 
