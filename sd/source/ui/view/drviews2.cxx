@@ -766,10 +766,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_DUPLICATE_PAGE:
         {
-            DuplicateSelectedSlides(rReq);
+            auto slideSorter = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+            SdPage* pNewPage = nullptr;
+            if(slideSorter)
+                DuplicateSelectedSlides(rReq);
+            else
+                pNewPage = CreateOrDuplicatePage (rReq, mePageKind, GetActualPage());
             Cancel();
             if(HasCurrentFunction(SID_BEZIER_EDIT) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+            if(!slideSorter && pNewPage != nullptr)
+                SwitchPage((pNewPage->GetPageNum()-1)/2);
             rReq.Done();
         }
         break;
