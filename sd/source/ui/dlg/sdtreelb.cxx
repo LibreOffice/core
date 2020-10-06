@@ -349,7 +349,7 @@ IMPL_LINK(SdPageObjsTLV, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
 namespace
 {
-    bool CanDragSource(weld::TreeView& rTreeView)
+    bool CanDragSource(const weld::TreeView& rTreeView)
     {
         std::unique_ptr<weld::TreeIter> xSource(rTreeView.make_iterator());
         if (!rTreeView.get_selected(xSource.get()))

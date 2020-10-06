@@ -48,7 +48,7 @@ void MediaObjectBar::InitInterface_Impl()
 {
 }
 
-MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
+MediaObjectBar::MediaObjectBar( const ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),
     mpView( pSdView )
 {

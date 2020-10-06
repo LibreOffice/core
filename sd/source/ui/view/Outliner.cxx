@@ -686,8 +686,8 @@ bool SdOutliner::SearchAndReplaceAll()
 namespace
 {
 
-basegfx::B2DRectangle getPDFSelection(std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
-                                       SdrObject* pObject)
+basegfx::B2DRectangle getPDFSelection(const std::unique_ptr<VectorGraphicSearch> & rVectorGraphicSearch,
+                                       const SdrObject* pObject)
 {
     basegfx::B2DRectangle aSelection;
 
@@ -725,8 +725,8 @@ basegfx::B2DRectangle getPDFSelection(std::unique_ptr<VectorGraphicSearch> & rVe
 
 } // end namespace
 
-void SdOutliner::sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell> & pViewShell,
-                                             OutlinerView* pOutlinerView,
+void SdOutliner::sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell> & pViewShell,
+                                             const OutlinerView* pOutlinerView,
                                              std::vector<sd::SearchSelection>* pSelections)
 {
     std::vector<::tools::Rectangle> aLogicRects;

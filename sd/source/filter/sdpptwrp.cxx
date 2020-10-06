@@ -103,7 +103,7 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
     }
 }
 
-static tools::SvRef<SotStorage> lcl_DRMDecrypt(SfxMedium& rMedium, tools::SvRef<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
+static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const tools::SvRef<SotStorage>& rStorage, std::shared_ptr<SvStream>& rNewStorageStrm)
 {
     tools::SvRef<SotStorage> aNewStorage;
 

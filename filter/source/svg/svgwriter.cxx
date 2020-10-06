@@ -1348,7 +1348,7 @@ void SVGTextWriter::endTextPosition()
     mpTextPositionElem.reset();
 }
 
-bool SVGTextWriter::hasTextOpacity() { return !maTextOpacity.isEmpty(); }
+bool SVGTextWriter::hasTextOpacity() const { return !maTextOpacity.isEmpty(); }
 
 void SVGTextWriter::implExportHyperlinkIds()
 {

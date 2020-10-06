@@ -48,7 +48,7 @@ void GraphicObjectBar::InitInterface_Impl()
 
 
 GraphicObjectBar::GraphicObjectBar (
-    ViewShell* pSdViewShell,
+    const ViewShell* pSdViewShell,
     ::sd::View* pSdView )
     : SfxShell (pSdViewShell->GetViewShell()),
       mpView   ( pSdView )

@@ -113,7 +113,7 @@ void SdDLL::RegisterFactorys()
 
 // Register all Interfaces
 
-void SdDLL::RegisterInterfaces(SdModule* pMod)
+void SdDLL::RegisterInterfaces(const SdModule* pMod)
 {
     // Module
     SdModule::RegisterInterface(pMod);

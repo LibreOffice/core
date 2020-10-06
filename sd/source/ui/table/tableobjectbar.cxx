@@ -55,7 +55,7 @@ SfxShell* CreateTableObjectBar( ViewShell& rShell, ::sd::View* pView )
 }
 
 /** registers the interfaces from the table ui */
-void RegisterInterfaces(SfxModule* pMod)
+void RegisterInterfaces(const SfxModule* pMod)
 {
     TableObjectBar::RegisterInterface(pMod);
 }

@@ -25,7 +25,7 @@
 
 namespace sd::ui::table {
 
-void RegisterInterfaces( SfxModule* pMod );
+void RegisterInterfaces( const SfxModule* pMod );
 
 }
 

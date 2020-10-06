@@ -296,14 +296,14 @@ namespace pcr
         return std::unique_ptr<weld::Builder>(Application::CreateBuilder(rTunnel.getWidget(), rUIFile));
     }
 
-    void PropertyHandlerHelper::setBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
+    void PropertyHandlerHelper::setBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Widget* pParent)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
         xName->insertByName("BuilderParent", makeAny(xWindow));
     }
 
-    void PropertyHandlerHelper::clearBuilderParent(css::uno::Reference<css::uno::XComponentContext>& rContext)
+    void PropertyHandlerHelper::clearBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext)
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         xName->removeByName("BuilderParent");

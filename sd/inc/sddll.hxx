@@ -40,7 +40,7 @@ class SD_DLLPUBLIC SdDLL final
     static void     RegisterRemotes();
 #endif
     static void     RegisterFactorys();
-    static void     RegisterInterfaces(SdModule* pMod);
+    static void     RegisterInterfaces(const SdModule* pMod);
     static void     RegisterControllers(SdModule* pMod);
 
 public:

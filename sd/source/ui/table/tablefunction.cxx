@@ -84,7 +84,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const
     }
 }
 
-static void InsertTableImpl(DrawViewShell* pShell,
+static void InsertTableImpl(const DrawViewShell* pShell,
                             ::sd::View* pView,
                             sal_Int32 nColumns,
                             sal_Int32 nRows,

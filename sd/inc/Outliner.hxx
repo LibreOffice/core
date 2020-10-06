@@ -360,8 +360,8 @@ private:
     */
     bool SearchAndReplaceOnce(std::vector<::sd::SearchSelection>* pSelections = nullptr);
 
-    void sendLOKSearchResultCallback(std::shared_ptr<sd::ViewShell>& pViewShell,
-                                     OutlinerView* pOutlinerView,
+    void sendLOKSearchResultCallback(const std::shared_ptr<sd::ViewShell>& pViewShell,
+                                     const OutlinerView* pOutlinerView,
                                      std::vector<sd::SearchSelection>* pSelections);
 
     /** Detect changes of the document or view and react accordingly.  Such
