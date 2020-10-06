@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e6386574_491ac570",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 30
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13a8ce8f_349099f8",
+      "range": {
+        "startLine": 275,
+        "startChar": 101,
+        "endLine": 275,
+        "endChar": 113
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bf0ede17_390c0f4f",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 30
@@ -45,6 +69,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84df27fa_eed1ff56",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf0ede17_390c0f4f",
+      "range": {
+        "startLine": 119,
+        "startChar": 25,
+        "endLine": 119,
+        "endChar": 64
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "7c5e599e_db3488c4",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22b5abdc_5af414e1",
+      "range": {
+        "startLine": 177,
+        "startChar": 8,
+        "endLine": 177,
+        "endChar": 50
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ee2ebfb_dddb052c",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -91,6 +163,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6e7c622_8eb801e9",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ee2ebfb_dddb052c",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 40
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "d278ce6a_a1448d0a",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b21ca639_e7e4a128",
+      "range": {
+        "startLine": 50,
+        "startChar": 54,
+        "endLine": 50,
+        "endChar": 56
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e0c6419_ad8dd832",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -137,6 +257,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf51c61_2e6b361c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e0c6419_ad8dd832",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 51,
+        "endChar": 84
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "b4108384_3e92d33a",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2280dde6_9ba2f994",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 36
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9bbbd587_619cf01b",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -183,6 +351,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbeba5d7_699cf097",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bbbd587_619cf01b",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 97
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "b481c930_e1c18c63",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b647a3c_476e58d2",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 55
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f0c87edd_44754e68",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -229,6 +445,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05ca5126_cf1867f7",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0c87edd_44754e68",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 25
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "73e20e63_6d47557c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4657c86b_581f5420",
+      "range": {
+        "startLine": 131,
+        "startChar": 40,
+        "endLine": 131,
+        "endChar": 42
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30f079a0_86c09ae3",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -275,6 +539,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fe91b88_ba0d6f77",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30f079a0_86c09ae3",
+      "range": {
+        "startLine": 141,
+        "startChar": 24,
+        "endLine": 141,
+        "endChar": 25
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -301,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "cf8a7565_2d9a6a96",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c370a4dc_14d2c409",
+      "range": {
+        "startLine": 161,
+        "startChar": 35,
+        "endLine": 161,
+        "endChar": 51
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bfd68a2_f36faf24",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 30
@@ -321,6 +633,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a110cb0c_a06e81d6",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bfd68a2_f36faf24",
+      "range": {
+        "startLine": 198,
+        "startChar": 8,
+        "endLine": 198,
+        "endChar": 40
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -347,6 +683,30 @@
     },
     {
       "key": {
+        "uuid": "54a3ddb3_1887d7fb",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca37d628_a599af9b",
+      "range": {
+        "startLine": 200,
+        "startChar": 14,
+        "endLine": 200,
+        "endChar": 16
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e03a96b_df57f7fc",
         "filename": "vcl/Package_toolbarmode.mk",
         "patchSetId": 30
@@ -367,6 +727,30 @@
       "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70934fcf_37470a57",
+        "filename": "vcl/Package_toolbarmode.mk",
+        "patchSetId": 30
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T10:27:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e03a96b_df57f7fc",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 4
+      },
+      "revId": "8fa0d48b7e583400d4cb305f2d65d3ea1cf72f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
