@@ -2341,7 +2341,7 @@ OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
 
 } // namespace
 
-void WatchWindow::implEnableChildren(weld::TreeIter& rEntry, bool bEnable)
+void WatchWindow::implEnableChildren(const weld::TreeIter& rEntry, bool bEnable)
 {
     if (bEnable)
     {

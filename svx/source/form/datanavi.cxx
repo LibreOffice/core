@@ -302,7 +302,7 @@ namespace svxform
         m_xItemList->enable_drag_source(xTransferable, DND_ACTION_COPY);
     }
 
-    void XFormsPage::AddChildren(weld::TreeIter* _pParent,
+    void XFormsPage::AddChildren(const weld::TreeIter* _pParent,
         const Reference< css::xml::dom::XNode >& _xNode)
     {
         DBG_ASSERT( m_xUIHelper.is(), "XFormsPage::AddChildren(): invalid UIHelper" );

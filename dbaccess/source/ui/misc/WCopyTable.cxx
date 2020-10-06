@@ -1143,7 +1143,7 @@ Reference< XPropertySet > OCopyTableWizard::returnTable()
         return createTable();
 }
 
-Reference< XPropertySet > OCopyTableWizard::getTable()
+Reference< XPropertySet > OCopyTableWizard::getTable() const
 {
     Reference< XPropertySet > xTable;
 

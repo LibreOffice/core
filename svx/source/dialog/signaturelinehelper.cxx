@@ -124,7 +124,7 @@ uno::Reference<graphic::XGraphic> importSVG(const OUString& rSVG)
     return xGraphic;
 }
 
-void setShapeCertificate(SdrView* pView,
+void setShapeCertificate(const SdrView* pView,
                          const css::uno::Reference<css::security::XCertificate>& xCertificate)
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

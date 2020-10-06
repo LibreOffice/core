@@ -30,7 +30,7 @@ namespace chart::sidebar {
 
 namespace {
 
-SvxColorToolBoxControl* getColorToolBoxControl(ToolbarUnoDispatcher& rColorDispatch)
+SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rColorDispatch)
 {
     css::uno::Reference<css::frame::XToolbarController> xController = rColorDispatch.GetControllerForCommand(".uno:FillColor");
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());

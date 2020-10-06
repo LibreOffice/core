@@ -279,7 +279,7 @@ bool OTableTreeListBox::isWildcardChecked(const weld::TreeIter& rEntry)
     return m_xTreeView->get_text_emphasis(rEntry, 0);
 }
 
-void OTableTreeListBox::checkWildcard(weld::TreeIter& rEntry)
+void OTableTreeListBox::checkWildcard(const weld::TreeIter& rEntry)
 {
     if (!m_bShowToggles)
         return;

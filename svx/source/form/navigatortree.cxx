@@ -716,7 +716,7 @@ namespace svxform
         return nAction == implAcceptDataTransfer(aClipboardContent.GetDataFlavorExVector(), nAction, xSelected.get(), false);
     }
 
-    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD )
+    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const weld::TreeIter* _pTargetEntry, bool _bDnD )
     {
         // no target -> no drop
         if (!_pTargetEntry)
@@ -872,7 +872,7 @@ namespace svxform
         return implExecuteDataTransfer( _rData, _nAction, xDrop.get(), _bDnD );
     }
 
-    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, weld::TreeIter* _pTargetEntry, bool _bDnD )
+    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const weld::TreeIter* _pTargetEntry, bool _bDnD )
     {
         const DataFlavorExVector& rDataFlavors = _rData.GetDataFlavorExVector();
 
@@ -1188,7 +1188,7 @@ namespace svxform
         }
     }
 
-    void NavigatorTree::ModelHasRemoved(weld::TreeIter* pTypedEntry)
+    void NavigatorTree::ModelHasRemoved(const weld::TreeIter* pTypedEntry)
     {
         if (doingKeyboardCut())
         {

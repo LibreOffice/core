@@ -600,7 +600,7 @@ bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& 
 }
 
 AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
-                             AdditionInfo& additionInfo)
+                             const AdditionInfo& additionInfo)
     : m_xBuilder(Application::CreateBuilder(pParent, "cui/ui/additionsfragment.ui"))
     , m_xContainer(m_xBuilder->weld_widget("additionsEntry"))
     , m_xImageScreenshot(m_xBuilder->weld_image("imageScreenshot"))

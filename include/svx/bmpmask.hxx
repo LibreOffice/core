@@ -160,7 +160,7 @@ public:
 
     bool                IsEyedropping() const;
 
-    void                onSelect( MaskSet* pSet );
+    void                onSelect( const MaskSet* pSet );
 
 private:
 

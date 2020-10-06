@@ -217,7 +217,7 @@ namespace svx
         SetImage(pVirDev.get());
     }
 
-    OUString ToolboxButtonColorUpdaterBase::GetCurrentColorName()
+    OUString ToolboxButtonColorUpdaterBase::GetCurrentColorName() const
     {
         OUString sColorName = GetQuickHelpText();
         // The obtained string is of format: color context (color name)

@@ -32,7 +32,7 @@
 class FmPropBrwMgr : public SfxChildWindow
 {
 public:
-    FmPropBrwMgr(vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo *pInfo);
+    FmPropBrwMgr(vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, const SfxChildWinInfo *pInfo);
     SFX_DECL_CHILDWINDOW(FmPropBrwMgr);
 };
 

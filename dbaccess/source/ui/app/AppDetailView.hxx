@@ -146,7 +146,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        OUString getQualifiedName(weld::TreeIter* _pEntry) const;
+        OUString getQualifiedName(const weld::TreeIter* _pEntry) const;
 
         /** returns if an entry is a leaf
             @param rTreeView

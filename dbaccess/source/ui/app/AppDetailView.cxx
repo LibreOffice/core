@@ -325,7 +325,7 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     return rData;
 }
 
-OUString OApplicationDetailView::getQualifiedName(weld::TreeIter* _pEntry) const
+OUString OApplicationDetailView::getQualifiedName(const weld::TreeIter* _pEntry) const
 {
     return GetControlHelper()->getQualifiedName( _pEntry );
 }

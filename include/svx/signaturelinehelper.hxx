@@ -57,7 +57,7 @@ SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(const OUStri
  * Sets xCertificate as the signing certificate of the selected shape on pView.
  */
 SVX_DLLPUBLIC void
-setShapeCertificate(SdrView* pView,
+setShapeCertificate(const SdrView* pView,
                     const css::uno::Reference<css::security::XCertificate>& xCertificate);
 }
 

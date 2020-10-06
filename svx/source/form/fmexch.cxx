@@ -163,7 +163,7 @@ namespace svxform
         }
     }
 
-    size_t OControlTransferData::onEntryRemoved(weld::TreeView* pView, weld::TreeIter* _pEntry)
+    size_t OControlTransferData::onEntryRemoved(const weld::TreeView* pView, const weld::TreeIter* _pEntry)
     {
         auto aIter = std::find_if(m_aSelectedEntries.begin(), m_aSelectedEntries.end(),
                                   [pView, _pEntry](const auto& rElem) {
@@ -226,7 +226,7 @@ namespace svxform
         }
     }
 
-    void OControlTransferData::buildListFromPath(const weld::TreeView* pTreeBox, weld::TreeIter* pRoot)
+    void OControlTransferData::buildListFromPath(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot)
     {
         ListBoxEntrySet aEmpty;
         m_aSelectedEntries.swap( aEmpty );

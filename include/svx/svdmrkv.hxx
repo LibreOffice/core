@@ -147,7 +147,7 @@ private:
     SVX_DLLPRIVATE void ImpSetPointsRects() const;
     void UndirtyMrkPnt() const;
 
-    void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, SfxViewShell* pOtherShell);
+    void SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const SfxViewShell* pOtherShell);
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
