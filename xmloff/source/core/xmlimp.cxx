@@ -715,7 +715,7 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
     return pRewindMap;
 }
 
-void SAL_CALL SvXMLImport::startElement( const OUString& rName,
+void SvXMLImport::startElement( const OUString& rName,
                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     //    SAL_INFO("svg", "startElement " << rName);
@@ -763,7 +763,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     maContexts.push(xContext);
 }
 
-void SAL_CALL SvXMLImport::endElement( const OUString&
+void SvXMLImport::endElement( const OUString&
 #ifdef DBG_UTIL
 rName
 #endif
@@ -828,10 +828,6 @@ void SvXMLImport::Characters( const OUString& rChars )
     {
         maContexts.top()->Characters( rChars );
     }
-}
-
-void SAL_CALL SvXMLImport::ignorableWhitespace( const OUString& )
-{
 }
 
 void SAL_CALL SvXMLImport::processingInstruction( const OUString&,
@@ -957,27 +953,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     const uno::Reference< xml::sax::XFastAttributeList > &)
 {
     return this;
-}
-
-// XExtendedDocumentHandler
-void SAL_CALL SvXMLImport::startCDATA()
-{
-}
-
-void SAL_CALL SvXMLImport::endCDATA()
-{
-}
-
-void SAL_CALL SvXMLImport::comment( const OUString& )
-{
-}
-
-void SAL_CALL SvXMLImport::allowLineBreak()
-{
-}
-
-void SAL_CALL SvXMLImport::unknown( const OUString& )
-{
 }
 
 void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
@@ -2187,6 +2162,20 @@ void SvXMLImport::NotifyMacroEventRead()
     mbNotifyMacroEventRead = true;
 }
 
+css::uno::Any SvXMLImport::queryInterface(css::uno::Type const & aType)
+{
+    assert( aType != cppu::UnoType<css::xml::sax::XDocumentHandler>::get() );
+    assert( aType != cppu::UnoType<css::xml::sax::XExtendedDocumentHandler>::get() );
+    return  cppu::WeakImplHelper<
+             css::xml::sax::XFastDocumentHandler,
+             css::lang::XServiceInfo,
+             css::lang::XInitialization,
+             css::document::XImporter,
+             css::document::XFilter,
+             css::lang::XUnoTunnel,
+             css::xml::sax::XFastParser>::queryInterface(aType);
+}
+
 SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()
 {
 }
@@ -2327,9 +2316,8 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::characters( const OUString& aChars )
     mrImport->characters( aChars );
 }
 
-void SAL_CALL SvXMLLegacyToFastDocHandler::ignorableWhitespace( const OUString& aWhitespaces )
+void SAL_CALL SvXMLLegacyToFastDocHandler::ignorableWhitespace( const OUString& )
 {
-    mrImport->ignorableWhitespace( aWhitespaces );
 }
 
 void SAL_CALL SvXMLLegacyToFastDocHandler::processingInstruction( const OUString& aTarget,

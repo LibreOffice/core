@@ -173,7 +173,6 @@ public:
 };
 
 class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
-             css::xml::sax::XExtendedDocumentHandler,
              css::xml::sax::XFastDocumentHandler,
              css::lang::XServiceInfo,
              css::lang::XInitialization,
@@ -302,14 +301,15 @@ public:
 
     virtual ~SvXMLImport() throw() override;
 
-    // css::xml::sax::XDocumentHandler
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
+
+    void startElement(const OUString& aName,
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs);
+    void endElement(const OUString& aName);
+
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
-    virtual void SAL_CALL startElement(const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
-    virtual void SAL_CALL endElement(const OUString& aName) override;
     virtual void SAL_CALL characters(const OUString& aChars) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
@@ -329,13 +329,6 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext(const OUString & Namespace, const OUString & Name,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-
-    // css::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() override;
-    virtual void SAL_CALL endCDATA() override;
-    virtual void SAL_CALL comment(const OUString& sComment) override;
-    virtual void SAL_CALL allowLineBreak() override;
-    virtual void SAL_CALL unknown(const OUString& sString) override;
 
     // XFastParser
     virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
