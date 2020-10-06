@@ -1152,6 +1152,16 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testBodyPrUpright, "tdf123610_handle_upright
         "/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "upright", "1");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testLostArrow, "tdf99810-lost-arrow.odt")
+{
+    // tdf#99810: check whether we use normal shape instead of connector shape if the XML namespace
+    // is wps, because wps:
+    xmlDocUniquePtr pDoc = parseExport("word/document.xml");
+
+    assertXPath(pDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+        "/a:graphic/a:graphicData/wps:wsp");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
