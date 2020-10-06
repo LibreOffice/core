@@ -258,12 +258,12 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
     {
         SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
 
-        if(pKnownTarget)
+        /*if(pKnownTarget)
         {
             // paint known target
             pKnownTarget->RedrawLayer(&nID, pRedirector, nullptr);
         }
-        else
+        else*/
         {
             // #i72752# DrawLayer() uses an OutputDevice different from BeginDrawLayer. This happens
             // e.g. when SW paints a single text line in text edit mode. Try to use it
@@ -302,7 +302,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget,
             }
             else
             {
-                OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
+                //OSL_FAIL("SdrPageView::DrawLayer: Creating temporary SdrPageWindow (ObjectContact), this should never be needed (!)");
 
                 // None of the known OutputDevices is the target of this paint, use
                 // a temporary SdrPageWindow for this Redraw.

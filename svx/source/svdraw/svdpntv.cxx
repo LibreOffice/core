@@ -762,12 +762,17 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
         const SdrModel& rModel = *(GetModel());
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
         const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
+        OutputDevice * pOutDevice = &rPaintWindow.GetTargetOutputDevice();
+
+        //AddWindowToPaintView(pOutDevice, nullptr);
 
         // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
         // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
-        mpPageView->setPreparedPageWindow(pKnownTarget);
-        mpPageView->DrawLayer(nControlLayerId, &rPaintWindow.GetTargetOutputDevice());
+        //mpPageView->setPreparedPageWindow(pKnownTarget);
         mpPageView->setPreparedPageWindow(nullptr);
+        mpPageView->DrawLayer(nControlLayerId, pOutDevice);
+
+        //DeleteWindowFromPaintView(pOutDevice);
     }
 }
 
