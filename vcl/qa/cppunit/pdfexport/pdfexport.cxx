@@ -64,6 +64,7 @@ namespace
 /// Tests the PDF export filter.
 class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+protected:
     uno::Reference<lang::XComponent> mxComponent;
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
@@ -77,108 +78,6 @@ public:
     virtual void tearDown() override;
     void saveAsPDF(const OUString& rFile);
     void load(const OUString& rFile, vcl::filter::PDFDocument& rDocument);
-    /// Tests that a pdf image is roundtripped back to PDF as a vector format.
-    void testTdf106059();
-    /// Tests that text highlight from Impress is not lost.
-    void testTdf105461();
-    void testTdf107868();
-    /// Tests that embedded video from Impress is not exported as a linked one.
-    void testTdf105093();
-    /// Tests export of non-PDF images.
-    void testTdf106206();
-    /// Tests export of PDF images without reference XObjects.
-    void testTdf106693();
-    void testForcePoint71();
-    void testTdf106972();
-    void testTdf106972Pdf17();
-    void testSofthyphenPos();
-    void testTdf107013();
-    void testTdf107018();
-    void testTdf107089();
-    void testTdf99680();
-    void testTdf99680_2();
-    void testTdf108963();
-    void testTdf118244_radioButtonGroup();
-    /// Test writing ToUnicode CMAP for LTR ligatures.
-    void testTdf115117_1();
-    /// Text extracting LTR text with ligatures.
-    void testTdf115117_1a();
-    /// Test writing ToUnicode CMAP for RTL ligatures.
-    void testTdf115117_2();
-    /// Test extracting RTL text with ligatures.
-    void testTdf115117_2a();
-    /// Test writing ToUnicode CMAP for doubly encoded glyphs.
-    void testTdf66597_1();
-    /// Test writing ActualText for RTL many to one glyph to Unicode mapping.
-    void testTdf66597_2();
-    /// Test writing ActualText for LTR many to one glyph to Unicode mapping.
-    void testTdf66597_3();
-    void testTdf109143();
-    void testTdf105954();
-    void testTdf128630();
-    void testTdf106702();
-    void testTdf113143();
-    void testTdf115262();
-    void testTdf121962();
-    void testTdf115967();
-    void testTdf121615();
-    void testTocLink();
-    void testPdfImageResourceInlineXObjectRef();
-    void testReduceSmallImage();
-    void testReduceImage();
-    void testLinkWrongPage();
-    void testLargePage();
-    void testVersion15();
-    void testDefaultVersion();
-    void testMultiPagePDF();
-    void testFormFontName();
-
-
-    CPPUNIT_TEST_SUITE(PdfExportTest);
-    CPPUNIT_TEST(testTdf106059);
-    CPPUNIT_TEST(testTdf105461);
-    CPPUNIT_TEST(testTdf107868);
-    CPPUNIT_TEST(testTdf105093);
-    CPPUNIT_TEST(testTdf106206);
-    CPPUNIT_TEST(testTdf106693);
-    CPPUNIT_TEST(testForcePoint71);
-    CPPUNIT_TEST(testTdf106972);
-    CPPUNIT_TEST(testTdf106972Pdf17);
-    CPPUNIT_TEST(testSofthyphenPos);
-    CPPUNIT_TEST(testTdf107013);
-    CPPUNIT_TEST(testTdf107018);
-    CPPUNIT_TEST(testTdf107089);
-    CPPUNIT_TEST(testTdf99680);
-    CPPUNIT_TEST(testTdf99680_2);
-    CPPUNIT_TEST(testTdf108963);
-    CPPUNIT_TEST(testTdf118244_radioButtonGroup);
-    CPPUNIT_TEST(testTdf115117_1);
-    CPPUNIT_TEST(testTdf115117_1a);
-    CPPUNIT_TEST(testTdf115117_2);
-    CPPUNIT_TEST(testTdf115117_2a);
-    CPPUNIT_TEST(testTdf66597_1);
-    CPPUNIT_TEST(testTdf66597_2);
-    CPPUNIT_TEST(testTdf66597_3);
-    CPPUNIT_TEST(testTdf109143);
-    CPPUNIT_TEST(testTdf105954);
-    CPPUNIT_TEST(testTdf128630);
-    CPPUNIT_TEST(testTdf106702);
-    CPPUNIT_TEST(testTdf113143);
-    CPPUNIT_TEST(testTdf115262);
-    CPPUNIT_TEST(testTdf121962);
-    CPPUNIT_TEST(testTdf115967);
-    CPPUNIT_TEST(testTdf121615);
-    CPPUNIT_TEST(testTocLink);
-    CPPUNIT_TEST(testPdfImageResourceInlineXObjectRef);
-    CPPUNIT_TEST(testReduceSmallImage);
-    CPPUNIT_TEST(testReduceImage);
-    CPPUNIT_TEST(testLinkWrongPage);
-    CPPUNIT_TEST(testLargePage);
-    CPPUNIT_TEST(testVersion15);
-    CPPUNIT_TEST(testDefaultVersion);
-    CPPUNIT_TEST(testMultiPagePDF);
-    CPPUNIT_TEST(testFormFontName);
-    CPPUNIT_TEST_SUITE_END();
 };
 
 PdfExportTest::PdfExportTest()
@@ -246,7 +145,8 @@ void PdfExportTest::load(const OUString& rFile, vcl::filter::PDFDocument& rDocum
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
-void PdfExportTest::testTdf106059()
+/// Tests that a pdf image is roundtripped back to PDF as a vector format.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106059)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106059.odt";
@@ -285,7 +185,8 @@ void PdfExportTest::testTdf106059()
     CPPUNIT_ASSERT(pReferenceXObject->Lookup("Ref"));
 }
 
-void PdfExportTest::testTdf106693()
+/// Tests export of PDF images without reference XObjects.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106693)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf106693.odt", aDocument);
@@ -324,7 +225,8 @@ void PdfExportTest::testTdf106693()
     CPPUNIT_ASSERT_EQUAL(OString("Form"), pInnerSubtype->GetValue());
 }
 
-void PdfExportTest::testTdf105461()
+/// Tests that text highlight from Impress is not lost.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105461)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
@@ -367,7 +269,7 @@ void PdfExportTest::testTdf105461()
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
 
-void PdfExportTest::testTdf107868()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
 {
     // No need to run it on Windows, since it would use GDI printing, and not trigger PDF export
     // which is the intent of the test.
@@ -424,7 +326,8 @@ void PdfExportTest::testTdf107868()
 #endif
 }
 
-void PdfExportTest::testTdf105093()
+/// Tests that embedded video from Impress is not exported as a linked one.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105093)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf105093.odp", aDocument);
@@ -457,7 +360,8 @@ void PdfExportTest::testTdf105093()
     CPPUNIT_ASSERT(pFileSpec->LookupElement("EF"));
 }
 
-void PdfExportTest::testTdf106206()
+/// Tests export of non-PDF images.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106206)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106206.odt";
@@ -506,7 +410,7 @@ void PdfExportTest::testTdf106206()
     CPPUNIT_ASSERT(bool(it == pEnd));
 }
 
-void PdfExportTest::testTdf109143()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf109143)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf109143.odt";
@@ -545,7 +449,7 @@ void PdfExportTest::testTdf109143()
     CPPUNIT_ASSERT(nLength < 50000);
 }
 
-void PdfExportTest::testTdf106972()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972.odt";
@@ -589,7 +493,7 @@ void PdfExportTest::testTdf106972()
     CPPUNIT_ASSERT(pImageResources->LookupElement("Font"));
 }
 
-void PdfExportTest::testTdf106972Pdf17()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106972Pdf17)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106972-pdf17.odt";
@@ -622,7 +526,7 @@ void PdfExportTest::testTdf106972Pdf17()
     CPPUNIT_ASSERT(pXObject->Lookup("Resources"));
 }
 
-void PdfExportTest::testSofthyphenPos()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
 {
     // No need to run it on Windows, since it would use GDI printing, and not trigger PDF export
     // which is the intent of the test.
@@ -684,7 +588,7 @@ void PdfExportTest::testSofthyphenPos()
 #endif
 }
 
-void PdfExportTest::testTdf107013()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107013)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf107013.odt", aDocument);
@@ -702,7 +606,7 @@ void PdfExportTest::testTdf107013()
     CPPUNIT_ASSERT(pXObject);
 }
 
-void PdfExportTest::testTdf107018()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107018)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf107018.odt", aDocument);
@@ -750,7 +654,7 @@ void PdfExportTest::testTdf107018()
     CPPUNIT_ASSERT_EQUAL(OString("Pages"), pName->GetValue());
 }
 
-void PdfExportTest::testTdf107089()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107089)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf107089.odt", aDocument);
@@ -792,7 +696,7 @@ void PdfExportTest::testTdf107089()
     CPPUNIT_ASSERT(it != pEnd);
 }
 
-void PdfExportTest::testTdf99680()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf99680.odt", aDocument);
@@ -832,7 +736,7 @@ void PdfExportTest::testTdf99680()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Save/restore graphic state operators count mismatch!", nSaveCount, nRestoreCount);
 }
 
-void PdfExportTest::testTdf99680_2()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf99680_2)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf99680-2.odt", aDocument);
@@ -874,7 +778,7 @@ void PdfExportTest::testTdf99680_2()
     }
 }
 
-void PdfExportTest::testTdf108963()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf108963.odp";
@@ -966,7 +870,7 @@ void PdfExportTest::testTdf108963()
 #endif
 }
 
-void PdfExportTest::testTdf118244_radioButtonGroup()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf118244_radioButtonGroup.odt", aDocument);
@@ -1003,9 +907,10 @@ void PdfExportTest::testTdf118244_radioButtonGroup()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("# of radio groups", sal_uInt32(3), nRadioGroups);
 }
 
+/// Test writing ToUnicode CMAP for LTR ligatures.
 // This requires Carlito font, if it is missing the test will most likely
 // fail.
-void PdfExportTest::testTdf115117_1()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
@@ -1066,9 +971,10 @@ void PdfExportTest::testTdf115117_1()
 #endif
 }
 
+/// Test writing ToUnicode CMAP for RTL ligatures.
 // This requires DejaVu Sans font, if it is missing the test will most likely
 // fail.
-void PdfExportTest::testTdf115117_2()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2)
 {
 #if HAVE_MORE_FONTS
     // See the comments in testTdf115117_1() for explanation.
@@ -1119,7 +1025,8 @@ void PdfExportTest::testTdf115117_2()
 #endif
 }
 
-void PdfExportTest::testTdf115117_1a()
+/// Text extracting LTR text with ligatures.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_1a)
 {
 #if HAVE_MORE_FONTS
     // Import the bugdoc and export as PDF.
@@ -1163,7 +1070,8 @@ void PdfExportTest::testTdf115117_1a()
 #endif
 }
 
-void PdfExportTest::testTdf115117_2a()
+/// Test extracting RTL text with ligatures.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
 {
 #if HAVE_MORE_FONTS
     // See the comments in testTdf115117_1a() for explanation.
@@ -1207,7 +1115,8 @@ void PdfExportTest::testTdf115117_2a()
 #endif
 }
 
-void PdfExportTest::testTdf66597_1()
+/// Test writing ToUnicode CMAP for doubly encoded glyphs.
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
 {
 #if HAVE_MORE_FONTS
     // This requires Amiri font, if it is missing the test will fail.
@@ -1297,8 +1206,9 @@ void PdfExportTest::testTdf66597_1()
 #endif
 }
 
+/// Test writing ActualText for RTL many to one glyph to Unicode mapping.
 // This requires Reem Kufi font, if it is missing the test will fail.
-void PdfExportTest::testTdf66597_2()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_2)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
@@ -1393,8 +1303,9 @@ void PdfExportTest::testTdf66597_2()
 #endif
 }
 
+/// Test writing ActualText for LTR many to one glyph to Unicode mapping.
 // This requires Gentium Basic font, if it is missing the test will fail.
-void PdfExportTest::testTdf66597_3()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_3)
 {
 #if HAVE_MORE_FONTS
     vcl::filter::PDFDocument aDocument;
@@ -1475,7 +1386,7 @@ void PdfExportTest::testTdf66597_3()
 #endif
 }
 
-void PdfExportTest::testTdf105954()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105954.odt";
@@ -1518,7 +1429,7 @@ void PdfExportTest::testTdf105954()
     CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
 }
 
-void PdfExportTest::testTdf128630()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf128630.odp";
@@ -1552,7 +1463,7 @@ void PdfExportTest::testTdf128630()
     }
 }
 
-void PdfExportTest::testTdf106702()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf106702)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106702.odt";
@@ -1602,7 +1513,7 @@ void PdfExportTest::testTdf106702()
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-void PdfExportTest::testTdf113143()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf113143.odp";
     utl::MediaDescriptor aMediaDescriptor;
@@ -1665,13 +1576,13 @@ void PdfExportTest::testTdf113143()
     CPPUNIT_ASSERT_EQUAL(aExpectedHeader, aHeader);
 }
 
-void PdfExportTest::testForcePoint71()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testForcePoint71)
 {
     // I just care it doesn't crash
     saveAsPDF("forcepoint71.key");
 }
 
-void PdfExportTest::testTdf115262()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115262.ods";
     utl::MediaDescriptor aMediaDescriptor;
@@ -1720,7 +1631,7 @@ void PdfExportTest::testTdf115262()
     CPPUNIT_ASSERT_LESS(nFirstImageTop, nRowTop);
 }
 
-void PdfExportTest::testTdf121962()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf121962.odt";
     utl::MediaDescriptor aMediaDescriptor;
@@ -1754,7 +1665,7 @@ void PdfExportTest::testTdf121962()
     }
 }
 
-void PdfExportTest::testTdf115967()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
 {
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115967.odt";
     utl::MediaDescriptor aMediaDescriptor;
@@ -1791,7 +1702,7 @@ void PdfExportTest::testTdf115967()
     CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
 }
 
-void PdfExportTest::testTdf121615()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
 {
     vcl::filter::PDFDocument aDocument;
     load("tdf121615.odt", aDocument);
@@ -1837,7 +1748,7 @@ void PdfExportTest::testTdf121615()
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, aBitmap.GetPixelColor( 199, 299 ));
 }
 
-void PdfExportTest::testTocLink()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTocLink)
 {
     // Load the Writer document.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "toc-link.fodt";
@@ -1880,7 +1791,7 @@ void PdfExportTest::testTocLink()
     CPPUNIT_ASSERT(FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot));
 }
 
-void PdfExportTest::testReduceSmallImage()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
 {
     // Load the Writer document.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-small-image.fodt";
@@ -1920,7 +1831,7 @@ void PdfExportTest::testReduceSmallImage()
     CPPUNIT_ASSERT_EQUAL(16, nHeight);
 }
 
-void PdfExportTest::testReduceImage()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
 {
     // Load the Writer document.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reduce-image.fodt";
@@ -1983,7 +1894,7 @@ bool HasLinksOnPage(std::unique_ptr<vcl::pdf::PDFiumPage>& pPdfPage)
     return FPDFLink_Enumerate(pPdfPage->getPointer(), &nStartPos, &pLinkAnnot);
 }
 
-void PdfExportTest::testLinkWrongPage()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLinkWrongPage)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "link-wrong-page.odp";
@@ -2008,7 +1919,7 @@ void PdfExportTest::testLinkWrongPage()
     CPPUNIT_ASSERT(!HasLinksOnPage(pPdfPage2));
 }
 
-void PdfExportTest::testLargePage()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "6m-wide.odg";
@@ -2028,7 +1939,7 @@ void PdfExportTest::testLargePage()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, static_cast<double>(aSize.width), 0.01);
 }
 
-void PdfExportTest::testPdfImageResourceInlineXObjectRef()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
@@ -2103,7 +2014,7 @@ void PdfExportTest::testPdfImageResourceInlineXObjectRef()
     CPPUNIT_ASSERT_EQUAL(-90, nRotateDeg);
 }
 
-void PdfExportTest::testDefaultVersion()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
@@ -2127,7 +2038,7 @@ void PdfExportTest::testDefaultVersion()
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
 }
 
-void PdfExportTest::testVersion15()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
 {
     // Create an empty document.
     mxComponent = loadFromDesktop("private:factory/swriter");
@@ -2160,7 +2071,7 @@ void PdfExportTest::testVersion15()
 // the corresponding page in the PDF. When such a document is exported,
 // the PDF graphic gets embedded into the exported PDF document (as a
 // Form XObject).
-void PdfExportTest::testMultiPagePDF()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testMultiPagePDF)
 {
 // setenv only works on unix based systems
 #ifndef _WIN32
@@ -2287,7 +2198,7 @@ void PdfExportTest::testMultiPagePDF()
 #endif
 }
 
-void PdfExportTest::testFormFontName()
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
 {
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "form-font-name.odt";
@@ -2339,8 +2250,6 @@ void PdfExportTest::testFormFontName()
     // font.
     CPPUNIT_ASSERT_EQUAL(OUString("0 0 0 rg /TiRo 12 Tf"), aDA);
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
 
 }
 
