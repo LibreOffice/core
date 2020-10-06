@@ -104,7 +104,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 }
 
 ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
-    const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XParser>& xParser,
+    const uno::Reference<frame::XModel>& xModel,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
     const uno::Sequence<uno::Any>& aArgs,
@@ -160,12 +160,11 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     ErrCode nReturn = ERRCODE_NONE;
     rDoc.SetRangeOverflowType(ERRCODE_NONE);   // is modified by the importer if limits are exceeded
 
-    uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
+    uno::Reference<XInterface> xImportInterface =
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            sComponentName, aArgs, xContext ),
-        uno::UNO_QUERY );
-    OSL_ENSURE( xDocHandler.is(), "can't get Calc importer" );
-    uno::Reference<document::XImporter> xImporter( xDocHandler, uno::UNO_QUERY );
+            sComponentName, aArgs, xContext );
+    SAL_WARN_IF( !xImportInterface, "sc", "can't get Calc importer " << sComponentName );
+    uno::Reference<document::XImporter> xImporter( xImportInterface, uno::UNO_QUERY );
     if (xImporter.is())
         xImporter->setTargetDocument( xModel );
 
@@ -174,16 +173,21 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
         pImporterImpl->SetPostProcessData(&maPostProcessData);
 
     // connect parser and filter
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xDocHandler.get() );
-    xParser->setDocumentHandler( xDocHandler );
-
     try
     {
-        if( xFastParser.is() )
+        // xImportInterface is either ScXMLImport or an XMLTransformer subclass.
+        // ScXMLImport implements XFastParser, but XMLTransformer only implements XExtendedDocumentHandler
+
+        uno::Reference< xml::sax::XFastParser > xFastParser(xImportInterface, uno::UNO_QUERY);
+        if (xFastParser)
             xFastParser->parseStream( aParserInput );
         else
+        {
+            uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);
+            uno::Reference<css::xml::sax::XDocumentHandler> xDocumentHandler(xImportInterface, uno::UNO_QUERY);
+            xParser->setDocumentHandler( xDocumentHandler );
             xParser->parseStream( aParserInput );
+        }
     }
     catch( const xml::sax::SAXParseException& r )
     {
@@ -273,9 +277,6 @@ ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCompo
     if (rDoc.HasRangeOverflow() && !nReturn)
         nReturn = rDoc.GetRangeOverflowType();
 
-    // free the component
-    xParser->setDocumentHandler( nullptr );
-
     // success!
     return nReturn;
 }
@@ -290,9 +291,6 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
 
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
-
-    // get parser
-    uno::Reference<xml::sax::XParser> xXMLParser = xml::sax::Parser::create(xContext);
 
     // get filter
     uno::Reference<frame::XModel> xModel = mrDocShell.GetModel();
@@ -425,7 +423,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         SAL_INFO( "sc.filter", "meta import start" );
 
         nMetaRetval = ImportFromComponent(
-                                xContext, xModel, xXMLParser, aParserInput,
+                                xContext, xModel, aParserInput,
                                 bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
                                 : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
                                 "meta.xml", aMetaArgs, false);
@@ -467,7 +465,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         SAL_INFO( "sc.filter", "settings import start" );
 
         nSettingsRetval = ImportFromComponent(
-                            xContext, xModel, xXMLParser, aParserInput,
+                            xContext, xModel, aParserInput,
                             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
                                    : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
                             "settings.xml", aSettingsArgs, false);
@@ -480,7 +478,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     {
         SAL_INFO( "sc.filter", "styles import start" );
 
-        nStylesRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
+        nStylesRetval = ImportFromComponent(xContext, xModel, aParserInput,
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                    : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
             "styles.xml",
@@ -505,7 +503,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
 
         SAL_INFO( "sc.filter", "content import start" );
 
-        nDocRetval = ImportFromComponent(xContext, xModel, xXMLParser, aParserInput,
+        nDocRetval = ImportFromComponent(xContext, xModel, aParserInput,
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
                    : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
             "content.xml",

@@ -150,34 +150,41 @@ ErrCode ReadThroughComponent(
     aParserInput.sSystemId = rName;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
-    SAL_INFO( "sw.filter", "parser created" );
     // get filter
     const OUString aFilterName(OUString::createFromAscii(pFilterName));
-    uno::Reference< xml::sax::XDocumentHandler > xFilter(
-        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
-        UNO_QUERY);
+    uno::Reference< XInterface > xFilter =
+        rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext);
     SAL_WARN_IF(!xFilter.is(), "sw.filter", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return ERR_SWG_READ_ERROR;
-    SAL_INFO( "sw.filter", "" << pFilterName << " created" );
-    // connect parser and filter
-    xParser->setDocumentHandler( xFilter );
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    uno::Reference< xml::sax::XFastParser > xFastParser(xFilter, UNO_QUERY);
+    uno::Reference< xml::sax::XDocumentHandler > xDocumentHandler;
+    if (!xFastParser)
+        xDocumentHandler.set(xFilter, UNO_QUERY);
+    if (!xDocumentHandler && !xFastParser)
+    {
+        SAL_WARN("sd", "service does not implement XFastParser or XDocumentHandler");
+        assert(false);
+        return ERR_SWG_READ_ERROR;
+    }
 
     // connect model and filter
     uno::Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
 
-    // finally, parser the stream
+    // finally, parse the stream
     try
     {
-        if( xFastParser.is() )
+        if (xFastParser)
             xFastParser->parseStream( aParserInput );
         else
+        {
+            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
+            // connect parser and filter
+            xParser->setDocumentHandler( xDocumentHandler );
             xParser->parseStream( aParserInput );
+        }
     }
     catch( xml::sax::SAXParseException& r)
     {
