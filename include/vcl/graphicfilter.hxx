@@ -294,6 +294,12 @@ public:
     /// The resulting graphic is added to rGraphics on success, nullptr is added on failure.
     void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, std::vector< std::unique_ptr<SvStream> > vStreams);
 
+    /**
+     Tries to ensure all Graphic objects are available (Graphic::isAvailable()). Only an optimization, may
+     not process all items.
+    */
+    void MakeGraphicsAvailableThreaded(std::vector< Graphic* >& rGraphics);
+
     ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,

@@ -609,6 +609,16 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
         Reference<XInterface>( xAnnotation, UNO_QUERY ) );
 }
 
+void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
+{
+    for( size_t i = 0; i < GetObjCount(); ++i)
+    {
+        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(GetObj(i)))
+            if(!grafObj->GetGraphic().isAvailable())
+                graphics.push_back( const_cast<Graphic*>(&grafObj->GetGraphic()));
+    }
+}
+
 void SdPage::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SdPage"));
