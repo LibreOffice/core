@@ -265,6 +265,12 @@ public:
     void testTdf135828_Shape_Rect();
     void testTdf123353();
     void testTdf133688_precedents();
+<<<<<<< HEAD   (72be5a tdf#99810 DOCX export: fix lost arrow shape)
+=======
+    void testTdf91251_missingOverflowRoundtrip();
+    void testTdf137000_handle_upright();
+    void testTdf126305_DataValidatyErrorAlert();
+>>>>>>> CHANGE (fca525 tdf#126305 XLSX export: fix data validation Error Alert)
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -424,6 +430,12 @@ public:
     CPPUNIT_TEST(testTdf135828_Shape_Rect);
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf133688_precedents);
+<<<<<<< HEAD   (72be5a tdf#99810 DOCX export: fix lost arrow shape)
+=======
+    CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
+    CPPUNIT_TEST(testTdf137000_handle_upright);
+    CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
+>>>>>>> CHANGE (fca525 tdf#126305 XLSX export: fix data validation Error Alert)
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5375,6 +5387,66 @@ void ScExportTest::testTdf133688_precedents()
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor[1]", 0);
 }
 
+<<<<<<< HEAD   (72be5a tdf#99810 DOCX export: fix lost arrow shape)
+=======
+void ScExportTest::testTdf91251_missingOverflowRoundtrip()
+{
+    // tdf#91251 check whether textBox overflow property (horzOverflow and vertOverflow) is
+    // getting preserved after roundtrip
+    ScDocShellRef xShell = loadDoc("tdf91251_missingOverflowRoundtrip.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDrawing = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
+    assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
+}
+
+void ScExportTest::testTdf137000_handle_upright()
+{
+    // tdf#106197 When exporting the "upright" attribute, we must set
+    // TextPreRotateAngle to 0.
+    // (Upright is an xml attribute of xdr:txBody/a:bodyPr. It is set when
+    // in a textbox menu we choose: do not rotate this element.)
+    ScDocShellRef xShell = loadDoc("tdf137000_export_upright.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
+    xmlDocUniquePtr pDrawing
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/drawings/drawing1.xml");
+    CPPUNIT_ASSERT(pDrawing);
+
+    assertXPathNoAttribute(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr",
+                           "rot");
+}
+
+void ScExportTest::testTdf126305_DataValidatyErrorAlert()
+{
+    ScDocShellRef xShell = loadDoc("tdf126305.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[1]", "errorStyle", "stop");
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[2]", "errorStyle", "warning");
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[3]", "errorStyle", "information");
+
+    xDocSh->DoClose();
+}
+
+>>>>>>> CHANGE (fca525 tdf#126305 XLSX export: fix data validation Error Alert)
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
