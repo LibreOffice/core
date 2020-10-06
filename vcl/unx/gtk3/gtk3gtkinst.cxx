@@ -16027,28 +16027,31 @@ private:
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);
-                if (pixbuf)
+                if (aIconName != "pan-up-symbolic" && aIconName != "pan-down-symbolic")
                 {
-                    gtk_image_set_from_pixbuf(pImage, pixbuf);
-                    g_object_unref(pixbuf);
+                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    {
+                        gtk_image_set_from_pixbuf(pImage, pixbuf);
+                        g_object_unref(pixbuf);
+                    }
                 }
             }
         }
         else if (GTK_IS_TOOL_BUTTON(pWidget))
         {
             GtkToolButton* pToolButton = GTK_TOOL_BUTTON(pWidget);
-            const gchar* icon_name = gtk_tool_button_get_icon_name(pToolButton);
-            if (icon_name)
+            if (const gchar* icon_name = gtk_tool_button_get_icon_name(pToolButton))
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
-                GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang);
-                if (pixbuf)
+                if (aIconName != "pan-up-symbolic" && aIconName != "pan-down-symbolic")
                 {
-                    GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
-                    g_object_unref(pixbuf);
-                    gtk_tool_button_set_icon_widget(pToolButton, pImage);
-                    gtk_widget_show(pImage);
+                    if (GdkPixbuf* pixbuf = load_icon_by_name_theme_lang(aIconName, m_aIconTheme, m_aUILang))
+                    {
+                        GtkWidget* pImage = gtk_image_new_from_pixbuf(pixbuf);
+                        g_object_unref(pixbuf);
+                        gtk_tool_button_set_icon_widget(pToolButton, pImage);
+                        gtk_widget_show(pImage);
+                    }
                 }
             }
 

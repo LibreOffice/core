@@ -655,7 +655,13 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         {
             if (!elem.m_bRadio)
             {
-                pTargetButton->SetModeImage(pImage->GetImage());
+                const Image& rImage = pImage->GetImage();
+                if (rImage.GetStock() == "pan-down-symbolic")
+                    pTargetButton->SetSymbol(SymbolType::SPIN_DOWN);
+                else if (rImage.GetStock() == "pan-up-symbolic")
+                    pTargetButton->SetSymbol(SymbolType::SPIN_UP);
+                else
+                    pTargetButton->SetModeImage(rImage);
                 if (pImage->GetStyle() & WB_SMALLSTYLE)
                 {
                     pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
