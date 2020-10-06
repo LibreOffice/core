@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b875e1a9_4c0e137c",
+        "filename": "sc/sdi/scalc.sdi",
+        "patchSetId": 4
+      },
+      "lineNbr": 2596,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2020-10-06T08:23:22Z",
+      "side": 1,
+      "message": "just a nitpick :) Then we can change SfxStringItem into SfxInt16Item as SCTAB is int16",
+      "revId": "8a43456761e2a3c934215e8630ce62437d7fc7d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
