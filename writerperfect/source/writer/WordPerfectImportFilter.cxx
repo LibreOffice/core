@@ -12,7 +12,7 @@
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -22,6 +22,7 @@
 #include <sfx2/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/svapp.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <libwpd/libwpd.h>
 #include <libwpg/libwpg.h>
@@ -33,7 +34,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::awt::XWindow;
 using com::sun::star::document::XImporter;
 using com::sun::star::io::XInputStream;
-using com::sun::star::xml::sax::XDocumentHandler;
+using com::sun::star::xml::sax::XFastDocumentHandler;
 
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
@@ -122,10 +123,13 @@ bool WordPerfectImportFilter::importImpl(
     }
 
     // An XML import service: what we push sax messages to.
-    Reference<XDocumentHandler> xInternalHandler(
-        mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Writer.XMLOasisImporter", mxContext),
-        css::uno::UNO_QUERY_THROW);
+    Reference<XInterface> xInternalFilter
+        = mxContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.comp.Writer.XMLOasisImporter", mxContext);
+    assert(xInternalFilter);
+    css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
+                                                                              css::uno::UNO_QUERY);
+    assert(xInternalHandler);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to.
     Reference<XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
@@ -133,7 +137,8 @@ bool WordPerfectImportFilter::importImpl(
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
-    DocumentHandler aHandler(xInternalHandler);
+    DocumentHandler aHandler(
+        new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(xInternalHandler.get())));
 
     OdtGenerator collector;
     collector.addDocumentHandler(&aHandler, ODF_FLAT_XML);

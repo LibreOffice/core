@@ -147,7 +147,8 @@ void SvXMLImportPropertyMapper::importXML(
         {
             // If it's an unknown attribute in a known namespace, ignore it.
             OUString aPrefix = rAttribute.Name.copy(0, nSepIndex);
-            if (rNamespaceMap.GetKeyByPrefix(aPrefix) != USHRT_MAX)
+            auto nKey = rNamespaceMap.GetKeyByPrefix(aPrefix);
+            if (nKey != USHRT_MAX && !(nKey & XML_NAMESPACE_UNKNOWN_FLAG))
                 continue;
         }
 
