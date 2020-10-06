@@ -226,6 +226,52 @@
     },
     {
       "key": {
+        "uuid": "92c2b82b_12e760d7",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:12:50Z",
+      "side": 1,
+      "message": "Everything in this function starting from this line only happens if sCmd is not empty. So maybe better just add\n\n    if (sCmd.isEmpty())\n        return\n\nand remove the following checks for this?",
+      "range": {
+        "startLine": 199,
+        "startChar": 44,
+        "endLine": 199,
+        "endChar": 59
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4102773c_c8373da8",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:12:50Z",
+      "side": 1,
+      "message": "This comment is better moved above the first \"if\", since (1) it looks like it belongs to all the ifs, and (2) this way, the line is not too long.",
+      "range": {
+        "startLine": 220,
+        "startChar": 41,
+        "endLine": 220,
+        "endChar": 102
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ac0a77_f6a45809",
         "filename": "cui/source/inc/toolbarmodedlg.hxx",
         "patchSetId": 33
@@ -242,6 +288,29 @@
         "startChar": 0,
         "endLine": 11,
         "endChar": 46
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb611e56_badb9c42",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:12:50Z",
+      "side": 1,
+      "message": "This one might look like personal preference, and I don\u0027t remember if we have a suggestion for this, but I see it generally preferred in the codebase:\n\nit\u0027s better to put public part first, followed by less exposed parts. This way, first thing that you see when look at class definition is what is publicly usable; and its implementation details go last, because they are generally less useful for the class users.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 49
       },
       "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
