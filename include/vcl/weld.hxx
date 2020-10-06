@@ -2247,7 +2247,7 @@ public:
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id) = 0;
     virtual std::unique_ptr<Frame> weld_frame(const OString& id) = 0;
     /* bUserManagedScrolling of true means that the automatic scrolling of the window is disabled
-       and the owner must specifically listen to adjustment changes and react appropiately to them.
+       and the owner must specifically listen to adjustment changes and react appropriately to them.
     */
     virtual std::unique_ptr<ScrolledWindow> weld_scrolled_window(const OString& id,
                                                                  bool bUserManagedScrolling = false)
