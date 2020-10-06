@@ -610,7 +610,7 @@ void SdPublishingDlg::CreatePages()
     m_xPage5 = m_xBuilder->weld_container("page5");
     m_xPage5_Title = m_xBuilder->weld_label("buttonStyleLabel");
     m_xPage5_TextOnly = m_xBuilder->weld_check_button("textOnlyCheckbutton");
-    m_xPage5_Buttons.reset(new ValueSet(m_xBuilder->weld_scrolled_window("buttonsDrawingareawin")));
+    m_xPage5_Buttons.reset(new ValueSet(m_xBuilder->weld_scrolled_window("buttonsDrawingareawin", true)));
     m_xPage5_ButtonsWnd.reset(new weld::CustomWeld(*m_xBuilder, "buttonsDrawingarea", *m_xPage5_Buttons));
     aAssistentFunc.InsertControl(5, m_xPage5.get());
     aAssistentFunc.InsertControl(5, m_xPage5_Title.get());

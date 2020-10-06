@@ -25,11 +25,10 @@
 ScCsvTableBox::ScCsvTableBox(weld::Builder& rBuilder)
     : mxRuler(new ScCsvRuler(maData, this))
     , mxGrid(new ScCsvGrid(maData, rBuilder.weld_menu("popup"), this))
-    , mxScroll(rBuilder.weld_scrolled_window("scrolledwindow"))
+    , mxScroll(rBuilder.weld_scrolled_window("scrolledwindow", true))
     , mxRulerWeld(new weld::CustomWeld(rBuilder, "csvruler", *mxRuler))
     , mxGridWeld(new weld::CustomWeld(rBuilder, "csvgrid", *mxGrid))
 {
-    mxScroll->set_user_managed_scrolling();
     Size aSize(mxScroll->get_approximate_digit_width() * 67,
                mxScroll->get_text_height() * 10);
     // this needs to be larger than the ScCsvGrid initial size to get it

@@ -76,7 +76,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin")))
+    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin", true)))
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("bitmapstyle"))
     , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
     , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))

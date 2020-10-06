@@ -183,7 +183,7 @@ SvxColorDockingWindow::SvxColorDockingWindow(SfxBindings* _pBindings, SfxChildWi
     : SfxDockingWindow(_pBindings, pCW, _pParent,
         "DockingColorWindow", "svx/ui/dockingcolorwindow.ui")
     , pColorList()
-    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , xColorSet(new SvxColorValueSet_docking(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , xColorSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *xColorSet))
 {
     SetText(SvxResId(STR_COLORTABLE));

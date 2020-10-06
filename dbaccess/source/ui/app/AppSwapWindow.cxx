@@ -34,7 +34,7 @@ using namespace ::com::sun::star::container;
 
 OApplicationSwapWindow::OApplicationSwapWindow(weld::Container* pParent, OAppBorderWindow& rBorderWindow)
     : OChildWindow(pParent, "dbaccess/ui/appswapwindow.ui", "AppSwapWindow")
-    , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll")))
+    , m_xIconControl(new OApplicationIconControl(m_xBuilder->weld_scrolled_window("scroll", true)))
     , m_xIconControlWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xIconControl))
     , m_eLastType(E_NONE)
     , m_rBorderWin(rBorderWindow)

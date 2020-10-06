@@ -72,8 +72,6 @@ SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWi
     , mbUpdateBackground(true)
 {
     init();
-
-    mxScrollArea->set_user_managed_scrolling();
 }
 
 void SvxShowCharSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)

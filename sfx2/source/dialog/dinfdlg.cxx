@@ -1772,8 +1772,7 @@ void CustomPropertiesControl::Init(weld::Builder& rBuilder)
     m_xName = rBuilder.weld_label("name");
     m_xType = rBuilder.weld_label("type");
     m_xValue = rBuilder.weld_label("value");
-    m_xVertScroll = rBuilder.weld_scrolled_window("scroll");
-    m_xVertScroll->set_user_managed_scrolling();
+    m_xVertScroll = rBuilder.weld_scrolled_window("scroll", true);
     m_xPropertiesWin.reset(new CustomPropertiesWindow(*m_xBody, *m_xName, *m_xType, *m_xValue));
 
     m_xBox->set_stack_background();

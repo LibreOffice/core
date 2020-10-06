@@ -431,7 +431,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxCBX_duration->get_widget().set_size_request(aOptimalSize.Width(), -1);
     rSpinButton.set_max(nMax);
 
-    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window("transitions_iconswin")));
+    mxVS_TRANSITION_ICONS.reset(new TransitionPane(m_xBuilder->weld_scrolled_window("transitions_iconswin", true)));
     mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, "transitions_icons", *mxVS_TRANSITION_ICONS));
 
     if( pDoc )

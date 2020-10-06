@@ -319,8 +319,6 @@ protected:
     void signal_hadjustment_changed() { m_aHChangeHdl.Call(*this); }
 
 public:
-    virtual void set_user_managed_scrolling() = 0;
-
     virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size)
         = 0;
@@ -2248,7 +2246,12 @@ public:
     virtual std::unique_ptr<Button> weld_button(const OString& id) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id) = 0;
     virtual std::unique_ptr<Frame> weld_frame(const OString& id) = 0;
-    virtual std::unique_ptr<ScrolledWindow> weld_scrolled_window(const OString& id) = 0;
+    /* bUserManagedScrolling of true means that the automatic scrolling of the window is disabled
+       and the owner must specifically listen to adjustment changes and react appropiately to them.
+    */
+    virtual std::unique_ptr<ScrolledWindow> weld_scrolled_window(const OString& id,
+                                                                 bool bUserManagedScrolling = false)
+        = 0;
     virtual std::unique_ptr<Notebook> weld_notebook(const OString& id) = 0;
     virtual std::unique_ptr<ToggleButton> weld_toggle_button(const OString& id) = 0;
     virtual std::unique_ptr<RadioButton> weld_radio_button(const OString& id) = 0;

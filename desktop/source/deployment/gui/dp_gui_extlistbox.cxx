@@ -198,7 +198,6 @@ ExtensionBox_Impl::ExtensionBox_Impl(std::unique_ptr<weld::ScrolledWindow> xScro
 
 void ExtensionBox_Impl::Init()
 {
-    m_xScrollBar->set_user_managed_scrolling();
     m_xScrollBar->connect_vadjustment_changed( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
 
     auto nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;

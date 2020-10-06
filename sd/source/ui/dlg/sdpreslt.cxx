@@ -45,7 +45,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     , m_xCbxMasterPage(m_xBuilder->weld_check_button("masterpage"))
     , m_xCbxCheckMasters(m_xBuilder->weld_check_button("checkmasters"))
     , m_xBtnLoad(m_xBuilder->weld_button("load"))
-    , m_xVS(new ValueSet(m_xBuilder->weld_scrolled_window("selectwin")))
+    , m_xVS(new ValueSet(m_xBuilder->weld_scrolled_window("selectwin", true)))
     , m_xVSWin(new weld::CustomWeld(*m_xBuilder, "select", *m_xVS))
 {
     m_xVSWin->set_size_request(m_xBtnLoad->get_approximate_digit_width() * 60,

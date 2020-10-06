@@ -266,7 +266,7 @@ constexpr sal_uInt16 gnCols = 2;
 SvxLineEndWindow::SvxLineEndWindow(SvxLineEndToolBoxControl* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglineend.ui", "FloatingLineEnd")
     , mxControl(pControl)
-    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxLineEndSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , mxLineEndSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineEndSet))
     , mnLines(12)
 {
@@ -504,7 +504,7 @@ com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
 SvxLineBox::SvxLineBox(SvxLineStyleToolBoxControl* pControl, weld::Widget* pParent, int nInitialIndex)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/floatinglinestyle.ui", "FloatingLineStyle")
     , mxControl(pControl)
-    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , mxLineStyleSet(new ValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , mxLineStyleSetWin(new weld::CustomWeld(*m_xBuilder, "valueset", *mxLineStyleSet))
 {
     mxLineStyleSet->SetStyle(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);

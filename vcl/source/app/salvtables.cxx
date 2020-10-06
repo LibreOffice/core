@@ -1955,10 +1955,10 @@ private:
 
 public:
     SalInstanceScrolledWindow(VclScrolledWindow* pScrolledWindow, SalInstanceBuilder* pBuilder,
-                              bool bTakeOwnership)
+                              bool bTakeOwnership, bool bUserManagedScrolling)
         : SalInstanceContainer(pScrolledWindow, pBuilder, bTakeOwnership)
         , m_xScrolledWindow(pScrolledWindow)
-        , m_bUserManagedScrolling(false)
+        , m_bUserManagedScrolling(bUserManagedScrolling)
     {
         ScrollBar& rVertScrollBar = m_xScrolledWindow->getVertScrollBar();
         m_aOrigVScrollHdl = rVertScrollBar.GetScrollHdl();
@@ -1966,6 +1966,7 @@ public:
         ScrollBar& rHorzScrollBar = m_xScrolledWindow->getHorzScrollBar();
         m_aOrigHScrollHdl = rHorzScrollBar.GetScrollHdl();
         rHorzScrollBar.SetScrollHdl(LINK(this, SalInstanceScrolledWindow, HscrollHdl));
+        m_xScrolledWindow->setUserManagedScrolling(m_bUserManagedScrolling);
     }
 
     virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
@@ -2154,12 +2155,6 @@ public:
     virtual int get_vscroll_width() const override
     {
         return m_xScrolledWindow->getVertScrollBar().get_preferred_size().Width();
-    }
-
-    virtual void set_user_managed_scrolling() override
-    {
-        m_bUserManagedScrolling = true;
-        m_xScrolledWindow->setUserManagedScrolling(true);
     }
 
     virtual ~SalInstanceScrolledWindow() override
@@ -6645,11 +6640,11 @@ std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
     return pRet;
 }
 
-std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString& id)
+std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString& id, bool bUserManagedScrolling)
 {
     VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
     return pScrolledWindow
-               ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, false)
+               ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, false, bUserManagedScrolling)
                : nullptr;
 }
 

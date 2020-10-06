@@ -1765,7 +1765,7 @@ ColorWindow::ColorWindow(const OUString& rCommand,
     , mxPaletteManager(rPaletteManager)
     , mrColorStatus(rColorStatus)
     , maColorSelectFunction(aFunction)
-    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , mxColorSet(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
     , mxRecentColorSet(new SvxColorValueSet(nullptr))
     , mxPaletteListBox(m_xBuilder->weld_combo_box("palette_listbox"))
     , mxButtonAutoColor(m_xBuilder->weld_button("auto_color_button"))

@@ -277,7 +277,6 @@ SwAddressPreview::SwAddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow
     : pImpl(new SwAddressPreview_Impl())
     , m_xVScrollBar(std::move(xWindow))
 {
-    m_xVScrollBar->set_user_managed_scrolling();
     m_xVScrollBar->connect_vadjustment_changed(LINK(this, SwAddressPreview, ScrollHdl));
 }
 

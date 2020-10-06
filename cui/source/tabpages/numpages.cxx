@@ -733,7 +733,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(weld::Container* pPage, weld::DialogC
     , bPreset(false)
     , m_xErrorText(m_xBuilder->weld_label("errorft"))
     , m_xBtBrowseFile(m_xBuilder->weld_button("browseBtn"))
-    , m_xExamplesVS(new SvxBmpNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin")))
+    , m_xExamplesVS(new SvxBmpNumValueSet(m_xBuilder->weld_scrolled_window("valuesetwin", true)))
     , m_xExamplesVSWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xExamplesVS))
 {
     SetExchangeSupport();

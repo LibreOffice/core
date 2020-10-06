@@ -213,7 +213,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     , m_xRight3ED(m_xBuilder->weld_entry("Right3ED"))
     , m_xLeft4ED(m_xBuilder->weld_entry("Left4ED"))
     , m_xRight4ED(m_xBuilder->weld_entry("Right4ED"))
-    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow"))
+    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("scrolledwindow", true))
     , m_xAdjustLB(m_xBuilder->weld_combo_box("adjustlb"))
     , m_xPositionLB(m_xBuilder->weld_combo_box("positionlb"))
     , m_xCharStyleFT(m_xBuilder->weld_label("styleft"))
@@ -228,7 +228,6 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
 {
     m_xCharStyleLB->make_sorted();
     m_xPreviewWin->setRubyDialog(this);
-    m_xScrolledWindow->set_user_managed_scrolling();
     m_xScrolledWindow->set_size_request(-1, m_xGrid->get_preferred_size().Height());
     m_xScrolledWindow->set_vpolicy(VclPolicyType::NEVER);
 

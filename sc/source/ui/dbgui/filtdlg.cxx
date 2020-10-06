@@ -82,7 +82,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Window* pPa
     , m_xEdVal4(m_xBuilder->weld_combo_box("val4"))
     , m_xBtnRemove4(m_xBuilder->weld_button("remove4"))
     , m_xContents(m_xBuilder->weld_widget("grid"))
-    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar", true))
     , m_xExpander(m_xBuilder->weld_expander("more"))
     , m_xBtnClear(m_xBuilder->weld_button("clear"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
@@ -259,7 +259,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         UpdateValueList(i+1);
     }
 
-    m_xScrollBar->set_user_managed_scrolling();
     m_xScrollBar->connect_vadjustment_changed( LINK( this, ScFilterDlg, ScrollHdl ) );
     m_xScrollBar->vadjustment_configure(0, 0, 8, 1, 3, 4);
     Size aSize(m_xContents->get_preferred_size());

@@ -198,7 +198,7 @@ ScOptSolverDlg::ScOptSolverDlg(SfxBindings* pB, SfxChildWindow* pCW, weld::Windo
     , m_xEdRight4(new ScCursorRefEdit(m_xBuilder->weld_entry("val4edit")))
     , m_xRBRight4(new formula::RefButton(m_xBuilder->weld_button("val4button")))
     , m_xBtnDel4(m_xBuilder->weld_button("del4"))
-    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xScrollBar(m_xBuilder->weld_scrolled_window("scrollbar", true))
     , m_xBtnOpt(m_xBuilder->weld_button("options"))
     , m_xBtnCancel(m_xBuilder->weld_button("close"))
     , m_xBtnSolve(m_xBuilder->weld_button("ok"))
@@ -323,7 +323,6 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     }
     m_xEdTargetValue->SetModifyHdl( LINK( this, ScOptSolverDlg, TargetModifyHdl ) );
 
-    m_xScrollBar->set_user_managed_scrolling();
     Size aSize(m_xContents->get_preferred_size());
     m_xContents->set_size_request(aSize.Width(), aSize.Height());
     m_xScrollBar->connect_vadjustment_changed( LINK( this, ScOptSolverDlg, ScrollHdl ) );

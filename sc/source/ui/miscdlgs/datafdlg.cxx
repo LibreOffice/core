@@ -35,12 +35,10 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     , m_xBtnPrev(m_xBuilder->weld_button("prev"))
     , m_xBtnNext(m_xBuilder->weld_button("next"))
     , m_xBtnClose(m_xBuilder->weld_button("close"))
-    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar", true))
     , m_xGrid(m_xBuilder->weld_container("grid"))
     , m_xFixedText(m_xBuilder->weld_label("label"))
 {
-    m_xSlider->set_user_managed_scrolling();
-
     sNewRecord = m_xFixedText->get_label();
 
     //read header from current document, and add new controls

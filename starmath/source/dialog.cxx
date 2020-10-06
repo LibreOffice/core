@@ -940,7 +940,6 @@ SmShowSymbolSet::SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolled
     , nSelectSymbol(SYMBOL_NONE)
     , m_xScrolledWindow(std::move(pScrolledWindow))
 {
-    m_xScrolledWindow->set_user_managed_scrolling();
     m_xScrolledWindow->connect_vadjustment_changed(LINK(this, SmShowSymbolSet, ScrollHdl));
 }
 
@@ -1296,7 +1295,7 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     , rSymbolMgr(rMgr)
     , pFontListDev(pFntListDevice)
     , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolset"))
-    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow")))
+    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
     , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, "symbolsetdisplay", *m_xSymbolSetDisplay))
     , m_xSymbolName(m_xBuilder->weld_label("symbolname"))
     , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "preview", m_aSymbolDisplay))
@@ -1741,7 +1740,7 @@ SmSymDefineDialog::SmSymDefineDialog(weld::Window* pParent, OutputDevice *pFntLi
     , m_xDeleteBtn(m_xBuilder->weld_button("delete"))
     , m_xOldSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "oldSymbolDisplay", m_aOldSymbolDisplay))
     , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "symbolDisplay", m_aSymbolDisplay))
-    , m_xCharsetDisplay(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll"), m_xVirDev))
+    , m_xCharsetDisplay(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll", true), m_xVirDev))
     , m_xCharsetDisplayArea(new weld::CustomWeld(*m_xBuilder, "charsetDisplay", *m_xCharsetDisplay))
 {
     // auto completion is troublesome since that symbols character also gets automatically selected in the

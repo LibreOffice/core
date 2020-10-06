@@ -79,7 +79,7 @@ SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogControl
     , m_xCtlPixel(new SvxPixelCtl(this))
     , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pController->getDialog()))
     , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), pController->getDialog()))
-    , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin")))
+    , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin", true)))
     , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
     , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
     , m_xCtlPixelWin(new weld::CustomWeld(*m_xBuilder, "CTL_PIXEL", *m_xCtlPixel))
