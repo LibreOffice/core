@@ -128,7 +128,7 @@ public:
     CustomWidgetController& operator=(CustomWidgetController&&) = default;
 };
 
-class VCL_DLLPUBLIC CustomWeld
+class VCL_DLLPUBLIC CustomWeld final
 {
 private:
     weld::CustomWidgetController& m_rWidgetController;
