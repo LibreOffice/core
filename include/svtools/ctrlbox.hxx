@@ -379,7 +379,7 @@ public:
     void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) { m_xComboBox->connect_get_property_tree(rLink); }
     void set_entry_width_chars(int nWidth) { m_xComboBox->set_entry_width_chars(nWidth); }
     void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
-    int get_max_mru_count() { return m_xComboBox->get_max_mru_count(); }
+    int get_max_mru_count() const { return m_xComboBox->get_max_mru_count(); }
     void set_max_mru_count(int nCount) { m_xComboBox->set_max_mru_count(nCount); }
 
     // font size is in points, not pixels, e.g. see Window::[G]etPointFont

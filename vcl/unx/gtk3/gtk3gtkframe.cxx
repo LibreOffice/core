@@ -2741,7 +2741,7 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
     }
 }
 
-SalWheelMouseEvent GtkSalFrame::GetWheelEvent(GdkEventScroll& rEvent)
+SalWheelMouseEvent GtkSalFrame::GetWheelEvent(const GdkEventScroll& rEvent)
 {
     SalWheelMouseEvent aEvent;
 

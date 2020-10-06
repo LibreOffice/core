@@ -338,7 +338,7 @@ static std::vector<OUString> gRenderedFontNames;
 
 namespace
 {
-    void calcCustomItemSize(weld::ComboBox& rComboBox)
+    void calcCustomItemSize(const weld::ComboBox& rComboBox)
     {
         gUserItemSz = Size(rComboBox.get_approximate_digit_width() * 52, rComboBox.get_text_height());
         gUserItemSz.setHeight(gUserItemSz.Height() * 16);

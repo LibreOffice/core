@@ -384,7 +384,7 @@ void SfxTemplatePanelControl::dispose()
     PanelLayout::dispose();
 }
 
-static void MakeExpanded_Impl(weld::TreeView& rBox, std::vector<OUString>& rEntries)
+static void MakeExpanded_Impl(const weld::TreeView& rBox, std::vector<OUString>& rEntries)
 {
     std::unique_ptr<weld::TreeIter> xEntry = rBox.make_iterator();
     if (rBox.get_iter_first(*xEntry))
@@ -487,7 +487,7 @@ static void FillBox_Impl(weld::TreeView& rBox,
                          StyleTree_Impl* pEntry,
                          const std::vector<OUString>& rEntries,
                          SfxStyleFamily eStyleFamily,
-                         weld::TreeIter* pParent)
+                         const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> xResult = rBox.make_iterator();
     const OUString& rName = pEntry->getName();

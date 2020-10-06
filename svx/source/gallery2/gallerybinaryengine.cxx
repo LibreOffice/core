@@ -131,7 +131,7 @@ bool GalleryBinaryEngine::implWrite(const GalleryTheme& rTheme, const GalleryThe
 }
 
 void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry,
-                                       sal_uInt32& rInsertPos)
+                                       sal_uInt32 nInsertPos)
 {
     if (pFoundEntry)
     {
@@ -150,14 +150,14 @@ void GalleryBinaryEngine::insertObject(const SgaObject& rObj, GalleryObject* pFo
         else if (rObj.GetTitle() == "__<empty>__")
             const_cast<SgaObject&>(rObj).SetTitle("");
 
-        implWriteSgaObject(rObj, rInsertPos, &aNewEntry);
+        implWriteSgaObject(rObj, nInsertPos, &aNewEntry);
         pFoundEntry->nOffset = aNewEntry.nOffset;
     }
     else
-        implWriteSgaObject(rObj, rInsertPos, nullptr);
+        implWriteSgaObject(rObj, nInsertPos, nullptr);
 }
 
-void GalleryBinaryEngine::removeObject(std::unique_ptr<GalleryObject>& pEntry)
+void GalleryBinaryEngine::removeObject(const std::unique_ptr<GalleryObject>& pEntry)
 {
     if (mrGalleryObjectCollection.getObjectList().empty())
         KillFile(GetSdgURL());
@@ -489,7 +489,7 @@ INetURLObject GalleryBinaryEngine::implCreateUniqueURL(SgaObjKind eObjKind,
 }
 
 SgaObjectBmp GalleryBinaryEngine::insertGraphic(const Graphic& rGraphic, const GfxLink& aGfxLink,
-                                                ConvertDataFormat& nExportFormat,
+                                                const ConvertDataFormat& nExportFormat,
                                                 const INetURLObject& rUserURL)
 {
     const INetURLObject aURL(implCreateUniqueURL(SgaObjKind::Bitmap, rUserURL, nExportFormat));
@@ -530,7 +530,7 @@ SgaObjectBmp GalleryBinaryEngine::insertGraphic(const Graphic& rGraphic, const G
     return SgaObjectBmp();
 }
 
-SgaObjectSvDraw GalleryBinaryEngine::updateSvDrawObject(GalleryObject* pEntry)
+SgaObjectSvDraw GalleryBinaryEngine::updateSvDrawObject(const GalleryObject* pEntry)
 {
     if (GetSvDrawStorage().is())
     {

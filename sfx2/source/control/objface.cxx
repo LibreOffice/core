@@ -100,7 +100,7 @@ SfxInterface::SfxInterface( const char *pClassName,
     SetSlotMap( rSlotMap, nSlotCount );
 }
 
-void SfxInterface::Register( SfxModule* pMod )
+void SfxInterface::Register( const SfxModule* pMod )
 {
     if ( pMod )
         pMod->GetSlotPool()->RegisterInterface(*this);

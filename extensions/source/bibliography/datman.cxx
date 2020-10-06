@@ -410,14 +410,14 @@ class DBChangeDialog_Impl : public weld::GenericDialogController
 
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 public:
-    DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pMan);
+    DBChangeDialog_Impl(weld::Window* pParent, const BibDataManager* pMan);
 
     OUString     GetCurrentURL()const;
 };
 
 }
 
-DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, BibDataManager* pDatMan )
+DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, const BibDataManager* pDatMan )
     : GenericDialogController(pParent, "modules/sbibliography/ui/choosedatasourcedialog.ui", "ChooseDataSourceDialog")
     , m_xSelectionLB(m_xBuilder->weld_tree_view("treeview"))
 {

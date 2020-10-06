@@ -102,7 +102,7 @@ public:
     const OUString&         GetPopupMenuName() const;
     StatusBarId             GetStatusBarId() const;
 
-    void                    Register( SfxModule* );
+    void                    Register( const SfxModule* );
 
     SAL_DLLPRIVATE bool     ContainsSlot_Impl( const SfxSlot *pSlot ) const
                             { return pSlot >= pSlots && pSlot < pSlots + Count(); }

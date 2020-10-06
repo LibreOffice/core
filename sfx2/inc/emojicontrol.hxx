@@ -25,7 +25,7 @@ class SfxEmojiControl final : public WeldToolbarPopup
 
 {
 public:
-    explicit SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent);
+    explicit SfxEmojiControl(const EmojiPopup* pControl, weld::Widget* pParent);
     virtual ~SfxEmojiControl() override;
 
     virtual void GrabFocus() override;

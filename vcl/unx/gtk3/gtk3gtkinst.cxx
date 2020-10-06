@@ -1969,7 +1969,7 @@ protected:
         return ::SwapForRTL(m_pWidget);
     }
 
-    void do_enable_drag_source(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+    void do_enable_drag_source(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
     {
         css::uno::Reference<css::datatransfer::XTransferable> xTrans(rHelper.get());
         css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> xListener(rHelper.get());
@@ -4444,7 +4444,7 @@ private:
         *pActivate = true;
     }
 
-    bool signal_screenshot_popup_menu(GdkEventButton* pEvent)
+    bool signal_screenshot_popup_menu(const GdkEventButton* pEvent)
     {
         GtkWidget *pMenu = gtk_menu_new();
 
@@ -4885,7 +4885,7 @@ private:
         return pThis->signal_button(pEvent);
     }
 
-    bool signal_button(GdkEventButton* pEvent)
+    bool signal_button(const GdkEventButton* pEvent)
     {
         int nNewCurrentPage = -1;
 
@@ -7990,7 +7990,7 @@ private:
         gtk_tool_button_set_icon_widget(pItem, pImage);
     }
 
-    void set_item_image(GtkToolButton* pItem, VirtualDevice* pDevice)
+    void set_item_image(GtkToolButton* pItem, const VirtualDevice* pDevice)
     {
         GtkWidget* pImage = nullptr;
 
@@ -9231,7 +9231,7 @@ struct GtkTreeRowReferenceDeleter
     }
 };
 
-bool separator_function(GtkTreePath* path, const std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>>& rSeparatorRows)
+bool separator_function(const GtkTreePath* path, const std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>>& rSeparatorRows)
 {
     bool bFound = false;
     for (auto& a : rSeparatorRows)
@@ -9502,7 +9502,7 @@ private:
         }
     }
 
-    bool separator_function(GtkTreePath* path)
+    bool separator_function(const GtkTreePath* path)
     {
         return ::separator_function(path, m_aSeparatorRows);
     }
@@ -9710,7 +9710,7 @@ private:
         return bRet;
     }
 
-    bool signal_test_collapse_row(GtkTreeIter& iter)
+    bool signal_test_collapse_row(const GtkTreeIter& iter)
     {
         disable_notify_events();
 
@@ -13193,7 +13193,7 @@ private:
     {
         return signal_command(rCEvt);
     }
-    bool signal_scroll(GdkEventScroll* pEvent)
+    bool signal_scroll(const GdkEventScroll* pEvent)
     {
         SalWheelMouseEvent aEvt(GtkSalFrame::GetWheelEvent(*pEvent));
 
@@ -14054,7 +14054,7 @@ private:
         return -1;
     }
 
-    bool separator_function(GtkTreePath* path)
+    bool separator_function(const GtkTreePath* path)
     {
         return ::separator_function(path, m_aSeparatorRows);
     }
@@ -14619,7 +14619,7 @@ private:
         enable_notify_events();
     }
 
-    void insert_including_mru(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface)
+    void insert_including_mru(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, const VirtualDevice* pImageSurface)
     {
         disable_notify_events();
         GtkTreeIter iter;

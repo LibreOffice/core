@@ -140,7 +140,7 @@ public:
     INetURLObject       GetURL() const;
     OUString            GetFilterName() const;
 
-    sal_Int8            AcceptDrop( DropTargetHelper& rTarget );
+    sal_Int8            AcceptDrop( const DropTargetHelper& rTarget );
     sal_Int8            ExecuteDrop( const ExecuteDropEvent& rEvt );
     bool                StartDrag();
     void                TogglePreview();

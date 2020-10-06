@@ -76,8 +76,8 @@ public:
 
     SAL_DLLPRIVATE bool implWrite(const GalleryTheme& rTheme, const GalleryThemeEntry* pThm);
 
-    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, sal_uInt32& rInsertPos);
-    void removeObject(std::unique_ptr<GalleryObject>& pEntry);
+    void insertObject(const SgaObject& rObj, GalleryObject* pFoundEntry, sal_uInt32 nInsertPos);
+    void removeObject(const std::unique_ptr<GalleryObject>& pEntry);
 
     std::unique_ptr<SgaObject> implReadSgaObject(GalleryObject const* pEntry);
     bool implWriteSgaObject(const SgaObject& rObj, sal_uInt32 nPos, GalleryObject* pExistentEntry);
@@ -94,9 +94,10 @@ public:
                                       ConvertDataFormat nFormat = ConvertDataFormat::Unknown);
 
     SgaObjectBmp insertGraphic(const Graphic& rGraphic, const GfxLink& aGfxLink,
-                               ConvertDataFormat& nExportFormat, const INetURLObject& rUserURL);
+                               const ConvertDataFormat& nExportFormat,
+                               const INetURLObject& rUserURL);
 
-    SgaObjectSvDraw updateSvDrawObject(GalleryObject* pEntry);
+    SgaObjectSvDraw updateSvDrawObject(const GalleryObject* pEntry);
 
     void updateTheme();
     static void insertFileOrDirURL(const INetURLObject& rFileOrDirURL,

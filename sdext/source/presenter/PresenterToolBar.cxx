@@ -305,7 +305,7 @@ namespace {
         virtual void restart() override;
         virtual bool isPaused() override;
         virtual void setPauseStatus(const bool pauseStatus) override;
-        TimeValue getPauseTimeValue();
+        TimeValue getPauseTimeValue() const;
         void setPauseTimeValue(const TimeValue pauseTime);
     private:
         TimeValue maStartTimeValue;
@@ -1840,7 +1840,7 @@ void PresentationTimeLabel::setPauseStatus(const bool pauseStatus)
 	paused = pauseStatus;
 }
 
-TimeValue PresentationTimeLabel::getPauseTimeValue()
+TimeValue PresentationTimeLabel::getPauseTimeValue() const
 {
 	return pauseTimeValue;
 }

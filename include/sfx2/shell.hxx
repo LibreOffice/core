@@ -537,7 +537,7 @@ inline void SfxShell::SetPool
             static SfxInterface*     pInterface;                 \
             static SfxInterface*     GetStaticInterface();       \
             static SfxInterfaceId    GetInterfaceId() {return nId;} \
-            static void              RegisterInterface(SfxModule* pMod=nullptr); \
+            static void              RegisterInterface(const SfxModule* pMod=nullptr); \
             virtual SfxInterface*    GetInterface() const override;
 
 #define SFX_TMPL_INTERFACE(Class,SuperClass,Abstract)                       \
@@ -563,7 +563,7 @@ inline void SfxShell::SetPool
         return GetStaticInterface();                                        \
     }                                                                       \
                                                                             \
-    void Class::RegisterInterface(SfxModule* pMod)                          \
+    void Class::RegisterInterface(const SfxModule* pMod)                    \
     {                                                                       \
         GetStaticInterface()->Register(pMod);                               \
     }
