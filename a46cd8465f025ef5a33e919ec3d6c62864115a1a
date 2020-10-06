@@ -111,6 +111,115 @@
     },
     {
       "key": {
+        "uuid": "c2bf4bbd_76c74f1d",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "It\u0027s better to keep the includes sorted (unless the order is important); the \"library\" headers (those which have \"module\" prefix like \"vcl/\" sorted separately, the \"module\" headers (local to this module, used without the prefix) separately).",
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba75b3f_80bb36fd",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "Seems a leftover?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 42
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "856a78d2_6fb2c6d0",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "and this?",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 28
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "838377dc_2825b14c",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 37
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72467acb_734aea98",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "and this",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 26
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46ec89f4_4c15bf49",
         "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
         "patchSetId": 33
@@ -266,6 +375,23 @@
         "endLine": 220,
         "endChar": 102
       },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a1e3e7e_ea45c974",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T12:52:54Z",
+      "side": 1,
+      "message": "Empty line missing",
       "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
