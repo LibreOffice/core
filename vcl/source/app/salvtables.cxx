@@ -6540,13 +6540,12 @@ SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUI
 {
 }
 
-std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(const OString& id,
-                                                                             bool bTakeOwnership)
+std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(const OString& id)
 {
     MessageDialog* pMessageDialog = m_xBuilder->get<MessageDialog>(id);
     std::unique_ptr<weld::MessageDialog> pRet(
         pMessageDialog ? new SalInstanceMessageDialog(pMessageDialog, this, false) : nullptr);
-    if (bTakeOwnership && pMessageDialog)
+    if (pMessageDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pMessageDialog);
@@ -6555,13 +6554,12 @@ std::unique_ptr<weld::MessageDialog> SalInstanceBuilder::weld_message_dialog(con
     return pRet;
 }
 
-std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString& id,
-                                                              bool bTakeOwnership)
+std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString& id)
 {
     Dialog* pDialog = m_xBuilder->get<Dialog>(id);
     std::unique_ptr<weld::Dialog> pRet(pDialog ? new SalInstanceDialog(pDialog, this, false)
                                                : nullptr);
-    if (bTakeOwnership && pDialog)
+    if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
@@ -6570,13 +6568,12 @@ std::unique_ptr<weld::Dialog> SalInstanceBuilder::weld_dialog(const OString& id,
     return pRet;
 }
 
-std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OString& id,
-                                                                    bool bTakeOwnership)
+std::unique_ptr<weld::Assistant> SalInstanceBuilder::weld_assistant(const OString& id)
 {
     vcl::RoadmapWizard* pDialog = m_xBuilder->get<vcl::RoadmapWizard>(id);
     std::unique_ptr<weld::Assistant> pRet(pDialog ? new SalInstanceAssistant(pDialog, this, false)
                                                   : nullptr);
-    if (bTakeOwnership && pDialog)
+    if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
@@ -6614,177 +6611,156 @@ std::unique_ptr<weld::Window> SalInstanceBuilder::create_screenshot_window()
     return std::unique_ptr<weld::Dialog>(new SalInstanceDialog(xDialog, this, false));
 }
 
-std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id,
-                                                              bool bTakeOwnership)
+std::unique_ptr<weld::Widget> SalInstanceBuilder::weld_widget(const OString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get(id);
-    return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, bTakeOwnership) : nullptr;
+    return pWidget ? std::make_unique<SalInstanceWidget>(pWidget, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString& id,
-                                                                    bool bTakeOwnership)
+std::unique_ptr<weld::Container> SalInstanceBuilder::weld_container(const OString& id)
 {
     vcl::Window* pContainer = m_xBuilder->get(id);
-    return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, bTakeOwnership)
+    return pContainer ? std::make_unique<SalInstanceContainer>(pContainer, this, false)
                       : nullptr;
 }
 
-std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OString& id)
 {
     VclBox* pContainer = m_xBuilder->get<VclBox>(id);
-    return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, bTakeOwnership)
+    return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, false)
                       : nullptr;
 }
 
-std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OString& id,
-                                                            bool bTakeOwnership)
+std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OString& id)
 {
     VclPaned* pPaned = m_xBuilder->get<VclPaned>(id);
-    return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, bTakeOwnership)
+    return pPaned ? std::make_unique<SalInstancePaned>(pPaned, this, false)
                   : nullptr;
 }
 
-std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Frame> SalInstanceBuilder::weld_frame(const OString& id)
 {
     VclFrame* pFrame = m_xBuilder->get<VclFrame>(id);
     std::unique_ptr<weld::Frame> pRet(pFrame ? new SalInstanceFrame(pFrame, this, false) : nullptr);
-    if (bTakeOwnership && pFrame)
-    {
-        assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
-        m_aOwnedToplevel.set(pFrame);
-        m_xBuilder->drop_ownership(pFrame);
-    }
     return pRet;
 }
 
-std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString& id,
-                                                                               bool bTakeOwnership)
+std::unique_ptr<weld::ScrolledWindow> SalInstanceBuilder::weld_scrolled_window(const OString& id)
 {
     VclScrolledWindow* pScrolledWindow = m_xBuilder->get<VclScrolledWindow>(id);
     return pScrolledWindow
-               ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceScrolledWindow>(pScrolledWindow, this, false)
                : nullptr;
 }
 
-std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString& id,
-                                                                  bool bTakeOwnership)
+std::unique_ptr<weld::Notebook> SalInstanceBuilder::weld_notebook(const OString& id)
 {
     vcl::Window* pNotebook = m_xBuilder->get(id);
     if (!pNotebook)
         return nullptr;
     if (pNotebook->GetType() == WindowType::TABCONTROL)
         return std::make_unique<SalInstanceNotebook>(static_cast<TabControl*>(pNotebook), this,
-                                                     bTakeOwnership);
+                                                     false);
     if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
         return std::make_unique<SalInstanceVerticalNotebook>(
-            static_cast<VerticalTabControl*>(pNotebook), this, bTakeOwnership);
+            static_cast<VerticalTabControl*>(pNotebook), this, false);
     return nullptr;
 }
 
-std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OString& id,
-                                                              bool bTakeOwnership)
+std::unique_ptr<weld::Button> SalInstanceBuilder::weld_button(const OString& id)
 {
     Button* pButton = m_xBuilder->get<Button>(id);
-    return pButton ? std::make_unique<SalInstanceButton>(pButton, this, bTakeOwnership) : nullptr;
+    return pButton ? std::make_unique<SalInstanceButton>(pButton, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OString& id,
-                                                                       bool bTakeOwnership)
+std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OString& id)
 {
     MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
-    return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, bTakeOwnership)
+    return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, false)
                    : nullptr;
 }
 
-std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OString& id,
-                                                                       bool bTakeOwnership)
+std::unique_ptr<weld::LinkButton> SalInstanceBuilder::weld_link_button(const OString& id)
 {
     FixedHyperlink* pButton = m_xBuilder->get<FixedHyperlink>(id);
-    return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, bTakeOwnership)
+    return pButton ? std::make_unique<SalInstanceLinkButton>(pButton, this, false)
                    : nullptr;
 }
 
-std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OString& id,
-                                                                           bool bTakeOwnership)
+std::unique_ptr<weld::ToggleButton> SalInstanceBuilder::weld_toggle_button(const OString& id)
 {
     PushButton* pToggleButton = m_xBuilder->get<PushButton>(id);
     return pToggleButton
-               ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceToggleButton>(pToggleButton, this, false)
                : nullptr;
 }
 
-std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OString& id,
-                                                                         bool bTakeOwnership)
+std::unique_ptr<weld::RadioButton> SalInstanceBuilder::weld_radio_button(const OString& id)
 {
     RadioButton* pRadioButton = m_xBuilder->get<RadioButton>(id);
     return pRadioButton
-               ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceRadioButton>(pRadioButton, this, false)
                : nullptr;
 }
 
-std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OString& id,
-                                                                         bool bTakeOwnership)
+std::unique_ptr<weld::CheckButton> SalInstanceBuilder::weld_check_button(const OString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
     return pCheckButton
-               ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceCheckButton>(pCheckButton, this, false)
                : nullptr;
 }
 
-std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Scale> SalInstanceBuilder::weld_scale(const OString& id)
 {
     Slider* pSlider = m_xBuilder->get<Slider>(id);
-    return pSlider ? std::make_unique<SalInstanceScale>(pSlider, this, bTakeOwnership) : nullptr;
+    return pSlider ? std::make_unique<SalInstanceScale>(pSlider, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OString& id,
-                                                                         bool bTakeOwnership)
+std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const OString& id)
 {
     ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
-    return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, bTakeOwnership)
+    return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OString& id,
-                                                                bool bTakeOwnership)
+std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OString& id)
 {
     Throbber* pThrobber = m_xBuilder->get<Throbber>(id);
-    return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, bTakeOwnership)
+    return pThrobber ? std::make_unique<SalInstanceSpinner>(pThrobber, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Image> SalInstanceBuilder::weld_image(const OString& id)
 {
     FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
-    return pImage ? std::make_unique<SalInstanceImage>(pImage, this, bTakeOwnership) : nullptr;
+    return pImage ? std::make_unique<SalInstanceImage>(pImage, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OString& id,
-                                                                  bool bTakeOwnership)
+std::unique_ptr<weld::Calendar> SalInstanceBuilder::weld_calendar(const OString& id)
 {
     Calendar* pCalendar = m_xBuilder->get<Calendar>(id);
-    return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, bTakeOwnership)
+    return pCalendar ? std::make_unique<SalInstanceCalendar>(pCalendar, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Entry> SalInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
-    return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, this, bTakeOwnership) : nullptr;
+    return pEntry ? std::make_unique<SalInstanceEntry>(pEntry, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OString& id,
-                                                                       bool bTakeOwnership)
+std::unique_ptr<weld::SpinButton> SalInstanceBuilder::weld_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-    return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, this, bTakeOwnership)
+    return pSpinButton ? std::make_unique<SalInstanceSpinButton>(pSpinButton, this, false)
                        : nullptr;
 }
 
 std::unique_ptr<weld::MetricSpinButton>
-SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit, bool bTakeOwnership)
+SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit)
 {
-    std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id, bTakeOwnership));
+    std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id));
     if (xButton)
     {
         SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(*xButton);
@@ -6794,99 +6770,92 @@ SalInstanceBuilder::weld_metric_spin_button(const OString& id, FieldUnit eUnit, 
 }
 
 std::unique_ptr<weld::FormattedSpinButton>
-SalInstanceBuilder::weld_formatted_spin_button(const OString& id, bool bTakeOwnership)
+SalInstanceBuilder::weld_formatted_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
     return pSpinButton
-               ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceFormattedSpinButton>(pSpinButton, this, false)
                : nullptr;
 }
 
-std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id,
-                                                                   bool bTakeOwnership)
+std::unique_ptr<weld::ComboBox> SalInstanceBuilder::weld_combo_box(const OString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get(id);
     ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
     if (pComboBox)
-        return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, bTakeOwnership);
+        return std::make_unique<SalInstanceComboBoxWithEdit>(pComboBox, this, false);
     ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
     return pListBox
-               ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, bTakeOwnership)
+               ? std::make_unique<SalInstanceComboBoxWithoutEdit>(pListBox, this, false)
                : nullptr;
 }
 
 std::unique_ptr<weld::EntryTreeView>
 SalInstanceBuilder::weld_entry_tree_view(const OString& containerid, const OString& entryid,
-                                         const OString& treeviewid, bool bTakeOwnership)
+                                         const OString& treeviewid)
 {
     vcl::Window* pContainer = m_xBuilder->get(containerid);
     return pContainer ? std::make_unique<SalInstanceEntryTreeView>(
-                            pContainer, this, bTakeOwnership, weld_entry(entryid, bTakeOwnership),
-                            weld_tree_view(treeviewid, bTakeOwnership))
+                            pContainer, this, false, weld_entry(entryid),
+                            weld_tree_view(treeviewid))
                       : nullptr;
 }
 
-std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OString& id,
-                                                                   bool bTakeOwnership)
+std::unique_ptr<weld::TreeView> SalInstanceBuilder::weld_tree_view(const OString& id)
 {
     SvTabListBox* pTreeView = m_xBuilder->get<SvTabListBox>(id);
-    return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, bTakeOwnership)
+    return pTreeView ? std::make_unique<SalInstanceTreeView>(pTreeView, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OString& id,
-                                                                   bool bTakeOwnership)
+std::unique_ptr<weld::IconView> SalInstanceBuilder::weld_icon_view(const OString& id)
 {
     IconView* pIconView = m_xBuilder->get<IconView>(id);
-    return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, bTakeOwnership)
+    return pIconView ? std::make_unique<SalInstanceIconView>(pIconView, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Label> SalInstanceBuilder::weld_label(const OString& id)
 {
     Control* pLabel = m_xBuilder->get<Control>(id);
-    return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, bTakeOwnership) : nullptr;
+    return pLabel ? std::make_unique<SalInstanceLabel>(pLabel, this, false) : nullptr;
 }
 
-std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OString& id,
-                                                                   bool bTakeOwnership)
+std::unique_ptr<weld::TextView> SalInstanceBuilder::weld_text_view(const OString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-    return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, bTakeOwnership)
+    return pTextView ? std::make_unique<SalInstanceTextView>(pTextView, this, false)
                      : nullptr;
 }
 
-std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OString& id,
-                                                                  bool bTakeOwnership)
+std::unique_ptr<weld::Expander> SalInstanceBuilder::weld_expander(const OString& id)
 {
     VclExpander* pExpander = m_xBuilder->get<VclExpander>(id);
-    return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, bTakeOwnership)
+    return pExpander ? std::make_unique<SalInstanceExpander>(pExpander, this, false)
                      : nullptr;
 }
 
 std::unique_ptr<weld::DrawingArea>
 SalInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl,
-                                      FactoryFunction pUITestFactoryFunction, void* pUserData,
-                                      bool bTakeOwnership)
+                                      FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pDrawingArea = m_xBuilder->get<VclDrawingArea>(id);
     return pDrawingArea ? std::make_unique<SalInstanceDrawingArea>(pDrawingArea, this, rA11yImpl,
                                                                    pUITestFactoryFunction,
-                                                                   pUserData, bTakeOwnership)
+                                                                   pUserData, false)
                         : nullptr;
 }
 
-std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Menu> SalInstanceBuilder::weld_menu(const OString& id)
 {
     PopupMenu* pMenu = m_xBuilder->get_menu(id);
-    return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, bTakeOwnership) : nullptr;
+    return pMenu ? std::make_unique<SalInstanceMenu>(pMenu, true) : nullptr;
 }
 
-std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& id,
-                                                                bool bTakeOwnership)
+std::unique_ptr<weld::Toolbar> SalInstanceBuilder::weld_toolbar(const OString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
-    return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, bTakeOwnership)
+    return pToolBox ? std::make_unique<SalInstanceToolbar>(pToolBox, this, false)
                     : nullptr;
 }
 

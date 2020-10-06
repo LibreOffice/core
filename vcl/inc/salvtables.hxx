@@ -36,116 +36,84 @@ public:
                        const css::uno::Reference<css::frame::XFrame>& rFrame
                        = css::uno::Reference<css::frame::XFrame>());
 
-    virtual std::unique_ptr<weld::MessageDialog>
-    weld_message_dialog(const OString& id, bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
-                                                      bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString& id,
-                                                            bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Assistant> weld_assistant(const OString& id) override;
 
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override;
 
-    virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id,
-                                                      bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Widget> weld_widget(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Container> weld_container(const OString& id,
-                                                            bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Container> weld_container(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Box> weld_box(const OString& id,
-                                                bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Box> weld_box(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Paned> weld_paned(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Paned> weld_paned(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Frame> weld_frame(const OString& id) override;
 
-    virtual std::unique_ptr<weld::ScrolledWindow>
-    weld_scrolled_window(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
-                                                          bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Button> weld_button(const OString& id,
-                                                      bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::MenuButton>
-    weld_menu_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::LinkButton>
-    weld_link_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::ToggleButton>
-    weld_toggle_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ToggleButton> weld_toggle_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::RadioButton>
-    weld_radio_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::CheckButton>
-    weld_check_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Scale> weld_scale(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Scale> weld_scale(const OString& id) override;
 
-    virtual std::unique_ptr<weld::ProgressBar>
-    weld_progress_bar(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString& id,
-                                                        bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Spinner> weld_spinner(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Image> weld_image(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Image> weld_image(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString& id,
-                                                          bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Calendar> weld_calendar(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id) override;
 
-    virtual std::unique_ptr<weld::SpinButton>
-    weld_spin_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString& id) override;
 
     virtual std::unique_ptr<weld::MetricSpinButton>
-    weld_metric_spin_button(const OString& id, FieldUnit eUnit,
-                            bool bTakeOwnership = false) override;
+    weld_metric_spin_button(const OString& id, FieldUnit eUnit) override;
 
     virtual std::unique_ptr<weld::FormattedSpinButton>
-    weld_formatted_spin_button(const OString& id, bool bTakeOwnership = false) override;
+    weld_formatted_spin_button(const OString& id) override;
 
-    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
-                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id) override;
 
     virtual std::unique_ptr<weld::EntryTreeView>
     weld_entry_tree_view(const OString& containerid, const OString& entryid,
-                         const OString& treeviewid, bool bTakeOwnership = false) override;
+                         const OString& treeviewid) override;
 
-    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id,
-                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OString& id) override;
 
-    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id,
-                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::IconView> weld_icon_view(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
-                                                    bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
 
-    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
-                                                           bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::TextView> weld_text_view(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id,
-                                                          bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Expander> weld_expander(const OString& id) override;
 
     virtual std::unique_ptr<weld::DrawingArea>
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
-                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
-                      bool bTakeOwnership = false) override;
+                      FactoryFunction pUITestFactoryFunction = nullptr,
+                      void* pUserData = nullptr) override;
 
-    virtual std::unique_ptr<weld::Menu> weld_menu(const OString& id,
-                                                  bool bTakeOwnership = true) override;
+    virtual std::unique_ptr<weld::Menu> weld_menu(const OString& id) override;
 
-    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
-                                                        bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id) override;
 
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override;
 
