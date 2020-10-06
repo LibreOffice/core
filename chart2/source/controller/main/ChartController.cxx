@@ -746,6 +746,9 @@ void SAL_CALL ChartController::dispose()
 {
     m_bDisposed = true;
 
+    mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
+    mpSelectionChangeHandler->Disconnect();
+
     if (getModel().is())
     {
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
@@ -754,8 +757,6 @@ void SAL_CALL ChartController::dispose()
             sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
         }
     }
-    mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
-    mpSelectionChangeHandler->Disconnect();
 
     try
     {
