@@ -270,6 +270,7 @@ public:
     void testTdf123353();
     void testTdf133688_precedents();
     void testTdf91251_missingOverflowRoundtrip();
+    void testTdf126305_DataValidatyErrorAlert();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -434,6 +435,7 @@ public:
     CPPUNIT_TEST(testTdf123353);
     CPPUNIT_TEST(testTdf133688_precedents);
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
+    CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5481,6 +5483,25 @@ void ScExportTest::testTdf91251_missingOverflowRoundtrip()
 
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
     assertXPath(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr", "horzOverflow", "clip");
+}
+
+void ScExportTest::testTdf126305_DataValidatyErrorAlert()
+{
+    ScDocShellRef xShell = loadDoc("tdf126305.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+    xmlDocUniquePtr pDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[1]", "errorStyle", "stop");
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[2]", "errorStyle", "warning");
+    assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[3]", "errorStyle", "information");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
