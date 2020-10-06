@@ -1529,7 +1529,7 @@ bool SwNoTextFrame::IsTransparent() const
     return false;
 }
 
-void SwNoTextFrame::StopAnimation( OutputDevice* pOut ) const
+void SwNoTextFrame::StopAnimation( const OutputDevice* pOut ) const
 {
     // Stop animated graphics
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();

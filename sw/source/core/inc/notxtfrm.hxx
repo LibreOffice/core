@@ -82,7 +82,7 @@ public:
 
     bool IsTransparent() const;
 
-    void StopAnimation( OutputDevice* = nullptr ) const;
+    void StopAnimation( const OutputDevice* = nullptr ) const;
     bool HasAnimation()  const;
 
     // RotateFlyFrame3 - Support for Transformations

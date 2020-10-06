@@ -1167,7 +1167,7 @@ namespace
 }
 
 // Handler for Dragging and ContextMenu
-static bool lcl_InsertExpandCollapseAllItem(weld::TreeView& rContentTree, weld::TreeIter& rEntry, weld::Menu& rPop)
+static bool lcl_InsertExpandCollapseAllItem(const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
     if (rContentTree.iter_has_child(rEntry) || rContentTree.get_children_on_demand(rEntry))
     {
@@ -1177,7 +1177,7 @@ static bool lcl_InsertExpandCollapseAllItem(weld::TreeView& rContentTree, weld::
     return true;
 }
 
-static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, weld::TreeView& rContentTree, weld::TreeIter& rEntry, weld::Menu& rPop)
+static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, const weld::TreeView& rContentTree, const weld::TreeIter& rEntry, weld::Menu& rPop)
 {
     rPop.set_sensitive(OString::number(1512), false);
     rPop.set_sensitive(OString::number(1513), false);

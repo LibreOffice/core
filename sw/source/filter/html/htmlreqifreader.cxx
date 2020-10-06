@@ -147,7 +147,7 @@ bool ParseOLE2Presentation(SvStream& rOle2, sal_uInt32& nWidth, sal_uInt32& nHei
  * Inserts an OLE1 header before an OLE2 storage, assuming that the storage has an Ole10Native
  * stream.
  */
-OString InsertOLE1HeaderFromOle10NativeStream(tools::SvRef<SotStorage>& xStorage,
+OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xStorage,
                                               SwOLENode& rOLENode, SvStream& rOle1)
 {
     tools::SvRef<SotStorageStream> xOle1Stream

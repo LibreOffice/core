@@ -303,7 +303,7 @@ namespace numfunc
      * or not. This is typically true, unless the numbering levels are invisible and have no
      * indents.
      */
-    bool NumDownChangesIndent(SwWrtShell& rShell);
+    bool NumDownChangesIndent(const SwWrtShell& rShell);
 
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();
 }

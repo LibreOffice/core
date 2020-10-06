@@ -803,7 +803,7 @@ SwGrfNumPortion::~SwGrfNumPortion()
     pBrush.reset();
 }
 
-void SwGrfNumPortion::StopAnimation( OutputDevice* pOut )
+void SwGrfNumPortion::StopAnimation( const OutputDevice* pOut )
 {
     if ( IsAnimated() )
     {
@@ -1034,7 +1034,7 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
     }
 }
 
-void SwTextFrame::StopAnimation( OutputDevice* pOut )
+void SwTextFrame::StopAnimation( const OutputDevice* pOut )
 {
     OSL_ENSURE( HasAnimation(), "SwTextFrame::StopAnimation: Which Animation?" );
     if( !HasPara() )

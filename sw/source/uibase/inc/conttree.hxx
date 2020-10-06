@@ -358,7 +358,7 @@ public:
         return *m_xTreeView;
     }
 
-    void MoveSelectionTo(weld::TreeIter* pDropTarget);
+    void MoveSelectionTo(const weld::TreeIter* pDropTarget);
 
     void                TbxMenuHdl(const OString& rCommand, weld::Menu& rMenu);
     void                InsertRegion( const SwGlblDocContent* pCont,

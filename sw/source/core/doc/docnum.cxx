@@ -1143,7 +1143,7 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
     return bResult;
 }
 
-void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
+void SwDoc::StopNumRuleAnimations( const OutputDevice* pOut )
 {
     for( sal_uInt16 n = GetNumRuleTable().size(); n; )
     {

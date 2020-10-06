@@ -209,7 +209,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         const SfxPoolItem* pItem = nullptr;
@@ -316,7 +316,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest const & rReq)
             pView->GetModel()->SetChanged();
 }
 
-static void lcl_unifyFillTransparencyItems(SfxItemSet& rSet)
+static void lcl_unifyFillTransparencyItems(const SfxItemSet& rSet)
 {
     // Transparent fill options are None, Solid, Linear, Axial, Radial, Elliptical, Quadratic, Square.
     // But this is represented across two items namely XFillTransparenceItem (for None and Solid)

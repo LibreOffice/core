@@ -290,7 +290,7 @@ public:
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
 
-    const SwFrame* GetSavedOutlineFrame() { return m_pSavedOutlineFrame; }
+    const SwFrame* GetSavedOutlineFrame() const { return m_pSavedOutlineFrame; }
     void SetSavedOutlineFrame(SwFrame* pFrame) { m_pSavedOutlineFrame = pFrame; }
 
     void SetOutlineContentVisibilityButtons();

@@ -131,7 +131,7 @@ public:
     void ResetASCIIOpts() { m_aASCIIOpts.Reset(); }
 
     css::uno::Reference<css::io::XInputStream>& GetInputStream() { return m_xInputStream; }
-    void SetInputStream(css::uno::Reference<css::io::XInputStream>& xInputStream)
+    void SetInputStream(const css::uno::Reference<css::io::XInputStream>& xInputStream)
     {
         m_xInputStream = xInputStream;
     }

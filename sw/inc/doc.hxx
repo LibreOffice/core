@@ -1146,7 +1146,7 @@ public:
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
-    void StopNumRuleAnimations( OutputDevice* );
+    void StopNumRuleAnimations( const OutputDevice* );
 
     /** Insert new table at position @param rPos (will be inserted before Node!).
      For AutoFormat at input: columns have to be set at predefined width.

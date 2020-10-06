@@ -339,7 +339,8 @@ class TextContrastCheck : public NodeCheck
 {
 private:
     void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange,
-                        uno::Reference<text::XTextContent> const& xParagraph, SwTextNode* pTextNode)
+                        uno::Reference<text::XTextContent> const& xParagraph,
+                        const SwTextNode* pTextNode)
     {
         sal_Int32 nParaBackColor(COL_AUTO);
         uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
