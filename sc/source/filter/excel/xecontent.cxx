@@ -1637,6 +1637,17 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
     return nullptr;
 }
 
+const char* lcl_GetErrorType( sal_uInt32 nFlags )
+{
+    switch (nFlags & EXC_DV_ERROR_MASK)
+    {
+        case EXC_DV_ERROR_STOP:      return "stop";
+        case EXC_DV_ERROR_WARNING:   return "warning";
+        case EXC_DV_ERROR_INFO:      return "information";
+    }
+    return nullptr;
+}
+
 } // namespace
 
 XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
@@ -1846,7 +1857,7 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement( XML_dataValidation,
             XML_allowBlank,         ToPsz( ::get_flag( mnFlags, EXC_DV_IGNOREBLANK ) ),
             XML_error,              XESTRING_TO_PSZ( maErrorText ),
-            // OOXTODO: XML_errorStyle,
+            XML_errorStyle,         lcl_GetErrorType(mnFlags),
             XML_errorTitle,         XESTRING_TO_PSZ( maErrorTitle ),
             // OOXTODO: XML_imeMode,
             XML_operator,           lcl_GetOperatorType( mnFlags ),
