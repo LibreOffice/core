@@ -55,7 +55,7 @@ public:
     static sal_uLong GetElementCount() {return s_nSwAutoCompleteClientCount;}
 #endif
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 };
 
 class SwAutoCompleteWord_Impl
@@ -131,16 +131,17 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
     return *this;
 }
 
-void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
+void SwAutoCompleteClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    switch( pOld ? pOld->Which() : 0 )
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    switch(pLegacy->GetWhich())
     {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( static_cast<void*>(GetRegisteredIn()) == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
+        case RES_REMOVE_UNO_OBJECT:
+        case RES_OBJECTDYING:
             EndListeningAll();
-        m_pAutoCompleteWord->DocumentDying(*m_pDoc);
-        break;
+            m_pAutoCompleteWord->DocumentDying(*m_pDoc);
     }
 }
 
