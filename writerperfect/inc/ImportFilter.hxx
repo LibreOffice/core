@@ -18,7 +18,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
@@ -26,6 +26,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include "DocumentHandler.hxx"
 #include "WPXSvInputStream.hxx"
@@ -70,19 +71,24 @@ public:
         aDescriptor["ParentWindow"] >>= xDialogParent;
 
         // An XML import service: what we push sax messages to...
-        css::uno::Reference<css::xml::sax::XDocumentHandler> xInternalHandler(
-            mxContext->getServiceManager()->createInstanceWithContext(
-                DocumentHandlerFor<Generator>::name(), mxContext),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference<XInterface> xInternalFilter
+            = mxContext->getServiceManager()->createInstanceWithContext(
+                DocumentHandlerFor<Generator>::name(), mxContext);
+        assert(xInternalFilter);
+        css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(
+            xInternalFilter, css::uno::UNO_QUERY);
+        assert(xInternalHandler);
 
         // The XImporter sets up an empty target document for XDocumentHandler to write to...
         css::uno::Reference<css::document::XImporter> xImporter(xInternalHandler,
                                                                 css::uno::UNO_QUERY);
+        assert(xImporter);
         xImporter->setTargetDocument(mxDoc);
 
         // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
         // writes to in-memory target doc
-        DocumentHandler aHandler(xInternalHandler);
+        DocumentHandler aHandler(
+            new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(xInternalHandler.get())));
 
         WPXSvInputStream input(xInputStream);
 

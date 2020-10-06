@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,xof,\
     cppuhelper \
     sal \
     salhelper \
+    tl \
 	sax \
     xo \
 ))
