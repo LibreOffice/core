@@ -68,7 +68,11 @@ void WinSkiaSalGraphicsImpl::performFlush()
     SkiaZone zone;
     flushDrawing();
     if (mWindowContext)
-        mWindowContext->swapBuffers();
+    {
+        if (mDirtyRect.intersect(SkIRect::MakeWH(GetWidth(), GetHeight())))
+            mWindowContext->swapBuffers(&mDirtyRect);
+        mDirtyRect.setEmpty();
+    }
 }
 
 bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey,

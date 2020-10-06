@@ -38,6 +38,7 @@ skia_patches := \
     public-make-from-backend-texture.patch.1 \
     c++20.patch.0 \
     constexpr-debug-std-max.patch.1 \
+    swap-buffers-rect.patch.1
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
