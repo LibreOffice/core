@@ -42,6 +42,7 @@
 #include "OOo2Oasis.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -1915,26 +1916,14 @@ void OOo2OasisTransformer::Initialize(
 {
     OSL_ENSURE( !GetDocHandler().is(), "duplication initialization" );
 
-    Reference< XDocumentHandler > xDocHandler;
     if( !m_aSubServiceName.isEmpty() )
     {
-        Reference< XComponentContext > xContext =
-            comphelper::getProcessComponentContext();
-        try
-        {
-            // get filter component
-            xDocHandler.set(
-                    xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext),
-                    UNO_QUERY);
-        }
-        catch( Exception& )
-        {
-        }
-    }
+        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        // get filter component
+        Reference< XInterface > xDocHandler =
+                xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext);
+        assert(xDocHandler);
 
-    OSL_ENSURE( xDocHandler.is(), "can't instantiate filter component" );
-    if( xDocHandler.is() )
-    {
         Sequence<Any> aArgs( 1 + rArguments.getLength() );
         aArgs[0] <<= xDocHandler;
         std::copy(rArguments.begin(), rArguments.end(), std::next(aArgs.begin()));
