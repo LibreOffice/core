@@ -66,6 +66,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_socket \
 	$(if $(filter $(OS),WNT), \
 		UnpackedTarball/mariadb-connector-c/libmariadb/win32_errmsg \
+		UnpackedTarball/mariadb-connector-c/libmariadb/secure/win_crypt \
 		UnpackedTarball/mariadb-connector-c/win-iconv/win_iconv) \
 ))
 
