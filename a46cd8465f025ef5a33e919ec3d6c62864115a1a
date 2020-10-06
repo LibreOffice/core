@@ -1,0 +1,245 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e7c5f134_e26399c3",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "#pragma once is the replacement for the include guards, so please drop these (see tdf#124176).",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 40
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa25e844_f4460e7c",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "this header uses std::tuple and OUString. It needs to include respective headers itself to be self-contained. See tipoftheday.hrc.",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c035d98_fedbb2a5",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "We normally have an empty line after this one.",
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92beb091_bc0a2f8a",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "Here is the `using` that you possibly forgot to remove :-)",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 20
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df9ca733_449f2902",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "By convention, the first thing to include in CXX is \u003csal/config.h\u003e. Please add that before this line.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 29
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ec89f4_4c15bf49",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "Often - when the type of the object is clear from the initializer, or in fact knowing the exact type is not important for the reader - it\u0027s clearer to use `auto` instead of the full type:\n\n        const auto xCurrentFrame \u003d pViewFrame-\u003eGetFrame().GetFrameInterface();\n        const auto xContext \u003d comphelper::getProcessComponentContext();\n        const auto xModuleManager \u003d css::frame::ModuleManager::create(xContext);",
+      "range": {
+        "startLine": 46,
+        "startChar": 14,
+        "endLine": 46,
+        "endChar": 53
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92b31b0c_b164e0f5",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "Another occurence of the magic number that needs replaced to SAL_N_ELEMENTS",
+      "range": {
+        "startLine": 119,
+        "startChar": 24,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a38b8637_bc684feb",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "These 7 and 8 are also magic numbers. I suppose that their semantical meaning could be best expressed by creating some telling constexpr names in the toolbarmode.hrc, below the definition of TOOLBARMODES_ARRAY, like\n\n    constexpr int nContextSingle \u003d 7;\n    constexpr int nContextGroup \u003d 8;\n\nto use here. Being there, near the definition of texts, helps to keep them in sync.",
+      "range": {
+        "startLine": 136,
+        "startChar": 24,
+        "endLine": 136,
+        "endChar": 25
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8ac0a77_f6a45809",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "Use pragma once instead :-)",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 46
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2aaa5f7_afa46e39",
+        "filename": "cui/source/inc/toolbarmodedlg.hxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "The same nitpick about having empty line in the end of the file",
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a740414_f0a98fb1",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 33
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:42:50Z",
+      "side": 1,
+      "message": "This line is too long (violates clangformat) - should had been\n\n            ScopedVclPtr\u003cVclAbstractDialog\u003e pDlg(\n                pFact-\u003eCreateToolbarmodeDialog(rReq.GetFrameWeld()));",
+      "range": {
+        "startLine": 968,
+        "startChar": 12,
+        "endLine": 968,
+        "endChar": 102
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
