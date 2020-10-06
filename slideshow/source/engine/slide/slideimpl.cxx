@@ -48,6 +48,9 @@
 #include "targetpropertiescreator.hxx"
 #include <tools.hxx>
 #include <box2dtools.hxx>
+#include <vcl/graphicfilter.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/unoshape.hxx>
 
 using namespace ::com::sun::star;
 
@@ -386,6 +389,23 @@ void SlideImpl::prefetch()
 {
     if( !mxRootNode.is() )
         return;
+
+    // Try to prefetch all graphics from the page. This will be done
+    // in threads to be more efficient than loading them on-demand one by one.
+    std::vector<Graphic*> graphics;
+    for (sal_Int32 i = 0; i < mxDrawPage->getCount(); i++)
+    {
+        com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape(mxDrawPage->getByIndex(i), com::sun::star::uno::UNO_QUERY_THROW);
+        SvxShape* pShape = comphelper::getUnoTunnelImplementation<SvxShape>(xShape);
+        SdrObject* pObj = pShape ? pShape->GetSdrObject() : nullptr;
+        if (!pObj)
+            continue;
+        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(pObj))
+            if( !grafObj->GetGraphic().isAvailable())
+                graphics.push_back( const_cast<Graphic*>(&grafObj->GetGraphic()));
+    }
+    if(graphics.size() > 1) // threading does not help with loading just one
+        GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded( graphics );
 
     applyInitialShapeAttributes(mxRootNode);
 }

@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <algorithm>
 
@@ -644,6 +645,19 @@ void SlideSorterView::Paint (
     // Paint all page objects that are fully or partially inside the
     // repaint region.
     const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(rRepaintArea));
+    // Try to prefetch all graphics from the pages to paint. This will be done
+    // in threads to be more efficient than loading them on-demand one by one.
+    std::vector<Graphic*> graphics;
+    for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
+    {
+        model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
+        if (!pDescriptor || ! pDescriptor->HasState(PageDescriptor::ST_Visible))
+            continue;
+        pDescriptor->GetPage()->getGraphicsForPrefetch(graphics);
+    }
+    if(graphics.size() > 1) // threading does not help with loading just one
+        GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
+
     for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
