@@ -995,6 +995,9 @@ void SkiaSalBitmap::EnsureBitmapData()
     if (mBitCount == 32)
         alphaType = kPremul_SkAlphaType;
 #endif
+    // But if the source image has no alpha, then use no alpha (faster to convert).
+    if (mImage->imageInfo().alphaType() == kOpaque_SkAlphaType)
+        alphaType = kOpaque_SkAlphaType;
     SkBitmap bitmap;
     if (!bitmap.tryAllocPixels(SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), alphaType)))
         abort();
