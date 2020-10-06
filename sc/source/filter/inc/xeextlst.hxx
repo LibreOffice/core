@@ -195,7 +195,7 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
     void AddRecord( XclExpExt* pEntry );
-    void AddRecord( XclExpExtRef& aEntry ) { AddRecord(aEntry.get()); }
+    void AddRecord( const XclExpExtRef& aEntry ) { AddRecord(aEntry.get()); }
 
     XclExpExt* GetItem( XclExpExtType eType );
 

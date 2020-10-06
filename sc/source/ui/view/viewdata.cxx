@@ -118,13 +118,13 @@ bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_
     }
 }
 
-ScPositionHelper::ScPositionHelper(ScDocument *pDoc, bool bColumn)
+ScPositionHelper::ScPositionHelper(const ScDocument *pDoc, bool bColumn)
     : MAX_INDEX(bColumn ? (pDoc ? pDoc->MaxCol() : -1) : MAXTILEDROW)
 {
     mData.insert(std::make_pair(-1, 0));
 }
 
-void ScPositionHelper::setDocument(ScDocument& rDoc, bool bColumn)
+void ScPositionHelper::setDocument(const ScDocument& rDoc, bool bColumn)
 {
     MAX_INDEX = bColumn ? rDoc.MaxCol() : MAXTILEDROW;
 }
@@ -480,7 +480,7 @@ void ScBoundsProvider::GetIndexTowards(
     }
 }
 
-ScViewDataTable::ScViewDataTable(ScDocument *pDoc) :
+ScViewDataTable::ScViewDataTable(const ScDocument *pDoc) :
                 eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),
                 aZoomY( 1,1 ),
@@ -514,7 +514,7 @@ ScViewDataTable::ScViewDataTable(ScDocument *pDoc) :
     nPixPosY[0]=nPixPosY[1]=0;
 }
 
-void ScViewDataTable::InitData(ScDocument& rDoc)
+void ScViewDataTable::InitData(const ScDocument& rDoc)
 {
     aWidthHelper.setDocument(rDoc, true);
     aHeightHelper.setDocument(rDoc, false);

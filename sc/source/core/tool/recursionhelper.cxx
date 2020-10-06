@@ -150,7 +150,7 @@ void ScRecursionHelper::PopFormulaGroup()
     aInDependencyEvalMode.pop_back();
 }
 
-bool ScRecursionHelper::AnyCycleMemberInDependencyEvalMode(ScFormulaCell* pCell)
+bool ScRecursionHelper::AnyCycleMemberInDependencyEvalMode(const ScFormulaCell* pCell)
 {
     assert(pCell);
 

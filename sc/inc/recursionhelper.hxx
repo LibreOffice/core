@@ -113,7 +113,7 @@ public:
     /** Detects a simple cycle involving formula-groups and singleton formula-cells. */
     bool PushFormulaGroup(ScFormulaCell* pCell);
     void PopFormulaGroup();
-    bool AnyCycleMemberInDependencyEvalMode(ScFormulaCell* pCell);
+    bool AnyCycleMemberInDependencyEvalMode(const ScFormulaCell* pCell);
     bool AnyParentFGInCycle();
     void SetFormulaGroupDepEvalMode(bool bSet);
     // When dependency computation detects a cycle, it may not compute proper cell values.
@@ -126,7 +126,7 @@ public:
     void CleanTemporaryGroupCells();
 
     void SetFormulaGroupSet(o3tl::sorted_vector<ScFormulaCellGroup*>* pSet) { pFGSet = pSet; }
-    bool HasFormulaGroupSet() { return pFGSet != nullptr; }
+    bool HasFormulaGroupSet() const { return pFGSet != nullptr; }
     bool CheckFGIndependence(ScFormulaCellGroup* pFG);
     void SetGroupsIndependent(bool bSet) { bGroupsIndependent = bSet; }
     bool AreGroupsIndependent() { return bGroupsIndependent; }

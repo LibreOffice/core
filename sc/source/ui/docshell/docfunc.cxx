@@ -4472,7 +4472,7 @@ namespace {
  * Expand the fill range as necessary, to allow copying of adjacent cell(s)
  * even when those cells are not in the original range.
  */
-void adjustFillRangeForAdjacentCopy(ScDocument &rDoc, ScRange& rRange, FillDir eDir)
+void adjustFillRangeForAdjacentCopy(const ScDocument &rDoc, ScRange& rRange, FillDir eDir)
 {
     switch (eDir)
     {

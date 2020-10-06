@@ -2232,7 +2232,7 @@ static bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 
 namespace {
 
-void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString& rFmtStr)
+void getFormatString(const SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString& rFmtStr)
 {
     rFmtStr = pFormatter->GetCalcCellReturn( nFormat);
 }

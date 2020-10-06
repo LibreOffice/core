@@ -43,7 +43,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
         SfxItemSet maItemSet;
         ESelection maSelection;
 
-        explicit ParaFormat(ScEditEngineDefaulter& rEditEngine);
+        explicit ParaFormat(const ScEditEngineDefaulter& rEditEngine);
     };
 
     struct Field

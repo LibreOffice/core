@@ -137,8 +137,8 @@ private:
     std::set<value_type, Comp> mData;
 
 public:
-    ScPositionHelper(ScDocument *pDoc, bool bColumn);
-    void setDocument(ScDocument& rDoc, bool bColumn);
+    ScPositionHelper(const ScDocument *pDoc, bool bColumn);
+    void setDocument(const ScDocument& rDoc, bool bColumn);
 
     void insert(index_type nIndex, long nPos);
     void removeByIndex(index_type nIndex);
@@ -245,9 +245,9 @@ private:
 
     bool            bShowGrid;                  // per sheet show grid lines option.
     bool            mbOldCursorValid;           // "virtual" Cursor position when combined
-                    ScViewDataTable(ScDocument *pDoc = nullptr);
+                    ScViewDataTable(const ScDocument *pDoc = nullptr);
 
-    void            InitData(ScDocument& rDoc);
+    void            InitData(const ScDocument& rDoc);
     void            WriteUserDataSequence(
                         css::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         const ScViewData& rViewData, SCTAB nTab ) const;

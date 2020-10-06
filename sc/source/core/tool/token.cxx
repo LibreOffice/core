@@ -429,7 +429,7 @@ FormulaToken* ScRawToken::CreateToken(ScSheetLimits& rLimits) const
 namespace {
 
 //  TextEqual: if same formula entered (for optimization in sort)
-bool checkTextEqual( ScSheetLimits& rLimits, const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
+bool checkTextEqual( const ScSheetLimits& rLimits, const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
 {
     assert(
         (_rToken1.GetType() == svSingleRef || _rToken1.GetType() == svDoubleRef)
@@ -4033,7 +4033,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
 namespace {
 
-bool adjustSingleRefOnDeletedTab( ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnDeletedTab( const ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
     ScAddress aAbs = rRef.toAbs(rLimits, rOldPos);
     if (nDelPos <= aAbs.Tab() && aAbs.Tab() < nDelPos + nSheets)
@@ -4059,7 +4059,7 @@ bool adjustSingleRefOnDeletedTab( ScSheetLimits& rLimits, ScSingleRefData& rRef,
     return false;
 }
 
-bool adjustSingleRefOnInsertedTab( ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
+bool adjustSingleRefOnInsertedTab( const ScSheetLimits& rLimits, ScSingleRefData& rRef, SCTAB nInsPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos )
 {
     ScAddress aAbs = rRef.toAbs(rLimits, rOldPos);
     if (nInsPos <= aAbs.Tab())
@@ -4079,7 +4079,7 @@ bool adjustSingleRefOnInsertedTab( ScSheetLimits& rLimits, ScSingleRefData& rRef
     return false;
 }
 
-bool adjustDoubleRefOnDeleteTab(ScSheetLimits& rLimits, ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
+bool adjustDoubleRefOnDeleteTab(const ScSheetLimits& rLimits, ScComplexRefData& rRef, SCTAB nDelPos, SCTAB nSheets, const ScAddress& rOldPos, const ScAddress& rNewPos)
 {
     ScSingleRefData& rRef1 = rRef.Ref1;
     ScSingleRefData& rRef2 = rRef.Ref2;
@@ -4474,7 +4474,7 @@ void ScTokenArray::AdjustReferenceOnCopy( const ScAddress& rNewPos )
 
 namespace {
 
-void clearTabDeletedFlag( ScSheetLimits& rLimits, ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
+void clearTabDeletedFlag( const ScSheetLimits& rLimits, ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
 {
     if (!rRef.IsTabDeleted())
         return;
@@ -4521,7 +4521,7 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
 namespace {
 
 void checkBounds(
-    ScSheetLimits& rLimits,
+    const ScSheetLimits& rLimits,
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
     const ScSingleRefData& rRef, std::vector<SCROW>& rBounds, const ScRange* pDeletedRange )
 {

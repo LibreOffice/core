@@ -90,7 +90,7 @@ static void save_FixedWidthList(const ScCsvSplits& rSplits)
     aItem.PutProperties(aNames, aValues);
 }
 
-ScCsvRuler::ScCsvRuler(ScCsvLayoutData& rData, ScCsvTableBox* pTableBox)
+ScCsvRuler::ScCsvRuler(const ScCsvLayoutData& rData, ScCsvTableBox* pTableBox)
     : ScCsvControl(rData)
     , mpTableBox(pTableBox)
     , mnPosCursorLast(1)

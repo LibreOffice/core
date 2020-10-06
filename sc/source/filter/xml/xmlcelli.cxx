@@ -100,7 +100,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLTableRowCellContext::ParaFormat::ParaFormat(ScEditEngineDefaulter& rEditEngine) :
+ScXMLTableRowCellContext::ParaFormat::ParaFormat(const ScEditEngineDefaulter& rEditEngine) :
     maItemSet(rEditEngine.GetEmptyItemSet()) {}
 
 ScXMLTableRowCellContext::Field::Field(std::unique_ptr<SvxFieldData> pData) : mpData(std::move(pData)) {}
