@@ -90,7 +90,7 @@ const std::string_view gPropNames[CB_COUNT] =
 
 TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBase)
     : mrBase(rBase)
-    , m_xValueSet(new TableValueSet(rBuilder.weld_scrolled_window("previewswin")))
+    , m_xValueSet(new TableValueSet(rBuilder.weld_scrolled_window("previewswin", true)))
     , m_xValueSetWin(new weld::CustomWeld(rBuilder, "previews", *m_xValueSet))
 {
     m_xValueSet->SetStyle(m_xValueSet->GetStyle() | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_ITEMBORDER);

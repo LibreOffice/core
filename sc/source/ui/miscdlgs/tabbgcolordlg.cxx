@@ -33,7 +33,7 @@ ScTabBgColorDlg::ScTabBgColorDlg(weld::Window* pParent, const OUString& rTitle,
     : GenericDialogController(pParent, "modules/scalc/ui/tabcolordialog.ui", "TabColorDialog")
     , m_aTabBgColor(rDefaultColor)
     , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))
-    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin")))
+    , m_xTabBgColorSet(new ScTabBgColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
     , m_xTabBgColorSetWin(new weld::CustomWeld(*m_xBuilder, "colorset", *m_xTabBgColorSet))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
 {

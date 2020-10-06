@@ -57,7 +57,7 @@ SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController*
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pController->getDialog()))
     , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
     , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pController->getDialog()))
-    , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
+    , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin", true)))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnModify(m_xBuilder->weld_button("modify"))
     , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, "hatchpresetlist", *m_xHatchLB))

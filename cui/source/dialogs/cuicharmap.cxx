@@ -132,9 +132,9 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
                      std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar14", m_aFavCharView[13]),
                      std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar15", m_aFavCharView[14]),
                      std::make_unique<weld::CustomWeld>(*m_xBuilder, "favchar16", m_aFavCharView[15])}
-    , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll"), m_xVirDev))
+    , m_xShowSet(new SvxShowCharSet(m_xBuilder->weld_scrolled_window("showscroll", true), m_xVirDev))
     , m_xShowSetArea(new weld::CustomWeld(*m_xBuilder, "showcharset", *m_xShowSet))
-    , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll"), m_xVirDev))
+    , m_xSearchSet(new SvxSearchCharSet(m_xBuilder->weld_scrolled_window("searchscroll", true), m_xVirDev))
     , m_xSearchSetArea(new weld::CustomWeld(*m_xBuilder, "searchcharset", *m_xSearchSet))
 {
     m_aShowChar.SetCentered(true);

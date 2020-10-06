@@ -42,7 +42,7 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     , m_sRequired(ForResId(STR_REQUIRED))
     , m_xBuilder(Application::CreateBuilder(pParent, "formula/ui/parameter.ui"))
     , m_xContainer(m_xBuilder->weld_container("ParameterPage"))
-    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar"))
+    , m_xSlider(m_xBuilder->weld_scrolled_window("scrollbar", true))
     , m_xParamGrid(m_xBuilder->weld_widget("paramgrid"))
     , m_xGrid(m_xBuilder->weld_widget("grid"))
     , m_xFtEditDesc(m_xBuilder->weld_label("editdesc"))
@@ -90,7 +90,6 @@ ParaWin::ParaWin(weld::Container* pParent,IControlReferenceHandler* _pDlg)
     nEdFocus = NOT_FOUND;
     nActiveLine = 0;
 
-    m_xSlider->set_user_managed_scrolling();
     m_xSlider->connect_vadjustment_changed(LINK(this, ParaWin, ScrollHdl));
 
     InitArgInput( 0, *m_xFtArg1, *m_xBtnFx1, *m_xEdArg1, *m_xRefBtn1);

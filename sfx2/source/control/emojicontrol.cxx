@@ -49,7 +49,7 @@ SfxEmojiControl::SfxEmojiControl(const EmojiPopup* pControl, weld::Widget* pPare
     , mxSymbolsBtn(m_xBuilder->weld_toggle_button(FILTER_SYMBOLS))
     , mxFlagsBtn(m_xBuilder->weld_toggle_button(FILTER_FLAGS))
     , mxUnicode9Btn(m_xBuilder->weld_toggle_button(FILTER_UNICODE9))
-    , mxEmojiView(new EmojiView(m_xBuilder->weld_scrolled_window("emoji_win")))
+    , mxEmojiView(new EmojiView(m_xBuilder->weld_scrolled_window("emoji_win", true)))
     , mxEmojiWeld(new weld::CustomWeld(*m_xBuilder, "emoji_view", *mxEmojiView))
 {
     ConvertLabelToUnicode(*mxPeopleBtn);

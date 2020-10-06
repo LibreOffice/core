@@ -112,10 +112,7 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mbHasVisibleItems   = false;
 
     if (mxScrolledWindow)
-    {
-        mxScrolledWindow->set_user_managed_scrolling();
         mxScrolledWindow->connect_vadjustment_changed(LINK(this, ValueSet, ImplScrollHdl));
-    }
 }
 
 void ValueSet::SetDrawingArea(weld::DrawingArea* pDrawingArea)

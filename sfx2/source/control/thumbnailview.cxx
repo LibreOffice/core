@@ -1222,7 +1222,6 @@ SfxThumbnailView::SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow
     , mxScrolledWindow(std::move(xWindow))
     , mxContextMenu(std::move(xMenu))
 {
-    mxScrolledWindow->set_user_managed_scrolling();
     ImplInit();
     mxScrolledWindow->connect_vadjustment_changed(LINK(this, SfxThumbnailView, ImplScrollHdl));
 }

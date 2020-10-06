@@ -5681,7 +5681,7 @@ private:
     }
 
 public:
-    GtkInstanceScrolledWindow(GtkScrolledWindow* pScrolledWindow, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+    GtkInstanceScrolledWindow(GtkScrolledWindow* pScrolledWindow, GtkInstanceBuilder* pBuilder, bool bTakeOwnership, bool bUserManagedScrolling)
         : GtkInstanceContainer(GTK_CONTAINER(pScrolledWindow), pBuilder, bTakeOwnership)
         , m_pScrolledWindow(pScrolledWindow)
         , m_pOrigViewport(nullptr)
@@ -5690,9 +5690,11 @@ public:
         , m_nVAdjustChangedSignalId(g_signal_connect(m_pVAdjustment, "value-changed", G_CALLBACK(signalVAdjustValueChanged), this))
         , m_nHAdjustChangedSignalId(g_signal_connect(m_pHAdjustment, "value-changed", G_CALLBACK(signalHAdjustValueChanged), this))
     {
+        if (bUserManagedScrolling)
+            set_user_managed_scrolling();
     }
 
-    virtual void set_user_managed_scrolling() override
+    void set_user_managed_scrolling()
     {
         disable_notify_events();
         //remove the original viewport and replace it with our bodged one which
@@ -16390,13 +16392,13 @@ public:
         return std::make_unique<GtkInstanceFrame>(pFrame, this, false);
     }
 
-    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id) override
+    virtual std::unique_ptr<weld::ScrolledWindow> weld_scrolled_window(const OString &id, bool bUserManagedScrolling = false) override
     {
         GtkScrolledWindow* pScrolledWindow = GTK_SCROLLED_WINDOW(gtk_builder_get_object(m_pBuilder, id.getStr()));
         if (!pScrolledWindow)
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pScrolledWindow));
-        return std::make_unique<GtkInstanceScrolledWindow>(pScrolledWindow, this, false);
+        return std::make_unique<GtkInstanceScrolledWindow>(pScrolledWindow, this, false, bUserManagedScrolling);
     }
 
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString &id) override

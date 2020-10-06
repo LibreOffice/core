@@ -284,7 +284,7 @@ namespace svx
     SuggestionDisplay::SuggestionDisplay(weld::Builder& rBuilder)
         : m_bDisplayListBox( true )
         , m_bInSelectionUpdate( false )
-        , m_xValueSet(new SuggestionSet(rBuilder.weld_scrolled_window("scrollwin")))
+        , m_xValueSet(new SuggestionSet(rBuilder.weld_scrolled_window("scrollwin", true)))
         , m_xValueSetWin(new weld::CustomWeld(rBuilder, "valueset", *m_xValueSet))
         , m_xListBox(rBuilder.weld_tree_view("listbox"))
     {
@@ -1435,12 +1435,10 @@ namespace svx
         , m_xEdit3(new SuggestionEdit(m_xBuilder->weld_entry("edit3"), this))
         , m_xEdit4(new SuggestionEdit(m_xBuilder->weld_entry("edit4"), this))
         , m_xContents(m_xBuilder->weld_widget("box"))
-        , m_xScrollSB(m_xBuilder->weld_scrolled_window("scrollbar"))
+        , m_xScrollSB(m_xBuilder->weld_scrolled_window("scrollbar", true))
         , m_xNewPB(m_xBuilder->weld_button("new"))
         , m_xDeletePB(m_xBuilder->weld_button("delete"))
     {
-        m_xScrollSB->set_user_managed_scrolling();
-
         Size aSize(m_xContents->get_preferred_size());
         m_xScrollSB->set_size_request(-1, aSize.Height());
 

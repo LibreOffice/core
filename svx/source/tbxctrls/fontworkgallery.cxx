@@ -57,7 +57,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog(weld::Window* pParent, SdrView& rSd
     , mrSdrView(rSdrView)
     , mppSdrObject(nullptr)
     , mpDestModel(nullptr)
-    , maCtlFavorites(m_xBuilder->weld_scrolled_window("ctlFavoriteswin"))
+    , maCtlFavorites(m_xBuilder->weld_scrolled_window("ctlFavoriteswin", true))
     , mxCtlFavorites(new weld::CustomWeld(*m_xBuilder, "ctlFavorites", maCtlFavorites))
     , mxOKButton(m_xBuilder->weld_button("ok"))
 {
