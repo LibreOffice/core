@@ -58,7 +58,7 @@ private:
     bool                        mbTracking;         /// If currently mouse tracking
 
 public:
-    explicit ScCsvRuler(ScCsvLayoutData& rData, ScCsvTableBox* pTableBox);
+    explicit ScCsvRuler(const ScCsvLayoutData& rData, ScCsvTableBox* pTableBox);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     ScCsvTableBox* GetTableBox() { return mpTableBox; }
     virtual ~ScCsvRuler() override;

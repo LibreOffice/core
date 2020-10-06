@@ -190,7 +190,7 @@ ScAddress ScSingleRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos 
     return toAbs(rDoc.GetSheetLimits(), rPos);
 }
 
-ScAddress ScSingleRefData::toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const
+ScAddress ScSingleRefData::toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const
 {
     SCCOL nRetCol = Flags.bColRel ? mnCol + rPos.Col() : mnCol;
     SCROW nRetRow = Flags.bRowRel ? mnRow + rPos.Row() : mnRow;
@@ -210,7 +210,7 @@ ScAddress ScSingleRefData::toAbs( ScSheetLimits& rLimits, const ScAddress& rPos 
     return aAbs;
 }
 
-void ScSingleRefData::SetAddress( ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos )
+void ScSingleRefData::SetAddress( const ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos )
 {
     if (Flags.bColRel)
         mnCol = rAddr.Col() - rPos.Col();
@@ -391,7 +391,7 @@ void ScComplexRefData::InitFromRefAddresses( const ScDocument& rDoc, const ScRef
     SetRange( rDoc.GetSheetLimits(), ScRange( rRef1.GetAddress(), rRef2.GetAddress()), rPos);
 }
 
-ScComplexRefData& ScComplexRefData::Extend( ScSheetLimits& rLimits, const ScSingleRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScSheetLimits& rLimits, const ScSingleRefData & rRef, const ScAddress & rPos )
 {
     bool bInherit3D = (Ref1.IsFlag3D() && !Ref2.IsFlag3D() && !rRef.IsFlag3D());
     ScRange aAbsRange = toAbs(rLimits, rPos);
@@ -470,7 +470,7 @@ ScComplexRefData& ScComplexRefData::Extend( ScSheetLimits& rLimits, const ScSing
     return *this;
 }
 
-ScComplexRefData& ScComplexRefData::Extend( ScSheetLimits& rLimits, const ScComplexRefData & rRef, const ScAddress & rPos )
+ScComplexRefData& ScComplexRefData::Extend( const ScSheetLimits& rLimits, const ScComplexRefData & rRef, const ScAddress & rPos )
 {
     return Extend( rLimits, rRef.Ref1, rPos).Extend( rLimits, rRef.Ref2, rPos);
 }
@@ -490,12 +490,12 @@ ScRange ScComplexRefData::toAbs( const ScDocument& rDoc, const ScAddress& rPos )
     return toAbs(rDoc.GetSheetLimits(), rPos);
 }
 
-ScRange ScComplexRefData::toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const
+ScRange ScComplexRefData::toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const
 {
     return ScRange(Ref1.toAbs(rLimits, rPos), Ref2.toAbs(rLimits, rPos));
 }
 
-void ScComplexRefData::SetRange( ScSheetLimits& rLimits, const ScRange& rRange, const ScAddress& rPos )
+void ScComplexRefData::SetRange( const ScSheetLimits& rLimits, const ScRange& rRange, const ScAddress& rPos )
 {
     Ref1.SetAddress(rLimits, rRange.aStart, rPos);
     Ref2.SetAddress(rLimits, rRange.aEnd, rPos);

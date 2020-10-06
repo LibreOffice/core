@@ -736,8 +736,8 @@ namespace {
 struct Convention_A1 : public ScCompiler::Convention
 {
     explicit Convention_A1( FormulaGrammar::AddressConvention eConv ) : ScCompiler::Convention( eConv ) { }
-    static void MakeColStr( ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCCOL nCol );
-    static void MakeRowStr( ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCROW nRow );
+    static void MakeColStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCCOL nCol );
+    static void MakeRowStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCROW nRow );
 
     ParseResult parseAnyToken( const OUString& rFormula,
                                sal_Int32 nSrcPos,
@@ -767,7 +767,7 @@ struct Convention_A1 : public ScCompiler::Convention
 
 }
 
-void Convention_A1::MakeColStr( ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCCOL nCol )
+void Convention_A1::MakeColStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCCOL nCol )
 {
     if ( !rLimits.ValidCol(nCol) )
         rBuffer.append(ScResId(STR_NO_REF_TABLE));
@@ -775,7 +775,7 @@ void Convention_A1::MakeColStr( ScSheetLimits& rLimits, OUStringBuffer& rBuffer,
         ::ScColToAlpha( rBuffer, nCol);
 }
 
-void Convention_A1::MakeRowStr( ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCROW nRow )
+void Convention_A1::MakeRowStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuffer, SCROW nRow )
 {
     if ( !rLimits.ValidRow(nRow) )
         rBuffer.append(ScResId(STR_NO_REF_TABLE));
@@ -807,7 +807,7 @@ struct ConventionOOO_A1 : public Convention_A1
     };
 
     static void MakeOneRefStrImpl(
-        ScSheetLimits& rLimits, OUStringBuffer& rBuffer,
+        const ScSheetLimits& rLimits, OUStringBuffer& rBuffer,
         const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
@@ -858,7 +858,7 @@ struct ConventionOOO_A1 : public Convention_A1
         }
     }
 
-    static SingletonDisplay getSingletonDisplay( ScSheetLimits& rLimits, const ScAddress& rAbs1, const ScAddress& rAbs2,
+    static SingletonDisplay getSingletonDisplay( const ScSheetLimits& rLimits, const ScAddress& rAbs1, const ScAddress& rAbs2,
             const ScComplexRefData& rRef, bool bFromRangeName )
     {
         // If any part is error, display as such.
@@ -943,7 +943,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     static bool makeExternalSingleRefStr(
-        ScSheetLimits& rLimits,
+        const ScSheetLimits& rLimits,
         OUStringBuffer& rBuffer, const OUString& rFileName, const OUString& rTabName,
         const ScSingleRefData& rRef, const ScAddress& rPos, bool bDisplayTabName, bool bEncodeUrl )
     {
@@ -976,7 +976,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     static void makeExternalRefStrImpl(
-        ScSheetLimits& rLimits,
+        const ScSheetLimits& rLimits,
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
         const OUString& rTabName, const ScSingleRefData& rRef, bool bODF )
     {
@@ -998,7 +998,7 @@ struct ConventionOOO_A1 : public Convention_A1
     }
 
     static void makeExternalRefStrImpl(
-        ScSheetLimits& rLimits,
+        const ScSheetLimits& rLimits,
         OUStringBuffer& rBuffer, const ScAddress& rPos, const OUString& rFileName,
         const std::vector<OUString>& rTabNames, const OUString& rTabName,
         const ScComplexRefData& rRef, bool bODF )
@@ -1123,7 +1123,7 @@ struct ConventionXL
     }
 
     static void GetTab(
-        ScSheetLimits& rLimits,
+        const ScSheetLimits& rLimits,
         const ScAddress& rPos, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, OUString& rTabName )
     {
@@ -1136,7 +1136,7 @@ struct ConventionXL
         rTabName = rTabNames[aAbs.Tab()];
     }
 
-    static void MakeTabStr( ScSheetLimits& rLimits, OUStringBuffer& rBuf,
+    static void MakeTabStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuf,
                             const ScAddress& rPos,
                             const std::vector<OUString>& rTabNames,
                             const ScComplexRefData& rRef,
@@ -1292,7 +1292,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     ConventionXL_A1() : Convention_A1( FormulaGrammar::CONV_XL_A1 ) { }
     explicit ConventionXL_A1( FormulaGrammar::AddressConvention eConv ) : Convention_A1( eConv ) { }
 
-    static void makeSingleCellStr( ScSheetLimits& rLimits, OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
+    static void makeSingleCellStr( const ScSheetLimits& rLimits, OUStringBuffer& rBuf, const ScSingleRefData& rRef, const ScAddress& rAbs )
     {
         if (!rRef.IsColRel())
             rBuf.append('$');

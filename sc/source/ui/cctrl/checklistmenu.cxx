@@ -1169,7 +1169,7 @@ IMPL_LINK(ScCheckListMenuControl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 namespace
 {
-    void insertMember(weld::TreeView& rView, weld::TreeIter& rIter, const ScCheckListMember& rMember)
+    void insertMember(weld::TreeView& rView, const weld::TreeIter& rIter, const ScCheckListMember& rMember)
     {
         OUString aLabel = rMember.maName;
         if (aLabel.isEmpty())

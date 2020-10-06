@@ -64,7 +64,7 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         const SfxPoolItem* pItem = nullptr;

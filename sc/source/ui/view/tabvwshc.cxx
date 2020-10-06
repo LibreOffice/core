@@ -496,7 +496,7 @@ css::uno::Reference<css::datatransfer::XTransferable2> ScTabViewShell::GetClipDa
     return xTransferable;
 }
 
-void ScTabViewShell::notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
+void ScTabViewShell::notifyAllViewsHeaderInvalidation(const SfxViewShell* pForViewShell, HeaderType eHeaderType, SCTAB nCurrentTabIndex)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -528,7 +528,7 @@ void ScTabViewShell::notifyAllViewsHeaderInvalidation(SfxViewShell* pForViewShel
     }
 }
 
-bool ScTabViewShell::isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
+bool ScTabViewShell::isAnyEditViewInRange(const SfxViewShell* pForViewShell, bool bColumns, SCCOLROW nStart, SCCOLROW nEnd)
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -553,7 +553,7 @@ bool ScTabViewShell::isAnyEditViewInRange(SfxViewShell* pForViewShell, bool bCol
     return false;
 }
 
-void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(SfxViewShell* pForViewShell, bool bColumns,
+void ScTabViewShell::notifyAllViewsSheetGeomInvalidation(const SfxViewShell* pForViewShell, bool bColumns,
                                                          bool bRows, bool bSizes, bool bHidden, bool bFiltered,
                                                          bool bGroups, SCTAB nCurrentTabIndex)
 {

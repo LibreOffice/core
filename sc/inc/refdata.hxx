@@ -101,9 +101,9 @@ public:
         loaded. */
     bool ValidExternal(const ScDocument& rDoc) const;
 
-    ScAddress toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const;
+    ScAddress toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const;
     ScAddress toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
-    void SetAddress( ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos );
+    void SetAddress( const ScSheetLimits& rLimits, const ScAddress& rAddr, const ScAddress& rPos );
     SCROW Row() const;
     SCCOL Col() const;
     SCTAB Tab() const;
@@ -168,12 +168,12 @@ struct ScComplexRefData
         return Ref1.Col() == 0 && Ref2.Col() == MAXCOL && !Ref1.IsColRel() && !Ref2.IsColRel();
     }
 
-    SC_DLLPUBLIC ScRange toAbs( ScSheetLimits& rLimits, const ScAddress& rPos ) const;
+    SC_DLLPUBLIC ScRange toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScRange toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
 
     /** Set a new range, assuming that the ordering of the range matches the
         ordering of the reference data flags already set. */
-    void SetRange( ScSheetLimits& rLimits, const ScRange& rRange, const ScAddress& rPos );
+    void SetRange( const ScSheetLimits& rLimits, const ScRange& rRange, const ScAddress& rPos );
 
     /** Adjust ordering (front-top-left/rear-bottom-right) to a new position. */
     void PutInOrder( const ScAddress& rPos );
@@ -183,8 +183,8 @@ struct ScComplexRefData
     /** Enlarge range if reference passed is not within existing range.
         ScAddress position is used to calculate absolute references from
         relative references. */
-    ScComplexRefData& Extend( ScSheetLimits& rLimits, const ScSingleRefData & rRef, const ScAddress & rPos );
-    ScComplexRefData& Extend( ScSheetLimits& rLimits, const ScComplexRefData & rRef, const ScAddress & rPos );
+    ScComplexRefData& Extend( const ScSheetLimits& rLimits, const ScSingleRefData & rRef, const ScAddress & rPos );
+    ScComplexRefData& Extend( const ScSheetLimits& rLimits, const ScComplexRefData & rRef, const ScAddress & rPos );
 
     /** Increment or decrement end column unless or until sticky.
         @see ScRange::IncEndColSticky()

@@ -468,7 +468,7 @@ bool extractSheetAndRange(const OUString& rName, OUString& rSheet, OUString& rRa
 
 }
 
-bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
+bool XclImpExtName::CreateOleData(const ScDocument& rDoc, const OUString& rUrl,
                                   sal_uInt16& rFileId, OUString& rTabName, ScRange& rRange) const
 {
     if (!mpMOper)
