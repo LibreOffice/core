@@ -167,7 +167,7 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     }
 }
 
-std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 {
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
     m_nWindowId = pDialog->GetLOKWindowId();
@@ -176,7 +176,7 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
 
     std::unique_ptr<weld::Dialog> pRet(
         pDialog ? new JSDialog(m_aOwnedToplevel, pDialog, this, false) : nullptr);
-    if (bTakeOwnership && pDialog)
+    if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
         m_aOwnedToplevel.set(pDialog);
@@ -196,11 +196,11 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id, 
     return pRet;
 }
 
-std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
     auto pWeldWidget = std::make_unique<JSLabel>(
-        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pLabel, this, bTakeOwnership);
+        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pLabel, this, false);
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -208,12 +208,12 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id, bo
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
     auto pWeldWidget = pButton ? std::make_unique<JSButton>(m_bHasTopLevelDialog ? m_aOwnedToplevel
                                                                                  : m_aParentDialog,
-                                                            pButton, this, bTakeOwnership)
+                                                            pButton, this, false)
                                : nullptr;
 
     if (pWeldWidget)
@@ -222,12 +222,12 @@ std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id, 
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bool bTakeOwnership)
+std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
     auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(m_bHasTopLevelDialog ? m_aOwnedToplevel
                                                                                : m_aParentDialog,
-                                                          pEntry, this, bTakeOwnership)
+                                                          pEntry, this, false)
                               : nullptr;
 
     if (pWeldWidget)
@@ -236,8 +236,7 @@ std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id, bo
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString& id,
-                                                                  bool bTakeOwnership)
+std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString& id)
 {
     vcl::Window* pWidget = m_xBuilder->get<vcl::Window>(id);
     ::ComboBox* pComboBox = dynamic_cast<::ComboBox*>(pWidget);
@@ -245,16 +244,15 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 
     if (pComboBox)
     {
-        pWeldWidget = std::make_unique<JSComboBox>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                        : m_aParentDialog,
-                                                   pComboBox, this, bTakeOwnership);
+        pWeldWidget = std::make_unique<JSComboBox>(
+            m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pComboBox, this, false);
     }
     else
     {
         ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
         pWeldWidget = pListBox ? std::make_unique<JSListBox>(m_bHasTopLevelDialog ? m_aOwnedToplevel
                                                                                   : m_aParentDialog,
-                                                             pListBox, this, bTakeOwnership)
+                                                             pListBox, this, false)
                                : nullptr;
     }
 
@@ -264,13 +262,12 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id,
-                                                                 bool bTakeOwnership)
+std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id)
 {
     TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
     auto pWeldWidget = pNotebook ? std::make_unique<JSNotebook>(
                                        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                       pNotebook, this, bTakeOwnership)
+                                       pNotebook, this, false)
                                  : nullptr;
 
     if (pWeldWidget)
@@ -279,13 +276,12 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OString& id,
-                                                                      bool bTakeOwnership)
+std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
     auto pWeldWidget = pSpinButton ? std::make_unique<JSSpinButton>(
                                          m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                         pSpinButton, this, bTakeOwnership)
+                                         pSpinButton, this, false)
                                    : nullptr;
 
     if (pWeldWidget)
@@ -294,13 +290,12 @@ std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OStr
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OString& id,
-                                                                        bool bTakeOwnership)
+std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
     auto pWeldWidget = pCheckButton ? std::make_unique<JSCheckButton>(
                                           m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                          pCheckButton, this, bTakeOwnership)
+                                          pCheckButton, this, false)
                                     : nullptr;
 
     if (pWeldWidget)
@@ -311,15 +306,13 @@ std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OS
 
 std::unique_ptr<weld::DrawingArea>
 JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl,
-                                     FactoryFunction pUITestFactoryFunction, void* pUserData,
-                                     bool bTakeOwnership)
+                                     FactoryFunction pUITestFactoryFunction, void* pUserData)
 {
     VclDrawingArea* pArea = m_xBuilder->get<VclDrawingArea>(id);
-    auto pWeldWidget = pArea
-                           ? std::make_unique<JSDrawingArea>(
-                                 m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pArea,
-                                 this, rA11yImpl, pUITestFactoryFunction, pUserData, bTakeOwnership)
-                           : nullptr;
+    auto pWeldWidget = pArea ? std::make_unique<JSDrawingArea>(
+                                   m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pArea,
+                                   this, rA11yImpl, pUITestFactoryFunction, pUserData)
+                             : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -327,13 +320,12 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id,
-                                                               bool bTakeOwnership)
+std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
     auto pWeldWidget = pToolBox ? std::make_unique<JSToolbar>(
                                       m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                      pToolBox, this, bTakeOwnership)
+                                      pToolBox, this, false)
                                 : nullptr;
 
     if (pWeldWidget)
@@ -342,13 +334,12 @@ std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id
     return pWeldWidget;
 }
 
-std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString& id,
-                                                                  bool bTakeOwnership)
+std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
     auto pWeldWidget = pTextView ? std::make_unique<JSTextView>(
                                        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                       pTextView, this, bTakeOwnership)
+                                       pTextView, this, false)
                                  : nullptr;
 
     if (pWeldWidget)
@@ -574,10 +565,9 @@ void JSCheckButton::set_active(bool active)
 
 JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
                              SalInstanceBuilder* pBuilder, const a11yref& rAlly,
-                             FactoryFunction pUITestFactoryFunction, void* pUserData,
-                             bool bTakeOwnership)
+                             FactoryFunction pUITestFactoryFunction, void* pUserData)
     : SalInstanceDrawingArea(pDrawingArea, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
-                             bTakeOwnership)
+                             false)
     , JSDialogSender(aOwnedToplevel)
 {
 }

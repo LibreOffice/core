@@ -74,30 +74,20 @@ public:
                       const css::uno::Reference<css::frame::XFrame>& rFrame,
                       sal_uInt64 nWindowId = 0);
     virtual ~JSInstanceBuilder() override;
-    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id,
-                                                      bool bTakeOwnership = true) override;
-    virtual std::unique_ptr<weld::Label> weld_label(const OString& id,
-                                                    bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::Button> weld_button(const OString& id,
-                                                      bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id,
-                                                    bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id,
-                                                           bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id,
-                                                          bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::SpinButton>
-    weld_spin_button(const OString& id, bool bTakeOwnership = false) override;
-    virtual std::unique_ptr<weld::CheckButton>
-    weld_check_button(const OString& id, bool bTakeOwnership = false) override;
+    virtual std::unique_ptr<weld::Dialog> weld_dialog(const OString& id) override;
+    virtual std::unique_ptr<weld::Label> weld_label(const OString& id) override;
+    virtual std::unique_ptr<weld::Button> weld_button(const OString& id) override;
+    virtual std::unique_ptr<weld::Entry> weld_entry(const OString& id) override;
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OString& id) override;
+    virtual std::unique_ptr<weld::Notebook> weld_notebook(const OString& id) override;
+    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OString& id) override;
+    virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OString& id) override;
     virtual std::unique_ptr<weld::DrawingArea>
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
-                      FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,
-                      bool bTakeOwnership = false) override;
-    std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id,
-                                                bool bTakeOwnership = false) override;
-    std::unique_ptr<weld::TextView> weld_text_view(const OString& id,
-                                                   bool bTakeOwnership = false) override;
+                      FactoryFunction pUITestFactoryFunction = nullptr,
+                      void* pUserData = nullptr) override;
+    std::unique_ptr<weld::Toolbar> weld_toolbar(const OString& id) override;
+    std::unique_ptr<weld::TextView> weld_text_view(const OString& id) override;
 
     static weld::MessageDialog* CreateMessageDialog(weld::Widget* pParent,
                                                     VclMessageType eMessageType,
@@ -239,8 +229,7 @@ class JSDrawingArea : public SalInstanceDrawingArea, public JSDialogSender
 public:
     JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
                   SalInstanceBuilder* pBuilder, const a11yref& rAlly,
-                  FactoryFunction pUITestFactoryFunction, void* pUserData,
-                  bool bTakeOwnership = false);
+                  FactoryFunction pUITestFactoryFunction, void* pUserData);
 
     virtual void queue_draw() override;
     virtual void queue_draw_area(int x, int y, int width, int height) override;
