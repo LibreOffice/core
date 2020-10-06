@@ -711,7 +711,6 @@ bool SbxValue::SetType( SbxDataType t )
             SetError( ERRCODE_BASIC_CONVERSION );
             return false;
         }
-        t = SbxEMPTY;
     }
     if( ( t & 0x0FFF ) != ( aData.eType & 0x0FFF ) )
     {
