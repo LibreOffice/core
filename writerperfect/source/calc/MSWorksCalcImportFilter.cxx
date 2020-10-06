@@ -317,18 +317,23 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
     }
 
     // An XML import service: what we push sax messages to...
-    css::uno::Reference<css::xml::sax::XDocumentHandler> xInternalHandler(
-        getXContext()->getServiceManager()->createInstanceWithContext(
-            writerperfect::DocumentHandlerFor<OdsGenerator>::name(), getXContext()),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<XInterface> xInternalFilter
+        = getXContext()->getServiceManager()->createInstanceWithContext(
+            writerperfect::DocumentHandlerFor<OdsGenerator>::name(), getXContext());
+    assert(xInternalFilter);
+    css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
+                                                                              css::uno::UNO_QUERY);
+    assert(xInternalHandler);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to...
     css::uno::Reference<css::document::XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
+    assert(xImporter);
     xImporter->setTargetDocument(getTargetDocument());
 
     // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
     // writes to in-memory target doc
-    writerperfect::DocumentHandler aHandler(xInternalHandler);
+    writerperfect::DocumentHandler aHandler(
+        new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(xInternalHandler.get())));
 
     writerperfect::WPXSvInputStream input(xInputStream);
     OdsGenerator exporter;

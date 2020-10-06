@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_wpftimport,\
 	vcl \
 	wpftqahelper \
 	writerperfect \
+	xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,writerperfect_wpftimport,boost_headers))

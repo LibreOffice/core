@@ -68,7 +68,6 @@ class ScXMLImportWrapper
 
     ErrCode ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::frame::XModel>& xModel,
-        const css::uno::Reference<css::xml::sax::XParser>& xParser,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName,
         const css::uno::Sequence<css::uno::Any>& aArgs,
