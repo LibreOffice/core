@@ -24,7 +24,7 @@ one go*/
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
@@ -264,38 +264,42 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
-    Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(rxContext);
-
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= rPropSet;
 
     // get filter
-    Reference< xml::sax::XFastDocumentHandler > xFilter(
+    Reference< XInterface > xFilter =
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            OUString::createFromAscii(pFilterName), aArgs, rxContext),
-        UNO_QUERY );
-    OSL_ENSURE( xFilter.is(), "Can't instantiate filter component." );
+            OUString::createFromAscii(pFilterName), aArgs, rxContext);
+    SAL_WARN_IF( !xFilter, "starmath", "Can't instantiate filter component " << pFilterName );
     if ( !xFilter.is() )
         return nError;
-
-    // connect parser and filter
-    xParser->setFastDocumentHandler( xFilter );
 
     // connect model and filter
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
-    uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
-
     // finally, parser the stream
     try
     {
-        if( xFastParser.is() )
+        Reference<css::xml::sax::XFastParser> xFastParser(xFilter, UNO_QUERY);
+        Reference<css::xml::sax::XFastDocumentHandler> xFastDocHandler(xFilter, UNO_QUERY);
+        if (xFastParser)
             xFastParser->parseStream( aParserInput );
-        else
+        else if (xFastDocHandler)
+        {
+            Reference<css::xml::sax::XFastParser> xParser = css::xml::sax::FastParser::create(rxContext);
+            xParser->setFastDocumentHandler(xFastDocHandler);
             xParser->parseStream( aParserInput );
+        }
+        else
+        {
+            Reference<css::xml::sax::XDocumentHandler> xDocHandler(xFilter, UNO_QUERY);
+            assert(xDocHandler);
+            Reference<css::xml::sax::XParser> xParser = css::xml::sax::Parser::create(rxContext);
+            xParser->setDocumentHandler(xDocHandler);
+            xParser->parseStream( aParserInput );
+        }
 
         auto pFilter = comphelper::getUnoTunnelImplementation<SmXMLImport>(xFilter);
         if ( pFilter && pFilter->GetSuccess() )
