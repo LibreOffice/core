@@ -381,7 +381,7 @@ static sk_app::VulkanWindowContext::SharedGrDirectContext getTemporaryGrDirectCo
     return sk_app::VulkanWindowContext::getSharedGrDirectContext();
 }
 
-sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
+sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type, SkAlphaType alpha)
 {
     SkiaZone zone;
     assert(type == kN32_SkColorType || type == kAlpha_8_SkColorType);
@@ -392,9 +392,9 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
         {
             if (GrDirectContext* grDirectContext = getSharedGrDirectContext())
             {
-                surface = SkSurface::MakeRenderTarget(
-                    grDirectContext, SkBudgeted::kNo,
-                    SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
+                surface
+                    = SkSurface::MakeRenderTarget(grDirectContext, SkBudgeted::kNo,
+                                                  SkImageInfo::Make(width, height, type, alpha));
                 if (surface)
                 {
 #ifdef DBG_UTIL
@@ -411,7 +411,7 @@ sk_sp<SkSurface> createSkSurface(int width, int height, SkColorType type)
             break;
     }
     // Create raster surface as a fallback.
-    surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, kPremul_SkAlphaType));
+    surface = SkSurface::MakeRaster(SkImageInfo::Make(width, height, type, alpha));
     assert(surface);
     if (surface)
     {

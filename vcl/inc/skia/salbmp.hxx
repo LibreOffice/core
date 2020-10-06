@@ -82,6 +82,8 @@ public:
     // Returns true if it is known that this bitmap can be ignored if it's to be used
     // as an alpha bitmap. An optimization, not guaranteed to return true for all such cases.
     bool IsFullyOpaqueAsAlpha() const;
+    // Alpha type best suitable for the content.
+    SkAlphaType alphaType() const;
 
 #ifdef DBG_UTIL
     void dump(const char* file) const;
