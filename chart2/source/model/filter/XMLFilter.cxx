@@ -440,11 +440,11 @@ ErrCode XMLFilter::impl_ImportStream(
                     aFilterCompArgs[ nArgs++ ] <<= xImportInfo;
 
                 // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-                Reference< xml::sax::XDocumentHandler  > xDocHandler(
-                    xFactory->createInstanceWithArgumentsAndContext( rServiceName, aFilterCompArgs, m_xContext ),
-                    uno::UNO_QUERY_THROW );
-
-                Reference< document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY_THROW );
+                Reference< XInterface  > xFilter =
+                    xFactory->createInstanceWithArgumentsAndContext( rServiceName, aFilterCompArgs, m_xContext );
+                assert(xFilter);
+                Reference< document::XImporter > xImporter( xFilter, uno::UNO_QUERY );
+                assert(xImporter);
                 xImporter->setTargetDocument( Reference< lang::XComponent >( m_xTargetDoc, uno::UNO_SET_THROW ));
 
                 if ( !m_sDocumentHandler.isEmpty() )
@@ -454,30 +454,30 @@ ErrCode XMLFilter::impl_ImportStream(
                         uno::Sequence< uno::Any > aArgs(2);
                         beans::NamedValue aValue;
                         aValue.Name = "DocumentHandler";
-                        aValue.Value <<= xDocHandler;
+                        aValue.Value <<= xFilter;
                         aArgs[0] <<= aValue;
                         aValue.Name = "Model";
                         aValue.Value <<= m_xTargetDoc;
                         aArgs[1] <<= aValue;
 
-                        xDocHandler.set(xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext), uno::UNO_QUERY_THROW );
+                        xFilter = xFactory->createInstanceWithArgumentsAndContext(m_sDocumentHandler,aArgs,m_xContext);
                     }
                     catch (const uno::Exception&)
                     {
-                        TOOLS_WARN_EXCEPTION("chart2", "");
+                        TOOLS_WARN_EXCEPTION("chart2", "failed to instantiate " << m_sDocumentHandler);
                     }
                 }
                 xml::sax::InputSource aParserInput;
                 aParserInput.aInputStream.set(xInputStream, uno::UNO_QUERY_THROW);
 
                 // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
-                Reference< xml::sax::XFastParser  > xFastParser(xDocHandler, uno::UNO_QUERY);
+                Reference< xml::sax::XFastParser > xFastParser(xFilter, uno::UNO_QUERY);
                 if (xFastParser.is())
                     xFastParser->parseStream(aParserInput);
                 else
                 {
                     Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(m_xContext);
-                    xParser->setDocumentHandler( xDocHandler );
+                    xParser->setDocumentHandler( uno::Reference<xml::sax::XDocumentHandler>(xFilter, uno::UNO_QUERY_THROW) );
                     xParser->parseStream(aParserInput);
                 }
             }

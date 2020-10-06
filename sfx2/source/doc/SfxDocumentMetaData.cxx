@@ -1737,7 +1737,6 @@ SfxDocumentMetaData::loadFromStorage(
     // create DOM parser service
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
-    css::uno::Reference<css::xml::sax::XParser> xParser = css::xml::sax::Parser::create(m_xContext);
     css::xml::sax::InputSource input;
     input.aInputStream = xInStream;
 
@@ -1761,21 +1760,18 @@ SfxDocumentMetaData::loadFromStorage(
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= xPropArg;
 
-    css::uno::Reference<css::xml::sax::XDocumentHandler> xDocHandler (
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    css::uno::Reference<XInterface> xFilter =
         xMsf->createInstanceWithArgumentsAndContext(
-            OUString::createFromAscii(pServiceName), args, m_xContext),
-        css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::document::XImporter> xImp (xDocHandler,
-        css::uno::UNO_QUERY_THROW);
+            OUString::createFromAscii(pServiceName), args, m_xContext);
+    assert(xFilter);
+    css::uno::Reference<css::xml::sax::XFastParser> xDocHandler(xFilter, css::uno::UNO_QUERY);
+    assert(xDocHandler);
+    css::uno::Reference<css::document::XImporter> xImp(xDocHandler, css::uno::UNO_QUERY);
+    assert(xImp);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));
-    xParser->setDocumentHandler(xDocHandler);
-    css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            css::xml::sax::XFastParser* >( xDocHandler.get() );
     try {
-        if( xFastParser.is() )
-            xFastParser->parseStream(input);
-        else
-            xParser->parseStream(input);
+        xDocHandler->parseStream(input);
     } catch (const css::xml::sax::SAXException &) {
         throw css::io::WrongFormatException(
                 "SfxDocumentMetaData::loadFromStorage:"
