@@ -42,6 +42,7 @@
                 <property name="label" translatable="yes" context="macroselectordialog|add">Add</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="no_show_all">True</property>
               </object>
