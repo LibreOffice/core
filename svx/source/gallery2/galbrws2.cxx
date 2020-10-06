@@ -426,7 +426,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget )
+sal_Int8 GalleryBrowser2::AcceptDrop( const DropTargetHelper& rTarget )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 

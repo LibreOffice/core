@@ -38,7 +38,7 @@ const char FILTER_UNICODE9[]  = "unicode9";
 
 using namespace com::sun::star;
 
-SfxEmojiControl::SfxEmojiControl(EmojiPopup* pControl, weld::Widget* pParent)
+SfxEmojiControl::SfxEmojiControl(const EmojiPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/emojicontrol.ui", "emojictrl")
     , mxPeopleBtn(m_xBuilder->weld_toggle_button(FILTER_PEOPLE))
     , mxNatureBtn(m_xBuilder->weld_toggle_button(FILTER_NATURE))

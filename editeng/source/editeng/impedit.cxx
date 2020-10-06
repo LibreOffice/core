@@ -312,7 +312,7 @@ void ImpEditView::SelectionChanged()
 }
 
 // This function is also called when a text's font || size is changed. Because its highlight rectangle must be updated.
-void ImpEditView::lokSelectionCallback(std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
+void ImpEditView::lokSelectionCallback(const std::unique_ptr<tools::PolyPolygon> &pPolyPoly, bool bStartHandleVisible, bool bEndHandleVisible) {
     VclPtr<vcl::Window> pParent = pOutWin->GetParentWithLOKNotifier();
     vcl::Region aRegion( *pPolyPoly );
 

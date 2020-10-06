@@ -234,7 +234,7 @@ void ContentTabPage_Impl::InitRoot()
     }
 }
 
-void ContentTabPage_Impl::ClearChildren(weld::TreeIter* pParent)
+void ContentTabPage_Impl::ClearChildren(const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> xEntry = m_xContentBox->make_iterator(pParent);
     bool bEntry = m_xContentBox->iter_children(*xEntry);

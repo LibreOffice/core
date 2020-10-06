@@ -188,7 +188,7 @@ TextConversion_ko::getCharConversions(const OUString& aText, sal_Int32 nStartPos
     return output;
 }
 
-static Sequence< OUString >& operator += (Sequence< OUString > &rSeq1, Sequence< OUString > &rSeq2 )
+static Sequence< OUString >& operator += (Sequence< OUString > &rSeq1, const Sequence< OUString > &rSeq2 )
 {
     if (! rSeq1.hasElements() && rSeq2.hasElements())
         rSeq1 = rSeq2;

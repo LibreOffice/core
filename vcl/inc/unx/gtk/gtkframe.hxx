@@ -524,7 +524,7 @@ public:
     static guint                GetKeyValFor(GdkKeymap* pKeyMap, guint16 hardware_keycode, guint8 group);
     static sal_uInt16           GetKeyModCode(guint nState);
     static GdkEvent*            makeFakeKeyPress(GtkWidget* pWidget);
-    static SalWheelMouseEvent   GetWheelEvent(GdkEventScroll& rEvent);
+    static SalWheelMouseEvent   GetWheelEvent(const GdkEventScroll& rEvent);
     static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);

@@ -594,11 +594,11 @@ public:
                                     const css::uno::Reference<css::embed::XStorage>& xTarget,
                                     const css::uno::Sequence<OUString>& rExceptions = css::uno::Sequence<OUString>());
 
-    bool isEditDocLocked();
-    bool isContentExtractionLocked();
-    bool isExportLocked();
-    bool isPrintLocked();
-    bool isSaveLocked();
+    bool isEditDocLocked() const;
+    bool isContentExtractionLocked() const;
+    bool isExportLocked() const;
+    bool isPrintLocked() const;
+    bool isSaveLocked() const;
 
     // The functions from SvPersist
     void            EnableSetModified( bool bEnable = true );

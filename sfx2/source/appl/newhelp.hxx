@@ -72,7 +72,7 @@ private:
     DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
     DECL_LINK(CollapsingHdl, const weld::TreeIter&, bool);
 
-    void            ClearChildren(weld::TreeIter* pParent);
+    void            ClearChildren(const weld::TreeIter* pParent);
     void            InitRoot();
 public:
     ContentTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_Impl* _pIdxWin);

@@ -1863,7 +1863,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
     return mbContinueImportOnFilterExceptions == yes;
 }
 
-bool SfxObjectShell::isEditDocLocked()
+bool SfxObjectShell::isEditDocLocked() const
 {
     Reference<XModel> xModel = GetModel();
     if (!xModel.is())
@@ -1874,7 +1874,7 @@ bool SfxObjectShell::isEditDocLocked()
     return aArgs.getOrDefault("LockEditDoc", false);
 }
 
-bool SfxObjectShell::isContentExtractionLocked()
+bool SfxObjectShell::isContentExtractionLocked() const
 {
     Reference<XModel> xModel = GetModel();
     if (!xModel.is())
@@ -1883,7 +1883,7 @@ bool SfxObjectShell::isContentExtractionLocked()
     return aArgs.getOrDefault("LockContentExtraction", false);
 }
 
-bool SfxObjectShell::isExportLocked()
+bool SfxObjectShell::isExportLocked() const
 {
     Reference<XModel> xModel = GetModel();
     if (!xModel.is())
@@ -1892,7 +1892,7 @@ bool SfxObjectShell::isExportLocked()
     return aArgs.getOrDefault("LockExport", false);
 }
 
-bool SfxObjectShell::isPrintLocked()
+bool SfxObjectShell::isPrintLocked() const
 {
     Reference<XModel> xModel = GetModel();
     if (!xModel.is())
@@ -1901,7 +1901,7 @@ bool SfxObjectShell::isPrintLocked()
     return aArgs.getOrDefault("LockPrint", false);
 }
 
-bool SfxObjectShell::isSaveLocked()
+bool SfxObjectShell::isSaveLocked() const
 {
     Reference<XModel> xModel = GetModel();
     if (!xModel.is())
