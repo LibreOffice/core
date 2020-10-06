@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "4192fdc7_010b2603",
+        "filename": "cui/inc/toolbarmode.hrc",
+        "patchSetId": 33
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T14:15:10Z",
+      "side": 1,
+      "message": "Expected the file itself to be self-contained, never thought the compiler takes includes from other files into account. At least in Pascal it wouldn\u0027t work. Thanks for clarification.",
+      "parentUuid": "90e0959e_673c785c",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 48
+      },
+      "revId": "a46cd8465f025ef5a33e919ec3d6c62864115a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c035d98_fedbb2a5",
         "filename": "cui/inc/toolbarmode.hrc",
         "patchSetId": 33
