@@ -1627,13 +1627,15 @@ void SbRtl_Split(StarBASIC *, SbxArray & rPar, bool)
         }
     }
 
-    SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+    // tdf#123025 - split returns an array of substrings
+    SbxDimArray* pArray = new SbxDimArray( SbxSTRING );
     pArray->unoAddDim32( 0, nArraySize-1 );
 
     // insert parameter(s) into the array
     for(sal_Int32 i = 0 ; i < nArraySize ; i++ )
     {
-        SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
+        // tdf#123025 - split returns an array of substrings
+        SbxVariableRef xVar = new SbxVariable( SbxSTRING );
         xVar->PutString( vRet[i] );
         pArray->Put32( xVar.get(), &i );
     }
