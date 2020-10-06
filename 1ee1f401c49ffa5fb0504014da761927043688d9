@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dffe9b4e_f6d9d73b",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 32
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:00:27Z",
+      "side": 1,
+      "message": "The braces here are not needed: they are only needed when you introduce a variable in a case, so that the variable has a local scope. Here you only use variable declared in outer scope.",
+      "range": {
+        "startLine": 55,
+        "startChar": 12,
+        "endLine": 55,
+        "endChar": 13
+      },
+      "revId": "1ee1f401c49ffa5fb0504014da761927043688d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2a94bc7_1dc758e8",
+        "filename": "cui/source/dialogs/toolbarmodedlg.cxx",
+        "patchSetId": 32
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-06T11:00:27Z",
+      "side": 1,
+      "message": "1. OSL_* macros are obsolete, and should not be used in new code.\n2. We need static_assert here, which would just prevent compilation if its condition is false.",
+      "range": {
+        "startLine": 126,
+        "startChar": 4,
+        "endLine": 126,
+        "endChar": 14
+      },
+      "revId": "1ee1f401c49ffa5fb0504014da761927043688d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
