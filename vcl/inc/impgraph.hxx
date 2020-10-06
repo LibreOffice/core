@@ -207,6 +207,8 @@ public:
     bool swapOut();
     bool isSwappedOut() const { return mbSwapOut; }
     OUString getSwapFileURL() const;
+    // public only because of use in GraphicFilter
+    void updateFromLoadedGraphic(ImpGraphic* graphic);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

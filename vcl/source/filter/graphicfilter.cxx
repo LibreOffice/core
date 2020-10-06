@@ -1143,6 +1143,39 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
     }
 }
 
+void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphics)
+{
+    // Graphic::makeAvailable() is not thread-safe. Only the jpeg loader is, so here
+    // we process only jpeg images that also have their stream data, load new Graphic's
+    // from them and then update the passed objects using them.
+    std::vector< Graphic* > toLoad;
+    for(auto graphic : graphics)
+    {
+        // Need to use GetSharedGfxLink, to access the pointer without copying.
+        if(!graphic->isAvailable() && graphic->IsGfxLink()
+            && graphic->GetSharedGfxLink()->GetType() == GfxLinkType::NativeJpg
+            && graphic->GetSharedGfxLink()->GetDataSize() != 0 )
+            toLoad.push_back( graphic );
+    }
+    if( toLoad.empty())
+        return;
+    std::vector< std::unique_ptr<SvStream>> streams;
+    for( auto graphic : toLoad )
+    {
+        streams.push_back( std::make_unique<SvMemoryStream>( const_cast<sal_uInt8*>(graphic->GetSharedGfxLink()->GetData()),
+            graphic->GetSharedGfxLink()->GetDataSize(), StreamMode::READ | StreamMode::WRITE));
+    }
+    std::vector< std::shared_ptr<Graphic>> loadedGraphics;
+    ImportGraphics(loadedGraphics, std::move(streams));
+    assert(loadedGraphics.size() == toLoad.size());
+    for( size_t i = 0; i < toLoad.size(); ++i )
+    {
+        if(loadedGraphics[ i ] != nullptr)
+            toLoad[ i ]->ImplGetImpGraphic()->updateFromLoadedGraphic(loadedGraphics[ i ]->ImplGetImpGraphic());
+    }
+}
+
+
 Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 sizeLimit,
                                              const Size* pSizeHint)
 {

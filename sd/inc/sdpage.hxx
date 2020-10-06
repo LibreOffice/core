@@ -48,6 +48,7 @@ class SfxItemSet;
 class Paragraph;
 class Outliner;
 class SdStyleSheet;
+class Graphic;
 
 namespace sd
 {
@@ -376,6 +377,12 @@ public:
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
     sal_uInt16 getPageId() const { return mnPageId; }
+
+    /**
+     Returns graphics objects from the page that can be prefetched before it's painted.
+     The pointers are temporary and should not be kept.
+    */
+    void getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const;
 
     static sal_uInt16 mnLastPageId;
 

@@ -1429,22 +1429,23 @@ bool ImpGraphic::loadPrepared()
     Graphic aGraphic;
     if (!mpGfxLink->LoadNative(aGraphic))
         return false;
+    updateFromLoadedGraphic(aGraphic.ImplGetImpGraphic());
+    return true;
+}
 
+void ImpGraphic::updateFromLoadedGraphic(ImpGraphic* graphic)
+{
     GraphicExternalLink aLink = maGraphicExternalLink;
-
     Size aPrefSize = maSwapInfo.maPrefSize;
     MapMode aPrefMapMode = maSwapInfo.maPrefMapMode;
-    *this = *aGraphic.ImplGetImpGraphic();
+    *this = *graphic;
     if (aPrefSize.getWidth() && aPrefSize.getHeight() && aPrefMapMode == ImplGetPrefMapMode())
     {
         // Use custom preferred size if it was set when the graphic was still unloaded.
         // Only set the size in case the unloaded and loaded unit matches.
         ImplSetPrefSize(aPrefSize);
     }
-
     maGraphicExternalLink = aLink;
-
-    return true;
 }
 
 bool ImpGraphic::swapIn()
