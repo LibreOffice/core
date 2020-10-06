@@ -443,7 +443,7 @@ void box2DWorld::initateAllShapesAsStaticBodies(
     }
 }
 
-bool box2DWorld::hasWorldStepper() { return mbHasWorldStepper; }
+bool box2DWorld::hasWorldStepper() const { return mbHasWorldStepper; }
 
 void box2DWorld::setHasWorldStepper(const bool bHasWorldStepper)
 {
@@ -636,7 +636,7 @@ double box2DWorld::stepAmount(const double fPassedTime, const float fTimeStep,
 
 bool box2DWorld::shapesInitialized() { return mbShapesInitialized; }
 
-bool box2DWorld::isInitialized()
+bool box2DWorld::isInitialized() const
 {
     if (mpBox2DWorld)
         return true;
@@ -777,7 +777,7 @@ box2DBody::box2DBody(std::shared_ptr<b2Body> pBox2DBody, double fScaleFactor)
 {
 }
 
-::basegfx::B2DPoint box2DBody::getPosition()
+::basegfx::B2DPoint box2DBody::getPosition() const
 {
     b2Vec2 aPosition = mpBox2DBody->GetPosition();
     double fX = static_cast<double>(aPosition.x) / mfScaleFactor;
@@ -849,7 +849,7 @@ void box2DBody::setCollision(const bool bCanCollide)
     }
 }
 
-double box2DBody::getAngle()
+double box2DBody::getAngle() const
 {
     double fAngle = static_cast<double>(mpBox2DBody->GetAngle());
     return ::basegfx::rad2deg(-fAngle);
@@ -887,7 +887,7 @@ void box2DBody::setType(box2DBodyType eType)
     mpBox2DBody->SetType(getBox2DInternalBodyType(eType));
 }
 
-box2DBodyType box2DBody::getType() { return getBox2DLOBodyType(mpBox2DBody->GetType()); }
+box2DBodyType box2DBody::getType() const { return getBox2DLOBodyType(mpBox2DBody->GetType()); }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

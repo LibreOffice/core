@@ -220,7 +220,7 @@ public:
                                  const CustomAnimationEffectPtr& pEffect);
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
-    Size GetSize(vcl::RenderContext& rRenderContext);
+    Size GetSize(const vcl::RenderContext& rRenderContext);
     void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
     void PaintEffect(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, bool bSelected);
     void PaintTrigger(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect);
@@ -281,7 +281,7 @@ IMPL_STATIC_LINK(CustomAnimationList, CustomGetSizeHdl, weld::TreeView::get_size
     return pItem->GetSize(rRenderContext);
 }
 
-Size CustomAnimationListEntryItem::GetSize(vcl::RenderContext& rRenderContext)
+Size CustomAnimationListEntryItem::GetSize(const vcl::RenderContext& rRenderContext)
 {
     auto width = rRenderContext.GetTextWidth( msDescription ) + nIconWidth;
     if (width < (rRenderContext.GetTextWidth( msEffectName ) + 2*nIconWidth))

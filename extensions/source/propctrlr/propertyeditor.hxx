@@ -66,7 +66,7 @@ namespace pcr
         std::map<sal_uInt16, PropertyPage> m_aHiddenPages;
 
     public:
-        explicit OPropertyEditor(css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
+        explicit OPropertyEditor(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyEditor();
 
         void                        SetLineListener( IPropertyLineListener* );

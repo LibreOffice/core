@@ -715,7 +715,7 @@ std::string extractPrivateKey(const std::string & privateKey)
     return privateKey.substr(pos1, pos2);
 }
 
-OUString lcl_getCurrentDocumentMimeType(LibLODocument_Impl* pDocument)
+OUString lcl_getCurrentDocumentMimeType(const LibLODocument_Impl* pDocument)
 {
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
     if (!pBaseModel)

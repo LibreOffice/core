@@ -99,7 +99,7 @@ public:
 
     bool isOpen() const { return mbOpen; }
 
-    sal_uInt32 getGridSpan() { return m_nGridSpan; }
+    sal_uInt32 getGridSpan() const { return m_nGridSpan; }
     void setGridSpan( sal_uInt32 nSpan ) { m_nGridSpan = nSpan; }
 };
 
@@ -241,9 +241,9 @@ public:
         return mpProperties;
     }
 
-    sal_uInt32 getGridBefore() { return m_nGridBefore; }
+    sal_uInt32 getGridBefore() const { return m_nGridBefore; }
     void setGridBefore(sal_uInt32 nSkipGrids) { m_nGridBefore = nSkipGrids; }
-    sal_uInt32 getGridAfter() { return m_nGridAfter; }
+    sal_uInt32 getGridAfter() const { return m_nGridAfter; }
     void setGridAfter(sal_uInt32 nSkipGrids) { m_nGridAfter = nSkipGrids; }
     sal_uInt32 getGridSpan(sal_uInt32 i) { return mCells[i]->getGridSpan(); }
     std::vector< sal_uInt32 > getGridSpans()

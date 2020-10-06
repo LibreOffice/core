@@ -34,7 +34,7 @@ class GraphicObjectBar final
 public:
     SFX_DECL_INTERFACE( SD_IF_SDDRAWGRAFOBJECTBAR )
 
-    GraphicObjectBar (ViewShell* pSdViewShell, ::sd::View* pSdView);
+    GraphicObjectBar (const ViewShell* pSdViewShell, ::sd::View* pSdView);
     virtual ~GraphicObjectBar() override;
 
     void            GetAttrState( SfxItemSet& rSet );

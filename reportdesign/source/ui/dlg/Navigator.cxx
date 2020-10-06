@@ -136,10 +136,10 @@ class NavigatorTree : public ::cppu::BaseMutex
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
 
-    void insertEntry(const OUString& rName, weld::TreeIter* pParent, const OUString& rImageId, int nPosition, UserData* pData, weld::TreeIter& rRet);
+    void insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition, UserData* pData, weld::TreeIter& rRet);
 
-    void traverseSection(const uno::Reference<report::XSection>& xSection, weld::TreeIter* pParent, const OUString& rImageId, int nPosition = -1);
-    void traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, weld::TreeIter* pParent);
+    void traverseSection(const uno::Reference<report::XSection>& xSection, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition = -1);
+    void traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, const weld::TreeIter* pParent);
 
 protected:
     // OSelectionChangeListener
@@ -379,7 +379,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
     m_pSelectionListener->unlock();
 }
 
-void NavigatorTree::insertEntry(const OUString& rName, weld::TreeIter* pParent, const OUString& rImageId,
+void NavigatorTree::insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId,
                                 int nPosition, UserData* pData, weld::TreeIter& rRet)
 {
     OUString sId = pData ? OUString::number(reinterpret_cast<sal_Int64>(pData)) : OUString();
@@ -388,7 +388,7 @@ void NavigatorTree::insertEntry(const OUString& rName, weld::TreeIter* pParent, 
         m_xTreeView->set_image(rRet, rImageId);
 }
 
-void NavigatorTree::traverseSection(const uno::Reference<report::XSection>& xSection, weld::TreeIter* pParent, const OUString& rImageId, int nPosition)
+void NavigatorTree::traverseSection(const uno::Reference<report::XSection>& xSection, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition)
 {
     std::unique_ptr<weld::TreeIter> xSectionIter = m_xTreeView->make_iterator();
     std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
@@ -412,7 +412,7 @@ void NavigatorTree::traverseSection(const uno::Reference<report::XSection>& xSec
     }
 }
 
-void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, weld::TreeIter* pParent)
+void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, const weld::TreeIter* pParent)
 {
     std::unique_ptr<weld::TreeIter> xFunctionIter = m_xTreeView->make_iterator();
     std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();

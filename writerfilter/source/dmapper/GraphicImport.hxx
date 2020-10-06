@@ -98,7 +98,7 @@ public:
     bool IsGraphic() const;
     sal_Int32 GetLeftMarginOrig() const;
 
-    com::sun::star::awt::Point GetGraphicObjectPosition();
+    com::sun::star::awt::Point GetGraphicObjectPosition() const;
 
  private:
     // Properties

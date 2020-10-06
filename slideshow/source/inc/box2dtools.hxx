@@ -261,7 +261,7 @@ public:
     /// @return whether shapes in the slide are initialized as Box2D bodies or not
     bool shapesInitialized();
     /// @return whether the Box2D World is initialized or not
-    bool isInitialized();
+    bool isInitialized() const;
 
     /** Make the shape's corresponding box2D body a dynamic one.
 
@@ -311,7 +311,7 @@ public:
     initateAllShapesAsStaticBodies(const slideshow::internal::ShapeManagerSharedPtr& pShapeManager);
 
     /// @return whether the box2DWorld has a stepper or not
-    bool hasWorldStepper();
+    bool hasWorldStepper() const;
 
     /// Set the flag for whether the box2DWorld has a stepper or not
     void setHasWorldStepper(const bool bHasWorldStepper);
@@ -375,7 +375,7 @@ public:
     box2DBody(std::shared_ptr<b2Body> pBox2DBody, double fScaleFactor);
 
     /// @return current position in LO user space coordinates
-    ::basegfx::B2DPoint getPosition();
+    ::basegfx::B2DPoint getPosition() const;
 
     /** Set the position of box2d body
 
@@ -429,7 +429,7 @@ public:
     void setCollision(const bool bCanCollide);
 
     /// @return current angle of rotation of the body
-    double getAngle();
+    double getAngle() const;
 
     /** Set angle of the box2d body
 
@@ -459,7 +459,7 @@ public:
     void setType(box2DBodyType eType);
 
     /// @return type of the body
-    box2DBodyType getType();
+    box2DBodyType getType() const;
 };
 
 /** Make the Box2D body a dynamic one
