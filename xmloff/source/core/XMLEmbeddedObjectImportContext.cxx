@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <sal/log.hxx>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
@@ -74,6 +75,7 @@ XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xHandler( rHandler )
 {
+    assert(xHandler);
 }
 
 SvXMLImportContextRef XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
@@ -115,15 +117,17 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
 
     Reference< XComponentContext > xContext( GetImport().GetComponentContext() );
 
-    xHandler.set(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext),
-        UNO_QUERY);
+    Reference<XInterface> xFilter =
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sFilterService, aArgs, xContext);
+    SAL_WARN_IF(!xFilter, "xmloff", "could not create filter " << sFilterService);
+
+    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xFilter.get()))
+        xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
+    else
+        xHandler.set(xFilter, UNO_QUERY);
 
     if( !xHandler.is() )
         return;
-
-    if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xHandler.get()))
-        xHandler.set( new SvXMLLegacyToFastDocHandler( pFastHandler ) );
 
     try
     {

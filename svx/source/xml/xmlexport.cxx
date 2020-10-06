@@ -185,9 +185,6 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         xml::sax::InputSource aParserInput;
         aParserInput.aInputStream = xInputStream;
 
-        // get parser
-        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-
         // prepare filter arguments
         Sequence<Any> aFilterArgs( 2 );
         Any *pArgs = aFilterArgs.getArray();
@@ -195,26 +192,20 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
         *pArgs++ <<= xObjectResolver;
 
         // get filter
-        Reference< xml::sax::XDocumentHandler > xFilter( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext), UNO_QUERY );
-        uno::Reference< xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            xml::sax::XFastParser* >( xFilter.get() );
-        DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+        Reference< XInterface > xFilter = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii( pImportService ), aFilterArgs, xContext);
+        SAL_WARN_IF( !xFilter, "svx", "Can't instantiate filter component " << pImportService);
+        uno::Reference< xml::sax::XFastParser > xFastParser( xFilter,  UNO_QUERY );
+        assert(xFastParser);
 
         bRet = false;
-        if( xParser.is() && xFilter.is() )
+        if( xFastParser.is() )
         {
-            // connect parser and filter
-            xParser->setDocumentHandler( xFilter );
-
             // connect model and filter
             uno::Reference < document::XImporter > xImporter( xFilter, UNO_QUERY );
             xImporter->setTargetDocument( xTargetDocument );
 
             // finally, parser the stream
-            if( xFastParser.is() )
-                xFastParser->parseStream( aParserInput );
-            else
-                xParser->parseStream( aParserInput );
+            xFastParser->parseStream( aParserInput );
 
             bRet = true;
         }
