@@ -264,12 +264,12 @@ protected:
     SkCanvas* getXorCanvas();
     void applyXor();
     // NOTE: This must be called before the operation does any drawing.
-    void addXorRegion(const SkRect& rect)
+    void addUpdateRegion(const SkRect& rect)
     {
+        // Make slightly larger, just in case (rounding, antialiasing,...).
+        SkIRect addedRect = rect.makeOutset(2, 2).round();
         if (mXorMode)
         {
-            // Make slightly larger, just in case (rounding, antialiasing,...).
-            SkIRect addedRect = rect.makeOutset(2, 2).round();
             // Two xor operations should cancel each other out. We batch xor operations,
             // but if they can overlap, apply xor now, since applyXor() does the operation
             // just once.
@@ -277,6 +277,9 @@ protected:
                 applyXor();
             mXorRegion.op(addedRect, SkRegion::kUnion_Op);
         }
+        // Using SkIRect should be enough, SkRegion would be too slow with many operations
+        // and swapping to the screen is not _that_slow.
+        mDirtyRect.join(addedRect);
     }
     static void setCanvasClipRegion(SkCanvas* canvas, const vcl::Region& region);
     sk_sp<SkImage> mergeCacheBitmaps(const SkiaSalBitmap& bitmap, const SkiaSalBitmap* alphaBitmap,
@@ -318,6 +321,7 @@ protected:
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     bool mIsGPU; // whether the surface is GPU-backed
+    SkIRect mDirtyRect; // the area that has been changed since the last performFlush()
     vcl::Region mClipRegion;
     Color mLineColor;
     Color mFillColor;
