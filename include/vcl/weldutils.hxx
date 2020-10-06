@@ -183,7 +183,7 @@ public:
 
     void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
 
-    const css::uno::Reference<css::frame::XFrame>& getFrame() { return mxFrame; }
+    const css::uno::Reference<css::frame::XFrame>& getFrame() const { return mxFrame; }
 
     void startListening();
 

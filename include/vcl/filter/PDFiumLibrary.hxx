@@ -51,7 +51,7 @@ public:
     PDFium();
     ~PDFium();
 
-    OUString getLastError() { return maLastError; }
+    OUString getLastError() const { return maLastError; }
 
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
 };
@@ -95,10 +95,10 @@ public:
     PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment);
     ~PDFiumPathSegment();
 
-    FPDF_PATHSEGMENT getPointer() { return mpPathSegment; }
-    basegfx::B2DPoint getPoint();
-    bool isClosed();
-    int getType();
+    FPDF_PATHSEGMENT getPointer() const { return mpPathSegment; }
+    basegfx::B2DPoint getPoint() const;
+    bool isClosed() const;
+    int getType() const;
 };
 
 class VCL_DLLPUBLIC PDFiumPageObject final

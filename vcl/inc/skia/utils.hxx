@@ -64,7 +64,7 @@ void removeCachedImage(sk_sp<SkImage> image);
 constexpr int MAX_CACHE_SIZE = 4 * 2000 * 2000 * 4; // 4x 2000px 32bpp images, 64MiB
 
 #ifdef DBG_UTIL
-void prefillSurface(sk_sp<SkSurface>& surface);
+void prefillSurface(const sk_sp<SkSurface>& surface);
 VCL_DLLPUBLIC void dump(const SkBitmap& bitmap, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkImage>& image, const char* file);
 VCL_DLLPUBLIC void dump(const sk_sp<SkSurface>& surface, const char* file);

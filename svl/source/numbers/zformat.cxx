@@ -237,7 +237,7 @@ void ImpSvNumFor::Enlarge(sal_uInt16 nCnt)
     }
 }
 
-void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
+void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, const ImpSvNumberformatScan* pSc )
 {
     Enlarge( rNumFor.nStringsCnt );
     aI.Copy( rNumFor.aI, nStringsCnt );

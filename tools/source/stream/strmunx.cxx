@@ -42,7 +42,7 @@ struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {};
 
 struct Locks : public rtl::Static< std::map<SvFileStream const *, osl::DirectoryItem>, Locks > {};
 
-bool lockFile( SvFileStream* pStream )
+bool lockFile( const SvFileStream* pStream )
 {
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )

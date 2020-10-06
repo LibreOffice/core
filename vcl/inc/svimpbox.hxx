@@ -300,7 +300,7 @@ public:
     void                ShowCursor( bool bShow );
 
     bool                RequestHelp( const HelpEvent& rHEvt );
-    bool                IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
+    bool                IsNodeButton( const Point& rPosPixel, const SvTreeListEntry* pEntry ) const;
     void                SetUpdateMode( bool bMode );
     bool                GetUpdateMode() const { return m_bUpdateMode; }
     tools::Rectangle    GetClipRegionRect() const;

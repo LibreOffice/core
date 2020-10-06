@@ -141,7 +141,7 @@ private:
     friend class FreetypeFontInstance;
     friend class FreetypeManager;
 
-    explicit FreetypeFont(FreetypeFontInstance&, std::shared_ptr<FreetypeFontInfo>& rFontInfo);
+    explicit FreetypeFont(FreetypeFontInstance&, const std::shared_ptr<FreetypeFontInfo>& rFontInfo);
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
 

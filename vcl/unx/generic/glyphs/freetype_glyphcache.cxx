@@ -399,7 +399,7 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const F
 
 // FreetypeFont
 
-FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, std::shared_ptr<FreetypeFontInfo>& rFI)
+FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::shared_ptr<FreetypeFontInfo>& rFI)
 :   mrFontInstance(rFontInstance),
     mnCos( 0x10000),
     mnSin( 0 ),

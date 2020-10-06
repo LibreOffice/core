@@ -1894,7 +1894,7 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
 // ******* Control plus/minus button for expanding/collapsing
 
 // false == no expand/collapse button hit
-bool SvImpLBox::IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const
+bool SvImpLBox::IsNodeButton( const Point& rPosPixel, const SvTreeListEntry* pEntry ) const
 {
     if( !pEntry->HasChildren() && !pEntry->HasChildrenOnDemand() )
         return false;

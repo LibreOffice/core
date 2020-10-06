@@ -215,7 +215,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
     return bRet;
 }
 
-void Animation::Stop(OutputDevice* pOut, long nExtraData)
+void Animation::Stop(const OutputDevice* pOut, long nExtraData)
 {
     maViewList.erase(std::remove_if(maViewList.begin(), maViewList.end(),
                                     [=](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {

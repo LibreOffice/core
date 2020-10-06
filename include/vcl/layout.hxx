@@ -805,7 +805,7 @@ public:
     {
         m_aStartDragHdl = rLink;
     }
-    void SetDragHelper(rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
+    void SetDragHelper(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants)
     {
         m_xTransferHelper = rHelper;
         m_nDragAction = eDNDConstants;
@@ -866,7 +866,7 @@ Size getLegacyBestSizeForChildren(const vcl::Window &rWindow);
 vcl::Window* getNonLayoutParent(vcl::Window *pParent);
 
 //Sort ok/cancel etc buttons in platform order
-void sort_native_button_order(VclBox& rContainer);
+void sort_native_button_order(const VclBox& rContainer);
 
 #endif
 

@@ -119,7 +119,7 @@ namespace basegfx::utils
 
         static void implHandleSnippet(
             const B3DPolygon& rSnippet,
-            std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
+            const std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
             B3DPolygon& rFirst,
             B3DPolygon& rLast)
         {
@@ -146,7 +146,7 @@ namespace basegfx::utils
         }
 
         static void implHandleFirstLast(
-            std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
+            const std::function<void(const basegfx::B3DPolygon& rSnippet)>& rTargetCallback,
             B3DPolygon& rFirst,
             B3DPolygon& rLast)
         {

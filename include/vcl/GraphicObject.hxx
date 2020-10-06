@@ -269,7 +269,7 @@ public:
                                 OutputDevice* pFirstFrameOutDev = nullptr
                             );
 
-    void                    StopAnimation( OutputDevice* pOut = nullptr, long nExtraData = 0 );
+    void                    StopAnimation( const OutputDevice* pOut = nullptr, long nExtraData = 0 );
 
     static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
 

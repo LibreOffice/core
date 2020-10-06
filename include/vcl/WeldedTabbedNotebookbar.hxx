@@ -25,7 +25,8 @@ class VCL_DLLPUBLIC WeldedTabbedNotebookbar
     std::unique_ptr<weld::Notebook> m_xNotebook;
 
 public:
-    WeldedTabbedNotebookbar(VclPtr<vcl::Window>& pContainerWindow, const OUString& rUIFilePath,
+    WeldedTabbedNotebookbar(const VclPtr<vcl::Window>& pContainerWindow,
+                            const OUString& rUIFilePath,
                             const css::uno::Reference<css::frame::XFrame>& rFrame,
                             sal_uInt64 nWindowId);
 };

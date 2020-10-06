@@ -591,7 +591,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
     return bRet;
 }
 
-void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
+void GraphicObject::StopAnimation( const OutputDevice* pOut, long nExtraData )
 {
     if (mxSimpleCache)
         mxSimpleCache->maGraphic.StopAnimation(pOut, nExtraData);

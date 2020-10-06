@@ -74,13 +74,13 @@ template <typename MorphologyOp, int nComponentWidth> struct Value
                     bLookOutside ? rShared.mnOutsideVal : MorphologyOp::initVal);
     }
 
-    void apply(BitmapReadAccess* pReadAccess, long x, long y, sal_uInt8* pHint = nullptr)
+    void apply(const BitmapReadAccess* pReadAccess, long x, long y, sal_uInt8* pHint = nullptr)
     {
         sal_uInt8* pSource = (pHint ? pHint : pReadAccess->GetScanline(y)) + nWidthBytes * x;
         std::transform(pSource, pSource + nWidthBytes, aResult, aResult, MorphologyOp::apply);
     }
 
-    void copy(BitmapWriteAccess* pWriteAccess, long x, long y, sal_uInt8* pHint = nullptr)
+    void copy(const BitmapWriteAccess* pWriteAccess, long x, long y, sal_uInt8* pHint = nullptr)
     {
         sal_uInt8* pDest = (pHint ? pHint : pWriteAccess->GetScanline(y)) + nWidthBytes * x;
         std::copy_n(aResult, nWidthBytes, pDest);
@@ -102,7 +102,7 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
     {
     }
 
-    void apply(BitmapReadAccess* pReadAccess, long x, long y, sal_uInt8* /*pHint*/ = nullptr)
+    void apply(const BitmapReadAccess* pReadAccess, long x, long y, sal_uInt8* /*pHint*/ = nullptr)
     {
         const auto& rSource = pReadAccess->GetColor(y, x);
         aResult = Color(MorphologyOp::apply(rSource.GetTransparency(), aResult.GetTransparency()),

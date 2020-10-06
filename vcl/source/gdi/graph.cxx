@@ -448,7 +448,7 @@ void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
     mxImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
 }
 
-void Graphic::StopAnimation( OutputDevice* pOutDev, long nExtraData )
+void Graphic::StopAnimation( const OutputDevice* pOutDev, long nExtraData )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplStopAnimation( pOutDev, nExtraData );

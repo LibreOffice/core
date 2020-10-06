@@ -244,8 +244,8 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 #if HAVE_FEATURE_PDFIUM
 namespace
 {
-std::vector<PDFGraphicAnnotation> findAnnotations(std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
-                                                  basegfx::B2DSize aPageSize)
+std::vector<PDFGraphicAnnotation>
+findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2DSize aPageSize)
 {
     std::vector<PDFGraphicAnnotation> aPDFGraphicAnnotations;
     for (int nAnnotation = 0; nAnnotation < pPage->getAnnotationCount(); nAnnotation++)

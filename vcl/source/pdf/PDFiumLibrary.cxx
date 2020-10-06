@@ -387,7 +387,7 @@ PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
 
 PDFiumPathSegment::~PDFiumPathSegment() {}
 
-basegfx::B2DPoint PDFiumPathSegment::getPoint()
+basegfx::B2DPoint PDFiumPathSegment::getPoint() const
 {
     basegfx::B2DPoint aPoint;
     float fx, fy;
@@ -396,9 +396,9 @@ basegfx::B2DPoint PDFiumPathSegment::getPoint()
     return aPoint;
 }
 
-bool PDFiumPathSegment::isClosed() { return FPDFPathSegment_GetClose(mpPathSegment); }
+bool PDFiumPathSegment::isClosed() const { return FPDFPathSegment_GetClose(mpPathSegment); }
 
-int PDFiumPathSegment::getType() { return FPDFPathSegment_GetType(mpPathSegment); }
+int PDFiumPathSegment::getType() const { return FPDFPathSegment_GetType(mpPathSegment); }
 
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)

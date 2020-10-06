@@ -325,7 +325,7 @@ public:
 
 #ifdef DBG_UTIL
     void            PrintInfo() const;
-    void            DbgPrintDisplayEvent(const char *pComment, XEvent *pEvent) const;
+    void            DbgPrintDisplayEvent(const char *pComment, const XEvent *pEvent) const;
 #endif
 
     void            Beep() const;

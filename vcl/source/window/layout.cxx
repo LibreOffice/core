@@ -793,7 +793,7 @@ bool sortButtons::operator()(const vcl::Window *pA, const vcl::Window *pB) const
     return getButtonPriority(pA->GetHelpId()) < getButtonPriority(pB->GetHelpId());
 }
 
-void sort_native_button_order(VclBox& rContainer)
+void sort_native_button_order(const VclBox& rContainer)
 {
     std::vector<vcl::Window*> aChilds;
     for (vcl::Window* pChild = rContainer.GetWindow(GetWindowType::FirstChild); pChild;
