@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e1185e7_74e87de2",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T06:05:02Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be there",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 1
+      },
+      "revId": "24e465dea3184512e1eb7a76038f73bdcef02ac9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b86f06e_387b8cc8",
+        "filename": "sw/uiconfig/swriter/ui/inserttable.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-06T06:05:02Z",
+      "side": 1,
+      "message": "You have to fix those comments manually.",
+      "revId": "24e465dea3184512e1eb7a76038f73bdcef02ac9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
