@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/version.patch.0 \
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/0001-Prevent-unsigned-integer-underflow.patch \
+	external/liborcus/include.patch.0 \
 ))
 
 ifeq ($(OS),WNT)
