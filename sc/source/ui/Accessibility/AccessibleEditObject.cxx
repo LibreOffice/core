@@ -366,7 +366,7 @@ void ScAccessibleEditObject::CreateTextHelper()
     else
     {
         pAccessibleTextData.reset
-            (new ScAccessibleEditLineTextData(nullptr, GetOutputDeviceForView()));
+            (new ScAccessibleEditLineTextData(GetOutputDeviceForView()));
     }
 
     std::unique_ptr<ScAccessibilityEditSource> pEditSrc =

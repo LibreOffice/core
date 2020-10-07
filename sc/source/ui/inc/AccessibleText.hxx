@@ -130,7 +130,7 @@ protected:
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
-                        ScAccessibleEditLineTextData(EditView* pEditView, OutputDevice* pWin);
+                        ScAccessibleEditLineTextData(OutputDevice* pWin);
     virtual             ~ScAccessibleEditLineTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;

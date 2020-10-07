@@ -747,10 +747,9 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
         GetBroadcaster().Broadcast(*aHint);
 }
 
-ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, OutputDevice* pWin)
-    :
-    ScAccessibleEditObjectTextData(pEditView, pWin),
-    mbEditEngineCreated(false)
+ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(OutputDevice* pWin)
+    : ScAccessibleEditObjectTextData(nullptr, pWin)
+    , mbEditEngineCreated(false)
 {
     ScTextWnd* pTxtWnd = dynamic_cast<ScTextWnd*>( pWin );
 
@@ -787,7 +786,7 @@ void ScAccessibleEditLineTextData::Dispose()
 
 ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
 {
-    return new ScAccessibleEditLineTextData(nullptr, mpWindow);
+    return new ScAccessibleEditLineTextData(mpWindow);
 }
 
 SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
