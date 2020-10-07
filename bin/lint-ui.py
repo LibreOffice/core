@@ -122,7 +122,10 @@ def check_menu_buttons(root):
         images = button.findall("./property[@name='image']")
         assert(len(labels) <= 1)
         if len(labels) < 1 and len(images) < 1:
-            lint_assert(False, "No label in GtkMenuButton with id = '" + button.attrib['id'] + "'", button)
+            if sys.argv[1] == "vcl/uiconfig/ui/combobox.ui": and button.attrib['id'] == "overlaybutton":
+                pass
+            else:
+                lint_assert(False, "No label in GtkMenuButton with id = '" + button.attrib['id'] + "'", button)
 
 def check_check_buttons(root):
     radios = [element for element in root.findall('.//object') if element.attrib['class'] == 'GtkCheckButton']
