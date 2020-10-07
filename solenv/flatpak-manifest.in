@@ -375,10 +375,10 @@
                     "dest-filename": "external/tarballs/openldap-2.4.45.tgz"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.16.0.tar.bz2",
-                    "sha256": "854c6ec167ace59baa2984e175bac7b5b2af91bfde4bb10d2088b87a51ed76ec",
+                    "url": "https://dev-www.libreoffice.org/src/liborcus-0.16.1.tar.bz2",
+                    "sha256": "c700d1325f744104d9fca0d5a019434901e9d51a16eedfb05792f90a298587a4",
                     "type": "file",
-                    "dest-filename": "external/tarballs/liborcus-0.16.0.tar.bz2"
+                    "dest-filename": "external/tarballs/liborcus-0.16.1.tar.bz2"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz",
