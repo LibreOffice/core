@@ -28,6 +28,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
+#include <vcl/IDialogRenderable.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
@@ -60,7 +61,7 @@ namespace vcl { namespace unohelper {
         static  void    CopyStringTo(
             const OUString& rContent,
             const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard,
-            std::function<void (int, const char*)> *callback = nullptr
+            const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr
         );
     };
 

@@ -645,13 +645,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
                         = pEditView->GetWindow()->GetClipboard();
 
-                    if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text) { pViewData->GetViewShell()->libreOfficeKitViewCallback(callbackType, text); } ;
-                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, &callback);
-                    }
-                    else
-                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, nullptr);
+                    vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, SfxViewShell::Current());
                 }
             }
         break;
