@@ -2556,8 +2556,9 @@ bool SwContentTree::HasContentChanged()
                     // i.e. in header/footer
                     pArrType->FillMemberList(&bLevelOrVisibilityChanged);
                     bool bRemoveChildren = false;
-                    const size_t nChildCount = GetChildCount(*xEntry);
-                    if (nChildCount != pArrType->GetMemberCount())
+                    const size_t nOldChildCount = GetChildCount(*xEntry);
+                    const size_t nNewChildCount = pArrType->GetMemberCount();
+                    if (nOldChildCount != nNewChildCount)
                     {
                         bRemoveChildren = true;
                     }
@@ -2565,7 +2566,7 @@ bool SwContentTree::HasContentChanged()
                     {
                         std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
                         (void)m_xTreeView->iter_children(*xChild);
-                        for (size_t j = 0; j < nChildCount; ++j)
+                        for (size_t j = 0; j < nOldChildCount; ++j)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
                             OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
@@ -2585,8 +2586,8 @@ bool SwContentTree::HasContentChanged()
                             remove(*xRemove);
                             m_xTreeView->copy_iterator(*xEntry, *xRemove);
                         }
+                        m_xTreeView->set_children_on_demand(*xEntry, nNewChildCount != 0);
                     }
-                    m_xTreeView->set_children_on_demand(*xEntry, !nChildCount);
                 }
                 else if((nCntCount != 0)
                             != (pArrType->GetMemberCount()!=0))
