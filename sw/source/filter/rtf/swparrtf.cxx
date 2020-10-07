@@ -136,7 +136,15 @@ ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam
             if (pTextNode->GetText().getLength())
                 pDelNd->FormatToTextAttr(pTextNode);
             else
+            {
                 pTextNode->ChgFormatColl(pDelNd->GetTextColl());
+                if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
+                {
+                    // Lists would need manual merging, but copy paragraph direct formatting
+                    // otherwise.
+                    pDelNd->CopyCollFormat(*pTextNode);
+                }
+            }
             pTextNode->JoinNext();
         }
     }
