@@ -88,32 +88,33 @@ void WeldEditView::Resize()
 
 void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-    //note: ScEditWindow::Paint is similar
-
     rRenderContext.Push(PushFlags::ALL);
     rRenderContext.SetClipRegion();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
-    m_xEditView->SetBackgroundColor(aBgColor);
-
     rRenderContext.SetBackground(aBgColor);
-
-    tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-    m_xEditView->Paint(aLogicRect, &rRenderContext);
-
-    if (HasFocus())
-    {
-        m_xEditView->ShowCursor();
-        vcl::Cursor* pCursor = m_xEditView->GetCursor();
-        pCursor->DrawToDevice(rRenderContext);
-    }
 
     std::vector<tools::Rectangle> aLogicRects;
 
-    // get logic selection
-    m_xEditView->GetSelectionRectangles(aLogicRects);
+    if (m_xEditView)
+    {
+        m_xEditView->SetBackgroundColor(aBgColor);
+
+        tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
+        m_xEditView->Paint(aLogicRect, &rRenderContext);
+
+        if (HasFocus())
+        {
+            m_xEditView->ShowCursor();
+            vcl::Cursor* pCursor = m_xEditView->GetCursor();
+            pCursor->DrawToDevice(rRenderContext);
+        }
+
+        // get logic selection
+        m_xEditView->GetSelectionRectangles(aLogicRects);
+    }
 
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(COL_BLACK);
@@ -125,7 +126,10 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.Pop();
 }
 
-bool WeldEditView::MouseMove(const MouseEvent& rMEvt) { return m_xEditView->MouseMove(rMEvt); }
+bool WeldEditView::MouseMove(const MouseEvent& rMEvt)
+{
+    return m_xEditView && m_xEditView->MouseMove(rMEvt);
+}
 
 bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -135,12 +139,12 @@ bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
         GetFocus();
     }
 
-    return m_xEditView->MouseButtonDown(rMEvt);
+    return m_xEditView && m_xEditView->MouseButtonDown(rMEvt);
 }
 
 bool WeldEditView::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    return m_xEditView->MouseButtonUp(rMEvt);
+    return m_xEditView && m_xEditView->MouseButtonUp(rMEvt);
 }
 
 bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
@@ -151,7 +155,7 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
     {
         return false;
     }
-    else if (!m_xEditView->PostKeyEvent(rKEvt))
+    else if (m_xEditView && !m_xEditView->PostKeyEvent(rKEvt))
     {
         if (rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2())
         {
@@ -175,6 +179,8 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
 
 bool WeldEditView::Command(const CommandEvent& rCEvt)
 {
+    if (!m_xEditView)
+        return false;
     m_xEditView->Command(rCEvt);
     return true;
 }
@@ -1432,6 +1438,8 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
 int WeldEditView::GetSurroundingText(OUString& rSurrounding)
 {
+    if (!m_xEditView)
+        return -1;
     rSurrounding = m_xEditView->GetSurroundingText();
     return m_xEditView->GetSurroundingTextSelection().Min();
 }
@@ -1439,7 +1447,7 @@ int WeldEditView::GetSurroundingText(OUString& rSurrounding)
 bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
 {
     bool bRes(false);
-    EditEngine* pEditEngine = m_xEditView->GetEditEngine();
+    EditEngine* pEditEngine = m_xEditView ? m_xEditView->GetEditEngine() : nullptr;
     if (pEditEngine)
     {
         ESelection aSel(m_xEditView->GetSelection());
@@ -1455,7 +1463,8 @@ bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
 
 void WeldEditView::GetFocus()
 {
-    m_xEditView->ShowCursor();
+    if (m_xEditView)
+        m_xEditView->ShowCursor();
 
     weld::CustomWidgetController::GetFocus();
 
