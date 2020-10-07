@@ -646,7 +646,7 @@ typedef enum
      *
      * Payload is optional. When payload is empty, Online gets string from selected text.
      * Payload format is JSON.
-     * Example: { "mimeType": "string", "content": "some content" }
+     * Example: { "mimeType": "text/plain", "content": "some content" }
      */
     LOK_CALLBACK_CLIPBOARD_CHANGED = 38,
 
