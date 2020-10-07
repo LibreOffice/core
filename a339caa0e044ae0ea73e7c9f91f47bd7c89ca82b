@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab1e9db6_528ed222",
+        "filename": "external/mariadb-connector-c/StaticLibrary_mariadb-connector-c.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-07T08:19:37Z",
+      "side": 1,
+      "message": "remove this extra )",
+      "range": {
+        "startLine": 69,
+        "startChar": 65,
+        "endLine": 69,
+        "endChar": 66
+      },
+      "revId": "a339caa0e044ae0ea73e7c9f91f47bd7c89ca82b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
