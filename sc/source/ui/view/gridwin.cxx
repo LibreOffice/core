@@ -980,7 +980,7 @@ void ScGridWindow::ShowFilterMenu(const tools::Rectangle& rCellRect, bool bLayou
 
     if (IsMouseCaptured())
         ReleaseMouse();
-    mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus);
+    mpFilterFloat->StartPopupMode(aCellRect, FloatWinPopupFlags::Down|FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoMouseUpClose);
 }
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
