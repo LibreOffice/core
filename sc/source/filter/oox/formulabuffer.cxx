@@ -251,6 +251,7 @@ void applyCellFormulas(
 
 void applyArrayFormulas(
     ScDocumentImport& rDoc, SvNumberFormatter& rFormatter,
+    const Sequence<ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenRangeAddressItem>& rArrays )
 {
     for (const FormulaBuffer::TokenRangeAddressItem& rAddressItem : rArrays)
@@ -259,6 +260,7 @@ void applyArrayFormulas(
 
         ScCompiler aComp(rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
         aComp.SetNumberFormatter(&rFormatter);
+        aComp.SetExternalLinks(rExternalLinks);
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rAddressItem.maTokenAndAddress.maTokenStr));
         if (pArray)
             rDoc.setMatrixCells(rAddressItem.maRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
@@ -327,7 +329,7 @@ void processSheetFormulaCells(
     }
 
     if (rItem.mpArrayFormulas)
-        applyArrayFormulas(rDoc, rFormatter, *rItem.mpArrayFormulas);
+        applyArrayFormulas(rDoc, rFormatter, rExternalLinks, *rItem.mpArrayFormulas);
 
     if (rItem.mpCellFormulaValues)
         applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues, bGeneratorKnownGood);

@@ -272,6 +272,7 @@ public:
     void testTdf91251_missingOverflowRoundtrip();
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
+    void testTdf76047_externalLink();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -438,6 +439,7 @@ public:
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
+    CPPUNIT_TEST(testTdf76047_externalLink);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5523,6 +5525,29 @@ void ScExportTest::testTdf126305_DataValidatyErrorAlert()
     assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[3]", "errorStyle", "information");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf76047_externalLink()
+{
+    ScDocShellRef pShell = loadDoc("tdf76047_externalLink.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pShell.is());
+
+    // load data from external links. (tdf76047_externalLinkSource.ods)
+    // that file have to be the same directory as tdf76047_externalLink.xlsx
+    pShell->ReloadAllLinks();
+    ScDocument& rDoc = pShell->GetDocument();
+
+    // compare the loaded data (from external links) to the data copied manually to the testfile
+    for (int nCol = 1; nCol <= 5; nCol++) {
+        for (int nRow = 3; nRow <= 5; nRow++) {
+            OUString aStr1 = rDoc.GetString(ScAddress(nCol, nRow, 0));
+            OUString aStr2 = rDoc.GetString(ScAddress(nCol, nRow + 5, 0));
+            OUString aStr3 = rDoc.GetString(ScAddress(nCol, nRow + 11, 0));
+
+            CPPUNIT_ASSERT_EQUAL(aStr1, aStr3);
+            CPPUNIT_ASSERT_EQUAL(aStr2, aStr3);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
