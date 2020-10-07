@@ -2750,6 +2750,9 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     OUString aObjName = pObject->GetName();
 
+    bool bDrawObj = false;
+    bool bFrame = false;
+
     SwFrameFormat* pRetFrameFormat = nullptr;
     if (bReplaceable)
     {
@@ -2759,6 +2762,8 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     }
     else
     {
+        bDrawObj = true;
+
         // Drawing objects, (e.g. ovals or drawing groups)
         if (pF->bRcaSimple)
         {
@@ -2774,7 +2779,11 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pRetFrameFormat = ConvertDrawTextToFly(pObject, pOurNewObject, pRecord,
                 eAnchor, pF, aFlySet);
             if (pRetFrameFormat)
+            {
                 bDone = true;
+                bDrawObj = false;
+                bFrame = true;
+            }
         }
 
         if (!bDone)
@@ -2830,7 +2839,12 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         if (!aObjName.isEmpty())
             pRetFrameFormat->SetName( aObjName );
         if (pRetFrameFormat->GetName().isEmpty())
-            pRetFrameFormat->SetName(m_rDoc.GetUniqueDrawObjectName());
+        {
+            if (bDrawObj)
+                pRetFrameFormat->SetName(m_rDoc.GetUniqueDrawObjectName());
+            else if (bFrame)
+                pRetFrameFormat->SetName(m_rDoc.GetUniqueFrameName());
+        }
     }
     return AddAutoAnchor(pRetFrameFormat);
 }
