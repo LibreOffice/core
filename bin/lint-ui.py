@@ -28,7 +28,7 @@ ALIGNMENT_TOP_PADDING = '6'
 MESSAGE_BOX_SPACING = '24'
 MESSAGE_BORDER_WIDTH = '12'
 
-IGNORED_WORDS = ['the', 'of', 'to', 'for', 'a', 'and', 'as', 'from', 'on', 'into', 'by', 'at', 'or', 'do', 'in', 'when']
+IGNORED_WORDS = ['the', 'of', 'to', 'for', 'a', 'and', 'as', 'from', 'on', 'into', 'by', 'at', 'or', 'do', 'in', 'when', 'no']
 
 # Hook the XML parser and add line number attributes
 class LineNumberingParser(ET.XMLParser):
@@ -164,14 +164,44 @@ def check_title_labels(root):
         first = True
         for word in words:
             if len(word) and word[0].islower() and (word not in IGNORED_WORDS) and not first:
-                lint_assert(False, "The word '" + word + "' should be capitalized", label)
+                context = title.attrib['context']
+                # exclude a couple of whole sentences
+                if sys.argv[1] == "cui/uiconfig/ui/optpathspage.ui" and context == "optpathspage|label1":
+                    pass
+                elif sys.argv[1] == "dbaccess/uiconfig/ui/password.ui" and context == "password|label1":
+                    pass
+                elif sys.argv[1] == "sc/uiconfig/scalc/ui/datastreams.ui" and context == "datastreams|label4":
+                    pass
+                elif sys.argv[1] == "sc/uiconfig/scalc/ui/scgeneralpage.ui" and context == "scgeneralpage|label6":
+                    pass
+                elif sys.argv[1] == "sfx2/uiconfig/ui/documentfontspage.ui" and context == "documentfontspage|fontScriptFrameLabel":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/testmailsettings.ui" and context == "testmailsettings|label8":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcomparison.ui" and context == "optcomparison|setting":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcompatpage.ui" and context == "optcompatpage|label11":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/optcaptionpage.ui" and context == "optcaptionpage|label1":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/mmresultemaildialog.ui" and context == "mmresultemaildialog|attachft":
+                    pass
+                elif sys.argv[1] == "sw/uiconfig/swriter/ui/mailmerge.ui" and context == "mailmerge|singledocument":
+                    pass
+                elif sys.argv[1] == "cui/uiconfig/ui/acorexceptpage.ui" and context == "acorexceptpage|label2":
+                    pass
+                elif sys.argv[1] == "dbaccess/uiconfig/ui/dbwizmysqlintropage.ui" and context == "dbwizmysqlintropage|label1":
+                    pass
+                else:
+                    lint_assert(False, "The word '" + word + "' should be capitalized", label)
             first = False
 
 def main():
     tree = ET.parse(sys.argv[1], parser=LineNumberingParser())
     root = tree.getroot()
 
-    lint_assert('domain' in root.attrib, "interface needs to specific translation domain")
+    if sys.argv[1] != "libreofficekit/qa/gtktiledviewer/gtv.ui":
+        lint_assert('domain' in root.attrib, "interface needs to specify translation domain")
 
     top_level_widgets = [element for element in root.findall('object') if element.attrib['class'] not in IGNORED_TOP_LEVEL_WIDGETS]
     lint_assert( len(top_level_widgets) <= 1, "should be only one top-level widget for us to analyze, found " + str(len(top_level_widgets)))
