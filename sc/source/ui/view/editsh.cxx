@@ -643,10 +643,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         = pEditView->GetWindow()->GetClipboard();
 
                     if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text) { rViewData.GetViewShell()->libreOfficeKitViewCallback(callbackType, text); } ;
-                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, &callback);
-                    }
+                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, SfxViewShell::Current());
                     else
                         vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, nullptr);
                 }
