@@ -797,8 +797,6 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
     {
         if (pTxtWnd->HasEditView())
         {
-            mpEditView = pTxtWnd->GetEditView();
-
             if (mbEditEngineCreated && mpEditEngine)
                 ResetEditMode();
             mbEditEngineCreated = false;
