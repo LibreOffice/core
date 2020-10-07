@@ -1363,10 +1363,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 ::uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetView().GetEditWin().GetClipboard();
 
                 if (comphelper::LibreOfficeKit::isActive())
-                {
-                    std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text) { GetView().libreOfficeKitViewCallback(callbackType, text); } ;
-                    vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, &callback );
-                }
+                    vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, SfxViewShell::Current());
                 else
                     vcl::unohelper::TextDataObject::CopyStringTo(hyperlinkLocation, xClipboard, nullptr );
             }

@@ -2253,14 +2253,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         = pOutView->GetWindow()->GetClipboard();
 
                     if (comphelper::LibreOfficeKit::isActive())
-                    {
-                        std::function<void (int, const char*)> callback = [&] (int callbackType, const char* text)
-                        {
-                            SfxViewFrame* pFrame = GetViewFrame();
-                            pFrame->GetViewShell()->libreOfficeKitViewCallback(callbackType, text);
-                        };
-                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, &callback);
-                    }
+                        vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard, SfxViewShell::Current());
                     else
                         vcl::unohelper::TextDataObject::CopyStringTo(pURLField->GetURL(), xClipboard);
                 }
