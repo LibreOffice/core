@@ -631,7 +631,7 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
 
     // AdditionsItem set location
     m_xContainer->set_grid_left_attach(0);
-    m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size() - 1);
+    m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size());
 
     // Set maximum length of the extension title
     OUString sExtensionName;
