@@ -1,0 +1,30 @@
+--- src/liborcus/orcus_xlsx.cpp
++++ src/liborcus/orcus_xlsx.cpp
+@@ -32,6 +32,7 @@
+ 
+ #include <cstdlib>
+ #include <iostream>
++#include <limits>
+ #include <string>
+ #include <cstring>
+ #include <sstream>
+--- src/liborcus/xls_xml_context.cpp
++++ src/liborcus/xls_xml_context.cpp
+@@ -16,6 +16,7 @@
+ #include <mdds/sorted_string_map.hpp>
+ 
+ #include <iostream>
++#include <limits>
+ 
+ using namespace std;
+ namespace ss = orcus::spreadsheet;
+--- src/liborcus/xlsx_revision_context.cpp
++++ src/liborcus/xlsx_revision_context.cpp
+@@ -16,6 +16,7 @@
+ #include "orcus/global.hpp"
+ 
+ #include <iostream>
++#include <limits>
+ 
+ using namespace std;
+ 
