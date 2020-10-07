@@ -787,7 +787,7 @@ void ScAccessibleEditLineTextData::Dispose()
 
 ScAccessibleTextData* ScAccessibleEditLineTextData::Clone() const
 {
-    return new ScAccessibleEditLineTextData(mpEditView, mpWindow);
+    return new ScAccessibleEditLineTextData(nullptr, mpWindow);
 }
 
 SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
