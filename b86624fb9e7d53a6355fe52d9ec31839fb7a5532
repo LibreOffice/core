@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d7967c3_eb6e1418",
+        "filename": "svx/source/sidebar/effect/EffectPropertyPanel.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-07T16:06:45Z",
+      "side": 1,
+      "message": "Specifically, the order is defined here.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 61
+      },
+      "revId": "b86624fb9e7d53a6355fe52d9ec31839fb7a5532",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
