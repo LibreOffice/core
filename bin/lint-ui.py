@@ -59,8 +59,8 @@ def lint_assert(predicate, warning=DEFAULT_WARNING_STR, node=None):
 def check_top_level_widget(element):
     # check widget type
     widget_type = element.attrib['class']
-    lint_assert(widget_type in POSSIBLE_TOP_LEVEL_WIDGETS,
-                "Top level widget should be 'GtkDialog', 'GtkFrame', 'GtkBox', or 'GtkGrid', but is " + widget_type)
+    if not(widget_type in POSSIBLE_TOP_LEVEL_WIDGETS):
+        return
 
     # check border_width property
     border_width_properties = element.findall("property[@name='border_width']")
@@ -204,15 +204,12 @@ def main():
         lint_assert('domain' in root.attrib, "interface needs to specify translation domain")
 
     top_level_widgets = [element for element in root.findall('object') if element.attrib['class'] not in IGNORED_TOP_LEVEL_WIDGETS]
-    lint_assert( len(top_level_widgets) <= 1, "should be only one top-level widget for us to analyze, found " + str(len(top_level_widgets)))
-    if len(top_level_widgets) > 1:
-        return
     # eg. one file contains only a Menu, which we don't check
     if len(top_level_widgets) == 0:
         return
 
-    top_level_widget = top_level_widgets[0]
-    check_top_level_widget(top_level_widget)
+    for top_level_widget in top_level_widgets:
+        check_top_level_widget(top_level_widget)
 
     # TODO - only do this if we have a GtkDialog?
     # check button box spacing
