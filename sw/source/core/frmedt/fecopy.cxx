@@ -397,10 +397,8 @@ bool SwFEShell::CopyDrawSel( SwFEShell& rDestShell, const Point& rSttPt,
                         pFormat->SetFormatAttr( SwFormatVertOrient( aPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // #i47455# - notify draw frame format
                         // that position attributes are already set.
-                        if ( dynamic_cast<const SwDrawFrameFormat*>( pFormat) !=  nullptr )
-                        {
-                            static_cast<SwDrawFrameFormat*>(pFormat)->PosAttrSet();
-                        }
+                        if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pFormat))
+                            pDrawFormat->PosAttrSet();
                     }
                     if( bSelectInsert )
                         pDestDrwView->MarkObj( pNew, pDestPgView );
@@ -997,10 +995,8 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
                                 pDV->MarkObj( pObj, pDV->GetSdrPageView() );
                                 // #i47455# - notify draw frame format
                                 // that position attributes are already set.
-                                if ( dynamic_cast<const SwDrawFrameFormat*>( pNew) !=  nullptr )
-                                {
-                                    static_cast<SwDrawFrameFormat*>(pNew)->PosAttrSet();
-                                }
+                                if (SwDrawFrameFormat *pDrawFormat = dynamic_cast<SwDrawFrameFormat*>(pNew))
+                                    pDrawFormat->PosAttrSet();
                             }
                         }
                     }

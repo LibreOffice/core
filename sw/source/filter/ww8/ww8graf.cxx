@@ -2817,11 +2817,10 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         }
     }
 
+    SwDrawFrameFormat* pDrawFrameFormat = dynamic_cast<SwDrawFrameFormat*>(pRetFrameFormat);
     // #i44344#, #i44681# - positioning attributes already set
-    if ( pRetFrameFormat /*#i52825# */ && dynamic_cast< const SwDrawFrameFormat *>( pRetFrameFormat ) !=  nullptr )
-    {
-        static_cast<SwDrawFrameFormat*>(pRetFrameFormat)->PosAttrSet();
-    }
+    if (pDrawFrameFormat)
+        pDrawFrameFormat->PosAttrSet();
     if (!IsInlineEscherHack())
         MapWrapIntoFlyFormat(pRecord, pRetFrameFormat);
 
