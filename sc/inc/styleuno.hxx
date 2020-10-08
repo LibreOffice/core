@@ -110,7 +110,7 @@ private:
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Family
 
-    ScStyleObj*             GetObjectByIndex_Impl(sal_uInt32 nIndex);
+    ScStyleObj*             GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScStyleObj*             GetObjectByName_Impl(const OUString& Name);
 
 public:
