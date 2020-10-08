@@ -368,6 +368,7 @@ public:
     void testTdf38394();
     void testTdf59666();
     void testInconsistentBookmark();
+    void testSpellOnlineParameter();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -580,6 +581,7 @@ public:
     CPPUNIT_TEST(testTdf54409);
     CPPUNIT_TEST(testTdf38394);
     CPPUNIT_TEST(testTdf59666);
+    CPPUNIT_TEST(testSpellOnlineParameter);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7293,6 +7295,18 @@ void SwUiWriterTest::testInconsistentBookmark()
             CPPUNIT_ASSERT_GREATER(pos2, pos3);
         }
     }
+}
+
+void SwUiWriterTest::testSpellOnlineParameter()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    bool bSet = pOpt->IsOnlineSpell();
+
+    uno::Sequence<beans::PropertyValue> params = comphelper::InitPropertySequence({{"Enable", uno::makeAny(!bSet)}});
+    lcl_dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
 
 void SwUiWriterTest::testTdf108423()

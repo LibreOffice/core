@@ -275,6 +275,22 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), aGradient.GetStartColor().AsRGBHexString());
     CPPUNIT_ASSERT_EQUAL(OUString("0000ff"), aGradient.GetEndColor().AsRGBHexString());
 }
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/empty.fodp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
+    uno::Sequence<beans::PropertyValue> params(comphelper::InitPropertySequence({
+        { "Enable",
+          uno::makeAny(!bSet) },
+    }));
+
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

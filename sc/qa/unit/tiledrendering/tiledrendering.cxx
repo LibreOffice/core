@@ -38,6 +38,7 @@
 #include <vcl/unohelp2.hxx>
 #include <sc.hrc>
 #include <comphelper/string.hxx>
+#include <docoptio.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -110,6 +111,7 @@ public:
     void testSheetGeometryDataCorrectness();
     void testDeleteCellMultilineContent();
     void testFunctionDlg();
+    void testSpellOnlineParameter();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -155,6 +157,7 @@ public:
     CPPUNIT_TEST(testSheetGeometryDataCorrectness);
     CPPUNIT_TEST(testDeleteCellMultilineContent);
     CPPUNIT_TEST(testFunctionDlg);
+    CPPUNIT_TEST(testSpellOnlineParameter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1682,6 +1685,22 @@ void ScTiledRenderingTest::testFunctionDlg()
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
     SfxLokHelper::setView(nView2);
     SfxViewShell::Current()->registerLibreOfficeKitViewCallback(nullptr, nullptr);
+}
+
+void ScTiledRenderingTest::testSpellOnlineParameter()
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    bool bSet = pDoc->GetDocOptions().IsAutoSpell();
+
+    uno::Sequence<beans::PropertyValue> params =
+    {
+        comphelper::makePropertyValue("Enable", uno::makeAny(!bSet)),
+    };
+
+    lcl_dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
 }
 
 void ScTiledRenderingTest::testVbaRangeCopyPaste()
