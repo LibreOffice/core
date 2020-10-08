@@ -787,6 +787,7 @@ void SwXMLImport::endDocument()
                     pDelNd->FormatToTextAttr( pTextNode );
                 else
                 {
+                    pTextNode->ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END);
                     pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
                     if (!pDelNd->GetNoCondAttr(RES_PARATR_LIST_ID, /*bInParents=*/false))
                     {
