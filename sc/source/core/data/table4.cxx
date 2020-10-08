@@ -967,7 +967,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         //  Analyse
 
         FillCmd eFillCmd;
-        FillDateCmd eDateCmd;
+        FillDateCmd eDateCmd = {};
         double nInc;
         sal_uInt16 nMinDigits;
         ScUserListData* pListData = nullptr;
