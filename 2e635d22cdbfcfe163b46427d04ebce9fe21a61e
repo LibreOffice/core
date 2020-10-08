@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51d074f2_079e61a1",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-10-08T05:31:19Z",
+      "side": 0,
+      "message": "Weld::SpinButton is derived from Weld::Entry so there shouldn\u0027t be a need to change this. The NF meaning at end of variable name is left over from when these were VclPtr\u003cNumericField\u003e types. I suppose they could be renamed m_xColSpinButton and m_xRowSpinButton.",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 55
+      },
+      "revId": "2e635d22cdbfcfe163b46427d04ebce9fe21a61e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfdf03a4_fa0ee155",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-10-08T05:31:19Z",
+      "side": 1,
+      "message": "Parentheses around m_xRow-\u003eget_text() can be dropped. Same goes for all the other .toInt64() changes",
+      "range": {
+        "startLine": 36,
+        "startChar": 11,
+        "endLine": 36,
+        "endChar": 41
+      },
+      "revId": "9760466d73f4e6382999fcf37c0d147f65a5901a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
