@@ -207,7 +207,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_DefaultFormComponentInspectorModel_get_implementation(
-    const css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
+    css::uno::XComponentContext* context , css::uno::Sequence<css::uno::Any> const&)
 {
     return cppu::acquire(new pcr::DefaultFormComponentInspectorModel(context));
 }
