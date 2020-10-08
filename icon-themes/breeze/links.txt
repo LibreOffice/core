@@ -2891,3 +2891,6 @@ cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
 cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
 cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
 cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
+
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
