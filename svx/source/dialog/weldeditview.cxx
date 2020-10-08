@@ -1463,7 +1463,7 @@ bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
 void WeldEditView::GetFocus()
 {
     if (m_xEditView)
-        m_xEditView->ShowCursor();
+        m_xEditView->ShowCursor(false);
 
     weld::CustomWidgetController::GetFocus();
 
