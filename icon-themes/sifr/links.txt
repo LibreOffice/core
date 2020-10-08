@@ -2716,3 +2716,6 @@ cmd/sc_librelogo-home.png cmd/sc_firstpage.png
 cmd/sc_librelogo-run.png cmd/sc_mediaplay.png
 cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
+
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
