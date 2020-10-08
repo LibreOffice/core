@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78eba2c7_a775894e",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-08T20:34:30Z",
+      "side": 1,
+      "message": "If the following call to FillAnalyse will assign a value to eDateCmd if it sets eFillCmd to FILL_DATE, then there is no good reason to initialize eDateCmd to a random value here, as eDateCmd is actually read below only if eFillCmd is FILL_DATE.  (And leaving eDateCmd uninitialized here has the advantage that tools like Valgrind can detect violations of the assumption that FillAnalyse will assign a value to eDateCmd if it sets eFillCmd to FILL_DATE.)",
+      "revId": "16dc075c10d876d436ab431182302604681cdfe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
