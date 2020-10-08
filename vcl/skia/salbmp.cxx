@@ -995,18 +995,18 @@ void SkiaSalBitmap::EnsureBitmapData()
     // Try to fill mBuffer from mImage.
     assert(mImage->colorType() == kN32_SkColorType);
     SkiaZone zone;
-    // Use kUnpremul_SkAlphaType to make Skia convert from premultiplied alpha when reading
-    // from the SkImage, in case there is any alpha involved. If converting to bpp<32 formats,
-    // we will ignore the alpha when converting to mBuffer. Unless bpp==32 and SKIA_USE_BITMAP32,
-    // in which case keep the format, since SKIA_USE_BITMAP32 implies premultiplied alpha.
+    // If the source image has no alpha, then use no alpha (faster to convert), otherwise
+    // use kUnpremul_SkAlphaType to make Skia convert from premultiplied alpha when reading
+    // from the SkImage (the alpha will be ignored if converting to bpp<32 formats, but
+    // the color channels must be unpremultiplied. Unless bpp==32 and SKIA_USE_BITMAP32,
+    // in which case use kPremul_SkAlphaType, since SKIA_USE_BITMAP32 implies premultiplied alpha.
     SkAlphaType alphaType = kUnpremul_SkAlphaType;
+    if (mImage->imageInfo().alphaType() == kOpaque_SkAlphaType)
+        alphaType = kOpaque_SkAlphaType;
 #if SKIA_USE_BITMAP32
     if (mBitCount == 32)
         alphaType = kPremul_SkAlphaType;
 #endif
-    // But if the source image has no alpha, then use no alpha (faster to convert).
-    if (mImage->imageInfo().alphaType() == kOpaque_SkAlphaType)
-        alphaType = kOpaque_SkAlphaType;
     SkBitmap bitmap;
     if (!bitmap.tryAllocPixels(SkImageInfo::MakeS32(mSize.Width(), mSize.Height(), alphaType)))
         abort();
