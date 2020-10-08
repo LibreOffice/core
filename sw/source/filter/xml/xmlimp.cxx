@@ -811,7 +811,10 @@ void SwXMLImport::endDocument()
                 if (!pTextNode->GetText().isEmpty())
                     pDelNd->FormatToTextAttr( pTextNode );
                 else
+                {
+                    pTextNode->ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END);
                     pTextNode->ChgFormatColl( pDelNd->GetTextColl() );
+                }
                 pTextNode->JoinNext();
             }
         }
