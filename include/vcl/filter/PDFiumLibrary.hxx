@@ -207,10 +207,9 @@ public:
     // Page size in points
     basegfx::B2DSize getPageSize(int nIndex);
     int getPageCount();
+    int getFileVersion();
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex);
-
-    FPDF_DOCUMENT getPointer() { return mpPdfDocument; }
 };
 
 struct PDFiumLibrary final : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
