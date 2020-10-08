@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75283fc8_736d8453",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-08T14:01:43Z",
+      "side": 1,
+      "message": "as in \"i\u0027ve tested the others and only jpeg is safe\" or as in \"so far, only jpeg is known to be safe\" ?",
+      "revId": "d9227aba82c1392d2e2b47eaec30b0cca25e25bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
