@@ -107,7 +107,7 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
         if (HasFocus())
         {
-            m_xEditView->ShowCursor();
+            m_xEditView->ShowCursor(false);
             vcl::Cursor* pCursor = m_xEditView->GetCursor();
             pCursor->DrawToDevice(rRenderContext);
         }
