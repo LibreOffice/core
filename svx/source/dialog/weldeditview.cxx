@@ -102,8 +102,7 @@ void WeldEditView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     {
         m_xEditView->SetBackgroundColor(aBgColor);
 
-        tools::Rectangle aLogicRect(rRenderContext.PixelToLogic(rRect));
-        m_xEditView->Paint(aLogicRect, &rRenderContext);
+        m_xEditView->Paint(rRect, &rRenderContext);
 
         if (HasFocus())
         {
