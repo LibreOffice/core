@@ -1930,13 +1930,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testLargePage)
     // The document has 1 page.
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
     // Check the value (not the unit) of the page size.
-    FS_SIZEF aSize;
-    FPDF_GetPageSizeByIndexF(pPdfDocument->getPointer(), 0, &aSize);
+    basegfx::B2DSize aSize = pPdfDocument->getPageSize(0);
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 8503.94
     // - Actual  : 17007.875
     // i.e. the value for 600 cm was larger than the 14 400 limit set in the spec.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, static_cast<double>(aSize.width), 0.01);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8503.94, aSize.getX(), 0.01);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
@@ -2033,8 +2032,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testDefaultVersion)
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    int nFileVersion = 0;
-    FPDF_GetFileVersion(pPdfDocument->getPointer(), &nFileVersion);
+    int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(16, nFileVersion);
 }
 
@@ -2060,8 +2058,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
     CPPUNIT_ASSERT(pPdfDocument);
-    int nFileVersion = 0;
-    FPDF_GetFileVersion(pPdfDocument->getPointer(), &nFileVersion);
+    int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 

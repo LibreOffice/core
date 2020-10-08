@@ -174,6 +174,13 @@ basegfx::B2DSize PDFiumDocument::getPageSize(int nIndex)
 
 int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
+int PDFiumDocument::getFileVersion()
+{
+    int nFileVersion = 0;
+    FPDF_GetFileVersion(mpPdfDocument, &nFileVersion);
+    return nFileVersion;
+}
+
 int PDFiumPage::getObjectCount() { return FPDFPage_CountObjects(mpPage); }
 
 std::unique_ptr<PDFiumPageObject> PDFiumPage::getObject(int nIndex)
