@@ -805,7 +805,10 @@ void SwXMLImport::endDocument( void )
                 if (!pTxtNode->GetTxt().isEmpty())
                     pDelNd->FmtToTxtAttr( pTxtNode );
                 else
+                {
+                    pTxtNode->ResetAttr(RES_CHRATR_BEGIN, RES_CHRATR_END);
                     pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );
+                }
                 pTxtNode->JoinNext();
             }
         }

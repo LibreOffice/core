@@ -2144,11 +2144,13 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     while( true )
                     {
                         // check current item
-                        sal_uInt16 nWhich = IsInvalidItem( pItem )
+                        const sal_uInt16 nWhich = IsInvalidItem( pItem )
                             ? pDest->GetpSwAttrSet()->GetWhichByPos( aIter.GetCurPos() )
                             : pItem->Which();
                         if( RES_FRMATR_STYLE_NAME != nWhich &&
                             RES_FRMATR_CONDITIONAL_STYLE_NAME != nWhich &&
+                            RES_PAGEDESC != nWhich &&
+                            RES_BREAK != nWhich &&
                             SFX_ITEM_SET == pDest->GetpSwAttrSet()->GetItemState( nWhich, false ) )
                         {
                             // check if parent value (original value in style) has the same value as in [pItem]
