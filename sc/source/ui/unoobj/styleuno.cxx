@@ -646,9 +646,9 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
         ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
-        if ( nIndex < aIter.Count() )
+        if ( nIndex < static_cast<sal_uInt32>(aIter.Count()) )
         {
-            SfxStyleSheetBase* pStyle = aIter[static_cast<sal_uInt16>(nIndex)];
+            SfxStyleSheetBase* pStyle = aIter[nIndex];
             if ( pStyle )
             {
                 return new ScStyleObj( pDocShell, eFamily, pStyle->GetName() );

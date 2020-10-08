@@ -2664,7 +2664,7 @@ SwStyleSheetIterator::~SwStyleSheetIterator()
     EndListening( *mxIterSheet->GetPool() );
 }
 
-sal_uInt16  SwStyleSheetIterator::Count()
+sal_Int32  SwStyleSheetIterator::Count()
 {
     // let the list fill correctly!!
     if( !bFirstCalled )
@@ -2672,7 +2672,7 @@ sal_uInt16  SwStyleSheetIterator::Count()
     return aLst.size();
 }
 
-SfxStyleSheetBase* SwStyleSheetIterator::operator[]( sal_uInt16 nIdx )
+SfxStyleSheetBase* SwStyleSheetIterator::operator[]( sal_Int32 nIdx )
 {
     // found
     if( !bFirstCalled )
