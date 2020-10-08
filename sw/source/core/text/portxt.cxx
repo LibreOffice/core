@@ -582,7 +582,7 @@ TextFrameIndex SwTextPortion::GetSpaceCnt(const SwTextSizeInfo &rInf,
             return TextFrameIndex(0);
     }
 
-    if ( InExpGrp() && PortionType::InputField == GetWhichPor() )
+    if ( InExpGrp() || PortionType::InputField == GetWhichPor() )
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
