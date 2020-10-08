@@ -380,6 +380,7 @@ public:
     void testTdf133589();
     void testInconsistentBookmark();
     void testInsertLongDateFormat();
+    void testSpellOnlineParameter();
 #if HAVE_FEATURE_PDFIUM
     void testInsertPdf();
 #endif
@@ -599,6 +600,7 @@ public:
     CPPUNIT_TEST(testTdf123786);
     CPPUNIT_TEST(testTdf133589);
     CPPUNIT_TEST(testInsertLongDateFormat);
+    CPPUNIT_TEST(testSpellOnlineParameter);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testInsertPdf);
 #endif
@@ -7354,6 +7356,24 @@ void SwUiWriterTest::testInconsistentBookmark()
             CPPUNIT_ASSERT_GREATER(pos2, pos3);
         }
     }
+}
+
+void SwUiWriterTest::testSpellOnlineParameter()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    bool bSet = pOpt->IsOnlineSpell();
+
+    uno::Sequence<beans::PropertyValue> params
+        = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
+
+    // set the same state as now and we don't expect any change (no-toggle)
+    params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
 
 void SwUiWriterTest::testTdf108423()

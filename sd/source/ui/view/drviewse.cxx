@@ -1340,7 +1340,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            bool bOnlineSpell = !GetDoc()->GetOnlineSpell();
+            bool bOnlineSpell;
+            const SfxPoolItem* pItem;
+
+            if (rReq.GetArgs()->HasItem(FN_PARAM_1, &pItem))
+                bOnlineSpell = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            else // Toggle
+                bOnlineSpell = !GetDoc()->GetOnlineSpell();
+
             GetDoc()->SetOnlineSpell(bOnlineSpell);
 
             ::Outliner* pOL = mpDrawView->GetTextEditOutliner();

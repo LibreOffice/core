@@ -379,6 +379,24 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dot length", 706, fDotLength, 12);
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Dash length", 2822, fDashLength, 12);
 }
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc("sd/qa/unit/data/empty.fodp"));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    bool bSet = pImpressDocument->GetDoc()->GetOnlineSpell();
+
+    uno::Sequence<beans::PropertyValue> params(
+        comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } }));
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
+
+    // set the same state as now and we don't expect any change (no-toggle)
+    params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
