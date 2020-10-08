@@ -195,8 +195,8 @@ public:
                           SfxStyleFamily eFam, SfxStyleSearchBits n=SfxStyleSearchBits::All );
     SfxStyleSearchBits GetSearchMask() const;
     SfxStyleFamily GetSearchFamily() const;
-    virtual sal_uInt16 Count();
-    virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
+    virtual sal_Int32 Count();
+    virtual SfxStyleSheetBase *operator[](sal_Int32 nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
     virtual SfxStyleSheetBase* Find(const OUString& rStr);

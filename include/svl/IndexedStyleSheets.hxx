@@ -93,11 +93,11 @@ public:
     HasStyleSheet(const rtl::Reference< SfxStyleSheetBase >& style) const;
 
     /** Obtain the number of style sheets which are held */
-    unsigned
+    sal_Int32
     GetNumberOfStyleSheets() const;
 
     /** Obtain the number of style sheets for which a certain condition holds */
-    unsigned
+    sal_Int32
     GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& predicate) const;
 
     /** Return the stylesheet by its position.
@@ -105,19 +105,18 @@ public:
      * @internal
      * Method is not const because the returned style sheet is not const
      */
-    SfxStyleSheetBase*
-    GetStyleSheetByPosition(unsigned pos);
+    SfxStyleSheetBase* GetStyleSheetByPosition(sal_Int32 pos);
 
     /** Find the position of a provided style.
      *
      * @throws std::runtime_error if the style has not been found.
      */
-    unsigned
+    sal_Int32
     FindStyleSheetPosition(const SfxStyleSheetBase& style) const;
 
     /** Obtain the positions of all styles which have a given name
      */
-    std::vector<unsigned>
+    std::vector<sal_Int32>
     FindPositionsByName(const OUString& name) const;
 
     enum class SearchBehavior { ReturnAll, ReturnFirst };
@@ -125,7 +124,7 @@ public:
      *
      * This method is fast because it can use the name-based index
      */
-    std::vector<unsigned>
+    std::vector<sal_Int32>
     FindPositionsByNameAndPredicate(const OUString& name, StyleSheetPredicate& predicate,
             SearchBehavior behavior = SearchBehavior::ReturnAll) const;
 
@@ -133,7 +132,7 @@ public:
      *
      * This method is slow because it cannot use the name-based index
      */
-    std::vector<unsigned>
+    std::vector<sal_Int32>
     FindPositionsByPredicate(StyleSheetPredicate& predicate) const;
 
     /** Execute a callback on all style sheets */
@@ -151,19 +150,18 @@ public:
     Reindex();
 
     /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found. */
-    SfxStyleSheetBase*
-    GetNthStyleSheetThatMatchesPredicate(unsigned n, StyleSheetPredicate& predicate,
-            unsigned startAt = 0);
+    SfxStyleSheetBase* GetNthStyleSheetThatMatchesPredicate(sal_Int32 n,
+                                                            StyleSheetPredicate& predicate,
+                                                            sal_Int32 startAt = 0);
 
     /** Get the positions of the style sheets which belong to a certain family.
      */
-    const std::vector<unsigned>&
+    const std::vector<sal_Int32>&
     GetStyleSheetPositionsByFamily(SfxStyleFamily) const;
 
 private:
     /** Register the position of a styleName in the index */
-    void
-    Register(const SfxStyleSheetBase& style, unsigned pos);
+    void Register(const SfxStyleSheetBase& style, sal_Int32 pos);
 
     typedef std::vector<rtl::Reference<SfxStyleSheetBase> > VectorType;
     /** Vector with the stylesheets to allow for index-based access.
@@ -179,7 +177,7 @@ private:
     /** A map which stores the positions of style sheets by their name */
     MapType mPositionsByName;
 
-    std::vector<std::vector<unsigned> > mStyleSheetPositionsByFamily;
+    std::vector<std::vector<sal_Int32>> mStyleSheetPositionsByFamily;
 };
 
 } /* namespace svl */

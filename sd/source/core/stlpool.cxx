@@ -617,7 +617,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
     // find all style sheets of the source pool which have the same family
     HasFamilyPredicate aHasFamilyPredicate(eFamily);
-    std::vector<unsigned> aSheetsWithFamily = rSourcePool.GetIndexedStyleSheets().FindPositionsByPredicate(aHasFamilyPredicate);
+    std::vector<sal_Int32> aSheetsWithFamily = rSourcePool.GetIndexedStyleSheets().FindPositionsByPredicate(aHasFamilyPredicate);
 
     for (const auto& rPos : aSheetsWithFamily)
     {
@@ -627,7 +627,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
         OUString aName( pSheet->GetName() );
 
         // now check whether we already have a sheet with the same name
-        std::vector<unsigned> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);
+        std::vector<sal_Int32> aSheetsWithName = GetIndexedStyleSheets().FindPositionsByName(aName);
         bool bAddToList = false;
         SfxStyleSheetBase * pExistingSheet = nullptr;
         if (!aSheetsWithName.empty())
@@ -915,7 +915,7 @@ void SdStyleSheetPool::UpdateStdNames()
     OUString aHelpFile;
     StyleSheetIsUserDefinedPredicate aPredicate;
     std::vector<SfxStyleSheetBase*> aEraseList;
-    std::vector<unsigned> aUserDefinedStyles = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
+    std::vector<sal_Int32> aUserDefinedStyles = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
     for (const auto& rStyle : aUserDefinedStyles)
     {
         SfxStyleSheetBase* pStyle = GetStyleSheetByPositionInIndex(rStyle);
