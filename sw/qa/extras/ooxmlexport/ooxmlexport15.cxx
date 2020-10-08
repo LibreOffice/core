@@ -791,6 +791,16 @@ DECLARE_OOXMLEXPORT_TEST(testImageSpaceSettings, "tdf135047_ImageSpaceSettings.f
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:drawing/wp:anchor", "distR", "90170");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf137295, "tdf137295.doc")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, the test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
