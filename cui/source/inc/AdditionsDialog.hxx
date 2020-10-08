@@ -124,7 +124,8 @@ public:
     std::unique_ptr<weld::Widget> m_xContainer;
     std::unique_ptr<weld::Image> m_xImageScreenshot;
     std::unique_ptr<weld::Button> m_xButtonInstall;
-    std::unique_ptr<weld::LinkButton> m_xLinkButtonName;
+    std::unique_ptr<weld::LinkButton> m_xLinkButtonWebsite;
+    std::unique_ptr<weld::Label> m_xLabelName;
     std::unique_ptr<weld::Label> m_xLabelAuthor;
     std::unique_ptr<weld::Label> m_xLabelDesc;
     std::unique_ptr<weld::Label> m_xLabelDescription;

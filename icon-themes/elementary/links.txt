@@ -2718,3 +2718,6 @@ cmd/sc_renametable.png cmd/sc_name.png
 cmd/32/textattributes.png cmd/32/fontdialog.png
 cmd/lc_textattributes.png cmd/lc_fontdialog.png
 cmd/sc_textattributes.png cmd/sc_fontdialog.png
+
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
