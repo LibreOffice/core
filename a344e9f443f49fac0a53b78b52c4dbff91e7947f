@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9dedc7d_5d879177",
+        "filename": "cui/source/dialogs/AdditionsDialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2020-10-08T10:16:53Z",
+      "side": 1,
+      "message": "Why not just use the sc/res/icon-set-stars-full.png file? any reason for this naming?",
+      "range": {
+        "startLine": 675,
+        "startChar": 53,
+        "endLine": 675,
+        "endChar": 66
+      },
+      "revId": "a344e9f443f49fac0a53b78b52c4dbff91e7947f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
