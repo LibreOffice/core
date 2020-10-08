@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0b202e4_4dbc1db9",
+        "filename": "sw/source/core/text/portxt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-08T12:27:46Z",
+      "side": 1,
+      "message": "The difference between this line using `\u0026\u0026`, and line 622 using `||`, seems suspicious - was it intentional?",
+      "range": {
+        "startLine": 585,
+        "startChar": 20,
+        "endLine": 585,
+        "endChar": 22
+      },
+      "revId": "ac76f9e8ad8b077623725d0f6dceb13adb37e43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
