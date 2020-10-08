@@ -16,6 +16,24 @@
       "revId": "d9227aba82c1392d2e2b47eaec30b0cca25e25bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f36958d8_f2f2e8d0",
+        "filename": "vcl/source/filter/graphicfilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-08T14:43:06Z",
+      "side": 1,
+      "message": "commit 9a5abf25c9bcabbd77cf37ae9c6a91cb4172df60 special-cases the JPEG filter, a while ago I did fixes to support parallel jpeg loading, this builds on top of that. Pretty much every other filter creates the bitmap as part of importing, but bitmap creation is not thread-safe. So I would assume no other filters work with this parallel setup, just because nobody handles GraphicFilterImportFlags::UseExistingBitmap, which is a requirement for parallel handling.\n\nI.e. my understanding is that the answer is the first, but s/tested/read the code/ :-)",
+      "parentUuid": "75283fc8_736d8453",
+      "revId": "d9227aba82c1392d2e2b47eaec30b0cca25e25bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
