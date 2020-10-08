@@ -2501,13 +2501,15 @@ void EditEngine::StyleSheetChanged( SfxStyleSheet* /* pStyle */ )
 
 void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
 {
-
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TextHeightChanged );
         aNotify.nParagraph = nPara;
         pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
+
+    for (EditView* pView : pImpEditEngine->aEditViews)
+        pView->pImpEditView->ScrollStateChange();
 }
 
 OUString EditEngine::GetUndoComment( sal_uInt16 nId ) const

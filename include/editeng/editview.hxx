@@ -114,6 +114,11 @@ public:
     // Triggered to update InputEngine cursor position
     virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) = 0;
 
+    // Triggered if scroll bar state should change
+    virtual void EditViewScrollStateChange()
+    {
+    }
+
     // implemented if drag and drop support is wanted
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
     {
