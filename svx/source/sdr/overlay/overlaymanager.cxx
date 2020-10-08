@@ -290,10 +290,10 @@ namespace sdr::overlay
                 // assume AA needs one pixel more and invalidate one pixel more
                 const double fDiscreteOne(getDiscreteOne());
                 const tools::Rectangle aInvalidateRectangle(
-                    static_cast<sal_Int32>(floor(rRange.getMinX() - fDiscreteOne)),
-                    static_cast<sal_Int32>(floor(rRange.getMinY() - fDiscreteOne)),
-                    static_cast<sal_Int32>(ceil(rRange.getMaxX() + fDiscreteOne)),
-                    static_cast<sal_Int32>(ceil(rRange.getMaxY() + fDiscreteOne)));
+                    static_cast<long>(floor(rRange.getMinX() - fDiscreteOne)),
+                    static_cast<long>(floor(rRange.getMinY() - fDiscreteOne)),
+                    static_cast<long>(ceil(rRange.getMaxX() + fDiscreteOne)),
+                    static_cast<long>(ceil(rRange.getMaxY() + fDiscreteOne)));
                 return aInvalidateRectangle;
             }
             else
