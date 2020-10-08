@@ -28,6 +28,7 @@ public:
     {
         return css::uno::Reference<css::accessibility::XAccessible>();
     }
+    // rRect is in Logical units rather than Pixels
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) = 0;
     virtual void Resize() {}
     virtual bool MouseButtonDown(const MouseEvent&) { return false; }
