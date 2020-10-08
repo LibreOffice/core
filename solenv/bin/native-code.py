@@ -338,6 +338,7 @@ core_constructor_list = [
     "com_sun_star_comp_embed_HatchWindowFactory_get_implementation",
 # vcl/vcl.android.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
+    "com_sun_star_comp_graphic_GraphicMapper_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
     "com_sun_star_frame_VCLSessionManagerClient_get_implementation",
     "vcl_FontIdentificator_get_implementation",
