@@ -30,6 +30,12 @@
 #if defined(OPENBSD)
 #include <sched.h>
 #endif
+#ifdef __FreeBSD__
+#if __FreeBSD_version <= 1201517
+#include <pthread_np.h>
+#define pthread_setname_np pthread_set_name_np
+#endif
+#endif
 #include <config_options.h>
 #include <o3tl/safeint.hxx>
 #include <osl/thread.h>
@@ -567,7 +573,7 @@ void SAL_CALL osl_setThreadName(char const * name)
     int err = pthread_setname_np( pthread_self(), shortname );
     if ( 0 != err )
         SAL_WARN("sal.osl", "pthread_setname_np failed with errno " << err);
-#elif defined __FreeBSD_kernel__
+#elif defined __FreeBSD__
     pthread_setname_np( pthread_self(), name );
 #elif defined MACOSX || defined IOS
     pthread_setname_np( name );
