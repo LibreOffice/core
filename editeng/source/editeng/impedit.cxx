@@ -1428,6 +1428,15 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     }
 }
 
+// call this so users of EditViewCallbacks can update their scrollbar state
+// so called when we have either scrolled to a new location
+// or the size of document has changed
+void ImpEditView::ScrollStateChange()
+{
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        pCallbacks->EditViewScrollStateChange();
+}
+
 Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
 {
     DBG_ASSERT( pEditEngine->pImpEditEngine->IsFormatted(), "Scroll: Not formatted!" );
@@ -1560,6 +1569,9 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
             pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
         }
+
+        if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+            pCallbacks->EditViewScrollStateChange();
 
         if (comphelper::LibreOfficeKit::isActive())
         {

@@ -399,7 +399,16 @@ void ImpEditEngine::FormatDoc()
                 }
                 bGrow = true;
                 if ( IsCallParaInsertedOrDeleted() )
+                {
                     GetEditEnginePtr()->ParagraphHeightChanged( nPara );
+
+                    for (EditView* pView : aEditViews)
+                    {
+                        ImpEditView* pImpView = pView->pImpEditView.get();
+                        pImpView->ScrollStateChange();
+                    }
+
+                }
                 pParaPortion->SetMustRepaint( false );
             }
 

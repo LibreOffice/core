@@ -390,6 +390,8 @@ public:
     void            DrawSelectionXOR( EditSelection, vcl::Region* pRegion = nullptr, OutputDevice* pTargetDevice = nullptr );
     void GetSelectionRectangles(EditSelection aTmpSel, std::vector<tools::Rectangle>& rLogicRects);
 
+    void ScrollStateChange();
+
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
     void            SetSelectionMode( EESelectionMode eMode );
