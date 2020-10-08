@@ -638,7 +638,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XStyleFamily
 
-ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
+ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     if ( pDocShell )
     {
@@ -648,7 +648,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         if ( nIndex < aIter.Count() )
         {
-            SfxStyleSheetBase* pStyle = aIter[static_cast<sal_uInt16>(nIndex)];
+            SfxStyleSheetBase* pStyle = aIter[nIndex];
             if ( pStyle )
             {
                 return new ScStyleObj( pDocShell, eFamily, pStyle->GetName() );

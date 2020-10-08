@@ -91,9 +91,9 @@ void IndexedStyleSheetsTest::AddingSameStylesheetTwiceHasNoEffect()
     rtl::Reference<SfxStyleSheetBase> sheet1(new MockedStyleSheet("sheet1"));
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
-    CPPUNIT_ASSERT_EQUAL(1u, iss.GetNumberOfStyleSheets());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), iss.GetNumberOfStyleSheets());
     iss.AddStyleSheet(sheet1);
-    CPPUNIT_ASSERT_EQUAL(1u, iss.GetNumberOfStyleSheets());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), iss.GetNumberOfStyleSheets());
 }
 
 void IndexedStyleSheetsTest::RemovedStyleSheetIsNotFound()
@@ -114,9 +114,9 @@ void IndexedStyleSheetsTest::RemovingStyleSheetWhichIsNotAvailableHasNoEffect()
     rtl::Reference<SfxStyleSheetBase> sheet2(new MockedStyleSheet("sheet2"));
     IndexedStyleSheets iss;
     iss.AddStyleSheet(sheet1);
-    CPPUNIT_ASSERT_EQUAL(1u, iss.GetNumberOfStyleSheets());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), iss.GetNumberOfStyleSheets());
     iss.RemoveStyleSheet(sheet2);
-    CPPUNIT_ASSERT_EQUAL(1u, iss.GetNumberOfStyleSheets());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), iss.GetNumberOfStyleSheets());
 }
 
 void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
@@ -131,17 +131,17 @@ void IndexedStyleSheetsTest::StyleSheetsCanBeRetrievedByTheirName()
     iss.AddStyleSheet(sheet2);
     iss.AddStyleSheet(sheet3);
 
-    std::vector<unsigned> r = iss.FindPositionsByName(name1);
+    std::vector<sal_Int32> r = iss.FindPositionsByName(name1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Two style sheets are found by 'name1'",
             2u, static_cast<unsigned>(r.size()));
     std::sort (r.begin(), r.end());
-    CPPUNIT_ASSERT_EQUAL(0u, r.at(0));
-    CPPUNIT_ASSERT_EQUAL(2u, r.at(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), r.at(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), r.at(1));
 
     r = iss.FindPositionsByName(name2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("One style sheets is found by 'name2'",
             1u, static_cast<unsigned>(r.size()));
-    CPPUNIT_ASSERT_EQUAL(1u, r.at(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), r.at(0));
 }
 
 void IndexedStyleSheetsTest::KnowsThatItStoresAStyleSheet()
@@ -176,10 +176,10 @@ void IndexedStyleSheetsTest::PositionCanBeQueriedByFamily()
     iss.AddStyleSheet(sheet2);
     iss.AddStyleSheet(sheet3);
 
-    const std::vector<unsigned>& v = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::Char);
+    const std::vector<sal_Int32>& v = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::Char);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Separation by family works.", static_cast<size_t>(2), v.size());
 
-    const std::vector<unsigned>& w = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::All);
+    const std::vector<sal_Int32>& w = iss.GetStyleSheetPositionsByFamily(SfxStyleFamily::All);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wildcard works for family queries.", static_cast<size_t>(3), w.size());
 }
 
@@ -197,11 +197,11 @@ void IndexedStyleSheetsTest::OnlyOneStyleSheetIsReturnedWhenReturnFirstIsUsed()
 
     DummyPredicate predicate; // returns always true, i.e., all style sheets match the predicate.
 
-    std::vector<unsigned> v = iss.FindPositionsByNameAndPredicate(name, predicate,
+    std::vector<sal_Int32> v = iss.FindPositionsByNameAndPredicate(name, predicate,
             IndexedStyleSheets::SearchBehavior::ReturnFirst);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Only one style sheet is returned.", static_cast<size_t>(1), v.size());
 
-    std::vector<unsigned> w = iss.FindPositionsByNameAndPredicate(name, predicate);
+    std::vector<sal_Int32> w = iss.FindPositionsByNameAndPredicate(name, predicate);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("All style sheets are returned.", static_cast<size_t>(3), w.size());
 }
 

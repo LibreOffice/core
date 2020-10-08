@@ -412,7 +412,7 @@ struct CaseInsensitiveNamePredicate : svl::StyleSheetPredicate
 ScStyleSheet* ScStyleSheetPool::FindCaseIns( const OUString& rName, SfxStyleFamily eFam )
 {
     CaseInsensitiveNamePredicate aPredicate(rName, eFam);
-    std::vector<unsigned> aFoundPositions = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
+    std::vector<sal_Int32> aFoundPositions = GetIndexedStyleSheets().FindPositionsByPredicate(aPredicate);
 
     for (const auto& rPos : aFoundPositions)
     {
