@@ -531,7 +531,11 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case SID_AUTOSPELL_CHECK:
-        if( STATE_TOGGLE == eState )
+        const SfxPoolItem* pItem;
+
+        if (pArgs->HasItem(FN_PARAM_1, &pItem))
+            bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        else if( STATE_TOGGLE == eState )
         {
             bFlag = !pOpt->IsOnlineSpell();
             bSet = bFlag;

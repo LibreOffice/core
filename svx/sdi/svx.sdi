@@ -8160,7 +8160,7 @@ SvxKerningItem Spacing SID_ATTR_CHAR_KERNING
 
 
 SfxBoolItem SpellOnline SID_AUTOSPELL_CHECK
-
+(SfxBoolItem Enable FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
