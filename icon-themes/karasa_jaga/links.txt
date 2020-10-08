@@ -2072,3 +2072,5 @@ vcl/res/radio5.png vcl/res/radio3.png
 vcl/source/src/msgbox.png vcl/res/msgbox.png
 xmlsecurity/res/notcertificate_16.png svx/res/notcertificate_16.png
 xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png

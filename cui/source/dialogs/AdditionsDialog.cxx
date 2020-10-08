@@ -282,6 +282,8 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
 
 void LoadImage(const OUString& rPreviewFile, std::shared_ptr<AdditionsItem> pCurrentItem)
 {
+    const sal_Int8 Margin = 6;
+
     SolarMutexGuard aGuard;
 
     GraphicFilter aFilter;
@@ -292,11 +294,30 @@ void LoadImage(const OUString& rPreviewFile, std::shared_ptr<AdditionsItem> pCur
     // for VCL to be able to create bitmaps / do visual changes in the thread
     aFilter.ImportGraphic(aGraphic, aURLObj);
     BitmapEx aBmp = aGraphic.GetBitmapEx();
+    Size aBmpSize = aBmp.GetSizePixel();
+    Size aThumbSize(pCurrentItem->m_xImageScreenshot->get_size_request());
+    if (!aBmp.IsEmpty())
+    {
+        double aScale;
+        if (aBmpSize.Width() > aThumbSize.Width() - 2 * Margin)
+        {
+            aScale = static_cast<double>(aBmpSize.Width()) / (aThumbSize.Width() - 2 * Margin);
+            aBmp.Scale(Size(aBmpSize.Width() / aScale, aBmpSize.Height() / aScale));
+        }
+        else if (aBmpSize.Height() > aThumbSize.Height() - 2 * Margin)
+        {
+            aScale = static_cast<double>(aBmpSize.Height()) / (aThumbSize.Height() - 2 * Margin);
+            aBmp.Scale(Size(aBmpSize.Width() / aScale, aBmpSize.Height() / aScale));
+        };
+        aBmpSize = aBmp.GetSizePixel();
+    }
 
     ScopedVclPtr<VirtualDevice> xVirDev = pCurrentItem->m_xImageScreenshot->create_virtual_device();
-    xVirDev->SetOutputSizePixel(aBmp.GetSizePixel());
-    xVirDev->DrawBitmapEx(Point(0, 0), aBmp);
-
+    xVirDev->SetOutputSizePixel(aThumbSize);
+    //white background since images come with a white border
+    xVirDev->SetBackground(Wallpaper(COL_WHITE));
+    xVirDev->Erase();
+    xVirDev->DrawBitmapEx(Point(aThumbSize.Width() / 2 - aBmpSize.Width() / 2, Margin), aBmp);
     pCurrentItem->m_xImageScreenshot->set_image(xVirDev.get());
     xVirDev.disposeAndClear();
 }
@@ -606,12 +627,13 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     , m_xContainer(m_xBuilder->weld_widget("additionsEntry"))
     , m_xImageScreenshot(m_xBuilder->weld_image("imageScreenshot"))
     , m_xButtonInstall(m_xBuilder->weld_button("buttonInstall"))
-    , m_xLinkButtonName(m_xBuilder->weld_link_button("linkButtonName"))
+    , m_xLinkButtonWebsite(m_xBuilder->weld_link_button("btnWebsite"))
+    , m_xLabelName(m_xBuilder->weld_label("lbName"))
     , m_xLabelAuthor(m_xBuilder->weld_label("labelAuthor"))
     , m_xLabelDesc(m_xBuilder->weld_label("labelDesc")) // no change (print description)
     , m_xLabelDescription(m_xBuilder->weld_label("labelDescription"))
-    , m_xLabelLicense(m_xBuilder->weld_label("labelLicense"))
-    , m_xLabelVersion(m_xBuilder->weld_label("labelVersion"))
+    , m_xLabelLicense(m_xBuilder->weld_label("lbLicenseText"))
+    , m_xLabelVersion(m_xBuilder->weld_label("lbVersionText"))
     , m_xLabelComments(m_xBuilder->weld_label("labelComments")) // no change
     , m_xLinkButtonComments(m_xBuilder->weld_link_button("linkButtonComments"))
     , m_xImageVoting1(m_xBuilder->weld_image("imageVoting1"))
@@ -647,43 +669,37 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
         sExtensionName = additionInfo.sName;
     }
 
-    m_xLinkButtonName->set_label(sExtensionName);
+    m_xLabelName->set_label(sExtensionName);
 
     double aExtensionRating = additionInfo.sRating.toDouble();
     switch (int(aExtensionRating))
     {
         case 5:
-            m_xImageVoting5->show();
+            m_xImageVoting5->set_from_icon_name("cmd/sc_stars-full.png");
             [[fallthrough]];
         case 4:
-            m_xImageVoting4->show();
+            m_xImageVoting4->set_from_icon_name("cmd/sc_stars-full.png");
             [[fallthrough]];
         case 3:
-            m_xImageVoting3->show();
+            m_xImageVoting3->set_from_icon_name("cmd/sc_stars-full.png");
             [[fallthrough]];
         case 2:
-            m_xImageVoting2->show();
+            m_xImageVoting2->set_from_icon_name("cmd/sc_stars-full.png");
             [[fallthrough]];
         case 1:
-            m_xImageVoting1->show();
-            break;
-        case 0:
-            m_xLabelNoVoting->show();
+            m_xImageVoting1->set_from_icon_name("cmd/sc_stars-full.png");
             break;
     }
 
-    m_xLinkButtonName->set_uri(additionInfo.sExtensionURL);
+    m_xLinkButtonWebsite->set_uri(additionInfo.sExtensionURL);
     m_xLabelDescription->set_label(additionInfo.sIntroduction);
 
     if (!additionInfo.sAuthorName.equalsIgnoreAsciiCase("null"))
         m_xLabelAuthor->set_label(additionInfo.sAuthorName);
 
     m_xButtonInstall->set_label(CuiResId(RID_SVXSTR_ADDITIONS_INSTALLBUTTON));
-    OUString sLicenseString = CuiResId(RID_SVXSTR_ADDITIONS_LICENCE) + additionInfo.sLicense;
-    m_xLabelLicense->set_label(sLicenseString);
-    OUString sVersionString
-        = CuiResId(RID_SVXSTR_ADDITIONS_REQUIREDVERSION) + additionInfo.sCompatibleVersion;
-    m_xLabelVersion->set_label(sVersionString);
+    m_xLabelLicense->set_label(additionInfo.sLicense);
+    m_xLabelVersion->set_label(">=" + additionInfo.sCompatibleVersion);
     m_xLinkButtonComments->set_label(additionInfo.sCommentNumber);
     m_xLinkButtonComments->set_uri(additionInfo.sCommentURL);
     m_xLabelDownloadNumber->set_label(additionInfo.sDownloadNumber);
