@@ -3233,67 +3233,67 @@ void SwContentTree::UpdateTracking()
     if (!((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) ||
           m_nOutlineTracking == 3 || nActPos == SwOutlineNodes::npos))
     {
-        // assure outline content type is expanded
         // this assumes outline content type is first in treeview
         std::unique_ptr<weld::TreeIter> xFirstEntry(m_xTreeView->make_iterator());
         if (m_xTreeView->get_iter_first(*xFirstEntry))
-            m_xTreeView->expand_row(*xFirstEntry);
-
-        m_xTreeView->all_foreach([this, nActPos](weld::TreeIter& rEntry){
-            bool bRet = false;
-            if (lcl_IsContent(rEntry, *m_xTreeView) && reinterpret_cast<SwContent*>(
-                        m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
-                        ContentTypeId::OUTLINE)
+        {
+            m_xTreeView->expand_row(*xFirstEntry); // assure outline content type is expanded
+            weld::TreeIter& rEntry = *xFirstEntry;
+            do
             {
-                if (reinterpret_cast<SwOutlineContent*>(
-                            m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
+                if (lcl_IsContent(rEntry, *m_xTreeView) && reinterpret_cast<SwContent*>(
+                            m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
+                        ContentTypeId::OUTLINE)
                 {
-                    std::unique_ptr<weld::TreeIter> xFirstSelected(
-                                m_xTreeView->make_iterator());
-                    if (!m_xTreeView->get_selected(xFirstSelected.get()))
-                        xFirstSelected.reset();
-                    // only select if not already selected or tree has multiple entries selected
-                    if (m_xTreeView->count_selected_rows() != 1 ||
-                            m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
+                    if (reinterpret_cast<SwOutlineContent*>(
+                                m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
                     {
-                        if (m_nOutlineTracking == 2) // focused outline tracking
+                        std::unique_ptr<weld::TreeIter> xFirstSelected(
+                                    m_xTreeView->make_iterator());
+                        if (!m_xTreeView->get_selected(xFirstSelected.get()))
+                            xFirstSelected.reset();
+                        // only select if not already selected or multiple entries are selected
+                        if (m_xTreeView->count_selected_rows() != 1 ||
+                                m_xTreeView->iter_compare(rEntry, *xFirstSelected) != 0)
                         {
-                            // collapse to children of root node
-                            std::unique_ptr<weld::TreeIter> xChildEntry(
-                                        m_xTreeView->make_iterator());
-                            if (m_xTreeView->get_iter_first(*xChildEntry) &&
-                                    m_xTreeView->iter_children(*xChildEntry))
+                            if (m_nOutlineTracking == 2) // focused outline tracking
                             {
-                                do
+                                // collapse to children of root node
+                                std::unique_ptr<weld::TreeIter> xChildEntry(
+                                            m_xTreeView->make_iterator());
+                                if (m_xTreeView->get_iter_first(*xChildEntry) &&
+                                        m_xTreeView->iter_children(*xChildEntry))
                                 {
-                                    if (reinterpret_cast<SwContent*>(
-                                                m_xTreeView->get_id(*xChildEntry).toInt64())->
-                                            GetParent()->GetType() == ContentTypeId::OUTLINE)
-                                        m_xTreeView->collapse_row(*xChildEntry);
-                                    else
-                                        break;
+                                    do
+                                    {
+                                        if (reinterpret_cast<SwContent*>(
+                                                    m_xTreeView->get_id(*xChildEntry).toInt64())->
+                                                GetParent()->GetType() == ContentTypeId::OUTLINE)
+                                            m_xTreeView->collapse_row(*xChildEntry);
+                                        else
+                                            break;
+                                    }
+                                    while (m_xTreeView->iter_next(*xChildEntry));
                                 }
-                                while (m_xTreeView->iter_next(*xChildEntry));
                             }
+                            // unselect all entries, make pEntry visible, and select
+                            m_xTreeView->set_cursor(rEntry);
+                            Select(); // set sensitivies of toolbox buttons for moving outlines
                         }
-                        // unselect all entries, make pEntry visible, and select
-                        m_xTreeView->set_cursor(rEntry);
-                        Select();
+                        break;
                     }
-                    bRet = true;
                 }
-            }
-            else
-            {
-                // use of this break assumes outline content type is first in tree
-                if (lcl_IsContentType(rEntry, *m_xTreeView) &&
-                        reinterpret_cast<SwContentType*>(
-                            m_xTreeView->get_id(rEntry).toInt64())->GetType() !=
-                        ContentTypeId::OUTLINE)
-                    bRet = true;
-            }
-            return bRet;
-        });
+                else
+                {
+                    // use of this break assumes outline content type is first in tree
+                    if (lcl_IsContentType(rEntry, *m_xTreeView) &&
+                            reinterpret_cast<SwContentType*>(
+                                m_xTreeView->get_id(rEntry).toInt64())->GetType() !=
+                            ContentTypeId::OUTLINE)
+                        break;
+                }
+            } while (m_xTreeView->iter_next(rEntry));
+        }
     }
     else
     {
