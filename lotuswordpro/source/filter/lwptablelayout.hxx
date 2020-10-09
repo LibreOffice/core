@@ -67,6 +67,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <unordered_map>
 
 class XFTableStyle;
 class XFTable;
@@ -164,7 +165,8 @@ private:
     void SplitConflictCells();
     rtl::Reference<XFTable> m_pXFTable;
     bool m_bConverted;
-    std::map<std::pair<sal_uInt16,sal_uInt8>,XFCell*> m_CellsMap;
+    typedef sal_Int32 RowCol;
+    std::unordered_map<RowCol, XFCell*> m_CellsMap;
 
     void PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID);
 };
