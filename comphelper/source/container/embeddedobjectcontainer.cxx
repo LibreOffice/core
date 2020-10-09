@@ -931,6 +931,14 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
             }
 
             OUString aTempName, aMediaType;
+            /* Do not create a new name for a removed object, in the pImpl->mpTempObjectContainer,
+            because the original m_aEntryName of xObj will be overwritten by InsertEmbeddedObject(),
+            so uno::Reference < embed::XEmbeddedObject >& xObj will misbehave in
+            EmbeddedObjectContainer::StoreAsChildren and SfxObjectShell::SaveCompletedChildren
+            and will throw an exception because of objects with the same names! */
+            if( !pImpl->mpTempObjectContainer->HasEmbeddedObject(aName) )
+                aTempName = aName;
+
             pImpl->mpTempObjectContainer->InsertEmbeddedObject( xObj, aTempName );
 
             uno::Reference < io::XInputStream > xStream = GetGraphicStream( xObj, &aMediaType );
