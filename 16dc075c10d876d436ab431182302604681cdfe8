@@ -16,6 +16,24 @@
       "revId": "16dc075c10d876d436ab431182302604681cdfe8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa66ce3d_a61017b6",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-10-09T06:48:07Z",
+      "side": 1,
+      "message": "Ok, then i delete it back.\n\nI considered to initialize it here, because it is about the same case as the previous..\nThe only difference is that the \"only if eFillCmd is FILL_DATE\" check is in this function, not in 1 function deeper.\nIf somone put the\n    else if ( eFillCmd \u003d\u003d FILL_LINEAR || eFillCmd \u003d\u003d FILL_DATE )        // values\n    {\nbranch into a new function.. (like as FillSeries), then it will suddenly become the same issue.",
+      "parentUuid": "78eba2c7_a775894e",
+      "revId": "16dc075c10d876d436ab431182302604681cdfe8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
