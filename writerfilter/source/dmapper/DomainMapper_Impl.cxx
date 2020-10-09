@@ -266,6 +266,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_nStartGenericField(0),
         m_bTextInserted(false),
         m_sCurrentPermId(0),
+        m_bFrameDirectionSet(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_sCurrentParaStyleName(),
