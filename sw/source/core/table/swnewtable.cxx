@@ -2185,7 +2185,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
             pNewLine->GetFrameFormat()->SetFormatAttr(lastSize);
         }
         SfxPoolItem const* pRowBrush(nullptr);
-        rSubLineFormat.GetItemState(RES_BACKGROUND, true, &pRowBrush);
+        (void)rSubLineFormat.GetItemState(RES_BACKGROUND, true, &pRowBrush);
         GetTabLines().insert(GetTabLines().begin() + nRow + i, pNewLine);
         for (size_t j = 0; j < pSourceLine->GetTabBoxes().size(); ++j)
         {
