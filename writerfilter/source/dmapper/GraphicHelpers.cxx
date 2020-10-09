@@ -67,8 +67,14 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page:
-                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin: // fallthrough intended
-                        m_nRelation =  text::RelOrientation::PAGE_FRAME;
+                        m_nRelation = text::RelOrientation::PAGE_FRAME;
+                        break;
+
+                    // We piggyback on PAGE_RIGHT for now, because we need to know
+                    // when the shape alignment is relative from the top margin.
+                    // (atrfrm.cxx around line 1365)
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin:
+                        m_nRelation = text::RelOrientation::PAGE_RIGHT; // missing PAGE_PRINT_AREA_TOP
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_bottomMargin:

@@ -34,10 +34,11 @@ class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
 {
     SwTwips         m_nYPos;  ///< Contains *always* the current RelPos.
     sal_Int16       m_eOrient;
+    bool            m_bIsAlignmentRelativeFromTopMargin = false;
     sal_Int16       m_eRelation;
 public:
-    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
-                     sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
+    SwFormatVertOrient(SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
+                       sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA, bool m_bIsAlignmentRelativeFromTopMargin = false);
     SwFormatVertOrient(SwFormatVertOrient const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "Pure virtual methods" of SfxPoolItem.
@@ -53,8 +54,10 @@ public:
 
     sal_Int16 GetVertOrient() const { return m_eOrient; }
     sal_Int16 GetRelationOrient() const { return m_eRelation; }
+    bool      GetIsAlignmentRelativeFromTopMargin() const { return m_bIsAlignmentRelativeFromTopMargin; }
     void   SetVertOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
     void   SetRelationOrient( sal_Int16 eNew ) { m_eRelation = eNew; }
+    void   SetIsAlignmentRelativeFromTopMargin( bool anAdjustment ) { m_bIsAlignmentRelativeFromTopMargin = anAdjustment; }
 
     SwTwips GetPos() const { return m_nYPos; }
     void    SetPos( SwTwips nNew ) { m_nYPos = nNew; }

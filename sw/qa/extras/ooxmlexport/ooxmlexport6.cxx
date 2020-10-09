@@ -998,6 +998,21 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf133924, "tdf133924.docx")
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", "notBeside");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
+                         "tdf133045_TestShapeAlignmentRelativeFromTopMargin.docx")
+{
+    // tdf#133045 These shapes are relatively aligned from top margin, vertically to
+    // top, center and bottom.
+
+    if (mbExported)
+        return;
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[1]/bounds", "top", "1487"); // center
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[2]/bounds", "top", "2668"); // bottom
+    assertXPath(pXmlDoc, "//SwAnchoredDrawObject[3]/bounds", "top", "298");  // top
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

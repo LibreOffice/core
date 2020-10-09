@@ -1297,11 +1297,12 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
-                                  sal_Int16 eRel )
+                                  sal_Int16 eRel, bool IsAlignmentRelativeFromTopMargin )
     : SfxPoolItem( RES_VERT_ORIENT ),
     m_nYPos( nY ),
     m_eOrient( eVert ),
-    m_eRelation( eRel )
+    m_eRelation( eRel ),
+    m_bIsAlignmentRelativeFromTopMargin( IsAlignmentRelativeFromTopMargin )
 {}
 
 bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
@@ -1359,6 +1360,19 @@ bool SwFormatVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_VERTORIENT_RELATION:
         {
             m_eRelation = lcl_IntToRelation(rVal);
+
+            if (m_eRelation == text::RelOrientation::PAGE_RIGHT)
+            {
+                // So at import, we set this PAGE_RIGHT, which make no sense in vertical,
+                // but allows us to identify the case when the shape alignment is relative
+                // from the top margin. (graphichelper.cxx around line 75)
+                m_eRelation = text::RelOrientation::PAGE_FRAME;
+                m_bIsAlignmentRelativeFromTopMargin = true;
+
+                // Hack it back to the "good" value. :)
+                uno::Any& aVal = const_cast<uno::Any&>(rVal);
+                aVal <<= m_eRelation;
+            }
         }
         break;
         case MID_VERTORIENT_POSITION:
