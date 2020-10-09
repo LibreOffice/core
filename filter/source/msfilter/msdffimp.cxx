@@ -1047,7 +1047,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         MSO_LineJoin eLineJointDefault = mso_lineJoinMiter;
         if ( eShapeType == mso_sptMin )
             eLineJointDefault = mso_lineJoinRound;
-        MSO_LineJoin eLineJoint = static_cast<MSO_LineJoin>(GetPropertyValue( DFF_Prop_lineJoinStyle, eLineJointDefault ));
+        auto eLineJoint = GetPropertyValue(DFF_Prop_lineJoinStyle, eLineJointDefault);
         css::drawing::LineJoint eXLineJoint( css::drawing::LineJoint_MITER );
         if ( eLineJoint == mso_lineJoinBevel )
             eXLineJoint = css::drawing::LineJoint_BEVEL;
