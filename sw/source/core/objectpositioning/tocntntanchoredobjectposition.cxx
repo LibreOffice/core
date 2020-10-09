@@ -230,7 +230,6 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
     // determine vertical position
     {
-
         // determine vertical positioning and alignment attributes
         SwFormatVertOrient aVert( rFrameFormat.GetVertOrient() );
 
@@ -248,6 +247,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             GetVertAlignmentValues( *pOrientFrame, rPageAlignLayFrame,
                                      aVert.GetRelationOrient(),
                                      nAlignAreaHeight, nAlignAreaOffset );
+
+            SwRect aHeaderRect;
+            const SwPageFrame* aPageFrame = pOrientFrame->FindPageFrame();
+            const SwHeaderFrame* pHeaderFrame = aPageFrame->GetHeaderFrame();
+            if (pHeaderFrame)
+                aHeaderRect = pHeaderFrame->GetPaintArea();
+            const auto nTopMarginHeight = aPageFrame->GetTopMargin() + aHeaderRect.Height();
+            const auto nHeightBetweenOffsetAndMargin = nAlignAreaOffset + nTopMarginHeight;
 
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
@@ -310,7 +317,10 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 break;
                 case text::VertOrientation::CENTER:
                 {
-                    nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
+                    if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_TOP)
+                        nRelPosY = (nAlignAreaOffset / 2) - (nObjHeight / 2) + (nHeightBetweenOffsetAndMargin / 2);
+                    else
+                        nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
                 }
                 break;
                 // #i22341#
@@ -347,8 +357,10 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         }
                         else
                         {
-                            nRelPosY += nAlignAreaHeight -
-                                        ( nObjHeight + nLowerSpace );
+                            if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_TOP)
+                                nRelPosY = 0 - (nObjHeight + nLowerSpace) + nHeightBetweenOffsetAndMargin;
+                            else
+                                nRelPosY += nAlignAreaHeight - (nObjHeight + nLowerSpace);
                         }
                     }
                 }
