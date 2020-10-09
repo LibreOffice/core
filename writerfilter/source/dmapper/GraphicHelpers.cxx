@@ -68,8 +68,11 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_page:
-                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin: // fallthrough intended
-                        m_nRelation =  text::RelOrientation::PAGE_FRAME;
+                        m_nRelation = text::RelOrientation::PAGE_FRAME;
+                        break;
+
+                    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_topMargin:
+                        m_nRelation = text::RelOrientation::PAGE_PRINT_AREA_TOP;
                         break;
 
                     case NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_bottomMargin:
