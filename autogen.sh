@@ -300,9 +300,14 @@ if (defined $ENV{NOCONFIGURE}) {
     # When running a shell script from Perl on WSL, weirdly named
     # environment variables like the "ProgramFiles(x86)" one don't get
     # imported by the shell. So export it as PROGRAMFILESX86 instead.
-    if (`wslsys 2>/dev/null` ne "") {
+    my $building_for_linux = 0;
+    foreach my $arg (@args) {
+        $building_for_linux = 1 if ($arg =~ /--host=x86_64.*linux/);
+    }
+    if (`wslsys 2>/dev/null` ne "" && !$building_for_linux) {
         if (!$ENV{"ProgramFiles(x86)"}) {
-            print STDERR "To build on WSL, you need to set the WSLENV environment variable in the Control Panel to 'ProgramFiles(x86)'\n";
+            print STDERR "To build for Windows on WSL, you need to set the WSLENV environment variable in the Control Panel to 'ProgramFiles(x86)'\n";
+            print STDERR "If you actually do want to build for WSL (Linux) on WSL, pass a --host=x86_64-pc-linux-gnu option\n";
             exit (1);
         }
         $ENV{"PROGRAMFILESX86"} = $ENV{"ProgramFiles(x86)"};
