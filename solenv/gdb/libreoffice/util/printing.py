@@ -7,7 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-from collections.abc import Mapping
+try:
+    from collections.abc import Mapping
+except:
+    from collections import Mapping
 import gdb
 import re
 import six
