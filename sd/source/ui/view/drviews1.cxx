@@ -39,6 +39,7 @@
 #include <svx/fmshell.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/graphicfilter.hxx>
 
 #include <view/viewoverlaymanager.hxx>
 
@@ -996,6 +997,13 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             GetViewShell()->DisconnectAllClients();
             VisAreaChanged(::tools::Rectangle(Point(), Size(1, 1)));
         }
+
+        // Try to prefetch all graphics for the active page. This will be done
+        // in threads to be more efficient than loading them on-demand one by one.
+        std::vector<Graphic*> graphics;
+        mpActualPage->getGraphicsForPrefetch(graphics);
+        if(graphics.size() > 1) // threading does not help with loading just one
+            GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
 
         if (meEditMode == EditMode::Page)
         {
