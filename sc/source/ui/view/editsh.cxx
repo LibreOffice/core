@@ -298,8 +298,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         pTopView->Paste();
                 }
 
-                if (pTopView)
-                    pTopView->GetWindow()->GrabFocus();
+                if (vcl::Window* pViewWindow = pTopView ? pTopView->GetWindow() : nullptr)
+                    pViewWindow->GrabFocus();
             }
             break;
 
@@ -310,7 +310,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (pTopView)
                 {
                     pTopView->Paste();
-                    pTopView->GetWindow()->GrabFocus();
+                    if (vcl::Window* pViewWindow = pTopView ? pTopView->GetWindow() : nullptr)
+                        pViewWindow->GrabFocus();
                 }
             }
             break;
@@ -458,8 +459,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 }
 
-                if (pTopView)
-                    pTopView->GetWindow()->GrabFocus();
+                if (vcl::Window* pViewWindow = pTopView ? pTopView->GetWindow() : nullptr)
+                    pViewWindow->GrabFocus();
             }
             break;
 
@@ -492,8 +493,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 }
                 pDlg.disposeAndClear();
 
-                if (pTopView)
-                    pTopView->GetWindow()->GrabFocus();
+                if (vcl::Window* pViewWindow = pTopView ? pTopView->GetWindow() : nullptr)
+                    pViewWindow->GrabFocus();
             }
             break;
 
