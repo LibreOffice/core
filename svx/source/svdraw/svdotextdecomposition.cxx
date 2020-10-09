@@ -861,6 +861,17 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 // is one. Check the shape itself, then the host page, then that page's master page.
 void SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
 {
+    const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
+    if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
+    {
+        Color aColor(rOutliner.GetBackgroundColor());
+        GetDraftFillColor(*pBackgroundFillSet, aColor);
+        rOutliner.SetBackgroundColor(aColor);
+    }
+}
+
+const SfxItemSet* SdrObject::getBackgroundFillSet() const
+{
     const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();
 
     if (drawing::FillStyle_NONE == pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
@@ -879,13 +890,17 @@ void SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
             }
         }
     }
+    return pBackgroundFillSet;
+}
 
-    if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
-    {
-        Color aColor(rOutliner.GetBackgroundColor());
-        GetDraftFillColor(*pBackgroundFillSet, aColor);
-        rOutliner.SetBackgroundColor(aColor);
-    }
+const Graphic* SdrObject::getFillGraphic() const
+{
+    if(IsGroupObject()) // Doesn't make sense, and GetObjectItemSet() asserts.
+        return nullptr;
+    const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
+    if (drawing::FillStyle_BITMAP != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
+        return nullptr;
+    return &pBackgroundFillSet->Get(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic();
 }
 
 void SdrTextObj::impDecomposeBlockTextPrimitive(
