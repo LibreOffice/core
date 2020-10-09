@@ -1536,9 +1536,9 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
     rIStrm.ReadUInt16( nTmp16 );
 
     enum RegionType { REGION_NULL, REGION_EMPTY, REGION_RECTANGLE, REGION_COMPLEX };
-    RegionType meStreamedType = static_cast<RegionType>(nTmp16);
+    auto eStreamedType = nTmp16;
 
-    switch(meStreamedType)
+    switch (eStreamedType)
     {
         case REGION_NULL:
         {
