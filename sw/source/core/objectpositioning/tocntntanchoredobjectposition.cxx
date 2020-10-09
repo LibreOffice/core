@@ -249,6 +249,14 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                                      aVert.GetRelationOrient(),
                                      nAlignAreaHeight, nAlignAreaOffset );
 
+            SwRect aHeaderRect;
+            const SwPageFrame* aPageFrame = pOrientFrame->FindPageFrame();
+            const SwHeaderFrame* pHeaderFrame = aPageFrame->GetHeaderFrame();
+            if (pHeaderFrame)
+                aHeaderRect = pHeaderFrame->GetPaintArea();
+            const SwTwips nTopMarginHeight = aPageFrame->GetTopMargin() + aHeaderRect.Height();
+            const SwTwips nHeightBetweenOffsetAndMargin = nAlignAreaOffset + nTopMarginHeight;
+
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
             const SwTwips nObjHeight = aRectFnSet.GetHeight(aObjBoundRect);
@@ -310,7 +318,10 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 break;
                 case text::VertOrientation::CENTER:
                 {
-                    nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
+                    if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_TOP)
+                        nRelPosY = (nAlignAreaOffset / 2) - (nObjHeight / 2) + (nHeightBetweenOffsetAndMargin / 2);
+                    else
+                        nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
                 }
                 break;
                 // #i22341#
@@ -347,8 +358,10 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                         }
                         else
                         {
-                            nRelPosY += nAlignAreaHeight -
-                                        ( nObjHeight + nLowerSpace );
+                            if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_TOP)
+                                nRelPosY = 0 - (nObjHeight + nLowerSpace) + nHeightBetweenOffsetAndMargin;
+                            else
+                                nRelPosY += nAlignAreaHeight - (nObjHeight + nLowerSpace);
                         }
                     }
                 }
@@ -525,7 +538,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                 // #i18732# - adjust <nRelPosY> by difference
                 // between 'page area' and 'anchor' frame, if position is
                 // vertical aligned to 'page areas'
-                else if ( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME )
+                else if (aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                         || aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA_TOP)
                 {
                     nVertOffsetToFrameAnchorPos += aRectFnSet.YDiff(
                                     aRectFnSet.GetTop(rPageAlignLayFrame.getFrameArea()),

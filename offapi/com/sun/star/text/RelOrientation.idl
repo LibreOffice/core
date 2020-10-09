@@ -73,11 +73,17 @@ published constants RelOrientation
          */
         const short TEXT_LINE = 9;
 
-    /** Similar to PAGE_PRINT_AREA, but count from bottom, not from top.
+    /** Bottom page border (page area below PAGE_PRINT_AREA).
 
         @since LibreOffice 7.0
      */
     const short PAGE_PRINT_AREA_BOTTOM = 10;
+
+    /** Top page border (page area above PAGE_PRINT_AREA).
+
+        @since LibreOffice 7.1
+     */
+    const short PAGE_PRINT_AREA_TOP = 11;
 
 };
 
