@@ -640,8 +640,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SvxFieldData* pField = pEditView->GetFieldAtCursor();
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
-                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
-                        = pEditView->GetWindow()->GetClipboard();
+                    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard = GetSystemClipboard();
 
                     if (comphelper::LibreOfficeKit::isActive())
                     {
