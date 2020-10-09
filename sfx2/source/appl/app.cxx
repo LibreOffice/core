@@ -256,8 +256,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate )
                 NotifyEvent( SfxViewEventHint( SfxEventHintId::DeactivateDoc, GlobalEventConfig::GetEventName(GlobalEventId::DEACTIVATEDOC), pOldFrame->GetObjectShell(), pOldFrame->GetFrame().GetController() ) );
 
-            if ( !comphelper::LibreOfficeKit::isDialogPainting() )
-                pOldFrame->DoDeactivate( bTaskActivate, pFrame );
+            pOldFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldFrame->GetProgress() )
                 pOldFrame->GetProgress()->Suspend();
