@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <o3tl/safeint.hxx>
 
@@ -197,7 +198,13 @@ void CGM::ImplDoClass1()
         }
         break;
         case 0x0f : /*Character Coding Announcer*/
-            pElement->eCharacterCodingA = static_cast<CharacterCodingA>(ImplGetUI16());
+        {
+            auto nCharacterCoding = ImplGetUI16();
+            if (nCharacterCoding <= CCA_EXT_8)
+                pElement->eCharacterCodingA = static_cast<CharacterCodingA>(nCharacterCoding);
+            else
+                SAL_WARN("filter.icgm", "CharacterCoding " << nCharacterCoding << " requested, but legal max is " << CCA_EXT_8);
+        }
         break;
         case 0x10 : /*Name Precision */break;                   // NS
         case 0x11 : /*Maximum VDC Extent */break;               // NS
