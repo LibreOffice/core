@@ -1464,6 +1464,22 @@ DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf137270, "tdf137270.docx")
+{
+    // Images had a bad position because IsFollowingTextFlow was not set for them.
+    // In MSO Word there is an option on the UI called "Move object with text", which
+    // is similar to our IsFollowingTextFlow property.
+    // The problem is that this UI option is not directly saved into the DOCX file
+    // but it is implicitly coded into the vertical relative position.
+    // Relative vertical position to paragraph means IsFollowingTextFlow should be set.
+
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(2), "VertOrientRelation"));
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(2), "IsFollowingTextFlow"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
 {
     // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing symbols in export

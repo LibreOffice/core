@@ -1420,6 +1420,11 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                     xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(m_pImpl->bLayoutInCell));
 
+                // In MSO "Move object with text" setting is automatically set for vert alignment relative to paragraph.
+                if (m_pImpl->nVertRelation == text::RelOrientation::FRAME)
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
+                        uno::makeAny(true));
+
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),
