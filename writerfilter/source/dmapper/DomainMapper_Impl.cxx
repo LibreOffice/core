@@ -785,7 +785,7 @@ OUString DomainMapper_Impl::GetCurrentParaStyleName()
     // use saved currParaStyleName as a fallback, in case no particular para style name applied.
     // tdf#134784 except in the case of first paragraph of shapes to avoid bad fallback.
     // TODO fix this "highly inaccurate" m_sCurrentParaStyleName
-    if ( !m_bIsFirstParaInShape )
+    if ( !IsInShape() )
         sName = m_sCurrentParaStyleName;
 
     PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
