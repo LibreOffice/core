@@ -24,6 +24,7 @@
 #include <salbmp.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <bmpfast.hxx>
 
 #include <string.h>
 #include <sal/log.hxx>
@@ -344,11 +345,14 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
     }
     else
     {
-        // TODO: use fastbmp infrastructure
-        Scanline pScanline = GetScanline( nY );
-        Scanline pScanlineRead = rReadAcc.GetScanline(nY);
-        for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
-            SetPixelOnData( pScanline, nX, rReadAcc.GetPixelFromData( pScanlineRead, nX ) );
+        long nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() );
+        if(!ImplFastCopyScanline( nY, *ImplGetBitmapBuffer(), *rReadAcc.ImplGetBitmapBuffer()))
+        {
+            Scanline pScanline = GetScanline( nY );
+            Scanline pScanlineRead = rReadAcc.GetScanline(nY);
+            for( long nX = 0; nX < nWidth; nX++ )
+                SetPixelOnData( pScanline, nX, rReadAcc.GetPixelFromData( pScanlineRead, nX ) );
+        }
     }
 }
 
@@ -371,13 +375,13 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
         memcpy(GetScanline(nY), aSrcScanline, nCount);
     else
     {
+        if(ImplFastCopyScanline( nY, *ImplGetBitmapBuffer(), aSrcScanline, nSrcScanlineFormat, nSrcScanlineSize ))
+            return;
+
         DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
                     nFormat != ScanlineFormat::N32BitTcMask,
                     "No support for pixel formats with color masks yet!" );
-
-        // TODO: use fastbmp infrastructure
         FncGetPixel pFncGetPixel;
-
         switch( nFormat )
         {
             case ScanlineFormat::N1BitMsbPal:    pFncGetPixel = GetPixelForN1BitMsbPal; break;
