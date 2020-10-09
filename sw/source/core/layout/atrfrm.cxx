@@ -1296,13 +1296,13 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // Partially implemented inline in hxx
-SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
-                                  sal_Int16 eRel )
-    : SfxPoolItem( RES_VERT_ORIENT ),
-    m_nYPos( nY ),
-    m_eOrient( eVert ),
-    m_eRelation( eRel )
-{}
+SwFormatVertOrient::SwFormatVertOrient(SwTwips nY, sal_Int16 eVert, sal_Int16 eRel)
+    : SfxPoolItem(RES_VERT_ORIENT)
+    , m_nYPos(nY)
+    , m_eOrient(eVert)
+    , m_eRelation(eRel)
+{
+}
 
 bool SwFormatVertOrient::operator==( const SfxPoolItem& rAttr ) const
 {

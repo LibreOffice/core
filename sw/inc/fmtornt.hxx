@@ -36,8 +36,8 @@ class SW_DLLPUBLIC SwFormatVertOrient: public SfxPoolItem
     sal_Int16       m_eOrient;
     sal_Int16       m_eRelation;
 public:
-    SwFormatVertOrient( SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
-                     sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA );
+    SwFormatVertOrient(SwTwips nY = 0, sal_Int16 eVert = css::text::VertOrientation::NONE,
+                       sal_Int16 eRel = css::text::RelOrientation::PRINT_AREA);
     SwFormatVertOrient(SwFormatVertOrient const &) = default; // SfxPoolItem copy function dichotomy
 
     /// "Pure virtual methods" of SfxPoolItem.

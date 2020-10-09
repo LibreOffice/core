@@ -79,6 +79,12 @@ published constants RelOrientation
      */
     const short PAGE_PRINT_AREA_BOTTOM = 10;
 
+    /** Need a top to differentiate between RelFromV_page and RelFromV_topMargin.
+
+        @since LibreOffice 7.0
+     */
+    const short PAGE_PRINT_AREA_TOP = 11;
+
 };
 
 
