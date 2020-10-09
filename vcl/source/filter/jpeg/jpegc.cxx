@@ -231,6 +231,12 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
                 nPixelSize = 1;
             }
 #if defined(JCS_EXTENSIONS)
+            else if (eFinalFormat == ScanlineFormat::N24BitTcBgr)
+            {
+                best_out_color_space = JCS_EXT_BGR;
+                eScanlineFormat = eFinalFormat;
+                nPixelSize = 3;
+            }
             else if (eFinalFormat == ScanlineFormat::N32BitTcBgra)
             {
                 best_out_color_space = JCS_EXT_BGRA;
