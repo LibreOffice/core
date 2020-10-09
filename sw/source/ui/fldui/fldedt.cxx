@@ -280,8 +280,6 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurField = rMgr.GetCurField();
 
-    EnsureSelection(pCurField, rMgr);
-
     sal_uInt16 nGroup = SwFieldMgr::GetGroup(pCurField->GetTypeId(), pCurField->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
@@ -290,6 +288,7 @@ IMPL_LINK(SwFieldEditDlg, NextPrevHdl, weld::Button&, rButton, void)
     pTabPage->EditNewField();
 
     Init();
+    EnsureSelection(pCurField, rMgr);
 }
 
 IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
