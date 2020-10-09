@@ -55,13 +55,10 @@ void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::X
 
 void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    if (msContextName.getLength() > 0)
+    if (msContextName.getLength() > 0 && !comphelper::LibreOfficeKit::isActive())
     {
-        BroadcastContextChange(
-            rxFrame,
-            GetModuleName(rxFrame),
-            (comphelper::LibreOfficeKit::isActive() ? msContextName:
-             vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default)));
+        BroadcastContextChange(rxFrame, GetModuleName(rxFrame),
+                               vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Default));
     }
 }
 
