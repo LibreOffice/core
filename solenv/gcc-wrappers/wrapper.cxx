@@ -262,7 +262,8 @@ int startprocess(string command, string args, bool verbose)
         &si, // Startup Info
         &pi) // Process Information
         ) {
-            cerr << "Error: could not create process" << endl;
+            auto const e = GetLastError();
+            cerr << "Error: could not create process \"" << cmdlineBuf << "\": " << e << endl;
             exit(1);
     }
 
