@@ -62,7 +62,7 @@ public:
     PIXBYTE GetRed() const     { return mpPixel[0]; }
     PIXBYTE GetGreen() const   { return mpPixel[1]; }
     PIXBYTE GetBlue() const    { return mpPixel[2]; }
-    static PIXBYTE GetAlpha()  { return 0; }
+    static PIXBYTE GetAlpha()  { return 255; }
     static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
@@ -82,7 +82,7 @@ public:
     PIXBYTE GetRed() const      { return mpPixel[2]; }
     PIXBYTE GetGreen() const    { return mpPixel[1]; }
     PIXBYTE GetBlue() const     { return mpPixel[0]; }
-    static PIXBYTE GetAlpha()   { return 0; }
+    static PIXBYTE GetAlpha()   { return 255; }
     static void SetAlpha( PIXBYTE ) {}
 
     void SetColor( PIXBYTE r, PIXBYTE g, PIXBYTE b ) const
