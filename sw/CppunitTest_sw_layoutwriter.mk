@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_use_common_precompiled_header,sw_layoutwriter))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_layoutwriter, \
     sw/qa/extras/layout/layout \
+    sw/qa/extras/layout/layout2 \
 ))
 
 # note: this links msword only for the reason to have an order dependency,
