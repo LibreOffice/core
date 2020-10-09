@@ -1058,7 +1058,7 @@
                     replacement image and keep only the id attribute.
                     See fdo#66645 -->
                     <xsl:apply-templates select="@draw:name"/>
-                    <xsl:apply-templates select="draw:object[1]"/>
+                    <xsl:apply-templates select="draw:object[1]"/><xsl:text> </xsl:text><!-- often trailing whitespace is missing -->
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="style">
