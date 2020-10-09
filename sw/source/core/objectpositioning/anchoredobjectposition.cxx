@@ -250,6 +250,7 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
         }
         break;
         case text::RelOrientation::PAGE_FRAME:
+        case text::RelOrientation::PAGE_PRINT_AREA_TOP:
         {
             nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.getFrameArea());
             nOffset = aRectFnSet.YDiff(
