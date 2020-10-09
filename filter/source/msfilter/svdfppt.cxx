@@ -932,7 +932,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     eTHA = SDRTEXTHORZADJUST_BLOCK;
 
                     // read text anchor
-                    MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
+                    auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
 
                     switch( eTextAnchor )
                     {
