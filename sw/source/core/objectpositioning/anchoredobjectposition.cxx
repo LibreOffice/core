@@ -311,6 +311,14 @@ void SwAnchoredObjectPosition::GetVertAlignmentValues(
 
         }
         break;
+        case text::RelOrientation::PAGE_PRINT_AREA_TOP:
+        {
+            nHeight = aRectFnSet.GetHeight(_rPageAlignLayFrame.getFrameArea());
+            nOffset = aRectFnSet.YDiff(
+                aRectFnSet.GetTop(_rPageAlignLayFrame.getFrameArea()),
+                nVertOrientTop);
+        }
+        break;
         // #i22341# - vertical alignment at top of line
         case text::RelOrientation::TEXT_LINE:
         {
