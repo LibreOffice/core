@@ -816,7 +816,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                 sal_Int32 nTextRotationAngle = 0;
                 if ( IsProperty( DFF_Prop_txflTextFlow ) )
                 {
-                    MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+                    auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
                     switch( eTextFlow )
                     {
                         case mso_txflBtoT :                     // Bottom to Top non-@
@@ -877,7 +877,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     eTHA = SDRTEXTHORZADJUST_CENTER;
 
                     // read text anchor
-                    MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
+                    auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
 
                     switch( eTextAnchor )
                     {
@@ -1047,7 +1047,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
                     }
                 }
                 SdrObject* pTObj = nullptr;
-                bool bWordWrap = static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) != mso_wrapNone;
+                bool bWordWrap = GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare) != mso_wrapNone;
                 bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0;
 
                 if ( dynamic_cast<const SdrObjCustomShape* >(pRet) !=  nullptr && ( eTextKind == OBJ_RECT ) )
@@ -1298,7 +1298,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
         }
         if ( GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
         {
-            if ( static_cast<MSO_FillType>(GetPropertyValue( DFF_Prop_fillType, mso_fillSolid )) == mso_fillBackground )
+            if (GetPropertyValue(DFF_Prop_fillType, mso_fillSolid) == mso_fillBackground)
             {
                 rData.aBackgroundColoredObjects.push_back( pRet );
             }
@@ -7661,7 +7661,7 @@ bool SdrPowerPointImport::IsVerticalText() const
     bool bVerticalText = false;
     if ( IsProperty( DFF_Prop_txflTextFlow ) )
     {
-        MSO_TextFlow eTextFlow = static_cast<MSO_TextFlow>( GetPropertyValue( DFF_Prop_txflTextFlow, 0 ) & 0xFFFF );
+        auto eTextFlow = GetPropertyValue(DFF_Prop_txflTextFlow, 0) & 0xFFFF;
         switch( eTextFlow )
         {
         case mso_txflTtoBA :                    // Top to Bottom @-font, above -> below
@@ -7692,7 +7692,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj const & rText
         eTHA = SDRTEXTHORZADJUST_CENTER;
 
         // read text anchor
-        MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
+        auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
 
         switch( eTextAnchor )
         {
@@ -7744,7 +7744,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj const & rText
         eTHA = SDRTEXTHORZADJUST_BLOCK;
 
         // read text anchor
-        MSO_Anchor eTextAnchor = static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop ));
+        auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, mso_anchorTop);
 
         switch( eTextAnchor )
         {
