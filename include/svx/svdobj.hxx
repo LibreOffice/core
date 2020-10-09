@@ -74,6 +74,7 @@ class SdrGluePointList;
 class SdrLayerIDSet;
 class Fraction;
 enum class PointerStyle;
+class Graphic;
 
 namespace basegfx
 {
@@ -917,6 +918,8 @@ public:
     const css::uno::WeakReference< css::uno::XInterface >& getWeakUnoShape() const { return maWeakUnoShape; }
 
     void setSuitableOutlinerBg(Outliner& rOutliner) const;
+    // If fillstyle is drawing::FillStyle_BITMAP, returns the graphic.
+    const Graphic* getFillGraphic() const;
 
 protected:
     tools::Rectangle            aOutRect;     // surrounding rectangle for Paint (incl. LineWidth, ...)
@@ -994,6 +997,8 @@ protected:
 
     // helper function for reimplementing Clone().
     template< typename T > T* CloneHelper(SdrModel& rTargetModel) const;
+
+    const SfxItemSet* getBackgroundFillSet() const;
 
 private:
     struct Impl;
