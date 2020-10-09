@@ -273,7 +273,14 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 rJobData.SetOrientation( static_cast<Orientation>(SVBT16ToUInt16( pOldJobData->nOrientation )) );
                 rJobData.SetDuplexMode( DuplexMode::Unknown );
                 rJobData.SetPaperBin( SVBT16ToUInt16( pOldJobData->nPaperBin ) );
-                rJobData.SetPaperFormat( static_cast<Paper>(SVBT16ToUInt16( pOldJobData->nPaperFormat )) );
+                sal_uInt16 nPaperFormat = SVBT16ToUInt16(pOldJobData->nPaperFormat);
+                if (nPaperFormat < NUM_PAPER_ENTRIES)
+                    rJobData.SetPaperFormat(static_cast<Paper>(nPaperFormat));
+                else
+                {
+                    SAL_WARN("vcl", "Parsing error: " << nPaperFormat <<
+                             " paper format, but legal max is " << NUM_PAPER_ENTRIES);
+                }
                 rJobData.SetPaperWidth( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperWidth )) );
                 rJobData.SetPaperHeight( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperHeight )) );
                 if ( rJobData.GetDriverDataLen() )
