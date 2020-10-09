@@ -16,6 +16,24 @@
       "revId": "1da5f05be97b2cf4fa59adff6a77bdb70927202b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fddf06a0_408e8d1b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-09T08:23:57Z",
+      "side": 1,
+      "message": "My local Linux ASan+UBSan build reliably hangs in CppunitTest_sw_uiwriter too (while it reliably succeeds if I replace this #if with\n\n  #if 0\n\nto not execute this particular test), and once it is hung, workdir/CppunitTest/sw_uiwriter.test.log keeps growing with\n\n[...]\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 197000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 198000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 199000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 200000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 201000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 202000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 203000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 204000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 205000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 206000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 207000\n  warn:vcl.schedule:1999952:1999952:vcl/source/app/svapp.cxx:469: ProcessEventsToIdle: 208000\n[...]",
+      "parentUuid": "d1bb1acf_1b4cfc36",
+      "revId": "1da5f05be97b2cf4fa59adff6a77bdb70927202b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
