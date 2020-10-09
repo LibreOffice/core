@@ -52,6 +52,8 @@
 #include "elements.hxx"
 #include "outact.hxx"
 
+#define MAX_PAGES_FOR_FUZZING 2048
+
 using namespace ::com::sun::star;
 
 CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XModel > & rModel)
@@ -386,6 +388,11 @@ void CGMImpressOutAct::InsertPage()
         maXDrawPage = xPage;
         if ( !ImplInitPage() )
             mpCGM->mbStatus = false;
+        if (mnCurrentPage > MAX_PAGES_FOR_FUZZING && utl::ConfigManager::IsFuzzing())
+        {
+            // ofz#21753 that's enough pages for fuzzing, we're not doing anything productive now
+            mpCGM->mbStatus = false;
+        }
     }
     mnCurrentPage++;
 }
