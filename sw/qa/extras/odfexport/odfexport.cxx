@@ -46,6 +46,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/documentconstants.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -776,6 +777,58 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
         }
     }
     CPPUNIT_ASSERT_EQUAL(3, nMatches);
+}
+
+DECLARE_ODFEXPORT_TEST(testTdf134987, "tdf134987.docx")
+{
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
+    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aSeq.getLength());
+
+    OUString aMediaType;
+    // checking first object (formula)
+    {
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("1"), uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
+        CPPUNIT_ASSERT(xObj.is());
+
+        uno::Reference<document::XStorageBasedDocument> xSBDoc(xObj, uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> xStorage(xSBDoc->getDocumentStorage());
+        CPPUNIT_ASSERT(xStorage.is());
+
+        uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xStorProps->getPropertyValue("MediaType") >>= aMediaType);
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII));
+    }
+    // checking second object (chart)
+    {
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("2"), uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
+        CPPUNIT_ASSERT(xObj.is());
+
+        uno::Reference<document::XStorageBasedDocument> xSBDoc(xObj, uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> xStorage(xSBDoc->getDocumentStorage());
+        CPPUNIT_ASSERT(xStorage.is());
+
+        uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xStorProps->getPropertyValue("MediaType") >>= aMediaType);
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII));
+    }
+    // checking third object (chart)
+    {
+        uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier(xAccess->getByName("3"), uno::UNO_QUERY);
+        uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
+        CPPUNIT_ASSERT(xObj.is());
+
+        uno::Reference<document::XStorageBasedDocument> xSBDoc(xObj, uno::UNO_QUERY);
+        uno::Reference<embed::XStorage> xStorage(xSBDoc->getDocumentStorage());
+        CPPUNIT_ASSERT(xStorage.is());
+
+        uno::Reference< beans::XPropertySet > xStorProps(xStorage, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xStorProps->getPropertyValue("MediaType") >>= aMediaType);
+        CPPUNIT_ASSERT(aMediaType.equalsIgnoreAsciiCase(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII));
+    }
 }
 
 DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
