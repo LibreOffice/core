@@ -2042,7 +2042,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 throw datatransfer::UnsupportedFlavorException();
 
             std::shared_ptr<GDIMetaFile> xMetaFile =
-                m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
+                m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
             if (xMetaFile)
             {
