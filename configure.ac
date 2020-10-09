@@ -3951,7 +3951,10 @@ if test "$_os" = "WINNT"; then
     case "$WIN_HOST_ARCH" in
     x64)
         AC_MSG_CHECKING([for a x86 compiler and libraries for 32-bit binaries required for TWAIN support])
-        if test -n "$WIN_MULTI_ARCH"; then
+        if test -n "$CXX_X86_BINARY"; then
+            BUILD_X86=TRUE
+            AC_MSG_RESULT([preset])
+        elif test -n "$WIN_MULTI_ARCH"; then
             BUILD_X86=TRUE
             CXX_X86_BINARY=`win_short_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
             CXX_X86_BINARY+=" /arch:SSE"
