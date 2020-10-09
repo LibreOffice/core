@@ -173,20 +173,21 @@ public:
     }
 };
 
+// This assumes the content uses the grayscale palette (needs to be checked
+// by code allowing the use of the format).
+// Only reading color is implemented, since e.g. 24bpp input couldn't be
+// easily guaranteed to be grayscale.
 template <>
-class TrueColorPixelPtr<ScanlineFormat::N8BitTcMask> : public BasePixelPtr
+class TrueColorPixelPtr<ScanlineFormat::N8BitPal> : public BasePixelPtr
 {
 public:
     void    operator++()                    { mpPixel += 1; }
-    PIXBYTE GetAlpha() const                { return mpPixel[0]; }
-};
 
-// TODO: for some reason many Alpha maps are ScanlineFormat::N8BitPal
-// they should be ScanlineFormat::N8BitTcMask
-template <>
-class TrueColorPixelPtr<ScanlineFormat::N8BitPal>
-: public TrueColorPixelPtr<ScanlineFormat::N8BitTcMask>
-{};
+    PIXBYTE GetRed() const      { return mpPixel[0]; }
+    PIXBYTE GetGreen() const    { return mpPixel[0]; }
+    PIXBYTE GetBlue() const     { return mpPixel[0]; }
+    static PIXBYTE GetAlpha()   { return 255; }
+};
 
 }
 
@@ -251,7 +252,8 @@ static void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     TrueColorPixelPtr<SRCFMT> aSrc( rSrc );
     while( --nPixelCount >= 0 )
     {
-        ImplBlendPixels(aDst, aSrc, aMsk.GetAlpha());
+        // VCL masks store alpha as color, hence the GetRed() and not GetAlpha().
+        ImplBlendPixels(aDst, aSrc, aMsk.GetRed());
         ++aDst;
         ++aSrc;
         ++aMsk;
@@ -424,13 +426,17 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         case ScanlineFormat::N1BitLsbPal:
         case ScanlineFormat::N4BitMsnPal:
         case ScanlineFormat::N4BitLsnPal:
-        case ScanlineFormat::N8BitPal:
             break;
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
+            break;
+
+        case ScanlineFormat::N8BitPal:
+            if(rSrc.maPalette.IsGreyPalette8Bit())
+                return ImplConvertFromBitmap<ScanlineFormat::N8BitPal>( rDst, rSrc );
             break;
 
         case ScanlineFormat::N24BitTcBgr:
@@ -737,13 +743,17 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         case ScanlineFormat::N1BitLsbPal:
         case ScanlineFormat::N4BitMsnPal:
         case ScanlineFormat::N4BitLsnPal:
-        case ScanlineFormat::N8BitPal:
             break;
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
+            break;
+
+        case ScanlineFormat::N8BitPal:
+            if(rSrc.maPalette.IsGreyPalette8Bit())
+                return ImplBlendFromBitmap<ScanlineFormat::N8BitPal>( rDst, rSrc, rMsk );
             break;
 
         case ScanlineFormat::N24BitTcBgr:
