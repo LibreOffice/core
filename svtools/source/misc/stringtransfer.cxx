@@ -33,20 +33,16 @@ namespace svt
 
 
     //= OStringTransferable
-
-
-    OStringTransferable::OStringTransferable(const OUString& _rContent)
-        :TransferableHelper()
-        ,m_sContent( _rContent )
+    OStringTransferable::OStringTransferable(const OUString& rContent)
+        : TransferDataContainer()
+        , m_sContent(rContent)
     {
     }
-
 
     void OStringTransferable::AddSupportedFormats()
     {
         AddFormat(SotClipboardFormatId::STRING);
     }
-
 
     bool OStringTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
@@ -57,16 +53,12 @@ namespace svt
         return false;
     }
 
-
     //= OStringTransfer
-
-
     void OStringTransfer::CopyString( const OUString& _rContent, vcl::Window* _pWindow )
     {
         rtl::Reference<OStringTransferable> pTransferable = new OStringTransferable( _rContent );
         pTransferable->CopyToClipboard( _pWindow );
     }
-
 
     bool OStringTransfer::PasteString( OUString& _rContent, vcl::Window* _pWindow )
     {
@@ -88,15 +80,12 @@ namespace svt
         return false;
     }
 
-
     void OStringTransfer::StartStringDrag( const OUString& _rContent, vcl::Window* _pWindow, sal_Int8 _nDragSourceActions )
     {
         rtl::Reference<OStringTransferable> pTransferable = new OStringTransferable( _rContent );
         pTransferable->StartDrag(_pWindow, _nDragSourceActions);
     }
 
-
 }   // namespace svt
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
