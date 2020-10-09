@@ -27,14 +27,16 @@
 
 namespace svt
 {
-
-
     //= OStringTransferable
-
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OStringTransferable final : public TransferableHelper
+    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OStringTransferable final : public TransferDataContainer
     {
     public:
-        OStringTransferable(const OUString& _rContent);
+        OStringTransferable(const OUString& rContent);
+
+        void UpdateData(const OUString& rContent)
+        {
+            m_sContent = rContent;
+        }
 
     private:
         // TransferableHelper overridables
@@ -46,7 +48,6 @@ namespace svt
 
 
     //= OStringTransfer
-
     class OStringTransfer
     {
     public:
@@ -66,9 +67,7 @@ namespace svt
         SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, vcl::Window* _pWindow, sal_Int8 _nDragSourceActions );
     };
 
-
 }   // namespace svt
-
 
 #endif // INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 
