@@ -911,7 +911,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         sal_Int32 nLineWidth = static_cast<sal_Int32>(GetPropertyValue( DFF_Prop_lineWidth, 9525 ));
 
         // support LineCap
-        const MSO_LineCap eLineCap(static_cast<MSO_LineCap>(GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapFlat)));
+        auto eLineCap = GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapFlat);
 
         switch(eLineCap)
         {
@@ -933,7 +933,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             }
         }
 
-        MSO_LineDashing eLineDashing = static_cast<MSO_LineDashing>(GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid ));
+        auto eLineDashing = GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid);
         if (eLineDashing == mso_lineSolid || nLineWidth < 0)
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
@@ -1063,9 +1063,9 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
             if ( IsProperty( DFF_Prop_lineStartArrowhead ) )
             {
-                MSO_LineEnd         eLineEnd = static_cast<MSO_LineEnd>(GetPropertyValue( DFF_Prop_lineStartArrowhead, 0 ));
-                MSO_LineEndWidth    eWidth = static_cast<MSO_LineEndWidth>(GetPropertyValue( DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow ));
-                MSO_LineEndLength   eLength = static_cast<MSO_LineEndLength>(GetPropertyValue( DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow ));
+                auto eLineEnd = GetPropertyValue(DFF_Prop_lineStartArrowhead, 0);
+                auto eWidth = GetPropertyValue(DFF_Prop_lineStartArrowWidth, mso_lineMediumWidthArrow);
+                auto eLength = GetPropertyValue(DFF_Prop_lineStartArrowLength, mso_lineMediumLenArrow);
 
                 sal_Int32   nArrowWidth;
                 bool        bArrowCenter;
@@ -1576,7 +1576,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
     rSet.Put( makeSdrTextUpperDistItem( nTextTop ) );
     rSet.Put( makeSdrTextLowerDistItem( nTextBottom ) );
 
-    rSet.Put( makeSdrTextWordWrapItem( static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) != mso_wrapNone ) );
+    rSet.Put( makeSdrTextWordWrapItem( GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare) != mso_wrapNone ) );
     rSet.Put( makeSdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape, 0 ) & 2 ) != 0 ) );
 }
 
@@ -5116,9 +5116,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         pImpRec->nShapeId   = rObjData.nShapeId;
         pImpRec->eShapeType = rObjData.eShapeType;
 
-        MSO_WrapMode eWrapMode( static_cast<MSO_WrapMode>(GetPropertyValue(
-                                                            DFF_Prop_WrapText,
-                                                            mso_wrapSquare )) );
+        auto eWrapMode = GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare);
         rObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt,
                                             DFF_msofbtClientAnchor,
                                             SEEK_FROM_CURRENT_AND_RESTART );
@@ -5342,7 +5340,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 aSet.Put( makeSdrTextAutoGrowWidthItem( false ) );
             }
 
-            switch ( static_cast<MSO_WrapMode>(GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare )) )
+            switch (GetPropertyValue(DFF_Prop_WrapText, mso_wrapSquare))
             {
                 case mso_wrapNone :
                     aSet.Put( makeSdrTextAutoGrowWidthItem( true ) );
@@ -5371,8 +5369,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // read text anchor
             if ( IsProperty( DFF_Prop_anchorText ) )
             {
-                MSO_Anchor eTextAnchor =
-                    static_cast<MSO_Anchor>(GetPropertyValue( DFF_Prop_anchorText, 0 ));
+                auto eTextAnchor = GetPropertyValue(DFF_Prop_anchorText, 0);
 
                 SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
                 bool bTVASet(false);
