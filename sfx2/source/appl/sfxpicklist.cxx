@@ -118,9 +118,8 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
         }
         else
         {
-            std::shared_ptr<GDIMetaFile> xMetaFile = pDocSh->GetPreviewMetaFile();
-            BitmapEx aResultBitmap;
-            if (xMetaFile->CreateThumbnail(aResultBitmap))
+            BitmapEx aResultBitmap = pDocSh->GetPreviewBitmap();
+            if (!aResultBitmap.IsEmpty())
             {
                 SvMemoryStream aStream(65535, 65535);
                 vcl::PNGWriter aWriter(aResultBitmap);

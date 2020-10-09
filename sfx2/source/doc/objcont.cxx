@@ -35,6 +35,7 @@
 #include <unotools/securityoptions.hxx>
 #include <tools/datetime.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/helpers.hxx>
 #include <rtl/uri.hxx>
 
 #include <unotools/useroptions.hxx>
@@ -94,11 +95,32 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
 std::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
 {
-    return CreatePreviewMetaFile_Impl( bFullContent );
+    auto xFile = std::make_shared<GDIMetaFile>();
+    ScopedVclPtrInstance< VirtualDevice > pDevice;
+    pDevice->EnableOutput( false );
+    if(!CreatePreview_Impl(bFullContent, pDevice, xFile.get()))
+        return std::shared_ptr<GDIMetaFile>();
+    return xFile;
 }
 
-std::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
+BitmapEx SfxObjectShell::GetPreviewBitmap( bool bFullContent, BmpConversion nColorConversion,
+    BmpScaleFlag nScaleFlag) const
+{
+    ScopedVclPtrInstance< VirtualDevice > pDevice;
+    pDevice->SetAntialiasing(AntialiasingFlags::Enable | pDevice->GetAntialiasing());
+    if(!CreatePreview_Impl(bFullContent, pDevice, nullptr))
+        return BitmapEx();
+    Size size = pDevice->GetOutputSizePixel();
+    BitmapEx aBitmap = pDevice->GetBitmapEx( Point(), size);
+    // Scale down the image to the desired size from the 4*size from CreatePreview_Impl().
+    size = Size( size.Width() / 4, size.Height() / 4 );
+    aBitmap.Scale(size, nScaleFlag);
+    if (!aBitmap.IsEmpty())
+        aBitmap.Convert(nColorConversion);
+    return aBitmap;
+}
+
+bool SfxObjectShell::CreatePreview_Impl( bool bFullContent, VirtualDevice* pDevice, GDIMetaFile* pFile) const
 {
     // DoDraw can only be called when no printing is done, otherwise
     // the printer may be turned off
@@ -106,17 +128,9 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
-         return std::shared_ptr<GDIMetaFile>();
-
-    auto xFile = std::make_shared<GDIMetaFile>();
-
-    ScopedVclPtrInstance< VirtualDevice > pDevice;
-    pDevice->EnableOutput( false );
+         return false;
 
     MapMode aMode( GetMapUnit() );
-    pDevice->SetMapMode( aMode );
-    xFile->SetPrefMapMode( aMode );
-
     Size aTmpSize;
     sal_Int8 nAspect;
     if ( bFullContent )
@@ -130,11 +144,47 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
         aTmpSize = GetFirstPageSize();
     }
 
-    xFile->SetPrefSize( aTmpSize );
     DBG_ASSERT( !aTmpSize.IsEmpty(),
         "size of first page is 0, override GetFirstPageSize or set visible-area!" );
 
-    xFile->Record( pDevice );
+    if(pFile)
+    {
+        pDevice->SetMapMode( aMode );
+        pFile->SetPrefMapMode( aMode );
+        pFile->SetPrefSize( aTmpSize );
+        pFile->Record( pDevice );
+    }
+    else
+    {
+        // Use pixel size, that's also what DoDraw() requires in this case,
+        // despite the metafile case (needlessly?) setting mapmode.
+        Size aSizePix = pDevice->LogicToPixel( aTmpSize, aMode );
+        // Code based on GDIMetaFile::CreateThumbnail().
+        sal_uInt32      nMaximumExtent = 256;
+        // determine size that has the same aspect ratio as image size and
+        // fits into the rectangle determined by nMaximumExtent
+        if ( aSizePix.Width() && aSizePix.Height()
+          && ( sal::static_int_cast< unsigned long >(aSizePix.Width()) >
+                   nMaximumExtent ||
+               sal::static_int_cast< unsigned long >(aSizePix.Height()) >
+                   nMaximumExtent ) )
+        {
+            double      fWH = static_cast< double >( aSizePix.Width() ) / aSizePix.Height();
+            if ( fWH <= 1.0 )
+            {
+                aSizePix.setWidth( FRound( nMaximumExtent * fWH ) );
+                aSizePix.setHeight( nMaximumExtent );
+            }
+            else
+            {
+                aSizePix.setWidth( nMaximumExtent );
+                aSizePix.setHeight( FRound(  nMaximumExtent / fWH ) );
+            }
+        }
+        // do it 4x larger to be able to scale it down & get beautiful antialias
+        aTmpSize = Size( aSizePix.Width() * 4, aSizePix.Height() * 4 );
+        pDevice->SetOutputSizePixel( aTmpSize );
+    }
 
     LanguageType eLang;
     SvtCTLOptions aCTLOptions;
@@ -149,9 +199,10 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 
     const_cast<SfxObjectShell*>(this)->DoDraw( pDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
 
-    xFile->Stop();
+    if(pFile)
+        pFile->Stop();
 
-    return xFile;
+    return true;
 }
 
 

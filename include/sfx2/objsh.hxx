@@ -26,6 +26,7 @@
 #include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <svl/poolitem.hxx>
 #include <sot/formats.hxx>
@@ -64,6 +65,7 @@ class Color;
 class Fraction;
 class SvGlobalName;
 class InfobarData;
+class VirtualDevice;
 
 enum class SfxModelFlags;
 enum class SfxEventHintId;
@@ -445,6 +447,10 @@ public:
     Size                        GetFirstPageSize() const;
     bool                        DoClose();
     std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
+    BitmapEx                    GetPreviewBitmap(
+                                    bool bFullContent = false,
+                                    BmpConversion nColorConversion = BmpConversion::N24Bit,
+                                    BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
     virtual void                CancelTransfers();
 
     bool                        GenerateAndStoreThumbnail(
@@ -681,7 +687,7 @@ public:
                                 bool bShowCloseButton = true);
     std::vector<InfobarData>& getPendingInfobars();
 
-    SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl(bool bFullContent) const;
+    SAL_DLLPRIVATE bool CreatePreview_Impl(bool bFullContent, VirtualDevice* pDevice, GDIMetaFile* pFile) const;
 
     SAL_DLLPRIVATE static bool IsPackageStorageFormat_Impl(const SfxMedium &);
 
