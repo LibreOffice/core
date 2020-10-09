@@ -614,9 +614,13 @@ void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
 {
     for( size_t i = 0; i < GetObjCount(); ++i)
     {
-        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(GetObj(i)))
+        SdrObject* obj = GetObj(i);
+        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(obj))
             if(!grafObj->GetGraphic().isAvailable())
                 graphics.push_back( const_cast<Graphic*>(&grafObj->GetGraphic()));
+        if( const Graphic* fillGraphic = obj->getFillGraphic())
+            if(!fillGraphic->isAvailable())
+                graphics.push_back( const_cast<Graphic*>(fillGraphic));
     }
 }
 
