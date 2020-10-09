@@ -152,7 +152,7 @@ void LwpParaBorderOverride::Read(LwpObjectStream *pStrm)
 
             if( pStrm->CheckExtra() )
             {
-                m_eRightType = static_cast<BorderWidthType>(pStrm->QuickReaduInt16());
+                m_eRightType = readBorderWidthType(pStrm);
                 m_nRightWidth = pStrm->QuickReaduInt32();
             }
         }
