@@ -457,6 +457,103 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     return false;
 }
 
+static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, long nY )
+{
+    if( rBuf.mnFormat & ScanlineFormat::TopDown )
+        return rBuf.mpBits + nY * rBuf.mnScanlineSize;
+    else
+        return rBuf.mpBits + (rBuf.mnHeight - 1 - nY) * rBuf.mnScanlineSize;
+}
+
+static inline Scanline ImplGetScanline( BitmapBuffer& rBuf, long nY )
+{
+    return const_cast<Scanline>(ImplGetScanline( const_cast<const BitmapBuffer&>(rBuf), nY ));
+}
+
+template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT>
+static bool ImplCopyToScanline( long nY, BitmapBuffer& rDst, TrueColorPixelPtr<SRCFMT>& rSrcLine, long nSrcWidth )
+{
+    TrueColorPixelPtr<DSTFMT> aDstType;
+    aDstType.SetRawPtr( ImplGetScanline( rDst, nY ));
+    ImplConvertLine( aDstType, rSrcLine, std::min( nSrcWidth, rDst.mnWidth ));
+    return true;
+}
+
+template <ScanlineFormat SRCFMT>
+static bool ImplCopyFromScanline( long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline, long nSrcWidth )
+{
+    TrueColorPixelPtr<SRCFMT> aSrcType;
+    aSrcType.SetRawPtr( const_cast<Scanline>( aSrcScanline ));
+    // select the matching instantiation for the destination's bitmap format
+    switch( RemoveScanline( rDst.mnFormat ))
+    {
+        case ScanlineFormat::N24BitTcBgr:
+            return ImplCopyToScanline<ScanlineFormat::N24BitTcBgr>( nY, rDst, aSrcType, nSrcWidth );
+        case ScanlineFormat::N24BitTcRgb:
+            return ImplCopyToScanline<ScanlineFormat::N24BitTcRgb>( nY, rDst, aSrcType, nSrcWidth );
+
+        case ScanlineFormat::N32BitTcAbgr:
+            return ImplCopyToScanline<ScanlineFormat::N32BitTcAbgr>( nY, rDst, aSrcType, nSrcWidth );
+        case ScanlineFormat::N32BitTcArgb:
+            return ImplCopyToScanline<ScanlineFormat::N32BitTcArgb>( nY, rDst, aSrcType, nSrcWidth );
+        case ScanlineFormat::N32BitTcBgra:
+            return ImplCopyToScanline<ScanlineFormat::N32BitTcBgra>( nY, rDst, aSrcType, nSrcWidth );
+        case ScanlineFormat::N32BitTcRgba:
+            return ImplCopyToScanline<ScanlineFormat::N32BitTcRgba>( nY, rDst, aSrcType, nSrcWidth );
+        default:
+            break;
+    }
+    return false;
+
+}
+
+bool ImplFastCopyScanline( long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline,
+    ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize)
+{
+    if( rDst.mnHeight <= nY )
+        return false;
+
+    const ScanlineFormat nSrcFormat = RemoveScanline(nSrcScanlineFormat);
+    const ScanlineFormat nDstFormat = RemoveScanline(rDst.mnFormat);
+
+    // special handling of trivial cases
+    if( nSrcFormat == nDstFormat )
+    {
+        memcpy( ImplGetScanline( rDst, nY ), aSrcScanline, std::min<long>(nSrcScanlineSize, rDst.mnScanlineSize));
+        return true;
+    }
+
+    // select the matching instantiation for the source's bitmap format
+    switch( nSrcFormat )
+    {
+        case ScanlineFormat::N24BitTcBgr:
+            return ImplCopyFromScanline<ScanlineFormat::N24BitTcBgr>( nY, rDst, aSrcScanline, nSrcScanlineSize / 3 );
+        case ScanlineFormat::N24BitTcRgb:
+            return ImplCopyFromScanline<ScanlineFormat::N24BitTcRgb>( nY, rDst, aSrcScanline, nSrcScanlineSize / 3 );
+
+        case ScanlineFormat::N32BitTcAbgr:
+            return ImplCopyFromScanline<ScanlineFormat::N32BitTcAbgr>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
+        case ScanlineFormat::N32BitTcArgb:
+            return ImplCopyFromScanline<ScanlineFormat::N32BitTcArgb>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
+        case ScanlineFormat::N32BitTcBgra:
+            return ImplCopyFromScanline<ScanlineFormat::N32BitTcBgra>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
+        case ScanlineFormat::N32BitTcRgba:
+            return ImplCopyFromScanline<ScanlineFormat::N32BitTcRgba>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
+        default:
+            break;
+    }
+    return false;
+}
+
+bool ImplFastCopyScanline( long nY, BitmapBuffer& rDst, const BitmapBuffer& rSrc)
+{
+    if( nY >= rDst.mnHeight )
+        return false;
+    if( rSrc.maPalette != rDst.maPalette )
+        return false;
+    return ImplFastCopyScanline( nY, rDst, ImplGetScanline( rSrc, nY ), rSrc.mnFormat, rSrc.mnScanlineSize);
+}
+
 template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT> //,sal_uLong MSKFMT>
 static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
