@@ -1408,15 +1408,10 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
  * @param   nRow - row id
  * @param   nCol - column id
  */
-void LwpTableLayout::SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell)
+void LwpTableLayout::SetCellsMap(sal_uInt16 nRow, sal_uInt8 nCol, XFCell* pXFCell)
 {
-    std::pair<std::pair<sal_uInt16,sal_uInt8>,XFCell*> cell;
-    std::pair<sal_uInt16,sal_uInt8> pos;
-    pos.first = nRow;
-    pos.second = nCol;
-    cell.first = pos;
-    cell.second = pXFCell;
-    m_CellsMap.insert(cell);
+    // combine the 16bit nRow and 8bit nCol into a single 32bit number
+    m_CellsMap.insert(std::make_pair((nRow << 8) | nCol, pXFCell));
 }
 
 /**
@@ -1425,11 +1420,9 @@ void LwpTableLayout::SetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol,XFCell* pXFCell)
  * @param   nCol  - column id
  * @return  pXFCell
  */
-XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow,sal_uInt8 nCol)
+XFCell* LwpTableLayout::GetCellsMap(sal_uInt16 nRow, sal_uInt8 nCol)
 {
-    std::pair<sal_uInt16,sal_uInt8> pos;
-    pos.first = nRow;
-    pos.second = nCol;
+    RowCol pos = (nRow << 8) | nCol;
     auto iter =  m_CellsMap.find(pos);
     if (iter == m_CellsMap.end())
         return nullptr;
