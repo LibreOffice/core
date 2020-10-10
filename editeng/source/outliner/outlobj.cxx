@@ -67,11 +67,6 @@ OutlinerParaObject::OutlinerParaObject(
 {
 }
 
-OutlinerParaObject::OutlinerParaObject( const EditTextObject& rTextObj ) :
-    mpImpl(OutlinerParaObjData(rTextObj.Clone(), ParagraphDataVector(), true))
-{
-}
-
 OutlinerParaObject::OutlinerParaObject( std::unique_ptr<EditTextObject> pTextObj ) :
     mpImpl(OutlinerParaObjData(std::move(pTextObj), ParagraphDataVector(), true))
 {
