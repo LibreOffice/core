@@ -373,7 +373,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
     if (nCount <= 0)
         return nullptr;
 
-    std::unique_ptr<EditTextObject> pText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    std::unique_ptr<EditTextObject> xText = pEditEngine->CreateTextObject( nStartPara, nCount );
     const bool bIsEditDoc(OutlinerMode::TextObject == ImplGetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
@@ -383,7 +383,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
-    std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc));
+    std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(std::move(xText), aParagraphDataVector, bIsEditDoc));
     pPObj->SetOutlinerMode(GetMode());
 
     return pPObj;
