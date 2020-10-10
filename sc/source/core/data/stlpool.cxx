@@ -49,6 +49,7 @@
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <editutil.hxx>
+#include <stylehelper.hxx>
 
 ScStyleSheetPool::ScStyleSheetPool( const SfxItemPool& rPoolP,
                                     ScDocument*     pDocument )
@@ -71,14 +72,14 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                                            SfxStyleFamily eFam, SfxStyleSearchBits mask)
 {
-    //  When updating styles from a template, Office 5.1 sometimes created
-    //  files with multiple default styles.
-    //  Create new styles in that case:
-
-    //TODO: only when loading?
-
     if ( rName == STRING_STANDARD && Find( rName, eFam ) != nullptr )
     {
+        //  When updating styles from a template, Office 5.1 sometimes created
+        //  files with multiple default styles.
+        //  Create new styles in that case:
+
+        //TODO: only when loading?
+
         OSL_FAIL("renaming additional default style");
         sal_uInt32 nCount = GetIndexedStyleSheets().GetNumberOfStyleSheets();
         for ( sal_uInt32 nAdd = 1; nAdd <= nCount; nAdd++ )
@@ -91,7 +92,11 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
                 return SfxStyleSheetPool::Make(aNewName, eFam, mask);
         }
     }
-    return SfxStyleSheetPool::Make(rName, eFam, mask);
+
+    // Core uses translated names for both naming and display.
+    // This for all three, loading standard builtin styles from styles.xml
+    // configuration, loading documents and updating from templates.
+    return SfxStyleSheetPool::Make( ScStyleNameConversion::ProgrammaticToDisplayName( rName, eFam), eFam, mask);
 }
 
 SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,

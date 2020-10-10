@@ -33,8 +33,8 @@
 #define SC_STYLE_PROG_STANDARD      "Default"
 #define SC_STYLE_PROG_RESULT        "Result"
 #define SC_STYLE_PROG_RESULT1       "Result2"
-#define SC_STYLE_PROG_HEADLINE      "Heading"
-#define SC_STYLE_PROG_HEADLINE1     "Heading1"
+#define SC_STYLE_PROG_HEADING       "Heading"
+#define SC_STYLE_PROG_HEADING1      "Heading1"
 #define SC_STYLE_PROG_REPORT        "Report"
 
 #define SC_PIVOT_STYLE_PROG_INNER                  "Pivot Table Value"
@@ -60,11 +60,36 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     {
         static ScDisplayNameMap const aCellMap[]
         {
+            // Standard builtin styles from configuration.
+            // Defined in sc/res/xml/styles.xml
+            // Installed to "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/calc/styles.xml"
+            // e.g. /usr/lib64/libreoffice/share/calc/styles.xml
+            // or instdir/share/calc/styles.xml
+            { ScResId( STR_STYLENAME_HEADING ),   "Heading" },
+            { ScResId( STR_STYLENAME_HEADING_1 ), "Heading 1" },
+            { ScResId( STR_STYLENAME_HEADING_2 ), "Heading 2" },
+            { ScResId( STR_STYLENAME_TEXT ),      "Text" },
+            { ScResId( STR_STYLENAME_NOTE ),      "Note" },
+            { ScResId( STR_STYLENAME_FOOTNOTE ),  "Footnote" },
+            { ScResId( STR_STYLENAME_HYPERLINK ), "Hyperlink" },
+            { ScResId( STR_STYLENAME_STATUS ),    "Status" },
+            { ScResId( STR_STYLENAME_GOOD ),      "Good" },
+            { ScResId( STR_STYLENAME_NEUTRAL ),   "Neutral" },
+            { ScResId( STR_STYLENAME_BAD ),       "Bad" },
+            { ScResId( STR_STYLENAME_WARNING ),   "Warning" },
+            { ScResId( STR_STYLENAME_ERROR ),     "Error" },
+            { ScResId( STR_STYLENAME_ACCENT ),    "Accent" },
+            { ScResId( STR_STYLENAME_ACCENT_1 ),  "Accent 1" },
+            { ScResId( STR_STYLENAME_ACCENT_2 ),  "Accent 2" },
+            { ScResId( STR_STYLENAME_ACCENT_3 ),  "Accent 3" },
+            { ScResId( STR_STYLENAME_RESULT ),    "Result" },
+            // API compatibility programmatic names after.
             { ScResId( STR_STYLENAME_STANDARD_CELL ), OUString(SC_STYLE_PROG_STANDARD) },
             { ScResId( STR_STYLENAME_RESULT ), OUString(SC_STYLE_PROG_RESULT) },
             { ScResId( STR_STYLENAME_RESULT1 ), OUString(SC_STYLE_PROG_RESULT1) },
-            { ScResId( STR_STYLENAME_HEADLINE ), OUString(SC_STYLE_PROG_HEADLINE) },
-            { ScResId( STR_STYLENAME_HEADLINE1 ), OUString(SC_STYLE_PROG_HEADLINE1) },
+            { ScResId( STR_STYLENAME_HEADING ), OUString(SC_STYLE_PROG_HEADING) },
+            { ScResId( STR_STYLENAME_HEADING_1 ), OUString(SC_STYLE_PROG_HEADING1) },
+            // Pivot table styles.
             { ScResId( STR_PIVOT_STYLENAME_INNER ), OUString(SC_PIVOT_STYLE_PROG_INNER) },
             { ScResId( STR_PIVOT_STYLENAME_RESULT ), OUString(SC_PIVOT_STYLE_PROG_RESULT) },
             { ScResId( STR_PIVOT_STYLENAME_CATEGORY ), OUString(SC_PIVOT_STYLE_PROG_CATEGORY) },
