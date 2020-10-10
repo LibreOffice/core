@@ -621,6 +621,25 @@ void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
     else
         bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
 
+    ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
+    if (pDrawLayer)
+    {
+        std::vector<SdrObject*> aColDrawObjects;
+        aColDrawObjects = pDrawLayer->GetObjectsAnchoredToCols(GetTab(), nStartCol, nEndCol);
+        for (auto aObj : aColDrawObjects)
+        {
+            if (bHidden)
+                aObj->SetVisible(false);
+            else
+            {
+                // Object might be hidden by a hidden row, don't show object then
+                ScDrawObjData* pData = pDrawLayer->GetObjData(aObj);
+                if (pData && !GetDoc().RowHidden(pData->maStart.Row(), pData->maStart.Tab()))
+                    aObj->SetVisible(true);
+            }
+        }
+    }
+
     if (bChanged)
         SetStreamValid(false);
 }
