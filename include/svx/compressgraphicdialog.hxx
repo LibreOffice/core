@@ -59,6 +59,7 @@ private:
     SfxBindings&    m_rBindings;
 
     double          m_dResolution;
+    sal_Int32       m_aNativeSize;
 
     void Initialize();
 
