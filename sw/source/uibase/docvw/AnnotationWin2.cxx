@@ -1272,7 +1272,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             // will be created
             if (!mpOutliner->GetEditEngine().GetText().isEmpty())
             {
-                OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
+                OutlinerParaObject* pPara = new OutlinerParaObject(GetOutlinerView()->GetEditView().CreateTextObject());
                 mrMgr.RegisterAnswer(pPara);
             }
             if (mrMgr.HasActiveSidebarWin())
