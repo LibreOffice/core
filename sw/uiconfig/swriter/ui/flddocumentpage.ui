@@ -187,7 +187,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="flddocumentpage|label2">S_elect</property>
+            <property name="label" translatable="yes" context="flddocumentpage|label2">_Select</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <attributes>
@@ -323,7 +323,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="flddocumentpage|label3">F_ormat</property>
+                <property name="label" translatable="yes" context="flddocumentpage|label3">_Format</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -339,7 +339,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="fixed">
-            <property name="label" translatable="yes" context="flddocumentpage|fixed">_Fixed content</property>
+            <property name="label" translatable="yes" context="flddocumentpage|fixed">Fi_xed content</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -366,7 +366,7 @@
               <object class="GtkLabel" id="levelft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="flddocumentpage|levelft">Level</property>
+                <property name="label" translatable="yes" context="flddocumentpage|levelft">_Level</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">level</property>
                 <property name="xalign">0</property>
