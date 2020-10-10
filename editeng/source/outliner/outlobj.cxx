@@ -62,8 +62,8 @@ bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) 
 }
 
 OutlinerParaObject::OutlinerParaObject(
-    const EditTextObject& rTextObj, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
-    mpImpl(OutlinerParaObjData(rTextObj.Clone(), rParagraphDataVector, bIsEditDoc))
+    std::unique_ptr<EditTextObject> xTextObj, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
+    mpImpl(OutlinerParaObjData(std::move(xTextObj), rParagraphDataVector, bIsEditDoc))
 {
 }
 
