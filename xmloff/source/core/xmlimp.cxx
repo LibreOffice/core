@@ -2261,12 +2261,13 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         OUString aNamespace;
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 const nAttrPrefix(mrImport->mpNamespaceMap->GetKeyByAttrName(
-                rAttrName, nullptr, &aLocalAttrName, &aNamespace));
+        // don't add unknown namespaces to the map
+        sal_uInt16 const nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByQName(
+                rAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
         if( XML_NAMESPACE_XMLNS != nAttrPrefix )
         {
             auto const nToken = SvXMLImport::getTokenFromName(aLocalAttrName);
-            if (nToken == xmloff::XML_TOKEN_INVALID)
+            if (XML_NAMESPACE_UNKNOWN == nAttrPrefix || nToken == xmloff::XML_TOKEN_INVALID)
             {
                 mxFastAttributes->addUnknown(aNamespace,
                     OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
