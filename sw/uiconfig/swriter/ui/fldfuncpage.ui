@@ -164,7 +164,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="fldfuncpage|label4">S_elect</property>
+            <property name="label" translatable="yes" context="fldfuncpage|label4">_Select</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <attributes>
@@ -239,7 +239,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="fldfuncpage|label2">F_ormat</property>
+            <property name="label" translatable="yes" context="fldfuncpage|label2">_Format</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <attributes>
