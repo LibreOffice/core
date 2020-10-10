@@ -5169,6 +5169,19 @@ void WW8PLCFMan::RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave )
             m_aD[i].Restore( rSave.aS[n++] );
 }
 
+namespace
+{
+    bool IsSizeLegalCheckSize(long nSprmLen, sal_Int32 nSprmsLen)
+    {
+        if (nSprmLen > nSprmsLen)
+        {
+            SAL_WARN("sw.ww8", "Short sprm, len " << nSprmLen << " claimed, max possible is " << nSprmsLen);
+            return false;
+        }
+        return true;
+    }
+}
+
 void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
@@ -5196,9 +5209,8 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos, p->nSprmsLen);
-        if (pRes->nMemLen > p->nSprmsLen)
+        if (!IsSizeLegalCheckSize(pRes->nMemLen, p->nSprmsLen))
         {
-            SAL_WARN("sw.ww8", "Short sprm, len " << pRes->nMemLen << " claimed, max possible is " << p->nSprmsLen);
             pRes->nSprmId = 0;
         }
     }
