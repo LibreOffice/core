@@ -49,6 +49,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     , mxLbGroup(m_xBuilder->weld_combo_box("group_by"))
     , mxLbColumns(m_xBuilder->weld_tree_view("columns"))
     , mxLbFunctions(m_xBuilder->weld_tree_view("functions"))
+    , mxLbSelectAllColumns(m_xBuilder->weld_check_button("select_all_columns_button"))
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(SCSTR_SUBTOTALS); ++i)
         mxLbFunctions->append_text(ScResId(SCSTR_SUBTOTALS[i]));
@@ -80,9 +81,26 @@ void ScTpSubTotalGroup::Init()
     mxLbColumns->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
     mxLbColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
     mxLbFunctions->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl) );
+    mxLbSelectAllColumns->connect_clicked( LINK( this, ScTpSubTotalGroup, CheckBoxHdl ) );
 
     nFieldArr[0] = 0;
     FillListBoxes();
+}
+
+namespace
+{
+    int GetCheckedEntryCount(weld::TreeView& rTreeView)
+    {
+        int nRet = 0;
+
+        rTreeView.all_foreach([&](const weld::TreeIter& rEntry) {
+            if ( rTreeView.get_toggle(rEntry) == TRISTATE_TRUE )
+                ++nRet;
+            return false;
+        });
+
+        return nRet;
+    }
 }
 
 bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
@@ -139,21 +157,12 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
         mxLbFunctions->select( 0 );
     }
 
-    return true;
-}
+    if ( mxLbColumns->n_children() == GetCheckedEntryCount(*mxLbColumns) )
+        mxLbSelectAllColumns->set_active( true );
+    else
+        mxLbSelectAllColumns->set_active( false );
 
-namespace
-{
-    int GetCheckedEntryCount(const weld::TreeView& rTreeView)
-    {
-        int nRet = 0;
-        for (sal_Int32 i=0, nEntryCount = rTreeView.n_children(); i < nEntryCount; ++i)
-        {
-            if (rTreeView.get_toggle(i) == TRISTATE_TRUE)
-                ++nRet;
-        }
-        return nRet;
-    }
+    return true;
 }
 
 bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
@@ -335,6 +344,11 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 IMPL_LINK(ScTpSubTotalGroup, SelectTreeListBoxHdl, weld::TreeView&, rLb, void)
 {
     SelectHdl(&rLb);
+
+    if ( mxLbColumns->n_children() == GetCheckedEntryCount(*mxLbColumns) )
+        mxLbSelectAllColumns->set_active( true );
+    else
+        mxLbSelectAllColumns->set_active( false );
 }
 
 IMPL_LINK(ScTpSubTotalGroup, SelectListBoxHdl, weld::ComboBox&, rLb, void)
@@ -366,6 +380,11 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, const weld::TreeView::iter_col&, rRowCol
 {
     mxLbColumns->select(rRowCol.first);
     SelectHdl(mxLbColumns.get());
+
+    if ( mxLbColumns->n_children() == GetCheckedEntryCount(*mxLbColumns) )
+        mxLbSelectAllColumns->set_active( true );
+    else
+        mxLbSelectAllColumns->set_active( false );
 }
 
 // Derived Group TabPages:
@@ -567,6 +586,23 @@ IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
         }
         else
             m_xLbUserDef->set_sensitive(false);
+    }
+}
+
+IMPL_LINK(ScTpSubTotalGroup, CheckBoxHdl, weld::Button&, rBox, void)
+{
+    if (&rBox == mxLbSelectAllColumns.get())
+    {
+        bool bChecked = mxLbSelectAllColumns->get_active();
+
+        mxLbColumns->all_foreach([&](const weld::TreeIter& rEntry) {
+            if ( bChecked )
+                mxLbColumns->set_toggle(rEntry, TRISTATE_TRUE);
+            else
+                mxLbColumns->set_toggle(rEntry, TRISTATE_FALSE);
+
+            return false;
+        });
     }
 }
 
