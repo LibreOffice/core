@@ -1185,11 +1185,9 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         }
 
         bool bVertical = pTextObj->IsVerticalWriting();
-        std::unique_ptr<EditTextObject> pTemporaryText = m_pDrawEditEngine->CreateTextObject();
-        std::unique_ptr<OutlinerParaObject> pOp( new OutlinerParaObject(*pTemporaryText) );
+        std::unique_ptr<OutlinerParaObject> pOp(new OutlinerParaObject(m_pDrawEditEngine->CreateTextObject()));
         pOp->SetOutlinerMode( OutlinerMode::TextObject );
         pOp->SetVertical( bVertical );
-        pTemporaryText.reset();
         pTextObj->NbcSetOutlinerParaObject( std::move(pOp) );
         pTextObj->SetVerticalWriting(bVertical);
 
