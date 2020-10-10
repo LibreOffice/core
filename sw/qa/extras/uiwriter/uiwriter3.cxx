@@ -1818,4 +1818,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     CPPUNIT_ASSERT_EQUAL(Color(0, 102, 204), aBitmap.GetPixelColor(0, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130314)
+{
+    load(DATA_DIRECTORY, "tdf130314.odt");
+    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    // printing asserted in SwFrame::GetNextSctLeaf()
+    xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
+    aTempFile.EnableKillingFile();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
