@@ -38,6 +38,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
+#include <svx/svdpage.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <editeng/editstat.hxx>
@@ -53,6 +54,7 @@
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
 #include <ViewSettingsSequenceDefines.hxx>
+#include <userdat.hxx>
 
 #include <compiler.hxx>
 
@@ -1654,6 +1656,36 @@ void SAL_CALL ScXMLImport::endDocument()
             if (bLockHeight)
             {
                 pDoc->LockAdjustHeight();
+            }
+        }
+
+        // Initialize and set position and size of objects
+        if (pDoc && pDoc->GetDrawLayer())
+        {
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                if (!pPage)
+                    continue;
+                bool bNegativePage = pDoc->IsNegativePage(nTab);
+                const size_t nCount = pPage->GetObjCount();
+                for (size_t i = 0; i < nCount; ++i)
+                {
+                    SdrObject* pObj = pPage->GetObj(i);
+                    ScDrawObjData* pData
+                        = ScDrawLayer::GetObjDataTab(pObj, nTab);
+                    // Existance of pData means, that it is a cell anchored object
+                    if (pData)
+                    {
+                        // Finish and correct import based on full size (no hidden row/col) and LTR
+                        pDrawLayer->InitializeCellAnchoredObj(pObj, *pData);
+                        // Adapt object to hidden row/col and RTL
+                        pDrawLayer->RecalcPos(pObj, *pData, bNegativePage,
+                                              true /*bUpdateNoteCaptionPos*/);
+                    }
+                }
             }
         }
 

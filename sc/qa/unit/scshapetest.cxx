@@ -146,7 +146,7 @@ void ScShapeTest::testCustomShapeCellAnchoredRotatedShape()
     CPPUNIT_ASSERT(pObj);
 
     // Check Position and Size
-    tools::Rectangle aRect(2406, 754, 5774, 3692); // expected snap rect
+    tools::Rectangle aRect(2400, 751, 5772, 3693); // expected snap rect
     rDoc.SetDrawPageSize(0); // trigger recalcpos
     const tools::Rectangle& rShapeRect(pObj->GetSnapRect());
     const OUString sPosSizeErrors(lcl_compareRectWithTolerance(aRect, rShapeRect, 1));
