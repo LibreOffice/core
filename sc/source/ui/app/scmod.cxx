@@ -343,7 +343,7 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 bool bSet;
                 const SfxPoolItem* pItem;
-                if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
+                if (pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pItem))
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
