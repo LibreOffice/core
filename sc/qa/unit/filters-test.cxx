@@ -555,11 +555,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedhiddenshape.", FORMAT_ODS, true);
         ScDocument& rDoc = xDocSh->GetDocument();
         // ensure the imported legacy rotated shape is in the expected position
-        // when a shape is fully hidden reloading seems to result is in some errors, usually
-        // ( same but different error happens pre-patch ) - we should do better here, I regard it
-        // as a pre-existing bug though (#FIXME)
-        //Rectangle aRect( 6000, -2000, 8000, 4000 ); // proper dimensions
-        tools::Rectangle aRect( 6000, -2000, 7430, 4000 );
+        tools::Rectangle aRect( 6000, -2000, 8000, 4000 );
+
         // ensure the imported (and converted) anchor (note we internally now store the anchor in
         // terms of the rotated shape) is more or less contains the correct info
         ScDrawObjData aAnchor;
@@ -569,10 +566,11 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maEnd.SetCol( 7 );
         rDoc.ShowRows(0, 9, 0, true); // show relevant rows
         rDoc.SetDrawPageSize(0); // trigger recalcpos
-
-        // apply hefty (1 mm) tolerance here, as some opensuse tinderbox
-        // failing
-        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor, 100 );
+        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor);
+        // test save and reload
+        xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+        ScDocument& rDoc2 = xDocSh->GetDocument();
+        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
     }

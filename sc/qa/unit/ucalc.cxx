@@ -2797,17 +2797,15 @@ void Test::testGraphicsInGroup()
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
 
-        const tools::Long TOLERANCE = 30; //30 hmm
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Hiding should not change the logic rectangle",
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_MESSAGE("Hiding should make invisible", !pObj->IsVisible());
 
-        CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
-            testEqualsWithTolerance(aOrigRect.Left(), rNewRect.Left(), TOLERANCE) &&
-            testEqualsWithTolerance(aOrigRect.Right(), rNewRect.Right(), TOLERANCE));
-        CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
-            (rNewRect.Bottom() - rNewRect.Top()) <= 1);
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when cell anchored",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+        CPPUNIT_ASSERT_MESSAGE("Show should make visible", pObj->IsVisible());
     }
 
     {
