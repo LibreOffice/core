@@ -63,6 +63,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,mariadb-connector-c,\
 	UnpackedTarball/mariadb-connector-c/libmariadb/mariadb_stmt \
 	UnpackedTarball/mariadb-connector-c/libmariadb/ma_client_plugin \
 	UnpackedTarball/mariadb-connector-c/plugins/auth/my_auth \
+	UnpackedTarball/mariadb-connector-c/plugins/auth/caching_sha2_pw \
 	UnpackedTarball/mariadb-connector-c/plugins/pvio/pvio_socket \
 	$(if $(filter $(OS),WNT), \
 		UnpackedTarball/mariadb-connector-c/libmariadb/win32_errmsg \
