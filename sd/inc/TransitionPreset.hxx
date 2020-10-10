@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 #include <unordered_map>
@@ -36,7 +36,7 @@ namespace sd {
 
 class TransitionPreset;
 typedef std::shared_ptr< TransitionPreset > TransitionPresetPtr;
-typedef std::list< TransitionPresetPtr > TransitionPresetList;
+typedef std::vector< TransitionPresetPtr > TransitionPresetList;
 typedef std::unordered_map< OUString, OUString > UStringMap;
 
 class TransitionPreset
