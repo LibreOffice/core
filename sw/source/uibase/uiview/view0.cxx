@@ -533,7 +533,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     case SID_AUTOSPELL_CHECK:
         const SfxPoolItem* pItem;
 
-        if (pArgs->HasItem(FN_PARAM_1, &pItem))
+        if (pArgs && pArgs->HasItem(FN_PARAM_1, &pItem))
             bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         else if( STATE_TOGGLE == eState )
         {
