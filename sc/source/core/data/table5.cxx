@@ -36,6 +36,7 @@
 #include <printopt.hxx>
 #include <bcaslot.hxx>
 #include <compressedarray.hxx>
+#include <userdat.hxx>
 
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 
@@ -583,13 +584,25 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     else
         bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
 
-    std::vector<SdrObject*> aRowDrawObjects;
+    // Cell anchored objects might change visibility
     ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
-    if (pDrawLayer) {
+    if (pDrawLayer)
+    {
+        std::vector<SdrObject*> aRowDrawObjects;
         aRowDrawObjects = pDrawLayer->GetObjectsAnchoredToRows(GetTab(), nStartRow, nEndRow);
         for (auto aObj : aRowDrawObjects)
         {
-            aObj->SetVisible(!bHidden);
+            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
+            if (pData)
+            {
+                if (bHidden)
+                    aObj->SetVisible(false);
+                else if (!GetDoc().ColHidden(pData->maStart.Col(), pData->maStart.Tab()))
+                {
+                    // Only change visibility if object is not hidden by a hidden col
+                    aObj->SetVisible(true);
+                }
+            }
         }
     }
 
@@ -620,6 +633,28 @@ void ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
         bChanged = mpHiddenCols->setTrue(nStartCol, nEndCol);
     else
         bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
+
+    // Cell anchored objects might change visibility
+    ScDrawLayer* pDrawLayer = rDocument.GetDrawLayer();
+    if (pDrawLayer)
+    {
+        std::vector<SdrObject*> aColDrawObjects;
+        aColDrawObjects = pDrawLayer->GetObjectsAnchoredToCols(GetTab(), nStartCol, nEndCol);
+        for (auto aObj : aColDrawObjects)
+        {
+            ScDrawObjData* pData = ScDrawLayer::GetObjData(aObj);
+            if (pData)
+            {
+                if (bHidden)
+                    aObj->SetVisible(false);
+                else if (!GetDoc().RowHidden(pData->maStart.Row(), pData->maStart.Tab()))
+                {
+                    // Only change visibility if object is not hidden by a hidden row
+                    aObj->SetVisible(true);
+                }
+            }
+        }
+    }
 
     if (bChanged)
         SetStreamValid(false);
