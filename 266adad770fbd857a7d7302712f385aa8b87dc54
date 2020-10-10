@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "042a2f4d_3a7dcb1e",
+        "filename": "sc/source/ui/dbgui/tpsubt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-10T12:30:51Z",
+      "side": 1,
+      "message": "best to use the treeview iterator API here, treeview doesn\u0027t scale well otherwise",
+      "revId": "266adad770fbd857a7d7302712f385aa8b87dc54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d798d3e0_4153d835",
+        "filename": "sc/source/ui/dbgui/tpsubt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-10T12:30:51Z",
+      "side": 1,
+      "message": "use treeview iter API here, and best also to freeze/thaw when updating potentially large treeviews",
+      "revId": "266adad770fbd857a7d7302712f385aa8b87dc54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
