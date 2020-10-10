@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6caf0475_8fdc43a3",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-10T09:06:09Z",
+      "side": 1,
+      "message": "rather store it as bytes - it is confusing when debugging things when we mix units, and other places store it as bytes",
+      "revId": "d5f82be0206b843aa136f779ce0a3b907c8964a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6809dc44_628f5b84",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-10T09:06:09Z",
+      "side": 1,
+      "message": "naming - this is not nativeSize, this is reduction",
+      "revId": "d5f82be0206b843aa136f779ce0a3b907c8964a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
