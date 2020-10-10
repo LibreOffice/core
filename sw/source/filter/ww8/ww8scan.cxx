@@ -5182,6 +5182,34 @@ namespace
     }
 }
 
+bool WW8PLCFMan::IsSprmLegalForCategory(sal_uInt16 nSprmId, short nIdx) const
+{
+    const WW8PLCFxDesc* p = &m_aD[nIdx];
+    if (p != m_pSep) // just check sep for now
+        return true;
+
+    bool bRet;
+    ww::WordVersion eVersion = maSprmParser.GetFIBVersion();
+    if (eVersion <= ww::eWW2)
+    {
+        bRet = nSprmId >= 112 && nSprmId <= 145;
+        SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
+        assert(bRet && "once off crashtesting scan for real world cases");
+    }
+    else if (eVersion < ww::eWW8) // just check ww6/7 for now
+    {
+        bRet = nSprmId >= NS_sprm::v6::sprmSScnsPgn && nSprmId <= NS_sprm::v6::sprmSDMPaperReq;
+        SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
+    }
+    else
+    {
+        // we could pull the sgc from the SprmId in this case
+        bRet = true;
+    }
+
+    return bRet;
+}
+
 void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
@@ -5209,7 +5237,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos, p->nSprmsLen);
-        if (!IsSizeLegalCheckSize(pRes->nMemLen, p->nSprmsLen))
+        if (!IsSizeLegalCheckSize(pRes->nMemLen, p->nSprmsLen) || !IsSprmLegalForCategory(pRes->nSprmId, nIdx))
         {
             pRes->nSprmId = 0;
         }
@@ -5306,7 +5334,10 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
     if( bStart )
     {
         const sal_uInt16 nLastId = GetId(p);
-        p->pIdStack->push(nLastId);   // remember Id for attribute end
+
+        const sal_uInt16 nLastAttribStarted = IsSprmLegalForCategory(nLastId, nIdx) ? nLastId : 0;
+
+        p->pIdStack->push(nLastAttribStarted);   // remember Id for attribute end
 
         if( p->nSprmsLen )
         {   /*

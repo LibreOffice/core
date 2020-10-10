@@ -147,6 +147,8 @@ public:
     /// Returns the offset to data of the first sprm of id nId, 0
     //  if not found. nLen must be the <= length of pSprms
     SprmResult findSprmData(sal_uInt16 nId, sal_uInt8* pSprms, sal_Int32 nLen) const;
+
+    ww::WordVersion GetFIBVersion() const { return meVersion; }
 };
 
 //Read a Pascal-style, i.e. single byte string length followed
@@ -961,6 +963,8 @@ private:
     void AdvSprm(short nIdx, bool bStart);
     void AdvNoSprm(short nIdx, bool bStart);
     sal_uInt16 GetId(const WW8PLCFxDesc* p ) const;
+
+    bool IsSprmLegalForCategory(sal_uInt16 nSprmId, short nIdx) const;
 
 public:
     WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
