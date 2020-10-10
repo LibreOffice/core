@@ -310,7 +310,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (pTopView)
                 {
                     pTopView->Paste();
-                    if (vcl::Window* pViewWindow = pTopView ? pTopView->GetWindow() : nullptr)
+                    if (vcl::Window* pViewWindow = pTopView->GetWindow())
                         pViewWindow->GrabFocus();
                 }
             }
