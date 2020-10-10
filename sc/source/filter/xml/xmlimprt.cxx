@@ -1657,6 +1657,34 @@ void SAL_CALL ScXMLImport::endDocument()
             }
         }
 
+        // Initialize and set position and size of objects
+        if (pDoc && pDoc->GetDrawLayer())
+        {
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer->GetPage(nTab);
+                if (!pPage)
+                    continue;
+                bool bNegativePage = pDoc->IsNegativePage(static_cast<SCTAB>(nTab));
+                const size_t nCount = pPage->GetObjCount();
+                for (size_t i = 0; i < nCount; ++i)
+                {
+                    SdrObject* pObj = pPage->GetObj(i);
+                    ScDrawObjData* pData = pDrawLayer->GetObjDataTab(pObj, static_cast<SCTAB>(nTab));
+                    // Existance of pData means, that it is a cell anchored object
+                    if(pData)
+                    {
+                        // Finish and correct import based on full size (no hidden row/col) and LTR
+                        pDrawLayer->InitializeCellAnchoredObj(pObj, *pData);
+                        // Adapt object to hidden row/col and RTL
+                        pDrawLayer->RecalcPos( pObj, *pData, bNegativePage, true /*bUpdateNoteCaptionPos*/);
+                    }
+                }
+            }
+        }
+
         aTables.FixupOLEs();
     }
     if (GetModel().is())
