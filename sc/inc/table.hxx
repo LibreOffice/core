@@ -77,7 +77,7 @@ class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class ColumnIterator;
-
+class ScDrawObjData;
 }
 
 class SfxItemSet;
