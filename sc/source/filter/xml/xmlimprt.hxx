@@ -49,12 +49,13 @@ class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
 class ScDocumentImport;
 class ScMyImpDetectiveOpArray;
+class SdrPage;
 
 namespace sc {
 
 struct ImportPostProcessData;
 struct PivotTableSources;
-
+class ScDrawObjData;
 }
 
 enum ScXMLDocTokens
