@@ -192,10 +192,10 @@ void CompressGraphicsDialog::Update()
     SvMemoryStream aMemStream;
     aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
     m_aGraphic.ExportNative(aMemStream);
-    sal_Int32 aNativeSize = aMemStream.TellEnd();
+    m_aNativeSize = aMemStream.TellEnd() / 1024;
 
     OUString aNativeSizeString = SvxResId(STR_IMAGE_CAPACITY);
-    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
+    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(m_aNativeSize));
     m_xFixedText5->set_label(aNativeSizeString);
 
     m_xFixedText6->set_label("??");
@@ -358,10 +358,14 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void 
 
     if ( aSize > 0 )
     {
-        OUString aSizeAsString = OUString::number(aSize / 1024);
+        aSize /= 1024;
+        OUString aSizeAsString = OUString::number(aSize);
 
-        OUString aNewSizeString = SvxResId(STR_IMAGE_CAPACITY);
+        OUString aNativeSizeAsString = OUString::number( m_aNativeSize > 0 ? (m_aNativeSize - aSize) * 100 / m_aNativeSize : 0 );
+
+        OUString aNewSizeString = SvxResId(STR_IMAGE_CAPACITY_WITH_REDUCTION);
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
+        aNewSizeString = aNewSizeString.replaceAll("$(REDUCTION)", aNativeSizeAsString);
         m_xFixedText6->set_label(aNewSizeString);
     }
 }

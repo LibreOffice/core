@@ -1368,6 +1368,7 @@
 #define STR_IMAGE_ORIGINAL_SIZE                             NC_("STR_IMAGE_ORIGINAL_SIZE", "$(WIDTH) x $(HEIGHT) ($(WIDTH_IN_PX) x $(HEIGHT_IN_PX) px)")
 #define STR_IMAGE_VIEW_SIZE                                 NC_("STR_IMAGE_VIEW_SIZE", "$(WIDTH) x $(HEIGHT) at $(DPI) DPI")
 #define STR_IMAGE_CAPACITY                                  NC_("STR_IMAGE_CAPACITY", "$(CAPACITY) kiB")
+#define STR_IMAGE_CAPACITY_WITH_REDUCTION                   NC_("STR_IMAGE_CAPACITY_WITH_REDUCTION", "$(CAPACITY) kiB ($(REDUCTION) % Reduction)")
 #define STR_IMAGE_GIF                                       NC_("STR_IMAGE_GIF", "Gif image")
 #define STR_IMAGE_JPEG                                      NC_("STR_IMAGE_JPEG", "Jpeg image")
 #define STR_IMAGE_PNG                                       NC_("STR_IMAGE_PNG", "PNG image")
