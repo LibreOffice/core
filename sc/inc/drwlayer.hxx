@@ -136,6 +136,7 @@ public:
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
+    void InitializeCellAnchoredObj(SdrObject* pObj, ScDrawObjData& rData);
     void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
     bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
@@ -189,6 +190,7 @@ public:
     std::vector<SdrObject*> GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow);
     std::map<SCROW, std::vector<SdrObject*>> GetObjectsAnchoredToRange(SCTAB nTab, SCCOL nCol, SCROW nStartRow, SCROW nEndRow);
     bool HasObjectsAnchoredInRange(const ScRange& rRange);
+    std::vector<SdrObject*> GetObjectsAnchoredToCols(SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol);
     void MoveObject(SdrObject* pObj, const ScAddress& rNewPosition);
 
     // positions for detective lines
