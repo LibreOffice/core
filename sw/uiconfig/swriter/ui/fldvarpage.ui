@@ -210,7 +210,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="fldvarpage|label2">S_elect</property>
+                <property name="label" translatable="yes" context="fldvarpage|label2">_Select</property>
                 <property name="use_underline">True</property>
                 <property name="xalign">0</property>
                 <attributes>
@@ -367,7 +367,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="fldvarpage|label3">F_ormat</property>
+                    <property name="label" translatable="yes" context="fldvarpage|label3">_Format</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <attributes>
@@ -440,7 +440,7 @@
                           <object class="GtkLabel" id="separatorft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="fldvarpage|separatorft">_Separator</property>
+                            <property name="label" translatable="yes" context="fldvarpage|separatorft">Se_parator</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">separator</property>
                             <property name="xalign">0</property>
