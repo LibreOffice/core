@@ -10,6 +10,7 @@
 import traceback
 import uno
 
+
 def GetNamedRanges():
     """Returns a list of the named ranges in the document.
     """
@@ -28,6 +29,7 @@ def GetNamedRanges():
         traceback.print_tb(tb)
         return None
 
+
 def DefineNamedRange(sheet, x0, y0, width, height, name):
     """Defines a new (or replaces an existing) named range on a sheet,
     using zero-based absolute coordinates
@@ -37,13 +39,16 @@ def DefineNamedRange(sheet, x0, y0, width, height, name):
     # FIXME: Is there some Python-callable API to turn a row and column into an A1 string?
     # This obviously works only for the first 26 columns.
     abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    content = "$" + sheet + "." + "$" + abc[x0 : x0+1] + "$" + str(y0+1) + ":" + "$" + abc[x0+width-1 : x0+width] + "$" + str(y0+height)
+    content = "$" + sheet + "." + "$" + \
+        abc[x0: x0+1] + "$" + str(y0+1) + ":" + "$" + abc[x0+width -
+                                                          1: x0+width] + "$" + str(y0+height)
     position = uno.createUnoStruct('com.sun.star.table.CellAddress')
     position.Sheet = 0
     position.Column = 0
     position.Row = 0
     model.NamedRanges.addNewByName(name, content, position, 0)
     return None
+
 
 def DeleteNamedRange(name):
     try:

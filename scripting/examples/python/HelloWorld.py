@@ -18,21 +18,30 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-def HelloWorldPython( ):
-    """Prints the string 'Hello World(in Python)' into the current document"""
-#get the doc from the scripting context which is made available to all scripts
+def HelloWorldPython():
+    """Prints the string 'Hello World (in Python)' into the current document.
+    """
+
+    # Get the doc from the scripting context which is made available to all
+    # scripts.
     desktop = XSCRIPTCONTEXT.getDesktop()
     model = desktop.getCurrentComponent()
-#check whether there's already an opened document. Otherwise, create a new one
+
+    # Check whether there's already an opened document.
+    # Otherwise, create a new one
     if not hasattr(model, "Text"):
         model = desktop.loadComponentFromURL(
-            "private:factory/swriter","_blank", 0, () )
-#get the XText interface
+            "private:factory/swriter", "_blank", 0, ())
+
+    # get the XText interface
     text = model.Text
-#create an XTextRange at the end of the document
+
+    # create an XTextRange at the end of the document
     tRange = text.End
-#and set the string
+
+    # and set the string
     tRange.String = "Hello World (in Python)"
+
     return None
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
