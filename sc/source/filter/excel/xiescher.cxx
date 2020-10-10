@@ -1497,7 +1497,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                 // rich text
                 std::unique_ptr< EditTextObject > xEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
-                std::unique_ptr<OutlinerParaObject> pOutlineObj(new OutlinerParaObject( *xEditObj ));
+                std::unique_ptr<OutlinerParaObject> pOutlineObj(new OutlinerParaObject(std::move(xEditObj)));
                 pOutlineObj->SetOutlinerMode( OutlinerMode::TextObject );
                 pTextObj->NbcSetOutlinerParaObject( std::move(pOutlineObj) );
             }
