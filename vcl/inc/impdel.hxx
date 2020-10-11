@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_IMPDEL_HXX
 #define INCLUDED_VCL_IMPDEL_HXX
 
-#include <list>
+#include <algorithm>
+#include <vector>
 
 namespace vcl
 {
@@ -29,7 +30,7 @@ class DeletionListener;
 
 class DeletionNotifier
 {
-    std::list< DeletionListener* > m_aListeners;
+    std::vector< DeletionListener* > m_aListeners;
     protected:
     DeletionNotifier() {}
 
@@ -43,7 +44,7 @@ class DeletionNotifier
     { m_aListeners.push_back( pListener ); }
 
     void removeDel( DeletionListener* pListener )
-    { m_aListeners.remove( pListener ); }
+    { m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), pListener), m_aListeners.end()); }
 };
 
 class DeletionListener
