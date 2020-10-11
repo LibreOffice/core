@@ -18,12 +18,12 @@
  */
 #include <cmath>
 #define SWPAGE_NO_MARGIN       0
-#define SWPAGE_NARROW_VALUE    720
-#define SWPAGE_MODERATE_LR     1080
-#define SWPAGE_NORMAL_VALUE    1136
-#define SWPAGE_WIDE_VALUE1     1440
-#define SWPAGE_WIDE_VALUE2     2880
-#define SWPAGE_WIDE_VALUE3     1800
+#define SWPAGE_NARROW_VALUE    720   // twips: 0.5 (1/2) in or 1.27 cm
+#define SWPAGE_MODERATE_LR     1080  // twips: 0.75 (3/4) in or 1.91 cm
+#define SWPAGE_NORMAL_VALUE    1136  // twips: 0.79 in or 2.00 cm
+#define SWPAGE_WIDE_VALUE1     1440  // twips: 1.00 in or 2.54 cm
+#define SWPAGE_WIDE_VALUE2     2880  // twips: 2.00 in or 5.08 cm
+#define SWPAGE_WIDE_VALUE3     1800  // twips: 1.25 (5/4) in or 3.18 cm
 #define SWPAGE_UNIT_THRESHOLD  5
 
 namespace sw::sidebar{
@@ -88,7 +88,7 @@ void SetModerate( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsNormal075( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+bool IsNormal079( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
                const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_NORMAL_VALUE) <= SWPAGE_UNIT_THRESHOLD &&
@@ -98,7 +98,7 @@ bool IsNormal075( const tools::Long nPageLeftMargin, const tools::Long nPageRigh
         !bMirrored );
 }
 
-void SetNormal075( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+void SetNormal079( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
                 tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_NORMAL_VALUE;
