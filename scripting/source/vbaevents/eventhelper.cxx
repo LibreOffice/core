@@ -67,7 +67,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/evtmethodhelper.hxx>
 
-#include <list>
+#include <vector>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -172,7 +172,7 @@ struct TranslateInfo
 
 typedef std::unordered_map<
     OUString,
-    std::list< TranslateInfo > > EventInfoHash;
+    std::vector< TranslateInfo > > EventInfoHash;
 
 namespace {
 
@@ -273,7 +273,7 @@ static EventInfoHash& getEventTransInfo()
         while (i < nCount)
         {
             sEventInfo = pTransProp->sEventInfo;
-            std::list< TranslateInfo > infoList;
+            std::vector< TranslateInfo > infoList;
             do
             {
                 infoList.push_back( pTransProp->aTransInfo );
@@ -382,7 +382,7 @@ ScriptEventHelper::~ScriptEventHelper()
 Sequence< OUString >
 ScriptEventHelper::getEventListeners() const
 {
-    std::list< OUString > eventMethods;
+    std::vector< OUString > eventMethods;
 
     Reference< beans::XIntrospection > xIntrospection = beans::theIntrospection::get( m_xCtx );
 
