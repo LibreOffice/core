@@ -664,8 +664,7 @@ std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, Wi
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_NO )
             nStyle |= MessBoxStyle::DefaultNo;
     }
-    if ( nCompType == WindowType::MULTILINEEDIT || nCompType == WindowType::DIALOG
-         || nCompType == WindowType::GROUPBOX || nCompType == WindowType::TABPAGE )
+    if ( nCompType == WindowType::MULTILINEEDIT || nCompType == WindowType::DIALOG || nCompType == WindowType::GROUPBOX )
     {
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
