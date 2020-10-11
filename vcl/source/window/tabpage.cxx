@@ -23,46 +23,15 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/scrbar.hxx>
 
 void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    assert((nStyle & WB_VSCROLL) == 0 && (nStyle & WB_HSCROLL) == 0);
-
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
     Window::ImplInit( pParent, nStyle, nullptr );
 
     ImplInitSettings();
-
-    m_pVScroll.set(VclPtr<ScrollBar>::Create(this, ((nStyle & WB_VSCROLL) ? WB_HIDE : 0) | WB_VSCROLL | WB_DRAG));
-    m_pHScroll.set(VclPtr<ScrollBar>::Create(this, ((nStyle & WB_HSCROLL) ? WB_HIDE : 0) | WB_HSCROLL | WB_DRAG));
-    m_aScrollBarBox.set(
-        VclPtr<ScrollBarBox>::Create(this,
-                                     ((nStyle & (WB_VSCROLL|WB_HSCROLL)) ? WB_HIDE : 0)));
-    mbHasHoriBar = false;
-    mbHasVertBar = false;
-    ScrollBarVisibility aVis = None;
-
-    if ( nStyle & ( WB_AUTOHSCROLL | WB_AUTOVSCROLL ) )
-    {
-        if ( nStyle & WB_AUTOHSCROLL )
-            aVis = Hori;
-        if ( nStyle &  WB_AUTOVSCROLL )
-        {
-            if ( aVis == Hori )
-                aVis = Both;
-            else
-                aVis = Vert;
-        }
-    }
-    setScrollVisibility( aVis );
-    mnScrWidth = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
-
-    Link<ScrollBar*,void> aLink( LINK( this, TabPage, ScrollBarHdl ) );
-    m_pVScroll->SetScrollHdl(aLink);
-    m_pHScroll->SetScrollHdl(aLink);
 
     // if the tabpage is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
@@ -103,14 +72,6 @@ TabPage::TabPage( vcl::Window* pParent, WinBits nStyle ) :
 TabPage::~TabPage()
 {
     disposeOnce();
-}
-
-void TabPage::dispose()
-{
-    m_pVScroll.disposeAndClear();
-    m_pHScroll.disposeAndClear();
-    m_aScrollBarBox.disposeAndClear();
-    vcl::Window::dispose();
 }
 
 void TabPage::StateChanged( StateChangedType nType )
@@ -219,104 +180,6 @@ void TabPage::SetPosPixel(const Point& rAllocPos)
     {
         VclContainer::setLayoutAllocation(*GetWindow(GetWindowType::FirstChild), Point(0, 0), aAllocation);
     }
-}
-
-void TabPage::setScrollVisibility( ScrollBarVisibility rVisState )
-{
-    maScrollVis = rVisState;
-    if (  maScrollVis == Hori || maScrollVis == Both )
-    {
-        mbHasHoriBar = true;
-        m_pHScroll->Show();
-    }
-    if ( maScrollVis == Vert || maScrollVis == Both )
-    {
-        mbHasVertBar = true;
-        m_pVScroll->Show();
-    }
-    if ( mbHasHoriBar || mbHasVertBar )
-        SetStyle( GetStyle() | WB_CLIPCHILDREN );
-}
-
-void TabPage::lcl_Scroll( long nX, long nY )
-{
-    long nXScroll = mnScrollPos.X() - nX;
-    long nYScroll = mnScrollPos.Y() - nY;
-    mnScrollPos = Point( nX, nY );
-
-    tools::Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
-    Scroll(nXScroll, nYScroll, aScrollableArea );
-    // Manually scroll all children ( except the scrollbars )
-    for ( int index = 0; index < GetChildCount(); ++index )
-    {
-        vcl::Window* pChild = GetChild( index );
-        if ( pChild && pChild != m_pVScroll.get() && pChild != m_pHScroll.get() )
-        {
-            Point aPos = pChild->GetPosPixel();
-            aPos += Point( nXScroll, nYScroll );
-            pChild->SetPosPixel( aPos );
-        }
-    }
-}
-
-IMPL_LINK( TabPage, ScrollBarHdl, ScrollBar*, pSB, void )
-{
-    sal_uInt16 nPos = static_cast<sal_uInt16>(pSB->GetThumbPos());
-    if( pSB == m_pVScroll.get() )
-        lcl_Scroll(mnScrollPos.X(), nPos );
-    else if( pSB == m_pHScroll.get() )
-        lcl_Scroll(nPos, mnScrollPos.Y() );
-}
-
-void TabPage::SetScrollTop( long nTop )
-{
-    Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
-    m_pHScroll->SetThumbPos( 0 );
-    // new pos is 0,0
-    mnScrollPos = aOld;
-}
-void TabPage::SetScrollLeft( long nLeft )
-{
-    Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
-    m_pVScroll->SetThumbPos( 0 );
-    // new pos is 0,0
-    mnScrollPos = aOld;
-}
-
-void TabPage::SetScrollWidth( long nWidth )
-{
-    maScrollArea.setWidth( nWidth );
-    ResetScrollBars();
-}
-
-void TabPage::SetScrollHeight( long nHeight )
-{
-    maScrollArea.setHeight( nHeight );
-    ResetScrollBars();
-}
-
-void TabPage::Resize()
-{
-    ResetScrollBars();
-}
-
-void TabPage::ResetScrollBars()
-{
-    Size aOutSz = GetOutputSizePixel();
-
-    Point aVPos( aOutSz.Width() - mnScrWidth, 0 );
-    Point aHPos( 0, aOutSz.Height() - mnScrWidth );
-
-    m_pVScroll->SetPosSizePixel( aVPos, Size( mnScrWidth,  GetSizePixel().Height() - mnScrWidth ) );
-    m_pHScroll->SetPosSizePixel( aHPos, Size(  GetSizePixel().Width() - mnScrWidth, mnScrWidth ) );
-
-    m_pHScroll->SetRangeMax( maScrollArea.Width() + mnScrWidth  );
-    m_pHScroll->SetVisibleSize( GetSizePixel().Width() );
-
-    m_pVScroll->SetRangeMax( maScrollArea.Height() + mnScrWidth );
-    m_pVScroll->SetVisibleSize( GetSizePixel().Height() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
