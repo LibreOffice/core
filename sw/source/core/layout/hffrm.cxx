@@ -656,17 +656,17 @@ bool SwHeadFootFrame::GetEatSpacing() const
     return pFormat->GetHeaderAndFooterEatSpacing().GetValue();
 }
 
-static void DelFlys( SwLayoutFrame const *pFrame, SwPageFrame *pPage )
+static void DelFlys( const SwLayoutFrame& rFrame, SwPageFrame &rPage)
 {
     size_t i = 0;
-    while ( pPage->GetSortedObjs() &&
-            pPage->GetSortedObjs()->size() &&
-            i < pPage->GetSortedObjs()->size() )
+    while ( rPage.GetSortedObjs() &&
+            rPage.GetSortedObjs()->size() &&
+            i < rPage.GetSortedObjs()->size() )
     {
-        SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
+        SwAnchoredObject* pObj = (*rPage.GetSortedObjs())[i];
         if (SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pObj))
         {
-            if ( pFrame->IsAnLower( pFlyFrame ) )
+            if (rFrame.IsAnLower(pFlyFrame))
             {
                 SwFrame::DestroyFrame(pFlyFrame);
                 // Do not increment index, in this case
@@ -700,7 +700,7 @@ void SwPageFrame::PrepareHeader()
         if ( pLay->IsHeaderFrame() )
         {   SwLayoutFrame *pDel = pLay;
             pLay = static_cast<SwLayoutFrame*>(pLay->GetNext());
-            ::DelFlys( pDel, this );
+            ::DelFlys(*pDel, *this);
             pDel->Cut();
             SwFrame::DestroyFrame(pDel);
         }
@@ -712,7 +712,7 @@ void SwPageFrame::PrepareHeader()
     }
     else if (pLay->IsHeaderFrame())
     {   // Remove header if present.
-        ::DelFlys( pLay, this );
+        ::DelFlys(*pLay, *this);
         pLay->Cut();
         SwFrame::DestroyFrame(pLay);
     }
@@ -742,7 +742,7 @@ void SwPageFrame::PrepareFooter()
 
         if ( pLay->IsFooterFrame() )
         {
-            ::DelFlys( pLay, this );
+            ::DelFlys(*pLay, *this);
             pLay->Cut();
             SwFrame::DestroyFrame(pLay);
         }
@@ -752,8 +752,9 @@ void SwPageFrame::PrepareFooter()
             ::RegistFlys( this, pF );
     }
     else if ( pLay->IsFooterFrame() )
-    {   // Remove footer if already present
-        ::DelFlys( pLay, this );
+    {
+        // Remove footer if already present
+        ::DelFlys(*pLay, *this);
         SwViewShell *pShell;
         if ( pLay->GetPrev() && nullptr != (pShell = getRootFrame()->GetCurrShell()) &&
              pShell->VisArea().HasArea() )
