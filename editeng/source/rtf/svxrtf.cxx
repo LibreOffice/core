@@ -1085,7 +1085,8 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
     // It can be merged
     aAttrSet.Put( aMrgSet );
 
-    for (size_t n = 0; n < m_pChildList->size(); ++n)
+    size_t n = 0, nChildLen = m_pChildList->size();
+    while (n < nChildLen)
     {
         pTmp = (*m_pChildList)[n].get();
         pTmp->aAttrSet.Differentiate( aMrgSet );
@@ -1093,8 +1094,10 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
         if (!pTmp->m_pChildList && !pTmp->aAttrSet.Count() && !pTmp->nStyleNo)
         {
             m_pChildList->erase( m_pChildList->begin() + n );
-            --n;
+            --nChildLen;
+            continue;
         }
+        ++n;
     }
     if (m_pChildList->empty())
     {
