@@ -21,12 +21,12 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Moderate"), 0 },
-    // Normal (0.75")
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"),  75 },
-    // Normal (1")
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 100 },
-    // Normal (1.25")
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 125 },
+    // Normal (0.39")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"),  39 },
+    // Normal (0.5")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"),  50 },
+    // Normal (0.63")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"),  63 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Wide"), 0 }
 };
 
@@ -36,12 +36,12 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Moderate"), 0 },
-    // Normal (1.9 cm)
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 190 },
-    // Normal (2.54 cm)
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 254 },
-    // Normal (3.18 cm)
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 318 },
+    // Normal (1.0 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 100 },
+    // Normal (1.27 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 127 },
+    // Normal (1.59 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 159 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Wide"), 0 }
 };
 
