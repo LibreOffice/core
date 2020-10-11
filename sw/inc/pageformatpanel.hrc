@@ -21,8 +21,8 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_INCH[] =
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Narrow"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Moderate"), 0 },
-    // Normal (0.75")
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 75 },
+    // Normal (0.79")
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 79 },
     // Normal (1")
     { NC_("RID_PAGEFORMATPANEL_MARGINS_INCH", "Normal (%1)"), 100 },
     // Normal (1.25")
@@ -37,8 +37,8 @@ const std::pair<const char*, int> RID_PAGEFORMATPANEL_MARGINS_CM[] =
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "None"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Narrow"), 0 },
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Moderate"), 0 },
-    // Normal (1.9 cm)
-    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 190 },
+    // Normal (2.0 cm)
+    { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 200 },
     // Normal (2.54 cm)
     { NC_("RID_PAGEFORMATPANEL_MARGINS_CM", "Normal (%1)"), 254 },
     // Normal (3.18 cm)

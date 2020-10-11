@@ -477,19 +477,19 @@ void SlideBackground::UpdateMarginBox()
         if (nCustomIndex != -1)
             mxMarginSelectBox->remove(nCustomIndex);
     }
-    else if( IsNormal075(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    else if( IsNormal039(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
         mxMarginSelectBox->set_active(3);
         if (nCustomIndex != -1)
             mxMarginSelectBox->remove(nCustomIndex);
     }
-    else if( IsNormal100(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    else if( IsNormal050(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
         mxMarginSelectBox->set_active(4);
         if (nCustomIndex != -1)
             mxMarginSelectBox->remove(nCustomIndex);
     }
-    else if( IsNormal125(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
+    else if( IsNormal063(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin) )
     {
         mxMarginSelectBox->set_active(5);
         if (nCustomIndex != -1)
@@ -1238,13 +1238,13 @@ IMPL_LINK_NOARG( SlideBackground, ModifyMarginHdl, weld::ComboBox&, void )
             SetModerate(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
             break;
         case 3:
-            SetNormal075(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            SetNormal039(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
             break;
         case 4:
-            SetNormal100(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            SetNormal050(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
             break;
         case 5:
-            SetNormal125(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
+            SetNormal063(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);
             break;
         case 6:
             SetWide(m_nPageLeftMargin, m_nPageRightMargin, m_nPageTopMargin, m_nPageBottomMargin);

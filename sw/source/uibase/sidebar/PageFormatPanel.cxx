@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(PageFormatPanel, PaperModifyMarginHdl, weld::ComboBox&, void)
             SetModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 3:
-            SetNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            SetNormal079(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
             break;
         case 4:
             SetNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
@@ -389,7 +389,7 @@ void PageFormatPanel::UpdateMarginBox()
         if (nCustomEntry != -1)
             mxMarginSelectBox->remove(nCustomEntry);
     }
-    else if( IsNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    else if( IsNormal079(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
     {
         mxMarginSelectBox->set_active(3);
         if (nCustomEntry != -1)
