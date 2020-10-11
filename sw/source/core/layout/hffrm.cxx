@@ -664,9 +664,8 @@ static void DelFlys( SwLayoutFrame const *pFrame, SwPageFrame *pPage )
             i < pPage->GetSortedObjs()->size() )
     {
         SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-        if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
+        if (SwFlyFrame* pFlyFrame = dynamic_cast<SwFlyFrame*>(pObj))
         {
-            SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
             if ( pFrame->IsAnLower( pFlyFrame ) )
             {
                 SwFrame::DestroyFrame(pFlyFrame);
