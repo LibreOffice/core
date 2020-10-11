@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9cfcfc8_bcbade54",
+        "filename": "scripting/source/vbaevents/eventhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-11T12:48:12Z",
+      "side": 1,
+      "message": "can std::move it to avoid a copy",
+      "revId": "fb23b78b6d26d33b1748d37e94cb5a772c11bc80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
