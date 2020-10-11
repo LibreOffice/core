@@ -5191,22 +5191,25 @@ bool WW8PLCFMan::IsSprmLegalForCategory(sal_uInt16 nSprmId, short nIdx) const
     bool bRet;
     ww::WordVersion eVersion = maSprmParser.GetFIBVersion();
     if (eVersion <= ww::eWW2)
-    {
         bRet = nSprmId >= 112 && nSprmId <= 145;
-        SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
-        assert(bRet && "once off crashtesting scan for real world cases");
-    }
-    else if (eVersion < ww::eWW8) // just check ww6/7 for now
-    {
+    else if (eVersion < ww::eWW8)
         bRet = nSprmId >= NS_sprm::v6::sprmSScnsPgn && nSprmId <= NS_sprm::v6::sprmSDMPaperReq;
-        SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
-    }
     else
     {
-        // we could pull the sgc from the SprmId in this case
-        bRet = true;
-    }
+        /*
+          Sprm bits: 10-12  sgc   sprm group; type of sprm (PAP, CHP, etc)
 
+          sgc value type of sprm
+          1         PAP
+          2         CHP
+          3         PIC
+          4         SEP
+          5         TAP
+        */
+        auto nSGC = ((nSprmId & 0x1C00) >> 10);
+        bRet = nSGC == 4;
+    }
+    SAL_WARN_IF(!bRet, "sw.ww8", "sprm, id " << nSprmId << " wrong category for section properties");
     return bRet;
 }
 
