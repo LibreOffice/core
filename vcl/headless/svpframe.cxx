@@ -78,11 +78,11 @@ SvpSalFrame::~SvpSalFrame()
     if( m_pInstance )
         m_pInstance->deregisterFrame( this );
 
-    std::list<SvpSalFrame*> Children = m_aChildren;
+    std::vector<SvpSalFrame*> Children = m_aChildren;
     for( auto& rChild : Children )
         rChild->SetParent( m_pParent );
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
 
     if( s_pFocusFrame == this )
     {
@@ -474,7 +474,7 @@ void SvpSalFrame::SimulateKeyPress( sal_uInt16 /*nKeyCode*/ )
 void SvpSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+        m_pParent->m_aChildren.erase(std::remove(m_pParent->m_aChildren.begin(), m_pParent->m_aChildren.end(), this), m_pParent->m_aChildren.end());
     m_pParent = static_cast<SvpSalFrame*>(pNewParent);
 }
 
