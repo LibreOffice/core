@@ -650,16 +650,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
     if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
         return;
 
-    bool bTryDirectPaint = false;
-    if(SkiaHelper::isVCLSkiaEnabled())
-        bTryDirectPaint = true;
-#if HAVE_FEATURE_OPENGL
-    if(OpenGLHelper::isVCLOpenGLEnabled())
-        bTryDirectPaint = true;
-#endif
     static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-    if(pDisableNative)
-        bTryDirectPaint = false;
+    bool bTryDirectPaint = !pDisableNative;
 
     if (bTryDirectPaint)
     {
@@ -701,7 +693,12 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             if (mpGraphics->DrawAlphaBitmap(aTR, *pSalSrcBmp, *pSalAlphaBmp, this))
                 return;
         }
-        assert(false);
+
+        // we need to make sure OpenGL never reaches this slow code path
+#if HAVE_FEATURE_OPENGL
+        assert(!OpenGLHelper::isVCLOpenGLEnabled());
+#endif
+        assert(!SkiaHelper::isVCLSkiaEnabled());
     }
 
     tools::Rectangle aBmpRect(Point(), rBmp.GetSizePixel());
