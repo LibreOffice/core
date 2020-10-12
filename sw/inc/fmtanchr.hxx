@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwFormatAnchor: public SfxPoolItem
 
     /// #i28701# - getting anchor positions ordered
     sal_uInt32 m_nOrder;
-    static sal_uInt32 m_nOrderCounter;
+    static sal_uInt32 s_nOrderCounter;
 
 public:
     SwFormatAnchor( RndStdIds eRnd = RndStdIds::FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );

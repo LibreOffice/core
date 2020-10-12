@@ -510,11 +510,11 @@ class SwXLinkNameAccessWrapper final : public cppu::WeakImplHelper
     css::document::XLinkTargetSupplier
 >
 {
-    css::uno::Reference< css::container::XNameAccess >    xRealAccess;
-    const SfxItemPropertySet*                             pPropSet;
-    const OUString                                        sLinkSuffix;
-    const OUString                                        sLinkDisplayName;
-    SwXTextDocument*                                      pxDoc;
+    css::uno::Reference< css::container::XNameAccess >    m_xRealAccess;
+    const SfxItemPropertySet*                             m_pPropSet;
+    const OUString                                        m_sLinkSuffix;
+    const OUString                                        m_sLinkDisplayName;
+    SwXTextDocument*                                      m_pxDoc;
 
 public:
     SwXLinkNameAccessWrapper(css::uno::Reference< css::container::XNameAccess >  const & xAccess,
@@ -585,13 +585,13 @@ enum class SwCreateDrawTable {
 
 class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
 {
-    css::uno::Reference < css::uno::XInterface > xDashTable;
-    css::uno::Reference < css::uno::XInterface > xGradientTable;
-    css::uno::Reference < css::uno::XInterface > xHatchTable;
-    css::uno::Reference < css::uno::XInterface > xBitmapTable;
-    css::uno::Reference < css::uno::XInterface > xTransGradientTable;
-    css::uno::Reference < css::uno::XInterface > xMarkerTable;
-    css::uno::Reference < css::uno::XInterface > xDrawDefaults;
+    css::uno::Reference < css::uno::XInterface > m_xDashTable;
+    css::uno::Reference < css::uno::XInterface > m_xGradientTable;
+    css::uno::Reference < css::uno::XInterface > m_xHatchTable;
+    css::uno::Reference < css::uno::XInterface > m_xBitmapTable;
+    css::uno::Reference < css::uno::XInterface > m_xTransGradientTable;
+    css::uno::Reference < css::uno::XInterface > m_xMarkerTable;
+    css::uno::Reference < css::uno::XInterface > m_xDrawDefaults;
 
     SwDoc*  m_pDoc;
 public:

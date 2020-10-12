@@ -3985,20 +3985,20 @@ Sequence< OUString > SwXLinkTargetSupplier::getSupportedServiceNames()
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(
             Reference< XNameAccess > const & xAccess, const OUString& rLinkDisplayName, const OUString& sSuffix ) :
-    xRealAccess(xAccess),
-    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    sLinkSuffix(sSuffix),
-    sLinkDisplayName(rLinkDisplayName),
-    pxDoc(nullptr)
+    m_xRealAccess(xAccess),
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
+    m_sLinkSuffix(sSuffix),
+    m_sLinkDisplayName(rLinkDisplayName),
+    m_pxDoc(nullptr)
 {
 }
 
 SwXLinkNameAccessWrapper::SwXLinkNameAccessWrapper(SwXTextDocument& rxDoc,
             const OUString& rLinkDisplayName, const OUString& sSuffix) :
-    pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
-    sLinkSuffix(sSuffix),
-    sLinkDisplayName(rLinkDisplayName),
-    pxDoc(&rxDoc)
+    m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINK_TARGET)),
+    m_sLinkSuffix(sSuffix),
+    m_sLinkDisplayName(rLinkDisplayName),
+    m_pxDoc(&rxDoc)
 {
 }
 
@@ -4012,19 +4012,19 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     bool bFound = false;
     //cut link extension and call the real NameAccess
     OUString sParam = rName;
-    OUString sSuffix(sLinkSuffix);
+    OUString sSuffix(m_sLinkSuffix);
     if(sParam.getLength() > sSuffix.getLength() )
     {
         OUString sCmp = sParam.copy(sParam.getLength() - sSuffix.getLength(),
                                                     sSuffix.getLength());
         if(sCmp == sSuffix)
         {
-            if(pxDoc)
+            if(m_pxDoc)
             {
                 sParam = sParam.copy(0, sParam.getLength() - sSuffix.getLength());
-                if(!pxDoc->GetDocShell())
+                if(!m_pxDoc->GetDocShell())
                     throw RuntimeException("No document shell available");
-                SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
+                SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
                 const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
                 for (size_t i = 0; i < nOutlineCount && !bFound; ++i)
@@ -4041,7 +4041,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
             }
             else
             {
-                aRet = xRealAccess->getByName(sParam.copy(0, sParam.getLength() - sSuffix.getLength()));
+                aRet = m_xRealAccess->getByName(sParam.copy(0, sParam.getLength() - sSuffix.getLength()));
                 Reference< XInterface > xInt;
                 if(!(aRet >>= xInt))
                     throw RuntimeException("Could not retrieve property");
@@ -4059,12 +4059,12 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
 Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
 {
     Sequence< OUString > aRet;
-    if(pxDoc)
+    if(m_pxDoc)
     {
-        if(!pxDoc->GetDocShell())
+        if(!m_pxDoc->GetDocShell())
             throw RuntimeException("No document shell available");
 
-        SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
         const SwOutlineNodes& rOutlineNodes = pDoc->GetNodes().GetOutLineNds();
         const size_t nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
@@ -4078,10 +4078,10 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
     }
     else
     {
-        Sequence< OUString > aOrg = xRealAccess->getElementNames();
+        Sequence< OUString > aOrg = m_xRealAccess->getElementNames();
         aRet.realloc(aOrg.getLength());
         std::transform(aOrg.begin(), aOrg.end(), aRet.begin(),
-            [this](const OUString& rOrg) -> OUString { return rOrg + sLinkSuffix; });
+            [this](const OUString& rOrg) -> OUString { return rOrg + m_sLinkSuffix; });
     }
     return aRet;
 }
@@ -4090,18 +4090,18 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
 {
     bool bRet = false;
     OUString sParam(rName);
-    if(sParam.getLength() > sLinkSuffix.getLength() )
+    if(sParam.getLength() > m_sLinkSuffix.getLength() )
     {
-        OUString sCmp = sParam.copy(sParam.getLength() - sLinkSuffix.getLength(),
-                                                    sLinkSuffix.getLength());
-        if(sCmp == sLinkSuffix)
+        OUString sCmp = sParam.copy(sParam.getLength() - m_sLinkSuffix.getLength(),
+                                                    m_sLinkSuffix.getLength());
+        if(sCmp == m_sLinkSuffix)
         {
-            sParam = sParam.copy(0, sParam.getLength() - sLinkSuffix.getLength());
-            if(pxDoc)
+            sParam = sParam.copy(0, sParam.getLength() - m_sLinkSuffix.getLength());
+            if(m_pxDoc)
             {
-                if(!pxDoc->GetDocShell())
+                if(!m_pxDoc->GetDocShell())
                     throw RuntimeException("No document shell available");
-                SwDoc* pDoc = pxDoc->GetDocShell()->GetDoc();
+                SwDoc* pDoc = m_pxDoc->GetDocShell()->GetDoc();
                 const size_t nOutlineCount = pDoc->GetNodes().GetOutLineNds().size();
 
                 for (size_t i = 0; i < nOutlineCount && !bRet; ++i)
@@ -4117,7 +4117,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
             }
             else
             {
-                bRet = xRealAccess->hasByName(sParam);
+                bRet = m_xRealAccess->hasByName(sParam);
             }
         }
     }
@@ -4132,20 +4132,20 @@ uno::Type  SwXLinkNameAccessWrapper::getElementType()
 sal_Bool SwXLinkNameAccessWrapper::hasElements()
 {
     bool bRet = false;
-    if(pxDoc)
+    if(m_pxDoc)
     {
         OSL_FAIL("not implemented");
     }
     else
     {
-        bRet = xRealAccess->hasElements();
+        bRet = m_xRealAccess->hasElements();
     }
     return bRet;
 }
 
 Reference< XPropertySetInfo >  SwXLinkNameAccessWrapper::getPropertySetInfo()
 {
-    static Reference< XPropertySetInfo >  xRet = pPropSet->getPropertySetInfo();
+    static Reference< XPropertySetInfo >  xRet = m_pPropSet->getPropertySetInfo();
     return xRet;
 }
 
@@ -4190,11 +4190,11 @@ Any SwXLinkNameAccessWrapper::getPropertyValue(const OUString& rPropertyName)
     Any aRet;
     if( rPropertyName == UNO_LINK_DISPLAY_NAME )
     {
-        aRet <<= sLinkDisplayName;
+        aRet <<= m_sLinkDisplayName;
     }
     else if( rPropertyName == UNO_LINK_DISPLAY_BITMAP )
     {
-        aRet = lcl_GetDisplayBitmap(sLinkSuffix);
+        aRet = lcl_GetDisplayBitmap(m_sLinkSuffix);
     }
     else
         throw UnknownPropertyException(rPropertyName);
@@ -4325,39 +4325,39 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable 
             // #i52858#
             // assure that Draw model is created, if it doesn't exist.
             case SwCreateDrawTable::Dash         :
-                if(!xDashTable.is())
-                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xDashTable;
+                if(!m_xDashTable.is())
+                    m_xDashTable = SvxUnoDashTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xDashTable;
             break;
             case SwCreateDrawTable::Gradient     :
-                if(!xGradientTable.is())
-                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xGradientTable;
+                if(!m_xGradientTable.is())
+                    m_xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xGradientTable;
             break;
             case SwCreateDrawTable::Hatch        :
-                if(!xHatchTable.is())
-                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xHatchTable;
+                if(!m_xHatchTable.is())
+                    m_xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xHatchTable;
             break;
             case SwCreateDrawTable::Bitmap       :
-                if(!xBitmapTable.is())
-                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xBitmapTable;
+                if(!m_xBitmapTable.is())
+                    m_xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xBitmapTable;
             break;
             case SwCreateDrawTable::TransGradient:
-                if(!xTransGradientTable.is())
-                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xTransGradientTable;
+                if(!m_xTransGradientTable.is())
+                    m_xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xTransGradientTable;
             break;
             case SwCreateDrawTable::Marker       :
-                if(!xMarkerTable.is())
-                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
-                xRet = xMarkerTable;
+                if(!m_xMarkerTable.is())
+                    m_xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                xRet = m_xMarkerTable;
             break;
             case  SwCreateDrawTable::Defaults:
-                if(!xDrawDefaults.is())
-                    xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(*m_pDoc));
-                xRet = xDrawDefaults;
+                if(!m_xDrawDefaults.is())
+                    m_xDrawDefaults = static_cast<cppu::OWeakObject*>(new SwSvxUnoDrawPool(*m_pDoc));
+                xRet = m_xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 0
             default: OSL_FAIL("which table?");
@@ -4369,13 +4369,13 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(SwCreateDrawTable 
 
 void SwXDocumentPropertyHelper::Invalidate()
 {
-    xDashTable = nullptr;
-    xGradientTable = nullptr;
-    xHatchTable = nullptr;
-    xBitmapTable = nullptr;
-    xTransGradientTable = nullptr;
-    xMarkerTable = nullptr;
-    xDrawDefaults = nullptr;
+    m_xDashTable = nullptr;
+    m_xGradientTable = nullptr;
+    m_xHatchTable = nullptr;
+    m_xBitmapTable = nullptr;
+    m_xTransGradientTable = nullptr;
+    m_xMarkerTable = nullptr;
+    m_xDrawDefaults = nullptr;
     m_pDoc = nullptr;
     SvxUnoForbiddenCharsTable::mxForbiddenChars.reset();
 }
