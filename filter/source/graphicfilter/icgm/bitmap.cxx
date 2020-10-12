@@ -79,189 +79,189 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         return;
     }
 
-    try {
+    try
+    {
+        if (rDesc.mnScanSize)
+        {
+            vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ), 24 );
 
-    if (rDesc.mnScanSize) {
+            // the picture may either be read from left to right or right to left, from top to bottom ...
 
-    vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ), 24 );
+            long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
+            long nyCount = rDesc.mnY + 1;
+            long    nx, ny, nxC;
 
-    // the picture may either be read from left to right or right to left, from top to bottom ...
-
-    long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
-    long nyCount = rDesc.mnY + 1;
-    long    nx, ny, nxC;
-
-    switch ( rDesc.mnDstBitsPerPixel ) {
-    case 1 : {
-        bool bOk = true;
-        std::vector<Color> palette(2);
-        if ( rDesc.mnLocalColorPrecision == 1 )
-            palette = ImplGeneratePalette( rDesc );
-        else {
-            palette[0] = BMCOL( mpCGM->pElement->nBackGroundColor );
-            palette[1] = ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
-                         ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
-                         : BMCOL( mpCGM->pElement->aFillBundle.GetColor() );
-        };
-        for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
-            nxC = nxCount;
-            for ( nx = 0; --nxC; nx++ ) {
-                // this is not fast, but a one bit/pixel format is rarely used
-                const sal_uInt8* pPos = rDesc.mpBuf + (nx >> 3);
-                if (pPos >= rDesc.mpEndBuf)
-                {
-                    SAL_WARN("filter.icgm", "buffer is too small");
-                    bOk = false;
-                    break;
+            switch ( rDesc.mnDstBitsPerPixel ) {
+            case 1 : {
+                bool bOk = true;
+                std::vector<Color> palette(2);
+                if ( rDesc.mnLocalColorPrecision == 1 )
+                    palette = ImplGeneratePalette( rDesc );
+                else {
+                    palette[0] = BMCOL( mpCGM->pElement->nBackGroundColor );
+                    palette[1] = ( mpCGM->pElement->nAspectSourceFlags & ASF_FILLINTERIORSTYLE )
+                                 ? BMCOL( mpCGM->pElement->pFillBundle->GetColor() )
+                                 : BMCOL( mpCGM->pElement->aFillBundle.GetColor() );
+                };
+                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                    nxC = nxCount;
+                    for ( nx = 0; --nxC; nx++ ) {
+                        // this is not fast, but a one bit/pixel format is rarely used
+                        const sal_uInt8* pPos = rDesc.mpBuf + (nx >> 3);
+                        if (pPos >= rDesc.mpEndBuf)
+                        {
+                            SAL_WARN("filter.icgm", "buffer is too small");
+                            bOk = false;
+                            break;
+                        }
+                        sal_uInt8 colorIndex = static_cast<sal_uInt8>((*pPos >> ((nx & 7)^7))) & 1;
+                        aBitmap.SetPixel(ny, nx, palette[colorIndex]);
+                    }
                 }
-                sal_uInt8 colorIndex = static_cast<sal_uInt8>((*pPos >> ((nx & 7)^7))) & 1;
-                aBitmap.SetPixel(ny, nx, palette[colorIndex]);
             }
+            break;
+
+            case 2 : {
+                bool bOk = true;
+                auto palette = ImplGeneratePalette( rDesc );
+                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                    nxC = nxCount;
+                    for ( nx = 0; --nxC; nx++ ) {
+                        // this is not fast, but a two bits/pixel format is rarely used
+                        const sal_uInt8* pPos = rDesc.mpBuf + (nx >> 2);
+                        if (pPos >= rDesc.mpEndBuf)
+                        {
+                            SAL_WARN("filter.icgm", "buffer is too small");
+                            bOk = false;
+                            break;
+                        }
+                        aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>( (*pPos >> (((nx & 3)^3) << 1))) & 3]);
+                    }
+                }
+            }
+            break;
+
+            case 4 : {
+                bool bOk = true;
+                auto palette = ImplGeneratePalette( rDesc );
+                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                    nxC = nxCount;
+                    sal_uInt8* pTemp = rDesc.mpBuf;
+                    for ( nx = 0; --nxC; nx++ ) {
+
+                        if (pTemp >= rDesc.mpEndBuf)
+                        {
+                            SAL_WARN("filter.icgm", "buffer is too small");
+                            bOk = false;
+                            break;
+                        }
+
+                        sal_uInt8 nDat = *pTemp++;
+
+                        aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>(nDat >> 4)]);
+                        if ( --nxC ) {
+                            ++nx;
+                            aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>(nDat & 15)]);
+                        } else
+                            break;
+                    }
+                }
+            }
+            break;
+
+            case 8 : {
+                bool bOk = true;
+                auto palette = ImplGeneratePalette( rDesc );
+                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                    sal_uInt8* pTemp = rDesc.mpBuf;
+                    nxC = nxCount;
+                    for ( nx = 0; --nxC; nx++ ) {
+
+                        if (pTemp >= rDesc.mpEndBuf)
+                        {
+                            SAL_WARN("filter.icgm", "buffer is too small");
+                            bOk = false;
+                            break;
+                        }
+
+                        aBitmap.SetPixel(ny, nx, palette[*(pTemp++)]);
+                    }
+                }
+            }
+            break;
+
+            case 24 : {
+                bool bOk = true;
+                Color aBitmapColor;
+                for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
+                    sal_uInt8* pTemp = rDesc.mpBuf;
+                    nxC = nxCount;
+                    for ( nx = 0; --nxC; nx++ ) {
+
+                        if (pTemp + 2 >= rDesc.mpEndBuf)
+                        {
+                            SAL_WARN("filter.icgm", "buffer is too small");
+                            bOk = false;
+                            break;
+                        }
+
+                        aBitmapColor.SetRed( *pTemp++ );
+                        aBitmapColor.SetGreen( *pTemp++ );
+                        aBitmapColor.SetBlue( *pTemp++ );
+                        aBitmap.SetPixel(ny, nx, aBitmapColor);
+                    }
+                }
+            }
+            break;
+            }
+
+            if ( rDesc.mbStatus )
+                rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
+        }
+
+        double nX = rDesc.mnR.X - rDesc.mnQ.X;
+        double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
+
+        rDesc.mndy = sqrt( nX * nX + nY * nY );
+
+        nX = rDesc.mnR.X - rDesc.mnP.X;
+        nY = rDesc.mnR.Y - rDesc.mnP.Y;
+
+        rDesc.mndx = sqrt( nX * nX + nY * nY );
+
+        nX = rDesc.mnR.X - rDesc.mnP.X;
+        nY = rDesc.mnR.Y - rDesc.mnP.Y;
+
+        double fSqrt = sqrt(nX * nX + nY * nY);
+        rDesc.mnOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        if ( nY > 0 )
+            rDesc.mnOrientation = 360 - rDesc.mnOrientation;
+
+        nX = rDesc.mnQ.X - rDesc.mnR.X;
+        nY = rDesc.mnQ.Y - rDesc.mnR.Y;
+
+        double fAngle = 0.01745329251994 * ( 360 - rDesc.mnOrientation );
+        double fSin = sin(fAngle);
+        double fCos = cos(fAngle);
+        nX = fCos * nX + fSin * nY;
+        nY = -( fSin * nX - fCos * nY );
+
+        fSqrt = sqrt(nX * nX + nY * nY);
+        fAngle = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
+        if ( nY > 0 )
+            fAngle = 360 - fAngle;
+
+        if ( fAngle > 180 ) {               // is the picture build upwards or downwards ?
+            rDesc.mnOrigin = rDesc.mnP;
+        } else {
+            rDesc.mbVMirror = true;
+            rDesc.mnOrigin = rDesc.mnP;
+            rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
+            rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
         }
     }
-    break;
-
-    case 2 : {
-        bool bOk = true;
-        auto palette = ImplGeneratePalette( rDesc );
-        for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
-            nxC = nxCount;
-            for ( nx = 0; --nxC; nx++ ) {
-                // this is not fast, but a two bits/pixel format is rarely used
-                const sal_uInt8* pPos = rDesc.mpBuf + (nx >> 2);
-                if (pPos >= rDesc.mpEndBuf)
-                {
-                    SAL_WARN("filter.icgm", "buffer is too small");
-                    bOk = false;
-                    break;
-                }
-                aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>( (*pPos >> (((nx & 3)^3) << 1))) & 3]);
-            }
-        }
-    }
-    break;
-
-    case 4 : {
-        bool bOk = true;
-        auto palette = ImplGeneratePalette( rDesc );
-        for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
-            nxC = nxCount;
-            sal_uInt8* pTemp = rDesc.mpBuf;
-            for ( nx = 0; --nxC; nx++ ) {
-
-                if (pTemp >= rDesc.mpEndBuf)
-                {
-                    SAL_WARN("filter.icgm", "buffer is too small");
-                    bOk = false;
-                    break;
-                }
-
-                sal_uInt8 nDat = *pTemp++;
-
-                aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>(nDat >> 4)]);
-                if ( --nxC ) {
-                    ++nx;
-                    aBitmap.SetPixel(ny, nx, palette[static_cast<sal_uInt8>(nDat & 15)]);
-                } else
-                    break;
-            }
-        }
-    }
-    break;
-
-    case 8 : {
-        bool bOk = true;
-        auto palette = ImplGeneratePalette( rDesc );
-        for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
-            sal_uInt8* pTemp = rDesc.mpBuf;
-            nxC = nxCount;
-            for ( nx = 0; --nxC; nx++ ) {
-
-                if (pTemp >= rDesc.mpEndBuf)
-                {
-                    SAL_WARN("filter.icgm", "buffer is too small");
-                    bOk = false;
-                    break;
-                }
-
-                aBitmap.SetPixel(ny, nx, palette[*(pTemp++)]);
-            }
-        }
-    }
-    break;
-
-    case 24 : {
-        bool bOk = true;
-        Color aBitmapColor;
-        for (ny = 0; bOk && --nyCount; ny++, rDesc.mpBuf += rDesc.mnScanSize) {
-            sal_uInt8* pTemp = rDesc.mpBuf;
-            nxC = nxCount;
-            for ( nx = 0; --nxC; nx++ ) {
-
-                if (pTemp + 2 >= rDesc.mpEndBuf)
-                {
-                    SAL_WARN("filter.icgm", "buffer is too small");
-                    bOk = false;
-                    break;
-                }
-
-                aBitmapColor.SetRed( *pTemp++ );
-                aBitmapColor.SetGreen( *pTemp++ );
-                aBitmapColor.SetBlue( *pTemp++ );
-                aBitmap.SetPixel(ny, nx, aBitmapColor);
-            }
-        }
-    }
-    break;
-    }
-
-    if ( rDesc.mbStatus )
-        rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
-
-    }
-
-    double nX = rDesc.mnR.X - rDesc.mnQ.X;
-    double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
-
-    rDesc.mndy = sqrt( nX * nX + nY * nY );
-
-    nX = rDesc.mnR.X - rDesc.mnP.X;
-    nY = rDesc.mnR.Y - rDesc.mnP.Y;
-
-    rDesc.mndx = sqrt( nX * nX + nY * nY );
-
-    nX = rDesc.mnR.X - rDesc.mnP.X;
-    nY = rDesc.mnR.Y - rDesc.mnP.Y;
-
-    double fSqrt = sqrt(nX * nX + nY * nY);
-    rDesc.mnOrientation = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
-    if ( nY > 0 )
-        rDesc.mnOrientation = 360 - rDesc.mnOrientation;
-
-    nX = rDesc.mnQ.X - rDesc.mnR.X;
-    nY = rDesc.mnQ.Y - rDesc.mnR.Y;
-
-    double fAngle = 0.01745329251994 * ( 360 - rDesc.mnOrientation );
-    double fSin = sin(fAngle);
-    double fCos = cos(fAngle);
-    nX = fCos * nX + fSin * nY;
-    nY = -( fSin * nX - fCos * nY );
-
-    fSqrt = sqrt(nX * nX + nY * nY);
-    fAngle = fSqrt != 0.0 ? (acos(nX / fSqrt) * 57.29577951308) : 0.0;
-    if ( nY > 0 )
-        fAngle = 360 - fAngle;
-
-    if ( fAngle > 180 ) {               // is the picture build upwards or downwards ?
-        rDesc.mnOrigin = rDesc.mnP;
-    } else {
-        rDesc.mbVMirror = true;
-        rDesc.mnOrigin = rDesc.mnP;
-        rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
-        rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
-    }
-
-    } catch (const std::bad_alloc&) {
+    catch (const std::bad_alloc&)
+    {
         rDesc.mbStatus = false;
     }
 }
