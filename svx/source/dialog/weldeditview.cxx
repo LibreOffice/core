@@ -132,6 +132,9 @@ bool WeldEditView::MouseMove(const MouseEvent& rMEvt)
 
 bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    if (!IsMouseCaptured())
+        CaptureMouse();
+
     if (!HasFocus())
     {
         GrabFocus();
@@ -143,6 +146,8 @@ bool WeldEditView::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool WeldEditView::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    if (IsMouseCaptured())
+        ReleaseMouse();
     return m_xEditView && m_xEditView->MouseButtonUp(rMEvt);
 }
 
