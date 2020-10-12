@@ -145,8 +145,8 @@ public:
     void         NextPoint();
     void         PrevPoint();
     bool         CheckMinMoved(const Point& rPnt);
-    long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }
-    long         GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
+    tools::Long         GetDX() const                     { return GetNow().X()-GetPrev().X(); }
+    tools::Long         GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
     Fraction     GetXFact() const;
     Fraction     GetYFact() const;
 

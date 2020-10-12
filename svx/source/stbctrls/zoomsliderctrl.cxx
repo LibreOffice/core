@@ -63,15 +63,15 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
         mbDraggingStarted( false ) {}
 };
 
-const long nSliderXOffset = 20;
-const long nSnappingEpsilon = 5; // snapping epsilon in pixels
-const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
+const tools::Long nSliderXOffset = 20;
+const tools::Long nSnappingEpsilon = 5; // snapping epsilon in pixels
+const tools::Long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two adjacent snapping points
 
 // nOffset refers to the origin of the control:
 // + ----------- -
-sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
+sal_uInt16 SvxZoomSliderControl::Offset2Zoom( tools::Long nOffset ) const
 {
-    const long nControlWidth = getControlRect().GetWidth();
+    const tools::Long nControlWidth = getControlRect().GetWidth();
     sal_uInt16 nRet = 0;
 
     if ( nOffset < nSliderXOffset )
@@ -82,7 +82,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 
     // check for snapping points:
     sal_uInt16 nCount = 0;
-    for ( const long nCurrent : mxImpl->maSnappingPointOffsets )
+    for ( const tools::Long nCurrent : mxImpl->maSnappingPointOffsets )
     {
         if ( std::abs(nCurrent - nOffset) < nSnappingEpsilon )
         {
@@ -98,19 +98,19 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
         if ( nOffset < nControlWidth / 2 )
         {
             // first half of slider
-            const long nFirstHalfRange = mxImpl->mnSliderCenter - mxImpl->mnMinZoom;
-            const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
-            const long nZoomPerSliderPixel = (1000 * nFirstHalfRange) / nHalfSliderWidth;
-            const long nOffsetToSliderLeft = nOffset - nSliderXOffset;
+            const tools::Long nFirstHalfRange = mxImpl->mnSliderCenter - mxImpl->mnMinZoom;
+            const tools::Long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
+            const tools::Long nZoomPerSliderPixel = (1000 * nFirstHalfRange) / nHalfSliderWidth;
+            const tools::Long nOffsetToSliderLeft = nOffset - nSliderXOffset;
             nRet = mxImpl->mnMinZoom + sal_uInt16( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
         }
         else
         {
             // second half of slider
-            const long nSecondHalfRange = mxImpl->mnMaxZoom - mxImpl->mnSliderCenter;
-            const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
-            const long nZoomPerSliderPixel = 1000 * nSecondHalfRange / nHalfSliderWidth;
-            const long nOffsetToSliderCenter = nOffset - nControlWidth/2;
+            const tools::Long nSecondHalfRange = mxImpl->mnMaxZoom - mxImpl->mnSliderCenter;
+            const tools::Long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
+            const tools::Long nZoomPerSliderPixel = 1000 * nSecondHalfRange / nHalfSliderWidth;
+            const tools::Long nOffsetToSliderCenter = nOffset - nControlWidth/2;
             nRet = mxImpl->mnSliderCenter + sal_uInt16( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
         }
     }
@@ -124,27 +124,27 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( long nOffset ) const
 }
 
 // returns the offset to the left control border
-long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
+tools::Long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 {
-    const long nControlWidth = getControlRect().GetWidth();
-    long nRet = nSliderXOffset;
+    const tools::Long nControlWidth = getControlRect().GetWidth();
+    tools::Long nRet = nSliderXOffset;
 
-    const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
+    const tools::Long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
 
     if ( nCurrentZoom <= mxImpl->mnSliderCenter )
     {
         nCurrentZoom = nCurrentZoom - mxImpl->mnMinZoom;
-        const long nFirstHalfRange = mxImpl->mnSliderCenter - mxImpl->mnMinZoom;
-        const long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nFirstHalfRange;
-        const long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
+        const tools::Long nFirstHalfRange = mxImpl->mnSliderCenter - mxImpl->mnMinZoom;
+        const tools::Long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nFirstHalfRange;
+        const tools::Long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRet += nOffset;
     }
     else
     {
         nCurrentZoom = nCurrentZoom - mxImpl->mnSliderCenter;
-        const long nSecondHalfRange = mxImpl->mnMaxZoom - mxImpl->mnSliderCenter;
-        const long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nSecondHalfRange;
-        const long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
+        const tools::Long nSecondHalfRange = mxImpl->mnMaxZoom - mxImpl->mnSliderCenter;
+        const tools::Long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nSecondHalfRange;
+        const tools::Long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRet += nHalfSliderWidth + nOffset;
     }
 
@@ -202,11 +202,11 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         }
 
         // remove snapping points that are too close to each other:
-        long nLastOffset = 0;
+        tools::Long nLastOffset = 0;
 
         for ( const sal_uInt16 nCurrent : aTmpSnappingPoints )
         {
-            const long nCurrentOffset = Zoom2Offset( nCurrent );
+            const tools::Long nCurrentOffset = Zoom2Offset( nCurrent );
 
             if ( nCurrentOffset - nLastOffset >= nSnappingPointsMinDist )
             {
@@ -230,8 +230,8 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     tools::Rectangle           aRect = rUsrEvt.GetRect();
     tools::Rectangle           aSlider = aRect;
 
-    long nSliderHeight  = 1 * pDev->GetDPIScaleFactor();
-    long nSnappingHeight = 2 * pDev->GetDPIScaleFactor();
+    tools::Long nSliderHeight  = 1 * pDev->GetDPIScaleFactor();
+    tools::Long nSnappingHeight = 2 * pDev->GetDPIScaleFactor();
 
     aSlider.AdjustTop((aControlRect.GetHeight() - nSliderHeight)/2 );
     aSlider.SetBottom( aSlider.Top() + nSliderHeight - 1 );
@@ -255,7 +255,7 @@ void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw snapping points:
     for ( const auto& rSnappingPoint : mxImpl->maSnappingPointOffsets )
     {
-        long nSnapPosX = aRect.Left() + rSnappingPoint;
+        tools::Long nSnapPosX = aRect.Left() + rSnappingPoint;
 
         pDev->DrawRect( tools::Rectangle( nSnapPosX - 1, aSlider.Top() - nSnappingHeight,
                     nSnapPosX, aSlider.Bottom() + nSnappingHeight ) );
@@ -291,12 +291,12 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     const Point aPoint = rEvt.GetPosPixel();
     const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
 
-    long nIncDecWidth   = mxImpl->maIncreaseButton.GetSizePixel().Width();
+    tools::Long nIncDecWidth   = mxImpl->maIncreaseButton.GetSizePixel().Width();
 
-    const long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
-    const long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;
+    const tools::Long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
+    const tools::Long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;
 
-    const long nOldZoom = mxImpl->mnCurrentZoom;
+    const tools::Long nOldZoom = mxImpl->mnCurrentZoom;
 
     // click to - button
     if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )
@@ -354,10 +354,10 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 
     // Tooltips
 
-    long nIncDecWidth = mxImpl->maIncreaseButton.GetSizePixel().Width();
+    tools::Long nIncDecWidth = mxImpl->maIncreaseButton.GetSizePixel().Width();
 
-    const long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
-    const long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;
+    const tools::Long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
+    const tools::Long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;
 
     // click to - button
     if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )

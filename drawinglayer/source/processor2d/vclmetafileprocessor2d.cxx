@@ -2331,10 +2331,10 @@ VclMetafileProcessor2D::CreateBufferDevice(const basegfx::B2DRange& rCandidateRa
     constexpr double fMaxQuadratPixels = 500000;
     basegfx::B2DRange aViewRange(rCandidateRange);
     aViewRange.transform(maCurrentTransformation);
-    rRectLogic = tools::Rectangle(static_cast<long>(std::floor(aViewRange.getMinX())),
-                                  static_cast<long>(std::floor(aViewRange.getMinY())),
-                                  static_cast<long>(std::ceil(aViewRange.getMaxX())),
-                                  static_cast<long>(std::ceil(aViewRange.getMaxY())));
+    rRectLogic = tools::Rectangle(static_cast<tools::Long>(std::floor(aViewRange.getMinX())),
+                                  static_cast<tools::Long>(std::floor(aViewRange.getMinY())),
+                                  static_cast<tools::Long>(std::ceil(aViewRange.getMaxX())),
+                                  static_cast<tools::Long>(std::ceil(aViewRange.getMaxY())));
     const tools::Rectangle aRectPixel(mpOutputDevice->LogicToPixel(rRectLogic));
     rSizePixel = aRectPixel.GetSize();
     const double fViewVisibleArea(rSizePixel.getWidth() * rSizePixel.getHeight());

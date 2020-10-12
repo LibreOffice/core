@@ -103,7 +103,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
 
 void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
 {
-    long nIndex = pList.is() ? pList->GetIndex( Name ) : -1;
+    tools::Long nIndex = pList.is() ? pList->GetIndex( Name ) : -1;
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
@@ -117,7 +117,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
-    long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
+    tools::Long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
     if( nIndex == -1  )
         throw container::NoSuchElementException();
 
@@ -127,7 +127,7 @@ void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno:
 // XNameAccess
 uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
 {
-    long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
+    tools::Long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
     if( nIndex == -1 )
         throw container::NoSuchElementException();
 
@@ -137,12 +137,12 @@ uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
 {
-    const long nCount = pList.is() ? pList->Count() : 0;
+    const tools::Long nCount = pList.is() ? pList->Count() : 0;
 
     uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
 
-    for( long nIndex = 0; nIndex < nCount; nIndex++ )
+    for( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const XColorEntry* pEntry = pList->GetColor(nIndex);
         pStrings[nIndex] = pEntry->GetName();
@@ -153,7 +153,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
 
 sal_Bool SAL_CALL SvxUnoColorTable::hasByName( const OUString& aName )
 {
-    long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
+    tools::Long nIndex = pList.is() ? pList->GetIndex( aName ) : -1;
     return nIndex != -1;
 }
 

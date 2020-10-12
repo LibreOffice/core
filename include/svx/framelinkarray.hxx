@@ -207,22 +207,22 @@ public:
     /** Sets an additional left width for the merged range that contains (nCol,nRow).
         @descr  Useful to handle merged ranges that are not completely part of the array.
         @precond  The merged range must be at the left border of the array. */
-    void                SetAddMergedLeftSize( size_t nCol, size_t nRow, long nAddSize );
+    void                SetAddMergedLeftSize( size_t nCol, size_t nRow, tools::Long nAddSize );
 
     /** Sets an additional right width for the merged range that contains (nCol,nRow).
         @descr  Useful to handle merged ranges that are not completely part of the array.
         @precond  The merged range must be at the right border of the array. */
-    void                SetAddMergedRightSize( size_t nCol, size_t nRow, long nAddSize );
+    void                SetAddMergedRightSize( size_t nCol, size_t nRow, tools::Long nAddSize );
 
     /** Sets an additional top height for the merged range that contains (nCol,nRow).
         @descr  Useful to handle merged ranges that are not completely part of the array.
         @precond  The merged range must be at the top border of the array. */
-    void                SetAddMergedTopSize( size_t nCol, size_t nRow, long nAddSize );
+    void                SetAddMergedTopSize( size_t nCol, size_t nRow, tools::Long nAddSize );
 
     /** Sets an additional bottom height for the merged range that contains (nCol,nRow).
         @descr  Useful to handle merged ranges that are not completely part of the array.
         @precond  The merged range must be at the bottom border of the array. */
-    void                SetAddMergedBottomSize( size_t nCol, size_t nRow, long nAddSize );
+    void                SetAddMergedBottomSize( size_t nCol, size_t nRow, tools::Long nAddSize );
 
     /** Returns true, if the cell (nCol,nRow) is part of a merged range. */
     bool                IsMerged( size_t nCol, size_t nRow ) const;
@@ -250,44 +250,44 @@ public:
     // cell coordinates
 
     /** Sets the X output coordinate of the left column. */
-    void                SetXOffset( long nXOffset );
+    void                SetXOffset( tools::Long nXOffset );
 
     /** Sets the Y output coordinate of the top row. */
-    void                SetYOffset( long nYOffset );
+    void                SetYOffset( tools::Long nYOffset );
 
     /** Sets the output width of the specified column. */
-    void                SetColWidth( size_t nCol, long nWidth );
+    void                SetColWidth( size_t nCol, tools::Long nWidth );
 
     /** Sets the output height of the specified row. */
-    void                SetRowHeight( size_t nRow, long nHeight );
+    void                SetRowHeight( size_t nRow, tools::Long nHeight );
 
     /** Sets the same output width for all columns. */
-    void                SetAllColWidths( long nWidth );
+    void                SetAllColWidths( tools::Long nWidth );
 
     /** Sets the same output height for all rows. */
-    void                SetAllRowHeights( long nHeight );
+    void                SetAllRowHeights( tools::Long nHeight );
 
     /** Returns the X output coordinate of the left border of the specified column.
         @descr  The column index <array-width> returns the X output coordinate
                 of the right array border. */
-    long                GetColPosition( size_t nCol ) const;
+    tools::Long                GetColPosition( size_t nCol ) const;
 
     /** Returns the Y output coordinate of the top border of the specified row.
         @descr  The row index <array-height> returns the Y output coordinate
                 of the bottom array border. */
-    long                GetRowPosition( size_t nRow ) const;
+    tools::Long                GetRowPosition( size_t nRow ) const;
 
     /** Returns the output width of the specified range of columns. */
-    long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
+    tools::Long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
 
     /** Returns the output height of the specified range of rows. */
-    long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
+    tools::Long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
 
     /** Returns the output width of the entire array. */
-    long                GetWidth() const;
+    tools::Long                GetWidth() const;
 
     /** Returns the output height of the entire array. */
-    long                GetHeight() const;
+    tools::Long                GetHeight() const;
 
     /** Returns the output range of the cell (nCol,nRow).
         Returns total output range of merged ranges, if bExpandMerged is true. */

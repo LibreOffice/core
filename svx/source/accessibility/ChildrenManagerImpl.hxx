@@ -116,11 +116,11 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    long GetChildCount() const throw ();
+    tools::Long GetChildCount() const throw ();
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    css::uno::Reference<css::drawing::XShape> GetChildShape(long nIndex);
+    css::uno::Reference<css::drawing::XShape> GetChildShape(tools::Long nIndex);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -135,7 +135,7 @@ public:
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
     css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (long nIndex);
+        GetChild (tools::Long nIndex);
 
     /** Return the requested accessible child.
         @param aChildDescriptor
@@ -256,7 +256,7 @@ public:
     virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
-        const long _nIndex,
+        const tools::Long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) override;
 

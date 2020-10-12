@@ -357,7 +357,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
         {
             fWAngle = NormAngle36000(GetAngle(rPnt - DragStat().GetRef1()) -
                 rCandidate.mnStartAngle) - rCandidate.mnLastAngle;
-            rCandidate.mnLastAngle = static_cast<long>(fWAngle) + rCandidate.mnLastAngle;
+            rCandidate.mnLastAngle = static_cast<tools::Long>(fWAngle) + rCandidate.mnLastAngle;
             fWAngle /= 100.0;
             fHAngle = 0.0;
         }
@@ -370,15 +370,15 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             fHAngle = 90.0 * static_cast<double>(rPnt.Y() - maLastPos.Y())
                 / static_cast<double>(maFullBound.GetHeight());
         }
-        long nSnap = 0;
+        tools::Long nSnap = 0;
 
         if(!getSdrDragView().IsRotateAllowed())
             nSnap = 90;
 
         if(nSnap != 0)
         {
-            fWAngle = static_cast<double>((static_cast<long>(fWAngle) + nSnap/2) / nSnap * nSnap);
-            fHAngle = static_cast<double>((static_cast<long>(fHAngle) + nSnap/2) / nSnap * nSnap);
+            fWAngle = static_cast<double>((static_cast<tools::Long>(fWAngle) + nSnap/2) / nSnap * nSnap);
+            fHAngle = static_cast<double>((static_cast<tools::Long>(fHAngle) + nSnap/2) / nSnap * nSnap);
         }
 
         // to radians

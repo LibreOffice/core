@@ -44,10 +44,10 @@ private:
     Style               maBLTR;
 
 public:
-    long                mnAddLeft;
-    long                mnAddRight;
-    long                mnAddTop;
-    long                mnAddBottom;
+    tools::Long                mnAddLeft;
+    tools::Long                mnAddRight;
+    tools::Long                mnAddTop;
+    tools::Long                mnAddBottom;
 
     SvxRotateMode       meRotMode;
     double              mfOrientation;
@@ -227,8 +227,8 @@ struct ArrayImpl
 
     size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
 
-    long                GetColPosition( size_t nCol ) const;
-    long                GetRowPosition( size_t nRow ) const;
+    tools::Long                GetColPosition( size_t nCol ) const;
+    tools::Long                GetRowPosition( size_t nRow ) const;
 
     bool                HasCellRotation() const;
 };
@@ -333,7 +333,7 @@ bool ArrayImpl::IsInClipRange( size_t nCol, size_t nRow ) const
     return IsColInClipRange( nCol ) && IsRowInClipRange( nRow );
 }
 
-long ArrayImpl::GetColPosition( size_t nCol ) const
+tools::Long ArrayImpl::GetColPosition( size_t nCol ) const
 {
     if( mbXCoordsDirty )
     {
@@ -343,7 +343,7 @@ long ArrayImpl::GetColPosition( size_t nCol ) const
     return maXCoords[ nCol ];
 }
 
-long ArrayImpl::GetRowPosition( size_t nRow ) const
+tools::Long ArrayImpl::GetRowPosition( size_t nRow ) const
 {
     if( mbYCoordsDirty )
     {
@@ -709,7 +709,7 @@ void Array::SetMergedRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol,
         lclSetMergedRange( mxImpl->maCells, mxImpl->mnWidth, nFirstCol, nFirstRow, nLastCol, nLastRow );
 }
 
-void Array::SetAddMergedLeftSize( size_t nCol, size_t nRow, long nAddSize )
+void Array::SetAddMergedLeftSize( size_t nCol, size_t nRow, tools::Long nAddSize )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetAddMergedLeftSize" );
     DBG_FRAME_CHECK( mxImpl->GetMergedFirstCol( nCol, nRow ) == 0, "SetAddMergedLeftSize", "additional border inside array" );
@@ -717,7 +717,7 @@ void Array::SetAddMergedLeftSize( size_t nCol, size_t nRow, long nAddSize )
         CELLACC( aIt.Col(), aIt.Row() ).mnAddLeft = nAddSize;
 }
 
-void Array::SetAddMergedRightSize( size_t nCol, size_t nRow, long nAddSize )
+void Array::SetAddMergedRightSize( size_t nCol, size_t nRow, tools::Long nAddSize )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetAddMergedRightSize" );
     DBG_FRAME_CHECK( mxImpl->GetMergedLastCol( nCol, nRow ) + 1 == mxImpl->mnWidth, "SetAddMergedRightSize", "additional border inside array" );
@@ -725,7 +725,7 @@ void Array::SetAddMergedRightSize( size_t nCol, size_t nRow, long nAddSize )
         CELLACC( aIt.Col(), aIt.Row() ).mnAddRight = nAddSize;
 }
 
-void Array::SetAddMergedTopSize( size_t nCol, size_t nRow, long nAddSize )
+void Array::SetAddMergedTopSize( size_t nCol, size_t nRow, tools::Long nAddSize )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetAddMergedTopSize" );
     DBG_FRAME_CHECK( mxImpl->GetMergedFirstRow( nCol, nRow ) == 0, "SetAddMergedTopSize", "additional border inside array" );
@@ -733,7 +733,7 @@ void Array::SetAddMergedTopSize( size_t nCol, size_t nRow, long nAddSize )
         CELLACC( aIt.Col(), aIt.Row() ).mnAddTop = nAddSize;
 }
 
-void Array::SetAddMergedBottomSize( size_t nCol, size_t nRow, long nAddSize )
+void Array::SetAddMergedBottomSize( size_t nCol, size_t nRow, tools::Long nAddSize )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetAddMergedBottomSize" );
     DBG_FRAME_CHECK( mxImpl->GetMergedLastRow( nCol, nRow ) + 1 == mxImpl->mnHeight, "SetAddMergedBottomSize", "additional border inside array" );
@@ -774,76 +774,76 @@ void Array::SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, s
 }
 
 // cell coordinates
-void Array::SetXOffset( long nXOffset )
+void Array::SetXOffset( tools::Long nXOffset )
 {
     mxImpl->maXCoords[ 0 ] = nXOffset;
     mxImpl->mbXCoordsDirty = true;
 }
 
-void Array::SetYOffset( long nYOffset )
+void Array::SetYOffset( tools::Long nYOffset )
 {
     mxImpl->maYCoords[ 0 ] = nYOffset;
     mxImpl->mbYCoordsDirty = true;
 }
 
-void Array::SetColWidth( size_t nCol, long nWidth )
+void Array::SetColWidth( size_t nCol, tools::Long nWidth )
 {
     DBG_FRAME_CHECK_COL( nCol, "SetColWidth" );
     mxImpl->maWidths[ nCol ] = nWidth;
     mxImpl->mbXCoordsDirty = true;
 }
 
-void Array::SetRowHeight( size_t nRow, long nHeight )
+void Array::SetRowHeight( size_t nRow, tools::Long nHeight )
 {
     DBG_FRAME_CHECK_ROW( nRow, "SetRowHeight" );
     mxImpl->maHeights[ nRow ] = nHeight;
     mxImpl->mbYCoordsDirty = true;
 }
 
-void Array::SetAllColWidths( long nWidth )
+void Array::SetAllColWidths( tools::Long nWidth )
 {
     std::fill( mxImpl->maWidths.begin(), mxImpl->maWidths.end(), nWidth );
     mxImpl->mbXCoordsDirty = true;
 }
 
-void Array::SetAllRowHeights( long nHeight )
+void Array::SetAllRowHeights( tools::Long nHeight )
 {
     std::fill( mxImpl->maHeights.begin(), mxImpl->maHeights.end(), nHeight );
     mxImpl->mbYCoordsDirty = true;
 }
 
-long Array::GetColPosition( size_t nCol ) const
+tools::Long Array::GetColPosition( size_t nCol ) const
 {
     DBG_FRAME_CHECK_COL_1( nCol, "GetColPosition" );
     return mxImpl->GetColPosition( nCol );
 }
 
-long Array::GetRowPosition( size_t nRow ) const
+tools::Long Array::GetRowPosition( size_t nRow ) const
 {
     DBG_FRAME_CHECK_ROW_1( nRow, "GetRowPosition" );
     return mxImpl->GetRowPosition( nRow );
 }
 
-long Array::GetColWidth( size_t nFirstCol, size_t nLastCol ) const
+tools::Long Array::GetColWidth( size_t nFirstCol, size_t nLastCol ) const
 {
     DBG_FRAME_CHECK_COL( nFirstCol, "GetColWidth" );
     DBG_FRAME_CHECK_COL( nLastCol, "GetColWidth" );
     return GetColPosition( nLastCol + 1 ) - GetColPosition( nFirstCol );
 }
 
-long Array::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
+tools::Long Array::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
 {
     DBG_FRAME_CHECK_ROW( nFirstRow, "GetRowHeight" );
     DBG_FRAME_CHECK_ROW( nLastRow, "GetRowHeight" );
     return GetRowPosition( nLastRow + 1 ) - GetRowPosition( nFirstRow );
 }
 
-long Array::GetWidth() const
+tools::Long Array::GetWidth() const
 {
     return GetColPosition( mxImpl->mnWidth ) - GetColPosition( 0 );
 }
 
-long Array::GetHeight() const
+tools::Long Array::GetHeight() const
 {
     return GetRowPosition( mxImpl->mnHeight ) - GetRowPosition( 0 );
 }

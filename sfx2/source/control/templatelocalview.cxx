@@ -71,7 +71,7 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
     return true;
 }
 
-void TemplateLocalView::updateThumbnailDimensions(long itemMaxSize)
+void TemplateLocalView::updateThumbnailDimensions(tools::Long itemMaxSize)
 {
     mnThumbnailWidth = itemMaxSize;
     mnThumbnailHeight = itemMaxSize;

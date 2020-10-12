@@ -219,7 +219,7 @@ void SwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
         sal_uInt32 nFreeWidth = aPagePrtArea.GetWidth() - rRenderContext.GetTextWidth(DEMOTEXT);
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
-        aDrawObj.SetSize(Size(std::max(5L, static_cast<long>(nFreeWidth) / 3L), std::max(5L, aFrmSize.Height() * 3L)));
+        aDrawObj.SetSize(Size(std::max(5L, static_cast<tools::Long>(nFreeWidth) / 3L), std::max(5L, aFrmSize.Height() * 3L)));
         aDrawObj.SetPos(Point(aParaPrtArea.Right() + 1, aParaPrtArea.Bottom() / 2));
         aParaPrtArea.SetRight( aDrawObj.Right() );
     }
@@ -480,8 +480,8 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     if (nAnchor == RndStdIds::FLY_AT_FLY)
         aRect = DrawInnerFrame_Impl(rRenderContext, aFrameAtFrame, m_aBgCol, m_aBorderCol);
 
-    long lXPos = 0;
-    long lYPos = 0;
+    tools::Long lXPos = 0;
+    tools::Long lYPos = 0;
 
     // Horizontal alignment
     if (nAnchor != RndStdIds::FLY_AS_CHAR)
@@ -601,7 +601,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         aFrmRect.Move(0, pOuterFrame->Bottom() - aFrmRect.Bottom());
 
     // Draw Test paragraph
-    const long nTxtLineHeight = aTextLine.GetHeight();
+    const tools::Long nTxtLineHeight = aTextLine.GetHeight();
     tools::Rectangle aTxt(aTextLine);
     sal_Int32 nStep;
     sal_uInt16 nLines;
@@ -626,8 +626,8 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     if (nAnchor != RndStdIds::FLY_AS_CHAR)
     {
         // Simulate text
-        const long nOldR = aTxt.Right();
-        const long nOldL = aTxt.Left();
+        const tools::Long nOldR = aTxt.Right();
+        const tools::Long nOldL = aTxt.Left();
 
         // #i22341#
         const bool bIgnoreWrap = nAnchor == RndStdIds::FLY_AT_CHAR &&

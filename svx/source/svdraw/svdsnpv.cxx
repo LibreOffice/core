@@ -262,18 +262,18 @@ Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 {
     if (!bSnapEnab) return SdrSnap::NOTSNAPPED;
-    long x=rPnt.X();
-    long y=rPnt.Y();
+    tools::Long x=rPnt.X();
+    tools::Long y=rPnt.Y();
     if (pPV==nullptr) {
         pPV=GetSdrPageView();
         if (pPV==nullptr) return SdrSnap::NOTSNAPPED;
     }
 
-    long dx=NOT_SNAPPED;
-    long dy=NOT_SNAPPED;
-    long dx1,dy1;
-    long mx=aMagnSiz.Width();
-    long my=aMagnSiz.Height();
+    tools::Long dx=NOT_SNAPPED;
+    tools::Long dy=NOT_SNAPPED;
+    tools::Long dx1,dy1;
+    tools::Long mx=aMagnSiz.Width();
+    tools::Long my=aMagnSiz.Height();
     if (mbHlplVisible && bHlplSnap && !IsDragHelpLine())
     {
         const SdrHelpLineList& rHLL=pPV->GetHelpLines();
@@ -284,16 +284,16 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             const Point& rPos=rHL.GetPos();
             switch (rHL.GetKind()) {
                 case SdrHelpLineKind::Vertical: {
-                    long a=x-rPos.X();
+                    tools::Long a=x-rPos.X();
                     if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; }
                 } break;
                 case SdrHelpLineKind::Horizontal: {
-                    long b=y-rPos.Y();
+                    tools::Long b=y-rPos.Y();
                     if (std::abs(b)<=my) { dy1=-b; if (std::abs(dy1)<std::abs(dy)) dy=dy1; }
                 } break;
                 case SdrHelpLineKind::Point: {
-                    long a=x-rPos.X();
-                    long b=y-rPos.Y();
+                    tools::Long a=x-rPos.X();
+                    tools::Long b=y-rPos.Y();
                     if (std::abs(a)<=mx && std::abs(b)<=my) {
                         dx1=-a; dy1=-b;
                         if (std::abs(dx1)<std::abs(dx) && std::abs(dy1)<std::abs(dy)) { dx=dx1; dy=dy1; }
@@ -304,13 +304,13 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if (mbBordVisible && bBordSnap) {
         SdrPage* pPage=pPV->GetPage();
-        long xs=pPage->GetWidth();
-        long ys=pPage->GetHeight();
-        long lft=pPage->GetLeftBorder();
-        long rgt=pPage->GetRightBorder();
-        long upp=pPage->GetUpperBorder();
-        long lwr=pPage->GetLowerBorder();
-        long a;
+        tools::Long xs=pPage->GetWidth();
+        tools::Long ys=pPage->GetHeight();
+        tools::Long lft=pPage->GetLeftBorder();
+        tools::Long rgt=pPage->GetRightBorder();
+        tools::Long upp=pPage->GetUpperBorder();
+        tools::Long lwr=pPage->GetLowerBorder();
+        tools::Long a;
         a=x- lft    ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left margin
         a=x-(xs-rgt); if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right margin
         a=x         ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left edge of paper
@@ -381,8 +381,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             else
                 fx -= fSnapWidth / 2.0;
 
-            x = static_cast<long>((fx - static_cast<double>(pPV->GetPageOrigin().X())) / fSnapWidth);
-            x = static_cast<long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().X()));
+            x = static_cast<tools::Long>((fx - static_cast<double>(pPV->GetPageOrigin().X())) / fSnapWidth);
+            x = static_cast<tools::Long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().X()));
             dx = 0;
         }
         fSnapWidth = double(aSnapWdtY);
@@ -396,8 +396,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             else
                 fy -= fSnapWidth / 2.0;
 
-            y = static_cast<long>((fy - static_cast<double>(pPV->GetPageOrigin().Y())) / fSnapWidth);
-            y = static_cast<long>(static_cast<double>(y) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().Y()));
+            y = static_cast<tools::Long>((fy - static_cast<double>(pPV->GetPageOrigin().Y())) / fSnapWidth);
+            y = static_cast<tools::Long>(static_cast<double>(y) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().Y()));
             dy = 0;
         }
     }
@@ -409,7 +409,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     return bRet;
 }
 
-void SdrSnapView::CheckSnap(const Point& rPt, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
+void SdrSnapView::CheckSnap(const Point& rPt, tools::Long& nBestXSnap, tools::Long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
 {
     Point aPt(rPt);
     SdrSnap nRet=SnapPos(aPt,nullptr);

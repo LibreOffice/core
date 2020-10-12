@@ -63,10 +63,10 @@ Point SdrGluePoint::GetAbsolutePos(const SdrObject& rObj) const
         default: break;
     }
     if (!bNoPercent) {
-        long nXMul=aSnap.Right()-aSnap.Left();
-        long nYMul=aSnap.Bottom()-aSnap.Top();
-        long nXDiv=10000;
-        long nYDiv=10000;
+        tools::Long nXMul=aSnap.Right()-aSnap.Left();
+        tools::Long nYMul=aSnap.Bottom()-aSnap.Top();
+        tools::Long nXDiv=10000;
+        tools::Long nYDiv=10000;
         if (nXMul!=nXDiv) {
             aPt.setX( aPt.X() * nXMul );
             aPt.setX( aPt.X() / nXDiv );
@@ -107,12 +107,12 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
     }
     aPt-=aOfs;
     if (!bNoPercent) {
-        long nXMul=aSnap.Right()-aSnap.Left();
-        long nYMul=aSnap.Bottom()-aSnap.Top();
+        tools::Long nXMul=aSnap.Right()-aSnap.Left();
+        tools::Long nYMul=aSnap.Bottom()-aSnap.Top();
         if (nXMul==0) nXMul=1;
         if (nYMul==0) nYMul=1;
-        long nXDiv=10000;
-        long nYDiv=10000;
+        tools::Long nXDiv=10000;
+        tools::Long nYDiv=10000;
         if (nXMul!=nXDiv) {
             aPt.setX( aPt.X() * nXDiv );
             aPt.setX( aPt.X() / nXMul );
@@ -125,7 +125,7 @@ void SdrGluePoint::SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj)
     aPos=aPt;
 }
 
-long SdrGluePoint::GetAlignAngle() const
+tools::Long SdrGluePoint::GetAlignAngle() const
 {
     if (nAlign == (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
         return 0; // Invalid!
@@ -148,7 +148,7 @@ long SdrGluePoint::GetAlignAngle() const
     return 0;
 }
 
-void SdrGluePoint::SetAlignAngle(long nAngle)
+void SdrGluePoint::SetAlignAngle(tools::Long nAngle)
 {
     nAngle=NormAngle36000(nAngle);
     if (nAngle>=33750 || nAngle<2250) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_CENTER;
@@ -161,7 +161,7 @@ void SdrGluePoint::SetAlignAngle(long nAngle)
     else if (nAngle<33750) nAlign=SdrAlign::HORZ_RIGHT |SdrAlign::VERT_BOTTOM;
 }
 
-long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
+tools::Long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
 {
     switch (nEsc) {
         case SdrEscapeDirection::RIGHT : return 0;
@@ -173,7 +173,7 @@ long SdrGluePoint::EscDirToAngle(SdrEscapeDirection nEsc)
     return 0;
 }
 
-SdrEscapeDirection SdrGluePoint::EscAngleToDir(long nAngle)
+SdrEscapeDirection SdrGluePoint::EscAngleToDir(tools::Long nAngle)
 {
     nAngle=NormAngle36000(nAngle);
     if (nAngle>=31500 || nAngle<4500)
@@ -186,7 +186,7 @@ SdrEscapeDirection SdrGluePoint::EscAngleToDir(long nAngle)
     return SdrEscapeDirection::BOTTOM;
 }
 
-void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
+void SdrGluePoint::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj)
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     RotatePoint(aPt,rRef,sn,cs);
@@ -206,14 +206,14 @@ void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, 
     if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
-void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj)
+void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj)
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     MirrorPoint(aPt,rRef1,rRef2);
     // mirror reference edge
     if(nAlign != (SdrAlign::HORZ_CENTER|SdrAlign::VERT_CENTER))
     {
-        long nAW=GetAlignAngle();
+        tools::Long nAW=GetAlignAngle();
         nAW+=2*(nAngle-nAW);
         SetAlignAngle(nAW);
     }
@@ -221,22 +221,22 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, c
     SdrEscapeDirection nEscDir0=nEscDir;
     SdrEscapeDirection nEscDir1=SdrEscapeDirection::SMART;
     if (nEscDir0&SdrEscapeDirection::LEFT) {
-        long nEW=EscDirToAngle(SdrEscapeDirection::LEFT);
+        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::LEFT);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::TOP) {
-        long nEW=EscDirToAngle(SdrEscapeDirection::TOP);
+        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::TOP);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::RIGHT) {
-        long nEW=EscDirToAngle(SdrEscapeDirection::RIGHT);
+        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::RIGHT);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
     if (nEscDir0&SdrEscapeDirection::BOTTOM) {
-        long nEW=EscDirToAngle(SdrEscapeDirection::BOTTOM);
+        tools::Long nEW=EscDirToAngle(SdrEscapeDirection::BOTTOM);
         nEW+=2*(nAngle-nEW);
         nEscDir1|=EscAngleToDir(nEW);
     }
@@ -361,7 +361,7 @@ void SdrGluePointList::SetReallyAbsolute(bool bOn, const SdrObject& rObj)
         xGP->SetReallyAbsolute(bOn,rObj);
 }
 
-void SdrGluePointList::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
+void SdrGluePointList::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj)
 {
     for (auto& xGP : aList)
         xGP->Rotate(rRef,nAngle,sn,cs,pObj);
@@ -370,11 +370,11 @@ void SdrGluePointList::Rotate(const Point& rRef, long nAngle, double sn, double 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj)
 {
     Point aPt(rRef2); aPt-=rRef1;
-    long nAngle=GetAngle(aPt);
+    tools::Long nAngle=GetAngle(aPt);
     Mirror(rRef1,rRef2,nAngle,pObj);
 }
 
-void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj)
+void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj)
 {
     for (auto& xGP : aList)
         xGP->Mirror(rRef1,rRef2,nAngle,pObj);

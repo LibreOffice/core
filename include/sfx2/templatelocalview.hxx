@@ -165,8 +165,8 @@ protected:
 
     TemplateViewItem *maSelectedItem;
 
-    long mnThumbnailWidth;
-    long mnThumbnailHeight;
+    tools::Long mnThumbnailWidth;
+    tools::Long mnThumbnailHeight;
 
     Point maPosition; //store the point of click event
 

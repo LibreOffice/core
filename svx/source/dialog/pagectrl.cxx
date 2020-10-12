@@ -75,7 +75,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::MapTwip));
 
-    Fraction aXScale(aWinSize.Width(), std::max(long(aSize.Width() * 2 + aSize.Width() / 8), 1L));
+    Fraction aXScale(aWinSize.Width(), std::max(tools::Long(aSize.Width() * 2 + aSize.Width() / 8), 1L));
     Fraction aYScale(aWinSize.Height(), std::max(aSize.Height(), 1L));
     MapMode aMapMode(rRenderContext.GetMapMode());
 
@@ -91,7 +91,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     }
     rRenderContext.SetMapMode(aMapMode);
     Size aSz(rRenderContext.PixelToLogic(GetOutputSizePixel()));
-    long nYPos = (aSz.Height() - aSize.Height()) / 2;
+    tools::Long nYPos = (aSz.Height() - aSize.Height()) / 2;
 
     if (eUsage == SvxPageUsage::All)
     {
@@ -109,7 +109,7 @@ void SvxPageWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
             rRenderContext.SetMapMode(aMapMode);
             aSz = rRenderContext.PixelToLogic(GetOutputSizePixel());
             nYPos = (aSz.Height() - aSize.Height()) / 2;
-            long nXPos = (aSz.Width() - aSize.Width()) / 2;
+            tools::Long nXPos = (aSz.Width() - aSize.Width()) / 2;
             DrawPage(rRenderContext, Point(nXPos,nYPos),true,true);
         }
         else
@@ -161,8 +161,8 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     rRenderContext.SetFillColor(rFieldColor);
     rRenderContext.DrawRect(tools::Rectangle(rOrg, aTempSize));
 
-    long nL = nLeft;
-    long nR = nRight;
+    tools::Long nL = nLeft;
+    tools::Long nR = nRight;
 
     if (eUsage == SvxPageUsage::Mirror && !bSecond)
     {
@@ -235,7 +235,7 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         OUString sText("ABC");
         Point aMove(1, rRenderContext.GetTextHeight());
         sal_Unicode cArrow = 0x2193;
-        long nAWidth = rRenderContext.GetTextWidth(sText.copy(0,1));
+        tools::Long nAWidth = rRenderContext.GetTextWidth(sText.copy(0,1));
         switch (nFrameDirection)
         {
         case SvxFrameDirection::Horizontal_LR_TB:
@@ -267,8 +267,8 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
         for (sal_Int32 i = 0; i < sText.getLength(); i++)
         {
             OUString sDraw(sText.copy(i,1));
-            long nHDiff = 0;
-            long nCharWidth = rRenderContext.GetTextWidth(sDraw);
+            tools::Long nHDiff = 0;
+            tools::Long nCharWidth = rRenderContext.GetTextWidth(sDraw);
             bool bHorizontal = 0 == aMove.Y();
             if (!bHorizontal)
             {
@@ -296,12 +296,12 @@ void SvxPageWindow::DrawPage(vcl::RenderContext& rRenderContext, const Point& rO
     // Paint Table, if necessary center it
     rRenderContext.SetLineColor(COL_LIGHTGRAY);
 
-    long nW = aRect.GetWidth();
-    long nH = aRect.GetHeight();
-    long const nTW = CELL_WIDTH * 3;
-    long const nTH = CELL_HEIGHT * 3;
-    long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
-    long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
+    tools::Long nW = aRect.GetWidth();
+    tools::Long nH = aRect.GetHeight();
+    tools::Long const nTW = CELL_WIDTH * 3;
+    tools::Long const nTH = CELL_HEIGHT * 3;
+    tools::Long _nLeft = bHorz ? aRect.Left() + ((nW - nTW) / 2) : aRect.Left();
+    tools::Long _nTop = bVert ? aRect.Top() + ((nH - nTH) / 2) : aRect.Top();
     tools::Rectangle aCellRect(Point(_nLeft, _nTop),Size(CELL_WIDTH, CELL_HEIGHT));
 
     for (sal_uInt16 i = 0; i < 3; ++i)

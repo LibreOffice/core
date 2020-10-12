@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
+#include <tools/long.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -281,7 +282,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     catch (const UnknownPropertyException&) {}
     catch (const WrappedTargetException&) {}
 
-    long nOldCount = pCurSet->GetCount();
+    tools::Long nOldCount = pCurSet->GetCount();
     bool bWasFinal = false;
 
     aRet >>= bWasFinal;
@@ -335,7 +336,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                 }
             case ListActionType::MOVED:
                 {
-                    long nOffset = 0;
+                    tools::Long nOffset = 0;
                     if ( aAction.ActionInfo >>= nOffset )
                     {
                         pCurSet->Move( aAction.Position,

@@ -249,8 +249,8 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     BitmapEx aBitmap = m_aGraphic.GetBitmapEx();
     if ( m_xReduceResolutionCB->get_active() )
     {
-        long nPixelX = static_cast<long>( GetViewWidthInch() * m_dResolution );
-        long nPixelY = static_cast<long>( GetViewHeightInch() * m_dResolution );
+        tools::Long nPixelX = static_cast<tools::Long>( GetViewWidthInch() * m_dResolution );
+        tools::Long nPixelY = static_cast<tools::Long>( GetViewHeightInch() * m_dResolution );
 
         aBitmap.Scale( Size( nPixelX, nPixelY ), GetSelectedInterpolationType() );
     }
@@ -373,8 +373,8 @@ tools::Rectangle CompressGraphicsDialog::GetScaledCropRectangle() const
 {
     if ( m_xReduceResolutionCB->get_active() )
     {
-        long nPixelX = static_cast<long>( GetViewWidthInch()  * m_dResolution );
-        long nPixelY = static_cast<long>( GetViewHeightInch() * m_dResolution );
+        tools::Long nPixelX = static_cast<tools::Long>( GetViewWidthInch()  * m_dResolution );
+        tools::Long nPixelY = static_cast<tools::Long>( GetViewHeightInch() * m_dResolution );
         Size aSize = m_aGraphic.GetBitmapEx().GetSizePixel();
         double aScaleX = nPixelX / static_cast<double>(aSize.Width());
         double aScaleY = nPixelY / static_cast<double>(aSize.Height());

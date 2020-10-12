@@ -387,7 +387,7 @@ void SvxRubyDialog::SetRubyText(sal_Int32 nPos, weld::Entry& rLeft, weld::Entry&
 
 void SvxRubyDialog::GetRubyText()
 {
-    long nTempLastPos = GetLastPos();
+    tools::Long nTempLastPos = GetLastPos();
     for (int i = 0; i < 8; i+=2)
     {
         if (aEditArr[i]->get_sensitive() &&
@@ -731,13 +731,13 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     OUString sBaseText, sRubyText;
     m_pParentDlg->GetCurrentText(sBaseText, sRubyText);
 
-    long nTextHeight = rRenderContext.GetTextHeight();
-    long nBaseWidth = rRenderContext.GetTextWidth(sBaseText);
+    tools::Long nTextHeight = rRenderContext.GetTextHeight();
+    tools::Long nBaseWidth = rRenderContext.GetTextWidth(sBaseText);
 
     vcl::Font aRubyFont(aFont);
     aRubyFont.SetFontHeight(aRubyFont.GetFontHeight() * 70 / 100);
     rRenderContext.SetFont(aRubyFont);
-    long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
+    tools::Long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aFont);
 
     RubyAdjust nAdjust = static_cast<RubyAdjust>(m_pParentDlg->m_xAdjustLB->get_active());
@@ -748,19 +748,19 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     //which part is stretched ?
     bool bRubyStretch = nBaseWidth >= nRubyWidth;
 
-    long nCenter = aWinSize.Width() / 2;
-    long nHalfWidth = std::max( nBaseWidth, nRubyWidth ) /2;
-    long nLeftStart = nCenter - nHalfWidth;
-    long nRightEnd = nCenter + nHalfWidth;
+    tools::Long nCenter = aWinSize.Width() / 2;
+    tools::Long nHalfWidth = std::max( nBaseWidth, nRubyWidth ) /2;
+    tools::Long nLeftStart = nCenter - nHalfWidth;
+    tools::Long nRightEnd = nCenter + nHalfWidth;
 
     // Default values for TOP or no selection
-    long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
-    long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
+    tools::Long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
+    tools::Long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
     sal_Int16 nRubyPos = m_pParentDlg->m_xPositionLB->get_active();
     if ( nRubyPos == 1 )    // BOTTOM
     {
-        long nTmp = nYRuby;
+        tools::Long nTmp = nYRuby;
         nYRuby = nYBase;
         nYBase = nTmp;
     }
@@ -782,8 +782,8 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         aRubyFont.SetOrientation(Degree10(2700));
     }
 
-    long nYOutput;
-    long nOutTextWidth;
+    tools::Long nYOutput;
+    tools::Long nOutTextWidth;
     OUString sOutputText;
 
     if (bRubyStretch)
@@ -814,7 +814,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         break;
         case RubyAdjust_INDENT_BLOCK:
         {
-            long nCharWidth = rRenderContext.GetTextWidth("X");
+            tools::Long nCharWidth = rRenderContext.GetTextWidth("X");
             if (nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;
@@ -828,12 +828,12 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
             if (sOutputText.getLength() > 1)
             {
                 sal_Int32 nCount = sOutputText.getLength();
-                long nSpace = ((nRightEnd - nLeftStart) - rRenderContext.GetTextWidth(sOutputText)) / (nCount - 1);
+                tools::Long nSpace = ((nRightEnd - nLeftStart) - rRenderContext.GetTextWidth(sOutputText)) / (nCount - 1);
                 for (sal_Int32 i = 0; i < nCount; i++)
                 {
                     OUString sChar(sOutputText[i]);
                     rRenderContext.DrawText(Point(nLeftStart , nYOutput),  sChar);
-                    long nCharWidth = rRenderContext.GetTextWidth(sChar);
+                    tools::Long nCharWidth = rRenderContext.GetTextWidth(sChar);
                     nLeftStart += nCharWidth + nSpace;
                 }
                 break;

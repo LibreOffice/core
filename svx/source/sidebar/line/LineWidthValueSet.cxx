@@ -79,8 +79,8 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
-    long nRectHeight = aRect.GetHeight();
-    long nRectWidth = aRect.GetWidth();
+    tools::Long nRectHeight = aRect.GetHeight();
+    tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
     //const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

@@ -162,7 +162,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName)
     try
     {
 
-        long nValue(0);
+        tools::Long nValue(0);
         if (mxSet.is())
         {
             uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
@@ -187,7 +187,7 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName)
         if (mxSet.is())
         {
             uno::Any aValue = mxSet->getPropertyValue (sPropertyName);
-            long nValue = 0;
+            tools::Long nValue = 0;
             aValue >>= nValue;
             msDescription.append (nValue);
         }

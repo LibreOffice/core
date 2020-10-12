@@ -16,7 +16,7 @@ namespace svx
 
 std::unique_ptr<sfx2::StylePreviewRenderer> CommonStyleManager::CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
-                                            long nMaxHeight)
+                                            tools::Long nMaxHeight)
 {
     return std::unique_ptr<sfx2::StylePreviewRenderer>(new CommonStylePreviewRenderer(mrShell, rOutputDev, pStyle, nMaxHeight));
 }

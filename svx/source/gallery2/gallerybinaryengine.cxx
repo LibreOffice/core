@@ -772,7 +772,7 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
     rOStm.WriteUInt32(COMPAT_FORMAT('G', 'A', 'L', 'R'))
         .WriteUInt32(COMPAT_FORMAT('E', 'S', 'R', 'V'));
 
-    const long nReservePos = rOStm.Tell();
+    const tools::Long nReservePos = rOStm.Tell();
     std::unique_ptr<VersionCompat> pCompat(new VersionCompat(rOStm, StreamMode::WRITE, 2));
 
     rOStm.WriteUInt32(rId).WriteBool(pThm->IsNameFromResource()); // From version 2 and up
@@ -780,7 +780,8 @@ SvStream& GalleryBinaryEngine::writeGalleryTheme(SvStream& rOStm, const GalleryT
     pCompat.reset();
 
     // Fill the rest of the buffer.
-    const long nRest = std::max(512L - (static_cast<long>(rOStm.Tell()) - nReservePos), 0L);
+    const tools::Long nRest
+        = std::max(512L - (static_cast<tools::Long>(rOStm.Tell()) - nReservePos), 0L);
 
     if (nRest)
     {

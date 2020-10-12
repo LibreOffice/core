@@ -45,10 +45,10 @@ void SdrTextObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     {
         // Either the rotation or shear angle exists.
         tools::Rectangle aSR0(GetSnapRect());
-        long nWdt0=aSR0.Right()-aSR0.Left();
-        long nHgt0=aSR0.Bottom()-aSR0.Top();
-        long nWdt1=rRect.Right()-rRect.Left();
-        long nHgt1=rRect.Bottom()-rRect.Top();
+        tools::Long nWdt0=aSR0.Right()-aSR0.Left();
+        tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
+        tools::Long nWdt1=rRect.Right()-rRect.Left();
+        tools::Long nHgt1=rRect.Bottom()-rRect.Top();
         SdrTextObj::NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     }
@@ -81,12 +81,12 @@ void SdrTextObj::NbcSetLogicRect(const tools::Rectangle& rRect)
     SetRectsDirty();
 }
 
-long SdrTextObj::GetRotateAngle() const
+tools::Long SdrTextObj::GetRotateAngle() const
 {
     return aGeo.nRotationAngle;
 }
 
-long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
+tools::Long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 {
     return aGeo.nShearAngle;
 }
@@ -155,7 +155,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     if (bRotate90) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (!bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle36000(aGeo.nRotationAngle);
+            tools::Long a=NormAngle36000(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;
@@ -183,11 +183,11 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetRectsDirty();
 }
 
-void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrTextObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    long dx=maRect.Right()-maRect.Left();
-    long dy=maRect.Bottom()-maRect.Top();
+    tools::Long dx=maRect.Right()-maRect.Left();
+    tools::Long dy=maRect.Bottom()-maRect.Top();
     Point aP(maRect.TopLeft());
     RotatePoint(aP,rRef,sn,cs);
     maRect.SetLeft(aP.X() );
@@ -207,7 +207,7 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrTextObj::NbcShear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear)
+void SdrTextObj::NbcShear(const Point& rRef, tools::Long /*nAngle*/, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
 
@@ -257,7 +257,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     if (bRotate90) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (bRotate90 && !bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle36000(aGeo.nRotationAngle);
+            tools::Long a=NormAngle36000(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;

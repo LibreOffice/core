@@ -350,7 +350,7 @@ void SvxLineEndWindow::FillValueSet()
 
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
-    long nCount = mpLineEndList->Count();
+    tools::Long nCount = mpLineEndList->Count();
 
     // First entry: no line end.
     // An entry is temporarily added to get the UI bitmap
@@ -374,7 +374,7 @@ void SvxLineEndWindow::FillValueSet()
 
     mpLineEndList->Remove(nCount);
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         pEntry = mpLineEndList->GetLineEnd( i );
         DBG_ASSERT( pEntry, "Could not access LineEndEntry" );
@@ -543,8 +543,8 @@ void SvxLineBox::Fill( const XDashListRef &pList )
     mxLineStyleSet->InsertItem(2, Image(aBmp), pList->GetStringForUiSolidLine());
 
     // entries for dashed lines
-    long nCount = pList->Count();
-    for( long i = 0; i < nCount; i++ )
+    tools::Long nCount = pList->Count();
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XDashEntry* pEntry = pList->GetDash(i);
         const BitmapEx aBitmap = pList->GetUiBitmap(i);

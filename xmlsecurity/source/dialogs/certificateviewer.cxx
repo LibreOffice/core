@@ -137,7 +137,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
     // #i41270# Check only if we have that certificate in our security environment
     if (pDlg->mbCheckForPrivateKey)
     {
-        long nCertificateCharacters = pDlg->mxSecurityEnvironment->getCertificateCharacters(xCert);
+        tools::Long nCertificateCharacters = pDlg->mxSecurityEnvironment->getCertificateCharacters(xCert);
         bHasPrivateKey = (nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY);
     }
     if (!bHasPrivateKey)

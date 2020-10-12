@@ -270,8 +270,8 @@ void SvxColorDockingWindow::FillValueSet()
 
     // create the last entry for 'invisible/none'
     const Size aColorSize(SvxColorValueSet::getEntryEdgeLength(), SvxColorValueSet::getEntryEdgeLength());
-    long nPtX = aColorSize.Width() - 1;
-    long nPtY = aColorSize.Height() - 1;
+    tools::Long nPtX = aColorSize.Width() - 1;
+    tools::Long nPtY = aColorSize.Height() - 1;
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
     pVD->SetOutputSizePixel( aColorSize );

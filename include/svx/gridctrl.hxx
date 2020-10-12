@@ -295,7 +295,7 @@ private:
                                             // (with respect to the data source capabilities)
                                             // defaults to (insert | update | delete)
     sal_uInt16          m_nLastColId;
-    long                m_nLastRowId;
+    tools::Long                m_nLastRowId;
 
     bool                m_bDesignMode : 1;      // default = sal_False
     bool                m_bRecordCountFinal : 1;
@@ -312,14 +312,14 @@ protected:
     bool                m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
-    virtual bool SeekRow(long nRow) override;
-    virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows) override;
+    virtual bool SeekRow(tools::Long nRow) override;
+    virtual void VisibleRowsChanged( tools::Long nNewTopRow, sal_uInt16 nNumRows) override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
-    virtual RowStatus GetRowStatus(long nRow) const override;
-    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
+    virtual RowStatus GetRowStatus(tools::Long nRow) const override;
+    virtual bool CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol) override;
     virtual void CursorMoved() override;
     virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY) override;
-    virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
+    virtual sal_uInt32 GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId) override;
     virtual void Command(const CommandEvent& rEvt) override;
     virtual bool PreNotify(NotifyEvent& rEvt) override;
     virtual void KeyInput(const KeyEvent& rEvt) override;
@@ -327,7 +327,7 @@ protected:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void Select() override;
 
-    virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) override;
+    virtual ::svt::CellController* GetController(tools::Long nRow, sal_uInt16 nCol) override;
 
     virtual void CellModified() override;
     virtual bool SaveModified() override;
@@ -374,7 +374,7 @@ protected:
     // DragSourceHelper overridables
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;
 
-    void    executeRowContextMenu( long _nRow, const Point& _rPreferredPos );
+    void    executeRowContextMenu( tools::Long _nRow, const Point& _rPreferredPos );
 
 public:
     DbGridControl(
@@ -397,7 +397,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const override;
+    virtual OUString  GetCellText(tools::Long _nRow, sal_uInt16 _nColId) const override;
 
     void RemoveRows(bool bNewCursor);
 
@@ -437,7 +437,7 @@ public:
 
     void SetFilterMode(bool bMode);
     bool IsFilterMode() const {return m_bFilterMode;}
-    bool IsFilterRow(long nRow) const {return m_bFilterMode && nRow == 0;}
+    bool IsFilterRow(tools::Long nRow) const {return m_bFilterMode && nRow == 0;}
 
     void EnableNavigationBar(bool bEnable);
     bool HasNavigationBar() const {return m_bNavigationBar;}
@@ -472,9 +472,9 @@ public:
     // is the current line being updated
     bool IsUpdating() const {return m_bUpdating;}
 
-    void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
-    void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true );
-    void RowModified( long nRow );
+    void RowRemoved( tools::Long nRow, tools::Long nNumRows = 1, bool bDoPaint = true );
+    void RowInserted( tools::Long nRow, tools::Long nNumRows = 1, bool bDoPaint = true );
+    void RowModified( tools::Long nRow );
 
     void resetCurrentRow();
 
@@ -560,12 +560,12 @@ public:
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
 protected:
-    void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
-    bool SeekCursor(long nRow, bool bAbsolute = false);
+    void RecalcRows(tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
+    bool SeekCursor(tools::Long nRow, bool bAbsolute = false);
     void RemoveColumns();       // cleaning of own structures
     void AdjustRows();
     sal_Int32 AlignSeekCursor();
-    bool SetCurrent(long nNewRow);
+    bool SetCurrent(tools::Long nNewRow);
 
     OUString GetCurrentRowCellText(DbGridColumn const * pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();
@@ -575,7 +575,7 @@ protected:
     bool IsCurrentAppending() const;
 
     // empty row for insertion
-    bool IsInsertionRow(long nRow) const;
+    bool IsInsertionRow(tools::Long nRow) const;
 
     void  SetSeekPos(sal_Int32 nPos) {m_nSeekPos = nPos;}
     sal_Int32 GetCurrentPos() const {return m_nCurrentPos;}

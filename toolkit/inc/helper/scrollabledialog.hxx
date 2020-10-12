@@ -37,10 +37,10 @@ namespace toolkit
         bool               mbHasHoriBar;
         bool               mbHasVertBar;
         Point              mnScrollPos;
-        long               mnScrWidth;
+        tools::Long               mnScrWidth;
         ScrollBarVisibility maScrollVis;
 
-        void    lcl_Scroll( long nX, long nY );
+        void    lcl_Scroll( tools::Long nX, tools::Long nY );
         DECL_LINK( ScrollBarHdl, ScrollBar*, void );
 
     public:
@@ -50,10 +50,10 @@ namespace toolkit
         // Window
         virtual void Resize() override;
 
-        void    SetScrollWidth( long nWidth );
-        void    SetScrollHeight( long nHeight );
-        void    SetScrollLeft( long nLeft );
-        void    SetScrollTop( long Top );
+        void    SetScrollWidth( tools::Long nWidth );
+        void    SetScrollHeight( tools::Long nHeight );
+        void    SetScrollLeft( tools::Long nLeft );
+        void    SetScrollTop( tools::Long Top );
         void    setScrollVisibility( ScrollBarVisibility rState );
         void    ResetScrollBars();
     };

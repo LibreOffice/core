@@ -45,7 +45,7 @@ XLineEndList::~XLineEndList()
 {
 }
 
-XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
+XLineEndEntry* XLineEndList::GetLineEnd(tools::Long nIndex) const
 {
     return static_cast<XLineEndEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -79,7 +79,7 @@ bool XLineEndList::Create()
     return true;
 }
 
-BitmapEx XLineEndList::CreateBitmapForUI( long nIndex )
+BitmapEx XLineEndList::CreateBitmapForUI( tools::Long nIndex )
 {
     BitmapEx aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");

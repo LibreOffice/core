@@ -226,9 +226,9 @@ namespace
         {
             const Size aBitmapSize(rBitmapEx.GetSizePixel());
 
-            for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
-                for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
@@ -246,11 +246,11 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XHatchListRef &pList)
     if( !pList.is() )
         return;
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     ScopedVclPtrInstance< VirtualDevice > pVD;
     rBox.freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XHatchEntry* pEntry = pList->GetHatch(i);
         const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
@@ -273,11 +273,11 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XGradientListRef &pList)
     if( !pList.is() )
         return;
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     ScopedVclPtrInstance< VirtualDevice > pVD;
     rBox.freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XGradientEntry* pEntry = pList->GetGradient(i);
         const BitmapEx aBitmapEx = pList->GetUiBitmap( i );
@@ -300,14 +300,14 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XBitmapListRef &pList)
     if( !pList.is() )
         return;
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
     ScopedVclPtrInstance< VirtualDevice > pVD;
     pVD->SetOutputSizePixel(aSize, false);
     rBox.freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
         BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
@@ -324,14 +324,14 @@ void SvxFillAttrBox::Fill(weld::ComboBox& rBox, const XPatternListRef &pList)
     if( !pList.is() )
         return;
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
     ScopedVclPtrInstance< VirtualDevice > pVD;
     pVD->SetOutputSizePixel(aSize, false);
     rBox.freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XBitmapEntry* pEntry = pList->GetBitmap( i );
         BitmapEx aBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();

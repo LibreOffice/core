@@ -227,12 +227,12 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, weld::Button&, void
     INetURLObject   aURL( aDlg.GetPath() );
     OUString aFileName = aURL.GetLastName().getToken(0, '.');
     OUString aName = aFileName;
-    long j = 1;
+    tools::Long j = 1;
     bool bValidBitmapName = false;
     while( !bValidBitmapName )
     {
         bValidBitmapName = true;
-        for( long i = 0; i < pList->Count() && bValidBitmapName; i++ )
+        for( tools::Long i = 0; i < pList->Count() && bValidBitmapName; i++ )
         {
             if( aName == pList->GetBitmap(i)->GetName() )
             {

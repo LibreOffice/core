@@ -327,7 +327,7 @@ void SdrHdl::SetMoveOutside( bool bMoveOutside )
     }
 }
 
-void SdrHdl::SetRotationAngle(long n)
+void SdrHdl::SetRotationAngle(tools::Long n)
 {
     if(nRotationAngle != n)
     {
@@ -966,7 +966,7 @@ PointerStyle SdrHdl::GetPointer() const
     } else {
         // When resizing rotated rectangles, rotate the mouse cursor slightly, too
         if (bSize && nRotationAngle!=0) {
-            long nHdlAngle=0;
+            tools::Long nHdlAngle=0;
             switch (eKind) {
                 case SdrHdlKind::LowerRight: nHdlAngle=31500; break;
                 case SdrHdlKind::Lower: nHdlAngle=27000; break;
@@ -1706,7 +1706,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     }
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
-        long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
+        tools::Long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
         return nAngle==0 || nAngle==18000;
     }
     return false;

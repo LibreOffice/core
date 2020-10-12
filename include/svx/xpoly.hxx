@@ -47,8 +47,8 @@ class SVXCORE_DLLPUBLIC XPolygon final
 
     // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
-    void    GenBezArc(const Point& rCenter, long nRx, long nRy,
-                      long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
+    void    GenBezArc(const Point& rCenter, tools::Long nRx, tools::Long nRy,
+                      tools::Long nXHdl, tools::Long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
                       sal_uInt16 nQuad, sal_uInt16 nFirst);
     static bool CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2);
 
@@ -57,8 +57,8 @@ public:
     XPolygon( const XPolygon& );
     XPolygon( XPolygon&& );
     XPolygon( const tools::Polygon& rPoly );
-    XPolygon( const tools::Rectangle& rRect, long nRx = 0, long nRy = 0 );
-    XPolygon( const Point& rCenter, long nRx, long nRy,
+    XPolygon( const tools::Rectangle& rRect, tools::Long nRx = 0, tools::Long nRy = 0 );
+    XPolygon( const Point& rCenter, tools::Long nRx, tools::Long nRy,
               sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
               bool bClose = true );
 
@@ -72,7 +72,7 @@ public:
     void        Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags );
     void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
     void        Remove( sal_uInt16 nPos, sal_uInt16 nCount );
-    void        Move( long nHorzMove, long nVertMove );
+    void        Move( tools::Long nHorzMove, tools::Long nVertMove );
     tools::Rectangle   GetBoundRect() const;
 
     const Point&    operator[]( sal_uInt16 nPos ) const;

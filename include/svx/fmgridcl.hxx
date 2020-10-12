@@ -149,7 +149,7 @@ protected:
     virtual void Command(const CommandEvent& rEvt) override;
 
     virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) override;
-    virtual long QueryMinimumRowHeight() override;
+    virtual tools::Long QueryMinimumRowHeight() override;
     virtual void RowHeightChanged() override;
     virtual void ColumnResized(sal_uInt16 nId) override;
     virtual void ColumnMoved(sal_uInt16 nId) override;

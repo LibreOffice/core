@@ -101,16 +101,16 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     bool            bAppSetNullOffset :1;
     bool            bHorz :1;
-    long            lLogicNullOffset;     // in logic coordinates
-    long            lAppNullOffset;       // in logic coordinates
-    long            lInitialDragPos;
+    tools::Long            lLogicNullOffset;     // in logic coordinates
+    tools::Long            lAppNullOffset;       // in logic coordinates
+    tools::Long            lInitialDragPos;
     SvxRulerSupportFlags nFlags;
     SvxRulerDragFlags    nDragType;
     sal_uInt16      nDefTabType;
     sal_uInt16      nTabCount;
     sal_uInt16      nTabBufSize;
-    long            lDefTabDist;
-    long            lTabPos;
+    tools::Long            lDefTabDist;
+    tools::Long            lTabPos;
 
     std::vector<RulerTab>    mpTabs;    // tab positions in pixel
     std::vector<RulerIndent> mpIndents; // paragraph margins in pixel
@@ -118,9 +118,9 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     std::vector<RulerBorder> mpObjectBorders;
 
     SfxBindings*    pBindings;
-    long            nDragOffset;
-    long            nMaxLeft;
-    long            nMaxRight;
+    tools::Long            nDragOffset;
+    tools::Long            nMaxLeft;
+    tools::Long            nMaxRight;
     bool            bValid;
     bool            bListening;
     bool            bActive;
@@ -129,8 +129,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     bool mbSnapping;
 
     void StartListening_Impl();
-    long GetCorrectedDragPos(bool bLeft = true, bool bRight = true );
-    void DrawLine_Impl(long &lTabPos, int, bool Horizontal);
+    tools::Long GetCorrectedDragPos(bool bLeft = true, bool bRight = true );
+    void DrawLine_Impl(tools::Long &lTabPos, int, bool Horizontal);
     sal_uInt16 GetObjectBordersOff(sal_uInt16 nIdx) const;
 
     // page borders or surrounding frame
@@ -162,44 +162,44 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void UpdateObject();
 
     // Convert position to stick to ruler ticks
-    long MakePositionSticky(long rValue, long aPointOfReference, bool aSnapToFrameMargin = true) const;
+    tools::Long MakePositionSticky(tools::Long rValue, tools::Long aPointOfReference, bool aSnapToFrameMargin = true) const;
 
-    long PixelHAdjust(long lPos, long lPos2) const;
-    long PixelVAdjust(long lPos, long lPos2) const;
-    long PixelAdjust(long lPos, long lPos2) const;
+    tools::Long PixelHAdjust(tools::Long lPos, tools::Long lPos2) const;
+    tools::Long PixelVAdjust(tools::Long lPos, tools::Long lPos2) const;
+    tools::Long PixelAdjust(tools::Long lPos, tools::Long lPos2) const;
 
-    long ConvertHPosPixel(long lPos) const;
-    long ConvertVPosPixel(long lPos) const;
-    long ConvertHSizePixel(long lSize) const;
-    long ConvertVSizePixel(long lSize) const;
+    tools::Long ConvertHPosPixel(tools::Long lPos) const;
+    tools::Long ConvertVPosPixel(tools::Long lPos) const;
+    tools::Long ConvertHSizePixel(tools::Long lSize) const;
+    tools::Long ConvertVSizePixel(tools::Long lSize) const;
 
-    long ConvertPosPixel(long lPos) const;
-    long ConvertSizePixel(long lSize) const;
+    tools::Long ConvertPosPixel(tools::Long lPos) const;
+    tools::Long ConvertSizePixel(tools::Long lSize) const;
 
-    long ConvertHPosLogic(long lPos) const;
-    long ConvertVPosLogic(long lPos) const;
-    long ConvertHSizeLogic(long lSize) const;
-    long ConvertVSizeLogic(long lSize) const;
+    tools::Long ConvertHPosLogic(tools::Long lPos) const;
+    tools::Long ConvertVPosLogic(tools::Long lPos) const;
+    tools::Long ConvertHSizeLogic(tools::Long lSize) const;
+    tools::Long ConvertVSizeLogic(tools::Long lSize) const;
 
-    long ConvertPosLogic(long lPos) const;
-    long ConvertSizeLogic(long lSize) const;
+    tools::Long ConvertPosLogic(tools::Long lPos) const;
+    tools::Long ConvertSizeLogic(tools::Long lSize) const;
 
-    long RoundToCurrentMapMode(long lValue) const;
+    tools::Long RoundToCurrentMapMode(tools::Long lValue) const;
 
-    long GetFirstLineIndent() const;
-    long GetLeftIndent() const;
-    long GetRightIndent() const;
-    long GetLogicRightIndent() const;
+    tools::Long GetFirstLineIndent() const;
+    tools::Long GetLeftIndent() const;
+    tools::Long GetRightIndent() const;
+    tools::Long GetLogicRightIndent() const;
 
-    long GetLeftFrameMargin() const;
-    long GetRightFrameMargin() const;
+    tools::Long GetLeftFrameMargin() const;
+    tools::Long GetRightFrameMargin() const;
 
     void CalcMinMax();
 
     void EvalModifier();
     void DragMargin1();
     //adjust the left margin either after DragMargin1() or after DragBorders()
-    void AdjustMargin1(long lDiff);
+    void AdjustMargin1(tools::Long lDiff);
     void DragMargin2();
     void DragIndents();
     void DragTabs();
@@ -212,10 +212,10 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void ApplyBorders();
     void ApplyObject();
 
-    long GetFrameLeft() const;
+    tools::Long GetFrameLeft() const;
 
-    long GetLeftMin() const;
-    long GetRightMax() const;
+    tools::Long GetLeftMin() const;
+    tools::Long GetRightMax() const;
 
     DECL_LINK( TabMenuSelect, Menu *, bool );
     DECL_LINK( MenuSelect, Menu *, bool );
@@ -226,7 +226,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
         MoveLeft,
         MoveRight
     };
-    void UpdateParaContents_Impl(long lDiff, UpdateType);
+    void UpdateParaContents_Impl(tools::Long lDiff, UpdateType);
 
 protected:
     virtual void    Command( const CommandEvent& rCEvt ) override;
@@ -253,7 +253,7 @@ protected:
     sal_uInt16 GetActRightColumn (
                 bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX ) const;
-    long CalcPropMaxRight(sal_uInt16 nCol = USHRT_MAX) const;
+    tools::Long CalcPropMaxRight(sal_uInt16 nCol = USHRT_MAX) const;
 
 public:
 
@@ -262,10 +262,10 @@ public:
     virtual ~SvxRuler() override;
     virtual void dispose() override;
 
-    void SetDefTabDist(long);
+    void SetDefTabDist(tools::Long);
 
     // set/get NullOffset in logic units
-    void SetNullOffsetLogic(long lOff);
+    void SetNullOffsetLogic(tools::Long lOff);
 
     void SetActive(bool bOn = true);
 
@@ -276,8 +276,8 @@ public:
 
     //#i24363# tab stops relative to indent
     void SetTabsRelativeToIndent( bool bRel );
-    void SetValues(RulerChangeType type, long value);
-    long GetPageWidth() const;
+    void SetValues(RulerChangeType type, tools::Long value);
+    tools::Long GetPageWidth() const;
 };
 
 #endif

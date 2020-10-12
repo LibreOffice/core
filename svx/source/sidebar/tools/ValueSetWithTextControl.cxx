@@ -64,7 +64,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->Push();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 
-    const long nRectHeight = aRect.GetHeight();
+    const tools::Long nRectHeight = aRect.GetHeight();
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     {
@@ -102,7 +102,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         aStrRect.AdjustTop(nRectHeight/4 );
         aStrRect.AdjustBottom( -(nRectHeight/4) );
 
-        const long nRectWidth = aRect.GetWidth();
+        const tools::Long nRectWidth = aRect.GetWidth();
         aStrRect.AdjustLeft(8 );
         aStrRect.AdjustRight( -((nRectWidth*2)/3) );
         pDev->SetFont(aFont);

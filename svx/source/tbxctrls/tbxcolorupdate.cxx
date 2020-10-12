@@ -296,7 +296,7 @@ namespace svx
             const XDash& rDash = aDashItem.GetDashValue();
 
             XDashListRef xLineStyleList = pItem->GetDashList();
-            for (long i = 0; i < xLineStyleList->Count(); ++i)
+            for (tools::Long i = 0; i < xLineStyleList->Count(); ++i)
             {
                 const XDashEntry* pEntry = xLineStyleList->GetDash(i);
                 const XDash& rEntry = pEntry->GetDash();
