@@ -408,6 +408,7 @@ void SearchAndParseThread::CheckInstalledExtensions()
                     }
                     else
                     {
+                        SolarMutexGuard aGuard;
                         rInfo->m_xButtonInstall->set_sensitive(false);
                         rInfo->m_xButtonInstall->set_label(
                             CuiResId(RID_SVXSTR_ADDITIONS_INSTALLEDBUTTON));
