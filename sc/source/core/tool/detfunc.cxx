@@ -758,14 +758,14 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
-        if ( pObject->GetLayer() == SC_LAYER_INTERN &&
-                dynamic_cast< const SdrRectObj* >(pObject) != nullptr )
-        {
-            aObjRect = static_cast<SdrRectObj*>(pObject)->GetLogicRect();
-            aObjRect.Justify();
-            if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
-                ppObj[nDelCount++] = pObject;
-        }
+        if ( pObject->GetLayer() == SC_LAYER_INTERN )
+            if ( auto pSdrRectObj = dynamic_cast< const SdrRectObj* >(pObject) )
+            {
+                aObjRect = pSdrRectObj->GetLogicRect();
+                aObjRect.Justify();
+                if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
+                    ppObj[nDelCount++] = pObject;
+            }
 
         pObject = aIter.Next();
     }
@@ -1268,13 +1268,13 @@ bool ScDetectiveFunc::DeleteCirclesAt( SCCOL nCol, SCROW nRow )
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-            if (pObject->GetLayer() == SC_LAYER_INTERN
-                && dynamic_cast<const SdrCircObj*>(pObject) != nullptr)
-            {
-                tools::Rectangle aObjRect = static_cast<SdrCircObj*>(pObject)->GetLogicRect();
-                if (RectIsPoints(aObjRect, aStartCorner, aEndCorner))
-                    ppObj[nDelCount++] = pObject;
-            }
+            if (pObject->GetLayer() == SC_LAYER_INTERN)
+                if (auto pSdrCircObj = dynamic_cast<const SdrCircObj*>(pObject) )
+                {
+                    tools::Rectangle aObjRect = pSdrCircObj->GetLogicRect();
+                    if (RectIsPoints(aObjRect, aStartCorner, aEndCorner))
+                        ppObj[nDelCount++] = pObject;
+                }
 
             pObject = aIter.Next();
         }

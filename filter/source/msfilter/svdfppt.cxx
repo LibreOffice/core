@@ -778,12 +778,13 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, Svx
 
                     case PPT_PST_RecolorInfoAtom :
                     {
-                        if ( dynamic_cast<const SdrGrafObj* >(pRet) != nullptr && static_cast<SdrGrafObj*>(pRet)->HasGDIMetaFile() )
-                        {
-                            Graphic aGraphic( static_cast<SdrGrafObj*>(pRet)->GetGraphic() );
-                            RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
-                            static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraphic );
-                        }
+                        if ( auto pSdrGrafObj = dynamic_cast<const SdrGrafObj* >(pRet) )
+                            if ( pSdrGrafObj->HasGDIMetaFile() )
+                            {
+                                Graphic aGraphic( pSdrGrafObj->GetGraphic() );
+                                RecolorGraphic( rSt, aClientDataHd.nRecLen, aGraphic );
+                                static_cast<SdrGrafObj*>(pRet)->SetGraphic( aGraphic );
+                            }
                     }
                     break;
                 }
@@ -7103,9 +7104,8 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
 
 static bool IsLine( const SdrObject* pObj )
 {
-    return dynamic_cast< const SdrPathObj* >(pObj) !=  nullptr &&
-           static_cast<const SdrPathObj*>(pObj)->IsLine() &&
-           static_cast<const SdrPathObj*>(pObj)->GetPointCount() == 2;
+    auto pSdrPathObj = dynamic_cast< const SdrPathObj* >(pObj);
+    return pSdrPathObj && pSdrPathObj->IsLine() && pSdrPathObj->GetPointCount() == 2;
 }
 
 static bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,

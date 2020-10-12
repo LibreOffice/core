@@ -51,8 +51,8 @@ void SwViewShellImp::StartAction()
     if ( HasDrawView() )
     {
         CurrShell aCurr( GetShell() );
-        if ( dynamic_cast<const SwFEShell*>( m_pShell) !=  nullptr )
-            static_cast<SwFEShell*>(m_pShell)->HideChainMarker(); // might have changed
+        if ( auto pFEShell = dynamic_cast<SwFEShell*>( m_pShell) )
+            pFEShell->HideChainMarker(); // might have changed
     }
 }
 
@@ -61,8 +61,8 @@ void SwViewShellImp::EndAction()
     if ( HasDrawView() )
     {
         CurrShell aCurr( GetShell() );
-        if ( dynamic_cast<const SwFEShell*>(m_pShell) !=  nullptr )
-            static_cast<SwFEShell*>(m_pShell)->SetChainMarker(); // might have changed
+        if ( auto pFEShell = dynamic_cast<SwFEShell*>(m_pShell) )
+            pFEShell->SetChainMarker(); // might have changed
     }
 }
 

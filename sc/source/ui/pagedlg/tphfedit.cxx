@@ -51,10 +51,10 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     SfxViewShell* pShell = SfxViewShell::Current();
     if (pShell)
     {
-        if (dynamic_cast<const ScTabViewShell*>( pShell) !=  nullptr)
-            static_cast<ScTabViewShell*>(pShell)->FillFieldData(rData);
-        else if (dynamic_cast<const ScPreviewShell*>( pShell) !=  nullptr)
-            static_cast<ScPreviewShell*>(pShell)->FillFieldData(rData);
+        if (auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pShell))
+            pTabViewShell->FillFieldData(rData);
+        else if (auto pPreviewShell = dynamic_cast<ScPreviewShell*>( pShell))
+            pPreviewShell->FillFieldData(rData);
     }
 }
 

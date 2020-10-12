@@ -187,12 +187,11 @@ SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
 
     const SfxPoolItem& rItem = m_rSet.Get(m_rSet.GetPool()->GetWhich(SID_ATTR_ZOOM));
 
-    if (nullptr != dynamic_cast<const SvxZoomItem*>(&rItem))
+    if (auto pZoomItem = dynamic_cast<const SvxZoomItem*>(&rItem))
     {
-        const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(rItem);
-        const sal_uInt16 nZoom = rZoomItem.GetValue();
-        const SvxZoomType eType = rZoomItem.GetType();
-        const SvxZoomEnableFlags nValSet = rZoomItem.GetValueSet();
+        const sal_uInt16 nZoom = pZoomItem->GetValue();
+        const SvxZoomType eType = pZoomItem->GetType();
+        const SvxZoomEnableFlags nValSet = pZoomItem->GetValueSet();
         ZoomButtonId nButtonId = ZoomButtonId::NONE;
 
         switch (eType)

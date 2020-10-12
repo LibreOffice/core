@@ -667,9 +667,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if ( dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
-        NotifyStyle( static_cast<const SfxStyleSheetHint&>(rHint) );
-    else if ( dynamic_cast<const ScAutoStyleHint*>(&rHint) )
+    if ( auto pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
+        NotifyStyle( *pStyleSheetHint );
+    else if ( auto pStlHint = dynamic_cast<const ScAutoStyleHint*>(&rHint) )
     {
         //! direct call for AutoStyles
 
@@ -677,19 +677,18 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //  modifying the document must be asynchronous
         //  (handled by AddInitial)
 
-        const ScAutoStyleHint& rStlHint = static_cast<const ScAutoStyleHint&>(rHint);
-        const ScRange& aRange = rStlHint.GetRange();
-        const OUString& aName1 = rStlHint.GetStyle1();
-        const OUString& aName2 = rStlHint.GetStyle2();
-        sal_uInt32 nTimeout = rStlHint.GetTimeout();
+        const ScRange& aRange = pStlHint->GetRange();
+        const OUString& aName1 = pStlHint->GetStyle1();
+        const OUString& aName2 = pStlHint->GetStyle2();
+        sal_uInt32 nTimeout = pStlHint->GetTimeout();
 
         if (!m_pAutoStyleList)
             m_pAutoStyleList.reset( new ScAutoStyleList(this) );
         m_pAutoStyleList->AddInitial( aRange, aName1, nTimeout, aName2 );
     }
-    else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
+    else if ( auto pEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        SfxEventHintId nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
+        SfxEventHintId nEventId = pEventHint->GetEventId();
 
         switch ( nEventId )
         {

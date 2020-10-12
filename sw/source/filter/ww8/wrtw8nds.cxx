@@ -1579,9 +1579,8 @@ SvxFrameDirection MSWordExportBase::GetDefaultFrameDirection( ) const
         {
             nDir = TrueFrameDirection( *static_cast< const SwFrameFormat * >(m_pOutFormatNode) );
         }
-        else if ( dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) !=  nullptr )    //paragraph
+        else if ( auto pNd = dynamic_cast< const SwContentNode *>( m_pOutFormatNode ) )    //paragraph
         {
-            const SwContentNode *pNd = static_cast<const SwContentNode *>(m_pOutFormatNode);
             SwPosition aPos( *pNd );
             nDir = m_rDoc.GetTextDirection( aPos );
         }

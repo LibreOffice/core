@@ -1435,9 +1435,8 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
+    if (auto pFocusLostHint = dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
     {
-        const ScAccGridWinFocusLostHint* pFocusLostHint = static_cast<const ScAccGridWinFocusLostHint *>(&rHint);
         if (pFocusLostHint->GetOldGridWin() == meSplitPos)
         {
             if (mxTempAcc.is() && mpTempAccEdit)
@@ -1448,9 +1447,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 CommitFocusLost();
         }
     }
-    else if (dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
+    else if (auto pFocusGotHint = dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
     {
-        const ScAccGridWinFocusGotHint* pFocusGotHint = static_cast<const ScAccGridWinFocusGotHint*>(&rHint);
         if (pFocusGotHint->GetNewGridWin() == meSplitPos)
         {
             uno::Reference<XAccessible> xAccessible;
