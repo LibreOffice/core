@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4a1e0ee7_3e764871",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-12T12:04:04Z",
+      "side": 1,
+      "message": "Ew, yuck. ScopeGuard makes the code unreadable IMHO.\nI would rather un-flatten the code to avoid the double-call.",
+      "parentUuid": "5d60f703_84be4fd1",
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8cb80da3_0433fcc3",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 2
