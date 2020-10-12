@@ -100,7 +100,7 @@ cmd/32/insertformula.png cmd/32/dbviewfunctions.png
 cmd/32/insertformvscroll.png cmd/32/scrollbar.png
 cmd/32/insertframeinteract.png cmd/32/insertframe.png
 cmd/32/insertframeinteractnocolumns.png cmd/32/insertframe.png
-cmd/32/insertimagecontrol.png cmd/32/insertgraphic.png
+cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
 cmd/32/insertnumericfield.png cmd/32/numberformatstandard.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
@@ -145,7 +145,7 @@ cmd/lc_insertformula.png cmd/lc_dbviewfunctions.png
 cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
 cmd/lc_insertframeinteract.png cmd/lc_insertframe.png
 cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
-cmd/lc_insertimagecontrol.png cmd/lc_insertgraphic.png
+cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
 cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
@@ -190,7 +190,7 @@ cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
 cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
-cmd/sc_insertimagecontrol.png cmd/sc_insertgraphic.png
+cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -2357,7 +2357,7 @@ startmath/res/im21108.png cmd/lc_outlineformat.png
 # FolderTree expanded icon
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/back_small.png cmd/sc_prevrecord.png
-svtools/res/bmpfont.png cmd/color.png
+svtools/res/bmpfont.png cmd/sc_color.png
 svtools/res/ed06.png dbaccess/res/pkey.png
 svtools/res/folderop.png cmd/sc_open.png
 svtools/res/info_large.png cmd/lc_alignleft.png
