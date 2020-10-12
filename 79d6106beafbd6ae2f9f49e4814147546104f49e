@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8cb80da3_0433fcc3",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-12T10:01:55Z",
+      "side": 1,
+      "message": "This has always been true with the basic section-related flags. But later when I add ParaInfo into the stack, then it is triggered when reading numbering.xml (and potentially I suppose for styles.xml). So this line will need to be removed eventually, but I have it here during initial development to show when assumptions are wrong...\n\nI would like to document here which circumstances are known to trigger this.",
+      "range": {
+        "startLine": 440,
+        "startChar": 4,
+        "endLine": 440,
+        "endChar": 38
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b8dd5a4_12bffc92",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-12T10:01:55Z",
+      "side": 1,
+      "message": "even though this is never pop\u0027ed, there is no memory leak here, right?  When m_aSectionInfoStack goes out of scope, it takes everything with it, right?\n\n(You are probably scared at how little I know about programming at this point - and rightly so...)",
+      "range": {
+        "startLine": 443,
+        "startChar": 42,
+        "endLine": 443,
+        "endChar": 66
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff7392e9_85858ba8",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-12T10:01:55Z",
+      "side": 1,
+      "message": "This is a const function, so it can\u0027t modify the actual stack. But since it may not be modified, a default copy can just be sent. But is this an expensive function - to copy a std::dequeue? I don\u0027t know how I could do this with a reference. Something like make_unique - but that would require SectionInfo to be a pointer wouldn\u0027t it?\n\nI am kindof stuck on not wanting to use a pointer, but just a reference. So this works nicely the way I want it to work, but ideally this would also return a reference somehow.",
+      "range": {
+        "startLine": 451,
+        "startChar": 69,
+        "endLine": 451,
+        "endChar": 93
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e096b2f_5673f17b",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-12T10:01:55Z",
+      "side": 1,
+      "message": "These are just info-gathering asserts. To be replaced by comments or something later on.\nThe entire sType variable is not used in code, just available for debugging/assumption-testing.",
+      "range": {
+        "startLine": 469,
+        "startChar": 8,
+        "endLine": 471,
+        "endChar": 42
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
