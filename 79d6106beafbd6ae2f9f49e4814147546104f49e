@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "8e1c45db_1a6d23ad",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-12T13:25:40Z",
+      "side": 1,
+      "message": "Yes, that way is fine as well. Just don\u0027t copy\u0026paste like. :-)",
+      "parentUuid": "4a1e0ee7_3e764871",
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8cb80da3_0433fcc3",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 2
