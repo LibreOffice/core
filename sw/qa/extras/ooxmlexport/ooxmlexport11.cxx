@@ -1380,6 +1380,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD_DATABASE, "tdf67207.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.text.fieldmaster.DataBase.database.Sheet1.c1"), sValue);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf101122_noFillForCustomShape, "tdf101122_noFillForCustomShape.odt")
+{
+    // tdf#101122 check whether the "F" (noFill) option has been exported to docx
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/"
+                "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+                "fill", "none");
+    assertXPathNoAttribute(
+        pXmlDoc,
+        "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
+        "a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+        "fill");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

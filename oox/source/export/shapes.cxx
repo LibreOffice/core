@@ -427,7 +427,7 @@ ShapeExport& ShapeExport::WritePolyPolygonShape( const Reference< XShape >& xSha
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
     WriteTransformation( aRect, XML_a );
-    WritePolyPolygon( aPolyPolygon, bClosed );
+    WritePolyPolygon(xShape, aPolyPolygon, bClosed);
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
     if( xProps.is() ) {
         if( bClosed )
@@ -845,7 +845,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         bool bInvertRotation = bFlipH != bFlipV;
         if (nRotation != 0)
             aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10));
-        WritePolyPolygon( aPolyPolygon, false );
+        WritePolyPolygon(xShape, aPolyPolygon, false);
     }
     else if (bCustGeom)
     {
