@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f850c57f_f1c63f6b",
+        "filename": "sdext/source/presenter/PresenterAccessibility.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-12T10:43:07Z",
+      "side": 1,
+      "message": "I imagine if you called temp.clear() explicitly after m_isInDtor was set then the unused variable plugin would stop complaining for whatever that would be worth",
+      "revId": "1c3216121945f77ddf54bca25828f71b9f218fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
