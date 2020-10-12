@@ -525,7 +525,7 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         }
 
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true));
+        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType, true, &aSprms));
         RTFSprms const attributes(
             rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType, true));
         return new RTFReferenceProperties(attributes, sprms);
