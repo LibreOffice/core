@@ -209,7 +209,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     delete pFormat;
 }
 
-void SwFormatFrameSize::ScaleMetrics(long lMult, long lDiv) {
+void SwFormatFrameSize::ScaleMetrics(tools::Long lMult, tools::Long lDiv) {
     // Don't inherit the SvxSizeItem override (might or might not be relevant; added "just in case"
     // when changing SwFormatFrameSize to derive from SvxSizeItem instead of directly from
     // SfxPoolItem):
@@ -1008,7 +1008,7 @@ sal_uInt16 SwFormatCol::CalcColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
     assert(nCol < m_aColumns.size());
     if ( m_nWidth != nAct )
     {
-        long nW = m_aColumns[nCol].GetWishWidth();
+        tools::Long nW = m_aColumns[nCol].GetWishWidth();
         nW *= nAct;
         nW /= m_nWidth;
         return sal_uInt16(nW);
@@ -1078,7 +1078,7 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     //Convert the current width to the requested width.
     for (SwColumn &rCol: m_aColumns)
     {
-        long nTmp = rCol.GetWishWidth();
+        tools::Long nTmp = rCol.GetWishWidth();
         nTmp *= GetWishWidth();
         nTmp /= nAct;
         rCol.SetWishWidth(sal_uInt16(nTmp));

@@ -16,6 +16,7 @@
 
 #include <svx/svditer.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include "types.hxx"
 
@@ -45,7 +46,7 @@ SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab,
                              ChartSourceType eChartSourceType);
 
 SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab,
-                            long nIndex, ChartSourceType eChartSourceType);
+                            ::tools::Long nIndex, ChartSourceType eChartSourceType);
 
 std::vector<SdrOle2Obj*> getAllPivotChartsConnectedTo(OUString const & sPivotTableName, ScDocShell* pDocShell);
 

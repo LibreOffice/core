@@ -155,7 +155,7 @@ void ClrContourCache()
 SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                             const SwRect &rLine,
                                             const SwTextFrame* pFrame,
-                                            const long nXPos,
+                                            const tools::Long nXPos,
                                             const bool bRight )
 {
     SwRect aRet;
@@ -202,7 +202,7 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
 
 SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
     const SdrObject* pObj, const SwTextFrame* pFrame, const SwRect &rLine,
-    const long nXPos, const bool bRight )
+    const tools::Long nXPos, const bool bRight )
 {
     SwRect aRet;
     sal_uInt16 nPos = 0; // Search in the Cache
@@ -267,9 +267,9 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         mvItems.insert(mvItems.begin(), std::move(item));
     }
     SwRectFnSet aRectFnSet(pFrame);
-    long nTmpTop = aRectFnSet.GetTop(rLine);
+    tools::Long nTmpTop = aRectFnSet.GetTop(rLine);
     // fnGetBottom is top + height
-    long nTmpBottom = aRectFnSet.GetBottom(rLine);
+    tools::Long nTmpBottom = aRectFnSet.GetBottom(rLine);
 
     Range aRange( std::min( nTmpTop, nTmpBottom ), std::max( nTmpTop, nTmpBottom ) );
 
@@ -867,8 +867,8 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
         SwRectFnSet aRectFnSet(m_pCurrFrame);
-        const long nRight = aRectFnSet.GetRight(aRect) - 1;
-        const long nLeft = aRectFnSet.GetLeft(aRect) + 1;
+        const tools::Long nRight = aRectFnSet.GetRight(aRect) - 1;
+        const tools::Long nLeft = aRectFnSet.GetLeft(aRect) + 1;
         const bool bR2L = m_pCurrFrame->IsRightToLeft();
 
         const IDocumentDrawModelAccess& rIDDMA = m_pCurrFrame->GetDoc().getIDocumentDrawModelAccess();
@@ -1162,7 +1162,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
         // Especially in HTML documents there are often (dummy) paragraphs in
         // 2 pt font, and they used to only evade big frames after huge numbers
         // of empty lines.
-        const long nTmpTop = aRectFnSet.GetTop(aTmp);
+        const tools::Long nTmpTop = aRectFnSet.GetTop(aTmp);
         if( aRectFnSet.YDiff( nTmpTop, aRectFnSet.GetTop(aLine) ) > 0 )
         {
             if( aRectFnSet.YDiff( m_nNextTop, nTmpTop ) > 0 )
@@ -1264,7 +1264,7 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 {
     SwRectFnSet aRectFnSet(m_pCurrFrame);
 
-    const long nXPos = m_pCurrFrame->IsRightToLeft() ?
+    const tools::Long nXPos = m_pCurrFrame->IsRightToLeft() ?
                        rLine.Right() :
                        aRectFnSet.GetLeft(rLine);
 
@@ -1358,18 +1358,18 @@ css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObjec
     if ( css::text::WrapTextMode_DYNAMIC == eSurroundForTextWrap )
     {
         SwRectFnSet aRectFnSet(m_pCurrFrame);
-        const long nCurrLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
-        const long nCurrRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
+        const tools::Long nCurrLeft = aRectFnSet.GetPrtLeft(*m_pCurrFrame);
+        const tools::Long nCurrRight = aRectFnSet.GetPrtRight(*m_pCurrFrame);
         const SwRect& aRect( pAnchoredObj->GetObjRectWithSpaces() );
-        long nFlyLeft = aRectFnSet.GetLeft(aRect);
-        long nFlyRight = aRectFnSet.GetRight(aRect);
+        tools::Long nFlyLeft = aRectFnSet.GetLeft(aRect);
+        tools::Long nFlyRight = aRectFnSet.GetRight(aRect);
 
         if ( nFlyRight < nCurrLeft || nFlyLeft > nCurrRight )
             eSurroundForTextWrap = css::text::WrapTextMode_PARALLEL;
         else
         {
-            long nLeft = nFlyLeft - nCurrLeft;
-            long nRight = nCurrRight - nFlyRight;
+            tools::Long nLeft = nFlyLeft - nCurrLeft;
+            tools::Long nRight = nCurrRight - nFlyRight;
             if( nFlyRight - nFlyLeft > FRAME_MAX )
             {
                 if( nLeft < nRight )

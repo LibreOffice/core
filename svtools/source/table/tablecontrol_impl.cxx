@@ -511,7 +511,7 @@ namespace svt::table
         {
             // the number of pixels which are scrolled out of the left hand
             // side of the window
-            const long nScrolledOutLeft = m_nLeftColumn == 0 ? 0 : m_aColumnWidths[ m_nLeftColumn - 1 ].getEnd();
+            const tools::Long nScrolledOutLeft = m_nLeftColumn == 0 ? 0 : m_aColumnWidths[ m_nLeftColumn - 1 ].getEnd();
 
             ColumnPositions::const_reverse_iterator loop = m_aColumnWidths.rbegin();
             do
@@ -581,8 +581,8 @@ namespace svt::table
     {
 
         /// determines whether a scrollbar is needed for the given values
-        bool lcl_determineScrollbarNeed( long const i_position, ScrollbarVisibility const i_visibility,
-            long const i_availableSpace, long const i_neededSpace )
+        bool lcl_determineScrollbarNeed( tools::Long const i_position, ScrollbarVisibility const i_visibility,
+            tools::Long const i_availableSpace, tools::Long const i_neededSpace )
         {
             if ( i_visibility == ScrollbarShowNever )
                 return false;
@@ -609,8 +609,8 @@ namespace svt::table
 
 
         bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
-            bool const i_needBar, long _nVisibleUnits,
-            long _nPosition, long _nRange,
+            bool const i_needBar, tools::Long _nVisibleUnits,
+            tools::Long _nPosition, tools::Long _nRange,
             bool _bHorizontal, const Link<ScrollBar*,void>& _rScrollHandler )
         {
             // do we currently have the scrollbar?
@@ -653,7 +653,7 @@ namespace svt::table
             for the given row height. Partially fitting rows are counted, too, if the
             respective parameter says so.
         */
-        TableSize lcl_getRowsFittingInto( long _nOverallHeight, long _nRowHeightPixel, bool _bAcceptPartialRow )
+        TableSize lcl_getRowsFittingInto( tools::Long _nOverallHeight, tools::Long _nRowHeightPixel, bool _bAcceptPartialRow )
         {
             return  _bAcceptPartialRow
                 ?   ( _nOverallHeight + ( _nRowHeightPixel - 1 ) ) / _nRowHeightPixel
@@ -686,11 +686,11 @@ namespace svt::table
     }
 
 
-    long TableControl_Impl::impl_ni_calculateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding,
+    tools::Long TableControl_Impl::impl_ni_calculateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding,
         bool const i_assumeVerticalScrollbar, ::std::vector< long >& o_newColWidthsPixel ) const
     {
         // the available horizontal space
-        long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
+        tools::Long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
         ENSURE_OR_RETURN( !!m_pModel, "TableControl_Impl::impl_ni_calculateColumnWidths: not allowed without a model!", gridWidthPixel );
         if ( m_pModel->hasRowHeaders() && ( gridWidthPixel != 0 ) )
         {
@@ -699,7 +699,7 @@ namespace svt::table
 
         if ( i_assumeVerticalScrollbar && ( m_pModel->getVerticalScrollbarVisibility() != ScrollbarShowNever ) )
         {
-            long nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+            tools::Long nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
             gridWidthPixel -= nScrollbarMetrics;
         }
 
@@ -710,18 +710,18 @@ namespace svt::table
 
         // collect some meta data for our columns:
         // - their current (pixel) metrics
-        long accumulatedCurrentWidth = 0;
+        tools::Long accumulatedCurrentWidth = 0;
         ::std::vector< long > currentColWidths;
         currentColWidths.reserve( colCount );
         typedef ::std::vector< ::std::pair< long, long > >   ColumnLimits;
         ColumnLimits effectiveColumnLimits;
         effectiveColumnLimits.reserve( colCount );
-        long accumulatedMinWidth = 0;
-        long accumulatedMaxWidth = 0;
+        tools::Long accumulatedMinWidth = 0;
+        tools::Long accumulatedMaxWidth = 0;
         // - their relative flexibility
         ::std::vector< ::sal_Int32 > columnFlexibilities;
         columnFlexibilities.reserve( colCount );
-        long flexibilityDenominator = 0;
+        tools::Long flexibilityDenominator = 0;
         size_t flexibleColumnCount = 0;
         for ( ColPos col = 0; col < colCount; ++col )
         {
@@ -729,7 +729,7 @@ namespace svt::table
             ENSURE_OR_THROW( !!pColumn, "invalid column returned by the model!" );
 
             // current width
-            long const currentWidth = appFontWidthToPixel( pColumn->getWidth() );
+            tools::Long const currentWidth = appFontWidthToPixel( pColumn->getWidth() );
             currentColWidths.push_back( currentWidth );
 
             // accumulated width
@@ -745,17 +745,17 @@ namespace svt::table
                 flexibility = 0;
 
             // min/max width
-            long effectiveMin = currentWidth, effectiveMax = currentWidth;
+            tools::Long effectiveMin = currentWidth, effectiveMax = currentWidth;
             // if the column is not flexible, it will not be asked for min/max, but we assume the current width as limit then
             if ( flexibility > 0 )
             {
-                long const minWidth = appFontWidthToPixel( pColumn->getMinWidth() );
+                tools::Long const minWidth = appFontWidthToPixel( pColumn->getMinWidth() );
                 if ( minWidth > 0 )
                     effectiveMin = minWidth;
                 else
                     effectiveMin = MIN_COLUMN_WIDTH_PIXEL;
 
-                long const maxWidth = appFontWidthToPixel( pColumn->getMaxWidth() );
+                tools::Long const maxWidth = appFontWidthToPixel( pColumn->getMaxWidth() );
                 OSL_ENSURE( minWidth <= maxWidth, "TableControl_Impl::impl_ni_calculateColumnWidths: pretty undecided 'bout its width limits, this column!" );
                 if ( ( maxWidth > 0 ) && ( maxWidth >= minWidth ) )
                     effectiveMax = maxWidth;
@@ -784,7 +784,7 @@ namespace svt::table
         }
         else if ( gridWidthPixel > accumulatedCurrentWidth )
         {   // we have space to give away ...
-            long distributePixel = gridWidthPixel - accumulatedCurrentWidth;
+            tools::Long distributePixel = gridWidthPixel - accumulatedCurrentWidth;
             if ( gridWidthPixel > accumulatedMaxWidth )
             {
                 // ... but the column's maximal widths are still less than we have
@@ -803,11 +803,11 @@ namespace svt::table
                     // distribute the remaining space amongst all columns with a positive flexibility
                     for ( size_t i=0; i<o_newColWidthsPixel.size() && !startOver; ++i )
                     {
-                        long const columnFlexibility = columnFlexibilities[i];
+                        tools::Long const columnFlexibility = columnFlexibilities[i];
                         if ( columnFlexibility == 0 )
                             continue;
 
-                        long newColWidth = currentColWidths[i] + columnFlexibility * distributePixel / flexibilityDenominator;
+                        tools::Long newColWidth = currentColWidths[i] + columnFlexibility * distributePixel / flexibilityDenominator;
 
                         if ( newColWidth > effectiveColumnLimits[i].second )
                         {   // that was too much, we hit the col's maximum
@@ -818,7 +818,7 @@ namespace svt::table
                             columnFlexibilities[i] = 0;
                             --flexibleColumnCount;
                             // ... and the remaining width ...
-                            long const difference = newColWidth - currentColWidths[i];
+                            tools::Long const difference = newColWidth - currentColWidths[i];
                             distributePixel -= difference;
                             // ... this way, we ensure that the width not taken up by this column is consumed by the other
                             // flexible ones (if there are some)
@@ -861,7 +861,7 @@ namespace svt::table
         }
         else if ( gridWidthPixel < accumulatedCurrentWidth )
         {   // we need to take away some space from the columns which allow it ...
-            long takeAwayPixel = accumulatedCurrentWidth - gridWidthPixel;
+            tools::Long takeAwayPixel = accumulatedCurrentWidth - gridWidthPixel;
             if ( gridWidthPixel < accumulatedMinWidth )
             {
                 // ... but the column's minimal widths are still more than we have
@@ -880,11 +880,11 @@ namespace svt::table
                     // take away the space we need from the columns with a positive flexibility
                     for ( size_t i=0; i<o_newColWidthsPixel.size() && !startOver; ++i )
                     {
-                        long const columnFlexibility = columnFlexibilities[i];
+                        tools::Long const columnFlexibility = columnFlexibilities[i];
                         if ( columnFlexibility == 0 )
                             continue;
 
-                        long newColWidth = currentColWidths[i] - columnFlexibility * takeAwayPixel / flexibilityDenominator;
+                        tools::Long newColWidth = currentColWidths[i] - columnFlexibility * takeAwayPixel / flexibilityDenominator;
 
                         if ( newColWidth < effectiveColumnLimits[i].first )
                         {   // that was too much, we hit the col's minimum
@@ -895,7 +895,7 @@ namespace svt::table
                             columnFlexibilities[i] = 0;
                             --flexibleColumnCount;
                             // ... and the remaining width ...
-                            long const difference = currentColWidths[i] - newColWidth;
+                            tools::Long const difference = currentColWidths[i] - newColWidth;
                             takeAwayPixel -= difference;
 
                             // and start over with the first column, since there might be earlier columns which need
@@ -964,10 +964,10 @@ namespace svt::table
         //     - V-NO: redistribute the remaining space (if any) amongst all columns which allow it
 
         ::std::vector< long > newWidthsPixel;
-        long gridWidthPixel = impl_ni_calculateColumnWidths( i_assumeInflexibleColumnsUpToIncluding, true, newWidthsPixel );
+        tools::Long gridWidthPixel = impl_ni_calculateColumnWidths( i_assumeInflexibleColumnsUpToIncluding, true, newWidthsPixel );
 
         // the width/height of a scrollbar, needed several times below
-        long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+        tools::Long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // determine the playground for the data cells (excluding headers)
         // TODO: what if the control is smaller than needed for the headers/scrollbars?
@@ -977,7 +977,7 @@ namespace svt::table
 
         OSL_ENSURE( ( m_nRowCount == m_pModel->getRowCount() ) && ( m_nColumnCount == m_pModel->getColumnCount() ),
             "TableControl_Impl::impl_ni_relayout: how is this expected to work with invalid data?" );
-        long const nAllColumnsWidth = ::std::accumulate( newWidthsPixel.begin(), newWidthsPixel.end(), 0 );
+        tools::Long const nAllColumnsWidth = ::std::accumulate( newWidthsPixel.begin(), newWidthsPixel.end(), 0 );
 
         ScrollbarVisibility const eVertScrollbar = m_pModel->getVerticalScrollbarVisibility();
         ScrollbarVisibility const eHorzScrollbar = m_pModel->getHorizontalScrollbarVisibility();
@@ -1022,12 +1022,12 @@ namespace svt::table
         // update the column objects with the new widths we finally calculated
         TableSize const colCount = m_pModel->getColumnCount();
         m_aColumnWidths.reserve( colCount );
-        long accumulatedWidthPixel = m_nRowHeaderWidthPixel;
+        tools::Long accumulatedWidthPixel = m_nRowHeaderWidthPixel;
         bool anyColumnWidthChanged = false;
         for ( ColPos col = 0; col < colCount; ++col )
         {
-            const long columnStart = accumulatedWidthPixel;
-            const long columnEnd = columnStart + newWidthsPixel[col];
+            const tools::Long columnStart = accumulatedWidthPixel;
+            const tools::Long columnEnd = columnStart + newWidthsPixel[col];
             m_aColumnWidths.emplace_back( columnStart, columnEnd );
             accumulatedWidthPixel = columnEnd;
 
@@ -1035,8 +1035,8 @@ namespace svt::table
             PColumnModel const pColumn = m_pModel->getColumnModel( col );
             ENSURE_OR_THROW( !!pColumn, "invalid column returned by the model!" );
 
-            long const oldColumnWidthAppFont = pColumn->getWidth();
-            long const newColumnWidthAppFont = pixelWidthToAppFont( newWidthsPixel[col] );
+            tools::Long const oldColumnWidthAppFont = pColumn->getWidth();
+            tools::Long const newColumnWidthAppFont = pixelWidthToAppFont( newWidthsPixel[col] );
             pColumn->setWidth( newColumnWidthAppFont );
 
             anyColumnWidthChanged |= ( oldColumnWidthAppFont != newColumnWidthAppFont );
@@ -1058,7 +1058,7 @@ namespace svt::table
         // now adjust the column metrics, since they currently ignore the horizontal scroll position
         if ( m_nLeftColumn > 0 )
         {
-            const long offsetPixel = m_aColumnWidths[ 0 ].getStart() - m_aColumnWidths[ m_nLeftColumn ].getStart();
+            const tools::Long offsetPixel = m_aColumnWidths[ 0 ].getStart() - m_aColumnWidths[ m_nLeftColumn ].getStart();
             for (auto & columnWidth : m_aColumnWidths)
             {
                 columnWidth.move( offsetPixel );
@@ -1073,7 +1073,7 @@ namespace svt::table
     void TableControl_Impl::impl_ni_positionChildWindows( tools::Rectangle const & i_dataCellPlayground,
         bool const i_verticalScrollbar, bool const i_horizontalScrollbar )
     {
-        long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+        tools::Long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // create or destroy the vertical scrollbar, as needed
         lcl_updateScrollbar(
@@ -1785,13 +1785,13 @@ namespace svt::table
     }
 
 
-    long TableControl_Impl::pixelWidthToAppFont( long const i_pixels ) const
+    tools::Long TableControl_Impl::pixelWidthToAppFont( tools::Long const i_pixels ) const
     {
         return m_pDataWindow->PixelToLogic(Size(i_pixels, 0), MapMode(MapUnit::MapAppFont)).Width();
     }
 
 
-    long TableControl_Impl::appFontWidthToPixel( long const i_appFontUnits ) const
+    tools::Long TableControl_Impl::appFontWidthToPixel( tools::Long const i_appFontUnits ) const
     {
         return m_pDataWindow->LogicToPixel(Size(i_appFontUnits, 0), MapMode(MapUnit::MapAppFont)).Width();
     }
@@ -2035,7 +2035,7 @@ namespace svt::table
             // Same for onEndScroll
 
             // scroll the view port, if possible
-            long nPixelDelta = m_nRowHeightPixel * ( m_nTopRow - nOldTopRow );
+            tools::Long nPixelDelta = m_nRowHeightPixel * ( m_nTopRow - nOldTopRow );
 
             tools::Rectangle aDataArea( Point( 0, m_nColHeaderHeightPixel ), m_pDataWindow->GetOutputSizePixel() );
 
@@ -2043,7 +2043,7 @@ namespace svt::table
                 &&  std::abs( nPixelDelta ) < aDataArea.GetHeight()
                 )
             {
-                m_pDataWindow->Scroll( 0, static_cast<long>(-nPixelDelta), aDataArea, ScrollFlags::Clip | ScrollFlags::Update | ScrollFlags::Children);
+                m_pDataWindow->Scroll( 0, static_cast<tools::Long>(-nPixelDelta), aDataArea, ScrollFlags::Clip | ScrollFlags::Update | ScrollFlags::Children);
             }
             else
             {
@@ -2101,7 +2101,7 @@ namespace svt::table
             // scroll the view port, if possible
             const tools::Rectangle aDataArea( Point( m_nRowHeaderWidthPixel, 0 ), m_pDataWindow->GetOutputSizePixel() );
 
-            long nPixelDelta =
+            tools::Long nPixelDelta =
                     m_aColumnWidths[ nOldLeftColumn ].getStart()
                 -   m_aColumnWidths[ m_nLeftColumn ].getStart();
 
@@ -2177,7 +2177,7 @@ namespace svt::table
     }
 
 
-    ColPos TableControl_Impl::impl_getColumnForOrdinate( long const i_ordinate ) const
+    ColPos TableControl_Impl::impl_getColumnForOrdinate( tools::Long const i_ordinate ) const
     {
         if ( ( m_aColumnWidths.empty() ) || ( i_ordinate < 0 ) )
             return COL_INVALID;
@@ -2203,7 +2203,7 @@ namespace svt::table
     }
 
 
-    RowPos TableControl_Impl::impl_getRowForAbscissa( long const i_abscissa ) const
+    RowPos TableControl_Impl::impl_getRowForAbscissa( tools::Long const i_abscissa ) const
     {
         if ( i_abscissa < 0 )
             return ROW_INVALID;
@@ -2211,8 +2211,8 @@ namespace svt::table
         if ( i_abscissa < m_nColHeaderHeightPixel )
             return ROW_COL_HEADERS;
 
-        long const abscissa = i_abscissa - m_nColHeaderHeightPixel;
-        long const row = m_nTopRow + abscissa / m_nRowHeightPixel;
+        tools::Long const abscissa = i_abscissa - m_nColHeaderHeightPixel;
+        tools::Long const row = m_nTopRow + abscissa / m_nRowHeightPixel;
         return row < m_pModel->getRowCount() ? row : ROW_INVALID;
     }
 

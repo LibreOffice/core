@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <comphelper/flagguard.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/long.hxx>
 #include <libxml/xmlwriter.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <unotools/datetime.hxx>
@@ -388,7 +389,7 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
     // Both redo and undo action entries will be removed until we reached the
     // new nMaxUndoActionCount.
 
-    long nNumToDelete = m_xData->pActUndoArray->maUndoActions.size() - nMaxUndoActionCount;
+    tools::Long nNumToDelete = m_xData->pActUndoArray->maUndoActions.size() - nMaxUndoActionCount;
     while ( nNumToDelete > 0 )
     {
         size_t nPos = m_xData->pActUndoArray->maUndoActions.size();

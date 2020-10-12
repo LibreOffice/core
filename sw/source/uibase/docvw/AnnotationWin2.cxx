@@ -408,8 +408,8 @@ void SwAnnotationWin::MouseButtonUp(const MouseEvent& rMouseEvent)
     }
 }
 
-void SwAnnotationWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeight,
-                                       const SwRect& aAnchorRect, const long aPageBorder)
+void SwAnnotationWin::SetPosSizePixelRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                                       const SwRect& aAnchorRect, const tools::Long aPageBorder)
 {
     mPosSize = tools::Rectangle(Point(nX,nY),Size(nWidth,nHeight));
     if (!mAnchorRect.IsEmpty() && mAnchorRect != aAnchorRect)
@@ -428,7 +428,7 @@ void SwAnnotationWin::SetVirtualPosSize( const Point& aPoint, const Size& aSize)
     mPosSize = tools::Rectangle(aPoint,aSize);
 }
 
-void SwAnnotationWin::TranslateTopPosition(const long aAmount)
+void SwAnnotationWin::TranslateTopPosition(const tools::Long aAmount)
 {
     mPosSize.Move(0,aAmount);
 }
@@ -634,21 +634,21 @@ void SwAnnotationWin::Rescale()
     if ( mpMetadataAuthor )
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
     if ( mpMetadataDate )
     {
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
     if ( mpMetadataResolved )
     {
         vcl::Font aFont( mpMetadataResolved->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = long(aFont.GetFontHeight() * rFraction);
+        sal_Int32 nHeight = tools::Long(aFont.GetFontHeight() * rFraction);
         aFont.SetFontHeight( nHeight );
         mpMetadataResolved->SetControlFont( aFont );
     }
@@ -890,8 +890,8 @@ void SwAnnotationWin::SetPosAndSize()
 
 void SwAnnotationWin::DoResize()
 {
-    long aTextHeight    =  LogicToPixel( mpOutliner->CalcTextSize()).Height();
-    long aHeight        =  GetSizePixel().Height();
+    tools::Long aTextHeight    =  LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    tools::Long aHeight        =  GetSizePixel().Height();
     unsigned long aWidth    =  GetSizePixel().Width();
 
     aHeight -= GetMetaHeight();
@@ -959,10 +959,10 @@ void SwAnnotationWin::DoResize()
     const Fraction& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
-    mpMenuButton->setPosSizePixel( long(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
-                                   long(aPos.Y()+5*fy),
-                                   long(METABUTTON_WIDTH*fx),
-                                   long(METABUTTON_HEIGHT*fy) );
+    mpMenuButton->setPosSizePixel( tools::Long(aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx),
+                                   tools::Long(aPos.Y()+5*fy),
+                                   tools::Long(METABUTTON_WIDTH*fx),
+                                   tools::Long(METABUTTON_HEIGHT*fy) );
 }
 
 void SwAnnotationWin::SetSizePixel( const Size& rNewSize )
@@ -982,17 +982,17 @@ void SwAnnotationWin::SetScrollbar()
     mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
 }
 
-void SwAnnotationWin::ResizeIfNecessary(long aOldHeight, long aNewHeight)
+void SwAnnotationWin::ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {
         //check for lower border or next note
-        long aBorder = mrMgr.GetNextBorder();
+        tools::Long aBorder = mrMgr.GetNextBorder();
         if (aBorder != -1)
         {
             if (aNewHeight > GetMinimumSizeWithoutMeta())
             {
-                long aNewLowerValue = GetPosPixel().Y() + aNewHeight + GetMetaHeight();
+                tools::Long aNewLowerValue = GetPosPixel().Y() + aNewHeight + GetMetaHeight();
                 if (aNewLowerValue < aBorder)
                     SetSizePixel(Size(GetSizePixel().Width(),aNewHeight+GetMetaHeight()));
                 else
@@ -1329,7 +1329,7 @@ SwEditWin&  SwAnnotationWin::EditWin()
     return mrView.GetEditWin();
 }
 
-long SwAnnotationWin::GetPostItTextHeight()
+tools::Long SwAnnotationWin::GetPostItTextHeight()
 {
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
@@ -1396,7 +1396,7 @@ void SwAnnotationWin::UnsetActiveSidebarWin()
 
 IMPL_LINK(SwAnnotationWin, ScrollHdl, ScrollBar*, pScroll, void)
 {
-    long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
+    tools::Long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
@@ -1426,14 +1426,14 @@ sal_Int32 SwAnnotationWin::GetScrollbarWidth() const
 sal_Int32 SwAnnotationWin::GetMetaButtonAreaWidth() const
 {
     const Fraction& f( GetMapMode().GetScaleX() );
-    return long(METABUTTON_AREA_WIDTH * f);
+    return tools::Long(METABUTTON_AREA_WIDTH * f);
 }
 
 sal_Int32 SwAnnotationWin::GetMetaHeight() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
     const int fields = GetNumFields();
-    return long(fields*POSTIT_META_FIELD_HEIGHT*f);
+    return tools::Long(fields*POSTIT_META_FIELD_HEIGHT*f);
 }
 
 sal_Int32 SwAnnotationWin::GetNumFields() const
@@ -1449,7 +1449,7 @@ sal_Int32 SwAnnotationWin::GetMinimumSizeWithMeta() const
 sal_Int32 SwAnnotationWin::GetMinimumSizeWithoutMeta() const
 {
     const Fraction& f(mrView.GetWrtShellPtr()->GetOut()->GetMapMode().GetScaleY());
-    return long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
+    return tools::Long(POSTIT_MINIMUMSIZE_WITHOUT_META * f);
 }
 
 void SwAnnotationWin::SetSpellChecking()

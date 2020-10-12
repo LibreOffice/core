@@ -79,12 +79,12 @@ void SalBitmap::updateChecksum() const
             if( pBuf->mnScanlineSize == lineBitsCount / 8 )
                 nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             else // Do not include padding with undefined content in the checksum.
-                for( long y = 0; y < pBuf->mnHeight; ++y )
+                for( tools::Long y = 0; y < pBuf->mnHeight; ++y )
                     nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
         }
         else // Compute checksum in the order of scanlines, to make it consistent between different bitmap implementations.
         {
-            for( long y = pBuf->mnHeight - 1; y >= 0; --y )
+            for( tools::Long y = pBuf->mnHeight - 1; y >= 0; --y )
                 nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
         }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);

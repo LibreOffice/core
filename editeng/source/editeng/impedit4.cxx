@@ -923,7 +923,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             ContentNode* pNode = aEditDoc.GetObject( nPara );
             SeekCursor( pNode, nPos, aFont );
             MapMode aPntMode( MapUnit::MapPoint );
-            long nFontHeight = GetRefDevice()->LogicToLogic(
+            tools::Long nFontHeight = GetRefDevice()->LogicToLogic(
                     aFont.GetFontSize(), &GetRefMapMode(), &aPntMode ).Height();
             nFontHeight *=2;    // Half Points
             sal_uInt16 const nProp = static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight();
@@ -954,7 +954,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 rOutput.WriteCharPtr( "{\\*\\updnprop" ).WriteCharPtr( OString::number(
                     nProp100).getStr() ).WriteChar( '}' );
             }
-            long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
+            tools::Long nUpDown = nFontHeight * std::abs( nEsc ) / 100;
             if ( nEsc < 0 )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_DN );
             else if ( nEsc > 0 )
@@ -1177,7 +1177,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
     bool bUsePortionInfo = false;
     XParaPortionList* pPortionInfo = rTextObject.mpImpl->GetPortionInfo();
 
-    if ( pPortionInfo && ( static_cast<long>(pPortionInfo->GetPaperWidth()) == aPaperSize.Width() )
+    if ( pPortionInfo && ( static_cast<tools::Long>(pPortionInfo->GetPaperWidth()) == aPaperSize.Width() )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() )
             && ( pPortionInfo->GetStretchX() == nStretchX )
             && ( pPortionInfo->GetStretchY() == nStretchY ) )

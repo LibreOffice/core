@@ -42,9 +42,9 @@ private:
 
     bool            bVertical;              // Vertical = Row header
 
-    long            nWidth;
-    long            nSmallWidth;
-    long            nBigWidth;
+    tools::Long            nWidth;
+    tools::Long            nSmallWidth;
+    tools::Long            nBigWidth;
 
     SCCOLROW        nSize;
 
@@ -54,8 +54,8 @@ private:
 
     bool            bDragging;              // Resizing
     SCCOLROW        nDragNo;
-    long            nDragStart;
-    long            nDragPos;
+    tools::Long            nDragStart;
+    tools::Long            nDragPos;
     void*           nTipVisible;
     bool            bDragMoved;
 
@@ -63,7 +63,7 @@ private:
 
     bool            bInRefMode;
 
-    long            GetScrPos( SCCOLROW nEntryNo ) const;
+    tools::Long            GetScrPos( SCCOLROW nEntryNo ) const;
     SCCOLROW        GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) const;
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
@@ -101,9 +101,9 @@ protected:
     virtual void    SelectWindow();
     virtual bool    IsDisabled() const;
     virtual bool    ResizeAllowed() const;
-    virtual OUString  GetDragHelp( long nVal );
+    virtual OUString  GetDragHelp( tools::Long nVal );
 
-    virtual void    DrawInvert( long nDragPos );
+    virtual void    DrawInvert( tools::Long nDragPos );
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
 public:
@@ -117,10 +117,10 @@ public:
 
     void    SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
 
-    long    GetWidth() const                    { return nWidth; }
-    long    GetSmallWidth() const               { return nSmallWidth; }
-    long    GetBigWidth() const                 { return nBigWidth; }
-    void    SetWidth( long nNew );
+    tools::Long    GetWidth() const                    { return nWidth; }
+    tools::Long    GetSmallWidth() const               { return nSmallWidth; }
+    tools::Long    GetBigWidth() const                 { return nBigWidth; }
+    void    SetWidth( tools::Long nNew );
     void    GetMarkRange(SCCOLROW& rStart, SCCOLROW& rEnd) const;
 };
 

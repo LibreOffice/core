@@ -48,7 +48,7 @@ public:
     virtual ~SwHeaderFooterWin( ) override;
     virtual void dispose() override;
 
-    void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
+    void SetOffset( Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd );
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;

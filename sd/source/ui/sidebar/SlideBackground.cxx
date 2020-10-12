@@ -727,14 +727,14 @@ void SlideBackground::dispose()
     PanelLayout::dispose();
 }
 
-void SlideBackground::ExecuteMarginLRChange(const long mnPageLeftMargin, const long mnPageRightMargin)
+void SlideBackground::ExecuteMarginLRChange(const ::tools::Long mnPageLeftMargin, const ::tools::Long mnPageRightMargin)
 {
     mpPageLRMarginItem->SetLeft(mnPageLeftMargin);
     mpPageLRMarginItem->SetRight(mnPageRightMargin);
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() } );
 }
 
-void SlideBackground::ExecuteMarginULChange(const long mnPageTopMargin, const long mnPageBottomMargin)
+void SlideBackground::ExecuteMarginULChange(const ::tools::Long mnPageTopMargin, const ::tools::Long mnPageBottomMargin)
 {
     mpPageULMarginItem->SetUpper(mnPageTopMargin);
     mpPageULMarginItem->SetLower(mnPageBottomMargin);

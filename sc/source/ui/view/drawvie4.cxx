@@ -434,7 +434,7 @@ void ScDrawView::SetMarkedOriginalSize()
     std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(*GetModel()));
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    long nDone = 0;
+    tools::Long nDone = 0;
     const size_t nCount = rMarkList.GetMarkCount();
     for (size_t i=0; i<nCount; ++i)
     {
@@ -553,10 +553,10 @@ void ScDrawView::FitToCellSize()
     // For graphic objects, we want to keep the aspect ratio
     if (pObj->shouldKeepAspectRatio())
     {
-        long nWidth = aGraphicRect.GetWidth();
+        tools::Long nWidth = aGraphicRect.GetWidth();
         assert(nWidth && "div-by-zero");
         double fScaleX = static_cast<double>(aCellRect.GetWidth()) / static_cast<double>(nWidth);
-        long nHeight = aGraphicRect.GetHeight();
+        tools::Long nHeight = aGraphicRect.GetHeight();
         assert(nHeight && "div-by-zero");
         double fScaleY = static_cast<double>(aCellRect.GetHeight()) / static_cast<double>(nHeight);
         double fScaleMin = std::min(fScaleX, fScaleY);

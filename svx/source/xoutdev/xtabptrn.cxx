@@ -30,7 +30,7 @@
 
 using namespace com::sun::star;
 
-XBitmapEntry* XPatternList::GetBitmap(long nIndex) const
+XBitmapEntry* XPatternList::GetBitmap(tools::Long nIndex) const
 {
     return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -79,7 +79,7 @@ bool XPatternList::Create()
     return true;
 }
 
-BitmapEx XPatternList::CreateBitmap( long nIndex, const Size& rSize ) const
+BitmapEx XPatternList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
 {
     assert( nIndex < Count() );
 
@@ -118,9 +118,9 @@ BitmapEx XPatternList::CreateBitmap( long nIndex, const Size& rSize ) const
         {
             const Size aBitmapSize(rBitmapEx.GetSizePixel());
 
-            for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
-                for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
@@ -135,14 +135,14 @@ BitmapEx XPatternList::CreateBitmap( long nIndex, const Size& rSize ) const
         return BitmapEx();
 }
 
-BitmapEx XPatternList::CreateBitmapForUI( long nIndex )
+BitmapEx XPatternList::CreateBitmapForUI( tools::Long nIndex )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-BitmapEx XPatternList::GetBitmapForPreview( long nIndex, const Size& rSize )
+BitmapEx XPatternList::GetBitmapForPreview( tools::Long nIndex, const Size& rSize )
 {
     return CreateBitmap(nIndex, rSize);
 }

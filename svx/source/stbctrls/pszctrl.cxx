@@ -57,7 +57,7 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
+OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( tools::Long nVal )
 {
     // deliver and set the Metric of the application
     FieldUnit eOutUnit = SfxModule::GetModuleFieldUnit( getFrameInterface() );
@@ -396,7 +396,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     if ( pImpl->bPos || pImpl->bSize )
     {
         // count the position for showing the size
-        long nSizePosX =
+        tools::Long nSizePosX =
             rRect.Left() + rRect.GetWidth() / 2 + PAINT_OFFSET;
         // draw position
         Point aPnt = rRect.TopLeft();

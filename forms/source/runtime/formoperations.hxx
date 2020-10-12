@@ -35,6 +35,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <connectivity/dbtools.hxx>
+#include <tools/long.hxx>
 
 namespace frm
 {
@@ -70,7 +71,7 @@ namespace frm
         bool    m_bActiveControlModified;
         bool    m_bConstructed;
     #ifdef DBG_UTIL
-        mutable long
+        mutable tools::Long
                 m_nMethodNestingLevel;
     #endif
 

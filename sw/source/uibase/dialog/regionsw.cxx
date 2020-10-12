@@ -54,7 +54,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         SwRect aRect;
         rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
 
-        long nWidth = aRect.Width();
+        tools::Long nWidth = aRect.Width();
         aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
 
         // height=width for more consistent preview (analog to edit region)
@@ -90,7 +90,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             SwFormatCol aCol;
             SwRect aRect;
             rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
-            long nWidth = aRect.Width();
+            tools::Long nWidth = aRect.Width();
 
             sal_uInt16 nCol = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
             if(nCol)
@@ -164,7 +164,7 @@ void SwWrtShell::StartInsertRegionDialog(const SwSectionData& rSectionData)
             SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE>{});
     SwRect aRect;
     CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
-    long nWidth = aRect.Width();
+    tools::Long nWidth = aRect.Width();
     aSet.Put(SwFormatFrameSize(SwFrameSize::Variable, nWidth));
     // height=width for more consistent preview (analog to edit region)
     aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));

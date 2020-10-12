@@ -2005,7 +2005,7 @@ sal_Int16 ScDataPilotFieldObj::getFunction() const
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
             // for non-data fields, property Function is the subtotals
-            long nSubCount = pDim->GetSubTotalsCount();
+            tools::Long nSubCount = pDim->GetSubTotalsCount();
             if ( nSubCount > 0 )
                 eRet = static_cast<sal_Int16>(pDim->GetSubTotalFunc(0));    // always use the first one
             // else keep NONE
@@ -2488,8 +2488,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 //! Also do this when removing groups?
                 //! Handle this case dynamically with automatic groups?
 
-                long nGroupCount = pBaseGroupDim->GetGroupCount();
-                for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
+                tools::Long nGroupCount = pBaseGroupDim->GetGroupCount();
+                for ( tools::Long nGroup = 0; nGroup < nGroupCount; nGroup++ )
                 {
                     const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 

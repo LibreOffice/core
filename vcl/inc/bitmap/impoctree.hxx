@@ -24,9 +24,9 @@
 
 class ImpErrorQuad
 {
-    long nRed;
-    long nGreen;
-    long nBlue;
+    tools::Long nRed;
+    tools::Long nGreen;
+    tools::Long nBlue;
 
 public:
     ImpErrorQuad()
@@ -37,9 +37,9 @@ public:
     }
 
     ImpErrorQuad(const BitmapColor& rColor)
-        : nRed(long(rColor.GetRed()) << 5)
-        , nGreen(long(rColor.GetGreen()) << 5)
-        , nBlue(long(rColor.GetBlue()) << 5)
+        : nRed(tools::Long(rColor.GetRed()) << 5)
+        , nGreen(tools::Long(rColor.GetGreen()) << 5)
+        , nBlue(tools::Long(rColor.GetBlue()) << 5)
     {
     }
 
@@ -56,16 +56,16 @@ public:
 
 inline void ImpErrorQuad::operator=(const BitmapColor& rColor)
 {
-    nRed = long(rColor.GetRed()) << 5;
-    nGreen = long(rColor.GetGreen()) << 5;
-    nBlue = long(rColor.GetBlue()) << 5;
+    nRed = tools::Long(rColor.GetRed()) << 5;
+    nGreen = tools::Long(rColor.GetGreen()) << 5;
+    nBlue = tools::Long(rColor.GetBlue()) << 5;
 }
 
 inline ImpErrorQuad& ImpErrorQuad::operator-=(const BitmapColor& rColor)
 {
-    nRed -= long(rColor.GetRed()) << 5;
-    nGreen -= long(rColor.GetGreen()) << 5;
-    nBlue -= long(rColor.GetBlue()) << 5;
+    nRed -= tools::Long(rColor.GetRed()) << 5;
+    nGreen -= tools::Long(rColor.GetGreen()) << 5;
+    nBlue -= tools::Long(rColor.GetBlue()) << 5;
 
     return *this;
 }

@@ -695,7 +695,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                     const CommandWheelData* pData = rCEvt.GetWheelData();
                     if( pData && !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) && !pData->IsHorz() )
                     {
-                        long nDelta = pData->GetDelta();
+                        ::tools::Long nDelta = pData->GetDelta();
                         if( nDelta > 0 )
                             xSlideShowController->gotoPreviousSlide();
                         else if( nDelta < 0 )
@@ -716,8 +716,8 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 {
                     if( !GetDocSh()->IsUIActive() )
                     {
-                        const long  nOldZoom = GetActiveWindow()->GetZoom();
-                        long        nNewZoom;
+                        const ::tools::Long  nOldZoom = GetActiveWindow()->GetZoom();
+                        ::tools::Long        nNewZoom;
                         Point aOldMousePos = GetActiveWindow()->PixelToLogic(rCEvt.GetMousePosPixel());
 
                         if( pData->GetDelta() < 0 )
@@ -768,7 +768,7 @@ void ViewShell::SetupRulers()
     if(!mbHasRulers || !mpContentWindow || SlideShow::IsRunning(GetViewShellBase()))
         return;
 
-    long nHRulerOfs = 0;
+    ::tools::Long nHRulerOfs = 0;
 
     if ( !mpVerticalRuler )
     {
@@ -937,10 +937,10 @@ void ViewShell::ArrangeGUIElements()
     mpImpl->mbArrangeActive = true;
 
     // Calculate border for in-place editing.
-    long nLeft = maViewPos.X();
-    long nTop  = maViewPos.Y();
-    long nRight = maViewPos.X() + maViewSize.Width();
-    long nBottom = maViewPos.Y() + maViewSize.Height();
+    ::tools::Long nLeft = maViewPos.X();
+    ::tools::Long nTop  = maViewPos.Y();
+    ::tools::Long nRight = maViewPos.X() + maViewSize.Width();
+    ::tools::Long nBottom = maViewPos.Y() + maViewSize.Height();
 
     // Horizontal scrollbar.
     if (mpHorizontalScrollBar
@@ -1397,7 +1397,7 @@ SdDrawDocument* ViewShell::GetDoc() const
     return GetViewShellBase().GetDocument();
 }
 
-ErrCode ViewShell::DoVerb (long )
+ErrCode ViewShell::DoVerb (::tools::Long )
 {
     return ERRCODE_NONE;
 }

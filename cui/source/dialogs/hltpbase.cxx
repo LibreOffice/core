@@ -204,13 +204,13 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd()
         else
         {
             // Pos Extrawindow on the left side of Dialog
-            MoveToExtraWnd( Point(0,0) - Point( long(0.05*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
+            MoveToExtraWnd( Point(0,0) - Point( tools::Long(0.05*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
         }
     }
     else
     {
         // Pos Extrawindow on the right side of Dialog
-        MoveToExtraWnd ( Point( long(1.05*aDlgSize.getWidth()), 0 ) );
+        MoveToExtraWnd ( Point( tools::Long(1.05*aDlgSize.getWidth()), 0 ) );
     }
 
     // Set size of Extra-Window

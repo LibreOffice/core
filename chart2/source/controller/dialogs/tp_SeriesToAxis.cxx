@@ -119,7 +119,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     m_xRbtAxis2->set_active(false);
     if (rInAttrs->GetItemState(SCHATTR_AXIS,true, &pPoolItem) == SfxItemState::SET)
     {
-        long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
             m_xRbtAxis2->set_active(true);
@@ -127,16 +127,16 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
         }
     }
 
-    long nTmp;
+    tools::Long nTmp;
     if (rInAttrs->GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        nTmp = static_cast<tools::Long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
         m_xMTGap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
     if (rInAttrs->GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        nTmp = static_cast<tools::Long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
         m_xMTOverlap->set_value(nTmp, FieldUnit::PERCENT);
     }
 
@@ -185,7 +185,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
                     m_xRB_ContinueLine->set_sensitive(true);
             }
 
-            long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+            tools::Long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
             if(nVal==css::chart::MissingValueTreatment::LEAVE_GAP)
                 m_xRB_DontPaint->set_active(true);
             else if(nVal==css::chart::MissingValueTreatment::USE_ZERO)

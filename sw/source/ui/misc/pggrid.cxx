@@ -246,8 +246,8 @@ void SwTextGridPage::PutGridItem(SfxItemSet& rSet)
                 m_bHRulerChanged = true;
             }
             m_bVRulerChanged = true;
-            pView->GetHRuler().SetCharWidth(static_cast<long>(m_xCharWidthMF->get_value(FieldUnit::TWIP)/56.7));
-            pView->GetVRuler().SetLineHeight(static_cast<long>(m_xTextSizeMF->get_value(FieldUnit::TWIP)/56.7));
+            pView->GetHRuler().SetCharWidth(static_cast<tools::Long>(m_xCharWidthMF->get_value(FieldUnit::TWIP)/56.7));
+            pView->GetVRuler().SetLineHeight(static_cast<tools::Long>(m_xTextSizeMF->get_value(FieldUnit::TWIP)/56.7));
         }
 }
 

@@ -50,12 +50,12 @@
 
 using namespace com::sun::star;
 
-static Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
+static Point GetAnglePnt(const tools::Rectangle& rR, tools::Long nAngle)
 {
     Point aCenter(rR.Center());
-    long nWdt=rR.Right()-rR.Left();
-    long nHgt=rR.Bottom()-rR.Top();
-    long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
+    tools::Long nWdt=rR.Right()-rR.Left();
+    tools::Long nHgt=rR.Bottom()-rR.Top();
+    tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
     double a;
     a = nAngle * F_PI18000;
     Point aRetval(FRound(cos(a)*nMaxRad),-FRound(sin(a)*nMaxRad));
@@ -142,11 +142,11 @@ SdrCircObj::SdrCircObj(
     SdrModel& rSdrModel,
     SdrCircKind eNewKind,
     const tools::Rectangle& rRect,
-    long nNewStartWink,
-    long nNewEndWink)
+    tools::Long nNewStartWink,
+    tools::Long nNewEndWink)
 :   SdrRectObj(rSdrModel, rRect)
 {
-    long nAngleDif=nNewEndWink-nNewStartWink;
+    tools::Long nAngleDif=nNewEndWink-nNewStartWink;
     nStartAngle=NormAngle36000(nNewStartWink);
     nEndAngle=NormAngle36000(nNewEndWink);
     if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
@@ -230,7 +230,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     return bNeed;
 }
 
-basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const
+basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrCircKind eCircleKind, const tools::Rectangle& rRect1, tools::Long nStart, tools::Long nEnd) const
 {
     const basegfx::B2DRange aRange = vcl::unotools::b2DRectangleFromRectangle(rRect1);
     basegfx::B2DPolygon aCircPolygon;
@@ -398,10 +398,10 @@ struct ImpCircUser : public SdrDragStatUserData
     tools::Rectangle                   aR;
     Point                       aCenter;
     Point                       aP1;
-    long                        nHgt;
-    long                        nWdt;
-    long                        nStart;
-    long                        nEnd;
+    tools::Long                        nHgt;
+    tools::Long                        nWdt;
+    tools::Long                        nStart;
+    tools::Long                        nEnd;
 
 public:
     ImpCircUser()
@@ -538,8 +538,8 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 
         aPt -= maRect.Center();
 
-        long nWdt = maRect.Right() - maRect.Left();
-        long nHgt = maRect.Bottom() - maRect.Top();
+        tools::Long nWdt = maRect.Right() - maRect.Left();
+        tools::Long nHgt = maRect.Bottom() - maRect.Top();
 
         if(nWdt>=nHgt)
         {
@@ -550,11 +550,11 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
             aPt.setX(BigMulDiv(aPt.X(),nHgt,nWdt) );
         }
 
-        long nAngle=NormAngle36000(GetAngle(aPt));
+        tools::Long nAngle=NormAngle36000(GetAngle(aPt));
 
         if (rDrag.GetView() && rDrag.GetView()->IsAngleSnapEnabled())
         {
-            long nSA=rDrag.GetView()->GetSnapAngle();
+            tools::Long nSA=rDrag.GetView()->GetSnapAngle();
 
             if (nSA!=0)
             {
@@ -661,7 +661,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
         }
         nStart=NormAngle36000(GetAngle(aP));
         if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
-            long nSA=rStat.GetView()->GetSnapAngle();
+            tools::Long nSA=rStat.GetView()->GetSnapAngle();
             if (nSA!=0) { // angle snapping
                 nStart+=nSA/2;
                 nStart/=nSA;
@@ -683,7 +683,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat const & rStat)
     }
     nEnd=NormAngle36000(GetAngle(aP));
     if (rStat.GetView()!=nullptr && rStat.GetView()->IsAngleSnapEnabled()) {
-        long nSA=rStat.GetView()->GetSnapAngle();
+        tools::Long nSA=rStat.GetView()->GetSnapAngle();
         if (nSA!=0) { // angle snapping
             nEnd+=nSA/2;
             nEnd/=nSA;
@@ -831,7 +831,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    long nAngle0=aGeo.nRotationAngle;
+    tools::Long nAngle0=aGeo.nRotationAngle;
     bool bNoShearRota=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
@@ -843,12 +843,12 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             // That, however, is pretty bad (because of forced "hard" formatting).
             // Alternatively, we could implement a bMirrored flag (maybe even
             // a more general one, e. g. for mirrored text, ...).
-            long nS0=nStartAngle;
-            long nE0=nEndAngle;
+            tools::Long nS0=nStartAngle;
+            tools::Long nE0=nEndAngle;
             if (bNoShearRota) {
                 // the RectObj already mirrors at VMirror because of a 180deg rotation
                 if (! (bXMirr && bYMirr)) {
-                    long nTmp=nS0;
+                    tools::Long nTmp=nS0;
                     nS0=18000-nE0;
                     nE0=18000-nTmp;
                 }
@@ -857,12 +857,12 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                     nS0+=nAngle0;
                     nE0+=nAngle0;
                     if (bXMirr) {
-                        long nTmp=nS0;
+                        tools::Long nTmp=nS0;
                         nS0=18000-nE0;
                         nE0=18000-nTmp;
                     }
                     if (bYMirr) {
-                        long nTmp=nS0;
+                        tools::Long nTmp=nS0;
                         nS0=-nE0;
                         nE0=-nTmp;
                     }
@@ -870,7 +870,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                     nE0-=aGeo.nRotationAngle;
                 }
             }
-            long nAngleDif=nE0-nS0;
+            tools::Long nAngleDif=nE0-nS0;
             nStartAngle=NormAngle36000(nS0);
             nEndAngle  =NormAngle36000(nE0);
             if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
@@ -880,7 +880,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpSetCircInfoToAttr();
 }
 
-void SdrCircObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrCircObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     SetXPolyDirty();
@@ -894,9 +894,9 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     Point aTmpPt2;
     if (bFreeMirr) { // some preparations for using an arbitrary axis of reflection
         Point aCenter(maRect.Center());
-        long nWdt=maRect.GetWidth()-1;
-        long nHgt=maRect.GetHeight()-1;
-        long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
+        tools::Long nWdt=maRect.GetWidth()-1;
+        tools::Long nHgt=maRect.GetHeight()-1;
+        tools::Long nMaxRad=(std::max(nWdt,nHgt)+1) /2;
         double a;
         // starting point
         a = nStartAngle * F_PI18000;
@@ -939,7 +939,7 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         // because it's mirrored, the angles are swapped, too
         nStartAngle=GetAngle(aTmpPt2);
         nEndAngle  =GetAngle(aTmpPt1);
-        long nAngleDif=nEndAngle-nStartAngle;
+        tools::Long nAngleDif=nEndAngle-nStartAngle;
         nStartAngle=NormAngle36000(nStartAngle);
         nEndAngle  =NormAngle36000(nEndAngle);
         if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
@@ -985,8 +985,8 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (meCircleKind!=SdrCircKind::Full) {
         const Point aPntStart(GetAnglePnt(maRect,nStartAngle));
         const Point aPntEnd(GetAnglePnt(maRect,nEndAngle));
-        long a=nStartAngle;
-        long e=nEndAngle;
+        tools::Long a=nStartAngle;
+        tools::Long e=nEndAngle;
         rRect.SetLeft(maRect.Right() );
         rRect.SetRight(maRect.Left() );
         rRect.SetTop(maRect.Bottom() );
@@ -1020,7 +1020,7 @@ void SdrCircObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (aGeo.nShearAngle==0)
         return;
 
-    long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.nTan);
+    tools::Long nDst=FRound((rRect.Bottom()-rRect.Top())*aGeo.nTan);
     if (aGeo.nShearAngle>0) {
         Point aRef(rRect.TopLeft());
         rRect.AdjustLeft( -nDst );
@@ -1046,10 +1046,10 @@ void SdrCircObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0 || meCircleKind!=SdrCircKind::Full) {
         tools::Rectangle aSR0(GetSnapRect());
-        long nWdt0=aSR0.Right()-aSR0.Left();
-        long nHgt0=aSR0.Bottom()-aSR0.Top();
-        long nWdt1=rRect.Right()-rRect.Left();
-        long nHgt1=rRect.Bottom()-rRect.Top();
+        tools::Long nWdt0=aSR0.Right()-aSR0.Left();
+        tools::Long nHgt0=aSR0.Bottom()-aSR0.Top();
+        tools::Long nWdt1=rRect.Right()-rRect.Left();
+        tools::Long nHgt1=rRect.Bottom()-rRect.Top();
         NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {

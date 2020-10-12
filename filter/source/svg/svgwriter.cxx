@@ -812,12 +812,12 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
         return;
 
     const OUString& rsCurFontName               = maCurrentFont.GetFamilyName();
-    long int nCurFontSize                       = maCurrentFont.GetFontHeight();
+    tools::Long nCurFontSize                       = maCurrentFont.GetFontHeight();
     FontItalic eCurFontItalic                   = maCurrentFont.GetItalic();
     FontWeight eCurFontWeight                   = maCurrentFont.GetWeight();
 
     const OUString& rsParFontName               = maParentFont.GetFamilyName();
-    long int nParFontSize                       = maParentFont.GetFontHeight();
+    tools::Long nParFontSize                       = maParentFont.GetFontHeight();
     FontItalic eParFontItalic                   = maParentFont.GetItalic();
     FontWeight eParFontWeight                   = maParentFont.GetWeight();
 
@@ -1743,7 +1743,7 @@ SVGActionWriter::~SVGActionWriter()
 }
 
 
-long SVGActionWriter::ImplMap( sal_Int32 nVal ) const
+tools::Long SVGActionWriter::ImplMap( sal_Int32 nVal ) const
 {
     Size aSz( nVal, nVal );
 
@@ -1810,7 +1810,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
     const OUString   aComma( "," );
     Point                      aPolyPoint;
 
-    for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
+    for( tools::Long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
     {
         const tools::Polygon&  rPoly = rPolyPoly[ static_cast<sal_uInt16>(i) ];
         sal_uInt16 n = 1, nSize = rPoly.GetSize();
@@ -1908,7 +1908,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
 }
 
 
-void SVGActionWriter::ImplWriteRect( const tools::Rectangle& rRect, long nRadX, long nRadY )
+void SVGActionWriter::ImplWriteRect( const tools::Rectangle& rRect, tools::Long nRadX, tools::Long nRadY )
 {
     tools::Rectangle aRect;
 
@@ -1929,7 +1929,7 @@ void SVGActionWriter::ImplWriteRect( const tools::Rectangle& rRect, long nRadX, 
 }
 
 
-void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY )
+void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
 {
     Point aCenter;
 
@@ -2356,9 +2356,9 @@ void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset
 Color SVGActionWriter::ImplGetColorWithIntensity( const Color& rColor,
                                                   sal_uInt16 nIntensity )
 {
-     sal_uInt8 nNewRed = static_cast<sal_uInt8>( static_cast<long>(rColor.GetRed()) * nIntensity / 100 );
-     sal_uInt8 nNewGreen = static_cast<sal_uInt8>( static_cast<long>(rColor.GetGreen()) * nIntensity / 100 );
-     sal_uInt8 nNewBlue = static_cast<sal_uInt8>( static_cast<long>(rColor.GetBlue()) * nIntensity / 100 );
+     sal_uInt8 nNewRed = static_cast<sal_uInt8>( static_cast<tools::Long>(rColor.GetRed()) * nIntensity / 100 );
+     sal_uInt8 nNewGreen = static_cast<sal_uInt8>( static_cast<tools::Long>(rColor.GetGreen()) * nIntensity / 100 );
+     sal_uInt8 nNewBlue = static_cast<sal_uInt8>( static_cast<tools::Long>(rColor.GetBlue()) * nIntensity / 100 );
      return Color( nNewRed, nNewGreen, nNewBlue);
 }
 
@@ -2367,16 +2367,16 @@ Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
                                              const Color& rEndColor,
                                              double fOffset )
 {
-    long nRedStep = rEndColor.GetRed() - rStartColor.GetRed();
-    long nNewRed = rStartColor.GetRed() + static_cast<long>( nRedStep * fOffset );
+    tools::Long nRedStep = rEndColor.GetRed() - rStartColor.GetRed();
+    tools::Long nNewRed = rStartColor.GetRed() + static_cast<tools::Long>( nRedStep * fOffset );
     nNewRed = ( nNewRed < 0 ) ? 0 : ( nNewRed > 0xFF) ? 0xFF : nNewRed;
 
-    long nGreenStep = rEndColor.GetGreen() - rStartColor.GetGreen();
-    long nNewGreen = rStartColor.GetGreen() + static_cast<long>( nGreenStep * fOffset );
+    tools::Long nGreenStep = rEndColor.GetGreen() - rStartColor.GetGreen();
+    tools::Long nNewGreen = rStartColor.GetGreen() + static_cast<tools::Long>( nGreenStep * fOffset );
     nNewGreen = ( nNewGreen < 0 ) ? 0 : ( nNewGreen > 0xFF) ? 0xFF : nNewGreen;
 
-    long nBlueStep = rEndColor.GetBlue() - rStartColor.GetBlue();
-    long nNewBlue = rStartColor.GetBlue() + static_cast<long>( nBlueStep * fOffset );
+    tools::Long nBlueStep = rEndColor.GetBlue() - rStartColor.GetBlue();
+    tools::Long nNewBlue = rStartColor.GetBlue() + static_cast<tools::Long>( nBlueStep * fOffset );
     nNewBlue = ( nNewBlue < 0 ) ? 0 : ( nNewBlue > 0xFF) ? 0xFF : nNewBlue;
 
     return Color( static_cast<sal_uInt8>(nNewRed), static_cast<sal_uInt8>(nNewGreen), static_cast<sal_uInt8>(nNewBlue) );
@@ -2443,7 +2443,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
         = aSrcSize.Width() ? static_cast<double>(rDestSize.Width()) / aSrcSize.Width() : 1.0;
     const double fScaleY
         = aSrcSize.Height() ? static_cast<double>(rDestSize.Height()) / aSrcSize.Height() : 1.0;
-    long nMoveX, nMoveY;
+    tools::Long nMoveX, nMoveY;
 
     if (fScaleX != 1.0 || fScaleY != 1.0)
     {
@@ -2475,7 +2475,7 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     const long* pDXArray, long nWidth )
+                                     const tools::Long* pDXArray, tools::Long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -2519,7 +2519,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         {
             if( aMetric.IsShadow() )
             {
-                long nOff = 1 + ((aMetric.GetLineHeight()-24)/24);
+                tools::Long nOff = 1 + ((aMetric.GetLineHeight()-24)/24);
                 if ( aMetric.IsOutline() )
                     nOff += 6;
 
@@ -2566,7 +2566,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
-                                     const long* pDXArray, long nWidth,
+                                     const tools::Long* pDXArray, tools::Long nWidth,
                                      Color aTextColor )
 {
     sal_Int32                               nLen = rText.getLength();
@@ -2594,7 +2594,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         aNormSize = Size( mpVDev->GetTextArray( rText, xTmpArray.get() ), 0 );
     }
-    long* pDX = xTmpArray.get();
+    tools::Long* pDX = xTmpArray.get();
 
     // if text is rotated, set transform matrix at new g element
     if( rFont.GetOrientation() )
@@ -2646,7 +2646,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
-                long i;
+                tools::Long i;
                 const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( i = 0; i < ( nLen - 1 ); i++ )
@@ -2714,11 +2714,11 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
         return;
 
     tools::Polygon aPoly( 4 );
-    const long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
+    const tools::Long  nLineHeight = std::max<long>( FRound( aMetric.GetLineHeight() * 0.05 ), 1 );
 
     if( rFont.GetStrikeout() )
     {
-        const long nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
+        const tools::Long nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
 
         aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
         aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );
@@ -2730,7 +2730,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
     if( rFont.GetUnderline() )
     {
-        const long  nYLinePos = aBaseLinePos.Y() + ( nLineHeight << 1 );
+        const tools::Long  nYLinePos = aBaseLinePos.Y() + ( nLineHeight << 1 );
 
         aPoly[ 0 ].setX( aBaseLinePos.X() ); aPoly[ 0 ].setY( nYLinePos - ( nLineHeight >> 1 ) );
         aPoly[ 1 ].setX( aBaseLinePos.X() + aNormSize.Width() - 1 ); aPoly[ 1 ].setY( aPoly[ 0 ].Y() );

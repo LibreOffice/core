@@ -1530,7 +1530,7 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, too
     Size aTextSiz(rOutliner.GetPaperSize());
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
-        long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
+        tools::Long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
             aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
@@ -1677,7 +1677,7 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
     if (pViewMin!=nullptr)
     {
         *pViewMin=aViewInit;
-        long nYFree=aAnkSiz.Height()-aPaperMin.Height();
+        tools::Long nYFree=aAnkSiz.Height()-aPaperMin.Height();
 
         if (eVAdj==SDRTEXTVERTADJUST_TOP)
         {

@@ -1011,8 +1011,8 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (!DragStat().IsNoSnap())
         {
-            long nBestXSnap=0;
-            long nBestYSnap=0;
+            tools::Long nBestXSnap=0;
+            tools::Long nBestYSnap=0;
             bool bXSnapped=false;
             bool bYSnapped=false;
             Point aDif(aPnt-DragStat().GetStart());
@@ -1042,7 +1042,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
     else
     {
         if (!DragStat().IsNoSnap()) SnapPos(aPnt);
-        long nSA=0;
+        tools::Long nSA=0;
 
         if (getSdrDragView().IsAngleSnapEnabled())
             nSA=getSdrDragView().GetSnapAngle();
@@ -1068,8 +1068,8 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
             if (pH!=nullptr)
             {
                 Point aRef(pH->GetPos());
-                long nAngle=NormAngle36000(GetAngle(aPnt-aRef));
-                long nNewAngle=nAngle;
+                tools::Long nAngle=NormAngle36000(GetAngle(aPnt-aRef));
+                tools::Long nNewAngle=nAngle;
                 nNewAngle+=nSA/2;
                 nNewAngle/=nSA;
                 nNewAngle*=nSA;
@@ -1550,8 +1550,8 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
     bYSnapped=false;
     Point aNoSnapPnt(rNoSnapPnt_);
     const tools::Rectangle& aSR=GetMarkedRect();
-    long nMovedx=aNoSnapPnt.X()-DragStat().GetStart().X();
-    long nMovedy=aNoSnapPnt.Y()-DragStat().GetStart().Y();
+    tools::Long nMovedx=aNoSnapPnt.X()-DragStat().GetStart().X();
+    tools::Long nMovedy=aNoSnapPnt.Y()-DragStat().GetStart().Y();
     Point aLO(aSR.TopLeft());      aLO.AdjustX(nMovedx ); aLO.AdjustY(nMovedy );
     Point aRU(aSR.BottomRight());  aRU.AdjustX(nMovedx ); aRU.AdjustY(nMovedy );
     Point aLU(aLO.X(),aRU.Y());
@@ -1891,10 +1891,10 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         }
     }
 
-    long nXDiv=aStart.X()-aRef.X(); if (nXDiv==0) nXDiv=1;
-    long nYDiv=aStart.Y()-aRef.Y(); if (nYDiv==0) nYDiv=1;
-    long nXMul=aPnt.X()-aRef.X();
-    long nYMul=aPnt.Y()-aRef.Y();
+    tools::Long nXDiv=aStart.X()-aRef.X(); if (nXDiv==0) nXDiv=1;
+    tools::Long nYDiv=aStart.Y()-aRef.Y(); if (nYDiv==0) nYDiv=1;
+    tools::Long nXMul=aPnt.X()-aRef.X();
+    tools::Long nYMul=aPnt.Y()-aRef.Y();
 
     if (nXDiv<0)
     {
@@ -2117,8 +2117,8 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
     if (!DragStat().CheckMinMoved(aPnt))
         return;
 
-    long nNewAngle=NormAngle36000(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
-    long nSA=0;
+    tools::Long nNewAngle=NormAngle36000(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
+    tools::Long nSA=0;
 
     if (getSdrDragView().IsAngleSnapEnabled())
         nSA=getSdrDragView().GetSnapAngle();
@@ -2280,7 +2280,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         return;
 
     bResize=!getSdrDragView().IsOrtho();
-    long nSA=0;
+    tools::Long nSA=0;
 
     if (getSdrDragView().IsAngleSnapEnabled())
         nSA=getSdrDragView().GetSnapAngle();
@@ -2304,7 +2304,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     Point aRef(DragStat().GetRef1());
     Point aDif(aPnt-aRef);
 
-    long nNewAngle=0;
+    tools::Long nNewAngle=0;
 
     if (bSlant)
     {
@@ -2359,7 +2359,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
     if (bSlant)
     { // calculate resize for slant
         // when angle snapping is activated, disable 89 degree limit
-        long nTmpAngle=nNewAngle;
+        tools::Long nTmpAngle=nNewAngle;
         if (bUpSideDown) nNewAngle-=18000;
         if (bNeg) nTmpAngle=-nTmpAngle;
         bResize=true;
@@ -2480,7 +2480,7 @@ SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
 
 bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 {
-    long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
+    tools::Long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
     nAngle1-=nAngle;
     nAngle1=NormAngle36000(nAngle1);
 
@@ -3118,8 +3118,8 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         bAtCenter=true;
 
     Fraction aNewFract(1,1);
-    long dx1=aPnt.X()-aNewCenter.X();
-    long dy1=aPnt.Y()-aNewCenter.Y();
+    tools::Long dx1=aPnt.X()-aNewCenter.X();
+    tools::Long dy1=aPnt.Y()-aNewCenter.Y();
     bValid=bVertical ? dx1!=0 : dy1!=0;
 
     if (bValid)
@@ -3130,25 +3130,25 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             bValid = std::abs(dy1)*100>std::abs(dx1);
     }
 
-    long nNewRad=0;
+    tools::Long nNewRad=0;
     nAngle=0;
 
     if (bValid)
     {
         double a=0; // slope of the radius
-        long nPntWink=0;
+        tools::Long nPntWink=0;
 
         if (bVertical)
         {
             a=static_cast<double>(dy1)/static_cast<double>(dx1); // slope of the radius
-            nNewRad=(static_cast<long>(dy1*a)+dx1) /2;
+            nNewRad=(static_cast<tools::Long>(dy1*a)+dx1) /2;
             aNewCenter.AdjustX(nNewRad );
             nPntWink=GetAngle(aPnt-aNewCenter);
         }
         else
         {
             a=static_cast<double>(dx1)/static_cast<double>(dy1); // slope of the radius
-            nNewRad=(static_cast<long>(dx1*a)+dy1) /2;
+            nNewRad=(static_cast<tools::Long>(dx1*a)+dy1) /2;
             aNewCenter.AdjustY(nNewRad );
             nPntWink=GetAngle(aPnt-aNewCenter)-9000;
         }
@@ -3182,7 +3182,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
         if (bResize)
         {
-            long nMul=static_cast<long>(nUmfang*NormAngle36000(nPntWink)/36000);
+            tools::Long nMul=static_cast<tools::Long>(nUmfang*NormAngle36000(nPntWink)/36000);
 
             if (bAtCenter)
                 nMul*=2;
@@ -3192,7 +3192,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
         else
         {
-            nAngle=static_cast<long>((nMarkSize*360/nUmfang)*100)/2;
+            nAngle=static_cast<tools::Long>((nMarkSize*360/nUmfang)*100)/2;
 
             if (nAngle==0)
                 bValid=false;
@@ -3207,12 +3207,12 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
     if (!bValid && bResize)
     {
-        long nMul=bVertical ? dy1 : dx1;
+        tools::Long nMul=bVertical ? dy1 : dx1;
 
         if (bLft || bUpr)
             nMul=-nMul;
 
-        long nDiv=nMarkSize;
+        tools::Long nDiv=nMarkSize;
 
         if (bAtCenter)
         {

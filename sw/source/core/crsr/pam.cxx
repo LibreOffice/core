@@ -350,7 +350,7 @@ SwPaM::SwPaM( const SwPosition& rMark, const SwPosition& rPoint, SwPaM* pRing )
 }
 
 SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
-              long nMarkOffset, long nPointOffset, SwPaM* pRing )
+              tools::Long nMarkOffset, tools::Long nPointOffset, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )
@@ -371,7 +371,7 @@ SwPaM::SwPaM( const SwNodeIndex& rMark, const SwNodeIndex& rPoint,
 }
 
 SwPaM::SwPaM( const SwNode& rMark, const SwNode& rPoint,
-              long nMarkOffset, long nPointOffset, SwPaM* pRing )
+              tools::Long nMarkOffset, tools::Long nPointOffset, SwPaM* pRing )
     : Ring( pRing )
     , m_Bound1( rMark )
     , m_Bound2( rPoint )

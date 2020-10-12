@@ -183,7 +183,7 @@ namespace {
 struct EncEntry
 {
     unsigned char  aEnc;
-    long       aGID;
+    tools::Long       aGID;
 
     EncEntry() : aEnc( 0 ), aGID( 0 ) {}
 

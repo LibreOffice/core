@@ -119,12 +119,12 @@ void SwMultiPortion::CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf )
         SetAscent( nTmp );
 }
 
-long SwMultiPortion::CalcSpacing( long , const SwTextSizeInfo & ) const
+tools::Long SwMultiPortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
 {
     return 0;
 }
 
-bool SwMultiPortion::ChgSpaceAdd( SwLineLayout*, long ) const
+bool SwMultiPortion::ChgSpaceAdd( SwLineLayout*, tools::Long ) const
 {
     return false;
 }
@@ -193,12 +193,12 @@ SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
         SetDirection( DIR_LEFT2RIGHT );
 }
 
-long SwBidiPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo& rInf ) const
+tools::Long SwBidiPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo& rInf ) const
 {
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt(rInf)) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
-bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const
+bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const
 {
     if( !HasTabulator() && nSpaceAdd > 0 && !pCurr->IsSpaceAdd() )
     {
@@ -333,7 +333,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(
 // the open bracket sets position behind itself,
 // the close bracket in front of itself.
 void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
-                                        long nSpaceAdd,
+                                        tools::Long nSpaceAdd,
                                         bool bOpen ) const
 {
     sal_Unicode cCh = bOpen ? pBracket->cPre : pBracket->cPost;
@@ -479,7 +479,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
     rInf.SetIdx( nStart );
 }
 
-long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo & ) const
+tools::Long SwDoubleLinePortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo & ) const
 {
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt()) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
@@ -491,7 +491,7 @@ long SwDoubleLinePortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo & ) 
 // contains no tabulator, it is necessary to create/manipulate the inner
 // space arrays.
 bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
-                                           long nSpaceAdd ) const
+                                           tools::Long nSpaceAdd ) const
 {
     bool bRet = false;
     if( !HasTabulator() && nSpaceAdd > 0 )
@@ -1413,14 +1413,14 @@ class SwSpaceManipulator
     SwMultiPortion& rMulti;
     std::vector<long>* pOldSpaceAdd;
     sal_uInt16 nOldSpIdx;
-    long nSpaceAdd;
+    tools::Long nSpaceAdd;
     bool bSpaceChg;
     sal_uInt8 nOldDir;
 public:
     SwSpaceManipulator( SwTextPaintInfo& rInf, SwMultiPortion& rMult );
     ~SwSpaceManipulator();
     void SecondLine();
-    long GetSpaceAdd() const { return nSpaceAdd; }
+    tools::Long GetSpaceAdd() const { return nSpaceAdd; }
 };
 
 }
@@ -2513,7 +2513,7 @@ SwTextCursorSave::SwTextCursorSave( SwTextCursor* pCursor,
                                   SwTwips nY,
                                   sal_uInt16& nX,
                                   TextFrameIndex const nCurrStart,
-                                  long nSpaceAdd )
+                                  tools::Long nSpaceAdd )
   : pTextCursor(pCursor),
     pCurr(pCursor->m_pCurr),
     nStart(pCursor->m_nStart)

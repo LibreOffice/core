@@ -166,7 +166,7 @@ tools::Rectangle ScAccessibleCell::GetBoundingBox() const
     tools::Rectangle aCellRect;
     if (mpViewShell)
     {
-        long nSizeX, nSizeY;
+        tools::Long nSizeX, nSizeY;
         mpViewShell->GetViewData().GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));

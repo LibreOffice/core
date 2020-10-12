@@ -65,12 +65,12 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
+bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
 {
     return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
-void SvpSalVirtualDevice::CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *const pBuffer)
+void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer)
 {
     if (m_pSurface)
     {
@@ -108,7 +108,7 @@ void SvpSalVirtualDevice::CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *con
     }
 }
 
-bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
+bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
         sal_uInt8 *const pBuffer)
 {
     if (nNewDX == 0)
@@ -133,12 +133,12 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     return true;
 }
 
-long SvpSalVirtualDevice::GetWidth() const
+tools::Long SvpSalVirtualDevice::GetWidth() const
 {
     return m_pSurface ? m_aFrameSize.getX() : 0;
 }
 
-long SvpSalVirtualDevice::GetHeight() const
+tools::Long SvpSalVirtualDevice::GetHeight() const
 {
     return m_pSurface ? m_aFrameSize.getY() : 0;
 }

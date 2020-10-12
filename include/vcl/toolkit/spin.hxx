@@ -43,10 +43,10 @@ private:
     bool            mbInitialDown    : 1;
     bool            mbHorz           : 1;
     bool            mbUpperIsFocused : 1;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnValue;
-    long            mnValueStep;
+    tools::Long            mnMinRange;
+    tools::Long            mnMaxRange;
+    tools::Long            mnValue;
+    tools::Long            mnValueStep;
 
     SAL_DLLPRIVATE tools::Rectangle* ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
@@ -70,15 +70,15 @@ public:
     virtual void    GetFocus() override;
     virtual void    LoseFocus() override;
 
-    void            SetRangeMin( long nNewRange );
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( long nNewRange );
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin( tools::Long nNewRange );
+    tools::Long            GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax( tools::Long nNewRange );
+    tools::Long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    void            SetValue( long nValue );
-    long            GetValue() const { return mnValue; }
-    void            SetValueStep( long nNewStep ) { mnValueStep = nNewStep; }
-    long            GetValueStep() const { return mnValueStep; }
+    void            SetValue( tools::Long nValue );
+    tools::Long            GetValue() const { return mnValue; }
+    void            SetValueStep( tools::Long nNewStep ) { mnValueStep = nNewStep; }
+    tools::Long            GetValueStep() const { return mnValueStep; }
     virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 
 private:

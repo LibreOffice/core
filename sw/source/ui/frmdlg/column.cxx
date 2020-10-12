@@ -223,7 +223,7 @@ void SwColumnDlg::ObjectHdl(const weld::ComboBox* pBox)
     }
     weld::ComboBox* pApplyToLB = m_xTabPage->GetApplyComboBox();
     m_nOldSelection = pApplyToLB->get_active_id().toInt32();
-    long nWidth = m_nSelectionWidth;
+    tools::Long nWidth = m_nSelectionWidth;
     switch(m_nOldSelection)
     {
         case LISTBOX_SELECTION  :
@@ -364,7 +364,7 @@ void SwColumnPage::ResetColWidth()
         const sal_uInt16 nWidth = GetMaxWidth( m_xColMgr.get(), m_nCols ) / m_nCols;
 
         for(sal_uInt16 i = 0; i < m_nCols; ++i)
-            m_nColWidth[i] = static_cast<long>(nWidth);
+            m_nColWidth[i] = static_cast<tools::Long>(nWidth);
     }
 
 }
@@ -490,7 +490,7 @@ SwColumnPage::SwColumnPage(weld::Container* pPage, weld::DialogController* pCont
         SvxBorderLineStyle::DASHED );
 
     sal_Int64 nLineWidth = m_xLineWidthEdit->get_value(FieldUnit::POINT);
-    nLineWidth = static_cast<long>(vcl::ConvertDoubleValue(
+    nLineWidth = static_cast<tools::Long>(vcl::ConvertDoubleValue(
             nLineWidth,
             m_xLineWidthEdit->get_digits(),
             FieldUnit::POINT, MapUnit::MapTwip ));
@@ -513,9 +513,9 @@ SwColumnPage::~SwColumnPage()
     m_xTextDirectionLB.reset();
 }
 
-void SwColumnPage::SetPageWidth(long nPageWidth)
+void SwColumnPage::SetPageWidth(tools::Long nPageWidth)
 {
-    long nNewMaxWidth = static_cast< long >(m_xEd1->NormalizePercent(nPageWidth));
+    tools::Long nNewMaxWidth = static_cast< tools::Long >(m_xEd1->NormalizePercent(nPageWidth));
 
     m_xDistEd1->set_max(nNewMaxWidth, FieldUnit::TWIP);
     m_xDistEd2->set_max(nNewMaxWidth, FieldUnit::TWIP);
@@ -639,12 +639,12 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
 {
     if (!m_xColMgr)
         return;
-    long nGutterWidth = m_xColMgr->GetGutterWidth();
+    tools::Long nGutterWidth = m_xColMgr->GetGutterWidth();
     if (m_nCols > 1)
     {
             // Determine whether the most narrow column is too narrow
             // for the adjusted column gap
-        long nMin = m_nColWidth[0];
+        tools::Long nMin = m_nColWidth[0];
 
         for( sal_uInt16 i = 1; i < m_nCols; ++i )
             nMin = std::min(nMin, m_nColWidth[i]);
@@ -655,7 +655,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
             m_xColMgr->SetAutoWidth(false);
                 // when the user didn't allocate the whole width,
                 // add the missing amount to the last column.
-            long nSum = 0;
+            tools::Long nSum = 0;
             for(sal_uInt16 i = 0; i < m_nCols; ++i)
                 nSum += m_nColWidth[i];
             nGutterWidth = 0;
@@ -663,7 +663,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
                 nGutterWidth += m_nColDist[i];
             nSum += nGutterWidth;
 
-            long nMaxW = m_xColMgr->GetActualSize();
+            tools::Long nMaxW = m_xColMgr->GetActualSize();
 
             if( nSum < nMaxW  )
                 m_nColWidth[m_nCols - 1] += nMaxW - nSum;
@@ -671,7 +671,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
             m_xColMgr->SetColWidth( 0, static_cast< sal_uInt16 >(m_nColWidth[0] + m_nColDist[0]/2) );
             for( sal_uInt16 i = 1; i < m_nCols-1; ++i )
             {
-                long nActDist = (m_nColDist[i] + m_nColDist[i - 1]) / 2;
+                tools::Long nActDist = (m_nColDist[i] + m_nColDist[i - 1]) / 2;
                 m_xColMgr->SetColWidth( i, static_cast< sal_uInt16 >(m_nColWidth[i] + nActDist ));
             }
             m_xColMgr->SetColWidth( m_nCols-1, static_cast< sal_uInt16 >(m_nColWidth[m_nCols-1] + m_nColDist[m_nCols -2]/2) );
@@ -687,7 +687,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
         m_xLineColorLbl->set_sensitive(bEnable);
 
         sal_Int64 nLineWidth = m_xLineWidthEdit->get_value(FieldUnit::PERCENT);
-        nLineWidth = static_cast<long>(vcl::ConvertDoubleValue(
+        nLineWidth = static_cast<tools::Long>(vcl::ConvertDoubleValue(
                 nLineWidth,
                 m_xLineWidthEdit->get_digits(),
                 m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));
@@ -722,7 +722,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, weld::MetricSpinButton&, void )
 
     //set maximum values
     m_xCLNrEdt->set_max(std::max(1L,
-        std::min(long(nMaxCols), long( m_xColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
+        std::min(tools::Long(nMaxCols), tools::Long( m_xColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
 
     //prompt example window
     if(!m_bLockUpdate)
@@ -796,7 +796,7 @@ void SwColumnPage::Init()
         // set maximum number of columns
         // values below 1 are not allowed
     m_xCLNrEdt->set_max(std::max(1L,
-        std::min(long(nMaxCols), long( m_xColMgr->GetActualSize() / g_nMinWidth) )));
+        std::min(tools::Long(nMaxCols), tools::Long( m_xColMgr->GetActualSize() / g_nMinWidth) )));
 }
 
 bool SwColumnPage::isLineNotNone() const
@@ -921,7 +921,7 @@ void SwColumnPage::ColModify(const weld::SpinButton* pNF)
 
     if (pNF)
         m_aDefaultVS.SetNoSelection();
-    long nDist = static_cast< long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
+    tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
@@ -944,10 +944,10 @@ IMPL_LINK(SwColumnPage, GapModify, weld::MetricSpinButton&, rMetricField, void)
         return;
     SwPercentField *pField = m_aPercentFieldsMap[&rMetricField];
     assert(pField);
-    long nActValue = static_cast< long >(pField->DenormalizePercent(pField->get_value(FieldUnit::TWIP)));
+    tools::Long nActValue = static_cast< tools::Long >(pField->DenormalizePercent(pField->get_value(FieldUnit::TWIP)));
     if (m_xAutoWidthBox->get_active())
     {
-        const long nMaxGap = static_cast< long >
+        const tools::Long nMaxGap = static_cast< tools::Long >
             ((m_xColMgr->GetActualSize() - m_nCols * MINLAY)/(m_nCols - 1));
         if(nActValue > nMaxGap)
         {
@@ -964,11 +964,11 @@ IMPL_LINK(SwColumnPage, GapModify, weld::MetricSpinButton&, rMetricField, void)
     else
     {
         const sal_uInt16 nVis = m_nFirstVis + ((pField == m_xDistEd2.get()) ? 1 : 0);
-        long nDiff = nActValue - m_nColDist[nVis];
+        tools::Long nDiff = nActValue - m_nColDist[nVis];
         if(nDiff)
         {
-            long nLeft = m_nColWidth[nVis];
-            long nRight = m_nColWidth[nVis + 1];
+            tools::Long nLeft = m_nColWidth[nVis];
+            tools::Long nRight = m_nColWidth[nVis + 1];
             if(nLeft + nRight + 2 * MINLAY < nDiff)
                 nDiff = nLeft + nRight - 2 * MINLAY;
             if(nDiff < nRight - MINLAY)
@@ -977,7 +977,7 @@ IMPL_LINK(SwColumnPage, GapModify, weld::MetricSpinButton&, rMetricField, void)
             }
             else
             {
-                long nTemp = nDiff - nRight + MINLAY;
+                tools::Long nTemp = nDiff - nRight + MINLAY;
                 nRight = MINLAY;
                 if(nLeft > nTemp - MINLAY)
                 {
@@ -1016,7 +1016,7 @@ IMPL_LINK(SwColumnPage, EdModify, weld::MetricSpinButton&, rEdit, void)
 // no explicit values for the column width can be entered.
 IMPL_LINK(SwColumnPage, AutoWidthHdl, weld::ToggleButton&, rBox, void)
 {
-    long nDist = static_cast< long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
+    tools::Long nDist = static_cast< tools::Long >(m_xDistEd1->DenormalizePercent(m_xDistEd1->get_value(FieldUnit::TWIP)));
     m_xColMgr->SetCount(m_nCols, static_cast<sal_uInt16>(nDist));
     for(sal_uInt16 i = 0; i < m_nCols; i++)
         m_nColDist[i] = nDist;
@@ -1066,15 +1066,15 @@ void SwColumnPage::Timeout()
         else if (m_pModifiedField == m_xEd3.get())
             nChanged += 2;
 
-        long nNewWidth = static_cast< long >
+        tools::Long nNewWidth = static_cast< tools::Long >
             (m_pModifiedField->DenormalizePercent(m_pModifiedField->get_value(FieldUnit::TWIP)));
-        long nDiff = nNewWidth - m_nColWidth[nChanged];
+        tools::Long nDiff = nNewWidth - m_nColWidth[nChanged];
 
         // when it's the last column
         if(nChanged == m_nCols - 1)
         {
             m_nColWidth[0] -= nDiff;
-            if(m_nColWidth[0] < static_cast<long>(g_nMinWidth))
+            if(m_nColWidth[0] < static_cast<tools::Long>(g_nMinWidth))
             {
                 nNewWidth -= g_nMinWidth - m_nColWidth[0];
                 m_nColWidth[0] = g_nMinWidth;
@@ -1084,7 +1084,7 @@ void SwColumnPage::Timeout()
         else if(nDiff)
         {
             m_nColWidth[nChanged + 1] -= nDiff;
-            if(m_nColWidth[nChanged + 1] < static_cast<long>(g_nMinWidth))
+            if(m_nColWidth[nChanged + 1] < static_cast<tools::Long>(g_nMinWidth))
             {
                 nNewWidth -= g_nMinWidth - m_nColWidth[nChanged + 1];
                 m_nColWidth[nChanged + 1] = g_nMinWidth;
@@ -1214,7 +1214,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             nTotalWish = FRAME_FORMAT_WIDTH;
         else
         {
-            long const nDistance = rBox.GetSmallestDistance();
+            tools::Long const nDistance = rBox.GetSmallestDistance();
             nTotalWish = (!bVertical ? rSize.GetWidth() : rSize.GetHeight()) - 2 * nDistance;
         }
 
@@ -1280,7 +1280,7 @@ IMPL_LINK(SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void)
         m_xDistEd1->set_value(50, FieldUnit::CM);
         ColModify(nullptr);
         // now set the width ratio to 2 : 1 or 1 : 2 respectively
-        const long nSmall = static_cast< long >(m_xColMgr->GetActualSize() / 3);
+        const tools::Long nSmall = static_cast< tools::Long >(m_xColMgr->GetActualSize() / 3);
         if(nItem == 4)
         {
             m_xEd2->set_value(m_xEd2->NormalizePercent(nSmall), FieldUnit::TWIP);
@@ -1318,8 +1318,8 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 
     tools::Rectangle aRect = rUDEvt.GetRect();
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
-    long nRectWidth = aRect.GetWidth();
-    long nRectHeight = aRect.GetHeight();
+    tools::Long nRectWidth = aRect.GetWidth();
+    tools::Long nRectHeight = aRect.GetHeight();
 
     Point aBLPos = aRect.TopLeft();
     Color aFillColor(pDev->GetFillColor());
@@ -1327,11 +1327,11 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
     pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
 
-    long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
-    long nTop = (nRectHeight - 11 * nStep ) / 2;
+    tools::Long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
+    tools::Long nTop = (nRectHeight - 11 * nStep ) / 2;
     sal_uInt16 nCols = 0;
-    long nStarts[3];
-    long nEnds[3];
+    tools::Long nStarts[3];
+    tools::Long nEnds[3];
     nStarts[0] = nRectWidth * 10 / 100;
     switch( nItemId )
     {

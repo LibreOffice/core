@@ -28,8 +28,8 @@ public:
     BitmapWriteAccess(Bitmap& rBitmap);
     virtual ~BitmapWriteAccess() override;
 
-    void CopyScanline(long nY, const BitmapReadAccess& rReadAcc);
-    void CopyScanline(long nY, ConstScanline aSrcScanline, ScanlineFormat nSrcScanlineFormat,
+    void CopyScanline(tools::Long nY, const BitmapReadAccess& rReadAcc);
+    void CopyScanline(tools::Long nY, ConstScanline aSrcScanline, ScanlineFormat nSrcScanlineFormat,
                       sal_uInt32 nSrcScanlineSize);
 
     void SetPalette(const BitmapPalette& rPalette)
@@ -54,7 +54,7 @@ public:
         mpBuffer->maPalette[nColor] = rBitmapColor;
     }
 
-    void SetPixel(long nY, long nX, const BitmapColor& rBitmapColor)
+    void SetPixel(tools::Long nY, tools::Long nX, const BitmapColor& rBitmapColor)
     {
         assert(mpBuffer && "Access is not valid!");
         assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
@@ -63,7 +63,7 @@ public:
         mFncSetPixel(GetScanline(nY), nX, rBitmapColor, maColorMask);
     }
 
-    void SetPixelIndex(long nY, long nX, sal_uInt8 cIndex)
+    void SetPixelIndex(tools::Long nY, tools::Long nX, sal_uInt8 cIndex)
     {
         SetPixel(nY, nX, BitmapColor(cIndex));
     }

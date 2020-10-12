@@ -94,10 +94,10 @@ void CopyDlg::Reset()
     // tdf#125011 draw/impress sizes are in mm_100th already, "normalize" to
     // decimal shift by number of decimal places the widgets are using (2) then
     // scale by the ui scaling factor
-    auto nPageWidth = long(m_xMtrFldMoveX->normalize(aPageSize.Width()) / maUIScale);
-    auto nPageHeight = long(m_xMtrFldMoveX->normalize(aPageSize.Height()) / maUIScale);
-    auto nRectWidth = long(m_xMtrFldMoveX->normalize(aRect.GetWidth()) / maUIScale);
-    auto nRectHeight = long(m_xMtrFldMoveX->normalize(aRect.GetHeight()) / maUIScale);
+    auto nPageWidth = tools::Long(m_xMtrFldMoveX->normalize(aPageSize.Width()) / maUIScale);
+    auto nPageHeight = tools::Long(m_xMtrFldMoveX->normalize(aPageSize.Height()) / maUIScale);
+    auto nRectWidth = tools::Long(m_xMtrFldMoveX->normalize(aRect.GetWidth()) / maUIScale);
+    auto nRectHeight = tools::Long(m_xMtrFldMoveX->normalize(aRect.GetHeight()) / maUIScale);
 
     m_xMtrFldMoveX->set_range(-nPageWidth, nPageWidth, FieldUnit::MM_100TH);
     m_xMtrFldMoveY->set_range(-nPageHeight, nPageHeight, FieldUnit::MM_100TH);
@@ -120,30 +120,30 @@ void CopyDlg::Reset()
         else
             m_xNumFldCopies->set_value(1);
 
-        long nMoveX = 500;
+        tools::Long nMoveX = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_xMtrFldMoveX, long(nMoveX / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldMoveX, tools::Long(nMoveX / maUIScale), MapUnit::Map100thMM);
 
-        long nMoveY = 500;
+        tools::Long nMoveY = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_xMtrFldMoveY, long(nMoveY / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldMoveY, tools::Long(nMoveY / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             m_xMtrFldAngle->set_value(static_cast<const SfxInt32Item*>( pPoolItem )->GetValue(), FieldUnit::NONE);
         else
             m_xMtrFldAngle->set_value(0, FieldUnit::NONE);
 
-        long nWidth = 0;
+        tools::Long nWidth = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_xMtrFldWidth, long(nWidth / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldWidth, tools::Long(nWidth / maUIScale), MapUnit::Map100thMM);
 
-        long nHeight = 0;
+        tools::Long nHeight = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_xMtrFldHeight, long(nHeight / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldHeight, tools::Long(nHeight / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
@@ -179,10 +179,10 @@ void CopyDlg::Reset()
  */
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
-    long nMoveX = long( GetCoreValue( *m_xMtrFldMoveX, MapUnit::Map100thMM) * maUIScale);
-    long nMoveY = long( GetCoreValue( *m_xMtrFldMoveY, MapUnit::Map100thMM) * maUIScale);
-    long nHeight = long( GetCoreValue( *m_xMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
-    long nWidth  = long( GetCoreValue( *m_xMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
+    tools::Long nMoveX = tools::Long( GetCoreValue( *m_xMtrFldMoveX, MapUnit::Map100thMM) * maUIScale);
+    tools::Long nMoveY = tools::Long( GetCoreValue( *m_xMtrFldMoveY, MapUnit::Map100thMM) * maUIScale);
+    tools::Long nHeight = tools::Long( GetCoreValue( *m_xMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
+    tools::Long nWidth  = tools::Long( GetCoreValue( *m_xMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
 
     rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, static_cast<sal_uInt16>(m_xNumFldCopies->get_value()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
@@ -219,9 +219,9 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, weld::Button&, void)
 {
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
 
-    SetMetricValue( *m_xMtrFldMoveX, long( aRect.GetWidth() /
+    SetMetricValue( *m_xMtrFldMoveX, tools::Long( aRect.GetWidth() /
                                     maUIScale ), MapUnit::Map100thMM);
-    SetMetricValue( *m_xMtrFldMoveY, long( aRect.GetHeight() /
+    SetMetricValue( *m_xMtrFldMoveY, tools::Long( aRect.GetHeight() /
                                     maUIScale ), MapUnit::Map100thMM);
 
     // sets color attribute
@@ -240,14 +240,14 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault, weld::Button&, void)
 {
     m_xNumFldCopies->set_value(1);
 
-    long nValue = 500;
-    SetMetricValue( *m_xMtrFldMoveX, long(nValue / maUIScale), MapUnit::Map100thMM);
-    SetMetricValue( *m_xMtrFldMoveY, long(nValue / maUIScale), MapUnit::Map100thMM);
+    tools::Long nValue = 500;
+    SetMetricValue( *m_xMtrFldMoveX, tools::Long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldMoveY, tools::Long(nValue / maUIScale), MapUnit::Map100thMM);
 
     nValue = 0;
     m_xMtrFldAngle->set_value(nValue, FieldUnit::DEGREE);
-    SetMetricValue( *m_xMtrFldWidth, long(nValue / maUIScale), MapUnit::Map100thMM);
-    SetMetricValue( *m_xMtrFldHeight, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldWidth, tools::Long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldHeight, tools::Long(nValue / maUIScale), MapUnit::Map100thMM);
 
     // set color attribute
     const SfxPoolItem*  pPoolItem = nullptr;

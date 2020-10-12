@@ -132,12 +132,12 @@ void ImplJobSetup::SetPaperFormat(Paper ePaperFormat)
     mePaperFormat = ePaperFormat;
 }
 
-void ImplJobSetup::SetPaperWidth(long nPaperWidth)
+void ImplJobSetup::SetPaperWidth(tools::Long nPaperWidth)
 {
     mnPaperWidth = nPaperWidth;
 }
 
-void ImplJobSetup::SetPaperHeight(long nPaperHeight)
+void ImplJobSetup::SetPaperHeight(tools::Long nPaperHeight)
 {
     mnPaperHeight = nPaperHeight;
 }
@@ -281,8 +281,8 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                     SAL_WARN("vcl", "Parsing error: " << nPaperFormat <<
                              " paper format, but legal max is " << NUM_PAPER_ENTRIES);
                 }
-                rJobData.SetPaperWidth( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperWidth )) );
-                rJobData.SetPaperHeight( static_cast<long>(SVBT32ToUInt32( pOldJobData->nPaperHeight )) );
+                rJobData.SetPaperWidth( static_cast<tools::Long>(SVBT32ToUInt32( pOldJobData->nPaperWidth )) );
+                rJobData.SetPaperHeight( static_cast<tools::Long>(SVBT32ToUInt32( pOldJobData->nPaperHeight )) );
                 if ( rJobData.GetDriverDataLen() )
                 {
                     const char* pDriverData = reinterpret_cast<const char*>(pOldJobData) + nOldJobDataSize;

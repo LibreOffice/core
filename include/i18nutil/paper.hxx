@@ -22,6 +22,7 @@
 
 #include <i18nutil/i18nutildllapi.h>
 #include <rtl/string.hxx>
+#include <tools/long.hxx>
 
 namespace com::sun::star::lang { struct Locale; }
 
@@ -121,15 +122,15 @@ enum Paper
 class I18NUTIL_DLLPUBLIC PaperInfo
 {
     Paper m_eType;
-    long m_nPaperWidth;     // width in 100thMM
-    long m_nPaperHeight;    // height in 100thMM
+    tools::Long m_nPaperWidth;     // width in 100thMM
+    tools::Long m_nPaperHeight;    // height in 100thMM
 public:
     PaperInfo(Paper eType);
-    PaperInfo(long nPaperWidth, long nPaperHeight);
+    PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight);
 
     Paper getPaper() const { return m_eType; }
-    long getWidth() const { return m_nPaperWidth; }
-    long getHeight() const { return m_nPaperHeight; }
+    tools::Long getWidth() const { return m_nPaperWidth; }
+    tools::Long getHeight() const { return m_nPaperHeight; }
     bool sloppyEqual(const PaperInfo &rOther) const;
     void doSloppyFit();
 
@@ -139,7 +140,7 @@ public:
     static Paper fromPSName(const OString &rName);
     static OString toPSName(Paper eType);
 
-    static long sloppyFitPageDimension(long nDimension);
+    static tools::Long sloppyFitPageDimension(tools::Long nDimension);
 };
 
 #endif // INCLUDED_I18NUTIL_PAPER_HXX

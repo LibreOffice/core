@@ -87,7 +87,7 @@ void TextCharacterSpacingControl::Initialize()
     SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_KERNING, pItem);
 
     const SvxKerningItem* pKerningItem = static_cast<const SvxKerningItem*>(pItem);
-    long nKerning = 0;
+    tools::Long nKerning = 0;
 
     if(pKerningItem)
         nKerning = pKerningItem->GetValue();
@@ -113,7 +113,7 @@ void TextCharacterSpacingControl::Initialize()
     {
         MapUnit eUnit = GetCoreMetric();
         MapUnit eOrgUnit = eUnit;
-        long nBig = mxEditKerning->normalize(nKerning);
+        tools::Long nBig = mxEditKerning->normalize(nKerning);
         nKerning = OutputDevice::LogicToLogic(nBig, eOrgUnit, MapUnit::MapPoint);
         mxEditKerning->set_value(nKerning, FieldUnit::NONE);
     }
@@ -129,14 +129,14 @@ void TextCharacterSpacingControl::Initialize()
     }
 }
 
-void TextCharacterSpacingControl::ExecuteCharacterSpacing(long nValue, bool bClose)
+void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bool bClose)
 {
     MapUnit eUnit = GetCoreMetric();
 
-    long nSign = (nValue < 0) ? -1 : 1;
+    tools::Long nSign = (nValue < 0) ? -1 : 1;
     nValue = nValue * nSign;
 
-    long nVal = OutputDevice::LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
+    tools::Long nVal = OutputDevice::LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
     short nKern = (nValue == 0) ? 0 : static_cast<short>(mxEditKerning->denormalize(nVal));
 
     SvxKerningItem aKernItem(nSign * nKern, SID_ATTR_CHAR_KERNING);

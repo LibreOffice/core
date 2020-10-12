@@ -155,10 +155,10 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
 
     if(IsTextFrame())
     {
-        long nMinWdt=GetMinTextFrameWidth();
-        long nMinHgt=GetMinTextFrameHeight();
-        long nMaxWdt=GetMaxTextFrameWidth();
-        long nMaxHgt=GetMaxTextFrameHeight();
+        tools::Long nMinWdt=GetMinTextFrameWidth();
+        tools::Long nMinHgt=GetMinTextFrameHeight();
+        tools::Long nMaxWdt=GetMaxTextFrameWidth();
+        tools::Long nMaxHgt=GetMaxTextFrameHeight();
         if (nMinWdt<1) nMinWdt=1;
         if (nMinHgt<1) nMinHgt=1;
         if (!bFitToSize) {
@@ -229,12 +229,12 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Recta
     if (pViewMin!=nullptr) {
         *pViewMin=aViewInit;
 
-        long nXFree=aAnkSiz.Width()-aPaperMin.Width();
+        tools::Long nXFree=aAnkSiz.Width()-aPaperMin.Width();
         if (eHAdj==SDRTEXTHORZADJUST_LEFT) pViewMin->AdjustRight( -nXFree );
         else if (eHAdj==SDRTEXTHORZADJUST_RIGHT) pViewMin->AdjustLeft(nXFree );
         else { pViewMin->AdjustLeft(nXFree/2 ); pViewMin->SetRight(pViewMin->Left()+aPaperMin.Width() ); }
 
-        long nYFree=aAnkSiz.Height()-aPaperMin.Height();
+        tools::Long nYFree=aAnkSiz.Height()-aPaperMin.Height();
         if (eVAdj==SDRTEXTVERTADJUST_TOP) pViewMin->AdjustBottom( -nYFree );
         else if (eVAdj==SDRTEXTVERTADJUST_BOTTOM) pViewMin->AdjustTop(nYFree );
         else { pViewMin->AdjustTop(nYFree/2 ); pViewMin->SetBottom(pViewMin->Top()+aPaperMin.Height() ); }

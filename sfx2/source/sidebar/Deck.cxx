@@ -243,7 +243,7 @@ bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
         return false;
 
     // Execute the actual scroll action.
-    long nDelta = pData->GetDelta();
+    tools::Long nDelta = pData->GetDelta();
     mpVerticalScrollBar->DoScroll(
         mpVerticalScrollBar->GetThumbPos() - nDelta);
     return true;

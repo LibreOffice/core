@@ -60,8 +60,8 @@ class SW_DLLPUBLIC SwEditWin final : public vcl::Window,
 {
     static  QuickHelpData* m_pQuickHlpData;
 
-    static  long    m_nDDStartPosX;
-    static  long    m_nDDStartPosY;
+    static  tools::Long    m_nDDStartPosX;
+    static  tools::Long    m_nDDStartPosY;
 
     Color m_aWaterCanTextColor;     // text color; for the watering can
     Color m_aWaterCanTextBackColor; // text background; for the watering can
@@ -245,8 +245,8 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    static long GetDDStartPosX() { return m_nDDStartPosX; }
-    static long GetDDStartPosY() { return m_nDDStartPosY; }
+    static tools::Long GetDDStartPosX() { return m_nDDStartPosX; }
+    static tools::Long GetDDStartPosY() { return m_nDDStartPosY; }
 
     static void InitStaticData();
     static void FinitStaticData();

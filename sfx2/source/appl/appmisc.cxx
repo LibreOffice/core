@@ -200,7 +200,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 }
 
 /** loads the application logo as used in the impress slideshow pause screen */
-BitmapEx SfxApplication::GetApplicationLogo(long nWidth)
+BitmapEx SfxApplication::GetApplicationLogo(tools::Long nWidth)
 {
     BitmapEx aBitmap;
     SfxApplication::loadBrandSvg("shell/about", aBitmap, nWidth);

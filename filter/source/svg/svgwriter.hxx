@@ -187,7 +187,7 @@ class GDIMetaFile;
 
 struct BulletListItemInfo
 {
-    long nFontSize;
+    tools::Long nFontSize;
     Color aColor;
     Point aPos;
     sal_Unicode cBulletChar;
@@ -216,7 +216,7 @@ class SVGTextWriter final
     OUString maTextOpacity;
     sal_Int32                                   mnLeftTextPortionLength;
     Point                                       maTextPos;
-    long int                                    mnTextWidth;
+    tools::Long                                 mnTextWidth;
     bool                                        mbPositioningNeeded;
     bool                                        mbIsNewListItem;
     sal_Int16                                   meNumberingType;
@@ -315,7 +315,7 @@ private:
     bool                                        mbIsPlaceholderShape;
 
 
-    long                    ImplMap( sal_Int32 nVal ) const;
+    tools::Long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
     void                    ImplMap( const tools::Rectangle& rRect, tools::Rectangle& rDstRect ) const;
@@ -323,8 +323,8 @@ private:
     tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = nullptr );
-    void                    ImplWriteRect( const tools::Rectangle& rRect, long nRadX = 0, long nRadY = 0 );
-    void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY );
+    void                    ImplWriteRect( const tools::Rectangle& rRect, tools::Long nRadX = 0, tools::Long nRadY = 0 );
+    void                    ImplWriteEllipse( const Point& rCenter, tools::Long nRadX, tools::Long nRadY );
     void                    ImplWritePattern( const tools::PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, sal_uInt32 nWriteFlags );
     void                    ImplAddLineAttr( const LineInfo &rAttrs );
     void                    ImplWritePolyPolygon( const tools::PolyPolygon& rPolyPoly, bool bLineOnly,
@@ -340,8 +340,8 @@ private:
     static Color            ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
     static Color            ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth );
-    void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, tools::Long nWidth );
+    void                    ImplWriteText( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, tools::Long nWidth, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,

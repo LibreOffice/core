@@ -57,12 +57,12 @@ public:
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
 
-    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags, long nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, sal_uInt16 nId, ButtonDialogFlags nBtnFlags, tools::Long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
 
 protected:
                         ButtonDialog( WindowType nType );
-    long                ImplGetButtonSize();
+    tools::Long                ImplGetButtonSize();
 
 private:
                         ButtonDialog( const ButtonDialog & ) = delete;
@@ -72,7 +72,7 @@ private:
     std::vector<std::unique_ptr<ImplBtnDlgItem>> m_ItemList;
     Size                maPageSize;
     Size                maCtrlSize;
-    long                mnButtonSize;
+    tools::Long                mnButtonSize;
     sal_uInt16          mnCurButtonId;
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;

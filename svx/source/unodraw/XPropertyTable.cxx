@@ -49,8 +49,8 @@ private:
     XPropertyList*  mpList;
     sal_Int16 mnWhich;
 
-    long getCount() const { return mpList ? mpList->Count() : 0; }
-    const XPropertyEntry* get(long index) const;
+    tools::Long getCount() const { return mpList ? mpList->Count() : 0; }
+    const XPropertyEntry* get(tools::Long index) const;
 public:
     SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pList ) throw();
 
@@ -86,7 +86,7 @@ SvxUnoXPropertyTable::SvxUnoXPropertyTable( sal_Int16 nWhich, XPropertyList* pLi
 {
 }
 
-const XPropertyEntry* SvxUnoXPropertyTable::get(long index) const
+const XPropertyEntry* SvxUnoXPropertyTable::get(tools::Long index) const
 {
     if( mpList )
         return mpList->Get(index);
@@ -126,8 +126,8 @@ void SAL_CALL SvxUnoXPropertyTable::removeByName( const  OUString& Name )
 
     OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, Name);
 
-    const long nCount = getCount();
-    long i;
+    const tools::Long nCount = getCount();
+    tools::Long i;
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
@@ -148,8 +148,8 @@ void SAL_CALL SvxUnoXPropertyTable::replaceByName( const  OUString& aName, const
 
     OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
-    const long nCount = getCount();
-    long i;
+    const tools::Long nCount = getCount();
+    tools::Long i;
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
@@ -174,8 +174,8 @@ uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
 
     OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
-    const long nCount = getCount();
-    long i;
+    const tools::Long nCount = getCount();
+    tools::Long i;
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
@@ -191,10 +191,10 @@ uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 
-    const long nCount = getCount();
+    const tools::Long nCount = getCount();
     uno::Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
-    long i;
+    tools::Long i;
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);
@@ -212,8 +212,8 @@ sal_Bool SAL_CALL SvxUnoXPropertyTable::hasByName( const  OUString& aName )
 
     OUString aInternalName = SvxUnogetInternalNameForItem(mnWhich, aName);
 
-    const long nCount = mpList?mpList->Count():0;
-    long i;
+    const tools::Long nCount = mpList?mpList->Count():0;
+    tools::Long i;
     for( i = 0; i < nCount; i++ )
     {
         const XPropertyEntry* pEntry = get(i);

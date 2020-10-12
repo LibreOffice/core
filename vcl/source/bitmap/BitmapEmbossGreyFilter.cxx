@@ -40,21 +40,21 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
             if (pWriteAcc)
             {
                 BitmapColor aGrey(sal_uInt8(0));
-                const long nWidth = pWriteAcc->Width();
-                const long nHeight = pWriteAcc->Height();
-                long nGrey11, nGrey12, nGrey13;
-                long nGrey21, nGrey22, nGrey23;
-                long nGrey31, nGrey32, nGrey33;
+                const tools::Long nWidth = pWriteAcc->Width();
+                const tools::Long nHeight = pWriteAcc->Height();
+                tools::Long nGrey11, nGrey12, nGrey13;
+                tools::Long nGrey21, nGrey22, nGrey23;
+                tools::Long nGrey31, nGrey32, nGrey33;
                 double fAzim = basegfx::deg2rad(mnAzimuthAngle100 * 0.01);
                 double fElev = basegfx::deg2rad(mnElevationAngle100 * 0.01);
                 std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
                 std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
-                long nX, nY, nNx, nNy, nDotL;
-                const long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
-                const long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
-                const long nLz = FRound(sin(fElev) * 255.0);
+                tools::Long nX, nY, nNx, nNy, nDotL;
+                const tools::Long nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
+                const tools::Long nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
+                const tools::Long nLz = FRound(sin(fElev) * 255.0);
                 const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
-                const long nNzLz = ((6 * 255) / 4) * nLz;
+                const tools::Long nNzLz = ((6 * 255) / 4) * nLz;
                 const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, 0L, 255L));
 
                 // fill mapping tables
@@ -113,7 +113,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
 
                         if (nX < (nWidth - 1))
                         {
-                            const long nNextX = pHMap[nX + 3];
+                            const tools::Long nNextX = pHMap[nX + 3];
 
                             nGrey11 = nGrey12;
                             nGrey12 = nGrey13;

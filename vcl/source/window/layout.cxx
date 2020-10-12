@@ -209,12 +209,12 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
 void VclBox::accumulateMaxes(const Size &rChildSize, Size &rSize) const
 {
-    long nSecondaryChildDimension = getSecondaryDimension(rChildSize);
-    long nSecondaryBoxDimension = getSecondaryDimension(rSize);
+    tools::Long nSecondaryChildDimension = getSecondaryDimension(rChildSize);
+    tools::Long nSecondaryBoxDimension = getSecondaryDimension(rSize);
     setSecondaryDimension(rSize, std::max(nSecondaryChildDimension, nSecondaryBoxDimension));
 
-    long nPrimaryChildDimension = getPrimaryDimension(rChildSize);
-    long nPrimaryBoxDimension = getPrimaryDimension(rSize);
+    tools::Long nPrimaryChildDimension = getPrimaryDimension(rChildSize);
+    tools::Long nPrimaryBoxDimension = getPrimaryDimension(rSize);
     if (m_bHomogeneous)
         setPrimaryDimension(rSize, std::max(nPrimaryBoxDimension, nPrimaryChildDimension));
     else
@@ -233,7 +233,7 @@ Size VclBox::calculateRequisition() const
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
 
-        long nPrimaryDimension = getPrimaryDimension(aChildSize);
+        tools::Long nPrimaryDimension = getPrimaryDimension(aChildSize);
         nPrimaryDimension += pChild->get_padding() * 2;
         setPrimaryDimension(aChildSize, nPrimaryDimension);
 
@@ -259,9 +259,9 @@ void VclBox::setAllocation(const Size &rAllocation)
     if (!nVisibleChildren)
         return;
 
-    long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
+    tools::Long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
 
-    long nHomogeneousDimension = 0, nExtraSpace = 0;
+    tools::Long nHomogeneousDimension = 0, nExtraSpace = 0;
     if (m_bHomogeneous)
     {
         nHomogeneousDimension = (nAllocPrimaryDimension -
@@ -294,7 +294,7 @@ void VclBox::setAllocation(const Size &rAllocation)
         Point aPos(0, 0);
         if (ePackType == VclPackType::End)
         {
-            long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+            tools::Long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
         }
 
@@ -302,7 +302,7 @@ void VclBox::setAllocation(const Size &rAllocation)
         {
             vcl::Window *pChild = window;
 
-            long nPadding = pChild->get_padding();
+            tools::Long nPadding = pChild->get_padding();
 
             Size aBoxSize;
             if (m_bHomogeneous)
@@ -310,7 +310,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             else
             {
                 aBoxSize = getLayoutRequisition(*pChild);
-                long nPrimaryDimension = getPrimaryDimension(aBoxSize);
+                tools::Long nPrimaryDimension = getPrimaryDimension(aBoxSize);
                 nPrimaryDimension += nPadding * 2;
                 if (getPrimaryDimensionChildExpand(*pChild))
                     nPrimaryDimension += nExtraSpace;
@@ -320,12 +320,12 @@ void VclBox::setAllocation(const Size &rAllocation)
 
             Point aChildPos(aPos);
             Size aChildSize(aBoxSize);
-            long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+            tools::Long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
 
             bool bFill = pChild->get_fill();
             if (bFill)
             {
-                setPrimaryDimension(aChildSize, std::max(static_cast<long>(1),
+                setPrimaryDimension(aChildSize, std::max(static_cast<tools::Long>(1),
                     getPrimaryDimension(aBoxSize) - nPadding * 2));
 
                 setPrimaryCoordinate(aChildPos, nPrimaryCoordinate + nPadding);
@@ -339,7 +339,7 @@ void VclBox::setAllocation(const Size &rAllocation)
                     (getPrimaryDimension(aBoxSize) - getPrimaryDimension(aChildSize)) / 2);
             }
 
-            long nDiff = getPrimaryDimension(aBoxSize) + m_nSpacing;
+            tools::Long nDiff = getPrimaryDimension(aBoxSize) + m_nSpacing;
             if (ePackType == VclPackType::Start)
                 setPrimaryCoordinate(aPos, nPrimaryCoordinate + nDiff);
             else
@@ -391,7 +391,7 @@ Size VclBox::finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const
 
     if (nVisibleChildren)
     {
-        long nPrimaryDimension = getPrimaryDimension(rSize);
+        tools::Long nPrimaryDimension = getPrimaryDimension(rSize);
         if (m_bHomogeneous)
             nPrimaryDimension *= nVisibleChildren;
         setPrimaryDimension(aRet, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
@@ -405,8 +405,8 @@ Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
 {
     Size aRet;
 
-    long nMainGroupDimension = getPrimaryDimension(rReq.m_aMainGroupSize);
-    long nSubGroupDimension = getPrimaryDimension(rReq.m_aSubGroupSize);
+    tools::Long nMainGroupDimension = getPrimaryDimension(rReq.m_aMainGroupSize);
+    tools::Long nSubGroupDimension = getPrimaryDimension(rReq.m_aSubGroupSize);
 
     setPrimaryDimension(aRet, nMainGroupDimension + nSubGroupDimension);
 
@@ -417,9 +417,9 @@ Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
     return aRet;
 }
 
-static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
+static tools::Long getMaxNonOutlier(const std::vector<long> &rG, tools::Long nAvgDimension)
 {
-    long nMaxDimensionNonOutlier = 0;
+    tools::Long nMaxDimensionNonOutlier = 0;
     for (auto const& nPrimaryChildDimension : rG)
     {
         if (nPrimaryChildDimension < nAvgDimension * 1.5)
@@ -433,7 +433,7 @@ static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
 
 static std::vector<long> setButtonSizes(const std::vector<long> &rG,
     const std::vector<bool> &rNonHomogeneous,
-    long nAvgDimension, long nMaxNonOutlier, long nMinWidth)
+    tools::Long nAvgDimension, tools::Long nMaxNonOutlier, tools::Long nMinWidth)
 {
     std::vector<long> aVec;
     //set everything < 1.5 times the average to the same width, leave the
@@ -463,10 +463,10 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     Size aMainGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
     Size aSubGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
 
-    long nMinMainGroupPrimary = getPrimaryDimension(aMainGroupSize);
-    long nMinSubGroupPrimary = getPrimaryDimension(aSubGroupSize);
-    long nMainGroupSecondary = getSecondaryDimension(aMainGroupSize);
-    long nSubGroupSecondary = getSecondaryDimension(aSubGroupSize);
+    tools::Long nMinMainGroupPrimary = getPrimaryDimension(aMainGroupSize);
+    tools::Long nMinSubGroupPrimary = getPrimaryDimension(aSubGroupSize);
+    tools::Long nMainGroupSecondary = getSecondaryDimension(aMainGroupSize);
+    tools::Long nSubGroupSecondary = getSecondaryDimension(aSubGroupSize);
 
     bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VclButtonBoxStyle::Spread || m_eLayoutStyle == VclButtonBoxStyle::Center);
 
@@ -498,13 +498,13 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
 
     if (m_bHomogeneous)
     {
-        long nMaxMainDimension = aMainGroupSizes.empty() ? 0 :
+        tools::Long nMaxMainDimension = aMainGroupSizes.empty() ? 0 :
             *std::max_element(aMainGroupSizes.begin(), aMainGroupSizes.end());
         nMaxMainDimension = std::max(nMaxMainDimension, nMinMainGroupPrimary);
-        long nMaxSubDimension = aSubGroupSizes.empty() ? 0 :
+        tools::Long nMaxSubDimension = aSubGroupSizes.empty() ? 0 :
             *std::max_element(aSubGroupSizes.begin(), aSubGroupSizes.end());
         nMaxSubDimension = std::max(nMaxSubDimension, nMinSubGroupPrimary);
-        long nMaxDimension = std::max(nMaxMainDimension, nMaxSubDimension);
+        tools::Long nMaxDimension = std::max(nMaxMainDimension, nMaxSubDimension);
         aReq.m_aMainGroupDimensions.resize(aMainGroupSizes.size(), nMaxDimension);
         aReq.m_aSubGroupDimensions.resize(aSubGroupSizes.size(), nMaxDimension);
     }
@@ -514,20 +514,20 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
         //that are way wider than the average and leave them
         //at their natural size and set the remainder to share the
         //max size of the remaining members of the buttonbox
-        long nAccDimension = std::accumulate(aMainGroupSizes.begin(),
+        tools::Long nAccDimension = std::accumulate(aMainGroupSizes.begin(),
             aMainGroupSizes.end(), 0);
         nAccDimension = std::accumulate(aSubGroupSizes.begin(),
             aSubGroupSizes.end(), nAccDimension);
 
         size_t nTotalSize = aMainGroupSizes.size() + aSubGroupSizes.size();
 
-        long nAvgDimension = nTotalSize ? nAccDimension / nTotalSize : 0;
+        tools::Long nAvgDimension = nTotalSize ? nAccDimension / nTotalSize : 0;
 
-        long nMaxMainNonOutlier = getMaxNonOutlier(aMainGroupSizes,
+        tools::Long nMaxMainNonOutlier = getMaxNonOutlier(aMainGroupSizes,
             nAvgDimension);
-        long nMaxSubNonOutlier = getMaxNonOutlier(aSubGroupSizes,
+        tools::Long nMaxSubNonOutlier = getMaxNonOutlier(aSubGroupSizes,
             nAvgDimension);
-        long nMaxNonOutlier = std::max(nMaxMainNonOutlier, nMaxSubNonOutlier);
+        tools::Long nMaxNonOutlier = std::max(nMaxMainNonOutlier, nMaxSubNonOutlier);
 
         aReq.m_aMainGroupDimensions = setButtonSizes(aMainGroupSizes,
             aMainGroupNonHomogeneous,
@@ -561,7 +561,7 @@ Size VclButtonBox::addSpacing(const Size &rSize, sal_uInt16 nVisibleChildren) co
 
     if (nVisibleChildren)
     {
-        long nPrimaryDimension = getPrimaryDimension(rSize);
+        tools::Long nPrimaryDimension = getPrimaryDimension(rSize);
         setPrimaryDimension(aRet,
             nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
         setSecondaryDimension(aRet, getSecondaryDimension(rSize));
@@ -611,7 +611,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     if (aReq.m_aMainGroupDimensions.empty() && aReq.m_aSubGroupDimensions.empty())
         return;
 
-    long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
+    tools::Long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
 
     Point aMainGroupPos, aOtherGroupPos;
     int nSpacing = m_nSpacing;
@@ -622,7 +622,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         case VclButtonBoxStyle::Start:
             if (!aReq.m_aSubGroupDimensions.empty())
             {
-                long nOtherPrimaryDimension = getPrimaryDimension(
+                tools::Long nOtherPrimaryDimension = getPrimaryDimension(
                     addSpacing(aReq.m_aSubGroupSize, aReq.m_aSubGroupDimensions.size()));
                 setPrimaryCoordinate(aOtherGroupPos,
                     nAllocPrimaryDimension - nOtherPrimaryDimension);
@@ -631,9 +631,9 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         case VclButtonBoxStyle::Spread:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
-                long nMainPrimaryDimension = getPrimaryDimension(
+                tools::Long nMainPrimaryDimension = getPrimaryDimension(
                     addSpacing(aReq.m_aMainGroupSize, aReq.m_aMainGroupDimensions.size()));
-                long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
+                tools::Long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
                 nExtraSpace += (aReq.m_aMainGroupDimensions.size()-1) * nSpacing;
                 nSpacing = nExtraSpace/(aReq.m_aMainGroupDimensions.size()+1);
                 setPrimaryCoordinate(aMainGroupPos, nSpacing);
@@ -642,9 +642,9 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         case VclButtonBoxStyle::Center:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
-                long nMainPrimaryDimension = getPrimaryDimension(
+                tools::Long nMainPrimaryDimension = getPrimaryDimension(
                     addSpacing(aReq.m_aMainGroupSize, aReq.m_aMainGroupDimensions.size()));
-                long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
+                tools::Long nExtraSpace = nAllocPrimaryDimension - nMainPrimaryDimension;
                 setPrimaryCoordinate(aMainGroupPos, nExtraSpace/2);
             }
             break;
@@ -655,7 +655,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
         case VclButtonBoxStyle::End:
             if (!aReq.m_aMainGroupDimensions.empty())
             {
-                long nMainPrimaryDimension = getPrimaryDimension(
+                tools::Long nMainPrimaryDimension = getPrimaryDimension(
                     addSpacing(aReq.m_aMainGroupSize, aReq.m_aMainGroupDimensions.size()));
                 setPrimaryCoordinate(aMainGroupPos,
                     nAllocPrimaryDimension - nMainPrimaryDimension);
@@ -676,18 +676,18 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
         if (bIgnoreSecondaryPacking || !pChild->get_secondary())
         {
-            long nMainGroupPrimaryDimension = *aPrimaryI++;
+            tools::Long nMainGroupPrimaryDimension = *aPrimaryI++;
             setPrimaryDimension(aChildSize, nMainGroupPrimaryDimension);
             setLayoutAllocation(*pChild, aMainGroupPos, aChildSize);
-            long nPrimaryCoordinate = getPrimaryCoordinate(aMainGroupPos);
+            tools::Long nPrimaryCoordinate = getPrimaryCoordinate(aMainGroupPos);
             setPrimaryCoordinate(aMainGroupPos, nPrimaryCoordinate + nMainGroupPrimaryDimension + nSpacing);
         }
         else
         {
-            long nSubGroupPrimaryDimension = *aSecondaryI++;
+            tools::Long nSubGroupPrimaryDimension = *aSecondaryI++;
             setPrimaryDimension(aChildSize, nSubGroupPrimaryDimension);
             setLayoutAllocation(*pChild, aOtherGroupPos, aChildSize);
-            long nPrimaryCoordinate = getPrimaryCoordinate(aOtherGroupPos);
+            tools::Long nPrimaryCoordinate = getPrimaryCoordinate(aOtherGroupPos);
             setPrimaryCoordinate(aOtherGroupPos, nPrimaryCoordinate + nSubGroupPrimaryDimension + nSpacing);
         }
     }
@@ -1145,7 +1145,7 @@ Size VclGrid::calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 n
     std::vector<Value> aHeights;
     calcMaxs(A, aWidths, aHeights);
 
-    long nTotalWidth = 0;
+    tools::Long nTotalWidth = 0;
     if (get_column_homogeneous())
     {
         nTotalWidth = std::max_element(aWidths.begin(), aWidths.end(), compareValues)->m_nValue;
@@ -1158,7 +1158,7 @@ Size VclGrid::calculateRequisitionForSpacings(sal_Int32 nRowSpacing, sal_Int32 n
 
     nTotalWidth += nColSpacing * (aWidths.size()-1);
 
-    long nTotalHeight = 0;
+    tools::Long nTotalHeight = 0;
     if (get_row_homogeneous())
     {
         nTotalHeight = std::max_element(aHeights.begin(), aHeights.end(), compareValues)->m_nValue;
@@ -1196,7 +1196,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
     sal_Int32 nColSpacing(get_column_spacing());
     sal_Int32 nRowSpacing(get_row_spacing());
 
-    long nAvailableWidth = rAllocation.Width();
+    tools::Long nAvailableWidth = rAllocation.Width();
     if (nMaxX)
         nAvailableWidth -= nColSpacing * (nMaxX - 1);
     if (get_column_homogeneous())
@@ -1210,7 +1210,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
         for (sal_Int32 x = 0; x < nMaxX; ++x)
             if (aWidths[x].m_bExpand)
                 ++nExpandables;
-        long nExtraWidthForExpanders = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
+        tools::Long nExtraWidthForExpanders = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
 
         //We don't fit and there is no volunteer to be shrunk
         if (!nExpandables && rAllocation.Width() < aRequisition.Width())
@@ -1225,7 +1225,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
             }
 
             //share out the remaining pain to everyone
-            long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
+            tools::Long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
 
             for (sal_Int32 x = 0; x < nMaxX; ++x)
                 aWidths[x].m_nValue += nExtraWidth;
@@ -1239,7 +1239,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
         }
     }
 
-    long nAvailableHeight = rAllocation.Height();
+    tools::Long nAvailableHeight = rAllocation.Height();
     if (nMaxY)
         nAvailableHeight -= nRowSpacing * (nMaxY - 1);
     if (get_row_homogeneous())
@@ -1253,7 +1253,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
         for (sal_Int32 y = 0; y < nMaxY; ++y)
             if (aHeights[y].m_bExpand)
                 ++nExpandables;
-        long nExtraHeightForExpanders = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
+        tools::Long nExtraHeightForExpanders = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
 
         //We don't fit and there is no volunteer to be shrunk
         if (!nExpandables && rAllocation.Height() < aRequisition.Height())
@@ -1268,7 +1268,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
             }
 
             //share out the remaining pain to everyone
-            long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
+            tools::Long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
 
             for (sal_Int32 y = 0; y < nMaxY; ++y)
                 aHeights[y].m_nValue += nExtraHeight;
@@ -1724,7 +1724,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     aButtonSize.setHeight( std::min(aButtonSize.Height(), aExpanderSize.Height()) );
     aButtonSize.setWidth( std::min(aButtonSize.Width(), aExpanderSize.Width()) );
 
-    long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
+    tools::Long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
     setLayoutAllocation(*m_pDisclosureButton, aButtonPos, aButtonSize);
 
@@ -1734,7 +1734,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
         aLabelSize.setWidth( std::min(aLabelSize.Width(),
             aExpanderSize.Width() - aButtonSize.Width()) );
 
-        long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
+        tools::Long nExtraLabelHeight = aExpanderSize.Height() - aLabelSize.Height();
         Point aLabelPos(aChildPos.X() + aButtonSize.Width(), aChildPos.Y() + nExtraLabelHeight/2);
         setLayoutAllocation(*pLabel, aLabelPos, aLabelSize);
     }
@@ -1894,8 +1894,8 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
     if (pChild && pChild->IsVisible())
         aChildReq = getLayoutRequisition(*pChild);
 
-    long nAvailHeight = rAllocation.Height() - 2;
-    long nAvailWidth = rAllocation.Width() - 2;
+    tools::Long nAvailHeight = rAllocation.Height() - 2;
+    tools::Long nAvailWidth = rAllocation.Width() - 2;
     // vert. ScrollBar
     if (GetStyle() & WB_AUTOVSCROLL)
     {
@@ -2546,13 +2546,13 @@ VclVPaned::VclVPaned(vcl::Window *pParent)
 
 IMPL_LINK(VclVPaned, SplitHdl, Splitter*, pSplitter, void)
 {
-    long nSize = pSplitter->GetSplitPosPixel();
+    tools::Long nSize = pSplitter->GetSplitPosPixel();
     Size aSplitterSize(m_pSplitter->GetSizePixel());
     Size aAllocation(GetSizePixel());
     arrange(aAllocation, nSize, aAllocation.Height() - nSize - aSplitterSize.Height());
 }
 
-void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight)
+void VclVPaned::arrange(const Size& rAllocation, tools::Long nFirstHeight, tools::Long nSecondHeight)
 {
     Size aSplitterSize(rAllocation.Width(), getLayoutRequisition(*m_pSplitter).Height());
     Size aFirstChildSize(rAllocation.Width(), nFirstHeight);
@@ -2583,7 +2583,7 @@ void VclVPaned::arrange(const Size& rAllocation, long nFirstHeight, long nSecond
     }
 }
 
-void VclVPaned::set_position(long nPosition)
+void VclVPaned::set_position(tools::Long nPosition)
 {
     VclPaned::set_position(nPosition);
 
@@ -2600,10 +2600,10 @@ void VclVPaned::setAllocation(const Size& rAllocation)
     //supporting "shrink" could be done by adjusting the allowed drag rectangle
     m_pSplitter->SetDragRectPixel(tools::Rectangle(Point(0, 0), rAllocation));
     Size aSplitterSize(rAllocation.Width(), getLayoutRequisition(*m_pSplitter).Height());
-    const long nHeight = rAllocation.Height() - aSplitterSize.Height();
+    const tools::Long nHeight = rAllocation.Height() - aSplitterSize.Height();
 
-    long nFirstHeight = 0;
-    long nSecondHeight = 0;
+    tools::Long nFirstHeight = 0;
+    tools::Long nSecondHeight = 0;
     bool bFirstCanResize = true;
     bool bSecondCanResize = true;
     const bool bInitialAllocation = get_position() < 0;
@@ -2631,8 +2631,8 @@ void VclVPaned::setAllocation(const Size& rAllocation)
         }
         ++nElement;
     }
-    long nHeightRequest = nFirstHeight + nSecondHeight;
-    long nHeightDiff = nHeight - nHeightRequest;
+    tools::Long nHeightRequest = nFirstHeight + nSecondHeight;
+    tools::Long nHeightDiff = nHeight - nHeightRequest;
     if (bFirstCanResize == bSecondCanResize)
         nFirstHeight += nHeightDiff/2;
     else if (bFirstCanResize)
@@ -2665,13 +2665,13 @@ VclHPaned::VclHPaned(vcl::Window *pParent)
 
 IMPL_LINK(VclHPaned, SplitHdl, Splitter*, pSplitter, void)
 {
-    long nSize = pSplitter->GetSplitPosPixel();
+    tools::Long nSize = pSplitter->GetSplitPosPixel();
     Size aSplitterSize(m_pSplitter->GetSizePixel());
     Size aAllocation(GetSizePixel());
     arrange(aAllocation, nSize, aAllocation.Width() - nSize - aSplitterSize.Width());
 }
 
-void VclHPaned::arrange(const Size& rAllocation, long nFirstWidth, long nSecondWidth)
+void VclHPaned::arrange(const Size& rAllocation, tools::Long nFirstWidth, tools::Long nSecondWidth)
 {
     Size aSplitterSize(getLayoutRequisition(*m_pSplitter).Width(), rAllocation.Height());
     Size aFirstChildSize(nFirstWidth, rAllocation.Height());
@@ -2702,7 +2702,7 @@ void VclHPaned::arrange(const Size& rAllocation, long nFirstWidth, long nSecondW
     }
 }
 
-void VclHPaned::set_position(long nPosition)
+void VclHPaned::set_position(tools::Long nPosition)
 {
     VclPaned::set_position(nPosition);
 
@@ -2719,10 +2719,10 @@ void VclHPaned::setAllocation(const Size& rAllocation)
     //supporting "shrink" could be done by adjusting the allowed drag rectangle
     m_pSplitter->SetDragRectPixel(tools::Rectangle(Point(0, 0), rAllocation));
     Size aSplitterSize(getLayoutRequisition(*m_pSplitter).Width(), rAllocation.Height());
-    const long nWidth = rAllocation.Width() - aSplitterSize.Width();
+    const tools::Long nWidth = rAllocation.Width() - aSplitterSize.Width();
 
-    long nFirstWidth = 0;
-    long nSecondWidth = 0;
+    tools::Long nFirstWidth = 0;
+    tools::Long nSecondWidth = 0;
     bool bFirstCanResize = true;
     bool bSecondCanResize = true;
     const bool bInitialAllocation = get_position() < 0;
@@ -2750,8 +2750,8 @@ void VclHPaned::setAllocation(const Size& rAllocation)
         }
         ++nElement;
     }
-    long nWidthRequest = nFirstWidth + nSecondWidth;
-    long nWidthDiff = nWidth - nWidthRequest;
+    tools::Long nWidthRequest = nFirstWidth + nSecondWidth;
+    tools::Long nWidthDiff = nWidth - nWidthRequest;
     if (bFirstCanResize == bSecondCanResize)
         nFirstWidth += nWidthDiff/2;
     else if (bFirstCanResize)

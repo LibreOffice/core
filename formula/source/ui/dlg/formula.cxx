@@ -71,7 +71,7 @@ public:
     void            ClearAllParas();
 
     void            MakeTree(StructPage* _pTree, weld::TreeIter* pParent, const FormulaToken* pFuncToken,
-                             const FormulaToken* _pToken, long Count);
+                             const FormulaToken* _pToken, tools::Long Count);
     void            fillTree(StructPage* _pTree);
     void            UpdateTokenArray( const OUString& rStrExp);
     OUString        RepairFormula(const OUString& aFormula);
@@ -583,12 +583,12 @@ void FormulaDlg_Impl::CalcStruct( const OUString& rStrExp, bool bForceRecalcStru
 }
 
 void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, const FormulaToken* pFuncToken,
-                               const FormulaToken* _pToken, long Count)
+                               const FormulaToken* _pToken, tools::Long Count)
 {
     if ( _pToken == nullptr || Count <= 0 )
         return;
 
-    long nParas = _pToken->GetParamCount();
+    tools::Long nParas = _pToken->GetParamCount();
     OpCode eOp = _pToken->GetOpCode();
 
     // #i101512# for output, the original token is needed

@@ -486,10 +486,10 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
     ::CalcClipRect( pObj, aTmpStretch, false );
     aClip.Intersection_( aTmpStretch );
 
-    const long nBot = getFrameArea().Top() + getFrameArea().Height();
-    const long nRig = getFrameArea().Left() + getFrameArea().Width();
-    const long nClipBot = aClip.Top() + aClip.Height();
-    const long nClipRig = aClip.Left() + aClip.Width();
+    const tools::Long nBot = getFrameArea().Top() + getFrameArea().Height();
+    const tools::Long nRig = getFrameArea().Left() + getFrameArea().Width();
+    const tools::Long nClipBot = aClip.Top() + aClip.Height();
+    const tools::Long nClipRig = aClip.Left() + aClip.Width();
 
     const bool bBot = nBot > nClipBot;
     const bool bRig = nRig > nClipRig;
@@ -507,7 +507,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             // now the flyframe can change its position and so on ...
             if ( !pHeader || !pHeader->IsHeaderFrame() )
             {
-                const long nOld = getFrameArea().Top();
+                const tools::Long nOld = getFrameArea().Top();
 
                 // tdf#112443 disable positioning if content is completely off page
                 bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
@@ -527,7 +527,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
         }
         if ( bRig )
         {
-            const long nOld = getFrameArea().Left();
+            const tools::Long nOld = getFrameArea().Left();
 
             // tdf#112443 disable positioning if content is completely off page
             bool bDisableOffPagePositioning = GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
@@ -573,7 +573,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
 
             if ( bBot )
             {
-                long nDiff = nClipBot;
+                tools::Long nDiff = nClipBot;
                 nDiff -= aFrameRect.Top(); // nDiff represents the available distance
                 nDiff = aFrameRect.Height() - nDiff;
                 aFrameRect.Height( aFrameRect.Height() - nDiff );
@@ -581,7 +581,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             }
             if ( bRig )
             {
-                long nDiff = nClipRig;
+                tools::Long nDiff = nClipRig;
                 nDiff -= aFrameRect.Left();// nDiff represents the available distance
                 nDiff = aFrameRect.Width() - nDiff;
                 aFrameRect.Width( aFrameRect.Width() - nDiff );
@@ -654,14 +654,14 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
 
             // Now change the Frame; for columns, we put the new values into the attributes,
             // otherwise we'll end up with unwanted side-effects/oscillations
-            const long nPrtHeightDiff = getFrameArea().Height() - getFramePrintArea().Height();
-            const long nPrtWidthDiff  = getFrameArea().Width()  - getFramePrintArea().Width();
+            const tools::Long nPrtHeightDiff = getFrameArea().Height() - getFramePrintArea().Height();
+            const tools::Long nPrtWidthDiff  = getFrameArea().Width()  - getFramePrintArea().Width();
             maUnclippedFrame = getFrameArea();
 
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
                 aFrm.Height( aFrameRect.Height() );
-                aFrm.Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
+                aFrm.Width ( std::max( tools::Long(MINLAY), aFrameRect.Width() ) );
             }
 
             if ( Lower() && Lower()->IsColumnFrame() )
@@ -1394,8 +1394,8 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 // of body frame:
                 aRectFnSet.SetRight( rRect, aRectFnSet.GetRight(pUp->GetUpper()->getFrameArea()) );
             }
-            long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
-            long nTop;
+            tools::Long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
+            tools::Long nTop;
             const SwFormat *pFormat = GetUserCall(pSdrObj)->GetFormat();
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
             if( bMove )
@@ -1403,7 +1403,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 nTop = aRectFnSet.IsVert() ? static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X() :
                                static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y();
                 nTop = aRectFnSet.YInc( nTop, -nHeight );
-                long nWidth = aRectFnSet.GetWidth(pFly->getFrameArea());
+                tools::Long nWidth = aRectFnSet.GetWidth(pFly->getFrameArea());
                 aRectFnSet.SetLeftAndWidth( rRect, aRectFnSet.IsVert() ?
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().Y() :
                             static_cast<const SwFlyInContentFrame*>(pFly)->GetRefPoint().X(), nWidth );
@@ -1437,16 +1437,16 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             rRect = pUp->getFramePrintArea();
             rRect += pUp->getFrameArea().Pos();
             SwRectFnSet aRectFnSet(pAnchorFrame);
-            long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
-            long nTop;
+            tools::Long nHeight = (9*aRectFnSet.GetHeight(rRect))/10;
+            tools::Long nTop;
             const SvxULSpaceItem &rUL = pFormat->GetULSpace();
             SwRect aSnapRect( pSdrObj->GetSnapRect() );
-            long nTmpH = 0;
+            tools::Long nTmpH = 0;
             if( bMove )
             {
                 nTop = aRectFnSet.YInc( aRectFnSet.IsVert() ? pSdrObj->GetAnchorPos().X() :
                                        pSdrObj->GetAnchorPos().Y(), -nHeight );
-                long nWidth = aRectFnSet.GetWidth(aSnapRect);
+                tools::Long nWidth = aRectFnSet.GetWidth(aSnapRect);
                 aRectFnSet.SetLeftAndWidth( rRect, aRectFnSet.IsVert() ?
                             pSdrObj->GetAnchorPos().Y() :
                             pSdrObj->GetAnchorPos().X(), nWidth );

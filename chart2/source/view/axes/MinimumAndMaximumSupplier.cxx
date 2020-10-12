@@ -185,19 +185,19 @@ void MergedMinimumAndMaximumSupplier::clearMinimumAndMaximumSupplierList()
     m_aMinimumAndMaximumSupplierList.clear();
 }
 
-long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
+tools::Long MergedMinimumAndMaximumSupplier::calculateTimeResolutionOnXAxis()
 {
-    long nRet = css::chart::TimeUnit::YEAR;
+    tools::Long nRet = css::chart::TimeUnit::YEAR;
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
     {
-        long nCurrent = elem->calculateTimeResolutionOnXAxis();
+        tools::Long nCurrent = elem->calculateTimeResolutionOnXAxis();
         if(nRet>nCurrent)
             nRet=nCurrent;
     }
     return nRet;
 }
 
-void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate )
+void MergedMinimumAndMaximumSupplier::setTimeResolutionOnXAxis( tools::Long nTimeResolution, const Date& rNullDate )
 {
     for (auto const& elem : m_aMinimumAndMaximumSupplierList)
         elem->setTimeResolutionOnXAxis( nTimeResolution, rNullDate );

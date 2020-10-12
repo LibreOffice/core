@@ -212,8 +212,8 @@ void CommentUIObject::execute(const OUString& rAction,
         if (rParameters.find("FROM") != rParameters.end() &&
                     rParameters.find("TO") != rParameters.end())
             {
-                long nMin = rParameters.find("FROM")->second.toInt32();
-                long nMax = rParameters.find("TO")->second.toInt32();
+                tools::Long nMin = rParameters.find("FROM")->second.toInt32();
+                tools::Long nMax = rParameters.find("TO")->second.toInt32();
                 ESelection aNewSelection( 0 , nMin, mxCommentUIObject->GetOutliner()->GetParagraphCount()-1, nMax );
                 mxCommentUIObject->GetOutlinerView()->SetSelection( aNewSelection );
             }

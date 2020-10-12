@@ -956,8 +956,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 // Translation...
                 aTextPos -= rOrigin;
                 // Rotation...
-                aRotatedPos.setX(static_cast<long>(nCos*aTextPos.X() + nSin*aTextPos.Y()) );
-                aRotatedPos.setY(static_cast<long>(- (nSin*aTextPos.X() - nCos*aTextPos.Y())) );
+                aRotatedPos.setX(static_cast<tools::Long>(nCos*aTextPos.X() + nSin*aTextPos.Y()) );
+                aRotatedPos.setY(static_cast<tools::Long>(- (nSin*aTextPos.X() - nCos*aTextPos.Y())) );
                 aTextPos = aRotatedPos;
                 // Translation...
                 aTextPos += rOrigin;
@@ -1053,7 +1053,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             bStrippingPortions || nOrientation )
         return;
 
-    long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
+    tools::Long nWidth = pOutDev->PixelToLogic( Size( 10, 0 ) ).Width();
 
     Point aStartPos, aEndPos;
     if ( !bVertical )
@@ -1082,7 +1082,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
 void Outliner::InvalidateBullet(sal_Int32 nPara)
 {
-    long nLineHeight = static_cast<long>(pEditEngine->GetLineHeight(nPara ));
+    tools::Long nLineHeight = static_cast<tools::Long>(pEditEngine->GetLineHeight(nPara ));
     for (OutlinerView* pView : aViewList)
     {
         Point aPos( pView->pEditView->GetWindowPosTopLeft(nPara ) );
@@ -1519,7 +1519,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
         aTopLeft.setX( rLR.GetTextLeft() + rLR.GetTextFirstLineOffset() + nSpaceBefore );
 
-        long nBulletWidth = std::max( static_cast<long>(-rLR.GetTextFirstLineOffset()), static_cast<long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
+        tools::Long nBulletWidth = std::max( static_cast<tools::Long>(-rLR.GetTextFirstLineOffset()), static_cast<tools::Long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
         if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
             nBulletWidth = aBulletSize.Width();
 
@@ -1668,7 +1668,7 @@ void Outliner::StripPortions()
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, const long* pDXArray,const SvxFont& rFont,
+                            sal_Int32 nTextLen, const tools::Long* pDXArray,const SvxFont& rFont,
                             sal_Int32 nPara, sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,
                             const SvxFieldData* pFieldData,
@@ -1688,7 +1688,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
     }
 }
 
-void Outliner::DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar, const SvxFont& rFont,
+void Outliner::DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar, const SvxFont& rFont,
     sal_Int32 nPara, sal_uInt8 nRightToLeft, bool bEndOfLine, bool bEndOfParagraph,
     const Color& rOverlineColor, const Color& rTextLineColor)
 {

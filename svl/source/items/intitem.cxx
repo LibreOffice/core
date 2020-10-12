@@ -165,7 +165,7 @@ SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
 }
 
 // virtual
-void SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
+void SfxMetricItem::ScaleMetrics(tools::Long nMult, tools::Long nDiv)
 {
     BigInt aTheValue(GetValue());
     aTheValue *= nMult;

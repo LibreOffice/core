@@ -1211,7 +1211,7 @@ void FmGridControl::DeleteSelectedRows()
         else
         {
             // we look for the first row after the selected block for selection
-            long nIdx = LastSelectedRow() + 1;
+            tools::Long nIdx = LastSelectedRow() + 1;
             if (nIdx < GetRowCount() - 1)
             {
                 // there is a next row to position on
@@ -1453,10 +1453,10 @@ bool FmGridControl::isColumnMarked(sal_uInt16 nId) const
     return m_nMarkedColumnId == nId;
 }
 
-long FmGridControl::QueryMinimumRowHeight()
+tools::Long FmGridControl::QueryMinimumRowHeight()
 {
-    long const nMinimalLogicHeight = 20; // 0.2 cm
-    long nMinimalPixelHeight = LogicToPixel(Point(0, nMinimalLogicHeight), MapMode(MapUnit::Map10thMM)).Y();
+    tools::Long const nMinimalLogicHeight = 20; // 0.2 cm
+    tools::Long nMinimalPixelHeight = LogicToPixel(Point(0, nMinimalLogicHeight), MapMode(MapUnit::Map10thMM)).Y();
     return CalcZoom( nMinimalPixelHeight );
 }
 
@@ -1814,7 +1814,7 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
         // The next problem caused by the same behavior (SeekCursor causes a propertyChanged): when adjusting rows we implicitly
         // change our selection. So a "FirstSelected(); SeekCursor(); NextSelected();" may produce unpredictable results.
         // That's why we _first_ collect the indices of the selected rows and _then_ their bookmarks.
-        long nIdx = FirstSelectedRow();
+        tools::Long nIdx = FirstSelectedRow();
         while (nIdx != BROWSER_ENDOFSELECTION)
         {
             // (we misuse the bookmarks array for this ...)

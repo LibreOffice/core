@@ -54,8 +54,8 @@ private:
     tools::Rectangle    maRect;
     bool                mbEnabled;
     OutputDevice&       mrParent;
-    long                mnCenterX;
-    long                mnCenterY;
+    tools::Long                mnCenterX;
+    tools::Long                mnCenterY;
 };
 
 /** This control allows to input a rotation angle, visualized by a dial.
@@ -141,8 +141,8 @@ private:
         sal_Int32           mnAngle;
         sal_Int32           mnInitialAngle;
         sal_Int32           mnOldAngle;
-        long                mnCenterX;
-        long                mnCenterY;
+        tools::Long                mnCenterX;
+        tools::Long                mnCenterY;
         bool                mbNoRot;
 
         explicit            DialControl_Impl(OutputDevice& rReference);

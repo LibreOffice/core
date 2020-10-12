@@ -42,7 +42,7 @@ public:
     inline SwRect( const SwRect &rRect );
     inline SwRect( const Point& rLT, const Size&  rSize );
     inline SwRect( const Point& rLT, const Point& rRB );
-    inline SwRect( long X, long Y, long Width, long Height );
+    inline SwRect( tools::Long X, tools::Long Y, tools::Long Width, tools::Long Height );
 
     //SV-SS e.g. SwRect( pWin->GetClipRect() );
     SwRect( const tools::Rectangle &rRect );
@@ -50,25 +50,25 @@ public:
     //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
     inline void Pos(  const Point& rNew );
-    inline void Pos( const long nNewX, const long nNewY );
+    inline void Pos( const tools::Long nNewX, const tools::Long nNewY );
     inline void SSize( const Size&  rNew  );
-    inline void SSize( const long nHeight, const long nWidth );
-    inline void Width(  long nNew );
-    inline void Height( long nNew );
-    inline void Left( const long nLeft );
-    inline void Right( const long nRight );
-    inline void Top( const long nTop );
-    inline void Bottom( const long nBottom );
+    inline void SSize( const tools::Long nHeight, const tools::Long nWidth );
+    inline void Width(  tools::Long nNew );
+    inline void Height( tools::Long nNew );
+    inline void Left( const tools::Long nLeft );
+    inline void Right( const tools::Long nRight );
+    inline void Top( const tools::Long nTop );
+    inline void Bottom( const tools::Long nBottom );
 
     //Get-Methods
     inline const Point &Pos()  const;
     inline const Size  &SSize() const;
-    inline long Width()  const;
-    inline long Height() const;
-    inline long Left()   const;
-    inline long Right()  const;
-    inline long Top()    const;
-    inline long Bottom() const;
+    inline tools::Long Width()  const;
+    inline tools::Long Height() const;
+    inline tools::Long Left()   const;
+    inline tools::Long Right()  const;
+    inline tools::Long Top()    const;
+    inline tools::Long Bottom() const;
 
     // In order to be able to access the members of Pos and SSize from the layout side.
     inline Point &Pos();
@@ -84,7 +84,7 @@ public:
     SwRect &Intersection_( const SwRect &rRect );
 
     bool IsInside( const Point& rPOINT ) const;
-    bool IsNear(const Point& rPoint, long nTolerance ) const;
+    bool IsNear(const Point& rPoint, tools::Long nTolerance ) const;
     bool IsInside( const SwRect& rRect ) const;
     bool IsOver( const SwRect& rRect ) const;
     inline bool HasArea() const;
@@ -106,32 +106,32 @@ public:
     friend SvStream& WriteSwRect( SvStream &rStream, const SwRect &rRect );
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const;
 
-    void Top_(      const long nTop );
-    void Bottom_(   const long nBottom );
-    void Left_(     const long nLeft );
-    void Right_(    const long nRight );
-    void Width_(    const long nNew );
-    void Height_(   const long nNew );
-    long Top_()     const;
-    long Bottom_()  const;
-    long Left_()    const;
-    long Right_()   const;
-    long Width_()   const;
-    long Height_()  const;
-    void SubTop(    const long nSub );
-    void AddTop(    const long nAdd );
-    void AddBottom( const long nAdd );
-    void AddLeft(   const long nAdd );
-    void SubLeft(   const long nSub );
-    void AddRight(  const long nAdd );
-    void AddWidth(  const long nAdd );
-    void AddHeight( const long nAdd );
-    void SetPosX(   const long nNew );
-    void SetPosY(   const long nNew );
-    void SetLeftAndWidth( long nLeft, long nNew );
-    void SetTopAndHeight( long nTop, long nNew );
-    void SetRightAndWidth( long nRight, long nNew );
-    void SetBottomAndHeight( long nBottom, long nNew );
+    void Top_(      const tools::Long nTop );
+    void Bottom_(   const tools::Long nBottom );
+    void Left_(     const tools::Long nLeft );
+    void Right_(    const tools::Long nRight );
+    void Width_(    const tools::Long nNew );
+    void Height_(   const tools::Long nNew );
+    tools::Long Top_()     const;
+    tools::Long Bottom_()  const;
+    tools::Long Left_()    const;
+    tools::Long Right_()   const;
+    tools::Long Width_()   const;
+    tools::Long Height_()  const;
+    void SubTop(    const tools::Long nSub );
+    void AddTop(    const tools::Long nAdd );
+    void AddBottom( const tools::Long nAdd );
+    void AddLeft(   const tools::Long nAdd );
+    void SubLeft(   const tools::Long nSub );
+    void AddRight(  const tools::Long nAdd );
+    void AddWidth(  const tools::Long nAdd );
+    void AddHeight( const tools::Long nAdd );
+    void SetPosX(   const tools::Long nNew );
+    void SetPosY(   const tools::Long nNew );
+    void SetLeftAndWidth( tools::Long nLeft, tools::Long nNew );
+    void SetTopAndHeight( tools::Long nTop, tools::Long nNew );
+    void SetRightAndWidth( tools::Long nRight, tools::Long nNew );
+    void SetBottomAndHeight( tools::Long nBottom, tools::Long nNew );
     void SetUpperLeftCorner(  const Point& rNew );
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
@@ -141,23 +141,23 @@ public:
     Point BottomLeft()  const;
     Point BottomRight()  const;
     Size  SwappedSize() const;
-    long GetLeftDistance( long ) const;
-    long GetBottomDistance( long ) const;
-    long GetRightDistance( long ) const;
-    long GetTopDistance( long ) const;
-    bool OverStepLeft( long ) const;
-    bool OverStepBottom( long ) const;
-    bool OverStepTop( long ) const;
-    bool OverStepRight( long ) const;
+    tools::Long GetLeftDistance( tools::Long ) const;
+    tools::Long GetBottomDistance( tools::Long ) const;
+    tools::Long GetRightDistance( tools::Long ) const;
+    tools::Long GetTopDistance( tools::Long ) const;
+    bool OverStepLeft( tools::Long ) const;
+    bool OverStepBottom( tools::Long ) const;
+    bool OverStepTop( tools::Long ) const;
+    bool OverStepRight( tools::Long ) const;
 };
 
-typedef void (SwRect::*SwRectSet)( const long nNew );
+typedef void (SwRect::*SwRectSet)( const tools::Long nNew );
 typedef long (SwRect::*SwRectGet)() const;
 typedef Point (SwRect::*SwRectPoint)() const;
 typedef Size (SwRect::*SwRectSize)() const;
-typedef bool (SwRect::*SwRectMax)( long ) const;
-typedef long (SwRect::*SwRectDist)( long ) const;
-typedef void (SwRect::*SwRectSetTwice)( long, long );
+typedef bool (SwRect::*SwRectMax)( tools::Long ) const;
+typedef long (SwRect::*SwRectDist)( tools::Long ) const;
+typedef void (SwRect::*SwRectSetTwice)( tools::Long, tools::Long );
 typedef void (SwRect::*SwRectSetPos)( const Point& );
 
 //  Set-Methods
@@ -170,7 +170,7 @@ inline void SwRect::Pos(  const Point& rNew )
 {
     m_Point = rNew;
 }
-inline void SwRect::Pos( const long nNewX, const long nNewY )
+inline void SwRect::Pos( const tools::Long nNewX, const tools::Long nNewY )
 {
     m_Point.setX(nNewX);
     m_Point.setY(nNewY);
@@ -179,34 +179,34 @@ inline void SwRect::SSize( const Size&  rNew  )
 {
     m_Size = rNew;
 }
-inline void SwRect::SSize( const long nNewHeight, const long nNewWidth )
+inline void SwRect::SSize( const tools::Long nNewHeight, const tools::Long nNewWidth )
 {
     m_Size.setWidth(nNewWidth);
     m_Size.setHeight(nNewHeight);
 }
-inline void SwRect::Width(  long nNew )
+inline void SwRect::Width(  tools::Long nNew )
 {
     m_Size.setWidth(nNew);
 }
-inline void SwRect::Height( long nNew )
+inline void SwRect::Height( tools::Long nNew )
 {
     m_Size.setHeight(nNew);
 }
-inline void SwRect::Left( const long nLeft )
+inline void SwRect::Left( const tools::Long nLeft )
 {
     m_Size.AdjustWidth( m_Point.getX() - nLeft );
     m_Point.setX(nLeft);
 }
-inline void SwRect::Right( const long nRight )
+inline void SwRect::Right( const tools::Long nRight )
 {
     m_Size.setWidth(nRight - m_Point.getX() + 1);
 }
-inline void SwRect::Top( const long nTop )
+inline void SwRect::Top( const tools::Long nTop )
 {
     m_Size.AdjustHeight( m_Point.getY() - nTop );
     m_Point.setY(nTop);
 }
-inline void SwRect::Bottom( const long nBottom )
+inline void SwRect::Bottom( const tools::Long nBottom )
 {
     m_Size.setHeight(nBottom - m_Point.getY() + 1);
 }
@@ -224,27 +224,27 @@ inline const Size  &SwRect::SSize() const
 {
     return m_Size;
 }
-inline long SwRect::Width()  const
+inline tools::Long SwRect::Width()  const
 {
     return m_Size.Width();
 }
-inline long SwRect::Height() const
+inline tools::Long SwRect::Height() const
 {
     return m_Size.Height();
 }
-inline long SwRect::Left()   const
+inline tools::Long SwRect::Left()   const
 {
     return m_Point.X();
 }
-inline long SwRect::Right()  const
+inline tools::Long SwRect::Right()  const
 {
     return m_Size.getWidth() ? m_Point.getX() + m_Size.getWidth() - 1 : m_Point.getX();
 }
-inline long SwRect::Top()    const
+inline tools::Long SwRect::Top()    const
 {
     return m_Point.Y();
 }
-inline long SwRect::Bottom() const
+inline tools::Long SwRect::Bottom() const
 {
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
@@ -322,7 +322,7 @@ inline SwRect::SwRect( const Point& rLT, const Point& rRB ) :
     m_Size( rRB.X() - rLT.X() + 1, rRB.Y() - rLT.Y() + 1 )
 {
 }
-inline SwRect::SwRect( long X, long Y, long W, long H ) :
+inline SwRect::SwRect( tools::Long X, tools::Long Y, tools::Long W, tools::Long H ) :
     m_Point( X, Y ),
     m_Size( W, H )
 {

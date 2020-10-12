@@ -24,7 +24,7 @@
 
 class SdrOnePositionXItem: public SdrMetricItem {
 public:
-    SdrOnePositionXItem(long nPosX=0): SdrMetricItem(SDRATTR_ONEPOSITIONX,nPosX) {}
+    SdrOnePositionXItem(tools::Long nPosX=0): SdrMetricItem(SDRATTR_ONEPOSITIONX,nPosX) {}
     virtual SdrOnePositionXItem* Clone(SfxItemPool*) const override
     {
         return new SdrOnePositionXItem(*this);
@@ -33,7 +33,7 @@ public:
 
 class SdrOnePositionYItem: public SdrMetricItem {
 public:
-    SdrOnePositionYItem(long nPosY=0): SdrMetricItem(SDRATTR_ONEPOSITIONY,nPosY) {}
+    SdrOnePositionYItem(tools::Long nPosY=0): SdrMetricItem(SDRATTR_ONEPOSITIONY,nPosY) {}
     virtual SdrOnePositionYItem* Clone(SfxItemPool*) const override
     {
         return new SdrOnePositionYItem(*this);
@@ -42,7 +42,7 @@ public:
 
 class SdrOneSizeWidthItem: public SdrMetricItem {
 public:
-    SdrOneSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_ONESIZEWIDTH,nWdt)  {}
+    SdrOneSizeWidthItem(tools::Long nWdt=0): SdrMetricItem(SDRATTR_ONESIZEWIDTH,nWdt)  {}
     virtual SdrOneSizeWidthItem* Clone(SfxItemPool*) const override
     {
         return new SdrOneSizeWidthItem(*this);
@@ -51,7 +51,7 @@ public:
 
 class SdrOneSizeHeightItem: public SdrMetricItem {
 public:
-    SdrOneSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_ONESIZEHEIGHT,nHgt)  {}
+    SdrOneSizeHeightItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_ONESIZEHEIGHT,nHgt)  {}
     virtual SdrOneSizeHeightItem* Clone(SfxItemPool*) const override
     {
         return new SdrOneSizeHeightItem(*this);

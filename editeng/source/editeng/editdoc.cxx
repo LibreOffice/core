@@ -493,7 +493,7 @@ ExtraPortionInfo::~ExtraPortionInfo()
 {
 }
 
-void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen )
+void ExtraPortionInfo::SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nLen )
 {
     if (pDXArray)
     {
@@ -752,9 +752,9 @@ void ParaPortionList::Reset()
     maPortions.clear();
 }
 
-long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
+tools::Long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
 {
-    long nHeight = 0;
+    tools::Long nHeight = 0;
     for (const auto & rPortion : maPortions)
     {
         const ParaPortion* pTmpPortion = rPortion.get();
@@ -766,9 +766,9 @@ long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
     return nHeight;
 }
 
-sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
+sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
 {
-    long nY = 0;
+    tools::Long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
         nY += maPortions[i]->GetHeight(); // should also be correct even in bVisible!
@@ -999,7 +999,7 @@ void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH )
     nTxtHeight = ( nTxtH ? nTxtH : nH );
 }
 
-void EditLine::SetStartPosX( long start )
+void EditLine::SetStartPosX( tools::Long start )
 {
     if (start > 0)
         nStartPosX = start;

@@ -1381,10 +1381,10 @@ void SdrObjCustomShape::AdaptTextMinSize()
 
         if(GetTextBounds(aTextBound))
         {
-            const long nHDist(GetTextLeftDistance() + GetTextRightDistance());
-            const long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
-            const long nTWdt(std::max(long(0), static_cast<long>(aTextBound.GetWidth() - 1 - nHDist)));
-            const long nTHgt(std::max(long(0), static_cast<long>(aTextBound.GetHeight() - 1 - nVDist)));
+            const tools::Long nHDist(GetTextLeftDistance() + GetTextRightDistance());
+            const tools::Long nVDist(GetTextUpperDistance() + GetTextLowerDistance());
+            const tools::Long nTWdt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetWidth() - 1 - nHDist)));
+            const tools::Long nTHgt(std::max(tools::Long(0), static_cast<tools::Long>(aTextBound.GetHeight() - 1 - nVDist)));
 
             aSet.Put(makeSdrTextMinFrameWidthItem(nTWdt));
             aSet.Put(makeSdrTextMinFrameHeightItem(nTHgt));
@@ -1528,7 +1528,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::NbcRotate( const Point& rRef, long nAngle, double sn, double cs )
+void SdrObjCustomShape::NbcRotate( const Point& rRef, tools::Long nAngle, double sn, double cs )
 {
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
@@ -1545,7 +1545,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nAngle, double sn, do
     aGeo.nRotationAngle = 0;                                             // resetting aGeo data
     aGeo.RecalcSinCos();
 
-    long nW = static_cast<long>( fObjectRotation * 100 );                      // applying our object rotation
+    tools::Long nW = static_cast<tools::Long>( fObjectRotation * 100 );                      // applying our object rotation
     if ( bMirroredX )
         nW = 36000 - nW;
     if ( bMirroredY )
@@ -1578,8 +1578,8 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     // TTTT: Fix for old mirroring, can be removed again in aw080
     // storing horizontal and vertical flipping without modifying the rotate angle
     // decompose other flipping to rotation and MirrorX.
-    long ndx = rRef2.X()-rRef1.X();
-    long ndy = rRef2.Y()-rRef1.Y();
+    tools::Long ndx = rRef2.X()-rRef1.X();
+    tools::Long ndy = rRef2.Y()-rRef1.Y();
 
     if(!ndx) // MirroredX
     {
@@ -1601,7 +1601,7 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
             SdrTextObj::NbcMirror( rRef1, rRef2 );
 
             // update fObjectRotation
-            long nTextObjRotation = aGeo.nRotationAngle;
+            tools::Long nTextObjRotation = aGeo.nRotationAngle;
             double fAngle = nTextObjRotation;
 
             fAngle /= 100.0;
@@ -1620,18 +1620,18 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::Shear( const Point& rRef, long nAngle, double tn, bool bVShear )
+void SdrObjCustomShape::Shear( const Point& rRef, tools::Long nAngle, double tn, bool bVShear )
 {
     SdrTextObj::Shear( rRef, nAngle, tn, bVShear );
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::NbcShear( const Point& rRef, long nAngle, double tn, bool bVShear )
+void SdrObjCustomShape::NbcShear( const Point& rRef, tools::Long nAngle, double tn, bool bVShear )
 {
     // TTTT: Fix for old mirroring, can be removed again in aw080
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
 
     // updating fObjectRotation
-    long nTextObjRotation = aGeo.nRotationAngle;
+    tools::Long nTextObjRotation = aGeo.nRotationAngle;
     double fAngle = nTextObjRotation;
     fAngle /= 100.0;
     if (IsMirroredX())
@@ -1719,7 +1719,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
 
-    long nShearAngle = aGeo.nShearAngle;
+    tools::Long nShearAngle = aGeo.nShearAngle;
     double fTan = aGeo.nTan;
 
     if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
@@ -2229,8 +2229,8 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
         if ( bWdtGrow || bHgtGrow )
         {
             tools::Rectangle aR0(rR);
-            long nHgt=0,nMinHgt=0,nMaxHgt=0;
-            long nWdt=0,nMinWdt=0,nMaxWdt=0;
+            tools::Long nHgt=0,nMinHgt=0,nMaxHgt=0;
+            tools::Long nWdt=0,nMinWdt=0,nMaxWdt=0;
             Size aSiz(rR.GetSize()); aSiz.AdjustWidth( -1 ); aSiz.AdjustHeight( -1 );
             Size aMaxSiz(100000,100000);
             Size aTmpSiz(getSdrModelFromSdrObject().GetMaxObjSize());
@@ -2252,8 +2252,8 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                 if (nMinHgt<=0) nMinHgt=1;
                 aSiz.setHeight(nMaxHgt );
             }
-            long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-            long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
+            tools::Long nHDist=GetTextLeftDistance()+GetTextRightDistance();
+            tools::Long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
             aSiz.AdjustWidth( -nHDist );
             aSiz.AdjustHeight( -nVDist );
             if ( aSiz.Width() < 2 )
@@ -2319,8 +2319,8 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
             nHgt+=nVDist;
             if ( nHgt < 1 )
                 nHgt = 1; // nVDist may also be negative
-            long nWdtGrow = nWdt-(rR.Right()-rR.Left());
-            long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
+            tools::Long nWdtGrow = nWdt-(rR.Right()-rR.Left());
+            tools::Long nHgtGrow = nHgt-(rR.Bottom()-rR.Top());
             if ( nWdtGrow == 0 )
                 bWdtGrow = false;
             if ( nHgtGrow == 0 )
@@ -2336,7 +2336,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                         rR.AdjustLeft( -nWdtGrow );
                     else
                     {
-                        long nWdtGrow2=nWdtGrow/2;
+                        tools::Long nWdtGrow2=nWdtGrow/2;
                         rR.AdjustLeft( -nWdtGrow2 );
                         rR.SetRight(rR.Left()+nWdt );
                     }
@@ -2350,7 +2350,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool
                         rR.AdjustTop( -nHgtGrow );
                     else
                     {
-                        long nHgtGrow2=nHgtGrow/2;
+                        tools::Long nHgtGrow2=nHgtGrow/2;
                         rR.AdjustTop( -nHgtGrow2 );
                         rR.SetBottom(rR.Top()+nHgt );
                     }
@@ -2495,10 +2495,10 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
     SdrTextHorzAdjust eHAdj(GetTextHorizontalAdjust());
     SdrTextVertAdjust eVAdj(GetTextVerticalAdjust());
 
-    long nMinWdt = GetMinTextFrameWidth();
-    long nMinHgt = GetMinTextFrameHeight();
-    long nMaxWdt = GetMaxTextFrameWidth();
-    long nMaxHgt = GetMaxTextFrameHeight();
+    tools::Long nMinWdt = GetMinTextFrameWidth();
+    tools::Long nMinHgt = GetMinTextFrameHeight();
+    tools::Long nMaxWdt = GetMaxTextFrameWidth();
+    tools::Long nMaxHgt = GetMaxTextFrameHeight();
     if (nMinWdt<1) nMinWdt=1;
     if (nMinHgt<1) nMinHgt=1;
     if ( nMaxWdt == 0 || nMaxWdt > aMaxSiz.Width() )
@@ -2529,14 +2529,14 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools
     {
         *pViewMin = aViewInit;
 
-        long nXFree = aAnkSiz.Width() - aPaperMin.Width();
+        tools::Long nXFree = aAnkSiz.Width() - aPaperMin.Width();
         if ( eHAdj == SDRTEXTHORZADJUST_LEFT )
             pViewMin->AdjustRight( -nXFree );
         else if ( eHAdj == SDRTEXTHORZADJUST_RIGHT )
             pViewMin->AdjustLeft(nXFree );
         else { pViewMin->AdjustLeft(nXFree / 2 ); pViewMin->SetRight( pViewMin->Left() + aPaperMin.Width() ); }
 
-        long nYFree = aAnkSiz.Height() - aPaperMin.Height();
+        tools::Long nYFree = aAnkSiz.Height() - aPaperMin.Height();
         if ( eVAdj == SDRTEXTVERTADJUST_TOP )
             pViewMin->AdjustBottom( -nYFree );
         else if ( eVAdj == SDRTEXTVERTADJUST_BOTTOM )
@@ -2605,8 +2605,8 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     sal_Int32 nMaxAutoPaperWidth = 1000000;
     sal_Int32 nMaxAutoPaperHeight= 1000000;
 
-    long nAnkWdt=aAnkRect.GetWidth();
-    long nAnkHgt=aAnkRect.GetHeight();
+    tools::Long nAnkWdt=aAnkRect.GetWidth();
+    tools::Long nAnkHgt=aAnkRect.GetHeight();
 
     if (GetMergedItem(SDRATTR_TEXT_WORDWRAP).GetValue())
     {
@@ -2700,7 +2700,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
 
     if (eHAdj==SDRTEXTHORZADJUST_CENTER || eHAdj==SDRTEXTHORZADJUST_RIGHT)
     {
-        long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
+        tools::Long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
         if (eHAdj==SDRTEXTHORZADJUST_CENTER)
             aTextPos.AdjustX(nFreeWdt/2 );
         if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
@@ -2708,7 +2708,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& 
     }
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
-        long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
+        tools::Long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
             aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)

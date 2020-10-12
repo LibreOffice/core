@@ -65,7 +65,7 @@ struct WW8SwFlyPara
     sal_uInt8 nXBind, nYBind;        // bound relative to what
 
                 // part 2: changes found during reading
-    long nNewNetWidth;
+    tools::Long nNewNetWidth;
     std::unique_ptr<SwPosition> xMainTextPos;   // to return to main text after apo
     sal_uInt16 nLineSpace;          // line space in tw for graf apos
     bool bAutoWidth;
@@ -80,7 +80,7 @@ struct WW8SwFlyPara
                   const sal_Int32 nIniFlyDx,
                   const sal_Int32 nIniFlyDy );
 
-    void BoxUpWidth( long nWidth );
+    void BoxUpWidth( tools::Long nWidth );
     std::unique_ptr<SwWW8FltAnchorStack> xOldAnchorStck;
 };
 
@@ -141,7 +141,7 @@ public:
     WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
         const WW8SwFlyPara* pFS, bool bGraf);
     WW8FlySet(SwWW8ImplReader& rReader, const SwPaM* pPaM, const WW8_PIC& rPic,
-        long nWidth, long nHeight);
+        tools::Long nWidth, tools::Long nHeight);
 };
 
 // Gets filled in WW8TabDesc::MergeCells().

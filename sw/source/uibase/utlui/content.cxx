@@ -172,7 +172,7 @@ namespace
 
 // Content, contains names and reference at the content type.
 
-SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos) :
+SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos) :
     SwTypeNumber(CTYPE_CNT),
     pParent(pCnt),
     sContentName(rName),
@@ -807,7 +807,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     if (!pTemp->GetName().isEmpty())
                     {
                         SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
-                        long nYPos = 0;
+                        tools::Long nYPos = 0;
                         const Point aNullPt;
                         if(pContact && pContact->GetFormat())
                             nYPos = pContact->GetFormat()->FindLayoutRect(false, &aNullPt).Top();

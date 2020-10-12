@@ -488,7 +488,7 @@ void ScFiltersTest::testTdf79998()
     xDocSh->DoClose();
 }
 
-static void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, const tools::Rectangle& aRect, const ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
+static void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, const tools::Rectangle& aRect, const ScDrawObjData& aAnchor, tools::Long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);

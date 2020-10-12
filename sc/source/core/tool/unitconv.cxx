@@ -56,7 +56,7 @@ ScUnitConverter::ScUnitConverter()
     // empty node name -> use the config item's path itself
     const Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( "" );
 
-    long nNodeCount = aNodeNames.getLength();
+    tools::Long nNodeCount = aNodeNames.getLength();
     if ( !nNodeCount )
         return;
 
@@ -64,7 +64,7 @@ ScUnitConverter::ScUnitConverter()
     OUString* pValNameArray = aValNames.getArray();
     const OUString sSlash('/');
 
-    long nIndex = 0;
+    tools::Long nIndex = 0;
     for (const OUString& rNode : aNodeNames)
     {
         OUString sPrefix = rNode + sSlash;
@@ -86,7 +86,7 @@ ScUnitConverter::ScUnitConverter()
     double fFactor = 0;
 
     nIndex = 0;
-    for (long i=0; i<nNodeCount; i++)
+    for (tools::Long i=0; i<nNodeCount; i++)
     {
         pProperties[nIndex++] >>= sFromUnit;
         pProperties[nIndex++] >>= sToUnit;

@@ -30,7 +30,7 @@
  */
 class SVXCORE_DLLPUBLIC SdrCaptionLineLenItem: public SdrMetricItem {
 public:
-    SdrCaptionLineLenItem(long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
+    SdrCaptionLineLenItem(tools::Long nLineLen=0): SdrMetricItem(SDRATTR_CAPTIONLINELEN,nLineLen) {}
     virtual ~SdrCaptionLineLenItem() override;
     virtual SdrCaptionLineLenItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

@@ -76,12 +76,12 @@ void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
         if ( fX < fY )
         {
             rSize.setWidth( aPageSize.Width() );
-            rSize.setHeight( static_cast<long>( rSize.Height() * fX ) );
+            rSize.setHeight( static_cast<tools::Long>( rSize.Height() * fX ) );
         }
         else
         {
             rSize.setHeight( aPageSize.Height() );
-            rSize.setWidth( static_cast<long>( rSize.Width() * fY ) );
+            rSize.setWidth( static_cast<tools::Long>( rSize.Width() * fY ) );
         }
 
         if (!rSize.Width())

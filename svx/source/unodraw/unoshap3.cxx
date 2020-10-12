@@ -314,7 +314,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);
             aCam.SetPosAndLookAt(aCamPos, aLookAt);
             aCam.SetFocalLength(fCamFocal / 100.0);
-            aCam.SetDeviceWindow(tools::Rectangle(0, 0, static_cast<long>(fW), static_cast<long>(fH)));
+            aCam.SetDeviceWindow(tools::Rectangle(0, 0, static_cast<tools::Long>(fW), static_cast<tools::Long>(fH)));
 
             // set at scene
             pScene->SetCamera(aCam);

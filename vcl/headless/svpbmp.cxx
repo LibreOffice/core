@@ -101,7 +101,7 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     pDIB->mnFormat |= ScanlineFormat::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
-    long nScanlineBase;
+    tools::Long nScanlineBase;
     bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
     if (bFail)
     {

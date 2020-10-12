@@ -146,14 +146,14 @@ public:
     /** Returns the Calc column width (twips) for the passed Excel width.
      *  Excel Column width is stored as 1/256th of a character.
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16       GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth );
+    static sal_uInt16       GetScColumnWidth( sal_uInt16 nXclWidth, tools::Long nScCharWidth );
     /** Returns the Excel column width for the passed Calc width (twips).
         @param nScCharWidth  Width of the '0' character in Calc (twips). */
-    static sal_uInt16   GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth );
+    static sal_uInt16   GetXclColumnWidth( sal_uInt16 nScWidth, tools::Long nScCharWidth );
 
     /** Returns a correction value to convert column widths from/to default column widths.
         @param nXclDefFontHeight  Excel height of application default font. */
-    static double       GetXclDefColWidthCorrection( long nXclDefFontHeight );
+    static double       GetXclDefColWidthCorrection( tools::Long nXclDefFontHeight );
 
     // formatting -------------------------------------------------------------
 

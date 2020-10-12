@@ -31,7 +31,7 @@
 #include <tabview.hxx>
 #include <columnspanset.hxx>
 
-static OUString lcl_MetricString( long nTwips, const OUString& rText )
+static OUString lcl_MetricString( tools::Long nTwips, const OUString& rText )
 {
     if ( nTwips <= 0 )
         return ScResId(STR_TIP_HIDE);
@@ -187,7 +187,7 @@ bool ScColBar::ResizeAllowed() const
     return !rViewData.HasEditView( rViewData.GetActivePart() );
 }
 
-void ScColBar::DrawInvert( long nDragPosP )
+void ScColBar::DrawInvert( tools::Long nDragPosP )
 {
     tools::Rectangle aRect( nDragPosP,0, nDragPosP+HDR_SLIDERSIZE-1,GetOutputSizePixel().Width()-1 );
     PaintImmediately();
@@ -196,9 +196,9 @@ void ScColBar::DrawInvert( long nDragPosP )
     pTabView->GetViewData().GetView()->InvertVertical(meWhich,nDragPosP);
 }
 
-OUString ScColBar::GetDragHelp( long nVal )
+OUString ScColBar::GetDragHelp( tools::Long nVal )
 {
-    long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTX() );
+    tools::Long nTwips = static_cast<tools::Long>( nVal / pTabView->GetViewData().GetPPTX() );
     return lcl_MetricString( nTwips, ScResId(STR_TIP_WIDTH) );
 }
 
@@ -347,7 +347,7 @@ bool ScRowBar::ResizeAllowed() const
     return !rViewData.HasEditView( rViewData.GetActivePart() );
 }
 
-void ScRowBar::DrawInvert( long nDragPosP )
+void ScRowBar::DrawInvert( tools::Long nDragPosP )
 {
     tools::Rectangle aRect( 0,nDragPosP, GetOutputSizePixel().Width()-1,nDragPosP+HDR_SLIDERSIZE-1 );
     PaintImmediately();
@@ -356,9 +356,9 @@ void ScRowBar::DrawInvert( long nDragPosP )
     pTabView->GetViewData().GetView()->InvertHorizontal(meWhich,nDragPosP);
 }
 
-OUString ScRowBar::GetDragHelp( long nVal )
+OUString ScRowBar::GetDragHelp( tools::Long nVal )
 {
-    long nTwips = static_cast<long>( nVal / pTabView->GetViewData().GetPPTY() );
+    tools::Long nTwips = static_cast<tools::Long>( nVal / pTabView->GetViewData().GetPPTY() );
     return lcl_MetricString( nTwips, ScResId(STR_TIP_HEIGHT) );
 }
 

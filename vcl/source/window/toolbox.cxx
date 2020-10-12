@@ -176,8 +176,8 @@ void ToolBox::ImplUpdateDragArea() const
     }
 }
 
-void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
-                              long& rRight, long& rBottom ) const
+void ToolBox::ImplCalcBorder( WindowAlign eAlign, tools::Long& rLeft, tools::Long& rTop,
+                              tools::Long& rRight, tools::Long& rBottom ) const
 {
     if( ImplIsFloatingMode() || !(mnWinStyle & WB_BORDER) )
     {
@@ -331,7 +331,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
     // full window height is used when docked (single line)
     if (ImplIsFloatingMode())
     {
-        long nLineSize;
+        tools::Long nLineSize;
         if (mbHorz)
         {
             nLineSize = mnMaxItemHeight;
@@ -347,7 +347,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
         }
     }
 
-    long nLeft, nTop, nRight, nBottom;
+    tools::Long nLeft, nTop, nRight, nBottom;
     ImplCalcBorder(meAlign, nLeft, nTop, nRight, nBottom);
 
     Size aTopLineSz(aLineSz);
@@ -391,7 +391,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
 
     if (mbHorz)
     {
-        long y = 0;
+        tools::Long y = 0;
 
         rRenderContext.DrawGradient(tools::Rectangle(0, y, aTopLineSz.Width(), y + aTopLineSz.Height()), g);
         y += aTopLineSz.Height();
@@ -406,7 +406,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
     }
     else
     {
-        long x = 0;
+        tools::Long x = 0;
 
         rRenderContext.DrawGradient(tools::Rectangle(x, 0, x + aTopLineSz.Width(), aTopLineSz.Height()), g);
         x += aTopLineSz.Width();
@@ -546,8 +546,8 @@ void ToolBox::ImplErase(vcl::RenderContext& rRenderContext, const tools::Rectang
 void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    long nDX = mnDX;
-    long nDY = mnDY;
+    tools::Long nDX = mnDX;
+    tools::Long nDY = mnDY;
 
     ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper(this);
 
@@ -629,11 +629,11 @@ const ImplToolItem *ToolBox::ImplGetFirstClippedItem() const
 
 Size ToolBox::ImplCalcSize( ImplToolItems::size_type nCalcLines, sal_uInt16 nCalcMode )
 {
-    long            nMax;
-    long            nLeft = 0;
-    long            nTop = 0;
-    long            nRight = 0;
-    long            nBottom = 0;
+    tools::Long            nMax;
+    tools::Long            nLeft = 0;
+    tools::Long            nTop = 0;
+    tools::Long            nRight = 0;
+    tools::Long            nBottom = 0;
     Size            aSize;
     WindowAlign     eOldAlign = meAlign;
     bool            bOldHorz = mbHorz;
@@ -749,7 +749,7 @@ void ToolBox::ImplCalcFloatSizes()
         return;
 
     // calculate the minimal size, i.e. where the biggest item just fits
-    long            nCalcSize = 0;
+    tools::Long            nCalcSize = 0;
 
     for (auto const& item : mpData->m_aItems)
     {
@@ -757,7 +757,7 @@ void ToolBox::ImplCalcFloatSizes()
         {
             if ( item.mpWindow )
             {
-                long nTempSize = item.mpWindow->GetSizePixel().Width();
+                tools::Long nTempSize = item.mpWindow->GetSizePixel().Width();
                 if ( nTempSize > nCalcSize )
                     nCalcSize = nTempSize;
             }
@@ -770,12 +770,12 @@ void ToolBox::ImplCalcFloatSizes()
     }
 
     // calc an upper bound for ImplCalcBreaks below
-    long upperBoundWidth = nCalcSize * mpData->m_aItems.size();
+    tools::Long upperBoundWidth = nCalcSize * mpData->m_aItems.size();
 
     ImplToolItems::size_type nLines;
     ImplToolItems::size_type nCalcLines;
     ImplToolItems::size_type nTempLines;
-    long    nMaxLineWidth;
+    tools::Long    nMaxLineWidth;
     nCalcLines = ImplCalcBreaks( nCalcSize, &nMaxLineWidth, true );
 
     maFloatSizes.reserve( nCalcLines );
@@ -783,7 +783,7 @@ void ToolBox::ImplCalcFloatSizes()
     nTempLines = nLines = nCalcLines;
     while ( nLines )
     {
-        long nHeight = ImplCalcSize( nTempLines, TB_CALCMODE_FLOAT ).Height();
+        tools::Long nHeight = ImplCalcSize( nTempLines, TB_CALCMODE_FLOAT ).Height();
 
         ImplToolSize aSize;
         aSize.mnWidth  = nMaxLineWidth+(TB_BORDER_OFFSET1*2);
@@ -868,9 +868,9 @@ void ToolBox::ImplSetMinMaxFloatSize()
     }
 }
 
-ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( long nToolSize ) const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( tools::Long nToolSize ) const
 {
-    long nLineHeight;
+    tools::Long nLineHeight;
 
     if ( mbHorz )
     {
@@ -892,7 +892,7 @@ ToolBox::ImplToolItems::size_type ToolBox::ImplCalcLines( long nToolSize ) const
     }
 
     // #i91917# always report at least one line
-    long nLines = nToolSize/nLineHeight;
+    tools::Long nLines = nToolSize/nLineHeight;
     if( nLines < 1 )
         nLines = 1;
 
@@ -934,10 +934,10 @@ sal_uInt16 ToolBox::ImplTestLineSize( const Point& rPos ) const
 void ToolBox::ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uInt16 nLineMode )
 {
     bool    bHorz;
-    long    nOneLineSize;
-    long    nCurSize;
-    long    nMaxSize;
-    long    nSize;
+    tools::Long    nOneLineSize;
+    tools::Long    nCurSize;
+    tools::Long    nMaxSize;
+    tools::Long    nSize;
     Size    aSize;
 
     if ( nLineMode & DOCK_LINERIGHT )
@@ -1339,7 +1339,7 @@ ImplToolItem* ToolBox::ImplGetItem( sal_uInt16 nItemId ) const
     return nullptr;
 }
 
-static void ImplAddButtonBorder( long &rWidth, long& rHeight, bool bNativeButtons )
+static void ImplAddButtonBorder( tools::Long &rWidth, tools::Long& rHeight, bool bNativeButtons )
 {
     rWidth += SMALLBUTTON_HSIZE;
     rHeight += SMALLBUTTON_VSIZE;
@@ -1363,13 +1363,13 @@ bool ToolBox::ImplCalcItem()
     OutputDevice *pDefault = Application::GetDefaultDevice();
     float fScaleFactor = pDefault ? pDefault->GetDPIScaleFactor() : 1.0;
 
-    long            nDefWidth;
-    long            nDefHeight;
-    long            nMaxWidth = 0;
-    long            nMaxHeight = 0;
-    long            nMinWidth   = 6;
-    long            nMinHeight  = 6;
-    long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH * fScaleFactor;
+    tools::Long            nDefWidth;
+    tools::Long            nDefHeight;
+    tools::Long            nMaxWidth = 0;
+    tools::Long            nMaxHeight = 0;
+    tools::Long            nMinWidth   = 6;
+    tools::Long            nMinHeight  = 6;
+    tools::Long            nDropDownArrowWidth = TB_DROPDOWNARROWWIDTH * fScaleFactor;
 #ifdef IOS
     nDropDownArrowWidth *= 3;
 #endif
@@ -1540,7 +1540,7 @@ bool ToolBox::ImplCalcItem()
                 // if required, take window height into consideration
                 if ( item.mpWindow )
                 {
-                    long nHeight = item.mpWindow->GetSizePixel().Height();
+                    tools::Long nHeight = item.mpWindow->GetSizePixel().Height();
                     if ( nHeight > mnWinHeight )
                         mnWinHeight = nHeight;
                 }
@@ -1556,7 +1556,7 @@ bool ToolBox::ImplCalcItem()
                 // -> swap width and height
                 if( item.mbVisibleText && !mbHorz )
                 {
-                    long tmp = item.maItemSize.Width();
+                    tools::Long tmp = item.maItemSize.Width();
                     item.maItemSize.setWidth( item.maItemSize.Height() );
                     item.maItemSize.setHeight( tmp );
 
@@ -1574,19 +1574,19 @@ bool ToolBox::ImplCalcItem()
             if ( item.meType == ToolBoxItemType::BUTTON || item.meType == ToolBoxItemType::SPACE )
             {
                 // add borders
-                long w = item.maItemSize.Width();
-                long h = item.maItemSize.Height();
+                tools::Long w = item.maItemSize.Width();
+                tools::Long h = item.maItemSize.Height();
                 ImplAddButtonBorder( w, h, mpData->mbNativeButtons );
                 item.maItemSize.setWidth(w);
                 item.maItemSize.setHeight(h);
 
                 if( item.meType == ToolBoxItemType::BUTTON )
                 {
-                    long nMinW = std::max(nMinWidth, item.maMinimalItemSize.Width());
-                    long nMinH = std::max(nMinHeight, item.maMinimalItemSize.Height());
+                    tools::Long nMinW = std::max(nMinWidth, item.maMinimalItemSize.Width());
+                    tools::Long nMinH = std::max(nMinHeight, item.maMinimalItemSize.Height());
 
-                    long nGrowContentWidth = 0;
-                    long nGrowContentHeight = 0;
+                    tools::Long nGrowContentWidth = 0;
+                    tools::Long nGrowContentHeight = 0;
 
                     if( item.maItemSize.Width() < nMinW )
                     {
@@ -1628,8 +1628,8 @@ bool ToolBox::ImplCalcItem()
         // as this is used for alignment of multiple toolbars
         // it is only required for docked toolbars
 
-        long nFixedWidth = nDefWidth+nDropDownArrowWidth;
-        long nFixedHeight = nDefHeight;
+        tools::Long nFixedWidth = nDefWidth+nDropDownArrowWidth;
+        tools::Long nFixedHeight = nDefHeight;
         ImplAddButtonBorder( nFixedWidth, nFixedHeight, mpData->mbNativeButtons );
 
         if( mbHorz )
@@ -1653,19 +1653,19 @@ bool ToolBox::ImplCalcItem()
         return false;
 }
 
-ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const
+ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const
 {
     sal_uLong           nLineStart = 0;
     sal_uLong           nGroupStart = 0;
-    long            nLineWidth = 0;
-    long            nCurWidth;
-    long            nLastGroupLineWidth = 0;
-    long            nMaxLineWidth = 0;
+    tools::Long            nLineWidth = 0;
+    tools::Long            nCurWidth;
+    tools::Long            nLastGroupLineWidth = 0;
+    tools::Long            nMaxLineWidth = 0;
     ImplToolItems::size_type nLines = 1;
     bool            bWindow;
     bool            bBreak = false;
-    long            nWidthTotal = nWidth;
-    long nMenuWidth = 0;
+    tools::Long            nWidthTotal = nWidth;
+    tools::Long nMenuWidth = 0;
 
     // when docked the menubutton will be in the first line
     if( IsMenuEnabled() && !ImplIsFloatingMode() )
@@ -1701,7 +1701,7 @@ ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( long nWidth, long* pM
 
                 if ( it->mpWindow && bCalcHorz )
                 {
-                    long nWinItemWidth = it->mpWindow->GetSizePixel().Width();
+                    tools::Long nWinItemWidth = it->mpWindow->GetSizePixel().Width();
                     if ( !mbScroll || (nWinItemWidth <= nWidthTotal) )
                     {
                         nCurWidth = nWinItemWidth;
@@ -1791,7 +1791,7 @@ ToolBox::ImplToolItems::size_type ToolBox::ImplCalcBreaks( long nWidth, long* pM
         if( ImplIsFloatingMode() && !ImplIsInPopupMode() )
         {
             // leave enough space to display buttons in the decoration
-            long aMinWidth = 2 * GetSettings().GetStyleSettings().GetFloatTitleHeight();
+            tools::Long aMinWidth = 2 * GetSettings().GetStyleSettings().GetFloatTitleHeight();
             if( nMaxLineWidth < aMinWidth )
                 nMaxLineWidth = aMinWidth;
         }
@@ -1822,11 +1822,11 @@ Size ToolBox::ImplGetOptimalFloatingSize()
 
     // try to preserve current width
 
-    long nLineHeight = std::max( mnWinHeight, mnMaxItemHeight );
+    tools::Long nLineHeight = std::max( mnWinHeight, mnMaxItemHeight );
     int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder;
     int nBorderY = 2*TB_BORDER_OFFSET2 + mnTopBorder + mnBottomBorder;
     Size aSz( aCurrentSize );
-    long maxX;
+    tools::Long maxX;
     ImplToolItems::size_type nLines = ImplCalcBreaks( aSz.Width()-nBorderX, &maxX, mbHorz );
 
     ImplToolItems::size_type manyLines = 1000;
@@ -1849,11 +1849,11 @@ Size ToolBox::ImplGetOptimalFloatingSize()
         return aSize2;
 
     // set the size with the smallest delta as the current size
-    long dx1 = std::abs( mnDX - aSize1.Width() );
-    long dy1 = std::abs( mnDY - aSize1.Height() );
+    tools::Long dx1 = std::abs( mnDX - aSize1.Width() );
+    tools::Long dy1 = std::abs( mnDY - aSize1.Height() );
 
-    long dx2 = std::abs( mnDX - aSize2.Width() );
-    long dy2 = std::abs( mnDY - aSize2.Height() );
+    tools::Long dx2 = std::abs( mnDX - aSize2.Width() );
+    tools::Long dy2 = std::abs( mnDY - aSize2.Height() );
 
     if( dx1*dy1 < dx2*dy2 )
         aCurrentSize = aSize1;
@@ -1899,10 +1899,10 @@ void ToolBox::ImplFormat( bool bResize )
 
     // recalculate positions and sizes
     tools::Rectangle       aEmptyRect;
-    long            nLineSize;
-    long            nLeft;
-    long            nTop;
-    long            nMax;   // width of layoutarea in pixels
+    tools::Long            nLineSize;
+    tools::Long            nLeft;
+    tools::Long            nTop;
+    tools::Long            nMax;   // width of layoutarea in pixels
     ImplToolItems::size_type nFormatLine;
     bool            bMustFullPaint;
 
@@ -1935,7 +1935,7 @@ void ToolBox::ImplFormat( bool bResize )
     // Horizontal
     if ( mbHorz )
     {
-        long nBottom;
+        tools::Long nBottom;
         // nLineSize: height of a single line, will fit highest item
         nLineSize = mnMaxItemHeight;
 
@@ -1973,14 +1973,14 @@ void ToolBox::ImplFormat( bool bResize )
         // we have to center all items in the window height
         if( IsMenuEnabled() && !ImplIsFloatingMode() )
         {
-            long  nWinHeight = mnDY - nTop - nBottom;
+            tools::Long  nWinHeight = mnDY - nTop - nBottom;
             if( nWinHeight > nLineSize )
                 nLineSize = nWinHeight;
         }
     }
     else
     {
-        long nRight;
+        tools::Long nRight;
         nLineSize = mnMaxItemWidth;
 
         if ( mbScroll )
@@ -2012,7 +2012,7 @@ void ToolBox::ImplFormat( bool bResize )
         // we have to center all items in the window height
         if( !ImplIsFloatingMode() && IsMenuEnabled() )
         {
-            long  nWinWidth = mnDX - nLeft - nRight;
+            tools::Long  nWinWidth = mnDX - nLeft - nRight;
             if( nWinWidth > nLineSize )
                 nLineSize = nWinWidth;
         }
@@ -2037,8 +2037,8 @@ void ToolBox::ImplFormat( bool bResize )
     else
     {
         // init start values
-        long nX = nLeft;    // top-left offset
-        long nY = nTop;
+        tools::Long nX = nLeft;    // top-left offset
+        tools::Long nY = nTop;
         nFormatLine = 1;
 
         // save old scroll rectangles and reset them
@@ -2147,7 +2147,7 @@ void ToolBox::ImplFormat( bool bResize )
             else if ( mnCurLine+mnVisLines-1 > mnCurLines )
                 mnCurLine = mnCurLines - (mnVisLines-1);
 
-            long firstItemCenter = 0;
+            tools::Long firstItemCenter = 0;
             for (auto & item : mpData->m_aItems)
             {
                 item.mbShowWindow = false;
@@ -2368,8 +2368,8 @@ static void ImplDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tool
 {
     const Image pImage(StockImage::Yes, CHEVRON);
     Size aImageSize = pImage.GetSizePixel();
-    long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
-    long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
+    tools::Long x = rRect.Left() + (rRect.getWidth() - aImageSize.Width())/2;
+    tools::Long y = rRect.Top() + (rRect.getHeight() - aImageSize.Height())/2;
     DrawImageFlags nImageStyle = DrawImageFlags::NONE;
 
     rRenderContext.DrawImage(Point(x,y), pImage, nImageStyle);
@@ -2394,11 +2394,11 @@ static void ImplDrawDropdownArrow(vcl::RenderContext& rRenderContext, const tool
     tools::Polygon aPoly(4);
 
     // the assumption is, that the width always specifies the size of the expected arrow.
-    const long nMargin = round(2 * rRenderContext.GetDPIScaleFactor());
-    const long nSize = rDropDownRect.getWidth() - 2 * nMargin;
-    const long nHalfSize = (nSize + 1) / 2;
-    const long x = rDropDownRect.Left() + nMargin + (bRotate ? (rDropDownRect.getWidth() - nHalfSize) / 2 : 0);
-    const long y = rDropDownRect.Top() + nMargin + (rDropDownRect.getHeight() - (bRotate ? nSize : nHalfSize)) / 2;
+    const tools::Long nMargin = round(2 * rRenderContext.GetDPIScaleFactor());
+    const tools::Long nSize = rDropDownRect.getWidth() - 2 * nMargin;
+    const tools::Long nHalfSize = (nSize + 1) / 2;
+    const tools::Long x = rDropDownRect.Left() + nMargin + (bRotate ? (rDropDownRect.getWidth() - nHalfSize) / 2 : 0);
+    const tools::Long y = rDropDownRect.Top() + nMargin + (rDropDownRect.getHeight() - (bRotate ? nSize : nHalfSize)) / 2;
 
     aPoly.SetPoint(Point(x, y), 0);
     if (bRotate) // >
@@ -2506,7 +2506,7 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItem
     if (bNativeOk)
         return;
 
-    long nCenterPos, nSlim;
+    tools::Long nCenterPos, nSlim;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
     if (IsHorizontal())
@@ -2590,10 +2590,10 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     /* Compute the button/separator rectangle here, we'll need it for
      * both the buttons and the separators. */
     tools::Rectangle aButtonRect( pItem->maRect.TopLeft(), aBtnSize );
-    long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
-    long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
-    long    nImageOffX  = 0;
-    long    nImageOffY  = 0;
+    tools::Long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
+    tools::Long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
+    tools::Long    nImageOffX  = 0;
+    tools::Long    nImageOffY  = 0;
     DrawButtonFlags nStyle      = DrawButtonFlags::NONE;
 
     // draw separators in flat style only
@@ -2642,8 +2642,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     pItem->DetermineButtonDrawStyle( tmpButtonType, bImage, bText );
 
     // compute output values
-    long    nBtnWidth = aBtnSize.Width()-SMALLBUTTON_HSIZE;
-    long    nBtnHeight = aBtnSize.Height()-SMALLBUTTON_VSIZE;
+    tools::Long    nBtnWidth = aBtnSize.Width()-SMALLBUTTON_HSIZE;
+    tools::Long    nBtnHeight = aBtnSize.Height()-SMALLBUTTON_VSIZE;
     Size    aImageSize;
 
     const bool bDropDown = (pItem->mnBits & ToolBoxItemBits::DROPDOWN) == ToolBoxItemBits::DROPDOWN;
@@ -2705,8 +2705,8 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
     if ( bText )
     {
         const Size aTxtSize(GetCtrlTextWidth(pItem->maText), GetTextHeight());
-        long nTextOffX = nOffX;
-        long nTextOffY = nOffY;
+        tools::Long nTextOffX = nOffX;
+        tools::Long nTextOffY = nOffY;
 
         // rotate text when vertically docked
         vcl::Font aOldFont = rRenderContext.GetFont();
@@ -3505,8 +3505,8 @@ void ToolBox::Resize()
     if( !aSize.Width() && !aSize.Height() )
         return;
 
-    long nOldDX = mnDX;
-    long nOldDY = mnDY;
+    tools::Long nOldDX = mnDX;
+    tools::Long nOldDY = mnDY;
     mnDX = aSize.Width();
     mnDY = aSize.Height();
 

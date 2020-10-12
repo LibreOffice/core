@@ -309,7 +309,7 @@ static bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,co
     return false;       // no valid function name
 }
 
-static void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
+static void lcl_AddRef( ScTokenArray& rArray, tools::Long nStartRow, tools::Long nColCount, tools::Long nRowCount )
 {
     ScComplexRefData aRef;
     aRef.InitRange(ScRange(0,nStartRow,0,nColCount-1,nStartRow+nRowCount-1,0));
@@ -332,19 +332,19 @@ public:
     // the other types methods are here just to reflect the orig code and for
     // completeness.
 
-    void visitElem( long nCol, long nRow, sal_Int16 elem )
+    void visitElem( tools::Long nCol, tools::Long nRow, sal_Int16 elem )
     {
         mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
-    void visitElem( long nCol, long nRow, sal_Int32 elem )
+    void visitElem( tools::Long nCol, tools::Long nRow, sal_Int32 elem )
     {
         mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
-    void visitElem( long nCol, long nRow, const double& elem )
+    void visitElem( tools::Long nCol, tools::Long nRow, const double& elem )
     {
         mpDoc->SetValue( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), 0, elem );
     }
-    void visitElem( long nCol, long nRow, const OUString& elem )
+    void visitElem( tools::Long nCol, tools::Long nRow, const OUString& elem )
     {
         if (!elem.isEmpty())
         {
@@ -353,7 +353,7 @@ public:
             mpDoc->SetString(ScAddress(nCol,nRow,0), elem, &aParam);
         }
     }
-    void visitElem( long nCol, long nRow, const uno::Any& rElement )
+    void visitElem( tools::Long nCol, tools::Long nRow, const uno::Any& rElement )
     {
         uno::TypeClass eElemClass = rElement.getValueTypeClass();
         if ( eElemClass == uno::TypeClass_VOID )
@@ -391,14 +391,14 @@ class SequencesContainer
 {
     uno::Sequence< uno::Sequence< seq > > maSeq;
 
-    long& mrDocRow;
+    tools::Long& mrDocRow;
     bool mbOverflow;
     bool mbArgError;
     ScDocument* mpDoc;
     ScTokenArray& mrTokenArr;
 
 public:
-    SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, long& rDocRow, ScDocument* pDoc ) :
+    SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, tools::Long& rDocRow, ScDocument* pDoc ) :
         mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc ), mrTokenArr( rTokenArr )
     {
         rArg >>= maSeq;
@@ -407,16 +407,16 @@ public:
     void process()
     {
         SimpleVisitor aVisitor(mpDoc);
-        long nStartRow = mrDocRow;
-        long nRowCount = maSeq.getLength();
-        long nMaxColCount = 0;
+        tools::Long nStartRow = mrDocRow;
+        tools::Long nRowCount = maSeq.getLength();
+        tools::Long nMaxColCount = 0;
         for ( const uno::Sequence< seq >& rRow : maSeq )
         {
-            long nColCount = rRow.getLength();
+            tools::Long nColCount = rRow.getLength();
             if ( nColCount > nMaxColCount )
                 nMaxColCount = nColCount;
             const seq* pColArr = rRow.getConstArray();
-            for (long nCol=0; nCol<nColCount; nCol++)
+            for (tools::Long nCol=0; nCol<nColCount; nCol++)
                 if ( nCol <= mpDoc->MaxCol() && mrDocRow <= mpDoc->MaxRow() )
                     aVisitor.visitElem( nCol, mrDocRow, pColArr[ nCol ] );
                 else
@@ -436,7 +436,7 @@ class ArrayOfArrayProc
 {
 public:
 static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
-                                long& rDocRow, bool& rArgErr, bool& rOverflow )
+                                tools::Long& rDocRow, bool& rArgErr, bool& rOverflow )
 {
     SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
     aContainer.process();
@@ -487,13 +487,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
     bool bArgErr = false;
     bool bOverflow = false;
-    long nDocRow = 0;
-    long nArgCount = aArguments.getLength();
+    tools::Long nDocRow = 0;
+    tools::Long nArgCount = aArguments.getLength();
     const uno::Any* pArgArr = aArguments.getConstArray();
 
     svl::SharedStringPool& rSPool = pDoc->GetSharedStringPool();
     aTokenArr.AddOpCode(ocOpen);
-    for (long nPos=0; nPos<nArgCount; nPos++)
+    for (tools::Long nPos=0; nPos<nArgCount; nPos++)
     {
         if ( nPos > 0 )
             aTokenArr.AddOpCode(ocSep);
@@ -557,9 +557,9 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                 {
                     ScRange const & rSrcRange = rRanges[ 0 ];
 
-                    long nStartRow = nDocRow;
-                    long nColCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
-                    long nRowCount = rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + 1;
+                    tools::Long nStartRow = nDocRow;
+                    tools::Long nColCount = rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1;
+                    tools::Long nRowCount = rSrcRange.aEnd.Row() - rSrcRange.aStart.Row() + 1;
 
                     if ( nStartRow + nRowCount > pDoc->GetSheetLimits().GetMaxRowCount() )
                         bOverflow = true;

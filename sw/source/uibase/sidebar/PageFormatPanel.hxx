@@ -89,17 +89,17 @@ private:
     FieldUnit meFUnit;
     MapUnit meUnit;
 
-    long mnPageLeftMargin;
-    long mnPageRightMargin;
-    long mnPageTopMargin;
-    long mnPageBottomMargin;
+    tools::Long mnPageLeftMargin;
+    tools::Long mnPageRightMargin;
+    tools::Long mnPageTopMargin;
+    tools::Long mnPageBottomMargin;
     OUString aCustomEntry;
 
     void Initialize();
     void SetMarginFieldUnit();
     void UpdateMarginBox();
-    void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
-    void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
+    void ExecuteMarginLRChange( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin );
+    void ExecuteMarginULChange( const tools::Long nPageTopMargin, const tools::Long  nPageBottomMargin);
     DECL_LINK(PaperFormatModifyHdl, weld::ComboBox&, void);
     DECL_LINK(PaperSizeModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(PaperModifyMarginHdl, weld::ComboBox&, void );

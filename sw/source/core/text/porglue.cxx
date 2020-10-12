@@ -105,7 +105,7 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const long nPrtGlue )
+void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const tools::Long nPrtGlue )
 {
     auto nPrt = std::min( nPrtGlue, GetPrtGlue() );
     if( 0 < nPrt )

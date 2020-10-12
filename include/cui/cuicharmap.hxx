@@ -47,7 +47,7 @@ class CUI_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController
 private:
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     OUString m_sText;
-    long mnY;
+    tools::Long mnY;
     bool mbCenter;
     vcl::Font m_aFont;
 

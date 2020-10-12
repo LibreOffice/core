@@ -413,7 +413,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
         nNewOffset = static_cast<sal_uInt16>((*pOffset)[nPos2]);
         return ;
     }
-    long nDiff = nNewOffset - nOldOffset;
+    tools::Long nDiff = nNewOffset - nOldOffset;
     if ( nDiff < 0 )
     {
         do
@@ -1299,22 +1299,22 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
             break;
             case HtmlOptionId::WIDTH:
             {
-                pImage->aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+                pImage->aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::HEIGHT:
             {
-                pImage->aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+                pImage->aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::HSPACE:
             {
-                pImage->aSpace.setX( static_cast<long>(rOption.GetNumber()) );
+                pImage->aSpace.setX( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
             case HtmlOptionId::VSPACE:
             {
-                pImage->aSpace.setY( static_cast<long>(rOption.GetNumber()) );
+                pImage->aSpace.setY( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
             default: break;
@@ -1350,7 +1350,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     if (mxActEntry->maImageList.empty())
         return;
 
-    long nWidth = 0;
+    tools::Long nWidth = 0;
     for (const std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
     {
         if ( pI->nDir & nHorizontal )
@@ -2232,8 +2232,8 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
         const SCROW nLastRow = maSize.mnRows - 1;
-        const long nOuterLine = DEF_LINE_WIDTH_2;
-        const long nInnerLine = DEF_LINE_WIDTH_0;
+        const tools::Long nOuterLine = DEF_LINE_WIDTH_2;
+        const tools::Long nInnerLine = DEF_LINE_WIDTH_0;
         SvxBorderLine aOuterLine(nullptr, nOuterLine, SvxBorderLineStyle::SOLID);
         SvxBorderLine aInnerLine(nullptr, nInnerLine, SvxBorderLineStyle::SOLID);
         SvxBoxItem aBorderItem( ATTR_BORDER );

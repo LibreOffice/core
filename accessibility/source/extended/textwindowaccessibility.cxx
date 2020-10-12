@@ -913,8 +913,8 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >(pParagraph->getNumber());
         // XXX  numeric overflow
-    ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< long >(rPoint.X),
-                                            static_cast< long >(rPoint.Y))));
+    ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< tools::Long >(rPoint.X),
+                                            static_cast< tools::Long >(rPoint.Y))));
         // XXX  numeric overflow (2x)
     return aPaM.GetPara() == nNumber ? aPaM.GetIndex() : -1;
         // XXX  numeric overflow

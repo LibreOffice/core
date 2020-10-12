@@ -261,8 +261,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, 
     {
         // Clip only if necessary...
         if ( rStartDocPos.X() || rStartDocPos.Y() ||
-             ( rOutRect.GetHeight() < static_cast<long>(GetTextHeight()) ) ||
-             ( rOutRect.GetWidth() < static_cast<long>(CalcTextWidth()) ) )
+             ( rOutRect.GetHeight() < static_cast<tools::Long>(GetTextHeight()) ) ||
+             ( rOutRect.GetWidth() < static_cast<tools::Long>(CalcTextWidth()) ) )
         {
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
@@ -846,7 +846,7 @@ EditSelection EditEngine::SelectWord(
     return pImpEditEngine->SelectWord(rCurSelection, nWordType);
 }
 
-long EditEngine::GetXPos(
+tools::Long EditEngine::GetXPos(
         const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart) const
 {
     return pImpEditEngine->GetXPos(pParaPortion, pLine, nIndex, bPreferPortionStart);
@@ -1030,10 +1030,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     sal_Int32 nParas = GetParagraphCount();
                     Point aPos;
                     Point aViewStart( pEditView->GetOutputArea().TopLeft() );
-                    long n20 = 40 * pImpEditEngine->nOnePixelInRef;
+                    tools::Long n20 = 40 * pImpEditEngine->nOnePixelInRef;
                     for ( sal_Int32 n = 0; n < nParas; n++ )
                     {
-                        long nH = GetTextHeight( n );
+                        tools::Long nH = GetTextHeight( n );
                         Point P1( aViewStart.X() + n20 + n20*(n%2), aViewStart.Y() + aPos.Y() );
                         Point P2( P1 );
                         P2.AdjustX(n20 );
@@ -1887,7 +1887,7 @@ void EditEngine::SetControlWord( EEControlBits nWord )
     }
     else
     {
-        long nY = 0;
+        tools::Long nY = 0;
         sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
         for ( sal_Int32 n = 0; n < nNodes; n++ )
         {
@@ -1915,10 +1915,10 @@ EEControlBits EditEngine::GetControlWord() const
     return pImpEditEngine->aStatus.GetControlWord();
 }
 
-long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
+tools::Long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
 {
 
-    long nX = 0;
+    tools::Long nX = 0;
     const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nParagraph );
     if ( pPPortion )
     {
@@ -2007,7 +2007,7 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
     // take unrotated positions for calculation here
     Point aDocPos = GetDocPos( rPaperPos );
 
-    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < static_cast<long>(pImpEditEngine->GetTextHeight()) ) )
+    if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < static_cast<tools::Long>(pImpEditEngine->GetTextHeight()) ) )
     {
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, false );
         if ( aPaM.GetNode() )
@@ -2377,7 +2377,7 @@ void EditEngine::CompleteOnlineSpelling()
     }
 }
 
-sal_Int32 EditEngine::FindParagraph( long nDocPosY )
+sal_Int32 EditEngine::FindParagraph( tools::Long nDocPosY )
 {
     return pImpEditEngine->GetParaPortions().FindParagraph( nDocPosY );
 }
@@ -2447,14 +2447,14 @@ css::uno::Reference< css::datatransfer::XTransferable >
 // ======================    Virtual Methods    ========================
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-                              const long*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
+                              const tools::Long*, const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
                               const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool,
                               const css::lang::Locale*, const Color&, const Color&)
 
 {
 }
 
-void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
+void EditEngine::DrawingTab( const Point& /*rStartPos*/, tools::Long /*nWidth*/,
                              const OUString& /*rChar*/, const SvxFont& /*rFont*/,
                              sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/, bool /*bEndOfLine*/,
                              bool /*bEndOfParagraph*/, const Color& /*rOverlineColor*/,
@@ -2462,7 +2462,7 @@ void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
 {
 }
 
-void EditEngine::PaintingFirstLine( sal_Int32, const Point&, long, const Point&, short, OutputDevice* )
+void EditEngine::PaintingFirstLine( sal_Int32, const Point&, tools::Long, const Point&, short, OutputDevice* )
 {
 }
 

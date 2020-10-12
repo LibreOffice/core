@@ -41,10 +41,10 @@ public:
 
     void Clear();
 
-    bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz, long nExtraData,
-               OutputDevice* pFirstFrameOutDev);
+    bool Start(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz,
+               tools::Long nExtraData, OutputDevice* pFirstFrameOutDev);
 
-    void Stop(const OutputDevice* pOutDev = nullptr, long nExtraData = 0);
+    void Stop(const OutputDevice* pOutDev = nullptr, tools::Long nExtraData = 0);
 
     void Draw(OutputDevice* pOutDev, const Point& rDestPt) const;
     void Draw(OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz) const;

@@ -1143,8 +1143,8 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     const OUString aText = GetText();
 
     Size aSize(GetOutputSizePixel());
-    long nAvailWidth = aSize.Width();
-    long nWinHeight = aSize.Height();
+    tools::Long nAvailWidth = aSize.Width();
+    tools::Long nWinHeight = aSize.Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
@@ -1152,7 +1152,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     Size aFontSize(aOrigFont.GetFontSize());
     ::tools::Rectangle aBoundRect;
 
-    for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
+    for (tools::Long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 5)
     {
         if (!rRenderContext.GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty())
         {
@@ -1162,7 +1162,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         if (!mbCenter)
             break;
         //only shrink in the single glyph large view mode
-        long nTextWidth = aBoundRect.GetWidth();
+        tools::Long nTextWidth = aBoundRect.GetWidth();
         if (nAvailWidth > nTextWidth)
             break;
         vcl::Font aFont(aOrigFont);
@@ -1217,7 +1217,7 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
 void SvxShowText::SetFont( const vcl::Font& rFont )
 {
-    long nWinHeight = GetOutputSizePixel().Height();
+    tools::Long nWinHeight = GetOutputSizePixel().Height();
 
     m_aFont = rFont;
     m_aFont.SetWeight(WEIGHT_NORMAL);

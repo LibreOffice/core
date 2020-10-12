@@ -392,11 +392,11 @@ SwNumRule::SwNumRule( const OUString& rNm,
         }
         // position-and-space mode LABEL_ALIGNMENT
         // first line indent of general numbering in inch: -0,25 inch
-        const long cFirstLineIndent = -1440/4;
+        const tools::Long cFirstLineIndent = -1440/4;
         // indent values of general numbering in inch:
         //  0,5         0,75        1,0         1,25        1,5
         //  1,75        2,0         2,25        2,5         2,75
-        const long cIndentAt[ MAXLEVEL ] = {
+        const tools::Long cIndentAt[ MAXLEVEL ] = {
             1440/2,     1440*3/4,   1440,       1440*5/4,   1440*3/2,
             1440*7/4,   1440*2,     1440*9/4,   1440*5/2,   1440*11/4 };
         for( n = 0; n < MAXLEVEL; ++n )
@@ -951,11 +951,11 @@ void SwNumRule::ChangeIndent( const sal_Int32 nDiff )
             // adjust also the list tab position, if a list tab stop is applied
             if ( aTmpNumFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
             {
-                const long nNewListTab = aTmpNumFormat.GetListtabPos() +  nDiff;
+                const tools::Long nNewListTab = aTmpNumFormat.GetListtabPos() +  nDiff;
                 aTmpNumFormat.SetListtabPos( nNewListTab );
             }
 
-            const long nNewIndent = nDiff +
+            const tools::Long nNewIndent = nDiff +
                               aTmpNumFormat.GetIndentAt();
             aTmpNumFormat.SetIndentAt( nNewIndent );
         }
@@ -983,7 +983,7 @@ void SwNumRule::SetIndent( const short nNewIndent,
         // adjust also the list tab position, if a list tab stop is applied
         if ( aTmpNumFormat.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
-            const long nNewListTab = aTmpNumFormat.GetListtabPos() +
+            const tools::Long nNewListTab = aTmpNumFormat.GetListtabPos() +
                                      ( nNewIndent - aTmpNumFormat.GetIndentAt() );
             aTmpNumFormat.SetListtabPos( nNewListTab );
         }

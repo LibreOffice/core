@@ -16,6 +16,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
+#include <tools/long.hxx>
 
 
 #ifdef _WIN32
@@ -38,7 +39,7 @@
 
 #else
 #include <sys/time.h>
-    static long getTimeMS()
+    static tools::Long getTimeMS()
     {
         struct timeval t;
         gettimeofday(&t, nullptr);
@@ -69,7 +70,7 @@ static int help()
 
 int main (int argc, char **argv)
 {
-    long start, end;
+    tools::Long start, end;
 
     start = getTimeMS();
 

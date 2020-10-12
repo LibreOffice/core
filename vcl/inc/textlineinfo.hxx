@@ -26,19 +26,19 @@
 class ImplTextLineInfo
 {
 private:
-    long        mnWidth;
+    tools::Long        mnWidth;
     sal_Int32   mnIndex;
     sal_Int32   mnLen;
 
 public:
-   ImplTextLineInfo( long nWidth, sal_Int32 nIndex, sal_Int32 nLen )
+   ImplTextLineInfo( tools::Long nWidth, sal_Int32 nIndex, sal_Int32 nLen )
    {
        mnWidth = nWidth;
        mnIndex = nIndex;
        mnLen   = nLen;
    }
 
-    long       GetWidth() const { return mnWidth; }
+    tools::Long       GetWidth() const { return mnWidth; }
     sal_Int32  GetIndex() const { return mnIndex; }
     sal_Int32  GetLen() const { return mnLen; }
 };

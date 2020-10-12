@@ -33,8 +33,8 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const Size aSizePix(aBitmap.GetSizePixel());
-    const long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
-    const long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
+    const tools::Long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
+    const tools::Long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
     bool bRet = false;
 
     SAL_INFO("vcl.gdi", "New width: " << nNewWidth << "\nNew height: " << nNewHeight);
@@ -51,8 +51,8 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
             if (pWriteAcc)
             {
-                const long nScanlineSize = pWriteAcc->GetScanlineSize();
-                const long nNewHeight1 = nNewHeight - 1;
+                const tools::Long nScanlineSize = pWriteAcc->GetScanlineSize();
+                const tools::Long nNewHeight1 = nNewHeight - 1;
 
                 if (nNewWidth && nNewHeight)
                 {
@@ -61,24 +61,24 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
                     std::unique_ptr<long[]> pLutX(new long[nNewWidth]);
                     std::unique_ptr<long[]> pLutY(new long[nNewHeight]);
 
-                    for (long nX = 0; nX < nNewWidth; nX++)
+                    for (tools::Long nX = 0; nX < nNewWidth; nX++)
                     {
-                        pLutX[nX] = long(nX * nWidth / nNewWidth);
+                        pLutX[nX] = tools::Long(nX * nWidth / nNewWidth);
                     }
 
-                    for (long nY = 0; nY < nNewHeight; nY++)
+                    for (tools::Long nY = 0; nY < nNewHeight; nY++)
                     {
-                        pLutY[nY] = long(nY * nHeight / nNewHeight);
+                        pLutY[nY] = tools::Long(nY * nHeight / nNewHeight);
                     }
 
-                    long nActY = 0;
+                    tools::Long nActY = 0;
                     while (nActY < nNewHeight)
                     {
-                        long nMapY = pLutY[nActY];
+                        tools::Long nMapY = pLutY[nActY];
                         Scanline pScanline = pWriteAcc->GetScanline(nActY);
                         Scanline pScanlineRead = pReadAcc->GetScanline(nMapY);
 
-                        for (long nX = 0; nX < nNewWidth; nX++)
+                        for (tools::Long nX = 0; nX < nNewWidth; nX++)
                         {
                             pWriteAcc->SetPixelOnData(
                                 pScanline, nX,

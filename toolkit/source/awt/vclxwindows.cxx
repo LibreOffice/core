@@ -3741,7 +3741,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 css::awt::Size VCLXScrollBar::implGetMinimumSize( vcl::Window const * p )
 {
-    long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
+    tools::Long n = p->GetSettings().GetStyleSettings().GetScrollBarSize();
     return css::awt::Size( n, n );
 }
 
@@ -5482,7 +5482,7 @@ void VCLXNumericField::setValue( double Value )
     // (e.g., input 105 using 2 digits returns 1,05)
     // Thus, to set a value of 1,05, insert 105 and 2 digits
     pNumericFormatter->SetValue(
-        static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+        static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 
     // #107218# Call same listeners like VCL would do after user interaction
     VclPtr< Edit > pEdit = GetAs< Edit >();
@@ -5512,7 +5512,7 @@ void VCLXNumericField::setMin( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMin(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+            static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getMin()
@@ -5532,7 +5532,7 @@ void VCLXNumericField::setMax( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetMax(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+            static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getMax()
@@ -5552,7 +5552,7 @@ void VCLXNumericField::setFirst( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetFirst(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+            static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getFirst()
@@ -5572,7 +5572,7 @@ void VCLXNumericField::setLast( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetLast(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+            static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getLast()
@@ -5602,7 +5602,7 @@ void VCLXNumericField::setSpinSize( double Value )
     NumericFormatter* pNumericFormatter = static_cast<NumericFormatter*>(GetFormatter());
     if ( pNumericFormatter )
         pNumericFormatter->SetSpinSize(
-            static_cast<long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
+            static_cast<tools::Long>(ImplCalcLongValue( Value, pNumericFormatter->GetDecimalDigits() )) );
 }
 
 double VCLXNumericField::getSpinSize()

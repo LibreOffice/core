@@ -398,7 +398,7 @@ void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_xBaseSize->get_value(FieldUnit::NONE)))) );
+    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< tools::Long >(m_xBaseSize->get_value(FieldUnit::NONE)))) );
 
     rFormat.SetRelSize(SIZ_TEXT,     sal::static_int_cast<sal_uInt16>(m_xTextSize->get_value(FieldUnit::NONE)));
     rFormat.SetRelSize(SIZ_INDEX,    sal::static_int_cast<sal_uInt16>(m_xIndexSize->get_value(FieldUnit::NONE)));
@@ -1026,7 +1026,7 @@ bool SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (rMEvt.IsLeft() && tools::Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
     {
-        long nPos = (aPoint.Y() / nLen) * nColumns + (aPoint.X() / nLen) +
+        tools::Long nPos = (aPoint.Y() / nLen) * nColumns + (aPoint.X() / nLen) +
                       m_xScrolledWindow->vadjustment_get_value() * nColumns;
         SelectSymbol( sal::static_int_cast< sal_uInt16 >(nPos) );
 

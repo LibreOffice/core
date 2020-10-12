@@ -76,11 +76,11 @@ namespace
 
 namespace Print
 {
-    long const nLeftMargin = 1700;
-    long const nRightMargin = 900;
-    long const nTopMargin = 2000;
-    long const nBottomMargin = 1000;
-    long const nBorder = 300;
+    tools::Long const nLeftMargin = 1700;
+    tools::Long const nRightMargin = 900;
+    tools::Long const nTopMargin = 2000;
+    tools::Long const nBottomMargin = 1000;
+    tools::Long const nBorder = 300;
 }
 
 short const ValidWindow = 0x1234;
@@ -123,13 +123,13 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
     aFont.SetAlignment( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
 
-    long nFontHeight = pPrinter->GetTextHeight();
+    tools::Long nFontHeight = pPrinter->GetTextHeight();
 
     // 1st Border => line, 2+3 Border = free space
-    long nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
+    tools::Long nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
 
-    long nXLeft = Print::nLeftMargin - Print::nBorder;
-    long nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
+    tools::Long nXLeft = Print::nLeftMargin - Print::nBorder;
+    tools::Long nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
 
     if( bOutput )
         pPrinter->DrawRect(tools::Rectangle(
@@ -138,7 +138,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
         ));
 
 
-    long nY = Print::nTopMargin - 2*Print::nBorder;
+    tools::Long nY = Print::nTopMargin - 2*Print::nBorder;
     Point aPos(Print::nLeftMargin, nY);
     if( bOutput )
         pPrinter->DrawText( aPos, rTitle );
@@ -740,12 +740,12 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
     AssertValidEditEngine();
     TextView * pView = GetEditView();
     // scroll if applicable so that first line is at the top
-    long nVisHeight = GetOutputSizePixel().Height();
+    tools::Long nVisHeight = GetOutputSizePixel().Height();
     if ( pView->GetTextEngine()->GetTextHeight() > nVisHeight )
     {
-        long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
-        long nOldStartY = pView->GetStartDocPos().Y();
-        long nNewStartY = static_cast<long>(nStart) * pView->GetTextEngine()->GetCharHeight();
+        tools::Long nMaxY = pView->GetTextEngine()->GetTextHeight() - nVisHeight;
+        tools::Long nOldStartY = pView->GetStartDocPos().Y();
+        tools::Long nNewStartY = static_cast<tools::Long>(nStart) * pView->GetTextEngine()->GetCharHeight();
         nNewStartY = std::min( nNewStartY, nMaxY );
         pView->Scroll( 0, -(nNewStartY-nOldStartY) );
         pView->ShowCursor( false );
@@ -834,7 +834,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     // nLinepPage is not correct if there's a line break
     sal_Int32 nLinespPage = aPaperSz.Height()/nLineHeight;
-    long nXTextWidth = pPrinter->approximate_digit_width();
+    tools::Long nXTextWidth = pPrinter->approximate_digit_width();
 
     sal_Int32 nCharspLine = aPaperSz.Width() / std::max<long>(nXTextWidth, 1);
     const sal_uInt32 nParas = GetEditEngine()->GetParagraphCount();
@@ -1163,7 +1163,7 @@ void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
     {
         // don't scroll with the value but rather use the Thumb-Pos for the VisArea:
-        long nDiff = GetEditView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
+        tools::Long nDiff = GetEditView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
         GetEditView()->Scroll( nDiff, 0 );
         GetEditView()->ShowCursor( false );
         pCurScrollBar->SetThumbPos( GetEditView()->GetStartDocPos().X() );
@@ -1510,7 +1510,7 @@ void ModulWindowLayout::BasicRemoveWatch ()
     aWatchWindow->RemoveSelectedWatch();
 }
 
-void ModulWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
+void ModulWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const nHeight)
 {
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.20, nHeight * 0.75));
     AddToBottom(aWatchWindow.get(), Size(nWidth * 0.67, nHeight * 0.25));

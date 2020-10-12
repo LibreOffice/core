@@ -201,7 +201,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
     const SwFormatFrameSize &rSize = pFormat->GetFrameSize();
     unsigned long nTableSz = static_cast<unsigned long>(rSize.GetWidth());
 
-    long nPageSize = 0;
+    tools::Long nPageSize = 0;
     bool bRelBoxSize = false;
 
     rBase.GetTablePageSize( this, nPageSize, bRelBoxSize );
@@ -1033,7 +1033,7 @@ WW8TableCellGrid::~WW8TableCellGrid()
 {
 }
 
-WW8TableCellGridRow::Pointer_t WW8TableCellGrid::getRow(long nTop, bool bCreate)
+WW8TableCellGridRow::Pointer_t WW8TableCellGrid::getRow(tools::Long nTop, bool bCreate)
 {
     WW8TableCellGridRow::Pointer_t pResult;
 
@@ -1064,12 +1064,12 @@ WW8TableCellGrid::RowTops_t::const_iterator WW8TableCellGrid::getRowTopsEnd() co
     return m_aRowTops.end();
 }
 
-CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsBegin(long nTop)
+CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsBegin(tools::Long nTop)
 {
     return getRow(nTop)->begin();
 }
 
-CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsEnd(long nTop)
+CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsEnd(tools::Long nTop)
 {
     return getRow(nTop)->end();
 }
@@ -1103,7 +1103,7 @@ void WW8TableCellGrid::addShadowCells()
         bool bBeginningOfCell = true;
         bool bVertMerge = false;
         SwRect aRect = aCellIt->getRect();
-        long nRowSpan = 1;
+        tools::Long nRowSpan = 1;
         while (aCellIt != aCellEndIt)
         {
             WW8TableNodeInfo * pNodeInfo = aCellIt->getTableNodeInfo();
@@ -1181,7 +1181,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells(RowEndInners_t &rLastRowEnds)
         sal_uInt32 nDepthInCell = 0;
         while (aCellIt != aCellEndIt)
         {
-            long nCellX = aCellIt->left();
+            tools::Long nCellX = aCellIt->left();
             WW8TableNodeInfo * pNodeInfo = aCellIt->getTableNodeInfo();
             if (pNodeInfo)
             {

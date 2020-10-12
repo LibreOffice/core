@@ -665,8 +665,8 @@ DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             }
             if(nColSum != pTableData->GetWidth())
             {
-                SwTwips nMinWidth = std::min( long(MINLAY),
-                                    static_cast<long>(pTableData->GetWidth() /
+                SwTwips nMinWidth = std::min( tools::Long(MINLAY),
+                                    static_cast<tools::Long>(pTableData->GetWidth() /
                                             pTableData->GetColCount() - 1));
                 SwTwips nDiff = nColSum - pTableData->GetWidth();
                 while ( std::abs(nDiff) > pTableData->GetColCount() + 1 )
@@ -1043,7 +1043,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
         //All columns will be changed proportionally with,
         //the table width is adjusted accordingly.
         OSL_ENSURE(nDiff * m_nNoOfVisibleCols <= m_pTableData->GetSpace() - m_nTableWidth, "wrong maximum" );
-        long nAdd = nDiff;
+        tools::Long nAdd = nDiff;
         if(nDiff * m_nNoOfVisibleCols > m_pTableData->GetSpace() - m_nTableWidth)
         {
             nAdd = (m_pTableData->GetSpace() - m_nTableWidth) / m_nNoOfVisibleCols;

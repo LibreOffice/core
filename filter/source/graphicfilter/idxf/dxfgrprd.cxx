@@ -155,7 +155,7 @@ sal_uInt16 DXFGroupReader::Read()
     return nG;
 }
 
-long DXFGroupReader::ReadI()
+tools::Long DXFGroupReader::ReadI()
 {
     OString s = DXFReadLine(rIS);
     char *p=s.pData->buffer;

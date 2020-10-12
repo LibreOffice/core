@@ -223,7 +223,7 @@ void Writer::SetStream(SvStream *const pStream)
     m_pImpl->m_pStream = pStream;
 }
 
-SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
+SvStream& Writer::OutLong( SvStream& rStrm, tools::Long nVal )
 {
     const bool bNeg = nVal < 0;
     if (bNeg)

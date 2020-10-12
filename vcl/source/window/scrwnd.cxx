@@ -222,19 +222,19 @@ void ImplWheelWindow::ImplRecalcScrollValues()
             else if( !o3tl::convertsToAtLeast(fValX, LONG_MIN) )
                 mnActDeltaX = LONG_MIN;
             else
-                mnActDeltaX = static_cast<long>(fValX);
+                mnActDeltaX = static_cast<tools::Long>(fValX);
 
             if( !o3tl::convertsToAtMost(fValY, LONG_MAX) )
                 mnActDeltaY = LONG_MAX;
             else if( !o3tl::convertsToAtLeast(fValY, LONG_MIN) )
                 mnActDeltaY = LONG_MIN;
             else
-                mnActDeltaY = static_cast<long>(fValY);
+                mnActDeltaY = static_cast<tools::Long>(fValY);
         }
     }
 }
 
-PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
+PointerStyle ImplWheelWindow::ImplGetMousePointer( tools::Long nDistX, tools::Long nDistY )
 {
     PointerStyle    eStyle;
     const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
@@ -310,8 +310,8 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     FloatingWindow::MouseMove( rMEvt );
 
     const Point aMousePos( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
-    const long  nDistX = aMousePos.X() - maCenter.X();
-    const long  nDistY = aMousePos.Y() - maCenter.Y();
+    const tools::Long  nDistX = aMousePos.X() - maCenter.X();
+    const tools::Long  nDistY = aMousePos.Y() - maCenter.Y();
 
     mnActDist = static_cast<sal_uLong>(hypot( static_cast<double>(nDistX), nDistY ));
 

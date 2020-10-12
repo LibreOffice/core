@@ -106,8 +106,8 @@ namespace {
 
 }
 
-static long lUserW = 5669; // 10 cm
-static long lUserH = 5669; // 10 cm
+static tools::Long lUserW = 5669; // 10 cm
+static tools::Long lUserH = 5669; // 10 cm
 
 SwEnvFormatPage::SwEnvFormatPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/envformatpage.ui", "EnvFormatPage", &rSet)
@@ -275,7 +275,7 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         aTmpSet.Put( aTabPos );
 
         // left border as offset
-        const long nOff = aTmpSet.Get( RES_LR_SPACE ).GetTextLeft();
+        const tools::Long nOff = aTmpSet.Get( RES_LR_SPACE ).GetTextLeft();
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
 
@@ -347,12 +347,12 @@ SfxItemSet *SwEnvFormatPage::GetCollItemSet(SwTextFormatColl const * pColl, bool
 
 IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, weld::ComboBox&, void)
 {
-    long lWidth;
-    long lHeight;
-    long lSendFromLeft;
-    long lSendFromTop;
-    long lAddrFromLeft;
-    long lAddrFromTop;
+    tools::Long lWidth;
+    tools::Long lHeight;
+    tools::Long lSendFromLeft;
+    tools::Long lSendFromTop;
+    tools::Long lAddrFromLeft;
+    tools::Long lAddrFromTop;
 
     const sal_uInt16 nPaper = m_aIDs[m_xSizeFormatBox->get_active()];
     if (nPaper != sal_uInt16(PAPER_USER))
@@ -388,10 +388,10 @@ IMPL_LINK_NOARG(SwEnvFormatPage, FormatHdl, weld::ComboBox&, void)
 
 void SwEnvFormatPage::SetMinMax()
 {
-    long lWVal = static_cast< long >(getfieldval(*m_xSizeWidthField ));
-    long lHVal = static_cast< long >(getfieldval(*m_xSizeHeightField));
+    tools::Long lWVal = static_cast< tools::Long >(getfieldval(*m_xSizeWidthField ));
+    tools::Long lHVal = static_cast< tools::Long >(getfieldval(*m_xSizeHeightField));
 
-    long lWidth  = std::max(lWVal, lHVal),
+    tools::Long lWidth  = std::max(lWVal, lHVal),
          lHeight = std::min(lWVal, lHVal);
 
     // Min and Max
@@ -434,15 +434,15 @@ void SwEnvFormatPage::FillItem(SwEnvItem& rItem)
     const sal_uInt16 nPaper = m_aIDs[m_xSizeFormatBox->get_active()];
     if (nPaper == sal_uInt16(PAPER_USER))
     {
-        long lWVal = static_cast< long >(getfieldval(*m_xSizeWidthField ));
-        long lHVal = static_cast< long >(getfieldval(*m_xSizeHeightField));
+        tools::Long lWVal = static_cast< tools::Long >(getfieldval(*m_xSizeWidthField ));
+        tools::Long lHVal = static_cast< tools::Long >(getfieldval(*m_xSizeHeightField));
         rItem.m_nWidth  = std::max(lWVal, lHVal);
         rItem.m_nHeight = std::min(lWVal, lHVal);
     }
     else
     {
-        long lWVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Width ();
-        long lHVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Height();
+        tools::Long lWVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Width ();
+        tools::Long lHVal = SvxPaperInfo::GetPaperSize(static_cast<Paper>(nPaper)).Height();
         rItem.m_nWidth  = std::max(lWVal, lHVal);
         rItem.m_nHeight = std::min(lWVal, lHVal);
     }

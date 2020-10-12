@@ -80,10 +80,10 @@ class SAL_WARN_UNUSED SvxFontWorkDialog final : public SfxDockingWindow
     OString         m_sLastAdjustTbxId;
     OString         m_sLastShadowTbxId;
 
-    long            nSaveShadowX;
-    long            nSaveShadowY;
-    long            nSaveShadowAngle;
-    long            nSaveShadowSize;
+    tools::Long            nSaveShadowX;
+    tools::Long            nSaveShadowY;
+    tools::Long            nSaveShadowAngle;
+    tools::Long            nSaveShadowSize;
 
     SvxFontWorkControllerItem* pCtrlItems[CONTROLLER_COUNT];
 

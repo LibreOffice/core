@@ -22,19 +22,19 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrMetricItem makeSdrTextLeftDistItem(long mnHeight) {
+inline SdrMetricItem makeSdrTextLeftDistItem(tools::Long mnHeight) {
     return SdrMetricItem(SDRATTR_TEXT_LEFTDIST, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextRightDistItem(long mnHeight) {
+inline SdrMetricItem makeSdrTextRightDistItem(tools::Long mnHeight) {
     return SdrMetricItem(SDRATTR_TEXT_RIGHTDIST, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextUpperDistItem(long mnHeight) {
+inline SdrMetricItem makeSdrTextUpperDistItem(tools::Long mnHeight) {
     return SdrMetricItem(SDRATTR_TEXT_UPPERDIST, mnHeight);
 }
 
-inline SdrMetricItem makeSdrTextLowerDistItem(long mnHeight) {
+inline SdrMetricItem makeSdrTextLowerDistItem(tools::Long mnHeight) {
     return SdrMetricItem(SDRATTR_TEXT_LOWERDIST, mnHeight);
 }
 

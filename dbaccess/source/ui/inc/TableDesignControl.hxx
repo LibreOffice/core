@@ -32,8 +32,8 @@ namespace dbaui
         friend class OTableDesignUndoAct;
 
     protected:
-        long    m_nDataPos;    ///< currently needed row
-        long    m_nCurrentPos; ///< current position of selected column
+        tools::Long    m_nDataPos;    ///< currently needed row
+        tools::Long    m_nCurrentPos; ///< current position of selected column
 
     private:
         sal_uInt16  m_nCurUndoActId;
@@ -41,10 +41,10 @@ namespace dbaui
     public:
         OTableRowView(vcl::Window* pParent);
 
-        virtual void SetCellData( long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
-        virtual void SetCellData( long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData ) = 0;
-        virtual css::uno::Any          GetCellData( long nRow, sal_uInt16 nColId ) = 0;
-        virtual void SetControlText( long nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
+        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
+        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData ) = 0;
+        virtual css::uno::Any          GetCellData( tools::Long nRow, sal_uInt16 nColId ) = 0;
+        virtual void SetControlText( tools::Long nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
 
         virtual OTableDesignView* GetView() const = 0;
 
@@ -56,18 +56,18 @@ namespace dbaui
         virtual void paste() override;
 
     protected:
-        void Paste( long nRow );
+        void Paste( tools::Long nRow );
 
         virtual void CopyRows()                             = 0;
         virtual void DeleteRows()                           = 0;
-        virtual void InsertRows( long nRow )                = 0;
-        virtual void InsertNewRows( long nRow )             = 0;
+        virtual void InsertRows( tools::Long nRow )                = 0;
+        virtual void InsertNewRows( tools::Long nRow )             = 0;
 
         virtual bool IsPrimaryKeyAllowed()              = 0;
-        virtual bool IsInsertNewAllowed( long nRow )    = 0;
+        virtual bool IsInsertNewAllowed( tools::Long nRow )    = 0;
         virtual bool IsDeleteAllowed()                  = 0;
 
-        virtual RowStatus GetRowStatus(long nRow) const override;
+        virtual RowStatus GetRowStatus(tools::Long nRow) const override;
         virtual void KeyInput(const KeyEvent& rEvt) override;
         virtual void Command( const CommandEvent& rEvt ) override;
 

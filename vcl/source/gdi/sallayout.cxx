@@ -579,8 +579,8 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 
         double fX = aOfs.X();
         double fY = aOfs.Y();
-        long nX = static_cast<long>( +fCos * fX + fSin * fY );
-        long nY = static_cast<long>( +fCos * fY - fSin * fX );
+        tools::Long nX = static_cast<tools::Long>( +fCos * fX + fSin * fY );
+        tools::Long nY = static_cast<tools::Long>( +fCos * fY - fSin * fX );
         aPos += Point( nX, nY );
     }
 
@@ -802,7 +802,7 @@ static bool lcl_CanApplyAsianKerning(sal_Unicode cp)
 void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
 {
     const int nLength = rStr.getLength();
-    long nOffset = 0;
+    tools::Long nOffset = 0;
 
     for (std::vector<GlyphItem>::iterator pGlyphIter = m_GlyphItems.Impl()->begin(),
                                           pGlyphIterEnd = m_GlyphItems.Impl()->end();
@@ -844,7 +844,7 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray ) const
 {
     // initialize result array
     for (int i = 0; i < nMaxIndex; ++i)
@@ -853,8 +853,8 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) co
     // calculate caret positions using glyph array
     for (auto const& aGlyphItem : *m_GlyphItems.Impl())
     {
-        long nXPos = aGlyphItem.m_aLinearPos.getX();
-        long nXRight = nXPos + aGlyphItem.origWidth();
+        tools::Long nXPos = aGlyphItem.m_aLinearPos.getX();
+        tools::Long nXRight = nXPos + aGlyphItem.origWidth();
         int n = aGlyphItem.charPos();
         int nCurrIdx = 2 * (n - mnMinCharPos);
         // tdf#86399 if this is not the start of a cluster, don't overwrite the caret bounds of the cluster start
@@ -930,7 +930,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     return true;
 }
 
-void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
+void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
 {
     if( nStart >= static_cast<int>(m_GlyphItems.Impl()->size()) )
         return;
@@ -944,7 +944,7 @@ void GenericSalLayout::MoveGlyph( int nStart, long nNewXPos )
     if( pGlyphIter->IsRTLGlyph() )
         nNewXPos += pGlyphIter->m_nNewWidth - pGlyphIter->origWidth();
     // calculate the x-offset to the old position
-    long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX();
+    tools::Long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
@@ -1162,7 +1162,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     mnLevel = nLevel;
 
     // prepare merge the fallback levels
-    long nXPos = 0;
+    tools::Long nXPos = 0;
     double fUnitMul = 1.0;
     for( n = 0; n < nLevel; ++n )
         maFallbackRuns[n].ResetPos();
@@ -1200,7 +1200,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // use base(n==0) or fallback(n>=1) level
             fUnitMul = mnUnitsPerPixel;
             fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
-            long nNewPos = static_cast<long>(nXPos/fUnitMul + 0.5);
+            tools::Long nNewPos = static_cast<tools::Long>(nXPos/fUnitMul + 0.5);
             mpLayouts[n]->MoveGlyph( nStartOld[n], nNewPos );
         }
         else
@@ -1338,7 +1338,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // the measured width is still in fallback font units
             // => convert it to base level font units
             if( n > 0 ) // optimization: because (fUnitMul==1.0) for (n==0)
-                nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
+                nRunAdvance = static_cast<tools::Long>(nRunAdvance*fUnitMul + 0.5);
         }
 
         // calculate new x position (in base level units)
@@ -1478,7 +1478,7 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, tools::Long* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
@@ -1495,8 +1495,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
         for( int i = 0; i < nMaxIndex; ++i )
             if( pTempPos[i] >= 0 )
             {
-                long w = pTempPos[i];
-                w = static_cast<long>(w*fUnitMul + 0.5);
+                tools::Long w = pTempPos[i];
+                w = static_cast<tools::Long>(w*fUnitMul + 0.5);
                 pCaretXArray[i] = w;
             }
     }

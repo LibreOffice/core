@@ -278,7 +278,7 @@ sal_uInt16 SwNode::GetSectionLevel() const
 }
 
 #ifdef DBG_UTIL
-long SwNode::s_nSerial = 0;
+tools::Long SwNode::s_nSerial = 0;
 #endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const SwNodeType nNdType )

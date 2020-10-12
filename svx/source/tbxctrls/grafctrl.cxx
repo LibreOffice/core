@@ -135,7 +135,7 @@ void ImplGrafControl::Update( const SfxPoolItem* pItem )
 {
     if( pItem )
     {
-        long nValue;
+        tools::Long nValue;
 
         if ( maCommand == ".uno:GrafTransparence" )
             nValue = static_cast<const SfxUInt16Item*>( pItem )->GetValue();
@@ -221,7 +221,7 @@ ImplGrafControl::ImplGrafControl(
     }
     else
     {
-        const long nMinVal = maCommand == ".uno:GrafTransparence" ? 0 : -100;
+        const tools::Long nMinVal = maCommand == ".uno:GrafTransparence" ? 0 : -100;
 
         mxField->set_unit(FieldUnit::PERCENT);
         mxField->set_digits(0);

@@ -71,8 +71,8 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
                                         sal_uInt16 nCat, const OString& sHelp,
                                         const uno::Reference<reflection::XIdlMethod>& rFunc,
                                         const uno::Any& rO,
-                                        long nAC, const ScAddInArgDesc* pAD,
-                                        long nCP ) :
+                                        tools::Long nAC, const ScAddInArgDesc* pAD,
+                                        tools::Long nCP ) :
     aOriginalName( rNam ),
     aLocalName( rLoc ),
     aUpperName( rNam ),
@@ -89,7 +89,7 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const OUString& rNam, const OUString& rL
     if ( nArgCount )
     {
         pArgDescs.reset( new ScAddInArgDesc[nArgCount] );
-        for (long i=0; i<nArgCount; i++)
+        for (tools::Long i=0; i<nArgCount; i++)
             pArgDescs[i] = pAD[i];
     }
 
@@ -194,20 +194,20 @@ void ScUnoAddInFuncData::SetFunction( const uno::Reference< reflection::XIdlMeth
     aObject = rNewObj;
 }
 
-void ScUnoAddInFuncData::SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs )
+void ScUnoAddInFuncData::SetArguments( tools::Long nNewCount, const ScAddInArgDesc* pNewDescs )
 {
     nArgCount = nNewCount;
     if ( nArgCount )
     {
         pArgDescs.reset( new ScAddInArgDesc[nArgCount] );
-        for (long i=0; i<nArgCount; i++)
+        for (tools::Long i=0; i<nArgCount; i++)
             pArgDescs[i] = pNewDescs[i];
     }
     else
         pArgDescs.reset();
 }
 
-void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
+void ScUnoAddInFuncData::SetCallerPos( tools::Long nNewPos )
 {
     nCallerPos = nNewPos;
 }
@@ -362,12 +362,12 @@ void ScUnoAddInCollection::ReadConfiguration()
 
         // allocate pointers
 
-        long nOld = nFuncCount;
+        tools::Long nOld = nFuncCount;
         nFuncCount = nNewCount+nOld;
         if ( nOld )
         {
             std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppNew(new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount]);
-            for (long i=0; i<nOld; i++)
+            for (tools::Long i=0; i<nOld; i++)
                 ppNew[i] = std::move(ppFuncData[i]);
             ppFuncData = std::move(ppNew);
         }
@@ -449,7 +449,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 // get argument info
 
                 std::unique_ptr<ScAddInArgDesc[]> pVisibleArgs;
-                long nVisibleCount = 0;
+                tools::Long nVisibleCount = 0;
 
                 OUString aArgumentsPath(aFuncPropPath + CFGSTR_PARAMETERS);
 
@@ -573,7 +573,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
 
     OUString aUpperCmp = ScGlobal::getCharClassPtr()->uppercase(rExcelName);
 
-    for (long i=0; i<nFuncCount; i++)
+    for (tools::Long i=0; i<nFuncCount; i++)
     {
         ScUnoAddInFuncData* pFuncData = ppFuncData[i].get();
         if ( pFuncData )
@@ -724,16 +724,16 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
     uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
             xAcc->getMethods( beans::MethodConcept::ALL );
-    long nNewCount = aMethods.getLength();
+    tools::Long nNewCount = aMethods.getLength();
     if ( !nNewCount )
         return;
 
-    long nOld = nFuncCount;
+    tools::Long nOld = nFuncCount;
     nFuncCount = nNewCount+nOld;
     if ( nOld )
     {
         std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppNew(new std::unique_ptr<ScUnoAddInFuncData>[nFuncCount]);
-        for (long i=0; i<nOld; i++)
+        for (tools::Long i=0; i<nOld; i++)
             ppNew[i] = std::move(ppFuncData[i]);
         ppFuncData = std::move(ppNew);
     }
@@ -749,7 +749,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         pLocalHashMap.reset( new ScAddInHashMap );
 
     const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
-    for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
+    for (tools::Long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
     {
         ppFuncData[nFuncPos+nOld] = nullptr;
 
@@ -789,14 +789,14 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 OUString aFuncName = aServiceName + "." + aFuncU;
 
                 bool bValid = true;
-                long nVisibleCount = 0;
-                long nCallerPos = SC_CALLERPOS_NONE;
+                tools::Long nVisibleCount = 0;
+                tools::Long nCallerPos = SC_CALLERPOS_NONE;
 
                 uno::Sequence<reflection::ParamInfo> aParams =
                         xFunc->getParameterInfos();
-                long nParamCount = aParams.getLength();
+                tools::Long nParamCount = aParams.getLength();
                 const reflection::ParamInfo* pParArr = aParams.getConstArray();
-                long nParamPos;
+                tools::Long nParamPos;
                 for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                 {
                     if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
@@ -845,7 +845,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     {
                         ScAddInArgDesc aDesc;
                         pVisibleArgs.reset(new ScAddInArgDesc[nVisibleCount]);
-                        long nDestPos = 0;
+                        tools::Long nDestPos = 0;
                         for (nParamPos=0; nParamPos<nParamCount; nParamPos++)
                         {
                             uno::Reference<reflection::XIdlClass> xParClass =
@@ -932,9 +932,9 @@ static void lcl_UpdateFunctionList( const ScFunctionList& rFunctionList, const S
 
 static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const OUString& rArgIntName )
 {
-    long nArgCount = rFuncData.GetArgumentCount();
+    tools::Long nArgCount = rFuncData.GetArgumentCount();
     const ScAddInArgDesc* pArguments = rFuncData.GetArguments();
-    for (long nPos=0; nPos<nArgCount; nPos++)
+    for (tools::Long nPos=0; nPos<nArgCount; nPos++)
     {
         if ( pArguments[nPos].aInternalName == rArgIntName )
             return &pArguments[nPos];
@@ -994,14 +994,14 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                 // internal argument name.
 
                 bool bValid = true;
-                long nVisibleCount = 0;
-                long nCallerPos = SC_CALLERPOS_NONE;
+                tools::Long nVisibleCount = 0;
+                tools::Long nCallerPos = SC_CALLERPOS_NONE;
 
                 const uno::Sequence<reflection::ParamInfo> aParams =
                         xFunc->getParameterInfos();
-                long nParamCount = aParams.getLength();
+                tools::Long nParamCount = aParams.getLength();
                 const reflection::ParamInfo* pParArr = aParams.getConstArray();
-                for (long nParamPos=0; nParamPos<nParamCount; nParamPos++)
+                for (tools::Long nParamPos=0; nParamPos<nParamCount; nParamPos++)
                 {
                     if ( pParArr[nParamPos].aMode != reflection::ParamMode_IN )
                         bValid = false;
@@ -1022,7 +1022,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                     {
                         ScAddInArgDesc aDesc;
                         pVisibleArgs.reset(new ScAddInArgDesc[nVisibleCount]);
-                        long nDestPos = 0;
+                        tools::Long nDestPos = 0;
                         for (const auto& rParam : aParams)
                         {
                             uno::Reference<reflection::XIdlClass> xParClass =
@@ -1123,7 +1123,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const OUString& rNa
     return nullptr;
 }
 
-const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
+const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( tools::Long nIndex )
 {
     if (!bInitialized)
         Initialize();
@@ -1145,7 +1145,7 @@ void ScUnoAddInCollection::LocalizeString( OUString& rName )
         rName = iLook->second->GetUpperLocal();         //TODO: upper?
 }
 
-long ScUnoAddInCollection::GetFuncCount()
+tools::Long ScUnoAddInCollection::GetFuncCount()
 {
     if (!bInitialized)
         Initialize();
@@ -1153,7 +1153,7 @@ long ScUnoAddInCollection::GetFuncCount()
     return nFuncCount;
 }
 
-bool ScUnoAddInCollection::FillFunctionDesc( long nFunc, ScFuncDesc& rDesc )
+bool ScUnoAddInCollection::FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc )
 {
     if (!bInitialized)
         Initialize();
@@ -1172,7 +1172,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     bool bIncomplete = !rFuncData.GetFunction().is();       //TODO: extra flag?
 
-    long nArgCount = rFuncData.GetArgumentCount();
+    tools::Long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > SAL_MAX_UINT16 )
         return false;
 
@@ -1203,7 +1203,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
         rDesc.maDefArgDescs.clear();
         rDesc.maDefArgDescs.resize(nArgCount);
         rDesc.pDefArgFlags   = new ScFuncDesc::ParameterFlags[nArgCount];
-        for ( long nArg=0; nArg<nArgCount; nArg++ )
+        for ( tools::Long nArg=0; nArg<nArgCount; nArg++ )
         {
             rDesc.maDefArgNames[nArg] = pArgs[nArg].aName;
             rDesc.maDefArgDescs[nArg] = pArgs[nArg].aDescription;
@@ -1231,7 +1231,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 }
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
-                                long nParamCount ) :
+                                tools::Long nParamCount ) :
     bValidCount( false ),
     nErrCode( FormulaError::NoCode ),      // before function was called
     bHasString( true ),
@@ -1243,14 +1243,14 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
     if ( !pFuncData )
         return;
 
-    long nDescCount = pFuncData->GetArgumentCount();
+    tools::Long nDescCount = pFuncData->GetArgumentCount();
     const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
 
     //  is aVarArg sequence needed?
     if ( nParamCount >= nDescCount && nDescCount > 0 &&
          pArgs[nDescCount-1].eType == SC_ADDINARG_VARARGS )
     {
-        long nVarCount = nParamCount - ( nDescCount - 1 );  // size of last argument
+        tools::Long nVarCount = nParamCount - ( nDescCount - 1 );  // size of last argument
         aVarArg.realloc( nVarCount );
         bValidCount = true;
     }
@@ -1258,7 +1258,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rNa
     {
         //  all args behind nParamCount must be optional
         bValidCount = true;
-        for (long i=nParamCount; i<nDescCount; i++)
+        for (tools::Long i=nParamCount; i<nDescCount; i++)
             if ( !pArgs[i].bOptional )
                 bValidCount = false;
     }
@@ -1273,11 +1273,11 @@ ScUnoAddInCall::~ScUnoAddInCall()
     // pFuncData is deleted with ScUnoAddInCollection
 }
 
-ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
+ScAddInArgumentType ScUnoAddInCall::GetArgType( tools::Long nPos )
 {
     if ( pFuncData )
     {
-        long nCount = pFuncData->GetArgumentCount();
+        tools::Long nCount = pFuncData->GetArgumentCount();
         const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
 
         // if last arg is sequence, use "any" type
@@ -1309,16 +1309,16 @@ void ScUnoAddInCall::SetCallerFromObjectShell( const SfxObjectShell* pObjSh )
     }
 }
 
-void ScUnoAddInCall::SetParam( long nPos, const uno::Any& rValue )
+void ScUnoAddInCall::SetParam( tools::Long nPos, const uno::Any& rValue )
 {
     if ( !pFuncData )
         return;
 
-    long nCount = pFuncData->GetArgumentCount();
+    tools::Long nCount = pFuncData->GetArgumentCount();
     const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
     if ( nCount > 0 && nPos >= nCount-1 && pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
     {
-        long nVarPos = nPos-(nCount-1);
+        tools::Long nVarPos = nPos-(nCount-1);
         if ( nVarPos < aVarArg.getLength() )
             aVarArg.getArray()[nVarPos] = rValue;
         else
@@ -1339,7 +1339,7 @@ void ScUnoAddInCall::ExecuteCall()
     if ( !pFuncData )
         return;
 
-    long nCount = pFuncData->GetArgumentCount();
+    tools::Long nCount = pFuncData->GetArgumentCount();
     const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
     if ( nCount > 0 && pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
     {
@@ -1355,15 +1355,15 @@ void ScUnoAddInCall::ExecuteCall()
         uno::Any aCallerAny;
         aCallerAny <<= xCaller;
 
-        long nUserLen = aArgs.getLength();
-        long nCallPos = pFuncData->GetCallerPos();
+        tools::Long nUserLen = aArgs.getLength();
+        tools::Long nCallPos = pFuncData->GetCallerPos();
         if (nCallPos>nUserLen)                          // should not happen
         {
             OSL_FAIL("wrong CallPos");
             nCallPos = nUserLen;
         }
 
-        long nDestLen = nUserLen + 1;
+        tools::Long nDestLen = nUserLen + 1;
         uno::Sequence<uno::Any> aRealArgs( nDestLen );
         uno::Any* pDest = aRealArgs.getArray();
 
@@ -1424,7 +1424,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
 }
 
 template <typename T>
-static long lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
+static tools::Long lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
 {
     if (!pRowSeq->hasElements())
         return 0;
@@ -1499,23 +1499,23 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    long nRowCount = pRowSeq->getLength();
-                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    tools::Long nRowCount = pRowSeq->getLength();
+                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (long nRow=0; nRow<nRowCount; nRow++)
+                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
                         {
-                            long nColCount = pRowArr[nRow].getLength();
+                            tools::Long nColCount = pRowArr[nRow].getLength();
                             const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
-                            for (long nCol=0; nCol<nColCount; nCol++)
+                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1534,23 +1534,23 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    long nRowCount = pRowSeq->getLength();
-                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    tools::Long nRowCount = pRowSeq->getLength();
+                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (long nRow=0; nRow<nRowCount; nRow++)
+                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
                         {
-                            long nColCount = pRowArr[nRow].getLength();
+                            tools::Long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
-                            for (long nCol=0; nCol<nColCount; nCol++)
+                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1569,25 +1569,25 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    long nRowCount = pRowSeq->getLength();
-                    long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    tools::Long nRowCount = pRowSeq->getLength();
+                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (long nRow=0; nRow<nRowCount; nRow++)
+                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
                         {
-                            long nColCount = pRowArr[nRow].getLength();
+                            tools::Long nColCount = pRowArr[nRow].getLength();
                             const OUString* pColArr = pRowArr[nRow].getConstArray();
-                            for (long nCol=0; nCol<nColCount; nCol++)
+                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(pColArr[nCol]),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
-                            for (long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(EMPTY_OUSTRING),

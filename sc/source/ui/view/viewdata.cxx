@@ -129,7 +129,7 @@ void ScPositionHelper::setDocument(const ScDocument& rDoc, bool bColumn)
     MAX_INDEX = bColumn ? rDoc.MaxCol() : MAXTILEDROW;
 }
 
-void ScPositionHelper::insert(index_type nIndex, long nPos)
+void ScPositionHelper::insert(index_type nIndex, tools::Long nPos)
 {
     if (nIndex < 0) return;
     SAL_INFO("sc.lok.poshelper", "ScPositionHelper::insert: nIndex: "
@@ -169,7 +169,7 @@ void ScPositionHelper::invalidateByIndex(index_type nIndex)
     }
 }
 
-void ScPositionHelper::invalidateByPosition(long nPos)
+void ScPositionHelper::invalidateByPosition(tools::Long nPos)
 {
     SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nPos: " << nPos);
     if (nPos <= 0)
@@ -202,8 +202,8 @@ ScPositionHelper::getNearestByIndex(index_type nIndex) const
         return *posLB;
     }
 
-    long nDiffUB = posUB->first - nIndex;
-    long nDiffLB = posLB->first - nIndex;
+    tools::Long nDiffUB = posUB->first - nIndex;
+    tools::Long nDiffLB = posLB->first - nIndex;
     if (nDiffUB < -nDiffLB)
     {
         return *posUB;
@@ -215,7 +215,7 @@ ScPositionHelper::getNearestByIndex(index_type nIndex) const
 }
 
 const ScPositionHelper::value_type&
-ScPositionHelper::getNearestByPosition(long nPos) const
+ScPositionHelper::getNearestByPosition(tools::Long nPos) const
 {
     SAL_INFO("sc.lok.poshelper",
             "ScPositionHelper::getNearest: nPos: " << nPos << ", size: " << mData.size());
@@ -233,8 +233,8 @@ ScPositionHelper::getNearestByPosition(long nPos) const
         return *posLB;
     }
 
-    long nDiffUB = posUB->second - nPos;
-    long nDiffLB = posLB->second - nPos;
+    tools::Long nDiffUB = posUB->second - nPos;
+    tools::Long nDiffLB = posLB->second - nPos;
 
     if (nDiffUB < -nDiffLB)
     {
@@ -246,14 +246,14 @@ ScPositionHelper::getNearestByPosition(long nPos) const
     }
 }
 
-long ScPositionHelper::getPosition(index_type nIndex) const
+tools::Long ScPositionHelper::getPosition(index_type nIndex) const
 {
     auto it = mData.find(std::make_pair(nIndex, 0));
     if (it == mData.end()) return -1;
     return it->second;
 }
 
-long ScPositionHelper::computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx)
+tools::Long ScPositionHelper::computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx)
 {
     assert(MAX_INDEX > 0);
     if (nIndex < 0) nIndex = 0;
@@ -261,7 +261,7 @@ long ScPositionHelper::computePosition(index_type nIndex, const std::function<lo
 
     const auto& rNearest = getNearestByIndex(nIndex);
     index_type nStartIndex = rNearest.first;
-    long nTotalPixels = rNearest.second;
+    tools::Long nTotalPixels = rNearest.second;
 
     if (nStartIndex < nIndex)
     {
@@ -293,43 +293,43 @@ ScBoundsProvider::ScBoundsProvider(const ScViewData &rView, SCTAB nT, bool bColH
     , nSecondPositionPx(-1)
 {}
 
-void ScBoundsProvider::GetStartIndexAndPosition(SCCOL& nIndex, long& nPosition) const
+void ScBoundsProvider::GetStartIndexAndPosition(SCCOL& nIndex, tools::Long& nPosition) const
 {
     assert(bColumnHeader);
     nIndex = nFirstIndex;
     nPosition = nFirstPositionPx;
 }
 
-void ScBoundsProvider::GetEndIndexAndPosition(SCCOL& nIndex, long& nPosition) const
+void ScBoundsProvider::GetEndIndexAndPosition(SCCOL& nIndex, tools::Long& nPosition) const
 {
     assert(bColumnHeader);
     nIndex = nSecondIndex;
     nPosition = nSecondPositionPx;
 }
 
-void ScBoundsProvider::GetStartIndexAndPosition(SCROW& nIndex, long& nPosition) const
+void ScBoundsProvider::GetStartIndexAndPosition(SCROW& nIndex, tools::Long& nPosition) const
 {
     assert(!bColumnHeader);
     nIndex = nFirstIndex;
     nPosition = nFirstPositionPx;
 }
 
-void ScBoundsProvider::GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) const
+void ScBoundsProvider::GetEndIndexAndPosition(SCROW& nIndex, tools::Long& nPosition) const
 {
     assert(!bColumnHeader);
     nIndex = nSecondIndex;
     nPosition = nSecondPositionPx;
 }
 
-long ScBoundsProvider::GetSize(index_type nIndex) const
+tools::Long ScBoundsProvider::GetSize(index_type nIndex) const
 {
     const sal_uInt16 nSize = bColumnHeader ? rDoc.GetColWidth(nIndex, nTab) : rDoc.GetRowHeight(nIndex, nTab);
     return ScViewData::ToPixel(nSize, bColumnHeader ? mfPPTX : mfPPTY);
 }
 
-void ScBoundsProvider::GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
-                    long nBound, index_type& nFoundIndex, long& nPosition,
-                    bool bTowards, long nDiff)
+void ScBoundsProvider::GetIndexAndPos(index_type nNearestIndex, tools::Long nNearestPosition,
+                    tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition,
+                    bool bTowards, tools::Long nDiff)
 {
     if (nDiff > 0) // nBound < nNearestPosition
         GeIndexBackwards(nNearestIndex, nNearestPosition, nBound,
@@ -341,13 +341,13 @@ void ScBoundsProvider::GetIndexAndPos(index_type nNearestIndex, long nNearestPos
 
 void ScBoundsProvider::Compute(
             value_type aFirstNearest, value_type aSecondNearest,
-            long nFirstBound, long nSecondBound)
+            tools::Long nFirstBound, tools::Long nSecondBound)
 {
     SAL_INFO("sc.lok.header", "BoundsProvider: nFirstBound: " << nFirstBound
             << ", nSecondBound: " << nSecondBound);
 
-    long nFirstDiff = aFirstNearest.second - nFirstBound;
-    long nSecondDiff = aSecondNearest.second - nSecondBound;
+    tools::Long nFirstDiff = aFirstNearest.second - nFirstBound;
+    tools::Long nSecondDiff = aSecondNearest.second - nSecondBound;
     SAL_INFO("sc.lok.header", "BoundsProvider: rTopNearest: index: " << aFirstNearest.first
             << ", pos: " << aFirstNearest.second << ", diff: " << nFirstDiff);
     SAL_INFO("sc.lok.header", "BoundsProvider: rBottomNearest: index: " << aSecondNearest.first
@@ -363,7 +363,7 @@ void ScBoundsProvider::Compute(
     }
 
     index_type nNearestIndex = aFirstNearest.first;
-    long nNearestPosition = aFirstNearest.second;
+    tools::Long nNearestPosition = aFirstNearest.second;
     SAL_INFO("sc.lok.header", "BoundsProvider: nearest to first bound:  nNearestIndex: "
             << nNearestIndex << ", nNearestPosition: " << nNearestPosition);
 
@@ -399,14 +399,14 @@ void ScBoundsProvider::Compute(
     }
 }
 
-void ScBoundsProvider::EnlargeStartBy(long nOffset)
+void ScBoundsProvider::EnlargeStartBy(tools::Long nOffset)
 {
     const index_type nNewFirstIndex =
             std::max(static_cast<index_type>(-1),
                      static_cast<index_type>(nFirstIndex - nOffset));
     for (index_type nIndex = nFirstIndex; nIndex > nNewFirstIndex; --nIndex)
     {
-        const long nSizePx = GetSize(nIndex);
+        const tools::Long nSizePx = GetSize(nIndex);
         nFirstPositionPx -= nSizePx;
     }
     nFirstIndex = nNewFirstIndex;
@@ -414,12 +414,12 @@ void ScBoundsProvider::EnlargeStartBy(long nOffset)
             << ", nFirstPositionPx: " << nFirstPositionPx);
 }
 
-void ScBoundsProvider::EnlargeEndBy(long nOffset)
+void ScBoundsProvider::EnlargeEndBy(tools::Long nOffset)
 {
     const index_type nNewSecondIndex = std::min(MAX_INDEX, static_cast<index_type>(nSecondIndex + nOffset));
     for (index_type nIndex = nSecondIndex + 1; nIndex <= nNewSecondIndex; ++nIndex)
     {
-        const long nSizePx = GetSize(nIndex);
+        const tools::Long nSizePx = GetSize(nIndex);
         nSecondPositionPx += nSizePx;
     }
     nSecondIndex = nNewSecondIndex;
@@ -428,8 +428,8 @@ void ScBoundsProvider::EnlargeEndBy(long nOffset)
 }
 
 void ScBoundsProvider::GeIndexBackwards(
-            index_type nNearestIndex, long nNearestPosition,
-            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+            index_type nNearestIndex, tools::Long nNearestPosition,
+            tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition, bool bTowards)
 {
     nFoundIndex = -1;
     for (index_type nIndex = nNearestIndex; nIndex >= 0; --nIndex)
@@ -441,7 +441,7 @@ void ScBoundsProvider::GeIndexBackwards(
             break;
         }
 
-        const long nSizePx = GetSize(nIndex);
+        const tools::Long nSizePx = GetSize(nIndex);
         nNearestPosition -= nSizePx;
     }
     if (!bTowards && nFoundIndex != -1)
@@ -452,13 +452,13 @@ void ScBoundsProvider::GeIndexBackwards(
 }
 
 void ScBoundsProvider::GetIndexTowards(
-            index_type nNearestIndex, long nNearestPosition,
-            long nBound, index_type& nFoundIndex, long& nPosition, bool bTowards)
+            index_type nNearestIndex, tools::Long nNearestPosition,
+            tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition, bool bTowards)
 {
     nFoundIndex = -2;
     for (index_type nIndex = nNearestIndex + 1; nIndex <= MAX_INDEX; ++nIndex)
     {
-        const long nSizePx = GetSize(nIndex);
+        const tools::Long nSizePx = GetSize(nIndex);
         nNearestPosition += nSizePx;
 
         if (nNearestPosition > nBound)
@@ -529,8 +529,8 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     ScSplitMode eExVSplitMode = eVSplitMode;
     SCCOL nExFixPosX = nFixPosX;
     SCROW nExFixPosY = nFixPosY;
-    long nExHSplitPos = nHSplitPos;
-    long nExVSplitPos = nVSplitPos;
+    tools::Long nExHSplitPos = nHSplitPos;
+    tools::Long nExVSplitPos = nVSplitPos;
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -575,8 +575,8 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     pSettings[SC_POSITION_BOTTOM].Name = SC_POSITIONBOTTOM;
     pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
 
-    sal_Int32 nZoomValue = long(aZoomY * 100);
-    sal_Int32 nPageZoomValue = long(aPageZoomY * 100);
+    sal_Int32 nZoomValue = tools::Long(aZoomY * 100);
+    sal_Int32 nPageZoomValue = tools::Long(aPageZoomY * 100);
     pSettings[SC_TABLE_ZOOM_TYPE].Name = SC_ZOOMTYPE;
     pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
     pSettings[SC_TABLE_ZOOM_VALUE].Name = SC_ZOOMVALUE;
@@ -719,12 +719,12 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     if (eHSplitMode == SC_SPLIT_FIX)
         nFixPosX = rViewData.GetDocument().SanitizeCol( static_cast<SCCOL>( bHasHSplitInTwips ? nTempPosHTw : nTempPosH ));
     else
-        nHSplitPos = bHasHSplitInTwips ? static_cast< long >( nTempPosHTw * rViewData.GetPPTX() ) : nTempPosH;
+        nHSplitPos = bHasHSplitInTwips ? static_cast< tools::Long >( nTempPosHTw * rViewData.GetPPTX() ) : nTempPosH;
 
     if (eVSplitMode == SC_SPLIT_FIX)
         nFixPosY = rViewData.GetDocument().SanitizeRow( static_cast<SCROW>( bHasVSplitInTwips ? nTempPosVTw : nTempPosV ));
     else
-        nVSplitPos = bHasVSplitInTwips ? static_cast< long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
+        nVSplitPos = bHasVSplitInTwips ? static_cast< tools::Long >( nTempPosVTw * rViewData.GetPPTY() ) : nTempPosV;
 
     eWhichActive = SanitizeWhichActive();
 }
@@ -811,8 +811,8 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
     assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
     maMarkData.SelectOneTable(0); // Sync with nTabNo
 
-    aScrSize = Size( long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
-                     static_cast<long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
+    aScrSize = Size( tools::Long( STD_COL_WIDTH           * PIXEL_PER_TWIPS * OLE_STD_CELLS_X ),
+                     static_cast<tools::Long>( ScGlobal::nStdRowHeight * PIXEL_PER_TWIPS * OLE_STD_CELLS_Y ) );
     maTabData.emplace_back( new ScViewDataTable(nullptr) );
     pThisTab = maTabData[nTabNo].get();
 
@@ -1405,11 +1405,11 @@ void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
     const SCTAB nTab = GetTabNo();
     auto GetColWidthPx = [this, nTab](SCCOL nCol) {
         const sal_uInt16 nSize = this->mrDoc.GetColWidth(nCol, nTab);
-        const long nSizePx = ScViewData::ToPixel(nSize, nPPTX);
+        const tools::Long nSizePx = ScViewData::ToPixel(nSize, nPPTX);
         return nSizePx;
     };
 
-    long nTotalPixels = GetLOKWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
+    tools::Long nTotalPixels = GetLOKWidthHelper().computePosition(nNewMaxCol, GetColWidthPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledCol: nNewMaxCol: "
             << nNewMaxCol << ", nTotalPixels: " << nTotalPixels);
@@ -1430,11 +1430,11 @@ void ScViewData::SetMaxTiledRow( SCROW nNewMaxRow )
     const SCTAB nTab = GetTabNo();
     auto GetRowHeightPx = [this, nTab](SCROW nRow) {
         const sal_uInt16 nSize = this->mrDoc.GetRowHeight(nRow, nTab);
-        const long nSizePx = ScViewData::ToPixel(nSize, nPPTY);
+        const tools::Long nSizePx = ScViewData::ToPixel(nSize, nPPTY);
         return nSizePx;
     };
 
-    long nTotalPixels = GetLOKHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
+    tools::Long nTotalPixels = GetLOKHeightHelper().computePosition(nNewMaxRow, GetRowHeightPx);
 
     SAL_INFO("sc.lok.docsize", "ScViewData::SetMaxTiledRow: nNewMaxRow: "
             << nNewMaxRow << ", nTotalPixels: " << nTotalPixels);
@@ -1592,11 +1592,11 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if ( bAsianVertical )
             bGrowCentered = bGrowToLeft = false;   // keep old behavior for asian mode
 
-        long nSizeXPix, nSizeXPTwips = 0;
+        tools::Long nSizeXPix, nSizeXPTwips = 0;
 
-        const long nGridWidthPx = pView->GetGridWidth(eHWhich);
-        const long nGridHeightPx = pView->GetGridHeight(eVWhich);
-        long nGridWidthTwips = 0, nGridHeightTwips = 0;
+        const tools::Long nGridWidthPx = pView->GetGridWidth(eHWhich);
+        const tools::Long nGridHeightPx = pView->GetGridHeight(eVWhich);
+        tools::Long nGridWidthTwips = 0, nGridHeightTwips = 0;
         if (bLOKPrintTwips)
         {
             Size aGridSize(nGridWidthPx, nGridHeightPx);
@@ -1622,13 +1622,13 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             {
                 //  growing into both directions until one edge is reached
                 //! should be limited to whole cells in both directions
-                long nLeft = aPixRect.Left();
-                long nRight = nGridWidthPx - aPixRect.Right();
+                tools::Long nLeft = aPixRect.Left();
+                tools::Long nRight = nGridWidthPx - aPixRect.Right();
                 nSizeXPix = aPixRect.GetWidth() + 2 * std::min( nLeft, nRight );
                 if (bLOKPrintTwips)
                 {
-                    long nLeftPTwips = aPTwipsRect.Left();
-                    long nRightPTwips = nGridWidthTwips - aPTwipsRect.Right();
+                    tools::Long nLeftPTwips = aPTwipsRect.Left();
+                    tools::Long nRightPTwips = nGridWidthTwips - aPTwipsRect.Right();
                     nSizeXPTwips = aPTwipsRect.GetWidth() + 2 * std::min(nLeftPTwips, nRightPTwips);
                 }
             }
@@ -1653,8 +1653,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             }
         }
         OSL_ENSURE(pView,"no View for EditView");
-        long nSizeYPix = nGridHeightPx - aPixRect.Top();
-        long nSizeYPTwips = bLOKPrintTwips ? (nGridHeightTwips - aPTwipsRect.Top()) : 0;
+        tools::Long nSizeYPix = nGridHeightPx - aPixRect.Top();
+        tools::Long nSizeYPTwips = bLOKPrintTwips ? (nGridHeightTwips - aPTwipsRect.Top()) : 0;
 
         if ( nSizeYPix <= 0 )
         {
@@ -1690,8 +1690,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         if (bLOKPrintTwips)
             aVisPTwips = pEditView[eWhich]->GetLOKSpecialVisArea();
 
-        long nDiff = aVis.Right() - aVis.Left();
-        long nDiffPTwips = bLOKPrintTwips ? (aVisPTwips.Right() - aVisPTwips.Left()) : 0;
+        tools::Long nDiff = aVis.Right() - aVis.Left();
+        tools::Long nDiffPTwips = bLOKPrintTwips ? (aVisPTwips.Right() - aVisPTwips.Left()) : 0;
         if ( GetEditAdjust() == SvxAdjust::Right )
         {
             aVis.SetRight( aPaper.Width() - 1 );
@@ -1820,10 +1820,10 @@ void ScViewData::EditGrowX()
     if (bLOKPrintTwips)
         aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
 
-    long        nOldRight = aArea.Right();
+    tools::Long        nOldRight = aArea.Right();
 
     // Margin is already included in the original width.
-    long nTextWidth = pEngine->CalcTextWidth();
+    tools::Long nTextWidth = pEngine->CalcTextWidth();
 
     bool bChanged = false;
     bool bAsianVertical = pEngine->IsVertical();
@@ -1844,24 +1844,24 @@ void ScViewData::EditGrowX()
     {
         while (aArea.GetWidth() + 0 < nTextWidth && ( nEditStartCol > nLeft || nEditEndCol < nRight ) )
         {
-            long nLogicLeft = 0;
-            long nLogicLeftPTwips = 0;
+            tools::Long nLogicLeft = 0;
+            tools::Long nLogicLeftPTwips = 0;
             if ( nEditStartCol > nLeft )
             {
                 --nEditStartCol;
-                long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
-                long nLeftPix = ToPixel( nColWidth, nPPTX );
+                tools::Long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
+                tools::Long nLeftPix = ToPixel( nColWidth, nPPTX );
                 nLogicLeft = pWin->PixelToLogic(Size(nLeftPix,0)).Width();
                 if (bLOKPrintTwips)
                     nLogicLeftPTwips = nColWidth;
             }
-            long nLogicRight = 0;
-            long nLogicRightPTwips = 0;
+            tools::Long nLogicRight = 0;
+            tools::Long nLogicRightPTwips = 0;
             if ( nEditEndCol < nRight )
             {
                 ++nEditEndCol;
-                long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
-                long nRightPix = ToPixel( nColWidth, nPPTX );
+                tools::Long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
+                tools::Long nRightPix = ToPixel( nColWidth, nPPTX );
                 nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
                 if (bLOKPrintTwips)
                     nLogicRightPTwips = nColWidth;
@@ -1877,15 +1877,15 @@ void ScViewData::EditGrowX()
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
             {
-                long nCenter = ( aArea.Left() + aArea.Right() ) / 2;
-                long nHalf = aSize.Width() / 2;
+                tools::Long nCenter = ( aArea.Left() + aArea.Right() ) / 2;
+                tools::Long nHalf = aSize.Width() / 2;
                 aArea.SetLeft( nCenter - nHalf + 1 );
                 aArea.SetRight( nCenter + aSize.Width() - nHalf - 1 );
 
                 if (bLOKPrintTwips)
                 {
-                    long nCenterPTwips = ( aAreaPTwips.Left() + aAreaPTwips.Right() ) / 2;
-                    long nHalfPTwips = aSizePTwips.Width() / 2;
+                    tools::Long nCenterPTwips = ( aAreaPTwips.Left() + aAreaPTwips.Right() ) / 2;
+                    tools::Long nHalfPTwips = aSizePTwips.Width() / 2;
                     aAreaPTwips.SetLeft( nCenterPTwips - nHalfPTwips + 1 );
                     aAreaPTwips.SetRight( nCenterPTwips + aSizePTwips.Width() - nHalfPTwips - 1 );
                 }
@@ -1901,10 +1901,10 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditStartCol > nLeft)
         {
             --nEditStartCol;
-            long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
-            long nPix = ToPixel( nColWidth, nPPTX );
-            long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
-            long& nLogicWidthPTwips = nColWidth;
+            tools::Long nColWidth = rLocalDoc.GetColWidth( nEditStartCol, nTabNo );
+            tools::Long nPix = ToPixel( nColWidth, nPPTX );
+            tools::Long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            tools::Long& nLogicWidthPTwips = nColWidth;
 
             if ( !bLayoutRTL )
             {
@@ -1943,10 +1943,10 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
         {
             ++nEditEndCol;
-            long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
-            long nPix = ToPixel( nColWidth, nPPTX );
-            long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
-            long& nLogicWidthPTwips = nColWidth;
+            tools::Long nColWidth = rLocalDoc.GetColWidth( nEditEndCol, nTabNo );
+            tools::Long nPix = ToPixel( nColWidth, nPPTX );
+            tools::Long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
+            tools::Long& nLogicWidthPTwips = nColWidth;
             if ( bLayoutRTL )
             {
                 aArea.AdjustLeft( -nLogicWidth );
@@ -1996,15 +1996,15 @@ void ScViewData::EditGrowX()
 
             pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
 
-            long nCenter = aSize.Width() / 2;
-            long nVisSize = aArea.GetWidth();
+            tools::Long nCenter = aSize.Width() / 2;
+            tools::Long nVisSize = aArea.GetWidth();
             aVis.SetLeft( nCenter - nVisSize / 2 );
             aVis.SetRight( aVis.Left() + nVisSize - 1 );
 
             if (bLOKPrintTwips)
             {
-                long nCenterPTwips = aSizePTwips.Width() / 2;
-                long nVisSizePTwips = aAreaPTwips.GetWidth();
+                tools::Long nCenterPTwips = aSizePTwips.Width() / 2;
+                tools::Long nVisSizePTwips = aAreaPTwips.GetWidth();
                 aVisPTwips.SetLeft( nCenterPTwips - nVisSizePTwips / 2 );
                 aVisPTwips.SetRight( aVisPTwips.Left() + nVisSizePTwips - 1 );
             }
@@ -2030,13 +2030,13 @@ void ScViewData::EditGrowX()
 
             pEngine->SetDefaultItem( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
 
-            long nMove = aVis.Left();
+            tools::Long nMove = aVis.Left();
             aVis.SetLeft( 0 );
             aVis.AdjustRight( -nMove );
 
             if (bLOKPrintTwips)
             {
-                long nMovePTwips = aVisPTwips.Left();
+                tools::Long nMovePTwips = aVisPTwips.Left();
                 aVisPTwips.SetLeft( 0 );
                 aVisPTwips.AdjustRight( -nMovePTwips );
             }
@@ -2115,13 +2115,13 @@ void ScViewData::EditGrowY( bool bInitial )
         aAreaPTwips = pCurView->GetLOKSpecialOutputArea();
     }
 
-    long        nOldBottom = aArea.Bottom();
-    long        nTextHeight = pEngine->GetTextHeight();
+    tools::Long        nOldBottom = aArea.Bottom();
+    tools::Long        nTextHeight = pEngine->GetTextHeight();
 
     //  When editing a formula in a cell with optimal height, allow a larger portion
     //  to be clipped before extending to following rows, to avoid obscuring cells for
     //  reference input (next row is likely to be useful in formulas).
-    long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
+    tools::Long nAllowedExtra = SC_GROWY_SMALL_EXTRA;
     if (nEditEndRow == nEditRow && !(mrDoc.GetRowFlags(nEditRow, nTabNo) & CRFlags::ManualSize) &&
             pEngine->GetParagraphCount() <= 1 )
     {
@@ -2141,8 +2141,8 @@ void ScViewData::EditGrowY( bool bInitial )
     {
         ++nEditEndRow;
         ScDocument& rLocalDoc = GetDocument();
-        long nRowHeight = rLocalDoc.GetRowHeight( nEditEndRow, nTabNo );
-        long nPix = ToPixel( nRowHeight, nPPTY );
+        tools::Long nRowHeight = rLocalDoc.GetRowHeight( nEditEndRow, nTabNo );
+        tools::Long nPix = ToPixel( nRowHeight, nPPTY );
         aArea.AdjustBottom(pWin->PixelToLogic(Size(0,nPix)).Height() );
         if (bLOKPrintTwips)
             aAreaPTwips.AdjustBottom(nRowHeight);
@@ -2358,7 +2358,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
 
     SCCOL nPosX = GetPosX(eWhichX, nForTab);
-    long nScrPosX = 0;
+    tools::Long nScrPosX = 0;
 
     if (bAllowNeg || nWhereX >= nPosX)
     {
@@ -2382,7 +2382,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nTSize = mrDoc.GetColWidth(nX, nForTab);
                     if (nTSize)
                     {
-                        long nSizeXPix = ToPixel( nTSize, nPPTX );
+                        tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                         nScrPosX += nSizeXPix;
                     }
                 }
@@ -2396,7 +2396,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 nTSize = mrDoc.GetColWidth(nX, nForTab);
                 if (nTSize)
                 {
-                    long nSizeXPix = ToPixel( nTSize, nPPTX );
+                    tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                     nScrPosX -= nSizeXPix;
                 }
             }
@@ -2406,7 +2406,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 
 
     SCROW nPosY = GetPosY(eWhichY, nForTab);
-    long nScrPosY = 0;
+    tools::Long nScrPosY = 0;
 
     if (bAllowNeg || nWhereY >= nPosY)
     {
@@ -2446,7 +2446,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 nTSize = mrDoc.GetRowHeight(nY, nForTab);
                 if (nTSize)
                 {
-                    long nSizeYPix = ToPixel( nTSize, nPPTY );
+                    tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
                     nScrPosY -= nSizeYPix;
                 }
             }
@@ -2466,9 +2466,9 @@ Point ScViewData::GetPrintTwipsPos(SCCOL nCol, SCROW nRow) const
 {
     // hidden ones are given 0 sizes by these by default.
     // TODO: rewrite this to loop over spans (matters for jumbosheets).
-    long nPosX = nCol ? mrDoc.GetColWidth(0, nCol - 1, nTabNo) : 0;
+    tools::Long nPosX = nCol ? mrDoc.GetColWidth(0, nCol - 1, nTabNo) : 0;
     // This is now fast as it loops over spans.
-    long nPosY = nRow ? mrDoc.GetRowHeight(0, nRow - 1, nTabNo) : 0;
+    tools::Long nPosY = nRow ? mrDoc.GetRowHeight(0, nRow - 1, nTabNo) : 0;
     // TODO: adjust for RTL layout case.
 
     return Point(nPosX, nPosY);
@@ -2476,8 +2476,8 @@ Point ScViewData::GetPrintTwipsPos(SCCOL nCol, SCROW nRow) const
 
 Point ScViewData::GetPrintTwipsPosFromTileTwips(const Point& rTileTwipsPos) const
 {
-    const long nPixelX = static_cast<long>(rTileTwipsPos.X() * nPPTX);
-    const long nPixelY = static_cast<long>(rTileTwipsPos.Y() * nPPTY);
+    const tools::Long nPixelX = static_cast<tools::Long>(rTileTwipsPos.X() * nPPTX);
+    const tools::Long nPixelY = static_cast<tools::Long>(rTileTwipsPos.Y() * nPPTY);
     SCCOL nCol = 0;
     SCROW nRow = 0;
 
@@ -2495,8 +2495,8 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned)
     Point aCellPos = bPosSizeInPixels ? GetScrPos( nX, nY, SC_SPLIT_BOTTOMRIGHT, true ) :
             GetPrintTwipsPos(nX, nY);
 
-    long nSizeX;
-    long nSizeY;
+    tools::Long nSizeX;
+    tools::Long nSizeY;
     if (bPosSizeInPixels)
         GetMergeSizePixel( nX, nY, nSizeX, nSizeY );
     else
@@ -2515,11 +2515,11 @@ OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned)
         if (nSizeY == 0)
             nSizeY = 1;
 
-        long nPosXTw = rtl::math::round(aCellPos.getX() / fPPTX);
-        long nPosYTw = rtl::math::round(aCellPos.getY() / fPPTY);
+        tools::Long nPosXTw = rtl::math::round(aCellPos.getX() / fPPTX);
+        tools::Long nPosYTw = rtl::math::round(aCellPos.getY() / fPPTY);
         // look at Rectangle( const Point& rLT, const Size& rSize ) for the '- 1'
-        long nSizeXTw = rtl::math::round(nSizeX / fPPTX) - 1;
-        long nSizeYTw = rtl::math::round(nSizeY / fPPTY) - 1;
+        tools::Long nSizeXTw = rtl::math::round(nSizeX / fPPTX) - 1;
+        tools::Long nSizeYTw = rtl::math::round(nSizeY / fPPTY) - 1;
 
         ss << nPosXTw << ", " << nPosYTw << ", " << nSizeXTw << ", " << nSizeYTw << ", "
             << nX << ", " << nY;
@@ -2567,7 +2567,7 @@ SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uI
             sal_uInt16 nTSize = mrDoc.GetColWidth(nColNo, nTabNo);
             if (nTSize)
             {
-                long nSizeXPix = ToPixel( nTSize, nPPTX );
+                tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                 nScrPosX = sal::static_int_cast<sal_uInt16>( nScrPosX + static_cast<sal_uInt16>(nSizeXPix) );
             }
         }
@@ -2597,7 +2597,7 @@ SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uI
     {
         // forward
         nY = nPosY;
-        long nScrPosY = 0;
+        tools::Long nScrPosY = 0;
         AddPixelsWhile(nScrPosY, nScrSizeY, nY, mrDoc.MaxRow(), nPPTY, &mrDoc, nTabNo);
         // Original loop ended on last evaluated +1 or if that was MaxRow even on MaxRow+2.
         nY += (nY == mrDoc.MaxRow() ? 2 : 1);
@@ -2607,7 +2607,7 @@ SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uI
     {
         // backward
         nY = nPosY-1;
-        long nScrPosY = 0;
+        tools::Long nScrPosY = 0;
         AddPixelsWhileBackward(nScrPosY, nScrSizeY, nY, 0, nPPTY, &mrDoc, nTabNo);
         // Original loop ended on last evaluated -1 or if that was 0 even on -2.
         nY -= (nY == 0 ? 2 : 1);
@@ -2638,13 +2638,13 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
     return CellsAtY( GetPosY( eWhichY ), -1, eWhichY );
 }
 
-bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const
+bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, tools::Long& rSizeYPix ) const
 {
     const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nTabNo, ATTR_MERGE);
     if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
     {
-        long nOutWidth = 0;
-        long nOutHeight = 0;
+        tools::Long nOutWidth = 0;
+        tools::Long nOutHeight = 0;
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=0; i<nCountX; i++)
             nOutWidth += ToPixel(mrDoc.GetColWidth(nX + i, nTabNo), nPPTX);
@@ -2675,7 +2675,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
     }
 }
 
-bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, long& rSizeXTwips, long& rSizeYTwips) const
+bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, tools::Long& rSizeXTwips, tools::Long& rSizeYTwips) const
 {
     const ScMergeAttr* pMerge = mrDoc.GetAttr(nX, nY, nTabNo, ATTR_MERGE);
     SCCOL nCountX = pMerge->GetColMerge();
@@ -2691,7 +2691,7 @@ bool ScViewData::GetMergeSizePrintTwips(SCCOL nX, SCROW nY, long& rSizeXTwips, l
     return (nCountX > 1 || nCountY > 1);
 }
 
-void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
+void ScViewData::GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSplitPos eWhich,
                                         SCCOL& rPosX, SCROW& rPosY,
                                         bool bTestMerge, bool bRepair, SCTAB nForTab )
 {
@@ -2722,8 +2722,8 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     SCROW nStartPosY = GetPosY(eVWhich, nForTab);
     rPosX = nStartPosX;
     rPosY = nStartPosY;
-    long nScrX = 0;
-    long nScrY = 0;
+    tools::Long nScrX = 0;
+    tools::Long nScrY = 0;
 
     if (nClickX > 0)
     {
@@ -2807,11 +2807,11 @@ void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
                                         SCCOL nPosX, SCROW nPosY, bool& rLeft, bool& rTop )
 {
     bool bLayoutRTL = mrDoc.IsLayoutRTL(nTabNo);
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     Point aCellStart = GetScrPos( nPosX, nPosY, eWhich, true );
-    long nSizeX;
-    long nSizeY;
+    tools::Long nSizeX;
+    tools::Long nSizeY;
     GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
     rLeft = ( rClickPos.X() - aCellStart.X() ) * nLayoutSign <= nSizeX / 2;
     rTop  = rClickPos.Y() - aCellStart.Y() <= nSizeY / 2;
@@ -2824,27 +2824,27 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
     if (nNewPosX != 0 && !bIsTiledRendering)
     {
         SCCOL nOldPosX = pThisTab->nPosX[eWhich];
-        long nTPosX = pThisTab->nTPosX[eWhich];
-        long nPixPosX = pThisTab->nPixPosX[eWhich];
+        tools::Long nTPosX = pThisTab->nTPosX[eWhich];
+        tools::Long nPixPosX = pThisTab->nPixPosX[eWhich];
         SCCOL i;
         if ( nNewPosX > nOldPosX )
             for ( i=nOldPosX; i<nNewPosX; i++ )
             {
-                long nThis = mrDoc.GetColWidth(i, nTabNo);
+                tools::Long nThis = mrDoc.GetColWidth(i, nTabNo);
                 nTPosX -= nThis;
                 nPixPosX -= ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTX);
             }
         else
             for ( i=nNewPosX; i<nOldPosX; i++ )
             {
-                long nThis = mrDoc.GetColWidth(i, nTabNo);
+                tools::Long nThis = mrDoc.GetColWidth(i, nTabNo);
                 nTPosX += nThis;
                 nPixPosX += ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTX);
             }
 
         pThisTab->nPosX[eWhich] = nNewPosX;
         pThisTab->nTPosX[eWhich] = nTPosX;
-        pThisTab->nMPosX[eWhich] = static_cast<long>(nTPosX * HMM_PER_TWIPS);
+        pThisTab->nMPosX[eWhich] = static_cast<tools::Long>(nTPosX * HMM_PER_TWIPS);
         pThisTab->nPixPosX[eWhich] = nPixPosX;
     }
     else
@@ -2863,13 +2863,13 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
     if (nNewPosY != 0 && !bIsTiledRendering)
     {
         SCROW nOldPosY = pThisTab->nPosY[eWhich];
-        long nTPosY = pThisTab->nTPosY[eWhich];
-        long nPixPosY = pThisTab->nPixPosY[eWhich];
+        tools::Long nTPosY = pThisTab->nTPosY[eWhich];
+        tools::Long nPixPosY = pThisTab->nPixPosY[eWhich];
         SCROW i, nHeightEndRow;
         if ( nNewPosY > nOldPosY )
             for ( i=nOldPosY; i<nNewPosY; i++ )
             {
-                long nThis = mrDoc.GetRowHeight(i, nTabNo, nullptr, &nHeightEndRow);
+                tools::Long nThis = mrDoc.GetRowHeight(i, nTabNo, nullptr, &nHeightEndRow);
                 SCROW nRows = std::min( nNewPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY -= nThis * nRows;
@@ -2878,7 +2878,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         else
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
-                long nThis = mrDoc.GetRowHeight(i, nTabNo, nullptr, &nHeightEndRow);
+                tools::Long nThis = mrDoc.GetRowHeight(i, nTabNo, nullptr, &nHeightEndRow);
                 SCROW nRows = std::min( nOldPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY += nThis * nRows;
@@ -2887,7 +2887,7 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
 
         pThisTab->nPosY[eWhich] = nNewPosY;
         pThisTab->nTPosY[eWhich] = nTPosY;
-        pThisTab->nMPosY[eWhich] = static_cast<long>(nTPosY * HMM_PER_TWIPS);
+        pThisTab->nMPosY[eWhich] = static_cast<tools::Long>(nTPosY * HMM_PER_TWIPS);
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
     else
@@ -2903,13 +2903,13 @@ void ScViewData::RecalcPixPos()             // after zoom changes
 {
     for (sal_uInt16 eWhich=0; eWhich<2; eWhich++)
     {
-        long nPixPosX = 0;
+        tools::Long nPixPosX = 0;
         SCCOL nPosX = pThisTab->nPosX[eWhich];
         for (SCCOL i=0; i<nPosX; i++)
             nPixPosX -= ToPixel(mrDoc.GetColWidth(i, nTabNo), nPPTX);
         pThisTab->nPixPosX[eWhich] = nPixPosX;
 
-        long nPixPosY = 0;
+        tools::Long nPixPosY = 0;
         SCROW nPosY = pThisTab->nPosY[eWhich];
         for (SCROW j=0; j<nPosY; j++)
             nPixPosY -= ToPixel(mrDoc.GetRowHeight(j, nTabNo), nPPTY);
@@ -2935,9 +2935,9 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
     SCCOL nCol;
     SCROW nRow;
     sal_uInt16 nTSize;
-    long nSizePix;
-    long nScrPosX = 0;
-    long nScrPosY = 0;
+    tools::Long nSizePix;
+    tools::Long nScrPosX = 0;
+    tools::Long nScrPosY = 0;
 
     SetActivePart( SC_SPLIT_BOTTOMLEFT );
     SetPosX( SC_SPLIT_LEFT, nCol1 );
@@ -2968,20 +2968,20 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 
 void ScViewData::SetScreenPos( const Point& rVisAreaStart )
 {
-    long nSize;
-    long nTwips;
-    long nAdd;
+    tools::Long nSize;
+    tools::Long nTwips;
+    tools::Long nAdd;
     bool bEnd;
 
     nSize = 0;
-    nTwips = static_cast<long>(rVisAreaStart.X() / HMM_PER_TWIPS);
+    nTwips = static_cast<tools::Long>(rVisAreaStart.X() / HMM_PER_TWIPS);
     if (mrDoc.IsLayoutRTL(nTabNo))
         nTwips = -nTwips;
     SCCOL nX1 = 0;
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = static_cast<long>(mrDoc.GetColWidth(nX1, nTabNo));
+        nAdd = static_cast<tools::Long>(mrDoc.GetColWidth(nX1, nTabNo));
         if (nSize + nAdd <= nTwips + 1 && nX1 < mrDoc.MaxCol())
         {
             nSize += nAdd;
@@ -2992,12 +2992,12 @@ void ScViewData::SetScreenPos( const Point& rVisAreaStart )
     }
 
     nSize = 0;
-    nTwips = static_cast<long>(rVisAreaStart.Y() / HMM_PER_TWIPS);
+    nTwips = static_cast<tools::Long>(rVisAreaStart.Y() / HMM_PER_TWIPS);
     SCROW nY1 = 0;
     bEnd = false;
     while (!bEnd)
     {
-        nAdd = static_cast<long>(mrDoc.GetRowHeight(nY1, nTabNo));
+        nAdd = static_cast<tools::Long>(mrDoc.GetRowHeight(nY1, nTabNo));
         if (nSize + nAdd <= nTwips + 1 && nY1 < mrDoc.MaxRow())
         {
             nSize += nAdd;
@@ -3022,8 +3022,8 @@ void ScViewData::SetScreen( const tools::Rectangle& rVisArea )
     //  here without GetOutputFactor(), since it's for the output into a Metafile
 
     aScrSize = rVisArea.GetSize();
-    aScrSize.setWidth( static_cast<long>( aScrSize.Width() * ScGlobal::nScreenPPTX / HMM_PER_TWIPS ) );
-    aScrSize.setHeight( static_cast<long>( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS ) );
+    aScrSize.setWidth( static_cast<tools::Long>( aScrSize.Width() * ScGlobal::nScreenPPTX / HMM_PER_TWIPS ) );
+    aScrSize.setHeight( static_cast<tools::Long>( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS ) );
 }
 
 ScDocFunc& ScViewData::GetDocFunc() const
@@ -3098,8 +3098,8 @@ void ScViewData::UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY 
     aHeight *= Fraction( aScrSize.Height(),1 );
     aHeight /= aOldY;
 
-    aScrSize.setWidth( static_cast<long>(aWidth) );
-    aScrSize.setHeight( static_cast<long>(aHeight) );
+    aScrSize.setWidth( static_cast<tools::Long>(aWidth) );
+    aScrSize.setHeight( static_cast<tools::Long>(aHeight) );
 }
 
 void ScViewData::CalcPPT()
@@ -3162,9 +3162,9 @@ void ScViewData::WriteUserData(OUString& rData)
     // PosX[left]/PosX[right]/PosY[top]/PosY[bottom]
     // when rows bigger than 8192, "+" instead of "/"
 
-    sal_uInt16 nZoom = static_cast<sal_uInt16>(long(pThisTab->aZoomY * 100));
+    sal_uInt16 nZoom = static_cast<sal_uInt16>(tools::Long(pThisTab->aZoomY * 100));
     rData = OUString::number( nZoom ) + "/";
-    nZoom = static_cast<sal_uInt16>(long(pThisTab->aPageZoomY * 100));
+    nZoom = static_cast<sal_uInt16>(tools::Long(pThisTab->aPageZoomY * 100));
     rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
         rData += "1";
@@ -3346,8 +3346,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             ScSplitMode eExVSplit = pViewTab->eVSplitMode;
             SCCOL nExFixPosX = pViewTab->nFixPosX;
             SCROW nExFixPosY = pViewTab->nFixPosY;
-            long nExHSplitPos = pViewTab->nHSplitPos;
-            long nExVSplitPos = pViewTab->nVSplitPos;
+            tools::Long nExHSplitPos = pViewTab->nHSplitPos;
+            tools::Long nExVSplitPos = pViewTab->nVSplitPos;
 
             if (bLOKActive)
             {
@@ -3372,7 +3372,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
                 rSplitPos = Point( bHSplit ? nExHSplitPos : 0, bVSplit ? nExVSplitPos : 0 );
                 rSplitPos = Application::GetDefaultDevice()->PixelToLogic( rSplitPos, MapMode( MapUnit::MapTwip ) );
                 if( pDocShell )
-                    rSplitPos.setX( static_cast<long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor()) );
+                    rSplitPos.setX( static_cast<tools::Long>(static_cast<double>(rSplitPos.X()) / pDocShell->GetOutputFactor()) );
             }
             else if( bFrozen )
             {
@@ -3422,8 +3422,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
 
             // view mode and zoom
             rTabSett.mbPageMode = bPagebreak;
-            rTabSett.mnNormalZoom = static_cast< long >( pViewTab->aZoomY * Fraction( 100.0 ) );
-            rTabSett.mnPageZoom = static_cast< long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
+            rTabSett.mnNormalZoom = static_cast< tools::Long >( pViewTab->aZoomY * Fraction( 100.0 ) );
+            rTabSett.mnPageZoom = static_cast< tools::Long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
         }
     }
 }
@@ -3509,7 +3509,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                 if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
                 {
                     double nFactor = pDocShell->GetOutputFactor();
-                    aPixel.setX( static_cast<long>( aPixel.X() * nFactor + 0.5 ) );
+                    aPixel.setX( static_cast<tools::Long>( aPixel.X() * nFactor + 0.5 ) );
                 }
 
                 bHSplit = bHSplit && aPixel.X() > 0;
@@ -3640,8 +3640,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_ACTIVE_TABLE].Value <<= sName;
     pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = SC_HORIZONTALSCROLLBARWIDTH;
     pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
-    sal_Int32 nZoomValue = long(pThisTab->aZoomY * 100);
-    sal_Int32 nPageZoomValue = long(pThisTab->aPageZoomY * 100);
+    sal_Int32 nZoomValue = tools::Long(pThisTab->aZoomY * 100);
+    sal_Int32 nPageZoomValue = tools::Long(pThisTab->aPageZoomY * 100);
     pSettings[SC_ZOOM_TYPE].Name = SC_ZOOMTYPE;
     pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
     pSettings[SC_ZOOM_VALUE].Name = SC_ZOOMVALUE;
@@ -3916,13 +3916,13 @@ bool ScViewData::UpdateFixX( SCTAB nTab )                   // true = value chan
         return false;
 
     SCCOL nFix = maTabData[nTab]->nFixPosX;
-    long nNewPos = 0;
+    tools::Long nNewPos = 0;
     for (SCCOL nX=maTabData[nTab]->nPosX[SC_SPLIT_LEFT]; nX<nFix; nX++)
     {
         sal_uInt16 nTSize = rLocalDoc.GetColWidth( nX, nTab );
         if (nTSize)
         {
-            long nPix = ToPixel( nTSize, nPPTX );
+            tools::Long nPix = ToPixel( nTSize, nPPTX );
             nNewPos += nPix;
         }
     }
@@ -3951,13 +3951,13 @@ bool ScViewData::UpdateFixY( SCTAB nTab )               // true = value changed
         return false;
 
     SCROW nFix = maTabData[nTab]->nFixPosY;
-    long nNewPos = 0;
+    tools::Long nNewPos = 0;
     for (SCROW nY=maTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
         sal_uInt16 nTSize = rLocalDoc.GetRowHeight( nY, nTab );
         if (nTSize)
         {
-            long nPix = ToPixel( nTSize, nPPTY );
+            tools::Long nPix = ToPixel( nTSize, nPPTY );
             nNewPos += nPix;
         }
     }
@@ -4019,7 +4019,7 @@ void ScViewData::SetRefEnd( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
     nRefEndX = nNewX; nRefEndY = nNewY; nRefEndZ = nNewZ;
 }
 
-void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
+void ScViewData::AddPixelsWhile( tools::Long & rScrY, tools::Long nEndPixels, SCROW & rPosY,
         SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )
 {
     SCROW nRow = rPosY;
@@ -4048,7 +4048,7 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
                     nAdd += nPixel;
                 }
             }
-            rScrY += static_cast<long>(nAdd);
+            rScrY += static_cast<tools::Long>(nAdd);
             nRow += nRows;
         }
     }
@@ -4057,7 +4057,7 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
     rPosY = nRow;
 }
 
-void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
+void ScViewData::AddPixelsWhileBackward( tools::Long & rScrY, tools::Long nEndPixels,
         SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
         SCTAB nTabNo )
 {
@@ -4087,7 +4087,7 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
                     nAdd += nPixel;
                 }
             }
-            rScrY += static_cast<long>(nAdd);
+            rScrY += static_cast<tools::Long>(nAdd);
             nRow -= nRows;
         }
     }
@@ -4192,7 +4192,7 @@ void ScViewData::DeriveLOKFreezeIfNeeded(SCTAB nForTab)
 
 void ScViewData::OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
                                        SCCOL& nExFixPosX, SCROW& nExFixPosY,
-                                       long& nExHSplitPos, long& nExVSplitPos, SCTAB nForTab) const
+                                       tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const
 {
     SCCOL nFreezeCol = mrDoc.GetLOKFreezeCol(nForTab);
     SCROW nFreezeRow = mrDoc.GetLOKFreezeRow(nForTab);

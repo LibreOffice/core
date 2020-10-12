@@ -1960,7 +1960,7 @@ void SwCursor::DoSetBidiLevelUpDown()
 }
 
 bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
-                       Point const * pPt, long nUpDownX,
+                       Point const * pPt, tools::Long nUpDownX,
                        SwRootFrame & rLayout)
 {
     SwTableCursor* pTableCursor = dynamic_cast<SwTableCursor*>(this);

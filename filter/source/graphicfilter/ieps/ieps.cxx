@@ -70,11 +70,11 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, 
 
 
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
+static tools::Long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
 {
     bool    bValid = true;
     bool    bNegative = false;
-    long    nRetValue = 0;
+    tools::Long    nRetValue = 0;
     while (nSecurityCount && (*rBuf == ' ' || *rBuf == 0x9))
     {
         ++rBuf;
@@ -466,7 +466,7 @@ static void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_
 
 //there is no preview -> make a red box
 static void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
-    long nWidth, long nHeight, Graphic &rGraphic)
+    tools::Long nWidth, tools::Long nHeight, Graphic &rGraphic)
 {
     GDIMetaFile aMtf;
     ScopedVclPtrInstance< VirtualDevice > pVDev;
@@ -664,15 +664,15 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 {
                     pDest += 15;
                     nSecurityCount = nRemainingBytes - 15;
-                    long nWidth = ImplGetNumber(pDest, nSecurityCount);
-                    long nHeight = ImplGetNumber(pDest, nSecurityCount);
-                    long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
-                    long nScanLines = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nWidth = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nHeight = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
+                    tools::Long nScanLines = ImplGetNumber(pDest, nSecurityCount);
                     pDest = ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), nSecurityCount, 1);       // go to the first Scanline
                     bOk = pDest && nWidth > 0 && nHeight > 0 && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines;
                     if (bOk)
                     {
-                        long nResult;
+                        tools::Long nResult;
                         bOk = !o3tl::checked_multiply(nWidth, nHeight, nResult) && nResult <= SAL_MAX_INT32/2/3;
                     }
                     if (bOk)
@@ -684,10 +684,10 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             bool bIsValid = true;
                             sal_uInt8 nDat = 0;
                             char nByte;
-                            for (long y = 0; bIsValid && y < nHeight; ++y)
+                            for (tools::Long y = 0; bIsValid && y < nHeight; ++y)
                             {
                                 int nBitsLeft = 0;
-                                for (long x = 0; x < nWidth; ++x)
+                                for (tools::Long x = 0; x < nWidth; ++x)
                                 {
                                     if ( --nBitsLeft < 0 )
                                     {
@@ -770,14 +770,14 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             {
                 pDest += 14;
                 nSecurityCount = std::min<sal_uInt32>(nRemainingBytes - 14, 100);
-                long nNumb[4];
+                tools::Long nNumb[4];
                 nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
                 for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
                 {
                     nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
                 }
                 bool bFail = nSecurityCount == 0;
-                long nWidth(0), nHeight(0);
+                tools::Long nWidth(0), nHeight(0);
                 if (!bFail)
                     bFail = o3tl::checked_sub(nNumb[2], nNumb[0], nWidth) || o3tl::checked_add(nWidth, 1L, nWidth);
                 if (!bFail)

@@ -66,8 +66,8 @@ public:
             return VclHBox::Resize();
         }
 
-        long nWidth = GetSizePixel().Width();
-        long nCurrentWidth = VclHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
+        tools::Long nWidth = GetSizePixel().Width();
+        tools::Long nCurrentWidth = VclHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
 
         // Hide lower priority controls
         for (int i = GetChildCount() - 1; i >= 0; i--)
@@ -158,7 +158,7 @@ public:
             ++nVisibleChildren;
             Size aChildSize = getLayoutRequisition(*pChild);
 
-            long nPrimaryDimension = getPrimaryDimension(aChildSize);
+            tools::Long nPrimaryDimension = getPrimaryDimension(aChildSize);
             nPrimaryDimension += pChild->get_padding() * 2;
             setPrimaryDimension(aChildSize, nPrimaryDimension);
 
@@ -197,8 +197,8 @@ IMPL_LINK(PriorityMergedHBox, PBClickHdl, Button*, /*pButton*/, void)
 
     m_pPopup->hideSeparators(true);
 
-    long x = m_pButton->GetPosPixel().getX();
-    long y = m_pButton->GetPosPixel().getY() + GetSizePixel().Height();
+    tools::Long x = m_pButton->GetPosPixel().getX();
+    tools::Long y = m_pButton->GetPosPixel().getY() + GetSizePixel().Height();
     tools::Rectangle aRect(x, y, x, y);
 
     m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down | FloatWinPopupFlags::GrabFocus

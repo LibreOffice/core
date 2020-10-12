@@ -525,7 +525,7 @@ public:
 
     void NumUpDown( bool bDown = true );
 
-    bool MoveParagraph( long nOffset = 1);
+    bool MoveParagraph( tools::Long nOffset = 1);
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
@@ -946,10 +946,10 @@ public:
     void UpdateRedlineAttr();
 
     /// Compare two documents.
-    long CompareDoc( const SwDoc& rDoc );
+    tools::Long CompareDoc( const SwDoc& rDoc );
 
     /// Merge two documents.
-    long MergeDoc( const SwDoc& rDoc );
+    tools::Long MergeDoc( const SwDoc& rDoc );
 
     /// Footnote attributes global to document.
     const SwFootnoteInfo& GetFootnoteInfo() const;

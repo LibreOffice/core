@@ -32,7 +32,7 @@ DXFLType::DXFLType()
 
 void DXFLType::Read(DXFGroupReader & rDGR)
 {
-    long nDashIndex=-1;
+    tools::Long nDashIndex=-1;
 
     while (rDGR.Read()!=0)
     {

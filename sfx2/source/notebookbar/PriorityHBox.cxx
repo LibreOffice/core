@@ -96,7 +96,7 @@ Size PriorityHBox::calculateRequisition() const
 
         if (bAlwaysExpanded)
         {
-            long nPrimaryDimension = getPrimaryDimension(aChildSize);
+            tools::Long nPrimaryDimension = getPrimaryDimension(aChildSize);
             nPrimaryDimension += pChild->get_padding() * 2;
             setPrimaryDimension(aChildSize, nPrimaryDimension);
         }
@@ -119,8 +119,8 @@ void PriorityHBox::Resize()
         return VclHBox::Resize();
     }
 
-    long nWidth = GetSizePixel().Width();
-    long nCurrentWidth = VclHBox::calculateRequisition().getWidth();
+    tools::Long nWidth = GetSizePixel().Width();
+    tools::Long nCurrentWidth = VclHBox::calculateRequisition().getWidth();
 
     // Hide lower priority controls
     for (vcl::IPrioritable* pPrioritable : m_aSortedChildren)

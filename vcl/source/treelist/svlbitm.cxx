@@ -535,14 +535,14 @@ std::unique_ptr<SvLBoxItem> SvLBoxContextBmp::Clone(SvLBoxItem const * pSource) 
     return std::unique_ptr<SvLBoxItem>(pNew.release());
 }
 
-long SvLBoxButtonData::Width()
+tools::Long SvLBoxButtonData::Width()
 {
     if ( !bDataOk )
         SetWidthAndHeight();
     return nWidth;
 }
 
-long SvLBoxButtonData::Height()
+tools::Long SvLBoxButtonData::Height()
 {
     if ( !bDataOk )
         SetWidthAndHeight();

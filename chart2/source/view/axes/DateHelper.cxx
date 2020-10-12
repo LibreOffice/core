@@ -66,7 +66,7 @@ bool DateHelper::IsLessThanOneYearAway( const Date& rD1, const Date& rD2 )
     return rD2 > aDMin && rD2 < aDMax;
 }
 
-double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution )
+double DateHelper::RasterizeDateValue( double fValue, const Date& rNullDate, tools::Long TimeResolution )
 {
     if (std::isnan(fValue))
         return fValue;

@@ -82,8 +82,8 @@ void SvxDefaultColorOptPage::FillBoxChartColorLB()
 
     m_xLbChartColors->freeze();
     ClearColorEntries();
-    const long nCount(m_SvxChartColorTableUniquePtr->size());
-    for (long i = 0; i < nCount; ++i)
+    const tools::Long nCount(m_SvxChartColorTableUniquePtr->size());
+    for (tools::Long i = 0; i < nCount; ++i)
         InsertColorEntry((*m_SvxChartColorTableUniquePtr)[i]);
     m_xLbChartColors->thaw();
 }

@@ -133,9 +133,9 @@ const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
 
 }
 
-static long int sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode** pEnd )
+static tools::Long sal_Unicode_strtol ( const sal_Unicode*  p, const sal_Unicode** pEnd )
 {
-    long int accum = 0, prev = 0;
+    tools::Long accum = 0, prev = 0;
     bool is_neg = false;
 
     if( *p == '-' )
@@ -660,7 +660,7 @@ static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
                                             ScAddress* pAddr, ScRefFlags* nFlags )
 {
     const sal_Unicode *pEnd;
-    long int n;
+    tools::Long n;
     bool isRelative;
 
     if( p[0] == '\0' )
@@ -708,7 +708,7 @@ static const sal_Unicode* lcl_r1c1_get_row(
                                     ScAddress* pAddr, ScRefFlags* nFlags )
 {
     const sal_Unicode *pEnd;
-    long int n;
+    tools::Long n;
     bool isRelative;
 
     if( p[0] == '\0' )
@@ -941,7 +941,7 @@ static const sal_Unicode* lcl_a1_get_row( const ScDocument& rDoc,
                                                  const OUString* pErrRef )
 {
     const sal_Unicode *pEnd;
-    long int n;
+    tools::Long n;
 
     if( *p == '$' )
     {
@@ -1330,7 +1330,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
             }
             else
             {
-                long n = rtl_ustr_toInt32( p, 10 ) - 1;
+                tools::Long n = rtl_ustr_toInt32( p, 10 ) - 1;
                 while (rtl::isAsciiDigit( *p ))
                     p++;
                 const SCROW nMaxRow = rDoc.MaxRow();

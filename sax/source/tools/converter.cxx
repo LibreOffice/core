@@ -30,6 +30,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <tools/long.hxx>
 
 #include <algorithm>
 #include <string_view>
@@ -288,9 +289,9 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
     }
 
     // The new length is (nVal * nMul)/(nDiv*nFac*10)
-    long nMul = 1000;
-    long nDiv = 1;
-    long nFac = 100;
+    tools::Long nMul = 1000;
+    tools::Long nDiv = 1;
+    tools::Long nFac = 100;
     const char* psUnit = nullptr;
     switch( nSourceUnit )
     {

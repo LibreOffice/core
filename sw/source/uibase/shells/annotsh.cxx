@@ -868,7 +868,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest const &rReq)
 
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
-    long aOldHeight = pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight();
+    tools::Long aOldHeight = pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight();
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
@@ -1496,7 +1496,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     SwWrtShell &rSh = rView.GetWrtShell();
     SwUndoId nUndoId(SwUndoId::EMPTY);
 
-    long aOldHeight = rView.GetPostItMgr()->HasActiveSidebarWin()
+    tools::Long aOldHeight = rView.GetPostItMgr()->HasActiveSidebarWin()
                       ? rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight()
                       : 0;
 

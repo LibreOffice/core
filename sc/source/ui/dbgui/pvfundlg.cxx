@@ -131,7 +131,7 @@ const sal_uInt16 SC_BASEITEM_USER_POS = 2;
 const sal_uInt16 SC_SORTNAME_POS = 0;
 const sal_uInt16 SC_SORTDATA_POS = 1;
 
-const long SC_SHOW_DEFAULT = 10;
+const tools::Long SC_SHOW_DEFAULT = 10;
 
 } // namespace
 
@@ -750,7 +750,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     m_xCbShow->connect_clicked( LINK( this, ScDPSubtotalOptDlg, CheckHdl ) );
 
     m_xLbShowFrom->set_active(FromDataPilotFieldShowItemsMode(maLabelData.maShowInfo.ShowItemsMode));
-    long nCount = static_cast< long >( maLabelData.maShowInfo.ItemCount );
+    tools::Long nCount = static_cast< tools::Long >( maLabelData.maShowInfo.ItemCount );
     if( nCount < 1 )
         nCount = SC_SHOW_DEFAULT;
     m_xNfShow->set_value( nCount );
@@ -853,8 +853,8 @@ ScDPShowDetailDlg::ScDPShowDetailDlg(weld::Window* pParent, ScDPObject& rDPObj, 
     , mxLbDims(m_xBuilder->weld_tree_view("dimsTreeview"))
 {
     ScDPSaveData* pSaveData = rDPObj.GetSaveData();
-    long nDimCount = rDPObj.GetDimCount();
-    for (long nDim=0; nDim<nDimCount; nDim++)
+    tools::Long nDimCount = rDPObj.GetDimCount();
+    for (tools::Long nDim=0; nDim<nDimCount; nDim++)
     {
         bool bIsDataLayout;
         sal_Int32 nDimFlags = 0;
@@ -900,7 +900,7 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
         // This should never happen!
         return aSelectedName;
 
-    long nDim = itr->second;
+    tools::Long nDim = itr->second;
     bool bIsDataLayout = false;
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }

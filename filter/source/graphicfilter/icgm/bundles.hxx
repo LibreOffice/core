@@ -29,14 +29,14 @@
 class Bundle
 {
 
-    long                mnBundleIndex;
+    tools::Long                mnBundleIndex;
     sal_uInt32          mnColor;
 
 public:
     void                SetColor( sal_uInt32 nColor ) ;
     sal_uInt32          GetColor() const { return mnColor;}
-    long                GetIndex() const { return mnBundleIndex; } ;
-    void                SetIndex( long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
+    tools::Long                GetIndex() const { return mnBundleIndex; } ;
+    void                SetIndex( tools::Long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
 
     Bundle()
         : mnBundleIndex( 0 )
@@ -126,8 +126,8 @@ class FillBundle : public Bundle
 public:
 
     FillInteriorStyle   eFillInteriorStyle;
-    long                nFillPatternIndex;
-    long                nFillHatchIndex;
+    tools::Long                nFillPatternIndex;
+    tools::Long                nFillHatchIndex;
 
     FillBundle()
         : eFillInteriorStyle(FIS_HOLLOW)

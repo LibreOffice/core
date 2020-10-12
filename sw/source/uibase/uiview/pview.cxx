@@ -1286,7 +1286,7 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
 void SwPagePreview::CalcAndSetBorderPixel( SvBorder &rToFill )
 {
     const StyleSettings &rSet = m_pViewWin->GetSettings().GetStyleSettings();
-    const long nTmp = rSet.GetScrollBarSize();
+    const tools::Long nTmp = rSet.GetScrollBarSize();
     if ( m_pVScrollbar->IsVisible( true ) )
         rToFill.Right()  = nTmp;
     if ( m_pHScrollbar->IsVisible( true ) )
@@ -1393,7 +1393,7 @@ IMPL_LINK( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
     {
         // Scroll how many pages??
         OUString sStateStr(m_sPageStr);
-        long nThmbPos = pScrollbar->GetThumbPos();
+        tools::Long nThmbPos = pScrollbar->GetThumbPos();
         if( 1 == m_pViewWin->GetCol() || !nThmbPos )
             ++nThmbPos;
         sStateStr += OUString::number( nThmbPos );
@@ -1481,13 +1481,13 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
         }
         else
         {
-            long nThmbPos = pScrollbar->GetThumbPos();
+            tools::Long nThmbPos = pScrollbar->GetThumbPos();
             m_pViewWin->Scroll(0, nThmbPos - m_pViewWin->GetPaintedPreviewDocRect().Top());
         }
     }
     else
     {
-        long nThmbPos = pScrollbar->GetThumbPos();
+        tools::Long nThmbPos = pScrollbar->GetThumbPos();
         m_pViewWin->Scroll(nThmbPos - m_pViewWin->GetPaintedPreviewDocRect().Left(), 0);
     }
     // additional invalidate page status.
@@ -1576,7 +1576,7 @@ void SwPagePreview::ScrollViewSzChg()
             const Size& rPreviewSize =
                     GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
             m_pVScrollbar->SetRangeMax(rPreviewSize.Height()) ;
-            long nVisHeight = rDocRect.GetHeight();
+            tools::Long nVisHeight = rDocRect.GetHeight();
             m_pVScrollbar->SetVisibleSize( nVisHeight );
             m_pVScrollbar->SetThumbPos( rDocRect.Top() );
             m_pVScrollbar->SetLineSize( nVisHeight / 10 );
@@ -1601,8 +1601,8 @@ void SwPagePreview::ScrollViewSzChg()
         {
             bShowHScrollbar = true;
 
-            long nVisWidth = rDocRect.GetWidth();
-            long nThumb = rDocRect.Left();
+            tools::Long nVisWidth = rDocRect.GetWidth();
+            tools::Long nThumb = rDocRect.Left();
             aRange = Range(0, rPreviewSize.Width());
 
             m_pHScrollbar->SetRange( aRange );
@@ -1762,7 +1762,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
  * when less than the desired number of rows fits into
  * the view
  */
-void SwPagePreviewWin::Scroll(long nXMove, long nYMove, ScrollFlags /*nFlags*/)
+void SwPagePreviewWin::Scroll(tools::Long nXMove, tools::Long nYMove, ScrollFlags /*nFlags*/)
 {
     maPaintedPreviewDocRect.Move(nXMove, nYMove);
     mpPgPreviewLayout->Prepare( 0, maPaintedPreviewDocRect.TopLeft(),

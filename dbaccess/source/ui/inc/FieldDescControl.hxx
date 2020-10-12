@@ -136,7 +136,7 @@ namespace dbaui
 
         virtual css::lang::Locale               GetLocale() const = 0;
 
-        virtual void                            CellModified(long nRow, sal_uInt16 nColId ) = 0;
+        virtual void                            CellModified(tools::Long nRow, sal_uInt16 nColId ) = 0;
         virtual void                            SetModified(bool bModified);    // base implementation is empty
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;

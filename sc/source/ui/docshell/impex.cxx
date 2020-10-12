@@ -1322,7 +1322,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     sal_uInt16  nInfoCount      = pExtOptions->GetInfoCount();
     const sal_Int32* pColStart  = pExtOptions->GetColStart();
     const sal_uInt8* pColFormat = pExtOptions->GetColFormat();
-    long nSkipLines             = pExtOptions->GetStartRow();
+    tools::Long nSkipLines             = pExtOptions->GetStartRow();
 
     LanguageType eDocLang = pExtOptions->GetLanguage();
     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eDocLang);

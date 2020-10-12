@@ -125,7 +125,7 @@ public:
 
     virtual void    ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
-    virtual void    SetZoom( long nZoom ) override;
+    virtual void    SetZoom( ::tools::Long nZoom ) override;
     virtual void    SetZoomRect( const ::tools::Rectangle& rZoomRect ) override;
 
     void            InsertURLField(const OUString& rURL, const OUString& rText, const OUString& rTarget);
@@ -264,8 +264,8 @@ public:
     virtual void    ReadFrameViewData(FrameView* pView) override;
     virtual void    WriteFrameViewData() override;
 
-    virtual ErrCode DoVerb(long nVerb) override;
-    virtual bool    ActivateObject(SdrOle2Obj* pObj, long nVerb) override;
+    virtual ErrCode DoVerb(::tools::Long nVerb) override;
+    virtual bool    ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb) override;
 
     void            SetZoomOnPage( bool bZoom ) { mbZoomOnPage = bZoom; }
     bool            IsZoomOnPage() const { return mbZoomOnPage; }
@@ -409,7 +409,7 @@ protected:
     virtual void    UpdateVRuler() override;
     virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) override;
 
-    void            SetupPage( Size const &rSize, long nLeft, long nRight, long nUpper, long nLower,
+    void            SetupPage( Size const &rSize, ::tools::Long nLeft, ::tools::Long nRight, ::tools::Long nUpper, ::tools::Long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );
 
     void            GetMenuStateSel(SfxItemSet& rSet);

@@ -658,8 +658,8 @@ sal_Int32 RtfSdrExport::StartShape()
                     rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
                 if (pFontHeight)
                 {
-                    long nFontHeight = TransformMetric(pFontHeight->GetHeight(), FieldUnit::TWIP,
-                                                       FieldUnit::POINT);
+                    tools::Long nFontHeight = TransformMetric(pFontHeight->GetHeight(),
+                                                              FieldUnit::TWIP, FieldUnit::POINT);
                     lcl_AppendSP(
                         m_rAttrOutput.RunText(), "gtextSize",
                         msfilter::rtfutil::OutString(OUString::number(nFontHeight * RTF_MULTIPLIER),

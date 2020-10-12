@@ -3164,7 +3164,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( pField->GetPar1(), 0);
 
-        long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
+        tools::Long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
             GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
@@ -4917,8 +4917,8 @@ class SwWW8WrTabu
 public:
     SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax);
 
-    void Add(const SvxTabStop &rTS, long nAdjustment);
-    void Del(const SvxTabStop &rTS, long nAdjustment);
+    void Add(const SvxTabStop &rTS, tools::Long nAdjustment);
+    void Del(const SvxTabStop &rTS, tools::Long nAdjustment);
     void PutAll(WW8Export& rWW8Wrt);
 };
 
@@ -4936,7 +4936,7 @@ SwWW8WrTabu::SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax)
 /**
  * insert a tab in the WW structure
  */
-void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
+void SwWW8WrTabu::Add(const SvxTabStop & rTS, tools::Long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
@@ -4988,7 +4988,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
 /**
  * Insert a to be deleted tab in the WW structure
  */
-void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
+void SwWW8WrTabu::Del(const SvxTabStop &rTS, tools::Long nAdjustment)
 {
     // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
@@ -5028,7 +5028,7 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 
 static void ParaTabStopAdd( WW8Export& rWrt,
                             const SvxTabStopItem& rTStops,
-                            const long nLParaMgn )
+                            const tools::Long nLParaMgn )
 {
     SwWW8WrTabu aTab( 0, rTStops.Count());
 
@@ -5042,8 +5042,8 @@ static void ParaTabStopAdd( WW8Export& rWrt,
     aTab.PutAll( rWrt );
 }
 
-static bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
-    long nTwoLeft, const SvxTabStop &rTwo)
+static bool lcl_IsEqual(tools::Long nOneLeft, const SvxTabStop &rOne,
+    tools::Long nTwoLeft, const SvxTabStop &rTwo)
 {
     return(
             nOneLeft == nTwoLeft &&
@@ -5055,9 +5055,9 @@ static bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
 
 static void ParaTabStopDelAdd( WW8Export& rWrt,
                                const SvxTabStopItem& rTStyle,
-                               const long nLStypeMgn,
+                               const tools::Long nLStypeMgn,
                                const SvxTabStopItem& rTNew,
-                               const long nLParaMgn )
+                               const tools::Long nLParaMgn )
 {
     SwWW8WrTabu aTab(rTStyle.Count(), rTNew.Count());
 
@@ -5066,7 +5066,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
     do {
         const SvxTabStop* pTO;
-        long nOP;
+        tools::Long nOP;
         if( nO < rTStyle.Count() )                  // old not yet at the end?
         {
             pTO = &rTStyle[ nO ];
@@ -5084,7 +5084,7 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         }
 
         const SvxTabStop* pTN;
-        long nNP;
+        tools::Long nNP;
         if( nN < rTNew.Count() )                    // new not yet at the end
         {
             pTN = &rTNew[ nN ];
@@ -5137,7 +5137,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
 {
     const bool bTabsRelativeToIndex = m_rWW8Export.m_pCurPam->GetDoc().getIDocumentSettingAccess().get( DocumentSettingId::TABS_RELATIVE_TO_INDENT );
 
-    long nCurrentLeft = 0;
+    tools::Long nCurrentLeft = 0;
     if ( bTabsRelativeToIndex )
     {
         const SfxPoolItem* pLR = m_rWW8Export.HasItem( RES_LR_SPACE );
@@ -5161,7 +5161,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         }
 
         // #i120938# - consider left indentation of style and its parent style
-        long nParentLeft = 0;
+        tools::Long nParentLeft = 0;
         if ( bTabsRelativeToIndex )
         {
             const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>( pParentStyle->GetAttrSet(), RES_LR_SPACE );
@@ -5184,7 +5184,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
     }
     else
     {
-        long nStyleLeft = 0;
+        tools::Long nStyleLeft = 0;
         if ( bTabsRelativeToIndex )
         {
             const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>(*m_rWW8Export.m_pStyAttr, RES_LR_SPACE);

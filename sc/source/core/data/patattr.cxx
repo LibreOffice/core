@@ -345,7 +345,7 @@ void ScPatternAttr::GetFont(
         Fraction aFraction( 1,1 );
         if (pScale)
             aFraction = *pScale;
-        Size aSize( 0, static_cast<long>(nFontHeight) );
+        Size aSize( 0, static_cast<tools::Long>(nFontHeight) );
         MapMode aDestMode = pOutDev->GetMapMode();
         MapMode aSrcMode( MapUnit::MapTwip, Point(), aFraction, aFraction );
         if (aDestMode.GetMapUnit() == MapUnit::MapPixel && pOutDev->GetDPIX() > 0)
@@ -361,7 +361,7 @@ void ScPatternAttr::GetFont(
     }
     else /* if pOutDev != NULL */
     {
-        rFont.SetFontSize( Size( 0, static_cast<long>(nFontHeight) ) );
+        rFont.SetFontSize( Size( 0, static_cast<tools::Long>(nFontHeight) ) );
     }
 
     //  determine effective font color
@@ -558,7 +558,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     std::unique_ptr<SvxFontItem> aFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO));            // use item as-is
     std::unique_ptr<SvxFontItem> aCjkFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO_CJK));            // use item as-is
     std::unique_ptr<SvxFontItem> aCtlFontItem(std::make_unique<SvxFontItem>(EE_CHAR_FONTINFO_CTL));            // use item as-is
-    long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
+    tools::Long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
     std::unique_ptr<SvxUnderlineItem> aUnderlineItem(std::make_unique<SvxUnderlineItem>(LINESTYLE_NONE, EE_CHAR_UNDERLINE));
     std::unique_ptr<SvxOverlineItem> aOverlineItem(std::make_unique<SvxOverlineItem>(LINESTYLE_NONE, EE_CHAR_OVERLINE));
@@ -712,9 +712,9 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
 
-    long nHeight = TwipsToHMM(nTHeight);
-    long nCjkHeight = TwipsToHMM(nCjkTHeight);
-    long nCtlHeight = TwipsToHMM(nCtlTHeight);
+    tools::Long nHeight = TwipsToHMM(nTHeight);
+    tools::Long nCjkHeight = TwipsToHMM(nCjkTHeight);
+    tools::Long nCtlHeight = TwipsToHMM(nCtlTHeight);
 
     //  put items into EditEngine ItemSet
 
@@ -1312,9 +1312,9 @@ const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSe
 
 //  GetRotateVal is tested before ATTR_ORIENTATION
 
-long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
+tools::Long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
-    long nAttrRotate = 0;
+    tools::Long nAttrRotate = 0;
     if ( GetCellOrientation() == SvxCellOrientation::Standard )
     {
         bool bRepeat = ( GetItem(ATTR_HOR_JUSTIFY, pCondSet).
@@ -1330,7 +1330,7 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
 {
     ScRotateDir nRet = ScRotateDir::NONE;
 
-    long nAttrRotate = GetRotateVal( pCondSet );
+    tools::Long nAttrRotate = GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
         SvxRotateMode eRotMode = GetItem(ATTR_ROTATE_MODE, pCondSet).GetValue();
@@ -1341,7 +1341,7 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
             nRet = ScRotateDir::Center;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            long nRot180 = nAttrRotate % 18000;     // 1/100 degrees
+            tools::Long nRot180 = nAttrRotate % 18000;     // 1/100 degrees
             if ( nRot180 == 9000 )
                 nRet = ScRotateDir::Center;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||

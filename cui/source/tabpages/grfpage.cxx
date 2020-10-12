@@ -361,7 +361,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
 
     if (&rField == m_xWidthZoomMF.get())
     {
-        long nLRBorders = lcl_GetValue(*m_xLeftMF, eUnit)
+        tools::Long nLRBorders = lcl_GetValue(*m_xLeftMF, eUnit)
                          +lcl_GetValue(*m_xRightMF, eUnit);
         m_xWidthMF->set_value( m_xWidthMF->normalize(
             ((aOrigSize.Width() - nLRBorders) * rField.get_value(FieldUnit::NONE))/100),
@@ -369,7 +369,7 @@ IMPL_LINK( SvxGrfCropPage, ZoomHdl, weld::MetricSpinButton&, rField, void )
     }
     else
     {
-        long nULBorders = lcl_GetValue(*m_xTopMF, eUnit)
+        tools::Long nULBorders = lcl_GetValue(*m_xTopMF, eUnit)
                          +lcl_GetValue(*m_xBottomMF, eUnit);
         m_xHeightMF->set_value( m_xHeightMF->normalize(
             ((aOrigSize.Height() - nULBorders ) * rField.get_value(FieldUnit::NONE))/100) ,
@@ -393,7 +393,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
 
     if(&rField == m_xWidthMF.get())
     {
-        long nWidth = aOrigSize.Width() -
+        tools::Long nWidth = aOrigSize.Width() -
                 ( lcl_GetValue(*m_xLeftMF, eUnit) +
                   lcl_GetValue(*m_xRightMF, eUnit) );
         if(!nWidth)
@@ -403,7 +403,7 @@ IMPL_LINK( SvxGrfCropPage, SizeHdl, weld::MetricSpinButton&, rField, void )
     }
     else
     {
-        long nHeight = aOrigSize.Height() -
+        tools::Long nHeight = aOrigSize.Height() -
                 ( lcl_GetValue(*m_xTopMF, eUnit) +
                   lcl_GetValue(*m_xBottomMF, eUnit));
         if(!nHeight)
@@ -427,9 +427,9 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
     bool bZoom = m_xZoomConstRB->get_active();
     if (&rField == m_xLeftMF.get() || &rField == m_xRightMF.get())
     {
-        long nLeft = lcl_GetValue( *m_xLeftMF, eUnit );
-        long nRight = lcl_GetValue( *m_xRightMF, eUnit );
-        long nWidthZoom = static_cast<long>(m_xWidthZoomMF->get_value(FieldUnit::NONE));
+        tools::Long nLeft = lcl_GetValue( *m_xLeftMF, eUnit );
+        tools::Long nRight = lcl_GetValue( *m_xRightMF, eUnit );
+        tools::Long nWidthZoom = static_cast<tools::Long>(m_xWidthZoomMF->get_value(FieldUnit::NONE));
         if (bZoom && nWidthZoom != 0 && ( ( ( aOrigSize.Width() - (nLeft + nRight )) * nWidthZoom )
                             / 100 >= aPageSize.Width() ) )
         {
@@ -464,9 +464,9 @@ IMPL_LINK( SvxGrfCropPage, CropModifyHdl, weld::MetricSpinButton&, rField, void 
     }
     else
     {
-        long nTop = lcl_GetValue( *m_xTopMF, eUnit );
-        long nBottom = lcl_GetValue( *m_xBottomMF, eUnit );
-        long nHeightZoom = static_cast<long>(m_xHeightZoomMF->get_value(FieldUnit::NONE));
+        tools::Long nTop = lcl_GetValue( *m_xTopMF, eUnit );
+        tools::Long nBottom = lcl_GetValue( *m_xBottomMF, eUnit );
+        tools::Long nHeightZoom = static_cast<tools::Long>(m_xHeightZoomMF->get_value(FieldUnit::NONE));
         if(bZoom && ( ( ( aOrigSize.Height() - (nTop + nBottom )) * nHeightZoom)
                                             / 100 >= aPageSize.Height()))
         {
@@ -509,11 +509,11 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, weld::Button&, void)
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    long nWidth = aOrigSize.Width() -
+    tools::Long nWidth = aOrigSize.Width() -
         lcl_GetValue( *m_xLeftMF, eUnit ) -
         lcl_GetValue( *m_xRightMF, eUnit );
     m_xWidthMF->set_value( m_xWidthMF->normalize( nWidth ), eUnit );
-    long nHeight = aOrigSize.Height() -
+    tools::Long nHeight = aOrigSize.Height() -
         lcl_GetValue( *m_xTopMF, eUnit ) -
         lcl_GetValue( *m_xBottomMF, eUnit );
     m_xHeightMF->set_value( m_xHeightMF->normalize( nHeight ), eUnit );
@@ -532,14 +532,14 @@ void SvxGrfCropPage::CalcZoom()
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
 
-    long nWidth = lcl_GetValue( *m_xWidthMF, eUnit );
-    long nHeight = lcl_GetValue( *m_xHeightMF, eUnit );
-    long nLRBorders = lcl_GetValue( *m_xLeftMF, eUnit ) +
+    tools::Long nWidth = lcl_GetValue( *m_xWidthMF, eUnit );
+    tools::Long nHeight = lcl_GetValue( *m_xHeightMF, eUnit );
+    tools::Long nLRBorders = lcl_GetValue( *m_xLeftMF, eUnit ) +
                       lcl_GetValue( *m_xRightMF, eUnit );
-    long nULBorders = lcl_GetValue( *m_xTopMF, eUnit ) +
+    tools::Long nULBorders = lcl_GetValue( *m_xTopMF, eUnit ) +
                       lcl_GetValue( *m_xBottomMF, eUnit );
     sal_uInt16 nZoom = 0;
-    long nDen;
+    tools::Long nDen;
     if( (nDen = aOrigSize.Width() - nLRBorders) > 0)
         nZoom = static_cast<sal_uInt16>((( nWidth  * 1000 / nDen )+5)/10);
     m_xWidthZoomMF->set_value(nZoom, FieldUnit::NONE);
@@ -560,21 +560,21 @@ void SvxGrfCropPage::CalcMinMaxBorder()
     DBG_ASSERT( pPool, "Where is the pool?" );
     FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( pPool->GetWhich(
                                                     SID_ATTR_GRAF_CROP ) ) );
-    long nR = lcl_GetValue(*m_xRightMF, eUnit );
-    long nMinWidth = (aOrigSize.Width() * 10) /11;
-    long nMin = nMinWidth - (nR >= 0 ? nR : 0);
+    tools::Long nR = lcl_GetValue(*m_xRightMF, eUnit );
+    tools::Long nMinWidth = (aOrigSize.Width() * 10) /11;
+    tools::Long nMin = nMinWidth - (nR >= 0 ? nR : 0);
     m_xLeftMF->set_max( m_xLeftMF->normalize(nMin), eUnit );
 
-    long nL = lcl_GetValue(*m_xLeftMF, eUnit );
+    tools::Long nL = lcl_GetValue(*m_xLeftMF, eUnit );
     nMin = nMinWidth - (nL >= 0 ? nL : 0);
     m_xRightMF->set_max( m_xRightMF->normalize(nMin), eUnit );
 
-    long nUp  = lcl_GetValue( *m_xTopMF, eUnit );
-    long nMinHeight = (aOrigSize.Height() * 10) /11;
+    tools::Long nUp  = lcl_GetValue( *m_xTopMF, eUnit );
+    tools::Long nMinHeight = (aOrigSize.Height() * 10) /11;
     nMin = nMinHeight - (nUp >= 0 ? nUp : 0);
     m_xBottomMF->set_max( m_xBottomMF->normalize(nMin), eUnit );
 
-    long nLow = lcl_GetValue(*m_xBottomMF, eUnit );
+    tools::Long nLow = lcl_GetValue(*m_xBottomMF, eUnit );
     nMin = nMinHeight - (nLow >= 0 ? nLow : 0);
     m_xTopMF->set_max( m_xTopMF->normalize(nMin), eUnit );
 }
@@ -597,21 +597,21 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
                                                eUnit, m_xLeftMF->get_unit());
 
         // if the margin is too big, it is set to 1/3 on both pages
-        long nR = lcl_GetValue( *m_xRightMF, eUnit );
-        long nL = lcl_GetValue( *m_xLeftMF, eUnit );
+        tools::Long nR = lcl_GetValue( *m_xRightMF, eUnit );
+        tools::Long nL = lcl_GetValue( *m_xLeftMF, eUnit );
         if((nL + nR) < - aOrigSize.Width())
         {
-            long nVal = aOrigSize.Width() / -3;
+            tools::Long nVal = aOrigSize.Width() / -3;
             m_xRightMF->set_value( m_xRightMF->normalize( nVal ), eUnit );
             m_xLeftMF->set_value( m_xLeftMF->normalize( nVal ), eUnit );
             m_aExampleWN.SetLeft(nVal);
             m_aExampleWN.SetRight(nVal);
         }
-        long nUp  = lcl_GetValue(*m_xTopMF, eUnit );
-        long nLow = lcl_GetValue(*m_xBottomMF, eUnit );
+        tools::Long nUp  = lcl_GetValue(*m_xTopMF, eUnit );
+        tools::Long nLow = lcl_GetValue(*m_xBottomMF, eUnit );
         if((nUp + nLow) < - aOrigSize.Height())
         {
-            long nVal = aOrigSize.Height() / -3;
+            tools::Long nVal = aOrigSize.Height() / -3;
             m_xTopMF->set_value( m_xTopMF->normalize( nVal ), eUnit );
             m_xBottomMF->set_value( m_xBottomMF->normalize( nVal ), eUnit );
             m_aExampleWN.SetTop(nVal);

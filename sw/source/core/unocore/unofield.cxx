@@ -1487,7 +1487,7 @@ void SAL_CALL SwXTextField::attach(
             break;
             case SwServiceType::FieldTypeAuthor:
             {
-                long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
+                tools::Long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
                 if (m_pImpl->m_pProps->bBool2)
                     nFormat |= AF_FIXED;
 

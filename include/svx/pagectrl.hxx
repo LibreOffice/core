@@ -32,24 +32,24 @@ private:
     Size aWinSize;
     Size aSize;
 
-    long nTop;
-    long nBottom;
-    long nLeft;
-    long nRight;
+    tools::Long nTop;
+    tools::Long nBottom;
+    tools::Long nLeft;
+    tools::Long nRight;
 
     bool bResetBackground;
     bool bFrameDirection;
     SvxFrameDirection nFrameDirection;
 
-    long nHdLeft;
-    long nHdRight;
-    long nHdDist;
-    long nHdHeight;
+    tools::Long nHdLeft;
+    tools::Long nHdRight;
+    tools::Long nHdDist;
+    tools::Long nHdHeight;
 
-    long nFtLeft;
-    long nFtRight;
-    long nFtDist;
-    long nFtHeight;
+    tools::Long nFtLeft;
+    tools::Long nFtRight;
+    tools::Long nFtDist;
+    tools::Long nFtHeight;
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maHeaderFillAttributes;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFooterFillAttributes;
@@ -103,35 +103,35 @@ public:
         return aSize;
     }
 
-    void SetTop(long nNew) { nTop = nNew; }
-    void SetBottom(long nNew) { nBottom = nNew; }
-    void SetLeft(long nNew) { nLeft = nNew; }
-    void SetRight(long nNew) { nRight = nNew; }
+    void SetTop(tools::Long nNew) { nTop = nNew; }
+    void SetBottom(tools::Long nNew) { nBottom = nNew; }
+    void SetLeft(tools::Long nNew) { nLeft = nNew; }
+    void SetRight(tools::Long nNew) { nRight = nNew; }
 
-    long GetTop() const { return nTop; }
-    long GetBottom() const { return nBottom; }
-    long GetLeft() const { return nLeft; }
-    long GetRight() const { return nRight; }
+    tools::Long GetTop() const { return nTop; }
+    tools::Long GetBottom() const { return nBottom; }
+    tools::Long GetLeft() const { return nLeft; }
+    tools::Long GetRight() const { return nRight; }
 
-    void SetHdLeft(long nNew) { nHdLeft = nNew; }
-    void SetHdRight(long nNew) { nHdRight = nNew; }
-    void SetHdDist(long nNew) { nHdDist = nNew; }
-    void SetHdHeight(long nNew) { nHdHeight = nNew; }
+    void SetHdLeft(tools::Long nNew) { nHdLeft = nNew; }
+    void SetHdRight(tools::Long nNew) { nHdRight = nNew; }
+    void SetHdDist(tools::Long nNew) { nHdDist = nNew; }
+    void SetHdHeight(tools::Long nNew) { nHdHeight = nNew; }
 
-    long GetHdLeft() const { return nHdLeft; }
-    long GetHdRight() const { return nHdRight; }
-    long GetHdDist() const { return nHdDist; }
-    long GetHdHeight() const { return nHdHeight; }
+    tools::Long GetHdLeft() const { return nHdLeft; }
+    tools::Long GetHdRight() const { return nHdRight; }
+    tools::Long GetHdDist() const { return nHdDist; }
+    tools::Long GetHdHeight() const { return nHdHeight; }
 
-    void SetFtLeft(long nNew) { nFtLeft = nNew; }
-    void SetFtRight(long nNew) { nFtRight = nNew; }
-    void SetFtDist(long nNew) { nFtDist = nNew; }
-    void SetFtHeight(long nNew) { nFtHeight = nNew; }
+    void SetFtLeft(tools::Long nNew) { nFtLeft = nNew; }
+    void SetFtRight(tools::Long nNew) { nFtRight = nNew; }
+    void SetFtDist(tools::Long nNew) { nFtDist = nNew; }
+    void SetFtHeight(tools::Long nNew) { nFtHeight = nNew; }
 
-    long GetFtLeft() const { return nFtLeft; }
-    long GetFtRight() const { return nFtRight; }
-    long GetFtDist() const { return nFtDist; }
-    long GetFtHeight() const { return nFtHeight; }
+    tools::Long GetFtLeft() const { return nFtLeft; }
+    tools::Long GetFtRight() const { return nFtRight; }
+    tools::Long GetFtDist() const { return nFtDist; }
+    tools::Long GetFtHeight() const { return nFtHeight; }
 
     void SetUsage(SvxPageUsage eU) { eUsage = eU; }
     SvxPageUsage GetUsage() const { return eUsage; }

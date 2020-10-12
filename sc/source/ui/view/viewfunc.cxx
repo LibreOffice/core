@@ -1461,7 +1461,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
 }
 
 
-void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
+void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
 {
     if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
         return;
@@ -1517,7 +1517,7 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
     }
 }
 
-void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
+void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset)
 {
     if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
         return;
@@ -2390,7 +2390,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                 ScInputHandler* pHdl = pScMod->GetInputHdl( GetViewData().GetViewShell() );
                 if (pHdl)
                 {
-                    long nEdit = pHdl->GetTextSize().Width();       // in 0.01 mm
+                    tools::Long nEdit = pHdl->GetTextSize().Width();       // in 0.01 mm
 
                     const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
                     const SvxMarginItem& rMItem = pPattern->GetItem(ATTR_MARGIN);
@@ -2418,7 +2418,7 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
                     aZoomX = aZoomY = Fraction( 1, 1 );
                 }
 
-                long nPixel = rDoc.GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),
+                tools::Long nPixel = rDoc.GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),
                                             nPPTX, nPPTY, aZoomX, aZoomY, true );
                 sal_uInt16 nTwips = static_cast<sal_uInt16>( nPixel / nPPTX );
                 if (nTwips != 0)

@@ -283,10 +283,10 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
                 double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
                 double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
 
-                aPos.X = static_cast< long >( aPos.X * fWidth );
-                aPos.Y = static_cast< long >( aPos.Y * fHeight );
-                aSize.Width = static_cast< long >( aSize.Width * fWidth );
-                aSize.Height = static_cast< long >( aSize.Height * fHeight );
+                aPos.X = static_cast< tools::Long >( aPos.X * fWidth );
+                aPos.Y = static_cast< tools::Long >( aPos.Y * fHeight );
+                aSize.Width = static_cast< tools::Long >( aSize.Width * fWidth );
+                aSize.Height = static_cast< tools::Long >( aSize.Height * fHeight );
 
                 xShape->setPosition( aPos );
                 xShape->setSize( aSize );

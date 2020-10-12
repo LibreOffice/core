@@ -598,7 +598,7 @@ void GDIMetaFile::push_back(const rtl::Reference<MetaAction>& pAction)
 void GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
 {
     const Size  aOldPrefSize( GetPrefSize() );
-    long        nMoveX, nMoveY;
+    tools::Long        nMoveX, nMoveY;
     double      fScaleX, fScaleY;
 
     if( nMirrorFlags & BmpMirrorFlags::Horizontal )
@@ -631,7 +631,7 @@ void GDIMetaFile::Mirror( BmpMirrorFlags nMirrorFlags )
     }
 }
 
-void GDIMetaFile::Move( long nX, long nY )
+void GDIMetaFile::Move( tools::Long nX, tools::Long nY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
@@ -665,7 +665,7 @@ void GDIMetaFile::Move( long nX, long nY )
     }
 }
 
-void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
+void GDIMetaFile::Move( tools::Long nX, tools::Long nY, tools::Long nDPIX, tools::Long nDPIY )
 {
     const Size      aBaseOffset( nX, nY );
     Size            aOffset( aBaseOffset );
@@ -697,8 +697,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev->LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev->GetMapMode() );
-                aOffset.setWidth( static_cast<long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX())) );
-                aOffset.setHeight( static_cast<long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY())) );
+                aOffset.setWidth( static_cast<tools::Long>(aOffset.Width() * static_cast<double>(aMap.GetScaleX())) );
+                aOffset.setHeight( static_cast<tools::Long>(aOffset.Height() * static_cast<double>(aMap.GetScaleY())) );
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev->GetMapMode() );
@@ -768,8 +768,8 @@ void GDIMetaFile::Clip( const tools::Rectangle& i_rClipRect )
 Point GDIMetaFile::ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
                                         const Size& rOffset, double fSin, double fCos )
 {
-    const long nX = rPt.X() - rRotatePt.X();
-    const long nY = rPt.Y() - rRotatePt.Y();
+    const tools::Long nX = rPt.X() - rRotatePt.X();
+    const tools::Long nY = rPt.Y() - rRotatePt.Y();
 
     return Point( FRound( fCos * nX + fSin * nY ) + rRotatePt.X() + rOffset.Width(),
                   -FRound( fSin * nX - fCos * nY ) + rRotatePt.Y() + rOffset.Height() );
@@ -819,7 +819,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
     }
 }
 
-void GDIMetaFile::Rotate( long nAngle10 )
+void GDIMetaFile::Rotate( tools::Long nAngle10 )
 {
     nAngle10 %= 3600;
     nAngle10 = ( nAngle10 < 0 ) ? ( 3599 + nAngle10 ) : nAngle10;
@@ -2112,7 +2112,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
     const bool bGamma = ( fGamma != 1.0 );
 
     // create mapping table
-    for( long nX = 0; nX < 256; nX++ )
+    for( tools::Long nX = 0; nX < 256; nX++ )
     {
         if(!msoBrightness)
         {
@@ -2178,7 +2178,7 @@ void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pRepla
 
     for( sal_uLong i = 0; i < nColorCount; i++ )
     {
-        long        nVal;
+        tools::Long        nVal;
 
         nVal = pSearchColors[ i ].GetRed();
         aColParam.pMinR[ i ] = static_cast<sal_uLong>(std::max( nVal, 0L ));

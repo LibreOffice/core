@@ -329,7 +329,7 @@ void ScDPGroupItem::FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) c
         rFilter.addMatchItem(rElement);
 }
 
-ScDPGroupDimension::ScDPGroupDimension( long nSource, const OUString& rNewName ) :
+ScDPGroupDimension::ScDPGroupDimension( tools::Long nSource, const OUString& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
     aGroupName( rNewName ),
@@ -366,7 +366,7 @@ void ScDPGroupDimension::AddItem( const ScDPGroupItem& rItem )
     aItems.push_back( rItem );
 }
 
-void ScDPGroupDimension::SetGroupDim( long nDim )
+void ScDPGroupDimension::SetGroupDim( tools::Long nDim )
 {
     nGroupDim = nDim;
 }
@@ -483,7 +483,7 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     aGroups.push_back( aNewGroup );
 }
 
-void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )
+void ScDPGroupTableData::SetNumGroupDimension( tools::Long nIndex, const ScDPNumGroupDimension& rGroup )
 {
     if ( nIndex < nSourceCount )
     {
@@ -493,35 +493,35 @@ void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDi
     }
 }
 
-long ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
+tools::Long ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
 {
-    for (long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
+    for (tools::Long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
         if (pSourceData->getDimensionName(i) == rName)        //TODO: ignore case?
             return i;
     return -1;  // none
 }
 
-long ScDPGroupTableData::GetColumnCount()
+tools::Long ScDPGroupTableData::GetColumnCount()
 {
     return nSourceCount + aGroups.size();
 }
 
-bool ScDPGroupTableData::IsNumGroupDimension( long nDimension ) const
+bool ScDPGroupTableData::IsNumGroupDimension( tools::Long nDimension ) const
 {
     return ( nDimension < nSourceCount && pNumGroups[nDimension].GetInfo().mbEnable );
 }
 
-void ScDPGroupTableData::GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo)
+void ScDPGroupTableData::GetNumGroupInfo(tools::Long nDimension, ScDPNumGroupInfo& rInfo)
 {
     if ( nDimension < nSourceCount )
         rInfo = pNumGroups[nDimension].GetInfo();
 }
-long  ScDPGroupTableData::GetMembersCount( long nDim )
+tools::Long  ScDPGroupTableData::GetMembersCount( tools::Long nDim )
 {
     const std::vector< SCROW >&  members = GetColumnEntries( nDim );
     return members.size();
 }
-const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn )
+const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( tools::Long  nColumn )
 {
     if ( nColumn >= nSourceCount )
     {
@@ -544,12 +544,12 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     return pSourceData->GetColumnEntries( nColumn );
 }
 
-const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
+const ScDPItemData* ScDPGroupTableData::GetMemberById( tools::Long nDim, tools::Long nId )
 {
     return pSourceData->GetMemberById( nDim, nId );
 }
 
-OUString ScDPGroupTableData::getDimensionName(long nColumn)
+OUString ScDPGroupTableData::getDimensionName(tools::Long nColumn)
 {
     if ( nColumn >= nSourceCount )
     {
@@ -562,13 +562,13 @@ OUString ScDPGroupTableData::getDimensionName(long nColumn)
     return pSourceData->getDimensionName( nColumn );
 }
 
-bool ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
+bool ScDPGroupTableData::getIsDataLayoutDimension(tools::Long nColumn)
 {
     // position of data layout dimension is moved from source data
     return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
 }
 
-bool ScDPGroupTableData::IsDateDimension(long nDim)
+bool ScDPGroupTableData::IsDateDimension(tools::Long nDim)
 {
     if ( nDim >= nSourceCount )
     {
@@ -581,7 +581,7 @@ bool ScDPGroupTableData::IsDateDimension(long nDim)
     return pSourceData->IsDateDimension( nDim );
 }
 
-sal_uInt32 ScDPGroupTableData::GetNumberFormat(long nDim)
+sal_uInt32 ScDPGroupTableData::GetNumberFormat(tools::Long nDim)
 {
     if ( nDim >= nSourceCount )
     {
@@ -599,7 +599,7 @@ void ScDPGroupTableData::DisposeData()
     for ( auto& rGroup : aGroups )
         rGroup.DisposeData();
 
-    for ( long i=0; i<nSourceCount; i++ )
+    for ( tools::Long i=0; i<nSourceCount; i++ )
         pNumGroups[i].DisposeData();
 
     pSourceData->DisposeData();
@@ -700,8 +700,8 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
             // This is an ordinary group field or external number group field.
 
             const ScDPGroupDimension* pGrpDim = itrGrp->second;
-            long nSrcDim = pGrpDim->GetSourceDim();
-            long nGrpDim = pGrpDim->GetGroupDim();
+            tools::Long nSrcDim = pGrpDim->GetSourceDim();
+            tools::Long nGrpDim = pGrpDim->GetGroupDim();
             const ScDPNumGroupInfo* pNumInfo = rCache.GetNumGroupInfo(nGrpDim);
 
             if (pGrpDim->IsDateDimension() && pNumInfo)
@@ -803,15 +803,15 @@ void ScDPGroupTableData::ReloadCacheTable()
 
 void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<long>& rDims)
 {
-    long nGroupedColumns = aGroups.size();
+    tools::Long nGroupedColumns = aGroups.size();
 
     const ScDPCache& rCache = GetCacheTable().getCache();
     size_t i = 0;
-    for (long nColumn : rDims)
+    for (tools::Long nColumn : rDims)
     {
         bool bDateDim = false;
 
-        long nSourceDim = nColumn;
+        tools::Long nSourceDim = nColumn;
         if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupedColumns )
         {
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
@@ -871,13 +871,13 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
     }
 }
 
-bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
+bool ScDPGroupTableData::IsBaseForGroup(tools::Long nDim) const
 {
     return std::any_of(aGroups.begin(), aGroups.end(),
         [&nDim](const ScDPGroupDimension& rDim) { return rDim.GetSourceDim() == nDim; });
 }
 
-long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
+tools::Long ScDPGroupTableData::GetGroupBase(tools::Long nGroupDim) const
 {
     auto aIter = std::find_if(aGroups.begin(), aGroups.end(),
         [&nGroupDim](const ScDPGroupDimension& rDim) { return rDim.GetGroupDim() == nGroupDim; });
@@ -887,7 +887,7 @@ long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
     return -1;      // none
 }
 
-bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
+bool ScDPGroupTableData::IsNumOrDateGroup(tools::Long nDimension) const
 {
     // Virtual method from ScDPTableData, used in result data to force text labels.
 
@@ -905,8 +905,8 @@ bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
     return false;
 }
 
-bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                    const ScDPItemData& rBaseData, long nBaseIndex ) const
+bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, tools::Long nGroupIndex,
+                                    const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const
 {
     auto aIter = std::find_if(aGroups.begin(), aGroups.end(),
         [&nGroupIndex, &nBaseIndex](const ScDPGroupDimension& rDim) {
@@ -933,8 +933,8 @@ bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
     return true;
 }
 
-bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
-                                         const ScDPItemData& rSecondData, long nSecondIndex ) const
+bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, tools::Long nFirstIndex,
+                                         const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const
 {
     const ScDPGroupDimension* pFirstDim = nullptr;
     const ScDPGroupDimension* pSecondDim = nullptr;
@@ -990,11 +990,11 @@ bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
     return true;
 }
 
-long ScDPGroupTableData::GetSourceDim( long nDim )
+tools::Long ScDPGroupTableData::GetSourceDim( tools::Long nDim )
 {
     if ( getIsDataLayoutDimension( nDim ) )
         return nSourceCount;
-    if (  nDim >= nSourceCount && nDim < nSourceCount +static_cast<long>(aGroups.size())  )
+    if (  nDim >= nSourceCount && nDim < nSourceCount +static_cast<tools::Long>(aGroups.size())  )
     {
         const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
         return  rGroupDim.GetSourceDim();
@@ -1002,7 +1002,7 @@ long ScDPGroupTableData::GetSourceDim( long nDim )
     return nDim;
 }
 
-long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
+tools::Long ScDPGroupTableData::Compare(tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
@@ -1018,7 +1018,7 @@ long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
 void ScDPGroupTableData::Dump() const
 {
     cout << "--- ScDPGroupTableData" << endl;
-    for (long i = 0; i < nSourceCount; ++i)
+    for (tools::Long i = 0; i < nSourceCount; ++i)
     {
         cout << "* dimension: " << i << endl;
         const ScDPNumGroupDimension& rGrp = pNumGroups[i];

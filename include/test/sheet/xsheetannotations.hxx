@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
+#include <tools/long.hxx>
 
 namespace apitest {
 
@@ -23,7 +24,7 @@ class OOO_DLLPUBLIC_TEST XSheetAnnotations
 {
 public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(long nIndex) = 0;
+    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(tools::Long nIndex) = 0;
 
     // XSheetAnnotations
     void testIndex();

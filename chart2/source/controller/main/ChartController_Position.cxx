@@ -47,10 +47,10 @@ using namespace ::com::sun::star::chart2;
 
 static void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectangle& rPosAndSize, const awt::Size& rOriginalSize )
 {
-    long nPosX(0);
-    long nPosY(0);
-    long nSizX(0);
-    long nSizY(0);
+    tools::Long nPosX(0);
+    tools::Long nPosY(0);
+    tools::Long nSizX(0);
+    tools::Long nSizY(0);
 
     RectPoint eRP = RectPoint::LT;
 

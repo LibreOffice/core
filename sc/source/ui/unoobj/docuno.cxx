@@ -530,7 +530,7 @@ static ScViewData* lcl_getViewMatchingDocZoomTab(const Fraction& rZoomX,
 void ScModelObj::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
-                            long nTileWidth, long nTileHeight )
+                            tools::Long nTileWidth, tools::Long nTileHeight )
 {
     ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
 
@@ -539,8 +539,8 @@ void ScModelObj::paintTile( VirtualDevice& rDevice,
         return;
 
     ScViewData* pActiveViewData = &pViewShell->GetViewData();
-    Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    Fraction aFracX(tools::Long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction aFracY(tools::Long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
     // Try to find a view that matches the tile-zoom requested by iterating over
     // first few shells. This is to avoid switching of zooms in ScGridWindow::PaintTile
@@ -671,8 +671,8 @@ Size ScModelObj::getDocumentSize()
         return ScViewData::ToPixel(nSize, fPPTX);
     };
 
-    long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
-    long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, nEndRow, nTab, fPPTY);
+    tools::Long nDocWidthPixel = pViewData->GetLOKWidthHelper().computePosition(nEndCol, GetColWidthPx);
+    tools::Long nDocHeightPixel = pThisDoc->GetScaledRowHeight(0, nEndRow, nTab, fPPTY);
 
     if (nDocWidthPixel > 0 && nDocHeightPixel > 0)
     {
@@ -1100,8 +1100,8 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
             SCCOL nX = aNote.maPos.Col();
             SCROW nY = aNote.maPos.Row();
             Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-            long nSizeXPix;
-            long nSizeYPix;
+            tools::Long nSizeXPix;
+            tools::Long nSizeYPix;
             pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
 
             double fPPTX = pViewData->GetPPTX();
@@ -1139,8 +1139,8 @@ void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
             SCCOL nX = aNote.maPos.Col();
             SCROW nY = aNote.maPos.Row();
             Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-            long nSizeXPix;
-            long nSizeYPix;
+            tools::Long nSizeXPix;
+            tools::Long nSizeYPix;
             pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
 
             double fPPTX = pViewData->GetPPTX();
@@ -1751,7 +1751,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     ScPrintSelectionStatus aStatus;
     OUString aPagesStr;
     // #i115266# if FillRenderMarkData fails, keep nTotalPages at 0, but still handle getRenderer(0) below
-    long nTotalPages = 0;
+    tools::Long nTotalPages = 0;
     bool bRenderToGraphic = false;
     bool bSinglePageSheets = false;
     if ( FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr, bRenderToGraphic ) )
@@ -1934,8 +1934,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         else
             aPage.Select( nRenderer+1 );
 
-        long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
-        long nTabStart = pPrintFuncCache->GetTabStart( nTab );
+        tools::Long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
+        tools::Long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
         (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, false, nullptr );
 
@@ -1952,7 +1952,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         aPageSize.Height = TwipsToHMM( aTwips.Height());
     }
 
-    long nPropCount = bWasCellRange ? 5 : 4;
+    tools::Long nPropCount = bWasCellRange ? 5 : 4;
     uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = SC_UNONAME_PAGESIZE;
@@ -2010,7 +2010,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     {
         pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
     }
-    long nTotalPages = pPrintFuncCache->GetPageCount();
+    tools::Long nTotalPages = pPrintFuncCache->GetPageCount();
 
     for ( const auto& rValue : rOptions)
     {
@@ -2167,8 +2167,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     else
         aPage.Select( nRenderer+1 );
 
-    long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
-    long nTabStart = pPrintFuncCache->GetTabStart( nTab );
+    tools::Long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
+    tools::Long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast< vcl::PDFExtOutDevData* >(pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
@@ -2261,10 +2261,10 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                         Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
                         Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
 
-                        long nX1 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
-                        long nX2 = aLocationPixel.Left() + static_cast<long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
-                        long nY1 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
-                        long nY2 = aLocationPixel.Top() + static_cast<long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
+                        tools::Long nX1 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                        tools::Long nX2 = aLocationPixel.Left() + static_cast<tools::Long>( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                        tools::Long nY1 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                        tools::Long nY2 = aLocationPixel.Top() + static_cast<tools::Long>( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
 
                         if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
                         if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();

@@ -79,13 +79,13 @@ SdVectorizeDlg::~SdVectorizeDlg()
 
         if( fGrfWH < fWinWH )
         {
-            aBmpSize.setWidth( static_cast<long>( rDispSize.Height() * fGrfWH ) );
+            aBmpSize.setWidth( static_cast<tools::Long>( rDispSize.Height() * fGrfWH ) );
             aBmpSize.setHeight( rDispSize.Height() );
         }
         else
         {
             aBmpSize.setWidth( rDispSize.Width() );
-            aBmpSize.setHeight( static_cast<long>( rDispSize.Width() / fGrfWH) );
+            aBmpSize.setHeight( static_cast<tools::Long>( rDispSize.Width() / fGrfWH) );
         }
 
         const Point aBmpPos( ( rDispSize.Width()  - aBmpSize.Width() ) >> 1,
@@ -147,26 +147,26 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 
             if( pRAcc )
             {
-                const long      nWidth = pRAcc->Width();
-                const long      nHeight = pRAcc->Height();
-                const long      nTileX = m_xMtFillHoles->get_value(FieldUnit::NONE);
-                const long      nTileY = m_xMtFillHoles->get_value(FieldUnit::NONE);
+                const tools::Long      nWidth = pRAcc->Width();
+                const tools::Long      nHeight = pRAcc->Height();
+                const tools::Long      nTileX = m_xMtFillHoles->get_value(FieldUnit::NONE);
+                const tools::Long      nTileY = m_xMtFillHoles->get_value(FieldUnit::NONE);
                 assert(nTileX && "div-by-zero");
-                const long      nCountX = nWidth / nTileX;
+                const tools::Long      nCountX = nWidth / nTileX;
                 assert(nTileY && "div-by-zero");
-                const long      nCountY = nHeight / nTileY;
-                const long      nRestX = nWidth % nTileX;
-                const long      nRestY = nHeight % nTileY;
+                const tools::Long      nCountY = nHeight / nTileY;
+                const tools::Long      nRestX = nWidth % nTileX;
+                const tools::Long      nRestY = nHeight % nTileY;
 
                 MapMode aMap( rMtf.GetPrefMapMode() );
                 aNewMtf.SetPrefSize( rMtf.GetPrefSize() );
                 aNewMtf.SetPrefMapMode( aMap );
 
-                for( long nTY = 0; nTY < nCountY; nTY++ )
+                for( tools::Long nTY = 0; nTY < nCountY; nTY++ )
                 {
-                    const long nY = nTY * nTileY;
+                    const tools::Long nY = nTY * nTileY;
 
-                    for( long nTX = 0; nTX < nCountX; nTX++ )
+                    for( tools::Long nTX = 0; nTX < nCountX; nTX++ )
                         AddTile( pRAcc.get(), aNewMtf, nTX * nTileX, nTY * nTileY, nTileX, nTileY );
 
                     if( nRestX )
@@ -175,9 +175,9 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 
                 if( nRestY )
                 {
-                    const long nY = nCountY * nTileY;
+                    const tools::Long nY = nCountY * nTileY;
 
-                    for( long nTX = 0; nTX < nCountX; nTX++ )
+                    for( tools::Long nTX = 0; nTX < nCountX; nTX++ )
                         AddTile( pRAcc.get(), aNewMtf, nTX * nTileX, nY, nTileX, nRestY );
 
                     if( nRestX )
@@ -202,16 +202,16 @@ void SdVectorizeDlg::Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf )
 }
 
 void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
-                              long nPosX, long nPosY, long nWidth, long nHeight )
+                              tools::Long nPosX, tools::Long nPosY, tools::Long nWidth, tools::Long nHeight )
 {
     sal_uLong           nSumR = 0, nSumG = 0, nSumB = 0;
-    const long      nRight = nPosX + nWidth - 1;
-    const long      nBottom = nPosY + nHeight - 1;
+    const tools::Long      nRight = nPosX + nWidth - 1;
+    const tools::Long      nBottom = nPosY + nHeight - 1;
     const double    fMult = 1.0 / ( nWidth * nHeight );
 
-    for( long nY = nPosY; nY <= nBottom; nY++ )
+    for( tools::Long nY = nPosY; nY <= nBottom; nY++ )
     {
-        for( long nX = nPosX; nX <= nRight; nX++ )
+        for( tools::Long nX = nPosX; nX <= nRight; nX++ )
         {
             const BitmapColor aPixel( pRAcc->GetColor( nY, nX ) );
 
@@ -241,7 +241,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
-IMPL_LINK( SdVectorizeDlg, ProgressHdl, long, nData, void )
+IMPL_LINK( SdVectorizeDlg, ProgressHdl, tools::Long, nData, void )
 {
     m_xPrgs->set_percentage(nData);
 }

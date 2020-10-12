@@ -268,7 +268,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         const SwRect& GetLastCharRect() const { return maLastCharRect;}
         SwTwips GetRelCharX( const SwFrame* pFrame ) const;
         SwTwips GetRelCharY( const SwFrame* pFrame ) const;
-        void AddLastCharY( long nDiff );
+        void AddLastCharY( tools::Long nDiff );
         void ResetLastCharRectHeight();
 
         // accessor to member <nmLastTopOfLine>

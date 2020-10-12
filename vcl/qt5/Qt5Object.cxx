@@ -84,7 +84,8 @@ void Qt5Object::ResetClipRegion()
 
 void Qt5Object::BeginSetClipRegion(sal_uInt32) { m_pRegion = QRegion(); }
 
-void Qt5Object::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
+void Qt5Object::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                tools::Long nHeight)
 {
     m_pRegion += QRect(nX, nY, nWidth, nHeight);
 }
@@ -95,7 +96,7 @@ void Qt5Object::EndSetClipRegion()
         m_pRegion = m_pRegion.intersected(m_pQWidget->geometry());
 }
 
-void Qt5Object::SetPosSize(long nX, long nY, long nWidth, long nHeight)
+void Qt5Object::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     if (m_pQWidget)
     {

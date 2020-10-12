@@ -91,7 +91,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     SetBackground();
 }
 
-void ScHeaderControl::SetWidth( long nNew )
+void ScHeaderControl::SetWidth( tools::Long nNew )
 {
     OSL_ENSURE( bVertical, "SetWidth works only on row headers" );
     if ( nNew != nWidth )
@@ -112,7 +112,7 @@ ScHeaderControl::~ScHeaderControl()
 void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 {
     bool bLayoutRTL = IsLayoutRTL();
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     tools::Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
@@ -171,11 +171,11 @@ void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEn
         DoPaint( nOldStart, nOldEnd );          //  cancel selection
 }
 
-long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
+tools::Long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
 {
-    long nScrPos;
+    tools::Long nScrPos;
 
-    long nMax = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
+    tools::Long nMax = ( bVertical ? GetOutputSizePixel().Height() : GetOutputSizePixel().Width() ) + 1;
     if (nEntryNo >= nSize)
         nScrPos = nMax;
     else
@@ -224,7 +224,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
 
     bool bLayoutRTL = IsLayoutRTL();
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
     bool bMirrored = IsMirrored();
 
     OUString            aString;
@@ -239,16 +239,16 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     SCCOLROW    nPos = GetPos();
 
-    long nPStart = bVertical ? rRect.Top() : rRect.Left();
-    long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
+    tools::Long nPStart = bVertical ? rRect.Top() : rRect.Left();
+    tools::Long nPEnd = bVertical ? rRect.Bottom() : rRect.Right();
 
-    long nTransStart = nPEnd + 1;
-    long nTransEnd = 0;
+    tools::Long nTransStart = nPEnd + 1;
+    tools::Long nTransEnd = 0;
 
-    long nInitScrPos = 0;
+    tools::Long nInitScrPos = 0;
     if ( bLayoutRTL )
     {
-        long nTemp = nPStart;       // swap nPStart / nPEnd
+        tools::Long nTemp = nPStart;       // swap nPStart / nPEnd
         nPStart = nPEnd;
         nPEnd = nTemp;
         nTemp = nTransStart;        // swap nTransStart / nTransEnd
@@ -263,7 +263,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     // complete the painting of the outer lines
     // first find the end of the last cell
 
-    long nLineEnd = nInitScrPos - nLayoutSign;
+    tools::Long nLineEnd = nInitScrPos - nLayoutSign;
 
     for (SCCOLROW i=nPos; i<nSize; i++)
     {
@@ -274,7 +274,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
             if ( bMarkRange && i >= nMarkStart && i <= nMarkEnd )
             {
-                long nLineStart = nLineEnd - ( nSizePix - 1 ) * nLayoutSign;
+                tools::Long nLineStart = nLineEnd - ( nSizePix - 1 ) * nLayoutSign;
                 if ( nLineStart * nLayoutSign < nTransStart * nLayoutSign )
                     nTransStart = nLineStart;
                 if ( nLineEnd * nLayoutSign > nTransEnd * nLayoutSign )
@@ -351,7 +351,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         SetLineColor( rStyleSettings.GetDarkShadowColor() );
         if (bVertical)
         {
-            long nDarkPos = bMirrored ? 0 : nBarSize-1;
+            tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
             DrawLine( Point( nDarkPos, nPStart ), Point( nDarkPos, nLineEnd ) );
         }
         else
@@ -363,7 +363,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             SetLineColor( aSelLineColor );
             if (bVertical)
             {
-                long nDarkPos = bMirrored ? 0 : nBarSize-1;
+                tools::Long nDarkPos = bMirrored ? 0 : nBarSize-1;
                 DrawLine( Point( nDarkPos, nTransStart ), Point( nDarkPos, nTransEnd ) );
             }
             else
@@ -417,7 +417,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
         }
 
         SCCOLROW    nCount=0;
-        long    nScrPos=nInitScrPos;
+        tools::Long    nScrPos=nInitScrPos;
         do
         {
             if (bVertical)
@@ -527,15 +527,15 @@ SCCOLROW ScHeaderControl::GetMousePos( const MouseEvent& rMEvt, bool& rBorder ) 
     SCCOLROW    nPos = GetPos();
     SCCOLROW    nHitNo = nPos;
     SCCOLROW    nEntryNo = 1 + nPos;
-    long    nScrPos;
-    long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
-    long    nDif;
+    tools::Long    nScrPos;
+    tools::Long    nMousePos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+    tools::Long    nDif;
     Size    aSize = GetOutputSizePixel();
-    long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
+    tools::Long    nWinSize = bVertical ? aSize.Height() : aSize.Width();
 
     bool bLayoutRTL = IsLayoutRTL();
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
-    long nEndPos = bLayoutRTL ? -1 : nWinSize;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nEndPos = bLayoutRTL ? -1 : nWinSize;
 
     nScrPos = GetScrPos( nPos ) - nLayoutSign;
     do
@@ -720,10 +720,10 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
         }
         bDragging = false;
 
-        long nScrPos    = GetScrPos( nDragNo );
-        long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+        tools::Long nScrPos    = GetScrPos( nDragNo );
+        tools::Long nMousePos  = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
         bool bLayoutRTL = IsLayoutRTL();
-        long nNewWidth  = bLayoutRTL ? ( nScrPos - nMousePos + 1 )
+        tools::Long nNewWidth  = bLayoutRTL ? ( nScrPos - nMousePos + 1 )
                                      : ( nMousePos + 2 - nScrPos );
 
         if ( nNewWidth < 0 /* && !IsSelected(nDragNo) */ )
@@ -783,7 +783,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
 
     if ( bDragging )
     {
-        long nNewPos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
+        tools::Long nNewPos = bVertical ? rMEvt.GetPosPixel().Y() : rMEvt.GetPosPixel().X();
         if ( nNewPos != nDragPos )
         {
             DrawInvert( nDragPos );
@@ -907,9 +907,9 @@ void ScHeaderControl::ShowDragHelp()
     if (!Help::IsQuickHelpEnabled())
         return;
 
-    long nScrPos    = GetScrPos( nDragNo );
+    tools::Long nScrPos    = GetScrPos( nDragNo );
     bool bLayoutRTL = IsLayoutRTL();
-    long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
+    tools::Long nVal = bLayoutRTL ? ( nScrPos - nDragPos + 1 )
                            : ( nDragPos + 2 - nScrPos );
 
     OUString aHelpStr = GetDragHelp( nVal );
@@ -989,11 +989,11 @@ void ScHeaderControl::SelectWindow()
 {
 }
 
-void ScHeaderControl::DrawInvert( long /* nDragPos */ )
+void ScHeaderControl::DrawInvert( tools::Long /* nDragPos */ )
 {
 }
 
-OUString ScHeaderControl::GetDragHelp( long /* nVal */ )
+OUString ScHeaderControl::GetDragHelp( tools::Long /* nVal */ )
 {
     return EMPTY_OUSTRING;
 }
