@@ -383,61 +383,61 @@ namespace
     {
         vcl::Font aNewFont( _rOriginalFont );
         const SfxPoolItem* pItem( nullptr );
-        if ( SfxItemState::SET == _rItemSet.GetItemState( _nFont,true,&pItem) && dynamic_cast< const SvxFontItem *>( pItem ) !=  nullptr)
-        {
-            const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
-            aNewFont.SetFamilyName(pFontItem->GetFamilyName());
-            aNewFont.SetStyleName(pFontItem->GetStyleName());
-            aNewFont.SetFamily(pFontItem->GetFamily());
-            aNewFont.SetPitch(pFontItem->GetPitch());
-            aNewFont.SetCharSet(pFontItem->GetCharSet());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( _nFontHeight,true,&pItem) && dynamic_cast< const SvxFontHeightItem *>( pItem ) !=  nullptr)
-        {
-            const SvxFontHeightItem* pFontItem = static_cast<const SvxFontHeightItem*>(pItem);
-            aNewFont.SetFontHeight(OutputDevice::LogicToLogic(Size(0, pFontItem->GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( _nPosture,true,&pItem) && dynamic_cast< const SvxPostureItem *>( pItem ) !=  nullptr)
-        {
-            const SvxPostureItem* pFontItem = static_cast<const SvxPostureItem*>(pItem);
-            aNewFont.SetItalic(pFontItem->GetPosture());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( _nWeight,true,&pItem) && dynamic_cast< const SvxWeightItem *>( pItem ) !=  nullptr)
-        {
-            const SvxWeightItem* pFontItem = static_cast<const SvxWeightItem*>(pItem);
-            aNewFont.SetWeight(pFontItem->GetWeight());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_WORDLINEMODE,true,&pItem) && dynamic_cast< const SvxWordLineModeItem *>( pItem ) !=  nullptr)
-        {
-            const SvxWordLineModeItem* pFontItem = static_cast<const SvxWordLineModeItem*>(pItem);
-            aNewFont.SetWordLineMode(pFontItem->GetValue());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CROSSEDOUT,true,&pItem) && dynamic_cast< const SvxCrossedOutItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCrossedOutItem* pFontItem = static_cast<const SvxCrossedOutItem*>(pItem);
-            aNewFont.SetStrikeout(pFontItem->GetStrikeout());
-        }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( _nFont,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxFontItem *>( pItem ) )
+            {
+                aNewFont.SetFamilyName(pFontItem->GetFamilyName());
+                aNewFont.SetStyleName(pFontItem->GetStyleName());
+                aNewFont.SetFamily(pFontItem->GetFamily());
+                aNewFont.SetPitch(pFontItem->GetPitch());
+                aNewFont.SetCharSet(pFontItem->GetCharSet());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( _nFontHeight,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxFontHeightItem *>( pItem ) )
+            {
+                aNewFont.SetFontHeight(OutputDevice::LogicToLogic(Size(0, pFontItem->GetHeight()), MapMode(MapUnit::MapTwip), MapMode(MapUnit::MapPoint)).Height());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( _nPosture,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxPostureItem *>( pItem ) )
+            {
+                aNewFont.SetItalic(pFontItem->GetPosture());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( _nWeight,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxWeightItem *>( pItem ) )
+            {
+                aNewFont.SetWeight(pFontItem->GetWeight());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_WORDLINEMODE,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxWordLineModeItem *>( pItem ) )
+            {
+                aNewFont.SetWordLineMode(pFontItem->GetValue());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CROSSEDOUT,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxCrossedOutItem *>( pItem ) )
+            {
+                aNewFont.SetStrikeout(pFontItem->GetStrikeout());
+            }
 
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARROTATE,true,&pItem) && dynamic_cast< const SvxCharRotateItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCharRotateItem* pRotateItem = static_cast<const SvxCharRotateItem*>(pItem);
-            aNewFont.SetOrientation(pRotateItem->GetValue());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARSCALE_W,true,&pItem) && dynamic_cast< const SvxCharScaleWidthItem *>( pItem ) !=  nullptr)
-        {
-            const SvxCharScaleWidthItem* pCharItem = static_cast<const SvxCharScaleWidthItem*>(pItem);
-            aNewFont.SetWidthType(vcl::unohelper::ConvertFontWidth(pCharItem->GetValue()));
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,true,&pItem) && dynamic_cast< const SvxUnderlineItem *>( pItem ) !=  nullptr)
-        {
-            const SvxUnderlineItem* pFontItem = static_cast<const SvxUnderlineItem*>(pItem);
-            aNewFont.SetUnderline(pFontItem->GetLineStyle());
-        }
-        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_COLOR,true,&pItem) && dynamic_cast< const SvxColorItem *>( pItem ) !=  nullptr)
-        {
-            const SvxColorItem* pFontItem = static_cast<const SvxColorItem*>(pItem);
-            aNewFont.SetColor(pFontItem->GetValue());
-        }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARROTATE,true,&pItem) )
+            if ( auto pRotateItem = dynamic_cast< const SvxCharRotateItem *>( pItem ) )
+            {
+                aNewFont.SetOrientation(pRotateItem->GetValue());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CHARSCALE_W,true,&pItem) )
+            if ( auto pCharItem = dynamic_cast< const SvxCharScaleWidthItem *>( pItem ) )
+            {
+                aNewFont.SetWidthType(vcl::unohelper::ConvertFontWidth(pCharItem->GetValue()));
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_UNDERLINE,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxUnderlineItem *>( pItem ) )
+            {
+                aNewFont.SetUnderline(pFontItem->GetLineStyle());
+            }
+        if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_COLOR,true,&pItem) )
+            if ( auto pFontItem = dynamic_cast< const SvxColorItem *>( pItem ) )
+            {
+                aNewFont.SetColor(pFontItem->GetValue());
+            }
 
         _out_rAwtFont = VCLUnoHelper::CreateFontDescriptor( aNewFont );
     }

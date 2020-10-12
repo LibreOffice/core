@@ -2617,8 +2617,8 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 
     if( m_pActionViewShell )
     {
-        if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
-            static_cast<SwEditShell*>(m_pActionViewShell)->StartAction();
+        if( auto pEditShell = dynamic_cast< SwEditShell *>( m_pActionViewShell ) )
+            pEditShell->StartAction();
         else
             m_pActionViewShell->StartAction();
     }
