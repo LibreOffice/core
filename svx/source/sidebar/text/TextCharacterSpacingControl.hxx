@@ -40,7 +40,7 @@ public:
     virtual ~TextCharacterSpacingControl() override;
 
 private:
-    long                mnCustomKern;
+    tools::Long                mnCustomKern;
     short               mnLastCus;
 
     std::unique_ptr<weld::MetricSpinButton> mxEditKerning;
@@ -54,7 +54,7 @@ private:
     rtl::Reference<TextCharacterSpacingPopup> mxControl;
 
     void Initialize();
-    void ExecuteCharacterSpacing(long nValue, bool bClose = true);
+    void ExecuteCharacterSpacing(tools::Long nValue, bool bClose = true);
 
     DECL_LINK(PredefinedValuesHdl, weld::Button&, void);
     DECL_LINK(KerningModifyHdl, weld::MetricSpinButton&, void);

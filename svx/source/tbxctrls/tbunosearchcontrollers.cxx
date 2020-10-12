@@ -1377,7 +1377,7 @@ void SAL_CALL SearchLabelToolboxController::statusChanged( const css::frame::Fea
         m_xSL->set_label(aStr);
         m_xSL->SetOptimalSize();
         Size aSize(m_xSL->GetSizePixel());
-        long nWidth = !aStr.isEmpty() ? aSize.getWidth() : 16;
+        tools::Long nWidth = !aStr.isEmpty() ? aSize.getWidth() : 16;
         m_xSL->SetSizePixel(Size(nWidth, aSize.Height()));
     }
 }

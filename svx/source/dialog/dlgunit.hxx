@@ -24,7 +24,7 @@
 #include <svx/svdtrans.hxx>
 #include <vcl/fieldvalues.hxx>
 
-inline OUString GetUnitString( long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
+inline OUString GetUnitString( tools::Long nVal_100, FieldUnit eFieldUnit, sal_Unicode cSep )
 {
     OUStringBuffer aVal = OUString::number(
         vcl::ConvertValue(nVal_100, 2, MapUnit::Map100thMM, eFieldUnit));

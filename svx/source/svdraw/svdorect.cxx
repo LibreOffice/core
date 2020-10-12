@@ -96,7 +96,7 @@ void SdrRectObj::SetXPolyDirty()
     mpXPoly.reset();
 }
 
-XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, long nRad1) const
+XPolygon SdrRectObj::ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nRad1) const
 {
     XPolygon aXPoly(rRect1,nRad1,nRad1);
     const sal_uInt16 nPointCnt(aXPoly.GetPointCount());
@@ -173,7 +173,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     if (aGeo.nShearAngle==0)
         return;
 
-    long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.nTan);
+    tools::Long nDst=FRound((maRect.Bottom()-maRect.Top())*aGeo.nTan);
     if (aGeo.nShearAngle>0)
     {
         Point aRef(rRect.TopLeft());
@@ -272,7 +272,7 @@ basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 
 void SdrRectObj::RecalcSnapRect()
 {
-    long nEckRad=GetEckenradius();
+    tools::Long nEckRad=GetEckenradius();
     if ((aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) && nEckRad!=0) {
         maSnapRect=GetXPoly().GetBoundRect();
     } else {
@@ -318,8 +318,8 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
         {
             case 1: // Handle for changing the corner radius
             {
-                long a = GetEckenradius();
-                long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
+                tools::Long a = GetEckenradius();
+                tools::Long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
                 if (a>b) a=b;
                 if (a<0) a=0;
                 aPnt=maRect.TopLeft();
@@ -470,13 +470,13 @@ void SdrRectObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrRectObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrRectObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     SetXPolyDirty();

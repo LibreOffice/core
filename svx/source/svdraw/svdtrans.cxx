@@ -42,7 +42,7 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
     if (!aXFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction xFract, using Fraction(1,1)" );
         aXFact = Fraction(1,1);
-        long nWdt = rRect.Right() - rRect.Left();
+        tools::Long nWdt = rRect.Right() - rRect.Left();
         if (nWdt == 0) rRect.AdjustRight( 1 );
     }
     rRect.SetLeft( rRef.X() + FRound( (rRect.Left()  - rRef.X()) * double(aXFact) ) );
@@ -51,7 +51,7 @@ void ResizeRect(tools::Rectangle& rRect, const Point& rRef, const Fraction& rxFa
     if (!aYFact.IsValid()) {
         SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
         aYFact = Fraction(1,1);
-        long nHgt = rRect.Bottom() - rRect.Top();
+        tools::Long nHgt = rRect.Bottom() - rRect.Top();
         if (nHgt == 0) rRect.AdjustBottom( 1 );
     }
     rRect.SetTop( rRef.Y() + FRound( (rRect.Top()    - rRef.Y()) * double(aYFact) ) );
@@ -103,30 +103,30 @@ void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 
 void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 {
-    long mx=rRef2.X()-rRef1.X();
-    long my=rRef2.Y()-rRef1.Y();
+    tools::Long mx=rRef2.X()-rRef1.X();
+    tools::Long my=rRef2.Y()-rRef1.Y();
     if (mx==0) { // vertical axis
-        long dx=rRef1.X()-rPnt.X();
+        tools::Long dx=rRef1.X()-rPnt.X();
         rPnt.AdjustX(2*dx );
     } else if (my==0) { // horizontal axis
-        long dy=rRef1.Y()-rPnt.Y();
+        tools::Long dy=rRef1.Y()-rPnt.Y();
         rPnt.AdjustY(2*dy );
     } else if (mx==my) { // diagonal axis '\'
-        long dx1=rPnt.X()-rRef1.X();
-        long dy1=rPnt.Y()-rRef1.Y();
+        tools::Long dx1=rPnt.X()-rRef1.X();
+        tools::Long dy1=rPnt.Y()-rRef1.Y();
         rPnt.setX(rRef1.X()+dy1 );
         rPnt.setY(rRef1.Y()+dx1 );
     } else if (mx==-my) { // diagonal axis '/'
-        long dx1=rPnt.X()-rRef1.X();
-        long dy1=rPnt.Y()-rRef1.Y();
+        tools::Long dx1=rPnt.X()-rRef1.X();
+        tools::Long dy1=rPnt.Y()-rRef1.Y();
         rPnt.setX(rRef1.X()-dy1 );
         rPnt.setY(rRef1.Y()-dx1 );
     } else { // arbitrary axis
         // TODO: Optimize this! Raise perpendicular on the mirroring axis..?
-        long nRefWink=GetAngle(rRef2-rRef1);
+        tools::Long nRefWink=GetAngle(rRef2-rRef1);
         rPnt-=rRef1;
-        long nPntWink=GetAngle(rPnt);
-        long nAngle=2*(nRefWink-nPntWink);
+        tools::Long nPntWink=GetAngle(rPnt);
+        tools::Long nAngle=2*(nRefWink-nPntWink);
         double a = nAngle * F_PI18000;
         double nSin=sin(a);
         double nCos=cos(a);
@@ -164,10 +164,10 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
 {
     bool bC1=pC1!=nullptr;
     bool bC2=pC2!=nullptr;
-    long x0=rPnt.X();
-    long y0=rPnt.Y();
-    long cx=rCenter.X();
-    long cy=rCenter.Y();
+    tools::Long x0=rPnt.X();
+    tools::Long y0=rPnt.Y();
+    tools::Long cx=rCenter.X();
+    tools::Long cy=rCenter.Y();
     double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
     double sn=sin(nAngle);
     double cs=cos(nAngle);
@@ -183,7 +183,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC1->AdjustX( -x0 );
             // resize, account for the distance from the center
-            long nPntRad=cy-pC1->Y();
+            tools::Long nPntRad=cy-pC1->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
             pC1->setX(FRound(static_cast<double>(pC1->X())*nFact) );
             pC1->AdjustX(cx );
@@ -201,7 +201,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
             // move into the direction of the center, as a basic position for the rotation
             pC2->AdjustX( -x0 );
             // resize, account for the distance from the center
-            long nPntRad=rCenter.Y()-pC2->Y();
+            tools::Long nPntRad=rCenter.Y()-pC2->Y();
             double nFact=static_cast<double>(nPntRad)/static_cast<double>(rRad.Y());
             pC2->setX(FRound(static_cast<double>(pC2->X())*nFact) );
             pC2->AdjustX(cx );
@@ -218,13 +218,13 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
 {
     bool bC1=pC1!=nullptr;
     bool bC2=pC2!=nullptr;
-    long x0=rPnt.X();
-    long y0=rPnt.Y();
-    long dx1=0,dy1=0;
-    long dxC1=0,dyC1=0;
-    long dxC2=0,dyC2=0;
+    tools::Long x0=rPnt.X();
+    tools::Long y0=rPnt.Y();
+    tools::Long dx1=0,dy1=0;
+    tools::Long dxC1=0,dyC1=0;
+    tools::Long dxC2=0,dyC2=0;
     if (bVert) {
-        long nStart=rCenter.X()-rRad.X();
+        tools::Long nStart=rCenter.X()-rRad.X();
         dx1=rPnt.X()-nStart;
         rPnt.setX(nStart );
         if (bC1) {
@@ -236,7 +236,7 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
             pC2->setX(nStart );
         }
     } else {
-        long nStart=rCenter.Y()-rRad.Y();
+        tools::Long nStart=rCenter.Y()-rRad.Y();
         dy1=rPnt.Y()-nStart;
         rPnt.setY(nStart );
         if (bC1) {
@@ -272,14 +272,14 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
                           const tools::Rectangle& rRefRect)
 {
-    long y0=rPnt.Y();
+    tools::Long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
     if (bVert) {
     } else {
-        long nTop=rRefRect.Top();
-        long nBtm=rRefRect.Bottom();
-        long nHgt=nBtm-nTop;
-        long dy=rPnt.Y()-y0;
+        tools::Long nTop=rRefRect.Top();
+        tools::Long nBtm=rRefRect.Bottom();
+        tools::Long nHgt=nBtm-nTop;
+        tools::Long dy=rPnt.Y()-y0;
         double a=static_cast<double>(y0-nTop)/nHgt;
         a*=dy;
         rPnt.setY(y0+FRound(a) );
@@ -383,9 +383,9 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 }
 
 
-long GetAngle(const Point& rPnt)
+tools::Long GetAngle(const Point& rPnt)
 {
-    long a=0;
+    tools::Long a=0;
     if (rPnt.Y()==0) {
         if (rPnt.X()<0) a=-18000;
     } else if (rPnt.X()==0) {
@@ -398,21 +398,21 @@ long GetAngle(const Point& rPnt)
     return a;
 }
 
-long NormAngle18000(long a)
+tools::Long NormAngle18000(tools::Long a)
 {
     while (a<-18000) a+=36000;
     while (a>=18000) a-=36000;
     return a;
 }
 
-long NormAngle36000(long a)
+tools::Long NormAngle36000(tools::Long a)
 {
     while (a<0) a+=36000;
     while (a>=36000) a-=36000;
     return a;
 }
 
-sal_uInt16 GetAngleSector(long nAngle)
+sal_uInt16 GetAngleSector(tools::Long nAngle)
 {
     while (nAngle<0) nAngle+=36000;
     while (nAngle>=36000) nAngle-=36000;
@@ -422,10 +422,10 @@ sal_uInt16 GetAngleSector(long nAngle)
     return 3;
 }
 
-long GetLen(const Point& rPnt)
+tools::Long GetLen(const Point& rPnt)
 {
-    long x=std::abs(rPnt.X());
-    long y=std::abs(rPnt.Y());
+    tools::Long x=std::abs(rPnt.X());
+    tools::Long y=std::abs(rPnt.Y());
     if (x+y<0x8000) { // because 7FFF * 7FFF * 2 = 7FFE0002
         x*=x;
         y*=y;
@@ -493,15 +493,15 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
 
     Point aPt1(rPol[1]-rPol[0]);
     if (rGeo.nRotationAngle!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
-    long nWdt=aPt1.X();
+    tools::Long nWdt=aPt1.X();
 
     Point aPt0(rPol[0]);
     Point aPt3(rPol[3]-rPol[0]);
     if (rGeo.nRotationAngle!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
-    long nHgt=aPt3.Y();
+    tools::Long nHgt=aPt3.Y();
 
 
-    long nShW=GetAngle(aPt3);
+    tools::Long nShW=GetAngle(aPt3);
     nShW-=27000; // ShearWink is measured against a vertical line
     nShW=-nShW;  // negating, because '+' is shearing clock-wise
 
@@ -528,10 +528,10 @@ void Poly2Rect(const tools::Polygon& rPol, tools::Rectangle& rRect, GeoStat& rGe
 
 void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
-    long dx=rPt.X()-rPt0.X();
-    long dy=rPt.Y()-rPt0.Y();
-    long dxa=std::abs(dx);
-    long dya=std::abs(dy);
+    tools::Long dx=rPt.X()-rPt0.X();
+    tools::Long dy=rPt.Y()-rPt0.Y();
+    tools::Long dxa=std::abs(dx);
+    tools::Long dya=std::abs(dy);
     if (dx==0 || dy==0 || dxa==dya) return;
     if (dxa>=dya*2) { rPt.setY(rPt0.Y() ); return; }
     if (dya>=dxa*2) { rPt.setX(rPt0.X() ); return; }
@@ -544,10 +544,10 @@ void OrthoDistance8(const Point& rPt0, Point& rPt, bool bBigOrtho)
 
 void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 {
-    long dx=rPt.X()-rPt0.X();
-    long dy=rPt.Y()-rPt0.Y();
-    long dxa=std::abs(dx);
-    long dya=std::abs(dy);
+    tools::Long dx=rPt.X()-rPt0.X();
+    tools::Long dy=rPt.Y()-rPt0.Y();
+    tools::Long dxa=std::abs(dx);
+    tools::Long dya=std::abs(dy);
     if ((dxa<dya) != bBigOrtho) {
         rPt.setY(rPt0.Y()+(dxa* (dy>=0 ? 1 : -1) ) );
     } else {
@@ -556,7 +556,7 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 }
 
 
-long BigMulDiv(long nVal, long nMul, long nDiv)
+tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
 {
     BigInt aVal(nVal);
     aVal*=nMul;
@@ -568,7 +568,7 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     if(nDiv)
     {
         aVal/=nDiv;
-        return long(aVal);
+        return tools::Long(aVal);
     }
     return 0x7fffffff;
 }
@@ -664,7 +664,7 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
 
-static void GetMeterOrInch(MapUnit eMU, short& rnComma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
+static void GetMeterOrInch(MapUnit eMU, short& rnComma, tools::Long& rnMul, tools::Long& rnDiv, bool& rbMetr, bool& rbInch)
 {
     rnMul=1; rnDiv=1;
     short nComma=0;
@@ -698,7 +698,7 @@ static void GetMeterOrInch(MapUnit eMU, short& rnComma, long& rnMul, long& rnDiv
 void SdrFormatter::Undirty()
 {
     bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
-    long nMul1,nDiv1,nMul2,nDiv2;
+    tools::Long nMul1,nDiv1,nMul2,nDiv2;
     short nComma1,nComma2;
     // first: normalize to m or in
     GetMeterOrInch(eSrcMU,nComma1,nMul1,nDiv1,bSrcMetr,bSrcInch);
@@ -728,7 +728,7 @@ void SdrFormatter::Undirty()
 }
 
 
-OUString SdrFormatter::GetStr(long nVal) const
+OUString SdrFormatter::GetStr(tools::Long nVal) const
 {
     const OUString aNullCode("0");
 

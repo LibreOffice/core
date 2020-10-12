@@ -21,6 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
+#include <tools/long.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include "rtfreferencetable.hxx"
@@ -664,7 +665,7 @@ RTFValue::Pointer_t getNestedSprm(RTFSprms& rSprms, Id nParent, Id nId);
 bool findPropertyName(const std::vector<css::beans::PropertyValue>& rProperties,
                       const OUString& rName);
 RTFSprms& getLastAttributes(RTFSprms& rSprms, Id nId);
-OString DTTM22OString(long nDTTM);
+OString DTTM22OString(tools::Long nDTTM);
 
 /// Implementation of the RTFDocument interface.
 class RTFDocumentImpl : public RTFDocument, public RTFListener

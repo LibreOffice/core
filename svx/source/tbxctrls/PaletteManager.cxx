@@ -249,12 +249,12 @@ OUString PaletteManager::GetSelectedPalettePath()
         return OUString();
 }
 
-long PaletteManager::GetColorCount() const
+tools::Long PaletteManager::GetColorCount() const
 {
     return mnColorCount;
 }
 
-long PaletteManager::GetRecentColorCount() const
+tools::Long PaletteManager::GetRecentColorCount() const
 {
     return maRecentColors.size();
 }

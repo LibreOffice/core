@@ -44,7 +44,7 @@ namespace svx
 
 CommonStylePreviewRenderer::CommonStylePreviewRenderer(
                                 const SfxObjectShell& rShell, OutputDevice& rOutputDev,
-                                SfxStyleSheetBase* pStyle, long nMaxHeight)
+                                SfxStyleSheetBase* pStyle, tools::Long nMaxHeight)
     : StylePreviewRenderer(rShell, rOutputDev, pStyle, nMaxHeight)
     , m_pFont()
     , maFontColor(COL_AUTO)

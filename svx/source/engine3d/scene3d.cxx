@@ -529,9 +529,9 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
     UpperLeft = aOutRect.TopLeft();
     LowerRight = aOutRect.BottomRight();
 
-    long dxOutRectHalf = labs(UpperLeft.X() - LowerRight.X());
+    tools::Long dxOutRectHalf = labs(UpperLeft.X() - LowerRight.X());
     dxOutRectHalf /= 2;
-    long dyOutRectHalf = labs(UpperLeft.Y() - LowerRight.Y());
+    tools::Long dyOutRectHalf = labs(UpperLeft.Y() - LowerRight.Y());
     dyOutRectHalf /= 2;
 
         // Only the center is moved. The corners are moved by NbcMove. For the
@@ -558,8 +558,8 @@ void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
                   // ynew = x * sin(alpha) + y * cos(alpha)
                   // Bottom Right is not rotated: the pages of aOutRect must
                   // remain parallel to the coordinate axes.
-        NewCenter.setX( static_cast<long>(Center.X() * cs - Center.Y() * sn) );
-        NewCenter.setY( static_cast<long>(Center.X() * sn + Center.Y() * cs) );
+        NewCenter.setX( static_cast<tools::Long>(Center.X() * cs - Center.Y() * sn) );
+        NewCenter.setY( static_cast<tools::Long>(Center.X() * sn + Center.Y() * cs) );
     }
 
     Size Differenz;
@@ -611,7 +611,7 @@ void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
     }
 }
 
-void E3dScene::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void E3dScene::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     // So currently the glue points are defined relative to the scene aOutRect.
     // Before turning the glue points are defined relative to the page. They

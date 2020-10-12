@@ -129,8 +129,8 @@ Point centerImage(const tools::Rectangle& rBoundingRect, const Image& rImg)
 {
     Size aImgSize = rImg.GetSizePixel();
     Size aRectSize = rBoundingRect.GetSize();
-    long nXOffset = (aRectSize.getWidth() - aImgSize.getWidth())/2;
-    long nYOffset = (aRectSize.getHeight() - aImgSize.getHeight())/2;
+    tools::Long nXOffset = (aRectSize.getWidth() - aImgSize.getWidth())/2;
+    tools::Long nYOffset = (aRectSize.getHeight() - aImgSize.getHeight())/2;
     Point aPt = rBoundingRect.TopLeft();
     aPt += Point(nXOffset, nYOffset);
     return aPt;

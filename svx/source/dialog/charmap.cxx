@@ -465,28 +465,28 @@ void SvxShowCharSet::DeSelect()
 // stretch a grid rectangle if its at the edge to fill unused space
 tools::Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize)
 {
-    long x = rPointUL.X() - 1;
-    long y = rPointUL.Y() - 1;
+    tools::Long x = rPointUL.X() - 1;
+    tools::Long y = rPointUL.Y() - 1;
     Point aPointUL(x+1, y+1);
     Size aGridSize(nX-1, nY-1);
 
-    long nXDistFromLeft = x - m_nXGap;
+    tools::Long nXDistFromLeft = x - m_nXGap;
     if (nXDistFromLeft <= 1)
     {
         aPointUL.setX( 1 );
         aGridSize.AdjustWidth(m_nXGap + nXDistFromLeft );
     }
-    long nXDistFromRight = rOutputSize.Width() - m_nXGap - nX - x;
+    tools::Long nXDistFromRight = rOutputSize.Width() - m_nXGap - nX - x;
     if (nXDistFromRight <= 1)
         aGridSize.AdjustWidth(m_nXGap + nXDistFromRight );
 
-    long nXDistFromTop = y - m_nYGap;
+    tools::Long nXDistFromTop = y - m_nYGap;
     if (nXDistFromTop <= 1)
     {
         aPointUL.setY( 1 );
         aGridSize.AdjustHeight(m_nYGap + nXDistFromTop );
     }
-    long nXDistFromBottom = rOutputSize.Height() - m_nYGap - nY - y;
+    tools::Long nXDistFromBottom = rOutputSize.Height() - m_nYGap - nY - y;
     if (nXDistFromBottom <= 1)
         aGridSize.AdjustHeight(m_nYGap + nXDistFromBottom );
 

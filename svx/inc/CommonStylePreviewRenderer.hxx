@@ -36,7 +36,7 @@ class CommonStylePreviewRenderer final : public sfx2::StylePreviewRenderer
 
 public:
     CommonStylePreviewRenderer(const SfxObjectShell& rShell, OutputDevice& rOutputDev,
-                               SfxStyleSheetBase* pStyle, long nMaxHeight);
+                               SfxStyleSheetBase* pStyle, tools::Long nMaxHeight);
     virtual ~CommonStylePreviewRenderer() override;
 
     virtual bool recalculate() override;

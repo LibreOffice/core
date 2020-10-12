@@ -48,11 +48,11 @@ using namespace com::sun::star;
 
 // Word 97 incompatibility (#i19922#)
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
-const long MINBODY = 56;  // 1mm in twips rounded
+const tools::Long MINBODY = 56;  // 1mm in twips rounded
 
 // default distance to Header or footer
-const long DEF_DIST_WRITER = 500;    // 5mm (Writer)
-const long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
+const tools::Long DEF_DIST_WRITER = 500;    // 5mm (Writer)
+const tools::Long DEF_DIST_CALC = 250;      // 2.5mm (Calc)
 
 const sal_uInt16 SvxHFPage::pRanges[] =
 {
@@ -250,8 +250,8 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     // Size
     SvxSizeItem aSizeItem( static_cast<const SvxSizeItem&>(rOldSet.Get( nWSize )) );
     Size        aSize( aSizeItem.GetSize() );
-    long        nDist = GetCoreValue( *m_xDistEdit, eUnit );
-    long        nH    = GetCoreValue( *m_xHeightEdit, eUnit );
+    tools::Long        nDist = GetCoreValue( *m_xDistEdit, eUnit );
+    tools::Long        nH    = GetCoreValue( *m_xHeightEdit, eUnit );
 
     nH += nDist; // add distance
     aSize.setHeight( nH );
@@ -401,7 +401,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     else
     {
         // defaults for distance and height
-        long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
+        tools::Long nDefaultDist = bIsCalc ? DEF_DIST_CALC : DEF_DIST_WRITER;
         SetMetricValue( *m_xDistEdit, nDefaultDist, MapUnit::Map100thMM );
         SetMetricValue( *m_xHeightEdit, 500, MapUnit::Map100thMM );
     }
@@ -874,7 +874,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 rHeaderSet.Get( GetWhich(SID_ATTR_ULSPACE ) ));
             const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
                 rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
-            long nDist = rUL.GetLower();
+            tools::Long nDist = rUL.GetLower();
 
             m_aBspWin.SetHdHeight( rSize.GetSize().Height() - nDist );
             m_aBspWin.SetHdDist( nDist );
@@ -914,7 +914,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
                 rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
             const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
                 rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
-            long nDist = rUL.GetUpper();
+            tools::Long nDist = rUL.GetUpper();
 
             m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
             m_aBspWin.SetFtDist( nDist );
@@ -971,19 +971,19 @@ IMPL_LINK_NOARG(SvxHFPage, ValueChangeHdl, weld::MetricSpinButton&, void)
 
 void SvxHFPage::RangeHdl()
 {
-    long nHHeight = m_aBspWin.GetHdHeight();
-    long nHDist   = m_aBspWin.GetHdDist();
+    tools::Long nHHeight = m_aBspWin.GetHdHeight();
+    tools::Long nHDist   = m_aBspWin.GetHdDist();
 
-    long nFHeight = m_aBspWin.GetFtHeight();
-    long nFDist   = m_aBspWin.GetFtDist();
+    tools::Long nFHeight = m_aBspWin.GetFtHeight();
+    tools::Long nFDist   = m_aBspWin.GetFtDist();
 
-    long nHeight = std::max(long(MINBODY),
-        static_cast<long>(m_xHeightEdit->denormalize(m_xHeightEdit->get_value(FieldUnit::TWIP))));
-    long nDist   = m_xTurnOnBox->get_active() ?
-        static_cast<long>(m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP))) : 0;
+    tools::Long nHeight = std::max(tools::Long(MINBODY),
+        static_cast<tools::Long>(m_xHeightEdit->denormalize(m_xHeightEdit->get_value(FieldUnit::TWIP))));
+    tools::Long nDist   = m_xTurnOnBox->get_active() ?
+        static_cast<tools::Long>(m_xDistEdit->denormalize(m_xDistEdit->get_value(FieldUnit::TWIP))) : 0;
 
-    long nMin;
-    long nMax;
+    tools::Long nMin;
+    tools::Long nMax;
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
@@ -997,13 +997,13 @@ void SvxHFPage::RangeHdl()
     }
 
     // Current values of the side edges
-    long nBT = m_aBspWin.GetTop();
-    long nBB = m_aBspWin.GetBottom();
-    long nBL = m_aBspWin.GetLeft();
-    long nBR = m_aBspWin.GetRight();
+    tools::Long nBT = m_aBspWin.GetTop();
+    tools::Long nBB = m_aBspWin.GetBottom();
+    tools::Long nBL = m_aBspWin.GetLeft();
+    tools::Long nBR = m_aBspWin.GetRight();
 
-    long nH  = m_aBspWin.GetSize().Height();
-    long nW  = m_aBspWin.GetSize().Width();
+    tools::Long nH  = m_aBspWin.GetSize().Height();
+    tools::Long nW  = m_aBspWin.GetSize().Width();
 
     // Borders
     if ( nId == SID_ATTR_PAGE_HEADERSET )
@@ -1015,7 +1015,7 @@ void SvxHFPage::RangeHdl()
         m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FieldUnit::TWIP);
         nMin = ( nH - nBB - nBT ) / 5; // 20%
         nDist = std::max( nH - nMin - nHHeight - nFDist - nFHeight - nBB - nBT,
-                     long(0) );
+                     tools::Long(0) );
         m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FieldUnit::TWIP);
     }
     else
@@ -1027,17 +1027,17 @@ void SvxHFPage::RangeHdl()
         m_xHeightEdit->set_max(m_xHeightEdit->normalize(nMax), FieldUnit::TWIP);
         nMin = ( nH - nBT - nBB ) / 5; // 20%
         nDist = std::max( nH - nMin - nFHeight - nHDist - nHHeight - nBT - nBB,
-                     long(0) );
+                     tools::Long(0) );
         m_xDistEdit->set_max(m_xDistEdit->normalize(nDist), FieldUnit::TWIP);
     }
 
     // Limit Indentation
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_xRMEdit->denormalize(m_xRMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
+           static_cast<tools::Long>(m_xRMEdit->denormalize(m_xRMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
     m_xLMEdit->set_max(m_xLMEdit->normalize(nMax), FieldUnit::TWIP);
 
     nMax = nW - nBL - nBR -
-           static_cast<long>(m_xLMEdit->denormalize(m_xLMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
+           static_cast<tools::Long>(m_xLMEdit->denormalize(m_xLMEdit->get_value(FieldUnit::TWIP))) - MINBODY;
     m_xRMEdit->set_max(m_xLMEdit->normalize(nMax), FieldUnit::TWIP);
 }
 

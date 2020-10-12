@@ -127,8 +127,8 @@ private:
     const SdrView*                          mpView;
     sal_uInt32                              mlOldWidth;
     sal_uInt32                              mlOldHeight;
-    long                                    mlRotX;
-    long                                    mlRotY;
+    tools::Long                                    mlRotX;
+    tools::Long                                    mlRotY;
     Fraction                                maUIScale;
     MapUnit                                 mePoolUnit;
     FieldUnit                               meDlgUnit;

@@ -78,7 +78,7 @@ using ::com::sun::star::i18n::BreakIterator;
 
 namespace
 {
-void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext const & rRenderContext,long& n100PercentFont)
+void scaleFontWidth(vcl::Font& rFont, vcl::RenderContext const & rRenderContext,tools::Long& n100PercentFont)
 {
     rFont.SetAverageFontWidth(0);
     n100PercentFont = rRenderContext.GetFontMetric(rFont).GetAverageFontWidth();
@@ -98,7 +98,7 @@ void setFontSize(vcl::Font& rFont)
     rFont.SetFontSize(aSize);
 }
 
-void calcFontHeightAnyAscent(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, long& nHeight, long& nAscent)
+void calcFontHeightAnyAscent(vcl::RenderContext& rRenderContext, const vcl::Font& rFont, tools::Long& nHeight, tools::Long& nAscent)
 {
     if (!nHeight)
     {
@@ -154,13 +154,13 @@ class FontPrevWin_Impl
     std::unique_ptr<Color> mpBackColor;
     std::unique_ptr<Color> mpTextLineColor;
     std::unique_ptr<Color> mpOverlineColor;
-    long mnAscent;
+    tools::Long mnAscent;
     sal_Unicode mcStartBracket;
     sal_Unicode mcEndBracket;
 
-    long mn100PercentFontWidth; // initial -1 -> not set yet
-    long mn100PercentFontWidthCJK;
-    long mn100PercentFontWidthCTL;
+    tools::Long mn100PercentFontWidth; // initial -1 -> not set yet
+    tools::Long mn100PercentFontWidthCJK;
+    tools::Long mn100PercentFontWidthCTL;
     sal_uInt16 mnFontWidthScale;
 
     bool mbSelection : 1;
@@ -312,13 +312,13 @@ Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDe
         nEnd = maText.getLength();
         nScript = css::i18n::ScriptType::LATIN;
     }
-    long nTxtWidth = 0;
-    long nCJKHeight = 0;
-    long nCTLHeight = 0;
-    long nHeight = 0;
+    tools::Long nTxtWidth = 0;
+    tools::Long nCJKHeight = 0;
+    tools::Long nCTLHeight = 0;
+    tools::Long nHeight = 0;
     mnAscent = 0;
-    long nCJKAscent = 0;
-    long nCTLAscent = 0;
+    tools::Long nCJKAscent = 0;
+    tools::Long nCTLAscent = 0;
 
     do
     {
@@ -327,7 +327,7 @@ Size FontPrevWin_Impl::CalcTextSize(vcl::RenderContext& rRenderContext, OutputDe
                                     ((nScript == css::i18n::ScriptType::COMPLEX) ?
                                         maCTLFont :
                                         rInFont);
-        long nWidth = rFont.GetTextSize(_pPrinter, maText, nStart, nEnd - nStart).Width();
+        tools::Long nWidth = rFont.GetTextSize(_pPrinter, maText, nStart, nEnd - nStart).Width();
         if (nIdx >= maTextWidth.size())
             break;
 
@@ -702,8 +702,8 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
         const Size aLogSize(rRenderContext.GetOutputSize());
 
-        long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
-        long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
+        tools::Long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
+        tools::Long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
 
         if (nY + pImpl->mnAscent > aLogSize.Height())
             nY = aLogSize.Height() - pImpl->mnAscent;
@@ -741,7 +741,7 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             rRenderContext.SetOverlineColor(*pImpl->mpOverlineColor);
         }
 
-        long nStdAscent = pImpl->mnAscent;
+        tools::Long nStdAscent = pImpl->mnAscent;
         nY += nStdAscent;
 
         if (IsTwoLines())
@@ -751,9 +751,9 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
             setFontSize(aSmallFont);
             setFontSize(pImpl->maCJKFont);
 
-            long nStartBracketWidth = 0;
-            long nEndBracketWidth = 0;
-            long nTextWidth = 0;
+            tools::Long nStartBracketWidth = 0;
+            tools::Long nEndBracketWidth = 0;
+            tools::Long nTextWidth = 0;
             if (pImpl->mcStartBracket)
             {
                 OUString sBracket(pImpl->mcStartBracket);
@@ -765,16 +765,16 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
                 nEndBracketWidth = rFont.GetTextSize(pPrinter, sBracket).Width();
             }
             nTextWidth = pImpl->CalcTextSize(rRenderContext, pPrinter, aSmallFont).Width();
-            long nResultWidth = nStartBracketWidth;
+            tools::Long nResultWidth = nStartBracketWidth;
             nResultWidth += nEndBracketWidth;
             nResultWidth += nTextWidth;
 
-            long _nX = (aLogSize.Width() - nResultWidth) / 2;
+            tools::Long _nX = (aLogSize.Width() - nResultWidth) / 2;
             rRenderContext.DrawLine(Point(0,  nY), Point(_nX, nY));
             rRenderContext.DrawLine(Point(_nX + nResultWidth, nY), Point(aLogSize.Width(), nY));
 
-            long nSmallAscent = pImpl->mnAscent;
-            long nOffset = (nStdAscent - nSmallAscent) / 2;
+            tools::Long nSmallAscent = pImpl->mnAscent;
+            tools::Long nOffset = (nStdAscent - nSmallAscent) / 2;
 
             if (pImpl->mcStartBracket)
             {
@@ -854,7 +854,7 @@ void SvxFontPrevWindow::AutoCorrectFontColor()
 void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )
 {
     sal_uInt16 nWhich;
-    long nH;
+    tools::Long nH;
     if (GetWhich(rSet, nSlot, nWhich))
     {
         nH = OutputDevice::LogicToLogic(static_cast<const SvxFontHeightItem&>(rSet.Get(nWhich)).GetHeight(),

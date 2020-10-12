@@ -188,7 +188,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, CancelHdl, weld::Button&, void)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "svx/ui/querymodifyimagemapchangesdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QueryModifyImageMapChangesDialog"));
-        const long nRet = xQBox->run();
+        const tools::Long nRet = xQBox->run();
 
         if( nRet == RET_YES )
         {
@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, CancelHdl, weld::Button&, void)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xDialog.get(), "svx/ui/querysaveimagemapchangesdialog.ui"));
         std::unique_ptr<weld::MessageDialog> xQBox(xBuilder->weld_message_dialog("QuerySaveImageMapChangesDialog"));
-        const long nRet = xQBox->run();
+        const tools::Long nRet = xQBox->run();
 
         if( nRet == RET_YES )
             bRet = DoSave();

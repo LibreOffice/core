@@ -161,13 +161,13 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
         MapUnit eUnit =
             rCoreSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
-        long nX = GetCoreValue(  *m_xMtrFldDrawX, eUnit );
-        long nY = GetCoreValue( *m_xMtrFldDrawY, eUnit );
+        tools::Long nX = GetCoreValue(  *m_xMtrFldDrawX, eUnit );
+        tools::Long nY = GetCoreValue( *m_xMtrFldDrawY, eUnit );
 
         aGridItem.nFldDrawX    = static_cast<sal_uInt32>(nX);
         aGridItem.nFldDrawY    = static_cast<sal_uInt32>(nY);
-        aGridItem.nFldDivisionX = static_cast<long>(m_xNumFldDivisionX->get_value() - 1);
-        aGridItem.nFldDivisionY = static_cast<long>(m_xNumFldDivisionY->get_value() - 1);
+        aGridItem.nFldDivisionX = static_cast<tools::Long>(m_xNumFldDivisionX->get_value() - 1);
+        aGridItem.nFldDivisionY = static_cast<tools::Long>(m_xNumFldDivisionY->get_value() - 1);
 
         rCoreSet->Put( aGridItem );
     }
@@ -219,7 +219,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
     const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
+    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<tools::Long>(pItem->GetValue()));
 
     if (eFUnit == m_xMtrFldDrawX->get_unit())
         return;

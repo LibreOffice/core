@@ -129,10 +129,10 @@ protected:
 
     rtl::Reference<svx::SvxShowCharSetAcc> m_xAccessible;
     uno::Reference< uno::XComponentContext > mxContext;
-    long            nX;
-    long            nY;
-    long            m_nXGap;
-    long            m_nYGap;
+    tools::Long            nX;
+    tools::Long            nY;
+    tools::Long            m_nXGap;
+    tools::Long            m_nYGap;
     bool            bDrag;
 
     sal_Int32       nSelectedIndex;

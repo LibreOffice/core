@@ -194,16 +194,16 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
-    static long GetSquares() { return nSquares ; }
-    long GetWidth() const { return aRectSize.getWidth() ; }
-    long GetHeight() const { return aRectSize.getHeight() ; }
+    static tools::Long GetSquares() { return nSquares ; }
+    tools::Long GetWidth() const { return aRectSize.getWidth() ; }
+    tools::Long GetHeight() const { return aRectSize.getHeight() ; }
 
     //Device Pixel .
-    long ShowPosition( const Point &pt);
+    tools::Long ShowPosition( const Point &pt);
 
-    long PointToIndex(const Point &pt) const;
-    Point IndexToPoint(long nIndex) const ;
-    long GetFocusPosIndex() const ;
+    tools::Long PointToIndex(const Point &pt) const;
+    Point IndexToPoint(tools::Long nIndex) const ;
+    tools::Long GetFocusPosIndex() const ;
     //Keyboard function for key input and focus handling function
     virtual bool        KeyInput( const KeyEvent& rKEvt ) override;
     virtual void        GetFocus() override;

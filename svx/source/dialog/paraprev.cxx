@@ -71,7 +71,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
     rRenderContext.SetLineColor();
 
-    long nH = aWinSize.Height() / 19;
+    tools::Long nH = aWinSize.Height() / 19;
     Size aLineSiz(aWinSize.Width() - DEF_MARGIN, nH);
     Size aSiz = aLineSiz;
     Point aPnt;
@@ -92,9 +92,9 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (3 <= i && 6 > i)
         {
-            long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
-            long nFirst = nFirstLineOffset * aLineSiz.Width() / aSize.Width();
-            long nTmp = nLeft + nFirst;
+            tools::Long nLeft = nLeftMargin * aLineSiz.Width() / aSize.Width();
+            tools::Long nFirst = nFirstLineOffset * aLineSiz.Width() / aSize.Width();
+            tools::Long nTmp = nLeft + nFirst;
 
             if (i == 3)
             {
@@ -106,7 +106,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
                 aPnt.AdjustX(nLeft );
                 aSiz.AdjustWidth( -nLeft );
             }
-            long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
+            tools::Long nRight = nRightMargin * aLineSiz.Width() / aSize.Width();
             aSiz.AdjustWidth( -nRight );
         }
 
@@ -136,7 +136,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 
         if (3 <= i && 5 >= i)
         {
-            long nLW = long();
+            tools::Long nLW = long();
             switch (i)
             {
                 case 3:

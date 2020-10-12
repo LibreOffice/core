@@ -92,12 +92,12 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (bTop) aTmpRect.SetTop(aPos.Y() );
     if (bBtm) aTmpRect.SetBottom(aPos.Y() );
     if (bOrtho) { // Ortho
-        long nWdt0=maRect.Right() -maRect.Left();
-        long nHgt0=maRect.Bottom()-maRect.Top();
-        long nXMul=aTmpRect.Right() -aTmpRect.Left();
-        long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
-        long nXDiv=nWdt0;
-        long nYDiv=nHgt0;
+        tools::Long nWdt0=maRect.Right() -maRect.Left();
+        tools::Long nHgt0=maRect.Bottom()-maRect.Top();
+        tools::Long nXMul=aTmpRect.Right() -aTmpRect.Left();
+        tools::Long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
+        tools::Long nXDiv=nWdt0;
+        tools::Long nYDiv=nHgt0;
         bool bXNeg=(nXMul<0)!=(nXDiv<0);
         bool bYNeg=(nYMul<0)!=(nYDiv<0);
         nXMul=std::abs(nXMul);
@@ -113,26 +113,26 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
-                long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nNeed=tools::Long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
                 if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
                 if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             } else {
-                long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nNeed=tools::Long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
                 if (bXNeg) nNeed=-nNeed;
                 if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
                 if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
-                long nHgt0b=maRect.Bottom()-maRect.Top();
-                long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nHgt0b=maRect.Bottom()-maRect.Top();
+                tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
                 aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
                 aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                long nWdt0b=maRect.Right()-maRect.Left();
-                long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nWdt0b=maRect.Right()-maRect.Left();
+                tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
                 aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
                 aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }

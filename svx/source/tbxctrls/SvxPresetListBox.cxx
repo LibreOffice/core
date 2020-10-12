@@ -71,7 +71,7 @@ void SvxPresetListBox::FillPresetListBoxImpl(ListType & pList, sal_uInt32 nStart
 {
     const Size aSize( GetIconSize() );
     BitmapEx aBitmap;
-    for(long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
+    for(tools::Long nIndex = 0; nIndex < pList.Count(); nIndex++, nStartIndex++)
     {
         aBitmap = pList.GetBitmapForPreview(nIndex, aSize);
         EntryType* pItem = static_cast<EntryType*>( pList.Get(nIndex) );

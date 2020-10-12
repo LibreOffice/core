@@ -906,28 +906,28 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<tools::Long>(aRot.getX() + 0.5), static_cast<tools::Long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Left(), -aTurnRect.Bottom());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<tools::Long>(aRot.getX() + 0.5), static_cast<tools::Long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Top());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<tools::Long>(aRot.getX() + 0.5), static_cast<tools::Long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
 
             aRot = basegfx::B2DPoint(aTurnRect.Right(), -aTurnRect.Bottom());
             aRot *= aLatheMat;
             aRot.setX(-aRot.getX());
             aRot *= aInvLatheMat;
-            aRotPnt = Point(static_cast<long>(aRot.getX() + 0.5), static_cast<long>(-aRot.getY() - 0.5));
+            aRotPnt = Point(static_cast<tools::Long>(aRot.getX() + 0.5), static_cast<tools::Long>(-aRot.getY() - 0.5));
             aRect.Union(tools::Rectangle(aRotPnt, aRotPnt));
         }
     }
@@ -1277,7 +1277,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
 
-    tools::Rectangle aRect(0,0, static_cast<long>(fW), static_cast<long>(fH));
+    tools::Rectangle aRect(0,0, static_cast<tools::Long>(fW), static_cast<tools::Long>(fH));
 
     E3dScene* pScene = new E3dScene(p3DObj->getSdrModelFromSdrObject());
 
@@ -1311,11 +1311,11 @@ void E3dView::Start3DCreation()
         return;
 
     //positioned
-    long          nOutMin = 0;
-    long          nOutMax = 0;
-    long          nMinLen = 0;
-    long          nObjDst = 0;
-    long          nOutHgt = 0;
+    tools::Long          nOutMin = 0;
+    tools::Long          nOutMax = 0;
+    tools::Long          nMinLen = 0;
+    tools::Long          nObjDst = 0;
+    tools::Long          nOutHgt = 0;
     OutputDevice* pOut    = GetFirstOutputDevice();
 
     // first determine representation boundaries
@@ -1324,7 +1324,7 @@ void E3dView::Start3DCreation()
         nMinLen = pOut->PixelToLogic(Size(0,50)).Height();
         nObjDst = pOut->PixelToLogic(Size(0,20)).Height();
 
-        long nDst = pOut->PixelToLogic(Size(0,10)).Height();
+        tools::Long nDst = pOut->PixelToLogic(Size(0,10)).Height();
 
         nOutMin =  -pOut->GetMapMode().GetOrigin().Y();
         nOutMax =  pOut->GetOutputSize().Height() - 1 + nOutMin;
@@ -1341,7 +1341,7 @@ void E3dView::Start3DCreation()
 
         nOutHgt = nOutMax - nOutMin;
 
-        long nTemp = nOutHgt / 4;
+        tools::Long nTemp = nOutHgt / 4;
         if (nTemp > nMinLen) nMinLen = nTemp;
     }
 
@@ -1355,13 +1355,13 @@ void E3dView::Start3DCreation()
     }
 
     basegfx::B2DPoint aCenter(aR.getCenter());
-    long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
-    long      nHgt     = nMarkHgt + nObjDst * 2;
+    tools::Long      nMarkHgt = basegfx::fround(aR.getHeight()) - 1;
+    tools::Long      nHgt     = nMarkHgt + nObjDst * 2;
 
     if (nHgt < nMinLen) nHgt = nMinLen;
 
-    long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
-    long nY2 = nY1 + nHgt;
+    tools::Long nY1 = basegfx::fround(aCenter.getY()) - (nHgt + 1) / 2;
+    tools::Long nY2 = nY1 + nHgt;
 
     if (pOut && (nMinLen > nOutHgt)) nMinLen = nOutHgt;
     if (pOut)

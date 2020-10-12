@@ -186,13 +186,13 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
         // scale graphic to page size
         if ( fGrfWH < fWinWH )
         {
-            aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
+            aSize.setWidth( static_cast<tools::Long>(aMaxSize.Height() * fGrfWH) );
             aSize.setHeight( aMaxSize.Height() );
         }
         else if ( fGrfWH > 0.F )
         {
             aSize.setWidth( aMaxSize.Width() );
-            aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
+            aSize.setHeight( static_cast<tools::Long>(aMaxSize.Width() / fGrfWH) );
         }
 
         aPos = rMaxRect.Center();

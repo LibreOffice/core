@@ -47,12 +47,12 @@ XGradientList::~XGradientList()
 {
 }
 
-void XGradientList::Replace(std::unique_ptr<XGradientEntry> pEntry, long nIndex)
+void XGradientList::Replace(std::unique_ptr<XGradientEntry> pEntry, tools::Long nIndex)
 {
     XPropertyList::Replace(std::move(pEntry), nIndex);
 }
 
-XGradientEntry* XGradientList::GetGradient(long nIndex) const
+XGradientEntry* XGradientList::GetGradient(tools::Long nIndex) const
 {
     return static_cast<XGradientEntry*>( XPropertyList::Get( nIndex ) );
 }
@@ -84,7 +84,7 @@ bool XGradientList::Create()
     return true;
 }
 
-BitmapEx XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
+BitmapEx XGradientList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
 {
     BitmapEx aRetval;
 
@@ -207,14 +207,14 @@ BitmapEx XGradientList::CreateBitmap( long nIndex, const Size& rSize ) const
     return aRetval;
 }
 
-BitmapEx XGradientList::CreateBitmapForUI(long nIndex)
+BitmapEx XGradientList::CreateBitmapForUI(tools::Long nIndex)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-BitmapEx XGradientList::GetBitmapForPreview(long nIndex, const Size& rSize)
+BitmapEx XGradientList::GetBitmapForPreview(tools::Long nIndex, const Size& rSize)
 {
     return CreateBitmap(nIndex, rSize);
 }

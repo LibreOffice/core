@@ -436,7 +436,7 @@ namespace {
 
 struct PointerStyles
 {
-   long msoPointerStyle;
+   tools::Long msoPointerStyle;
    PointerStyle loPointStyle;
 };
 
@@ -463,9 +463,9 @@ PointerStyles const styles[] = {
 
 };
 
-static long lcl_loPointerToMsoPointer( PointerStyle eType )
+static tools::Long lcl_loPointerToMsoPointer( PointerStyle eType )
 {
-    long nRet = msforms::fmMousePointer::fmMousePointerDefault;
+    tools::Long nRet = msforms::fmMousePointer::fmMousePointerDefault;
     for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )
     {
         if ( styles[ i ].loPointStyle == eType )
@@ -477,7 +477,7 @@ static long lcl_loPointerToMsoPointer( PointerStyle eType )
     return nRet;
 }
 
-static PointerStyle lcl_msoPointerToLOPointer( long msoPointerStyle )
+static PointerStyle lcl_msoPointerToLOPointer( tools::Long msoPointerStyle )
 {
     PointerStyle aPointer( PointerStyle::Arrow );
     for ( int i = 0; i < int(SAL_N_ELEMENTS( styles )); ++i )

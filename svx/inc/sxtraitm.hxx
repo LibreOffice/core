@@ -24,7 +24,7 @@
 
 class SdrTransformRef1XItem: public SdrMetricItem {
 public:
-    SdrTransformRef1XItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1X,nHgt)  {}
+    SdrTransformRef1XItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1X,nHgt)  {}
     virtual SdrTransformRef1XItem* Clone(SfxItemPool*) const override
     {
         return new SdrTransformRef1XItem(*this);
@@ -33,7 +33,7 @@ public:
 
 class SdrTransformRef1YItem: public SdrMetricItem {
 public:
-    SdrTransformRef1YItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1Y,nHgt)  {}
+    SdrTransformRef1YItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1Y,nHgt)  {}
     virtual SdrTransformRef1YItem* Clone(SfxItemPool*) const override
     {
         return new SdrTransformRef1YItem(*this);
@@ -42,7 +42,7 @@ public:
 
 class SdrTransformRef2XItem: public SdrMetricItem {
 public:
-    SdrTransformRef2XItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2X,nHgt)  {}
+    SdrTransformRef2XItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2X,nHgt)  {}
     virtual SdrTransformRef2XItem* Clone(SfxItemPool*) const override
     {
         return new SdrTransformRef2XItem(*this);
@@ -51,7 +51,7 @@ public:
 
 class SdrTransformRef2YItem: public SdrMetricItem {
 public:
-    SdrTransformRef2YItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2Y,nHgt)  {}
+    SdrTransformRef2YItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2Y,nHgt)  {}
     virtual SdrTransformRef2YItem* Clone(SfxItemPool*) const override
     {
         return new SdrTransformRef2YItem(*this);

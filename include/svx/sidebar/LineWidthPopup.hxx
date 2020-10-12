@@ -38,7 +38,7 @@ public:
     LineWidthPopup(weld::Widget* pParent, LinePropertyPanelBase& rParent);
     ~LineWidthPopup();
 
-    void SetWidthSelect (long lValue, bool bValuable, MapUnit eMapUnit);
+    void SetWidthSelect (tools::Long lValue, bool bValuable, MapUnit eMapUnit);
 
     weld::Container* getTopLevel() const { return m_xTopLevel.get(); }
 
@@ -49,7 +49,7 @@ private:
     MapUnit m_eMapUnit;
     bool m_bVSFocus;
     bool m_bCustom;
-    long m_nCustomWidth;
+    tools::Long m_nCustomWidth;
     Image  m_aIMGCus;
     Image m_aIMGCusGray;
 

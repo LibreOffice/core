@@ -42,8 +42,8 @@
 #include <tools/diagnose_ex.h>
 #include <tabwin.hrc>
 
-const long STD_WIN_SIZE_X = 120;
-const long STD_WIN_SIZE_Y = 150;
+const tools::Long STD_WIN_SIZE_X = 120;
+const tools::Long STD_WIN_SIZE_Y = 150;
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;

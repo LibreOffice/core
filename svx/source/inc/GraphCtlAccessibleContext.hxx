@@ -146,7 +146,7 @@ public:
 private:
     virtual ~SvxGraphCtrlAccessibleContext() override;
     /// @throws css::lang::IndexOutOfBoundsException
-    void checkChildIndexOnSelection( long nIndexOfChild );
+    void checkChildIndexOnSelection( tools::Long nIndexOfChild );
 
     virtual void SAL_CALL disposing() final override;
 

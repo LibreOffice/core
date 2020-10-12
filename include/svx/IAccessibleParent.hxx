@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_IACCESSIBLEPARENT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <tools/long.hxx>
 
 namespace accessibility { class AccessibleControlShape; }
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -80,7 +81,7 @@ public:
     virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
-        const long _nIndex,
+        const tools::Long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) = 0;
     //Add this method to support Form Controls

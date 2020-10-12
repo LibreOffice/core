@@ -35,6 +35,7 @@
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
+#include <tools/long.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -661,7 +662,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
             {
                 css::uno::Sequence< OUString> aSeq;
                 rValue >>= aSeq;
-                long nEntries = aSeq.getLength();
+                tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
                 for ( const auto& rVal : std::as_const(aSeq) )
                     OutStream->writeUTF( rVal );
@@ -670,7 +671,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
             {
                 css::uno::Sequence<sal_uInt16> aSeq;
                 rValue >>= aSeq;
-                long nEntries = aSeq.getLength();
+                tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
                 for ( const auto nVal : aSeq )
                     OutStream->writeShort( nVal );
@@ -679,7 +680,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
             {
                 css::uno::Sequence<sal_Int16> aSeq;
                 rValue >>= aSeq;
-                long nEntries = aSeq.getLength();
+                tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
                 for ( const auto nVal : aSeq )
                     OutStream->writeShort( nVal );
@@ -870,9 +871,9 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                 }
                 else if ( *pType == cppu::UnoType< css::uno::Sequence< OUString> >::get() )
                 {
-                    long nEntries = InStream->readLong();
+                    tools::Long nEntries = InStream->readLong();
                     css::uno::Sequence< OUString> aSeq( nEntries );
-                    for ( long n = 0; n < nEntries; n++ )
+                    for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = InStream->readUTF();
                     aValue <<= aSeq;
 
@@ -880,17 +881,17 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                 else if ( *pType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )
 
                 {
-                    long nEntries = InStream->readLong();
+                    tools::Long nEntries = InStream->readLong();
                     css::uno::Sequence<sal_uInt16> aSeq( nEntries );
-                    for ( long n = 0; n < nEntries; n++ )
+                    for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = static_cast<sal_uInt16>(InStream->readShort());
                     aValue <<= aSeq;
                 }
                 else if ( *pType == cppu::UnoType< css::uno::Sequence<sal_Int16> >::get() )
                 {
-                    long nEntries = InStream->readLong();
+                    tools::Long nEntries = InStream->readLong();
                     css::uno::Sequence<sal_Int16> aSeq( nEntries );
-                    for ( long n = 0; n < nEntries; n++ )
+                    for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = InStream->readShort();
                     aValue <<= aSeq;
                 }

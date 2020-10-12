@@ -154,8 +154,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     tools::Rectangle aRect = rUDEvt.GetRect();
     sal_uInt16 nItemId = rUDEvt.GetItemId();
 
-    long nRectWidth = aRect.GetWidth();
-    long nRectHeight = aRect.GetHeight();
+    tools::Long nRectWidth = aRect.GetWidth();
+    tools::Long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
     Point aBLPos = aRect.TopLeft();
     vcl::Font aOldFont = pDev->GetFont();
@@ -261,8 +261,8 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         // has to be made again
         pVDev->SetLineColor(aBackColor);
         pVDev->DrawRect(aOrgRect);
-        long nStartX = aOrgRect.TopLeft().X();
-        long nStartY = aOrgRect.TopLeft().Y();
+        tools::Long nStartX = aOrgRect.TopLeft().X();
+        tools::Long nStartY = aOrgRect.TopLeft().Y();
 
         if(xFormatter.is() && aOutlineSettings.getLength() > nItemId - 1)
         {
@@ -282,7 +282,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     nLevelCount = 5;
                 for( sal_Int32 i = 0; i < nLevelCount; i++)
                 {
-                    long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
+                    tools::Long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
                     Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
 
                     Any aLevelAny = xLevel->getByIndex(i);
@@ -361,7 +361,7 @@ void SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         aLeft.AdjustX(pDev->GetTextWidth(sSuffixes[i]) );
                     }
 
-                    long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
+                    tools::Long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
                     Point aLineLeft(aLeft.X(), nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
                     pVDev->SetLineColor(COL_LIGHTGRAY);
@@ -498,7 +498,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
-    long nRectHeight = aRect.GetHeight();
+    tools::Long nRectHeight = aRect.GetHeight();
     Size aSize(nRectHeight/8, nRectHeight/8);
 
     Graphic aGraphic;

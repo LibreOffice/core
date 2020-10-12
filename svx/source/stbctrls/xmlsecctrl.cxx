@@ -132,7 +132,7 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
-    long yOffset = (aRect.GetHeight() - mpImpl->maImage.GetSizePixel().Height()) / 2;
+    tools::Long yOffset = (aRect.GetHeight() - mpImpl->maImage.GetSizePixel().Height()) / 2;
 
     if( mpImpl->mnState == SignatureState::OK )
     {

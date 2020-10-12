@@ -30,7 +30,7 @@
 class SVXCORE_DLLPUBLIC XLineStartWidthItem final : public SfxMetricItem
 {
 public:
-            XLineStartWidthItem(long nWidth = LINE_START_WIDTH_DEFAULT);
+            XLineStartWidthItem(tools::Long nWidth = LINE_START_WIDTH_DEFAULT);
     virtual XLineStartWidthItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

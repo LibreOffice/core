@@ -394,18 +394,18 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 
     mbHasVisibleItems = true;
 
-    long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
+    tools::Long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
 
-    long nItemHeightOffset = mnItemHeight + nVItemSpace;
-    long nHiddenLines = static_cast<long>((nFullSteps - 1) * nScrollRatio);
+    tools::Long nItemHeightOffset = mnItemHeight + nVItemSpace;
+    tools::Long nHiddenLines = static_cast<tools::Long>((nFullSteps - 1) * nScrollRatio);
 
     // calculate offsets
-    long nStartX = nHItemSpace;
-    long nStartY = nVItemSpace;
+    tools::Long nStartX = nHItemSpace;
+    tools::Long nStartY = nVItemSpace;
 
     // calculate and draw items
-    long x = nStartX;
-    long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
+    tools::Long x = nStartX;
+    tools::Long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
 
     // draw items
     // Unless we are scrolling (via scrollbar) we just use the precalculated
@@ -483,8 +483,8 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     mxScrolledWindow->vadjustment_set_upper(mnLines * gnFineness);
     mxScrolledWindow->vadjustment_set_page_size(mnVisLines * gnFineness);
     if (!bScrollBarUsed)
-        mxScrolledWindow->vadjustment_set_value(static_cast<long>(mnFirstLine)*gnFineness);
-    long nPageSize = mnVisLines;
+        mxScrolledWindow->vadjustment_set_value(static_cast<tools::Long>(mnFirstLine)*gnFineness);
+    tools::Long nPageSize = mnVisLines;
     if ( nPageSize < 1 )
         nPageSize = 1;
     mxScrolledWindow->vadjustment_set_page_increment(nPageSize*gnFineness);

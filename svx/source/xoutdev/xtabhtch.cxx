@@ -45,12 +45,12 @@ XHatchList::~XHatchList()
 {
 }
 
-void XHatchList::Replace(std::unique_ptr<XHatchEntry> pEntry, long nIndex)
+void XHatchList::Replace(std::unique_ptr<XHatchEntry> pEntry, tools::Long nIndex)
 {
     XPropertyList::Replace(std::move(pEntry), nIndex);
 }
 
-XHatchEntry* XHatchList::GetHatch(long nIndex) const
+XHatchEntry* XHatchList::GetHatch(tools::Long nIndex) const
 {
     return static_cast<XHatchEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -76,7 +76,7 @@ bool XHatchList::Create()
     return true;
 }
 
-BitmapEx XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
+BitmapEx XHatchList::CreateBitmap( tools::Long nIndex, const Size& rSize) const
 {
     BitmapEx aRetval;
     OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
@@ -181,7 +181,7 @@ BitmapEx XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
     return aRetval;
 }
 
-BitmapEx XHatchList::CreateBitmapForUI(long nIndex)
+BitmapEx XHatchList::CreateBitmapForUI(tools::Long nIndex)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
@@ -189,7 +189,7 @@ BitmapEx XHatchList::CreateBitmapForUI(long nIndex)
     return aRetVal;
 }
 
-BitmapEx XHatchList::GetBitmapForPreview(long nIndex, const Size& rSize)
+BitmapEx XHatchList::GetBitmapForPreview(tools::Long nIndex, const Size& rSize)
 {
     return CreateBitmap(nIndex, rSize);
 }

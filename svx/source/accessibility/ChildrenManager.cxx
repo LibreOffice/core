@@ -49,17 +49,17 @@ ChildrenManager::~ChildrenManager()
     SAL_INFO("svx", "~ChildrenManager");
 }
 
-long ChildrenManager::GetChildCount() const throw ()
+tools::Long ChildrenManager::GetChildCount() const throw ()
 {
     return mpImpl->GetChildCount();
 }
 
-css::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
+css::uno::Reference<XAccessible> ChildrenManager::GetChild (tools::Long nIndex)
 {
     return mpImpl->GetChild (nIndex);
 }
 
-css::uno::Reference<css::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
+css::uno::Reference<css::drawing::XShape> ChildrenManager::GetChildShape(tools::Long nIndex)
 {
     return mpImpl->GetChildShape(nIndex);
 }

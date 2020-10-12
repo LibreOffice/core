@@ -212,13 +212,13 @@ public:
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
-    long GetMarkedObjRotate() const;
-    void RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy=false);
+    tools::Long GetMarkedObjRotate() const;
+    void RotateMarkedObj(const Point& rRef, tools::Long nAngle, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedObjHorizontal();
     void MirrorMarkedObjVertical();
-    long GetMarkedObjShear() const;
-    void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
+    tools::Long GetMarkedObjShear() const;
+    void ShearMarkedObj(const Point& rRef, tools::Long nAngle, bool bVShear=false, bool bCopy=false);
     void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical, bool bNoContortion, bool bCopy=false);
     void DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion, bool bCopy=false);
 
@@ -227,7 +227,7 @@ public:
     void SetAllMarkedRect(const tools::Rectangle& rRect) { SetMarkedObjRect(rRect); }
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj(rSiz,bCopy); }
     void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact) { ResizeMarkedObj(rRef,xFact,yFact); }
-    void RotateAllMarked(const Point& rRef, long nAngle) { RotateMarkedObj(rRef,nAngle); }
+    void RotateAllMarked(const Point& rRef, tools::Long nAngle) { RotateMarkedObj(rRef,nAngle); }
     void MirrorAllMarkedHorizontal() { MirrorMarkedObjHorizontal(); }
     void MirrorAllMarkedVertical() { MirrorMarkedObjVertical(); }
     void CopyMarked() { CopyMarkedObj(); }
