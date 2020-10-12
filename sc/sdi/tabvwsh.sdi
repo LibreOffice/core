@@ -161,6 +161,8 @@ interface TableEditView
     SID_CREATE_SW_DRAWVIEW [ ExecMethod = Execute; ]
     SID_ATTR_ZOOM       [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_ATTR_ZOOMSLIDER [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_IN [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_OUT [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_INSERT_FILE [ ExecMethod = Execute; StateMethod = GetState; ]
 
     FID_SCALE           [ ExecMethod = Execute; StateMethod = GetState; ]

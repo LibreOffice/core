@@ -5876,42 +5876,6 @@ SfxBoolItem WrapText SID_ATTR_ALIGN_LINEBREAK
 ]
 
 
-SfxVoidItem ZoomIn SID_PREVIEW_ZOOMIN
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
-
-SfxVoidItem ZoomOut SID_PREVIEW_ZOOMOUT
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
-]
-
-
 SfxVoidItem FocusInputLine SID_FOCUS_INPUTLINE
 ()
 [
