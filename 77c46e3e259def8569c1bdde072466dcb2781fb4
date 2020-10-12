@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1a81922_9270629d",
+        "filename": "filter/source/graphicfilter/icgm/bitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-12T17:00:58Z",
+      "side": 1,
+      "message": "This seems to not change in this scope, and this condition is checked in line 84?",
+      "range": {
+        "startLine": 218,
+        "startChar": 9,
+        "endLine": 218,
+        "endChar": 23
+      },
+      "revId": "77c46e3e259def8569c1bdde072466dcb2781fb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
