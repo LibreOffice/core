@@ -457,9 +457,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
     {
         // optimization for SplitNode: If a split is at the end of a node then
         // move the frames from the current to the new one and create new ones
-        // for the current one. As a result, no need for recreating the layout.
-
-        LockModify();   // disable notifications
+        // for the current one.
 
         // If fly frames are moved, they don't need to destroy their layout
         // frames.  Set a flag that is checked in SwTextFlyCnt::SetAnchor.
@@ -567,28 +565,6 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             SetInCache( false );
         }
 
-        UnlockModify(); // enable notify again
-
-        // If there is an accessible layout we must call modify even
-        // with length zero, because we have to notify about the changed
-        // text node.
-        const SwRootFrame *pRootFrame;
-        if ( (nTextLen != nSplitPos) ||
-            ( (pRootFrame = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != nullptr &&
-              pRootFrame->IsAnyShellAccessible() ) )
-        {
-            // tell the frames that something was "deleted" at the end
-            if( 1 == nTextLen - nSplitPos )
-            {
-                SwDelChr aHint( nSplitPos );
-                pNode->NotifyClients( nullptr, &aHint );
-            }
-            else
-            {
-                SwDelText aHint( nSplitPos, nTextLen - nSplitPos );
-                pNode->NotifyClients( nullptr, &aHint );
-            }
-        }
         if ( HasHints() )
         {
             MoveTextAttr_To_AttrSet();

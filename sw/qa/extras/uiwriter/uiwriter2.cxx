@@ -32,6 +32,7 @@ public:
     void testRedlineInHiddenSection();
     void testTdf101534();
     void testTdf131684();
+    void testRedlineSplitContentNode();
     void testTdf132236();
     void testTdf109376_redline();
     void testTdf109376();
@@ -41,6 +42,7 @@ public:
     CPPUNIT_TEST(testRedlineInHiddenSection);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf131684);
+    CPPUNIT_TEST(testRedlineSplitContentNode);
     CPPUNIT_TEST(testTdf132236);
     CPPUNIT_TEST(testTdf109376_redline);
     CPPUNIT_TEST(testTdf109376);
@@ -239,6 +241,48 @@ void SwUiWriterTest2::testRedlineInHiddenSection()
     CPPUNIT_ASSERT(
         !pNode->GetNodes()[pNode->GetIndex() + 3]->GetTextNode()->getLayoutFrame(nullptr));
     CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
+}
+
+void SwUiWriterTest2::testRedlineSplitContentNode()
+{
+    load(DATA_DIRECTORY, "try2.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    // these are required so that IsBlank() is true
+    aViewOptions.SetBlank(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // enable redlining
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    SwDocShell* const pDocShell = pTextDoc->GetDocShell();
+    SwDoc* const pDoc = pDocShell->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    pWrtShell->CalcLayout();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 18, /*bBasicCall=*/false);
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
+    // crashed
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
+    rUndoManager.Redo();
+    rUndoManager.Undo();
+    rUndoManager.Redo();
+    rUndoManager.Undo();
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
 }
 
 void SwUiWriterTest2::testTdf132236()

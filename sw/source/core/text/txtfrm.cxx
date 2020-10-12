@@ -1855,7 +1855,6 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
     }
     if (nLastEnd != rNode.Len()) // without nLen, string yet to be removed
     {
-        assert(rNode.Len() == 0 || nLastEnd < nSourceEnd);
         if (nLastEnd < nSourceEnd)
         {
             deleted.emplace_back(std::max(nLastEnd, nSourceStart), nSourceEnd);
