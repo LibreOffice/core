@@ -81,6 +81,8 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
     try {
 
+    if (rDesc.mnScanSize) {
+
     vcl::bitmap::RawBitmap aBitmap( Size( rDesc.mnX, rDesc.mnY ), 24 );
 
     // the picture may either be read from left to right or right to left, from top to bottom ...
@@ -212,6 +214,12 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
     }
     break;
     }
+
+    if ( rDesc.mbStatus )
+        rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
+
+    }
+
     double nX = rDesc.mnR.X - rDesc.mnQ.X;
     double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
 
@@ -252,9 +260,6 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         rDesc.mnOrigin.X += rDesc.mnQ.X - rDesc.mnR.X;
         rDesc.mnOrigin.Y += rDesc.mnQ.Y - rDesc.mnR.Y;
     }
-
-    if ( rDesc.mbStatus )
-        rDesc.mxBitmap = vcl::bitmap::CreateFromData(std::move(aBitmap));
 
     } catch (const std::bad_alloc&) {
         rDesc.mbStatus = false;
