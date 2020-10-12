@@ -135,7 +135,7 @@ public:
     // pData allows for using a system dependent graphics or device context
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics* pGraphics,
-                                                     long &nDX, long &nDY,
+                                                     tools::Long &nDX, tools::Long &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
 
     // Printer

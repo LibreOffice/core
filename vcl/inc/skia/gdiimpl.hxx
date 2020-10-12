@@ -57,7 +57,7 @@ public:
     virtual sal_uInt16 GetBitCount() const override;
 
     // get the width of the device
-    virtual long GetGraphicsWidth() const override;
+    virtual tools::Long GetGraphicsWidth() const override;
 
     // set the clip region to empty
     virtual void ResetClipRegion() override;
@@ -86,12 +86,14 @@ public:
     virtual void SetROPFillColor(SalROPColor nROPColor) override;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void drawPixel(long nX, long nY) override;
-    virtual void drawPixel(long nX, long nY, Color nColor) override;
+    virtual void drawPixel(tools::Long nX, tools::Long nY) override;
+    virtual void drawPixel(tools::Long nX, tools::Long nY, Color nColor) override;
 
-    virtual void drawLine(long nX1, long nY1, long nX2, long nY2) override;
+    virtual void drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                          tools::Long nY2) override;
 
-    virtual void drawRect(long nX, long nY, long nWidth, long nHeight) override;
+    virtual void drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                          tools::Long nHeight) override;
 
     virtual void drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry) override;
 
@@ -120,8 +122,9 @@ public:
                                        const PolyFlags* const* pFlgAry) override;
 
     // CopyArea --> No RasterOp, but ClipRegion
-    virtual void copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                          long nSrcHeight, bool bWindowInvalidate) override;
+    virtual void copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                          tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+                          bool bWindowInvalidate) override;
 
     virtual void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override;
 
@@ -139,18 +142,19 @@ public:
     virtual void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                           Color nMaskColor) override;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap(long nX, long nY, long nWidth,
-                                                 long nHeight) override;
+    virtual std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                                 tools::Long nHeight) override;
 
-    virtual Color getPixel(long nX, long nY) override;
+    virtual Color getPixel(tools::Long nX, tools::Long nY) override;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) override;
+    virtual void invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                        SalInvert nFlags) override;
 
     virtual void invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags) override;
 
-    virtual bool drawEPS(long nX, long nY, long nWidth, long nHeight, void* pPtr,
-                         sal_uInt32 nSize) override;
+    virtual bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                         void* pPtr, sal_uInt32 nSize) override;
 
     /** Render bitmap with alpha channel
 
@@ -187,8 +191,8 @@ public:
 
       @returns true if successfully drawn, false if not able to draw rectangle
      */
-    virtual bool drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
-                               sal_uInt8 nTransparency) override;
+    virtual bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                               tools::Long nHeight, sal_uInt8 nTransparency) override;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
                               const Gradient& rGradient) override;
@@ -241,8 +245,8 @@ protected:
     virtual void createWindowContext(bool forceRaster = false) = 0;
     void createOffscreenSurface();
 
-    void privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight, double nTransparency,
-                              bool blockAA = false);
+    void privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                              tools::Long nHeight, double nTransparency, bool blockAA = false);
 
     void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
 
@@ -289,8 +293,8 @@ protected:
     // rounding results in off-by-one errors (down), especially when drawing using GPU,
     // see https://bugs.chromium.org/p/skia/issues/detail?id=9611 . Compensate for
     // it by using centers of pixels. Using 0.5 may sometimes round up, so go with 0.495 .
-    static constexpr SkScalar toSkX(long x) { return x + 0.495; }
-    static constexpr SkScalar toSkY(long y) { return y + 0.495; }
+    static constexpr SkScalar toSkX(tools::Long x) { return x + 0.495; }
+    static constexpr SkScalar toSkY(tools::Long y) { return y + 0.495; }
     // Value to add to be exactly in the middle of the pixel.
     static constexpr SkScalar toSkXYFix = SkScalar(0.005);
 

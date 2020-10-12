@@ -52,15 +52,15 @@ static void init_source (j_decompress_ptr cinfo)
 
 }
 
-static long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
+static tools::Long StreamRead( SvStream* pStream, void* pBuffer, tools::Long nBufferSize )
 {
-    long nRead = 0;
+    tools::Long nRead = 0;
 
     if( pStream->GetError() != ERRCODE_IO_PENDING )
     {
-        long nInitialPosition = pStream->Tell();
+        tools::Long nInitialPosition = pStream->Tell();
 
-        nRead = static_cast<long>(pStream->ReadBytes(pBuffer, nBufferSize));
+        nRead = static_cast<tools::Long>(pStream->ReadBytes(pBuffer, nBufferSize));
 
         if( pStream->GetError() == ERRCODE_IO_PENDING )
         {
@@ -105,7 +105,7 @@ static boolean fill_input_buffer (j_decompress_ptr cinfo)
     return TRUE;
 }
 
-static void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
+static void skip_input_data (j_decompress_ptr cinfo, tools::Long numberOfBytes)
 {
     SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 
@@ -116,9 +116,9 @@ static void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
     if (numberOfBytes <= 0)
         return;
 
-    while (numberOfBytes > static_cast<long>(source->pub.bytes_in_buffer))
+    while (numberOfBytes > static_cast<tools::Long>(source->pub.bytes_in_buffer))
     {
-        numberOfBytes -= static_cast<long>(source->pub.bytes_in_buffer);
+        numberOfBytes -= static_cast<tools::Long>(source->pub.bytes_in_buffer);
         (void) fill_input_buffer(cinfo);
 
         /* note we assume that fill_input_buffer will never return false,
@@ -242,7 +242,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam const & rParam)
     return true;
 }
 
-Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
+Graphic JPEGReader::CreateIntermediateGraphic(tools::Long nLines)
 {
     Graphic aGraphic;
     const Size aSizePixel(mpBitmap->GetSizePixel());
@@ -255,7 +255,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
 
     if (nLines && (nLines < aSizePixel.Height()))
     {
-        const long nNewLines = nLines - mnLastLines;
+        const tools::Long nNewLines = nLines - mnLastLines;
 
         if (nNewLines > 0)
         {
@@ -291,7 +291,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportF
     mrStream.Seek( mnLastPos );
 
     // read the (partial) image
-    long nLines;
+    tools::Long nLines;
     ReadJPEG( this, &mrStream, &nLines, nImportFlags, ppAccess );
 
     auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);

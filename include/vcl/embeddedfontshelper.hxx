@@ -14,6 +14,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/long.hxx>
 #include <vector>
 
 namespace com::sun::star::io { class XInputStream; }
@@ -77,7 +78,7 @@ public:
       @param size size of the font data
       @param rights type of operation to be allowed for the font
     */
-    static bool sufficientTTFRights( const void* data, long size, FontRights rights );
+    static bool sufficientTTFRights( const void* data, tools::Long size, FontRights rights );
 
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().

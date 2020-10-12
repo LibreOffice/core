@@ -1198,7 +1198,7 @@ void PDFPage::appendMatrix3(Matrix3 const & rMatrix, OStringBuffer& rBuffer)
     rBuffer.append(' ');
     appendDouble(rMatrix.get(3), rBuffer);
     rBuffer.append(' ');
-    appendPoint(Point(long(rMatrix.get(4)), long(rMatrix.get(5))), rBuffer);
+    appendPoint(Point(tools::Long(rMatrix.get(4)), tools::Long(rMatrix.get(5))), rBuffer);
 }
 
 double PDFPage::getHeight() const
@@ -5521,8 +5521,8 @@ void PDFWriterImpl::sortWidgets()
             SAL_WARN( "vcl.pdfwriter", "wrong number of sorted annotations" );
             SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions "
                      "on page nr " << item.first << ", " <<
-                     static_cast<long int>(item.second.aSortedAnnots.size()) << " sorted and " <<
-                     static_cast<long int>(nAnnots) << " unsorted");
+                     static_cast<tools::Long>(item.second.aSortedAnnots.size()) << " sorted and " <<
+                     static_cast<tools::Long>(nAnnots) << " unsorted");
         }
     }
 
@@ -5776,7 +5776,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
     setTextLineColor( aReliefColor );
     setOverlineColor( aReliefColor );
     setFont( aSetFont );
-    long nOff = 1 + GetDPIX()/300;
+    tools::Long nOff = 1 + GetDPIX()/300;
     if( eRelief == FontRelief::Engraved )
         nOff = -nOff;
 
@@ -5814,7 +5814,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     setOverlineColor( rFont.GetColor() );
     updateGraphicsState();
 
-    long nOff = 1 + ((GetFontInstance()->mnLineHeight-24)/24);
+    tools::Long nOff = 1 + ((GetFontInstance()->mnLineHeight-24)/24);
     if( rFont.IsOutline() )
         nOff++;
     rLayout.DrawBase() += Point( nOff, nOff );
@@ -5837,7 +5837,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         double fSkew,
         sal_Int32 nFontHeight )
 {
-    long nXOffset = 0;
+    tools::Long nXOffset = 0;
     Point aCurPos( rGlyphs[0].m_aPos );
     aCurPos = PixelToLogic( aCurPos );
     aCurPos += rAlignOffset;
@@ -5865,8 +5865,8 @@ void PDFWriterImpl::drawVerticalGlyphs(
         if( i < rGlyphs.size()-1 )
         // #i120627# the text on the Y axis is reversed when export ppt file to PDF format
         {
-            long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
-            long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
+            tools::Long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
+            tools::Long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
             nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
         }
         if (!rGlyphs[i].m_pGlyph->glyphId())
@@ -6386,9 +6386,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     tools::PolyPolygon             aEmphPoly;
     tools::Rectangle               aEmphRect1;
     tools::Rectangle               aEmphRect2;
-    long                    nEmphYOff;
-    long                    nEmphWidth;
-    long                    nEmphHeight;
+    tools::Long                    nEmphYOff;
+    tools::Long                    nEmphWidth;
+    tools::Long                    nEmphHeight;
     bool                    bEmphPolyLine;
     FontEmphasisMark        nEmphMark;
 
@@ -6429,8 +6429,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     else
         aOffset.AdjustY( -(GetFontInstance()->mxFontMetric->GetAscent() + nEmphYOff) );
 
-    long nEmphWidth2     = nEmphWidth / 2;
-    long nEmphHeight2    = nEmphHeight / 2;
+    tools::Long nEmphWidth2     = nEmphWidth / 2;
+    tools::Long nEmphHeight2    = nEmphHeight / 2;
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
@@ -6462,7 +6462,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
 }
 
-void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
+void PDFWriterImpl::drawEmphasisMark( tools::Long nX, tools::Long nY,
                                       const tools::PolyPolygon& rPolyPoly, bool bPolyLine,
                                       const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 )
 {
@@ -6516,7 +6516,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen )
 {
     MARK( "drawText with array" );
 
@@ -6548,8 +6548,8 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
 
 void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle )
 {
-    long        nWidth          = rRect.GetWidth();
-    long        nHeight         = rRect.GetHeight();
+    tools::Long        nWidth          = rRect.GetWidth();
+    tools::Long        nHeight         = rRect.GetHeight();
 
     if ( nWidth <= 0 || nHeight <= 0 )
         return;
@@ -6569,7 +6569,7 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
 
     Point       aPos            = rRect.TopLeft();
 
-    long        nTextHeight     = GetTextHeight();
+    tools::Long        nTextHeight     = GetTextHeight();
     sal_Int32   nMnemonicPos    = -1;
 
     OUString aStr = rOrigStr;
@@ -6640,7 +6640,7 @@ void PDFWriterImpl::drawText( const tools::Rectangle& rRect, const OUString& rOr
     }
     else
     {
-        long nTextWidth = GetTextWidth( aStr );
+        tools::Long nTextWidth = GetTextWidth( aStr );
 
         // Evt. Text kuerzen
         if ( nTextWidth > nWidth )
@@ -6733,12 +6733,12 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
 
 #define HCONV( x ) ImplDevicePixelToLogicHeight( x )
 
-void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
+void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
     const LogicalFontInstance*  pFontInstance = GetFontInstance();
-    long            nLineHeight = 0;
-    long            nLinePos = 0;
+    tools::Long            nLineHeight = 0;
+    tools::Long            nLinePos = 0;
 
     appendStrokingColor( aColor, aLine );
     aLine.append( "\n" );
@@ -6760,7 +6760,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
-    long nLineWidth = GetDPIX()/450;
+    tools::Long nLineWidth = GetDPIX()/450;
     if ( ! nLineWidth )
         nLineWidth = 1;
 
@@ -6772,7 +6772,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
 
     if ( eTextLine == LINESTYLE_DOUBLEWAVE )
     {
-        long nOrgLineHeight = nLineHeight;
+        tools::Long nOrgLineHeight = nLineHeight;
         nLineHeight /= 3;
         if ( nLineHeight < 2 )
         {
@@ -6781,10 +6781,10 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
             else
                 nLineHeight = 1;
         }
-        long nLineDY = nOrgLineHeight-(nLineHeight*2);
+        tools::Long nLineDY = nOrgLineHeight-(nLineHeight*2);
         if ( nLineDY < nLineWidth )
             nLineDY = nLineWidth;
-        long nLineDY2 = nLineDY/2;
+        tools::Long nLineDY2 = nLineDY/2;
         if ( !nLineDY2 )
             nLineDY2 = 1;
 
@@ -6803,13 +6803,13 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
     }
 }
 
-void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
+void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
     const LogicalFontInstance*  pFontInstance = GetFontInstance();
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    tools::Long            nLineHeight = 0;
+    tools::Long            nLinePos  = 0;
+    tools::Long            nLinePos2 = 0;
 
     if ( eTextLine > LINESTYLE_BOLDWAVE )
         eTextLine = LINESTYLE_SINGLE;
@@ -6994,13 +6994,13 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
 
 }
 
-void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor )
+void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, tools::Long nWidth, FontStrikeout eStrikeout, Color aColor )
 {
     // note: units in pFontInstance are ref device pixel
     const LogicalFontInstance*  pFontInstance = GetFontInstance();
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    tools::Long            nLineHeight = 0;
+    tools::Long            nLinePos  = 0;
+    tools::Long            nLinePos2 = 0;
 
     if ( eStrikeout > STRIKEOUT_X )
         eStrikeout = STRIKEOUT_SINGLE;
@@ -7059,7 +7059,7 @@ void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontSt
 
 }
 
-void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout )
+void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, tools::Long nWidth, FontStrikeout eStrikeout )
 {
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
@@ -7117,7 +7117,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     }
 }
 
-void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove )
+void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove )
 {
     if ( !nWidth ||
          ( ((eStrikeout == STRIKEOUT_NONE)||(eStrikeout == STRIKEOUT_DONTKNOW)) &&
@@ -7371,7 +7371,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const tools::Rectangle& rT
                          this,
                          rTargetRect );
         Point aDelta = m_aOutputStreams.front().m_aTargetRect.BottomLeft();
-        long nPageHeight = pointToPixel(m_aPages[m_nCurrentPage].getHeight());
+        tools::Long nPageHeight = pointToPixel(m_aPages[m_nCurrentPage].getHeight());
         aDelta.setY( -(nPageHeight - m_aOutputStreams.front().m_aTargetRect.Bottom()) );
         m_aMapMode.SetOrigin( m_aMapMode.GetOrigin() + aDelta );
     }
@@ -8245,7 +8245,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
         default:
             for( int y = aSize.Height()-1; y >= 0; y-- )
             {
-                for( long x = 0; x < aSize.Width(); x++ )
+                for( tools::Long x = 0; x < aSize.Width(); x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
                     aCol[0] = aColor.GetRed();
@@ -8516,8 +8516,8 @@ void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
         aLine.append("<< /Type /XObject");
         aLine.append(" /Subtype /Form");
 
-        long nWidth = aSize.Width();
-        long nHeight = aSize.Height();
+        tools::Long nWidth = aSize.Width();
+        tools::Long nHeight = aSize.Height();
         if (auto pRotate = dynamic_cast<filter::PDFNumberElement*>(pPage->Lookup("Rotate")))
         {
             // The original page was rotated, then construct a transformation matrix which does the
@@ -8674,7 +8674,7 @@ namespace
         Bitmap aNewBmp(rBitmap);
         BitmapScopedWriteAccess xWriteAcc(aNewBmp);
         const int nScanLineBytes = (pAccess->Width() + 7U) / 8U;
-        for (long nY = 0L; nY < xWriteAcc->Height(); ++nY)
+        for (tools::Long nY = 0L; nY < xWriteAcc->Height(); ++nY)
         {
             Scanline pBitSwap = xWriteAcc->GetScanline(nY);
             for (int x = 0; x < nScanLineBytes; ++x)
@@ -8945,7 +8945,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             //With PDF bitmaps, each row is padded to a BYTE boundary (multiple of 8 bits).
             const int nScanLineBytes = ((pAccess->GetBitCount() * pAccess->Width()) + 7U) / 8U;
 
-            for( long i = 0; i < pAccess->Height(); i++ )
+            for( tools::Long i = 0; i < pAccess->Height(); i++ )
             {
                 CHECK_RETURN( writeBuffer( pAccess->GetScanline( i ), nScanLineBytes ) );
             }
@@ -8954,9 +8954,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             const int nScanLineBytes = pAccess->Width()*3;
             std::unique_ptr<sal_uInt8[]> xCol(new sal_uInt8[nScanLineBytes]);
-            for( long y = 0; y < pAccess->Height(); y++ )
+            for( tools::Long y = 0; y < pAccess->Height(); y++ )
             {
-                for( long x = 0; x < pAccess->Width(); x++ )
+                for( tools::Long x = 0; x < pAccess->Width(); x++ )
                 {
                     BitmapColor aColor = pAccess->GetColor( y, x );
                     xCol[3*x+0] = aColor.GetRed();

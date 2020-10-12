@@ -66,8 +66,8 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
         mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
-void OutputDevice::DrawWallpaper( long nX, long nY,
-                                  long nWidth, long nHeight,
+void OutputDevice::DrawWallpaper( tools::Long nX, tools::Long nY,
+                                  tools::Long nWidth, tools::Long nHeight,
                                   const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -80,8 +80,8 @@ void OutputDevice::DrawWallpaper( long nX, long nY,
         DrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper );
 }
 
-void OutputDevice::DrawColorWallpaper( long nX, long nY,
-                                       long nWidth, long nHeight,
+void OutputDevice::DrawColorWallpaper( tools::Long nX, tools::Long nY,
+                                       tools::Long nWidth, tools::Long nHeight,
                                        const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -132,8 +132,8 @@ void OutputDevice::Erase(const tools::Rectangle& rRect)
         mpAlphaVDev->Erase(rRect);
 }
 
-void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
-                                            long nWidth, long nHeight,
+void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,
+                                            tools::Long nWidth, tools::Long nHeight,
                                             const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());
@@ -154,8 +154,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     else
         aBmpEx = rWallpaper.GetBitmap();
 
-    const long nBmpWidth = aBmpEx.GetSizePixel().Width();
-    const long nBmpHeight = aBmpEx.GetSizePixel().Height();
+    const tools::Long nBmpWidth = aBmpEx.GetSizePixel().Width();
+    const tools::Long nBmpHeight = aBmpEx.GetSizePixel().Height();
     const bool bTransparent = aBmpEx.IsTransparent();
 
     // draw background
@@ -267,10 +267,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     default:
         {
-            const long nRight = nX + nWidth - 1;
-            const long nBottom = nY + nHeight - 1;
-            long nFirstX;
-            long nFirstY;
+            const tools::Long nRight = nX + nWidth - 1;
+            const tools::Long nBottom = nY + nHeight - 1;
+            tools::Long nFirstX;
+            tools::Long nFirstY;
 
             if( eStyle == WallpaperStyle::Tile )
             {
@@ -283,10 +283,10 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
                 nFirstY = aPos.Y() + ( ( aSize.Height() - nBmpHeight ) >> 1 );
             }
 
-            const long nOffX = ( nFirstX - nX ) % nBmpWidth;
-            const long nOffY = ( nFirstY - nY ) % nBmpHeight;
-            long nStartX = nX + nOffX;
-            long nStartY = nY + nOffY;
+            const tools::Long nOffX = ( nFirstX - nX ) % nBmpWidth;
+            const tools::Long nOffY = ( nFirstY - nY ) % nBmpHeight;
+            tools::Long nStartX = nX + nOffX;
+            tools::Long nStartY = nY + nOffY;
 
             if( nOffX > 0 )
                 nStartX -= nBmpWidth;
@@ -294,9 +294,9 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             if( nOffY > 0 )
                 nStartY -= nBmpHeight;
 
-            for( long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
+            for( tools::Long nBmpY = nStartY; nBmpY <= nBottom; nBmpY += nBmpHeight )
             {
-                for( long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
+                for( tools::Long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
                 {
                     DrawBitmapEx( Point( nBmpX, nBmpY ), aBmpEx );
                 }
@@ -369,8 +369,8 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     mpMetaFile = pOldMetaFile;
 }
 
-void OutputDevice::DrawGradientWallpaper( long nX, long nY,
-                                          long nWidth, long nHeight,
+void OutputDevice::DrawGradientWallpaper( tools::Long nX, tools::Long nY,
+                                          tools::Long nWidth, tools::Long nHeight,
                                           const Wallpaper& rWallpaper )
 {
     assert(!is_double_buffered_window());

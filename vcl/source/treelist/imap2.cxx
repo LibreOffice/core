@@ -275,7 +275,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine  )
     else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
     {
         const Point     aCenter( ImpReadCERNCoords( &pStr ) );
-        const long      nRadius = ImpReadCERNRadius( &pStr );
+        const tools::Long      nRadius = ImpReadCERNRadius( &pStr );
         const OUString  aURL( ImpReadCERNURL( &pStr ) );
 
         maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
@@ -334,7 +334,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
     return aPt;
 }
 
-long ImageMap::ImpReadCERNRadius( const char** ppStr )
+tools::Long ImageMap::ImpReadCERNRadius( const char** ppStr )
 {
     OUStringBuffer  aStr;
     char            cChar = *(*ppStr)++;
@@ -412,7 +412,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine )
         const OUString  aURL( ImpReadNCSAURL( &pStr ) );
         const Point     aCenter( ImpReadNCSACoords( &pStr ) );
         const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
-        long            nRadius = static_cast<long>(sqrt( static_cast<double>(aDX.X()) * aDX.X() +
+        tools::Long            nRadius = static_cast<tools::Long>(sqrt( static_cast<double>(aDX.X()) * aDX.X() +
                                                static_cast<double>(aDX.Y()) * aDX.Y() ));
 
         maList.emplace_back( new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() ) );
@@ -498,7 +498,7 @@ IMapFormat ImageMap::ImpDetectFormat( SvStream& rIStm )
     // we check the format
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
-        long        nCount = 128;
+        tools::Long        nCount = 128;
 
         rIStm.Seek( nPos );
         OString aStr;

@@ -408,7 +408,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
     ImplInitMatchData();
     PhysicalFontFamily* pFoundData = nullptr;
 
-    long    nBestMatch = 40000;
+    tools::Long    nBestMatch = 40000;
     ImplFontAttrs  nBestType = ImplFontAttrs::None;
 
     for (auto const& family : maPhysicalFontFamilies)
@@ -433,7 +433,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
         //              Otherstyle, +Special, +Decorative,
         //       1000   Typewriter, Rounded, Gothic, Schollbook
         //        100
-        long nTestMatch = 0;
+        tools::Long nTestMatch = 0;
 
         // test CJK script attributes
         if ( nSearchType & ImplFontAttrs::CJK )

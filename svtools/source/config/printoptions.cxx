@@ -424,7 +424,7 @@ void SvtBasePrintOptions::SetPrinterOptions( const PrinterOptions& rOptions )
         SetReducedBitmapResolution( 0 );
     else
     {
-        for( long i = DPI_COUNT - 1; i >= 0; i-- )
+        for( tools::Long i = DPI_COUNT - 1; i >= 0; i-- )
         {
             if( nDPI >= aDPIArray[ i ] )
             {

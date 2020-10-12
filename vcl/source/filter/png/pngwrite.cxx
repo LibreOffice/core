@@ -624,10 +624,10 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
                 na = nc = 0;
             }
 
-            long np = na + nb - nc;
-            long npa = np - na;
-            long npb = np - nb;
-            long npc = np - nc;
+            tools::Long np = na + nb - nc;
+            tools::Long npa = np - na;
+            tools::Long npb = np - nb;
+            tools::Long npc = np - nc;
 
             if (npa < 0)
                 npa =-npa;
@@ -646,7 +646,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter (sal_uLong nY, sal_uLong nXStart, sal_uLo
             p4++;
             p2++;
         }
-        for (long i = 0; i < static_cast<long>(mnDeflateInSize - 1); i++)
+        for (tools::Long i = 0; i < static_cast<tools::Long>(mnDeflateInSize - 1); i++)
         {
             mpPreviousScan[i] = mpCurrentScan[i + 1];
         }

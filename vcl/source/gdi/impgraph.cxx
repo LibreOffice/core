@@ -1082,7 +1082,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
 }
 
 void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                                     const Size& rDestSize, long nExtraData,
+                                     const Size& rDestSize, tools::Long nExtraData,
                                      OutputDevice* pFirstFrameOutDev )
 {
     ensureAvailable();
@@ -1091,7 +1091,7 @@ void ImpGraphic::ImplStartAnimation( OutputDevice* pOutDev, const Point& rDestPt
         mpAnimation->Start( pOutDev, rDestPt, rDestSize, nExtraData, pFirstFrameOutDev );
 }
 
-void ImpGraphic::ImplStopAnimation( const OutputDevice* pOutDev, long nExtraData )
+void ImpGraphic::ImplStopAnimation( const OutputDevice* pOutDev, tools::Long nExtraData )
 {
     ensureAvailable();
 

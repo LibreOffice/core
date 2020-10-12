@@ -274,10 +274,10 @@ void MessBox::ImplPosControls()
     Size            aImageSize;
     Size            aPageSize;
     Size            aMEditSize;
-    long            nTitleWidth;
-    long            nButtonSize = ImplGetButtonSize();
-    long            nMaxLineWidth;
-    long            nWidth;
+    tools::Long            nTitleWidth;
+    tools::Long            nButtonSize = ImplGetButtonSize();
+    tools::Long            nMaxLineWidth;
+    tools::Long            nWidth;
     WinBits         nWinStyle = WB_LEFT | WB_NOLABEL;
     DrawTextFlags   nTextStyle = DrawTextFlags::MultiLine | DrawTextFlags::Top | DrawTextFlags::Left;
 
@@ -288,7 +288,7 @@ void MessBox::ImplPosControls()
     OUString aMessText(maMessText.replaceAll("\t", "    "));
 
     //If window too small, we make dialog box be wider
-    long nMaxWidth = 630 * GetDPIScaleFactor();
+    tools::Long nMaxWidth = 630 * GetDPIScaleFactor();
 
     // MessagBox should be at least as wide as to see the title
     // Extra-Width for Close button, because Close button is set after this call
@@ -2209,7 +2209,7 @@ css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
 {
-    vcl::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
+    vcl::Window * p = ::Application::GetTopWindow(static_cast< tools::Long >(nIndex));
         // XXX  numeric overflow
     return css::uno::Reference< css::awt::XTopWindow >(
         p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),

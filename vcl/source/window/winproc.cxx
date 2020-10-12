@@ -261,7 +261,7 @@ static void ContextMenuEventLink( void* pCEvent, void* )
 }
 
 bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
-                           long nX, long nY, sal_uInt64 nMsgTime,
+                           tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
     ImplSVHelpData& aHelpData = ImplGetSVHelpData();
@@ -448,12 +448,12 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             {
                 if ( !pMouseDownWin->ImplGetFrameData()->mbStartDragCalled )
                 {
-                    long nDragW  = rMSettings.GetStartDragWidth();
-                    long nDragH  = rMSettings.GetStartDragHeight();
+                    tools::Long nDragW  = rMSettings.GetStartDragWidth();
+                    tools::Long nDragH  = rMSettings.GetStartDragHeight();
                     //long nMouseX = nX;
                     //long nMouseY = nY;
-                    long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
-                    long nMouseY = aMousePos.Y();
+                    tools::Long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                    tools::Long nMouseY = aMousePos.Y();
                     if ( (((nMouseX-nDragW) > pMouseDownWin->ImplGetFrameData()->mnFirstMouseX) ||
                            ((nMouseX+nDragW) < pMouseDownWin->ImplGetFrameData()->mnFirstMouseX)) ||
                          (((nMouseY-nDragH) > pMouseDownWin->ImplGetFrameData()->mnFirstMouseY) ||
@@ -556,12 +556,12 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             {
                 const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
                 sal_uInt64 nDblClkTime = rMSettings.GetDoubleClickTime();
-                long    nDblClkW    = rMSettings.GetDoubleClickWidth();
-                long    nDblClkH    = rMSettings.GetDoubleClickHeight();
+                tools::Long    nDblClkW    = rMSettings.GetDoubleClickWidth();
+                tools::Long    nDblClkH    = rMSettings.GetDoubleClickHeight();
                 //long    nMouseX     = nX;
                 //long    nMouseY     = nY;
-                long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
-                long nMouseY = aMousePos.Y();
+                tools::Long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                tools::Long nMouseY = aMousePos.Y();
 
                 if ( (pChild == pChild->ImplGetFrameData()->mpMouseDownWin) &&
                      (nCode == pChild->ImplGetFrameData()->mnFirstMouseCode) &&
@@ -1223,7 +1223,7 @@ static bool ImplHandleEndExtTextInput()
 }
 
 static void ImplHandleExtTextInputPos( vcl::Window* pWindow,
-                                       tools::Rectangle& rRect, long& rInputWidth,
+                                       tools::Rectangle& rRect, tools::Long& rInputWidth,
                                        bool * pVertical )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1632,7 +1632,7 @@ static void KillOwnPopups( vcl::Window const * pWindow )
     }
 }
 
-void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
+void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
 {
     const bool bChanged = (nNewWidth != pWindow->GetOutputWidthPixel()) || (nNewHeight != pWindow->GetOutputHeightPixel());
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
@@ -1731,7 +1731,7 @@ static void ImplHandleMove( vcl::Window* pWindow )
 
 }
 
-static void ImplHandleMoveResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
+static void ImplHandleMoveResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
 {
     ImplHandleMove( pWindow );
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
@@ -2480,8 +2480,8 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
         case SalEvent::Resize:
             {
-            long nNewWidth;
-            long nNewHeight;
+            tools::Long nNewWidth;
+            tools::Long nNewHeight;
             pWindow->ImplGetWindowImpl()->mpFrame->GetClientSize( nNewWidth, nNewHeight );
             ImplHandleResize( pWindow, nNewWidth, nNewHeight );
             }

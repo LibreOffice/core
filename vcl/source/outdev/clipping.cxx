@@ -88,7 +88,7 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
     return bClipRegion;
 }
 
-void OutputDevice::MoveClipRegion( long nHorzMove, long nVertMove )
+void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove )
 {
 
     if ( mbClipRegion )

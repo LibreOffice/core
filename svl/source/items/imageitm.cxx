@@ -27,7 +27,7 @@ SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
 struct SfxImageItem_Impl
 {
     OUString aURL;
-    long    nAngle;
+    tools::Long    nAngle;
     bool    bMirrored;
     bool    operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
@@ -94,12 +94,12 @@ bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-void SfxImageItem::SetRotation( long nValue )
+void SfxImageItem::SetRotation( tools::Long nValue )
 {
     pImpl->nAngle = nValue;
 }
 
-long SfxImageItem::GetRotation() const
+tools::Long SfxImageItem::GetRotation() const
 {
     return pImpl->nAngle;
 }

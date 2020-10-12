@@ -73,8 +73,8 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     {
         MapMode aMapMode( MapUnit::MapPoint );
         Size    aSz = pOutDev->LogicToLogic( Size( 0, 12 ), &aMapMode, nullptr );
-        long    nThreshold = aSz.Height() / 2;
-        long    nStep = nThreshold / 3;
+        tools::Long    nThreshold = aSz.Height() / 2;
+        tools::Long    nStep = nThreshold / 3;
 
         if ( !nStep )
             nStep = aSz.Height() - nThreshold;
@@ -84,14 +84,14 @@ void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
             pFont->SetFontSize( aSz );
             pOutDev->SetFont( *pFont );
 
-            long nTextHeight = pOutDev->GetTextHeight();
-            long nTextWidth = pOutDev->GetTextWidth( *pText );
+            tools::Long nTextHeight = pOutDev->GetTextHeight();
+            tools::Long nTextWidth = pOutDev->GetTextWidth( *pText );
             if ( nTextHeight )
             {
                 // The approximation does not respect imprecisions caused
                 // by word wraps
-                long nLines = aSize.Height() / nTextHeight;
-                long nWidth = aSize.Width() * nLines; // Approximation!!!
+                tools::Long nLines = aSize.Height() / nTextHeight;
+                tools::Long nWidth = aSize.Width() * nLines; // Approximation!!!
 
                 if ( nTextWidth <= nWidth || aSz.Height() <= nThreshold )
                 {
@@ -441,14 +441,14 @@ void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
 }
 
 void Graphic::StartAnimation( OutputDevice* pOutDev, const Point& rDestPt,
-                              const Size& rDestSz, long nExtraData,
+                              const Size& rDestSz, tools::Long nExtraData,
                               OutputDevice* pFirstFrameOutDev )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplStartAnimation( pOutDev, rDestPt, rDestSz, nExtraData, pFirstFrameOutDev );
 }
 
-void Graphic::StopAnimation( const OutputDevice* pOutDev, long nExtraData )
+void Graphic::StopAnimation( const OutputDevice* pOutDev, tools::Long nExtraData )
 {
     ImplTestRefCount();
     mxImpGraphic->ImplStopAnimation( pOutDev, nExtraData );

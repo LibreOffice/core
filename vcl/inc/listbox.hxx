@@ -55,9 +55,9 @@ struct ImplEntryType
     void*       mpUserData;
     bool        mbIsSelected;
     ListBoxEntryFlags mnFlags;
-    long        mnHeight;
+    tools::Long        mnHeight;
 
-    long getHeightWithMargin() const;
+    tools::Long getHeightWithMargin() const;
 
     ImplEntryType( const OUString& rStr, const Image& rImage ) :
         maStr( rStr ),
@@ -121,8 +121,8 @@ public:
     /// GetAddedHeight( 0 ) @return 0
     /// GetAddedHeight( LISTBOX_ENTRY_NOTFOUND ) @return 0
     /// GetAddedHeight( i, k ) with k > i is equivalent -GetAddedHeight( k, i )
-    long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
-    long            GetEntryHeight( sal_Int32  nPos ) const;
+    tools::Long            GetAddedHeight( sal_Int32  nEndIndex, sal_Int32  nBeginIndex ) const;
+    tools::Long            GetEntryHeight( sal_Int32  nPos ) const;
 
     sal_Int32       GetEntryCount() const { return static_cast<sal_Int32>(maEntries.size()); }
     bool            HasImages() const { return mnImages != 0; }
@@ -179,15 +179,15 @@ private:
 
     Size            maUserItemSize;
 
-    long            mnMaxTxtHeight;  ///< Maximum height of a text item
-    long            mnMaxTxtWidth;   ///< Maximum width of a text item
+    tools::Long            mnMaxTxtHeight;  ///< Maximum height of a text item
+    tools::Long            mnMaxTxtWidth;   ///< Maximum width of a text item
                                      ///< Entry without Image
-    long            mnMaxImgTxtWidth;///< Maximum width of a text item
+    tools::Long            mnMaxImgTxtWidth;///< Maximum width of a text item
                                      ///< Entry AND Image
-    long            mnMaxImgWidth;   ///< Maximum width of an image item
-    long            mnMaxImgHeight;  ///< Maximum height of an image item
-    long            mnMaxWidth;      ///< Maximum width of an entry
-    long            mnMaxHeight;     ///< Maximum height of an entry
+    tools::Long            mnMaxImgWidth;   ///< Maximum width of an image item
+    tools::Long            mnMaxImgHeight;  ///< Maximum height of an image item
+    tools::Long            mnMaxWidth;      ///< Maximum width of an entry
+    tools::Long            mnMaxHeight;     ///< Maximum height of an entry
 
     sal_Int32       mnCurrentPos;    ///< Position (Focus)
     sal_Int32       mnTrackingSaveSelection; ///< Selection before Tracking();
@@ -197,8 +197,8 @@ private:
     sal_Int32       mnUserDrawEntry;
 
     sal_Int32       mnTop;           ///< output from line on
-    long            mnLeft;          ///< output from column on
-    long            mnTextHeight;    ///< text height
+    tools::Long            mnLeft;          ///< output from column on
+    tools::Long            mnTextHeight;    ///< text height
 
     sal_uInt16      mnSelectModifier;   ///< Modifiers
 
@@ -290,9 +290,9 @@ public:
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const;
 
-    long            GetLeftIndent() const           { return mnLeft; }
-    void            SetLeftIndent( long n );
-    void            ScrollHorz( long nDiff );
+    tools::Long            GetLeftIndent() const           { return mnLeft; }
+    void            SetLeftIndent( tools::Long n );
+    void            ScrollHorz( tools::Long nDiff );
 
     void            AllowGrabFocus( bool b )        { mbGrabFocus = b; }
     bool            IsGrabFocusAllowed() const      { return mbGrabFocus; }
@@ -337,9 +337,9 @@ public:
     Size            CalcSize(sal_Int32 nMaxLines) const;
     tools::Rectangle       GetBoundingRectangle( sal_Int32  nItem ) const;
 
-    long            GetEntryHeight() const              { return mnMaxHeight; }
-    long            GetEntryHeightWithMargin() const;
-    long            GetMaxEntryWidth() const            { return mnMaxWidth; }
+    tools::Long            GetEntryHeight() const              { return mnMaxHeight; }
+    tools::Long            GetEntryHeightWithMargin() const;
+    tools::Long            GetMaxEntryWidth() const            { return mnMaxWidth; }
 
     void            SetScrollHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maScrollHdl = rLink; }
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maSelectHdl = rLink; }
@@ -451,7 +451,7 @@ public:
     using Window::IsVisible;
     bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow->IsVisible( nEntry ); }
 
-    long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
+    tools::Long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
     void            SetLeftIndent( sal_uInt16 n )       { maLBWindow->SetLeftIndent( n ); }
 
     void            SetTravelSelect( bool bTravelSelect ) { maLBWindow->SetTravelSelect( bTravelSelect ); }
@@ -467,9 +467,9 @@ public:
     bool            IsReadOnly() const              { return maLBWindow->IsReadOnly(); }
 
     Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow->CalcSize( nMaxLines ); }
-    long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
-    long            GetEntryHeightWithMargin() const{ return maLBWindow->GetEntryHeightWithMargin(); }
-    long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
+    tools::Long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
+    tools::Long            GetEntryHeightWithMargin() const{ return maLBWindow->GetEntryHeightWithMargin(); }
+    tools::Long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
     void            SetScrollHdl( const Link<ImplListBox*,void>& rLink ) { maScrollHdl = rLink; }
     void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
@@ -520,8 +520,8 @@ public:
     Size            CalcFloatSize();
     void            StartFloat( bool bStartTracking );
 
-    virtual void    setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    virtual void    setPosSizePixel( tools::Long nX, tools::Long nY,
+                                     tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     void            SetDropDownLineCount( sal_uInt16 n ) { mnDDLineCount = n; }
     sal_uInt16      GetDropDownLineCount() const { return mnDDLineCount; }

@@ -311,7 +311,7 @@ protected:
     void            processRandREvent( XEvent* );
 
     void            doDestruct();
-    void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
+    void            addXineramaScreenUnique( int i, tools::Long i_nX, tools::Long i_nY, tools::Long i_nWidth, tools::Long i_nHeight );
     Time            GetEventTimeImpl( bool bAlwaysReget = false ) const;
 public:
     static bool BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI);

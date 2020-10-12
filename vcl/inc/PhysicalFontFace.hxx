@@ -22,6 +22,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcharmap.hxx>
 
@@ -76,8 +77,8 @@ protected:
     explicit PhysicalFontFace(const FontAttributes&);
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
-    long                    mnWidth;    // Width (in pixels)
-    long                    mnHeight;   // Height (in pixels)
+    tools::Long                    mnWidth;    // Width (in pixels)
+    tools::Long                    mnHeight;   // Height (in pixels)
 };
 
 #endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX

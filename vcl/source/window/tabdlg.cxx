@@ -35,8 +35,8 @@ void TabDialog::ImplPosControls()
         return;
 
     Size        aCtrlSize( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
-    long        nDownCtrl = 0;
-    long        nOffY = 0;
+    tools::Long        nDownCtrl = 0;
+    tools::Long        nOffY = 0;
     vcl::Window*     pTabControl = nullptr;
 
     vcl::Window* pChild = GetWindow( GetWindowType::FirstChild );
@@ -49,17 +49,17 @@ void TabDialog::ImplPosControls()
             else if ( pTabControl )
             {
                 Size aOptimalSize(pChild->get_preferred_size());
-                long nTxtWidth = aOptimalSize.Width();
+                tools::Long nTxtWidth = aOptimalSize.Width();
                 if ( nTxtWidth > aCtrlSize.Width() )
                     aCtrlSize.setWidth( nTxtWidth );
-                long nTxtHeight = aOptimalSize.Height();
+                tools::Long nTxtHeight = aOptimalSize.Height();
                 if ( nTxtHeight > aCtrlSize.Height() )
                     aCtrlSize.setHeight( nTxtHeight );
                 nDownCtrl++;
             }
             else
             {
-                long nHeight = pChild->GetSizePixel().Height();
+                tools::Long nHeight = pChild->GetSizePixel().Height();
                 if ( nHeight > nOffY )
                     nOffY = nHeight;
             }
@@ -91,13 +91,13 @@ void TabDialog::ImplPosControls()
         // position all other Children
         bool bTabCtrl   = false;
         int  nLines     = 0;
-        long nX;
-        long nY         = aDlgSize.Height();
-        long nTopX      = IMPL_DIALOG_OFFSET;
+        tools::Long nX;
+        tools::Long nY         = aDlgSize.Height();
+        tools::Long nTopX      = IMPL_DIALOG_OFFSET;
 
         // all buttons are right aligned under Windows 95
         nX = IMPL_DIALOG_OFFSET;
-        long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
+        tools::Long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
         if ( nCtrlBarWidth <= aTabSize.Width() )
             nX = aTabSize.Width() - nCtrlBarWidth + IMPL_DIALOG_OFFSET;
 

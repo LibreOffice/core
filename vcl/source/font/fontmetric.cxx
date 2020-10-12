@@ -125,7 +125,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
 
 void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
-    long nDescent = mnDescent;
+    tools::Long nDescent = mnDescent;
     if ( nDescent <= 0 )
     {
         nDescent = mnAscent / 10;
@@ -139,38 +139,38 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     if( 3*nDescent > mnAscent )
         nDescent = mnAscent / 3;
 
-    long nLineHeight = ((nDescent*25)+50) / 100;
+    tools::Long nLineHeight = ((nDescent*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
-    long nLineHeight2 = nLineHeight / 2;
+    tools::Long nLineHeight2 = nLineHeight / 2;
     if ( !nLineHeight2 )
         nLineHeight2 = 1;
 
-    long nBLineHeight = ((nDescent*50)+50) / 100;
+    tools::Long nBLineHeight = ((nDescent*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
-    long nBLineHeight2 = nBLineHeight/2;
+    tools::Long nBLineHeight2 = nBLineHeight/2;
     if ( !nBLineHeight2 )
         nBLineHeight2 = 1;
 
-    long n2LineHeight = ((nDescent*16)+50) / 100;
+    tools::Long n2LineHeight = ((nDescent*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
-    long n2LineDY = n2LineHeight;
+    tools::Long n2LineDY = n2LineHeight;
      /* #117909#
       * add some pixels to minimum double line distance on higher resolution devices
       */
-    long nMin2LineDY = 1 + pDev->GetDPIY()/150;
+    tools::Long nMin2LineDY = 1 + pDev->GetDPIY()/150;
     if ( n2LineDY < nMin2LineDY )
         n2LineDY = nMin2LineDY;
-    long n2LineDY2 = n2LineDY/2;
+    tools::Long n2LineDY2 = n2LineDY/2;
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
     const vcl::Font& rFont ( pDev->GetFont() );
     bool bCJKVertical = MsLangId::isCJK(rFont.GetLanguage()) && rFont.IsVertical();
-    long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
-    long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
+    tools::Long nUnderlineOffset = bCJKVertical ? mnDescent : (mnDescent/2 + 1);
+    tools::Long nStrikeoutOffset = -((mnAscent - mnIntLeading) / 3);
 
     mnUnderlineSize        = nLineHeight;
     mnUnderlineOffset      = nUnderlineOffset - nLineHeight2;
@@ -182,7 +182,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
     mnDUnderlineOffset1    = nUnderlineOffset - n2LineDY2 - n2LineHeight;
     mnDUnderlineOffset2    = mnDUnderlineOffset1 + n2LineDY + n2LineHeight;
 
-    long nWCalcSize = mnDescent;
+    tools::Long nWCalcSize = mnDescent;
     if ( nWCalcSize < 6 )
     {
         if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
@@ -215,7 +215,7 @@ void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 
 void ImplFontMetricData::ImplInitAboveTextLineSize()
 {
-    long nIntLeading = mnIntLeading;
+    tools::Long nIntLeading = mnIntLeading;
     // TODO: assess usage of nLeading below (changed in extleading CWS)
     // if no leading is available, we assume 15% of the ascent
     if ( nIntLeading <= 0 )
@@ -225,19 +225,19 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
             nIntLeading = 1;
     }
 
-    long nLineHeight = ((nIntLeading*25)+50) / 100;
+    tools::Long nLineHeight = ((nIntLeading*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
 
-    long nBLineHeight = ((nIntLeading*50)+50) / 100;
+    tools::Long nBLineHeight = ((nIntLeading*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
 
-    long n2LineHeight = ((nIntLeading*16)+50) / 100;
+    tools::Long n2LineHeight = ((nIntLeading*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
 
-    long nCeiling = -mnAscent;
+    tools::Long nCeiling = -mnAscent;
 
     mnAboveUnderlineSize       = nLineHeight;
     mnAboveUnderlineOffset     = nCeiling + (nIntLeading - nLineHeight + 1) / 2;
@@ -249,7 +249,7 @@ void ImplFontMetricData::ImplInitAboveTextLineSize()
     mnAboveDUnderlineOffset1   = nCeiling + (nIntLeading - 3*n2LineHeight + 1) / 2;
     mnAboveDUnderlineOffset2   = nCeiling + (nIntLeading +   n2LineHeight + 1) / 2;
 
-    long nWCalcSize = nIntLeading;
+    tools::Long nWCalcSize = nIntLeading;
     if ( nWCalcSize < 6 )
     {
         if ( (nWCalcSize == 1) || (nWCalcSize == 2) )

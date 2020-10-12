@@ -84,15 +84,15 @@ bool BorderWidthImpl::operator== ( const BorderWidthImpl& r ) const
            ( m_nRateGap == r.m_nRateGap );
 }
 
-long BorderWidthImpl::GetLine1( long nWidth ) const
+tools::Long BorderWidthImpl::GetLine1( tools::Long nWidth ) const
 {
-    long result = static_cast<long>(m_nRate1);
+    tools::Long result = static_cast<tools::Long>(m_nRate1);
     if ( m_nFlags & BorderWidthImplFlags::CHANGE_LINE1 )
     {
-        long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
-        long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
+        tools::Long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
+        tools::Long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
-                    static_cast<long>((m_nRate1 * nWidth) + 0.5)
+                    static_cast<tools::Long>((m_nRate1 * nWidth) + 0.5)
                         - (nConstant2 + nConstantD));
         if (result == 0 && m_nRate1 > 0.0 && nWidth > 0)
         {   // fdo#51777: hack to essentially treat 1 twip DOUBLE border
@@ -102,29 +102,29 @@ long BorderWidthImpl::GetLine1( long nWidth ) const
     return result;
 }
 
-long BorderWidthImpl::GetLine2( long nWidth ) const
+tools::Long BorderWidthImpl::GetLine2( tools::Long nWidth ) const
 {
-    long result = static_cast<long>(m_nRate2);
+    tools::Long result = static_cast<tools::Long>(m_nRate2);
     if ( m_nFlags & BorderWidthImplFlags::CHANGE_LINE2)
     {
-        long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
-        long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
+        tools::Long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
+        tools::Long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
         result = std::max<long>(0,
-                    static_cast<long>((m_nRate2 * nWidth) + 0.5)
+                    static_cast<tools::Long>((m_nRate2 * nWidth) + 0.5)
                         - (nConstant1 + nConstantD));
     }
     return result;
 }
 
-long BorderWidthImpl::GetGap( long nWidth ) const
+tools::Long BorderWidthImpl::GetGap( tools::Long nWidth ) const
 {
-    long result = static_cast<long>(m_nRateGap);
+    tools::Long result = static_cast<tools::Long>(m_nRateGap);
     if ( m_nFlags & BorderWidthImplFlags::CHANGE_DIST )
     {
-        long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
-        long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
+        tools::Long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
+        tools::Long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
         result = std::max<long>(0,
-                    static_cast<long>((m_nRateGap * nWidth) + 0.5)
+                    static_cast<tools::Long>((m_nRateGap * nWidth) + 0.5)
                         - (nConstant1 + nConstant2));
     }
 
@@ -135,7 +135,7 @@ long BorderWidthImpl::GetGap( long nWidth ) const
     return result;
 }
 
-static double lcl_getGuessedWidth( long nTested, double nRate, bool bChanging )
+static double lcl_getGuessedWidth( tools::Long nTested, double nRate, bool bChanging )
 {
     double nWidth = -1.0;
     if ( bChanging )
@@ -149,7 +149,7 @@ static double lcl_getGuessedWidth( long nTested, double nRate, bool bChanging )
     return nWidth;
 }
 
-long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
+tools::Long BorderWidthImpl::GuessWidth( tools::Long nLine1, tools::Long nLine2, tools::Long nGap )
 {
     std::vector< double > aToCompare;
     bool bInvalid = false;
@@ -196,12 +196,12 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
     return nWidth;
 }
 
-static void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, SvxBorderLineStyle nDashing )
+static void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, tools::Long nWidth, SvxBorderLineStyle nDashing )
 {
     AntialiasingFlags nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::Enable );
 
-    long nPix = rDev.PixelToLogic(Size(1, 1)).Width();
+    tools::Long nPix = rDev.PixelToLogic(Size(1, 1)).Width();
     basegfx::B2DPolyPolygon aPolygons = svtools::ApplyLineDashing(rPolygon, nDashing, nPix);
 
     // Handle problems of width 1px in Pixel mode: 0.5px gives a 1px line
@@ -527,9 +527,9 @@ IMPL_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
 
 namespace
 {
-    long shrinkFontToFit(OUString const &rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, tools::Rectangle &rTextRect)
+    tools::Long shrinkFontToFit(OUString const &rSampleText, tools::Long nH, vcl::Font &rFont, OutputDevice &rDevice, tools::Rectangle &rTextRect)
     {
-        long nWidth = 0;
+        tools::Long nWidth = 0;
 
         Size aSize( rFont.GetFontSize() );
 
@@ -575,8 +575,8 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     else
         rDevice.SetTextColor(rStyleSettings.GetDialogTextColor());
 
-    long nX = rTopLeft.X();
-    long nH = gUserItemSz.Height();
+    tools::Long nX = rTopLeft.X();
+    tools::Long nH = gUserItemSz.Height();
 
     nX += IMGOUTERTEXTSPACE;
 
@@ -610,12 +610,12 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
         rDevice.GetTextBoundRect(aTextRect, sFontName);
     }
 
-    long nTextHeight = aTextRect.GetHeight();
-    long nDesiredGap = (nH-nTextHeight)/2;
-    long nVertAdjust = nDesiredGap - aTextRect.Top();
+    tools::Long nTextHeight = aTextRect.GetHeight();
+    tools::Long nDesiredGap = (nH-nTextHeight)/2;
+    tools::Long nVertAdjust = nDesiredGap - aTextRect.Top();
     Point aPos( nX, rTopLeft.Y() + nVertAdjust );
     rDevice.DrawText(aPos, sFontName);
-    long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
+    tools::Long nTextX = aPos.X() + aTextRect.GetWidth() + GAPTOEXTRAPREVIEW;
 
     if (!bUsingCorrectFont)
         rDevice.SetFont(aFont);
@@ -716,11 +716,11 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
         const Size &rItemSize = gUserItemSz;
 
         //leave a little border at the edge
-        long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
+        tools::Long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
         if (nSpace >= 0)
         {
             //Make sure it fits in the available height, and get how wide that would be
-            long nWidth = shrinkFontToFit(sSampleText, nH, aFont, rDevice, aTextRect);
+            tools::Long nWidth = shrinkFontToFit(sSampleText, nH, aFont, rDevice, aTextRect);
             //Chop letters off until it fits in the available width
             while (nWidth > nSpace || nWidth > gUserItemSz.Width())
             {
@@ -1349,7 +1349,7 @@ namespace
     }
 }
 
-void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
+void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                             Color aColor1, Color aColor2, Color aColorDist,
                             SvxBorderLineStyle nStyle, BitmapEx& rBmp )
 {
@@ -1365,10 +1365,10 @@ void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
 
     // Paint the lines
     aSize = aVirDev->PixelToLogic( aSize );
-    long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
+    tools::Long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
     sal_uInt32 n1 = nLine1;
     sal_uInt32 n2 = nLine2;
-    long nDist  = nDistance;
+    tools::Long nDist  = nDistance;
     n1 += nPix-1;
     n1 -= n1%nPix;
     if ( n2 )
@@ -1378,7 +1378,7 @@ void SvtLineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         n2    += nPix-1;
         n2    -= n2%nPix;
     }
-    long nVirHeight = n1+nDist+n2;
+    tools::Long nVirHeight = n1+nDist+n2;
     if ( nVirHeight > aSize.Height() )
         aSize.setHeight( nVirHeight );
     // negative width should not be drawn
@@ -1517,7 +1517,7 @@ void SvtLineListBox::SelectEntry(SvxBorderLineStyle nStyle)
 }
 
 void SvtLineListBox::InsertEntry(
-    const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
+    const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, tools::Long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
 {
     m_vLineList.emplace_back(new ImpLineListData(

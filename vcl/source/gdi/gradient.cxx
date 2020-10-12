@@ -211,10 +211,10 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
                           fWidth  * fabs( sin( fAngle ) );
         fDX     = (fDX - fWidth)  * 0.5 + 0.5;
         fDY     = (fDY - fHeight) * 0.5 + 0.5;
-        aRect.AdjustLeft( -static_cast<long>(fDX) );
-        aRect.AdjustRight(static_cast<long>(fDX) );
-        aRect.AdjustTop( -static_cast<long>(fDY) );
-        aRect.AdjustBottom(static_cast<long>(fDY) );
+        aRect.AdjustLeft( -static_cast<tools::Long>(fDX) );
+        aRect.AdjustRight(static_cast<tools::Long>(fDX) );
+        aRect.AdjustTop( -static_cast<tools::Long>(fDY) );
+        aRect.AdjustBottom(static_cast<tools::Long>(fDY) );
 
         rBoundRect = aRect;
         rCenter = rRect.Center();
@@ -232,10 +232,10 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
             fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
             fDY = ( fDY - fHeight ) * 0.5 + 0.5;
 
-            aRect.AdjustLeft( -static_cast<long>(fDX) );
-            aRect.AdjustRight(static_cast<long>(fDX) );
-            aRect.AdjustTop( -static_cast<long>(fDY) );
-            aRect.AdjustBottom(static_cast<long>(fDY) );
+            aRect.AdjustLeft( -static_cast<tools::Long>(fDX) );
+            aRect.AdjustRight(static_cast<tools::Long>(fDX) );
+            aRect.AdjustTop( -static_cast<tools::Long>(fDY) );
+            aRect.AdjustBottom(static_cast<tools::Long>(fDY) );
         }
 
         Size aSize( aRect.GetSize() );
@@ -243,21 +243,21 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
         if( GetStyle() == GradientStyle::Radial )
         {
             // Calculation of radii for circle
-            aSize.setWidth( static_cast<long>(0.5 + sqrt(static_cast<double>(aSize.Width())*static_cast<double>(aSize.Width()) + static_cast<double>(aSize.Height())*static_cast<double>(aSize.Height()))) );
+            aSize.setWidth( static_cast<tools::Long>(0.5 + sqrt(static_cast<double>(aSize.Width())*static_cast<double>(aSize.Width()) + static_cast<double>(aSize.Height())*static_cast<double>(aSize.Height()))) );
             aSize.setHeight( aSize.Width() );
         }
         else if( GetStyle() == GradientStyle::Elliptical )
         {
             // Calculation of radii for ellipse
-            aSize.setWidth( static_cast<long>( 0.5 + static_cast<double>(aSize.Width())  * 1.4142 ) );
-            aSize.setHeight( static_cast<long>( 0.5 + static_cast<double>(aSize.Height()) * 1.4142 ) );
+            aSize.setWidth( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Width())  * 1.4142 ) );
+            aSize.setHeight( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Height()) * 1.4142 ) );
         }
 
         // Calculate new centers
-        long    nZWidth = aRect.GetWidth() * static_cast<long>(GetOfsX()) / 100;
-        long    nZHeight = aRect.GetHeight() * static_cast<long>(GetOfsY()) / 100;
-        long    nBorderX = static_cast<long>(GetBorder()) * aSize.Width()  / 100;
-        long    nBorderY = static_cast<long>(GetBorder()) * aSize.Height() / 100;
+        tools::Long    nZWidth = aRect.GetWidth() * static_cast<tools::Long>(GetOfsX()) / 100;
+        tools::Long    nZHeight = aRect.GetHeight() * static_cast<tools::Long>(GetOfsY()) / 100;
+        tools::Long    nBorderX = static_cast<tools::Long>(GetBorder()) * aSize.Width()  / 100;
+        tools::Long    nBorderY = static_cast<tools::Long>(GetBorder()) * aSize.Height() / 100;
         rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
 
         // Respect borders

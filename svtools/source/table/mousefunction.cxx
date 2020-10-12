@@ -117,24 +117,24 @@ namespace svt::table
 
         i_tableControl.hideTracking();
         PColumnModel const pColumn = i_tableControl.getModel()->getColumnModel( m_nResizingColumn );
-        long const maxWidthLogical = pColumn->getMaxWidth();
-        long const minWidthLogical = pColumn->getMinWidth();
+        tools::Long const maxWidthLogical = pColumn->getMaxWidth();
+        tools::Long const minWidthLogical = pColumn->getMinWidth();
 
         // new position of mouse
-        long const requestedEnd = aPoint.X();
+        tools::Long const requestedEnd = aPoint.X();
 
         // old position of right border
-        long const oldEnd = i_tableControl.getColumnMetrics( m_nResizingColumn ).nEndPixel;
+        tools::Long const oldEnd = i_tableControl.getColumnMetrics( m_nResizingColumn ).nEndPixel;
 
         // position of left border if cursor in the to-be-resized column
-        long const columnStart = i_tableControl.getColumnMetrics( m_nResizingColumn ).nStartPixel;
-        long const requestedWidth = requestedEnd - columnStart;
+        tools::Long const columnStart = i_tableControl.getColumnMetrics( m_nResizingColumn ).nStartPixel;
+        tools::Long const requestedWidth = requestedEnd - columnStart;
             // TODO: this is not correct, strictly: It assumes that the mouse was pressed exactly on the "end" pos,
             // but for a while now, we have relaxed this, and allow clicking a few pixels aside, too
 
         if ( requestedEnd >= columnStart )
         {
-            long requestedWidthLogical = i_tableControl.pixelWidthToAppFont( requestedWidth );
+            tools::Long requestedWidthLogical = i_tableControl.pixelWidthToAppFont( requestedWidth );
             // respect column width limits
             if ( oldEnd > requestedEnd )
             {

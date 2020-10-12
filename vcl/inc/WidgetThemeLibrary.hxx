@@ -110,8 +110,8 @@ typedef struct WidgetThemeLibrary_t WidgetThemeLibrary;
 
 typedef struct _rectangle
 {
-    long x, y;
-    long width, height;
+    tools::Long x, y;
+    tools::Long width, height;
 } rectangle_t;
 
 struct WidgetThemeLibrary_t

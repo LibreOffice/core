@@ -97,17 +97,17 @@ public:
     void                            SetDoubleClickTime( sal_uInt64 nDoubleClkTime );
     sal_uInt64                      GetDoubleClickTime() const;
 
-    void                            SetDoubleClickWidth( long nDoubleClkWidth );
-    long                            GetDoubleClickWidth() const;
+    void                            SetDoubleClickWidth( tools::Long nDoubleClkWidth );
+    tools::Long                            GetDoubleClickWidth() const;
 
-    void                            SetDoubleClickHeight( long nDoubleClkHeight );
-    long                            GetDoubleClickHeight() const;
+    void                            SetDoubleClickHeight( tools::Long nDoubleClkHeight );
+    tools::Long                            GetDoubleClickHeight() const;
 
-    void                            SetStartDragWidth( long nDragWidth );
-    long                            GetStartDragWidth() const;
+    void                            SetStartDragWidth( tools::Long nDragWidth );
+    tools::Long                            GetStartDragWidth() const;
 
-    void                            SetStartDragHeight( long nDragHeight );
-    long                            GetStartDragHeight() const;
+    void                            SetStartDragHeight( tools::Long nDragHeight );
+    tools::Long                            GetStartDragHeight() const;
 
     static sal_uInt16               GetStartDragCode();
 
@@ -492,27 +492,27 @@ public:
     void                            SetTabFont( const vcl::Font& rFont );
     const vcl::Font&                GetTabFont() const;
 
-    static long                     GetBorderSize();
+    static tools::Long                     GetBorderSize();
 
-    void                            SetTitleHeight( long nSize );
-    long                            GetTitleHeight() const;
+    void                            SetTitleHeight( tools::Long nSize );
+    tools::Long                            GetTitleHeight() const;
 
-    void                            SetFloatTitleHeight( long nSize );
-    long                            GetFloatTitleHeight() const;
+    void                            SetFloatTitleHeight( tools::Long nSize );
+    tools::Long                            GetFloatTitleHeight() const;
 
-    void                            SetScrollBarSize( long nSize );
-    long                            GetScrollBarSize() const;
+    void                            SetScrollBarSize( tools::Long nSize );
+    tools::Long                            GetScrollBarSize() const;
 
-    void                            SetMinThumbSize( long nSize );
-    long                            GetMinThumbSize() const;
+    void                            SetMinThumbSize( tools::Long nSize );
+    tools::Long                            GetMinThumbSize() const;
 
-    void                            SetSpinSize( long nSize );
-    long                            GetSpinSize() const;
+    void                            SetSpinSize( tools::Long nSize );
+    tools::Long                            GetSpinSize() const;
 
-    static long                     GetSplitSize();
+    static tools::Long                     GetSplitSize();
 
-    void                            SetCursorSize( long nSize );
-    long                            GetCursorSize() const;
+    void                            SetCursorSize( tools::Long nSize );
+    tools::Long                            GetCursorSize() const;
 
     void                            SetCursorBlinkTime( sal_uInt64 nBlinkTime );
     sal_uInt64                      GetCursorBlinkTime() const;
@@ -526,7 +526,7 @@ public:
     void                            SetDisplayOptions( DisplayOptions nOptions );
     DisplayOptions                  GetDisplayOptions() const;
 
-    void                            SetAntialiasingMinPixelHeight( long nMinPixel );
+    void                            SetAntialiasingMinPixelHeight( tools::Long nMinPixel );
     sal_uLong                       GetAntialiasingMinPixelHeight() const;
 
     void                            SetOptions( StyleSettingsOptions nOptions );

@@ -144,11 +144,11 @@ class EDITENG_DLLPUBLIC SvxBorderLine final
 {
     Color  aColor;
 
-    long m_nWidth;
+    tools::Long m_nWidth;
     bool m_bMirrorWidths;
     BorderWidthImpl m_aWidthImpl;
-    long m_nMult;
-    long m_nDiv;
+    tools::Long m_nMult;
+    tools::Long m_nDiv;
 
     SvxBorderLineStyle   m_nStyle;
 
@@ -200,7 +200,7 @@ public:
 
     // TODO Hacky method to mirror lines in only a few cases
     void            SetMirrorWidths() { m_bMirrorWidths = true; }
-    long            GetWidth( ) const { return m_nWidth; }
+    tools::Long            GetWidth( ) const { return m_nWidth; }
     sal_uInt16      GetOutWidth() const;
     sal_uInt16      GetInWidth() const;
     sal_uInt16      GetDistance() const;

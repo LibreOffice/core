@@ -27,6 +27,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tools/link.hxx>
+#include <tools/long.hxx>
 #include <memory>
 #include <vector>
 
@@ -56,14 +57,14 @@ class SVL_DLLPUBLIC DdeData
 
 public:
                     DdeData();
-                    DdeData(SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER SotClipboardFormatId = SotClipboardFormatId::STRING);
+                    DdeData(SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER tools::Long, SAL_UNUSED_PARAMETER SotClipboardFormatId = SotClipboardFormatId::STRING);
                     DdeData(SAL_UNUSED_PARAMETER const OUString&);
                     DdeData(const DdeData&);
                     DdeData(DdeData&&) noexcept;
                     ~DdeData();
 
     void const *    getData() const;
-    long            getSize() const;
+    tools::Long            getSize() const;
 
     SotClipboardFormatId GetFormat() const;
 
@@ -91,7 +92,7 @@ protected:
     Link<bool,void>           aDone;
     bool            bBusy;
 
-                    DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER long = 0 );
+                    DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER tools::Long = 0 );
 
 public:
     virtual        ~DdeTransaction();
@@ -110,7 +111,7 @@ public:
     void                 SetFormat( SotClipboardFormatId nFmt ) { aDdeData.SetFormat( nFmt );  }
     SotClipboardFormatId GetFormat() const       { return aDdeData.GetFormat(); }
 
-    long            GetError() const;
+    tools::Long            GetError() const;
 
 private:
     friend class    DdeInternal;
@@ -127,7 +128,7 @@ class SVL_DLLPUBLIC DdeLink : public DdeTransaction
     Link<void*,void> aNotify;
 
 public:
-                    DdeLink( DdeConnection&, const OUString&, long = 0 );
+                    DdeLink( DdeConnection&, const OUString&, tools::Long = 0 );
     virtual        ~DdeLink() override;
 
     void            SetNotifyHdl( const Link<void*,void>& rLink ) { aNotify = rLink; }
@@ -146,21 +147,21 @@ public:
 class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
 {
 public:
-            DdeRequest( DdeConnection&, const OUString&, long = 0 );
+            DdeRequest( DdeConnection&, const OUString&, tools::Long = 0 );
 };
 
 
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
-            DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
+            DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, tools::Long = 0 );
 };
 
 
 class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
 {
 public:
-            DdeExecute( DdeConnection&, const OUString&, long = 0 );
+            DdeExecute( DdeConnection&, const OUString&, tools::Long = 0 );
 };
 
 
@@ -177,7 +178,7 @@ public:
                     DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& );
                     ~DdeConnection();
 
-    long            GetError() const;
+    tools::Long            GetError() const;
 
     static const std::vector<DdeConnection*>& GetConnections();
 
@@ -316,7 +317,7 @@ public:
 };
 
 
-inline long DdeTransaction::GetError() const
+inline tools::Long DdeTransaction::GetError() const
 {
     return rDde.GetError();
 }

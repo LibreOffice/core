@@ -332,7 +332,7 @@ void GtkYieldMutex::ThreadsLeave()
 }
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics *pG,
-                                                    long &nDX, long &nDY,
+                                                    tools::Long &nDX, tools::Long &nDY,
                                                     DeviceFormat eFormat,
                                                     const SystemGraphicsData* pGd )
 {

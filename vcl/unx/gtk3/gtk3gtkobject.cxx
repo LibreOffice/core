@@ -134,7 +134,7 @@ void GtkSalObjectBase::BeginSetClipRegion( sal_uInt32 )
     m_pRegion = cairo_region_create();
 }
 
-void GtkSalObjectBase::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void GtkSalObjectBase::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     GdkRectangle aRect;
     aRect.x         = nX;
@@ -151,7 +151,7 @@ void GtkSalObject::EndSetClipRegion()
         gdk_window_shape_combine_region( gtk_widget_get_window(m_pSocket), m_pRegion, 0, 0 );
 }
 
-void GtkSalObject::SetPosSize(long nX, long nY, long nWidth, long nHeight)
+void GtkSalObject::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     if (m_pSocket)
     {
@@ -375,7 +375,7 @@ void GtkSalObjectWidgetClip::ApplyClipRegion()
     gtk_adjustment_set_value(gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(m_pScrolledWindow)), m_aClipRect.Top());
 }
 
-void GtkSalObjectWidgetClip::SetPosSize(long nX, long nY, long nWidth, long nHeight)
+void GtkSalObjectWidgetClip::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     m_aRect = tools::Rectangle(Point(nX, nY), Size(nWidth, nHeight));
     if (m_pSocket)

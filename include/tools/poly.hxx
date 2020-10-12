@@ -88,7 +88,7 @@ public:
                         Polygon( const tools::Rectangle& rRect,
                                  sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
                         Polygon( const Point& rCenter,
-                                 long nRadX, long nRadY );
+                                 tools::Long nRadX, tools::Long nRadY );
                         Polygon( const tools::Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = PolyStyle::Arc );
@@ -141,7 +141,7 @@ public:
     void                AdaptiveSubdivide( tools::Polygon& rResult, const double d = 1.0 ) const;
     static Polygon      SubdivideBezier( const Polygon& rPoly );
 
-    void                Move( long nHorzMove, long nVertMove );
+    void                Move( tools::Long nHorzMove, tools::Long nVertMove );
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
@@ -232,7 +232,7 @@ public:
     void                GetIntersection( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const;
     void                GetUnion( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult ) const;
 
-    void                Move( long nHorzMove, long nVertMove );
+    void                Move( tools::Long nHorzMove, tools::Long nVertMove );
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );

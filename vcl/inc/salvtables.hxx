@@ -467,7 +467,7 @@ private:
     // for calc ref dialog that shrink to range selection widgets and resize back
     VclPtr<vcl::Window> m_xRefEdit;
     std::vector<VclPtr<vcl::Window>> m_aHiddenWidgets; // vector of hidden Controls
-    long m_nOldEditWidthReq; // Original width request of the input field
+    tools::Long m_nOldEditWidthReq; // Original width request of the input field
     sal_Int32 m_nOldBorderWidth; // border width for expanded dialog
 
     DECL_LINK(PopupScreenShotMenuHdl, const CommandEvent&, bool);

@@ -350,7 +350,7 @@ struct DialogImpl
 {
     std::vector<VclPtr<PushButton>> maOwnedButtons;
     std::map<VclPtr<vcl::Window>, short> maResponses;
-    long    mnResult;
+    tools::Long    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
@@ -692,7 +692,7 @@ bool Dialog::EventNotify( NotifyEvent& rNEvt )
 Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
 {
 #ifndef IOS
-    long w = rScreenSize.Width();
+    tools::Long w = rScreenSize.Width();
     if (w <= 800)
         w -= 15;
     else if (w <= 1024)
@@ -700,7 +700,7 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     else
         w -= 115;
 
-    long h = rScreenSize.Height();
+    tools::Long h = rScreenSize.Height();
     if (h <= 768)
         h -= 50;
     else
@@ -1040,7 +1040,7 @@ short Dialog::Execute()
         OSL_FAIL( "Dialog::Execute() - Dialog destroyed in Execute()" );
     }
 
-    long nRet = mpDialogImpl->mnResult;
+    tools::Long nRet = mpDialogImpl->mnResult;
     mpDialogImpl->mnResult = -1;
 
     return static_cast<short>(nRet);
@@ -1077,7 +1077,7 @@ void Dialog::RemoveFromDlgList()
     rExecuteDialogs.erase(std::remove_if(rExecuteDialogs.begin(), rExecuteDialogs.end(), [this](VclPtr<Dialog>& dialog){ return dialog.get() == this; }), rExecuteDialogs.end());
 }
 
-void Dialog::EndDialog( long nResult )
+void Dialog::EndDialog( tools::Long nResult )
 {
     if (!mbInExecute || IsDisposed())
         return;

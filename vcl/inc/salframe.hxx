@@ -127,8 +127,8 @@ public:
     SalFrameGeometry        maGeometry = {}; ///< absolute, unmirrored values
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return maGeometry.nWidth; }
-    virtual long GetHeight() const override { return maGeometry.nHeight; }
+    virtual tools::Long GetWidth() const override { return maGeometry.nWidth; }
+    virtual tools::Long GetHeight() const override { return maGeometry.nHeight; }
     virtual bool IsOffScreen() const override { return false; }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
@@ -154,10 +154,10 @@ public:
 
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void            SetMinClientSize( long nWidth, long nHeight ) = 0;
-    virtual void            SetMaxClientSize( long nWidth, long nHeight ) = 0;
-    virtual void            SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) = 0;
-    virtual void            GetClientSize( long& rWidth, long& rHeight ) = 0;
+    virtual void            SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
+    virtual void            SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
+    virtual void            SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) = 0;
+    virtual void            GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) = 0;
     virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active
@@ -187,7 +187,7 @@ public:
     // pointer style
     virtual void            SetPointer( PointerStyle ePointerStyle ) = 0;
     virtual void            CaptureMouse( bool bMouse ) = 0;
-    virtual void            SetPointerPos( long nX, long nY ) = 0;
+    virtual void            SetPointerPos( tools::Long nX, tools::Long nY ) = 0;
 
     // flush output buffer
     virtual void            Flush() = 0;
@@ -246,7 +246,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void            BeginSetClipRegion( sal_uInt32 nRects ) = 0;
     // add a rectangle to the clip region
-    virtual void            UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void            UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
     // done setting up the clipregion
     virtual void            EndSetClipRegion() = 0;
 

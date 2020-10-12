@@ -127,12 +127,12 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<SvtIconChoiceCtrl>  pView;
     std::unique_ptr<IcnCursor_Impl> pImpCursor;
     std::unique_ptr<IcnGridMap_Impl> pGridMap;
-    long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
-    long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
+    tools::Long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
+    tools::Long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
     std::vector< SvxIconChoiceCtrlEntry* > maZOrderList;
     std::unique_ptr<SvxIconChoiceCtrlColumnInfoMap> m_pColumns;
     WinBits                 nWinBits;
-    long                    nMaxBoundHeight;            // height of highest BoundRects
+    tools::Long                    nMaxBoundHeight;            // height of highest BoundRects
     IconChoiceFlags         nFlags;
     DrawTextFlags           nCurTextDrawFlags;
     ImplSVEvent *           nUserEventAdjustScrBars;
@@ -168,12 +168,12 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK( CallSelectHdlHdl, Timer*, void );
 
     void                AdjustScrollBars();
-    void                PositionScrollBars( long nRealWidth, long nRealHeight );
-    static long         GetScrollBarPageSize( long nVisibleRange )
+    void                PositionScrollBars( tools::Long nRealWidth, tools::Long nRealHeight );
+    static tools::Long         GetScrollBarPageSize( tools::Long nVisibleRange )
                         {
                             return ((nVisibleRange*75)/100);
                         }
-    long                GetScrollBarLineSize() const
+    tools::Long                GetScrollBarLineSize() const
                         {
                             return nMaxBoundHeight / 2;
                         }
@@ -244,10 +244,10 @@ class SvxIconChoiceCtrl_Impl
 
 public:
 
-    long                nGridDX;
-    long                nGridDY;
-    long                nHorSBarHeight;
-    long                nVerSBarWidth;
+    tools::Long                nGridDX;
+    tools::Long                nGridDY;
+    tools::Long                nHorSBarHeight;
+    tools::Long                nVerSBarWidth;
 
                         SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pView, WinBits nWinStyle );
                         ~SvxIconChoiceCtrl_Impl();
@@ -301,8 +301,8 @@ public:
 
     void                Arrange(
                             bool bKeepPredecessors,
-                            long nSetMaxVirtWidth,
-                            long nSetMaxVirtHeight
+                            tools::Long nSetMaxVirtWidth,
+                            tools::Long nSetMaxVirtHeight
                         );
 
     tools::Rectangle           CalcFocusRect( SvxIconChoiceCtrlEntry* );
@@ -313,8 +313,8 @@ public:
                             const OUString* pStr = nullptr
                         );
 
-    long                CalcBoundingWidth() const;
-    long                CalcBoundingHeight() const;
+    tools::Long                CalcBoundingWidth() const;
+    tools::Long                CalcBoundingHeight() const;
     Size                CalcBoundingSize() const;
     void                FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry );
     void                SetBoundingRect_Impl(
@@ -346,7 +346,7 @@ public:
     sal_Int32           GetSelectionCount() const;
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
-    void                Scroll( long nDeltaX, long nDeltaY );
+    void                Scroll( tools::Long nDeltaX, tools::Long nDeltaY );
     const Size&         GetItemSize( IcnViewFieldType ) const;
 
     void                HideDDIcon();
@@ -417,8 +417,8 @@ class IcnCursor_Impl
     SvxIconChoiceCtrl_Impl* pView;
     std::unique_ptr<IconChoiceMap> xColumns;
     std::unique_ptr<IconChoiceMap> xRows;
-    long                    nCols;
-    long                    nRows;
+    tools::Long                    nCols;
+    tools::Long                    nRows;
     short                   nDeltaWidth;
     short                   nDeltaHeight;
     SvxIconChoiceCtrlEntry* pCurEntry;
@@ -428,7 +428,7 @@ class IcnCursor_Impl
 
     sal_uInt16              GetSortListPos(
                                 SvxIconChoiceCtrlEntryPtrVec& rList,
-                                long nValue,
+                                tools::Long nValue,
                                 bool bVertical);
     SvxIconChoiceCtrlEntry* SearchCol(
                                 sal_uInt16 nCol,

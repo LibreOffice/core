@@ -37,7 +37,7 @@ struct SvParser_Impl
     sal_uInt64      nFilePos;           // actual position in stream
     sal_uLong       nlLineNr;           // actual line number
     sal_uLong       nlLinePos;          // actual column number
-    long            nTokenValue;        // extra value (RTF)
+    tools::Long            nTokenValue;        // extra value (RTF)
     bool            bTokenHasValue;     // indicates whether nTokenValue is valid
     T               nToken;             // actual Token
     sal_uInt32      nNextCh;            // actual character

@@ -316,7 +316,7 @@ void PPDDecompressStream::Open( const OUString& i_rFile )
     mpMemStream.reset( new SvMemoryStream( 4096, 4096 ) );
     ZCodec aCodec;
     aCodec.BeginCompression( ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true );
-    long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
+    tools::Long nComp = aCodec.Decompress( *mpFileStream, *mpMemStream );
     aCodec.EndCompression();
     if( nComp < 0 )
     {

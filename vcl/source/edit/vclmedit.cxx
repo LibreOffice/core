@@ -50,7 +50,7 @@ private:
     VclPtr<ScrollBar>          mpVScrollBar;
     VclPtr<ScrollBarBox>       mpScrollBox;
 
-    long                mnTextWidth;
+    tools::Long                mnTextWidth;
     mutable Selection   maSelection;
 
 protected:
@@ -73,7 +73,7 @@ public:
     void        SetMaxTextLen(sal_Int32 nLen);
     sal_Int32   GetMaxTextLen() const;
 
-    void        SetMaxTextWidth(long nMaxWidth);
+    void        SetMaxTextWidth(tools::Long nMaxWidth);
 
     void        InsertText( const OUString& rStr );
     OUString    GetSelected() const;
@@ -139,7 +139,7 @@ void ImpVclMEdit::ImpUpdateScrollBarVis( WinBits nWinStyle )
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
-        long nOverallTextHeight(0);
+        tools::Long nOverallTextHeight(0);
         for ( sal_uInt32 i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
         if ( nOverallTextHeight > mpTextWindow->GetOutputSizePixel().Height() )
@@ -214,7 +214,7 @@ ImpVclMEdit::~ImpVclMEdit()
 
 void ImpVclMEdit::ImpSetScrollBarRanges()
 {
-    const long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+    const tools::Long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
     mpVScrollBar->SetRange( Range( 0, nTextHeight-1 ) );
 
     mpHScrollBar->SetRange( Range( 0, mnTextWidth-1 ) );
@@ -244,7 +244,7 @@ void ImpVclMEdit::ImpInitScrollBars()
 
 void ImpVclMEdit::ImpSetHScrollBarThumbPos()
 {
-    long nX = mpTextWindow->GetTextView()->GetStartDocPos().X();
+    tools::Long nX = mpTextWindow->GetTextView()->GetStartDocPos().X();
     if ( !mpTextWindow->GetTextEngine()->IsRightToLeft() )
         mpHScrollBar->SetThumbPos( nX );
     else
@@ -254,7 +254,7 @@ void ImpVclMEdit::ImpSetHScrollBarThumbPos()
 
 IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar, void )
 {
-    long nDiffX = 0, nDiffY = 0;
+    tools::Long nDiffX = 0, nDiffY = 0;
 
     if ( pCurScrollBar == mpVScrollBar )
         nDiffY = mpTextWindow->GetTextView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
@@ -319,7 +319,7 @@ OUString ImpVclMEdit::GetSelected( LineEnd aSeparator ) const
     return mpTextWindow->GetTextView()->GetSelected( aSeparator );
 }
 
-void ImpVclMEdit::SetMaxTextWidth(long nMaxWidth)
+void ImpVclMEdit::SetMaxTextWidth(tools::Long nMaxWidth)
 {
     mpTextWindow->GetTextEngine()->SetMaxTextWidth(nMaxWidth);
 }
@@ -335,7 +335,7 @@ void ImpVclMEdit::Resize()
 
         Size aSz = pVclMultiLineEdit->GetOutputSizePixel();
         Size aEditSize = aSz;
-        long nSBWidth = pVclMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
+        tools::Long nSBWidth = pVclMultiLineEdit->GetSettings().GetStyleSettings().GetScrollBarSize();
         nSBWidth = pVclMultiLineEdit->CalcZoom( nSBWidth );
 
         if (mpHScrollBar->IsVisible())
@@ -453,8 +453,8 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxHintId::TextHeightChanged:
             if ( mpTextWindow->GetTextView()->GetStartDocPos().Y() )
             {
-                long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
-                long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+                tools::Long nOutHeight = mpTextWindow->GetOutputSizePixel().Height();
+                tools::Long nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
                 if ( nTextHeight < nOutHeight )
                     mpTextWindow->GetTextView()->Scroll( 0, mpTextWindow->GetTextView()->GetStartDocPos().Y() );
             }
@@ -464,7 +464,7 @@ void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case SfxHintId::TextFormatted:
             if (mpHScrollBar->IsVisible())
             {
-                const long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+                const tools::Long nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
                     mnTextWidth = nWidth;
@@ -505,11 +505,11 @@ void ImpVclMEdit::SetSelection( const Selection& rSelection )
     else if ( aNewSelection.Max() > aText.getLength() )
         aNewSelection.Max() = aText.getLength();
 
-    long nEnd = std::max( aNewSelection.Min(), aNewSelection.Max() );
+    tools::Long nEnd = std::max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
     sal_uInt32 nPara = 0;
     sal_Int32 nChar = 0;
-    long x = 0;
+    tools::Long x = 0;
     while ( x <= nEnd )
     {
         if ( x == aNewSelection.Min() )
@@ -1055,7 +1055,7 @@ void VclMultiLineEdit::SetMaxTextLen(sal_Int32 nMaxLen)
     pImpVclMEdit->SetMaxTextLen(nMaxLen);
 }
 
-void VclMultiLineEdit::SetMaxTextWidth(long nMaxWidth)
+void VclMultiLineEdit::SetMaxTextWidth(tools::Long nMaxWidth)
 {
     pImpVclMEdit->SetMaxTextWidth(nMaxWidth );
 }
@@ -1163,9 +1163,9 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
 
     // center vertically for whole lines
 
-    long nHeight = aSz.Height() - nTop - nBottom;
-    long nLineHeight = pImpVclMEdit->CalcBlockSize( 1, 1 ).Height();
-    long nLines = nHeight / nLineHeight;
+    tools::Long nHeight = aSz.Height() - nTop - nBottom;
+    tools::Long nLineHeight = pImpVclMEdit->CalcBlockSize( 1, 1 ).Height();
+    tools::Long nLines = nHeight / nLineHeight;
     if ( nLines < 1 )
         nLines = 1;
 
@@ -1315,9 +1315,9 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nF
     if ( !nLines )
         nLines = 1;
     aTextSz.setHeight( nLines*aTextSz.Height() );
-    long nOnePixel = GetDrawPixel( pDev, 1 );
-    long nOffX = 3*nOnePixel;
-    long nOffY = 2*nOnePixel;
+    tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    tools::Long nOffX = 3*nOnePixel;
+    tools::Long nOffY = 2*nOnePixel;
 
     // Clipping?
     if ( ( nOffY < 0  ) || ( (nOffY+aTextSz.Height()) > aSize.Height() ) || ( (nOffX+aTextSz.Width()) > aSize.Width() ) )

@@ -1492,8 +1492,8 @@ namespace
 {
     void draw_vertical_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
     {
-        long nX = 0;
-        long nY = 0;
+        tools::Long nX = 0;
+        tools::Long nY = 0;
 
         gint nSeparatorWidth = 1;
 
@@ -1514,8 +1514,8 @@ namespace
 
     void draw_horizontal_separator(GtkStyleContext *context, cairo_t *cr, const tools::Rectangle& rControlRegion)
     {
-        long nX = 0;
-        long nY = 0;
+        tools::Long nX = 0;
+        tools::Long nY = 0;
 
         gint nSeparatorHeight = 1;
 
@@ -1762,10 +1762,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     clipRegion(cr);
     cairo_translate(cr, rControlRegion.Left(), rControlRegion.Top());
 
-    long nX = 0;
-    long nY = 0;
-    long nWidth = rControlRegion.GetWidth();
-    long nHeight = rControlRegion.GetHeight();
+    tools::Long nX = 0;
+    tools::Long nY = 0;
+    tools::Long nWidth = rControlRegion.GetWidth();
+    tools::Long nHeight = rControlRegion.GetHeight();
 
     StyleContextSave aContextState;
     aContextState.save(context);
@@ -1882,7 +1882,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
         gtk_render_background(mpProgressBarTroughStyle, cr, nX, nY, nWidth, nHeight);
 
-        long nProgressWidth = rValue.getNumericVal();
+        tools::Long nProgressWidth = rValue.getNumericVal();
         if (nProgressWidth)
         {
             GtkBorder padding;
@@ -1935,11 +1935,11 @@ static tools::Rectangle GetWidgetSize(const tools::Rectangle& rControlRegion, Gt
 {
     GtkRequisition aReq;
     gtk_widget_get_preferred_size(widget, nullptr, &aReq);
-    long nHeight = std::max<long>(rControlRegion.GetHeight(), aReq.height);
+    tools::Long nHeight = std::max<long>(rControlRegion.GetHeight(), aReq.height);
     return tools::Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
 
-static tools::Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long nContentWidth, long nContentHeight, const tools::Rectangle& rControlRegion)
+static tools::Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, tools::Long nContentWidth, tools::Long nContentHeight, const tools::Rectangle& rControlRegion)
 {
     GtkBorder border;
     gtk_style_context_get_border(pStyle, gtk_style_context_get_state(pStyle), &border);

@@ -106,7 +106,7 @@ public:
     // its size; otherwise these remain unchanged.
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics* pGraphics,
-                                                 long &rDX, long &rDY,
+                                                 tools::Long &rDX, tools::Long &rDY,
                                                  DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) = 0;
 
     // Printer

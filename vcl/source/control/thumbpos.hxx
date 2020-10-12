@@ -10,12 +10,12 @@
 #ifndef INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
 #define INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX
 
-inline long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
+inline tools::Long ImplMulDiv( tools::Long nNumber, tools::Long nNumerator, tools::Long nDenominator )
 {
     if (!nDenominator)
         return 0;
     double n = (static_cast<double>(nNumber) * static_cast<double>(nNumerator)) / static_cast<double>(nDenominator);
-    return static_cast<long>(n);
+    return static_cast<tools::Long>(n);
 }
 
 #endif // INCLUDED_VCL_SOURCE_CONTROL_THUMBPOS_HXX

@@ -135,8 +135,8 @@ namespace svt::table
         virtual vcl::Window* GetWindowInstance() override;
         virtual sal_Int32 GetAccessibleControlCount() const override;
         virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) override;
-        virtual long GetRowCount() const override;
-        virtual long GetColumnCount() const override;
+        virtual tools::Long GetRowCount() const override;
+        virtual tools::Long GetColumnCount() const override;
         virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) override;
         virtual tools::Rectangle calcHeaderRect( bool _bIsColumnBar ) override;
         virtual tools::Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) override;
