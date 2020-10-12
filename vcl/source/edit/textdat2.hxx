@@ -50,7 +50,7 @@ class TETextPortion
 {
 private:
     sal_Int32       nLen;
-    long            nWidth;
+    tools::Long            nWidth;
     sal_uInt8       nKind;
     bool            bRightToLeft;
 
@@ -63,7 +63,7 @@ public:
                 {}
 
     sal_Int32&  GetLen()                        { return nLen; }
-    long&           GetWidth()                  { return nWidth; }
+    tools::Long&           GetWidth()                  { return nWidth; }
     sal_uInt8&      GetKind()                   { return nKind; }
     void            SetRightToLeft(bool b)      { bRightToLeft = b; }
     bool            IsRightToLeft() const       { return bRightToLeft; }

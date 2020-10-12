@@ -157,10 +157,10 @@ private:
     void                ImplStartAnimation( OutputDevice* pOutDev,
                                             const Point& rDestPt,
                                             const Size& rDestSize,
-                                            long nExtraData,
+                                            tools::Long nExtraData,
                                             OutputDevice* pFirstFrameOutDev );
     void                ImplStopAnimation( const OutputDevice* pOutputDevice,
-                                           long nExtraData );
+                                           tools::Long nExtraData );
 
     void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
     Link<Animation*,void> ImplGetAnimationNotifyHdl() const;

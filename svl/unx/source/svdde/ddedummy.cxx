@@ -19,6 +19,7 @@
 
 #include <svl/svdde.hxx>
 #include <rtl/instance.hxx>
+#include <tools/long.hxx>
 
 struct Conversation
 {
@@ -44,7 +45,7 @@ DdeData::DdeData(DdeData&&) noexcept
 {
 }
 
-DdeData::DdeData( const void*, long, SotClipboardFormatId)
+DdeData::DdeData( const void*, tools::Long, SotClipboardFormatId)
 {
 }
 
@@ -71,7 +72,7 @@ DdeData& DdeData::operator=(DdeData&&) noexcept
     return *this;
 }
 
-long DdeData::getSize() const
+tools::Long DdeData::getSize() const
 {
     return 0L;
 }
@@ -83,7 +84,7 @@ void const * DdeData::getData() const
 
 struct DdeImp {};
 
-long DdeConnection::GetError() const
+tools::Long DdeConnection::GetError() const
 {
     return 0L;
 }
@@ -108,7 +109,7 @@ OUString DdeConnection::GetTopicName() const
     return OUString();
 }
 
-DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, long )
+DdeTransaction::DdeTransaction( DdeConnection& rConnection, const OUString&, tools::Long )
     : rDde(rConnection)
     , pName(nullptr)
     , nType(0)
@@ -134,17 +135,17 @@ DdeTransaction::~DdeTransaction()
 {
 }
 
-DdeRequest::DdeRequest( DdeConnection& rConnection, const OUString& rString, long lLong )
+DdeRequest::DdeRequest( DdeConnection& rConnection, const OUString& rString, tools::Long lLong )
     : DdeTransaction( rConnection, rString, lLong )
 {
 }
 
-DdeExecute::DdeExecute( DdeConnection& rConnection, const OUString& rString, long lLong )
+DdeExecute::DdeExecute( DdeConnection& rConnection, const OUString& rString, tools::Long lLong )
     : DdeTransaction( rConnection, rString, lLong )
 {
 }
 
-DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const DdeData&, long lLong )
+DdePoke::DdePoke( DdeConnection& rConnection, const OUString& rString, const DdeData&, tools::Long lLong )
     : DdeTransaction( rConnection, rString, lLong )
 {
 }
@@ -308,7 +309,7 @@ void DdeGetPutItem::AdviseLoop( SAL_UNUSED_PARAMETER bool )
 {
 }
 
-DdeLink::DdeLink( DdeConnection& rConnection, const OUString& rString, long l )
+DdeLink::DdeLink( DdeConnection& rConnection, const OUString& rString, tools::Long l )
     : DdeTransaction( rConnection, rString, l )
 {
 }

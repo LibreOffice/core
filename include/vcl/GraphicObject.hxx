@@ -265,11 +265,11 @@ public:
                                 OutputDevice* pOut,
                                 const Point& rPt,
                                 const Size& rSz,
-                                long nExtraData = 0,
+                                tools::Long nExtraData = 0,
                                 OutputDevice* pFirstFrameOutDev = nullptr
                             );
 
-    void                    StopAnimation( const OutputDevice* pOut = nullptr, long nExtraData = 0 );
+    void                    StopAnimation( const OutputDevice* pOut = nullptr, tools::Long nExtraData = 0 );
 
     static bool isGraphicObjectUniqueIdURL(OUString const & rURL);
 

@@ -30,16 +30,16 @@ class VCL_DLLPUBLIC Splitter : public vcl::Window
 {
 private:
     VclPtr<vcl::Window> mpRefWin;
-    long                mnSplitPos;
-    long                mnLastSplitPos;
-    long                mnStartSplitPos;
+    tools::Long                mnSplitPos;
+    tools::Long                mnLastSplitPos;
+    tools::Long                mnStartSplitPos;
     Point               maDragPos;
     tools::Rectangle           maDragRect;
     bool                mbHorzSplit;
     bool                mbDragFull;
     bool                mbKbdSplitting;
     bool                mbInKeyEvent;
-    long                mnKeyboardStepSize;
+    tools::Long                mnKeyboardStepSize;
     Link<Splitter*,void>   maStartSplitHdl;
     Link<Splitter*,void>   maSplitHdl;
     Link<Splitter*,void>   maEndSplitHdl;
@@ -85,15 +85,15 @@ public:
     void                SetDragRectPixel( const tools::Rectangle& rDragRect,
                                           vcl::Window* pRefWin = nullptr );
 
-    void                SetSplitPosPixel( long nPos );
-    long                GetSplitPosPixel() const { return mnSplitPos; }
+    void                SetSplitPosPixel( tools::Long nPos );
+    tools::Long                GetSplitPosPixel() const { return mnSplitPos; }
 
     bool                IsHorizontal() const { return mbHorzSplit; }
     void                SetHorizontal(bool bNew);
 
     // set the stepsize of the splitter for cursor movement
     // the default is 10% of the reference window's width/height
-    void                SetKeyboardStepSize( long nStepSize );
+    void                SetKeyboardStepSize( tools::Long nStepSize );
 
     void                SetStartSplitHdl( const Link<Splitter*,void>& rLink ) { maStartSplitHdl = rLink; }
     void                SetSplitHdl( const Link<Splitter*,void>& rLink ) { maSplitHdl = rLink; }

@@ -588,7 +588,7 @@ OString WindowStateData::ToStr() const
     return rStrBuf.makeStringAndClear();
 }
 
-void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window const * i_pConfigureWin )
+void SystemWindow::ImplMoveToScreen( tools::Long& io_rX, tools::Long& io_rY, tools::Long i_nWidth, tools::Long i_nHeight, vcl::Window const * i_pConfigureWin )
 {
     tools::Rectangle aScreenRect;
     if( !Application::IsUnifiedDisplay() )
@@ -706,7 +706,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         SalFrameGeometry g = pWin->mpWindowImpl->mpFrame->GetGeometry();
                         if( std::abs(g.nX-aState.mnX) < 2 && std::abs(g.nY-aState.mnY) < 5 )
                         {
-                            long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
+                            tools::Long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
                             if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > o3tl::make_unsigned(aDesktop.Right()) ||
                                 aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > o3tl::make_unsigned(aDesktop.Bottom()) )
                             {
@@ -768,18 +768,18 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         if( IsRollUp() )
             RollDown();
 
-        long nX         = rData.GetX();
-        long nY         = rData.GetY();
-        long nWidth     = rData.GetWidth();
-        long nHeight    = rData.GetHeight();
+        tools::Long nX         = rData.GetX();
+        tools::Long nY         = rData.GetY();
+        tools::Long nWidth     = rData.GetWidth();
+        tools::Long nHeight    = rData.GetHeight();
         const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
-        if( nX + nWidth > static_cast<long>(rGeom.nWidth) )
+        if( nX + nWidth > static_cast<tools::Long>(rGeom.nWidth) )
             nX = rGeom.nWidth - nWidth;
         if( nY < 0 )
             nY = 0;
-        if( nY + nHeight > static_cast<long>(rGeom.nHeight) )
+        if( nY + nHeight > static_cast<tools::Long>(rGeom.nHeight) )
             nY = rGeom.nHeight - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );

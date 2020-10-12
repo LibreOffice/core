@@ -251,9 +251,9 @@ class VCL_DLLPUBLIC ImplControlValue
     private:
         ControlType     mType;
         ButtonValue     mTristate;    // Tristate value: on, off, mixed
-        long            mNumber;      // numeric value
+        tools::Long            mNumber;      // numeric value
     protected:
-        ImplControlValue( ControlType i_eType, long i_nNumber )
+        ImplControlValue( ControlType i_eType, tools::Long i_nNumber )
         : mType( i_eType )
         , mTristate( ButtonValue::DontKnow )
         , mNumber( i_nNumber )
@@ -262,7 +262,7 @@ class VCL_DLLPUBLIC ImplControlValue
     public:
         explicit ImplControlValue( ButtonValue nTristate )
             : mType( ControlType::Generic ), mTristate(nTristate), mNumber(0) {}
-        explicit ImplControlValue( long nNumeric )
+        explicit ImplControlValue( tools::Long nNumeric )
             : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber( nNumeric) {}
         ImplControlValue()
             : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber(0) {}
@@ -281,8 +281,8 @@ class VCL_DLLPUBLIC ImplControlValue
         ButtonValue  getTristateVal() const { return mTristate; }
         void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
 
-        long         getNumericVal() const { return mNumber; }
-        void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
+        tools::Long         getNumericVal() const { return mNumber; }
+        void         setNumericVal( tools::Long nNumeric ) { mNumber = nNumeric; }
 };
 
 /* ScrollbarValue:
@@ -292,10 +292,10 @@ class VCL_DLLPUBLIC ImplControlValue
 class SAL_DLLPUBLIC_RTTI ScrollbarValue final : public ImplControlValue
 {
     public:
-        long            mnMin;
-        long            mnMax;
-        long            mnCur;
-        long            mnVisibleSize;
+        tools::Long            mnMin;
+        tools::Long            mnMax;
+        tools::Long            mnCur;
+        tools::Long            mnVisibleSize;
         tools::Rectangle       maThumbRect;
         tools::Rectangle       maButton1Rect;
         tools::Rectangle       maButton2Rect;
@@ -322,9 +322,9 @@ class SAL_DLLPUBLIC_RTTI ScrollbarValue final : public ImplControlValue
 class SAL_DLLPUBLIC_RTTI SliderValue final : public ImplControlValue
 {
     public:
-        long            mnMin;
-        long            mnMax;
-        long            mnCur;
+        tools::Long            mnMin;
+        tools::Long            mnMax;
+        tools::Long            mnCur;
         tools::Rectangle       maThumbRect;
         ControlState    mnThumbState;
 
@@ -494,7 +494,7 @@ public:
 class SAL_DLLPUBLIC_RTTI MenupopupValue final : public ImplControlValue
 {
 public:
-    MenupopupValue( long i_nGutterWidth, const tools::Rectangle& i_rItemRect )
+    MenupopupValue( tools::Long i_nGutterWidth, const tools::Rectangle& i_rItemRect )
     : ImplControlValue( ControlType::MenuPopup, i_nGutterWidth )
     , maItemRect( i_rItemRect )
     {}

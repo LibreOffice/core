@@ -51,11 +51,11 @@ class JPEGReader : public GraphicReader
     std::unique_ptr<Bitmap> mpBitmap;
     std::unique_ptr<Bitmap> mpIncompleteAlpha;
 
-    long                mnLastPos;
-    long                mnLastLines;
+    tools::Long                mnLastPos;
+    tools::Long                mnLastLines;
     bool                mbSetLogSize;
 
-    Graphic CreateIntermediateGraphic(long nLines);
+    Graphic CreateIntermediateGraphic(tools::Long nLines);
 
 public:
             JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );

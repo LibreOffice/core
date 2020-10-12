@@ -47,7 +47,7 @@ Reduces accuracy until it is a fraction (should become
 ctor fraction once); we could also do this with BigInts
 */
 
-static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
+static Fraction ImplMakeFraction( tools::Long nN1, tools::Long nN2, tools::Long nD1, tools::Long nD2 )
 {
     if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
     {
@@ -55,7 +55,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
         return Fraction( 1, 1 );
     }
 
-    long i = 1;
+    tools::Long i = 1;
 
     if ( nN1 < 0 ) { i = -i; nN1 = -nN1; }
     if ( nN2 < 0 ) { i = -i; nN2 = -nN2; }
@@ -88,7 +88,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 // rMapRes.nMapScNum?
 // rMapRes.nMapScDenom?         > 0
 
-static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
+static void ImplCalcBigIntThreshold( tools::Long nDPIX, tools::Long nDPIY,
                                      const ImplMapRes& rMapRes,
                                      ImplThresholdRes& rThresRes )
 {
@@ -100,9 +100,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // calculate thresholds for BigInt arithmetic
-        long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
+        tools::Long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
         sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
-        long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
+        tools::Long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
 
         if ( !nProductX )
             rThresRes.mnThresLogToPixX = LONG_MAX;
@@ -112,9 +112,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = static_cast<long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = static_cast<tools::Long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = static_cast<long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = static_cast<tools::Long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductX/2)) / nDenomX);
     }
 
     if ( nDPIY && (LONG_MAX / nDPIY < std::abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
@@ -125,9 +125,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     else
     {
         // calculate thresholds for BigInt arithmetic
-        long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
+        tools::Long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
         sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
-        long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
+        tools::Long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
 
         if ( !nProductY )
             rThresRes.mnThresLogToPixY = LONG_MAX;
@@ -137,9 +137,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = static_cast<long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = static_cast<tools::Long>((sal_uLong(LONG_MAX) - static_cast<sal_uLong>( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = static_cast<long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = static_cast<tools::Long>((sal_uLong(LONG_MAX) + static_cast<sal_uLong>(-nProductY/2)) / nDenomY);
     }
 
     rThresRes.mnThresLogToPixX /= 2;
@@ -149,7 +149,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
 }
 
 static void ImplCalcMapResolution( const MapMode& rMapMode,
-                                   long nDPIX, long nDPIY, ImplMapRes& rMapRes )
+                                   tools::Long nDPIX, tools::Long nDPIY, ImplMapRes& rMapRes )
 {
     switch ( rMapMode.GetMapUnit() )
     {
@@ -279,7 +279,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aX += BigInt(nXNumerator / 2);
         }
         aX /= BigInt(nXNumerator);
-        rMapRes.mnMapOfsX = static_cast<long>(aX) + aOrigin.X();
+        rMapRes.mnMapOfsX = static_cast<tools::Long>(aX) + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
         aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
@@ -297,7 +297,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
                 aY += BigInt(nYNumerator / 2);
         }
         aY /= BigInt(nYNumerator);
-        rMapRes.mnMapOfsY = static_cast<long>(aY) + aOrigin.Y();
+        rMapRes.mnMapOfsY = static_cast<tools::Long>(aY) + aOrigin.Y();
     }
 
     // calculate scaling factor according to MapMode
@@ -317,7 +317,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
 }
 
 static void ImplCalcMapResolution( const MapMode& rMapMode,
-                                   long nDPIX, long nDPIY,
+                                   tools::Long nDPIX, tools::Long nDPIY,
                                    ImplMapRes& rMapRes,
                                    ImplThresholdRes& rThresRes )
 {
@@ -344,8 +344,8 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
-                              long nThres )
+static tools::Long ImplLogicToPixel( tools::Long n, tools::Long nDPI, tools::Long nMapNum, tools::Long nMapDenom,
+                              tools::Long nThres )
 {
     assert(nDPI > 0);
 #if (SAL_TYPES_SIZEOFLONG < 8)
@@ -370,10 +370,10 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
         n64 *= nMapNum;
         n64 *= nDPI;
         if( nMapDenom == 1 )
-            n = static_cast<long>(n64);
+            n = static_cast<tools::Long>(n64);
         else
         {
-            n = static_cast<long>(2 * n64 / nMapDenom);
+            n = static_cast<tools::Long>(2 * n64 / nMapDenom);
             if( n < 0 ) --n; else ++n;
             n /= 2;
         }
@@ -381,11 +381,11 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
     return n;
 }
 
-static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
-                              long nThres )
+static tools::Long ImplPixelToLogic( tools::Long n, tools::Long nDPI, tools::Long nMapNum, tools::Long nMapDenom,
+                              tools::Long nThres )
 {
     assert(nDPI > 0);
-    long nDenom = nDPI * nMapNum;
+    tools::Long nDenom = nDPI * nMapNum;
     if (nDenom == 0)
     {
         return 0;
@@ -401,13 +401,13 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     {
         sal_Int64 n64 = n;
         n64 *= nMapDenom;
-        n = static_cast<long>(2 * n64 / nDenom);
+        n = static_cast<tools::Long>(2 * n64 / nDenom);
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
 }
 
-long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
+tools::Long OutputDevice::ImplLogicXToDevicePixel( tools::Long nX ) const
 {
     if ( !mbMap )
         return nX+mnOutOffX;
@@ -417,7 +417,7 @@ long OutputDevice::ImplLogicXToDevicePixel( long nX ) const
                              maThresRes.mnThresLogToPixX )+mnOutOffX+mnOutOffOrigX;
 }
 
-long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
+tools::Long OutputDevice::ImplLogicYToDevicePixel( tools::Long nY ) const
 {
     if ( !mbMap )
         return nY+mnOutOffY;
@@ -427,7 +427,7 @@ long OutputDevice::ImplLogicYToDevicePixel( long nY ) const
                              maThresRes.mnThresLogToPixY )+mnOutOffY+mnOutOffOrigY;
 }
 
-long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
+tools::Long OutputDevice::ImplLogicWidthToDevicePixel( tools::Long nWidth ) const
 {
     if ( !mbMap )
         return nWidth;
@@ -437,7 +437,7 @@ long OutputDevice::ImplLogicWidthToDevicePixel( long nWidth ) const
                              maThresRes.mnThresLogToPixX );
 }
 
-long OutputDevice::ImplLogicHeightToDevicePixel( long nHeight ) const
+tools::Long OutputDevice::ImplLogicHeightToDevicePixel( tools::Long nHeight ) const
 {
     if ( !mbMap )
         return nHeight;
@@ -455,7 +455,7 @@ float OutputDevice::ImplFloatLogicHeightToDevicePixel( float fLogicHeight) const
     return fPixelHeight;
 }
 
-long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
+tools::Long OutputDevice::ImplDevicePixelToLogicWidth( tools::Long nWidth ) const
 {
     if ( !mbMap )
         return nWidth;
@@ -465,7 +465,7 @@ long OutputDevice::ImplDevicePixelToLogicWidth( long nWidth ) const
                              maThresRes.mnThresPixToLogX );
 }
 
-long OutputDevice::ImplDevicePixelToLogicHeight( long nHeight ) const
+tools::Long OutputDevice::ImplDevicePixelToLogicHeight( tools::Long nHeight ) const
 {
     if ( !mbMap )
         return nHeight;
@@ -1490,8 +1490,8 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 }
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
-    long nNumerator      = 1;       \
-    long nDenominator    = 1;       \
+    tools::Long nNumerator      = 1;       \
+    tools::Long nDenominator    = 1;       \
     SAL_WARN_IF( eUnitSource > s_MaxValidUnit, "vcl.gdi", "Invalid source map unit");    \
     SAL_WARN_IF( eUnitDest > s_MaxValidUnit, "vcl.gdi", "Invalid destination map unit"); \
     if( (eUnitSource <= s_MaxValidUnit) && (eUnitDest <= s_MaxValidUnit) )  \
@@ -1520,11 +1520,11 @@ static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
     ImplCalcMapResolution( rMapModeDest, 72, 72, aMapResDest )
 
 // return (n1 * n2 * n3) / (n4 * n5)
-static long fn5( const long n1,
-                 const long n2,
-                 const long n3,
-                 const long n4,
-                 const long n5 )
+static tools::Long fn5( const tools::Long n1,
+                 const tools::Long n2,
+                 const tools::Long n3,
+                 const tools::Long n4,
+                 const tools::Long n5 )
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 || n4 == 0 || n5 == 0 )
         return 0;
@@ -1551,7 +1551,7 @@ static long fn5( const long n1,
         } // of if
         else
         {
-            long n8 = n4 * n5;
+            tools::Long n8 = n4 * n5;
 
             if ( a7.IsNeg() )
                 a7 -= n8 / 2;
@@ -1560,11 +1560,11 @@ static long fn5( const long n1,
 
             a7 /= n8;
         } // of else
-        return static_cast<long>(a7);
+        return static_cast<tools::Long>(a7);
     } // of if
     else
     {
-        long n6 = n2 * n3;
+        tools::Long n6 = n2 * n3;
 
         if ( LONG_MAX / std::abs(n1) < std::abs(n6) )
         {
@@ -1587,7 +1587,7 @@ static long fn5( const long n1,
             } // of if
             else
             {
-                long n8 = n4 * n5;
+                tools::Long n8 = n4 * n5;
 
                 if ( a7.IsNeg() )
                     a7 -= n8 / 2;
@@ -1596,11 +1596,11 @@ static long fn5( const long n1,
 
                 a7 /= n8;
             } // of else
-            return static_cast<long>(a7);
+            return static_cast<tools::Long>(a7);
         } // of if
         else
         {
-            long n7 = n1 * n6;
+            tools::Long n7 = n1 * n6;
 
             if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
             {
@@ -1616,12 +1616,12 @@ static long fn5( const long n1,
                     a7 += a9;
 
                 a7 /= a8;
-                return static_cast<long>(a7);
+                return static_cast<tools::Long>(a7);
             } // of if
             else
             {
-                const long n8 = n4 * n5;
-                const long n8_2 = n8 / 2;
+                const tools::Long n8 = n4 * n5;
+                const tools::Long n8_2 = n8 / 2;
 
                 if( n7 < 0 )
                 {
@@ -1638,7 +1638,7 @@ static long fn5( const long n1,
 }
 
 // return (n1 * n2) / n3
-static long fn3( const long n1, const long n2, const long n3 )
+static tools::Long fn3( const tools::Long n1, const tools::Long n2, const tools::Long n3 )
 {
     if ( n1 == 0 || n2 == 0 || n3 == 0 )
         return 0;
@@ -1653,12 +1653,12 @@ static long fn3( const long n1, const long n2, const long n3 )
             a4 += n3 / 2;
 
         a4 /= n3;
-        return static_cast<long>(a4);
+        return static_cast<tools::Long>(a4);
     } // of if
     else
     {
-        long        n4 = n1 * n2;
-        const long  n3_2 = n3 / 2;
+        tools::Long        n4 = n1 * n2;
+        const tools::Long  n3_2 = n3 / 2;
 
         if( n4 < 0 )
         {
@@ -1896,7 +1896,7 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     }
 }
 
-long OutputDevice::LogicToLogic( long nLongSource,
+tools::Long OutputDevice::LogicToLogic( tools::Long nLongSource,
                                  MapUnit eUnitSource, MapUnit eUnitDest )
 {
     if ( eUnitSource == eUnitDest )
@@ -1925,7 +1925,7 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
 }
 
 
-DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
+DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( tools::Long nWidth ) const
 {
     if ( !mbMap )
         return static_cast<DeviceCoordinate>(nWidth);

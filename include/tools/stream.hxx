@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/lineend.hxx>
+#include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <vcl/errcode.hxx>
 #include <rtl/string.hxx>
@@ -638,7 +639,7 @@ protected:
     ///               Set to 0 , if new block size is 0 bytes
     /// - nSize: New block size
     /// - nPos: Set to 0 if position outside of block
-    bool    ReAllocateMemory( long nDiff );
+    bool    ReAllocateMemory( tools::Long nDiff );
 
     /// Is called when this stream allocated the buffer or the buffer is
     /// resized. FreeMemory may need to NULLify handles in derived classes.

@@ -53,17 +53,17 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
             const sal_uInt32 nColorOffset = 256 / nColorsPerComponent;
             const sal_uInt32 nTotalColors
                 = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
-            const long nWidth = pRAcc->Width();
-            const long nHeight = pRAcc->Height();
+            const tools::Long nWidth = pRAcc->Width();
+            const tools::Long nHeight = pRAcc->Height();
             std::unique_ptr<PopularColorCount[]> pCountTable(new PopularColorCount[nTotalColors]);
 
             memset(pCountTable.get(), 0, nTotalColors * sizeof(PopularColorCount));
 
-            for (long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset)
+            for (tools::Long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset)
             {
-                for (long nG = 0; nG < 256; nG += nColorOffset)
+                for (tools::Long nG = 0; nG < 256; nG += nColorOffset)
                 {
-                    for (long nB = 0; nB < 256; nB += nColorOffset)
+                    for (tools::Long nB = 0; nB < 256; nB += nColorOffset)
                     {
                         pCountTable[nIndex].mnIndex = nIndex;
                         nIndex++;
@@ -73,10 +73,10 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
 
             if (pRAcc->HasPalette())
             {
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         const BitmapColor& rCol
                             = pRAcc->GetPaletteColor(pRAcc->GetIndexFromData(pScanlineRead, nX));
@@ -91,10 +91,10 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
             }
             else
             {
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         const BitmapColor aCol(pRAcc->GetPixelFromData(pScanlineRead, nX));
                         pCountTable[((static_cast<sal_uInt32>(aCol.GetRed()) >> nRightShiftBits)
@@ -145,11 +145,11 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
                 BitmapColor aDstCol(sal_uInt8(0));
                 std::unique_ptr<sal_uInt8[]> pIndexMap(new sal_uInt8[nTotalColors]);
 
-                for (long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset)
+                for (tools::Long nR = 0, nIndex = 0; nR < 256; nR += nColorOffset)
                 {
-                    for (long nG = 0; nG < 256; nG += nColorOffset)
+                    for (tools::Long nG = 0; nG < 256; nG += nColorOffset)
                     {
-                        for (long nB = 0; nB < 256; nB += nColorOffset)
+                        for (tools::Long nB = 0; nB < 256; nB += nColorOffset)
                         {
                             pIndexMap[nIndex++] = static_cast<sal_uInt8>(aNewPal.GetBestIndex(
                                 BitmapColor(static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG),
@@ -160,11 +160,11 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
 
                 if (pRAcc->HasPalette())
                 {
-                    for (long nY = 0; nY < nHeight; nY++)
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
                     {
                         Scanline pScanline = pWAcc->GetScanline(nY);
                         Scanline pScanlineRead = pRAcc->GetScanline(nY);
-                        for (long nX = 0; nX < nWidth; nX++)
+                        for (tools::Long nX = 0; nX < nWidth; nX++)
                         {
                             const BitmapColor& rCol = pRAcc->GetPaletteColor(
                                 pRAcc->GetIndexFromData(pScanlineRead, nX));
@@ -182,12 +182,12 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
                 }
                 else
                 {
-                    for (long nY = 0; nY < nHeight; nY++)
+                    for (tools::Long nY = 0; nY < nHeight; nY++)
                     {
                         Scanline pScanline = pWAcc->GetScanline(nY);
                         Scanline pScanlineRead = pRAcc->GetScanline(nY);
 
-                        for (long nX = 0; nX < nWidth; nX++)
+                        for (tools::Long nX = 0; nX < nWidth; nX++)
                         {
                             const BitmapColor aCol(pRAcc->GetPixelFromData(pScanlineRead, nX));
                             aDstCol.SetIndex(pIndexMap[((static_cast<sal_uInt32>(aCol.GetRed())

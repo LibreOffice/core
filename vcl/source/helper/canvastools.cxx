@@ -315,8 +315,8 @@ namespace vcl::unotools
 
         Size sizeFromRealSize2D( const geometry::RealSize2D& rSize )
         {
-            return Size( static_cast<long>(rSize.Width + .5),
-                         static_cast<long>(rSize.Height + .5) );
+            return Size( static_cast<tools::Long>(rSize.Width + .5),
+                         static_cast<tools::Long>(rSize.Height + .5) );
         }
 
         ::Size sizeFromB2DSize( const basegfx::B2DVector& rVec )

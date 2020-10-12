@@ -39,10 +39,10 @@ extern "C" {
 
 static int HatchCmpFnc( const void* p1, const void* p2 )
 {
-    const long nX1 = static_cast<Point const *>(p1)->X();
-    const long nX2 = static_cast<Point const *>(p2)->X();
-    const long nY1 = static_cast<Point const *>(p1)->Y();
-    const long nY2 = static_cast<Point const *>(p2)->Y();
+    const tools::Long nX1 = static_cast<Point const *>(p1)->X();
+    const tools::Long nX2 = static_cast<Point const *>(p2)->X();
+    const tools::Long nY1 = static_cast<Point const *>(p1)->Y();
+    const tools::Long nY2 = static_cast<Point const *>(p2)->Y();
 
     return ( nX1 > nX2 ? 1 : nX1 == nX2 ? nY1 > nY2 ? 1: nY1 == nY2 ? 0 : -1 : -1 );
 }
@@ -166,8 +166,8 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     else
     {
         tools::Rectangle   aRect( rPolyPoly.GetBoundRect() );
-        const long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
-        const long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
+        const tools::Long  nLogPixelWidth = ImplDevicePixelToLogicWidth( 1 );
+        const tools::Long  nWidth = ImplDevicePixelToLogicWidth( std::max( ImplLogicWidthToDevicePixel( rHatch.GetDistance() ), 3L ) );
         std::unique_ptr<Point[]> pPtBuffer(new Point[ HATCH_MAXPOINTS ]);
         Point       aPt1, aPt2, aEndPt1;
         Size        aInc;
@@ -211,12 +211,12 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     }
 }
 
-void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10,
+void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, sal_uInt16 nAngle10,
                                     Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
 {
     Point   aRef;
-    long    nAngle = nAngle10 % 1800;
-    long    nOffset = 0;
+    tools::Long    nAngle = nAngle10 % 1800;
+    tools::Long    nOffset = 0;
 
     if( nAngle > 900 )
         nAngle -= 1800;
@@ -257,8 +257,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
     {
         const double    fAngle = F_PI1800 * labs( nAngle );
         const double    fTan = tan( fAngle );
-        const long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
-        long            nPY;
+        const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
+        tools::Long            nPY;
 
         nDist = FRound( nDist / cos( fAngle ) );
         rInc = Size( 0, nDist );
@@ -290,8 +290,8 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, long nDist, s
     {
         const double fAngle = F_PI1800 * labs( nAngle );
         const double fTan = tan( fAngle );
-        const long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
-        long         nPX;
+        const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
+        tools::Long         nPX;
 
         nDist = FRound( nDist / sin( fAngle ) );
         rInc = Size( nDist, 0 );
@@ -327,9 +327,9 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
     assert(!is_double_buffered_window());
 
     double  fX, fY;
-    long    nAdd, nPCounter = 0;
+    tools::Long    nAdd, nPCounter = 0;
 
-    for( long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
+    for( tools::Long nPoly = 0, nPolyCount = rPolyPoly.Count(); nPoly < nPolyCount; nPoly++ )
     {
         const tools::Polygon& rPoly = rPolyPoly[ static_cast<sal_uInt16>(nPoly) ];
 
@@ -337,7 +337,7 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
         {
             tools::Line aCurSegment( rPoly[ 0 ], Point() );
 
-            for( long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
+            for( tools::Long i = 1, nCount = rPoly.GetSize(); i <= nCount; i++ )
             {
                 aCurSegment.SetEnd( rPoly[ static_cast<sal_uInt16>( i % nCount ) ] );
                 nAdd = 0;
@@ -390,12 +390,12 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
 
     if( bMtf )
     {
-        for( long i = 0; i < nPCounter; i += 2 )
+        for( tools::Long i = 0; i < nPCounter; i += 2 )
             mpMetaFile->AddAction( new MetaLineAction( pPtBuffer[ i ], pPtBuffer[ i + 1 ] ) );
     }
     else
     {
-        for( long i = 0; i < nPCounter; i += 2 )
+        for( tools::Long i = 0; i < nPCounter; i += 2 )
             DrawHatchLine_DrawLine(pPtBuffer[i], pPtBuffer[i+1]);
     }
 }

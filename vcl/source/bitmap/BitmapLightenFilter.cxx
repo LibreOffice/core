@@ -27,11 +27,11 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (pRead && pWrite)
     {
-        for (long nY = 0; nY < aSize.Height(); ++nY)
+        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
         {
             Scanline pScanline = pWrite->GetScanline(nY);
             Scanline pScanlineRead = pRead->GetScanline(nY);
-            for (long nX = 0; nX < aSize.Width(); ++nX)
+            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
             {
                 BitmapColor aBmpColor
                     = pRead->HasPalette()

@@ -70,8 +70,8 @@ class GIFReader : public GraphicReader
     std::unique_ptr<GIFLZWDecompressor> pDecomp;
     BitmapScopedWriteAccess pAcc8;
     BitmapScopedWriteAccess pAcc1;
-    long                nYAcc;
-    long                nLastPos;
+    tools::Long                nYAcc;
+    tools::Long                nLastPos;
     sal_uInt64          nMaxStreamData;
     sal_uInt32          nLogWidth100;
     sal_uInt32          nLogHeight100;
@@ -102,7 +102,7 @@ class GIFReader : public GraphicReader
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
-    void                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, bool bWatchForBackgroundColor );
+    void                CreateBitmaps( tools::Long nWidth, tools::Long nHeight, BitmapPalette* pPal, bool bWatchForBackgroundColor );
     bool                ReadGlobalHeader();
     bool                ReadExtension();
     bool                ReadLocalHeader();
@@ -168,7 +168,7 @@ void GIFReader::ClearImageExtensions()
     nTimer = 0;
 }
 
-void GIFReader::CreateBitmaps(long nWidth, long nHeight, BitmapPalette* pPal,
+void GIFReader::CreateBitmaps(tools::Long nWidth, tools::Long nHeight, BitmapPalette* pPal,
                               bool bWatchForBackgroundColor)
 {
     const Size aSize(nWidth, nHeight);
@@ -556,13 +556,13 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
         {
             if( bInterlaced )
             {
-                long nT1;
+                tools::Long nT1;
 
                 // lines will be copied if interlaced
                 if( nLastInterCount )
                 {
-                    long nMinY = std::min( static_cast<long>(nLastImageY) + 1, static_cast<long>(nImageHeight) - 1 );
-                    long nMaxY = std::min( static_cast<long>(nLastImageY) + nLastInterCount, static_cast<long>(nImageHeight) - 1 );
+                    tools::Long nMinY = std::min( static_cast<tools::Long>(nLastImageY) + 1, static_cast<tools::Long>(nImageHeight) - 1 );
+                    tools::Long nMaxY = std::min( static_cast<tools::Long>(nLastImageY) + nLastInterCount, static_cast<tools::Long>(nImageHeight) - 1 );
 
                     // copy last line read, if lines do not coincide
                     // ( happens at the end of the image )
@@ -579,7 +579,7 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
                             nSize1 = pAcc1->GetScanlineSize();
                         }
 
-                        for( long j = nMinY; j <= nMaxY; j++ )
+                        for( tools::Long j = nMinY; j <= nMaxY; j++ )
                         {
                             memcpy( pAcc8->GetScanline( j ), pScanline8, nSize8 );
 
@@ -594,7 +594,7 @@ void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
 
                 if( nT1 >= nImageHeight )
                 {
-                    long nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
+                    tools::Long nT2 = nImageY - ( ( nImageHeight + 7 ) >> 3 );
                     nT1 = ( nT2 << 3 ) + 4;
                     nLastInterCount = 3;
 

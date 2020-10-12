@@ -21,8 +21,8 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    const long nWidth = aBitmap.GetSizePixel().Width();
-    const long nHeight = aBitmap.GetSizePixel().Height();
+    const tools::Long nWidth = aBitmap.GetSizePixel().Width();
+    const tools::Long nHeight = aBitmap.GetSizePixel().Height();
 
     Bitmap aBlur(aBitmap);
     BitmapEx aBlurEx(aBlur);
@@ -42,10 +42,10 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
     BitmapColor aColor, aColorBlur;
 
     // For all pixels in original image subtract pixels values from blurred image
-    for (long y = 0; y < nHeight; y++)
+    for (tools::Long y = 0; y < nHeight; y++)
     {
         Scanline pScanline = pWriteAcc->GetScanline(y);
-        for (long x = 0; x < nWidth; x++)
+        for (tools::Long x = 0; x < nWidth; x++)
         {
             aColorBlur = pReadAccBlur->GetColor(y, x);
             aColor = pReadAcc->GetColor(y, x);

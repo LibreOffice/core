@@ -77,7 +77,7 @@ public:
       @param size size of the font data
       @param rights type of operation to be allowed for the font
     */
-    static bool sufficientTTFRights( const void* data, long size, FontRights rights );
+    static bool sufficientTTFRights( const void* data, tools::Long size, FontRights rights );
 
     /**
       Removes all temporary fonts in the path used by fileUrlForTemporaryFont().

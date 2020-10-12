@@ -84,7 +84,7 @@ public:
 
 public:
 
-    void            Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight );
+    void            Create( const OpenGLTexture& rTex, tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight );
     OpenGLTexture&  GetTexture() const;
     const BitmapPalette& GetBitmapPalette() const { return maPalette; }
 

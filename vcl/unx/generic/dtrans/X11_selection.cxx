@@ -103,7 +103,7 @@ extern "C"
     }
 }
 
-const long nXdndProtocolRevision = 5;
+const tools::Long nXdndProtocolRevision = 5;
 
 namespace {
 
@@ -1547,7 +1547,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
             rInc.m_nTransferStartTime   = time( nullptr );
 
             // use incr protocol, signal start to requestor
-            long nMinSize = m_nIncrementalThreshold;
+            tools::Long nMinSize = m_nIncrementalThreshold;
             XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
             XChangeProperty( m_pDisplay, requestor, property,
                              m_nINCRAtom, 32,  PropModeReplace, reinterpret_cast<unsigned char*>(&nMinSize), 1 );
@@ -1633,7 +1633,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
         else if( rRequest.target == m_nTIMESTAMPAtom )
         {
-            long nTimeStamp = static_cast<long>(m_aSelections[rRequest.selection]->m_nOrigTimestamp);
+            tools::Long nTimeStamp = static_cast<tools::Long>(m_aSelections[rRequest.selection]->m_nOrigTimestamp);
             XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
                              XA_INTEGER, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&nTimeStamp), 1 );
             aNotify.xselection.property = rRequest.property;

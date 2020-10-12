@@ -63,8 +63,8 @@ class VCL_DLLPUBLIC SvLBoxButtonData
 {
 private:
     Link<SvLBoxButtonData*,void> aLink;
-    long                    nWidth;
-    long                    nHeight;
+    tools::Long                    nWidth;
+    tools::Long                    nHeight;
     std::unique_ptr<SvLBoxButtonData_Impl> pImpl;
     bool                    bDataOk;
     std::vector<Image>      aBmps;  // indices s. constants BMP_...
@@ -78,8 +78,8 @@ public:
                             ~SvLBoxButtonData();
 
     static SvBmp            GetIndex( SvItemStateFlags nItemState );
-    long                    Width();
-    long                    Height();
+    tools::Long                    Width();
+    tools::Long                    Height();
     void                    SetLink( const Link<SvLBoxButtonData*,void>& rLink) { aLink=rLink; }
     bool                    IsRadio() const;
     // as buttons are not derived from LinkHdl

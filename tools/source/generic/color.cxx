@@ -26,20 +26,21 @@
 
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
+#include <tools/long.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
 {
-    R = sal_uInt8(std::clamp(long(R) + cLumInc, 0L, 255L));
-    G = sal_uInt8(std::clamp(long(G) + cLumInc, 0L, 255L));
-    B = sal_uInt8(std::clamp(long(B) + cLumInc, 0L, 255L));
+    R = sal_uInt8(std::clamp(tools::Long(R) + cLumInc, 0L, 255L));
+    G = sal_uInt8(std::clamp(tools::Long(G) + cLumInc, 0L, 255L));
+    B = sal_uInt8(std::clamp(tools::Long(B) + cLumInc, 0L, 255L));
 }
 
 void Color::DecreaseLuminance(sal_uInt8 cLumDec)
 {
-    R = sal_uInt8(std::clamp(long(R) - cLumDec, 0L, 255L));
-    G = sal_uInt8(std::clamp(long(G) - cLumDec, 0L, 255L));
-    B = sal_uInt8(std::clamp(long(B) - cLumDec, 0L, 255L));
+    R = sal_uInt8(std::clamp(tools::Long(R) - cLumDec, 0L, 255L));
+    G = sal_uInt8(std::clamp(tools::Long(G) - cLumDec, 0L, 255L));
+    B = sal_uInt8(std::clamp(tools::Long(B) - cLumDec, 0L, 255L));
 }
 
 void Color::DecreaseContrast(sal_uInt8 nContDec)

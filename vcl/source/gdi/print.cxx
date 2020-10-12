@@ -52,7 +52,7 @@ int nImplSysDialog = 0;
 
 namespace
 {
-    Paper ImplGetPaperFormat( long nWidth100thMM, long nHeight100thMM )
+    Paper ImplGetPaperFormat( tools::Long nWidth100thMM, tools::Long nHeight100thMM )
     {
         PaperInfo aInfo(nWidth100thMM, nHeight100thMM);
         aInfo.doSloppyFit();
@@ -240,8 +240,8 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
     tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
-    const long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
-    long            nMove;
+    const tools::Long      nBaseExtent = std::max( FRound( aDPISize.Width() / 300. ), 1L );
+    tools::Long            nMove;
     const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
         ( nTransparencePercent < 38 ) ? 25 :
         ( nTransparencePercent < 63 ) ? 50 :
@@ -726,8 +726,8 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         aMask.Mirror( nMirrFlags );
 
     // do painting
-    const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-    long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+    const tools::Long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
+    tools::Long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
     std::unique_ptr<long[]> pMapX( new long[ nSrcWidth + 1 ] );
     std::unique_ptr<long[]> pMapY( new long[ nSrcHeight + 1 ] );
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
@@ -830,10 +830,10 @@ void Printer::ImplUpdateFontList()
     ImplUpdateFontData();
 }
 
-long Printer::GetGradientStepCount( long nMinRect )
+tools::Long Printer::GetGradientStepCount( tools::Long nMinRect )
 {
     // use display-equivalent step size calculation
-    long nInc = (nMinRect < 800) ? 10 : 20;
+    tools::Long nInc = (nMinRect < 800) ? 10 : 20;
 
     return nInc;
 }
@@ -1257,8 +1257,8 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup )
          HasSupport( PrinterSupport::SetOrientation )))
         return;
 
-    const long nRotatedWidth = rData.GetPaperHeight();
-    const long nRotatedHeight = rData.GetPaperWidth();
+    const tools::Long nRotatedWidth = rData.GetPaperHeight();
+    const tools::Long nRotatedHeight = rData.GetPaperWidth();
     PaperInfo aRotatedInfo(nRotatedWidth, nRotatedHeight);
 
     for ( int i = 0; i < nPaperCount; i++ )

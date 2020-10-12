@@ -22,7 +22,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 {
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-    const long nDivisor = 8;
+    const tools::Long nDivisor = 8;
     Bitmap::ScopedReadAccess pReadAcc(aBitmap);
     bool bRet = false;
 
@@ -33,8 +33,8 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pWriteAcc)
         {
-            const long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
-            const long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
+            const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
+            const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             std::unique_ptr<long[]> pColm(new long[nWidth2]);
             std::unique_ptr<long[]> pRows(new long[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
@@ -44,9 +44,9 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp2 = pColRow2.get();
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
-            long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
+            tools::Long nY, nX, i, nSumR, nSumG, nSumB, nMatrixVal, nTmp;
             std::array<std::array<long, 256>, 9> aKoeff;
-            long* pTmp;
+            tools::Long* pTmp;
 
             // create LUT of products of matrix value and possible color component values
             for (nY = 0; nY < 9; nY++)
@@ -199,7 +199,7 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
     return BitmapEx();
 }
 
-const long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
+const tools::Long g_SharpenMatrix[] = { -1, -1, -1, -1, 16, -1, -1, -1, -1 };
 
 BitmapSharpenFilter::BitmapSharpenFilter()
     : BitmapConvolutionMatrixFilter(g_SharpenMatrix)

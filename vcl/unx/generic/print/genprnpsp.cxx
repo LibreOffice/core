@@ -661,7 +661,7 @@ bool PspSalInfoPrinter::SetData(
 
 void PspSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
-    long& rOutWidth, long& rOutHeight,
+    tools::Long& rOutWidth, tools::Long& rOutHeight,
     Point& rPageOffset,
     Size& rPaperSize )
 {
@@ -925,8 +925,8 @@ struct PDFNewJobParameters
 
     bool operator==(const PDFNewJobParameters& rComp ) const
     {
-        const long nRotatedWidth = rComp.maPageSize.Height();
-        const long nRotatedHeight = rComp.maPageSize.Width();
+        const tools::Long nRotatedWidth = rComp.maPageSize.Height();
+        const tools::Long nRotatedHeight = rComp.maPageSize.Width();
         Size aCompLSSize(nRotatedWidth, nRotatedHeight);
         return
             (maPageSize == rComp.maPageSize || maPageSize == aCompLSSize)

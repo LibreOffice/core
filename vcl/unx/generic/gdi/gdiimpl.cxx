@@ -543,9 +543,9 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
     }
 }
 
-void X11SalGraphicsImpl::copyArea ( long nDestX,    long nDestY,
-                                long nSrcX,     long nSrcY,
-                                long nSrcWidth, long nSrcHeight,
+void X11SalGraphicsImpl::copyArea ( tools::Long nDestX,    tools::Long nDestY,
+                                tools::Long nSrcX,     tools::Long nSrcY,
+                                tools::Long nSrcWidth, tools::Long nSrcHeight,
                                 bool /*bWindowInvalidate*/)
 {
     SalTwoRect aPosAry(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
@@ -558,7 +558,7 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap&
     Display*            pXDisp = pSalDisp->GetDisplay();
     const Drawable      aDrawable( mrParent.GetDrawable() );
     const SalColormap&  rColMap = pSalDisp->GetColormap( mrParent.m_nXScreen );
-    const long          nDepth = mrParent.GetDisplay()->GetVisual( mrParent.m_nXScreen ).GetDepth();
+    const tools::Long          nDepth = mrParent.GetDisplay()->GetVisual( mrParent.m_nXScreen ).GetDepth();
     GC                  aGC( GetCopyGC() );
     XGCValues           aOldVal, aNewVal;
     int                 nValues = GCForeground | GCBackground;
@@ -791,7 +791,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // the alpha values need to be inverted for XRender
     // TODO: make upper layers use standard alpha
-    long* pLDst = reinterpret_cast<long*>(pAlphaBits);
+    tools::Long* pLDst = reinterpret_cast<long*>(pAlphaBits);
     for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
         *pLDst = ~*pLDst;
 
@@ -851,8 +851,8 @@ bool X11SalGraphicsImpl::drawTransformedBitmap(
     return false;
 }
 
-bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool X11SalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                    tools::Long nHeight, sal_uInt8 nTransparency )
 {
     if( ! mrParent.m_pFrame && ! mrParent.m_pVDev )
         return false;
@@ -951,11 +951,11 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
     for (auto const& rectangle : aRectangles)
     {
-        const long nW(rectangle.GetWidth());
+        const tools::Long nW(rectangle.GetWidth());
 
         if(nW)
         {
-            const long nH(rectangle.GetHeight());
+            const tools::Long nH(rectangle.GetHeight());
 
             if(nH)
             {
@@ -1116,13 +1116,13 @@ void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
     }
 }
 
-void X11SalGraphicsImpl::drawPixel( long nX, long nY )
+void X11SalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY )
 {
     if( mnPenColor !=  SALCOLOR_NONE )
         XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
 }
 
-void X11SalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
+void X11SalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     if( nColor == SALCOLOR_NONE )
         return;
@@ -1150,7 +1150,7 @@ void X11SalGraphicsImpl::drawPixel( long nX, long nY, Color nColor )
     }
 }
 
-void X11SalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void X11SalGraphicsImpl::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     if( mnPenColor != SALCOLOR_NONE )
     {
@@ -1159,7 +1159,7 @@ void X11SalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
     }
 }
 
-void X11SalGraphicsImpl::drawRect( long nX, long nY, long nDX, long nDY )
+void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     if( mnBrushColor != SALCOLOR_NONE )
     {
@@ -1320,10 +1320,10 @@ bool X11SalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
     return false;
 }
 
-void X11SalGraphicsImpl::invert( long       nX,
-                                long        nY,
-                                long        nDX,
-                                long        nDY,
+void X11SalGraphicsImpl::invert( tools::Long       nX,
+                                tools::Long        nY,
+                                tools::Long        nDX,
+                                tools::Long        nDY,
                                 SalInvert   nFlags )
 {
     GC pGC;
@@ -1372,7 +1372,7 @@ void X11SalGraphicsImpl::invert( sal_uInt32 nPoints,
                       Complex, CoordModeOrigin );
 }
 
-bool X11SalGraphicsImpl::drawEPS( long,long,long,long,void*,sal_uInt32 )
+bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Long,void*,sal_uInt32 )
 {
     return false;
 }
@@ -1428,7 +1428,7 @@ bool X11SalGraphicsImpl::drawPolyPolygon(
     return bDrawn;
 }
 
-long X11SalGraphicsImpl::GetGraphicsHeight() const
+tools::Long X11SalGraphicsImpl::GetGraphicsHeight() const
 {
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nHeight;
@@ -1850,7 +1850,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     return bDrawnOk;
 }
 
-Color X11SalGraphicsImpl::getPixel( long nX, long nY )
+Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
 {
     if( mrParent.bWindow_ && !mrParent.bVirDev_ )
     {
@@ -1884,7 +1884,7 @@ Color X11SalGraphicsImpl::getPixel( long nX, long nY )
     return mrParent.GetColormap().GetColor( aXColor.pixel );
 }
 
-std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     bool bFakeWindowBG = false;
 
@@ -1909,7 +1909,7 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( long nX, long nY, long
             bFakeWindowBG = true;
         else
         {
-            long nOrgDX = nDX, nOrgDY = nDY;
+            tools::Long nOrgDX = nDX, nOrgDY = nDY;
 
             // clip to window size
             if ( nX < 0 )
@@ -1956,7 +1956,7 @@ sal_uInt16 X11SalGraphicsImpl::GetBitCount() const
     return mrParent.GetVisual().GetDepth();
 }
 
-long X11SalGraphicsImpl::GetGraphicsWidth() const
+tools::Long X11SalGraphicsImpl::GetGraphicsWidth() const
 {
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nWidth;

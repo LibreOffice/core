@@ -21,19 +21,20 @@
 #define INCLUDED_TOOLS_SVBORDER_HXX
 
 #include <tools/toolsdllapi.h>
+#include <tools/long.hxx>
 
 namespace tools { class Rectangle; }
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvBorder
 {
-    long nTop, nRight, nBottom, nLeft;
+    tools::Long nTop, nRight, nBottom, nLeft;
 
 public:
     SvBorder()
     {
         nTop = nRight = nBottom = nLeft = 0;
     }
-    SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
+    SvBorder( tools::Long nLeftP, tools::Long nTopP, tools::Long nRightP, tools::Long nBottomP )
     {
         nLeft = nLeftP;
         nTop = nTopP;
@@ -55,14 +56,14 @@ public:
                 Bottom() += rBorder.Bottom();
                 return *this;
             }
-    long &  Top()    { return nTop; }
-    long &  Right()  { return nRight; }
-    long &  Bottom() { return nBottom; }
-    long &  Left()   { return nLeft; }
-    long    Top()    const { return nTop; }
-    long    Right()  const { return nRight; }
-    long    Bottom() const { return nBottom; }
-    long    Left()   const { return nLeft; }
+    tools::Long &  Top()    { return nTop; }
+    tools::Long &  Right()  { return nRight; }
+    tools::Long &  Bottom() { return nBottom; }
+    tools::Long &  Left()   { return nLeft; }
+    tools::Long    Top()    const { return nTop; }
+    tools::Long    Right()  const { return nRight; }
+    tools::Long    Bottom() const { return nBottom; }
+    tools::Long    Left()   const { return nLeft; }
 };
 
 TOOLS_DLLPUBLIC tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBorder );

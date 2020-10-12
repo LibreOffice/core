@@ -53,7 +53,7 @@ namespace vcl
         virtual ~DefaultTextLayout();
 
         // ITextLayout overridables
-        virtual long        GetTextWidth( const OUString& _rText,
+        virtual tools::Long        GetTextWidth( const OUString& _rText,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 
@@ -65,12 +65,12 @@ namespace vcl
                                       OUString* _pDisplayText ) override;
 
         virtual void        GetCaretPositions( const OUString& _rText,
-                                               long* _pCaretXArray,
+                                               tools::Long* _pCaretXArray,
                                                sal_Int32 _nStartIndex,
                                                sal_Int32 _nLength ) const override;
 
         virtual sal_Int32   GetTextBreak( const OUString& _rText,
-                                          long _nMaxTextWidth,
+                                          tools::Long _nMaxTextWidth,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const override;
 

@@ -29,6 +29,7 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <tools/mapunit.hxx>
+#include <tools/long.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
 
 class IntlWrapper;
@@ -164,7 +165,7 @@ public:
                                     OUString &rText,
                                     const IntlWrapper& rIntlWrapper ) const;
 
-    virtual void             ScaleMetrics( long lMult, long lDiv );
+    virtual void             ScaleMetrics( tools::Long lMult, tools::Long lDiv );
     virtual bool             HasMetrics() const;
 
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

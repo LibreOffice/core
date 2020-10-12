@@ -32,8 +32,8 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     mxImpl->Init();
 }
 
-X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, long nDX, long nDY,
-                                                 const SystemGraphicsData* pData,
+X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, tools::Long nDX,
+                                                 tools::Long nDY, const SystemGraphicsData* pData,
                                                  std::unique_ptr<X11SalGraphics> pNewGraphics)
     : mpGraphics(std::move(pNewGraphics))
     , mbGraphics(false)
@@ -68,7 +68,7 @@ SalGraphics* X11SkiaSalVirtualDevice::AcquireGraphics()
 
 void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphics = false; }
 
-bool X11SkiaSalVirtualDevice::SetSize(long nDX, long nDY)
+bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
 {
     if (!nDX)
         nDX = 1;

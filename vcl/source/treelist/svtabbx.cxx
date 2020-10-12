@@ -109,7 +109,7 @@ void SvTabListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit eMapUnit)
+void SvTabListBox::SetTabs(sal_uInt16 nTabs, tools::Long const pTabPositions[], MapUnit eMapUnit)
 {
     mvTabList.resize(nTabs);
 
@@ -120,7 +120,7 @@ void SvTabListBox::SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit
     {
         Size aSize( *pTabPositions, 0 );
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
-        long nNewTab = aSize.Width();
+        tools::Long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );
         mvTabList[nIdx].nFlags &= MYTABMASK;
     }
@@ -389,7 +389,7 @@ void SvTabListBox::SetTabEditable(sal_uInt16 nTab, bool bEditable)
         rTab.nFlags &= ~SvLBoxTabFlags::EDITABLE;
 }
 
-long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
+tools::Long SvTabListBox::GetLogicTab( sal_uInt16 nTab )
 {
     if( SvTreeListBox::nTreeFlags & SvTreeFlags::RECALCTABS )
         SetTabs();
@@ -533,7 +533,7 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
     }
 }
 
-bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState )
+bool SvHeaderTabListBox::IsCellCheckBox( tools::Long _nRow, sal_uInt16 _nColumn, TriState& _rState )
 {
     bool bRet = false;
     SvTreeListEntry* pEntry = GetEntry( _nRow );
@@ -557,7 +557,7 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
     }
     return bRet;
 }
-long SvHeaderTabListBox::GetRowCount() const
+tools::Long SvHeaderTabListBox::GetRowCount() const
 {
     return GetEntryCount();
 }
@@ -622,7 +622,7 @@ void SvHeaderTabListBox::SelectAll()
     SvTreeListBox::SelectAll(true);
 }
 
-void SvHeaderTabListBox::SelectRow( long _nRow, bool _bSelect, bool )
+void SvHeaderTabListBox::SelectRow( tools::Long _nRow, bool _bSelect, bool )
 {
     Select( GetEntry( _nRow ), _bSelect );
 }
@@ -641,13 +641,13 @@ sal_Int32 SvHeaderTabListBox::GetSelectedColumnCount() const
     return 0;
 }
 
-bool SvHeaderTabListBox::IsRowSelected( long _nRow ) const
+bool SvHeaderTabListBox::IsRowSelected( tools::Long _nRow ) const
 {
     SvTreeListEntry* pEntry = GetEntry( _nRow );
     return ( pEntry && IsSelected( pEntry ) );
 }
 
-bool SvHeaderTabListBox::IsColumnSelected( long ) const
+bool SvHeaderTabListBox::IsColumnSelected( tools::Long ) const
 {
     return false;
 }
@@ -665,7 +665,7 @@ bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
     return true;
 }
 
-OUString SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
+OUString SvHeaderTabListBox::GetAccessibleCellText( tools::Long _nRow, sal_uInt16 _nColumnPos ) const
 {
     return GetTabEntryText(_nRow, _nColumnPos);
 }

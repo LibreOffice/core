@@ -531,7 +531,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     return LoadShaders(rVertexShaderName, rFragmentShaderName, OUString(), "", "");
 }
 
-void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFileName)
+void OpenGLHelper::renderToFile(tools::Long nWidth, tools::Long nHeight, const OUString& rFileName)
 {
     OpenGLZone aZone;
 
@@ -559,7 +559,7 @@ GLenum OpenGLHelper::OptimalBufferFormat()
 #endif
 }
 
-BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
+BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight)
 {
     assert(pBuffer);
     Bitmap aBitmap( Size(nWidth, nHeight), 24 );
@@ -580,7 +580,7 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, l
         assert(pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
         size_t nCurPos = 0;
-        for( long y = 0; y < nHeight; ++y)
+        for( tools::Long y = 0; y < nHeight; ++y)
         {
 #ifdef _WIN32
             Scanline pScan = pWriteAccess->GetScanline(y);
@@ -589,7 +589,7 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, l
             Scanline pScan = pWriteAccess->GetScanline(nHeight-1-y);
             Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(nHeight-1-y);
 #endif
-            for( long x = 0; x < nWidth; ++x )
+            for( tools::Long x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];
                 *pScan++ = pBuffer[nCurPos+1];
@@ -663,7 +663,7 @@ std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
     return rStrm;
 }
 
-void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
+void OpenGLHelper::createFramebuffer(tools::Long nWidth, tools::Long nHeight, GLuint& nFramebufferId,
         GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId)
 {
     OpenGLZone aZone;

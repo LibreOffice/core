@@ -26,7 +26,7 @@
 
 struct SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
-    long                nX, nY;
+    tools::Long                nX, nY;
     // dimensions of the drawable area in pixel
     unsigned long       nWidth, nHeight;
     // thickness of the decoration in pixel
@@ -62,8 +62,8 @@ inline std::ostream &operator <<(std::ostream& s, const SalFrameGeometry& rGeom)
 class VCL_PLUGIN_PUBLIC SalGeometryProvider {
 public:
     virtual ~SalGeometryProvider() {}
-    virtual long GetWidth() const = 0;
-    virtual long GetHeight() const = 0;
+    virtual tools::Long GetWidth() const = 0;
+    virtual tools::Long GetHeight() const = 0;
     virtual bool IsOffScreen() const = 0;
 };
 

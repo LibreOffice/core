@@ -20,7 +20,7 @@ class BitmapEx;
 class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter
 {
 public:
-    BitmapConvolutionMatrixFilter(const long (&rMatrix)[9])
+    BitmapConvolutionMatrixFilter(const tools::Long (&rMatrix)[9])
         : mrMatrix(rMatrix)
     {
     }
