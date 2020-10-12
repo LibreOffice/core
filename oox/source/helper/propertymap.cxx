@@ -47,6 +47,7 @@ using ::com::sun::star::text::WritingMode;
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <tools/long.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
 using ::com::sun::star::uno::Any;
@@ -567,7 +568,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
     sal_uInt32 uintValue;
     sal_Int16 int16Value;
     sal_uInt16 uint16Value;
-    long longValue;
+    tools::Long longValue;
     float floatValue = 0;
     bool boolValue;
     LineSpacing spacing;

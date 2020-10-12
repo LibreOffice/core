@@ -4843,7 +4843,7 @@ void SwHTMLParser::InsertSpacer()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     Size aSize( 0, 0);
-    long nSize = 0;
+    tools::Long nSize = 0;
     bool bPercentWidth = false;
     bool bPercentHeight = false;
     sal_uInt16 nType = HTML_SPTYPE_HORI;
@@ -4868,12 +4868,12 @@ void SwHTMLParser::InsertSpacer()
         case HtmlOptionId::WIDTH:
             // First only save as pixel value!
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             // First only save as pixel value!
             bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::SIZE:
             // First only save as pixel value!
@@ -5011,7 +5011,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
 {
     if( nPixel && Application::GetDefaultDevice() )
     {
-        long nTwips = Application::GetDefaultDevice()->PixelToLogic(
+        tools::Long nTwips = Application::GetDefaultDevice()->PixelToLogic(
                     Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
         return static_cast<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
     }
@@ -5291,8 +5291,8 @@ void SwHTMLParser::InsertHorzRule()
         SvxBorderLine aBorderLine( &aColor );
         if( nSize )
         {
-            long nPWidth = 0;
-            long nPHeight = static_cast<long>(nSize);
+            tools::Long nPWidth = 0;
+            tools::Long nPHeight = static_cast<tools::Long>(nSize);
             SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
             if ( !bNoShade )
             {
@@ -5324,17 +5324,17 @@ void SwHTMLParser::InsertHorzRule()
         if (!m_xTable)
         {
             // fake length and alignment of line above paragraph indents
-            long nBrowseWidth = GetCurrentBrowseWidth();
+            tools::Long nBrowseWidth = GetCurrentBrowseWidth();
             nWidth = bPercentWidth ? static_cast<sal_uInt16>((nWidth*nBrowseWidth) / 100)
                                : ToTwips( static_cast<sal_uInt16>(nBrowseWidth) );
             if( nWidth < MINLAY )
                 nWidth = MINLAY;
 
-            const SwFormatColl *pColl = (static_cast<long>(nWidth) < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
+            const SwFormatColl *pColl = (static_cast<tools::Long>(nWidth) < nBrowseWidth) ? GetCurrFormatColl() : nullptr;
             if (pColl)
             {
                 SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
-                long nDist = nBrowseWidth - nWidth;
+                tools::Long nDist = nBrowseWidth - nWidth;
 
                 switch( eAdjust )
                 {

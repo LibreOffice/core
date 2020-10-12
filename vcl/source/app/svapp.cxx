@@ -639,8 +639,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             // Update all windows
             vcl::Window* pFirstFrame = pSVData->maFrameData.mpFirstFrame;
             // Reset data that needs to be re-calculated
-            long nOldDPIX = 0;
-            long nOldDPIY = 0;
+            tools::Long nOldDPIX = 0;
+            tools::Long nOldDPIY = 0;
             if ( pFirstFrame )
             {
                 nOldDPIX = pFirstFrame->GetDPIX();
@@ -1064,9 +1064,9 @@ vcl::Window* Application::GetNextTopLevelWindow( vcl::Window const * pWindow )
     return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
 
-long    Application::GetTopWindowCount()
+tools::Long    Application::GetTopWindowCount()
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window *pWin = pSVData ? pSVData->maFrameData.mpFirstFrame.get() : nullptr;
     while( pWin )
@@ -1078,9 +1078,9 @@ long    Application::GetTopWindowCount()
     return nRet;
 }
 
-vcl::Window* Application::GetTopWindow( long nIndex )
+vcl::Window* Application::GetTopWindow( tools::Long nIndex )
 {
-    long nIdx = 0;
+    tools::Long nIdx = 0;
     ImplSVData* pSVData = ImplGetSVData();
     vcl::Window *pWin = pSVData ? pSVData->maFrameData.mpFirstFrame.get() : nullptr;
     while( pWin )
@@ -1268,8 +1268,8 @@ unsigned long calcDistSquare( const Point& i_rPoint, const tools::Rectangle& i_r
 {
     const Point aRectCenter( (i_rRect.Left() + i_rRect.Right())/2,
                        (i_rRect.Top() + i_rRect.Bottom())/ 2 );
-    const long nDX = aRectCenter.X() - i_rPoint.X();
-    const long nDY = aRectCenter.Y() - i_rPoint.Y();
+    const tools::Long nDX = aRectCenter.X() - i_rPoint.X();
+    const tools::Long nDY = aRectCenter.Y() - i_rPoint.Y();
     return nDX*nDX + nDY*nDY;
 }
 }

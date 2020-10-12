@@ -65,7 +65,7 @@ namespace myImplHelpers
         Otherwise we have to get the real layout rendered
         height, which is totally nonoptimum, but the best we can do.
         */
-        long nDist=0;
+        tools::Long nDist=0;
         const SwFormatFrameSize& rSz = rFormat.GetFrameSize();
 
         const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =

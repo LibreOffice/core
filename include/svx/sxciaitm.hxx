@@ -22,11 +22,11 @@
 #include <svx/svddef.hxx>
 #include <svx/sdangitm.hxx>
 
-inline SdrAngleItem makeSdrCircStartAngleItem(long nAngle) {
+inline SdrAngleItem makeSdrCircStartAngleItem(tools::Long nAngle) {
     return SdrAngleItem(SDRATTR_CIRCSTARTANGLE, nAngle);
 }
 
-inline SdrAngleItem makeSdrCircEndAngleItem(long nAngle) {
+inline SdrAngleItem makeSdrCircEndAngleItem(tools::Long nAngle) {
     return SdrAngleItem(SDRATTR_CIRCENDANGLE, nAngle);
 }
 

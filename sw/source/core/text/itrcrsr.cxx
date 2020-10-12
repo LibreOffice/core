@@ -216,7 +216,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         else
         {
             nLeft = m_pFrame->getFrameArea().Left() +
-                    std::max( long( rSpace.GetTextLeft() + nLMWithNum ),
+                    std::max( tools::Long( rSpace.GetTextLeft() + nLMWithNum ),
                          m_pFrame->getFramePrintArea().Left() );
         }
     }
@@ -240,7 +240,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     else
     {
         short nFLOfst = 0;
-        long nFirstLineOfs = 0;
+        tools::Long nFirstLineOfs = 0;
         if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
             rSpace.IsAutoFirst() )
         {
@@ -274,7 +274,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                     break;
                     case SvxInterLineSpaceRule::Prop:
                     {
-                        long nTmp = pSpace->GetPropLineSpace();
+                        tools::Long nTmp = pSpace->GetPropLineSpace();
                         // 50% is the minimum, at 0% we switch to
                         // the default value 100%...
                         if( nTmp < 50 )
@@ -398,7 +398,7 @@ void SwTextCursor::CtorInitTextCursor( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 
 // 1170: Ancient bug: Shift-End forgets the last character ...
 void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
-                                  SwCursorMoveState* pCMS, const long nMax )
+                                  SwCursorMoveState* pCMS, const tools::Long nMax )
 {
     // 1170: Ambiguity of document positions
     bRightMargin = true;
@@ -424,8 +424,8 @@ void SwTextCursor::GetEndCharRect(SwRect* pOrig, const TextFrameIndex nOfst,
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
-    long nX = 0;
-    long nLast = 0;
+    tools::Long nX = 0;
+    tools::Long nLast = 0;
     SwLinePortion *pPor = m_pCurr->GetFirstPortion();
 
     sal_uInt16 nTmpHeight, nTmpAscent;
@@ -516,7 +516,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
         std::deque<sal_uInt16>* pKanaComp = m_pCurr->GetpKanaComp();
         sal_uInt16 nSpaceIdx = 0;
         size_t nKanaIdx = 0;
-        long nSpaceAdd = m_pCurr->IsSpaceAdd() ? m_pCurr->GetLLSpaceAdd( 0 ) : 0;
+        tools::Long nSpaceAdd = m_pCurr->IsSpaceAdd() ? m_pCurr->GetLLSpaceAdd( 0 ) : 0;
 
         bool bNoText = true;
 
@@ -811,7 +811,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                         if( static_cast<SwMultiPortion*>(pPor)->HasRotation() )
                         {
                             GetInfo().SetMulti( false );
-                            long nTmp = pOrig->Width();
+                            tools::Long nTmp = pOrig->Width();
                             pOrig->Width( pOrig->Height() );
                             pOrig->Height( nTmp );
                             nTmp = pOrig->Left() - aOldPos.X();
@@ -1176,7 +1176,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 }
 
 void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
-                               SwCursorMoveState* pCMS, const long nMax )
+                               SwCursorMoveState* pCMS, const tools::Long nMax )
 {
     CharCursorToLine(nOfst);
 
@@ -1238,7 +1238,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
         }
         if ( pCMS && pCMS->m_bRealHeight && pCMS->m_aRealHeight.Y() >= 0 )
         {
-            long nTmp = pCMS->m_aRealHeight.X() + pOrig->Top();
+            tools::Long nTmp = pCMS->m_aRealHeight.X() + pOrig->Top();
             if( nTmp >= nMax )
             {
                 pCMS->m_aRealHeight.setX( nMax - pOrig->Top() );
@@ -1248,7 +1248,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
                 pCMS->m_aRealHeight.setY( nMax - nTmp );
         }
     }
-    long nOut = pOrig->Right() - GetTextFrame()->getFrameArea().Right();
+    tools::Long nOut = pOrig->Right() - GetTextFrame()->getFrameArea().Right();
     if( nOut > 0 )
     {
         if( GetTextFrame()->getFrameArea().Width() < GetTextFrame()->getFramePrintArea().Left()
@@ -1324,7 +1324,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
     TextFrameIndex const nOldIdx = GetInfo().GetIdx();
     sal_uInt16 nSpaceIdx = 0;
     size_t nKanaIdx = 0;
-    long nSpaceAdd = m_pCurr->IsSpaceAdd() ? m_pCurr->GetLLSpaceAdd( 0 ) : 0;
+    tools::Long nSpaceAdd = m_pCurr->IsSpaceAdd() ? m_pCurr->GetLLSpaceAdd( 0 ) : 0;
     short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
 
     // nWidth is the width of the line, or the width of

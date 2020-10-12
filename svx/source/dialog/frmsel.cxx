@@ -70,19 +70,19 @@ namespace
 {
 
 /** Space between outer control border and any graphical element of the control. */
-const long FRAMESEL_GEOM_OUTER    = 2;
+const tools::Long FRAMESEL_GEOM_OUTER    = 2;
 
 /** Space between arrows and usable inner area. */
-const long FRAMESEL_GEOM_INNER    = 3;
+const tools::Long FRAMESEL_GEOM_INNER    = 3;
 
 /** Maximum width to draw a frame border style. */
-const long FRAMESEL_GEOM_WIDTH    = 9;
+const tools::Long FRAMESEL_GEOM_WIDTH    = 9;
 
 /** Additional margin for click area of outer lines. */
-const long FRAMESEL_GEOM_ADD_CLICK_OUTER = 5;
+const tools::Long FRAMESEL_GEOM_ADD_CLICK_OUTER = 5;
 
 /** Additional margin for click area of inner lines. */
-const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
+const tools::Long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
 
 /** Returns the corresponding flag for a frame border. */
@@ -356,18 +356,18 @@ void FrameSelectorImpl::InitGlobalGeometry()
     /*  nMinSize is the lower of width and height (control will always be squarish).
         FRAMESEL_GEOM_OUTER is the minimal distance between inner control border
         and any element. */
-    long nMinSize = std::min( aCtrlSize.Width(), aCtrlSize.Height() ) - 2 * FRAMESEL_GEOM_OUTER;
+    tools::Long nMinSize = std::min( aCtrlSize.Width(), aCtrlSize.Height() ) - 2 * FRAMESEL_GEOM_OUTER;
     /*  nFixedSize is the size all existing elements need in one direction:
         the diag. arrow, space betw. arrow and frame border, outer frame border,
         inner frame border, other outer frame border, space betw. frame border
         and arrow, the other arrow. */
-    long nFixedSize = 2 * mnArrowSize + 2 * FRAMESEL_GEOM_INNER + 3 * FRAMESEL_GEOM_WIDTH;
+    tools::Long nFixedSize = 2 * mnArrowSize + 2 * FRAMESEL_GEOM_INNER + 3 * FRAMESEL_GEOM_WIDTH;
     /*  nBetwBordersSize contains the size between an outer and inner frame border (made odd). */
-    long nBetwBordersSize = (((nMinSize - nFixedSize) / 2) - 1) | 1;
+    tools::Long nBetwBordersSize = (((nMinSize - nFixedSize) / 2) - 1) | 1;
 
     /*  The final size of the usable area. At least do not get negative */
     mnCtrlSize = 2 * nBetwBordersSize + nFixedSize;
-    mnCtrlSize = std::max(mnCtrlSize, static_cast<long>(0));
+    mnCtrlSize = std::max(mnCtrlSize, static_cast<tools::Long>(0));
     mpVirDev->SetOutputSizePixel( Size( mnCtrlSize, mnCtrlSize ) );
 
     /*  Center the virtual device in the control. */
@@ -421,8 +421,8 @@ void FrameSelectorImpl::InitBorderGeometry()
                 basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
             const double fHorDiagAngle(atan2(fabs(aCellRange.getHeight()), fabs(aCellRange.getWidth())));
             const double fVerDiagAngle(fHorDiagAngle > 0.0 ? F_PI2 - fHorDiagAngle : 0.0);
-            const long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
-            const long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
+            const tools::Long nDiagFocusOffsX(basegfx::fround(-mnFocusOffs / tan(fHorDiagAngle) + mnFocusOffs / sin(fHorDiagAngle)));
+            const tools::Long nDiagFocusOffsY(basegfx::fround(-mnFocusOffs / tan(fVerDiagAngle) + mnFocusOffs / sin(fVerDiagAngle)));
 
             std::vector< Point > aFocusVec;
             aFocusVec.emplace_back( aRect.Left()  - mnFocusOffs,     aRect.Top()    + nDiagFocusOffsY );
@@ -454,10 +454,10 @@ void FrameSelectorImpl::InitBorderGeometry()
         - To right: Dependent on existence of inner vertical frame border
             (if enabled, use less space).
      */
-    long nClO = FRAMESEL_GEOM_WIDTH / 2 + FRAMESEL_GEOM_ADD_CLICK_OUTER;
-    long nClI = (mbTLBR && mbBLTR) ? (FRAMESEL_GEOM_WIDTH / 2 + FRAMESEL_GEOM_ADD_CLICK_INNER) : nClO;
-    long nClH = mbHor ? nClI : nClO;            // additional space dependent of horizontal inner border
-    long nClV = mbVer ? nClI : nClO;            // additional space dependent of vertical inner border
+    tools::Long nClO = FRAMESEL_GEOM_WIDTH / 2 + FRAMESEL_GEOM_ADD_CLICK_OUTER;
+    tools::Long nClI = (mbTLBR && mbBLTR) ? (FRAMESEL_GEOM_WIDTH / 2 + FRAMESEL_GEOM_ADD_CLICK_INNER) : nClO;
+    tools::Long nClH = mbHor ? nClI : nClO;            // additional space dependent of horizontal inner border
+    tools::Long nClV = mbVer ? nClI : nClO;            // additional space dependent of vertical inner border
 
     maLeft.AddClickRect(   tools::Rectangle( mnLine1 - nClO, mnLine1 - nClO, mnLine1 + nClV, mnLine3 + nClO ) );
     maVer.AddClickRect(    tools::Rectangle( mnLine2 - nClI, mnLine1 - nClO, mnLine2 + nClI, mnLine3 + nClO ) );
@@ -565,7 +565,7 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
 {
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::DrawArrows - access to disabled border" );
 
-    long nLinePos = 0;
+    tools::Long nLinePos = 0;
     switch( rBorder.GetType() )
     {
         case FrameBorderType::Left:
@@ -578,8 +578,8 @@ void FrameSelectorImpl::DrawArrows( const FrameBorder& rBorder )
     }
     nLinePos -= mnArrowSize / 2;
 
-    long nTLPos = 0;
-    long nBRPos = mnCtrlSize - mnArrowSize;
+    tools::Long nTLPos = 0;
+    tools::Long nBRPos = mnCtrlSize - mnArrowSize;
     Point aPos1, aPos2;
     int nImgIndex1 = -1, nImgIndex2 = -1;
     switch( rBorder.GetType() )
@@ -910,7 +910,7 @@ void FrameSelector::HideAllBorders()
         mxImpl->SetBorderState( **aIt, FrameBorderState::Hide );
 }
 
-bool FrameSelector::GetVisibleWidth( long& rnWidth, SvxBorderLineStyle& rnStyle ) const
+bool FrameSelector::GetVisibleWidth( tools::Long& rnWidth, SvxBorderLineStyle& rnStyle ) const
 {
     VisFrameBorderCIter aIt( mxImpl->maEnabBorders );
     if( !aIt.Is() )
@@ -1000,7 +1000,7 @@ void FrameSelector::SelectAllVisibleBorders()
         mxImpl->SelectBorder( **aIt, true/*bSelect*/ );
 }
 
-void FrameSelector::SetStyleToSelection( long nWidth, SvxBorderLineStyle nStyle )
+void FrameSelector::SetStyleToSelection( tools::Long nWidth, SvxBorderLineStyle nStyle )
 {
     mxImpl->maCurrStyle.SetBorderLineStyle( nStyle );
     mxImpl->maCurrStyle.SetWidth( nWidth );

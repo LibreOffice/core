@@ -675,8 +675,8 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
     }
 
     BitmapEx aBmp(BMP_PLUGIN);
-    long nHeight = rRect.GetHeight() - pOut->GetTextHeight();
-    long nWidth = rRect.GetWidth();
+    tools::Long nHeight = rRect.GetHeight() - pOut->GetTextHeight();
+    tools::Long nWidth = rRect.GetWidth();
     if(nHeight > 0 && nWidth > 0 && aBmp.GetSizePixel().Width() > 0)
     {
         aPt.setY( nHeight );
@@ -688,7 +688,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
         {
             // adjust to the width
             // keep proportions
-            long nH = nWidth * aBmpSize.Height() / aBmpSize.Width();
+            tools::Long nH = nWidth * aBmpSize.Height() / aBmpSize.Width();
             // center
             aP.AdjustY((nHeight - nH) / 2 );
             nHeight = nH;
@@ -697,7 +697,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const tools::Rectangle &rRect, con
         {
             // adjust to the height
             // keep proportions
-            long nW = nHeight * aBmpSize.Width() / aBmpSize.Height();
+            tools::Long nW = nHeight * aBmpSize.Width() / aBmpSize.Height();
             // center
             aP.AdjustX((nWidth - nW) / 2 );
             nWidth = nW;

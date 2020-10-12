@@ -689,7 +689,7 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
             SwFrame *pCont = pFootnoteFrame->GetUpper();
 
             SwRectFnSet aRectFnSet(pCont);
-            long nDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->getFrameArea()),
+            tools::Long nDiff = aRectFnSet.YDiff( aRectFnSet.GetTop(pCont->getFrameArea()),
                                              nDeadLine );
 
             if( nDiff >= 0 )
@@ -883,7 +883,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
 
                     SwRectFnSet aRectFnSet(pFootnoteCont);
 
-                    const long nDiff = aRectFnSet.YDiff(
+                    const tools::Long nDiff = aRectFnSet.YDiff(
                                             aRectFnSet.GetTop(pFootnoteCont->getFrameArea()),
                                              nTmpBot );
 
@@ -1172,7 +1172,7 @@ TextFrameIndex SwTextFormatter::FormatQuoVadis(TextFrameIndex const nOffset)
                 case SvxAdjust::Center:
                 {
                     nQuoWidth = nQuoWidth + pQuo->GetAscent();
-                    long nDiff = nLastLeft - nQuoWidth;
+                    tools::Long nDiff = nLastLeft - nQuoWidth;
                     if( nDiff < 0 )
                     {
                         nLastLeft = pQuo->GetAscent();

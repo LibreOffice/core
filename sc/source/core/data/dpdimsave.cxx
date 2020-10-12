@@ -197,12 +197,12 @@ ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroupAcc( const OUString& rGr
     return nullptr;        // none found
 }
 
-long ScDPSaveGroupDimension::GetGroupCount() const
+tools::Long ScDPSaveGroupDimension::GetGroupCount() const
 {
     return aGroups.size();
 }
 
-const ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupByIndex( long nIndex ) const
+const ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupByIndex( tools::Long nIndex ) const
 {
     return aGroups[nIndex];
 }
@@ -265,7 +265,7 @@ bool isInteger(double fValue)
 }
 
 void fillDateGroupDimension(
-    ScDPCache& rCache, ScDPNumGroupInfo& rDateInfo, long nSourceDim, long nGroupDim,
+    ScDPCache& rCache, ScDPNumGroupInfo& rDateInfo, tools::Long nSourceDim, tools::Long nGroupDim,
     sal_Int32 nDatePart, const SvNumberFormatter* pFormatter)
 {
     // Auto min/max is only used for "Years" part, but the loop is always
@@ -305,7 +305,7 @@ void fillDateGroupDimension(
 
     //TODO: if not automatic, limit fSourceMin/fSourceMax for list of year values?
 
-    long nStart = 0, nEnd = 0; // end is inclusive
+    tools::Long nStart = 0, nEnd = 0; // end is inclusive
 
     switch (nDatePart)
     {
@@ -327,7 +327,7 @@ void fillDateGroupDimension(
     // Now, populate the group items in the cache.
     rCache.ResetGroupItems(nGroupDim, rDateInfo, nDatePart);
 
-    for (long nValue = nStart; nValue <= nEnd; ++nValue)
+    for (tools::Long nValue = nStart; nValue <= nEnd; ++nValue)
         rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, nValue));
 
     // add first/last entry (min/max)
@@ -339,7 +339,7 @@ void fillDateGroupDimension(
 
 void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
-    long nSourceIndex = rData.GetDimensionIndex( aSourceDim );
+    tools::Long nSourceIndex = rData.GetDimensionIndex( aSourceDim );
     if ( nSourceIndex < 0 )
         return;
 
@@ -363,11 +363,11 @@ void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 
 void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
 {
-    long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
+    tools::Long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
     if (nSourceDim < 0)
         return;
 
-    long nDim = rCache.AppendGroupField();
+    tools::Long nDim = rCache.AppendGroupField();
     SvNumberFormatter* pFormatter = rCache.GetDoc().GetFormatTable();
 
     if (nDatePart)
@@ -408,7 +408,7 @@ ScDPSaveNumGroupDimension::ScDPSaveNumGroupDimension( const OUString& rName, con
 
 void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
-    long nSource = rData.GetDimensionIndex( aDimensionName );
+    tools::Long nSource = rData.GetDimensionIndex( aDimensionName );
     if ( nSource >= 0 )
     {
         ScDPNumGroupDimension aDim( aGroupInfo );           // aGroupInfo: value grouping
@@ -421,7 +421,7 @@ void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 
 void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
 {
-    long nDim = rCache.GetDimensionIndex(aDimensionName);
+    tools::Long nDim = rCache.GetDimensionIndex(aDimensionName);
     if (nDim < 0)
         return;
 
@@ -490,7 +490,7 @@ void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
 
         //TODO: limit number of entries?
 
-        long nLoopCount = 0;
+        tools::Long nLoopCount = 0;
         double fLoop = aGroupInfo.mfStart;
 
         rCache.ResetGroupItems(nDim, aGroupInfo, 0);

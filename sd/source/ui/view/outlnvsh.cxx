@@ -1051,19 +1051,19 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
  */
 void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
-    long   nThumb = pHScroll->GetThumbPos();
-    long   nRange = pHScroll->GetRange().Len();
+    ::tools::Long   nThumb = pHScroll->GetThumbPos();
+    ::tools::Long   nRange = pHScroll->GetRange().Len();
     double fX     = static_cast<double>(nThumb) / nRange;
 
     Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-    long          nViewWidth    = pWin->PixelToLogic(
+    ::tools::Long          nViewWidth    = pWin->PixelToLogic(
         pWin->GetSizePixel()).Width();
-    long          nTextWidth    = pOlView->GetPaperWidth();
+    ::tools::Long          nTextWidth    = pOlView->GetPaperWidth();
     nViewWidth                  = std::max(nViewWidth, nTextWidth);
-    long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
-    long          nTargetPos    = static_cast<long>(fX * nViewWidth);
-    long          nDelta        = nTargetPos - nCurrentPos;
+    ::tools::Long          nCurrentPos   = pOutlinerView->GetVisArea().Left();
+    ::tools::Long          nTargetPos    = static_cast<::tools::Long>(fX * nViewWidth);
+    ::tools::Long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(-nDelta, 0);
@@ -1072,19 +1072,19 @@ void OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
 void OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
-    long nThumb = pVScroll->GetThumbPos();
-    long nRange = pVScroll->GetRange().Len();
+    ::tools::Long nThumb = pVScroll->GetThumbPos();
+    ::tools::Long nRange = pVScroll->GetRange().Len();
     double fY = static_cast<double>(nThumb) / nRange;
 
     Window*       pWin          = mpContentWindow.get();
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
-    long          nViewHeight   = pWin->PixelToLogic(
+    ::tools::Long          nViewHeight   = pWin->PixelToLogic(
         pWin->GetSizePixel()).Height();
-    long          nTextHeight   = pOlView->GetOutliner().GetTextHeight();
+    ::tools::Long          nTextHeight   = pOlView->GetOutliner().GetTextHeight();
     nViewHeight                += nTextHeight;
-    long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
-    long          nTargetPos    = static_cast<long>(fY * nViewHeight);
-    long          nDelta        = nTargetPos - nCurrentPos;
+    ::tools::Long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
+    ::tools::Long          nTargetPos    = static_cast<::tools::Long>(fY * nViewHeight);
+    ::tools::Long          nDelta        = nTargetPos - nCurrentPos;
 
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
@@ -1108,7 +1108,7 @@ bool OutlineViewShell::PrepareClose( bool bUI )
 /**
  * Zoom with zoom factor. Inform OutlinerView
  */
-void OutlineViewShell::SetZoom(long nZoom)
+void OutlineViewShell::SetZoom(::tools::Long nZoom)
 {
     ViewShell::SetZoom(nZoom);
 

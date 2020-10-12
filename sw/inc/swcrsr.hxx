@@ -72,7 +72,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     friend class SwCursorSaveState;
 
     std::vector<SwCursor_SavePos> m_vSavePos; // the current entry is the last element
-    long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
+    tools::Long m_nRowSpanOffset;        // required for travelling in tabs with rowspans
     sal_uInt8 m_nCursorBidiLevel; // bidi level of the cursor
     bool m_bColumnSelection;      // true: cursor is aprt of a column selection
 
@@ -163,7 +163,7 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const* pLayout, bool isFieldNames);
-    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, long nUpDownX, SwRootFrame & rLayout);
+    bool UpDown(bool bUp, sal_uInt16 nCnt, Point const * pPt, tools::Long nUpDownX, SwRootFrame & rLayout);
     bool LeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI);
     bool IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeftMargin, bool bAPI) const;
     bool SttEndDoc( bool bSttDoc );
@@ -214,7 +214,7 @@ public:
     bool IsColumnSelection() const { return m_bColumnSelection; }
     void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
-    long GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
+    tools::Long GetCursorRowSpanOffset() const { return m_nRowSpanOffset; }
 
     SwCursor* GetNext()             { return dynamic_cast<SwCursor *>(GetNextInRing()); }
     const SwCursor* GetNext() const { return dynamic_cast<SwCursor const *>(GetNextInRing()); }

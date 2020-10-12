@@ -109,13 +109,13 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
             // constrain size to page size if necessary
             if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
             {
-                aSize.setWidth( static_cast<long>(aPageSize.Height() * fGrfWH) );
+                aSize.setWidth( static_cast<::tools::Long>(aPageSize.Height() * fGrfWH) );
                 aSize.setHeight( aPageSize.Height() );
             }
             else
             {
                 aSize.setWidth( aPageSize.Width() );
-                aSize.setHeight( static_cast<long>(aPageSize.Width() / fGrfWH) );
+                aSize.setHeight( static_cast<::tools::Long>(aPageSize.Width() / fGrfWH) );
             }
         }
 
@@ -331,11 +331,11 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                 XGradientListRef pGradientList = GetDoc()->GetGradientList ();
-                long          nCounts        = pGradientList->Count ();
+                ::tools::Long          nCounts        = pGradientList->Count ();
                 Color         aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
                                       static_cast<sal_uInt8>(pGreen->GetValue ()),
                                       static_cast<sal_uInt8>(pBlue->GetValue ()));
-                long i;
+                ::tools::Long i;
 
                 pAttr->ClearItem (XATTR_FILLGRADIENT);
                 pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -401,11 +401,11 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxUInt32Item* pBlue = rReq.GetArg<SfxUInt32Item>(ID_VAL_BLUE);
 
                 XHatchListRef pHatchList = GetDoc()->GetHatchList ();
-                long       nCounts     = pHatchList->Count ();
+                ::tools::Long       nCounts     = pHatchList->Count ();
                 Color      aColor (static_cast<sal_uInt8>(pRed->GetValue ()),
                                    static_cast<sal_uInt8>(pGreen->GetValue ()),
                                    static_cast<sal_uInt8>(pBlue->GetValue ()));
-                long i;
+                ::tools::Long i;
 
                 pAttr->ClearItem (XATTR_FILLHATCH);
                 pAttr->ClearItem (XATTR_FILLSTYLE);
@@ -476,9 +476,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     pAttr->ClearItem (XATTR_LINESTYLE);
 
                     XDashListRef pDashList = GetDoc()->GetDashList();
-                    long       nCounts    = pDashList->Count ();
+                    ::tools::Long       nCounts    = pDashList->Count ();
                     std::unique_ptr<XDashEntry> pEntry = std::make_unique<XDashEntry>(aNewDash, pName->GetValue());
-                    long i;
+                    ::tools::Long i;
 
                     for ( i = 0; i < nCounts; i++ )
                         if (pDashList->GetDash (i)->GetName () == pName->GetValue ())
@@ -533,8 +533,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     pAttr->ClearItem (XATTR_FILLSTYLE);
 
                     XGradientListRef pGradientList = GetDoc()->GetGradientList ();
-                    long           nCounts        = pGradientList->Count ();
-                    long i;
+                    ::tools::Long           nCounts        = pGradientList->Count ();
+                    ::tools::Long i;
 
                     for ( i = 0; i < nCounts; i++ )
                     {
@@ -610,8 +610,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     pAttr->ClearItem (XATTR_FILLSTYLE);
 
                     XHatchListRef pHatchList = GetDoc()->GetHatchList ();
-                    long       nCounts     = pHatchList->Count ();
-                    long i;
+                    ::tools::Long       nCounts     = pHatchList->Count ();
+                    ::tools::Long i;
 
                     for ( i = 0; i < nCounts; i++ )
                     {
@@ -668,9 +668,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
 
                 XGradientListRef pGradientList = GetDoc()->GetGradientList ();
-                long           nCounts        = pGradientList->Count ();
+                ::tools::Long           nCounts        = pGradientList->Count ();
 
-                for (long i = 0; i < nCounts; i ++)
+                for (::tools::Long i = 0; i < nCounts; i ++)
                 {
                     const XGradientEntry* pEntry = pGradientList->GetGradient(i);
 
@@ -705,9 +705,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(ID_VAL_INDEX);
 
                 XHatchListRef pHatchList = GetDoc()->GetHatchList ();
-                long       nCounts     = pHatchList->Count ();
+                ::tools::Long       nCounts     = pHatchList->Count ();
 
-                for (long i = 0; i < nCounts; i ++)
+                for (::tools::Long i = 0; i < nCounts; i ++)
                 {
                     const XHatchEntry* pEntry = pHatchList->GetHatch(i);
 
@@ -796,7 +796,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XFillStyleItem &rFillStyleItem = aAttr.Get (XATTR_FILLSTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rFillStyleItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rFillStyleItem.GetValue ())));
                 break;
             }
 
@@ -804,7 +804,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineStyleItem &rLineStyleItem = aAttr.Get (XATTR_LINESTYLE);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rLineStyleItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineStyleItem.GetValue ())));
                 break;
             }
 
@@ -812,7 +812,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
             {
                 const XLineWidthItem &rLineWidthItem = aAttr.Get (XATTR_LINEWIDTH);
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>(rLineWidthItem.GetValue ())));
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>(rLineWidthItem.GetValue ())));
                 break;
             }
 
@@ -866,7 +866,7 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
                         ;
                 }
 
-                rSet.Put (SfxUInt32Item (nWhich, static_cast<long>((nWhich == SID_GETRED)
+                rSet.Put (SfxUInt32Item (nWhich, static_cast<::tools::Long>((nWhich == SID_GETRED)
                                                              ? aColor.GetRed ()
                                                              : (nWhich == SID_GETGREEN)
                                                                    ? aColor.GetGreen ()

@@ -135,11 +135,11 @@ public:
 class ScDPRowMembersOrder
 {
     ScDPResultDimension& rDimension;
-    long                 nMeasure;
+    tools::Long                 nMeasure;
     bool                 bAscending;
 
 public:
-            ScDPRowMembersOrder( ScDPResultDimension& rDim, long nM, bool bAsc ) :
+            ScDPRowMembersOrder( ScDPResultDimension& rDim, tools::Long nM, bool bAsc ) :
                 rDimension(rDim),
                 nMeasure(nM),
                 bAscending(bAsc)
@@ -151,11 +151,11 @@ public:
 class ScDPColMembersOrder
 {
     ScDPDataDimension& rDimension;
-    long               nMeasure;
+    tools::Long               nMeasure;
     bool               bAscending;
 
 public:
-            ScDPColMembersOrder( ScDPDataDimension& rDim, long nM, bool bAsc ) :
+            ScDPColMembersOrder( ScDPDataDimension& rDim, tools::Long nM, bool bAsc ) :
                 rDimension(rDim),
                 nMeasure(nM),
                 bAscending(bAsc)
@@ -166,7 +166,7 @@ public:
 
 }
 
-static bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure, bool bAscending )
+static bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, tools::Long nMeasure, bool bAscending )
 {
     // members can be NULL if used for rows
 
@@ -192,7 +192,7 @@ static bool lcl_IsLess( const ScDPDataMember* pDataMember1, const ScDPDataMember
     }
 }
 
-static bool lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, long nMeasure )
+static bool lcl_IsEqual( const ScDPDataMember* pDataMember1, const ScDPDataMember* pDataMember2, tools::Long nMeasure )
 {
     // members can be NULL if used for rows
 
@@ -249,10 +249,10 @@ bool ScDPColMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) con
     return lcl_IsLess( pDataMember1, pDataMember2, nMeasure, bAscending );
 }
 
-ScDPInitState::Member::Member(long nSrcIndex, SCROW nNameIndex) :
+ScDPInitState::Member::Member(tools::Long nSrcIndex, SCROW nNameIndex) :
     mnSrcIndex(nSrcIndex), mnNameIndex(nNameIndex) {}
 
-void ScDPInitState::AddMember( long nSourceIndex, SCROW nMember )
+void ScDPInitState::AddMember( tools::Long nSourceIndex, SCROW nMember )
 {
     maMembers.emplace_back(nSourceIndex, nMember);
 }
@@ -314,7 +314,7 @@ ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPRe
     maRowSorted.push_back(-1);
 }
 
-void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
+void ScDPRunningTotalState::AddColIndex( tools::Long nVisible, tools::Long nSorted )
 {
     maColVisible.back() = nVisible;
     maColVisible.push_back(-1);
@@ -323,7 +323,7 @@ void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
     maColSorted.push_back(-1);
 }
 
-void ScDPRunningTotalState::AddRowIndex( long nVisible, long nSorted )
+void ScDPRunningTotalState::AddRowIndex( tools::Long nVisible, tools::Long nSorted )
 {
     maRowVisible.back() = nVisible;
     maRowVisible.push_back(-1);
@@ -364,7 +364,7 @@ void ScDPRunningTotalState::RemoveRowIndex()
     }
 }
 
-ScDPRelativePos::ScDPRelativePos( long nBase, long nDir ) :
+ScDPRelativePos::ScDPRelativePos( tools::Long nBase, tools::Long nDir ) :
     nBasePos( nBase ),
     nDirection( nDir )
 {
@@ -696,16 +696,16 @@ ScDPRowTotals::~ScDPRowTotals()
 {
 }
 
-static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
+static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, tools::Long nMeasure )
 {
     OSL_ENSURE( nMeasure >= 0, "GetColTotal: no measure" );
 
     ScDPAggData* pAgg = pFirst;
-    long nSkip = nMeasure;
+    tools::Long nSkip = nMeasure;
 
     // subtotal settings are ignored - column/row totals exist once per measure
 
-    for ( long nPos=0; nPos<nSkip; nPos++ )
+    for ( tools::Long nPos=0; nPos<nSkip; nPos++ )
         pAgg = pAgg->GetChild();    // column total is constructed empty - children need to be created
 
     if ( !pAgg->IsCalculated() )
@@ -718,17 +718,17 @@ static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
     return pAgg;
 }
 
-ScDPAggData* ScDPRowTotals::GetRowTotal( long nMeasure )
+ScDPAggData* ScDPRowTotals::GetRowTotal( tools::Long nMeasure )
 {
     return lcl_GetChildTotal( &aRowTotal, nMeasure );
 }
 
-ScDPAggData* ScDPRowTotals::GetGrandTotal( long nMeasure )
+ScDPAggData* ScDPRowTotals::GetGrandTotal( tools::Long nMeasure )
 {
     return lcl_GetChildTotal( &aGrandTotal, nMeasure );
 }
 
-static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
+static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, tools::Long nFuncNo )
 {
     ScSubTotalFunc eRet = SUBTOTAL_FUNC_NONE;
     if ( pLevel )
@@ -736,7 +736,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, long nFuncNo )
         //TODO: direct access via ScDPLevel
 
         uno::Sequence<sal_Int16> aSeq = pLevel->getSubTotals();
-        long nSequence = aSeq.getLength();
+        tools::Long nSequence = aSeq.getLength();
         if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
             // For manual subtotals, "automatic" is added as first function.
@@ -802,7 +802,7 @@ void ScDPResultData::SetLateInit( bool bSet )
     bLateInit = bSet;
 }
 
-long ScDPResultData::GetColStartMeasure() const
+tools::Long ScDPResultData::GetColStartMeasure() const
 {
     if (maMeasureFuncs.size() == 1)
         return 0;
@@ -810,7 +810,7 @@ long ScDPResultData::GetColStartMeasure() const
     return bDataAtCol ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
 }
 
-long ScDPResultData::GetRowStartMeasure() const
+tools::Long ScDPResultData::GetRowStartMeasure() const
 {
     if (maMeasureFuncs.size() == 1)
         return 0;
@@ -818,25 +818,25 @@ long ScDPResultData::GetRowStartMeasure() const
     return bDataAtRow ? SC_DPMEASURE_ALL : SC_DPMEASURE_ANY;
 }
 
-ScSubTotalFunc ScDPResultData::GetMeasureFunction(long nMeasure) const
+ScSubTotalFunc ScDPResultData::GetMeasureFunction(tools::Long nMeasure) const
 {
     OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureFuncs.size(), "bumm");
     return maMeasureFuncs[nMeasure];
 }
 
-const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(long nMeasure) const
+const sheet::DataPilotFieldReference& ScDPResultData::GetMeasureRefVal(tools::Long nMeasure) const
 {
     OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureRefs.size(), "bumm");
     return maMeasureRefs[nMeasure];
 }
 
-sheet::DataPilotFieldOrientation ScDPResultData::GetMeasureRefOrient(long nMeasure) const
+sheet::DataPilotFieldOrientation ScDPResultData::GetMeasureRefOrient(tools::Long nMeasure) const
 {
     OSL_ENSURE(o3tl::make_unsigned(nMeasure) < maMeasureRefOrients.size(), "bumm");
     return maMeasureRefOrients[nMeasure];
 }
 
-OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
+OUString ScDPResultData::GetMeasureString(tools::Long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
     //  with bForce==true, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
@@ -870,7 +870,7 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     }
 }
 
-OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
+OUString ScDPResultData::GetMeasureDimensionName(tools::Long nMeasure) const
 {
     if ( nMeasure < 0 )
     {
@@ -881,23 +881,23 @@ OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
     return mrSource.GetDataDimName(nMeasure);
 }
 
-bool ScDPResultData::IsBaseForGroup( long nDim ) const
+bool ScDPResultData::IsBaseForGroup( tools::Long nDim ) const
 {
     return mrSource.GetData()->IsBaseForGroup(nDim);
 }
 
-long ScDPResultData::GetGroupBase( long nGroupDim ) const
+tools::Long ScDPResultData::GetGroupBase( tools::Long nGroupDim ) const
 {
     return mrSource.GetData()->GetGroupBase(nGroupDim);
 }
 
-bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
+bool ScDPResultData::IsNumOrDateGroup( tools::Long nDim ) const
 {
     return mrSource.GetData()->IsNumOrDateGroup(nDim);
 }
 
-bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
-                                const ScDPItemData& rBaseData, long nBaseIndex ) const
+bool ScDPResultData::IsInGroup( SCROW nGroupDataId, tools::Long nGroupIndex,
+                                const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const
 {
     const ScDPItemData* pGroupData = mrSource.GetItemDataById(nGroupIndex , nGroupDataId);
     if ( pGroupData )
@@ -906,8 +906,8 @@ bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
         return false;
 }
 
-bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
-                                       const ScDPItemData& rSecondData, long nSecondIndex ) const
+bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, tools::Long nFirstIndex,
+                                       const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const
 {
     const ScDPItemData* pFirstData = mrSource.GetItemDataById(nFirstIndex , nFirstDataId);
     if ( pFirstData )
@@ -916,12 +916,12 @@ bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
         return false;
 }
 
-ResultMembers& ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const
+ResultMembers& ScDPResultData::GetDimResultMembers(tools::Long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
-    if (nDim < static_cast<long>(maDimMembers.size()) && maDimMembers[nDim])
+    if (nDim < static_cast<tools::Long>(maDimMembers.size()) && maDimMembers[nDim])
         return *maDimMembers[nDim];
 
-    if (nDim >= static_cast<long>(maDimMembers.size()))
+    if (nDim >= static_cast<tools::Long>(maDimMembers.size()))
         maDimMembers.resize(nDim+1);
 
     std::unique_ptr<ResultMembers> pResultMembers(new ResultMembers());
@@ -929,10 +929,10 @@ ResultMembers& ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimensio
     const ScMemberSortOrder& rGlobalOrder = pLevel->GetGlobalOrder();
 
     ScDPMembers* pMembers = pLevel->GetMembersObject();
-    long nMembCount = pMembers->getCount();
-    for (long i = 0; i < nMembCount; ++i)
+    tools::Long nMembCount = pMembers->getCount();
+    for (tools::Long i = 0; i < nMembCount; ++i)
     {
-        long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
+        tools::Long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
         ScDPMember* pMember = pMembers->getByIndex(nSorted);
         if (!pResultMembers->FindMember(pMember->GetItemDataId()))
         {
@@ -992,7 +992,7 @@ OUString ScDPResultMember::GetDisplayName( bool bLocaleIndependent ) const
     ScDPItemData aItem(pDPMember->FillItemData());
     if (aParentDimData.mpParentDim)
     {
-        long nDim = aParentDimData.mpParentDim->GetDimension();
+        tools::Long nDim = aParentDimData.mpParentDim->GetDimension();
         return pResultData->GetSource().GetData()->GetFormattedString(nDim, aItem, bLocaleIndependent);
     }
 
@@ -1131,14 +1131,14 @@ void ScDPResultMember::LateInitFrom(
     }
 }
 
-bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
+bool ScDPResultMember::IsSubTotalInTitle(tools::Long nMeasure) const
 {
     bool bRet = false;
     if ( pChildDimension && /*pParentLevel*/GetParentLevel() &&
          /*pParentLevel*/GetParentLevel()->IsOutlineLayout() && /*pParentLevel*/GetParentLevel()->IsSubtotalsAtTop() )
     {
-        long nUserSubStart;
-        long nSubTotals = GetSubTotalCount( &nUserSubStart );
+        tools::Long nUserSubStart;
+        tools::Long nSubTotals = GetSubTotalCount( &nUserSubStart );
         nSubTotals -= nUserSubStart;            // visible count
         if ( nSubTotals )
         {
@@ -1153,12 +1153,12 @@ bool ScDPResultMember::IsSubTotalInTitle(long nMeasure) const
     return bRet;
 }
 
-long ScDPResultMember::GetSize(long nMeasure) const
+tools::Long ScDPResultMember::GetSize(tools::Long nMeasure) const
 {
     if ( !IsVisible() )
         return 0;
     const ScDPLevel*       pParentLevel = GetParentLevel();
-    long nExtraSpace = 0;
+    tools::Long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
@@ -1168,9 +1168,9 @@ long ScDPResultMember::GetSize(long nMeasure) const
         if ( pParentLevel && pParentLevel->IsOutlineLayout() && !IsSubTotalInTitle( nMeasure ) )
             ++nExtraSpace;
 
-        long nSize = pChildDimension->GetSize(nMeasure);
-        long nUserSubStart;
-        long nUserSubCount = GetSubTotalCount( &nUserSubStart );
+        tools::Long nSize = pChildDimension->GetSize(nMeasure);
+        tools::Long nUserSubStart;
+        tools::Long nUserSubCount = GetSubTotalCount( &nUserSubStart );
         nUserSubCount -= nUserSubStart;     // for output size, use visible count
         if ( nUserSubCount )
         {
@@ -1223,7 +1223,7 @@ bool ScDPResultMember::IsValid() const
     return true;
 }
 
-long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const
+tools::Long ScDPResultMember::GetSubTotalCount( tools::Long* pUserSubStart ) const
 {
     if ( pUserSubStart )
         *pUserSubStart = 0;     // default
@@ -1237,7 +1237,7 @@ long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const
         //TODO: direct access via ScDPLevel
 
         uno::Sequence<sal_Int16> aSeq = pParentLevel->getSubTotals();
-        long nSequence = aSeq.getLength();
+        tools::Long nSequence = aSeq.getLength();
         if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
             // For manual subtotals, always add "automatic" as first function
@@ -1270,7 +1270,7 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
 
     ScDPSubTotalState aSubState;        // initial state
 
-    long nUserSubCount = GetSubTotalCount();
+    tools::Long nUserSubCount = GetSubTotalCount();
 
     // Calculate at least automatic if no subtotals are selected,
     // show only own values if there's no child dimension (innermost).
@@ -1279,7 +1279,7 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
 
     const ScDPLevel*    pParentLevel = GetParentLevel();
 
-    for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+    for (tools::Long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
         // #i68338# if nUserSubCount is 1 (automatic only), don't set nRowSubTotalFunc
         if ( pChildDimension && nUserSubCount > 1 )
@@ -1320,7 +1320,7 @@ static OUString lcl_parseSubtotalName(const OUString& rSubStr, const OUString& r
 }
 
 void ScDPResultMember::FillMemberResults(
-    uno::Sequence<sheet::MemberResult>* pSequences, long& rPos, long nMeasure, bool bRoot,
+    uno::Sequence<sheet::MemberResult>* pSequences, tools::Long& rPos, tools::Long nMeasure, bool bRoot,
     const OUString* pMemberName, const OUString* pMemberCaption )
 {
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
@@ -1330,7 +1330,7 @@ void ScDPResultMember::FillMemberResults(
         // empty sequence.  Bail out.
         return;
 
-    long nSize = GetSize(nMeasure);
+    tools::Long nSize = GetSize(nMeasure);
     sheet::MemberResult* pArray = pSequences->getArray();
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
@@ -1347,12 +1347,12 @@ void ScDPResultMember::FillMemberResults(
         ScDPItemData aItemData(FillItemData());
         if (aParentDimData.mpParentDim)
         {
-            long nDim = aParentDimData.mpParentDim->GetDimension();
+            tools::Long nDim = aParentDimData.mpParentDim->GetDimension();
             aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData, false);
         }
         else
         {
-            long nDim = -1;
+            tools::Long nDim = -1;
             const ScDPMember* pMem = GetDPMember();
             if (pMem)
                 nDim = pMem->GetDim();
@@ -1407,14 +1407,14 @@ void ScDPResultMember::FillMemberResults(
         pArray[rPos].Value   = fValue;
 
         //  set "continue" flag (removed for subtotals later)
-        for (long i=1; i<nSize; i++)
+        for (tools::Long i=1; i<nSize; i++)
             pArray[rPos+i].Flags |= sheet::MemberResultFlags::CONTINUE;
         if ( pParentLevel && pParentLevel->getRepeatItemLabels() )
         {
-            long nSizeNonEmpty = nSize;
+            tools::Long nSizeNonEmpty = nSize;
             if ( pParentLevel->IsAddEmpty() )
                 --nSizeNonEmpty;
-            for (long i=1; i<nSizeNonEmpty; i++)
+            for (tools::Long i=1; i<nSizeNonEmpty; i++)
             {
                 pArray[rPos+i].Name = aName;
                 pArray[rPos+i].Caption = aCaption;
@@ -1424,7 +1424,7 @@ void ScDPResultMember::FillMemberResults(
         }
     }
 
-    long nExtraSpace = 0;
+    tools::Long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
@@ -1453,20 +1453,20 @@ void ScDPResultMember::FillMemberResults(
 
     rPos += nSize;
 
-    long nUserSubStart;
-    long nUserSubCount = GetSubTotalCount(&nUserSubStart);
+    tools::Long nUserSubStart;
+    tools::Long nUserSubCount = GetSubTotalCount(&nUserSubStart);
     if ( !nUserSubCount || !pChildDimension || bSubTotalInTitle )
         return;
 
-    long nMemberMeasure = nMeasure;
-    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
     rPos -= nSubSize * (nUserSubCount - nUserSubStart);     // GetSize includes space for SubTotal
     rPos -= nExtraSpace;                                    // GetSize includes the empty line
 
-    for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
+    for (tools::Long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
     {
-        for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+        for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
         {
             if ( nMeasure == SC_DPMEASURE_ALL )
                 nMemberMeasure = nSubCount;
@@ -1537,7 +1537,7 @@ void ScDPResultMember::FillMemberResults(
 void ScDPResultMember::FillDataResults(
     const ScDPResultMember* pRefMember,
     ScDPResultFilterContext& rFilterCxt, uno::Sequence<uno::Sequence<sheet::DataResult> >& rSequence,
-    long nMeasure) const
+    tools::Long nMeasure) const
 {
     std::unique_ptr<FilterStack> pFilterStack;
     const ScDPMember* pDPMember = GetDPMember();
@@ -1551,9 +1551,9 @@ void ScDPResultMember::FillDataResults(
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
     //  (not on data layout dimension)
     const ScDPLevel*     pParentLevel = GetParentLevel();
-    long nStartRow = rFilterCxt.mnRow;
+    tools::Long nStartRow = rFilterCxt.mnRow;
 
-    long nExtraSpace = 0;
+    tools::Long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
@@ -1569,7 +1569,7 @@ void ScDPResultMember::FillDataResults(
         if ( bTitleLine )           // in tabular layout the title is on a separate row
             ++rFilterCxt.mnRow;                 // -> fill child dimension one row below
 
-        long nOldRow = rFilterCxt.mnRow;
+        tools::Long nOldRow = rFilterCxt.mnRow;
         pChildDimension->FillDataResults(pRefMember, rFilterCxt, rSequence, nMeasure);
         rFilterCxt.mnRow = nOldRow; // Revert to the original row before the call.
 
@@ -1579,8 +1579,8 @@ void ScDPResultMember::FillDataResults(
             --rFilterCxt.mnRow;                 // positions are calculated with the normal values
     }
 
-    long nUserSubStart;
-    long nUserSubCount = GetSubTotalCount(&nUserSubStart);
+    tools::Long nUserSubStart;
+    tools::Long nUserSubCount = GetSubTotalCount(&nUserSubStart);
     if ( !nUserSubCount && bHasChild )
         return;
 
@@ -1592,15 +1592,15 @@ void ScDPResultMember::FillDataResults(
         nUserSubStart = 0;
     }
 
-    long nMemberMeasure = nMeasure;
-    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
     if (bHasChild)
     {
         rFilterCxt.mnRow -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
         rFilterCxt.mnRow -= nExtraSpace;                                    // GetSize includes the empty line
     }
 
-    long nMoveSubTotal = 0;
+    tools::Long nMoveSubTotal = 0;
     if ( bSubTotalInTitle )
     {
         nMoveSubTotal = rFilterCxt.mnRow - nStartRow;   // force to first (title) row
@@ -1611,7 +1611,7 @@ void ScDPResultMember::FillDataResults(
     {
         ScDPSubTotalState aSubState;        // initial state
 
-        for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
+        for (tools::Long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
         {
             if ( bHasChild && nUserSubCount > 1 )
             {
@@ -1619,7 +1619,7 @@ void ScDPResultMember::FillDataResults(
                 aSubState.eRowForce = lcl_GetForceFunc( /*pParentLevel*/GetParentLevel() , nUserPos );
             }
 
-            for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+            for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
             {
                 if ( nMeasure == SC_DPMEASURE_ALL )
                     nMemberMeasure = nSubCount;
@@ -1646,14 +1646,14 @@ void ScDPResultMember::FillDataResults(
     rFilterCxt.mnRow += nMoveSubTotal;
 }
 
-void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const
+void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const
 {
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
     //  (not on data layout dimension)
 
     bool bHasChild = ( pChildDimension != nullptr );
 
-    long nUserSubCount = GetSubTotalCount();
+    tools::Long nUserSubCount = GetSubTotalCount();
 
     // process subtotals even if not shown
 
@@ -1662,14 +1662,14 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
     if (!nUserSubCount || !bHasChild)
         nUserSubCount = 1;
 
-    long nMemberMeasure = nMeasure;
-    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
     if (pDataRoot)
     {
         ScDPSubTotalState aSubState;        // initial state
 
-        for (long nUserPos = 0; nUserPos < nUserSubCount; ++nUserPos)   // including hidden "automatic"
+        for (tools::Long nUserPos = 0; nUserPos < nUserSubCount; ++nUserPos)   // including hidden "automatic"
         {
             if (bHasChild && nUserSubCount > 1)
             {
@@ -1677,7 +1677,7 @@ void ScDPResultMember::UpdateDataResults( const ScDPResultMember* pRefMember, lo
                 aSubState.eRowForce = lcl_GetForceFunc(GetParentLevel(), nUserPos);
             }
 
-            for (long nSubCount = 0; nSubCount < nSubSize; ++nSubCount)
+            for (tools::Long nSubCount = 0; nSubCount < nSubSize; ++nSubCount)
             {
                 if (nMeasure == SC_DPMEASURE_ALL)
                     nMemberMeasure = nSubCount;
@@ -1734,7 +1734,7 @@ void ScDPResultMember::ResetResults()
         pChildDimension->ResetResults();
 }
 
-void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, tools::Long nMeasure,
                                             ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const
 {
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
@@ -1744,7 +1744,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 
     bool bHasChild = ( pChildDimension != nullptr );
 
-    long nUserSubCount = GetSubTotalCount();
+    tools::Long nUserSubCount = GetSubTotalCount();
     //if ( nUserSubCount || !bHasChild )
     {
         // Calculate at least automatic if no subtotals are selected,
@@ -1752,14 +1752,14 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
         if ( !nUserSubCount || !bHasChild )
             nUserSubCount = 1;
 
-        long nMemberMeasure = nMeasure;
-        long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+        tools::Long nMemberMeasure = nMeasure;
+        tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
         if ( pDataRoot )
         {
             ScDPSubTotalState aSubState;        // initial state
 
-            for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+            for (tools::Long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
             {
                 if ( bHasChild && nUserSubCount > 1 )
                 {
@@ -1767,7 +1767,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
                     aSubState.eRowForce = lcl_GetForceFunc(GetParentLevel(), nUserPos);
                 }
 
-                for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+                for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
                 {
                     if ( nMeasure == SC_DPMEASURE_ALL )
                         nMemberMeasure = nSubCount;
@@ -1823,7 +1823,7 @@ void ScDPResultMember::Dump(int nIndent) const
 }
 #endif
 
-ScDPAggData* ScDPResultMember::GetColTotal( long nMeasure ) const
+ScDPAggData* ScDPResultMember::GetColTotal( tools::Long nMeasure ) const
 {
     return lcl_GetChildTotal( const_cast<ScDPAggData*>(&aColTotal), nMeasure );
 }
@@ -1884,10 +1884,10 @@ void ScDPDataMember::InitFrom( const ScDPResultDimension* pDim )
     pChildDimension->InitFrom(pDim);
 }
 
-const long SC_SUBTOTALPOS_AUTO = -1;    // default
-const long SC_SUBTOTALPOS_SKIP = -2;    // don't use
+const tools::Long SC_SUBTOTALPOS_AUTO = -1;    // default
+const tools::Long SC_SUBTOTALPOS_SKIP = -2;    // don't use
 
-static long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
+static tools::Long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
 {
     if ( rSubState.nColSubTotalFunc >= 0 && rSubState.nRowSubTotalFunc >= 0 &&
          rSubState.nColSubTotalFunc != rSubState.nRowSubTotalFunc )
@@ -1898,7 +1898,7 @@ static long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
         return SC_SUBTOTALPOS_SKIP;
     }
 
-    long nRet = SC_SUBTOTALPOS_AUTO;
+    tools::Long nRet = SC_SUBTOTALPOS_AUTO;
     if ( rSubState.nColSubTotalFunc >= 0 ) nRet = rSubState.nColSubTotalFunc;
     if ( rSubState.nRowSubTotalFunc >= 0 ) nRet = rSubState.nRowSubTotalFunc;
     return nRet;
@@ -1910,13 +1910,13 @@ void ScDPDataMember::UpdateValues( const vector<ScDPValue>& aValues, const ScDPS
 
     ScDPAggData* pAgg = &aAggregate;
 
-    long nSubPos = lcl_GetSubTotalPos(rSubState);
+    tools::Long nSubPos = lcl_GetSubTotalPos(rSubState);
     if (nSubPos == SC_SUBTOTALPOS_SKIP)
         return;
     if (nSubPos > 0)
     {
-        long nSkip = nSubPos * pResultData->GetMeasureCount();
-        for (long i=0; i<nSkip; i++)
+        tools::Long nSkip = nSubPos * pResultData->GetMeasureCount();
+        for (tools::Long i=0; i<nSkip; i++)
             pAgg = pAgg->GetChild();        // created if not there
     }
 
@@ -1939,7 +1939,7 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         InitFrom( pResultMember->GetChildDimension() );
     }
 
-    long nUserSubCount = pResultMember ? pResultMember->GetSubTotalCount() : 0;
+    tools::Long nUserSubCount = pResultMember ? pResultMember->GetSubTotalCount() : 0;
 
     // Calculate at least automatic if no subtotals are selected,
     // show only own values if there's no child dimension (innermost).
@@ -1947,7 +1947,7 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         nUserSubCount = 1;
 
     ScDPSubTotalState aLocalSubState = rSubState;        // keep row state, modify column
-    for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+    for (tools::Long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
         if ( pChildDimension && nUserSubCount > 1 )
         {
@@ -1963,7 +1963,7 @@ void ScDPDataMember::ProcessData( const vector< SCROW >& aChildMembers, const ve
         pChildDimension->ProcessData( aChildMembers, aValues, rSubState );      // with unmodified subtotal state
 }
 
-bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const
+bool ScDPDataMember::HasData( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     if ( rSubState.eColForce != SUBTOTAL_FUNC_NONE && rSubState.eRowForce != SUBTOTAL_FUNC_NONE &&
                                                         rSubState.eColForce != rSubState.eRowForce )
@@ -1978,7 +1978,7 @@ bool ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState 
     return pAgg->HasData();
 }
 
-bool ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const
+bool ScDPDataMember::HasError( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)
@@ -1987,7 +1987,7 @@ bool ScDPDataMember::HasError( long nMeasure, const ScDPSubTotalState& rSubState
     return pAgg->HasError();
 }
 
-double ScDPDataMember::GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const
+double ScDPDataMember::GetAggregate( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)
@@ -1996,37 +1996,37 @@ double ScDPDataMember::GetAggregate( long nMeasure, const ScDPSubTotalState& rSu
     return pAgg->GetResult();
 }
 
-ScDPAggData* ScDPDataMember::GetAggData( long nMeasure, const ScDPSubTotalState& rSubState )
+ScDPAggData* ScDPDataMember::GetAggData( tools::Long nMeasure, const ScDPSubTotalState& rSubState )
 {
     OSL_ENSURE( nMeasure >= 0, "GetAggData: no measure" );
 
     ScDPAggData* pAgg = &aAggregate;
-    long nSkip = nMeasure;
-    long nSubPos = lcl_GetSubTotalPos(rSubState);
+    tools::Long nSkip = nMeasure;
+    tools::Long nSubPos = lcl_GetSubTotalPos(rSubState);
     if (nSubPos == SC_SUBTOTALPOS_SKIP)
         return nullptr;
     if (nSubPos > 0)
         nSkip += nSubPos * pResultData->GetMeasureCount();
 
-    for ( long nPos=0; nPos<nSkip; nPos++ )
+    for ( tools::Long nPos=0; nPos<nSkip; nPos++ )
         pAgg = pAgg->GetChild();        //TODO: need to create children here?
 
     return pAgg;
 }
 
-const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const
+const ScDPAggData* ScDPDataMember::GetConstAggData( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const
 {
     OSL_ENSURE( nMeasure >= 0, "GetConstAggData: no measure" );
 
     const ScDPAggData* pAgg = &aAggregate;
-    long nSkip = nMeasure;
-    long nSubPos = lcl_GetSubTotalPos(rSubState);
+    tools::Long nSkip = nMeasure;
+    tools::Long nSubPos = lcl_GetSubTotalPos(rSubState);
     if (nSubPos == SC_SUBTOTALPOS_SKIP)
         return nullptr;
     if (nSubPos > 0)
         nSkip += nSubPos * pResultData->GetMeasureCount();
 
-    for ( long nPos=0; nPos<nSkip; nPos++ )
+    for ( tools::Long nPos=0; nPos<nSkip; nPos++ )
     {
         pAgg = pAgg->GetExistingChild();
         if (!pAgg)
@@ -2038,7 +2038,7 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( long nMeasure, const ScDPSub
 
 void ScDPDataMember::FillDataRow(
     const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence<sheet::DataResult>& rSequence, long nMeasure, bool bIsSubTotalRow,
+    uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState) const
 {
     std::unique_ptr<FilterStack> pFilterStack;
@@ -2053,14 +2053,14 @@ void ScDPDataMember::FillDataRow(
 
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
 
-    long nStartCol = rFilterCxt.mnCol;
+    tools::Long nStartCol = rFilterCxt.mnCol;
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
     const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
 
     const ScDPLevel* pRefParentLevel = pRefMember->GetParentLevel();
 
-    long nExtraSpace = 0;
+    tools::Long nExtraSpace = 0;
     if ( pRefParentLevel && pRefParentLevel->IsAddEmpty() )
         ++nExtraSpace;
 
@@ -2081,7 +2081,7 @@ void ScDPDataMember::FillDataRow(
 
         if ( pDataChild )
         {
-            long nOldCol = rFilterCxt.mnCol;
+            tools::Long nOldCol = rFilterCxt.mnCol;
             pDataChild->FillDataRow(pRefChild, rFilterCxt, rSequence, nMeasure, bIsSubTotalRow, rSubState);
             rFilterCxt.mnCol = nOldCol; // Revert to the old column value before the call.
         }
@@ -2091,8 +2091,8 @@ void ScDPDataMember::FillDataRow(
             --rFilterCxt.mnCol;                 // positions are calculated with the normal values
     }
 
-    long nUserSubStart;
-    long nUserSubCount = pRefMember->GetSubTotalCount(&nUserSubStart);
+    tools::Long nUserSubStart;
+    tools::Long nUserSubCount = pRefMember->GetSubTotalCount(&nUserSubStart);
     if ( !nUserSubCount && bHasChild )
         return;
 
@@ -2106,22 +2106,22 @@ void ScDPDataMember::FillDataRow(
 
     ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
 
-    long nMemberMeasure = nMeasure;
-    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
     if (bHasChild)
     {
         rFilterCxt.mnCol -= nSubSize * ( nUserSubCount - nUserSubStart );   // GetSize includes space for SubTotal
         rFilterCxt.mnCol -= nExtraSpace;                                    // GetSize includes the empty line
     }
 
-    long nMoveSubTotal = 0;
+    tools::Long nMoveSubTotal = 0;
     if ( bSubTotalInTitle )
     {
         nMoveSubTotal = rFilterCxt.mnCol - nStartCol;   // force to first (title) column
         rFilterCxt.mnCol = nStartCol;
     }
 
-    for (long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
+    for (tools::Long nUserPos=nUserSubStart; nUserPos<nUserSubCount; nUserPos++)
     {
         if ( pChildDimension && nUserSubCount > 1 )
         {
@@ -2130,7 +2130,7 @@ void ScDPDataMember::FillDataRow(
             aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
         }
 
-        for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+        for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
         {
             if ( nMeasure == SC_DPMEASURE_ALL )
                 nMemberMeasure = nSubCount;
@@ -2167,7 +2167,7 @@ void ScDPDataMember::FillDataRow(
 }
 
 void ScDPDataMember::UpdateDataRow(
-    const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    const ScDPResultMember* pRefMember, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState )
 {
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );
@@ -2181,7 +2181,7 @@ void ScDPDataMember::UpdateDataRow(
     bool bHasChild = ( pRefChild != nullptr );
 
     // process subtotals even if not shown
-    long nUserSubCount = pRefMember->GetSubTotalCount();
+    tools::Long nUserSubCount = pRefMember->GetSubTotalCount();
 
     // Calculate at least automatic if no subtotals are selected,
     // show only own values if there's no child dimension (innermost).
@@ -2190,10 +2190,10 @@ void ScDPDataMember::UpdateDataRow(
 
     ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
 
-    long nMemberMeasure = nMeasure;
-    long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
-    for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+    for (tools::Long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
     {
         if ( pChildDimension && nUserSubCount > 1 )
         {
@@ -2202,7 +2202,7 @@ void ScDPDataMember::UpdateDataRow(
             aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
         }
 
-        for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+        for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
         {
             if ( nMeasure == SC_DPMEASURE_ALL )
                 nMemberMeasure = nSubCount;
@@ -2275,7 +2275,7 @@ void ScDPDataMember::ResetResults()
 }
 
 void ScDPDataMember::UpdateRunningTotals(
-    const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    const ScDPResultMember* pRefMember, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent )
 {
@@ -2290,7 +2290,7 @@ void ScDPDataMember::UpdateRunningTotals(
     //  (pDataChild is null then, this happens when no values for it are in this row)
     bool bHasChild = ( pRefChild != nullptr );
 
-    long nUserSubCount = pRefMember->GetSubTotalCount();
+    tools::Long nUserSubCount = pRefMember->GetSubTotalCount();
     {
         // Calculate at least automatic if no subtotals are selected,
         // show only own values if there's no child dimension (innermost).
@@ -2299,10 +2299,10 @@ void ScDPDataMember::UpdateRunningTotals(
 
         ScDPSubTotalState aLocalSubState(rSubState);        // keep row state, modify column
 
-        long nMemberMeasure = nMeasure;
-        long nSubSize = pResultData->GetCountForMeasure(nMeasure);
+        tools::Long nMemberMeasure = nMeasure;
+        tools::Long nSubSize = pResultData->GetCountForMeasure(nMeasure);
 
-        for (long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
+        for (tools::Long nUserPos=0; nUserPos<nUserSubCount; nUserPos++)   // including hidden "automatic"
         {
             if ( pChildDimension && nUserSubCount > 1 )
             {
@@ -2311,7 +2311,7 @@ void ScDPDataMember::UpdateRunningTotals(
                 aLocalSubState.eColForce = lcl_GetForceFunc( pForceLevel, nUserPos );
             }
 
-            for ( long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
+            for ( tools::Long nSubCount=0; nSubCount<nSubSize; nSubCount++ )
             {
                 if ( nMeasure == SC_DPMEASURE_ALL )
                     nMemberMeasure = nSubCount;
@@ -2332,7 +2332,7 @@ void ScDPDataMember::UpdateRunningTotals(
                         bool bRunningTotal = ( eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL );
                         bool bRelative =
                             ( aReferenceValue.ReferenceItemType != sheet::DataPilotFieldReferenceItemType::NAMED && !bRunningTotal );
-                        long nRelativeDir = bRelative ?
+                        tools::Long nRelativeDir = bRelative ?
                             ( ( aReferenceValue.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::PREVIOUS ) ? -1 : 1 ) : 0;
 
                         const ScDPRunningTotalState::IndexArray& rColVisible = rRunning.GetColVisible();
@@ -2348,8 +2348,8 @@ void ScDPDataMember::UpdateRunningTotals(
                         bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
                         ScDPResultDimension* pSelectDim = nullptr;
-                        long nRowPos = 0;
-                        long nColPos = 0;
+                        tools::Long nRowPos = 0;
+                        tools::Long nColPos = 0;
 
                         //  find the reference field in column or row dimensions
 
@@ -2358,7 +2358,7 @@ void ScDPDataMember::UpdateRunningTotals(
                             pSelectDim = rRunning.GetRowResRoot()->GetChildDimension();
                             while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                             {
-                                long nIndex = rRowSorted[nRowPos];
+                                tools::Long nIndex = rRowSorted[nRowPos];
                                 if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
                                     pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                 else
@@ -2375,7 +2375,7 @@ void ScDPDataMember::UpdateRunningTotals(
                             pSelectDim = rRunning.GetColResRoot()->GetChildDimension();
                             while ( pSelectDim && pSelectDim->GetName() != aRefFieldName )
                             {
-                                long nIndex = rColSorted[nColPos];
+                                tools::Long nIndex = rColSorted[nColPos];
                                 if ( nIndex >= 0 && nIndex < pSelectDim->GetMemberCount() )
                                     pSelectDim = pSelectDim->GetMember(nIndex)->GetChildDimension();
                                 else
@@ -2395,7 +2395,7 @@ void ScDPDataMember::UpdateRunningTotals(
                             //  don't show or sum up the value. Otherwise, for following members,
                             //  the running totals of details and subtotals wouldn't match.
 
-                            long nMyIndex = bRefDimInCol ? rColSorted[nColPos] : rRowSorted[nRowPos];
+                            tools::Long nMyIndex = bRefDimInCol ? rColSorted[nColPos] : rRowSorted[nRowPos];
                             if ( nMyIndex >= 0 && nMyIndex < pSelectDim->GetMemberCount() )
                             {
                                 const ScDPResultMember* pMyRefMember = pSelectDim->GetMember(nMyIndex);
@@ -2447,8 +2447,8 @@ void ScDPDataMember::UpdateRunningTotals(
                                                                     nColPos, rRunning );
                                 else
                                 {
-                                    const long* pRowSorted = rRowSorted.data();
-                                    const long* pColSorted = rColSorted.data();
+                                    const tools::Long* pRowSorted = rRowSorted.data();
+                                    const tools::Long* pColSorted = rColSorted.data();
                                     pRowSorted += nRowPos + 1; // including the reference dimension
                                     pSelectMember = pSelectDim->GetRowReferenceMember(
                                         nullptr, nullptr, pRowSorted, pColSorted);
@@ -2506,8 +2506,8 @@ void ScDPDataMember::UpdateRunningTotals(
                                 else
                                 {
                                     aRefItemPos.nBasePos = rRowVisible[nRowPos];    // without sort order applied
-                                    const long* pRowSorted = rRowSorted.data();
-                                    const long* pColSorted = rColSorted.data();
+                                    const tools::Long* pRowSorted = rRowSorted.data();
+                                    const tools::Long* pColSorted = rColSorted.data();
                                     pRowSorted += nRowPos + 1; // including the reference dimension
                                     pSelectMember = pSelectDim->GetRowReferenceMember(
                                         pRefPos, pRefName, pRowSorted, pColSorted);
@@ -2685,12 +2685,12 @@ class ScDPGroupCompare
 private:
     const ScDPResultData* pResultData;
     const ScDPInitState& rInitState;
-    long                 nDimSource;
+    tools::Long                 nDimSource;
     bool                 bIncludeAll;
     bool                 bIsBase;
-    long                 nGroupBase;
+    tools::Long                 nGroupBase;
 public:
-            ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
+            ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, tools::Long nDimension );
 
     bool    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
     bool    TestIncluded( const ScDPMember& rMember );
@@ -2698,7 +2698,7 @@ public:
 
 }
 
-ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension ) :
+ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, tools::Long nDimension ) :
     pResultData( pData ),
     rInitState( rState ),
     nDimSource( nDimension )
@@ -2831,15 +2831,15 @@ void ScDPResultDimension::InitFrom(
     // global order is used to initialize aMembers, so it doesn't have to be looked at later
     const ScMemberSortOrder& rGlobalOrder = pThisLevel->GetGlobalOrder();
 
-    long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
+    tools::Long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
     ScDPGroupCompare aCompare( pResultData, rInitState, nDimSource );
 
     // Now, go through all members and initialize them.
     ScDPMembers* pMembers = pThisLevel->GetMembersObject();
-    long nMembCount = pMembers->getCount();
-    for ( long i=0; i<nMembCount; i++ )
+    tools::Long nMembCount = pMembers->getCount();
+    for ( tools::Long i=0; i<nMembCount; i++ )
     {
-        long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
+        tools::Long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
 
         ScDPMember* pMember = pMembers->getByIndex(nSorted);
         if ( aCompare.IsIncluded( *pMember ) )
@@ -2872,7 +2872,7 @@ void ScDPResultDimension::LateInitFrom(
     if (!pThisDim || !pThisLevel)
         return;
 
-    long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
+    tools::Long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
 
     bool bShowEmpty = pThisLevel->getShowEmpty();
 
@@ -2923,10 +2923,10 @@ void ScDPResultDimension::LateInitFrom(
 
             ScDPGroupCompare aCompare( pResultData, rInitState, nDimSource );
             ScDPMembers* pMembers = pThisLevel->GetMembersObject();
-            long nMembCount = pMembers->getCount();
-            for ( long i=0; i<nMembCount; i++ )
+            tools::Long nMembCount = pMembers->getCount();
+            for ( tools::Long i=0; i<nMembCount; i++ )
             {
-                long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
+                tools::Long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
 
                 ScDPMember* pMember = pMembers->getByIndex(nSorted);
                 if ( aCompare.IsIncluded( *pMember ) )
@@ -2940,8 +2940,8 @@ void ScDPResultDimension::LateInitFrom(
         //  initialize only specific member (or all if "show empty" flag is set)
         if ( bLateInitAllMembers  )
         {
-            long nCount = maMemberArray.size();
-            for (long i=0; i<nCount; i++)
+            tools::Long nCount = maMemberArray.size();
+            for (tools::Long i=0; i<nCount; i++)
             {
                 ScDPResultMember* pResultMember = maMemberArray[i].get();
 
@@ -2972,10 +2972,10 @@ void ScDPResultDimension::LateInitFrom(
         InitWithMembers( rParams, pItemData, nPos, rInitState );
 }
 
-long ScDPResultDimension::GetSize(long nMeasure) const
+tools::Long ScDPResultDimension::GetSize(tools::Long nMeasure) const
 {
-    long nTotal = 0;
-    long nMemberCount = maMemberArray.size();
+    tools::Long nTotal = 0;
+    tools::Long nMemberCount = maMemberArray.size();
     if (bIsDataLayout)
     {
         OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
@@ -2986,7 +2986,7 @@ long ScDPResultDimension::GetSize(long nMeasure) const
     else
     {
         //  add all members
-        for (long nMem=0; nMem<nMemberCount; nMem++)
+        for (tools::Long nMem=0; nMem<nMemberCount; nMem++)
             nTotal += maMemberArray[nMem]->GetSize(nMeasure);
     }
     return nTotal;
@@ -3031,14 +3031,14 @@ void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
 }
 
 void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
-                                                long nStart, long nMeasure )
+                                                tools::Long nStart, tools::Long nMeasure )
 {
-    long nPos = nStart;
-    long nCount = maMemberArray.size();
+    tools::Long nPos = nStart;
+    tools::Long nCount = maMemberArray.size();
 
-    for (long i=0; i<nCount; i++)
+    for (tools::Long i=0; i<nCount; i++)
     {
-        long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
+        tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
 
         ScDPResultMember* pMember = maMemberArray[nSorted].get();
         //  in data layout dimension, use first member with different measures/names
@@ -3059,16 +3059,16 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
 
 void ScDPResultDimension::FillDataResults(
     const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence, long nMeasure) const
+    uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence, tools::Long nMeasure) const
 {
     FilterStack aFilterStack(rFilterCxt.maFilters);
     aFilterStack.pushDimName(GetName(), bIsDataLayout);
 
-    long nMemberMeasure = nMeasure;
-    long nCount = maMemberArray.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMemberArray.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
-        long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
+        tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
 
         const ScDPResultMember* pMember;
         if (bIsDataLayout)
@@ -3086,11 +3086,11 @@ void ScDPResultDimension::FillDataResults(
     }
 }
 
-void ScDPResultDimension::UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const
+void ScDPResultDimension::UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const
 {
-    long nMemberMeasure = nMeasure;
-    long nCount = maMemberArray.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMemberArray.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pMember;
         if (bIsDataLayout)
@@ -3110,7 +3110,7 @@ void ScDPResultDimension::UpdateDataResults( const ScDPResultMember* pRefMember,
 
 void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
 {
-    long nCount = maMemberArray.size();
+    tools::Long nCount = maMemberArray.size();
 
     if ( bSortByData )
     {
@@ -3118,7 +3118,7 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
 
         OSL_ENSURE( aMemberOrder.empty(), "sort twice?" );
         aMemberOrder.resize( nCount );
-        for (long nPos=0; nPos<nCount; nPos++)
+        for (tools::Long nPos=0; nPos<nCount; nPos++)
             aMemberOrder[nPos] = nPos;
 
         ScDPRowMembersOrder aComp( *this, nSortMeasure, bSortAscending );
@@ -3128,8 +3128,8 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
     // handle children
 
     // for data layout, call only once - sorting measure is always taken from settings
-    long nLoopCount = bIsDataLayout ? 1 : nCount;
-    for (long i=0; i<nLoopCount; i++)
+    tools::Long nLoopCount = bIsDataLayout ? 1 : nCount;
+    for (tools::Long i=0; i<nLoopCount; i++)
     {
         ScDPResultMember* pMember = maMemberArray[i].get();
         if ( pMember->IsVisible() )
@@ -3139,13 +3139,13 @@ void ScDPResultDimension::SortMembers( ScDPResultMember* pRefMember )
 
 void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
 {
-    long nCount = maMemberArray.size();
+    tools::Long nCount = maMemberArray.size();
 
     // handle children first, before changing the visible state
 
     // for data layout, call only once - sorting measure is always taken from settings
-    long nLoopCount = bIsDataLayout ? 1 : nCount;
-    for (long i=0; i<nLoopCount; i++)
+    tools::Long nLoopCount = bIsDataLayout ? 1 : nCount;
+    for (tools::Long i=0; i<nLoopCount; i++)
     {
         ScDPResultMember* pMember = maMemberArray[i].get();
         if ( pMember->IsVisible() )
@@ -3159,7 +3159,7 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
 
     ScMemberSortOrder aAutoOrder;
     aAutoOrder.resize( nCount );
-    long nPos;
+    tools::Long nPos;
     for (nPos=0; nPos<nCount; nPos++)
         aAutoOrder[nPos] = nPos;
 
@@ -3168,7 +3168,7 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
 
     // look for equal values to the last included one
 
-    long nIncluded = nAutoCount;
+    tools::Long nIncluded = nAutoCount;
     const ScDPResultMember* pMember1 = maMemberArray[aAutoOrder[nIncluded - 1]].get();
     const ScDPDataMember* pDataMember1 = pMember1->IsVisible() ? pMember1->GetDataRoot() : nullptr;
     bool bContinue = true;
@@ -3199,8 +3199,8 @@ void ScDPResultDimension::DoAutoShow( ScDPResultMember* pRefMember )
 
 void ScDPResultDimension::ResetResults()
 {
-    long nCount = maMemberArray.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = maMemberArray.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         // sort order doesn't matter
         ScDPResultMember* pMember = maMemberArray[bIsDataLayout ? 0 : i].get();
@@ -3208,20 +3208,20 @@ void ScDPResultDimension::ResetResults()
     }
 }
 
-long ScDPResultDimension::GetSortedIndex( long nUnsorted ) const
+tools::Long ScDPResultDimension::GetSortedIndex( tools::Long nUnsorted ) const
 {
     return aMemberOrder.empty() ? nUnsorted : aMemberOrder[nUnsorted];
 }
 
-void ScDPResultDimension::UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+void ScDPResultDimension::UpdateRunningTotals( const ScDPResultMember* pRefMember, tools::Long nMeasure,
                                                 ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const
 {
     const ScDPResultMember* pMember;
-    long nMemberMeasure = nMeasure;
-    long nCount = maMemberArray.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMemberArray.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
-        long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
+        tools::Long nSorted = aMemberOrder.empty() ? i : aMemberOrder[i];
 
         if (bIsDataLayout)
         {
@@ -3247,7 +3247,7 @@ void ScDPResultDimension::UpdateRunningTotals( const ScDPResultMember* pRefMembe
 
 ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
     const ScDPRelativePos* pRelativePos, const OUString* pName,
-    const long* pRowIndexes, const long* pColIndexes ) const
+    const tools::Long* pRowIndexes, const tools::Long* pColIndexes ) const
 {
     // get named, previous/next, or first member of this dimension (first existing if pRelativePos and pName are NULL)
 
@@ -3256,9 +3256,9 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
     ScDPDataMember* pColMember = nullptr;
 
     bool bFirstExisting = ( pRelativePos == nullptr && pName == nullptr );
-    long nMemberCount = maMemberArray.size();
-    long nMemberIndex = 0;      // unsorted
-    long nDirection = 1;        // forward if no relative position is used
+    tools::Long nMemberCount = maMemberArray.size();
+    tools::Long nMemberIndex = 0;      // unsorted
+    tools::Long nDirection = 1;        // forward if no relative position is used
     if ( pRelativePos )
     {
         nDirection = pRelativePos->nDirection;
@@ -3290,7 +3290,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
 
         // get child members by given indexes
 
-        const long* pNextRowIndex = pRowIndexes;
+        const tools::Long* pNextRowIndex = pRowIndexes;
         while ( *pNextRowIndex >= 0 && pRowMember )
         {
             const ScDPResultDimension* pRowChild = pRowMember->GetChildDimension();
@@ -3315,7 +3315,7 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
         {
             pColMember = pRowMember->GetDataRoot();
 
-            const long* pNextColIndex = pColIndexes;
+            const tools::Long* pNextColIndex = pColIndexes;
             while ( *pNextColIndex >= 0 && pColMember )
             {
                 ScDPDataDimension* pColChild = pColMember->GetChildDimension();
@@ -3337,19 +3337,19 @@ ScDPDataMember* ScDPResultDimension::GetRowReferenceMember(
 
 ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
     const ScDPRelativePos* pRelativePos, const OUString* pName,
-    long nRefDimPos, const ScDPRunningTotalState& rRunning )
+    tools::Long nRefDimPos, const ScDPRunningTotalState& rRunning )
 {
     OSL_ENSURE( pRelativePos == nullptr || pName == nullptr, "can't use position and name" );
 
-    const long* pColIndexes = rRunning.GetColSorted().data();
-    const long* pRowIndexes = rRunning.GetRowSorted().data();
+    const tools::Long* pColIndexes = rRunning.GetColSorted().data();
+    const tools::Long* pRowIndexes = rRunning.GetRowSorted().data();
 
     // get own row member using all indexes
 
     const ScDPResultMember* pRowMember = rRunning.GetRowResRoot();
     ScDPDataMember* pColMember = nullptr;
 
-    const long* pNextRowIndex = pRowIndexes;
+    const tools::Long* pNextRowIndex = pRowIndexes;
     while ( *pNextRowIndex >= 0 && pRowMember )
     {
         const ScDPResultDimension* pRowChild = pRowMember->GetChildDimension();
@@ -3367,8 +3367,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
     {
         pColMember = pRowMember->GetDataRoot();
 
-        const long* pNextColIndex = pColIndexes;
-        long nColSkipped = 0;
+        const tools::Long* pNextColIndex = pColIndexes;
+        tools::Long nColSkipped = 0;
         while ( *pNextColIndex >= 0 && pColMember && nColSkipped < nRefDimPos )
         {
             ScDPDataDimension* pColChild = pColMember->GetChildDimension();
@@ -3388,11 +3388,11 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
         ScDPDataDimension* pReferenceDim = pColMember->GetChildDimension();
         if ( pReferenceDim )
         {
-            long nReferenceCount = pReferenceDim->GetMemberCount();
+            tools::Long nReferenceCount = pReferenceDim->GetMemberCount();
 
             bool bFirstExisting = ( pRelativePos == nullptr && pName == nullptr );
-            long nMemberIndex = 0;      // unsorted
-            long nDirection = 1;        // forward if no relative position is used
+            tools::Long nMemberIndex = 0;      // unsorted
+            tools::Long nDirection = 1;        // forward if no relative position is used
             pColMember = nullptr;          // don't use parent dimension's member if none found
             if ( pRelativePos )
             {
@@ -3423,7 +3423,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 
                 // get column members below the reference field
 
-                const long* pNextColIndex = pColIndexes + nRefDimPos + 1;
+                const tools::Long* pNextColIndex = pColIndexes + nRefDimPos + 1;
                 while ( *pNextColIndex >= 0 && pColMember )
                 {
                     ScDPDataDimension* pColChild = pColMember->GetChildDimension();
@@ -3464,8 +3464,8 @@ void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocum
 
     SCROW nStartRow = rPos.Row();
 
-    long nCount = bIsDataLayout ? 1 : maMemberArray.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = bIsDataLayout ? 1 : maMemberArray.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pMember = maMemberArray[i].get();
         pMember->DumpState( pRefMember, pDoc, rPos );
@@ -3486,16 +3486,16 @@ void ScDPResultDimension::Dump(int nIndent) const
 }
 #endif
 
-long ScDPResultDimension::GetMemberCount() const
+tools::Long ScDPResultDimension::GetMemberCount() const
 {
     return maMemberArray.size();
 }
 
-const ScDPResultMember* ScDPResultDimension::GetMember(long n) const
+const ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n) const
 {
     return maMemberArray[n].get();
 }
-ScDPResultMember* ScDPResultDimension::GetMember(long n)
+ScDPResultMember* ScDPResultDimension::GetMember(tools::Long n)
 {
     return maMemberArray[n].get();
 }
@@ -3546,8 +3546,8 @@ void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )
 
     // Go through all result members under the given result dimension, and
     // create a new data member instance for each result member.
-    long nCount = pDim->GetMemberCount();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = pDim->GetMemberCount();
+    for (tools::Long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pResMem = pDim->GetMember(i);
 
@@ -3571,8 +3571,8 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
 {
     // the ScDPItemData array must contain enough entries for all dimensions - this isn't checked
 
-    long nCount = maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         ScDPDataMember* pMember = maMembers[static_cast<sal_uInt16>(i)].get();
 
@@ -3595,7 +3595,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
 
 void ScDPDataDimension::FillDataRow(
     const ScDPResultDimension* pRefDim, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence<sheet::DataResult>& rSequence, long nMeasure, bool bIsSubTotalRow,
+    uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState) const
 {
     OUString aDimName;
@@ -3614,13 +3614,13 @@ void ScDPDataDimension::FillDataRow(
 
     const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
 
-    long nMemberMeasure = nMeasure;
-    long nCount = maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
-        long nSorted = rMemberOrder.empty() ? i : rMemberOrder[i];
+        tools::Long nSorted = rMemberOrder.empty() ? i : rMemberOrder[i];
 
-        long nMemberPos = nSorted;
+        tools::Long nMemberPos = nSorted;
         if (bIsDataLayout)
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
@@ -3639,17 +3639,17 @@ void ScDPDataDimension::FillDataRow(
 }
 
 void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, bool bIsSubTotalRow,
+                                    tools::Long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const
 {
     OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
-    long nMemberMeasure = nMeasure;
-    long nCount = maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
-        long nMemberPos = i;
+        tools::Long nMemberPos = i;
         if (bIsDataLayout)
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
@@ -3667,7 +3667,7 @@ void ScDPDataDimension::UpdateDataRow( const ScDPResultDimension* pRefDim,
 
 void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 {
-    long nCount = maMembers.size();
+    tools::Long nCount = maMembers.size();
 
     if ( pRefDim->IsSortByData() )
     {
@@ -3676,7 +3676,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
         ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
         OSL_ENSURE( rMemberOrder.empty(), "sort twice?" );
         rMemberOrder.resize( nCount );
-        for (long nPos=0; nPos<nCount; nPos++)
+        for (tools::Long nPos=0; nPos<nCount; nPos++)
             rMemberOrder[nPos] = nPos;
 
         ScDPColMembersOrder aComp( *this, pRefDim->GetSortMeasure(), pRefDim->IsSortAscending() );
@@ -3689,8 +3689,8 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
-    long nLoopCount = bIsDataLayout ? 1 : nCount;
-    for (long i=0; i<nLoopCount; i++)
+    tools::Long nLoopCount = bIsDataLayout ? 1 : nCount;
+    for (tools::Long i=0; i<nLoopCount; i++)
     {
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember ???
@@ -3703,7 +3703,7 @@ void ScDPDataDimension::SortMembers( ScDPResultDimension* pRefDim )
 
 void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 {
-    long nCount = maMembers.size();
+    tools::Long nCount = maMembers.size();
 
     // handle children first, before changing the visible state
 
@@ -3711,8 +3711,8 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
     // for data layout, call only once - sorting measure is always taken from settings
-    long nLoopCount = bIsDataLayout ? 1 : nCount;
-    for (long i=0; i<nLoopCount; i++)
+    tools::Long nLoopCount = bIsDataLayout ? 1 : nCount;
+    for (tools::Long i=0; i<nLoopCount; i++)
     {
         ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         if ( pRefMember->IsVisible() )  //TODO: here or in ScDPDataMember ???
@@ -3729,7 +3729,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
     ScMemberSortOrder aAutoOrder;
     aAutoOrder.resize( nCount );
-    long nPos;
+    tools::Long nPos;
     for (nPos=0; nPos<nCount; nPos++)
         aAutoOrder[nPos] = nPos;
 
@@ -3738,7 +3738,7 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
     // look for equal values to the last included one
 
-    long nIncluded = pRefDim->GetAutoCount();
+    tools::Long nIncluded = pRefDim->GetAutoCount();
     ScDPDataMember* pDataMember1 = maMembers[aAutoOrder[nIncluded - 1]].get();
     if ( !pDataMember1->IsVisible() )
         pDataMember1 = nullptr;
@@ -3771,18 +3771,18 @@ void ScDPDataDimension::DoAutoShow( ScDPResultDimension* pRefDim )
 
 void ScDPDataDimension::ResetResults()
 {
-    long nCount = maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         //  sort order doesn't matter
 
-        long nMemberPos = bIsDataLayout ? 0 : i;
+        tools::Long nMemberPos = bIsDataLayout ? 0 : i;
         ScDPDataMember* pDataMember = maMembers[nMemberPos].get();
         pDataMember->ResetResults();
     }
 }
 
-long ScDPDataDimension::GetSortedIndex( long nUnsorted ) const
+tools::Long ScDPDataDimension::GetSortedIndex( tools::Long nUnsorted ) const
 {
     if (!pResultDimension)
        return nUnsorted;
@@ -3792,21 +3792,21 @@ long ScDPDataDimension::GetSortedIndex( long nUnsorted ) const
 }
 
 void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
-                                    long nMeasure, bool bIsSubTotalRow,
+                                    tools::Long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const
 {
     OSL_ENSURE( pRefDim && static_cast<size_t>(pRefDim->GetMemberCount()) == maMembers.size(), "dimensions don't match" );
     OSL_ENSURE( pRefDim == pResultDimension, "wrong dim" );
 
-    long nMemberMeasure = nMeasure;
-    long nCount = maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nMemberMeasure = nMeasure;
+    tools::Long nCount = maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         const ScMemberSortOrder& rMemberOrder = pRefDim->GetMemberOrder();
-        long nSorted = rMemberOrder.empty() ? i : rMemberOrder[i];
+        tools::Long nSorted = rMemberOrder.empty() ? i : rMemberOrder[i];
 
-        long nMemberPos = nSorted;
+        tools::Long nMemberPos = nSorted;
         if (bIsDataLayout)
         {
             OSL_ENSURE(nMeasure == SC_DPMEASURE_ALL || pResultData->GetMeasureCount() == 1,
@@ -3840,8 +3840,8 @@ void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocumen
 
     SCROW nStartRow = rPos.Row();
 
-    long nCount = bIsDataLayout ? 1 : maMembers.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = bIsDataLayout ? 1 : maMembers.size();
+    for (tools::Long i=0; i<nCount; i++)
     {
         const ScDPResultMember* pRefMember = pRefDim->GetMember(i);
         const ScDPDataMember* pDataMember = maMembers[i].get();
@@ -3861,17 +3861,17 @@ void ScDPDataDimension::Dump(int nIndent) const
 }
 #endif
 
-long ScDPDataDimension::GetMemberCount() const
+tools::Long ScDPDataDimension::GetMemberCount() const
 {
     return maMembers.size();
 }
 
-const ScDPDataMember* ScDPDataDimension::GetMember(long n) const
+const ScDPDataMember* ScDPDataDimension::GetMember(tools::Long n) const
 {
     return maMembers[n].get();
 }
 
-ScDPDataMember* ScDPDataDimension::GetMember(long n)
+ScDPDataMember* ScDPDataDimension::GetMember(tools::Long n)
 {
     return maMembers[n].get();
 }
@@ -3909,8 +3909,8 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
     typedef std::unordered_map<OUString, long> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
-    long nColumnCount = pData->GetColumnCount();
-    for (long i = 0; i < nColumnCount; ++i)
+    tools::Long nColumnCount = pData->GetColumnCount();
+    for (tools::Long i = 0; i < nColumnCount; ++i)
     {
         aFieldNames.emplace(pData->getDimensionName(i), i);
     }
@@ -3924,7 +3924,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
             // This should never happen!
             continue;
 
-        long nDimIndex = itrField->second;
+        tools::Long nDimIndex = itrField->second;
         aCri.mnFieldIndex = static_cast<sal_Int32>(nDimIndex);
         aCri.mpFilter = std::make_shared<ScDPFilteredCache::GroupFilter>();
 
@@ -3997,7 +3997,7 @@ void ScDPResultDimension::InitWithMembers(
     if (!(pThisDim && pThisLevel))
         return;
 
-    long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
+    tools::Long nDimSource = pThisDim->GetDimension();     //TODO: check GetSourceDim?
 
     //  create all members at the first call (preserve order)
     ResultMembers& rMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
@@ -4075,9 +4075,9 @@ bool LateInitParams::IsEnd( size_t nPos ) const
 
 void ScDPResultDimension::CheckShowEmpty( bool bShow )
 {
-    long nCount = maMemberArray.size();
+    tools::Long nCount = maMemberArray.size();
 
-    for (long i=0; i<nCount; i++)
+    for (tools::Long i=0; i<nCount; i++)
     {
         ScDPResultMember* pMember = maMemberArray.at(i).get();
         pMember->CheckShowEmpty(bShow);

@@ -123,9 +123,9 @@ public:
 
     bool isValid() const;
 
-    virtual void getValue(long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const override;
-    virtual OUString getColumnLabel(long nCol) const override;
-    virtual long getColumnCount() const override;
+    virtual void getValue(tools::Long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const override;
+    virtual OUString getColumnLabel(tools::Long nCol) const override;
+    virtual tools::Long getColumnCount() const override;
     virtual bool first() override;
     virtual bool next() override;
     virtual void finish() override;
@@ -161,17 +161,17 @@ void DBConnector::finish()
     mxRowSet->beforeFirst();
 }
 
-long DBConnector::getColumnCount() const
+tools::Long DBConnector::getColumnCount() const
 {
     return mxMetaData->getColumnCount();
 }
 
-OUString DBConnector::getColumnLabel(long nCol) const
+OUString DBConnector::getColumnLabel(tools::Long nCol) const
 {
     return mxMetaData->getColumnLabel(nCol+1);
 }
 
-void DBConnector::getValue(long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const
+void DBConnector::getValue(tools::Long nCol, ScDPItemData &rData, SvNumFormatType& rNumType) const
 {
     rNumType = SvNumFormatType::NUMBER;
     sal_Int32 nType = mxMetaData->getColumnType(nCol+1);
@@ -501,7 +501,7 @@ bool ScDPObject::IsDataDescriptionCell(const ScAddress& rPos)
     if (!pSaveData)
         return false;
 
-    long nDataDimCount = pSaveData->GetDataDimensionCount();
+    tools::Long nDataDimCount = pSaveData->GetDataDimensionCount();
     if (nDataDimCount != 1)
         // There has to be exactly one data dimension for the description to
         // appear at top-left corner.
@@ -528,19 +528,19 @@ void ScDPObject::CreateOutput()
     pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
     pOutput->SetHeaderLayout ( mbHeaderLayout );
 
-    long nOldRows = nHeaderRows;
+    tools::Long nOldRows = nHeaderRows;
     nHeaderRows = pOutput->GetHeaderRows();
 
     if ( !(bAllowMove && nHeaderRows != nOldRows) )
         return;
 
-    long nDiff = nOldRows - nHeaderRows;
+    tools::Long nDiff = nOldRows - nHeaderRows;
     if ( nOldRows == 0 )
         --nDiff;
     if ( nHeaderRows == 0 )
         ++nDiff;
 
-    long nNewRow = aOutRange.aStart.Row() + nDiff;
+    tools::Long nNewRow = aOutRange.aStart.Row() + nDiff;
     if ( nNewRow < 0 )
         nNewRow = 0;
 
@@ -1193,7 +1193,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags )
+OUString ScDPObject::GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags )
 {
     rIsDataLayout = false;
     OUString aRet;
@@ -1202,7 +1202,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
     {
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
         uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
-        long nDimCount = xDims->getCount();
+        tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
         {
             uno::Reference<uno::XInterface> xIntDim(xDims->getByIndex(nDim), uno::UNO_QUERY);
@@ -1242,14 +1242,14 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
     return aRet;
 }
 
-bool ScDPObject::IsDuplicated( long nDim )
+bool ScDPObject::IsDuplicated( tools::Long nDim )
 {
     bool bDuplicated = false;
     if ( xSource.is() )
     {
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
         uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
-        long nDimCount = xDims->getCount();
+        tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
         {
             uno::Reference<beans::XPropertySet> xDimProp(xDims->getByIndex(nDim), uno::UNO_QUERY);
@@ -1271,9 +1271,9 @@ bool ScDPObject::IsDuplicated( long nDim )
     return bDuplicated;
 }
 
-long ScDPObject::GetDimCount()
+tools::Long ScDPObject::GetDimCount()
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
     if ( xSource.is() )
     {
         try
@@ -1404,22 +1404,22 @@ bool ScDPObject::IsFilterButton( const ScAddress& rPos )
     return pOutput->IsFilterButton( rPos );
 }
 
-long ScDPObject::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrientation& rOrient )
+tools::Long ScDPObject::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrientation& rOrient )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
     return pOutput->GetHeaderDim( rPos, rOrient );
 }
 
-bool ScDPObject::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
-                                tools::Rectangle& rPosRect, sheet::DataPilotFieldOrientation& rOrient, long& rDimPos )
+bool ScDPObject::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, tools::Long nDragDim,
+                                tools::Rectangle& rPosRect, sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
     return pOutput->GetHeaderDrag( rPos, bMouseLeft, bMouseTop, nDragDim, rPosRect, rOrient, rDimPos );
 }
 
-void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension)
+void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long nDimension)
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -1432,7 +1432,7 @@ OUString ScDPObject::GetFormattedString(const OUString& rDimName, const double f
     if(!pTableData)
         return OUString();
 
-    long nDim;
+    tools::Long nDim;
     for (nDim = 0; nDim < pTableData->GetColumnCount(); ++nDim)
     {
         if(rDimName == pTableData->getDimensionName(nDim))
@@ -1993,7 +1993,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     uno::Reference<container::XNamed> xDim;
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-    long nIntCount = xIntDims->getCount();
+    tools::Long nIntCount = xIntDims->getCount();
     if ( rElemDesc.Dimension < nIntCount )
     {
         xDim.set(xIntDims->getByIndex(rElemDesc.Dimension), uno::UNO_QUERY);
@@ -2014,7 +2014,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
 
     //  query old state
 
-    long nHierCount = 0;
+    tools::Long nHierCount = 0;
     uno::Reference<container::XIndexAccess> xHiers;
     uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
     if ( xHierSupp.is() )
@@ -2029,7 +2029,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     OSL_ENSURE( xHier.is(), "hierarchy not found" );
     if ( !xHier.is() ) return;
 
-    long nLevCount = 0;
+    tools::Long nLevCount = 0;
     uno::Reference<container::XIndexAccess> xLevels;
     uno::Reference<sheet::XLevelsSupplier> xLevSupp( xHier, uno::UNO_QUERY );
     if ( xLevSupp.is() )
@@ -2094,7 +2094,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
     if ( xDimProp.is() && xDimSupp.is() )
     {
         uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
-        long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+        tools::Long nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
                                 SC_UNO_DP_USEDHIERARCHY );
         if ( nHierarchy >= xHiers->getCount() )
             nHierarchy = 0;
@@ -2163,8 +2163,8 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
-    long nDimCount = xDims->getCount();
-    for (long nDim = 0; nDim < nDimCount; ++nDim)
+    tools::Long nDimCount = xDims->getCount();
+    for (tools::Long nDim = 0; nDim < nDimCount; ++nDim)
     {
         // dimension properties
         uno::Reference<beans::XPropertySet> xDimProp(xDims->getByIndex(nDim), uno::UNO_QUERY);
@@ -2200,7 +2200,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
                 xDimProp, SC_UNO_DP_ISDATALAYOUT);
 
             // is this dimension cloned?
-            long nDupSource = -1;
+            tools::Long nDupSource = -1;
             try
             {
                 uno::Any aOrigAny = xDimProp->getPropertyValue(SC_UNO_DP_ORIGINAL_POS);
@@ -2243,7 +2243,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
             rField.nFuncMask = nMask;
             rField.mnDupCount = nDupCount;
-            long nPos = ScUnoHelpFunctions::GetLongProperty(
+            tools::Long nPos = ScUnoHelpFunctions::GetLongProperty(
                 xDimProp, SC_UNO_DP_POSITION);
             aPos.push_back(nPos);
 
@@ -2335,7 +2335,7 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
         return;
 
     uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
-    long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
+    tools::Long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
         xDimProp, SC_UNO_DP_USEDHIERARCHY);
     if ( nHierarchy >= xHiers->getCount() )
         nHierarchy = 0;
@@ -2420,7 +2420,7 @@ void ScDPObject::FillLabelDataForDimension(
     if (bData)
         return;
 
-    rLabelData.mnOriginalDim = static_cast<long>(nOrigPos);
+    rLabelData.mnOriginalDim = static_cast<tools::Long>(nOrigPos);
     rLabelData.maLayoutName = aLayoutName;
     rLabelData.maSubtotalName = aSubtotalName;
     if (nOrigPos >= 0)
@@ -2551,14 +2551,14 @@ bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< 
 
 namespace {
 
-OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource, long nDim )
+OUString lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource, tools::Long nDim )
 {
     OUString aName;
     if ( xSource.is() )
     {
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
         uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
-        long nDimCount = xDims->getCount();
+        tools::Long nDimCount = xDims->getCount();
         if ( nDim < nDimCount )
         {
             uno::Reference<container::XNamed> xDimName(xDims->getByIndex(nDim), uno::UNO_QUERY);
@@ -2590,9 +2590,9 @@ bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
 
 class FindByOriginalDim
 {
-    long mnDim;
+    tools::Long mnDim;
 public:
-    explicit FindByOriginalDim(long nDim) : mnDim(nDim) {}
+    explicit FindByOriginalDim(tools::Long nDim) : mnDim(nDim) {}
     bool operator() (const ScPivotField& r) const
     {
         return mnDim == r.getOriginalDim();
@@ -2614,7 +2614,7 @@ void ScDPObject::ConvertOrientation(
     {
         const ScPivotField& rField = *itr;
 
-        long nCol = rField.getOriginalDim();
+        tools::Long nCol = rField.getOriginalDim();
         PivotFunc nFuncs = rField.nFuncMask;
         const sheet::DataPilotFieldReference& rFieldRef = rField.maFieldRef;
 

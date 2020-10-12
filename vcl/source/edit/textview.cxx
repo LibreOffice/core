@@ -312,12 +312,12 @@ void TextView::ImpHighlight( const TextSelection& rSel )
     SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
 
     tools::Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
-    long nY = 0;
+    tools::Long nY = 0;
     const sal_uInt32 nStartPara = aSel.GetStart().GetPara();
     const sal_uInt32 nEndPara = aSel.GetEnd().GetPara();
     for ( sal_uInt32 nPara = 0; nPara <= nEndPara; ++nPara )
     {
-        const long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
+        const tools::Long nParaHeight = mpImpl->mpTextEngine->CalcParaHeight( nPara );
         if ( ( nPara >= nStartPara ) && ( ( nY + nParaHeight ) > aVisArea.Top() ) )
         {
             TEParaPortion* pTEParaPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( nPara );
@@ -879,7 +879,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                 nInputEnd = rLine.GetEnd();
             tools::Rectangle aR2 = mpImpl->mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
 
-            long nWidth = aR2.Left()-aR1.Right();
+            tools::Long nWidth = aR2.Left()-aR1.Right();
             aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
             GetWindow()->SetCursorRect( &aR1, nWidth );
         }
@@ -907,7 +907,7 @@ void TextView::HideCursor()
     mpImpl->mpCursor->Hide();
 }
 
-void TextView::Scroll( long ndX, long ndY )
+void TextView::Scroll( tools::Long ndX, tools::Long ndY )
 {
     SAL_WARN_IF( !mpImpl->mpTextEngine->IsFormatted(), "vcl", "Scroll: Not formatted!" );
 
@@ -926,8 +926,8 @@ void TextView::Scroll( long ndX, long ndY )
     if ( aNewStartPos.X() < 0 )
         aNewStartPos.setX( 0 );
 
-    long nDiffX = mpImpl->maStartDocPos.X() - aNewStartPos.X();
-    long nDiffY = mpImpl->maStartDocPos.Y() - aNewStartPos.Y();
+    tools::Long nDiffX = mpImpl->maStartDocPos.X() - aNewStartPos.X();
+    tools::Long nDiffY = mpImpl->maStartDocPos.Y() - aNewStartPos.Y();
 
     if ( nDiffX || nDiffY )
     {
@@ -1360,7 +1360,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
 {
     TextPaM aPaM( rPaM );
 
-    long nX;
+    tools::Long nX;
     if ( mpImpl->mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpImpl->mpTextEngine->GetEditCursor( rPaM, false ).Left();
@@ -1396,7 +1396,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
 {
     TextPaM aPaM( rPaM );
 
-    long nX;
+    tools::Long nX;
     if ( mpImpl->mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpImpl->mpTextEngine->GetEditCursor( rPaM, false ).Left();
@@ -1512,7 +1512,7 @@ TextPaM TextView::PageDown( const TextPaM& rPaM )
     Point aBottomRight = aRect.BottomRight();
     aBottomRight.AdjustY(mpImpl->mpWindow->GetOutputSizePixel().Height() * 9/10 );
     aBottomRight.AdjustX(1 );
-    long nHeight = mpImpl->mpTextEngine->GetTextHeight();
+    tools::Long nHeight = mpImpl->mpTextEngine->GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
         aBottomRight.setY( nHeight-1 );
 
@@ -1582,11 +1582,11 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
         && aOutSz.Width() && aOutSz.Height()
     )
     {
-        long nVisStartY = mpImpl->maStartDocPos.Y();
-        long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
-        long nVisStartX = mpImpl->maStartDocPos.X();
-        long nVisEndX = mpImpl->maStartDocPos.X() + aOutSz.Width();
-        long nMoreX = aOutSz.Width() / 4;
+        tools::Long nVisStartY = mpImpl->maStartDocPos.Y();
+        tools::Long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
+        tools::Long nVisStartX = mpImpl->maStartDocPos.X();
+        tools::Long nVisEndX = mpImpl->maStartDocPos.X() + aOutSz.Width();
+        tools::Long nMoreX = aOutSz.Width() / 4;
 
         Point aNewStartPos( mpImpl->maStartDocPos );
 
@@ -1619,7 +1619,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 //      if ( !nMaxTextWidth || ( nMaxTextWidth > 0x7FFFFFFF ) )
 //          nMaxTextWidth = 0x7FFFFFFF;
 //      long nMaxX = (long)nMaxTextWidth - aOutSz.Width();
-        long nMaxX = mpImpl->mpTextEngine->CalcTextWidth() - aOutSz.Width();
+        tools::Long nMaxX = mpImpl->mpTextEngine->CalcTextWidth() - aOutSz.Width();
         if ( nMaxX < 0 )
             nMaxX = 0;
 
@@ -1629,7 +1629,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
             aNewStartPos.setX( nMaxX );
 
         // Y should not be further down than needed
-        long nYMax = mpImpl->mpTextEngine->GetTextHeight() - aOutSz.Height();
+        tools::Long nYMax = mpImpl->mpTextEngine->GetTextHeight() - aOutSz.Height();
         if ( nYMax < 0 )
             nYMax = 0;
         if ( aNewStartPos.Y() > nYMax )
@@ -1641,7 +1641,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 
     if ( aEditCursor.Right() < aEditCursor.Left() )
     {
-        long n = aEditCursor.Left();
+        tools::Long n = aEditCursor.Left();
         aEditCursor.SetLeft( aEditCursor.Right() );
         aEditCursor.SetRight( n );
     }
@@ -2125,8 +2125,8 @@ void TextView::CenterPaM( const TextPaM& rPaM )
 {
     // Get textview size and the corresponding y-coordinates
     Size aOutSz = mpImpl->mpWindow->GetOutputSizePixel();
-    long nVisStartY = mpImpl->maStartDocPos.Y();
-    long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
+    tools::Long nVisStartY = mpImpl->maStartDocPos.Y();
+    tools::Long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
 
     // Retrieve the coordinates of the PaM
     tools::Rectangle aRect = mpImpl->mpTextEngine->PaMtoEditCursor(rPaM);

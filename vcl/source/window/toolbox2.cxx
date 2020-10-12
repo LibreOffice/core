@@ -127,7 +127,7 @@ ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
     init(nItemId, nItemBits, false);
 }
 
-Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize )
+Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, tools::Long maxWidth, const Size& rDefaultSize )
 {
     Size aSize( rDefaultSize ); // the size of 'standard' toolbox items
                                 // non-standard items are eg windows or buttons with text
@@ -959,7 +959,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     }
 }
 
-static Image ImplRotImage( const Image& rImage, long nAngle10 )
+static Image ImplRotImage( const Image& rImage, tools::Long nAngle10 )
 {
     BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
 
@@ -968,7 +968,7 @@ static Image ImplRotImage( const Image& rImage, long nAngle10 )
     return Image( aRotBitmapEx );
 }
 
-void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
+void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, tools::Long nAngle10 )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -978,7 +978,7 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     Size aOldSize = pItem->maImage.GetSizePixel();
 
-    long nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % 3600;
+    tools::Long nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % 3600;
     while( nDeltaAngle < 0 )
         nDeltaAngle += 3600;
 
@@ -1046,7 +1046,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     if ( !mbCalc &&
          ((meButtonType != ButtonType::SYMBOLONLY) || !pItem->maImage) )
     {
-        long nOldWidth = GetCtrlTextWidth( pItem->maText );
+        tools::Long nOldWidth = GetCtrlTextWidth( pItem->maText );
         pItem->maText = MnemonicGenerator::EraseAllMnemonicChars(rText);
         mpData->ImplClearLayoutData();
         if ( nOldWidth != GetCtrlTextWidth( pItem->maText ) )
@@ -1429,9 +1429,9 @@ OUString ToolBox::GetDisplayText() const
     return mpData->m_pLayoutData ? mpData->m_pLayoutData->m_aDisplayText : OUString();
 }
 
-tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
+tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nIndex )
 {
-    long nItemIndex = -1;
+    tools::Long nItemIndex = -1;
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();
     if( mpData->m_pLayoutData )
@@ -1448,9 +1448,9 @@ tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )
     return (mpData->m_pLayoutData && nItemIndex != -1) ? mpData->m_pLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : tools::Rectangle();
 }
 
-long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID )
+tools::Long ToolBox::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID )
 {
-    long nIndex = -1;
+    tools::Long nIndex = -1;
     rItemID = 0;
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();

@@ -26,7 +26,7 @@ const double ZOOM_FACTOR = 1.12246205;
 * @param nCurrent current value
 * @param nMultiple multiple against which the current value is rounded
 */
-static long roundMultiple(long nCurrent, int nMultiple)
+static tools::Long roundMultiple(tools::Long nCurrent, int nMultiple)
 {
     // round zoom to a multiple of nMultiple
     return (( nCurrent + nMultiple / 2 ) - ( nCurrent + nMultiple / 2 ) % nMultiple);
@@ -39,10 +39,10 @@ static long roundMultiple(long nCurrent, int nMultiple)
 *
 * @param nCurrent current zoom factor
 */
-static long roundZoom(double nCurrent)
+static tools::Long roundZoom(double nCurrent)
 {
     // convert nCurrent properly to int
-    long nNew = nCurrent + 0.5;
+    tools::Long nNew = nCurrent + 0.5;
 
     // round to more common numbers above 50
     if (nNew > 1000) {
@@ -66,7 +66,7 @@ static long roundZoom(double nCurrent)
 * @param nPrevious previous zoom factor
 * @param nStep step which shouldn't be skipped
 */
-static long enforceStep(long nCurrent, long nPrevious, int nStep)
+static tools::Long enforceStep(tools::Long nCurrent, tools::Long nPrevious, int nStep)
 {
     if ((( nCurrent > nStep ) && ( nPrevious < nStep ))
     || (( nCurrent < nStep ) && ( nPrevious > nStep )))
@@ -80,9 +80,9 @@ static long enforceStep(long nCurrent, long nPrevious, int nStep)
 *
 * @param nCurrent current zoom factor
 */
-long zoomIn(long nCurrent)
+tools::Long zoomIn(tools::Long nCurrent)
 {
-    long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
+    tools::Long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
     // make sure some values are not skipped
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
@@ -97,9 +97,9 @@ long zoomIn(long nCurrent)
 *
 * @param nCurrent current zoom factor
 */
-long zoomOut(long nCurrent)
+tools::Long zoomOut(tools::Long nCurrent)
 {
-    long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
+    tools::Long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
     // make sure some values are not skipped
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);

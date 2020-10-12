@@ -44,9 +44,9 @@ class SwDropCapsPict : public weld::CustomWidgetController
     Color           maBackColor;
     Color           maTextLineColor;
     sal_uInt8       mnLines;
-    long            mnTotLineH;
-    long            mnLineH;
-    long            mnTextH;
+    tools::Long            mnTotLineH;
+    tools::Long            mnLineH;
+    tools::Long            mnTextH;
     sal_uInt16      mnDistance;
     VclPtr<Printer> mpPrinter;
     bool            mbDelPrinter;

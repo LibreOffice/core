@@ -329,7 +329,7 @@ void SlideSorterView::UpdateOrientation()
 
         if (pDockingWindow != nullptr)
         {
-            const long nScrollBarSize (
+            const tools::Long nScrollBarSize (
                 Application::GetSettings().GetStyleSettings().GetScrollBarSize());
             switch (pDockingWindow->GetOrientation())
             {
@@ -442,7 +442,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
         mbPreciousFlagUpdatePending |= true;
 
     model::SharedPageDescriptor pDescriptor;
-    for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
+    for (tools::Long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
     {
         pDescriptor = mrModel.GetPageDescriptor(nIndex);
         if (pDescriptor)
@@ -644,7 +644,7 @@ void SlideSorterView::Paint (
     // Paint all page objects that are fully or partially inside the
     // repaint region.
     const Range aRange (mpLayouter->GetRangeOfVisiblePageObjects(rRepaintArea));
-    for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
+    for (tools::Long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
         if (!pDescriptor || ! pDescriptor->HasState(PageDescriptor::ST_Visible))

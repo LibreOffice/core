@@ -305,7 +305,7 @@ void SdrVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrVirtObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     rRefObj.NbcRotate(rRef-aAnchor,nAngle,sn,cs);
     SetRectsDirty();
@@ -317,7 +317,7 @@ void SdrVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrVirtObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     rRefObj.NbcShear(rRef-aAnchor,nAngle,tn,bVShear);
     SetRectsDirty();
@@ -345,7 +345,7 @@ void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction
     }
 }
 
-void SdrVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrVirtObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     if (nAngle!=0) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
@@ -363,7 +363,7 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrVirtObj::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     if (nAngle!=0) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
@@ -432,12 +432,12 @@ void SdrVirtObj::NbcSetLogicRect(const tools::Rectangle& rRect)
 }
 
 
-long SdrVirtObj::GetRotateAngle() const
+tools::Long SdrVirtObj::GetRotateAngle() const
 {
     return rRefObj.GetRotateAngle();
 }
 
-long SdrVirtObj::GetShearAngle(bool bVertical) const
+tools::Long SdrVirtObj::GetShearAngle(bool bVertical) const
 {
     return rRefObj.GetShearAngle(bVertical);
 }

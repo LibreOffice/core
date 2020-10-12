@@ -46,10 +46,10 @@ private:
     bool mbFitWidth;
     bool mbRTL;
     Size maPreviousSize;
-    long mnLabelColumnWidth;
-    long mnDataColumnWidth1;
-    long mnDataColumnWidth2;
-    long mnRowHeight;
+    tools::Long mnLabelColumnWidth;
+    tools::Long mnDataColumnWidth1;
+    tools::Long mnDataColumnWidth2;
+    tools::Long mnRowHeight;
     const OUString maStringJan;
     const OUString maStringFeb;
     const OUString maStringMar;

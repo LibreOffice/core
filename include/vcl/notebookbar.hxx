@@ -36,7 +36,7 @@ public:
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const override;
-    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
+    virtual void setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void Resize() override;
 
     void SetSystemWindow(SystemWindow* pSystemWindow);

@@ -32,8 +32,8 @@ namespace sdr::properties {
 class SdrCircObjGeoData final : public SdrTextObjGeoData
 {
 public:
-    long                        nStartAngle;
-    long                        nEndAngle;
+    tools::Long                        nStartAngle;
+    tools::Long                        nEndAngle;
 };
 
 enum class SdrCircKind { Full, Section, Cut, Arc };
@@ -51,10 +51,10 @@ private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     SdrCircKind                 meCircleKind;
-    long                        nStartAngle;
-    long                        nEndAngle;
+    tools::Long                        nStartAngle;
+    tools::Long                        nEndAngle;
 
-    SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrCircKind eKind, const tools::Rectangle& rRect1, long nStart, long nEnd) const;
+    SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrCircKind eKind, const tools::Rectangle& rRect1, tools::Long nStart, tools::Long nEnd) const;
     SVX_DLLPRIVATE static void ImpSetCreateParams(SdrDragStat& rStat);
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // copy values from pool
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // copy values into pool
@@ -86,8 +86,8 @@ public:
         SdrModel& rSdrModel,
         SdrCircKind eNewKind,
         const tools::Rectangle& rRect,
-        long nNewStartAngle,
-        long nNewEndWink);
+        tools::Long nNewStartAngle,
+        tools::Long nNewEndWink);
 
     SdrCircKind GetCircleKind() const { return meCircleKind; }
 
@@ -129,7 +129,7 @@ public:
     virtual void NbcMove(const Size& aSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear (const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
     virtual SdrObjectUniquePtr DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
 private:
@@ -137,8 +137,8 @@ private:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
 public:
-    long GetStartAngle() const { return nStartAngle; }
-    long GetEndAngle() const { return nEndAngle; }
+    tools::Long GetStartAngle() const { return nStartAngle; }
+    tools::Long GetEndAngle() const { return nEndAngle; }
 
 };
 

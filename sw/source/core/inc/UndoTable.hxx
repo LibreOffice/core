@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 #include <o3tl/deleter.hxx>
+#include <tools/long.hxx>
 #include <ndarr.hxx>
 #include <undobj.hxx>
 #include <set>
@@ -176,7 +177,7 @@ class SwUndoTableNdsChg : public SwUndo
     };
     std::unique_ptr< std::set<BoxMove> > m_pNewSttNds;
     std::unique_ptr<SwUndoSaveSections> m_pDelSects;
-    long m_nMin, m_nMax;        // for redo of delete column
+    tools::Long m_nMin, m_nMax;        // for redo of delete column
     sal_uLong m_nSttNode;
     sal_uInt16 m_nCount;
     bool m_bFlag;
@@ -189,7 +190,7 @@ public:
     SwUndoTableNdsChg( SwUndoId UndoId,
                     const SwSelBoxes& rBoxes,
                     const SwTableNode& rTableNd,
-                    long nMn, long nMx,
+                    tools::Long nMn, tools::Long nMx,
                     sal_uInt16 nCnt, bool bFlg, bool bSameHeight );
 
     virtual ~SwUndoTableNdsChg() override;

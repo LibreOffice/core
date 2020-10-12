@@ -55,7 +55,7 @@ SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
     return *this;
 }
 
-void SwTabCols::Insert( long nValue, long nMin, long nMax,
+void SwTabCols::Insert( tools::Long nValue, tools::Long nMin, tools::Long nMax,
                         bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
@@ -66,7 +66,7 @@ void SwTabCols::Insert( long nValue, long nMin, long nMax,
     m_aData.insert( m_aData.begin() + nPos, aEntry );
 }
 
-void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
+void SwTabCols::Insert( tools::Long nValue, bool bValue, size_t nPos )
 {
     SwTabColsEntry aEntry;
     aEntry.nPos = nValue;

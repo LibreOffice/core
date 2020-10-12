@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_MDIEXP_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include "tblenum.hxx"
 #include "swdllapi.h"
 
@@ -41,9 +42,9 @@ extern void PageNumNotify( SwViewShell const * pVwSh,
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( SwViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
 
-SW_DLLPUBLIC void StartProgress(const char* pMessId, long nStartVal, long nEndVal, SwDocShell *pDocSh = nullptr);
+SW_DLLPUBLIC void StartProgress(const char* pMessId, tools::Long nStartVal, tools::Long nEndVal, SwDocShell *pDocSh = nullptr);
 SW_DLLPUBLIC void EndProgress      ( SwDocShell const *pDocSh );
-SW_DLLPUBLIC void SetProgressState  ( long nPosition, SwDocShell const *pDocShell );
+SW_DLLPUBLIC void SetProgressState  ( tools::Long nPosition, SwDocShell const *pDocShell );
 void RescheduleProgress( SwDocShell const *pDocShell );
 
 void RepaintPagePreview( SwViewShell const * pVwSh, const SwRect& rRect );

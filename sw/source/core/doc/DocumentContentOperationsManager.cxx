@@ -3776,7 +3776,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         }
         else
         {
-            long nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
+            tools::Long nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
             SwNodeIndex aIdx( rStartIdx, nOffset );
             newPos.nNode = aIdx;
         }

@@ -484,7 +484,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
         return false;
     bool bHasGraphics = false;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    long nWidth, nHeight;
+    tools::Long nWidth, nHeight;
     nWidth = nHeight = 0;
     char nDir = nHorizontal;
     for (const std::unique_ptr<ScHTMLImage> & pImage : pE->maImageList)
@@ -508,11 +508,11 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     }
     // Column widths
     ColWidthsMap& rColWidths = mpParser->GetColWidths();
-    long nThisWidth = 0;
+    tools::Long nThisWidth = 0;
     ColWidthsMap::const_iterator it = rColWidths.find( nCol );
     if ( it != rColWidths.end() )
         nThisWidth = it->second;
-    long nColWidths = nThisWidth;
+    tools::Long nColWidths = nThisWidth;
     SCCOL nColSpanCol = nCol + pE->nColOverlap;
     for ( SCCOL nC = nCol + 1; nC < nColSpanCol; nC++ )
     {
@@ -532,7 +532,7 @@ bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, ScEEParseEntry* pE )
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
         RowHeightMap::const_iterator it2 = maRowHeights.find( nR );
-        long nRowHeight = it2 == maRowHeights.end() ? 0 : it2->second;
+        tools::Long nRowHeight = it2 == maRowHeights.end() ? 0 : it2->second;
         if ( nHeight > nRowHeight )
         {
             maRowHeights[ nR ] = nHeight;
@@ -556,8 +556,8 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
 
     Point aCellInsertPos(
-        static_cast<long>(static_cast<double>(mpDoc->GetColOffset( nCol, nTab )) * HMM_PER_TWIPS),
-        static_cast<long>(static_cast<double>(mpDoc->GetRowOffset( nRow, nTab )) * HMM_PER_TWIPS) );
+        static_cast<tools::Long>(static_cast<double>(mpDoc->GetColOffset( nCol, nTab )) * HMM_PER_TWIPS),
+        static_cast<tools::Long>(static_cast<double>(mpDoc->GetRowOffset( nRow, nTab )) * HMM_PER_TWIPS) );
 
     Point aInsertPos( aCellInsertPos );
     Point aSpace;

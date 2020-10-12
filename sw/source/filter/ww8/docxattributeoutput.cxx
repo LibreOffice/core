@@ -3623,7 +3623,7 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
     if (m_xTableWrt && pTable == m_xTableWrt->GetTable())
         return;
 
-    long nPageSize = 0;
+    tools::Long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans (and maybe other infos)
@@ -3868,7 +3868,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     // prepend the properties before the run
     m_pSerializer->mark(Tag_TableDefinition, comphelper::containerToSequence(aOrder));
 
-    long nPageSize = 0;
+    tools::Long nPageSize = 0;
     const char* widthType = "dxa";
 
     // If actual width of table is relative it should export is as "pct".`
@@ -4039,7 +4039,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                     // from lcl_DecrementHoriOrientPosition() in writerfilter
                     if (const editeng::SvxBorderLine* pLeftBorder = rBox.GetLeft())
                     {
-                        long nWidth = pLeftBorder->GetWidth();
+                        tools::Long nWidth = pLeftBorder->GetWidth();
                         nValue += (nWidth / 2);
                     }
 
@@ -5673,7 +5673,7 @@ void DocxAttributeOutput::WriteOLEShape(const SwFlyFrameFormat& rFrameFormat, co
     {
         //Get the left border color and width
         const Color aLineColor = rBox.GetLeft()->GetColor();
-        const long aLineWidth = rBox.GetLeft()->GetWidth();
+        const tools::Long aLineWidth = rBox.GetLeft()->GetWidth();
 
         //Convert the left OLE border style to OOXML
         //FIXME improve if it's necessary
@@ -8443,7 +8443,7 @@ void DocxAttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 }
 
 static void impl_WriteTabElement( FSHelperPtr const & pSerializer,
-                                  const SvxTabStop& rTab, long tabsOffset )
+                                  const SvxTabStop& rTab, tools::Long tabsOffset )
 {
     FastAttributeList *pTabElementAttrList = FastSerializerHelper::createAttrList();
 
@@ -8518,7 +8518,7 @@ void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
     // Get offset for tabs
     // In DOCX, w:pos specifies the position of the current custom tab stop with respect to the current page margins.
     // But in ODT, zero position could be page margins or paragraph indent according to used settings.
-    long tabsOffset = 0;
+    tools::Long tabsOffset = 0;
     if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT))
         tabsOffset = m_rExport.GetItem(RES_LR_SPACE).GetTextLeft();
 

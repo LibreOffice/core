@@ -20,6 +20,8 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGMTYPES_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_CGMTYPES_HXX
 
+#include <tools/long.hxx>
+
 struct FloatPoint
 {
         double          X;
@@ -55,8 +57,8 @@ struct FloatRect
 struct HatchEntry
 {
     int     HatchStyle;
-    long    HatchDistance;
-    long    HatchAngle;
+    tools::Long    HatchDistance;
+    tools::Long    HatchAngle;
 };
 
 #define ASF_LINETYPE            0x00000001UL

@@ -365,8 +365,8 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
         }
     }
 
-    const long nOnePixel = GetDrawPixel( pDev, 1 );
-    const long nOffX = 3*nOnePixel;
+    const tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    const tools::Long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
 
@@ -383,9 +383,9 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     if ( IsDropDownBox() )
     {
         OUString   aText = GetSelectedEntry();
-        long       nTextHeight = pDev->GetTextHeight();
-        long       nTextWidth = pDev->GetTextWidth( aText );
-        long       nOffY = (aSize.Height()-nTextHeight) / 2;
+        tools::Long       nTextHeight = pDev->GetTextHeight();
+        tools::Long       nTextWidth = pDev->GetTextWidth( aText );
+        tools::Long       nOffY = (aSize.Height()-nTextHeight) / 2;
 
         // Clipping?
         if ( (nOffY < 0) ||
@@ -402,7 +402,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     }
     else
     {
-        long        nTextHeight = pDev->GetTextHeight();
+        tools::Long        nTextHeight = pDev->GetTextHeight();
         sal_uInt16  nLines = ( nTextHeight > 0 ) ? static_cast<sal_uInt16>(aSize.Height() / nTextHeight) : 1;
         tools::Rectangle   aClip( aPos, aSize );
 
@@ -535,7 +535,7 @@ sal_uInt16 ListBox::GetDropDownLineCount() const
     return mnLineCount;
 }
 
-void ListBox::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags )
+void ListBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags )
 {
     if( IsDropDownBox() && ( nFlags & PosSizeFlags::Size ) )
     {
@@ -559,8 +559,8 @@ void ListBox::Resize()
     if( IsDropDownBox() )
     {
         // Initialize the dropdown button size with the standard scrollbar width
-        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-        long nBottom = aOutSz.Height();
+        tools::Long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        tools::Long nBottom = aOutSz.Height();
 
         // Note: in case of no border, pBorder will actually be this
         vcl::Window *pBorder = GetWindow( GetWindowType::Border );
@@ -597,7 +597,7 @@ void ListBox::Resize()
                     // let's do the best we can and center vertically, so it doesn't look
                     // completely wrong.
                     Size aSz( GetOutputSizePixel() );
-                    long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
+                    tools::Long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
                     aContent.AdjustTop( -nDiff );
                     aContent.AdjustBottom( -nDiff );
                 }
@@ -647,13 +647,13 @@ void ListBox::FillLayoutData() const
     }
 }
 
-long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
+tools::Long ListBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) const
 {
     if( !HasLayoutData() )
         FillLayoutData();
 
     // Check whether rPoint fits at all
-    long nIndex = Control::GetIndexForPoint( rPoint );
+    tools::Long nIndex = Control::GetIndexForPoint( rPoint );
     if( nIndex != -1 )
     {
         // Point must be either in main list window
@@ -1214,7 +1214,7 @@ Size ListBox::CalcSubEditSize() const
 
         if (m_nMaxWidthChars != -1)
         {
-            long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
+            tools::Long nMaxWidth = m_nMaxWidthChars * approximate_char_width();
             aSz.setWidth( std::min(aSz.Width(), nMaxWidth) );
         }
 
@@ -1239,8 +1239,8 @@ Size ListBox::CalcAdjustedSize( const Size& rPrefSize ) const
     aSz.AdjustHeight( -(nTop+nBottom) );
     if ( !IsDropDownBox() )
     {
-        long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
-        long nLines = aSz.Height() / nEntryHeight;
+        tools::Long nEntryHeight = CalcBlockSize( 1, 1 ).Height();
+        tools::Long nLines = aSz.Height() / nEntryHeight;
         if ( nLines < 1 )
             nLines = 1;
         aSz.setHeight( nLines * nEntryHeight );

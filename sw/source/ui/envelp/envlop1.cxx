@@ -61,8 +61,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     const SwEnvItem& rItem = m_pDialog->aEnvItem;
 
-    const long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
-    const long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
+    const tools::Long nPageW = std::max(rItem.m_nWidth, rItem.m_nHeight);
+    const tools::Long nPageH = std::min(rItem.m_nWidth, rItem.m_nHeight);
 
     Size aSize(GetOutputSizePixel());
 
@@ -79,38 +79,38 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.SetLineColor(aFront);
 
     // Envelope
-    const long nW = static_cast<long>(f * nPageW);
-    const long nH = static_cast<long>(f * nPageH);
-    const long nX = (aSize.Width () - nW) / 2;
-    const long nY = (aSize.Height() - nH) / 2;
+    const tools::Long nW = static_cast<tools::Long>(f * nPageW);
+    const tools::Long nH = static_cast<tools::Long>(f * nPageH);
+    const tools::Long nX = (aSize.Width () - nW) / 2;
+    const tools::Long nY = (aSize.Height() - nH) / 2;
     rRenderContext.SetFillColor(aBack);
     rRenderContext.DrawRect(tools::Rectangle(Point(nX, nY), Size(nW, nH)));
 
     // Sender
     if (rItem.m_bSend)
     {
-        const long nSendX = nX + static_cast<long>(f * rItem.m_nSendFromLeft);
-        const long nSendY = nY + static_cast<long>(f * rItem.m_nSendFromTop );
-        const long nSendW = static_cast<long>(f * (rItem.m_nAddrFromLeft - rItem.m_nSendFromLeft));
-        const long nSendH = static_cast<long>(f * (rItem.m_nAddrFromTop  - rItem.m_nSendFromTop  - 566));
+        const tools::Long nSendX = nX + static_cast<tools::Long>(f * rItem.m_nSendFromLeft);
+        const tools::Long nSendY = nY + static_cast<tools::Long>(f * rItem.m_nSendFromTop );
+        const tools::Long nSendW = static_cast<tools::Long>(f * (rItem.m_nAddrFromLeft - rItem.m_nSendFromLeft));
+        const tools::Long nSendH = static_cast<tools::Long>(f * (rItem.m_nAddrFromTop  - rItem.m_nSendFromTop  - 566));
         rRenderContext.SetFillColor(aMedium);
 
         rRenderContext.DrawRect(tools::Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
     // Addressee
-    const long nAddrX = nX + static_cast<long>(f * rItem.m_nAddrFromLeft);
-    const long nAddrY = nY + static_cast<long>(f * rItem.m_nAddrFromTop );
-    const long nAddrW = static_cast<long>(f * (nPageW - rItem.m_nAddrFromLeft - 566));
-    const long nAddrH = static_cast<long>(f * (nPageH - rItem.m_nAddrFromTop  - 566));
+    const tools::Long nAddrX = nX + static_cast<tools::Long>(f * rItem.m_nAddrFromLeft);
+    const tools::Long nAddrY = nY + static_cast<tools::Long>(f * rItem.m_nAddrFromTop );
+    const tools::Long nAddrW = static_cast<tools::Long>(f * (nPageW - rItem.m_nAddrFromLeft - 566));
+    const tools::Long nAddrH = static_cast<tools::Long>(f * (nPageH - rItem.m_nAddrFromTop  - 566));
     rRenderContext.SetFillColor(aMedium);
     rRenderContext.DrawRect(tools::Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
     // Stamp
-    const long nStmpW = static_cast<long>(f * 1417 /* 2,5 cm */);
-    const long nStmpH = static_cast<long>(f * 1701 /* 3,0 cm */);
-    const long nStmpX = nX + nW - static_cast<long>(f * 566) - nStmpW;
-    const long nStmpY = nY + static_cast<long>(f * 566);
+    const tools::Long nStmpW = static_cast<tools::Long>(f * 1417 /* 2,5 cm */);
+    const tools::Long nStmpH = static_cast<tools::Long>(f * 1701 /* 3,0 cm */);
+    const tools::Long nStmpX = nX + nW - static_cast<tools::Long>(f * 566) - nStmpW;
+    const tools::Long nStmpY = nY + static_cast<tools::Long>(f * 566);
 
     rRenderContext.SetFillColor(aBack);
     rRenderContext.DrawRect(tools::Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));

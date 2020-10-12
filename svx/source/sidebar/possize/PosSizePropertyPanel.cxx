@@ -362,16 +362,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, weld::MetricSpinButton&, 
     if( mxCbxScale->get_active() &&
         mxCbxScale->get_sensitive() )
     {
-        long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mxMtrWidth->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldWidth) );
+        tools::Long nHeight = static_cast<tools::Long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mxMtrWidth->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldWidth) );
         if( nHeight <= mxMtrHeight->get_max( FieldUnit::NONE ) )
         {
             mxMtrHeight->set_value( nHeight, FieldUnit::NONE );
         }
         else
         {
-            nHeight = static_cast<long>(mxMtrHeight->get_max( FieldUnit::NONE ));
+            nHeight = static_cast<tools::Long>(mxMtrHeight->get_max( FieldUnit::NONE ));
             mxMtrHeight->set_value(nHeight, FieldUnit::NONE);
-            const long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
+            const tools::Long nWidth = static_cast<tools::Long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
             mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
         }
     }
@@ -384,16 +384,16 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, weld::MetricSpinButton&,
     if( mxCbxScale->get_active() &&
         mxCbxScale->get_sensitive() )
     {
-        long nWidth = static_cast<long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mxMtrHeight->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldHeight) );
+        tools::Long nWidth = static_cast<tools::Long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mxMtrHeight->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldHeight) );
         if( nWidth <= mxMtrWidth->get_max( FieldUnit::NONE ) )
         {
             mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
         }
         else
         {
-            nWidth = static_cast<long>(mxMtrWidth->get_max( FieldUnit::NONE ));
+            nWidth = static_cast<tools::Long>(mxMtrWidth->get_max( FieldUnit::NONE ));
             mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
-            const long nHeight = static_cast<long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
+            const tools::Long nHeight = static_cast<tools::Long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
             mxMtrHeight->set_value( nHeight, FieldUnit::NONE );
         }
     }
@@ -405,10 +405,10 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, v
 {
     if ( mxMtrPosX->get_value_changed_from_saved())
     {
-        long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
+        tools::Long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX = long( lX * aUIScale );
+        lX = tools::Long( lX * aUIScale );
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
 
@@ -421,10 +421,10 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, v
 {
     if ( mxMtrPosY->get_value_changed_from_saved() )
     {
-        long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
+        tools::Long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lY = long( lY * aUIScale );
+        lY = tools::Long( lY * aUIScale );
 
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
 
@@ -519,7 +519,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pWidthItem)
                 {
-                    long lOldWidth1 = long( pWidthItem->GetValue() / maUIScale );
+                    tools::Long lOldWidth1 = tools::Long( pWidthItem->GetValue() / maUIScale );
                     SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
                     SetMetricValue( *mxMtrWidth, lOldWidth1, mePoolUnit );
                     limitWidth(*mxMtrWidth);
@@ -539,7 +539,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pHeightItem)
                 {
-                    long nTmp = long( pHeightItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long( pHeightItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
                     SetMetricValue( *mxMtrHeight, nTmp, mePoolUnit );
                     limitWidth(*mxMtrHeight);
@@ -559,7 +559,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    long nTmp = long(pItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
                     SetMetricValue( *mxMtrPosX, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosX);
@@ -578,7 +578,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    long nTmp = long(pItem->GetValue() / maUIScale);
+                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
                     SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
                     SetMetricValue( *mxMtrPosY, nTmp, mePoolUnit );
                     limitWidth(*mxMtrPosY);
@@ -598,7 +598,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotX = pItem->GetValue();
-                    mlRotX = long( mlRotX / maUIScale );
+                    mlRotX = tools::Long( mlRotX / maUIScale );
                 }
             }
             break;
@@ -611,7 +611,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotY = pItem->GetValue();
-                    mlRotY = long( mlRotY / maUIScale );
+                    mlRotY = tools::Long( mlRotY / maUIScale );
                 }
             }
             break;
@@ -679,7 +679,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    long nTmp = pItem->GetValue();
+                    tools::Long nTmp = pItem->GetValue();
                     nTmp = nTmp < 0 ? 36000+nTmp : nTmp;
 
                     mxMtrAngle->set_value(nTmp, FieldUnit::DEGREE);
@@ -816,15 +816,15 @@ void PosSizePropertyPanel::executeSize()
 
     // get Width
     double nWidth = static_cast<double>(mxMtrWidth->get_value(FieldUnit::MM_100TH));
-    long lWidth = long(nWidth * static_cast<double>(aUIScale));
+    tools::Long lWidth = tools::Long(nWidth * static_cast<double>(aUIScale));
     lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
-    lWidth = static_cast<long>(mxMtrWidth->denormalize( lWidth ));
+    lWidth = static_cast<tools::Long>(mxMtrWidth->denormalize( lWidth ));
 
     // get Height
     double nHeight = static_cast<double>(mxMtrHeight->get_value(FieldUnit::MM_100TH));
-    long lHeight = long(nHeight * static_cast<double>(aUIScale));
+    tools::Long lHeight = tools::Long(nHeight * static_cast<double>(aUIScale));
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
-    lHeight = static_cast<long>(mxMtrHeight->denormalize( lHeight ));
+    lHeight = static_cast<tools::Long>(mxMtrHeight->denormalize( lHeight ));
 
     // put Width & Height to itemset
     SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));

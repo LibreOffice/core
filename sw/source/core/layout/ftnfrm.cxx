@@ -189,9 +189,9 @@ SwFootnoteFrame* SwFootnoteContFrame::AddChained(bool bAppend, SwFrame* pThis, b
 // lcl_Undersize(..) walks over a SwFrame and its contents
 // and returns the sum of all requested TextFrame magnifications.
 
-static long lcl_Undersize( const SwFrame* pFrame )
+static tools::Long lcl_Undersize( const SwFrame* pFrame )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
     SwRectFnSet aRectFnSet(pFrame);
     if( pFrame->IsTextFrame() )
     {
@@ -367,7 +367,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
         // do not use more space than the body has
         nDist = aRectFnSet.GetHeight(GetPrev()->getFrameArea());
 
-    long nAvail = 0;
+    tools::Long nAvail = 0;
     if ( bBrowseMode )
     {
         nAvail = GetUpper()->getFramePrintArea().Height();
@@ -390,7 +390,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
             aFrm.Pos().AdjustX( -nDist );
         }
     }
-    long nGrow = nDist - nAvail,
+    tools::Long nGrow = nDist - nAvail,
          nReal = 0;
     if ( nGrow > 0 )
     {

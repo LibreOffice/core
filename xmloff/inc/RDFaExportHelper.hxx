@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <map>
 
@@ -49,7 +50,7 @@ private:
 
     BlankNodeMap_t m_BlankNodeMap;
 
-    long m_Counter;
+    tools::Long m_Counter;
 
     OUString
     LookupBlankNode( css::uno::Reference<css::rdf::XBlankNode> const & i_xBlankNode);

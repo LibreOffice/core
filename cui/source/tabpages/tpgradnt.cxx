@@ -193,7 +193,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         pXGradient.reset(new XGradient( m_xLbColorFrom->GetSelectEntryColor(),
                     m_xLbColorTo->GetSelectEntryColor(),
                     static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                    static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
                     static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -291,7 +291,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                           m_xLbColorTo->GetSelectEntryColor(),
                           eXGS,
-                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -320,8 +320,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
     OUString aName;
 
-    long nCount = m_pGradientList->Count();
-    long j = 1;
+    tools::Long nCount = m_pGradientList->Count();
+    tools::Long j = 1;
     bool bValidGradientName = false;
 
     while( !bValidGradientName )
@@ -358,7 +358,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                               m_xLbColorTo->GetSelectEntryColor(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                              static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
                               static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -398,7 +398,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                           m_xLbColorTo->GetSelectEntryColor(),
                           static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -611,11 +611,11 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
 
 sal_Int32 SvxGradientTabPage::SearchGradientList(const OUString& rGradientName)
 {
-    long nCount = m_pGradientList->Count();
+    tools::Long nCount = m_pGradientList->Count();
     bool bValidGradientName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidGradientName;i++)
+    for(tools::Long i = 0;i < nCount && bValidGradientName;i++)
     {
         if(rGradientName == m_pGradientList->GetGradient( i )->GetName())
         {

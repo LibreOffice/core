@@ -442,7 +442,7 @@ formula::ParamClass ScParameterClassification::GetExternalParameterType( const f
             ScGlobal::GetAddInCollection()->GetFuncData( aUnoName, true );      // need fully initialized data
         if ( pFuncData )
         {
-            long nCount = pFuncData->GetArgumentCount();
+            tools::Long nCount = pFuncData->GetArgumentCount();
             if ( nCount <= 0 )
                 eRet = Bounds;
             else

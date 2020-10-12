@@ -81,10 +81,10 @@ void NodeTest::testTdf47813()
     pNodeL->Arrange(*pOutputDevice, aFmt);
     pNodeR->Prepare(aFmt, *mxDocShell, 0);
     pNodeR->Arrange(*pOutputDevice, aFmt);
-    long nWidthA = pNodeA->GetRect().GetWidth();
-    long nWidthC = pNodeC->GetRect().GetWidth();
-    long nWidthL = pNodeL->GetRect().GetWidth();
-    long nWidthR = pNodeR->GetRect().GetWidth();
+    tools::Long nWidthA = pNodeA->GetRect().GetWidth();
+    tools::Long nWidthC = pNodeC->GetRect().GetWidth();
+    tools::Long nWidthL = pNodeL->GetRect().GetWidth();
+    tools::Long nWidthR = pNodeR->GetRect().GetWidth();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthC/static_cast<double>(nWidthA), 0.01);
     // these values appear to change slightly with display scaling
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthL/static_cast<double>(nWidthA), 0.03);

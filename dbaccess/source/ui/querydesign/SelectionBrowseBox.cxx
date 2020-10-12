@@ -355,7 +355,7 @@ void OSelectionBrowseBox::Init()
     SetDataRowHeight(aHeight.Height());
     SetTitleLines(1);
     // get number of visible rows
-    for(long i=0;i<BROW_ROW_CNT;i++)
+    for(tools::Long i=0;i<BROW_ROW_CNT;i++)
     {
         if(m_bVisibleRow[i])
             m_nVisibleCount++;
@@ -429,7 +429,7 @@ void OSelectionBrowseBox::SetReadOnly(bool bRO)
     }
 }
 
-CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
+CellController* OSelectionBrowseBox::GetController(tools::Long nRow, sal_uInt16 nColId)
 {
     if ( nColId > getFields().size() )
         return nullptr;
@@ -442,7 +442,7 @@ CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
     if (static_cast<OQueryController&>(getDesignView()->getController()).isReadOnly())
         return nullptr;
 
-    long nCellIndex = GetRealRow(nRow);
+    tools::Long nCellIndex = GetRealRow(nRow);
     switch (nCellIndex)
     {
         case BROW_FIELD_ROW:
@@ -460,7 +460,7 @@ CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
     }
 }
 
-void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColId)
+void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColId)
 {
     OSL_ENSURE(nColId != BROWSER_INVALIDID,"An Invalid Id was set!");
     if ( nColId == BROWSER_INVALIDID )
@@ -470,7 +470,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
         return;
     OTableFieldDescRef pEntry = getFields()[nPos-1];
     OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::InitController : invalid FieldDescription !");
-    long nCellIndex = GetRealRow(nRow);
+    tools::Long nCellIndex = GetRealRow(nRow);
 
     switch (nCellIndex)
     {
@@ -905,7 +905,7 @@ bool OSelectionBrowseBox::SaveModified()
     {
         // for the Undo-action
         OUString strOldCellContents,sNewValue;
-        long nRow = GetRealRow(GetCurRow());
+        tools::Long nRow = GetRealRow(GetCurRow());
         bool bAppendRow = false;
         switch (nRow)
         {
@@ -1211,7 +1211,7 @@ bool OSelectionBrowseBox::SaveModified()
     return pEntry != nullptr && !bError;
 }
 
-bool OSelectionBrowseBox::SeekRow(long nRow)
+bool OSelectionBrowseBox::SeekRow(tools::Long nRow)
 {
     m_nSeekRow = nRow;
     return nRow < m_nVisibleCount;
@@ -1229,7 +1229,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
     if (!pEntry.is())
         return;
 
-    long nRow = GetRealRow(m_nSeekRow);
+    tools::Long nRow = GetRealRow(m_nSeekRow);
     if (nRow == BROW_VIS_ROW)
         PaintTristate(rRect, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
@@ -1260,7 +1260,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
     // ColId is synonymous to Position, and the condition should be valid
 
     sal_uInt16 nCurCol = GetCurColumnId();
-    long nCurrentRow = GetCurRow();
+    tools::Long nCurrentRow = GetCurRow();
 
     DeactivateCell();
 
@@ -1446,7 +1446,7 @@ void OSelectionBrowseBox::DeleteFields(const OUString& rAliasName)
         ActivateCell(nRow , nColId);
 }
 
-void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
+void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, tools::Long nNewWidth)
 {
     bool bWasEditing = IsEditing();
     if (bWasEditing)
@@ -1479,11 +1479,11 @@ tools::Rectangle OSelectionBrowseBox::GetInvalidRect( sal_uInt16 nColId )
 void OSelectionBrowseBox::InsertColumn(const OTableFieldDescRef& pEntry, sal_uInt16& _nColumnPosition)
 {
     // the control should have exactly one more column: the HandleColumn
-    OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= static_cast<long>(getFields().size())), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
+    OSL_ENSURE(_nColumnPosition == BROWSER_INVALIDID || (_nColumnPosition <= static_cast<tools::Long>(getFields().size())), "OSelectionBrowseBox::InsertColumn : invalid parameter nColId.");
      // -1 means at the end. Count means at the end, others denotes a correct position
 
     sal_uInt16 nCurCol = GetCurColumnId();
-    long nCurrentRow = GetCurRow();
+    tools::Long nCurrentRow = GetCurRow();
 
     DeactivateCell();
 
@@ -1857,7 +1857,7 @@ bool OSelectionBrowseBox::Save()
 
 void OSelectionBrowseBox::CellModified()
 {
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_VIS_ROW:
@@ -1928,7 +1928,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             }
 
             sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel( aMenuPos.X() ));
-            long   nRow = GetRowAtYPosPixel( aMenuPos.Y() );
+            tools::Long   nRow = GetRowAtYPosPixel( aMenuPos.Y() );
 
             if (nRow < 0 && nColId > HANDLE_ID )
             {
@@ -2018,7 +2018,7 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, bool _bVis)
     // do this before removing or inserting rows, as this triggers ActivateCell-calls, which rely on m_bVisibleRow
     m_bVisibleRow[_nWhich] = !m_bVisibleRow[_nWhich];
 
-    long nId = GetBrowseRow(_nWhich);
+    tools::Long nId = GetBrowseRow(_nWhich);
     if (_bVis)
     {
         RowInserted(nId);
@@ -2034,10 +2034,10 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, bool _bVis)
         ActivateCell();
 }
 
-long OSelectionBrowseBox::GetBrowseRow(long nRowId) const
+tools::Long OSelectionBrowseBox::GetBrowseRow(tools::Long nRowId) const
 {
     sal_uInt16 nCount(0);
-    for(long i = 0 ; i < nRowId ; ++i)
+    for(tools::Long i = 0 ; i < nRowId ; ++i)
     {
         if ( m_bVisibleRow[i] )
             ++nCount;
@@ -2045,20 +2045,20 @@ long OSelectionBrowseBox::GetBrowseRow(long nRowId) const
     return nCount;
 }
 
-long OSelectionBrowseBox::GetRealRow(long nRowId) const
+tools::Long OSelectionBrowseBox::GetRealRow(tools::Long nRowId) const
 {
-    long nErg=0,i;
-    const long nCount = m_bVisibleRow.size();
+    tools::Long nErg=0,i;
+    const tools::Long nCount = m_bVisibleRow.size();
     for(i=0;i < nCount; ++i)
     {
         if(m_bVisibleRow[i] && nErg++ == nRowId)
             break;
     }
-    OSL_ENSURE(nErg <= long(m_bVisibleRow.size()),"nErg cannot be greater than BROW_ROW_CNT!");
+    OSL_ENSURE(nErg <= tools::Long(m_bVisibleRow.size()),"nErg cannot be greater than BROW_ROW_CNT!");
     return i;
 }
 
-const long nVisibleRowMask[] =
+const tools::Long nVisibleRowMask[] =
                     {
                             0x0001,
                             0x0002,
@@ -2086,7 +2086,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
     return nErg;
 }
 
-void OSelectionBrowseBox::SetNoneVisibleRow(long nRows)
+void OSelectionBrowseBox::SetNoneVisibleRow(tools::Long nRows)
 {
     // only the first 11 rows are interesting
     sal_Int32 const nSize = SAL_N_ELEMENTS(nVisibleRowMask);
@@ -2094,7 +2094,7 @@ void OSelectionBrowseBox::SetNoneVisibleRow(long nRows)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
 }
 
-OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
+OUString OSelectionBrowseBox::GetCellText(tools::Long nRow, sal_uInt16 nColId) const
 {
 
     sal_uInt16 nPos = GetColumnPos(nColId);
@@ -2290,7 +2290,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             pEntry->SetCriteria(sal_uInt16(nRow - BROW_CRIT1_ROW), strNewText);
     }
 
-    long nCellIndex = GetRealRow(nRow);
+    tools::Long nCellIndex = GetRealRow(nRow);
     if(IsRowVisible(static_cast<sal_uInt16>(nRow)))
         RowModified(nCellIndex, nColId);
 
@@ -2333,7 +2333,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     }
 }
 
-sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId)
+sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(tools::Long nRowId, sal_uInt16 nColId)
 {
     sal_uInt16 nPos = GetColumnPos(nColId);
     OSL_ENSURE((nPos == 0) || (nPos <= getFields().size()), "OSelectionBrowseBox::GetTotalCellWidth : invalid parameter nColId");
@@ -2341,7 +2341,7 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId
     OTableFieldDescRef pEntry = getFields()[nPos-1];
     OSL_ENSURE(pEntry.is(), "OSelectionBrowseBox::GetTotalCellWidth : invalid FieldDescription !");
 
-    long nRow = GetRealRow(nRowId);
+    tools::Long nRow = GetRealRow(nRowId);
     OUString strText(GetCellText(nRow, nColId));
     return GetDataWindow().LogicToPixel(Size(GetDataWindow().GetTextWidth(strText),0)).Width();
 }
@@ -2349,7 +2349,7 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId
 bool OSelectionBrowseBox::isCutAllowed() const
 {
     bool bCutAllowed = false;
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_VIS_ROW:
@@ -2377,7 +2377,7 @@ bool OSelectionBrowseBox::isCutAllowed() const
 
 void OSelectionBrowseBox::cut()
 {
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_FIELD_ROW:
@@ -2400,7 +2400,7 @@ void OSelectionBrowseBox::cut()
 
 void OSelectionBrowseBox::paste()
 {
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_FIELD_ROW:
@@ -2423,7 +2423,7 @@ void OSelectionBrowseBox::paste()
 bool OSelectionBrowseBox::isPasteAllowed() const
 {
     bool bPasteAllowed = true;
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_VIS_ROW:
@@ -2443,7 +2443,7 @@ bool OSelectionBrowseBox::isCopyAllowed() const
 
 void OSelectionBrowseBox::copy()
 {
-    long nRow = GetRealRow(GetCurRow());
+    tools::Long nRow = GetRealRow(GetCurRow());
     switch (nRow)
     {
         case BROW_FIELD_ROW:

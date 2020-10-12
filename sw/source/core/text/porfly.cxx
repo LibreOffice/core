@@ -268,14 +268,14 @@ sw::DrawFlyCntPortion::DrawFlyCntPortion(SwFrameFormat const & rFormat)
     assert(m_pContact);
 }
 
-sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::FlyContentPortion* sw::FlyContentPortion::Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, tools::Long nLnAscent, tools::Long nLnDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags)
 {
     auto pNew(new sw::FlyContentPortion(pFly));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
     return pNew;
 }
 
-sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags)
+sw::DrawFlyCntPortion* sw::DrawFlyCntPortion::Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, tools::Long nLnAscent, tools::Long nLnDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags)
 {
     auto pNew(new DrawFlyCntPortion(rFormat));
     pNew->SetBase(rFrame, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags | AsCharFlags::UlSpace | AsCharFlags::Init);
@@ -316,8 +316,8 @@ SdrObject* sw::DrawFlyCntPortion::GetSdrObj(const SwTextFrame& rFrame)
  * @param rBase CAUTION: needs to be an absolute value!
  */
 void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
-                               long nLnAscent, long nLnDescent,
-                               long nFlyAsc, long nFlyDesc,
+                               tools::Long nLnAscent, tools::Long nLnDescent,
+                               tools::Long nFlyAsc, tools::Long nFlyDesc,
                                AsCharFlags nFlags )
 {
     // Use new class to position object

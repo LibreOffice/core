@@ -79,7 +79,7 @@ private:
     // local variables, internal functions
     SvxTabStop      aCurrentTab;
     std::unique_ptr<SvxTabStopItem>  aNewTabs;
-    long            nDefDist;
+    tools::Long            nDefDist;
 
     TabWin_Impl    m_aLeftWin;
     TabWin_Impl    m_aRightWin;

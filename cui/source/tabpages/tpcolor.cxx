@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_COLOR ) );
     OUString aName;
 
-    long j = 1;
+    tools::Long j = 1;
     bool bValidColorName = false;
     // check if name is already existing
     while (!bValidColorName)
@@ -623,11 +623,11 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
 sal_Int32 SvxColorTabPage::FindInCustomColors(OUString const & aColorName)
 {
     css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
-    long nCount = aCustomColorNameList.getLength();
+    tools::Long nCount = aCustomColorNameList.getLength();
     bool bValidColorName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidColorName;i++)
+    for(tools::Long i = 0;i < nCount && bValidColorName;i++)
     {
         if(aColorName == aCustomColorNameList[i])
         {
@@ -666,7 +666,7 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
 
 void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 {
-    long lTemp;
+    tools::Long lTemp;
 
     lTemp = 255 - ( rColor.GetRed() + nK );
 

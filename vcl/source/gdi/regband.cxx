@@ -37,7 +37,7 @@
 // points in a list). After registration of these points they are
 // converted to rectangles and the points in the list are deleted.
 
-ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
+ImplRegionBand::ImplRegionBand( tools::Long nTop, tools::Long nBottom )
 {
     // save boundaries
     mnYTop              = nTop;
@@ -189,7 +189,7 @@ void ImplRegionBand::ProcessPoints()
 // generate separations from lines and process union with existing
 // separations
 
-bool ImplRegionBand::InsertPoint( long nX, long nLineId,
+bool ImplRegionBand::InsertPoint( tools::Long nX, tools::Long nLineId,
                                   bool bEndPoint, LineType eLineType )
 {
     if ( !mpFirstBandPoint )
@@ -297,7 +297,7 @@ bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     return true;
 }
 
-void ImplRegionBand::MoveX( long nHorzMove )
+void ImplRegionBand::MoveX( tools::Long nHorzMove )
 {
     // move all x-separations
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -361,7 +361,7 @@ void ImplRegionBand::OptimizeBand()
     }
 }
 
-void ImplRegionBand::Union( long nXLeft, long nXRight )
+void ImplRegionBand::Union( tools::Long nXLeft, tools::Long nXRight )
 {
     SAL_WARN_IF( nXLeft > nXRight, "vcl", "ImplRegionBand::Union(): nxLeft > nXRight" );
 
@@ -433,7 +433,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-void ImplRegionBand::Intersect( long nXLeft, long nXRight )
+void ImplRegionBand::Intersect( tools::Long nXLeft, tools::Long nXRight )
 {
     SAL_WARN_IF( nXLeft > nXRight, "vcl", "ImplRegionBand::Intersect(): nxLeft > nXRight" );
 
@@ -478,7 +478,7 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-void ImplRegionBand::Exclude( long nXLeft, long nXRight )
+void ImplRegionBand::Exclude( tools::Long nXLeft, tools::Long nXRight )
 {
     SAL_WARN_IF( nXLeft > nXRight, "vcl", "ImplRegionBand::Exclude(): nxLeft > nXRight" );
 
@@ -556,7 +556,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-void ImplRegionBand::XOr( long nXLeft, long nXRight )
+void ImplRegionBand::XOr( tools::Long nXLeft, tools::Long nXRight )
 {
     SAL_WARN_IF( nXLeft > nXRight, "vcl", "ImplRegionBand::XOr(): nxLeft > nXRight" );
 
@@ -622,8 +622,8 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
     while ( pSep  )
     {
-        long nOldLeft( pSep->mnXLeft );
-        long nOldRight( pSep->mnXRight );
+        tools::Long nOldLeft( pSep->mnXLeft );
+        tools::Long nOldRight( pSep->mnXRight );
 
         // did the current segment actually touch the new rect? If
         // not, skip all comparisons, go on, loop and try to find
@@ -799,7 +799,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     OptimizeBand();
 }
 
-bool ImplRegionBand::IsInside( long nX )
+bool ImplRegionBand::IsInside( tools::Long nX )
 {
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
@@ -813,14 +813,14 @@ bool ImplRegionBand::IsInside( long nX )
     return false;
 }
 
-long ImplRegionBand::GetXLeftBoundary() const
+tools::Long ImplRegionBand::GetXLeftBoundary() const
 {
     assert(mpFirstSep && "ImplRegionBand::XLeftBoundary -> no separation in band!");
 
     return mpFirstSep->mnXLeft;
 }
 
-long ImplRegionBand::GetXRightBoundary() const
+tools::Long ImplRegionBand::GetXRightBoundary() const
 {
     SAL_WARN_IF( mpFirstSep == nullptr, "vcl", "ImplRegionBand::XRightBoundary -> no separation in band!" );
 
@@ -838,13 +838,13 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
     while ( pOwnRectBandSep && pSecondRectBandSep )
     {
         // get boundaries of current rectangle
-        long nOwnXLeft = pOwnRectBandSep->mnXLeft;
-        long nSecondXLeft = pSecondRectBandSep->mnXLeft;
+        tools::Long nOwnXLeft = pOwnRectBandSep->mnXLeft;
+        tools::Long nSecondXLeft = pSecondRectBandSep->mnXLeft;
         if ( nOwnXLeft != nSecondXLeft )
             return false;
 
-        long nOwnXRight = pOwnRectBandSep->mnXRight;
-        long nSecondXRight = pSecondRectBandSep->mnXRight;
+        tools::Long nOwnXRight = pOwnRectBandSep->mnXRight;
+        tools::Long nSecondXRight = pSecondRectBandSep->mnXRight;
         if ( nOwnXRight != nSecondXRight )
             return false;
 

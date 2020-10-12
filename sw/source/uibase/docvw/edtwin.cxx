@@ -170,8 +170,8 @@ static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
 
 QuickHelpData* SwEditWin::m_pQuickHlpData = nullptr;
 
-long    SwEditWin::m_nDDStartPosY = 0;
-long    SwEditWin::m_nDDStartPosX = 0;
+tools::Long    SwEditWin::m_nDDStartPosY = 0;
+tools::Long    SwEditWin::m_nDDStartPosX = 0;
 
 static SfxShell* lcl_GetTextShellFromDispatcher( SwView const & rView );
 
@@ -681,11 +681,11 @@ void SwEditWin::JustifyAreaTimer()
 {
     const tools::Rectangle &rVisArea = GetView().GetVisArea();
 #ifdef UNX
-    const long coMinLen = 100;
+    const tools::Long coMinLen = 100;
 #else
     const long coMinLen = 50;
 #endif
-    long const nTimeout = 800,
+    tools::Long const nTimeout = 800,
          nDiff = std::max(
          std::max( m_aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - m_aMovePos.Y() ),
          std::max( m_aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - m_aMovePos.X()));
@@ -760,7 +760,7 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
     SwBreakIt *pBreakIter = SwBreakIt::Get();
     uno::Reference < i18n::XBreakIterator > xBI = pBreakIter->GetBreakIter();
     assert(xBI.is());
-    long nCTLScriptPos = -1;
+    tools::Long nCTLScriptPos = -1;
 
     if (xBI->getScriptType( rText, 0 ) == i18n::ScriptType::COMPLEX)
         nCTLScriptPos = 0;
@@ -1076,10 +1076,10 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                            pToCharContentPos, bFollowTextFlow,
                            false, &aRefPoint );
     }
-    long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
-    long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
-    long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
-    long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
+    tools::Long nLeft = std::min( aTmp.Left() - aBoundRect.Left(), aSnap.Width() );
+    tools::Long nRight = std::min( aBoundRect.Right() - aTmp.Right(), aSnap.Width() );
+    tools::Long nUp = std::min( aTmp.Top() - aBoundRect.Top(), aSnap.Height() );
+    tools::Long nDown = std::min( aBoundRect.Bottom() - aTmp.Bottom(), aSnap.Height() );
 
     switch ( nDir )
     {
@@ -1116,7 +1116,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
     bool bSet = false;
     if ((RndStdIds::FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
     {
-        long aDiff = aTmp.Top() - aRefPoint.Y();
+        tools::Long aDiff = aTmp.Top() - aRefPoint.Y();
         if( aDiff > 0 )
             aDiff = 0;
         else if ( aDiff < -aTmp.Height() )
@@ -1205,8 +1205,8 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
     SwWrtShell &rSh = m_rView.GetWrtShell();
     rSh.StartUndo();
 
-    long nX = 0;
-    long nY = 0;
+    tools::Long nX = 0;
+    tools::Long nY = 0;
     const bool bOnePixel(
         MOVE_LEFT_SMALL == nDir ||
         MOVE_UP_SMALL == nDir ||
@@ -5790,7 +5790,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 {
                     aEEPos -= rOutputArea.TopRight();
                     //invert the horizontal direction and exchange X and Y
-                    long nTemp = -aEEPos.X();
+                    tools::Long nTemp = -aEEPos.X();
                     aEEPos.setX( aEEPos.Y() );
                     aEEPos.setY( nTemp );
                 }

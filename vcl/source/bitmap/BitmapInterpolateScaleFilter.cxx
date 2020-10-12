@@ -32,8 +32,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aBitmap(rBitmapEx.GetBitmap());
 
     const Size aSizePix(aBitmap.GetSizePixel());
-    const long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
-    const long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
+    const tools::Long nNewWidth = FRound(aSizePix.Width() * mfScaleX);
+    const tools::Long nNewHeight = FRound(aSizePix.Height() * mfScaleY);
     bool bRet = false;
 
     if ((nNewWidth > 1) && (nNewHeight > 1))
@@ -41,29 +41,29 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
         Bitmap::ScopedReadAccess pReadAcc(aBitmap);
         if (pReadAcc)
         {
-            long nWidth = pReadAcc->Width();
-            long nHeight = pReadAcc->Height();
+            tools::Long nWidth = pReadAcc->Width();
+            tools::Long nHeight = pReadAcc->Height();
             Bitmap aNewBmp(Size(nNewWidth, nHeight), 24);
             BitmapScopedWriteAccess pWriteAcc(aNewBmp);
 
             if (pWriteAcc)
             {
-                const long nNewWidth1 = nNewWidth - 1;
-                const long nWidth1 = pReadAcc->Width() - 1;
+                const tools::Long nNewWidth1 = nNewWidth - 1;
+                const tools::Long nWidth1 = pReadAcc->Width() - 1;
                 const double fRevScaleX = static_cast<double>(nWidth1) / nNewWidth1;
 
                 std::unique_ptr<long[]> pLutInt(new long[nNewWidth]);
                 std::unique_ptr<long[]> pLutFrac(new long[nNewWidth]);
 
-                for (long nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
+                for (tools::Long nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
                 {
                     double fTemp = nX * fRevScaleX;
-                    pLutInt[nX] = MinMax(static_cast<long>(fTemp), 0, nTemp);
+                    pLutInt[nX] = MinMax(static_cast<tools::Long>(fTemp), 0, nTemp);
                     fTemp -= pLutInt[nX];
-                    pLutFrac[nX] = static_cast<long>(fTemp * 1024.);
+                    pLutFrac[nX] = static_cast<tools::Long>(fTemp * 1024.);
                 }
 
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanlineRead = pReadAcc->GetScanline(nY);
                     if (1 == nWidth)
@@ -80,7 +80,7 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                         }
 
                         Scanline pScanline = pWriteAcc->GetScanline(nY);
-                        for (long nX = 0; nX < nNewWidth; nX++)
+                        for (tools::Long nX = 0; nX < nNewWidth; nX++)
                         {
                             pWriteAcc->SetPixelOnData(pScanline, nX, aCol0);
                         }
@@ -88,9 +88,9 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                     else
                     {
                         Scanline pScanline = pWriteAcc->GetScanline(nY);
-                        for (long nX = 0; nX < nNewWidth; nX++)
+                        for (tools::Long nX = 0; nX < nNewWidth; nX++)
                         {
-                            long nTemp = pLutInt[nX];
+                            tools::Long nTemp = pLutInt[nX];
 
                             BitmapColor aCol0, aCol1;
                             if (pReadAcc->HasPalette())
@@ -108,12 +108,12 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
                             nTemp = pLutFrac[nX];
 
-                            long lXR0 = aCol0.GetRed();
-                            long lXG0 = aCol0.GetGreen();
-                            long lXB0 = aCol0.GetBlue();
-                            long lXR1 = aCol1.GetRed() - lXR0;
-                            long lXG1 = aCol1.GetGreen() - lXG0;
-                            long lXB1 = aCol1.GetBlue() - lXB0;
+                            tools::Long lXR0 = aCol0.GetRed();
+                            tools::Long lXG0 = aCol0.GetGreen();
+                            tools::Long lXB0 = aCol0.GetBlue();
+                            tools::Long lXR1 = aCol1.GetRed() - lXR0;
+                            tools::Long lXG1 = aCol1.GetGreen() - lXG0;
+                            tools::Long lXB1 = aCol1.GetBlue() - lXB0;
 
                             aCol0.SetRed(
                                 static_cast<sal_uInt8>((lXR1 * nTemp + (lXR0 << 10)) >> 10));
@@ -144,19 +144,19 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
 
                 if (pReadAcc && pWriteAcc)
                 {
-                    const long nNewHeight1 = nNewHeight - 1;
-                    const long nHeight1 = pReadAcc->Height() - 1;
+                    const tools::Long nNewHeight1 = nNewHeight - 1;
+                    const tools::Long nHeight1 = pReadAcc->Height() - 1;
                     const double fRevScaleY = static_cast<double>(nHeight1) / nNewHeight1;
 
                     std::unique_ptr<long[]> pLutInt(new long[nNewHeight]);
                     std::unique_ptr<long[]> pLutFrac(new long[nNewHeight]);
 
-                    for (long nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
+                    for (tools::Long nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
                     {
                         double fTemp = nY * fRevScaleY;
-                        pLutInt[nY] = MinMax(static_cast<long>(fTemp), 0, nTemp);
+                        pLutInt[nY] = MinMax(static_cast<tools::Long>(fTemp), 0, nTemp);
                         fTemp -= pLutInt[nY];
-                        pLutFrac[nY] = static_cast<long>(fTemp * 1024.);
+                        pLutFrac[nY] = static_cast<tools::Long>(fTemp * 1024.);
                     }
 
                     // after 1st step, bitmap *is* 24bit format (see above)
@@ -164,34 +164,34 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                                                         "in-between format has palette, should not "
                                                         "happen (!)");
 
-                    for (long nX = 0; nX < nNewWidth; nX++)
+                    for (tools::Long nX = 0; nX < nNewWidth; nX++)
                     {
                         if (1 == nHeight)
                         {
                             BitmapColor aCol0 = pReadAcc->GetPixel(0, nX);
 
-                            for (long nY = 0; nY < nNewHeight; nY++)
+                            for (tools::Long nY = 0; nY < nNewHeight; nY++)
                             {
                                 pWriteAcc->SetPixel(nY, nX, aCol0);
                             }
                         }
                         else
                         {
-                            for (long nY = 0; nY < nNewHeight; nY++)
+                            for (tools::Long nY = 0; nY < nNewHeight; nY++)
                             {
-                                long nTemp = pLutInt[nY];
+                                tools::Long nTemp = pLutInt[nY];
 
                                 BitmapColor aCol0 = pReadAcc->GetPixel(nTemp++, nX);
                                 BitmapColor aCol1 = pReadAcc->GetPixel(nTemp, nX);
 
                                 nTemp = pLutFrac[nY];
 
-                                long lXR0 = aCol0.GetRed();
-                                long lXG0 = aCol0.GetGreen();
-                                long lXB0 = aCol0.GetBlue();
-                                long lXR1 = aCol1.GetRed() - lXR0;
-                                long lXG1 = aCol1.GetGreen() - lXG0;
-                                long lXB1 = aCol1.GetBlue() - lXB0;
+                                tools::Long lXR0 = aCol0.GetRed();
+                                tools::Long lXG0 = aCol0.GetGreen();
+                                tools::Long lXB0 = aCol0.GetBlue();
+                                tools::Long lXR1 = aCol1.GetRed() - lXR0;
+                                tools::Long lXG1 = aCol1.GetGreen() - lXG0;
+                                tools::Long lXB1 = aCol1.GetBlue() - lXB0;
 
                                 aCol0.SetRed(
                                     static_cast<sal_uInt8>((lXR1 * nTemp + (lXR0 << 10)) >> 10));

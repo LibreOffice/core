@@ -1015,8 +1015,8 @@ static double lcl_TimeToDouble( const T& rTime )
 template<class D>
 static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
 {
-    long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
-    long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    tools::Long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
+    tools::Long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
     return double( nDate - nNullDate );
 }
 

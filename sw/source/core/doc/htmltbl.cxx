@@ -361,7 +361,7 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrame(
     }
 
     SwTwips nUpperDummy = 0;
-    long nRightOffset = 0,
+    tools::Long nRightOffset = 0,
          nLeftOffset  = 0;
     rTabFrame.CalcFlyOffsets( nUpperDummy, nLeftOffset, nRightOffset );
     nWidth -= (nLeftOffset + nRightOffset);

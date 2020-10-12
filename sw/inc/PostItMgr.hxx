@@ -63,7 +63,7 @@ struct SwPostItPageItem
 {
     bool bScrollbar;
     sw::sidebarwindows::SidebarPosition eSidebarPosition;
-    long lOffset;
+    tools::Long lOffset;
     SwRect mPageRect;
     std::vector<SwSidebarItem*> mvSidebarItems;
     SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::LEFT ), lOffset(0)
@@ -132,7 +132,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         bool                            mbWaitingForCalcRects;
         VclPtr<sw::annotation::SwAnnotationWin> mpActivePostIt;
         bool                            mbLayout;
-        long                            mbLayoutHeight;
+        tools::Long                            mbLayoutHeight;
         bool                            mbLayouting;
         bool                            mbReadOnly;
         bool                            mbDeleteNote;
@@ -147,12 +147,12 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         void            AddPostIts(bool bCheckExistence = true,bool bFocus = true);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
-        void            Scroll(const long lScroll,const unsigned long aPage );
+        void            Scroll(const tools::Long lScroll,const unsigned long aPage );
         void            AutoScroll(const sw::annotation::SwAnnotationWin* pPostIt,const unsigned long aPage );
         bool            ScrollbarHit(const unsigned long aPage,const Point &aPoint);
         bool            LayoutByPage( std::vector<sw::annotation::SwAnnotationWin*> &aVisiblePostItList,
                                       const tools::Rectangle& rBorder,
-                                      long lNeededHeight);
+                                      tools::Long lNeededHeight);
         void            CheckForRemovedPostIts();
         bool            ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
         bool            BorderOverPageBorder(unsigned long aPage) const;
@@ -228,7 +228,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
 
         sw::annotation::SwAnnotationWin* GetNextPostIt( sal_uInt16 aDirection,
                                                         sw::annotation::SwAnnotationWin* aPostIt);
-        long GetNextBorder();
+        tools::Long GetNextBorder();
 
         sw::annotation::SwAnnotationWin* GetActiveSidebarWin() { return mpActivePostIt; }
         void SetActiveSidebarWin( sw::annotation::SwAnnotationWin* p);

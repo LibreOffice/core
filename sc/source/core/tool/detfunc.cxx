@@ -334,8 +334,8 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
         aPos.AdjustX(rDoc.GetColWidth( i, nTab ) );
     aPos.AdjustY(rDoc.GetRowHeight( 0, nRow - 1, nTab ) );
 
-    aPos.setX( static_cast< long >( aPos.X() * HMM_PER_TWIPS ) );
-    aPos.setY( static_cast< long >( aPos.Y() * HMM_PER_TWIPS ) );
+    aPos.setX( static_cast< tools::Long >( aPos.X() * HMM_PER_TWIPS ) );
+    aPos.setY( static_cast< tools::Long >( aPos.Y() * HMM_PER_TWIPS ) );
 
     if ( rDoc.IsNegativePage( nTab ) )
         aPos.setX( aPos.X() * -1 );
@@ -483,7 +483,7 @@ void ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     if (bFromOtherTab)
     {
         bool bNegativePage = rDoc.IsNegativePage( nTab );
-        long nPageSign = bNegativePage ? -1 : 1;
+        tools::Long nPageSign = bNegativePage ? -1 : 1;
 
         aStartPos = Point( aEndPos.X() - 1000 * nPageSign, aEndPos.Y() - 1000 );
         if (aStartPos.X() * nPageSign < 0)
@@ -555,7 +555,7 @@ void ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     }
 
     bool bNegativePage = rDoc.IsNegativePage( nTab );
-    long nPageSign = bNegativePage ? -1 : 1;
+    tools::Long nPageSign = bNegativePage ? -1 : 1;
 
     Point aStartPos = GetDrawPos( nStartCol, nStartRow, DrawPosMode::DetectiveArrow );
     Point aEndPos( aStartPos.X() + 1000 * nPageSign, aStartPos.Y() - 1000 );
@@ -1360,7 +1360,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     bool bDeleted = DeleteAll( ScDetectiveDelete::Circles );        // just circles
 
     ScDetectiveData aData( pModel );
-    long nInsCount = 0;
+    tools::Long nInsCount = 0;
 
     //  search for valid places
     ScDocAttrIterator aAttrIter( rDoc, nTab, 0,0,rDoc.MaxCol(),rDoc.MaxRow() );

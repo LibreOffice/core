@@ -349,7 +349,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Rotate( long nAngle10, const Color& rFillColor );
+    bool                    Rotate( tools::Long nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 

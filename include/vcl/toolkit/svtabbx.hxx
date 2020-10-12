@@ -58,9 +58,9 @@ public:
     SvTabListBox( vcl::Window* pParent, WinBits );
     virtual ~SvTabListBox() override;
     virtual void dispose() override;
-    void            SetTabs(sal_uInt16 nTabs, long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
+    void            SetTabs(sal_uInt16 nTabs, tools::Long const pTabPositions[], MapUnit = MapUnit::MapAppFont);
     using SvTreeListBox::GetTab;
-    long            GetLogicTab( sal_uInt16 nTab );
+    tools::Long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,
@@ -133,10 +133,10 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    bool            IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriState& _rState );
+    bool            IsCellCheckBox( tools::Long _nRow, sal_uInt16 _nColumn, TriState& _rState );
 
     /** @return  The count of the rows. */
-    virtual long                    GetRowCount() const override;
+    virtual tools::Long                    GetRowCount() const override;
     /** @return  The count of the columns. */
     virtual sal_uInt16              GetColumnCount() const override;
 
@@ -160,19 +160,19 @@ public:
     virtual void                    SetNoSelection() override;
     using SvTabListBox::SelectAll;
     virtual void                    SelectAll() override;
-    virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true ) override;
+    virtual void                    SelectRow( tools::Long _nRow, bool _bSelect = true, bool bExpand = true ) override;
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) override;
     virtual sal_Int32               GetSelectedRowCount() const override;
     virtual sal_Int32               GetSelectedColumnCount() const override;
     /** @return  <TRUE/>, if the row is selected. */
-    virtual bool                    IsRowSelected( long _nRow ) const override;
-    virtual bool                    IsColumnSelected( long _nColumn ) const override;
+    virtual bool                    IsRowSelected( tools::Long _nRow ) const override;
+    virtual bool                    IsColumnSelected( tools::Long _nColumn ) const override;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
-    virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const override;
+    virtual OUString                GetAccessibleCellText( tools::Long _nRow, sal_uInt16 _nColumnPos ) const override;
 
     virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
     virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) override;

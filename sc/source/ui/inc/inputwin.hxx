@@ -58,7 +58,7 @@ public:
     virtual void            SetFormulaMode( bool bSet ) = 0;
     virtual bool            IsInputActive() = 0;
     virtual void            TextGrabFocus() = 0;
-    virtual long            GetNumLines() const = 0;
+    virtual tools::Long            GetNumLines() const = 0;
 };
 
 class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit window
@@ -94,12 +94,12 @@ public:
 
     virtual void            Resize() override;
 
-    long GetPixelHeightForLines(long nLines);
-    long GetEditEngTxtHeight() const;
+    tools::Long GetPixelHeightForLines(tools::Long nLines);
+    tools::Long GetEditEngTxtHeight() const;
 
-    virtual long GetNumLines() const override { return mnLines; }
-    void SetNumLines(long nLines);
-    long GetLastNumExpandedLines() const { return mnLastExpandedLines; }
+    virtual tools::Long GetNumLines() const override { return mnLines; }
+    void SetNumLines(tools::Long nLines);
+    tools::Long GetLastNumExpandedLines() const { return mnLastExpandedLines; }
 
     void DoScroll();
 
@@ -146,8 +146,8 @@ private:
 
     ScTabViewShell* mpViewShell;
     ScTextWndGroup& mrGroupBar;
-    long mnLines;
-    long mnLastExpandedLines;
+    tools::Long mnLines;
+    tools::Long mnLastExpandedLines;
     bool mbInvalidate;
 };
 
@@ -198,9 +198,9 @@ public:
 
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual EditView*       GetEditView() override;
-    long                    GetLastNumExpandedLines() const;
-    virtual long            GetNumLines() const override;
-    long                    GetPixelHeightForLines(long nLines);
+    tools::Long                    GetLastNumExpandedLines() const;
+    virtual tools::Long            GetNumLines() const override;
+    tools::Long                    GetPixelHeightForLines(tools::Long nLines);
     ScrollBar&              GetScrollBar();
     virtual const OUString& GetTextString() const override;
     virtual bool            HasEditView() const override;
@@ -209,7 +209,7 @@ public:
     virtual void            Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual void            Resize() override;
-    void                    SetNumLines(long nLines);
+    void                    SetNumLines(tools::Long nLines);
     virtual void            SetFormulaMode(bool bSet) override;
     virtual void            SetTextString(const OUString& rString) override;
     virtual void            StartEditEngine() override;
@@ -244,15 +244,15 @@ public:
     bool                    IsInputActive() override;
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
-    virtual long            GetNumLines() const override { return maTextWndGroup->GetNumLines(); }
-    long                    GetVertOffset() const { return  mnVertOffset; }
+    virtual tools::Long            GetNumLines() const override { return maTextWndGroup->GetNumLines(); }
+    tools::Long                    GetVertOffset() const { return  mnVertOffset; }
 
 private:
     void            TriggerToolboxLayout();
 
     VclPtr<ScTextWndGroup> maTextWndGroup;
     VclPtr<PushButton>     maButton;
-    long                   mnVertOffset;
+    tools::Long                   mnVertOffset;
 
     DECL_LINK(ClickHdl, Button*, void);
 };
@@ -319,7 +319,7 @@ private:
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;
     ScTabViewShell* mpViewShell;
-    long            mnMaxY;
+    tools::Long            mnMaxY;
     bool            bIsOkCancelMode;
     bool            bInResize;
 };

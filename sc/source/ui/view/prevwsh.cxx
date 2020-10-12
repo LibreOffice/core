@@ -264,8 +264,8 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
     aPageSize = pParamSet->Get(ATTR_PAGE_SIZE).GetSize();
-    aPageSize.setWidth( static_cast<long>(aPageSize.Width()  * HMM_PER_TWIPS ) );
-    aPageSize.setHeight( static_cast<long>(aPageSize.Height() * HMM_PER_TWIPS ) );
+    aPageSize.setWidth( static_cast<tools::Long>(aPageSize.Width()  * HMM_PER_TWIPS ) );
+    aPageSize.setHeight( static_cast<tools::Long>(aPageSize.Height() * HMM_PER_TWIPS ) );
     return true;
 }
 
@@ -274,11 +274,11 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     Size aPageSize;
     OutputDevice* pDevice = Application::GetDefaultDevice();
 
-    long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
-    long nBarH = nBarW;
+    tools::Long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    tools::Long nBarH = nBarW;
 
-    long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
-    long aWidthOffSet = aHeightOffSet;
+    tools::Long aHeightOffSet = pDevice ? pDevice->PixelToLogic( Size( nBarW, nBarH ), pPreview->GetMapMode() ).Height() : 0;
+    tools::Long aWidthOffSet = aHeightOffSet;
 
     if (!GetPageSize( aPageSize ))
         return;
@@ -307,9 +307,9 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     }
 
     // recalculate any needed scrollbars
-    long nMaxWidthPos = aPageSize.Width() - aWindowSize.Width();
+    tools::Long nMaxWidthPos = aPageSize.Width() - aWindowSize.Width();
     bHori = nMaxWidthPos >= 0;
-    long nMaxHeightPos = aPageSize.Height() - aWindowSize.Height();
+    tools::Long nMaxHeightPos = aPageSize.Height() - aWindowSize.Height();
     bVert = nMaxHeightPos >= 0;
 
     // see if having a scroll bar requires the other
@@ -358,7 +358,7 @@ void ScPreviewShell::UpdateScrollBars()
         pHorScroll->SetLineSize( aWindowSize.Width() / 16 );
         pHorScroll->SetPageSize( aWindowSize.Width() );
         pHorScroll->SetVisibleSize( aWindowSize.Width() );
-        long nMaxPos = aPageSize.Width() - aWindowSize.Width();
+        tools::Long nMaxPos = aPageSize.Width() - aWindowSize.Width();
         if ( nMaxPos<0 )
         {
             //  page smaller than window -> center (but put scrollbar to 0)
@@ -383,8 +383,8 @@ void ScPreviewShell::UpdateScrollBars()
     if( !pVerScroll )
         return;
 
-    long nPageNo     = pPreview->GetPageNo();
-    long nTotalPages = pPreview->GetTotalPages();
+    tools::Long nPageNo     = pPreview->GetPageNo();
+    tools::Long nTotalPages = pPreview->GetTotalPages();
 
     nMaxVertPos = aPageSize.Height() - aWindowSize.Height();
     pVerScroll->SetLineSize( aWindowSize.Height() / 16  );
@@ -418,12 +418,12 @@ void ScPreviewShell::UpdateScrollBars()
 
 IMPL_LINK( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
 {
-    long nPos           = pScroll->GetThumbPos();
-    long nDelta         = pScroll->GetDelta();
-    long nMaxRange      = pScroll->GetRangeMax();
-    long nTotalPages    = pPreview->GetTotalPages();
-    long nPageNo        = 0;
-    long nPerPageLength = 0;
+    tools::Long nPos           = pScroll->GetThumbPos();
+    tools::Long nDelta         = pScroll->GetDelta();
+    tools::Long nMaxRange      = pScroll->GetRangeMax();
+    tools::Long nTotalPages    = pPreview->GetTotalPages();
+    tools::Long nPageNo        = 0;
+    tools::Long nPerPageLength = 0;
     bool bIsDivide      = true;
 
     if( nTotalPages )
@@ -498,12 +498,12 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == CommandWheelMode::ZOOM )
     {
-        long nOld = pPreview->GetZoom();
-        long nNew;
+        tools::Long nOld = pPreview->GetZoom();
+        tools::Long nNew;
         if ( pData->GetDelta() < 0 )
-            nNew = std::max( long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
+            nNew = std::max( tools::Long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
         else
-            nNew = std::min( long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
+            nNew = std::min( tools::Long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
 
         if ( nNew != nOld )
         {
@@ -579,8 +579,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_PREV_TABLE: // Accelerator
         case SID_PREVIEW_PREVIOUS:
             {
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if (nTotal && nPage > 0)
                     pPreview->SetPageNo( nPage-1 );
             }
@@ -589,8 +589,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_PREVIEW_NEXT:
             {
                 bool bAllTested = pPreview->AllTested();
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if (nTotal && (nPage+1 < nTotal || !bAllTested))
                     pPreview->SetPageNo( nPage+1 );
             }
@@ -598,8 +598,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_CURSORTOPOFFILE: // Accelerator
         case SID_PREVIEW_FIRST:
             {
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if (nTotal && nPage != 0)
                     pPreview->SetPageNo( 0 );
             }
@@ -610,8 +610,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 if (!pPreview->AllTested())
                     pPreview->CalcAll();
 
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if (nTotal && nPage+1 != nTotal)
                     pPreview->SetPageNo( nTotal-1 );
             }
@@ -771,8 +771,8 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
     pPreview->SetInGetState(true);
 
     SCTAB nTab      = pPreview->GetTab();
-    long nPage      = pPreview->GetPageNo();
-    long nTotal     = pPreview->GetTotalPages();
+    tools::Long nPage      = pPreview->GetPageNo();
+    tools::Long nTotal     = pPreview->GetTotalPages();
     sal_uInt16 nZoom    = pPreview->GetZoom();
     bool bAllTested = pPreview->AllTested();
 
@@ -973,26 +973,26 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
 {
     Point   aCurPos, aPrevPos;
 
-    long nHRange    = pHorScroll->GetRange().Max();
-    long nHLine     = pHorScroll->GetLineSize();
-    long nHPage     = pHorScroll->GetPageSize();
-    long nVRange    = pVerScroll->GetRange().Max();
-    long nVLine     = pVerScroll->GetLineSize();
-    long nVPage     = pVerScroll->GetPageSize();
+    tools::Long nHRange    = pHorScroll->GetRange().Max();
+    tools::Long nHLine     = pHorScroll->GetLineSize();
+    tools::Long nHPage     = pHorScroll->GetPageSize();
+    tools::Long nVRange    = pVerScroll->GetRange().Max();
+    tools::Long nVLine     = pVerScroll->GetLineSize();
+    tools::Long nVPage     = pVerScroll->GetPageSize();
 
     aCurPos.setX( pHorScroll->GetThumbPos() );
     aCurPos.setY( pVerScroll->GetThumbPos() );
     aPrevPos = aCurPos;
 
-    long nThumbPos  = pVerScroll->GetThumbPos();
-    long nRangeMax  = pVerScroll->GetRangeMax();
+    tools::Long nThumbPos  = pVerScroll->GetThumbPos();
+    tools::Long nRangeMax  = pVerScroll->GetRangeMax();
 
     switch( nMode )
     {
         case SID_CURSORUP:
             if( nMaxVertPos<0 )
             {
-                long nPage = pPreview->GetPageNo();
+                tools::Long nPage = pPreview->GetPageNo();
 
                 if( nPage>0 )
                 {
@@ -1007,8 +1007,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         case SID_CURSORDOWN:
             if( nMaxVertPos<0 )
             {
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
 
                 // before testing for last page, make sure all page counts are calculated
                 if ( nPage+1 == nTotal && !pPreview->AllTested() )
@@ -1036,7 +1036,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         case SID_CURSORPAGEUP:
             if( nThumbPos==0 || nMaxVertPos<0 )
             {
-                long nPage = pPreview->GetPageNo();
+                tools::Long nPage = pPreview->GetPageNo();
 
                 if( nPage>0 )
                 {
@@ -1052,8 +1052,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         case SID_CURSORPAGEDOWN:
             if( (std::abs(nVPage+nThumbPos-nRangeMax)<10) || nMaxVertPos<0 )
             {
-                long nPage = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
 
                 // before testing for last page, make sure all page counts are calculated
                 if ( nPage+1 == nTotal && !pPreview->AllTested() )
@@ -1075,8 +1075,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
         case SID_CURSORHOME:
             if( nMaxVertPos<0 )
             {
-                long nPage  = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage  = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if( nTotal && nPage != 0 )
                 {
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();
@@ -1095,8 +1095,8 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
             {
                 if( !pPreview->AllTested() )
                     pPreview->CalcAll();
-                long nPage  = pPreview->GetPageNo();
-                long nTotal = pPreview->GetTotalPages();
+                tools::Long nPage  = pPreview->GetPageNo();
+                tools::Long nTotal = pPreview->GetTotalPages();
                 if( nTotal && nPage+1 != nTotal )
                 {
                     SfxViewFrame* pSfxViewFrame = GetViewFrame();

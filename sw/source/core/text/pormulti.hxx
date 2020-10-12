@@ -137,8 +137,8 @@ public:
     void ActualizeTabulator();
 
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
-    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
-    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const;
+    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const;
 
     // Summarize the internal lines to calculate the (external) size
     void CalcSize( SwTextFormatter& rLine, SwTextFormatInfo &rInf );
@@ -165,7 +165,7 @@ public:
 
     SwBracket* GetBrackets() const { return pBracket.get(); }
     void SetBrackets( const SwDoubleLinePortion& rDouble );
-    void PaintBracket( SwTextPaintInfo& rInf, long nSpaceAdd, bool bOpen ) const;
+    void PaintBracket( SwTextPaintInfo& rInf, tools::Long nSpaceAdd, bool bOpen ) const;
     void FormatBrackets( SwTextFormatInfo &rInf, SwTwips& nMaxWidth );
     sal_uInt16 PreWidth() const { return pBracket->nPreWidth; };
     sal_uInt16 PostWidth() const { return pBracket->nPostWidth; }
@@ -181,8 +181,8 @@ public:
     TextFrameIndex GetSmallerSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
 
-    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
-    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const override;
+    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const override;
 };
 
 class SwRubyPortion : public SwMultiPortion
@@ -225,9 +225,9 @@ public:
     // Get number of blanks for justified alignment
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf) const;
     // Calculates extra spacing based on number of blanks
-    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
     // Manipulate the spacing array at pCurr
-    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const override;
+    virtual bool ChgSpaceAdd( SwLineLayout* pCurr, tools::Long nSpaceAdd ) const override;
 };
 
 // For cursor travelling in multiportions
@@ -242,7 +242,7 @@ class SwTextCursorSave
     bool bSpaceChg;
 public:
     SwTextCursorSave( SwTextCursor* pTextCursor, SwMultiPortion* pMulti,
-        SwTwips nY, sal_uInt16& nX, TextFrameIndex nCurrStart, long nSpaceAdd);
+        SwTwips nY, sal_uInt16& nX, TextFrameIndex nCurrStart, tools::Long nSpaceAdd);
     ~SwTextCursorSave();
 };
 

@@ -85,12 +85,12 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     // clear the bitmap by filling the first line pixel by pixel,
     // then dup the first line over each other line
     Scanline pFirstScanline = GetScanline(0);
-    const long nEndX = aRect.Right();
-    for (long nX = 0; nX <= nEndX; ++nX)
+    const tools::Long nEndX = aRect.Right();
+    for (tools::Long nX = 0; nX <= nEndX; ++nX)
         SetPixelOnData(pFirstScanline, nX, rColor);
     const auto nScanlineSize = GetScanlineSize();
-    const long nEndY = aRect.Bottom();
-    for (long nY = 1; nY <= nEndY; nY++)
+    const tools::Long nEndY = aRect.Bottom();
+    for (tools::Long nY = 1; nY <= nEndY; nY++)
     {
         Scanline pDestScanline = GetScanline(nY);
         memcpy(pDestScanline, pFirstScanline, nScanlineSize);
@@ -103,12 +103,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
         return;
 
     const BitmapColor& rLineColor = *mpLineColor;
-    long nX, nY;
+    tools::Long nX, nY;
 
     if (rStart.X() == rEnd.X())
     {
         // Vertical Line
-        const long nEndY = rEnd.Y();
+        const tools::Long nEndY = rEnd.Y();
 
         nX = rStart.X();
         nY = rStart.Y();
@@ -127,7 +127,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     else if (rStart.Y() == rEnd.Y())
     {
         // Horizontal Line
-        const long nEndX = rEnd.X();
+        const tools::Long nEndX = rEnd.X();
 
         nX = rStart.X();
         nY = rStart.Y();
@@ -145,12 +145,12 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
     }
     else
     {
-        const long  nDX = labs( rEnd.X() - rStart.X() );
-        const long  nDY = labs( rEnd.Y() - rStart.Y() );
-        long nX1;
-        long nY1;
-        long nX2;
-        long nY2;
+        const tools::Long  nDX = labs( rEnd.X() - rStart.X() );
+        const tools::Long  nDY = labs( rEnd.Y() - rStart.Y() );
+        tools::Long nX1;
+        tools::Long nY1;
+        tools::Long nX2;
+        tools::Long nY2;
 
         if (nDX >= nDY)
         {
@@ -169,9 +169,9 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 nY2 = rStart.Y();
             }
 
-            const long nDYX = (nDY - nDX) << 1;
-            const long nDY2 = nDY << 1;
-            long nD = nDY2 - nDX;
+            const tools::Long nDYX = (nDY - nDX) << 1;
+            const tools::Long nDY2 = nDY << 1;
+            tools::Long nD = nDY2 - nDX;
             bool bPos = nY1 < nY2;
 
             for (nX = nX1, nY = nY1; nX <= nX2; nX++)
@@ -208,9 +208,9 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 nY2 = rStart.Y();
             }
 
-            const long  nDYX = (nDX - nDY) << 1;
-            const long  nDY2 = nDX << 1;
-            long nD = nDY2 - nDY;
+            const tools::Long  nDYX = (nDX - nDY) << 1;
+            const tools::Long  nDY2 = nDX << 1;
+            tools::Long nD = nDY2 - nDY;
             bool bPos = nX1 < nX2;
 
             for (nX = nX1, nY = nY1; nY <= nY2; nY++)
@@ -246,15 +246,15 @@ void BitmapWriteAccess::FillRect( const tools::Rectangle& rRect )
     if (aRect.IsEmpty())
         return;
 
-    const long nStartX = rRect.Left();
-    const long nStartY = rRect.Top();
-    const long nEndX = rRect.Right();
-    const long nEndY = rRect.Bottom();
+    const tools::Long nStartX = rRect.Left();
+    const tools::Long nStartY = rRect.Top();
+    const tools::Long nEndX = rRect.Right();
+    const tools::Long nEndY = rRect.Bottom();
 
-    for (long nY = nStartY; nY <= nEndY; nY++)
+    for (tools::Long nY = nStartY; nY <= nEndY; nY++)
     {
         Scanline pScanline = GetScanline( nY );
-        for (long nX = nStartX; nX <= nEndX; nX++)
+        for (tools::Long nX = nStartX; nX <= nEndX; nX++)
         {
             SetPixelOnData(pScanline, nX, rFillColor);
         }

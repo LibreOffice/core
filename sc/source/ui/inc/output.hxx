@@ -60,11 +60,11 @@ typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipR
 
 /// Describes reference mark to be drawn, position & size in TWIPs
 struct ReferenceMark {
-    long nX;
-    long nY;
-    long nWidth;
-    long nHeight;
-    long nTab;
+    tools::Long nX;
+    tools::Long nY;
+    tools::Long nWidth;
+    tools::Long nHeight;
+    tools::Long nTab;
     Color aColor;
 
     ReferenceMark()
@@ -75,11 +75,11 @@ struct ReferenceMark {
         , nTab( 0 )
         , aColor( COL_AUTO ) {}
 
-    ReferenceMark( long aX,
-                   long aY,
-                   long aWidth,
-                   long aHeight,
-                   long aTab,
+    ReferenceMark( tools::Long aX,
+                   tools::Long aY,
+                   tools::Long aWidth,
+                   tools::Long aHeight,
+                   tools::Long aTab,
                    const Color& rColor )
         : nX( aX )
         , nY( aY )
@@ -100,9 +100,9 @@ private:
     {
         tools::Rectangle   maAlignRect;
         tools::Rectangle   maClipRect;
-        long        mnColWidth;
-        long        mnLeftClipLength; /// length of the string getting cut off on the left.
-        long        mnRightClipLength; /// length of the string getting cut off on the right.
+        tools::Long        mnColWidth;
+        tools::Long        mnLeftClipLength; /// length of the string getting cut off on the left.
+        tools::Long        mnRightClipLength; /// length of the string getting cut off on the right.
         bool        mbLeftClip;
         bool        mbRightClip;
     };
@@ -121,9 +121,9 @@ private:
         SCCOL                   mnX;
         SCCOL                   mnCellX;
         SCROW                   mnCellY;
-        long                    mnPosX;
-        long                    mnPosY;
-        long                    mnInitPosX;
+        tools::Long                    mnPosX;
+        tools::Long                    mnPosY;
+        tools::Long                    mnInitPosX;
         bool                    mbBreak:1;
         bool                    mbCellIsValue:1;
         bool                    mbAsianVertical:1;
@@ -144,9 +144,9 @@ private:
 
         bool readCellContent(const ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
         void setPatternToEngine(bool bUseStyleColor);
-        void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
+        void calcMargins(tools::Long& rTop, tools::Long& rLeft, tools::Long& rBottom, tools::Long& rRight, double nPPTX, double nPPTY) const;
         void calcPaperSize(Size& rPaperSize, const tools::Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
-        void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
+        void getEngineSize(ScFieldEditEngine* pEngine, tools::Long& rWidth, tools::Long& rHeight) const;
         bool hasLineBreak() const;
         bool isHyperlinkCell() const;
 
@@ -165,7 +165,7 @@ private:
          *                    finished, this parameter will store the new
          *                    position.
          */
-        void calcStartPosForVertical(Point& rLogicStart, long nCellWidth, long nEngineWidth, long nTopM, const OutputDevice* pRefDevice);
+        void calcStartPosForVertical(Point& rLogicStart, tools::Long nCellWidth, tools::Long nEngineWidth, tools::Long nTopM, const OutputDevice* pRefDevice);
 
         void setAlignmentToEngine();
         bool adjustHorAlignment(ScFieldEditEngine* pEngine);
@@ -180,11 +180,11 @@ private:
     SCSIZE nArrCount;           // occupied lines in info block
     ScDocument* mpDoc;          // Document
     SCTAB nTab;                 // sheet
-    long nScrX;                 // Output Startpos. (Pixel)
-    long nScrY;
-    long nScrW;                 // Output size (Pixel)
-    long nScrH;
-    long nMirrorW;              // Visible output width for mirroring (default: nScrW)
+    tools::Long nScrX;                 // Output Startpos. (Pixel)
+    tools::Long nScrY;
+    tools::Long nScrW;                 // Output size (Pixel)
+    tools::Long nScrH;
+    tools::Long nMirrorW;              // Visible output width for mirroring (default: nScrW)
     SCCOL nX1;                  // Start-/End coordinates
     SCROW nY1;                  //  ( incl. hidden )
     SCCOL nX2;
@@ -246,17 +246,17 @@ private:
 
     bool IsAvailable( SCCOL nX, SCROW nY );
 
-    void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
-                                   SCCOL nCellX, SCROW nCellY, long nNeeded,
+    void            GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, tools::Long nPosY,
+                                   SCCOL nCellX, SCROW nCellY, tools::Long nNeeded,
                                    const ScPatternAttr& rPattern,
                                    sal_uInt16 nHorJustify, bool bCellIsValue,
                                    bool bBreak, bool bOverwrite,
                                    OutputAreaParam& rParam );
 
     void            ShrinkEditEngine( EditEngine& rEngine, const tools::Rectangle& rAlignRect,
-                                    long nLeftM, long nTopM, long nRightM, long nBottomM,
-                                    bool bWidth, SvxCellOrientation nOrient, long nAttrRotate, bool bPixelToLogic,
-                                    long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
+                                    tools::Long nLeftM, tools::Long nTopM, tools::Long nRightM, tools::Long nBottomM,
+                                    bool bWidth, SvxCellOrientation nOrient, tools::Long nAttrRotate, bool bPixelToLogic,
+                                    tools::Long& rEngineWidth, tools::Long& rEngineHeight, tools::Long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
     void SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell );
@@ -276,15 +276,15 @@ private:
 
     std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
 
-    void ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
+    void ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineHeight, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam );
 
     ClearableClipRegionPtr Clip(DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
-                                long nEngineHeight, bool bWrapFields);
+                                tools::Long nEngineHeight, bool bWrapFields);
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
-    long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,
-                                   long& rNeededPixel, long nAddWidthPixels );
+    tools::Long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,
+                                   tools::Long& rNeededPixel, tools::Long nAddWidthPixels );
 
     // Check for and set cell rotations at OutputData to have it available
     // in the svx tooling to render the borders. Moved to private section
@@ -300,7 +300,7 @@ public:
      */
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                                     ScTableInfo& rTabInfo, ScDocument* pNewDoc,
-                                    SCTAB nNewTab, long nNewScrX, long nNewScrY,
+                                    SCTAB nNewTab, tools::Long nNewScrX, tools::Long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
                                     const Fraction* pZoomX = nullptr,
@@ -328,9 +328,9 @@ public:
     void    SetShowNullValues ( bool bSet );
     void    SetShowFormulas   ( bool bSet );
     void    SetShowSpellErrors( bool bSet );
-    void    SetMirrorWidth( long nNew );
-    long    GetScrW() const     { return nScrW; }
-    long    GetScrH() const     { return nScrH; }
+    void    SetMirrorWidth( tools::Long nNew );
+    tools::Long    GetScrW() const     { return nScrW; }
+    tools::Long    GetScrH() const     { return nScrH; }
 
     void    SetSnapPixel();
 
@@ -353,7 +353,7 @@ public:
     void    DrawClear();
 
     // #i72502# printer only command set
-    Point   PrePrintDrawingLayer(long nLogStX, long nLogStY );
+    Point   PrePrintDrawingLayer(tools::Long nLogStX, tools::Long nLogStY );
     void    PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
     void    PrintDrawingLayer(SdrLayerID nLayer, const Point& rMMOffset);
 

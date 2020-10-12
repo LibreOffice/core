@@ -47,7 +47,7 @@ void IconView::Resize()
     SvTreeListBox::Resize();
 }
 
-tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, long nEntryPos)
+tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos)
 {
     Size aSize;
     aSize.setHeight( nEntryHeight );
@@ -73,7 +73,7 @@ tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, long nEntryPos)
     return aRect;
 }
 
-void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
+void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
                             vcl::RenderContext& rRenderContext)
 {
 

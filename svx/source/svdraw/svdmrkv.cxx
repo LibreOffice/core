@@ -738,7 +738,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         {
             SdrMark* pM = GetSdrMarkByIndex(0);
             SdrObject* pO = pM->GetMarkedSdrObj();
-            long nRotAngle = pO->GetRotateAngle();
+            tools::Long nRotAngle = pO->GetRotateAngle();
             // true if we are dealing with a RotGrfFlyFrame
             // (SwVirtFlyDrawObj with a SwGrfNode)
             bool bWriterGraphic = pO->HasLimitedRotation();
@@ -1497,11 +1497,11 @@ void SdrMarkView::ForceRefToMarked()
         case SdrDragMode::Mirror:
         {
             // first calculate the length of the axis of reflection
-            long nOutMin=0;
-            long nOutMax=0;
-            long nMinLen=0;
-            long nObjDst=0;
-            long nOutHgt=0;
+            tools::Long nOutMin=0;
+            tools::Long nOutMax=0;
+            tools::Long nMinLen=0;
+            tools::Long nObjDst=0;
+            tools::Long nOutHgt=0;
             OutputDevice* pOut=GetFirstOutputDevice();
             if (pOut!=nullptr) {
                 // minimum length: 50 pixels
@@ -1510,7 +1510,7 @@ void SdrMarkView::ForceRefToMarked()
                 nObjDst=pOut->PixelToLogic(Size(0,20)).Height();
                 // MinY/MaxY
                 // margin = minimum length = 10 pixels
-                long nDst=pOut->PixelToLogic(Size(0,10)).Height();
+                tools::Long nDst=pOut->PixelToLogic(Size(0,10)).Height();
                 nOutMin=-pOut->GetMapMode().GetOrigin().Y();
                 nOutMax=pOut->GetOutputSize().Height()-1+nOutMin;
                 nOutMin+=nDst;
@@ -1524,18 +1524,18 @@ void SdrMarkView::ForceRefToMarked()
                 }
                 nOutHgt=nOutMax-nOutMin;
                 // otherwise minimum length = 1/4 OutHgt
-                long nTemp=nOutHgt/4;
+                tools::Long nTemp=nOutHgt/4;
                 if (nTemp>nMinLen) nMinLen=nTemp;
             }
 
             tools::Rectangle aR(GetMarkedObjBoundRect());
             Point aCenter(aR.Center());
-            long nMarkHgt=aR.GetHeight()-1;
-            long nHgt=nMarkHgt+nObjDst*2;       // 20 pixels overlapping above and below
+            tools::Long nMarkHgt=aR.GetHeight()-1;
+            tools::Long nHgt=nMarkHgt+nObjDst*2;       // 20 pixels overlapping above and below
             if (nHgt<nMinLen) nHgt=nMinLen;     // minimum length 50 pixels or 1/4 OutHgt, respectively
 
-            long nY1=aCenter.Y()-(nHgt+1)/2;
-            long nY2=nY1+nHgt;
+            tools::Long nY1=aCenter.Y()-(nHgt+1)/2;
+            tools::Long nY2=nY1+nHgt;
 
             if (pOut!=nullptr && nMinLen>nOutHgt) nMinLen=nOutHgt; // TODO: maybe shorten this a little
 

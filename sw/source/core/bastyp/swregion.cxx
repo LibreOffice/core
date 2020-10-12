@@ -74,10 +74,10 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // now split; only those rectangles should be left over that are in
             // the "old" but not in the "new" area; hence, not in intersection.
-            long nTmp = aInter.Top() - aTmp.Top();
+            tools::Long nTmp = aInter.Top() - aTmp.Top();
             if ( 0 < nTmp )
             {
-                const long nOldVal = aTmp.Height();
+                const tools::Long nOldVal = aTmp.Height();
                 aTmp.Height(nTmp);
                 InsertRect( aTmp, i, bDel );
                 aTmp.Height( nOldVal );
@@ -92,7 +92,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             nTmp = aInter.Left() - aTmp.Left();
             if ( 0 < nTmp )
             {
-                const long nOldVal = aTmp.Width();
+                const tools::Long nOldVal = aTmp.Width();
                 aTmp.Width( nTmp );
                 InsertRect( aTmp, i, bDel );
                 aTmp.Width( nOldVal );
@@ -171,7 +171,7 @@ void SwRegionRects::Compress()
                 // paints), the area of the union can be a little bit larger:
                 // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
                 // than the width of an A4 page
-                const long nFuzzy = 1361513;
+                const tools::Long nFuzzy = 1361513;
                 SwRect aUnion( (*this)[i] );
                 aUnion.Union( (*this)[j] );
                 SwRect aInter( (*this)[i] );

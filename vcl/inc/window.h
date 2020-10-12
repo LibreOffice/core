@@ -104,11 +104,11 @@ struct ImplWinData
                         mpExtOldAttrAry;
     std::optional<tools::Rectangle>
                         mpCursorRect;
-    long                mnCursorExtWidth;
+    tools::Long                mnCursorExtWidth;
     bool                mbVertical;
     std::unique_ptr<tools::Rectangle[]>
                         mpCompositionCharRects;
-    long                mnCompositionCharRects;
+    tools::Long                mnCompositionCharRects;
     std::optional<tools::Rectangle>
                         mpFocusRect;
     std::optional<tools::Rectangle>
@@ -141,14 +141,14 @@ struct ImplFrameData
     sal_Int32           mnDPIY;                 //< Original Screen Resolution
     ImplSVEvent *       mnFocusId;              //< FocusId for PostUserLink
     ImplSVEvent *       mnMouseMoveId;          //< MoveId for PostUserLink
-    long                mnLastMouseX;           //< last x mouse position
-    long                mnLastMouseY;           //< last y mouse position
-    long                mnBeforeLastMouseX;     //< last but one x mouse position
-    long                mnBeforeLastMouseY;     //< last but one y mouse position
-    long                mnFirstMouseX;          //< first x mouse position by mousebuttondown
-    long                mnFirstMouseY;          //< first y mouse position by mousebuttondown
-    long                mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
-    long                mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
+    tools::Long                mnLastMouseX;           //< last x mouse position
+    tools::Long                mnLastMouseY;           //< last y mouse position
+    tools::Long                mnBeforeLastMouseX;     //< last but one x mouse position
+    tools::Long                mnBeforeLastMouseY;     //< last but one y mouse position
+    tools::Long                mnFirstMouseX;          //< first x mouse position by mousebuttondown
+    tools::Long                mnFirstMouseY;          //< first y mouse position by mousebuttondown
+    tools::Long                mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
+    tools::Long                mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
     sal_uInt16          mnModalMode;            //< frame based modal count (app based makes no sense anymore)
     sal_uInt64          mnMouseDownTime;        //< mouse button down time for double click
     sal_uInt16          mnClickCount;           //< mouse click count
@@ -269,9 +269,9 @@ public:
     sal_Int32           mnHeightRequest;
     sal_Int32           mnOptimalWidthCache;
     sal_Int32           mnOptimalHeightCache;
-    long                mnX;
-    long                mnY;
-    long                mnAbsScreenX;
+    tools::Long                mnX;
+    tools::Long                mnY;
+    tools::Long                mnAbsScreenX;
     Point               maPos;
     OString             maHelpId;
     OUString            maHelpText;
@@ -406,8 +406,8 @@ class VCL_DLLPUBLIC PaintBufferGuard
     bool mbBackground;
     Wallpaper maBackground;
     AllSettings maSettings;
-    long mnOutOffX;
-    long mnOutOffY;
+    tools::Long mnOutOffX;
+    tools::Long mnOutOffY;
     tools::Rectangle m_aPaintRect;
 public:
     PaintBufferGuard(ImplFrameData* pFrameData, vcl::Window* pWindow);
@@ -422,9 +422,9 @@ public:
 // helper methods
 
 bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
-                           long nX, long nY, sal_uInt64 nMsgTime,
+                           tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
-void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
+void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
 
 VCL_DLLPUBLIC void ImplWindowStateFromStr(WindowStateData& rData, const OString& rStr);
 

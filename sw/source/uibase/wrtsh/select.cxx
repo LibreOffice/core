@@ -46,7 +46,7 @@ namespace com::sun::star::util {
 
 using namespace ::com::sun::star::util;
 
-static long nStartDragX = 0, nStartDragY = 0;
+static tools::Long nStartDragX = 0, nStartDragY = 0;
 static bool  bStartDrag = false;
 
 void SwWrtShell::Invalidate()
@@ -300,7 +300,7 @@ void SwWrtShell::PopMode()
 // eponymous methods in the CursorShell, the second removes
 // all selections at first.
 
-long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
+tools::Long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
 {
         // Remove a possibly present selection at the position
         // of the mouseclick
@@ -312,7 +312,7 @@ long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
     return SwCursorShell::SetCursor(*pPt, bTextOnly);
 }
 
-long SwWrtShell::SetCursorKillSel(const Point *pPt, bool bTextOnly )
+tools::Long SwWrtShell::SetCursorKillSel(const Point *pPt, bool bTextOnly )
 {
     SwActContext aActContext(this);
     ResetSelect(pPt,false);
@@ -329,7 +329,7 @@ void SwWrtShell::UnSelectFrame()
 
 // Remove of all selections
 
-long SwWrtShell::ResetSelect(const Point *,bool)
+tools::Long SwWrtShell::ResetSelect(const Point *,bool)
 {
     if(IsSelFrameMode())
     {
@@ -375,7 +375,7 @@ void SwWrtShell::SetSplitVerticalByDefault(bool value)
 
 // Do nothing
 
-long SwWrtShell::Ignore(const Point *, bool ) {
+tools::Long SwWrtShell::Ignore(const Point *, bool ) {
     return 1;
 }
 

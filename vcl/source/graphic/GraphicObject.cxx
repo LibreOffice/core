@@ -357,7 +357,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
         const Point     aOldOrigin( rPt );
         const MapMode   aMap100( MapUnit::Map100thMM );
         Size            aSize100;
-        long            nTotalWidth, nTotalHeight;
+        tools::Long            nTotalWidth, nTotalHeight;
 
         if( nRot10 )
         {
@@ -383,16 +383,16 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
         if( !aSize100.IsEmpty() && nTotalWidth > 0 && nTotalHeight > 0 )
         {
             double fScale = static_cast<double>(aSize100.Width()) / nTotalWidth;
-            const long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
-            const long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
+            const tools::Long nNewLeft = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Horizontal ) ? pAttr->GetRightCrop() : pAttr->GetLeftCrop() ) * fScale );
+            const tools::Long nNewRight = nNewLeft + FRound( aSize100.Width() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Width()) / aSize100.Width();
             rPt.AdjustX(FRound( nNewLeft * fScale ) );
             rSz.setWidth( FRound( ( nNewRight - nNewLeft + 1 ) * fScale ) );
 
             fScale = static_cast<double>(aSize100.Height()) / nTotalHeight;
-            const long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
-            const long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
+            const tools::Long nNewTop = -FRound( ( ( pAttr->GetMirrorFlags() & BmpMirrorFlags::Vertical ) ? pAttr->GetBottomCrop() : pAttr->GetTopCrop() ) * fScale );
+            const tools::Long nNewBottom = nNewTop + FRound( aSize100.Height() * fScale ) - 1;
 
             fScale = static_cast<double>(rSz.Height()) / aSize100.Height();
             rPt.AdjustY(FRound( nNewTop * fScale ) );
@@ -540,7 +540,7 @@ void GraphicObject::DrawTiled( OutputDevice* pOut, const tools::Rectangle& rArea
 }
 
 bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                    long nExtraData,
+                                    tools::Long nExtraData,
                                     OutputDevice* pFirstFrameOutDev )
 {
     bool bRet = false;
@@ -591,7 +591,7 @@ bool GraphicObject::StartAnimation( OutputDevice* pOut, const Point& rPt, const 
     return bRet;
 }
 
-void GraphicObject::StopAnimation( const OutputDevice* pOut, long nExtraData )
+void GraphicObject::StopAnimation( const OutputDevice* pOut, tools::Long nExtraData )
 {
     if (mxSimpleCache)
         mxSimpleCache->maGraphic.StopAnimation(pOut, nExtraData);
@@ -676,13 +676,13 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             // #104115# Adapt the pref size by hand (scale changes it
             // proportionally, but we want it to be smaller than the
             // former size, to crop the excess out)
-            aMtf.SetPrefSize( Size( static_cast<long>(static_cast<double>(rDestSize.Width()) *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
-                                    static_cast<long>(static_cast<double>(rDestSize.Height()) * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
+            aMtf.SetPrefSize( Size( static_cast<tools::Long>(static_cast<double>(rDestSize.Width()) *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
+                                    static_cast<tools::Long>(static_cast<double>(rDestSize.Height()) * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
 
             // #104115# Adapt the origin of the new mapmode, such that it
             // is shifted to the place where the cropped output starts
-            Point aNewOrigin( static_cast<long>(static_cast<double>(aMtfMapMode.GetOrigin().X()) + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
-                              static_cast<long>(static_cast<double>(aMtfMapMode.GetOrigin().Y()) + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
+            Point aNewOrigin( static_cast<tools::Long>(static_cast<double>(aMtfMapMode.GetOrigin().X()) + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
+                              static_cast<tools::Long>(static_cast<double>(aMtfMapMode.GetOrigin().Y()) + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
             MapMode aNewMap( rDestMap );
             aNewMap.SetOrigin( OutputDevice::LogicToLogic(aNewOrigin, aMtfMapMode, rDestMap) );
             aMtf.SetPrefMapMode( aNewMap );

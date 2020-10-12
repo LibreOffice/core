@@ -890,9 +890,9 @@ static OUString lcl_BoxNmToRel( const SwTable& rTable, const SwTableNode& rTable
     // If the formula is spanning over a table then keep external presentation
     if( &rTable == &rTableNd.GetTable() )
     {
-        long nBox = SwTable::GetBoxNum( sTmp, true );
+        tools::Long nBox = SwTable::GetBoxNum( sTmp, true );
         nBox -= SwTable::GetBoxNum( sRefBoxNm, true );
-        long nLine = SwTable::GetBoxNum( sTmp );
+        tools::Long nLine = SwTable::GetBoxNum( sTmp );
         nLine -= SwTable::GetBoxNum( sRefBoxNm );
 
         const OUString sCpy = sTmp;        //JP 01.11.95: add rest from box name

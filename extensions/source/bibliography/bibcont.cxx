@@ -146,7 +146,7 @@ void BibBookContainer::Split()
 }
 IMPL_LINK_NOARG( BibBookContainer, SplitHdl, Timer*, void)
 {
-    long nSize= GetItemSize( TOP_WINDOW);
+    tools::Long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();
     pConfig->setBeamerSize(nSize);
     nSize = GetItemSize( BOTTOM_WINDOW);
@@ -163,7 +163,7 @@ void BibBookContainer::createTopFrame( BibShortCutHandler* pWin )
     pTopWin=VclPtr<BibWindowContainer>::Create(this,pWin);
     pTopWin->Show();
     BibConfig* pConfig = BibModul::GetConfig();
-    long nSize = pConfig->getBeamerSize();
+    tools::Long nSize = pConfig->getBeamerSize();
     InsertItem(TOP_WINDOW, pTopWin, nSize, 1, 0, SplitWindowItemFlags::PercentSize  );
 
 }
@@ -179,7 +179,7 @@ void BibBookContainer::createBottomFrame( BibShortCutHandler* pWin )
     pBottomWin=VclPtr<BibWindowContainer>::Create(this,pWin);
 
     BibConfig* pConfig = BibModul::GetConfig();
-    long nSize = pConfig->getViewSize();
+    tools::Long nSize = pConfig->getViewSize();
     InsertItem(BOTTOM_WINDOW, pBottomWin, nSize, 1, 0, SplitWindowItemFlags::PercentSize  );
 
 }
@@ -208,7 +208,7 @@ bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
                 {
                     sal_uInt16 nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
                     sal_uInt16 nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
-                    long nHeight = GetItemSize( nFirstWinId );
+                    tools::Long nHeight = GetItemSize( nFirstWinId );
                     nHeight -= WIN_STEP_SIZE;
                     if(nHeight < WIN_MIN_HEIGHT)
                         nHeight = WIN_MIN_HEIGHT;

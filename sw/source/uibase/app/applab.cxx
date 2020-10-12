@@ -239,7 +239,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         aDesc.SetUseOn(UseOnPage::All);                // Site numbering
 
         // Set page size
-        long lPgWidth, lPgHeight;
+        tools::Long lPgWidth, lPgHeight;
         lPgWidth  = std::max<sal_Int32>(rItem.m_lPWidth, MINLAY);
         lPgHeight = std::max<sal_Int32>(rItem.m_lPHeight, MINLAY);
         rFormat.SetFormatAttr( SwFormatFrameSize( SwFrameSize::Fixed, lPgWidth, lPgHeight ));

@@ -186,7 +186,7 @@ void CertificateChooser::ImplInitialize()
         {
             uno::Reference< security::XCertificate > xCert = xCerts[ --nCert ];
             // Check if we have a private key for this...
-            long nCertificateCharacters = secEnvironment->getCertificateCharacters(xCert);
+            tools::Long nCertificateCharacters = secEnvironment->getCertificateCharacters(xCert);
 
             if (!(nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY))
             {

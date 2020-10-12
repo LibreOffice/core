@@ -22,6 +22,7 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <rtl/math.hxx>
+#include <tools/long.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -106,7 +107,7 @@ public:
 
     inline bool maySkipPointsInRegressionCalculation() const;
 
-    void setTimeResolution( long nTimeResolution, const Date& rNullDate );
+    void setTimeResolution( tools::Long nTimeResolution, const Date& rNullDate );
     virtual void setScaledCategoryWidth( double fScaledCategoryWidth );
     void AllowShiftXAxisPos( bool bAllowShift );
     void AllowShiftZAxisPos( bool bAllowShift );
@@ -127,7 +128,7 @@ protected: //member
     bool m_bMaySkipPointsInRegressionCalculation;
 
     bool m_bDateAxis;
-    long m_nTimeResolution;
+    tools::Long m_nTimeResolution;
     Date m_aNullDate;
 
     double m_fScaledCategoryWidth;

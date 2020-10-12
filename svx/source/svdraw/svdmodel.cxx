@@ -949,7 +949,7 @@ void SdrModel::ImpSetUIUnit()
     // may need to be changed in the future, too
     if(1 != nMul || 1 != nDiv)
     {
-        const Fraction aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
+        const Fraction aTemp(static_cast< tools::Long >(nMul), static_cast< tools::Long >(nDiv));
         nMul = aTemp.GetNumerator();
         nDiv = aTemp.GetDenominator();
     }
@@ -1080,7 +1080,7 @@ OUString SdrModel::GetUnitString(FieldUnit eUnit)
     }
 }
 
-OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumDigits) const
+OUString SdrModel::GetMetricString(tools::Long nVal, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not lose decimal places
@@ -1202,7 +1202,7 @@ OUString SdrModel::GetMetricString(long nVal, bool bNoUnitChars, sal_Int32 nNumD
     return aBuf.makeStringAndClear();
 }
 
-OUString SdrModel::GetAngleString(long nAngle)
+OUString SdrModel::GetAngleString(tools::Long nAngle)
 {
     bool bNeg = nAngle < 0;
 
@@ -1587,7 +1587,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     // get the drawing pages
     if (bInsPages) {
         sal_uInt16 nSourcePos=nFirstPageNum;
-        sal_uInt16 nMergeCount=sal_uInt16(std::abs(static_cast<long>(static_cast<long>(nFirstPageNum)-nLastPageNum))+1);
+        sal_uInt16 nMergeCount=sal_uInt16(std::abs(static_cast<tools::Long>(static_cast<tools::Long>(nFirstPageNum)-nLastPageNum))+1);
         if (nDestPos>GetPageCount()) nDestPos=GetPageCount();
         while (nMergeCount>0)
         {
@@ -1695,10 +1695,10 @@ void SdrModel::setUnoModel( const css::uno::Reference< css::uno::XInterface >& x
 
 void SdrModel::adaptSizeAndBorderForAllPages(
     const Size& /*rNewSize*/,
-    long /*nLeft*/,
-    long /*nRight*/,
-    long /*nUpper*/,
-    long /*nLower*/)
+    tools::Long /*nLeft*/,
+    tools::Long /*nRight*/,
+    tools::Long /*nUpper*/,
+    tools::Long /*nLower*/)
 {
     // base implementation does currently nothing. It may be added if needed,
     // but we are on SdrModel level here, thus probably have not enough information

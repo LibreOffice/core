@@ -95,7 +95,7 @@ public:
     virtual sal_uInt16          GetBitCount() const = 0;
 
     // get the width of the device
-    virtual long                GetGraphicsWidth() const = 0;
+    virtual tools::Long                GetGraphicsWidth() const = 0;
 
     // set the clip region to empty
     virtual void                ResetClipRegion() = 0;
@@ -177,10 +177,10 @@ public:
     // embeddable by GetDevFontList or NULL in case of error
     // parameters: pFont: describes the font in question
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void*         GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen) = 0;
+    virtual const void*         GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen) = 0;
 
     // free the font data again
-    virtual void                FreeEmbedFontData( const void* pData, long nDataLen ) = 0;
+    virtual void                FreeEmbedFontData( const void* pData, tools::Long nDataLen ) = 0;
 
     // get the same widths as in CreateFontSubset
     // in case of an embeddable font also fill the mapping
@@ -202,11 +202,11 @@ public:
     SalLayoutFlags              GetLayout() const { return m_nLayout; }
     void                        SetLayout( SalLayoutFlags aLayout ) { m_nLayout = aLayout;}
 
-    void                        mirror( long& nX, const OutputDevice *pOutDev ) const;
+    void                        mirror( tools::Long& nX, const OutputDevice *pOutDev ) const;
     // only called mirror2 to avoid ambiguity
     [[nodiscard]]
-    long                        mirror2( long nX, const OutputDevice *pOutDev ) const;
-    void                        mirror( long& nX, long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
+    tools::Long                        mirror2( tools::Long nX, const OutputDevice *pOutDev ) const;
+    void                        mirror( tools::Long& nX, tools::Long nWidth, const OutputDevice *pOutDev, bool bBack = false ) const;
     bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, const OutputDevice *pOutDev ) const;
     void                        mirror( tools::Rectangle& rRect, const OutputDevice*, bool bBack = false ) const;
     void                        mirror( vcl::Region& rRgn, const OutputDevice *pOutDev ) const;
@@ -219,12 +219,12 @@ public:
     bool                        SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    void                        DrawPixel( long nX, long nY, const OutputDevice *pOutDev );
-    void                        DrawPixel( long nX, long nY, Color nColor, const OutputDevice *pOutDev );
+    void                        DrawPixel( tools::Long nX, tools::Long nY, const OutputDevice *pOutDev );
+    void                        DrawPixel( tools::Long nX, tools::Long nY, Color nColor, const OutputDevice *pOutDev );
 
-    void                        DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
+    void                        DrawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2, const OutputDevice *pOutDev );
 
-    void                        DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
+    void                        DrawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice *pOutDev );
 
     void                        DrawPolyLine( sal_uInt32 nPoints, SalPoint const * pPtAry, const OutputDevice *pOutDev );
 
@@ -282,9 +282,9 @@ public:
 
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(
-                                    long nDestX, long nDestY,
-                                    long nSrcX, long nSrcY,
-                                    long nSrcWidth, long nSrcHeight,
+                                    tools::Long nDestX, tools::Long nDestY,
+                                    tools::Long nSrcX, tools::Long nSrcY,
+                                    tools::Long nSrcWidth, tools::Long nSrcHeight,
                                     const OutputDevice *pOutDev );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -313,18 +313,18 @@ public:
                                     const OutputDevice *pOutDev );
 
     std::shared_ptr<SalBitmap>  GetBitmap(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     const OutputDevice *pOutDev );
 
     Color                       GetPixel(
-                                    long nX, long nY,
+                                    tools::Long nX, tools::Long nY,
                                     const OutputDevice *pOutDev );
 
     // invert --> ClipRegion (only Windows)
     void                        Invert(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     SalInvert nFlags,
                                     const OutputDevice *pOutDev );
 
@@ -335,8 +335,8 @@ public:
                                     const OutputDevice *pOutDev );
 
     bool                        DrawEPS(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     void* pPtr,
                                     sal_uInt32 nSize,
                                     const OutputDevice *pOutDev );
@@ -416,8 +416,8 @@ public:
                                     const OutputDevice* pOutDev );
 
     bool                        DrawAlphaRect(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
@@ -443,12 +443,12 @@ protected:
     virtual bool                setClipRegion( const vcl::Region& ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void                drawPixel( long nX, long nY ) = 0;
-    virtual void                drawPixel( long nX, long nY, Color nColor ) = 0;
+    virtual void                drawPixel( tools::Long nX, tools::Long nY ) = 0;
+    virtual void                drawPixel( tools::Long nX, tools::Long nY, Color nColor ) = 0;
 
-    virtual void                drawLine( long nX1, long nY1, long nX2, long nY2 ) = 0;
+    virtual void                drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) = 0;
 
-    virtual void                drawRect( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual void                drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
 
     virtual void                drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) = 0;
 
@@ -500,9 +500,9 @@ protected:
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void                copyArea(
-                                    long nDestX, long nDestY,
-                                    long nSrcX, long nSrcY,
-                                    long nSrcWidth, long nSrcHeight,
+                                    tools::Long nDestX, tools::Long nDestY,
+                                    tools::Long nSrcX, tools::Long nSrcY,
+                                    tools::Long nSrcWidth, tools::Long nSrcHeight,
                                     bool bWindowInvalidate ) = 0;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -521,21 +521,21 @@ protected:
                                     const SalBitmap& rSalBitmap,
                                     Color nMaskColor ) = 0;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap( long nX, long nY, long nWidth, long nHeight ) = 0;
+    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
 
-    virtual Color               getPixel( long nX, long nY ) = 0;
+    virtual Color               getPixel( tools::Long nX, tools::Long nY ) = 0;
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void                invert(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     SalInvert nFlags) = 0;
 
     virtual void                invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) = 0;
 
     virtual bool                drawEPS(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     void* pPtr,
                                     sal_uInt32 nSize ) = 0;
 
@@ -587,8 +587,8 @@ protected:
      * @returns true if successfully drawn, false if not able to draw rectangle
      */
     virtual bool                drawAlphaRect(
-                                    long nX, long nY,
-                                    long nWidth, long nHeight,
+                                    tools::Long nX, tools::Long nY,
+                                    tools::Long nWidth, tools::Long nHeight,
                                     sal_uInt8 nTransparency ) = 0;
 
 private:
@@ -596,13 +596,13 @@ private:
 
     // for buffering the Mirror-Matrix, see ::getMirror
     basegfx::B2DHomMatrix       m_aLastMirror;
-    long                        m_aLastMirrorW;
+    tools::Long                        m_aLastMirrorW;
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
     bool                        m_bAntiAlias : 1;
 
-    inline long GetDeviceWidth(const OutputDevice* pOutDev) const;
+    inline tools::Long GetDeviceWidth(const OutputDevice* pOutDev) const;
 
     /**
      * Handle damage done by drawing with a widget draw override

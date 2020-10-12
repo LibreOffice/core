@@ -63,8 +63,8 @@ namespace {
     if( pLineEndList.is() )
     {
         OUString aArrowName( SvxResId(pResId) );
-        long nCount = pLineEndList->Count();
-        long nIndex;
+        tools::Long nCount = pLineEndList->Count();
+        tools::Long nIndex;
         for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
@@ -255,12 +255,12 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, const SdrObject& rObj, sal
     }
 
     SfxItemSet aSet( rModel.GetItemPool() );
-    long nWidth = 200; // (1/100th mm)
+    tools::Long nWidth = 200; // (1/100th mm)
 
     // determine line width and calculate with it the line end width
     if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
-        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
         if( nValue > 0 )
             nWidth = nValue * 3;
     }

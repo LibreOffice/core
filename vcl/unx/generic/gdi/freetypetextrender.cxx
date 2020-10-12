@@ -181,7 +181,7 @@ bool FreeTypeTextRenderImpl::CreateFontSubset(
     return bSuccess;
 }
 
-const void* FreeTypeTextRenderImpl::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* FreeTypeTextRenderImpl::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -192,7 +192,7 @@ const void* FreeTypeTextRenderImpl::GetEmbedFontData(const PhysicalFontFace* pFo
     return GenPspGraphics::DoGetEmbedFontData(aFont, pDataLen);
 }
 
-void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, long nLen )
+void FreeTypeTextRenderImpl::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
     GenPspGraphics::DoFreeEmbedFontData( pData, nLen );
 }

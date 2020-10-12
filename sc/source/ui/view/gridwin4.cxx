@@ -103,8 +103,8 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     lcl_LimitRect( aInner, aVisible );
 
     tools::Rectangle aOuter = aInner;
-    long nHor = static_cast<long>( SC_SCENARIO_HSPACE * nPPTX );
-    long nVer = static_cast<long>( SC_SCENARIO_VSPACE * nPPTY );
+    tools::Long nHor = static_cast<tools::Long>( SC_SCENARIO_HSPACE * nPPTX );
+    tools::Long nVer = static_cast<tools::Long>( SC_SCENARIO_VSPACE * nPPTY );
     aOuter.AdjustLeft( -nHor );
     aOuter.AdjustRight(nHor );
     aOuter.AdjustTop( -nVer );
@@ -137,18 +137,18 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     pDev->DrawRect( tools::Rectangle( aInner.Right(), aOuter.Top(),    aOuter.Right(), aOuter.Bottom() ) );
     pDev->DrawRect( tools::Rectangle( aOuter.Left(),  aInner.Bottom(), aOuter.Right(), aOuter.Bottom() ) );
 
-    long nButtonY = bTextBelow ? aInner.Bottom() : aOuter.Top();
+    tools::Long nButtonY = bTextBelow ? aInner.Bottom() : aOuter.Top();
 
     ScDDComboBoxButton aComboButton(pDev);
     aComboButton.SetOptSizePixel();
-    long nBWidth  = long(aComboButton.GetSizePixel().Width() * rZoomY);
-    long nBHeight = nVer + aTextSize.Height() + 1;
+    tools::Long nBWidth  = tools::Long(aComboButton.GetSizePixel().Width() * rZoomY);
+    tools::Long nBHeight = nVer + aTextSize.Height() + 1;
     Size aButSize( nBWidth, nBHeight );
-    long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;
+    tools::Long nButtonPos = bLayoutRTL ? aOuter.Left() : aOuter.Right()-nBWidth+1;
     aComboButton.Draw( Point(nButtonPos, nButtonY), aButSize );
     rButtonViewData.SetScenButSize( aButSize );
 
-    long nTextStart = bLayoutRTL ? aInner.Right() - aTextSize.Width() + 1 : aInner.Left();
+    tools::Long nTextStart = bLayoutRTL ? aInner.Right() - aTextSize.Width() + 1 : aInner.Left();
 
     bool bWasClip = false;
     vcl::Region aOldClip;
@@ -160,8 +160,8 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
             bWasClip = true;
             aOldClip = pDev->GetActiveClipRegion();
         }
-        long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
-        long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
+        tools::Long nClipStartX = bLayoutRTL ? aOuter.Left() + nBWidth : aInner.Left();
+        tools::Long nClipEndX = bLayoutRTL ? aInner.Right() : aOuter.Right() - nBWidth;
         pDev->SetClipRegion( vcl::Region(tools::Rectangle( nClipStartX, nButtonY + nVer/2,
                             nClipEndX, nButtonY + nVer/2 + aTextSize.Height())) );
     }
@@ -208,7 +208,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData& rViewData, S
     aMarks.FillRangeListWithMarks( xRanges.get(), false );
 
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (size_t j = 0, n = xRanges->size(); j < n; ++j)
     {
@@ -401,12 +401,12 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
     if ( rDoc.IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
-        long nWidth = GetSizePixel().Width();
+        tools::Long nWidth = GetSizePixel().Width();
         aMirroredPixel.SetLeft( nWidth - 1 - aPixRect.Right() );
         aMirroredPixel.SetRight( nWidth - 1 - aPixRect.Left() );
     }
 
-    long nScrX = ScViewData::ToPixel( rDoc.GetColWidth( nX1, nTab ), nPPTX );
+    tools::Long nScrX = ScViewData::ToPixel( rDoc.GetColWidth( nX1, nTab ), nPPTX );
     while ( nScrX <= aMirroredPixel.Left() && nX1 < rDoc.MaxCol() )
     {
         ++nX1;
@@ -419,7 +419,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::R
         nScrX += ScViewData::ToPixel( rDoc.GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    long nScrY = 0;
+    tools::Long nScrY = 0;
     ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, rDoc.MaxRow(), nPPTY, &rDoc, nTab);
     SCROW nY2 = nY1;
     if (nScrY <= aPixRect.Bottom() && nY2 < rDoc.MaxRow())
@@ -484,17 +484,17 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
     Point aScrPos = mrViewData.GetScrPos( nX1, nY1, eWhich );
-    long nMirrorWidth = GetSizePixel().Width();
+    tools::Long nMirrorWidth = GetSizePixel().Width();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     if ( bLayoutRTL )
     {
-        long nEndPixel = mrViewData.GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
+        tools::Long nEndPixel = mrViewData.GetScrPos( nX2+1, maVisibleRange.mnRow1, eWhich ).X();
         nMirrorWidth = aScrPos.X() - nEndPixel;
         aScrPos.setX( nEndPixel + 1 );
     }
 
-    long nScrX = aScrPos.X();
-    long nScrY = aScrPos.Y();
+    tools::Long nScrX = aScrPos.X();
+    tools::Long nScrY = aScrPos.Y();
 
     SCCOL nCurX = mrViewData.GetCurX();
     SCROW nCurY = mrViewData.GetCurY();
@@ -616,8 +616,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     SCROW nY1 = aOutputData.nY1;
     SCCOL nX2 = aOutputData.nX2;
     SCROW nY2 = aOutputData.nY2;
-    long nScrX = aOutputData.nScrX;
-    long nScrY = aOutputData.nScrY;
+    tools::Long nScrX = aOutputData.nScrX;
+    tools::Long nScrY = aOutputData.nScrY;
 
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
     Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID, false ).nColor );
@@ -1002,8 +1002,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                         EditView* pOtherEditView = rOtherViewData.GetEditView(eOtherWhich);
                         if (pOtherEditView)
                         {
-                            long nScreenX = aOutputData.nScrX;
-                            long nScreenY = aOutputData.nScrY;
+                            tools::Long nScreenX = aOutputData.nScrX;
+                            tools::Long nScreenY = aOutputData.nScrY;
 
                             rDevice.SetLineColor();
                             rDevice.SetFillColor(pOtherEditView->GetBackgroundColor());
@@ -1011,7 +1011,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eOtherWhich );
 
                             // don't overwrite grid
-                            long nLayoutSign = bLayoutRTL ? -1 : 1;
+                            tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
                             aEnd.AdjustX( -(2 * nLayoutSign) );
                             aEnd.AdjustY( -2 );
 
@@ -1088,7 +1088,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         Point aEnd = mrViewData.GetScrPos( nCol2+1, nRow2+1, eWhich );
 
         // don't overwrite grid
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         aEnd.AdjustX( -(2 * nLayoutSign) );
         aEnd.AdjustY( -2 );
 
@@ -1222,7 +1222,7 @@ namespace
 {
     template<typename IndexType>
     void lcl_getBoundingRowColumnforTile(ScViewData& rViewData,
-            long nTileStartPosPx, long nTileEndPosPx,
+            tools::Long nTileStartPosPx, tools::Long nTileEndPosPx,
             sal_Int32& nTopLeftTileOffset, sal_Int32& nTopLeftTileOrigin,
             sal_Int32& nTopLeftTileIndex, sal_Int32& nBottomRightTileIndex)
     {
@@ -1232,8 +1232,8 @@ namespace
 
         IndexType nStartIndex = -1;
         IndexType nEndIndex = -1;
-        long nStartPosPx = 0;
-        long nEndPosPx = 0;
+        tools::Long nStartPosPx = 0;
+        tools::Long nEndPosPx = 0;
 
         ScPositionHelper& rPositionHelper =
                 bColumnHeader ? rViewData.GetLOKWidthHelper() : rViewData.GetLOKHeightHelper();
@@ -1312,7 +1312,7 @@ namespace
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
                               int nTilePosX, int nTilePosY,
-                              long nTileWidth, long nTileHeight )
+                              tools::Long nTileWidth, tools::Long nTileHeight )
 {
     Fraction origZoomX = mrViewData.GetZoomX();
     Fraction origZoomY = mrViewData.GetZoomY();
@@ -1332,8 +1332,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // Similarly to Writer, we should set the mapmode once on the rDevice, and
     // not care about any zoom settings.
 
-    Fraction aFracX(long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
-    Fraction aFracY(long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
+    Fraction aFracX(tools::Long(nOutputWidth * TWIPS_PER_PIXEL), nTileWidth);
+    Fraction aFracY(tools::Long(nOutputHeight * TWIPS_PER_PIXEL), nTileHeight);
 
     const bool bChangeZoom = (aFracX !=  origZoomX || aFracY != origZoomY);
 
@@ -1716,18 +1716,18 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                             Point aPageEnd = mrViewData.GetScrPos(
                                                     nPrEndX+1,nPrEndY+1, eWhich, true );
 
-                            long nPageNo = rData.GetFirstPage();
+                            tools::Long nPageNo = rData.GetFirstPage();
                             if ( rData.IsTopDown() )
-                                nPageNo += static_cast<long>(nColPos)*nRowBreaks+nRowPos;
+                                nPageNo += static_cast<tools::Long>(nColPos)*nRowBreaks+nRowPos;
                             else
-                                nPageNo += static_cast<long>(nRowPos)*nColBreaks+nColPos;
+                                nPageNo += static_cast<tools::Long>(nRowPos)*nColBreaks+nColPos;
 
                             OUString aThisPageStr = aPageStr.replaceFirst("%1", OUString::number(nPageNo));
 
                             if ( pEditEng )
                             {
                                 //  find right font size with EditEngine
-                                long nHeight = 100;
+                                tools::Long nHeight = 100;
                                 pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                 pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
                                 pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
@@ -1735,8 +1735,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
                                 //  40% of width or 60% of height
-                                long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                tools::Long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                tools::Long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                 nHeight = std::min(nSizeX,nSizeY);
                                 pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                 pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -1756,8 +1756,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 Size aSize100(rRenderContext.GetTextWidth( aThisPageStr ), rRenderContext.GetTextHeight() );
 
                                 //  40% of width or 60% of height
-                                long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
-                                long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
+                                tools::Long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
+                                tools::Long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                 aFont.SetFontSize( Size( 0,std::min(nSizeX,nSizeY) ) );
                                 rRenderContext.SetFont( aFont );
 
@@ -1863,8 +1863,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                         }
 
                     bool bArrowState = bSimpleQuery && bColumnFound;
-                    long    nSizeX;
-                    long    nSizeY;
+                    tools::Long    nSizeX;
+                    tools::Long    nSizeY;
                     SCCOL nStartCol= nCol;
                     SCROW nStartRow = nRow;
                     //if address(nCol,nRow) is not the start pos of the merge area, the value of the nSizeX will be incorrect, it will be the length of the cell.
@@ -1895,11 +1895,11 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     continue;
 
                 Point aScrPos = mrViewData.GetScrPos( nCol, nRow, eWhich );
-                long nSizeX;
-                long nSizeY;
+                tools::Long nSizeX;
+                tools::Long nSizeY;
                 mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
-                long nPosX = aScrPos.X();
-                long nPosY = aScrPos.Y();
+                tools::Long nPosX = aScrPos.X();
+                tools::Long nPosY = aScrPos.Y();
                 // bLayoutRTL is handled in setBoundingBox
 
                 OUString aStr = rDoc.GetString(nCol, nRow, nTab);
@@ -1935,7 +1935,7 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     ScDDComboBoxButton aButton( this );             // for optimal size
     Size aBtnSize = aButton.GetSizePixel();
@@ -1943,13 +1943,13 @@ tools::Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos
     SCCOL nCol = rButtonPos.Col();
     SCROW nRow = rButtonPos.Row();
 
-    long nCellSizeX;    // width of this cell, including merged
-    long nDummy;
+    tools::Long nCellSizeX;    // width of this cell, including merged
+    tools::Long nDummy;
     mrViewData.GetMergeSizePixel( nCol, nRow, nCellSizeX, nDummy );
 
     // for height, only the cell's row is used, excluding merged cells
-    long nCellSizeY = ScViewData::ToPixel( rDoc.GetRowHeight( nRow, nTab ), mrViewData.GetPPTY() );
-    long nAvailable = nCellSizeX;
+    tools::Long nCellSizeY = ScViewData::ToPixel( rDoc.GetRowHeight( nRow, nTab ), mrViewData.GetPPTY() );
+    tools::Long nAvailable = nCellSizeX;
 
     //  left edge of next cell if there is a non-hidden next column
     SCCOL nNextCol = nCol + 1;
@@ -2045,7 +2045,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     SCTAB nTab = mrViewData.GetTabNo();
 
     bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( !aMultiMark.IsMultiMarked() )
         return;
     ScRange aMultiRange;
@@ -2113,7 +2113,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
 
     Point aScrPos = bInPrintTwips ? mrViewData.GetPrintTwipsPos(nX1, nY1) :
             mrViewData.GetScrPos(nX1, nY1, eWhich);
-    long nScrY = aScrPos.Y();
+    tools::Long nScrY = aScrPos.Y();
     bool bWasHidden = false;
     for (SCROW nY=nY1; nY<=nY2; nY++)
     {
@@ -2150,19 +2150,19 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
                     nLoopEndX = nX1;
             }
 
-            const long nHeight = bInPrintTwips ?
+            const tools::Long nHeight = bInPrintTwips ?
                     nHeightTwips : ScViewData::ToPixel(nHeightTwips, nPPTY);
-            long nEndY = nScrY + nHeight - 1;
-            long nScrX = aScrPos.X();
+            tools::Long nEndY = nScrY + nHeight - 1;
+            tools::Long nScrX = aScrPos.X();
             for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
             {
-                long nWidth = rDoc.GetColWidth(nX, nTab);
+                tools::Long nWidth = rDoc.GetColWidth(nX, nTab);
                 if (!bInPrintTwips)
                     nWidth = ScViewData::ToPixel(nWidth, nPPTX);
 
                 if ( nWidth > 0 )
                 {
-                    long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
+                    tools::Long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
 
                     SCROW nThisY = nY;
                     const ScPatternAttr* pPattern = rDoc.GetPattern( nX, nY, nTab );

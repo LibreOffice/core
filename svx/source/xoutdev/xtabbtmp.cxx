@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 
-XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
+XBitmapEntry* XBitmapList::GetBitmap(tools::Long nIndex) const
 {
     return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -44,7 +44,7 @@ bool XBitmapList::Create()
     return true;
 }
 
-BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
+BitmapEx XBitmapList::CreateBitmap( tools::Long nIndex, const Size& rSize ) const
 {
     OSL_ENSURE( nIndex < Count(), "Access out of range" );
 
@@ -83,9 +83,9 @@ BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
         {
             const Size aBitmapSize(rBitmapEx.GetSizePixel());
 
-            for(long y(0); y < rSize.Height(); y += aBitmapSize.Height())
+            for(tools::Long y(0); y < rSize.Height(); y += aBitmapSize.Height())
             {
-                for(long x(0); x < rSize.Width(); x += aBitmapSize.Width())
+                for(tools::Long x(0); x < rSize.Width(); x += aBitmapSize.Width())
                 {
                     pVirtualDevice->DrawBitmapEx(
                         Point(x, y),
@@ -100,14 +100,14 @@ BitmapEx XBitmapList::CreateBitmap( long nIndex, const Size& rSize ) const
         return BitmapEx();
 }
 
-BitmapEx XBitmapList::CreateBitmapForUI( long nIndex )
+BitmapEx XBitmapList::CreateBitmapForUI( tools::Long nIndex )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
     return CreateBitmap(nIndex, rSize);
 }
 
-BitmapEx XBitmapList::GetBitmapForPreview( long nIndex, const Size& rSize )
+BitmapEx XBitmapList::GetBitmapForPreview( tools::Long nIndex, const Size& rSize )
 {
     return CreateBitmap(nIndex, rSize);
 }

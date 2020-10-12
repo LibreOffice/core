@@ -25,6 +25,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <tools/long.hxx>
 
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
@@ -178,7 +179,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
 /*static*/ std::unique_ptr<AnchorOverlayObject> AnchorOverlayObject::CreateAnchorOverlayObject(
                                                        SwView const & rDocView,
                                                        const SwRect& aAnchorRect,
-                                                       long aPageBorder,
+                                                       tools::Long aPageBorder,
                                                        const Point& aLineStart,
                                                        const Point& aLineEnd,
                                                        const Color& aColorAnchor )

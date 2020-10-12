@@ -888,7 +888,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::BeginDragObj: bRet=BegDragObj(aLogicPos,nullptr,rVEvt.pHdl,mnMinMovLog); break;
         case SdrEventKind::BeginCreateObj: {
             if (nCurrentInvent==SdrInventor::Default && nCurrentIdent==OBJ_CAPTION) {
-                long nHgt=SdrEngineDefaults::GetFontHeight();
+                tools::Long nHgt=SdrEngineDefaults::GetFontHeight();
                 bRet=BegCreateCaptionObj(aLogicPos,Size(5*nHgt,2*nHgt));
             } else bRet=BegCreateObj(aLogicPos);
         } break;
@@ -1214,7 +1214,7 @@ OUString SdrView::GetStatusText()
     else if (IsTextEdit() && pTextEditOutlinerView!=nullptr) {
         aStr=SvxResId(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
         ESelection aSel(pTextEditOutlinerView->GetSelection());
-        long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
+        tools::Long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
         if (aSel.nEndPara>0) {
             for (sal_Int32 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++) {
                 nLin+=pTextEditOutliner->GetLineCount(nParaNum);

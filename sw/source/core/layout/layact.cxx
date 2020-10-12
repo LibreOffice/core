@@ -197,7 +197,7 @@ inline bool SwLayAction::PaintContent_( const SwContentFrame *pContent,
 void SwLayAction::PaintContent( const SwContentFrame *pCnt,
                               const SwPageFrame *pPage,
                               const SwRect &rOldRect,
-                              long nOldBottom )
+                              tools::Long nOldBottom )
 {
     SwRectFnSet aRectFnSet(pCnt);
 
@@ -211,8 +211,8 @@ void SwLayAction::PaintContent( const SwContentFrame *pCnt,
     {
         // paint the area between printing bottom and frame bottom and
         // the area left and right beside the frame, if its height changed.
-        long nOldHeight = aRectFnSet.GetHeight(rOldRect);
-        long nNewHeight = aRectFnSet.GetHeight(pCnt->getFrameArea());
+        tools::Long nOldHeight = aRectFnSet.GetHeight(rOldRect);
+        tools::Long nNewHeight = aRectFnSet.GetHeight(pCnt->getFrameArea());
         const bool bHeightDiff = nOldHeight != nNewHeight;
         if( bHeightDiff )
         {
@@ -682,7 +682,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 
         // set flag for interrupt content formatting
         mbFormatContentOnInterrupt = IsInterrupt();
-        long nBottom = rVis.Bottom();
+        tools::Long nBottom = rVis.Bottom();
         // #i42586# - format current page, if idle action is active
         // This is an optimization for the case that the interrupt is created by
         // the move of a form control object, which is represented by a window.
@@ -779,7 +779,7 @@ bool SwLayAction::TurboAction_( const SwContentFrame *pCnt )
     if ( !pCnt->isFrameAreaDefinitionValid() || pCnt->IsCompletePaint() || pCnt->IsRetouche() )
     {
         const SwRect aOldRect( pCnt->UnionFrame( true ) );
-        const long   nOldBottom = pCnt->getFrameArea().Top() + pCnt->getFramePrintArea().Bottom();
+        const tools::Long   nOldBottom = pCnt->getFrameArea().Top() + pCnt->getFramePrintArea().Bottom();
         pCnt->Calc(m_pImp->GetShell()->GetOut());
         if ( pCnt->getFrameArea().Bottom() < aOldRect.Bottom() )
             pCnt->SetRetouche();
@@ -843,13 +843,13 @@ bool SwLayAction::TurboAction()
     return bRet;
 }
 
-static bool lcl_IsInvaLay( const SwFrame *pFrame, long nBottom )
+static bool lcl_IsInvaLay( const SwFrame *pFrame, tools::Long nBottom )
 {
     return !pFrame->isFrameAreaDefinitionValid() ||
          (pFrame->IsCompletePaint() && ( pFrame->getFrameArea().Top() < nBottom ) );
 }
 
-static const SwFrame *lcl_FindFirstInvaLay( const SwFrame *pFrame, long nBottom )
+static const SwFrame *lcl_FindFirstInvaLay( const SwFrame *pFrame, tools::Long nBottom )
 {
     OSL_ENSURE( pFrame->IsLayoutFrame(), "FindFirstInvaLay, no LayFrame" );
 
@@ -871,7 +871,7 @@ static const SwFrame *lcl_FindFirstInvaLay( const SwFrame *pFrame, long nBottom 
     return nullptr;
 }
 
-static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, long nBottom,
+static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, tools::Long nBottom,
                                      const SwContentFrame *pFirst )
 {
     const SwContentFrame *pCnt = pFirst ? pFirst->GetNextContentFrame() :
@@ -917,7 +917,7 @@ static const SwFrame *lcl_FindFirstInvaContent( const SwLayoutFrame *pLay, long 
 
 // consider drawing objects
 static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrame* _pPage,
-                                              long _nBottom )
+                                              tools::Long _nBottom )
 {
     OSL_ENSURE( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" );
 
@@ -1142,7 +1142,7 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
 
     if ( !bRet && bBrowse )
     {
-        const long nBottom = rVis.Bottom();
+        const tools::Long nBottom = rVis.Bottom();
         const SwAnchoredObject* pObj( nullptr );
         if ( prPage->GetSortedObjs() &&
              (prPage->IsInvalidFlyLayout() || prPage->IsInvalidFlyContent()) &&
@@ -1725,7 +1725,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
                 if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
                      pContent->getFrameArea().Top() > m_pImp->GetShell()->VisArea().Bottom())
                 {
-                    const long nBottom = m_pImp->GetShell()->VisArea().Bottom();
+                    const tools::Long nBottom = m_pImp->GetShell()->VisArea().Bottom();
                     const SwFrame *pTmp = lcl_FindFirstInvaContent( pPage,
                                                             nBottom, pContent );
                     if ( !pTmp )
@@ -1774,7 +1774,7 @@ bool SwLayAction::FormatContent( const SwPageFrame *pPage )
             if ( bBrowse && !IsIdle() && !IsCalcLayout() && !IsComplete() &&
                  pContent->getFrameArea().Top() > m_pImp->GetShell()->VisArea().Bottom())
             {
-                const long nBottom = m_pImp->GetShell()->VisArea().Bottom();
+                const tools::Long nBottom = m_pImp->GetShell()->VisArea().Bottom();
                 const SwFrame *pTmp = lcl_FindFirstInvaContent( pPage,
                                                     nBottom, pContent );
                 if ( !pTmp )
@@ -1807,7 +1807,7 @@ void SwLayAction::FormatContent_( const SwContentFrame *pContent, const SwPageFr
     if ( !bDrawObjsOnly && IsPaint() )
     {
         const SwRect aOldRect( pContent->UnionFrame() );
-        const long nOldBottom = aRectFnSet.GetPrtBottom(*pContent);
+        const tools::Long nOldBottom = aRectFnSet.GetPrtBottom(*pContent);
         pContent->OptCalc();
         if( IsAgain() )
             return;

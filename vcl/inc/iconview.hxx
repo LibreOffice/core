@@ -29,9 +29,9 @@ public:
 
     virtual void Resize() override;
 
-    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nEntryPos) override;
+    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nEntryPos) override;
 
-    void PaintEntry( SvTreeListEntry&, long nX, long nY, vcl::RenderContext& rRenderContext);
+    void PaintEntry( SvTreeListEntry&, tools::Long nX, tools::Long nY, vcl::RenderContext& rRenderContext);
 };
 
 #endif

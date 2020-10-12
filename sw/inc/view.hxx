@@ -73,9 +73,9 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
 namespace sw::mark { class IFieldmark; }
 
-const long nLeftOfst = -370;
-const long nScrollX  =   30;
-const long nScrollY  =   30;
+const tools::Long nLeftOfst = -370;
+const tools::Long nScrollX  =   30;
+const tools::Long nScrollY  =   30;
 
 #define MINZOOM 20
 #define MAXZOOM 600
@@ -264,8 +264,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
 
-    inline long                  GetXScroll() const;
-    inline long                  GetYScroll() const;
+    inline tools::Long                  GetXScroll() const;
+    inline tools::Long                  GetYScroll() const;
     SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;
     SAL_DLLPRIVATE void          CalcPt( Point* pPt,const tools::Rectangle& rRect,
                                     sal_uInt16 nRangeX,
@@ -371,7 +371,7 @@ public:
     virtual SdrView*        GetDrawView() const override;
     virtual bool            HasUIFeature(SfxShellFeature nFeature) const override;
     virtual void            ShowCursor( bool bOn = true ) override;
-    virtual ErrCode         DoVerb( long nVerb ) override;
+    virtual ErrCode         DoVerb( tools::Long nVerb ) override;
 
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNew,
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
@@ -415,8 +415,8 @@ public:
                             sal_uInt16 nRangeX = USHRT_MAX,
                             sal_uInt16 nRangeY = USHRT_MAX);
 
-    long            SetVScrollMax(long lMax);
-    long            SetHScrollMax(long lMax);
+    tools::Long            SetVScrollMax(tools::Long lMax);
+    tools::Long            SetHScrollMax(tools::Long lMax);
 
     void            SpellError(LanguageType eLang);
     bool            ExecSpellPopup( const Point& rPt );
@@ -576,11 +576,11 @@ public:
 
     bool JumpToSwMark( const OUString& rMark );
 
-    long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
+    tools::Long InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName,
                     const OUString& rFilterName, sal_Int16 nVersion = 0 );
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
-    long InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion );
+    tools::Long InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper *, void );
 
     // status methods for clipboard.
@@ -674,12 +674,12 @@ public:
     void SetOldDrwCat(const OUString& sStr);
 };
 
-inline long SwView::GetXScroll() const
+inline tools::Long SwView::GetXScroll() const
 {
     return (m_aVisArea.GetWidth() * nScrollX) / 100;
 }
 
-inline long SwView::GetYScroll() const
+inline tools::Long SwView::GetYScroll() const
 {
     return (m_aVisArea.GetHeight() * nScrollY) / 100;
 }

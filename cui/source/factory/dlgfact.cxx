@@ -704,12 +704,12 @@ TransliterationFlags AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFla
     return m_xDlg->GetTransliterationFlags();
 }
 
-void AbstractFmInputRecordNoDialog_Impl::SetValue(long nNew)
+void AbstractFmInputRecordNoDialog_Impl::SetValue(tools::Long nNew)
 {
     m_xDlg->SetValue(nNew);
 }
 
-long AbstractFmInputRecordNoDialog_Impl::GetValue() const
+tools::Long AbstractFmInputRecordNoDialog_Impl::GetValue() const
 {
     return m_xDlg->GetValue();
 }
@@ -1600,7 +1600,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDia
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxFormatCellsDialog>(pParent, pAttr, rModel));
 }
 
-VclPtr<SvxAbstractSplitTableDialog> AbstractDialogFactory_Impl::CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical)
+VclPtr<SvxAbstractSplitTableDialog> AbstractDialogFactory_Impl::CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical)
 {
     return VclPtr<SvxSplitTableDlg>::Create( pParent, bIsTableVertical, nMaxVertical, 99 );
 }

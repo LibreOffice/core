@@ -39,25 +39,25 @@ constexpr ::Color SALCOLOR_NONE ( 0xFF, 0xFF, 0xFF, 0xFF );
 // must equal to class Point
 struct SalPoint
 {
-    long        mnX;
-    long        mnY;
+    tools::Long        mnX;
+    tools::Long        mnY;
 };
 
 typedef const SalPoint*   PCONSTSALPOINT;
 
 struct SalTwoRect
 {
-    long        mnSrcX;
-    long        mnSrcY;
-    long        mnSrcWidth;
-    long        mnSrcHeight;
-    long        mnDestX;
-    long        mnDestY;
-    long        mnDestWidth;
-    long        mnDestHeight;
+    tools::Long        mnSrcX;
+    tools::Long        mnSrcY;
+    tools::Long        mnSrcWidth;
+    tools::Long        mnSrcHeight;
+    tools::Long        mnDestX;
+    tools::Long        mnDestY;
+    tools::Long        mnDestWidth;
+    tools::Long        mnDestHeight;
 
-    SalTwoRect(long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight,
-               long nDestX, long nDestY, long nDestWidth, long nDestHeight)
+    SalTwoRect(tools::Long nSrcX, tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+               tools::Long nDestX, tools::Long nDestY, tools::Long nDestWidth, tools::Long nDestHeight)
         : mnSrcX(nSrcX), mnSrcY(nSrcY), mnSrcWidth(nSrcWidth), mnSrcHeight(nSrcHeight)
         , mnDestX(nDestX), mnDestY(nDestY), mnDestWidth(nDestWidth), mnDestHeight(nDestHeight)
     {

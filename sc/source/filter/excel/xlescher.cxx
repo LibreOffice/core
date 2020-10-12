@@ -60,18 +60,18 @@ double lclGetTwipsScale( MapUnit eMapUnit )
 }
 
 /** Calculates a drawing layer X position (in twips) from an object column position. */
-long lclGetXFromCol( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
+tools::Long lclGetXFromCol( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclCol, sal_uInt16 nOffset, double fScale )
 {
     SCCOL nScCol = static_cast< SCCOL >( nXclCol );
-    return static_cast< long >( fScale * (rDoc.GetColOffset( nScCol, nScTab ) +
+    return static_cast< tools::Long >( fScale * (rDoc.GetColOffset( nScCol, nScTab ) +
         ::std::min( nOffset / 1024.0, 1.0 ) * rDoc.GetColWidth( nScCol, nScTab )) + 0.5 );
 }
 
 /** Calculates a drawing layer Y position (in twips) from an object row position. */
-long lclGetYFromRow( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
+tools::Long lclGetYFromRow( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, sal_uInt16 nOffset, double fScale )
 {
     SCROW nScRow = static_cast< SCROW >( nXclRow );
-    return static_cast< long >( fScale * (rDoc.GetRowOffset( nScRow, nScTab ) +
+    return static_cast< tools::Long >( fScale * (rDoc.GetRowOffset( nScRow, nScTab ) +
         ::std::min( nOffset / 256.0, 1.0 ) * rDoc.GetRowHeight( nScRow, nScTab )) + 0.5 );
 }
 
@@ -79,11 +79,11 @@ long lclGetYFromRow( const ScDocument& rDoc, SCTAB nScTab, sal_uInt16 nXclRow, s
 void lclGetColFromX(
         const ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclCol,
         sal_uInt16& rnOffset, sal_uInt16 nXclStartCol, sal_uInt16 nXclMaxCol,
-        long& rnStartW, long nX, double fScale )
+        tools::Long& rnStartW, tools::Long nX, double fScale )
 {
     // rnStartW in conjunction with nXclStartCol is used as buffer for previously calculated width
-    long nTwipsX = static_cast< long >( nX / fScale + 0.5 );
-    long nColW = 0;
+    tools::Long nTwipsX = static_cast< tools::Long >( nX / fScale + 0.5 );
+    tools::Long nColW = 0;
     for( rnXclCol = nXclStartCol; rnXclCol <= nXclMaxCol; ++rnXclCol )
     {
         nColW = rDoc.GetColWidth( static_cast< SCCOL >( rnXclCol ), nScTab );
@@ -98,11 +98,11 @@ void lclGetColFromX(
 void lclGetRowFromY(
         const ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
         sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
-        long& rnStartH, long nY, double fScale )
+        tools::Long& rnStartH, tools::Long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
-    long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
-    long nRowH = 0;
+    tools::Long nTwipsY = static_cast< tools::Long >( nY / fScale + 0.5 );
+    tools::Long nRowH = 0;
     bool bFound = false;
     for( sal_uInt32 nRow = nXclStartRow; nRow <= nXclMaxRow; ++nRow )
     {
@@ -123,12 +123,12 @@ void lclGetRowFromY(
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
 void lclMirrorRectangle( tools::Rectangle& rRect )
 {
-    long nLeft = rRect.Left();
+    tools::Long nLeft = rRect.Left();
     rRect.SetLeft( -rRect.Right() );
     rRect.SetRight( -nLeft );
 }
 
-sal_uInt16 lclGetEmbeddedScale( long nPageSize, sal_Int32 nPageScale, long nPos, double fPosScale )
+sal_uInt16 lclGetEmbeddedScale( tools::Long nPageSize, sal_Int32 nPageScale, tools::Long nPos, double fPosScale )
 {
     return static_cast< sal_uInt16 >( nPos * fPosScale / nPageSize * nPageScale + 0.5 );
 }
@@ -171,7 +171,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const tools::Rec
         lclMirrorRectangle( aRect );
 
     double fScale = lclGetTwipsScale( eMapUnit );
-    long nDummy = 0;
+    tools::Long nDummy = 0;
     lclGetColFromX( rDoc, nScTab, maFirst.mnCol, mnLX, 0,             nXclMaxCol, nDummy, aRect.Left(),   fScale );
     lclGetColFromX( rDoc, nScTab, maLast.mnCol,  mnRX, maFirst.mnCol, nXclMaxCol, nDummy, aRect.Right(),  fScale );
     nDummy = 0;

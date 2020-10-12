@@ -552,7 +552,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoin
                 OUString aTxt = aBuf.makeStringAndClear();
                 OSL_ENSURE( !aTxt.isEmpty(), "no accessible text available" );
 
-                long nNodeX = pNode->GetLeft();
+                tools::Long nNodeX = pNode->GetLeft();
 
                 std::unique_ptr<long[]> pXAry(new long[ aTxt.getLength() ]);
                 pWin->SetFont( pNode->GetFont() );

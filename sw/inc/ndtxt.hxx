@@ -471,7 +471,7 @@ public:
 
        @return additional indents
      */
-     long GetLeftMarginWithNum( bool bTextLeft = false ) const;
+     tools::Long GetLeftMarginWithNum( bool bTextLeft = false ) const;
 
     /**
        Returns the combined first line indent of this text node and
@@ -494,7 +494,7 @@ public:
         Needed for text formatting
         Method considers new list level attributes, which also can provide a left margin value
     */
-    long GetLeftMarginForTabCalculation() const;
+    tools::Long GetLeftMarginForTabCalculation() const;
 
     /** Returns if this text node has a number.
 
@@ -654,7 +654,7 @@ public:
 
         @return boolean - indicating, if a list tab stop position is provided
     */
-    bool GetListTabStopPosition( long& nListTabStopPosition ) const;
+    bool GetListTabStopPosition( tools::Long& nListTabStopPosition ) const;
 
     /** Retrieves the character following the list label, if the paragraph's
         list level defines one.

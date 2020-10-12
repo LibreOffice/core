@@ -523,7 +523,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     // force update
     pPrvView->DataChanged(false);
     // set sensible first page
-    long nPage = pPrvView->GetFirstPage( 1 );
+    tools::Long nPage = pPrvView->GetFirstPage( 1 );
     pPrvView->SetPageNo( nPage );
     WaitUntilPreviewIsClosed( pViewFrame );
     // restore old tab selection

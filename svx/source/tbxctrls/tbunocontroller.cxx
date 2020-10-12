@@ -106,7 +106,7 @@ public:
         m_xWidget->set_sensitive(bSensitive);
     }
 
-    void statusChanged_Impl(long nHeight, bool bErase);
+    void statusChanged_Impl(tools::Long nHeight, bool bErase);
     void UpdateFont(const css::awt::FontDescriptor& rCurrentFont);
 
 protected:
@@ -231,12 +231,12 @@ void SvxFontSizeBox_Base::Select()
     m_rCtrl.dispatchCommand( aArgs );
 }
 
-void SvxFontSizeBox_Base::statusChanged_Impl( long nPoint, bool bErase )
+void SvxFontSizeBox_Base::statusChanged_Impl( tools::Long nPoint, bool bErase )
 {
     if ( !bErase )
     {
         // convert the metric
-        long nVal = nPoint;
+        tools::Long nVal = nPoint;
 
         // changed => set new value
         if (m_xWidget->get_value() != nVal)
@@ -433,14 +433,14 @@ void SAL_CALL FontHeightToolBoxControl::statusChanged(
             m_pBox->set_sensitive(true);
             frame::status::FontHeight aFontHeight;
             if ( rEvent.State >>= aFontHeight )
-                m_pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), false );
+                m_pBox->statusChanged_Impl( tools::Long( 10. * aFontHeight.Height ), false );
             else
-                m_pBox->statusChanged_Impl( long( -1 ), true );
+                m_pBox->statusChanged_Impl( tools::Long( -1 ), true );
         }
         else
         {
             m_pBox->set_sensitive(false);
-            m_pBox->statusChanged_Impl( long( -1 ), true );
+            m_pBox->statusChanged_Impl( tools::Long( -1 ), true );
         }
 
         if (m_pToolbar)

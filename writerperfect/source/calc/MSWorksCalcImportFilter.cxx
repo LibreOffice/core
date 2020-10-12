@@ -89,11 +89,11 @@ public:
      */
     const unsigned char* read(unsigned long, unsigned long&) override { return nullptr; }
     //! returns actual offset position
-    long tell() override { return 0; }
+    tools::Long tell() override { return 0; }
     /*! \brief seeks to an offset position, from actual, beginning or ending position
      * \return 0 if ok
      */
-    int seek(long, librevenge::RVNG_SEEK_TYPE) override { return 1; }
+    int seek(tools::Long, librevenge::RVNG_SEEK_TYPE) override { return 1; }
     //! returns true if we are at the end of the section/file
     bool isEnd() override { return true; }
 

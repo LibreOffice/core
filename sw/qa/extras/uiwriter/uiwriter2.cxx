@@ -2271,8 +2271,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testImageComment)
     const SwSortedObjs& rAnchored = *pTextFrame->GetDrawObjs();
     CPPUNIT_ASSERT_GREATER(static_cast<size_t>(0), rAnchored.size());
     SwAnchoredObject* pObject = rAnchored[0];
-    long nFrameLeft = pObject->GetObjRect().Left();
-    long nFrameTop = pObject->GetObjRect().Top();
+    tools::Long nFrameLeft = pObject->GetObjRect().Left();
+    tools::Long nFrameTop = pObject->GetObjRect().Top();
 
     // Make sure that the anchor points to the bottom left corner of the image.
     // Without the accompanying fix in place, this test would have failed with:

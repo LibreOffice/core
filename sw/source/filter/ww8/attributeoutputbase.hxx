@@ -666,7 +666,7 @@ public:
 
     void GetTablePageSize
     ( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner,
-      long& rPageSize, bool& rRelBoxSize );
+      tools::Long& rPageSize, bool& rRelBoxSize );
 
     virtual void MaybeOutputBrushItem(SfxItemSet const&) { }
 

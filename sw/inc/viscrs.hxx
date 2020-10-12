@@ -71,7 +71,7 @@ class SwSelPaintRects : public SwRects
     friend void InitCore();
     friend void FinitCore();
 
-    static long s_nPixPtX, s_nPixPtY;
+    static tools::Long s_nPixPtX, s_nPixPtY;
     static MapMode *s_pMapMode;
 
     const SwCursorShell* m_pCursorShell;
@@ -110,7 +110,7 @@ public:
     // check current MapMode of the shell and set possibly the static members.
     // Optional set the parameters pX, pY
     static void Get1PixelInLogic( const SwViewShell& rSh,
-                                    long* pX = nullptr, long* pY = nullptr );
+                                    tools::Long* pX = nullptr, tools::Long* pY = nullptr );
 };
 
 class SW_DLLPUBLIC SwShellCursor : public virtual SwCursor, public SwSelPaintRects

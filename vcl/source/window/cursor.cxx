@@ -251,8 +251,8 @@ void vcl::Cursor::LOKNotify( vcl::Window* pWindow, const OUString& rAction )
         aItems.emplace_back("visible", mpData->mbCurVisible ? "true" : "false");
     else if (rAction == "cursor_invalidate")
     {
-        const long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X() - pParent->GetOutOffXPixel();
-        const long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y() - pParent->GetOutOffYPixel();
+        const tools::Long nX = pWindow->GetOutOffXPixel() + pWindow->LogicToPixel(GetPos()).X() - pParent->GetOutOffXPixel();
+        const tools::Long nY = pWindow->GetOutOffYPixel() + pWindow->LogicToPixel(GetPos()).Y() - pParent->GetOutOffYPixel();
         Size aSize = pWindow->LogicToPixel(GetSize());
         if (!aSize.Width())
             aSize.setWidth( pWindow->GetSettings().GetStyleSettings().GetCursorSize() );
@@ -410,7 +410,7 @@ void vcl::Cursor::SetSize( const Size& rSize )
     }
 }
 
-void vcl::Cursor::SetWidth( long nNewWidth )
+void vcl::Cursor::SetWidth( tools::Long nNewWidth )
 {
     if ( maSize.Width() != nNewWidth )
     {

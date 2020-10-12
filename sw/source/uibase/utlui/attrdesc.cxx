@@ -484,7 +484,7 @@ bool SwFormatCol::GetPresentation
         rText = OUString::number(nCnt) + " " + SwResId( STR_COLUMNS );
         if ( COLADJ_NONE != GetLineAdj() )
         {
-            const long nWdth = static_cast<long>(GetLineWidth());
+            const tools::Long nWdth = static_cast<tools::Long>(GetLineWidth());
             rText += " " + SwResId( STR_LINE_WIDTH ) + " " +
                     ::GetMetricText( nWdth, eCoreUnit,
                                       MapUnit::MapPoint, &rIntl );

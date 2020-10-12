@@ -73,8 +73,8 @@ namespace vcl
 
 // Define for flags needed in ctor or layers below.
 // Currently the Preview flag is needed for DrawPage.
-#define VSHELLFLAG_ISPREVIEW            (long(0x1))
-#define VSHELLFLAG_SHARELAYOUT          (long(0x2))
+#define VSHELLFLAG_ISPREVIEW            (tools::Long(0x1))
+#define VSHELLFLAG_SHARELAYOUT          (tools::Long(0x2))
 typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -233,7 +233,7 @@ public:
         Sets the pOut so that the rRect is always painted over the entire
         pOut, ie. starts in 0,0 and ends in width/height.
     */
-    void PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, long tileWidth, long tileHeight);
+    void PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, tools::Long tileWidth, tools::Long tileHeight);
 
     bool IsPaintInProgress() const { return mbPaintInProgress; }
     bool IsDrawingLayerPaintInProgress() const { return !mPrePostPaintRegions.empty(); }
@@ -243,7 +243,7 @@ public:
     // The passed rect is situated on pixel borders
     // in order to avoid pixel errors when scrolling.
     virtual void VisPortChgd( const SwRect & );
-    bool SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle* );//Browser
+    bool SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const tools::Rectangle* );//Browser
     void EnableSmooth( bool b ) { mbEnableSmooth = b; }
 
     const SwRect& VisArea() const;
@@ -540,10 +540,10 @@ public:
     SwAccessibleMap* GetAccessibleMap();
 
     SwViewShell( SwViewShell&, vcl::Window *pWin, OutputDevice *pOut = nullptr,
-                long nFlags = 0 );
+                tools::Long nFlags = 0 );
     SwViewShell( SwDoc& rDoc, vcl::Window *pWin,
                const SwViewOption *pOpt, OutputDevice *pOut = nullptr,
-               long nFlags = 0 );
+               tools::Long nFlags = 0 );
     virtual ~SwViewShell() override;
 
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;

@@ -28,6 +28,7 @@
 #include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sal/log.hxx>
+#include <tools/long.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -78,7 +79,7 @@ private:
 public:
     explicit SwVbaReadFieldParams( const OUString& rData );
 
-    long SkipToNextToken();
+    tools::Long SkipToNextToken();
 
     sal_Int32 FindNextStringPiece( sal_Int32 _nStart );
 
@@ -119,9 +120,9 @@ OUString SwVbaReadFieldParams::GetResult() const
 }
 
 // ret: -2: NOT a '\' parameter but normal Text
-long SwVbaReadFieldParams::SkipToNextToken()
+tools::Long SwVbaReadFieldParams::SkipToNextToken()
 {
-    long nRet = -1;     // end
+    tools::Long nRet = -1;     // end
     if (
          (-1 != nNext) && (nLen > nNext) &&
          -1 != (nFnd = FindNextStringPiece(nNext))
@@ -351,7 +352,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( !_text.isEmpty() )
     {
-        long nRet;
+        tools::Long nRet;
         SwVbaReadFieldParams aReadParam( _text );
         while (-1 != (nRet = aReadParam.SkipToNextToken()))
         {
@@ -422,7 +423,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 {
     OUString aDocProperty;
     SwVbaReadFieldParams aReadParam( _text );
-    long nRet;
+    tools::Long nRet;
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )

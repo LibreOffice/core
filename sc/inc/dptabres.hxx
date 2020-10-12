@@ -58,13 +58,13 @@ class ScDPInitState
 public:
     struct Member
     {
-        long mnSrcIndex;
+        tools::Long mnSrcIndex;
         SCROW mnNameIndex;
 
-        Member(long nSrcIndex, SCROW nNameIndex);
+        Member(tools::Long nSrcIndex, SCROW nNameIndex);
     };
 
-    void AddMember(long nSourceIndex, SCROW nMember);
+    void AddMember(tools::Long nSourceIndex, SCROW nMember);
     void RemoveMember();
 
     const std::vector<Member>& GetMembers() const { return maMembers; }
@@ -82,8 +82,8 @@ struct ScDPSubTotalState
 {
     ScSubTotalFunc eColForce;
     ScSubTotalFunc eRowForce;
-    long nColSubTotalFunc;
-    long nRowSubTotalFunc;
+    tools::Long nColSubTotalFunc;
+    tools::Long nRowSubTotalFunc;
 
     ScDPSubTotalState() :
         eColForce( SUBTOTAL_FUNC_NONE ),
@@ -117,8 +117,8 @@ public:
     const IndexArray& GetRowVisible() const { return maRowVisible;}
     const IndexArray& GetRowSorted() const { return maRowSorted;}
 
-    void    AddColIndex( long nVisible, long nSorted );
-    void    AddRowIndex( long nVisible, long nSorted );
+    void    AddColIndex( tools::Long nVisible, tools::Long nSorted );
+    void    AddRowIndex( tools::Long nVisible, tools::Long nSorted );
     void    RemoveColIndex();
     void    RemoveRowIndex();
 
@@ -134,10 +134,10 @@ private:
 
 struct ScDPRelativePos
 {
-    long    nBasePos;       // simple count, without sort order applied
-    long    nDirection;
+    tools::Long    nBasePos;       // simple count, without sort order applied
+    tools::Long    nDirection;
 
-    ScDPRelativePos( long nBase, long nDir );
+    ScDPRelativePos( tools::Long nBase, tools::Long nDir );
 };
 
 //  aggregated data
@@ -201,8 +201,8 @@ public:
             ScDPRowTotals();
             ~ScDPRowTotals();
 
-    ScDPAggData*    GetRowTotal( long nMeasure );
-    ScDPAggData*    GetGrandTotal( long nMeasure );
+    ScDPAggData*    GetRowTotal( tools::Long nMeasure );
+    ScDPAggData*    GetGrandTotal( tools::Long nMeasure );
 
     bool IsInColRoot() const { return bIsInColRoot; }
     void SetInColRoot(bool bSet) { bIsInColRoot = bSet; }
@@ -299,29 +299,29 @@ public:
     void                SetDataLayoutOrientation( css::sheet::DataPilotFieldOrientation nOrient );
     void                SetLateInit( bool bSet );
 
-    long                GetMeasureCount() const { return maMeasureFuncs.size(); }
-    ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    OUString            GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
-    OUString            GetMeasureDimensionName(long nMeasure) const;
-    const css::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
-    css::sheet::DataPilotFieldOrientation      GetMeasureRefOrient(long nMeasure) const;
+    tools::Long                GetMeasureCount() const { return maMeasureFuncs.size(); }
+    ScSubTotalFunc      GetMeasureFunction(tools::Long nMeasure) const;
+    OUString            GetMeasureString(tools::Long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    OUString            GetMeasureDimensionName(tools::Long nMeasure) const;
+    const css::sheet::DataPilotFieldReference& GetMeasureRefVal(tools::Long nMeasure) const;
+    css::sheet::DataPilotFieldOrientation      GetMeasureRefOrient(tools::Long nMeasure) const;
 
     bool                IsLateInit() const              { return bLateInit; }
 
-    long                GetColStartMeasure() const;
-    long                GetRowStartMeasure() const;
+    tools::Long                GetColStartMeasure() const;
+    tools::Long                GetRowStartMeasure() const;
 
-    long                GetCountForMeasure( long nMeas ) const { return (nMeas == SC_DPMEASURE_ALL) ? maMeasureFuncs.size() : 1; }
+    tools::Long                GetCountForMeasure( tools::Long nMeas ) const { return (nMeas == SC_DPMEASURE_ALL) ? maMeasureFuncs.size() : 1; }
 
-    bool                IsBaseForGroup( long nDim ) const;              // any group
-    long                GetGroupBase( long nGroupDim ) const;
-    bool                IsNumOrDateGroup( long nDim ) const;
-    bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
-                                   const ScDPItemData& rBaseData, long nBaseIndex ) const;
-    bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
-                                          const ScDPItemData& rSecondData, long nSecondIndex ) const;
+    bool                IsBaseForGroup( tools::Long nDim ) const;              // any group
+    tools::Long                GetGroupBase( tools::Long nGroupDim ) const;
+    bool                IsNumOrDateGroup( tools::Long nDim ) const;
+    bool                IsInGroup( SCROW nGroupDataId, tools::Long nGroupIndex,
+                                   const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const;
+    bool                HasCommonElement( SCROW nFirstDataId, tools::Long nFirstIndex,
+                                          const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const;
 
-    ResultMembers&      GetDimResultMembers(long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const;
+    ResultMembers&      GetDimResultMembers(tools::Long nDim, const ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
     const ScDPSource& GetSource() const { return mrSource;}
 };
@@ -364,13 +364,13 @@ public:
     ScDPItemData FillItemData() const;
     bool IsValid() const;
     bool IsVisible() const;
-    long                GetSize(long nMeasure) const;
+    tools::Long                GetSize(tools::Long nMeasure) const;
     // bHasHiddenDetails is set only if the "show details" flag is off,
     // and there was a child dimension to skip
     bool HasHiddenDetails() const { return bHasHiddenDetails; }
-    bool IsSubTotalInTitle(long nMeasure) const;
+    bool IsSubTotalInTitle(tools::Long nMeasure) const;
 
-    long                GetSubTotalCount( long* pUserSubStart = nullptr ) const;
+    tools::Long                GetSubTotalCount( tools::Long* pUserSubStart = nullptr ) const;
 
     bool IsNamedItem( SCROW nIndex ) const;
     bool IsValidEntry( const ::std::vector< SCROW >& aMembers ) const;
@@ -384,16 +384,16 @@ public:
                                         const ::std::vector<ScDPValue>& aValues );
     void FillMemberResults(
         css::uno::Sequence< css::sheet::MemberResult>* pSequences,
-        long& rPos, long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
+        tools::Long& rPos, tools::Long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
     void FillDataResults(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
         css::uno::Sequence< css::uno::Sequence<  css::sheet::DataResult> >& rSequence,
-        long nMeasure) const;
+        tools::Long nMeasure) const;
 
-    void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
-    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+    void                UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const;
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, tools::Long nMeasure,
                                                 ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const;
 
     void                SortMembers( ScDPResultMember* pRefMember );
@@ -419,7 +419,7 @@ public:
     SCROW GetOrder() const { return aParentDimData.mnOrder; }         //! Ref
     bool IsRoot() const { return GetParentLevel() == nullptr; }
     SCROW                       GetDataId( ) const ;
-    ScDPAggData*        GetColTotal( long nMeasure ) const;
+    ScDPAggData*        GetColTotal( tools::Long nMeasure ) const;
 
     void                FillVisibilityData(ScDPResultVisibilityData& rData) const;
 };
@@ -443,28 +443,28 @@ public:
 
     OUString GetName() const;
     bool IsVisible() const;
-    bool HasData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    bool HasData( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const;
 
     bool IsNamedItem( SCROW nRow ) const;
     bool HasHiddenDetails() const;
 
     void                ProcessData( const ::std::vector< SCROW >& aChildMembers, const ::std::vector<ScDPValue>& aValues,
                                        const ScDPSubTotalState& rSubState );
-    bool HasError( long nMeasure, const ScDPSubTotalState& rSubState ) const;
-    double              GetAggregate( long nMeasure, const ScDPSubTotalState& rSubState ) const;
-    const ScDPAggData*  GetConstAggData( long nMeasure, const ScDPSubTotalState& rSubState ) const;
-    ScDPAggData*        GetAggData( long nMeasure, const ScDPSubTotalState& rSubState );
+    bool HasError( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    double              GetAggregate( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    const ScDPAggData*  GetConstAggData( tools::Long nMeasure, const ScDPSubTotalState& rSubState ) const;
+    ScDPAggData*        GetAggData( tools::Long nMeasure, const ScDPSubTotalState& rSubState );
 
     void FillDataRow(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
         css::uno::Sequence<css::sheet::DataResult>& rSequence,
-        long nMeasure, bool bIsSubTotalRow,
+        tools::Long nMeasure, bool bIsSubTotalRow,
         const ScDPSubTotalState& rSubState) const;
 
-    void UpdateDataRow( const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    void UpdateDataRow( const ScDPResultMember* pRefMember, tools::Long nMeasure, bool bIsSubTotalRow,
                         const ScDPSubTotalState& rSubState );
-    void UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure, bool bIsSubTotalRow,
+    void UpdateRunningTotals( const ScDPResultMember* pRefMember, tools::Long nMeasure, bool bIsSubTotalRow,
                               const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                               ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent );
 
@@ -495,7 +495,7 @@ private:
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
     OUString                aDimensionName;     //! or ptr to IntDimension?
-    long                    nSortMeasure;
+    tools::Long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
     bool                    bIsDataLayout:1;      //! or ptr to IntDimension?
     bool                    bSortByData:1;
@@ -503,8 +503,8 @@ private:
     bool                    bAutoShow:1;
     bool                    bAutoTopItems:1;
     bool                    bInitialized:1;
-    long                    nAutoMeasure;
-    long                    nAutoCount;
+    tools::Long                    nAutoMeasure;
+    tools::Long                    nAutoCount;
 
     ScDPResultMember*        FindMember(   SCROW  iData ) const;
     ScDPResultMember*        AddMember( const ScDPParentDimData& aData );
@@ -527,7 +527,7 @@ public:
                                         ScDPInitState& rInitState );
     void CheckShowEmpty( bool bShow = false );
 
-    long                GetSize(long nMeasure) const;
+    tools::Long                GetSize(tools::Long nMeasure) const;
 
     bool                IsValidEntry( const ::std::vector<SCROW>& aMembers ) const;
 
@@ -538,7 +538,7 @@ public:
                                      const ::std::vector<ScDPValue>& aValues ) const;   //! Test
     void                FillMemberResults( css::uno::Sequence<
                                                 css::sheet::MemberResult>* pSequences,
-                                            long nStart, long nMeasure );
+                                            tools::Long nStart, tools::Long nMeasure );
 
     void FillDataResults(
         const ScDPResultMember* pRefMember,
@@ -546,14 +546,14 @@ public:
         css::uno::Sequence<
             css::uno::Sequence<
                 css::sheet::DataResult> >& rSequence,
-        long nMeasure) const;
+        tools::Long nMeasure) const;
 
-    void                UpdateDataResults( const ScDPResultMember* pRefMember, long nMeasure ) const;
-    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, long nMeasure,
+    void                UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const;
+    void                UpdateRunningTotals( const ScDPResultMember* pRefMember, tools::Long nMeasure,
                                             ScDPRunningTotalState& rRunning, ScDPRowTotals& rTotals ) const;
 
     void                SortMembers( ScDPResultMember* pRefMember );
-    long                GetSortedIndex( long nUnsorted ) const;
+    tools::Long                GetSortedIndex( tools::Long nUnsorted ) const;
 
     void                DoAutoShow( ScDPResultMember* pRefMember );
 
@@ -562,12 +562,12 @@ public:
     //  called for the reference dimension
     ScDPDataMember* GetRowReferenceMember(
         const ScDPRelativePos* pMemberPos, const OUString* pName,
-        const long* pRowIndexes, const long* pColIndexes ) const;
+        const tools::Long* pRowIndexes, const tools::Long* pColIndexes ) const;
 
     // uses row root member from ScDPRunningTotalState
     static ScDPDataMember* GetColReferenceMember(
         const ScDPRelativePos* pMemberPos, const OUString* pName,
-        long nRefDimPos, const ScDPRunningTotalState& rRunning );
+        tools::Long nRefDimPos, const ScDPRunningTotalState& rRunning );
 
 #if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;
@@ -575,9 +575,9 @@ public:
 #endif
 
                         //  for ScDPDataDimension::InitFrom
-    long                GetMemberCount() const;
-    const ScDPResultMember* GetMember(long n) const;
-    ScDPResultMember*       GetMember(long n);
+    tools::Long                GetMemberCount() const;
+    const ScDPResultMember* GetMember(tools::Long n) const;
+    ScDPResultMember*       GetMember(tools::Long n);
 
     const ScMemberSortOrder& GetMemberOrder() const     { return aMemberOrder; }
     ScMemberSortOrder&  GetMemberOrder()                { return aMemberOrder; }
@@ -587,12 +587,12 @@ public:
 
     bool IsSortByData() const { return bSortByData; }
     bool IsSortAscending() const { return bSortAscending; }
-    long                GetSortMeasure() const  { return nSortMeasure; }
+    tools::Long                GetSortMeasure() const  { return nSortMeasure; }
 
     bool IsAutoShow() const { return bAutoShow; }
     bool IsAutoTopItems() const { return bAutoTopItems; }
-    long                GetAutoMeasure() const  { return nAutoMeasure; }
-    long                GetAutoCount() const    { return nAutoCount; }
+    tools::Long                GetAutoMeasure() const  { return nAutoMeasure; }
+    tools::Long                GetAutoCount() const    { return nAutoCount; }
 
     ScDPResultDimension* GetFirstChildDimension() const;
 
@@ -618,16 +618,16 @@ public:
         const ScDPResultDimension* pRefDim,
         ScDPResultFilterContext& rFilterCxt,
         css::uno::Sequence<css::sheet::DataResult>& rSequence,
-        long nMeasure, bool bIsSubTotalRow, const ScDPSubTotalState& rSubState) const;
+        tools::Long nMeasure, bool bIsSubTotalRow, const ScDPSubTotalState& rSubState) const;
 
-    void                UpdateDataRow( const ScDPResultDimension* pRefDim, long nMeasure, bool bIsSubTotalRow,
+    void                UpdateDataRow( const ScDPResultDimension* pRefDim, tools::Long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState ) const;
-    void                UpdateRunningTotals( const ScDPResultDimension* pRefDim, long nMeasure, bool bIsSubTotalRow,
+    void                UpdateRunningTotals( const ScDPResultDimension* pRefDim, tools::Long nMeasure, bool bIsSubTotalRow,
                                     const ScDPSubTotalState& rSubState, ScDPRunningTotalState& rRunning,
                                     ScDPRowTotals& rTotals, const ScDPResultMember& rRowParent ) const;
 
     void                SortMembers( ScDPResultDimension* pRefDim );
-    long                GetSortedIndex( long nUnsorted ) const;
+    tools::Long                GetSortedIndex( tools::Long nUnsorted ) const;
 
     void                DoAutoShow( ScDPResultDimension* pRefDim );
 
@@ -638,9 +638,9 @@ public:
     void Dump(int nIndent) const;
 #endif
 
-    long                GetMemberCount() const;
-    const ScDPDataMember*     GetMember(long n) const;
-    ScDPDataMember*     GetMember(long n);
+    tools::Long                GetMemberCount() const;
+    const ScDPDataMember*     GetMember(tools::Long n) const;
+    ScDPDataMember*     GetMember(tools::Long n);
 };
 
 /**

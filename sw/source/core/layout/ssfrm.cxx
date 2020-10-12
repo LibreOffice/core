@@ -36,24 +36,24 @@
 #include <ndtxt.hxx>
 
     // No inline cause we need the function pointers
-long SwFrame::GetTopMargin() const
+tools::Long SwFrame::GetTopMargin() const
     { return getFramePrintArea().Top(); }
-long SwFrame::GetBottomMargin() const
+tools::Long SwFrame::GetBottomMargin() const
     { return getFrameArea().Height() -getFramePrintArea().Height() -getFramePrintArea().Top(); }
-long SwFrame::GetLeftMargin() const
+tools::Long SwFrame::GetLeftMargin() const
     { return getFramePrintArea().Left(); }
-long SwFrame::GetRightMargin() const
+tools::Long SwFrame::GetRightMargin() const
     { return getFrameArea().Width() - getFramePrintArea().Width() - getFramePrintArea().Left(); }
-long SwFrame::GetPrtLeft() const
+tools::Long SwFrame::GetPrtLeft() const
     { return getFrameArea().Left() + getFramePrintArea().Left(); }
-long SwFrame::GetPrtBottom() const
+tools::Long SwFrame::GetPrtBottom() const
     { return getFrameArea().Top() + getFramePrintArea().Height() + getFramePrintArea().Top(); }
-long SwFrame::GetPrtRight() const
+tools::Long SwFrame::GetPrtRight() const
     { return getFrameArea().Left() + getFramePrintArea().Width() + getFramePrintArea().Left(); }
-long SwFrame::GetPrtTop() const
+tools::Long SwFrame::GetPrtTop() const
     { return getFrameArea().Top() + getFramePrintArea().Top(); }
 
-bool SwFrame::SetMinLeft( long nDeadline )
+bool SwFrame::SetMinLeft( tools::Long nDeadline )
 {
     SwTwips nDiff = nDeadline - getFrameArea().Left();
     if( nDiff > 0 )
@@ -69,7 +69,7 @@ bool SwFrame::SetMinLeft( long nDeadline )
     return false;
 }
 
-bool SwFrame::SetMaxBottom( long nDeadline )
+bool SwFrame::SetMaxBottom( tools::Long nDeadline )
 {
     SwTwips nDiff = getFrameArea().Top() + getFrameArea().Height() - nDeadline;
     if( nDiff > 0 )
@@ -85,7 +85,7 @@ bool SwFrame::SetMaxBottom( long nDeadline )
     return false;
 }
 
-bool SwFrame::SetMaxRight( long nDeadline )
+bool SwFrame::SetMaxRight( tools::Long nDeadline )
 {
     SwTwips nDiff = getFrameArea().Left() + getFrameArea().Width() - nDeadline;
     if( nDiff > 0 )
@@ -165,21 +165,21 @@ void SwFrame::MakeRightPos( const SwFrame* pUp, const SwFrame* pPrv, bool bNotif
     }
 }
 
-void SwFrame::SetTopBottomMargins( long nTop, long nBot )
+void SwFrame::SetTopBottomMargins( tools::Long nTop, tools::Long nBot )
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Top( nTop );
     aPrt.Height( getFrameArea().Height() - nTop - nBot );
 }
 
-void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
+void SwFrame::SetLeftRightMargins( tools::Long nLeft, tools::Long nRight)
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Left( nLeft );
     aPrt.Width( getFrameArea().Width() - nLeft - nRight );
 }
 
-void SwFrame::SetRightLeftMargins( long nRight, long nLeft)
+void SwFrame::SetRightLeftMargins( tools::Long nRight, tools::Long nLeft)
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Left( nLeft );
@@ -586,19 +586,19 @@ SwRect SwFrame::GetPaintArea() const
     const bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
     SwRectFnSet aRectFnSet(this);
-    long nRight = (aRect.*fnRect->fnGetRight)();
-    long nLeft  = (aRect.*fnRect->fnGetLeft)();
+    tools::Long nRight = (aRect.*fnRect->fnGetRight)();
+    tools::Long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrame* pTmp = this;
     bool bLeft = true;
     bool bRight = true;
-    long nRowSpan = 0;
+    tools::Long nRowSpan = 0;
     while( pTmp )
     {
         if( pTmp->IsCellFrame() && pTmp->GetUpper() &&
             pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
             nRowSpan = static_cast<const SwCellFrame*>(pTmp)->GetTabBox()->getRowSpan();
-        long nTmpRight = (pTmp->getFrameArea().*fnRect->fnGetRight)();
-        long nTmpLeft = (pTmp->getFrameArea().*fnRect->fnGetLeft)();
+        tools::Long nTmpRight = (pTmp->getFrameArea().*fnRect->fnGetRight)();
+        tools::Long nTmpLeft = (pTmp->getFrameArea().*fnRect->fnGetLeft)();
         if( pTmp->IsRowFrame() && nRowSpan > 1 )
         {
             const SwFrame* pNxt = pTmp;
@@ -689,10 +689,10 @@ SwRect SwFrame::UnionFrame( bool bBorder ) const
 {
     bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert ) : fnRectHori;
-    long nLeft = (getFrameArea().*fnRect->fnGetLeft)();
-    long nWidth = (getFrameArea().*fnRect->fnGetWidth)();
-    long nPrtLeft = (getFramePrintArea().*fnRect->fnGetLeft)();
-    long nPrtWidth = (getFramePrintArea().*fnRect->fnGetWidth)();
+    tools::Long nLeft = (getFrameArea().*fnRect->fnGetLeft)();
+    tools::Long nWidth = (getFrameArea().*fnRect->fnGetWidth)();
+    tools::Long nPrtLeft = (getFramePrintArea().*fnRect->fnGetLeft)();
+    tools::Long nPrtWidth = (getFramePrintArea().*fnRect->fnGetWidth)();
     SwRectFnSet aRectFnSet(this);
     if (aRectFnSet.XInc(nPrtLeft, nPrtWidth) > nWidth)
         nWidth = nPrtLeft + nPrtWidth;
@@ -702,7 +702,7 @@ SwRect SwFrame::UnionFrame( bool bBorder ) const
         nWidth -= nPrtLeft;
     }
     SwTwips nRight = aRectFnSet.XInc(nLeft, nWidth);
-    long nAdd = 0;
+    tools::Long nAdd = 0;
     if( bBorder )
     {
         SwBorderAttrAccess aAccess( SwFrame::GetCache(), this );
@@ -725,7 +725,7 @@ SwRect SwFrame::UnionFrame( bool bBorder ) const
     }
     if( IsTextFrame() && static_cast<const SwTextFrame*>(this)->HasPara() )
     {
-        long nTmp = static_cast<const SwTextFrame*>(this)->HangingMargin();
+        tools::Long nTmp = static_cast<const SwTextFrame*>(this)->HangingMargin();
         if( nTmp > nAdd )
             nAdd = nTmp;
     }

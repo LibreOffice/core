@@ -595,7 +595,7 @@ static void InsertMissingOutlinePoints( const std::vector< double >& rDistances,
     if (nSize == 0)
         return;
 
-    long nTextWidth = rTextAreaBoundRect.GetWidth();
+    tools::Long nTextWidth = rTextAreaBoundRect.GetWidth();
 
     if (nTextWidth == 0)
         throw o3tl::divide_by_zero();

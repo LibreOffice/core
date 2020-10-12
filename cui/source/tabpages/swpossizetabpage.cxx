@@ -1463,8 +1463,8 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
                                 sal_uInt16 nHRel,
                                 sal_uInt16 nV,
                                 sal_uInt16 nVRel,
-                                long   nX,
-                                long   nY)
+                                tools::Long   nX,
+                                tools::Long   nY)
 {
     int nPos = m_xVertLB->get_active();
     if (nPos != -1 && m_pVMap)

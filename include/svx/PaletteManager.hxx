@@ -38,7 +38,7 @@ class SVXCORE_DLLPUBLIC PaletteManager
     sal_uInt16              mnNumOfPalettes;
     sal_uInt16              mnCurrentPalette;
 
-    long                    mnColorCount;
+    tools::Long                    mnColorCount;
     svx::ToolboxButtonColorUpdaterBase* mpBtnUpdater;
 
     XColorListRef           pColorList;
@@ -62,8 +62,8 @@ public:
     OUString    GetPaletteName();
     OUString    GetSelectedPalettePath();
 
-    long        GetColorCount() const;
-    long        GetRecentColorCount() const;
+    tools::Long        GetColorCount() const;
+    tools::Long        GetRecentColorCount() const;
     void        AddRecentColor(const Color& rRecentColor, const OUString& rColorName, bool bFront = true);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdaterBase* pBtnUpdater);

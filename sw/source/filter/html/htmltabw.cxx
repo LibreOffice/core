@@ -79,7 +79,7 @@ class SwHTMLWrtTable : public SwWriteTable
                         bool bTop, bool bBottom, bool bLeft, bool bRight );
 
 public:
-    SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
+    SwHTMLWrtTable( const SwTableLines& rLines, tools::Long nWidth, sal_uInt32 nBWidth,
                     bool bRel, sal_uInt16 nLeftSub, sal_uInt16 nRightSub,
                     sal_uInt16 nNumOfRowsToRepeat );
     explicit SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
@@ -92,7 +92,7 @@ public:
 
 }
 
-SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
+SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, tools::Long nWidth,
                                 sal_uInt32 nBWidth, bool bRel,
                                 sal_uInt16 nLSub, sal_uInt16 nRSub,
                                 sal_uInt16 nNumOfRowsToRepeat )
@@ -318,7 +318,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             append("=\"").append(static_cast<sal_Int32>(nColSpan)).append("\"");
     }
 
-    long nWidth = 0;
+    tools::Long nWidth = 0;
     bool bOutWidth = true;
     sal_uInt32 nPercentWidth = SAL_MAX_UINT32;
 
@@ -347,7 +347,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         // ReqIF implies strict XHTML: no width for <td>.
         bOutWidth = false;
 
-    long nHeight = pCell->GetHeight() > 0
+    tools::Long nHeight = pCell->GetHeight() > 0
                         ? GetAbsHeight( pCell->GetHeight(), nRow, nRowSpan )
                         : 0;
     Size aPixelSz( nWidth, nHeight );
@@ -876,7 +876,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     sal_Int16 eFlyHoriOri = text::HoriOrientation::NONE;
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_NONE;
     sal_uInt8 nFlyPercentWidth = 0;
-    long nFlyWidth = 0;
+    tools::Long nFlyWidth = 0;
     sal_uInt16 nFlyHSpace = 0;
     sal_uInt16 nFlyVSpace = 0;
     if( pFlyFrameFormat )
@@ -909,7 +909,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     SwFrameFormat *pFormat = rTable.GetFrameFormat();
 
     const SwFormatFrameSize& rFrameSize = pFormat->GetFrameSize();
-    long nWidth = rFrameSize.GetSize().Width();
+    tools::Long nWidth = rFrameSize.GetSize().Width();
     sal_uInt8 nPercentWidth = rFrameSize.GetWidthPercent();
     sal_uInt16 nBaseWidth = static_cast<sal_uInt16>(nWidth);
 
@@ -954,7 +954,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
             {
                 // Without a right margin also an absolute width is maintained.
                 // We still try to define the actual width via the layout.
-                long nRealWidth = pFormat->FindLayoutRect(true).Width();
+                tools::Long nRealWidth = pFormat->FindLayoutRect(true).Width();
                 if( nRealWidth )
                     nWidth = nRealWidth;
             }

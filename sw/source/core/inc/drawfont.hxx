@@ -55,7 +55,7 @@ class SW_DLLPUBLIC SwDrawTextInfo
     SwFont *m_pFnt;
     SwUnderlineFont* m_pUnderFnt;
     TextFrameIndex* m_pHyphPos;
-    long m_nKanaDiff;
+    tools::Long m_nKanaDiff;
     TextFrameIndex m_nIdx;
     TextFrameIndex m_nLen;
     /// this is not a string index
@@ -63,9 +63,9 @@ class SW_DLLPUBLIC SwDrawTextInfo
     sal_uInt16 m_nWidth;
     sal_uInt16 m_nAscent;
     sal_uInt16 m_nCompress;
-    long m_nSperren;
-    long m_nSpace;
-    long m_nKern;
+    tools::Long m_nSperren;
+    tools::Long m_nSpace;
+    tools::Long m_nKern;
     TextFrameIndex m_nNumberOfBlanks;
     sal_uInt8 m_nCursorBidiLevel;
     bool m_bBullet : 1;
@@ -283,7 +283,7 @@ public:
         return m_nIdx + m_nLen;
     }
 
-    long GetKanaDiff() const
+    tools::Long GetKanaDiff() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bKana, "DrawTextInfo: Undefined kana difference" );
@@ -309,7 +309,7 @@ public:
         return m_nCompress;
     }
 
-    long GetSperren() const
+    tools::Long GetSperren() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSperr, "DrawTextInfo: Undefined >Sperren<" );
@@ -317,12 +317,12 @@ public:
         return m_nSperren;
     }
 
-    long GetKern() const
+    tools::Long GetKern() const
     {
         return m_nKern;
     }
 
-    long GetSpace() const
+    tools::Long GetSpace() const
     {
 #ifdef DBG_UTIL
         OSL_ENSURE( m_bSpace, "DrawTextInfo: Undefined Spacing" );
@@ -471,7 +471,7 @@ public:
 #endif
     }
 
-    void SetKanaDiff( long nNew )
+    void SetKanaDiff( tools::Long nNew )
     {
         m_nKanaDiff = nNew;
 #ifdef DBG_UTIL
@@ -492,12 +492,12 @@ public:
 #endif
     }
 
-    void SetKern( long nNew )
+    void SetKern( tools::Long nNew )
     {
         m_nKern = nNew;
     }
 
-    void SetSpace( long nNew )
+    void SetSpace( tools::Long nNew )
     {
         if( nNew < 0 )
         {

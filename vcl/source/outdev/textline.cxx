@@ -47,13 +47,13 @@ void OutputDevice::ImplInitAboveTextLineSize()
     mpFontInstance->mxFontMetric->ImplInitAboveTextLineSize();
 }
 
-void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
-                                      long nCurX, long nCurY,
+void OutputDevice::ImplDrawWavePixel( tools::Long nOriginX, tools::Long nOriginY,
+                                      tools::Long nCurX, tools::Long nCurY,
                                       short nOrientation,
                                       SalGraphics* pGraphics,
                                       OutputDevice const * pOutDev,
                                       bool bDrawPixAsRect,
-                                      long nPixWidth, long nPixHeight )
+                                      tools::Long nPixWidth, tools::Long nPixHeight )
 {
     if ( nOrientation )
     {
@@ -72,17 +72,17 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
     }
 }
 
-void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
-                                     long nDistX, long nDistY,
-                                     long nWidth, long nHeight,
-                                     long nLineWidth, short nOrientation,
+void OutputDevice::ImplDrawWaveLine( tools::Long nBaseX, tools::Long nBaseY,
+                                     tools::Long nDistX, tools::Long nDistY,
+                                     tools::Long nWidth, tools::Long nHeight,
+                                     tools::Long nLineWidth, short nOrientation,
                                      const Color& rColor )
 {
     if ( !nHeight )
         return;
 
-    long nStartX = nBaseX + nDistX;
-    long nStartY = nBaseY + nDistY;
+    tools::Long nStartX = nBaseX + nDistX;
+    tools::Long nStartY = nBaseY + nDistY;
 
     // If the height is 1 pixel, it's enough output a line
     if ( (nLineWidth == 1) && (nHeight == 1) )
@@ -90,8 +90,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         mpGraphics->SetLineColor( rColor );
         mbInitLineColor = true;
 
-        long nEndX = nStartX+nWidth;
-        long nEndY = nStartY;
+        tools::Long nEndX = nStartX+nWidth;
+        tools::Long nEndY = nStartY;
         if ( nOrientation )
         {
             Point aOriginPt( nBaseX, nBaseY );
@@ -102,14 +102,14 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     }
     else
     {
-        long    nCurX = nStartX;
-        long    nCurY = nStartY;
-        long    nDiffX = 2;
-        long    nDiffY = nHeight-1;
-        long    nCount = nWidth;
-        long    nOffY = -1;
-        long    nPixWidth;
-        long    nPixHeight;
+        tools::Long    nCurX = nStartX;
+        tools::Long    nCurY = nStartY;
+        tools::Long    nDiffX = 2;
+        tools::Long    nDiffY = nHeight-1;
+        tools::Long    nCount = nWidth;
+        tools::Long    nOffY = -1;
+        tools::Long    nPixWidth;
+        tools::Long    nPixHeight;
         bool    bDrawPixAsRect;
         // On printers that output pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
@@ -148,10 +148,10 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         else
         {
             nCurY += nDiffY;
-            long nFreq = nCount / (nDiffX+nDiffY);
+            tools::Long nFreq = nCount / (nDiffX+nDiffY);
             while ( nFreq-- )
             {
-                for( long i = nDiffY; i; --i )
+                for( tools::Long i = nDiffY; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -159,7 +159,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurX++;
                     nCurY += nOffY;
                 }
-                for( long i = nDiffX; i; --i )
+                for( tools::Long i = nDiffX; i; --i )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -171,7 +171,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             nFreq = nCount % (nDiffX+nDiffY);
             if ( nFreq )
             {
-                for( long i = nDiffY; i && nFreq; --i, --nFreq )
+                for( tools::Long i = nDiffY; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -180,7 +180,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                     nCurY += nOffY;
 
                 }
-                for( long i = nDiffX; i && nFreq; --i, --nFreq )
+                for( tools::Long i = nDiffX; i && nFreq; --i, --nFreq )
                 {
                     ImplDrawWavePixel( nBaseX, nBaseY, nCurX, nCurY, nOrientation,
                                        mpGraphics, this,
@@ -192,15 +192,15 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
-                                         long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawWaveTextLine( tools::Long nBaseX, tools::Long nBaseY,
+                                         tools::Long nDistX, tools::Long nDistY, tools::Long nWidth,
                                          FontLineStyle eTextLine,
                                          Color aColor,
                                          bool bIsAbove )
 {
     LogicalFontInstance* pFontInstance = mpFontInstance.get();
-    long            nLineHeight;
-    long            nLinePos;
+    tools::Long            nLineHeight;
+    tools::Long            nLinePos;
 
     if ( bIsAbove )
     {
@@ -215,7 +215,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
-    long nLineWidth = mnDPIX / 300;
+    tools::Long nLineWidth = mnDPIX / 300;
     if ( !nLineWidth )
         nLineWidth = 1;
 
@@ -224,10 +224,10 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 
     nLinePos += nDistY - (nLineHeight / 2);
 
-    long nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
+    tools::Long nLineWidthHeight = ((nLineWidth * mnDPIX) + (mnDPIY / 2)) / mnDPIY;
     if ( eTextLine == LINESTYLE_DOUBLEWAVE )
     {
-        long nOrgLineHeight = nLineHeight;
+        tools::Long nOrgLineHeight = nLineHeight;
         nLineHeight /= 3;
         if ( nLineHeight < 2 )
         {
@@ -237,11 +237,11 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
                 nLineHeight = 1;
         }
 
-        long nLineDY = nOrgLineHeight-(nLineHeight*2);
+        tools::Long nLineDY = nOrgLineHeight-(nLineHeight*2);
         if ( nLineDY < nLineWidthHeight )
             nLineDY = nLineWidthHeight;
 
-        long nLineDY2 = nLineDY/2;
+        tools::Long nLineDY2 = nLineDY/2;
         if ( !nLineDY2 )
             nLineDY2 = 1;
 
@@ -260,18 +260,18 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
-                                             long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStraightTextLine( tools::Long nBaseX, tools::Long nBaseY,
+                                             tools::Long nDistX, tools::Long nDistY, tools::Long nWidth,
                                              FontLineStyle eTextLine,
                                              Color aColor,
                                              bool bIsAbove )
 {
     LogicalFontInstance*  pFontInstance = mpFontInstance.get();
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    tools::Long            nLineHeight = 0;
+    tools::Long            nLinePos  = 0;
+    tools::Long            nLinePos2 = 0;
 
-    const long nY = nDistY;
+    const tools::Long nY = nDistY;
 
     if ( eTextLine > UNDERLINE_LAST )
         eTextLine = LINESTYLE_SINGLE;
@@ -341,7 +341,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     mpGraphics->SetFillColor( aColor );
     mbInitFillColor = true;
 
-    long nLeft = nDistX;
+    tools::Long nLeft = nDistX;
 
     switch ( eTextLine )
     {
@@ -356,12 +356,12 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     case LINESTYLE_DOTTED:
     case LINESTYLE_BOLDDOTTED:
         {
-            long nDotWidth = nLineHeight*mnDPIY;
+            tools::Long nDotWidth = nLineHeight*mnDPIY;
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            long nTempWidth = nDotWidth;
-            long nEnd = nLeft+nWidth;
+            tools::Long nTempWidth = nDotWidth;
+            tools::Long nEnd = nLeft+nWidth;
             while ( nLeft < nEnd )
             {
                 if ( nLeft+nTempWidth > nEnd )
@@ -377,14 +377,14 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     case LINESTYLE_BOLDDASH:
     case LINESTYLE_BOLDLONGDASH:
         {
-            long nDotWidth = nLineHeight*mnDPIY;
+            tools::Long nDotWidth = nLineHeight*mnDPIY;
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            long nMinDashWidth;
-            long nMinSpaceWidth;
-            long nSpaceWidth;
-            long nDashWidth;
+            tools::Long nMinDashWidth;
+            tools::Long nMinSpaceWidth;
+            tools::Long nSpaceWidth;
+            tools::Long nDashWidth;
             if ( (eTextLine == LINESTYLE_LONGDASH) ||
                  (eTextLine == LINESTYLE_BOLDLONGDASH) )
             {
@@ -409,8 +409,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
             if ( nSpaceWidth < nMinSpaceWidth )
                 nSpaceWidth = nMinSpaceWidth;
 
-            long nTempWidth = nDashWidth;
-            long nEnd = nLeft+nWidth;
+            tools::Long nTempWidth = nDashWidth;
+            tools::Long nEnd = nLeft+nWidth;
             while ( nLeft < nEnd )
             {
                 if ( nLeft+nTempWidth > nEnd )
@@ -423,20 +423,20 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     case LINESTYLE_DASHDOT:
     case LINESTYLE_BOLDDASHDOT:
         {
-            long nDotWidth = nLineHeight*mnDPIY;
+            tools::Long nDotWidth = nLineHeight*mnDPIY;
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            long nDashWidth = ((100*mnDPIX)+1270)/2540;
-            long nMinDashWidth = nDotWidth*4;
+            tools::Long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            tools::Long nMinDashWidth = nDotWidth*4;
             // DashWidth will be increased if the line is getting too thick
             // in proportion to the line's length
             if ( nDashWidth < nMinDashWidth )
                 nDashWidth = nMinDashWidth;
 
-            long nTempDotWidth = nDotWidth;
-            long nTempDashWidth = nDashWidth;
-            long nEnd = nLeft+nWidth;
+            tools::Long nTempDotWidth = nDotWidth;
+            tools::Long nTempDashWidth = nDashWidth;
+            tools::Long nEnd = nLeft+nWidth;
             while ( nLeft < nEnd )
             {
                 if ( nLeft+nTempDotWidth > nEnd )
@@ -458,20 +458,20 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     case LINESTYLE_DASHDOTDOT:
     case LINESTYLE_BOLDDASHDOTDOT:
         {
-            long nDotWidth = nLineHeight*mnDPIY;
+            tools::Long nDotWidth = nLineHeight*mnDPIY;
             nDotWidth += mnDPIY/2;
             nDotWidth /= mnDPIY;
 
-            long nDashWidth = ((100*mnDPIX)+1270)/2540;
-            long nMinDashWidth = nDotWidth*4;
+            tools::Long nDashWidth = ((100*mnDPIX)+1270)/2540;
+            tools::Long nMinDashWidth = nDotWidth*4;
             // DashWidth will be increased if the line is getting too thick
             // in proportion to the line's length
             if ( nDashWidth < nMinDashWidth )
                 nDashWidth = nMinDashWidth;
 
-            long nTempDotWidth = nDotWidth;
-            long nTempDashWidth = nDashWidth;
-            long nEnd = nLeft+nWidth;
+            tools::Long nTempDotWidth = nDotWidth;
+            tools::Long nTempDashWidth = nDashWidth;
+            tools::Long nEnd = nLeft+nWidth;
             while ( nLeft < nEnd )
             {
                 if ( nLeft+nTempDotWidth > nEnd )
@@ -503,17 +503,17 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
-                                          long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStrikeoutLine( tools::Long nBaseX, tools::Long nBaseY,
+                                          tools::Long nDistX, tools::Long nDistY, tools::Long nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
     LogicalFontInstance*  pFontInstance = mpFontInstance.get();
-    long            nLineHeight = 0;
-    long            nLinePos  = 0;
-    long            nLinePos2 = 0;
+    tools::Long            nLineHeight = 0;
+    tools::Long            nLinePos  = 0;
+    tools::Long            nLinePos2 = 0;
 
-    long nY = nDistY;
+    tools::Long nY = nDistY;
 
     if ( eStrikeout > STRIKEOUT_LAST )
         eStrikeout = STRIKEOUT_SINGLE;
@@ -548,7 +548,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
     mpGraphics->SetFillColor( aColor );
     mbInitFillColor = true;
 
-    const long& nLeft = nDistX;
+    const tools::Long& nLeft = nDistX;
 
     switch ( eStrikeout )
     {
@@ -565,8 +565,8 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
     }
 }
 
-void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
-                                          long nDistX, long nDistY, long nWidth,
+void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY,
+                                          tools::Long nDistX, tools::Long nDistY, tools::Long nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
@@ -587,7 +587,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     const OUString aStrikeoutTest(aChars, nTestStrLen);
 
     // calculate approximation of strikeout atom size
-    long nStrikeoutWidth = 0;
+    tools::Long nStrikeoutWidth = 0;
     std::unique_ptr<SalLayout> pLayout = ImplLayout( aStrikeoutTest, 0, nTestStrLen );
     if( pLayout )
     {
@@ -657,8 +657,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     ImplInitTextColor();
 }
 
-void OutputDevice::ImplDrawTextLine( long nX, long nY,
-                                     long nDistX, DeviceCoordinate nWidth,
+void OutputDevice::ImplDrawTextLine( tools::Long nX, tools::Long nY,
+                                     tools::Long nDistX, DeviceCoordinate nWidth,
                                      FontStrikeout eStrikeout,
                                      FontLineStyle eUnderline,
                                      FontLineStyle eOverline,
@@ -676,7 +676,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 
     if ( IsRTLEnabled() )
     {
-        long nXAdd = nWidth - nDistX;
+        tools::Long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
             nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
 
@@ -749,7 +749,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     nDist = aPos.X() - aStartPt.X();
                     if( mpFontInstance->mnOrientation )
                     {
-                        const long nDY = aPos.Y() - aStartPt.Y();
+                        const tools::Long nDY = aPos.Y() - aStartPt.Y();
                         const double fRad = mpFontInstance->mnOrientation * F_PI1800;
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
@@ -783,9 +783,9 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
     }
 }
 
-void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
+void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::Long nWidth )
 {
-    long nBaseX = nX;
+    tools::Long nBaseX = nX;
     if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
         // add some strange offset
@@ -895,7 +895,7 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
         mpAlphaVDev->SetOverlineColor( COL_BLACK );
 }
 
-void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
+void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
                                  FontStrikeout eStrikeout,
                                  FontLineStyle eUnderline,
                                  FontLineStyle eOverline,
@@ -936,7 +936,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
-void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, long nLineWidth)
+void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth)
 {
     assert(!is_double_buffered_window());
 
@@ -959,23 +959,23 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
     Point aStartPt = ImplLogicToDevicePixel(rStartPos);
     Point aEndPt = ImplLogicToDevicePixel(rEndPos);
 
-    long nStartX = aStartPt.X();
-    long nStartY = aStartPt.Y();
-    long nEndX = aEndPt.X();
-    long nEndY = aEndPt.Y();
+    tools::Long nStartX = aStartPt.X();
+    tools::Long nStartY = aStartPt.Y();
+    tools::Long nEndX = aEndPt.X();
+    tools::Long nEndY = aEndPt.Y();
     double fOrientation = 0.0;
 
     // handle rotation
     if (nStartY != nEndY || nStartX > nEndX)
     {
-        long nLengthX = nEndX - nStartX;
+        tools::Long nLengthX = nEndX - nStartX;
         fOrientation = std::atan2(nStartY - nEndY, (nLengthX == 0 ? 0.000000001 : nLengthX));
         fOrientation /= F_PI180;
         // un-rotate the end point
         aStartPt.RotateAround(nEndX, nEndY, -fOrientation * 10.0);
     }
 
-    long nWaveHeight = 3;
+    tools::Long nWaveHeight = 3;
 
     // Handle HiDPI
     float fScaleFactor = GetDPIScaleFactor();

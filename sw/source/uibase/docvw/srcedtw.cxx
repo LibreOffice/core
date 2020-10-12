@@ -323,10 +323,10 @@ void  SwSrcEditWindow::Resize()
     if ( !m_pTextView )
         return;
 
-    long nVisY = m_pTextView->GetStartDocPos().Y();
+    tools::Long nVisY = m_pTextView->GetStartDocPos().Y();
     m_pTextView->ShowCursor();
     Size aOutSz( GetOutputSizePixel() );
-    long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
+    tools::Long nMaxVisAreaStart = m_pTextView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
     if ( nMaxVisAreaStart < 0 )
         nMaxVisAreaStart = 0;
     if ( m_pTextView->GetStartDocPos().Y() > nMaxVisAreaStart )
@@ -336,7 +336,7 @@ void  SwSrcEditWindow::Resize()
         m_pTextView->SetStartDocPos( aStartDocPos );
         m_pTextView->ShowCursor();
     }
-    long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
+    tools::Long nScrollStd = GetSettings().GetStyleSettings().GetScrollBarSize();
     Size aScrollSz(aOutSz.Width() - nScrollStd, nScrollStd );
     Point aScrollPos(0, aOutSz.Height() - nScrollStd);
 
@@ -570,14 +570,14 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
     if(pScroll == m_pVScrollbar)
     {
-        long nDiff = m_pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
+        tools::Long nDiff = m_pTextView->GetStartDocPos().Y() - pScroll->GetThumbPos();
         GetTextView()->Scroll( 0, nDiff );
         m_pTextView->ShowCursor( false );
         pScroll->SetThumbPos( m_pTextView->GetStartDocPos().Y() );
     }
     else
     {
-        long nDiff = m_pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
+        tools::Long nDiff = m_pTextView->GetStartDocPos().X() - pScroll->GetThumbPos();
         GetTextView()->Scroll( nDiff, 0 );
         m_pTextView->ShowCursor( false );
         pScroll->SetThumbPos( m_pTextView->GetStartDocPos().X() );
@@ -633,7 +633,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )
         pIdle->Start();
     // SyntaxTimerHdl is called when text changed
     // => good opportunity to determine text width!
-    long nPrevTextWidth = m_nCurTextWidth;
+    tools::Long nPrevTextWidth = m_nCurTextWidth;
     m_nCurTextWidth = m_pTextEngine->CalcTextWidth() + 25;  // small tolerance
     if ( m_nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();

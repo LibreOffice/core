@@ -678,19 +678,19 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                             m_xTopMF->set_min(0, FieldUnit::NONE);
                             m_xBottomMF->set_min(0, FieldUnit::NONE);
                         }
-                        long nLeftDist = pBoxItem->GetDistance( SvxBoxItemLine::LEFT);
+                        tools::Long nLeftDist = pBoxItem->GetDistance( SvxBoxItemLine::LEFT);
                         SetMetricValue(*m_xLeftMF, nLeftDist, eCoreUnit);
-                        long nRightDist = pBoxItem->GetDistance( SvxBoxItemLine::RIGHT);
+                        tools::Long nRightDist = pBoxItem->GetDistance( SvxBoxItemLine::RIGHT);
                         SetMetricValue(*m_xRightMF, nRightDist, eCoreUnit);
-                        long nTopDist = pBoxItem->GetDistance( SvxBoxItemLine::TOP);
+                        tools::Long nTopDist = pBoxItem->GetDistance( SvxBoxItemLine::TOP);
                         SetMetricValue( *m_xTopMF, nTopDist, eCoreUnit );
-                        long nBottomDist = pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM);
+                        tools::Long nBottomDist = pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM);
                         SetMetricValue( *m_xBottomMF, nBottomDist, eCoreUnit );
 
                         // if the distance is set with no active border line
                         // or it is null with an active border line
                         // no automatic changes should be made
-                        const long nDefDist = bIsAnyBorderVisible ? pBoxInfoItem->GetDefDist() : 0;
+                        const tools::Long nDefDist = bIsAnyBorderVisible ? pBoxInfoItem->GetDefDist() : 0;
                         bool bDiffDist = (nDefDist != nLeftDist ||
                                     nDefDist != nRightDist ||
                                     nDefDist != nTopDist   ||
@@ -732,7 +732,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
     {
         // Do all visible lines show the same line widths?
-        long nWidth;
+        tools::Long nWidth;
         SvxBorderLineStyle nStyle;
         bool bWidthEq = m_aFrameSel.GetVisibleWidth( nWidth, nStyle );
         if( bWidthEq )
@@ -1331,7 +1331,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     static struct {
         SvxBorderLineStyle mnStyle;
-        long mnMinWidth;
+        tools::Long mnMinWidth;
         SvtLineListBox::ColorFunc mpColor1Fn;
         SvtLineListBox::ColorFunc mpColor2Fn;
         SvtLineListBox::ColorDistFunc mpColorDistFn;

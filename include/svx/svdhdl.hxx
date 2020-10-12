@@ -143,7 +143,7 @@ protected:
 
     SdrHdlKind                  eKind;
 
-    long                        nRotationAngle; // turn handle or mousepointer
+    tools::Long                        nRotationAngle; // turn handle or mousepointer
     sal_uInt32                  nObjHdlNum;     // required by MarkView
     sal_uInt32                  nPolyNum;       // Polygonpoint
     sal_uInt32                  nPPntNum;       // Point number of the polygon
@@ -207,7 +207,7 @@ public:
     void SetSelected(bool bJa=true);
 
     void Set1PixMore(bool bJa=true);
-    void SetRotationAngle(long n);
+    void SetRotationAngle(tools::Long n);
 
     bool IsCornerHdl() const { return eKind==SdrHdlKind::UpperLeft || eKind==SdrHdlKind::UpperRight || eKind==SdrHdlKind::LowerLeft || eKind==SdrHdlKind::LowerRight; }
     bool IsVertexHdl() const { return eKind==SdrHdlKind::Upper || eKind==SdrHdlKind::Lower || eKind==SdrHdlKind::Left  || eKind==SdrHdlKind::Right; }

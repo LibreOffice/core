@@ -58,16 +58,16 @@
 #include <unicode/timezone.h>
 #include <memory>
 
-const long DAY_SEC =24 * 60 * 60;
-const long YEAR_SEC = 365 * DAY_SEC;
-const long FOURYEAR_SEC = 4 * YEAR_SEC + DAY_SEC;
+const tools::Long DAY_SEC =24 * 60 * 60;
+const tools::Long YEAR_SEC = 365 * DAY_SEC;
+const tools::Long FOURYEAR_SEC = 4 * YEAR_SEC + DAY_SEC;
 #ifndef LONG_MAX
 const long LONG_MAX=2147483647;
 #endif
 //01-01-70 was a Thursday
-const long BASE_DOW = 4;
+const tools::Long BASE_DOW = 4;
 
-bool LtgGmTime(long rtime,LtTm& rtm)
+bool LtgGmTime(tools::Long rtime,LtTm& rtm)
 {
     if (rtime < 0)
     {
@@ -76,9 +76,9 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     //is-current-year-a-leap-year flag
     int islpyr = 0;
 
-    long tmptim;
-    long caltim = rtime;
-    tmptim = static_cast<long>(caltim / FOURYEAR_SEC);
+    tools::Long tmptim;
+    tools::Long caltim = rtime;
+    tmptim = static_cast<tools::Long>(caltim / FOURYEAR_SEC);
     caltim -= tmptim * FOURYEAR_SEC;
 
     //Determine which year of the interval
@@ -121,21 +121,21 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     //Determine days since January 1 (0 - 365). This is the tm_yday value.
     //Leave caltim with number of elapsed seconds in that day.
 
-    rtm.tm_yday = static_cast<long>(caltim / DAY_SEC);
+    rtm.tm_yday = static_cast<tools::Long>(caltim / DAY_SEC);
     caltim -= rtm.tm_yday * DAY_SEC;
 
     //Determine months since January (0 - 11) and day of month (1 - 31)
 
-    long const * mdays;
+    tools::Long const * mdays;
     if ( islpyr )
     {
-        static long const lpdays[] =
+        static tools::Long const lpdays[] =
             {-1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
         mdays = lpdays;
     }
     else
     {
-        static long const days[] =
+        static tools::Long const days[] =
             {-1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364};
         mdays = days;
     }
@@ -148,16 +148,16 @@ bool LtgGmTime(long rtime,LtTm& rtm)
 
     //Determine days since Sunday (0 - 6)
 
-    rtm.tm_wday = (static_cast<long>(rtime / DAY_SEC) + BASE_DOW) % 7;
+    rtm.tm_wday = (static_cast<tools::Long>(rtime / DAY_SEC) + BASE_DOW) % 7;
 
     //Determine hours since midnight (0 - 23), minutes after the hour
     //(0 - 59), and seconds after the minute (0 - 59).
 
-    rtm.tm_hour = static_cast<long>(caltim / 3600);
+    rtm.tm_hour = static_cast<tools::Long>(caltim / 3600);
     caltim -= rtm.tm_hour * 3600;
 
-    rtm.tm_min = static_cast<long>(caltim / 60);
-    rtm.tm_sec = static_cast<long>(caltim - (rtm.tm_min) * 60);
+    rtm.tm_min = static_cast<tools::Long>(caltim / 60);
+    rtm.tm_sec = static_cast<tools::Long>(caltim - (rtm.tm_min) * 60);
 
     //adjust year & month
     rtm.tm_year += 1900;
@@ -166,7 +166,7 @@ bool LtgGmTime(long rtime,LtTm& rtm)
     return true;
 
 };
-bool LtgLocalTime(long rtime,LtTm& rtm)
+bool LtgLocalTime(tools::Long rtime,LtTm& rtm)
 {
     if (rtime < 0)
     {
@@ -176,9 +176,9 @@ bool LtgLocalTime(long rtime,LtTm& rtm)
     if ((rtime > 3 * DAY_SEC)&&(rtime < LONG_MAX - 3 * DAY_SEC))
     {
         std::unique_ptr<icu::TimeZone> pLocalZone(icu::TimeZone::createDefault());
-        long offset = (pLocalZone->getRawOffset())/1000;
+        tools::Long offset = (pLocalZone->getRawOffset())/1000;
         pLocalZone.reset();
-        long ltime = rtime + offset;
+        tools::Long ltime = rtime + offset;
         return LtgGmTime(ltime,rtm);
     }
     return false;

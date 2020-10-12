@@ -152,12 +152,12 @@ public:
 
     VCL_DLLPUBLIC void addDrawTextureWithMaskColor(OpenGLTexture const & rTexture, Color nColor, const SalTwoRect& r2Rect);
 
-    void addDrawPixel(long nX, long nY, Color nColor);
+    void addDrawPixel(tools::Long nX, tools::Long nY, Color nColor);
 
-    void addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
+    void addDrawRectangle(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, double fTransparency,
                           Color nLineColor, Color nFillColor);
 
-    void addDrawLine(long nX1, long nY1, long nX2, long nY2, Color nLineColor, bool bUseAA);
+    void addDrawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2, Color nLineColor, bool bUseAA);
 
     void addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
                             Color nLineColor, Color nFillColor, bool bUseAA);

@@ -211,9 +211,9 @@ public:
         std::vector<tools::Rectangle> aRegions;
 
         // Make small cleared area for these guys
-        long nBorderSize = std::min(aSize.Height() / 32, aSize.Width() / 32);
-        long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
-        long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
+        tools::Long nBorderSize = std::min(aSize.Height() / 32, aSize.Width() / 32);
+        tools::Long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
+        tools::Long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
         for (int y = 0; y < nY; y++)
         {
             for (int x = 0; x < nX; x++)
@@ -323,9 +323,9 @@ public:
                 rDev.SetLineColor(COL_BLACK);
                 rDev.DrawRect(r);
 
-                for(long i=0; i<r.GetHeight(); i+=15)
+                for(tools::Long i=0; i<r.GetHeight(); i+=15)
                     rDev.DrawLine(Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i));
-                for(long i=0; i<r.GetWidth(); i+=15)
+                for(tools::Long i=0; i<r.GetWidth(); i+=15)
                     rDev.DrawLine(Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()));
 
                 // Should draw a white-line across the middle
@@ -558,7 +558,7 @@ public:
 
             Point aPos(r.Left(), r.Top()+20);
 
-            long nMaxTextHeight = 0;
+            tools::Long nMaxTextHeight = 0;
             for (size_t i = 0; i < SAL_N_ELEMENTS(aRuns); ++i)
             {
                 // Legend
@@ -591,7 +591,7 @@ public:
                     OUString aString(aRuns[i].mpString,
                                      strlen(aRuns[i].mpString),
                                      RTL_TEXTENCODING_UTF8);
-                    long nNewX = drawStringBox(rDev, aPos, aString,
+                    tools::Long nNewX = drawStringBox(rDev, aPos, aString,
                                                nMaxTextHeight);
 
                     aPos.setX( nNewX );
@@ -613,9 +613,9 @@ public:
             rDev.SetClipRegion();
         }
         // render text, bbox, DX arrays etc.
-        static long drawStringBox(OutputDevice &rDev, Point aPos,
+        static tools::Long drawStringBox(OutputDevice &rDev, Point aPos,
                            const OUString &aText,
-                           long &nMaxTextHeight)
+                           tools::Long &nMaxTextHeight)
         {
             rDev.Push();
             {
@@ -644,7 +644,7 @@ public:
                 // DX array rendering
                 std::unique_ptr<long[]> pItems(new long[aText.getLength()+10]);
                 rDev.GetTextArray(aText, pItems.get());
-                for (long j = 0; j < aText.getLength(); ++j)
+                for (tools::Long j = 0; j < aText.getLength(); ++j)
                 {
                     Point aTop = aTextRect.TopLeft();
                     Point aBottom = aTop;
@@ -733,8 +733,8 @@ public:
         {
             maCheckered.RenderRegion(rDev, r, rCtx);
 
-            long nDx = r.GetWidth()/20;
-            long nDy = r.GetHeight()/20;
+            tools::Long nDx = r.GetWidth()/20;
+            tools::Long nDy = r.GetHeight()/20;
             tools::Rectangle aShrunk(r);
             aShrunk.Move(nDx, nDy);
             aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
@@ -873,7 +873,7 @@ public:
 
             Point aRenderPt(r.TopLeft());
 
-            long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
+            tools::Long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
 
             // and yes - we really do this in the page border rendering code ...
             for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
@@ -1237,7 +1237,7 @@ public:
 
         void doDrawIcons(OutputDevice &rDev, tools::Rectangle r, bool bExpanded)
         {
-            long nMaxH = 0;
+            tools::Long nMaxH = 0;
             Point p(r.LeftCenter());
             size_t nToRender = maIcons.size();
 
@@ -1330,22 +1330,22 @@ public:
                     {
                         BitmapColor aColW = pAccW->GetPixelFromData(pScanlineW,x);
                         BitmapColor aColB = pAccB->GetPixelFromData(pScanlineB,x);
-                        long nAR = static_cast<long>(aColW.GetRed() - aColB.GetRed()); // (1-a)
-                        long nAG = static_cast<long>(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
-                        long nAB = static_cast<long>(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
+                        tools::Long nAR = static_cast<tools::Long>(aColW.GetRed() - aColB.GetRed()); // (1-a)
+                        tools::Long nAG = static_cast<tools::Long>(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
+                        tools::Long nAB = static_cast<tools::Long>(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
 
 #define CLAMP(a,b,c) (((a)<=(b))?(b):(((a)>=(c))?(c):(a)))
 
                         // we get the most precision from the largest delta
-                        long nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
+                        tools::Long nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
                         nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
-                        long nAlpha = 255 - nInverseAlpha;
+                        tools::Long nAlpha = 255 - nInverseAlpha;
 
                         pMaskAcc->SetPixelOnData(pScanlineMask,x,BitmapColor(static_cast<sal_Int8>(CLAMP(nInverseAlpha,0,255))));
                         // now recover the pixels
-                        long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
-                        long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
-                        long nB = (aColW.GetBlue() + aColB.GetBlue() - nInverseAlpha) * 128;
+                        tools::Long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
+                        tools::Long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
+                        tools::Long nB = (aColW.GetBlue() + aColB.GetBlue() - nInverseAlpha) * 128;
                         if (nAlpha == 0)
                         { // doesn't matter what's behind transparency
                             nR = nG = nB = 0;

@@ -793,8 +793,8 @@ void SAL_CALL SwAccessibleContext::removeAccessibleEventListener(
 static bool lcl_PointInRectangle(const awt::Point & aPoint,
                                      const awt::Rectangle & aRect)
 {
-    long nDiffX = aPoint.X - aRect.X;
-    long nDiffY = aPoint.Y - aRect.Y;
+    tools::Long nDiffX = aPoint.X - aRect.X;
+    tools::Long nDiffY = aPoint.Y - aRect.Y;
 
     return
         nDiffX >= 0 && nDiffX < aRect.Width && nDiffY >= 0 &&

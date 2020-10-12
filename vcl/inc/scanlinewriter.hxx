@@ -34,7 +34,7 @@ class ScanlineWriter
     sal_uInt8 const mnColorBitSize;  // number of bits a color takes
     sal_uInt8 const mnColorBitMask;  // bit mask used to isolate the color
     sal_uInt8* mpCurrentScanline;
-    long mnX;
+    tools::Long mnX;
 
 public:
 
@@ -65,10 +65,10 @@ public:
     void writeRGB(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB)
     {
         // calculate to which index we will write
-        long nScanlineIndex = mnX / mnColorsPerByte;
+        tools::Long nScanlineIndex = mnX / mnColorsPerByte;
 
         // calculate the number of shifts to get the color information to the right place
-        long nShift = (8 - mnColorBitSize) - ((mnX % mnColorsPerByte) * mnColorBitSize);
+        tools::Long nShift = (8 - mnColorBitSize) - ((mnX % mnColorsPerByte) * mnColorBitSize);
 
         sal_uInt16 nColorIndex = maPalette.GetBestIndex(BitmapColor(nR, nG, nB));
         mpCurrentScanline[nScanlineIndex] &= ~(mnColorBitMask << nShift); // clear

@@ -121,7 +121,7 @@ OUString ScDPUtil::getDateGroupName(
         {
             Date aDate(1, 1, SC_DP_LEAPYEAR);
             aDate.AddDays(nValue - 1);            // nValue is 1-based
-            long nDays = aDate - pFormatter->GetNullDate();
+            tools::Long nDays = aDate - pFormatter->GetNullDate();
 
             const sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
             const Color* pColor;

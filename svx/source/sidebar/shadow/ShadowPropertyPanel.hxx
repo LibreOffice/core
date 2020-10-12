@@ -60,7 +60,7 @@ private:
     ::sfx2::sidebar::ControllerItem maShadowYDistanceController;
 
     SfxBindings* mpBindings;
-    long nX,nY,nXY;
+    tools::Long nX,nY,nXY;
 
     std::unique_ptr<weld::CheckButton> mxShowShadow;
     std::unique_ptr<weld::MetricSpinButton> mxShadowDistance;
@@ -76,7 +76,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> mxShadowBlurMetric;
 
     void InsertAngleValues();
-    void SetTransparencyValue(long);
+    void SetTransparencyValue(tools::Long);
     void UpdateControls();
     void ModifyShadowDistance();
 

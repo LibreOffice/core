@@ -393,8 +393,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) override;
+                            tools::Long nTileWidth,
+                            tools::Long nTileHeight ) override;
     /// @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() override;
     /// @see vcl::ITiledRenderable::setPart().

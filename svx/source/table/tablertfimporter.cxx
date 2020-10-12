@@ -381,9 +381,9 @@ void SdrTableRTFParser::NextColumn()
         mpActDefault = nullptr;
 }
 
-static long TwipsToHundMM( long nIn )
+static tools::Long TwipsToHundMM( tools::Long nIn )
 {
-    long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::MapTwip, MapUnit::Map100thMM );
+    tools::Long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::MapTwip, MapUnit::Map100thMM );
     return nRet;
 }
 

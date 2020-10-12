@@ -24,6 +24,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <memory>
 
@@ -64,7 +65,7 @@ public:
     bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
     bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
 
-    OUString    GetNum( long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
+    OUString    GetNum( tools::Long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
 
     static OUString filterFormattingChars( const OUString& );
 };

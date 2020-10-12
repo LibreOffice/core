@@ -1651,9 +1651,9 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
 
         sal_uInt16 nNewScale = nOldScale;
 
-        long nBlkTwipsX = 0;
+        tools::Long nBlkTwipsX = 0;
         if (bHeaders)
-            nBlkTwipsX += long(PRINT_HEADER_WIDTH);
+            nBlkTwipsX += tools::Long(PRINT_HEADER_WIDTH);
         SCCOL nStartCol = rRange.aStart.Col();
         SCCOL nEndCol = rRange.aEnd.Col();
         if ( pRepeatCol && nStartCol >= pRepeatCol->aStart.Col() )
@@ -1669,9 +1669,9 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
                 nBlkTwipsX += m_aDocument.GetColWidth( i, nTab );
         }
 
-        long nBlkTwipsY = 0;
+        tools::Long nBlkTwipsY = 0;
         if (bHeaders)
-            nBlkTwipsY += long(PRINT_HEADER_HEIGHT);
+            nBlkTwipsY += tools::Long(PRINT_HEADER_HEIGHT);
         SCROW nStartRow = rRange.aStart.Row();
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
@@ -1684,7 +1684,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         nBlkTwipsY += m_aDocument.GetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
-        long nHdr, nFtr;
+        tools::Long nHdr, nFtr;
         ScPrintFunc aOldPrFunc( this, GetPrinter(), nTab );
         aOldPrFunc.GetScaleData( aPhysPage, nHdr, nFtr );
         nBlkTwipsY += nHdr + nFtr;
@@ -1694,11 +1694,11 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         if ( nBlkTwipsY == 0 )
             nBlkTwipsY = 1;
 
-        long nNeeded = std::min( aPhysPage.Width()  * 100 / nBlkTwipsX,
+        tools::Long nNeeded = std::min( aPhysPage.Width()  * 100 / nBlkTwipsX,
                             aPhysPage.Height() * 100 / nBlkTwipsY );
         if ( nNeeded < ZOOM_MIN )
             nNeeded = ZOOM_MIN;         // boundary
-        if ( nNeeded < static_cast<long>(nNewScale) )
+        if ( nNeeded < static_cast<tools::Long>(nNewScale) )
             nNewScale = static_cast<sal_uInt16>(nNeeded);
 
         bChange = ( nNewScale != nOldScale || nOldPages != 0 );
@@ -2171,8 +2171,8 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
             const_cast<ScDocShell*>(this)->m_aDocument.SetVisibleTab(nVisTab);
         }
         Size aSize = m_aDocument.GetPageSize(nVisTab);
-        const long SC_PREVIEW_SIZE_X = 10000;
-        const long SC_PREVIEW_SIZE_Y = 12400;
+        const tools::Long SC_PREVIEW_SIZE_X = 10000;
+        const tools::Long SC_PREVIEW_SIZE_Y = 12400;
         tools::Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);
         if (aSize.Width() > aSize.Height())
         {
@@ -2217,14 +2217,14 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 namespace {
 
 [[nodiscard]]
-long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStartCol )
+tools::Long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
-    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
-    long nSnap = 0;
+    tools::Long nTwips = static_cast<tools::Long>(nVal / HMM_PER_TWIPS);
+    tools::Long nSnap = 0;
     while ( nCol<rDoc.MaxCol() )
     {
-        long nAdd = rDoc.GetColWidth(nCol, nTab);
+        tools::Long nAdd = rDoc.GetColWidth(nCol, nTab);
         if ( nSnap + nAdd/2 < nTwips || nCol < rStartCol )
         {
             nSnap += nAdd;
@@ -2233,17 +2233,17 @@ long SnapHorizontal( const ScDocument& rDoc, SCTAB nTab, long nVal, SCCOL& rStar
         else
             break;
     }
-    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    nVal = static_cast<tools::Long>( nSnap * HMM_PER_TWIPS );
     rStartCol = nCol;
     return nVal;
 }
 
 [[nodiscard]]
-long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartRow )
+tools::Long SnapVertical( const ScDocument& rDoc, SCTAB nTab, tools::Long nVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
-    long nTwips = static_cast<long>(nVal / HMM_PER_TWIPS);
-    long nSnap = 0;
+    tools::Long nTwips = static_cast<tools::Long>(nVal / HMM_PER_TWIPS);
+    tools::Long nSnap = 0;
 
     bool bFound = false;
     for (SCROW i = nRow; i <= rDoc.MaxRow(); ++i)
@@ -2256,7 +2256,7 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
         }
 
         nRow = i;
-        long nAdd = rDoc.GetRowHeight(i, nTab);
+        tools::Long nAdd = rDoc.GetRowHeight(i, nTab);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
@@ -2271,7 +2271,7 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
     if (!bFound)
         nRow = rDoc.MaxRow();  // all hidden down to the bottom
 
-    nVal = static_cast<long>( nSnap * HMM_PER_TWIPS );
+    nVal = static_cast<tools::Long>( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
     return nVal;
 }
@@ -2281,24 +2281,24 @@ long SnapVertical( const ScDocument& rDoc, SCTAB nTab, long nVal, SCROW& rStartR
 void ScDocShell::SnapVisArea( tools::Rectangle& rRect ) const
 {
     SCTAB nTab = m_aDocument.GetVisibleTab();
-    long nOrigTop = rRect.Top();
-    long nOrigLeft = rRect.Left();
+    tools::Long nOrigTop = rRect.Top();
+    tools::Long nOrigLeft = rRect.Left();
     bool bNegativePage = m_aDocument.IsNegativePage( nTab );
     if ( bNegativePage )
         ScDrawLayer::MirrorRectRTL( rRect );        // calculate with positive (LTR) values
 
     SCCOL nCol = m_aDocument.GetPosLeft();
-    long nSetLeft = SnapHorizontal( m_aDocument, nTab, rRect.Left(), nCol );
+    tools::Long nSetLeft = SnapHorizontal( m_aDocument, nTab, rRect.Left(), nCol );
     rRect.SetLeft( nSetLeft );
     ++nCol;                                         // at least one column
-    long nCorrectionLeft = (nOrigLeft == 0 && nCol > 0) ? nSetLeft : 0; // initial correction
+    tools::Long nCorrectionLeft = (nOrigLeft == 0 && nCol > 0) ? nSetLeft : 0; // initial correction
     rRect.SetRight( SnapHorizontal( m_aDocument, nTab, rRect.Right() + nCorrectionLeft, nCol ));
 
     SCROW nRow = m_aDocument.GetPosTop();
-    long nSetTop = SnapVertical( m_aDocument, nTab, rRect.Top(), nRow );
+    tools::Long nSetTop = SnapVertical( m_aDocument, nTab, rRect.Top(), nRow );
     rRect.SetTop( nSetTop );
     ++nRow;                                         // at least one row
-    long nCorrectionTop = (nOrigTop == 0 && nRow > 0) ? nSetTop : 0; // initial correction
+    tools::Long nCorrectionTop = (nOrigTop == 0 && nRow > 0) ? nSetTop : 0; // initial correction
     rRect.SetBottom( SnapVertical( m_aDocument, nTab, rRect.Bottom() + nCorrectionTop, nRow ));
 
     if ( bNegativePage )
@@ -2501,7 +2501,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
             if (bInPrintTwips)
             {
                 Point aTopLeft = pViewData->GetPrintTwipsPos(rPos.Col(), rPos.Row());
-                long nSizeX, nSizeY;
+                tools::Long nSizeX, nSizeY;
                 pViewData->GetMergeSizePrintTwips(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
                 aRectString = tools::Rectangle(aTopLeft, Size(nSizeX - 1, nSizeY - 1)).toString();
             }
@@ -2509,7 +2509,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
             {
                 Point aTopLeft = pViewData->GetScrPos(rPos.Col(), rPos.Row(),
                         pViewData->GetActivePart(), true);
-                long nSizeXPix, nSizeYPix;
+                tools::Long nSizeXPix, nSizeYPix;
                 pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeXPix, nSizeYPix);
                 const double fPPTX = pViewData->GetPPTX();
                 const double fPPTY = pViewData->GetPPTY();

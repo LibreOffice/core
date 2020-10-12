@@ -257,8 +257,8 @@ void ImplDrawUpDownButtons(vcl::RenderContext& rRenderContext,
     }
 
     // calculate Symbol size
-    long nTempSize1 = aUpRect.GetWidth();
-    long nTempSize2 = aLowRect.GetWidth();
+    tools::Long nTempSize1 = aUpRect.GetWidth();
+    tools::Long nTempSize2 = aLowRect.GetWidth();
     if (std::abs( nTempSize1-nTempSize2 ) == 1)
     {
         if (nTempSize1 > nTempSize2)
@@ -614,7 +614,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
 
     if (GetStyle() & WB_DROPDOWN)
     {
-        long nW = rStyleSettings.GetScrollBarSize();
+        tools::Long nW = rStyleSettings.GetScrollBarSize();
         nW = GetDrawPixel( pDev, nW );
         aDropDownSize = Size( CalcZoom( nW ), aSize.Height() );
         aSize.AdjustWidth( -(aDropDownSize.Width()) );
@@ -627,9 +627,9 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
     // calculate sizes according to the height
     if (GetStyle() & WB_SPIN)
     {
-        long nBottom1 = aSize.Height()/2;
-        long nBottom2 = aSize.Height()-1;
-        long nTop2 = nBottom1;
+        tools::Long nBottom1 = aSize.Height()/2;
+        tools::Long nBottom2 = aSize.Height()-1;
+        tools::Long nTop2 = nBottom1;
         if ( !(aSize.Height() & 0x01) )
             nBottom1--;
 

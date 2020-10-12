@@ -49,12 +49,12 @@ static bool lcl_HasErrors( ScDocument& rDoc, const ScRange& rRange )
     return false;   // no error found
 }
 
-static long lcl_DoubleToLong( double fVal )
+static tools::Long lcl_DoubleToLong( double fVal )
 {
     double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
                                   ::rtl::math::approxCeil( fVal );
     if ( o3tl::convertsToAtLeast(fInt, LONG_MIN) && o3tl::convertsToAtMost(fInt, LONG_MAX) )
-        return static_cast<long>(fInt);
+        return static_cast<tools::Long>(fInt);
     else
         return 0;       // out of range
 }
@@ -64,16 +64,16 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument& rDoc, const S
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
-    long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
-    long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
+    tools::Long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
+    tools::Long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     uno::Sequence< uno::Sequence<sal_Int32> > aRowSeq( nRowCount );
     uno::Sequence<sal_Int32>* pRowAry = aRowSeq.getArray();
-    for (long nRow = 0; nRow < nRowCount; nRow++)
+    for (tools::Long nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<sal_Int32> aColSeq( nColCount );
         sal_Int32* pColAry = aColSeq.getArray();
-        for (long nCol = 0; nCol < nColCount; nCol++)
+        for (tools::Long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = lcl_DoubleToLong( rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) ) );
 
@@ -117,16 +117,16 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument& rDoc, const
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
-    long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
-    long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
+    tools::Long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
+    tools::Long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     uno::Sequence< uno::Sequence<double> > aRowSeq( nRowCount );
     uno::Sequence<double>* pRowAry = aRowSeq.getArray();
-    for (long nRow = 0; nRow < nRowCount; nRow++)
+    for (tools::Long nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<double> aColSeq( nColCount );
         double* pColAry = aColSeq.getArray();
-        for (long nCol = 0; nCol < nColCount; nCol++)
+        for (tools::Long nCol = 0; nCol < nColCount; nCol++)
             pColAry[nCol] = rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) );
 
@@ -170,18 +170,18 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
-    long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
-    long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
+    tools::Long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
+    tools::Long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<OUString> > aRowSeq( nRowCount );
     uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
-    for (long nRow = 0; nRow < nRowCount; nRow++)
+    for (tools::Long nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<OUString> aColSeq( nColCount );
         OUString* pColAry = aColSeq.getArray();
-        for (long nCol = 0; nCol < nColCount; nCol++)
+        for (tools::Long nCol = 0; nCol < nColCount; nCol++)
         {
             FormulaError nErrCode = rDoc.GetStringForFormula(
                         ScAddress(static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab),
@@ -242,18 +242,18 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
-    long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
-    long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
+    tools::Long nColCount = rRange.aEnd.Col() + 1 - rRange.aStart.Col();
+    tools::Long nRowCount = rRange.aEnd.Row() + 1 - rRange.aStart.Row();
 
     bool bHasErrors = false;
 
     uno::Sequence< uno::Sequence<uno::Any> > aRowSeq( nRowCount );
     uno::Sequence<uno::Any>* pRowAry = aRowSeq.getArray();
-    for (long nRow = 0; nRow < nRowCount; nRow++)
+    for (tools::Long nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<uno::Any> aColSeq( nColCount );
         uno::Any* pColAry = aColSeq.getArray();
-        for (long nCol = 0; nCol < nColCount; nCol++)
+        for (tools::Long nCol = 0; nCol < nColCount; nCol++)
         {
             uno::Any& rElement = pColAry[nCol];
 

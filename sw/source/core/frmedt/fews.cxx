@@ -192,7 +192,7 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
         return 0;
 }
 
-bool SwFEShell::GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
+bool SwFEShell::GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay) const
 {
     const SwFrame *pPage;
 
@@ -1083,7 +1083,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 if ( pUpper->IsCellFrame() )//MA_FLY_HEIGHT
                 {
                     const SwFrame* pTab = pUpper->FindTabFrame();
-                    long nBottom = aRectFnSet.GetPrtBottom(*pTab->GetUpper());
+                    tools::Long nBottom = aRectFnSet.GetPrtBottom(*pTab->GetUpper());
                     aRectFnSet.SetBottom( _orRect, nBottom );
                 }
             }

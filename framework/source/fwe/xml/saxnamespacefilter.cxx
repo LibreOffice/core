@@ -155,11 +155,7 @@ void SAL_CALL SaxNamespaceFilter::setDocumentLocator(
 OUString SaxNamespaceFilter::getErrorLineString()
 {
     if ( m_xLocator.is() )
-    {
-        char buffer[32];
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
-        return OUString::createFromAscii( buffer );
-    }
+        return "Line: " + OUString::number( m_xLocator->getLineNumber() ) + " - ";
     else
         return OUString();
 }

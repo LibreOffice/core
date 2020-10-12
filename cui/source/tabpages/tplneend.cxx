@@ -271,11 +271,11 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
     OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
     OUString aName(m_xEdtName->get_text());
-    long nCount = pLineEndList->Count();
+    tools::Long nCount = pLineEndList->Count();
     bool bDifferent = true;
 
     // check whether the name is existing already
-    for ( long i = 0; i < nCount && bDifferent; i++ )
+    for ( tools::Long i = 0; i < nCount && bDifferent; i++ )
         if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
             bDifferent = false;
 
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
             pDlg->GetName( aName );
             bDifferent = true;
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
+            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = false;
@@ -375,8 +375,8 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINEEND));
         OUString aName;
 
-        long nCount = pLineEndList->Count();
-        long j = 1;
+        tools::Long nCount = pLineEndList->Count();
+        tools::Long j = 1;
         bool bDifferent = false;
 
         while ( !bDifferent )
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
             aName = aNewName + " " + OUString::number( j++ );
             bDifferent = true;
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
+            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
                 if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = false;
         }
@@ -398,7 +398,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
             pDlg->GetName( aName );
             bDifferent = true;
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
+            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                     bDifferent = false;

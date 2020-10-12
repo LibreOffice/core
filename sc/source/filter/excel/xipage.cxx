@@ -311,7 +311,7 @@ void XclImpPageSettings::Finalize()
             -> set fixed header height to get correct sheet data position. */
         ScfTools::PutItem( rHdrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, false ), true );
         // shrink header height
-        long nHdrHeight = XclTools::GetTwipsFromInch( fHeaderHeight + fHeaderDist );
+        tools::Long nHdrHeight = XclTools::GetTwipsFromInch( fHeaderHeight + fHeaderDist );
         ScfTools::PutItem( rHdrItemSet, SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, nHdrHeight ) ), true );
         lclPutMarginItem( rHdrItemSet, EXC_ID_BOTTOMMARGIN, 0.0 );
     }
@@ -347,7 +347,7 @@ void XclImpPageSettings::Finalize()
             -> set fixed footer height to get correct sheet data end position. */
         ScfTools::PutItem( rFtrItemSet, SfxBoolItem( ATTR_PAGE_DYNAMIC, false ), true );
         // shrink footer height
-        long nFtrHeight = XclTools::GetTwipsFromInch( fFooterHeight + fFooterDist );
+        tools::Long nFtrHeight = XclTools::GetTwipsFromInch( fFooterHeight + fFooterDist );
         ScfTools::PutItem( rFtrItemSet, SvxSizeItem( ATTR_PAGE_SIZE, Size( 0, nFtrHeight ) ), true );
         lclPutMarginItem( rFtrItemSet, EXC_ID_TOPMARGIN, 0.0 );
     }

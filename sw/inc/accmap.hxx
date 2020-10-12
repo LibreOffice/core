@@ -264,7 +264,7 @@ public:
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
-        const long _nIndex,
+        const tools::Long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) override;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel

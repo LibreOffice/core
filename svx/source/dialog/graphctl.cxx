@@ -190,21 +190,21 @@ void GraphCtrl::Resize()
         Size            aNewSize;
         OutputDevice& rDevice = GetDrawingArea()->get_ref_device();
         const Size      aWinSize = rDevice.PixelToLogic( GetOutputSizePixel(), aDisplayMap );
-        const long      nWidth = aWinSize.Width();
-        const long      nHeight = aWinSize.Height();
+        const tools::Long      nWidth = aWinSize.Width();
+        const tools::Long      nHeight = aWinSize.Height();
         double          fGrfWH = static_cast<double>(aGraphSize.Width()) / aGraphSize.Height();
         double          fWinWH = static_cast<double>(nWidth) / nHeight;
 
         // Adapt Bitmap to Thumb size
         if ( fGrfWH < fWinWH)
         {
-            aNewSize.setWidth( static_cast<long>( static_cast<double>(nHeight) * fGrfWH ) );
+            aNewSize.setWidth( static_cast<tools::Long>( static_cast<double>(nHeight) * fGrfWH ) );
             aNewSize.setHeight( nHeight );
         }
         else
         {
             aNewSize.setWidth( nWidth );
-            aNewSize.setHeight( static_cast<long>( static_cast<double>(nWidth) / fGrfWH ) );
+            aNewSize.setHeight( static_cast<tools::Long>( static_cast<double>(nWidth) / fGrfWH ) );
         }
 
         aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
@@ -376,8 +376,8 @@ bool GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            long nX = 0;
-            long nY = 0;
+            tools::Long nX = 0;
+            tools::Long nY = 0;
 
             if (aCode.GetCode() == KEY_UP)
             {

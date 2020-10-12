@@ -35,7 +35,7 @@ namespace dbaui
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
 
-        virtual void        CellModified(long nRow, sal_uInt16 nColId ) override;
+        virtual void        CellModified(tools::Long nRow, sal_uInt16 nColId ) override;
 
         virtual css::lang::Locale  GetLocale() const override;
         virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;

@@ -84,7 +84,7 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( nullptr ); }
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
+    virtual void    GetCaretPositions( int nArraySize, tools::Long* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing

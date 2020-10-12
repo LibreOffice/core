@@ -39,8 +39,8 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void                    SetRotation( long nValue );
-    long                    GetRotation() const;
+    void                    SetRotation( tools::Long nValue );
+    tools::Long                    GetRotation() const;
     void                    SetMirrored( bool bSet );
     bool                    IsMirrored() const;
 };

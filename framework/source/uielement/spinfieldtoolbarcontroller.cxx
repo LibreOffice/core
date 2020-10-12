@@ -442,7 +442,7 @@ OUString SpinfieldToolbarController::FormatOutputString( double fValue )
         if ( m_bFloat )
             snprintf( aBuffer, 128, aFormat.getStr(), fValue );
         else
-            snprintf( aBuffer, 128, aFormat.getStr(), static_cast<long>( fValue ));
+            snprintf( aBuffer, 128, aFormat.getStr(), static_cast<tools::Long>( fValue ));
 
         sal_Int32 nSize = strlen( aBuffer );
         OString aTmp( aBuffer, nSize );

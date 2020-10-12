@@ -78,7 +78,7 @@ void VclComplexTextTest::testArabic()
     std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
     std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
-    long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
+    tools::Long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73

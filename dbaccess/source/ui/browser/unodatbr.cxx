@@ -290,7 +290,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
     {
 
         // create controls and set sizes
-        const long  nFrameWidth = getBrowserView()->LogicToPixel(::Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
+        const tools::Long  nFrameWidth = getBrowserView()->LogicToPixel(::Size(3, 0), MapMode(MapUnit::MapAppFont)).Width();
 
         m_pSplitter = VclPtr<Splitter>::Create(getBrowserView(),WB_HSCROLL);
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
@@ -1915,7 +1915,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                         if (pSelection != nullptr)
                         {
                             aSelection.realloc(pSelection->GetSelectCount());
-                            long nIdx = pSelection->FirstSelected();
+                            tools::Long nIdx = pSelection->FirstSelected();
                             Any* pSelectionNos = aSelection.getArray();
                             while (nIdx != SFX_ENDOFSELECTION)
                             {

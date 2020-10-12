@@ -142,7 +142,7 @@ void TextParagraph::insertAt(
             if( !aioBulletList.hasProperty( PROP_GraphicSize ) && !maRuns.empty()
                 && aParaProp.getBulletList().maGraphic.hasValue())
             {
-                long nFirstCharHeightMm = TransformMetric(nCharHeightFirst > 0 ? nCharHeightFirst : 1200, FieldUnit::POINT, FieldUnit::MM);
+                tools::Long nFirstCharHeightMm = TransformMetric(nCharHeightFirst > 0 ? nCharHeightFirst : 1200, FieldUnit::POINT, FieldUnit::MM);
                 float fBulletSizeRel = 1.f;
                 if( aParaProp.getBulletList().mnSize.hasValue() )
                     fBulletSizeRel = aParaProp.getBulletList().mnSize.get<sal_Int16>() / 100.f;

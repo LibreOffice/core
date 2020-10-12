@@ -295,7 +295,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 pUndoColl.reset( new ScDBCollection( *pColl ) );   // Undo for import range
 
                 OUString aImport = ScResId( STR_DBNAME_IMPORT );
-                long nCount = 0;
+                tools::Long nCount = 0;
                 const ScDBData* pDummy = nullptr;
                 ScDBCollection::NamedDBs& rDBs = pColl->getNamedDBs();
                 OUString aNewName;

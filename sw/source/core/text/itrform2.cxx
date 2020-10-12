@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 
 namespace {
     //! Calculates and sets optimal repaint offset for the current line
-    long lcl_CalcOptRepaint( SwTextFormatter &rThis,
+    tools::Long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                                     SwLineLayout const &rCurr,
                                     TextFrameIndex nOldLineEnd,
                                     const std::vector<long> &rFlyStarts );
@@ -506,7 +506,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             const SwLayoutFrame* pBody = pPageFrame->FindBodyCont();
             SwRectFnSet aRectFnSet(pPageFrame);
 
-            const long nGridOrigin = pBody ?
+            const tools::Long nGridOrigin = pBody ?
                                     aRectFnSet.GetPrtLeft(*pBody) :
                                     aRectFnSet.GetPrtLeft(*pPageFrame);
 
@@ -1598,7 +1598,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     if ( bOptimizeRepaint && m_pCurr->IsFly() )
     {
         SwLinePortion* pPor = m_pCurr->GetFirstPortion();
-        long nPOfst = 0;
+        tools::Long nPOfst = 0;
         while ( pPor )
         {
             if ( pPor->IsFlyPortion() )
@@ -1657,7 +1657,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
         {
             sal_uInt16 nTmpAscent, nTmpHeight;
             CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-            AlignFlyInCntBase( Y() + long( nTmpAscent ) );
+            AlignFlyInCntBase( Y() + tools::Long( nTmpAscent ) );
             m_pCurr->CalcLine( *this, GetInfo() );
             CalcRealHeight();
         }
@@ -1832,7 +1832,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                         pSpace->GetInterLineSpaceRule() == SvxInterLineSpaceRule::Prop
                         && GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
-                        long nTmp = pSpace->GetPropLineSpace();
+                        tools::Long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
@@ -1886,7 +1886,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     break;
                     case SvxInterLineSpaceRule::Prop:
                     {
-                        long nTmp = pSpace->GetPropLineSpace();
+                        tools::Long nTmp = pSpace->GetPropLineSpace();
                         // 50% is the minimum, if 0% we switch to the
                         // default value 100% ...
                         if( nTmp < 50 )
@@ -2069,7 +2069,7 @@ void SwTextFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::CalcUnclipped with unswapped frame" );
 
-    long nFlyAsc, nFlyDesc;
+    tools::Long nFlyAsc, nFlyDesc;
     m_pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
     rBottom = rTop + nFlyDesc;
@@ -2096,7 +2096,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     aTmpInf.SetIdx( nStartIdx );
     aTmpInf.SetPos( aStart );
 
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
     const sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
@@ -2198,7 +2198,7 @@ void SwTextFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     }
 }
 
-void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
+void SwTextFormatter::AlignFlyInCntBase( tools::Long nBaseLine ) const
 {
     OSL_ENSURE( ! m_pFrame->IsVertical() || m_pFrame->IsSwapped(),
             "SwTextFormatter::AlignFlyInCntBase with unswapped frame" );
@@ -2215,7 +2215,7 @@ void SwTextFormatter::AlignFlyInCntBase( long nBaseLine ) const
             nFlags |= AsCharFlags::Reverse;
     }
 
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
 
     while( pPos )
     {
@@ -2344,9 +2344,9 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     const SwLinePortion *pLast = rInf.GetLast();
 
-    long nAscent;
-    long nTop = Y();
-    long nHeight;
+    tools::Long nAscent;
+    tools::Long nTop = Y();
+    tools::Long nHeight;
 
     if( rInf.GetLineHeight() )
     {
@@ -2372,8 +2372,8 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
             nHeight = m_pCurr->GetRealHeight();
     }
 
-    const long nLeftMar = GetLeftMargin();
-    const long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
+    const tools::Long nLeftMar = GetLeftMargin();
+    const tools::Long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
 
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
@@ -2384,7 +2384,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::ADD_VERTICAL_FLY_OFFSETS)
         && IsFirstTextLine())
     {
-        const long nUpper = m_pFrame->getFramePrintArea().Top();
+        const tools::Long nUpper = m_pFrame->getFramePrintArea().Top();
         // Increase the rectangle
         if( nUpper > 0 && nTop >= nUpper  )
             aLine.SubTop( nUpper );
@@ -2426,7 +2426,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         if( aInter.Left() < nFrameLeft )
             aInter.Left( nFrameLeft );
 
-        long nAddMar = 0;
+        tools::Long nAddMar = 0;
         if ( m_pFrame->IsRightToLeft() )
         {
             nAddMar = m_pFrame->getFrameArea().Right() - Right();
@@ -2487,7 +2487,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         // or the next margin's top edge, which we need to respect.
         // That means we can comfortably grow up to this value; that's how
         // we save a few empty lines.
-        long nNextTop = rTextFly.GetNextTop();
+        tools::Long nNextTop = rTextFly.GetNextTop();
         if ( m_pFrame->IsVertical() )
             nNextTop = m_pFrame->SwitchVerticalToHorizontal( nNextTop );
         if( nNextTop > aInter.Bottom() )
@@ -2533,7 +2533,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     SwRectFnSet aRectFnSet(pPageFrame);
 
-    const long nGridOrigin = pBody ?
+    const tools::Long nGridOrigin = pBody ?
                             aRectFnSet.GetPrtLeft(*pBody) :
                             aRectFnSet.GetPrtLeft(*pPageFrame);
 
@@ -2553,7 +2553,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     const sal_uLong i = nTmpWidth / nGridWidth + 1;
 
-    const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
+    const tools::Long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
     if ( nNewWidth > 0 )
         rInf.Width( static_cast<sal_uInt16>(nNewWidth) );
     else
@@ -2577,7 +2577,7 @@ SwFlyCntPortion *SwTextFormatter::NewFlyCntPortion( SwTextFormatInfo &rInf,
     // aBase.X() = Offset in the line after the current position
     // aBase.Y() = LineIter.Y() + Ascent of the current position
 
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    tools::Long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     // i#11859 - use new method <SwLineLayout::MaxAscentDescent(..)>
     // to change line spacing behaviour at paragraph - Compatibility to MS Word
     //SwLinePortion *pPos = pCurr->GetFirstPortion();
@@ -2769,7 +2769,7 @@ void SwTextFormatter::MergeCharacterBorder( SwLinePortion& rPortion, SwLinePorti
 
 namespace {
     // calculates and sets optimal repaint offset for the current line
-    long lcl_CalcOptRepaint( SwTextFormatter &rThis,
+    tools::Long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                          SwLineLayout const &rCurr,
                          TextFrameIndex const nOldLineEnd,
                          const std::vector<long> &rFlyStarts )
@@ -2790,7 +2790,7 @@ namespace {
             // for example: the beginning of the first right tab stop
             // if this value is 0, this means that we do not have an upper
             // limit for the repaint offset
-            const long nFormatRepaint = txtFormatInfo.GetPaintOfst();
+            const tools::Long nFormatRepaint = txtFormatInfo.GetPaintOfst();
 
             if (nReformat < txtFormatInfo.GetLineStart() + TextFrameIndex(3))
                 return 0;
@@ -2837,9 +2837,9 @@ namespace {
             // we compare the former and the new fly positions in this line
             // if anything has changed, we carefully have to adjust the right
             // repaint position
-            long nPOfst = 0;
+            tools::Long nPOfst = 0;
             size_t nCnt = 0;
-            long nX = 0;
+            tools::Long nX = 0;
             TextFrameIndex nIdx = rThis.GetInfo().GetLineStart();
             SwLinePortion* pPor = rCurr.GetFirstPortion();
 

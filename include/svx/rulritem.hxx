@@ -26,8 +26,8 @@
 
 class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
 {
-    long    mlLeft;         // nLeft or the negative first-line indentation
-    long    mlRight;        // the unproblematic right edge
+    tools::Long    mlLeft;         // nLeft or the negative first-line indentation
+    tools::Long    mlRight;        // the unproblematic right edge
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -44,19 +44,19 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
+    SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem();
 
-    long GetLeft() const { return mlLeft;}
-    long GetRight() const { return mlRight;}
-    void SetLeft(long lArgLeft);
-    void SetRight(long lArgRight);
+    tools::Long GetLeft() const { return mlLeft;}
+    tools::Long GetRight() const { return mlRight;}
+    void SetLeft(tools::Long lArgLeft);
+    void SetRight(tools::Long lArgRight);
 };
 
 class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
 {
-    long    mlLeft;         // nLeft or the negative first-line indentation
-    long    mlRight;        // the unproblematic right edge
+    tools::Long    mlLeft;         // nLeft or the negative first-line indentation
+    tools::Long    mlRight;        // the unproblematic right edge
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -73,20 +73,20 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
+    SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem();
 
-    long GetUpper() const { return mlLeft;}
-    long GetLower() const { return mlRight;}
-    void SetUpper(long lArgLeft);
-    void SetLower(long lArgRight);
+    tools::Long GetUpper() const { return mlLeft;}
+    tools::Long GetLower() const { return mlRight;}
+    void SetUpper(tools::Long lArgLeft);
+    void SetLower(tools::Long lArgRight);
 };
 
 class SVX_DLLPUBLIC SvxPagePosSizeItem final : public SfxPoolItem
 {
     Point aPos;
-    long lWidth;
-    long lHeight;
+    tools::Long lWidth;
+    tools::Long lHeight;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
@@ -103,31 +103,31 @@ private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
 public:
     static SfxPoolItem* CreateDefault();
-    SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
+    SvxPagePosSizeItem(const Point &rPos, tools::Long lWidth, tools::Long lHeight);
     SvxPagePosSizeItem();
 
     const Point &GetPos() const { return aPos; }
-    long    GetWidth() const { return lWidth; }
-    long    GetHeight() const { return lHeight; }
+    tools::Long    GetWidth() const { return lWidth; }
+    tools::Long    GetHeight() const { return lHeight; }
 };
 
 struct SVX_DLLPUBLIC SvxColumnDescription
 {
-    long     nStart;    /* Start of the column */
-    long     nEnd;      /* End of the column */
+    tools::Long     nStart;    /* Start of the column */
+    tools::Long     nEnd;      /* End of the column */
     bool     bVisible;  /* Visibility */
 
-    long nEndMin; //min. possible position of end
-    long nEndMax; //max. possible position of end
+    tools::Long nEndMin; //min. possible position of end
+    tools::Long nEndMax; //max. possible position of end
 
-    SvxColumnDescription(long start, long end, bool bVis);
+    SvxColumnDescription(tools::Long start, tools::Long end, bool bVis);
 
-    SvxColumnDescription(long start, long end,
-                         long endMin, long endMax, bool bVis);
+    SvxColumnDescription(tools::Long start, tools::Long end,
+                         tools::Long endMin, tools::Long endMax, bool bVis);
 
     bool operator==(const SvxColumnDescription &rCmp) const;
     bool operator!=(const SvxColumnDescription &rCmp) const;
-    long GetWidth() const;
+    tools::Long GetWidth() const;
 };
 
 template<typename charT, typename traits>
@@ -144,8 +144,8 @@ class SVX_DLLPUBLIC SvxColumnItem final : public SfxPoolItem
 {
     std::vector<SvxColumnDescription>  aColumns; // Column array
 
-    long nLeft;             // Left edge for the table
-    long nRight;            // Right edge for the table; for columns always
+    tools::Long nLeft;             // Left edge for the table
+    tools::Long nRight;            // Right edge for the table; for columns always
                             // equal to the surrounding frame
     sal_uInt16 nActColumn;  // the current column
     bool       bTable;      // table?
@@ -177,13 +177,13 @@ public:
 
     sal_uInt16  Count() const;
     void        Append(const SvxColumnDescription& rDesc);
-    void        SetLeft(long aLeft);
-    void        SetRight(long aRight);
+    void        SetLeft(tools::Long aLeft);
+    void        SetRight(tools::Long aRight);
     sal_uInt16  GetActColumn() const { return nActColumn;}
     bool        IsFirstAct() const;
     bool        IsLastAct() const;
-    long        GetLeft() const { return nLeft;}
-    long        GetRight() const { return nRight;}
+    tools::Long        GetLeft() const { return nLeft;}
+    tools::Long        GetRight() const { return nRight;}
     bool        IsTable() const { return bTable;}
     bool        CalcOrtho() const;
     void        SetOrtho(bool bVal);
@@ -192,10 +192,10 @@ public:
 
 class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
 {
-    long nStartX;   /* Start in x direction */
-    long nEndX;     /* End in x direction */
-    long nStartY;   /* Start in y direction */
-    long nEndY;     /* End in y direction */
+    tools::Long nStartX;   /* Start in x direction */
+    tools::Long nEndX;     /* End in x direction */
+    tools::Long nStartY;   /* Start in y direction */
+    tools::Long nEndY;     /* End in y direction */
     bool bLimits;   /* boundary limit control by the application */
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -213,18 +213,18 @@ class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-    SvxObjectItem(long nStartX, long nEndX,
-                  long nStartY, long nEndY);
+    SvxObjectItem(tools::Long nStartX, tools::Long nEndX,
+                  tools::Long nStartY, tools::Long nEndY);
 
-    long GetStartX() const { return nStartX;}
-    long GetEndX() const { return nEndX;}
-    long GetStartY() const { return nStartY;}
-    long GetEndY() const { return nEndY;}
+    tools::Long GetStartX() const { return nStartX;}
+    tools::Long GetEndX() const { return nEndX;}
+    tools::Long GetStartY() const { return nStartY;}
+    tools::Long GetEndY() const { return nEndY;}
 
-    void SetStartX(long lValue);
-    void SetEndX(long lValue);
-    void SetStartY(long lValue);
-    void SetEndY(long lValue);
+    void SetStartX(tools::Long lValue);
+    void SetEndX(tools::Long lValue);
+    void SetStartY(tools::Long lValue);
+    void SetEndY(tools::Long lValue);
 };
 
 #endif

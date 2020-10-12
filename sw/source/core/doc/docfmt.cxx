@@ -1666,7 +1666,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                 }
             }
 
-            long nNext = aLS.GetTextLeft();
+            tools::Long nNext = aLS.GetTextLeft();
             if( bModulus )
                 nNext = ( nNext / nDefDist ) * nDefDist;
 

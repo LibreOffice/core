@@ -568,7 +568,7 @@ OUString OReadToolBoxDocumentHandler::getErrorLineString()
     if ( m_xLocator.is() )
     {
         char buffer[32];
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
+        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<tools::Long>( m_xLocator->getLineNumber() ));
         return OUString::createFromAscii( buffer );
     }
     else

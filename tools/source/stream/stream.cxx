@@ -34,6 +34,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <tools/long.hxx>
 
 #include <comphelper/fileformat.h>
 
@@ -1517,7 +1518,7 @@ void SvStream::EncryptBuffer(void* pStart, std::size_t nLen) const
     }
 }
 
-static unsigned char implGetCryptMask(const char* pStr, sal_Int32 nLen, long nVersion)
+static unsigned char implGetCryptMask(const char* pStr, sal_Int32 nLen, tools::Long nVersion)
 {
     unsigned char nCryptMask = 0;
 
@@ -1718,7 +1719,7 @@ std::size_t SvMemoryStream::PutData( const void* pData, std::size_t nCount )
         }
         else
         {
-            long nNewResize;
+            tools::Long nNewResize;
             if( nSize && nSize > nResize )
                 nNewResize = nSize;
             else
@@ -1772,8 +1773,8 @@ sal_uInt64 SvMemoryStream::SeekPos(sal_uInt64 const nNewPos)
         {
             if( nResize )  // Is extension possible?
             {
-                long nDiff = static_cast<long>(nNewPos - nSize + 1);
-                nDiff += static_cast<long>(nResize);
+                tools::Long nDiff = static_cast<tools::Long>(nNewPos - nSize + 1);
+                nDiff += static_cast<tools::Long>(nResize);
                 ReAllocateMemory( nDiff );
                 nPos = nNewPos;
                 nEndOfData = nNewPos;
@@ -1808,13 +1809,13 @@ void SvMemoryStream::AllocateMemory( std::size_t nNewSize )
 }
 
 // (using Bozo algorithm)
-bool SvMemoryStream::ReAllocateMemory( long nDiff )
+bool SvMemoryStream::ReAllocateMemory( tools::Long nDiff )
 {
     if (!m_isWritable || !bOwnsData)
         return false;
 
     bool bRetVal    = false;
-    long nTemp      = static_cast<long>(nSize);
+    tools::Long nTemp      = static_cast<tools::Long>(nSize);
     nTemp           += nDiff;
     std::size_t nNewSize  = static_cast<std::size_t>(nTemp);
 
@@ -1899,7 +1900,7 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
         return;
     }
 
-    long nDiff = static_cast<long>(nNewSize) - static_cast<long>(nSize);
+    tools::Long nDiff = static_cast<tools::Long>(nNewSize) - static_cast<tools::Long>(nSize);
     ReAllocateMemory( nDiff );
 }
 

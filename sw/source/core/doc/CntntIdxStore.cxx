@@ -71,7 +71,7 @@ namespace
     }
     struct MarkEntry
     {
-        long int m_nIdx;
+        tools::Long m_nIdx;
         bool m_bOther;
         sal_Int32 m_nContent;
 #if 0
@@ -243,7 +243,7 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nCon
         {
             if(pBkmk->GetMarkPos().nContent.GetIndex() < nContent)
             {
-                const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { static_cast<tools::Long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
             else // if a bookmark position is equal nContent, the other position
@@ -255,10 +255,10 @@ void ContentIdxStoreImpl::SaveBkmks(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nCon
         {
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
-                const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { static_cast<tools::Long>(ppBkmk - pMarkAccess->getAllMarksBegin()), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
-            const MarkEntry aEntry = { static_cast<long>(ppBkmk - pMarkAccess->getAllMarksBegin()), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
+            const MarkEntry aEntry = { static_cast<tools::Long>(ppBkmk - pMarkAccess->getAllMarksBegin()), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
             m_aBkmkEntries.push_back(aEntry);
         }
     }
@@ -286,7 +286,7 @@ void ContentIdxStoreImpl::RestoreBkmks(SwDoc& rDoc, updater_t const & rUpdater)
 void ContentIdxStoreImpl::SaveRedlines(SwDoc& rDoc, sal_uLong nNode, sal_Int32 nContent)
 {
     SwRedlineTable const & rRedlineTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-    long int nIdx = 0;
+    tools::Long nIdx = 0;
     for (const SwRangeRedline* pRdl : rRedlineTable)
     {
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nContent );

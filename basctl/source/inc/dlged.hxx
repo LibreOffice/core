@@ -129,7 +129,7 @@ private:
     tools::Rectangle           aPaintRect;
     bool                bDialogModelChanged;
     Idle                aMarkIdle;
-    long                mnPaintGuard;
+    tools::Long                mnPaintGuard;
     css::uno::Reference< css::frame::XModel > m_xDocument;
 
 public:

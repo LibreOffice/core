@@ -983,7 +983,7 @@ i12626
     bool checkEmitStructure();
 
     /* draws an emphasis mark */
-    void drawEmphasisMark(  long nX, long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
+    void drawEmphasisMark(  tools::Long nX, tools::Long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     bool            m_bIsPDF_A1;
@@ -1038,7 +1038,7 @@ i12626
 
     // helpers for CCITT 1bit bitmap stream
     void putG4Bits( sal_uInt32 i_nLength, sal_uInt32 i_nCode, BitStreamState& io_rState );
-    void putG4Span( long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
+    void putG4Span( tools::Long i_nSpan, bool i_bWhitePixel, BitStreamState& io_rState );
     void writeG4Stream( BitmapReadAccess const * i_pBitmap );
 
     // color helper functions
@@ -1168,15 +1168,15 @@ public:
 
     /* actual drawing functions */
     void drawText( const Point& rPos, const OUString& rText, sal_Int32 nIndex, sal_Int32 nLen, bool bTextLines = true );
-    void drawTextArray( const Point& rPos, const OUString& rText, const long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen );
+    void drawTextArray( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, sal_Int32 nIndex, sal_Int32 nLen );
     void drawStretchText( const Point& rPos, sal_uLong nWidth, const OUString& rText,
                           sal_Int32 nIndex, sal_Int32 nLen  );
     void drawText( const tools::Rectangle& rRect, const OUString& rOrigStr, DrawTextFlags nStyle );
-    void drawTextLine( const Point& rPos, long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove );
-    void drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
-    void drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
-    void drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor );
-    void drawStrikeoutChar( const Point& rPos, long nWidth, FontStrikeout eStrikeout );
+    void drawTextLine( const Point& rPos, tools::Long nWidth, FontStrikeout eStrikeout, FontLineStyle eUnderline, FontLineStyle eOverline, bool bUnderlineAbove );
+    void drawWaveTextLine( OStringBuffer& aLine, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
+    void drawStraightTextLine( OStringBuffer& aLine, tools::Long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
+    void drawStrikeoutLine( OStringBuffer& aLine, tools::Long nWidth, FontStrikeout eStrikeout, Color aColor );
+    void drawStrikeoutChar( const Point& rPos, tools::Long nWidth, FontStrikeout eStrikeout );
 
     void drawLine( const Point& rStart, const Point& rStop );
     void drawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo );

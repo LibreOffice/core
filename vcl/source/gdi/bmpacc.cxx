@@ -331,7 +331,7 @@ BitmapWriteAccess::~BitmapWriteAccess()
 {
 }
 
-void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
+void BitmapWriteAccess::CopyScanline( tools::Long nY, const BitmapReadAccess& rReadAcc )
 {
     assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
     SAL_WARN_IF( nY >= rReadAcc.Height(), "vcl", "y-coordinate in source out of range!" );
@@ -347,12 +347,12 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         // TODO: use fastbmp infrastructure
         Scanline pScanline = GetScanline( nY );
         Scanline pScanlineRead = rReadAcc.GetScanline(nY);
-        for( long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
+        for( tools::Long nX = 0, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixelOnData( pScanline, nX, rReadAcc.GetPixelFromData( pScanlineRead, nX ) );
     }
 }
 
-void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
+void BitmapWriteAccess::CopyScanline( tools::Long nY, ConstScanline aSrcScanline,
                                       ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize )
 {
     const ScanlineFormat nFormat = RemoveScanline( nSrcScanlineFormat );
@@ -426,7 +426,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
         {
             const ColorMask aDummyMask;
             Scanline pScanline = GetScanline(nY);
-            for (long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; ++nX)
+            for (tools::Long nX = 0, nWidth = mpBuffer->mnWidth; nX < nWidth; ++nX)
                 SetPixelOnData(pScanline, nX, pFncGetPixel(aSrcScanline, nX, aDummyMask));
         }
     }

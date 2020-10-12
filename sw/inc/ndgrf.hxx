@@ -82,9 +82,9 @@ public:
     void SetGraphic(const Graphic& rGraphic);
 
     /// wrappers for non-const calls at GraphicObject
-    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData, OutputDevice* pFirstFrameOutDev)
+    void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
     { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pFirstFrameOutDev); }
-    void StopGraphicAnimation(const OutputDevice* pOut, long nExtraData) { maGrfObj.StopAnimation(pOut, nExtraData); }
+    void StopGraphicAnimation(const OutputDevice* pOut, tools::Long nExtraData) { maGrfObj.StopAnimation(pOut, nExtraData); }
 
     virtual Size GetTwipSize() const override;
     void SetTwipSize( const Size& rSz );

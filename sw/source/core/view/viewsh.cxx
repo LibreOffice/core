@@ -576,7 +576,7 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
     {
         const SwFrame* pRoot = GetLayout();
         int nLoopCnt = 3;
-        long nOldH;
+        tools::Long nOldH;
         do{
             nOldH = pRoot->getFrameArea().Height();
             StartAction();
@@ -989,7 +989,7 @@ void SwViewShell::CalcLayout()
     const bool bEndProgress = SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) == nullptr;
     if ( bEndProgress )
     {
-        long nEndPage = GetLayout()->GetPageNum();
+        tools::Long nEndPage = GetLayout()->GetPageNum();
         nEndPage += nEndPage * 10 / 100;
         ::StartProgress( STR_STATSTR_REFORMAT, 0, nEndPage, GetDoc()->GetDocShell() );
     }
@@ -1110,8 +1110,8 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     else
     {
         //Calculate amount to be scrolled.
-        const long nXDiff = aPrevArea.Left() - VisArea().Left();
-        const long nYDiff = aPrevArea.Top()  - VisArea().Top();
+        const tools::Long nXDiff = aPrevArea.Left() - VisArea().Left();
+        const tools::Long nYDiff = aPrevArea.Top()  - VisArea().Top();
 
         if( !nXDiff && !GetViewOptions()->getBrowseMode() &&
             (!Imp()->HasDrawView() || !Imp()->GetDrawView()->IsGridVisible() ) )
@@ -1161,7 +1161,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     //selected and have handles attached.
                     if ( pPage->GetSortedObjs() )
                     {
-                        const long nOfst = GetOut()->PixelToLogic(
+                        const tools::Long nOfst = GetOut()->PixelToLogic(
                             Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width();
                         for (SwAnchoredObject* pObj : *pPage->GetSortedObjs())
                         {
@@ -1244,13 +1244,13 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->UpdateAccessible();
 }
 
-bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle *pRect )
+bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const tools::Rectangle *pRect )
 {
 #if !defined(MACOSX) && !defined(ANDROID) && !defined(IOS)
     // #i98766# - disable smooth scrolling for Mac
 
     const sal_uLong nBitCnt = mpOut->GetBitCount();
-    long lMult = 1, lMax = LONG_MAX;
+    tools::Long lMult = 1, lMax = LONG_MAX;
     if ( nBitCnt == 16 )
     {
         lMax = 7000;
@@ -1355,7 +1355,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             // or is it better to get the scrollfactor from the User
             // as option?
             // ??????????????????????
-            long lMaDelta = aPixSz.Height();
+            tools::Long lMaDelta = aPixSz.Height();
             if ( std::abs(lYDiff) > ( maVisArea.Height() / 3 ) )
                 lMaDelta *= 6;
             else
@@ -1366,10 +1366,10 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const tools::Rectangle
             if ( lYDiff < 0 )
                 lMaDelta = -lMaDelta;
 
-            long lDiff = lYDiff;
+            tools::Long lDiff = lYDiff;
             while ( lDiff )
             {
-                long lScroll;
+                tools::Long lScroll;
                 if ( Imp()->m_bStopSmooth || std::abs(lDiff) <= std::abs(lMaDelta) )
                 {
                     lScroll = lDiff;
@@ -1513,7 +1513,7 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         SwRect aLeft( rRect ), aRight( rRect );
         while ( pPage )
         {
-            long nTmp = pPage->getFrameArea().Left();
+            tools::Long nTmp = pPage->getFrameArea().Left();
             if ( nTmp < aLeft.Right() )
                 aLeft.Right( nTmp );
             nTmp = pPage->getFrameArea().Right();
@@ -1893,7 +1893,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     }
 }
 
-void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, long tileWidth, long tileHeight)
+void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contextHeight, int tilePosX, int tilePosY, tools::Long tileWidth, tools::Long tileHeight)
 {
     // SwViewShell's output device setup
     // TODO clean up SwViewShell's approach to output devices (the many of

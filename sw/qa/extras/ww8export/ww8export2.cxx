@@ -301,7 +301,7 @@ DECLARE_WW8EXPORT_TEST(testTdf80635_marginLeft, "tdf80635_marginLeft.doc")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was just the GetMinLeft of -199
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", long(-2950), getProperty<long>(xTable, "LeftMargin"), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(-2950), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf80635_pageLeft, "tdf80635_pageLeft.doc")
@@ -311,7 +311,7 @@ DECLARE_WW8EXPORT_TEST(testTdf80635_pageLeft, "tdf80635_pageLeft.doc")
     uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was just the GetMinLeft of -199
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", long(-2750), getProperty<long>(xTable, "LeftMargin"), 100);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Table Indent", tools::Long(-2750), getProperty<tools::Long>(xTable, "LeftMargin"), 100);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf99197_defaultLTR, "tdf99197_defaultLTR.doc")

@@ -81,7 +81,7 @@ void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
+ScChartObj* ScChartsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
 {
     OUString aName;
     if ( pDocShell )
@@ -94,7 +94,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
             OSL_ENSURE(pPage, "Page not found");
             if (pPage)
             {
-                long nPos = 0;
+                tools::Long nPos = 0;
                 SdrObjListIter aIter( pPage, SdrIterMode::DeepNoGroups );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)
@@ -354,11 +354,11 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        long nCount = getCount();
+        tools::Long nCount = getCount();
         uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
 
-        long nPos = 0;
+        tools::Long nPos = 0;
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         if (pDrawLayer)
         {

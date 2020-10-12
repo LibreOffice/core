@@ -356,7 +356,7 @@ bool ImplDecodeRLE(sal_uInt8* pBuffer, DIBV5Header const & rHeader, BitmapWriteA
 {
     Scanline pRLE = pBuffer;
     Scanline pEndRLE = pBuffer + rHeader.nSizeImage;
-    long        nY = rHeader.nHeight - 1;
+    tools::Long        nY = rHeader.nHeight - 1;
     const sal_uLong nWidth = rAcc.Width();
     sal_uLong       nCountByte;
     sal_uLong       nRunByte;
@@ -543,9 +543,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             rIStm.ReadUInt32( nBMask );
         }
 
-        const long nWidth(rHeader.nWidth);
-        const long nHeight(rHeader.nHeight);
-        long nResult = 0;
+        const tools::Long nWidth(rHeader.nWidth);
+        const tools::Long nHeight(rHeader.nHeight);
+        tools::Long nResult = 0;
         if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
             return false;
 
@@ -576,9 +576,9 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
             }
             std::vector<sal_uInt8> aBuf(nAlignedWidth);
 
-            const long nI(bTopDown ? 1 : -1);
-            long nY(bTopDown ? 0 : nHeight - 1);
-            long nCount(nHeight);
+            const tools::Long nI(bTopDown ? 1 : -1);
+            tools::Long nY(bTopDown ? 0 : nHeight - 1);
+            tools::Long nCount(nHeight);
 
             switch(rHeader.nBitCount)
             {
@@ -594,7 +594,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         }
                         sal_uInt8   cTmp = *pTmp++;
                         Scanline pScanline = rAcc.GetScanline(nY);
-                        for( long nX = 0, nShift = 8; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0, nShift = 8; nX < nWidth; nX++ )
                         {
                             if( !nShift )
                             {
@@ -621,7 +621,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         }
                         sal_uInt8   cTmp = *pTmp++;
                         Scanline pScanline = rAcc.GetScanline(nY);
-                        for( long nX = 0, nShift = 2; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0, nShift = 2; nX < nWidth; nX++ )
                         {
                             if( !nShift )
                             {
@@ -648,7 +648,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         }
 
                         Scanline pScanline = rAcc.GetScanline(nY);
-                        for( long nX = 0; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
                         {
                             auto nIndex = *pTmp++;
                             rAcc.SetPixelOnData(pScanline, nX, SanitizePaletteIndex(nIndex, rPalette, bForceToMonoWhileReading));
@@ -682,7 +682,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         }
 
                         Scanline pScanline = rAcc.GetScanline(nY);
-                        for( long nX = 0; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
                         {
                             aMask.GetColorFor16BitLSB( aColor, reinterpret_cast<sal_uInt8*>(pTmp16++) );
                             rAcc.SetPixelOnData(pScanline, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
@@ -705,7 +705,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                         }
 
                         Scanline pScanline = rAcc.GetScanline(nY);
-                        for( long nX = 0; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
                         {
                             aPixelColor.SetBlue( *pTmp++ );
                             aPixelColor.SetGreen( *pTmp++ );
@@ -747,7 +747,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                             Scanline pScanline = rAcc.GetScanline(nY);
                             Scanline pAlphaScanline = pAccAlpha->GetScanline(nY);
-                            for( long nX = 0; nX < nWidth; nX++ )
+                            for( tools::Long nX = 0; nX < nWidth; nX++ )
                             {
                                 aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixelOnData(pScanline, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
@@ -768,7 +768,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                             }
 
                             Scanline pScanline = rAcc.GetScanline(nY);
-                            for( long nX = 0; nX < nWidth; nX++ )
+                            for( tools::Long nX = 0; nX < nWidth; nX++ )
                             {
                                 aMask.GetColorFor32Bit( aColor, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixelOnData(pScanline, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
@@ -859,7 +859,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uL
                 const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
                 assert(nToRead > 0);
                 assert(!aData.empty());
-                const long nRead = aCodec.Read(*pMemStm, aData.data() + nDataPos, sal_uInt32(nToRead));
+                const tools::Long nRead = aCodec.Read(*pMemStm, aData.data() + nDataPos, sal_uInt32(nToRead));
                 if (nRead > 0)
                 {
                     nDataPos += static_cast<unsigned long>(nRead);
@@ -1138,7 +1138,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess const & rAcc, bool bRLE4 )
     sal_uInt8       cLast;
     bool        bFound;
 
-    for ( long nY = nHeight - 1; nY >= 0; nY-- )
+    for ( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
     {
         sal_uInt8* pTmp = aBuf.data();
         nX = nBufCount = 0;
@@ -1263,7 +1263,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
             rOStm.WriteBytes(rAcc.GetBuffer(), rAcc.Height() * rAcc.GetScanlineSize());
         else
         {
-            for( long nY = rAcc.Height() - 1, nScanlineSize = rAcc.GetScanlineSize(); nY >= 0; nY-- )
+            for( tools::Long nY = rAcc.Height() - 1, nScanlineSize = rAcc.GetScanlineSize(); nY >= 0; nY-- )
                 rOStm.WriteBytes( rAcc.GetScanline(nY), nScanlineSize );
         }
     }
@@ -1315,8 +1315,8 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
         }
         else
         {
-            const long nWidth(rAcc.Width());
-            const long nHeight(rAcc.Height());
+            const tools::Long nWidth(rAcc.Width());
+            const tools::Long nHeight(rAcc.Height());
             std::vector<sal_uInt8> aBuf(nAlignedWidth);
             switch( nBitCount )
             {
@@ -1326,13 +1326,13 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+7) / 8);
                     memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
 
-                    for( long nY = nHeight - 1; nY >= 0; nY-- )
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = aBuf.data();
                         sal_uInt8 cTmp = 0;
                         Scanline pScanline = rAcc.GetScanline( nY );
 
-                        for( long nX = 0, nShift = 8; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0, nShift = 8; nX < nWidth; nX++ )
                         {
                             if( !nShift )
                             {
@@ -1356,13 +1356,13 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     size_t nUnusedBytes = nAlignedWidth - ((nWidth+1) / 2);
                     memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
 
-                    for( long nY = nHeight - 1; nY >= 0; nY-- )
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = aBuf.data();
                         sal_uInt8 cTmp = 0;
                         Scanline pScanline = rAcc.GetScanline( nY );
 
-                        for( long nX = 0, nShift = 2; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0, nShift = 2; nX < nWidth; nX++ )
                         {
                             if( !nShift )
                             {
@@ -1381,12 +1381,12 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
 
                 case 8:
                 {
-                    for( long nY = nHeight - 1; nY >= 0; nY-- )
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = aBuf.data();
                         Scanline pScanline = rAcc.GetScanline( nY );
 
-                        for( long nX = 0; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
                             *pTmp++ = rAcc.GetIndexFromData( pScanline, nX );
 
                         rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
@@ -1407,12 +1407,12 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, BitmapRead
                     BitmapColor aPixelColor;
                     const bool bWriteAlpha(32 == nBitCount && pAccAlpha);
 
-                    for( long nY = nHeight - 1; nY >= 0; nY-- )
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
                         sal_uInt8* pTmp = aBuf.data();
                         Scanline pScanlineAlpha = bWriteAlpha ? pAccAlpha->GetScanline( nY ) : nullptr;
 
-                        for( long nX = 0; nX < nWidth; nX++ )
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
                         {
                             // when alpha is used, this may be non-24bit main bitmap, so use GetColor
                             // instead of GetPixel to ensure RGB value

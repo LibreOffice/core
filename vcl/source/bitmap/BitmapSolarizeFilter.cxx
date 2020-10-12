@@ -39,13 +39,13 @@ BitmapEx BitmapSolarizeFilter::execute(BitmapEx const& rBitmapEx) const
         else
         {
             BitmapColor aCol;
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
+            const tools::Long nWidth = pWriteAcc->Width();
+            const tools::Long nHeight = pWriteAcc->Height();
 
-            for (long nY = 0; nY < nHeight; nY++)
+            for (tools::Long nY = 0; nY < nHeight; nY++)
             {
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for (long nX = 0; nX < nWidth; nX++)
+                for (tools::Long nX = 0; nX < nWidth; nX++)
                 {
                     aCol = pWriteAcc->GetPixelFromData(pScanline, nX);
 

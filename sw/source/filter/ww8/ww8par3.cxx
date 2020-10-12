@@ -1125,7 +1125,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     // create Arrays
     bool bLVLOk = true;
 
-    long nOriginalPos = rSt.Tell();
+    tools::Long nOriginalPos = rSt.Tell();
 
     // 1. read PLCF LST and create list templates in Writer
 
@@ -1654,7 +1654,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         const auto nAbsLSpace = rFormat.GetAbsLSpace();
-        const long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
+        const tools::Long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
         aLR.SetTextLeft(nAbsLSpace);
         aLR.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent));

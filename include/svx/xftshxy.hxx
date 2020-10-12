@@ -34,7 +34,7 @@ class SVXCORE_DLLPUBLIC XFormTextShadowXValItem final : public SfxMetricItem
 public:
                             static SfxPoolItem* CreateDefault();
 
-                            XFormTextShadowXValItem(long nVal = 0);
+                            XFormTextShadowXValItem(tools::Long nVal = 0);
     virtual XFormTextShadowXValItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 
@@ -48,7 +48,7 @@ class SVXCORE_DLLPUBLIC XFormTextShadowYValItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-                            XFormTextShadowYValItem(long nVal = 0);
+                            XFormTextShadowYValItem(tools::Long nVal = 0);
     virtual XFormTextShadowYValItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
 

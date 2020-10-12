@@ -411,8 +411,8 @@ void SvxDrawPage::SelectObjectsInView( const Reference< drawing::XShapes > & aSh
 
     mpView->UnmarkAllObj( pPageView );
 
-    long nCount = aShapes->getCount();
-    for( long i = 0; i < nCount; i++ )
+    tools::Long nCount = aShapes->getCount();
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         uno::Any aAny( aShapes->getByIndex(i) );
         Reference< drawing::XShape > xShape;

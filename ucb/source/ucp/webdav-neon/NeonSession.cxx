@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/time.h>
+#include <tools/long.hxx>
 #include <ne_socket.h>
 #include <ne_auth.h>
 #include <ne_redirect.h>
@@ -1568,7 +1569,7 @@ void NeonSession::LOCK( const OUString & inPath,
     }
 
     // Set the lock timeout
-    theLock->timeout = static_cast<long>(rLock.Timeout);
+    theLock->timeout = static_cast<tools::Long>(rLock.Timeout);
 
     // Set the lock owner
     OUString aValue;
@@ -1628,7 +1629,7 @@ bool NeonSession::LOCK( NeonLock * pLock,
     // save the current requested timeout, because ne_lock_refresh uses
     // pLock->timeout as an out parameter. This prevents a feedback-loop,
     // where we would request a shorter timeout on each refresh.
-    long timeout = pLock->timeout;
+    tools::Long timeout = pLock->timeout;
     const int theRetVal = ne_lock_refresh(m_pHttpSession, pLock);
     if (theRetVal == NE_OK)
     {

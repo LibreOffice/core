@@ -1174,7 +1174,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pShape = pPage->GetObj(0);
     SdrObject* pTextBox = pPage->GetObj(1);
-    long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
+    tools::Long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
     // The top of the two shapes were 410 and 3951, now it should be 3950 and 3951.
     CPPUNIT_ASSERT(nDiff < 10);
 }

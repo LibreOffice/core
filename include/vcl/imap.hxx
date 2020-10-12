@@ -51,7 +51,7 @@ private:
 
     void                ImpReadCERNLine( const OString& rLine );
     static Point        ImpReadCERNCoords( const char** ppStr );
-    static long         ImpReadCERNRadius( const char** ppStr );
+    static tools::Long         ImpReadCERNRadius( const char** ppStr );
     static OUString     ImpReadCERNURL( const char** ppStr );
 
     void                ImpReadNCSALine( const OString& rLine );

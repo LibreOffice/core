@@ -105,7 +105,7 @@ void LwpFribNote::XFConvert(XFContentContainer* pCont)
     XFAnnotation* pXFNote = new XFAnnotation;
     pXFNote->SetAuthor(pLayout->GetAuthor());
     LtTm aTm;
-    long nTime = pLayout->GetTime();
+    tools::Long nTime = pLayout->GetTime();
     if(LtgLocalTime(nTime, aTm))
     {
         pXFNote->SetDate(LwpTools::DateTimeToOUString(aTm));

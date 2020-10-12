@@ -35,7 +35,7 @@ struct ScSubTotalParam;
 class SAL_DLLPUBLIC_RTTI ScDBFunc : public ScViewFunc
 {
 private:
-    void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension);
+    void GetSelectedMemberList(ScDPUniqueStringSet& rEntries, tools::Long& rDimension);
 
 public:
                     ScDBFunc( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
@@ -81,7 +81,7 @@ public:
     void            UngroupDataPilot();
     void DataPilotInput( const ScAddress& rPos, const OUString& rString );
 
-    void            DataPilotSort(ScDPObject* pDPObject, long nDimIndex, bool bAscending, const sal_uInt16* pUserListId = nullptr);
+    void            DataPilotSort(ScDPObject* pDPObject, tools::Long nDimIndex, bool bAscending, const sal_uInt16* pUserListId = nullptr);
     bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     bool HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& rOrientation );

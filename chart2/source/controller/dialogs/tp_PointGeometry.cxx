@@ -49,7 +49,7 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     int nShape = m_pGeometryResources ? m_pGeometryResources->get_selected_index() : -1;
     if (nShape != -1)
     {
-        long nSegs=32;
+        tools::Long nSegs=32;
 
         if (nShape==CHART_SHAPE3D_PYRAMID)
             nSegs=4;
@@ -66,7 +66,7 @@ void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
 
     if (rInAttrs->GetItemState(SCHATTR_STYLE_SHAPE,true, &pPoolItem) == SfxItemState::SET)
     {
-        long nVal = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nVal = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         if(m_pGeometryResources)
         {
             m_pGeometryResources->select(static_cast<sal_uInt16>(nVal));

@@ -86,8 +86,8 @@ public:
         return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
     }
 
-    void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
-    void PaintRedline( SwTwips nY, long nMax );
+    void PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax, bool bRed );
+    void PaintRedline( SwTwips nY, tools::Long nMax );
 };
 
 }
@@ -179,7 +179,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
 }
 
-void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
+void SwExtraPainter::PaintExtra( SwTwips nY, tools::Long nAsc, tools::Long nMax, bool bRed )
 {
   // Line number is stronger than the divider
     const OUString aTmp( HasNumber() ? m_rLineInf.GetNumType().GetNumStr( m_nLineNr )
@@ -243,13 +243,13 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         delete pTmpFnt;
     if( bRed )
     {
-        long nDiff = m_bGoLeft ? m_nRedX - m_nX : m_nX - m_nRedX;
+        tools::Long nDiff = m_bGoLeft ? m_nRedX - m_nX : m_nX - m_nRedX;
         if( nDiff > REDLINE_MINDIST )
             PaintRedline( nY, nMax );
     }
 }
 
-void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
+void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax )
 {
     Point aStart( m_nRedX, nY );
     Point aEnd( m_nRedX, nY + nMax );
@@ -344,7 +344,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
             }
         }
 
-        long nBottom = rRect.Bottom();
+        tools::Long nBottom = rRect.Bottom();
 
         bool bNoPrtLine = 0 == GetMinPrtLine();
         if( !bNoPrtLine )
@@ -420,7 +420,7 @@ SwRect SwTextFrame::GetPaintSwRect()
         // We return the right paint rect. Use the calculated PaintOfst as the
         // left margin
         SwRepaint& rRepaint = GetPara()->GetRepaint();
-        long l;
+        tools::Long l;
 
         if ( IsVertLR() && !IsVertLRBT()) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
             rRepaint.Chg( GetUpper()->getFrameArea().Pos() + GetUpper()->getFramePrintArea().Pos(), GetUpper()->getFramePrintArea().SSize() );
@@ -678,7 +678,7 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         //   adapt rRect (Top + 1, Bottom - 1)
         // Because the Iterator attaches the Lines without a gap to each other
         aLine.TwipsToLine( rRect.Top() + 1 );
-        long nBottom = rRect.Bottom();
+        tools::Long nBottom = rRect.Bottom();
 
         bool bNoPrtLine = 0 == GetMinPrtLine();
         if( !bNoPrtLine )
