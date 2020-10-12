@@ -1088,10 +1088,10 @@ struct Border
 {
     sal_Int16 column;
     sal_Int32 row;
-    long leftWidth;
-    long topWidth;
-    long rightWidth;
-    long bottomWidth;
+    tools::Long leftWidth;
+    tools::Long topWidth;
+    tools::Long rightWidth;
+    tools::Long bottomWidth;
     sal_uInt16 lOutWidth;
     sal_uInt16 lInWidth;
     sal_uInt16 lDistance;

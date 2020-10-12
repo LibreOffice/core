@@ -369,7 +369,7 @@ namespace
         {
             BoxStructure::iterator pInfo = maLines[nLine].begin();
             BoxStructure::iterator pEnd = maLines[nLine].end();
-            long nCol = pInfo->mnColSpan;
+            tools::Long nCol = pInfo->mnColSpan;
             while( nNewCol > nCol && ++pInfo != pEnd )
                 nCol += pInfo->mnColSpan;
             if( pInfo != pEnd )

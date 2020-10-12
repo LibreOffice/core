@@ -2693,14 +2693,14 @@ void SdOOXMLExportTest2::testTdf1225573_FontWorkScaleX()
     awt::Rectangle aBoundRectArch;
     xShapeArchProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectArch;
     // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(static_cast<long>(50), labs(aBoundRectArch.Width - 13081));
+    CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(50), labs(aBoundRectArch.Width - 13081));
 
     // Error was, that text in shapes of category "Warp" was not scaled to the path.
     uno::Reference<beans::XPropertySet> xShapeWaveProps(getShapeFromPage(0, 1, xDocShRef));
     awt::Rectangle aBoundRectWave;
     xShapeWaveProps->getPropertyValue(UNO_NAME_MISC_OBJ_BOUNDRECT) >>= aBoundRectWave;
     // difference should be zero, but allow some range for stroke thickness
-    CPPUNIT_ASSERT_LESS(static_cast<long>(50), labs(aBoundRectWave.Width - 11514));
+    CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(50), labs(aBoundRectWave.Width - 11514));
 
     xDocShRef->DoClose();
 }

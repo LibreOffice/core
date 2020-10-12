@@ -20,6 +20,7 @@
 #include "WrappedGapwidthProperty.hxx"
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
+#include <tools/long.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -82,7 +83,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
                 Sequence< sal_Int32 > aBarPositionSequence;
                 xProp->getPropertyValue( m_InnerSequencePropertyName ) >>= aBarPositionSequence;
 
-                long nOldLength = aBarPositionSequence.getLength();
+                tools::Long nOldLength = aBarPositionSequence.getLength();
                 if( nOldLength <= m_nAxisIndex  )
                 {
                     aBarPositionSequence.realloc( m_nAxisIndex+1 );

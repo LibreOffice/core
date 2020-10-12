@@ -31,14 +31,14 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
                             double nPPTX, double nPPTY,
                             Fraction& rScaleX, Fraction& rScaleY )
 {
-    long nPixelX = 0;
-    long nTwipsX = 0;
-    long nPixelY = 0;
-    long nTwipsY = 0;
+    tools::Long nPixelX = 0;
+    tools::Long nTwipsX = 0;
+    tools::Long nPixelY = 0;
+    tools::Long nTwipsY = 0;
     for (SCCOL i=nStartCol; i<nEndCol; i++)
     {
         sal_uInt16 nWidth = rDoc.GetColWidth(i,nTab);
-        nTwipsX += static_cast<long>(nWidth);
+        nTwipsX += static_cast<tools::Long>(nWidth);
         nPixelX += ScViewData::ToPixel( nWidth, nPPTX );
     }
 
@@ -52,7 +52,7 @@ void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,
         }
 
         sal_uInt16 nHeight = rDoc.GetRowHeight(nRow, nTab);
-        nTwipsY += static_cast<long>(nHeight);
+        nTwipsY += static_cast<tools::Long>(nHeight);
         nPixelY += ScViewData::ToPixel(nHeight, nPPTY);
     }
 

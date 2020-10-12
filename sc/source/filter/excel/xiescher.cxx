@@ -637,7 +637,7 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
     }
     else
     {
-        long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
+        tools::Long nLineWidth = 35 * ::std::min( rLineData.mnWidth, EXC_OBJ_LINE_THICK );
         rSdrObj.SetMergedItem( XLineWidthItem( nLineWidth ) );
         rSdrObj.SetMergedItem( XLineColorItem( EMPTY_OUSTRING, GetPalette().GetColor( rLineData.mnColorIdx ) ) );
         rSdrObj.SetMergedItem( XLineJointItem( css::drawing::LineJoint_MITER ) );
@@ -1169,7 +1169,7 @@ SdrObjectUniquePtr XclImpLineObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, 
 #undef EXC_ARROW_POINT
 
         ::basegfx::B2DPolyPolygon aArrowPolyPoly( aArrowPoly );
-        long nWidth = static_cast< long >( 125 * fArrowWidth );
+        tools::Long nWidth = static_cast< tools::Long >( 125 * fArrowWidth );
         if( bLineStart )
         {
             xSdrObj->SetMergedItem( XLineStartItem( EMPTY_OUSTRING, aArrowPolyPoly ) );
@@ -1289,8 +1289,8 @@ void XclImpArcObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uIn
 SdrObjectUniquePtr XclImpArcObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
     tools::Rectangle aNewRect = rAnchorRect;
-    long nStartAngle = 0;
-    long nEndAngle = 0;
+    tools::Long nStartAngle = 0;
+    tools::Long nEndAngle = 0;
     switch( mnQuadrant )
     {
         default:
@@ -1804,8 +1804,8 @@ void XclImpChartObj::FinalizeTabChart()
     const XclPageData& rPageData = GetPageSettings().GetPageData();
     Size aPaperSize = rPageData.GetScPaperSize();
 
-    long nWidth = XclTools::GetHmmFromTwips( aPaperSize.Width() );
-    long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
+    tools::Long nWidth = XclTools::GetHmmFromTwips( aPaperSize.Width() );
+    tools::Long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
 
     // subtract page margins, give some more extra space
     nWidth -= (XclTools::GetHmmFromInch( rPageData.mfLeftMargin + rPageData.mfRightMargin ) + 2000);

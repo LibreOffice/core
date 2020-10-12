@@ -175,8 +175,8 @@ namespace
             return nullptr;
 
         assert(pSrc->mnFormat == SVP_24BIT_FORMAT);
-        const long nWidth = pSrc->mnWidth;
-        const long nHeight = pSrc->mnHeight;
+        const tools::Long nWidth = pSrc->mnWidth;
+        const tools::Long nHeight = pSrc->mnHeight;
         std::unique_ptr<BitmapBuffer> pDst(new BitmapBuffer);
         pDst->mnFormat = (ScanlineFormat::N32BitTcArgb | ScanlineFormat::TopDown);
         pDst->mnWidth = nWidth;
@@ -185,7 +185,7 @@ namespace
         pDst->maColorMask = pSrc->maColorMask;
         pDst->maPalette = pSrc->maPalette;
 
-        long nScanlineBase;
+        tools::Long nScanlineBase;
         const bool bFail = o3tl::checked_multiply<long>(pDst->mnBitCount, nWidth, nScanlineBase);
         if (bFail)
         {
@@ -213,11 +213,11 @@ namespace
             return nullptr;
         }
 
-        for (long y = 0; y < nHeight; ++y)
+        for (tools::Long y = 0; y < nHeight; ++y)
         {
             sal_uInt8* pS = pSrc->mpBits + y * pSrc->mnScanlineSize;
             sal_uInt8* pD = pDst->mpBits + y * pDst->mnScanlineSize;
-            for (long x = 0; x < nWidth; ++x)
+            for (tools::Long x = 0; x < nWidth; ++x)
             {
 #if defined(ANDROID) && !HAVE_FEATURE_ANDROID_LOK
                 static_assert((SVP_CAIRO_FORMAT & ~ScanlineFormat::TopDown) == ScanlineFormat::N32BitTcRgba, "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
@@ -467,8 +467,8 @@ namespace
 
             if(pSurface)
             {
-                const long nStride(cairo_image_surface_get_stride(pSurface));
-                const long nHeight(cairo_image_surface_get_height(pSurface));
+                const tools::Long nStride(cairo_image_surface_get_stride(pSurface));
+                const tools::Long nHeight(cairo_image_surface_get_height(pSurface));
 
                 nRetval = nStride * nHeight;
 
@@ -597,7 +597,7 @@ namespace
     // MM02 decide to use buffers or not
     const char* pDisableMM02Goodies(getenv("SAL_DISABLE_MM02_GOODIES"));
     bool bUseBuffer(nullptr == pDisableMM02Goodies);
-    long nMinimalSquareSizeToBuffer(64*64);
+    tools::Long nMinimalSquareSizeToBuffer(64*64);
 
     void tryToUseSourceBuffer(
         const SalBitmap& rSourceBitmap,
@@ -765,8 +765,8 @@ bool SvpSalGraphics::drawTransformedBitmap(
     // MM02 try to access buffered BitmapHelper
     std::shared_ptr<BitmapHelper> aSurface;
     tryToUseSourceBuffer(rSourceBitmap, aSurface);
-    const long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
-    const long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
+    const tools::Long nDestWidth(basegfx::fround(basegfx::B2DVector(rX - rNull).getLength()));
+    const tools::Long nDestHeight(basegfx::fround(basegfx::B2DVector(rY - rNull).getLength()));
     cairo_surface_t* source(
         aSurface->getSurface(
             nDestWidth,
@@ -853,7 +853,7 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
     SvpSalGraphics::clipRegion(cr, m_aClipRegion);
 }
 
-bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
+bool SvpSalGraphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency)
 {
     const bool bHasFill(m_aFillColor != SALCOLOR_NONE);
     const bool bHasLine(m_aLineColor != SALCOLOR_NONE);
@@ -949,7 +949,7 @@ sal_uInt16 SvpSalGraphics::GetBitCount() const
     return 32;
 }
 
-long SvpSalGraphics::GetGraphicsWidth() const
+tools::Long SvpSalGraphics::GetGraphicsWidth() const
 {
     return m_pSurface ? m_aFrameSize.getX() : 0;
 }
@@ -1022,7 +1022,7 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
     }
 }
 
-void SvpSalGraphics::drawPixel( long nX, long nY )
+void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     if (m_aLineColor != SALCOLOR_NONE)
     {
@@ -1030,7 +1030,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY )
     }
 }
 
-void SvpSalGraphics::drawPixel( long nX, long nY, Color aColor )
+void SvpSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color aColor )
 {
     cairo_t* cr = getCairoContext(true);
     clipRegion(cr);
@@ -1043,7 +1043,7 @@ void SvpSalGraphics::drawPixel( long nX, long nY, Color aColor )
     releaseCairoContext(cr, true, extents);
 }
 
-void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
+void SvpSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     // because of the -1 hack we have to do fill and draw separately
     Color aOrigFillColor = m_aFillColor;
@@ -1329,7 +1329,7 @@ static size_t AddPolygonToPath(
     return nSizeMeasure;
 }
 
-void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void SvpSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     basegfx::B2DPolygon aPoly;
 
@@ -2041,12 +2041,12 @@ void SvpSalGraphics::applyColor(cairo_t *cr, Color aColor, double fTransparency)
     }
 }
 
-void SvpSalGraphics::copyArea( long nDestX,
-                               long nDestY,
-                               long nSrcX,
-                               long nSrcY,
-                               long nSrcWidth,
-                               long nSrcHeight,
+void SvpSalGraphics::copyArea( tools::Long nDestX,
+                               tools::Long nDestY,
+                               tools::Long nSrcX,
+                               tools::Long nSrcY,
+                               tools::Long nSrcWidth,
+                               tools::Long nSrcHeight,
                                bool /*bWindowInvalidate*/ )
 {
     SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
@@ -2196,11 +2196,11 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     sal_Int32 nStride;
     unsigned char *mask_data = aSurface.getBits(nStride);
     vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-    for (long y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
+    for (tools::Long y = rTR.mnSrcY ; y < rTR.mnSrcY + rTR.mnSrcHeight; ++y)
     {
         unsigned char *row = mask_data + (nStride*y);
         unsigned char *data = row + (rTR.mnSrcX * 4);
-        for (long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
+        for (tools::Long x = rTR.mnSrcX; x < rTR.mnSrcX + rTR.mnSrcWidth; ++x)
         {
             sal_uInt8 a = data[SVP_CAIRO_ALPHA];
             sal_uInt8 b = unpremultiply_table[a][data[SVP_CAIRO_BLUE]];
@@ -2250,7 +2250,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
     releaseCairoContext(cr, false, extents);
 }
 
-std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
+std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
@@ -2286,7 +2286,7 @@ std::shared_ptr<SalBitmap> SvpSalGraphics::getBitmap( long nX, long nY, long nWi
     return pBitmap;
 }
 
-Color SvpSalGraphics::getPixel( long nX, long nY )
+Color SvpSalGraphics::getPixel( tools::Long nX, tools::Long nY )
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     cairo_surface_t *target = cairo_surface_create_similar_image(m_pSurface, CAIRO_FORMAT_ARGB32, 1, 1);
@@ -2406,7 +2406,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
     releaseCairoContext(cr, false, extents);
 }
 
-void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
+void SvpSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
 {
     basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(basegfx::B2DRectangle(nX, nY, nX+nWidth, nY+nHeight));
 
@@ -2424,7 +2424,7 @@ void SvpSalGraphics::invert(sal_uInt32 nPoints, const SalPoint* pPtAry, SalInver
     invert(aPoly, nFlags);
 }
 
-bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uInt32 )
+bool SvpSalGraphics::drawEPS( tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32 )
 {
     return false;
 }

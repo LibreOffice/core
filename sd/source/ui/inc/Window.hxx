@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_WINDOW_HXX
 
 #include <tools/gen.hxx>
+#include <tools/long.hxx>
 #include <vcl/window.hxx>
 #include <vcl/transfer.hxx>
 
@@ -56,7 +57,7 @@ public:
         @param nZoom
             The zoom factor is given as integral percent value.
     */
-    void    SetZoomIntegral(long nZoom);
+    void    SetZoomIntegral(::tools::Long nZoom);
 
     /** This internally used method performs the actual adaptation of the
         window's map mode to the specified zoom factor.
@@ -69,7 +70,7 @@ public:
             forced into that interval.  Therefore the returned value is a
             valid zoom factor.
     */
-    long    SetZoomFactor(long nZoom);
+    ::tools::Long    SetZoomFactor(::tools::Long nZoom);
 
     /** This method is called when the whole page shall be displayed in the
         window.  Position and zoom factor are set so that the given
@@ -83,9 +84,9 @@ public:
         @return
             The new zoom factor is returned as integral percent value.
     */
-    long SetZoomRect (const ::tools::Rectangle& rZoomRect);
+    ::tools::Long SetZoomRect (const ::tools::Rectangle& rZoomRect);
 
-    long GetZoomForRect( const ::tools::Rectangle& rZoomRect );
+    ::tools::Long GetZoomForRect( const ::tools::Rectangle& rZoomRect );
 
     void SetMinZoomAutoCalc (bool bAuto);
 
@@ -100,12 +101,12 @@ public:
         <member>bMinZoomAutoCalc</member> is set (to <TRUE/>).</p>
     */
     void CalcMinZoom();
-    void SetMinZoom (long int nMin);
-    long GetMinZoom() const { return mnMinZoom;}
-    void SetMaxZoom (long int nMax);
-    long GetMaxZoom() const { return mnMaxZoom;}
+    void SetMinZoom (::tools::Long nMin);
+    ::tools::Long GetMinZoom() const { return mnMinZoom;}
+    void SetMaxZoom (::tools::Long nMax);
+    ::tools::Long GetMaxZoom() const { return mnMaxZoom;}
 
-    long GetZoom() const;
+    ::tools::Long GetZoom() const;
 
     const Point& GetWinViewPos() const { return maWinPos;}
     const Point& GetViewOrigin() const { return maViewOrigin;}
@@ -163,7 +164,7 @@ protected:
     */
     bool mbMinZoomAutoCalc;
     bool mbCenterAllowed;
-    long mnTicks;
+    ::tools::Long mnTicks;
 
     ViewShell* mpViewShell;
     bool mbUseDropScroll;

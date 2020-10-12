@@ -622,7 +622,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl(std::vector<OUString>& rLi
      * the list position of the current format. If the list is empty
      * or if there is no current format, SELPOS_NONE is delivered.
      */
-    for (long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex)
+    for (tools::Long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex)
     {
         FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), false);
     }
@@ -640,7 +640,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl(std::vector<OUString>& rL
     // default.
     FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, NF_DATETIME_SYS_DDMMYYYY_HHMM, true);
 
-    for (long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
+    for (tools::Long nIndex = NF_DATETIME_START; nIndex <= NF_DATETIME_END; ++nIndex)
     {
         FillEListWithOneFormat_Impl( rList, nSelPos, bSuppressDuplicates, static_cast<NfIndexTableOffset>(nIndex), true);
     }
@@ -757,7 +757,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys(std::vector<OUString>& rLi
 
     nCurCurrencyEntryPos = 0;
 
-    for (long nIndex = NF_CURRENCY_START; nIndex <= NF_CURRENCY_END; nIndex++)
+    for (tools::Long nIndex = NF_CURRENCY_START; nIndex <= NF_CURRENCY_END; nIndex++)
     {
         nNFEntry = pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex), eCurLanguage);
 

@@ -554,7 +554,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                 SkConvertRGBToRGBA(dest, mBuffer.get(), mPixelsSize.Height() * mPixelsSize.Width());
             else
             {
-                for (long y = 0; y < mPixelsSize.Height(); ++y)
+                for (tools::Long y = 0; y < mPixelsSize.Height(); ++y)
                 {
                     const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
                     SkConvertRGBToRGBA(dest, src, mPixelsSize.Width());
@@ -583,7 +583,7 @@ SkBitmap SkiaSalBitmap::GetAsSkBitmap() const
                                     mPixelsSize.Height() * mPixelsSize.Width());
             else
             {
-                for (long y = 0; y < mPixelsSize.Height(); ++y)
+                for (tools::Long y = 0; y < mPixelsSize.Height(); ++y)
                 {
                     const sal_uInt8* src = mBuffer.get() + mScanlineSize * y;
                     SkConvertGrayToRGBA(dest, src, mPixelsSize.Width());
@@ -648,7 +648,7 @@ bool SkiaSalBitmap::ConserveMemory() const
     static bool keepBitmapBuffer = getenv("SAL_SKIA_KEEP_BITMAP_BUFFER") != nullptr;
     constexpr bool is32Bit = sizeof(void*) == 4;
     // 16MiB bitmap data at least (set to 0 for easy testing).
-    constexpr long maxBufferSize = 2000 * 2000 * 4;
+    constexpr tools::Long maxBufferSize = 2000 * 2000 * 4;
     return !keepBitmapBuffer
            && (SkiaHelper::renderMethodToUse() == SkiaHelper::RenderRaster || is32Bit)
            && mPixelsSize.Height() * mScanlineSize > maxBufferSize
@@ -898,9 +898,9 @@ void SkiaSalBitmap::PerformErase()
         assert(bitmapBuffer->mnFormat & ScanlineFormat::TopDown);
         // Set first scanline, copy to others.
         Scanline scanline = bitmapBuffer->mpBits;
-        for (long x = 0; x < bitmapBuffer->mnWidth; ++x)
+        for (tools::Long x = 0; x < bitmapBuffer->mnWidth; ++x)
             setPixel(scanline, x, mEraseColor, bitmapBuffer->maColorMask);
-        for (long y = 1; y < bitmapBuffer->mnHeight; ++y)
+        for (tools::Long y = 1; y < bitmapBuffer->mnHeight; ++y)
             memcpy(scanline + y * bitmapBuffer->mnScanlineSize, scanline,
                    bitmapBuffer->mnScanlineSize);
     }
@@ -967,7 +967,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             memcpy(mBuffer.get(), bitmap.getPixels(), mSize.Height() * mScanlineSize);
         else
         {
-            for (long y = 0; y < mSize.Height(); ++y)
+            for (tools::Long y = 0; y < mSize.Height(); ++y)
             {
                 const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
                 sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
@@ -1043,7 +1043,7 @@ void SkiaSalBitmap::EnsureBitmapData()
             memcpy(mBuffer.get(), bitmap.getPixels(), mSize.Height() * mScanlineSize);
         else
         {
-            for (long y = 0; y < mSize.Height(); ++y)
+            for (tools::Long y = 0; y < mSize.Height(); ++y)
             {
                 const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
                 sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
@@ -1060,7 +1060,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
         else
         {
-            for (long y = 0; y < mSize.Height(); ++y)
+            for (tools::Long y = 0; y < mSize.Height(); ++y)
             {
                 const uint32_t* src = bitmap.getAddr32(0, y);
                 sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
@@ -1077,7 +1077,7 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
         else
         {
-            for (long y = 0; y < mSize.Height(); ++y)
+            for (tools::Long y = 0; y < mSize.Height(); ++y)
             {
                 const uint32_t* src = bitmap.getAddr32(0, y);
                 sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
@@ -1089,12 +1089,12 @@ void SkiaSalBitmap::EnsureBitmapData()
     {
         std::unique_ptr<vcl::ScanlineWriter> pWriter
             = vcl::ScanlineWriter::Create(mBitCount, mPalette);
-        for (long y = 0; y < mSize.Height(); ++y)
+        for (tools::Long y = 0; y < mSize.Height(); ++y)
         {
             const uint8_t* src = static_cast<uint8_t*>(bitmap.getAddr(0, y));
             sal_uInt8* dest = mBuffer.get() + mScanlineSize * y;
             pWriter->nextLine(dest);
-            for (long x = 0; x < mSize.Width(); ++x)
+            for (tools::Long x = 0; x < mSize.Width(); ++x)
             {
                 sal_uInt8 r = *src++;
                 sal_uInt8 g = *src++;

@@ -309,8 +309,8 @@ void ScPivotTableFiltersTest::testPivotTableNamedRangeSourceODS()
     CPPUNIT_ASSERT_EQUAL(OUString("MyRange"), pDesc->GetRangeName());
 
     css::sheet::DataPilotFieldOrientation nOrient;
-    long nDim = pDP->GetHeaderDim(ScAddress(0, 1, 1), nOrient);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to detect header dimension.", long(0), nDim);
+    tools::Long nDim = pDP->GetHeaderDim(ScAddress(0, 1, 1), nOrient);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to detect header dimension.", tools::Long(0), nDim);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("This dimension should be a page dimension.",
                                  sheet::DataPilotFieldOrientation_PAGE, nOrient);
 
@@ -403,7 +403,7 @@ void ScPivotTableFiltersTest::testPivotTableSharedCacheGroupODS()
     bool bHasMonths = false;
     std::vector<SCROW> aMemberIds;
 
-    for (long nGrpDim = 9; nGrpDim <= 10; ++nGrpDim)
+    for (tools::Long nGrpDim = 9; nGrpDim <= 10; ++nGrpDim)
     {
         nGrpType = pCache->GetGroupType(nGrpDim);
         switch (nGrpType)

@@ -191,7 +191,7 @@ public:
 
     void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                                     const ScPatternAttr* pWantedPattern, bool bDefault );
-    void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray );
+    void    CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray );
 
     bool    IsEmpty() const;
 
@@ -210,7 +210,7 @@ public:
     void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
     void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
     void    CopyArea(
-        SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags = ScMF::NONE) const;
+        SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags = ScMF::NONE) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 

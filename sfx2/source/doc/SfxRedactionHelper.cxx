@@ -423,7 +423,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
     fillSearchOptions(aSearchOptions, pRedactionTarget);
 
     utl::TextSearch textSearch(aSearchOptions);
-    static long aLastFontHeight = 0;
+    static tools::Long aLastFontHeight = 0;
 
     MetaAction* pCurrAct;
 

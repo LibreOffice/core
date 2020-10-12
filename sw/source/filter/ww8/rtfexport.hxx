@@ -184,7 +184,7 @@ public:
     /// Return back to the real stream.
     void resetStream();
     SvStream& OutULong(sal_uLong nVal);
-    SvStream& OutLong(long nVal);
+    SvStream& OutLong(tools::Long nVal);
     void OutUnicode(const char* pToken, const OUString& rContent, bool bUpr = false);
     void OutDateTime(const char* pStr, const css::util::DateTime& rDT);
     void OutPageDescription(const SwPageDesc& rPgDsc, bool bCheckForFirstPage);

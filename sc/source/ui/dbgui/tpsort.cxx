@@ -888,7 +888,7 @@ void ScTabPageSortOptions::FillAlgor()
         lang::Locale aLocale( LanguageTag::convertToLocale( eLang ));
         const uno::Sequence<OUString> aAlgos = m_xColWrap->listCollatorAlgorithms( aLocale );
 
-        long nCount = aAlgos.getLength();
+        tools::Long nCount = aAlgos.getLength();
         for (const OUString& sAlg : aAlgos)
         {
             OUString sUser = m_xColRes->GetTranslation( sAlg );

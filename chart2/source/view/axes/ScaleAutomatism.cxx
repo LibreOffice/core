@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 
 #include <rtl/math.hxx>
+#include <tools/long.hxx>
 #include <limits>
 
 namespace chart
@@ -612,11 +613,11 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         nMaxMainIncrementCount--;
 
     //choose major time interval:
-    long nDayCount = aMaxDate - aMinDate;
-    long nMainIncrementCount = 1;
+    tools::Long nDayCount = aMaxDate - aMinDate;
+    tools::Long nMainIncrementCount = 1;
     if( !bAutoMajor )
     {
-        long nIntervalDayCount = rExplicitIncrement.MajorTimeInterval.Number;
+        tools::Long nIntervalDayCount = rExplicitIncrement.MajorTimeInterval.Number;
         if( rExplicitIncrement.MajorTimeInterval.TimeUnit < rExplicitScale.TimeResolution )
             rExplicitIncrement.MajorTimeInterval.TimeUnit = rExplicitScale.TimeResolution;
         switch( rExplicitIncrement.MajorTimeInterval.TimeUnit )
@@ -636,8 +637,8 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     }
     if( bAutoMajor )
     {
-        long nNumer = 1;
-        long nIntervalDays =  nDayCount / nMaxMainIncrementCount;
+        tools::Long nNumer = 1;
+        tools::Long nIntervalDays =  nDayCount / nMaxMainIncrementCount;
         double nDaysPerInterval = 1.0;
         if( nIntervalDays>365 || rExplicitScale.TimeResolution==YEAR )
         {
@@ -672,7 +673,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
             }
         }
         rExplicitIncrement.MajorTimeInterval.Number = nNumer;
-        nMainIncrementCount = static_cast<long>(nDayCount/(nNumer*nDaysPerInterval));
+        nMainIncrementCount = static_cast<tools::Long>(nDayCount/(nNumer*nDaysPerInterval));
     }
 
     //choose minor time interval:
@@ -680,7 +681,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     {
         if( rExplicitIncrement.MinorTimeInterval.TimeUnit > rExplicitIncrement.MajorTimeInterval.TimeUnit )
             rExplicitIncrement.MinorTimeInterval.TimeUnit = rExplicitIncrement.MajorTimeInterval.TimeUnit;
-        long nIntervalDayCount = rExplicitIncrement.MinorTimeInterval.Number;
+        tools::Long nIntervalDayCount = rExplicitIncrement.MinorTimeInterval.Number;
         switch( rExplicitIncrement.MinorTimeInterval.TimeUnit )
         {
         case DAY:

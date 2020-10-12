@@ -60,7 +60,7 @@ SwTableRep::~SwTableRep()
 
 bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
-    long nOldLeft = rTabCols.GetLeft(),
+    tools::Long nOldLeft = rTabCols.GetLeft(),
          nOldRight = rTabCols.GetRight();
 
     bool bSingleLine = false;

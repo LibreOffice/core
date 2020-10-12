@@ -201,11 +201,11 @@ DeactivateRC SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 sal_Int32 SvxHatchTabPage::SearchHatchList(const OUString& rHatchName)
 {
-    long nCount = m_pHatchingList->Count();
+    tools::Long nCount = m_pHatchingList->Count();
     bool bValidHatchName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidHatchName;i++)
+    for(tools::Long i = 0;i < nCount && bValidHatchName;i++)
     {
         if(rHatchName == m_pHatchingList->GetHatch( i )->GetName())
         {
@@ -232,7 +232,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         pXHatch.reset(new XHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) ));
+                    static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) ));
     }
     assert( pXHatch && "XHatch couldn't be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
@@ -332,7 +332,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
+                    static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
 
@@ -378,7 +378,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         m_xLbLineColor->SetNoSelection();
         m_xLbLineColor->SelectEntry( pHatch->GetColor() );
         SetMetricValue( *m_xMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
-        long nHatchAngle = pHatch->GetAngle() / 10;
+        tools::Long nHatchAngle = pHatch->GetAngle() / 10;
         m_xMtrAngle->set_value(nHatchAngle, FieldUnit::NONE);
         m_xSliderAngle->set_value(nHatchAngle);
 
@@ -402,8 +402,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
     OUString aName;
 
-    long nCount = m_pHatchingList->Count();
-    long j = 1;
+    tools::Long nCount = m_pHatchingList->Count();
+    tools::Long j = 1;
     bool bValidHatchName = false;
 
     while( !bValidHatchName )
@@ -440,7 +440,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
+                    static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
     m_pHatchingList->Insert(std::make_unique<XHatchEntry>(aXHatch, aName), nCount);
 
@@ -469,7 +469,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     XHatch aXHatch( m_xLbLineColor->GetSelectEntryColor(),
                     static_cast<css::drawing::HatchStyle>(m_xLbLineType->get_active()),
                      GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
+                    static_cast<tools::Long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10) );
 
     m_pHatchingList->Replace(std::make_unique<XHatchEntry>(aXHatch, aName), nPos);
 

@@ -30,16 +30,16 @@ BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
         {
             const BitmapColor aBlack(pWriteAcc->GetBestMatchingColor(COL_BLACK));
             const BitmapColor aWhite(pWriteAcc->GetBestMatchingColor(COL_WHITE));
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
+            const tools::Long nWidth = pWriteAcc->Width();
+            const tools::Long nHeight = pWriteAcc->Height();
 
             if (pReadAcc->HasPalette())
             {
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
                     Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         const sal_uInt8 cIndex = pReadAcc->GetIndexFromData(pScanlineRead, nX);
                         if (pReadAcc->GetPaletteColor(cIndex).GetLuminance() >= mcThreshold)
@@ -55,11 +55,11 @@ BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const
             }
             else
             {
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
                     Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         if (pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance()
                             >= mcThreshold)

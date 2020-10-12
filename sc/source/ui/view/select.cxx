@@ -502,10 +502,10 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
         {
             // direction (left or top)
 
-            long nSizeX = 0;
+            tools::Long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
                 nSizeX += rDoc.GetColWidth( i, nTab );
-            long nSizeY = static_cast<long>(rDoc.GetRowHeight( nPosY+1, nEndY, nTab ));
+            tools::Long nSizeY = static_cast<tools::Long>(rDoc.GetRowHeight( nPosY+1, nEndY, nTab ));
 
             SCCOL nDelStartX = nStartX;
             SCROW nDelStartY = nStartY;
@@ -550,7 +550,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             bool bNegX = ( nPosX < nStartX );
             bool bNegY = ( nPosY < nStartY );
 
-            long nSizeX = 0;
+            tools::Long nSizeX = 0;
             if ( bNegX )
             {
                 //  in SetCursorAtPoint hidden columns are skipped.
@@ -563,7 +563,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
                 for (SCCOL i=nEndX+1; i<=nPosX; i++)
                     nSizeX += rDoc.GetColWidth( i, nTab );
 
-            long nSizeY = 0;
+            tools::Long nSizeY = 0;
             if ( bNegY )
             {
                 //  in SetCursorAtPoint hidden rows are skipped.

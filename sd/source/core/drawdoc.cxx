@@ -370,10 +370,10 @@ SdDrawDocument::~SdDrawDocument()
 
 void SdDrawDocument::adaptSizeAndBorderForAllPages(
     const Size& rNewSize,
-    long nLeft,
-    long nRight,
-    long nUpper,
-    long nLower)
+    ::tools::Long nLeft,
+    ::tools::Long nRight,
+    ::tools::Long nUpper,
+    ::tools::Long nLower)
 {
     const sal_uInt16 nMasterPageCnt(GetMasterSdPageCount(PageKind::Standard));
     const sal_uInt16 nPageCnt(GetSdPageCount(PageKind::Standard));
@@ -411,10 +411,10 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
     const Size& rNewSize,
     PageKind ePageKind,
     SdUndoGroup* pUndoGroup,
-    long nLeft,
-    long nRight,
-    long nUpper,
-    long nLower,
+    ::tools::Long nLeft,
+    ::tools::Long nRight,
+    ::tools::Long nUpper,
+    ::tools::Long nLower,
     bool bScaleAll,
     Orientation eOrientation,
     sal_uInt16 nPaperBin,

@@ -97,12 +97,12 @@ inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
         mpNumFormatColor.reset();
 }
 
-long SwTableBox::getRowSpan() const
+tools::Long SwTableBox::getRowSpan() const
 {
     return mnRowSpan;
 }
 
-void SwTableBox::setRowSpan( long nNewRowSpan )
+void SwTableBox::setRowSpan( tools::Long nNewRowSpan )
 {
     mnRowSpan = nNewRowSpan;
 }
@@ -188,7 +188,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
                 rDoc.GetDfltTextFormatColl(), nullptr,
                 nInsPos, nCnt );
 
-    long nRowSpan = pBox->getRowSpan();
+    tools::Long nRowSpan = pBox->getRowSpan();
     if( nRowSpan != 1 )
     {
         SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
@@ -276,11 +276,11 @@ static void FormatInArr( std::vector<SwFormat*>& rFormatArr, SwFormat* pBoxForma
         rFormatArr.push_back( pBoxFormat );
 }
 
-static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
-                         const long nNew, std::vector<SwFormat*>& rFormatArr );
+static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
+                         const tools::Long nNew, std::vector<SwFormat*>& rFormatArr );
 
-static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
-                         const long nNew, std::vector<SwFormat*>& rFormatArr, const bool bCheckSum )
+static void lcl_ModifyLines( SwTableLines &rLines, const tools::Long nOld,
+                         const tools::Long nNew, std::vector<SwFormat*>& rFormatArr, const bool bCheckSum )
 {
     for ( size_t i = 0; i < rLines.size(); ++i )
         ::lcl_ModifyBoxes( rLines[i]->GetTabBoxes(), nOld, nNew, rFormatArr );
@@ -297,8 +297,8 @@ static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
     }
 }
 
-static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
-                         const long nNew, std::vector<SwFormat*>& rFormatArr )
+static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
+                         const tools::Long nNew, std::vector<SwFormat*>& rFormatArr )
 {
     sal_uInt64 nSum = 0; // To avoid rounding errors we summarize all box widths
     sal_uInt64 nOriginalSum = 0; // Sum of original widths
@@ -373,7 +373,7 @@ void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
         AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
 }
 
-void SwTable::AdjustWidths( const long nOld, const long nNew )
+void SwTable::AdjustWidths( const tools::Long nOld, const tools::Long nNew )
 {
     std::vector<SwFormat*> aFormatArr;
     aFormatArr.reserve( m_aLines[0]->GetTabBoxes().size() );
@@ -384,7 +384,7 @@ static void lcl_RefreshHidden( SwTabCols &rToFill, size_t nPos )
 {
     for ( size_t i = 0; i < rToFill.Count(); ++i )
     {
-        if ( std::abs(static_cast<long>(nPos) - rToFill[i]) <= COLFUZZY )
+        if ( std::abs(static_cast<tools::Long>(nPos) - rToFill[i]) <= COLFUZZY )
         {
             rToFill.SetHidden( i, false );
             break;
@@ -396,20 +396,20 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const SwFrameFormat *pTabFormat, const bool bHidden,
                    const bool bRefreshHidden )
 {
-    const long nWish = pTabFormat->GetFrameSize().GetWidth();
+    const tools::Long nWish = pTabFormat->GetFrameSize().GetWidth();
     OSL_ENSURE(nWish, "weird <= 0 width frmfrm");
 
     // The value for the left edge of the box is calculated from the
     // widths of the previous boxes.
-    long nPos = 0;
-    long nLeftMin = 0;
-    long nRightMax = 0;
+    tools::Long nPos = 0;
+    tools::Long nLeftMin = 0;
+    tools::Long nRightMax = 0;
     if (nWish != 0) //fdo#33012 0 width frmfmt
     {
         SwTwips nSum = 0;
         const SwTableBox  *pCur  = pBox;
         const SwTableLine *pLine = pBox->GetUpper();
-        const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
+        const tools::Long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
 
         while ( pLine )
         {
@@ -418,7 +418,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
             {
                 const SwTwips nWidth = rBoxes[i]->GetFrameFormat()->GetFrameSize().GetWidth();
                 nSum += nWidth;
-                const long nTmp = lcl_MulDiv64<long>(nSum, nAct, nWish);
+                const tools::Long nTmp = lcl_MulDiv64<long>(nSum, nAct, nWish);
 
                 if (rBoxes[i] != pCur)
                 {
@@ -442,7 +442,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     bool bInsert = !bRefreshHidden;
     for ( size_t j = 0; bInsert && (j < rToFill.Count()); ++j )
     {
-        long nCmp = rToFill[j];
+        tools::Long nCmp = rToFill[j];
         if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
              (nPos <= (nCmp + COLFUZZY)) )
         {
@@ -472,17 +472,17 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     for ( size_t j = 0; !(bFoundPos && bFoundMax ) && j < rToFill.Count(); ++j )
     {
         SwTabColsEntry& rEntry = rToFill.GetEntry( j );
-        long nCmp = rToFill[j];
+        tools::Long nCmp = rToFill[j];
 
         if ( (nPos >= ((nCmp >= COLFUZZY) ? nCmp - COLFUZZY : nCmp)) &&
              (nPos <= (nCmp + COLFUZZY)) )
         {
             // check if nLeftMin is > old minimum for entry nPos:
-            const long nOldMin = rEntry.nMin;
+            const tools::Long nOldMin = rEntry.nMin;
             if ( nLeftMin > nOldMin )
                 rEntry.nMin = nLeftMin;
             // check if nRightMin is < old maximum for entry nPos:
-            const long nOldMax = rEntry.nMax;
+            const tools::Long nOldMax = rEntry.nMax;
             if ( nRightMax < nOldMax )
                 rEntry.nMax = nRightMax;
 
@@ -492,7 +492,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                   (nRightMax <= (nCmp + COLFUZZY)) )
         {
             // check if nPos is > old minimum for entry nRightMax:
-            const long nOldMin = rEntry.nMin;
+            const tools::Long nOldMin = rEntry.nMin;
             if ( nPos > nOldMin )
                 rEntry.nMin = nPos;
 
@@ -620,7 +620,7 @@ struct Parm
 {
     const SwTabCols &rNew;
     const SwTabCols &rOld;
-    long nNewWish,
+    tools::Long nNewWish,
          nOldWish;
     std::deque<SwTableBox*> aBoxArr;
     SwShareBoxFormats aShareFormats;
@@ -660,12 +660,12 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         // the new TabCols. If the adjusted edge has no neighbour we also
         // adjust all superior boxes.
 
-        const long nOldAct = rParm.rOld.GetRight() -
+        const tools::Long nOldAct = rParm.rOld.GetRight() -
                              rParm.rOld.GetLeft(); // +1 why?
 
         // The value for the left edge of the box is calculated from the
         // widths of the previous boxes plus the left edge.
-        long nLeft = rParm.rOld.GetLeft();
+        tools::Long nLeft = rParm.rOld.GetLeft();
         const  SwTableBox  *pCur  = pBox;
         const  SwTableLine *pLine = pBox->GetUpper();
 
@@ -681,15 +681,15 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             pCur  = pLine->GetUpper();
             pLine = pCur ? pCur->GetUpper() : nullptr;
         }
-        long nLeftDiff = 0;
-        long nRightDiff = 0;
+        tools::Long nLeftDiff = 0;
+        tools::Long nRightDiff = 0;
         if ( nLeft != rParm.rOld.GetLeft() ) // There are still boxes before this.
         {
             // Right edge is left edge plus width.
-            const long nWidth = lcl_MulDiv64<long>(
+            const tools::Long nWidth = lcl_MulDiv64<long>(
                 pBox->GetFrameFormat()->GetFrameSize().GetWidth(),
                 nOldAct, rParm.nOldWish);
-            const long nRight = nLeft + nWidth;
+            const tools::Long nRight = nLeft + nWidth;
             size_t nLeftPos  = 0;
             size_t nRightPos = 0;
             bool bFoundLeftPos = false;
@@ -720,10 +720,10 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             if ( rParm.rOld.Count() )
             {
                 // Calculate the difference to the edge touching the first box.
-                const long nWidth = lcl_MulDiv64<long>(
+                const tools::Long nWidth = lcl_MulDiv64<long>(
                     pBox->GetFrameFormat()->GetFrameSize().GetWidth(),
                     nOldAct, rParm.nOldWish);
-                const long nTmp = nWidth + rParm.rOld.GetLeft();
+                const tools::Long nTmp = nWidth + rParm.rOld.GetLeft();
                 for ( size_t i = 0; i < rParm.rOld.Count(); ++i )
                 {
                     if ( nTmp >= (rParm.rOld[i] - COLFUZZY) &&
@@ -755,12 +755,12 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             // tables, it does not make sense to adjust the attributes of the
             // boxes by this amount. The difference amount needs to be converted
             // accordingly.
-            long nTmp = rParm.rNew.GetRight() - rParm.rNew.GetLeft(); // +1 why?
+            tools::Long nTmp = rParm.rNew.GetRight() - rParm.rNew.GetLeft(); // +1 why?
             nLeftDiff *= rParm.nNewWish;
             nLeftDiff /= nTmp;
             nRightDiff *= rParm.nNewWish;
             nRightDiff /= nTmp;
-            long nDiff = nLeftDiff + nRightDiff;
+            tools::Long nDiff = nLeftDiff + nRightDiff;
 
             // Adjust the box and all superiors by the difference amount.
             while ( pBox )
@@ -813,9 +813,9 @@ static void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxAr
         rBoxArr.push_back( pBox );
 }
 
-static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
+static void lcl_AdjustBox( SwTableBox *pBox, const tools::Long nDiff, Parm &rParm );
 
-static void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
+static void lcl_AdjustLines( SwTableLines &rLines, const tools::Long nDiff, Parm &rParm )
 {
     for ( size_t i = 0; i < rLines.size(); ++i )
     {
@@ -825,7 +825,7 @@ static void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm
     }
 }
 
-static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
+static void lcl_AdjustBox( SwTableBox *pBox, const tools::Long nDiff, Parm &rParm )
 {
     if ( !pBox->GetTabLines().empty() )
         ::lcl_AdjustLines( pBox->GetTabLines(), nDiff, rParm );
@@ -892,8 +892,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             }
             pFormat->SetFormatAttr( aOri );
         }
-        const long nAct = rOld.GetRight() - rOld.GetLeft(); // +1 why?
-        long nTabDiff = 0;
+        const tools::Long nAct = rOld.GetRight() - rOld.GetLeft(); // +1 why?
+        tools::Long nTabDiff = 0;
 
         if ( rOld.GetLeft() != rNew.GetLeft() )
         {
@@ -903,7 +903,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
         if ( rOld.GetRight() != rNew.GetRight() )
         {
-            long nDiff = rNew.GetRight() - rOld.GetRight();
+            tools::Long nDiff = rNew.GetRight() - rOld.GetRight();
             nDiff *= aParm.nOldWish;
             nDiff /= nAct;
             nTabDiff += nDiff;
@@ -1048,7 +1048,7 @@ static void lcl_AdjustWidthsInLine( SwTableLine* pLine, ChangeList& rOldNew,
 }
 
 static void lcl_CalcNewWidths( std::vector<sal_uInt16> &rSpanPos, ChangeList& rChanges,
-    SwTableLine* pLine, long nWish, long nWidth, bool bTop )
+    SwTableLine* pLine, tools::Long nWish, tools::Long nWidth, bool bTop )
 {
     if( rChanges.empty() )
     {
@@ -1074,7 +1074,7 @@ static void lcl_CalcNewWidths( std::vector<sal_uInt16> &rSpanPos, ChangeList& rC
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
         SwTwips nCurrWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
-        const long nRowSpan = pBox->getRowSpan();
+        const tools::Long nRowSpan = pBox->getRowSpan();
         const bool bCurrRowSpan = bTop ? nRowSpan < 0 :
             ( nRowSpan > 1 || nRowSpan < -1 );
         if( bRowSpan || bCurrRowSpan )
@@ -1180,14 +1180,14 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 #endif
     // First step: evaluate which lines have been moved/which widths changed
     ChangeList aOldNew;
-    const long nNewWidth = rParm.rNew.GetRight() - rParm.rNew.GetLeft();
-    const long nOldWidth = rParm.rOld.GetRight() - rParm.rOld.GetLeft();
+    const tools::Long nNewWidth = rParm.rNew.GetRight() - rParm.rNew.GetLeft();
+    const tools::Long nOldWidth = rParm.rOld.GetRight() - rParm.rOld.GetLeft();
     if( nNewWidth < 1 || nOldWidth < 1 )
         return;
     for( size_t i = 0; i <= rOld.Count(); ++i )
     {
-        long nNewPos;
-        long nOldPos;
+        tools::Long nNewPos;
+        tools::Long nOldPos;
         if( i == rOld.Count() )
         {
             nOldPos = rParm.rOld.GetRight() - rParm.rOld.GetLeft();

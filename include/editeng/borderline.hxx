@@ -23,6 +23,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
 #include <tools/color.hxx>
+#include <tools/long.hxx>
 #include <tools/mapunit.hxx>
 #include <editeng/editengdllapi.h>
 #include <svtools/borderline.hxx>
@@ -144,11 +145,11 @@ class EDITENG_DLLPUBLIC SvxBorderLine final
 {
     Color  aColor;
 
-    long m_nWidth;
+    tools::Long m_nWidth;
     bool m_bMirrorWidths;
     BorderWidthImpl m_aWidthImpl;
-    long m_nMult;
-    long m_nDiv;
+    tools::Long m_nMult;
+    tools::Long m_nDiv;
 
     SvxBorderLineStyle   m_nStyle;
 
@@ -159,7 +160,7 @@ class EDITENG_DLLPUBLIC SvxBorderLine final
 
 public:
     SvxBorderLine( const Color *pCol = nullptr,
-            long nWidth = 0,
+            tools::Long nWidth = 0,
             SvxBorderLineStyle nStyle = SvxBorderLineStyle::SOLID,
             Color (*pColorOutFn)( Color ) = &darkColor,
             Color (*pColorInFn)( Color ) = &darkColor );
@@ -170,7 +171,7 @@ public:
     bool            HasGapColor() const { return m_pColorGapFn != nullptr; }
     Color           GetColorGap() const;
 
-    void SetWidth( long nWidth );
+    void SetWidth( tools::Long nWidth );
     /** Guess the style and width from the three lines widths values.
 
         When the value of nStyle is SvxBorderLine::DOUBLE, the style set will be guessed
@@ -200,7 +201,7 @@ public:
 
     // TODO Hacky method to mirror lines in only a few cases
     void            SetMirrorWidths() { m_bMirrorWidths = true; }
-    long            GetWidth( ) const { return m_nWidth; }
+    tools::Long            GetWidth( ) const { return m_nWidth; }
     sal_uInt16      GetOutWidth() const;
     sal_uInt16      GetInWidth() const;
     sal_uInt16      GetDistance() const;
@@ -209,7 +210,7 @@ public:
 
     void            SetColor( const Color &rColor ) { aColor = rColor; }
     void            SetBorderLineStyle( SvxBorderLineStyle nNew );
-    void            ScaleMetrics( long nMult, long nDiv );
+    void            ScaleMetrics( tools::Long nMult, tools::Long nDiv );
 
     bool            operator==( const SvxBorderLine &rCmp ) const;
 

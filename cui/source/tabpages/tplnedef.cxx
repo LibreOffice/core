@@ -377,7 +377,7 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
 {
     if( !m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != eFUnit )
     {
-        long nTmp1, nTmp2, nTmp3;
+        tools::Long nTmp1, nTmp2, nTmp3;
 
         // was changed with Control
         if( p )
@@ -412,7 +412,7 @@ void SvxLineDefTabPage::ChangeMetricHdl_Impl(const weld::ToggleButton* p)
     }
     else if( m_xCbxSynchronize->get_active() && m_xMtrLength1->get_unit() != FieldUnit::PERCENT )
     {
-        long nTmp1, nTmp2, nTmp3;
+        tools::Long nTmp1, nTmp2, nTmp3;
 
         // was changed with Control
         if( p )
@@ -491,8 +491,8 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc(CuiResId(RID_SVXSTR_DESC_LINESTYLE));
     OUString aName;
 
-    long nCount = pDashList->Count();
-    long j = 1;
+    tools::Long nCount = pDashList->Count();
+    tools::Long j = 1;
     bool bDifferent = false;
 
     while ( !bDifferent )
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         aName = aNewName + " " + OUString::number( j++ );
         bDifferent = true;
 
-        for ( long i = 0; i < nCount && bDifferent; i++ )
+        for ( tools::Long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pDashList->GetDash( i )->GetName() )
                 bDifferent = false;
     }
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
         pDlg->GetName( aName );
         bDifferent = true;
 
-        for( long i = 0; i < nCount && bDifferent; i++ )
+        for( tools::Long i = 0; i < nCount && bDifferent; i++ )
         {
             if( aName == pDashList->GetDash( i )->GetName() )
                 bDifferent = false;
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, weld::Button&, void)
             bLoop = false;
             FillDash_Impl();
 
-            long nDashCount = pDashList->Count();
+            tools::Long nDashCount = pDashList->Count();
             pDashList->Insert( std::make_unique<XDashEntry>(aDash, aName), nDashCount );
             m_xLbLineStyles->Append( *pDashList->GetDash(nDashCount), pDashList->GetUiBitmap(nDashCount) );
 
@@ -575,7 +575,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    long nCount = pDashList->Count();
+    tools::Long nCount = pDashList->Count();
     bool bLoop = true;
 
     while ( bLoop && pDlg->Execute() == RET_OK )
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl, weld::Button&, void)
         pDlg->GetName( aName );
         bool bDifferent = true;
 
-        for( long i = 0; i < nCount && bDifferent; i++ )
+        for( tools::Long i = 0; i < nCount && bDifferent; i++ )
         {
             if( aName == pDashList->GetDash( i )->GetName() &&
                 aName != aOldName )

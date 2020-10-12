@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
+#include <tools/long.hxx>
 
 #define MAX_DIGITS 8
 
@@ -88,7 +89,7 @@ public:
     operator        sal_uInt32() const;
     operator        double() const;
 #if SAL_TYPES_SIZEOFLONG == 8
-    operator        long() const;
+    operator        tools::Long() const;
 #endif
 
     bool            IsSet() const { return bIsSet; }
@@ -156,7 +157,7 @@ inline BigInt::operator sal_uInt32() const
 }
 
 #if SAL_TYPES_SIZEOFLONG == 8
-inline BigInt::operator long() const
+inline BigInt::operator tools::Long() const
 {
     // Clamp to int32 since long is int32 on Windows.
     if (!bIsBig)

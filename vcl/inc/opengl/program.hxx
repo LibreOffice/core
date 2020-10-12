@@ -89,7 +89,7 @@ public:
     void SetColor( const OString& rName, const Color& rColor );
     void SetColor( const OString& rName, Color nColor, sal_uInt8 nTransparency );
     void SetColorf( const OString& rName, Color nColor, double fTransparency );
-    void SetColorWithIntensity( const OString& rName, const Color& rColor, long nFactor );
+    void SetColorWithIntensity( const OString& rName, const Color& rColor, tools::Long nFactor );
     void SetTexture( const OString& rName, OpenGLTexture& rTexture );
     void SetTransform( const OString& rName, const OpenGLTexture& rTexture,
                        const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,

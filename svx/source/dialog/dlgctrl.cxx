@@ -432,8 +432,8 @@ void SvxRectCtl::LoseFocus()
 Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 {
     Point   aPt = rPt;
-    long    x;
-    long    y;
+    tools::Long    x;
+    tools::Long    y;
 
     Size aSize(GetOutputSizePixel());
 
@@ -579,15 +579,15 @@ css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccess
     return m_xAccess.get();
 }
 
-long SvxPixelCtl::PointToIndex(const Point &aPt) const
+tools::Long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
-    long nX = aPt.X() * nLines / aRectSize.Width();
-    long nY = aPt.Y() * nLines / aRectSize.Height();
+    tools::Long nX = aPt.X() * nLines / aRectSize.Width();
+    tools::Long nY = aPt.Y() * nLines / aRectSize.Height();
 
     return nX + nY * nLines ;
 }
 
-Point SvxPixelCtl::IndexToPoint(long nIndex) const
+Point SvxPixelCtl::IndexToPoint(tools::Long nIndex) const
 {
     DBG_ASSERT(nIndex >= 0 && nIndex < nSquares ," Check Index");
 
@@ -601,12 +601,12 @@ Point SvxPixelCtl::IndexToPoint(long nIndex) const
     return aPtTl;
 }
 
-long SvxPixelCtl::GetFocusPosIndex() const
+tools::Long SvxPixelCtl::GetFocusPosIndex() const
 {
     return aFocusPosition.getX() + aFocusPosition.getY() * nLines ;
 }
 
-long SvxPixelCtl::ShowPosition( const Point &rPt)
+tools::Long SvxPixelCtl::ShowPosition( const Point &rPt)
 {
     sal_Int32 nX = rPt.X() * nLines / aRectSize.Width();
     sal_Int32 nY = rPt.Y() * nLines / aRectSize.Height();
@@ -673,7 +673,7 @@ bool SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
         GrabFocus();
     }
 
-    long nIndex = ShowPosition(rMEvt.GetPosPixel());
+    tools::Long nIndex = ShowPosition(rMEvt.GetPosPixel());
 
     if(m_xAccess.is())
     {
@@ -751,8 +751,8 @@ void SvxPixelCtl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectan
 //Calculate visual focus rectangle via focus position
 tools::Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
 {
-    long nLeft,nTop,nRight,nBottom;
-    long i,j;
+    tools::Long nLeft,nTop,nRight,nBottom;
+    tools::Long i,j;
     i = aPosition.Y();
     j = aPosition.X();
     nLeft = aRectSize.Width() * j / nLines + 1;
@@ -820,7 +820,7 @@ bool SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
         }
         if(m_xAccess.is())
         {
-            long nIndex = GetFocusPosIndex();
+            tools::Long nIndex = GetFocusPosIndex();
             switch(nCode)
             {
             case KEY_LEFT:
@@ -931,10 +931,10 @@ void SvxLineLB::Fill( const XDashListRef &pList )
 
     // entries for dashed lines
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     m_xControl->freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XDashEntry* pEntry = pList->GetDash(i);
         const BitmapEx aBitmap = pList->GetUiBitmap( i );
@@ -1000,11 +1000,11 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     if( !pList.is() )
         return;
 
-    long nCount = pList->Count();
+    tools::Long nCount = pList->Count();
     ScopedVclPtrInstance< VirtualDevice > pVD;
     m_xControl->freeze();
 
-    for( long i = 0; i < nCount; i++ )
+    for( tools::Long i = 0; i < nCount; i++ )
     {
         const XLineEndEntry* pEntry = pList->GetLineEnd(i);
         const BitmapEx aBitmap = pList->GetUiBitmap( i );

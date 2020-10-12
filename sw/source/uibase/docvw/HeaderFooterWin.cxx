@@ -213,7 +213,7 @@ void SwHeaderFooterWin::dispose()
     SwFrameMenuButtonBase::dispose();
 }
 
-void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEnd)
+void SwHeaderFooterWin::SetOffset(Point aOffset, tools::Long nXLineStart, tools::Long nXLineEnd)
 {
     // Compute the text to show
     const SwPageDesc* pDesc = GetPageFrame()->GetPageDesc();
@@ -243,7 +243,7 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEn
     Size aBoxSize (aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,
                    aFontMetric.GetLineHeight() + TEXT_PADDING  * 2 );
 
-    long nYFooterOff = 0;
+    tools::Long nYFooterOff = 0;
     if (!m_bIsHeader)
         nYFooterOff = aBoxSize.Height();
 

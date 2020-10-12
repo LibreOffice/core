@@ -40,7 +40,7 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROUND(x) static_cast<long>((x) + .5)
+#define ROUND(x) static_cast<tools::Long>((x) + .5)
 
 namespace {
 
@@ -139,14 +139,14 @@ void SwLabPreview::SetDrawingArea(weld::DrawingArea* pWidget)
 void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     const Size aSize(GetOutputSizePixel());
-    const long lOutWPix = aSize.Width();
-    const long lOutHPix = aSize.Height();
+    const tools::Long lOutWPix = aSize.Width();
+    const tools::Long lOutHPix = aSize.Height();
 
     // Scale factor
     const double fxpix = double(lOutWPix - (2 * (m_lLeftWidth + 15))) / double(lOutWPix);
 
-    const long lOutWPix23 = long(double(lOutWPix) * fxpix);
-    const long lOutHPix23 = long(double(lOutHPix) * fxpix);
+    const tools::Long lOutWPix23 = tools::Long(double(lOutWPix) * fxpix);
+    const tools::Long lOutHPix23 = tools::Long(double(lOutHPix) * fxpix);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
@@ -167,11 +167,11 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.SetFont(aPaintFont);
 
     // size of region to be displayed
-    const long lDispW = m_aItem.m_lLeft + m_aItem.m_lHDist + ((m_aItem.m_nCols == 1)
+    const tools::Long lDispW = m_aItem.m_lLeft + m_aItem.m_lHDist + ((m_aItem.m_nCols == 1)
                             ? m_aItem.m_lLeft
                             : ROUND(m_aItem.m_lHDist / 10.0));
 
-    const long lDispH = m_aItem.m_lUpper + m_aItem.m_lVDist + ((m_aItem.m_nRows == 1)
+    const tools::Long lDispH = m_aItem.m_lUpper + m_aItem.m_lVDist + ((m_aItem.m_nRows == 1)
                             ? m_aItem.m_lUpper
                             : ROUND(m_aItem.m_lVDist / 10.0));
 
@@ -181,17 +181,17 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     const float f  = std::min(fx, fy);
 
     // zero point
-    const long lOutlineW = ROUND(f * lDispW);
-    const long lOutlineH = ROUND(f * lDispH);
+    const tools::Long lOutlineW = ROUND(f * lDispW);
+    const tools::Long lOutlineH = ROUND(f * lDispH);
 
-    const long lX0 = (lOutWPix - lOutlineW) / 2;
-    const long lY0 = (lOutHPix - lOutlineH) / 2;
-    const long lX1 = lX0 + ROUND(f *  m_aItem.m_lLeft );
-    const long lY1 = lY0 + ROUND(f *  m_aItem.m_lUpper);
-    const long lX2 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lWidth ));
-    const long lY2 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lHeight));
-    const long lX3 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lHDist ));
-    const long lY3 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lVDist ));
+    const tools::Long lX0 = (lOutWPix - lOutlineW) / 2;
+    const tools::Long lY0 = (lOutHPix - lOutlineH) / 2;
+    const tools::Long lX1 = lX0 + ROUND(f *  m_aItem.m_lLeft );
+    const tools::Long lY1 = lY0 + ROUND(f *  m_aItem.m_lUpper);
+    const tools::Long lX2 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lWidth ));
+    const tools::Long lY2 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lHeight));
+    const tools::Long lX3 = lX0 + ROUND(f * (m_aItem.m_lLeft  + m_aItem.m_lHDist ));
+    const tools::Long lY3 = lY0 + ROUND(f * (m_aItem.m_lUpper + m_aItem.m_lVDist ));
 
     // draw outline (area)
     rRenderContext.DrawRect(tools::Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
@@ -221,7 +221,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     // annotation: left border
     if (m_aItem.m_lLeft)
     {
-        long lX = (lX0 + lX1) / 2;
+        tools::Long lX = (lX0 + lX1) / 2;
         DrawArrow(rRenderContext, Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), false);
         DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
         rRenderContext.DrawText(Point(lX1 - m_lLeftWidth, lY0 - 10 - m_lXHeight), m_aLeftStr);
@@ -236,8 +236,8 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     // annotation: width and height
     {
-        long lX = lX2 - m_lXWidth / 2 - m_lHeightWidth / 2;
-        long lY = lY1 + m_lXHeight;
+        tools::Long lX = lX2 - m_lXWidth / 2 - m_lHeightWidth / 2;
+        tools::Long lY = lY1 + m_lXHeight;
 
         rRenderContext.DrawLine(Point(lX1, lY), Point(lX2 - 1, lY));
         rRenderContext.DrawLine(Point(lX, lY1), Point(lX, lY2 - 1));
@@ -249,7 +249,7 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     // annotation: horizontal gap
     if (m_aItem.m_nCols > 1)
     {
-        long lX = (lX1 + lX3) / 2;
+        tools::Long lX = (lX1 + lX3) / 2;
         DrawArrow(rRenderContext, Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), false);
         DrawArrow(rRenderContext, Point(lX, lY0 - 10), Point(lX, lY0 - 5), true);
         rRenderContext.DrawText(Point(lX - m_lHDistWidth / 2, lY0 - 10 - m_lXHeight), m_aHDistStr);
@@ -264,14 +264,14 @@ void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
 
     // annotation: columns
     {
-        long lY = lY0 + lOutlineH + 4;
+        tools::Long lY = lY0 + lOutlineH + 4;
         DrawArrow(rRenderContext, Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), true);
         rRenderContext.DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - m_lColsWidth / 2, lY + 5), m_aColsStr);
     }
 
     // annotation: lines
     {
-        long lX = lX0 + lOutlineW + 4;
+        tools::Long lX = lX0 + lOutlineW + 4;
         DrawArrow(rRenderContext, Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), true);
         rRenderContext.DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - m_lXHeight / 2) / 2), m_aRowsStr);
     }
@@ -364,42 +364,42 @@ IMPL_LINK_NOARG(SwLabFormatPage, PreviewHdl, Timer *, void)
 
 void SwLabFormatPage::ChangeMinMax()
 {
-    long lMax = 31748; // 56 cm
-    long nMinSize = 10; // 0,1cm
+    tools::Long lMax = 31748; // 56 cm
+    tools::Long nMinSize = 10; // 0,1cm
 
     // Min and Max
 
     int nCols   = m_xColsField->get_value(),
         nRows   = m_xRowsField->get_value();
-    long lLeft   = static_cast< long >(getfldval(*m_xLeftField )),
-         lUpper  = static_cast< long >(getfldval(*m_xUpperField)),
-         lHDist  = static_cast< long >(getfldval(*m_xHDistField)),
-         lVDist  = static_cast< long >(getfldval(*m_xVDistField)),
-         lWidth  = static_cast< long >(getfldval(*m_xWidthField)),
-         lHeight = static_cast< long >(getfldval(*m_xHeightField)),
+    tools::Long lLeft   = static_cast< tools::Long >(getfldval(*m_xLeftField )),
+         lUpper  = static_cast< tools::Long >(getfldval(*m_xUpperField)),
+         lHDist  = static_cast< tools::Long >(getfldval(*m_xHDistField)),
+         lVDist  = static_cast< tools::Long >(getfldval(*m_xVDistField)),
+         lWidth  = static_cast< tools::Long >(getfldval(*m_xWidthField)),
+         lHeight = static_cast< tools::Long >(getfldval(*m_xHeightField)),
          lMinPWidth  = lLeft  + (nCols - 1) * lHDist + lWidth,
          lMinPHeight = lUpper + (nRows - 1) * lVDist + lHeight;
 
     m_xHDistField->set_min(nMinSize, FieldUnit::CM);
     m_xVDistField->set_min(nMinSize, FieldUnit::CM);
 
-    m_xHDistField->set_max(long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<long>(nCols))), FieldUnit::TWIP);
-    m_xVDistField->set_max(long(100) * ((lMax - lUpper) / std::max(1L, static_cast<long>(nRows))), FieldUnit::TWIP);
+    m_xHDistField->set_max(tools::Long(100) * ((lMax - lLeft ) / std::max(1L, static_cast<tools::Long>(nCols))), FieldUnit::TWIP);
+    m_xVDistField->set_max(tools::Long(100) * ((lMax - lUpper) / std::max(1L, static_cast<tools::Long>(nRows))), FieldUnit::TWIP);
 
     m_xWidthField->set_min(nMinSize, FieldUnit::CM);
     m_xHeightField->set_min(nMinSize, FieldUnit::CM);
 
-    m_xWidthField->set_max(long(100) * lHDist, FieldUnit::TWIP);
-    m_xHeightField->set_max(long(100) * lVDist, FieldUnit::TWIP);
+    m_xWidthField->set_max(tools::Long(100) * lHDist, FieldUnit::TWIP);
+    m_xHeightField->set_max(tools::Long(100) * lVDist, FieldUnit::TWIP);
 
-    m_xLeftField->set_max(long(100) * (lMax - nCols * lHDist), FieldUnit::TWIP);
-    m_xUpperField->set_max(long(100) * (lMax - nRows * lVDist), FieldUnit::TWIP);
+    m_xLeftField->set_max(tools::Long(100) * (lMax - nCols * lHDist), FieldUnit::TWIP);
+    m_xUpperField->set_max(tools::Long(100) * (lMax - nRows * lVDist), FieldUnit::TWIP);
 
     m_xColsField->set_range(1, (lMax - lLeft ) / std::max(1L, lHDist));
     m_xRowsField->set_range(1, (lMax - lUpper) / std::max(1L, lVDist));
 
-    m_xPWidthField->set_range(long(100) * lMinPWidth, long(100) * lMax, FieldUnit::TWIP);
-    m_xPHeightField->set_range(long(100) * lMinPHeight, long(100) * lMax, FieldUnit::TWIP);
+    m_xPWidthField->set_range(tools::Long(100) * lMinPWidth, tools::Long(100) * lMax, FieldUnit::TWIP);
+    m_xPHeightField->set_range(tools::Long(100) * lMinPHeight, tools::Long(100) * lMax, FieldUnit::TWIP);
 }
 
 std::unique_ptr<SfxTabPage> SwLabFormatPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet)
@@ -429,16 +429,16 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
     rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM_LABEL);
 
     SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
-    rItem.m_lHDist  = rRec.m_nHDist  = static_cast< long >(getfldval(*m_xHDistField ));
-    rItem.m_lVDist  = rRec.m_nVDist  = static_cast< long >(getfldval(*m_xVDistField ));
-    rItem.m_lWidth  = rRec.m_nWidth  = static_cast< long >(getfldval(*m_xWidthField ));
-    rItem.m_lHeight = rRec.m_nHeight = static_cast< long >(getfldval(*m_xHeightField));
-    rItem.m_lLeft   = rRec.m_nLeft   = static_cast< long >(getfldval(*m_xLeftField  ));
-    rItem.m_lUpper  = rRec.m_nUpper  = static_cast< long >(getfldval(*m_xUpperField ));
+    rItem.m_lHDist  = rRec.m_nHDist  = static_cast< tools::Long >(getfldval(*m_xHDistField ));
+    rItem.m_lVDist  = rRec.m_nVDist  = static_cast< tools::Long >(getfldval(*m_xVDistField ));
+    rItem.m_lWidth  = rRec.m_nWidth  = static_cast< tools::Long >(getfldval(*m_xWidthField ));
+    rItem.m_lHeight = rRec.m_nHeight = static_cast< tools::Long >(getfldval(*m_xHeightField));
+    rItem.m_lLeft   = rRec.m_nLeft   = static_cast< tools::Long >(getfldval(*m_xLeftField  ));
+    rItem.m_lUpper  = rRec.m_nUpper  = static_cast< tools::Long >(getfldval(*m_xUpperField ));
     rItem.m_nCols   = rRec.m_nCols   = static_cast< sal_Int32 >(m_xColsField->get_value());
     rItem.m_nRows   = rRec.m_nRows   = static_cast< sal_Int32 >(m_xRowsField->get_value());
-    rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< long >(getfldval(*m_xPWidthField ));
-    rItem.m_lPHeight = rRec.m_nPHeight = static_cast< long >(getfldval(*m_xPHeightField));
+    rItem.m_lPWidth  = rRec.m_nPWidth  = static_cast< tools::Long >(getfldval(*m_xPWidthField ));
+    rItem.m_lPHeight = rRec.m_nPHeight = static_cast< tools::Long >(getfldval(*m_xPHeightField));
 
 }
 
@@ -486,16 +486,16 @@ void SwLabFormatPage::Reset(const SfxItemSet* )
 IMPL_LINK_NOARG(SwLabFormatPage, SaveHdl, weld::Button&, void)
 {
     SwLabRec aRec;
-    aRec.m_nHDist  = static_cast< long >(getfldval(*m_xHDistField));
-    aRec.m_nVDist  = static_cast< long >(getfldval(*m_xVDistField ));
-    aRec.m_nWidth  = static_cast< long >(getfldval(*m_xWidthField ));
-    aRec.m_nHeight = static_cast< long >(getfldval(*m_xHeightField));
-    aRec.m_nLeft   = static_cast< long >(getfldval(*m_xLeftField  ));
-    aRec.m_nUpper  = static_cast< long >(getfldval(*m_xUpperField ));
+    aRec.m_nHDist  = static_cast< tools::Long >(getfldval(*m_xHDistField));
+    aRec.m_nVDist  = static_cast< tools::Long >(getfldval(*m_xVDistField ));
+    aRec.m_nWidth  = static_cast< tools::Long >(getfldval(*m_xWidthField ));
+    aRec.m_nHeight = static_cast< tools::Long >(getfldval(*m_xHeightField));
+    aRec.m_nLeft   = static_cast< tools::Long >(getfldval(*m_xLeftField  ));
+    aRec.m_nUpper  = static_cast< tools::Long >(getfldval(*m_xUpperField ));
     aRec.m_nCols   = static_cast< sal_Int32 >(m_xColsField->get_value());
     aRec.m_nRows   = static_cast< sal_Int32 >(m_xRowsField->get_value());
-    aRec.m_nPWidth  = static_cast< long >(getfldval(*m_xPWidthField ));
-    aRec.m_nPHeight = static_cast< long >(getfldval(*m_xPHeightField));
+    aRec.m_nPWidth  = static_cast< tools::Long >(getfldval(*m_xPWidthField ));
+    aRec.m_nPHeight = static_cast< tools::Long >(getfldval(*m_xPHeightField));
     aRec.m_bCont = aItem.m_bCont;
     SwSaveLabelDlg aSaveDlg(GetParentSwLabDlg(), aRec);
     aSaveDlg.SetLabel(aItem.m_aLstMake, aItem.m_aLstType);

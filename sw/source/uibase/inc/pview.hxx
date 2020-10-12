@@ -141,7 +141,7 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    void Scroll(long nXMove, long nYMove, ScrollFlags nFlags = ScrollFlags::NONE) override;
+    void Scroll(tools::Long nXMove, tools::Long nYMove, ScrollFlags nFlags = ScrollFlags::NONE) override;
 
     /** Method to enable/disable book preview
         @param _bBookPreview

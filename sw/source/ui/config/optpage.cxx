@@ -1431,18 +1431,18 @@ void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     // Page
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
 
-    const long nOutWPix = aPage.GetWidth();
-    const long nOutHPix = aPage.GetHeight();
+    const tools::Long nOutWPix = aPage.GetWidth();
+    const tools::Long nOutHPix = aPage.GetHeight();
 
     // PrintArea
-    const long nLBorder = 8;
-    const long nRBorder = 8;
-    const long nTBorder = 4;
-    const long nBBorder = 4;
+    const tools::Long nLBorder = 8;
+    const tools::Long nRBorder = 8;
+    const tools::Long nTBorder = 4;
+    const tools::Long nBBorder = 4;
 
     aLeftPagePrtArea = tools::Rectangle(Point(nLBorder, nTBorder), Point((nOutWPix - 1) - nRBorder, (nOutHPix - 1) - nBBorder));
-    const long nWidth = aLeftPagePrtArea.GetWidth();
-    const long nCorr = (nWidth & 1) != 0 ? 0 : 1;
+    const tools::Long nWidth = aLeftPagePrtArea.GetWidth();
+    const tools::Long nCorr = (nWidth & 1) != 0 ? 0 : 1;
     aLeftPagePrtArea.SetSize(Size(nWidth / 2 - (nLBorder + nRBorder) / 2 + nCorr, aLeftPagePrtArea.GetHeight()));
 
     aRightPagePrtArea = aLeftPagePrtArea;
@@ -1507,11 +1507,11 @@ void SwMarkPreview::PaintPage(vcl::RenderContext& rRenderContext, const tools::R
     aTextLine.AdjustRight( -4 );
     aTextLine.Move(0, 4);
 
-    const long nStep = aTextLine.GetHeight() + 2;
-    const long nLines = rRect.GetHeight() / (aTextLine.GetHeight() + 2) - 1;
+    const tools::Long nStep = aTextLine.GetHeight() + 2;
+    const tools::Long nLines = rRect.GetHeight() / (aTextLine.GetHeight() + 2) - 1;
 
     // simulate text
-    for (long i = 0; i < nLines; ++i)
+    for (tools::Long i = 0; i < nLines; ++i)
     {
         if (i == (nLines - 1))
             aTextLine.SetSize(Size(aTextLine.GetWidth() / 2, aTextLine.GetHeight()));

@@ -256,7 +256,7 @@ void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)
     const sal_uInt32 nSysLongDateFormat = pFormatter->GetFormatIndex(
                                     NF_DATE_SYSTEM_LONG, eCurLanguage );
 
-    for( long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
+    for( tools::Long nIndex = eOffsetStart; nIndex <= eOffsetEnd; ++nIndex )
     {
         const sal_uInt32 nFormat = pFormatter->GetFormatIndex(
                         static_cast<NfIndexTableOffset>(nIndex), eCurLanguage );

@@ -24,6 +24,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include <unordered_map>
 #include <vector>
 
@@ -178,7 +179,7 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE long GetSlotId (const OUString& aServiceName) const;
+    SVX_DLLPRIVATE tools::Long GetSlotId (const OUString& aServiceName) const;
 
     /**  Determine the slot id of the specified shape type.  With this id
          internal methods can access the associated type descriptor.
@@ -188,7 +189,7 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE long GetSlotId (const css::uno::Reference<
+    SVX_DLLPRIVATE tools::Long GetSlotId (const css::uno::Reference<
         css::drawing::XShape>& rxShape) const;
 };
 

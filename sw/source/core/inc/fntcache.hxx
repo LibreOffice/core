@@ -98,7 +98,7 @@ class SwFntObj : public SwCacheObj
     /// Cache of already calculated layout glyphs.
     std::map<SwTextGlyphsKey, SalLayoutGlyphs> m_aTextGlyphs;
 
-    static long nPixWidth;
+    static tools::Long nPixWidth;
     static MapMode *pPixMap;
 
 public:

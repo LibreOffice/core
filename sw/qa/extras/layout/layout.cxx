@@ -851,15 +851,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
     CPPUNIT_ASSERT(pFrameFormat);
 
     // The shape has these values to copy to the associated text frame after modification::
-    const long nLPaddng = xShapeProps->getPropertyValue("TextLeftDistance").get<long>();
-    const long nRPaddng = xShapeProps->getPropertyValue("TextRightDistance").get<long>();
-    const long nTPaddng = xShapeProps->getPropertyValue("TextUpperDistance").get<long>();
-    const long nBPaddng = xShapeProps->getPropertyValue("TextLowerDistance").get<long>();
+    const tools::Long nLPaddng = xShapeProps->getPropertyValue("TextLeftDistance").get<long>();
+    const tools::Long nRPaddng = xShapeProps->getPropertyValue("TextRightDistance").get<long>();
+    const tools::Long nTPaddng = xShapeProps->getPropertyValue("TextUpperDistance").get<long>();
+    const tools::Long nBPaddng = xShapeProps->getPropertyValue("TextLowerDistance").get<long>();
 
-    CPPUNIT_ASSERT_EQUAL(long(1000), nLPaddng);
-    CPPUNIT_ASSERT_EQUAL(long(2000), nRPaddng);
-    CPPUNIT_ASSERT_EQUAL(long(3000), nTPaddng);
-    CPPUNIT_ASSERT_EQUAL(long(4001), nBPaddng);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1000), nLPaddng);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2000), nRPaddng);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(3000), nTPaddng);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4001), nBPaddng);
 
     // TODO: modify shape distance via UNO with text frame synchronization
     // Check the textbox as well:
@@ -867,10 +867,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
     CPPUNIT_ASSERT(xTxFrm);
     uno::Reference<beans::XPropertySet> xFrameProps(xTxFrm, uno::UNO_QUERY);
 
-    const long nFrameLeftPaddng = xFrameProps->getPropertyValue("LeftBorderDistance").get<long>();
-    const long nFrameRightPaddng = xFrameProps->getPropertyValue("RightBorderDistance").get<long>();
-    const long nFrameTopPaddng = xFrameProps->getPropertyValue("TopBorderDistance").get<long>();
-    const long nFrameBottomPaddng
+    const tools::Long nFrameLeftPaddng
+        = xFrameProps->getPropertyValue("LeftBorderDistance").get<long>();
+    const tools::Long nFrameRightPaddng
+        = xFrameProps->getPropertyValue("RightBorderDistance").get<long>();
+    const tools::Long nFrameTopPaddng
+        = xFrameProps->getPropertyValue("TopBorderDistance").get<long>();
+    const tools::Long nFrameBottomPaddng
         = xFrameProps->getPropertyValue("BottomBorderDistance").get<long>();
 
     // Check if the shape and frame have different setting

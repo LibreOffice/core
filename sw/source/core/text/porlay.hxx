@@ -175,17 +175,17 @@ public:
     // Stuff for justified alignment
     bool IsSpaceAdd() const { return m_pLLSpaceAdd != nullptr; }
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
-    void CreateSpaceAdd( const long nInit = 0 );
+    void CreateSpaceAdd( const tools::Long nInit = 0 );
     void FinishSpaceAdd() { m_pLLSpaceAdd.reset(); }
     sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(m_pLLSpaceAdd->size()); }
-    void SetLLSpaceAdd( long nNew, sal_uInt16 nIdx )
+    void SetLLSpaceAdd( tools::Long nNew, sal_uInt16 nIdx )
     {
         if ( nIdx == GetLLSpaceAddCount() )
             m_pLLSpaceAdd->push_back( nNew );
         else
             (*m_pLLSpaceAdd)[ nIdx ] = nNew;
     }
-    long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
+    tools::Long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
     void RemoveFirstLLSpaceAdd() { m_pLLSpaceAdd->erase( m_pLLSpaceAdd->begin() ); }
     std::vector<long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd.get(); }
 
@@ -246,7 +246,7 @@ class SwParaPortion : public SwLineLayout
     SwScriptInfo m_aScriptInfo;
 
     // Fraction aZoom;
-    long m_nDelta;
+    tools::Long m_nDelta;
 
     // If a SwTextFrame is locked, no changes occur to the formatting data (under
     // pLine) (compare with Orphans)
@@ -276,8 +276,8 @@ public:
     const SwRepaint& GetRepaint() const { return m_aRepaint; }
     SwCharRange& GetReformat() { return m_aReformat; }
     const SwCharRange& GetReformat() const { return m_aReformat; }
-    long& GetDelta() { return m_nDelta; }
-    const long& GetDelta() const { return m_nDelta; }
+    tools::Long& GetDelta() { return m_nDelta; }
+    const tools::Long& GetDelta() const { return m_nDelta; }
     SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 

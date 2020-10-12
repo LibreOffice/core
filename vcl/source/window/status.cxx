@@ -60,10 +60,10 @@ struct ImplStatusItem
 {
     sal_uInt16                          mnId;
     StatusBarItemBits                   mnBits;
-    long                                mnWidth;
-    long                                mnOffset;
-    long                                mnExtraWidth;
-    long                                mnX;
+    tools::Long                                mnWidth;
+    tools::Long                                mnOffset;
+    tools::Long                                mnExtraWidth;
+    tools::Long                                mnX;
     OUString                            maText;
     OUString                            maHelpText;
     OUString                            maQuickHelpText;
@@ -75,7 +75,7 @@ struct ImplStatusItem
     std::unique_ptr<SalLayout>          mxLayoutCache;
 };
 
-static long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
+static tools::Long ImplCalcProgressWidth( sal_uInt16 nMax, tools::Long nSize )
 {
     return ((nMax*(nSize+(nSize/2)))-(nSize/2)+(STATUSBAR_PRGS_OFFSET*2));
 }
@@ -83,9 +83,9 @@ static long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
 static Point ImplGetItemTextPos( const Size& rRectSize, const Size& rTextSize,
                                  StatusBarItemBits nStyle )
 {
-    long nX;
-    long nY;
-    long delta = (rTextSize.Height()/4) + 1;
+    tools::Long nX;
+    tools::Long nY;
+    tools::Long delta = (rTextSize.Height()/4) + 1;
     if( delta + rTextSize.Width() > rRectSize.Width() )
         delta = 0;
 
@@ -208,9 +208,9 @@ void StatusBar::ImplInitSettings()
 
 void StatusBar::ImplFormat()
 {
-    long            nExtraWidth;
-    long            nExtraWidth2;
-    long            nX;
+    tools::Long            nExtraWidth;
+    tools::Long            nExtraWidth2;
+    tools::Long            nX;
     sal_uInt16      nAutoSizeItems;
     bool            bChanged;
 
@@ -219,7 +219,7 @@ void StatusBar::ImplFormat()
         nAutoSizeItems = 0;
         mnItemsWidth = STATUSBAR_OFFSET_X;
         bChanged = false;
-        long nOffset = 0;
+        tools::Long nOffset = 0;
         for ( const auto & pItem : mvItemList ) {
             if ( pItem->mbVisible )
             {
@@ -373,7 +373,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 
     // compute output region
     ImplStatusItem* pItem = mvItemList[nPos].get();
-    long nW = 1;
+    tools::Long nW = 1;
     tools::Rectangle aTextRect(aRect.Left() + nW, aRect.Top() + nW,
                         aRect.Right() - nW, aRect.Bottom() - nW);
 
@@ -468,7 +468,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
 }
 
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
-                  long nOffset, long nPrgsWidth, long nPrgsHeight,
+                  tools::Long nOffset, tools::Long nPrgsWidth, tools::Long nPrgsHeight,
                   sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                   const tools::Rectangle& rFramePosSize)
 {
@@ -476,8 +476,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
     {
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
 
-        long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
-        long nPerc = std::min<sal_uInt16>(nPercent2, 10000);
+        tools::Long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
+        tools::Long nPerc = std::min<sal_uInt16>(nPercent2, 10000);
         ImplControlValue aValue(nFullWidth * nPerc / 10000);
         tools::Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
         tools::Rectangle aControlRegion(aDrawRect);
@@ -527,8 +527,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         // support progress that can also decrease
 
         // compute rectangle
-        long nDX = nPrgsWidth + nOffset;
-        long nLeft = rPos.X() + ((nPerc1 - 1) * nDX);
+        tools::Long nDX = nPrgsWidth + nOffset;
+        tools::Long nLeft = rPos.X() + ((nPerc1 - 1) * nDX);
         tools::Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
@@ -552,8 +552,8 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
         }
 
         // compute rectangle
-        long nDX = nPrgsWidth + nOffset;
-        long nLeft = rPos.X() + (nPerc1 * nDX);
+        tools::Long nDX = nPrgsWidth + nOffset;
+        tools::Long nLeft = rPos.X() + (nPerc1 * nDX);
         tools::Rectangle aRect(nLeft, rPos.Y(), nLeft + nPrgsWidth, rPos.Y() + nPrgsHeight);
 
         do
@@ -592,7 +592,7 @@ void StatusBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 
 
     Point aPos(maPrgsFrameRect.Left() + STATUSBAR_PRGS_OFFSET,
                maPrgsFrameRect.Top()  + STATUSBAR_PRGS_OFFSET);
-    long nPrgsHeight = mnPrgsSize;
+    tools::Long nPrgsHeight = mnPrgsSize;
     if (bNative)
     {
         aPos = maPrgsFrameRect.TopLeft();
@@ -617,7 +617,7 @@ void StatusBar::ImplCalcProgressRect()
     mnPrgsSize = maPrgsFrameRect.Bottom()-maPrgsFrameRect.Top()-(STATUSBAR_PRGS_OFFSET*2);
     sal_uInt16 nMaxPercent = STATUSBAR_PRGS_COUNT;
 
-    long nMaxWidth = mnDX-STATUSBAR_OFFSET-1;
+    tools::Long nMaxWidth = mnDX-STATUSBAR_OFFSET-1;
 
     // make smaller if there are too many rects
     while ( maPrgsFrameRect.Left()+ImplCalcProgressWidth( nMaxPercent, mnPrgsSize ) > nMaxWidth )
@@ -640,10 +640,10 @@ void StatusBar::ImplCalcProgressRect()
                                                  ControlState::ENABLED, aValue,
                                                  aNativeControlRegion, aNativeContentRegion ) ) )
         {
-            long nProgressHeight = aNativeControlRegion.GetHeight();
+            tools::Long nProgressHeight = aNativeControlRegion.GetHeight();
             if( nProgressHeight > maPrgsFrameRect.GetHeight() )
             {
-                long nDelta = nProgressHeight - maPrgsFrameRect.GetHeight();
+                tools::Long nDelta = nProgressHeight - maPrgsFrameRect.GetHeight();
                 maPrgsFrameRect.AdjustTop( -(nDelta - nDelta/2) );
                 maPrgsFrameRect.AdjustBottom(nDelta/2 );
             }
@@ -856,10 +856,10 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
 
     mbFormat = true;
     ImplInitSettings();
-    long nFudge = GetTextHeight() / 4;
+    tools::Long nFudge = GetTextHeight() / 4;
     for (auto & pItem : mvItemList)
     {
-        long nWidth = GetTextWidth( pItem->maText ) + nFudge;
+        tools::Long nWidth = GetTextWidth( pItem->maText ) + nFudge;
         if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
             pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
 
@@ -889,7 +889,7 @@ void StatusBar::UserDraw( const UserDrawEvent& )
 
 void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                             StatusBarItemBits nBits,
-                            long nOffset, sal_uInt16 nPos )
+                            tools::Long nOffset, sal_uInt16 nPos )
 {
     SAL_WARN_IF( !nItemId, "vcl", "StatusBar::InsertItem(): ItemId == 0" );
     SAL_WARN_IF( GetItemPos( nItemId ) != STATUSBAR_ITEM_NOTFOUND, "vcl",
@@ -906,11 +906,11 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     {
         nWidth *= GetDPIScaleFactor();
     }
-    long nFudge = GetTextHeight()/4;
+    tools::Long nFudge = GetTextHeight()/4;
     std::unique_ptr<ImplStatusItem> pItem(new ImplStatusItem);
     pItem->mnId             = nItemId;
     pItem->mnBits           = nBits;
-    pItem->mnWidth          = static_cast<long>(nWidth)+nFudge+STATUSBAR_OFFSET;
+    pItem->mnWidth          = static_cast<tools::Long>(nWidth)+nFudge+STATUSBAR_OFFSET;
     pItem->mnOffset         = nOffset;
     pItem->mpUserData       = nullptr;
     pItem->mbVisible        = true;
@@ -1058,7 +1058,7 @@ tools::Rectangle StatusBar::GetItemRect( sal_uInt16 nItemId ) const
         {
             // get rectangle and subtract frame
             aRect = ImplGetItemRectPos( nPos );
-            long nW = 1;
+            tools::Long nW = 1;
             aRect.AdjustTop(nW-1 );
             aRect.AdjustBottom( -(nW-1) );
             aRect.AdjustLeft(nW );
@@ -1080,7 +1080,7 @@ Point StatusBar::GetItemTextPos( sal_uInt16 nItemId ) const
             // get rectangle
             ImplStatusItem* pItem = mvItemList[ nPos ].get();
             tools::Rectangle aRect = ImplGetItemRectPos( nPos );
-            long nW = 1;
+            tools::Long nW = 1;
             tools::Rectangle           aTextRect( aRect.Left()+nW, aRect.Top()+nW,
                                            aRect.Right()-nW, aRect.Bottom()-nW );
             Point aPos = ImplGetItemTextPos( aTextRect.GetSize(),
@@ -1118,7 +1118,7 @@ StatusBarItemBits StatusBar::GetItemBits( sal_uInt16 nItemId ) const
     return StatusBarItemBits::NONE;
 }
 
-long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
+tools::Long StatusBar::GetItemOffset( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
@@ -1143,9 +1143,9 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     pItem->maText = rText;
 
     // adjust item width - see also DataChanged()
-    long nFudge = GetTextHeight()/4;
+    tools::Long nFudge = GetTextHeight()/4;
 
-    long nWidth;
+    tools::Long nWidth;
     if (nCharsWidth != -1)
     {
         std::unique_ptr<SalLayout> pSalLayout = ImplLayout("0",0,-1);
@@ -1409,9 +1409,9 @@ Size StatusBar::CalcWindowSizePixel() const
 {
     size_t  i = 0;
     size_t  nCount = mvItemList.size();
-    long    nOffset = 0;
-    long    nCalcWidth = STATUSBAR_OFFSET_X*2;
-    long    nCalcHeight;
+    tools::Long    nOffset = 0;
+    tools::Long    nCalcWidth = STATUSBAR_OFFSET_X*2;
+    tools::Long    nCalcHeight;
 
     while ( i < nCount )
     {
@@ -1421,9 +1421,9 @@ Size StatusBar::CalcWindowSizePixel() const
         i++;
     }
 
-    long nMinHeight = GetTextHeight();
-    const long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
-    long nProgressHeight = nMinHeight + nBarTextOffset;
+    tools::Long nMinHeight = GetTextHeight();
+    const tools::Long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
+    tools::Long nProgressHeight = nMinHeight + nBarTextOffset;
 
     if( IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
     {

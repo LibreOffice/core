@@ -21,6 +21,7 @@
 
 #include <IDocumentStatistics.hxx>
 #include <SwDocIdle.hxx>
+#include <tools/long.hxx>
 #include <memory>
 
 class SwDoc;
@@ -56,7 +57,7 @@ private:
       *
       * returns false when there is no more to calculate
       */
-    bool IncrementalDocStatCalculate(long nChars, bool bFields = true);
+    bool IncrementalDocStatCalculate(tools::Long nChars, bool bFields = true);
 
     // Our own 'StatsUpdateTimer' calls the following method
     DECL_LINK( DoIdleStatsUpdate, Timer *, void );

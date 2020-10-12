@@ -29,17 +29,17 @@ private:
     std::unique_ptr<weld::RadioButton> m_xVertBox;
     std::unique_ptr<weld::CheckButton> m_xPropCB;
 
-    long                mnMaxVertical;
-    long                mnMaxHorizontal;
+    tools::Long                mnMaxVertical;
+    tools::Long                mnMaxHorizontal;
 
 public:
-    SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal);
+    SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal);
 
     DECL_LINK(ClickHdl, weld::Button&, void);
 
     virtual bool IsHorizontal() const override;
     virtual bool IsProportional() const override;
-    virtual long GetCount() const override;
+    virtual tools::Long GetCount() const override;
 
     virtual short Execute() override;
     virtual void SetSplitVerticalByDefault() override;

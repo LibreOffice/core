@@ -47,8 +47,8 @@ private:
     std::unique_ptr<ScZoomSliderWnd_Impl> mpImpl;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
-    sal_uInt16 Offset2Zoom(long nOffset) const;
-    long Zoom2Offset(sal_uInt16 nZoom) const;
+    sal_uInt16 Offset2Zoom(tools::Long nOffset) const;
+    tools::Long Zoom2Offset(sal_uInt16 nZoom) const;
 
     void DoPaint(vcl::RenderContext& rRenderContext);
 public:

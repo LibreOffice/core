@@ -347,7 +347,7 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
 // be applied to the document and removed from the stack.
 // Returns if there were any selected attributes on the stack
 SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
-    sal_uInt16 nAttrId, bool bTstEnd, long nHand,
+    sal_uInt16 nAttrId, bool bTstEnd, tools::Long nHand,
     bool consumedByField)
 {
     SwFltStackEntry *pRet = nullptr;
@@ -995,7 +995,7 @@ SwFltRedline* SwFltRedline::Clone( SfxItemPool* ) const
 
 // methods of SwFltBookmark follow
 SwFltBookmark::SwFltBookmark( const OUString& rNa, const OUString& rVa,
-                              long nHand, const bool bIsTOCBookmark )
+                              tools::Long nHand, const bool bIsTOCBookmark )
     : SfxPoolItem( RES_FLTR_BOOKMARK )
     , mnHandle( nHand )
     , maName( rNa )
@@ -1048,12 +1048,12 @@ SwFltRDFMark* SwFltRDFMark::Clone(SfxItemPool*) const
     return new SwFltRDFMark(*this);
 }
 
-void SwFltRDFMark::SetHandle(long nHandle)
+void SwFltRDFMark::SetHandle(tools::Long nHandle)
 {
     m_nHandle = nHandle;
 }
 
-long SwFltRDFMark::GetHandle() const
+tools::Long SwFltRDFMark::GetHandle() const
 {
     return m_nHandle;
 }

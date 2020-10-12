@@ -196,8 +196,8 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     if (!nColumnCount)
         return;
 
-    long nL = GetLeft();
-    long nR = GetRight();
+    tools::Long nL = GetLeft();
+    tools::Long nR = GetRight();
 
     if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
     {
@@ -269,7 +269,7 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
 
     if (pColMgr->GetLineHeightPercent() != 100)
     {
-        long nLength = !m_bVertical ? aDown.Y() - aUp.Y() : aDown.X() - aUp.X();
+        tools::Long nLength = !m_bVertical ? aDown.Y() - aUp.Y() : aDown.X() - aUp.X();
         nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
         switch (pColMgr->GetAdjust())
         {
@@ -369,7 +369,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.SetFillColor(aGrayColor);
 
     //column separator?
-    long nLength = aLogSize.Height() - 2 * aTL.Y();
+    tools::Long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp(aTL);
     Point aDown(aTL.X(), nLength);
     bool bLines = false;
@@ -402,7 +402,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const tools:
         rRenderContext.DrawRect(aRect);
         rRenderContext.SetFillColor(rFieldColor);
         tools::Rectangle aFrameRect(aTL, m_aFrameSize);
-        long nSum = aTL.X();
+        tools::Long nSum = aTL.X();
         for (sal_uInt16 i = 0; i < nColCount; i++)
         {
             const SwColumn* pCol = &rCols[i];
@@ -430,22 +430,22 @@ void  SwColumnOnlyExample::SetColumns(const SwFormatCol& rCol)
 {
     m_aCols = rCol;
     sal_uInt16 nWishSum = m_aCols.GetWishWidth();
-    long nFrameWidth = m_aFrameSize.Width();
+    tools::Long nFrameWidth = m_aFrameSize.Width();
     SwColumns& rCols = m_aCols.GetColumns();
     sal_uInt16 nColCount = rCols.size();
 
     for(sal_uInt16 i = 0; i < nColCount; i++)
     {
         SwColumn* pCol = &rCols[i];
-        long nWish = pCol->GetWishWidth();
+        tools::Long nWish = pCol->GetWishWidth();
         nWish *= nFrameWidth;
         nWish /= nWishSum;
         pCol->SetWishWidth(static_cast<sal_uInt16>(nWish));
-        long nLeft = pCol->GetLeft();
+        tools::Long nLeft = pCol->GetLeft();
         nLeft *= nFrameWidth;
         nLeft /= nWishSum;
         pCol->SetLeft(static_cast<sal_uInt16>(nLeft));
-        long nRight = pCol->GetRight();
+        tools::Long nRight = pCol->GetRight();
         nRight *= nFrameWidth;
         nRight /= nWishSum;
         pCol->SetRight(static_cast<sal_uInt16>(nRight));
@@ -511,8 +511,8 @@ void SwPageGridExample::DrawPage(vcl::RenderContext& rRenderContext, const Point
         aLineColor.Invert();
     }
     rRenderContext.SetLineColor(aLineColor);
-    long nL = GetLeft();
-    long nR = GetRight();
+    tools::Long nL = GetLeft();
+    tools::Long nR = GetRight();
 
     if (GetUsage() == SvxPageUsage::Mirror && !bSecond)
     {

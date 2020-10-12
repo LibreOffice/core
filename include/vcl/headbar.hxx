@@ -199,21 +199,21 @@ namespace o3tl
 
 #define HEADERBAR_APPEND            (sal_uInt16(0xFFFF))
 #define HEADERBAR_ITEM_NOTFOUND     (sal_uInt16(0xFFFF))
-#define HEADERBAR_FULLSIZE          (long(1000000000))
+#define HEADERBAR_FULLSIZE          (tools::Long(1000000000))
 
 class VCL_DLLPUBLIC HeaderBar : public vcl::Window
 {
 private:
     std::vector<std::unique_ptr<ImplHeadItem>> mvItemList;
-    long                mnBorderOff1;
-    long                mnBorderOff2;
-    long                mnOffset;
-    long                mnDX;
-    long                mnDY;
-    long                mnDragSize;
-    long                mnStartPos;
-    long                mnDragPos;
-    long                mnMouseOff;
+    tools::Long                mnBorderOff1;
+    tools::Long                mnBorderOff2;
+    tools::Long                mnOffset;
+    tools::Long                mnDX;
+    tools::Long                mnDY;
+    tools::Long                mnDragSize;
+    tools::Long                mnStartPos;
+    tools::Long                mnDragPos;
+    tools::Long                mnMouseOff;
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnItemDragPos;
     bool                mbDragable;
@@ -233,10 +233,10 @@ private:
     using Window::ImplInit;
     VCL_DLLPRIVATE void             ImplInit( WinBits nWinStyle );
     VCL_DLLPRIVATE void             ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-    VCL_DLLPRIVATE long             ImplGetItemPos( sal_uInt16 nPos ) const;
+    VCL_DLLPRIVATE tools::Long             ImplGetItemPos( sal_uInt16 nPos ) const;
     VCL_DLLPRIVATE tools::Rectangle ImplGetItemRect( sal_uInt16 nPos ) const;
     using Window::ImplHitTest;
-    VCL_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
+    VCL_DLLPRIVATE sal_uInt16       ImplHitTest( const Point& rPos, tools::Long& nMouseOff, sal_uInt16& nPos ) const;
     VCL_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     VCL_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
@@ -272,14 +272,14 @@ public:
     virtual void        DoubleClick();
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
-                                    long nSize, HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE,
+                                    tools::Long nSize, HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
     void                MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos );
     void                Clear();
 
-    void                SetOffset( long nNewOffset );
-    void         SetDragSize( long nNewSize ) { mnDragSize = nNewSize; }
+    void                SetOffset( tools::Long nNewOffset );
+    void         SetDragSize( tools::Long nNewSize ) { mnDragSize = nNewSize; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
@@ -289,8 +289,8 @@ public:
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     bool                IsItemMode() const { return mbItemMode; }
 
-    void                SetItemSize( sal_uInt16 nItemId, long nNewSize );
-    long                GetItemSize( sal_uInt16 nItemId ) const;
+    void                SetItemSize( sal_uInt16 nItemId, tools::Long nNewSize );
+    tools::Long                GetItemSize( sal_uInt16 nItemId ) const;
     void                SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits );
     HeaderBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
 

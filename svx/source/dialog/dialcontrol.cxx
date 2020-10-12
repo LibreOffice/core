@@ -28,7 +28,7 @@
 
 namespace svx {
 
-const long DIAL_OUTER_WIDTH = 8;
+const tools::Long DIAL_OUTER_WIDTH = 8;
 
 DialControlBmp::DialControlBmp(OutputDevice& rReference)
     : VirtualDevice(rReference, DeviceFormat::DEFAULT, DeviceFormat::DEFAULT)
@@ -80,8 +80,8 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 
-        long nX = static_cast< long >( mnCenterX - fWidth * fCos - fHeight * fSin );
-        long nY = static_cast< long >( mnCenterY + fWidth * fSin - fHeight * fCos );
+        tools::Long nX = static_cast< tools::Long >( mnCenterX - fWidth * fCos - fHeight * fSin );
+        tools::Long nY = static_cast< tools::Long >( mnCenterY + fWidth * fSin - fHeight * fCos );
         tools::Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
         DrawText( aRect, rText, mbEnabled ? DrawTextFlags::NONE : DrawTextFlags::Disable );
     }
@@ -103,9 +103,9 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     SetLineColor( GetButtonLineColor() );
     SetFillColor( GetButtonFillColor( bMain ) );
 
-    long nX = mnCenterX - static_cast< long >( (DIAL_OUTER_WIDTH / 2 - mnCenterX) * fCos );
-    long nY = mnCenterY - static_cast< long >( (mnCenterY - DIAL_OUTER_WIDTH / 2) * fSin );
-    long nSize = bMain ? (DIAL_OUTER_WIDTH / 4) : (DIAL_OUTER_WIDTH / 2 - 1);
+    tools::Long nX = mnCenterX - static_cast< tools::Long >( (DIAL_OUTER_WIDTH / 2 - mnCenterX) * fCos );
+    tools::Long nY = mnCenterY - static_cast< tools::Long >( (mnCenterY - DIAL_OUTER_WIDTH / 2) * fSin );
+    tools::Long nSize = bMain ? (DIAL_OUTER_WIDTH / 4) : (DIAL_OUTER_WIDTH / 2 - 1);
     DrawEllipse( tools::Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
 }
 
@@ -200,8 +200,8 @@ void DialControlBmp::DrawBackground()
     {
         SetLineColor( (nAngle % 45) ? aLightColor : aFullColor );
         double fAngle = basegfx::deg2rad(nAngle);
-        long nX = static_cast< long >( -mnCenterX * cos( fAngle ) );
-        long nY = static_cast< long >( mnCenterY * sin( fAngle ) );
+        tools::Long nX = static_cast< tools::Long >( -mnCenterX * cos( fAngle ) );
+        tools::Long nY = static_cast< tools::Long >( mnCenterY * sin( fAngle ) );
         DrawLine( aStartPos, Point( mnCenterX - nX, mnCenterY - nY ) );
     }
 
@@ -241,7 +241,7 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 {
     // make the control squared, and adjusted so that we have a well-defined
     // center ["(x - 1) | 1" creates odd value <= x]
-    long nMin = (std::min(rWinSize.Width(), rWinSize.Height()) - 1) | 1;
+    tools::Long nMin = (std::min(rWinSize.Width(), rWinSize.Height()) - 1) | 1;
 
     maWinSize = Size( nMin, nMin );
 
@@ -446,8 +446,8 @@ void DialControl::SetModifyHdl( const Link<DialControl&,void>& rLink )
 
 void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 {
-    long nX = rPos.X() - mpImpl->mnCenterX;
-    long nY = mpImpl->mnCenterY - rPos.Y();
+    tools::Long nX = rPos.X() - mpImpl->mnCenterX;
+    tools::Long nY = mpImpl->mnCenterY - rPos.Y();
     double fH = sqrt( static_cast< double >( nX ) * nX + static_cast< double >( nY ) * nY );
     if( fH != 0.0 )
     {

@@ -28,7 +28,7 @@
 #define SWPAGE_WIDE_VALUE3     1800
 
 // #i19922# - tdf#126051 see cui/source/tabpages/page.cxx and svx/source/dialog/hdft.cxx
-const long MINBODY = 56;  // 1mm in twips rounded
+const tools::Long MINBODY = 56;  // 1mm in twips rounded
 
 class PageMarginPopup;
 
@@ -63,10 +63,10 @@ private:
 
     rtl::Reference<PageMarginPopup> m_xControl;
 
-    long m_nPageLeftMargin;
-    long m_nPageRightMargin;
-    long m_nPageTopMargin;
-    long m_nPageBottomMargin;
+    tools::Long m_nPageLeftMargin;
+    tools::Long m_nPageRightMargin;
+    tools::Long m_nPageTopMargin;
+    tools::Long m_nPageBottomMargin;
     bool m_bMirrored;
 
     const MapUnit m_eUnit;
@@ -74,10 +74,10 @@ private:
     Size m_aPageSize;
 
     bool m_bUserCustomValuesAvailable;
-    long m_nUserCustomPageLeftMargin;
-    long m_nUserCustomPageRightMargin;
-    long m_nUserCustomPageTopMargin;
-    long m_nUserCustomPageBottomMargin;
+    tools::Long m_nUserCustomPageLeftMargin;
+    tools::Long m_nUserCustomPageRightMargin;
+    tools::Long m_nUserCustomPageTopMargin;
+    tools::Long m_nUserCustomPageBottomMargin;
     bool m_bUserCustomMirrored;
 
     bool m_bCustomValuesUsed;
@@ -87,11 +87,11 @@ private:
     DECL_LINK( ModifyULMarginHdl, weld::MetricSpinButton&, void );
 
     static void ExecuteMarginLRChange(
-        const long nPageLeftMargin,
-        const long nPageRightMargin );
+        const tools::Long nPageLeftMargin,
+        const tools::Long nPageRightMargin );
     static void ExecuteMarginULChange(
-        const long nPageTopMargin,
-        const long nPageBottomMargin );
+        const tools::Long nPageTopMargin,
+        const tools::Long nPageBottomMargin );
     static void ExecutePageLayoutChange( const bool bMirrored );
 
     void SetMetricFieldMaxValues(const Size& rPageSize);

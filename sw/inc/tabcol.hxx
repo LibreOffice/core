@@ -23,12 +23,13 @@
 #include <memory>
 
 #include "swdllapi.h"
+#include <tools/long.hxx>
 
 struct SwTabColsEntry
 {
-    long nPos;
-    long nMin;
-    long nMax;
+    tools::Long nPos;
+    tools::Long nMin;
+    tools::Long nMax;
     bool bHidden; // For each entry a flag, hidden or not.
                   // If the flag bHidden is true column separator
                   // is not in current line. It must maintained
@@ -39,12 +40,12 @@ typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
 class SW_DLLPUBLIC SwTabCols
 {
-    long m_nLeftMin;  // Leftmost border (reference point) for
+    tools::Long m_nLeftMin;  // Leftmost border (reference point) for
                       // document coordinates.
                       // All other values are relative to this point!
-    long m_nLeft;     // Left border of table.
-    long m_nRight;    // Right border of table.
-    long m_nRightMax; // Maximum right border of table.
+    tools::Long m_nLeft;     // Left border of table.
+    tools::Long m_nRight;    // Right border of table.
+    tools::Long m_nRightMax; // Maximum right border of table.
 
     bool m_bLastRowAllowedToChange; // If the last row of the table frame
                                     // is split across pages, it may not
@@ -59,29 +60,29 @@ public:
     SwTabCols( sal_uInt16 nSize = 0 );
     SwTabCols( const SwTabCols& );
     SwTabCols &operator=( const SwTabCols& );
-    long& operator[]( size_t nPos ) { return m_aData[nPos].nPos; }
-    long operator[]( size_t nPos ) const { return m_aData[nPos].nPos; }
+    tools::Long& operator[]( size_t nPos ) { return m_aData[nPos].nPos; }
+    tools::Long operator[]( size_t nPos ) const { return m_aData[nPos].nPos; }
     size_t Count() const { return m_aData.size(); }
 
     bool IsHidden( size_t nPos ) const         { return m_aData[nPos].bHidden; }
     void SetHidden( size_t nPos, bool bValue ) { m_aData[nPos].bHidden = bValue; }
 
-    void Insert( long nValue, bool bValue, size_t nPos );
-    void Insert( long nValue, long nMin, long nMax, bool bValue, size_t nPos );
+    void Insert( tools::Long nValue, bool bValue, size_t nPos );
+    void Insert( tools::Long nValue, tools::Long nMin, tools::Long nMax, bool bValue, size_t nPos );
     void Remove( size_t nPos, size_t nCount = 1 );
 
     const SwTabColsEntry& GetEntry( size_t nPos ) const { return m_aData[nPos]; }
           SwTabColsEntry& GetEntry( size_t nPos )  { return m_aData[nPos]; }
 
-    long GetLeftMin() const { return m_nLeftMin; }
-    long GetLeft()  const { return m_nLeft;    }
-    long GetRight() const { return m_nRight;   }
-    long GetRightMax()const { return m_nRightMax;}
+    tools::Long GetLeftMin() const { return m_nLeftMin; }
+    tools::Long GetLeft()  const { return m_nLeft;    }
+    tools::Long GetRight() const { return m_nRight;   }
+    tools::Long GetRightMax()const { return m_nRightMax;}
 
-    void SetLeftMin ( long nNew )   { m_nLeftMin = nNew; }
-    void SetLeft    ( long nNew )   { m_nLeft = nNew;    }
-    void SetRight   ( long nNew )   { m_nRight = nNew;   }
-    void SetRightMax( long nNew )   { m_nRightMax = nNew;}
+    void SetLeftMin ( tools::Long nNew )   { m_nLeftMin = nNew; }
+    void SetLeft    ( tools::Long nNew )   { m_nLeft = nNew;    }
+    void SetRight   ( tools::Long nNew )   { m_nRight = nNew;   }
+    void SetRightMax( tools::Long nNew )   { m_nRightMax = nNew;}
 
     bool IsLastRowAllowedToChange() const { return m_bLastRowAllowedToChange; }
     void SetLastRowAllowedToChange( bool bNew ) { m_bLastRowAllowedToChange = bNew; }

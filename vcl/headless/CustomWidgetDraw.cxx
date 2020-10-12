@@ -84,8 +84,8 @@ bool CustomWidgetDraw::drawNativeControl(ControlType eType, ControlPart ePart,
 
     cairo_translate(pCairoContext, rControlRegion.Left(), rControlRegion.Top());
 
-    long nWidth = rControlRegion.GetWidth();
-    long nHeight = rControlRegion.GetHeight();
+    tools::Long nWidth = rControlRegion.GetWidth();
+    tools::Long nHeight = rControlRegion.GetHeight();
 
     bool bOK = false;
 

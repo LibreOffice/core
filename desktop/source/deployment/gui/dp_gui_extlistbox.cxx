@@ -260,14 +260,14 @@ sal_Int32 ExtensionBox_Impl::getSelIndex() const
 
 
 // Title + description
-void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
+void ExtensionBox_Impl::CalcActiveHeight( const tools::Long nPos )
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
     // get title height
-    long aTextHeight;
-    long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
+    tools::Long aTextHeight;
+    tools::Long nIconHeight = 2*TOP_OFFSET + SMALL_ICON_SIZE;
+    tools::Long nTitleHeight = 2*TOP_OFFSET + GetTextHeight();
     if ( nIconHeight < nTitleHeight )
         aTextHeight = nTitleHeight;
     else
@@ -297,7 +297,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
         m_nActiveHeight += 2;
 }
 
-tools::Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
+tools::Rectangle ExtensionBox_Impl::GetEntryRect( const tools::Long nPos ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
 
@@ -329,7 +329,7 @@ void ExtensionBox_Impl::DeleteRemoved()
 
 
 //This function may be called with nPos < 0
-void ExtensionBox_Impl::selectEntry( const long nPos )
+void ExtensionBox_Impl::selectEntry( const tools::Long nPos )
 {
     bool invalidate = false;
     {
@@ -353,7 +353,7 @@ void ExtensionBox_Impl::selectEntry( const long nPos )
             m_vEntries[ m_nActive ]->m_bActive = false;
         }
 
-        if ( ( nPos >= 0 ) && ( nPos < static_cast<long>(m_vEntries.size()) ) )
+        if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
         {
             m_bHasActive = true;
             m_nActive = nPos;
@@ -434,18 +434,18 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     auto nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= (2 * SMALL_ICON_SIZE) + (4 * SPACE_BETWEEN);
     rRenderContext.SetFont(aStdFont);
-    long nLinkWidth = 0;
+    tools::Long nLinkWidth = 0;
     if (!rEntry->m_sPublisher.isEmpty())
     {
         nLinkWidth = rRenderContext.GetTextWidth(rEntry->m_sPublisher);
         nMaxTitleWidth -= nLinkWidth + (2 * SPACE_BETWEEN);
     }
-    long aVersionWidth = rRenderContext.GetTextWidth(rEntry->m_sVersion);
+    tools::Long aVersionWidth = rRenderContext.GetTextWidth(rEntry->m_sVersion);
 
     aPos = rRect.TopLeft() + Point(ICON_OFFSET, TOP_OFFSET);
 
     rRenderContext.SetFont(aBoldFont);
-    long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
+    tools::Long aTitleWidth = rRenderContext.GetTextWidth(rEntry->m_sTitle) + (aTextHeight / 3);
     if (aTitleWidth > nMaxTitleWidth - aVersionWidth)
     {
         aTitleWidth = nMaxTitleWidth - aVersionWidth - (aTextHeight / 3);
@@ -459,8 +459,8 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     rRenderContext.SetFont(aStdFont);
     rRenderContext.DrawText(Point(aPos.X() + aTitleWidth, aPos.Y()), rEntry->m_sVersion);
 
-    long nIconHeight = TOP_OFFSET + SMALL_ICON_SIZE;
-    long nTitleHeight = TOP_OFFSET + GetTextHeight();
+    tools::Long nIconHeight = TOP_OFFSET + SMALL_ICON_SIZE;
+    tools::Long nTitleHeight = TOP_OFFSET + GetTextHeight();
     if ( nIconHeight < nTitleHeight )
         aTextHeight = nTitleHeight;
     else
@@ -481,7 +481,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     aPos.AdjustY(aTextHeight );
     if (rEntry->m_bActive)
     {
-        long nExtraHeight = 0;
+        tools::Long nExtraHeight = 0;
 
         if (rEntry->m_bHasButtons)
             nExtraHeight = 2;
@@ -493,7 +493,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     {
         //replace LF to space, so words do not stick together in one line view
         sDescription = sDescription.replace(0x000A, ' ');
-        const long nWidth = rRenderContext.GetTextWidth( sDescription );
+        const tools::Long nWidth = rRenderContext.GetTextWidth( sDescription );
         if (nWidth > rRect.GetWidth() - aPos.X())
             sDescription = rRenderContext.GetEllipsisString(sDescription, rRect.GetWidth() - aPos.X());
         rRenderContext.DrawText(aPos, sDescription);
@@ -569,10 +569,10 @@ void ExtensionBox_Impl::RecalcAll()
 
             // If there is unused space below the last entry but all entries don't fit into the box,
             // move the content down to use the whole space
-            const long nTotalHeight = GetTotalHeight();
+            const tools::Long nTotalHeight = GetTotalHeight();
             if ( m_bHasScrollBar && ( aOutputSize.Height() + m_nTopIndex > nTotalHeight ) )
             {
-                long nOffset = m_nTopIndex;
+                tools::Long nOffset = m_nTopIndex;
                 m_nTopIndex = nTotalHeight - aOutputSize.Height();
                 nOffset -= m_nTopIndex;
                 aEntryRect.Move( 0, nOffset );
@@ -592,11 +592,11 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
     if ( m_vEntries.empty() )
         return true;
 
-    long nSelect = 0;
+    tools::Long nSelect = 0;
 
     if ( m_bHasActive )
     {
-        long nPageSize = GetOutputSizePixel().Height() / m_nStdHeight;
+        tools::Long nPageSize = GetOutputSizePixel().Height() / m_nStdHeight;
         if ( nPageSize < 2 )
             nPageSize = 2;
 
@@ -623,7 +623,7 @@ bool ExtensionBox_Impl::HandleCursorKey( sal_uInt16 nKeyCode )
 
     if ( nSelect < 0 )
         nSelect = 0;
-    if ( nSelect >= static_cast<long>(m_vEntries.size()) )
+    if ( nSelect >= static_cast<tools::Long>(m_vEntries.size()) )
         nSelect = m_vEntries.size() - 1;
 
     selectEntry( nSelect );
@@ -655,9 +655,9 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::R
 }
 
 
-long ExtensionBox_Impl::GetTotalHeight() const
+tools::Long ExtensionBox_Impl::GetTotalHeight() const
 {
-    long nHeight = m_vEntries.size() * m_nStdHeight;
+    tools::Long nHeight = m_vEntries.size() * m_nStdHeight;
 
     if ( m_bHasActive )
     {
@@ -712,9 +712,9 @@ void ExtensionBox_Impl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Init();
 }
 
-long ExtensionBox_Impl::PointToPos( const Point& rPos )
+tools::Long ExtensionBox_Impl::PointToPos( const Point& rPos )
 {
-    long nPos = ( rPos.Y() + m_nTopIndex ) / m_nStdHeight;
+    tools::Long nPos = ( rPos.Y() + m_nTopIndex ) / m_nStdHeight;
 
     if ( m_bHasActive && ( nPos > m_nActive ) )
     {
@@ -732,7 +732,7 @@ bool ExtensionBox_Impl::MouseMove( const MouseEvent& rMEvt )
     bool bOverHyperlink = false;
 
     auto nPos = PointToPos( rMEvt.GetPosPixel() );
-    if ( ( nPos >= 0 ) && ( nPos < static_cast<long>(m_vEntries.size()) ) )
+    if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
     {
         const auto& rEntry = m_vEntries[nPos];
         bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rMEvt.GetPosPixel());
@@ -749,7 +749,7 @@ bool ExtensionBox_Impl::MouseMove( const MouseEvent& rMEvt )
 OUString ExtensionBox_Impl::RequestHelp(tools::Rectangle& rRect)
 {
     auto nPos = PointToPos( rRect.TopLeft() );
-    if ( ( nPos >= 0 ) && ( nPos < static_cast<long>(m_vEntries.size()) ) )
+    if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
     {
         const auto& rEntry = m_vEntries[nPos];
         bool bOverHyperlink = !rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rRect);
@@ -773,7 +773,7 @@ bool ExtensionBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
         {
             auto nPos = PointToPos( rMEvt.GetPosPixel() );
 
-            if ( ( nPos >= 0 ) && ( nPos < static_cast<long>(m_vEntries.size()) ) )
+            if ( ( nPos >= 0 ) && ( nPos < static_cast<tools::Long>(m_vEntries.size()) ) )
             {
                 const auto& rEntry = m_vEntries[nPos];
                 if (!rEntry->m_sPublisher.isEmpty() && rEntry->m_aLinkRect.IsInside(rMEvt.GetPosPixel()))
@@ -815,8 +815,8 @@ bool ExtensionBox_Impl::KeyInput(const KeyEvent& rKEvt)
     return bHandled;
 }
 
-bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nStart,
-                                      const long nEnd, long &nPos )
+bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const tools::Long nStart,
+                                      const tools::Long nEnd, tools::Long &nPos )
 {
     nPos = nStart;
     if ( nStart > nEnd )
@@ -846,7 +846,7 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nSta
         }
     }
 
-    const long nMid = nStart + ( ( nEnd - nStart ) / 2 );
+    const tools::Long nMid = nStart + ( ( nEnd - nStart ) / 2 );
     eCompare = rEntry->CompareTo( m_pCollator.get(), m_vEntries[ nMid ] );
 
     if ( eCompare < 0 )
@@ -904,7 +904,7 @@ void ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
 
     {
         osl::MutexGuard guard(m_entriesMutex);
-        long nPos = 0;
+        tools::Long nPos = 0;
         if (m_vEntries.empty())
         {
             addEventListenerOnce(xPackage);
@@ -989,7 +989,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
             [&xPackage](const TEntry_Impl& rxEntry) { return rxEntry->m_xPackage == xPackage; });
         if (iIndex != m_vEntries.end())
         {
-            long nPos = iIndex - m_vEntries.begin();
+            tools::Long nPos = iIndex - m_vEntries.begin();
 
             // Entries mustn't be removed here, because they contain a hyperlink control
             // which can only be deleted when the thread has the solar mutex. Therefore
@@ -1009,7 +1009,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 if ( nPos < m_nActive )
                     m_nActive -= 1;
                 else if ( ( nPos == m_nActive ) &&
-                          ( nPos == static_cast<long>(m_vEntries.size()) ) )
+                          ( nPos == static_cast<tools::Long>(m_vEntries.size()) ) )
                     m_nActive -= 1;
 
                 m_bHasActive = false;
@@ -1066,9 +1066,9 @@ void ExtensionBox_Impl::prepareChecking()
 
 void ExtensionBox_Impl::checkEntries()
 {
-    long nNewPos = -1;
-    long nChangedActivePos = -1;
-    long nPos = 0;
+    tools::Long nNewPos = -1;
+    tools::Long nChangedActivePos = -1;
+    tools::Long nPos = 0;
     bool bNeedsUpdate = false;
 
     {

@@ -441,7 +441,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const long* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& rUniStr, const tools::Long* pDXAry )
 {
     bool bEscapeUsed = false;
 
@@ -546,7 +546,7 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
                                       const OUString& rString,
-                                      const long* pDXAry )
+                                      const tools::Long* pDXAry )
 {
     sal_Int32 nOriginalTextLen = rString.getLength();
 
@@ -561,7 +561,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point& rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point& rPoint, const OUString& rString,
-                                const OString& rByteString, const long* pDXAry )
+                                const OString& rByteString, const tools::Long* pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -683,7 +683,7 @@ void WMFWriter::WMFRecord_RestoreDC()
     pWMF->WriteInt16( -1 );
 }
 
-void WMFWriter::WMFRecord_RoundRect(const tools::Rectangle & rRect, long nHorzRound, long nVertRound)
+void WMFWriter::WMFRecord_RoundRect(const tools::Rectangle & rRect, tools::Long nHorzRound, tools::Long nVertRound)
 {
     WriteRecordHeader(0x00000009,W_META_ROUNDRECT);
     WriteHeightWidth(Size(nHorzRound,nVertRound));
@@ -1412,7 +1412,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                             else
                                 aX += BigInt( aScaleX.GetNumerator()/2 );
                         aX /= BigInt( aScaleX.GetNumerator() );
-                        aOrigin.setX( static_cast<long>(aX) + aMM.GetOrigin().X() );
+                        aOrigin.setX( static_cast<tools::Long>(aX) + aMM.GetOrigin().X() );
                         BigInt aY( aOrigin.Y() );
                         aY *= BigInt( aScaleY.GetDenominator() );
                         if( aOrigin.Y() >= 0 )
@@ -1426,7 +1426,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                             else
                                 aY += BigInt( aScaleY.GetNumerator()/2 );
                         aY /= BigInt( aScaleY.GetNumerator() );
-                        aOrigin.setY( static_cast<long>(aY) + aMM.GetOrigin().Y() );
+                        aOrigin.setY( static_cast<tools::Long>(aY) + aMM.GetOrigin().Y() );
                         aSrcMapMode.SetOrigin( aOrigin );
 
                         aScaleX *= aSrcMapMode.GetScaleX();
@@ -1564,7 +1564,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 const Size      aDestSize( pA->GetSize() );
                 const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
                 const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                tools::Long            nMoveX, nMoveY;
 
                 aSrcLineInfo = LineInfo();
                 SetAllAttr();
@@ -1713,7 +1713,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     {
         aTargetMapMode = MapMode( MapUnit::MapInch );
 
-        const long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
+        const tools::Long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
         const Fraction  aFrac( 1, nUnit );
 
         aTargetMapMode.SetScaleX( aFrac );

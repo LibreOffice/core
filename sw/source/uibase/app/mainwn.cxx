@@ -29,7 +29,7 @@ namespace {
 
 struct SwProgress
 {
-    long nStartValue,
+    tools::Long nStartValue,
          nStartCount;
     SwDocShell  *pDocShell;
     std::unique_ptr<SfxProgress> pProgress;
@@ -49,7 +49,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
     return nullptr;
 }
 
-void StartProgress( const char* pMessResId, long nStartValue, long nEndValue,
+void StartProgress( const char* pMessResId, tools::Long nStartValue, tools::Long nEndValue,
                     SwDocShell *pDocShell )
 {
     if( SW_MOD()->IsEmbeddedLoadSave() )
@@ -79,7 +79,7 @@ void StartProgress( const char* pMessResId, long nStartValue, long nEndValue,
     pProgress->nStartValue = nStartValue;
 }
 
-void SetProgressState( long nPosition, SwDocShell const *pDocShell )
+void SetProgressState( tools::Long nPosition, SwDocShell const *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {

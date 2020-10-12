@@ -218,7 +218,7 @@ tools::Rectangle OApplicationIconControl::GetFocusRect()
     if (HasFocus())
     {
         // Get the last selected item in the list
-        for (long i = mFilteredItemList.size() - 1; i >= 0; --i)
+        for (tools::Long i = mFilteredItemList.size() - 1; i >= 0; --i)
         {
             ThumbnailViewItem* pItem = mFilteredItemList[i];
             if (pItem->isSelected())

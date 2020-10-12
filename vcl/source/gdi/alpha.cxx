@@ -89,15 +89,15 @@ void AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
         return;
 
     const BitmapColor   aReplace( cReplaceTransparency );
-    const long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
-    const long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
+    const tools::Long          nWidth = std::min( pMaskAcc->Width(), pAcc->Width() );
+    const tools::Long          nHeight = std::min( pMaskAcc->Height(), pAcc->Height() );
     const BitmapColor   aMaskWhite( pMaskAcc->GetBestMatchingColor( COL_WHITE ) );
 
-    for( long nY = 0; nY < nHeight; nY++ )
+    for( tools::Long nY = 0; nY < nHeight; nY++ )
     {
         Scanline pScanline = pAcc->GetScanline(nY);
         Scanline pScanlineMask = pMaskAcc->GetScanline(nY);
-        for( long nX = 0; nX < nWidth; nX++ )
+        for( tools::Long nX = 0; nX < nWidth; nX++ )
             if( pMaskAcc->GetPixelFromData( pScanlineMask, nX ) == aMaskWhite )
                 pAcc->SetPixelOnData( pScanline, nX, aReplace );
     }
@@ -110,15 +110,15 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     if( !(pAcc && pAcc->GetBitCount() == 8) )
         return;
 
-    const long nWidth = pAcc->Width(), nHeight = pAcc->Height();
+    const tools::Long nWidth = pAcc->Width(), nHeight = pAcc->Height();
 
     if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
     {
-        for( long nY = 0; nY < nHeight; nY++ )
+        for( tools::Long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScan = pAcc->GetScanline( nY );
 
-            for( long nX = 0; nX < nWidth; nX++, pScan++ )
+            for( tools::Long nX = 0; nX < nWidth; nX++, pScan++ )
             {
                 if( *pScan == cSearchTransparency )
                     *pScan = cReplaceTransparency;
@@ -129,10 +129,10 @@ void AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     {
         BitmapColor aReplace( cReplaceTransparency );
 
-        for( long nY = 0; nY < nHeight; nY++ )
+        for( tools::Long nY = 0; nY < nHeight; nY++ )
         {
             Scanline pScanline = pAcc->GetScanline(nY);
-            for( long nX = 0; nX < nWidth; nX++ )
+            for( tools::Long nX = 0; nX < nWidth; nX++ )
             {
                 if( pAcc->GetIndexFromData( pScanline, nX ) == cSearchTransparency )
                     pAcc->SetPixelOnData( pScanline, nX, aReplace );
@@ -155,13 +155,13 @@ void AlphaMask::BlendWith(const Bitmap& rOther)
     if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))
         return;
 
-    const long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
-    const long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
-    for (long y = 0; y < nHeight; ++y)
+    const tools::Long nHeight = std::min(pOtherAcc->Height(), pAcc->Height());
+    const tools::Long nWidth = std::min(pOtherAcc->Width(), pAcc->Width());
+    for (tools::Long y = 0; y < nHeight; ++y)
     {
         Scanline scanline = pAcc->GetScanline( y );
         ConstScanline otherScanline = pOtherAcc->GetScanline( y );
-        for (long x = 0; x < nWidth; ++x)
+        for (tools::Long x = 0; x < nWidth; ++x)
         {
             // Use sal_uInt16 for following multiplication
             const sal_uInt16 nGrey1 = *scanline;

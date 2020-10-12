@@ -27,12 +27,12 @@ class ScMetricInputDlg : public weld::GenericDialogController
 public:
     ScMetricInputDlg( weld::Window*   pParent,
                       const OString& sDialogName,
-                      long           nCurrent,
-                      long           nDefault,
+                      tools::Long           nCurrent,
+                      tools::Long           nDefault,
                       FieldUnit      eFUnit,
                       sal_uInt16     nDecimals,
-                      long           nMaximum,
-                      long           nMinimum);
+                      tools::Long           nMaximum,
+                      tools::Long           nMinimum);
     virtual ~ScMetricInputDlg() override;
 
     int GetInputValue() const;

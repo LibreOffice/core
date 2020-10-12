@@ -1913,7 +1913,7 @@ void SwTOXBaseSection::InsertSorted(std::unique_ptr<SwTOXSortTabBase> pNew)
     }
 
     // find position and insert
-    long i;
+    tools::Long i;
 
     for( i = aRange.Min(); i < aRange.Max(); ++i)
     {   // Only check for same level
@@ -1970,10 +1970,10 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
 
     OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
 
-    const long nMin = rRange.Min();
-    const long nMax = rRange.Max();
+    const tools::Long nMin = rRange.Min();
+    const tools::Long nMax = rRange.Max();
 
-    long i;
+    tools::Long i;
 
     for( i = nMin; i < nMax; ++i)
     {
@@ -1995,8 +1995,8 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
         }
         m_aSortArr.insert(m_aSortArr.begin() + i, std::move(pKey));
     }
-    const long nStart = i+1;
-    const long nEnd   = m_aSortArr.size();
+    const tools::Long nStart = i+1;
+    const tools::Long nEnd   = m_aSortArr.size();
 
     // Find end of range
     for(i = nStart; i < nEnd; ++i)

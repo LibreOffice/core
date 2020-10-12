@@ -209,8 +209,8 @@ public:
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
-    void setItemDimensions (long ItemWidth, long ThumbnailHeight,
-                            long DisplayHeight, int itemPadding);
+    void setItemDimensions (tools::Long ItemWidth, tools::Long ThumbnailHeight,
+                            tools::Long DisplayHeight, int itemPadding);
 
     void SelectItem( sal_uInt16 nItemId );
 
@@ -290,13 +290,13 @@ protected:
     ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
     ThumbnailValueItemList::iterator mpStartSelRange;
     VclPtr<ScrollBar> mpScrBar;
-    long mnItemWidth;
-    long mnItemHeight;
-    long mnItemPadding;
-    long mnThumbnailHeight;     // Maximum height of the thumbnail
-    long mnDisplayHeight;       // Height of the data display box (name, etc)
-    long mnVisLines;
-    long mnLines;
+    tools::Long mnItemWidth;
+    tools::Long mnItemHeight;
+    tools::Long mnItemPadding;
+    tools::Long mnThumbnailHeight;     // Maximum height of the thumbnail
+    tools::Long mnDisplayHeight;       // Height of the data display box (name, etc)
+    tools::Long mnVisLines;
+    tools::Long mnLines;
 
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;
@@ -346,8 +346,8 @@ public:
 
     void setItemMaxTextLength (sal_uInt32 nLength);
 
-    void setItemDimensions (long ItemWidth, long ThumbnailHeight,
-                            long DisplayHeight, int itemPadding);
+    void setItemDimensions (tools::Long ItemWidth, tools::Long ThumbnailHeight,
+                            tools::Long DisplayHeight, int itemPadding);
 
     void SelectItem( sal_uInt16 nItemId );
 
@@ -438,14 +438,14 @@ protected:
     css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
     ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
     ThumbnailValueItemList::iterator mpStartSelRange;
-    long mnItemWidth;
-    long mnItemHeight;
-    long mnItemPadding;
-    long mnThumbnailHeight;     // Maximum height of the thumbnail
-    long mnDisplayHeight;       // Height of the data display box (name, etc)
-    long mnVItemSpace;          // Vertical spacing between rows, -1 to use excess unused height split up between items
-    long mnVisLines;
-    long mnLines;
+    tools::Long mnItemWidth;
+    tools::Long mnItemHeight;
+    tools::Long mnItemPadding;
+    tools::Long mnThumbnailHeight;     // Maximum height of the thumbnail
+    tools::Long mnDisplayHeight;       // Height of the data display box (name, etc)
+    tools::Long mnVItemSpace;          // Vertical spacing between rows, -1 to use excess unused height split up between items
+    tools::Long mnVisLines;
+    tools::Long mnLines;
 
     sal_uInt16 mnCols;
     sal_uInt16 mnFirstLine;

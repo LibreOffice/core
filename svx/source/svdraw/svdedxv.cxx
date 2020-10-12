@@ -807,9 +807,9 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView const& rOutlView) co
     {
         // limit xPixRect because of driver problems when pixel coordinates are too far out
         Size aMaxXY(pWin->GetOutputSizePixel());
-        long a(2 * nPixSiz);
-        long nMaxX(aMaxXY.Width() + a);
-        long nMaxY(aMaxXY.Height() + a);
+        tools::Long a(2 * nPixSiz);
+        tools::Long nMaxX(aMaxXY.Width() + a);
+        tools::Long nMaxY(aMaxXY.Height() + a);
 
         if (aPixRect.Left() < -a)
             aPixRect.SetLeft(-a);
@@ -1718,7 +1718,7 @@ bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
         { // check if any characters were actually hit
             Point aPnt(rHit);
             aPnt -= aEditArea.TopLeft();
-            long nHitTol = 2000;
+            tools::Long nHitTol = 2000;
             OutputDevice* pRef = pTextEditOutliner->GetRefDevice();
             if (pRef)
                 nHitTol = OutputDevice::LogicToLogic(nHitTol, MapUnit::Map100thMM,

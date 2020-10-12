@@ -101,7 +101,7 @@ private:
     // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
     std::map<OUString, css::uno::Any> maInteropGrabBag;
 
-    long                    nHeaderRows;    // page fields plus filter button
+    tools::Long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;
     bool                    bSettingsChanged:1;
@@ -176,14 +176,14 @@ public:
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
     bool                IsDimNameInUse(const OUString& rName) const;
-    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
-    bool                IsDuplicated( long nDim );
-    long                GetDimCount();
+    OUString GetDimName( tools::Long nDim, bool& rIsDataLayout, sal_Int32* pFlags = nullptr );
+    bool                IsDuplicated( tools::Long nDim );
+    tools::Long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, css::sheet::DataPilotTableHeaderData& rData);
-    long                GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
+    tools::Long                GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
     bool                GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop,
-                                       long nDragDim,
-                                       tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, long& rDimPos );
+                                       tools::Long nDragDim,
+                                       tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
     OUString            GetFormattedString( const OUString& rDimName, const double fValue );
@@ -198,7 +198,7 @@ public:
         std::vector<sal_Int16>& rFilterFuncs,
         const OUString& rFilterList );
 
-    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long nDimension);
 
     void                ToggleDetails(const css::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 

@@ -31,15 +31,15 @@ public:
     }
 };
 
-inline SdrMetricItem makeSdrEdgeLine1DeltaItem(long nVal) {
+inline SdrMetricItem makeSdrEdgeLine1DeltaItem(tools::Long nVal) {
     return SdrMetricItem(SDRATTR_EDGELINE1DELTA, nVal);
 }
 
-inline SdrMetricItem makeSdrEdgeLine2DeltaItem(long nVal) {
+inline SdrMetricItem makeSdrEdgeLine2DeltaItem(tools::Long nVal) {
     return SdrMetricItem(SDRATTR_EDGELINE2DELTA, nVal);
 }
 
-inline SdrMetricItem makeSdrEdgeLine3DeltaItem(long nVal) {
+inline SdrMetricItem makeSdrEdgeLine3DeltaItem(tools::Long nVal) {
     return SdrMetricItem(SDRATTR_EDGELINE3DELTA, nVal);
 }
 

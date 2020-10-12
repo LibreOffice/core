@@ -114,7 +114,7 @@ static OUString GetDefaultString(sal_Int32 nChars)
     return aStr.makeStringAndClear();
 }
 
-static void calcFontHeightAnyAscent(vcl::RenderContext& rWin, vcl::Font const & _rFont, long& _nHeight, long& _nAscent)
+static void calcFontHeightAnyAscent(vcl::RenderContext& rWin, vcl::Font const & _rFont, tools::Long& _nHeight, tools::Long& _nAscent)
 {
     if ( !_nHeight )
     {
@@ -283,7 +283,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
                                                             aOutputSizePixel.Height() - 2 * BORDER))));
 
     OSL_ENSURE(mnLineH > 0, "We cannot make it that small");
-    long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
+    tools::Long nY0 = (aOutputSizePixel.Height() - (LINES * mnTotLineH)) / 2;
 
     rRenderContext.SetFillColor(maTextLineColor);
 
@@ -294,7 +294,7 @@ void SwDropCapsPict::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
 
     // Text background with gap (240 twips ~ 1 line height)
-    const long nDistW = (((static_cast<long>(mnDistance) * 100) / 240) * mnTotLineH) / 100;
+    const tools::Long nDistW = (((static_cast<tools::Long>(mnDistance) * 100) / 240) * mnTotLineH) / 100;
     rRenderContext.SetFillColor(maBackColor);
     if (mpPage && mpPage->m_xDropCapsBox->get_active())
     {
@@ -384,13 +384,13 @@ Size SwDropCapsPict::CalcTextSize()
     sal_Int32 nStart;
     sal_Int32 nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
-    long nTextWidth = 0;
-    long nCJKHeight = 0;
-    long nCTLHeight = 0;
-    long nHeight = 0;
-    long nAscent = 0;
-    long nCJKAscent = 0;
-    long nCTLAscent = 0;
+    tools::Long nTextWidth = 0;
+    tools::Long nCJKHeight = 0;
+    tools::Long nCTLHeight = 0;
+    tools::Long nHeight = 0;
+    tools::Long nAscent = 0;
+    tools::Long nCJKAscent = 0;
+    tools::Long nCTLAscent = 0;
     do
     {
         SvxFont& rFnt = (nScript == css::i18n::ScriptType::ASIAN)

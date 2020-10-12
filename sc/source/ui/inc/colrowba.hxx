@@ -52,9 +52,9 @@ public:
     virtual bool        IsDisabled() const override;
     virtual bool        ResizeAllowed() const override;
 
-    virtual void        DrawInvert( long nDragPos ) override;
+    virtual void        DrawInvert( tools::Long nDragPos ) override;
 
-    virtual OUString    GetDragHelp( long nVal ) override;
+    virtual OUString    GetDragHelp( tools::Long nVal ) override;
 };
 
 class ScRowBar : public ScHeaderControl
@@ -83,9 +83,9 @@ public:
     virtual bool        IsDisabled() const override;
     virtual bool        ResizeAllowed() const override;
 
-    virtual void        DrawInvert( long nDragPos ) override;
+    virtual void        DrawInvert( tools::Long nDragPos ) override;
 
-    virtual OUString    GetDragHelp( long nVal ) override;
+    virtual OUString    GetDragHelp( tools::Long nVal ) override;
 };
 
 #endif

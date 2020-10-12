@@ -39,20 +39,20 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
             if (pWriteAcc)
             {
                 BitmapColor aGrey(sal_uInt8(0));
-                const long nWidth = pWriteAcc->Width();
-                const long nHeight = pWriteAcc->Height();
-                const long nMask111 = -1, nMask121 = 0, nMask131 = 1;
-                const long nMask211 = -2, nMask221 = 0, nMask231 = 2;
-                const long nMask311 = -1, nMask321 = 0, nMask331 = 1;
-                const long nMask112 = 1, nMask122 = 2, nMask132 = 1;
-                const long nMask212 = 0, nMask222 = 0, nMask232 = 0;
-                const long nMask312 = -1, nMask322 = -2, nMask332 = -1;
-                long nGrey11, nGrey12, nGrey13;
-                long nGrey21, nGrey22, nGrey23;
-                long nGrey31, nGrey32, nGrey33;
+                const tools::Long nWidth = pWriteAcc->Width();
+                const tools::Long nHeight = pWriteAcc->Height();
+                const tools::Long nMask111 = -1, nMask121 = 0, nMask131 = 1;
+                const tools::Long nMask211 = -2, nMask221 = 0, nMask231 = 2;
+                const tools::Long nMask311 = -1, nMask321 = 0, nMask331 = 1;
+                const tools::Long nMask112 = 1, nMask122 = 2, nMask132 = 1;
+                const tools::Long nMask212 = 0, nMask222 = 0, nMask232 = 0;
+                const tools::Long nMask312 = -1, nMask322 = -2, nMask332 = -1;
+                tools::Long nGrey11, nGrey12, nGrey13;
+                tools::Long nGrey21, nGrey22, nGrey23;
+                tools::Long nGrey31, nGrey32, nGrey33;
                 std::unique_ptr<long[]> pHMap(new long[nWidth + 2]);
                 std::unique_ptr<long[]> pVMap(new long[nHeight + 2]);
-                long nX, nY, nSum1, nSum2;
+                tools::Long nX, nY, nSum1, nSum2;
 
                 // fill mapping tables
                 pHMap[0] = 0;
@@ -117,7 +117,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
                         nSum1 += nMask331 * nGrey33;
                         nSum2 += nMask332 * nGrey33;
 
-                        nSum1 = static_cast<long>(
+                        nSum1 = static_cast<tools::Long>(
                             sqrt(static_cast<double>(nSum1 * nSum1 + nSum2 * nSum2)));
 
                         aGrey.SetIndex(~static_cast<sal_uInt8>(std::clamp(nSum1, 0L, 255L)));
@@ -125,7 +125,7 @@ BitmapEx BitmapSobelGreyFilter::execute(BitmapEx const& rBitmapEx) const
 
                         if (nX < (nWidth - 1))
                         {
-                            const long nNextX = pHMap[nX + 3];
+                            const tools::Long nNextX = pHMap[nX + 3];
 
                             nGrey11 = nGrey12;
                             nGrey12 = nGrey13;

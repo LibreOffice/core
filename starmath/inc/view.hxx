@@ -232,7 +232,7 @@ protected:
                          const OUString& rLine);
     static Size GetTextSize(OutputDevice const & rDevice,
                      const OUString& rText,
-                     long          MaxWidth);
+                     tools::Long          MaxWidth);
     static void DrawTextLine(OutputDevice& rDevice,
                       const Point&  rPosition,
                       const OUString& rLine);

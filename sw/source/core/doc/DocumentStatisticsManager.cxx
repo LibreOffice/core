@@ -102,7 +102,7 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
 }
 
 // returns true while there is more to do
-bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bFields)
+bool DocumentStatisticsManager::IncrementalDocStatCalculate(tools::Long nChars, bool bFields)
 {
     mbInitialized = true;
     mpDocStat->Reset();
@@ -116,7 +116,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         {
         case SwNodeType::Text:
         {
-            long const nOldChars(mpDocStat->nChar);
+            tools::Long const nOldChars(mpDocStat->nChar);
             SwTextNode *pText = static_cast< SwTextNode * >( pNd );
             if (pText->CountWords(*mpDocStat, 0, pText->GetText().getLength()))
             {

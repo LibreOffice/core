@@ -989,8 +989,8 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
         // create footer objects for standard master page
         if( mePageKind == PageKind::Standard )
         {
-            const long nLftBorder = GetLeftBorder();
-            const long nUppBorder = GetUpperBorder();
+            const ::tools::Long nLftBorder = GetLeftBorder();
+            const ::tools::Long nUppBorder = GetUpperBorder();
 
             Point aPos ( nLftBorder, nUppBorder );
             Size aSize ( GetSize() );
@@ -999,10 +999,10 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             aSize.AdjustHeight( -(nUppBorder + GetLowerBorder()) );
 
             getPresObjProp( *this, sObjKind, sPageKind, propvalue);
-            aPos.AdjustX(long( aSize.Width() * propvalue[2] ) );
-            aPos.AdjustY(long( aSize.Height() * propvalue[3] ) );
-            aSize.setWidth( long( aSize.Width() * propvalue[1] ) );
-            aSize.setHeight( long( aSize.Height() * propvalue[0] ) );
+            aPos.AdjustX(::tools::Long( aSize.Width() * propvalue[2] ) );
+            aPos.AdjustY(::tools::Long( aSize.Height() * propvalue[3] ) );
+            aSize.setWidth( ::tools::Long( aSize.Width() * propvalue[1] ) );
+            aSize.setHeight( ::tools::Long( aSize.Height() * propvalue[0] ) );
 
             if(eObjKind == PresObjKind::Header )
             {
@@ -1025,18 +1025,18 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             Point aPosition ( GetLeftBorder(), GetUpperBorder() );
 
             getPresObjProp( *this, sObjKind, sPageKind, propvalue);
-            int NOTES_HEADER_FOOTER_WIDTH = long(aPageSize.Width() * propvalue[1]);
-            int NOTES_HEADER_FOOTER_HEIGHT = long(aPageSize.Height() * propvalue[0]);
+            int NOTES_HEADER_FOOTER_WIDTH = ::tools::Long(aPageSize.Width() * propvalue[1]);
+            int NOTES_HEADER_FOOTER_HEIGHT = ::tools::Long(aPageSize.Height() * propvalue[0]);
             Size aSize( NOTES_HEADER_FOOTER_WIDTH, NOTES_HEADER_FOOTER_HEIGHT );
             Point aPos ( 0 ,0 );
             if( propvalue[2] == 0 )
                 aPos.setX( aPosition.X() );
             else
-                aPos.setX( aPosition.X() + long( aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH ) );
+                aPos.setX( aPosition.X() + ::tools::Long( aPageSize.Width() - NOTES_HEADER_FOOTER_WIDTH ) );
             if( propvalue[3] == 0 )
                 aPos.setY( aPosition.Y() );
             else
-                aPos.setY( aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT ) );
+                aPos.setY( aPosition.Y() + ::tools::Long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT ) );
 
             ::tools::Rectangle aRect( aPos, aSize );
             return CreatePresObj( eObjKind, false, aRect );
@@ -1093,21 +1093,21 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         if (mePageKind == PageKind::Standard)
          {
             getPresObjProp( *this , "PRESOBJ_TITLE" ,sPageKind, propvalue);
-            aTitlePos.AdjustX(long( aTitleSize.Width() * propvalue[2] ) );
-            aTitlePos.AdjustY(long( aTitleSize.Height() * propvalue[3] ) );
-            aTitleSize.setWidth( long( aTitleSize.Width() * propvalue[1] ) );
-            aTitleSize.setHeight( long( aTitleSize.Height() * propvalue[0] ) );
+            aTitlePos.AdjustX(::tools::Long( aTitleSize.Width() * propvalue[2] ) );
+            aTitlePos.AdjustY(::tools::Long( aTitleSize.Height() * propvalue[3] ) );
+            aTitleSize.setWidth( ::tools::Long( aTitleSize.Width() * propvalue[1] ) );
+            aTitleSize.setHeight( ::tools::Long( aTitleSize.Height() * propvalue[0] ) );
         }
         else if (mePageKind == PageKind::Notes)
         {
             Point aPos = aTitlePos;
             getPresObjProp( *this, "PRESOBJ_TITLE" ,sPageKind, propvalue);
-            aPos.AdjustX(long( aTitleSize.Width() * propvalue[2] ) );
-            aPos.AdjustY(long( aTitleSize.Height() * propvalue[3] ) );
+            aPos.AdjustX(::tools::Long( aTitleSize.Width() * propvalue[2] ) );
+            aPos.AdjustY(::tools::Long( aTitleSize.Height() * propvalue[3] ) );
 
             // limit height
-            aTitleSize.setHeight( long( aTitleSize.Height() * propvalue[0] ) );
-            aTitleSize.setWidth( long( aTitleSize.Width() * propvalue[1] ) );
+            aTitleSize.setHeight( ::tools::Long( aTitleSize.Height() * propvalue[0] ) );
+            aTitleSize.setWidth( ::tools::Long( aTitleSize.Width() * propvalue[1] ) );
 
             Size aPartArea = aTitleSize;
             Size aSize;
@@ -1135,8 +1135,8 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
 
                 if ( fH > fV )
                     fH = fV;
-                aSize.setWidth( static_cast<long>(fH * pRefPage->GetWidth()) );
-                aSize.setHeight( static_cast<long>(fH * pRefPage->GetHeight()) );
+                aSize.setWidth( static_cast<::tools::Long>(fH * pRefPage->GetWidth()) );
+                aSize.setHeight( static_cast<::tools::Long>(fH * pRefPage->GetHeight()) );
 
                 aPos.AdjustX((aPartArea.Width() - aSize.Width()) / 2 );
                 aPos.AdjustY((aPartArea.Height()- aSize.Height())/ 2 );
@@ -1176,20 +1176,20 @@ void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
         if (mePageKind == PageKind::Standard)
         {
             getPresObjProp( *this ,"PRESOBJ_OUTLINE", sPageKind, propvalue);
-            aLayoutPos.AdjustX(long( aLayoutSize.Width() * propvalue[2] ) );
-            aLayoutPos.AdjustY(long( aLayoutSize.Height() * propvalue[3] ) );
-            aLayoutSize.setWidth( long( aLayoutSize.Width() * propvalue[1] ) );
-            aLayoutSize.setHeight( long( aLayoutSize.Height() * propvalue[0] ) );
+            aLayoutPos.AdjustX(::tools::Long( aLayoutSize.Width() * propvalue[2] ) );
+            aLayoutPos.AdjustY(::tools::Long( aLayoutSize.Height() * propvalue[3] ) );
+            aLayoutSize.setWidth( ::tools::Long( aLayoutSize.Width() * propvalue[1] ) );
+            aLayoutSize.setHeight( ::tools::Long( aLayoutSize.Height() * propvalue[0] ) );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
         else if (mePageKind == PageKind::Notes)
         {
             getPresObjProp( *this, "PRESOBJ_NOTES", sPageKind, propvalue);
-            aLayoutPos.AdjustX(long( aLayoutSize.Width() * propvalue[2] ) );
-            aLayoutPos.AdjustY(long( aLayoutSize.Height() * propvalue[3] ) );
-            aLayoutSize.setWidth( long( aLayoutSize.Width() * propvalue[1] ) );
-            aLayoutSize.setHeight( long( aLayoutSize.Height() * propvalue[0] ) );
+            aLayoutPos.AdjustX(::tools::Long( aLayoutSize.Width() * propvalue[2] ) );
+            aLayoutPos.AdjustY(::tools::Long( aLayoutSize.Height() * propvalue[3] ) );
+            aLayoutSize.setWidth( ::tools::Long( aLayoutSize.Width() * propvalue[1] ) );
+            aLayoutSize.setHeight( ::tools::Long( aLayoutSize.Height() * propvalue[0] ) );
             aLayoutRect.SetPos(aLayoutPos);
             aLayoutRect.SetSize(aLayoutSize);
         }
@@ -1869,8 +1869,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
         aNewPageSize = aBackgroundSize;
     }
 
-    long nOldWidth  = GetWidth() - GetLeftBorder() - GetRightBorder();
-    long nOldHeight = GetHeight() - GetUpperBorder() - GetLowerBorder();
+    ::tools::Long nOldWidth  = GetWidth() - GetLeftBorder() - GetRightBorder();
+    ::tools::Long nOldHeight = GetHeight() - GetUpperBorder() - GetLowerBorder();
 
     Fraction aFractX(aNewPageSize.Width(), nOldWidth);
     Fraction aFractY(aNewPageSize.Height(), nOldHeight);
@@ -1928,14 +1928,14 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                                 const SvxFontHeightItem& rOldHgt = rSet.Get(EE_CHAR_FONTHEIGHT);
                                 sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                 if( SfxItemState::DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                 {
                                     const SvxFontHeightItem& rOldHgt2 = rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                     nFontHeight = rOldHgt2.GetHeight();
-                                    nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                    nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                 }
 
@@ -1943,7 +1943,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                 {
                                     const SvxFontHeightItem& rOldHgt2 = rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                     nFontHeight = rOldHgt2.GetHeight();
-                                    nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                    nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
 
@@ -1966,14 +1966,14 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                                     const SvxFontHeightItem& rOldHgt = aTempSet.Get(EE_CHAR_FONTHEIGHT);
                                     sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                    nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                     if( SfxItemState::DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                     {
                                         const SvxFontHeightItem& rOldHgt2 = aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                         nFontHeight = rOldHgt2.GetHeight();
-                                        nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                        nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                     }
 
@@ -1981,7 +1981,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                                     {
                                         const SvxFontHeightItem& rOldHgt2 = aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                         nFontHeight = rOldHgt2.GetHeight();
-                                        nFontHeight = long(nFontHeight * static_cast<double>(aFractY));
+                                        nFontHeight = ::tools::Long(nFontHeight * static_cast<double>(aFractY));
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
@@ -2059,8 +2059,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
 
                 // corrected scaling; only distances may be scaled
                 // use aTopLeft as original TopLeft
-                aNewPos.setX( long((aTopLeft.X() - GetLeftBorder()) * static_cast<double>(aFractX)) + nLeft );
-                aNewPos.setY( long((aTopLeft.Y() - GetUpperBorder()) * static_cast<double>(aFractY)) + nUpper );
+                aNewPos.setX( ::tools::Long((aTopLeft.X() - GetLeftBorder()) * static_cast<double>(aFractX)) + nLeft );
+                aNewPos.setY( ::tools::Long((aTopLeft.Y() - GetUpperBorder()) * static_cast<double>(aFractY)) + nUpper );
 
                 Size aVec(aNewPos.X() - aTopLeft.X(), aNewPos.Y() - aTopLeft.Y());
 
@@ -3002,21 +3002,21 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
     }
     else
     {
-        const long nGapW = 1000; // gap is 1cm
-        const long nGapH = 1000;
+        const ::tools::Long nGapW = 1000; // gap is 1cm
+        const ::tools::Long nGapH = 1000;
 
-        long nLeftBorder = rHandoutMaster.GetLeftBorder();
-        long nRightBorder = rHandoutMaster.GetRightBorder();
-        long nTopBorder = rHandoutMaster.GetUpperBorder();
-        long nBottomBorder = rHandoutMaster.GetLowerBorder();
+        ::tools::Long nLeftBorder = rHandoutMaster.GetLeftBorder();
+        ::tools::Long nRightBorder = rHandoutMaster.GetRightBorder();
+        ::tools::Long nTopBorder = rHandoutMaster.GetUpperBorder();
+        ::tools::Long nBottomBorder = rHandoutMaster.GetLowerBorder();
 
-        const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
+        const ::tools::Long nHeaderFooterHeight = static_cast< ::tools::Long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
 
         nTopBorder += nHeaderFooterHeight;
         nBottomBorder += nHeaderFooterHeight;
 
-        long nX = nGapW + nLeftBorder;
-        long nY = nGapH + nTopBorder;
+        ::tools::Long nX = nGapW + nLeftBorder;
+        ::tools::Long nY = nGapH + nTopBorder;
 
         aArea.AdjustWidth( -(nGapW * 2 + nLeftBorder + nRightBorder) );
         aArea.AdjustHeight( -(nGapH * 2 + nTopBorder + nBottomBorder) );
@@ -3090,12 +3090,12 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
             // scale actual size into handout rect
             double fScale = static_cast<double>(aPartArea.Width()) / static_cast<double>(pFirstPage->GetWidth());
 
-            aSize.setHeight( static_cast<long>(fScale * pFirstPage->GetHeight() ) );
+            aSize.setHeight( static_cast<::tools::Long>(fScale * pFirstPage->GetHeight() ) );
             if( aSize.Height() > aPartArea.Height() )
             {
                 fScale = static_cast<double>(aPartArea.Height()) / static_cast<double>(pFirstPage->GetHeight());
                 aSize.setHeight( aPartArea.Height() );
-                aSize.setWidth( static_cast<long>(fScale * pFirstPage->GetWidth()) );
+                aSize.setWidth( static_cast<::tools::Long>(fScale * pFirstPage->GetWidth()) );
             }
             else
             {
@@ -3114,9 +3114,9 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         const bool bRTL = rModel.GetDefaultWritingMode() == css::text::WritingMode_RL_TB;
 
-        const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
-        const long nOffsetY = aPartArea.Height() + nGapH;
-        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) + nX : nX;
+        const ::tools::Long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
+        const ::tools::Long nOffsetY = aPartArea.Height() + nGapH;
+        const ::tools::Long nStartX = bRTL ? nOffsetX*(1 - nColCnt) + nX : nX;
 
         for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
         {

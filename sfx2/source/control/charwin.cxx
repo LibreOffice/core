@@ -146,8 +146,8 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     const OUString aText = GetText();
 
     Size aSize(GetOutputSizePixel());
-    long nAvailWidth = aSize.Width();
-    long nWinHeight = aSize.Height();
+    tools::Long nAvailWidth = aSize.Width();
+    tools::Long nWinHeight = aSize.Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
@@ -155,7 +155,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     Size aFontSize(aOrigFont.GetFontSize());
     ::tools::Rectangle aBoundRect;
 
-    for (long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 1)
+    for (tools::Long nFontHeight = aFontSize.Height(); nFontHeight > 0; nFontHeight -= 1)
     {
         if (!rRenderContext.GetTextBoundRect( aBoundRect, aText ) || aBoundRect.IsEmpty())
         {
@@ -164,7 +164,7 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         }
 
         //only shrink in the single glyph large view mode
-        long nTextWidth = aBoundRect.GetWidth();
+        tools::Long nTextWidth = aBoundRect.GetWidth();
         if (nAvailWidth > nTextWidth)
             break;
         vcl::Font aFont(aOrigFont);
@@ -236,7 +236,7 @@ void SvxCharView::setClearAllClickHdl(const Link<SvxCharView*,void> &rLink)
 
 void SvxCharView::SetFont( const vcl::Font& rFont )
 {
-    long nWinHeight = GetOutputSizePixel().Height();
+    tools::Long nWinHeight = GetOutputSizePixel().Height();
     maFont = rFont;
     maFont.SetWeight(WEIGHT_NORMAL);
     maFont.SetAlignment(ALIGN_TOP);

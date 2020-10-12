@@ -47,6 +47,7 @@
 #include <o3tl/runtimetooustring.hxx>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/long.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -85,8 +86,8 @@ namespace
         // TODO FIXME maybe we should compile with BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
         //            to actually get nanosecond precision in boostTime?
         // use this way rather than total_nanos to avoid overflows with 32-bit long
-        const long ticks = boostTime.time_of_day().fractional_seconds();
-        long nanoSeconds = ticks * ( 1000000000 / boost::posix_time::time_duration::ticks_per_second());
+        const tools::Long ticks = boostTime.time_of_day().fractional_seconds();
+        tools::Long nanoSeconds = ticks * ( 1000000000 / boost::posix_time::time_duration::ticks_per_second());
 
         unoTime.NanoSeconds = nanoSeconds;
 

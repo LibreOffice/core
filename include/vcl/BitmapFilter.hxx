@@ -28,13 +28,14 @@ namespace vcl::bitmap
 // [0, 31, false], [32, 63, false], [64, 95, false], [96, 100, true]
 template <int STRIP_SIZE>
 void generateStripRanges(
-    long nFirst, long nLast,
-    std::function<void(long const nStart, long const nEnd, bool const bLast)> aFunction)
+    tools::Long nFirst, tools::Long nLast,
+    std::function<void(tools::Long const nStart, tools::Long const nEnd, bool const bLast)>
+        aFunction)
 {
-    long nStart = nFirst;
+    tools::Long nStart = nFirst;
     for (; nStart < nLast - STRIP_SIZE; nStart += STRIP_SIZE)
     {
-        long nEnd = nStart + STRIP_SIZE - 1;
+        tools::Long nEnd = nStart + STRIP_SIZE - 1;
         aFunction(nStart, nEnd, false);
     }
     aFunction(nStart, nLast, true);

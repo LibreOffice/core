@@ -637,7 +637,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
     if (pC2!=nullptr) RotatePoint(*pC2,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
 }
 
-void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nAngle)
+void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, tools::Long nAngle)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditResize));

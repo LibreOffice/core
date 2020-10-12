@@ -16,15 +16,15 @@
 
 using namespace ::com::sun::star::table::BorderLineStyle;
 
-#define TEST_WIDTH long( 40 )
+#define TEST_WIDTH tools::Long( 40 )
 
-#define THINTHICKSG_IN_WIDTH long( 15 )
-#define THINTHICKSG_OUT_WIDTH long( 40 )
-#define THINTHICKSG_DIST_WIDTH long( 15 )
+#define THINTHICKSG_IN_WIDTH tools::Long( 15 )
+#define THINTHICKSG_OUT_WIDTH tools::Long( 40 )
+#define THINTHICKSG_DIST_WIDTH tools::Long( 15 )
 
-#define THINTHICKLG_IN_WIDTH long( 15 )
-#define THINTHICKLG_OUT_WIDTH long( 30 )
-#define THINTHICKLG_DIST_WIDTH long( 40 )
+#define THINTHICKLG_IN_WIDTH tools::Long( 15 )
+#define THINTHICKLG_OUT_WIDTH tools::Long( 30 )
+#define THINTHICKLG_DIST_WIDTH tools::Long( 40 )
 
 using namespace editeng;
 
@@ -77,9 +77,9 @@ void BorderLineTest::testGuessWidthDouble()
     SvxBorderLine line;
     line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE, TEST_WIDTH, TEST_WIDTH, TEST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE, line.GetBorderLineStyle() );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetOutWidth()) );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetInWidth()) );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<long>(line.GetDistance()) );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<tools::Long>(line.GetOutWidth()) );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<tools::Long>(line.GetInWidth()) );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH, static_cast<tools::Long>(line.GetDistance()) );
     CPPUNIT_ASSERT_EQUAL( 3*TEST_WIDTH, line.GetWidth() );
 }
 
@@ -89,10 +89,10 @@ void BorderLineTest::testGuessWidthNoMatch()
     line.GuessLinesWidths( SvxBorderLineStyle::DOUBLE,
             TEST_WIDTH + 1, TEST_WIDTH + 2, TEST_WIDTH + 3 );
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::DOUBLE, line.GetBorderLineStyle() );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+1, static_cast<long>(line.GetOutWidth()) );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+2, static_cast<long>(line.GetInWidth()) );
-    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+3, static_cast<long>(line.GetDistance()));
-    CPPUNIT_ASSERT_EQUAL( long( (3 * TEST_WIDTH) + 6 ), line.GetWidth() );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+1, static_cast<tools::Long>(line.GetOutWidth()) );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+2, static_cast<tools::Long>(line.GetInWidth()) );
+    CPPUNIT_ASSERT_EQUAL( TEST_WIDTH+3, static_cast<tools::Long>(line.GetDistance()));
+    CPPUNIT_ASSERT_EQUAL( tools::Long( (3 * TEST_WIDTH) + 6 ), line.GetWidth() );
 }
 
 void BorderLineTest::testGuessWidthThinthickSmallgap()
@@ -104,11 +104,11 @@ void BorderLineTest::testGuessWidthThinthickSmallgap()
             THINTHICKSG_DIST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_SMALLGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_OUT_WIDTH,
-            static_cast<long>(line.GetOutWidth()) );
+            static_cast<tools::Long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_IN_WIDTH,
-            static_cast<long>(line.GetInWidth()) );
+            static_cast<tools::Long>(line.GetInWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_DIST_WIDTH,
-            static_cast<long>(line.GetDistance()) );
+            static_cast<tools::Long>(line.GetDistance()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKSG_OUT_WIDTH + THINTHICKSG_IN_WIDTH
             + THINTHICKSG_DIST_WIDTH, line.GetWidth() );
 }
@@ -122,11 +122,11 @@ void BorderLineTest::testGuessWidthThinthickLargegap()
             THINTHICKLG_DIST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH,
-            static_cast<long>(line.GetOutWidth()) );
+            static_cast<tools::Long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_IN_WIDTH,
-            static_cast<long>(line.GetInWidth()) );
+            static_cast<tools::Long>(line.GetInWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_DIST_WIDTH,
-            static_cast<long>(line.GetDistance()) );
+            static_cast<tools::Long>(line.GetDistance()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH + THINTHICKLG_IN_WIDTH
             + THINTHICKLG_DIST_WIDTH, line.GetWidth() );
 }
@@ -140,11 +140,11 @@ void BorderLineTest::testGuessWidthNostyleDouble()
             THINTHICKLG_DIST_WIDTH );
     CPPUNIT_ASSERT_EQUAL( SvxBorderLineStyle::THINTHICK_LARGEGAP, line.GetBorderLineStyle() );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH,
-            static_cast<long>(line.GetOutWidth()) );
+            static_cast<tools::Long>(line.GetOutWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_IN_WIDTH,
-            static_cast<long>(line.GetInWidth()) );
+            static_cast<tools::Long>(line.GetInWidth()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_DIST_WIDTH,
-            static_cast<long>(line.GetDistance()) );
+            static_cast<tools::Long>(line.GetDistance()) );
     CPPUNIT_ASSERT_EQUAL( THINTHICKLG_OUT_WIDTH + THINTHICKLG_IN_WIDTH
             + THINTHICKLG_DIST_WIDTH, line.GetWidth() );
 }

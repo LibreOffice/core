@@ -429,12 +429,12 @@ void OTableWindow::Resize()
     Size    aOutSize = GetOutputSizePixel();
     aOutSize = Size(CalcZoom(aOutSize.Width()),CalcZoom(aOutSize.Height()));
 
-    long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
+    tools::Long nTitleHeight = CalcZoom( GetTextHeight() )+ CalcZoom( 4 );
 
     // Set the title and ListBox
-    long n5Pos = CalcZoom(5);
-    long nPositionX = n5Pos;
-    long nPositionY = n5Pos;
+    tools::Long n5Pos = CalcZoom(5);
+    tools::Long nPositionX = n5Pos;
+    tools::Long nPositionY = n5Pos;
 
     // position the image which indicates the type
     m_aTypeImage->SetPosPixel( Point( nPositionX, nPositionY ) );
@@ -447,7 +447,7 @@ void OTableWindow::Resize()
     nPositionX += aImageSize.Width() + CalcZoom( 2 );
     m_xTitle->SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
 
-    long nTitleToList = CalcZoom( 3 );
+    tools::Long nTitleToList = CalcZoom( 3 );
 
     m_xListBox->SetPosSizePixel(
         Point( n5Pos, nPositionY + nTitleHeight + nTitleToList ),

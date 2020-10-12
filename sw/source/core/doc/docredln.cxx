@@ -1052,7 +1052,7 @@ void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc)
     }
 }
 
-void SwRangeRedline::MaybeNotifyRedlinePositionModification(long nTop)
+void SwRangeRedline::MaybeNotifyRedlinePositionModification(tools::Long nTop)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;

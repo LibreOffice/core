@@ -181,31 +181,31 @@ bool SvxMarginItem::GetPresentation
     {
         case SfxItemPresentation::Nameless:
         {
-            rText = GetMetricText( static_cast<long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
+            rText = GetMetricText( static_cast<tools::Long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl );
+                        GetMetricText( static_cast<tools::Long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
         {
             rText = SvxResId(RID_SVXITEMS_MARGIN_LEFT) +
-                        GetMetricText( static_cast<long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nLeftMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_TOP) +
-                        GetMetricText( static_cast<long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nTopMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_RIGHT) +
-                        GetMetricText( static_cast<long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nRightMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         SvxResId(RID_SVXITEMS_MARGIN_BOTTOM) +
-                        GetMetricText( static_cast<long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nBottomMargin), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             return true;
         }
@@ -260,7 +260,7 @@ bool SvxMarginItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 bool SvxMarginItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
-    long nMaxVal = bConvert ? convertTwipToMm100(SHRT_MAX) : SHRT_MAX;   // members are sal_Int16
+    tools::Long nMaxVal = bConvert ? convertTwipToMm100(SHRT_MAX) : SHRT_MAX;   // members are sal_Int16
     sal_Int32 nVal = 0;
     if(!(rVal >>= nVal) || (nVal > nMaxVal))
         return false;

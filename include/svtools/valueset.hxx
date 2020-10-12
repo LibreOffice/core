@@ -199,13 +199,13 @@ private:
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
     tools::Rectangle  maNoneItemRect;
     tools::Rectangle  maItemListRect;
-    long            mnItemWidth;
-    long            mnItemHeight;
-    long            mnTextOffset;
-    long            mnVisLines;
-    long            mnLines;
-    long            mnUserItemWidth;
-    long            mnUserItemHeight;
+    tools::Long            mnItemWidth;
+    tools::Long            mnItemHeight;
+    tools::Long            mnTextOffset;
+    tools::Long            mnVisLines;
+    tools::Long            mnLines;
+    tools::Long            mnUserItemWidth;
+    tools::Long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
     int             mnSavedItemId;
     sal_uInt16      mnHighItemId;
@@ -330,8 +330,8 @@ public:
     {
         return mnUserVisLines;
     }
-    void           SetItemWidth( long nItemWidth );
-    void           SetItemHeight( long nLineHeight );
+    void           SetItemWidth( tools::Long nItemWidth );
+    void           SetItemHeight( tools::Long nLineHeight );
 
     void           SelectItem( sal_uInt16 nItemId );
     sal_uInt16     GetSelectedItemId() const

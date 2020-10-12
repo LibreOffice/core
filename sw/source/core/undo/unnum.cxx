@@ -202,7 +202,7 @@ void SwUndoDelNum::AddNode( const SwTextNode& rNd )
     }
 }
 
-SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, bool bIsOutlMv )
+SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, tools::Long nOff, bool bIsOutlMv )
     : SwUndo( bIsOutlMv ? SwUndoId::OUTLINE_UD : SwUndoId::MOVENUM, &rPam.GetDoc() ),
     SwUndRng( rPam ),
     m_nNewStart( 0 ), m_nOffset( nOff )

@@ -421,7 +421,7 @@ static bool lcl_HFPresentation
                 sal_uInt16 nPropLeftMargin  = rLRItem.GetPropLeft();
                 sal_uInt16 nPropRightMargin = rLRItem.GetPropRight();
                 sal_uInt16 nLeftMargin, nRightMargin;
-                long nTmp;
+                tools::Long nTmp;
                 nTmp = rLRItem.GetLeft();
                 nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
                 nTmp = rLRItem.GetRight();
@@ -435,7 +435,7 @@ static bool lcl_HFPresentation
                 }
                 else
                 {
-                    aText += GetMetricText( static_cast<long>(nLeftMargin),
+                    aText += GetMetricText( static_cast<tools::Long>(nLeftMargin),
                                            eCoreMetric, ePresentationMetric, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresentationMetric));
                 }
@@ -449,7 +449,7 @@ static bool lcl_HFPresentation
                 }
                 else
                 {
-                    aText += GetMetricText( static_cast<long>(nRightMargin),
+                    aText += GetMetricText( static_cast<tools::Long>(nRightMargin),
                                             eCoreMetric, ePresentationMetric, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresentationMetric));
                 }

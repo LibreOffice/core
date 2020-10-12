@@ -88,7 +88,7 @@ void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlotId, true, &pItem ) == SfxItemState::SET )
                 {
-                    long nNewVal = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                    tools::Long nNewVal = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
@@ -182,7 +182,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             tools::Rectangle aRect = pObj->GetLogicRect();
 
-                            long nVal;
+                            tools::Long nVal;
                             if ( nWhich == SID_OBJECT_LEFT )
                                 nVal = aRect.Left();
                             else if ( nWhich == SID_OBJECT_TOP )

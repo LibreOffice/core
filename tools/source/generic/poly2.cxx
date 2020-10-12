@@ -228,7 +228,7 @@ sal_uInt16 PolyPolygon::Count() const
     return mpImplPolyPolygon->mvPolyAry.size();
 }
 
-void PolyPolygon::Move( long nHorzMove, long nVertMove )
+void PolyPolygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     // Required for DrawEngine
     if( nHorzMove || nVertMove )
@@ -293,7 +293,7 @@ void PolyPolygon::Clip( const tools::Rectangle& rRect )
 
 tools::Rectangle PolyPolygon::GetBoundRect() const
 {
-    long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
+    tools::Long    nXMin=0, nXMax=0, nYMin=0, nYMax=0;
     bool    bFirst = true;
     sal_uInt16  nPolyCount = mpImplPolyPolygon->mvPolyAry.size();
 

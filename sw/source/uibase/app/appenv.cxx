@@ -330,7 +330,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         if ( aPaperSize.Width() > aPaperSize.Height() )
             Swap( aPaperSize );
 
-        long lLeft  = rItem.m_nShiftRight,
+        tools::Long lLeft  = rItem.m_nShiftRight,
              lUpper = rItem.m_nShiftDown;
 
         sal_uInt16 nPageW = static_cast<sal_uInt16>(std::max(rItem.m_nWidth, rItem.m_nHeight)),
@@ -339,13 +339,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         switch (rItem.m_eAlign)
         {
             case ENV_HOR_LEFT: break;
-            case ENV_HOR_CNTR: lLeft  += std::max(0L, long(aPaperSize.Width() - nPageW)) / 2;
+            case ENV_HOR_CNTR: lLeft  += std::max(0L, tools::Long(aPaperSize.Width() - nPageW)) / 2;
                                break;
-            case ENV_HOR_RGHT: lLeft  += std::max(0L, long(aPaperSize.Width() - nPageW));
+            case ENV_HOR_RGHT: lLeft  += std::max(0L, tools::Long(aPaperSize.Width() - nPageW));
                                break;
-            case ENV_VER_LEFT: lUpper += std::max(0L, long(aPaperSize.Width() - nPageH));
+            case ENV_VER_LEFT: lUpper += std::max(0L, tools::Long(aPaperSize.Width() - nPageH));
                                break;
-            case ENV_VER_CNTR: lUpper += std::max(0L, long(aPaperSize.Width() - nPageH)) / 2;
+            case ENV_VER_CNTR: lUpper += std::max(0L, tools::Long(aPaperSize.Width() - nPageH)) / 2;
                                break;
             case ENV_VER_RGHT: break;
         }

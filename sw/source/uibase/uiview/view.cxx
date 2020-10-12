@@ -1174,19 +1174,19 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 
     // No it is *not* a good idea to call GetToken within Point constr. immediately,
     // because which parameter is evaluated first?
-    long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
+    tools::Long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
          nY = rUserData.getToken( 0, ';', nPos ).toInt32();
     Point aCursorPos( nX, nY );
 
     sal_uInt16 nZoomFactor =
         static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
 
-    long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
+    tools::Long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
          nTop   = rUserData.getToken(0, ';', nPos ).toInt32(),
          nRight = rUserData.getToken(0, ';', nPos ).toInt32(),
          nBottom= rUserData.getToken(0, ';', nPos ).toInt32();
 
-    const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
     if ( nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
         return;
 
@@ -1244,8 +1244,8 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     if( !m_sNewCursorPos.isEmpty() )
     {
         sal_Int32 nIdx{ 0 };
-        const long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
-        const long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+        const tools::Long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+        const tools::Long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
         Point aCursorPos2( nXTmp, nYTmp );
         bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
 
@@ -1388,7 +1388,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         return;
 
     Point aCursorPos( nX, nY );
-    const long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
+    const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
     if (nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
         return;
 
@@ -1491,7 +1491,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             else
             {
                 //check if the values are possible
-                long nXMax = m_pHScrollbar->GetRangeMax() - m_pHScrollbar->GetVisibleSize();
+                tools::Long nXMax = m_pHScrollbar->GetRangeMax() - m_pHScrollbar->GetVisibleSize();
                 if( aTopLeft.X() > nXMax )
                     aTopLeft.setX( nXMax < 0 ? 0 : nXMax );
             }
@@ -1567,7 +1567,7 @@ void SwView::ShowCursor( bool bOn )
         m_pWrtShell->LockView( false );
 }
 
-ErrCode SwView::DoVerb( long nVerb )
+ErrCode SwView::DoVerb( tools::Long nVerb )
 {
     if ( !GetViewFrame()->GetFrame().IsInPlace() )
     {

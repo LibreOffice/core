@@ -446,8 +446,8 @@ void CGM::ImplDoClass5()
         case 0x72 : /*External Leading*/ break;
         case 0x7a : /*set Gradient Offset*/
         {
-            long nHorzOffset = ImplGetI( pElement->nIndexPrecision );
-            long nVertOffset = ImplGetI( pElement->nIndexPrecision );
+            tools::Long nHorzOffset = ImplGetI( pElement->nIndexPrecision );
+            tools::Long nVertOffset = ImplGetI( pElement->nIndexPrecision );
             (void)ImplGetUI16(); // nType
             mpOutAct->SetGradientOffset( nHorzOffset, nVertOffset );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;

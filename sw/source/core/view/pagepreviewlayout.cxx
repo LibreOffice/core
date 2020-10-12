@@ -209,7 +209,7 @@ void SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     {
         // adjust scaling for Drawing layer.
         aYScale *= Fraction( 1000, 1 );
-        long nNewNuminator = aYScale.operator long();
+        tools::Long nNewNuminator = aYScale.operator long();
         if( nNewNuminator < 1 )
             nNewNuminator = 1;
         aYScale = Fraction( nNewNuminator, 1000 );

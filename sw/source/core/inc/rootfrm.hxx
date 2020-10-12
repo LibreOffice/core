@@ -93,7 +93,7 @@ class SAL_DLLPUBLIC_RTTI SwRootFrame: public SwLayoutFrame
                                     // the rectangle is extended to the top/bottom/left/right
                                     // for pages located at the outer margins
     SwRect  maPagesArea;            // the area covered by the pages
-    long    mnViewWidth;            // the current page layout bases on this view width
+    tools::Long    mnViewWidth;            // the current page layout bases on this view width
     sal_uInt16  mnColumns;          // the current page layout bases on this number of columns
     bool    mbBookMode;             // the current page layout is in book view
     bool    mbSidebarChanged;       // the notes sidebar state has changed
@@ -124,7 +124,7 @@ class SAL_DLLPUBLIC_RTTI SwRootFrame: public SwLayoutFrame
      * mnBrowseWidth is the outer margin of the object most to the right.
      * The page's right edge should not be smaller than this value.
      */
-    long    mnBrowseWidth;
+    tools::Long    mnBrowseWidth;
 
     /// If we only have to format one ContentFrame, its in mpTurbo
     const SwContentFrame *mpTurbo;
@@ -362,7 +362,7 @@ public:
 
     static void SetNoVirDev(const bool bNew) { s_isNoVirDev = bNew; }
 
-    inline long GetBrowseWidth() const;
+    inline tools::Long GetBrowseWidth() const;
     inline void InvalidateBrowseWidth();
 
     bool IsNewLayout() const { return mbIsNewLayout; }
@@ -418,7 +418,7 @@ public:
     void SetHideRedlines(bool);
 };
 
-inline long SwRootFrame::GetBrowseWidth() const
+inline tools::Long SwRootFrame::GetBrowseWidth() const
 {
     if ( !mbBrowseWidthValid )
         const_cast<SwRootFrame*>(this)->ImplCalcBrowseWidth();

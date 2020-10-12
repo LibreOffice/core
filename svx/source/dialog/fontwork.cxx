@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimeoutHdl_Impl, Timer*, void)
         }
     }
 
-    long nValue = GetCoreValue(*m_xMtrFldDistance, MapUnit::Map100thMM);
+    tools::Long nValue = GetCoreValue(*m_xMtrFldDistance, MapUnit::Map100thMM);
     XFormTextDistanceItem aDistItem( nValue );
     nValue = GetCoreValue(*m_xMtrFldTextStart, MapUnit::Map100thMM);
     XFormTextStartItem aStartItem( nValue );

@@ -629,7 +629,7 @@ namespace
     // With mirrored margins, when relating the size of an object from the inside margin for example, on the
     // first page we calculate the new size of the object using the size of the right margin,
     // on second page the left margin, third page right margin, etc.
-    long getInsideOutsideRelativeWidth(bool isOutside, const SwPageFrame* const pPageFrame)
+    tools::Long getInsideOutsideRelativeWidth(bool isOutside, const SwPageFrame* const pPageFrame)
     {
         // Alternating between the only two possible cases: inside and outside.
         // Inside = false, Outside = true.
@@ -650,10 +650,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
     {
         tools::Rectangle aCurrObjRect = GetDrawObj()->GetCurrentBoundRect();
 
-        long nTargetWidth = aCurrObjRect.GetWidth( );
+        tools::Long nTargetWidth = aCurrObjRect.GetWidth( );
         if ( GetDrawObj( )->GetRelativeWidth( ) )
         {
-            long nWidth = 0;
+            tools::Long nWidth = 0;
             if (GetDrawObj()->GetRelativeWidthRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nWidth = GetPageFrame()->getFramePrintArea().SVRect().GetWidth();
@@ -689,10 +689,10 @@ SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             bCheck = !pObjCustomShape || !pObjCustomShape->IsAutoGrowHeight();
         }
 
-        long nTargetHeight = aCurrObjRect.GetHeight();
+        tools::Long nTargetHeight = aCurrObjRect.GetHeight();
         if (bCheck)
         {
-            long nHeight = 0;
+            tools::Long nHeight = 0;
             if (GetDrawObj()->GetRelativeHeightRelation() == text::RelOrientation::FRAME)
                 // Exclude margins.
                 nHeight = GetPageFrame()->getFramePrintArea().SVRect().GetHeight();

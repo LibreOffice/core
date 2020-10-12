@@ -155,7 +155,7 @@ void SwNumPositionTabPage::InitControls()
     const SwNumFormat* aNumFormatArr[MAXLEVEL];
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = USHRT_MAX;
-    long nFirstBorderTextRelative = -1;
+    tools::Long nFirstBorderTextRelative = -1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         aNumFormatArr[i] = &pActNum->Get(i);
@@ -173,7 +173,7 @@ void SwNumPositionTabPage::InitControls()
                 {
                     if(bRelative)
                     {
-                        const long nBorderTextRelative =
+                        const tools::Long nBorderTextRelative =
                             aNumFormatArr[i]->GetAbsLSpace() + aNumFormatArr[i]->GetFirstLineOffset() -
                             aNumFormatArr[i - 1]->GetAbsLSpace() + aNumFormatArr[i - 1]->GetFirstLineOffset();
                         if (nFirstBorderTextRelative == -1)
@@ -215,16 +215,16 @@ void SwNumPositionTabPage::InitControls()
     }
     if(bSameDistBorderNum)
     {
-        long nDistBorderNum;
+        tools::Long nDistBorderNum;
         if(bRelative)
         {
-            nDistBorderNum = static_cast<long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<tools::Long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
             if(nLvl)
-                nDistBorderNum -= static_cast<long>(aNumFormatArr[nLvl - 1]->GetAbsLSpace())+ aNumFormatArr[nLvl - 1]->GetFirstLineOffset();
+                nDistBorderNum -= static_cast<tools::Long>(aNumFormatArr[nLvl - 1]->GetAbsLSpace())+ aNumFormatArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = static_cast<long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<tools::Long>(aNumFormatArr[nLvl]->GetAbsLSpace())+ aNumFormatArr[nLvl]->GetFirstLineOffset();
         }
         m_xDistBorderMF->set_value(m_xDistBorderMF->normalize(nDistBorderNum),FieldUnit::TWIP);
     }
@@ -591,7 +591,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
 {
     if(bInInintControl)
         return;
-    long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
+    tools::Long nValue = static_cast< tools::Long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
@@ -610,7 +610,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
                     }
                     else
                     {
-                        long nTmp = pActNum->Get( i - 1 ).GetAbsLSpace() +
+                        tools::Long nTmp = pActNum->Get( i - 1 ).GetAbsLSpace() +
                                     pActNum->Get( i - 1 ).GetFirstLineOffset() -
                                     pActNum->Get( i ).GetFirstLineOffset();
 
@@ -629,7 +629,7 @@ IMPL_LINK(SwNumPositionTabPage, DistanceHdl, weld::MetricSpinButton&, rField, vo
             else if (&rField == m_xIndentMF.get())
             {
                 // now AbsLSpace also has to be modified by FirstLineOffset
-                long nDiff = nValue + aNumFormat.GetFirstLineOffset();
+                tools::Long nDiff = nValue + aNumFormat.GetFirstLineOffset();
                 auto const nAbsLSpace = aNumFormat.GetAbsLSpace();
                 aNumFormat.SetAbsLSpace( nAbsLSpace + nDiff );
                 aNumFormat.SetFirstLineOffset( -nValue );
@@ -650,7 +650,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, weld::ToggleButton&, rBox, void )
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->n_children() == 1 && USHRT_MAX != nActNumLvl;
     bool bSetValue = false;
-    long nValue = 0;
+    tools::Long nValue = 0;
     if(bOn || bSingleSelection)
     {
         sal_uInt16 nMask = 1;
@@ -749,7 +749,7 @@ IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBox&, 
 IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
+    const tools::Long nValue = static_cast< tools::Long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -770,7 +770,7 @@ IMPL_LINK( SwNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rF
 IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
+    const tools::Long nValue = static_cast< tools::Long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -779,7 +779,7 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFiel
         if ( nActNumLvl & nMask )
         {
             SwNumFormat aNumFormat( pActNum->Get(i) );
-            const long nFirstLineIndent = nValue - aNumFormat.GetIndentAt();
+            const tools::Long nFirstLineIndent = nValue - aNumFormat.GetIndentAt();
             aNumFormat.SetFirstLineIndent( nFirstLineIndent );
             pActNum->Set( i, aNumFormat );
         }
@@ -792,7 +792,7 @@ IMPL_LINK( SwNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFiel
 IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, weld::MetricSpinButton&, rField, void )
 {
     // determine value to be set at the chosen list levels
-    const long nValue = static_cast< long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
+    const tools::Long nValue = static_cast< tools::Long >(rField.denormalize(rField.get_value(FieldUnit::TWIP)));
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -801,10 +801,10 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, weld::MetricSpinButton&, rFie
         if ( nActNumLvl & nMask )
         {
             SwNumFormat aNumFormat( pActNum->Get(i) );
-            const long nAlignedAt = aNumFormat.GetIndentAt() +
+            const tools::Long nAlignedAt = aNumFormat.GetIndentAt() +
                                     aNumFormat.GetFirstLineIndent();
             aNumFormat.SetIndentAt( nValue );
-            const long nNewFirstLineIndent = nAlignedAt - nValue;
+            const tools::Long nNewFirstLineIndent = nAlignedAt - nValue;
             aNumFormat.SetFirstLineIndent( nNewFirstLineIndent );
             pActNum->Set( i, aNumFormat );
         }

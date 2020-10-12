@@ -49,7 +49,7 @@ public:
 
 private:
     std::unique_ptr<DialogImpl> mpDialogImpl;
-    long            mnMousePositioned;
+    tools::Long            mnMousePositioned;
     bool            mbInExecute;
     bool            mbInSyncExecute;
     bool            mbInClose;
@@ -134,7 +134,7 @@ public:
     // Dialog::Execute replacement API
 
 
-    void            EndDialog( long nResult = RET_CANCEL );
+    void            EndDialog( tools::Long nResult = RET_CANCEL );
 
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;

@@ -22,14 +22,14 @@ class X11SkiaSalVirtualDevice : public SalVirtualDevice
     int mnHeight;
 
 public:
-    X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, long nDX, long nDY,
+    X11SkiaSalVirtualDevice(SalGraphics const* pGraphics, tools::Long nDX, tools::Long nDY,
                             const SystemGraphicsData* pData,
                             std::unique_ptr<X11SalGraphics> pNewGraphics);
     virtual ~X11SkiaSalVirtualDevice() override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return mnWidth; }
-    virtual long GetHeight() const override { return mnHeight; }
+    virtual tools::Long GetWidth() const override { return mnWidth; }
+    virtual tools::Long GetHeight() const override { return mnHeight; }
 
     SalDisplay* GetDisplay() const { return mpDisplay; }
     const SalX11Screen& GetXScreenNumber() const { return mnXScreen; }
@@ -38,7 +38,7 @@ public:
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
     // Set new size, without saving the old contents
-    virtual bool SetSize(long nNewDX, long nNewDY) override;
+    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_SALVD_H

@@ -2172,7 +2172,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             double nFactor = 0.0;
             if ( nCol > nX2+1 )
             {
-                long nRotVal = pPattern->
+                tools::Long nRotVal = pPattern->
                         GetItem( ATTR_ROTATE_VALUE, pCondSet ).GetValue();
                 double nRealOrient = nRotVal * F_PI18000;   // 1/100 degree
                 double nCos = cos( nRealOrient );
@@ -2195,7 +2195,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                         // Does the rotated cell extend into the visible range?
 
                         SCCOL nTouchedCol = nCol;
-                        long nWidth = static_cast<long>(mpRowHeights->getValue(nRow) * nFactor);
+                        tools::Long nWidth = static_cast<tools::Long>(mpRowHeights->getValue(nRow) * nFactor);
                         OSL_ENSURE(nWidth <= 0, "Wrong direction");
                         while ( nWidth < 0 && nTouchedCol > 0 )
                         {
@@ -3013,7 +3013,7 @@ bool lcl_pixelSizeChanged(
     ScFlatUInt16RowSegments& rRowHeights, SCROW nStartRow, SCROW nEndRow,
     sal_uInt16 nNewHeight, double nPPTY)
 {
-    long nNewPix = static_cast<long>(nNewHeight * nPPTY);
+    tools::Long nNewPix = static_cast<tools::Long>(nNewHeight * nPPTY);
 
     ScFlatUInt16RowSegments::ForwardIterator aFwdIter(rRowHeights);
     for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
@@ -3024,7 +3024,7 @@ bool lcl_pixelSizeChanged(
 
         if (nHeight != nNewHeight)
         {
-            bool bChanged = (nNewPix != static_cast<long>(nHeight * nPPTY));
+            bool bChanged = (nNewPix != static_cast<tools::Long>(nHeight * nPPTY));
             if (bChanged)
                 return true;
         }
@@ -3910,11 +3910,11 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     {
         double fValX = GetColOffset( rDocument.MaxCol() + 1 ) * HMM_PER_TWIPS;
         double fValY = GetRowOffset( rDocument.MaxRow() + 1 ) * HMM_PER_TWIPS;
-        const long nMax = ::std::numeric_limits<long>::max();
+        const tools::Long nMax = ::std::numeric_limits<long>::max();
         // #i113884# Avoid int32 overflow with possible negative results than can cause bad effects.
         // If the draw page size is smaller than all rows, only the bottom of the sheet is affected.
-        long x = ( fValX > static_cast<double>(nMax) ) ? nMax : static_cast<long>(fValX);
-        long y = ( fValY > static_cast<double>(nMax) ) ? nMax : static_cast<long>(fValY);
+        tools::Long x = ( fValX > static_cast<double>(nMax) ) ? nMax : static_cast<tools::Long>(fValX);
+        tools::Long y = ( fValY > static_cast<double>(nMax) ) ? nMax : static_cast<tools::Long>(fValY);
 
         if ( IsLayoutRTL() )        // IsNegativePage
             x = -x;

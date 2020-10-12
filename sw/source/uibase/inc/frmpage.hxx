@@ -133,7 +133,7 @@ class SwFramePage: public SfxTabPage
     DECL_LINK(RelHdl, weld::ComboBox&, void);
     void            InitPos(RndStdIds eId, sal_Int16 nH, sal_Int16 nHRel,
                             sal_Int16 nV, sal_Int16 nVRel,
-                            long   nX,  long   nY);
+                            tools::Long   nX,  tools::Long   nY);
 
     DECL_LINK(RealSizeHdl, weld::Button&, void);
     DECL_LINK(RelSizeClickHdl, weld::ToggleButton&, void);

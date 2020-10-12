@@ -405,8 +405,8 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                         break;
                 }
 
-                long nX = 0;
-                long nY = 0;
+                tools::Long nX = 0;
+                tools::Long nY = 0;
                 sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
                 if (nCode == KEY_UP)

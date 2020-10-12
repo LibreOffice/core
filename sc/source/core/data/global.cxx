@@ -105,8 +105,8 @@ double          ScGlobal::nScreenPPTY           = 96.0;
 sal_uInt16          ScGlobal::nDefFontHeight        = 225;
 sal_uInt16          ScGlobal::nStdRowHeight         = 256;
 
-long            ScGlobal::nLastRowHeightExtra   = 0;
-long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
+tools::Long            ScGlobal::nLastRowHeightExtra   = 0;
+tools::Long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
 SfxViewShell* pScActiveViewShell = nullptr; //FIXME: Make this a member
 sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too

@@ -66,7 +66,7 @@ public:
 
     void MoveMarkedPoints(const Size& rSiz);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    void RotateMarkedPoints(const Point& rRef, long nAngle);
+    void RotateMarkedPoints(const Point& rRef, tools::Long nAngle);
 
     // This probably creates an arbitrary amount of new objects
     void RipUpAtMarkedPoints() override;

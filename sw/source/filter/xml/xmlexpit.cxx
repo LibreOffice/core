@@ -603,7 +603,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             const sal_uInt16 nDistance = pTop->GetDistance();
                             const sal_uInt16 nInWidth  = pTop->GetInWidth();
                             const sal_uInt16 nOutWidth = pTop->GetOutWidth();
-                            const long nWidth = pTop->GetWidth();
+                            const tools::Long nWidth = pTop->GetWidth();
 
                             bEqual = nDistance == pLeft->GetDistance() &&
                                      nInWidth  == pLeft->GetInWidth()  &&

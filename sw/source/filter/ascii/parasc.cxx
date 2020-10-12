@@ -54,7 +54,7 @@ class SwASCIIParser
     std::unique_ptr<char[]> pArr;
     const SwAsciiOptions& rOpt;
     std::unique_ptr<SfxItemSet> pItemSet;
-    long nFileSize;
+    tools::Long nFileSize;
     SvtScriptType nScript;
     bool bNewDoc;
 
@@ -243,7 +243,7 @@ ErrCode SwASCIIParser::CallParser()
 ErrCode SwASCIIParser::ReadChars()
 {
     sal_Unicode *pStt = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
-    long nReadCnt = 0, nLineLen = 0;
+    tools::Long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
     bool bSwapUnicode = false;
 
@@ -269,10 +269,10 @@ ErrCode SwASCIIParser::ReadChars()
         {
             aEmpty.SetCharSet(eCharSet);
             aEmpty.SetParaFlags(eLineEnd);
-            rInput.SeekRel(-(long(nLen)));
+            rInput.SeekRel(-(tools::Long(nLen)));
         }
         else
-            rInput.SeekRel(-(long(nOrig)));
+            rInput.SeekRel(-(tools::Long(nOrig)));
         pUseMe=&aEmpty;
     }
 

@@ -123,7 +123,7 @@ void ScDPFieldButton::draw()
         mpOutDev->SetTextColor(mpStyle->GetButtonTextColor());
 
         Point aTextPos = maPos;
-        long nTHeight = mpOutDev->GetTextHeight();
+        tools::Long nTHeight = mpOutDev->GetTextHeight();
         aTextPos.setX(maPos.getX() + 2); // 2 = Margin
         aTextPos.setY(maPos.getY() + (maSize.Height()-nTHeight)/2);
 
@@ -141,10 +141,10 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
 {
     float fScaleFactor = mpOutDev->GetDPIScaleFactor();
 
-    long nMaxSize = 18 * fScaleFactor; // Button max size in either dimension
+    tools::Long nMaxSize = 18 * fScaleFactor; // Button max size in either dimension
 
-    long nW = std::min(maSize.getWidth() / 2, nMaxSize);
-    long nH = std::min(maSize.getHeight(),    nMaxSize);
+    tools::Long nW = std::min(maSize.getWidth() / 2, nMaxSize);
+    tools::Long nH = std::min(maSize.getHeight(),    nMaxSize);
 
     // #i114944# AutoFilter button is left-aligned in RTL.
     // DataPilot button is always right-aligned for now, so text output isn't affected.

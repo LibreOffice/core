@@ -96,11 +96,11 @@ public:
     ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
     virtual ~ScSheetDPData() override;
 
-    virtual long                    GetColumnCount() override;
-    virtual OUString                getDimensionName(long nColumn) override;
-    virtual bool                    getIsDataLayoutDimension(long nColumn) override;
-    virtual bool                    IsDateDimension(long nDim) override;
-    virtual sal_uInt32              GetNumberFormat(long nDim) override;
+    virtual tools::Long                    GetColumnCount() override;
+    virtual OUString                getDimensionName(tools::Long nColumn) override;
+    virtual bool                    getIsDataLayoutDimension(tools::Long nColumn) override;
+    virtual bool                    IsDateDimension(tools::Long nDim) override;
+    virtual sal_uInt32              GetNumberFormat(tools::Long nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 

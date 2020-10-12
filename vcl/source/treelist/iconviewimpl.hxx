@@ -49,10 +49,10 @@ public:
 
     bool KeyInput( const KeyEvent& ) override;
 
-    void InvalidateEntry( long nId ) const override;
+    void InvalidateEntry( tools::Long nId ) const override;
 
 protected:
-    long GetEntryLine(const SvTreeListEntry* pEntry) const override;
+    tools::Long GetEntryLine(const SvTreeListEntry* pEntry) const override;
 
     void CursorUp() override;
     void CursorDown() override;

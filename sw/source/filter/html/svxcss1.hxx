@@ -130,9 +130,9 @@ public:
 
     sal_uInt16 m_nColumnCount;
 
-    long m_nLeft, m_nTop;
-    long m_nWidth, m_nHeight;
-    long m_nLeftMargin, m_nRightMargin;
+    tools::Long m_nLeft, m_nTop;
+    tools::Long m_nWidth, m_nHeight;
+    tools::Long m_nLeftMargin, m_nRightMargin;
 
     SvxCSS1LengthType m_eLeftType, m_eTopType;
     SvxCSS1LengthType m_eWidthType, m_eHeightType;
@@ -257,7 +257,7 @@ public:
     static bool GetEnum( const CSS1PropertyEnum *pPropTable,
                          const OUString& rValue, sal_uInt16 &rEnum );
 
-    static void PixelToTwip( long &nWidth, long &nHeight );
+    static void PixelToTwip( tools::Long &nWidth, tools::Long &nHeight );
 
     // determine the font height of a certain font size (0-6)
     virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;

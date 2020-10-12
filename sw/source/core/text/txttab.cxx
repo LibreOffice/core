@@ -184,7 +184,7 @@ SwTabPortion *SwTextFormatter::NewTabPortion( SwTextFormatInfo &rInf, bool bAuto
         // - the determined next tab stop is a default tab stop position OR
         //   the determined next tab stop is beyond the left margin
         {
-            long nLeftMarginTabPos = 0;
+            tools::Long nLeftMarginTabPos = 0;
             {
                 if ( !bTabsRelativeToIndent )
                 {

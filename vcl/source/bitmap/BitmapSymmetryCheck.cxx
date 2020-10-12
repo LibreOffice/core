@@ -24,20 +24,20 @@ bool BitmapSymmetryCheck::check(Bitmap& rBitmap)
 
 bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 {
-    long nHeight = pReadAccess->Height();
-    long nWidth = pReadAccess->Width();
+    tools::Long nHeight = pReadAccess->Height();
+    tools::Long nWidth = pReadAccess->Width();
 
-    long nHeightHalf = nHeight / 2;
-    long nWidthHalf = nWidth / 2;
+    tools::Long nHeightHalf = nHeight / 2;
+    tools::Long nWidthHalf = nWidth / 2;
 
     bool bHeightEven = (nHeight % 2) == 0;
     bool bWidthEven = (nWidth % 2) == 0;
 
-    for (long y = 0; y < nHeightHalf; ++y)
+    for (tools::Long y = 0; y < nHeightHalf; ++y)
     {
         Scanline pScanlineRead = pReadAccess->GetScanline( y );
         Scanline pScanlineRead2 = pReadAccess->GetScanline( nHeight - y - 1 );
-        for (long x = 0; x < nWidthHalf; ++x)
+        for (tools::Long x = 0; x < nWidthHalf; ++x)
         {
             if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead2, x))
             {
@@ -56,7 +56,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
 
     if (bWidthEven)
     {
-        for (long y = 0; y < nHeightHalf; ++y)
+        for (tools::Long y = 0; y < nHeightHalf; ++y)
         {
             if (pReadAccess->GetPixel(y, nWidthHalf) != pReadAccess->GetPixel(nHeight - y - 1, nWidthHalf))
             {
@@ -68,7 +68,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess const * pReadAccess)
     if (bHeightEven)
     {
         Scanline pScanlineRead = pReadAccess->GetScanline( nHeightHalf );
-        for (long x = 0; x < nWidthHalf; ++x)
+        for (tools::Long x = 0; x < nWidthHalf; ++x)
         {
             if (pReadAccess->GetPixelFromData(pScanlineRead, x) != pReadAccess->GetPixelFromData(pScanlineRead, nWidth - x - 1))
             {

@@ -92,8 +92,8 @@ GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
 void GroupBox::ImplDraw( OutputDevice* pDev, DrawFlags nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
-    long                    nTop;
-    long                    nTextOff;
+    tools::Long                    nTop;
+    tools::Long                    nTextOff;
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     OUString                aText( GetText() );
     tools::Rectangle               aRect( rPos, rSize );

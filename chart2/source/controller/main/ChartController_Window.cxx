@@ -1549,8 +1549,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                             awt::Point aPos( xShape->getPosition() );
                             awt::Size aSize( xShape->getSize() );
                             awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
-                            aPos.X = static_cast< long >( static_cast< double >( aPos.X ) + fShiftAmountX );
-                            aPos.Y = static_cast< long >( static_cast< double >( aPos.Y ) + fShiftAmountY );
+                            aPos.X = static_cast< tools::Long >( static_cast< double >( aPos.X ) + fShiftAmountX );
+                            aPos.Y = static_cast< tools::Long >( static_cast< double >( aPos.Y ) + fShiftAmountY );
                             if( aPos.X + aSize.Width > aPageSize.Width )
                                 aPos.X = aPageSize.Width - aSize.Width;
                             if( aPos.X < 0 )

@@ -1193,8 +1193,8 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position )
             if( GetSdrObject()->getSdrModelFromSdrObject().IsWriter() )
                 aLocalPos += GetSdrObject()->GetAnchorPos();
 
-            long nDX = aLocalPos.X() - aRect.Left();
-            long nDY = aLocalPos.Y() - aRect.Top();
+            tools::Long nDX = aLocalPos.X() - aRect.Left();
+            tools::Long nDY = aLocalPos.Y() - aRect.Top();
 
             GetSdrObject()->Move( Size( nDX, nDY ) );
             GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
@@ -1466,7 +1466,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             if( !pBitmapList.is() )
                 return false;
 
-            long nPos = pBitmapList->GetIndex(aStrName);
+            tools::Long nPos = pBitmapList->GetIndex(aStrName);
             if( nPos == -1 )
                 return false;
 
@@ -1482,7 +1482,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             if( !pGradientList.is() )
                 return false;
 
-            long nPos = pGradientList->GetIndex(aStrName);
+            tools::Long nPos = pGradientList->GetIndex(aStrName);
             if( nPos == -1 )
                 return false;
 
@@ -1498,7 +1498,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             if( !pHatchList.is() )
                 return false;
 
-            long nPos = pHatchList->GetIndex(aStrName);
+            tools::Long nPos = pHatchList->GetIndex(aStrName);
             if( nPos == -1 )
                 return false;
 
@@ -1515,7 +1515,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             if( !pLineEndList.is() )
                 return false;
 
-            long nPos = pLineEndList->GetIndex(aStrName);
+            tools::Long nPos = pLineEndList->GetIndex(aStrName);
             if( nPos == -1 )
                 return false;
 
@@ -1540,7 +1540,7 @@ bool SvxShape::SetFillAttribute( sal_uInt16 nWID, const OUString& rName, SfxItem
             if( !pDashList.is() )
                 return false;
 
-            long nPos = pDashList->GetIndex(aStrName);
+            tools::Long nPos = pDashList->GetIndex(aStrName);
             if( nPos == -1 )
                 return false;
 

@@ -75,8 +75,8 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
 
-    long nRectHeight = aRect.GetHeight();
-    long nRectWidth = aRect.GetWidth();
+    tools::Long nRectHeight = aRect.GetHeight();
+    tools::Long nRectWidth = aRect.GetWidth();
     Point aBLPos = aRect.TopLeft();
 
     vcl::Font aOldFont = pDev->GetFont();
@@ -111,9 +111,9 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         aFont.SetColor(rStyleSettings.GetFieldTextColor()); //high contrast
 
     pDev->SetFont(aFont);
-    long nTextWidth = pDev->GetTextWidth(maStrUnit[nItemId - 1]);
-    long nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
-    long nTRX = aBLPos.X() + nRectWidth - nTextWidth - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
+    tools::Long nTextWidth = pDev->GetTextWidth(maStrUnit[nItemId - 1]);
+    tools::Long nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
+    tools::Long nTRX = aBLPos.X() + nRectWidth - nTextWidth - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     Point aStart(aBLPos.X() + nRectWidth - nTextWidth - 5 , aBLPos.Y() + nRectHeight/6);
     pDev->DrawText(aStart, maStrUnit[nItemId - 1]); //can't set DrawTextFlags::EndEllipsis here, or the text will disappear
 

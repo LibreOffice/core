@@ -41,7 +41,7 @@ void IconViewImpl::CursorUp()
         return;
 
     m_nFlags &= ~LBoxFlags::Filling;
-    long nEntryHeight = m_pView->GetEntryHeight();
+    tools::Long nEntryHeight = m_pView->GetEntryHeight();
     ShowCursor( false );
     m_pView->PaintImmediately();
     m_pStartEntry = pPrevFirstToDraw;
@@ -103,7 +103,7 @@ void IconViewImpl::PageDown( sal_uInt16 nDelta )
     else
     {
         tools::Rectangle aArea( GetVisibleArea() );
-        long nScroll = m_pView->GetEntryHeight() * static_cast<long>(nRealDelta);
+        tools::Long nScroll = m_pView->GetEntryHeight() * static_cast<tools::Long>(nRealDelta);
         nScroll = -nScroll;
         m_pView->PaintImmediately();
         m_pView->Scroll( 0, nScroll, aArea, ScrollFlags::NoChildren );
@@ -137,7 +137,7 @@ void IconViewImpl::PageUp( sal_uInt16 nDelta )
     }
     else
     {
-        long nEntryHeight = m_pView->GetEntryHeight();
+        tools::Long nEntryHeight = m_pView->GetEntryHeight();
         tools::Rectangle aArea( GetVisibleArea() );
         m_pView->PaintImmediately();
         m_pView->Scroll( 0, nEntryHeight*nRealDelta, aArea, ScrollFlags::NoChildren );
@@ -153,13 +153,13 @@ void IconViewImpl::KeyDown( bool bPageDown )
     if( !m_aVerSBar->IsVisible() )
         return;
 
-    long nDelta;
+    tools::Long nDelta;
     if( bPageDown )
         nDelta = m_aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = m_aVerSBar->GetThumbPos();
+    tools::Long nThumbPos = m_aVerSBar->GetThumbPos();
 
     if( nDelta <= 0 )
         return;
@@ -178,13 +178,13 @@ void IconViewImpl::KeyUp( bool bPageUp )
     if( !m_aVerSBar->IsVisible() )
         return;
 
-    long nDelta;
+    tools::Long nDelta;
     if( bPageUp )
         nDelta = m_aVerSBar->GetPageSize();
     else
         nDelta = 1;
 
-    long nThumbPos = m_aVerSBar->GetThumbPos();
+    tools::Long nThumbPos = m_aVerSBar->GetThumbPos();
 
     if( nThumbPos < nDelta )
         nDelta = nThumbPos;
@@ -201,13 +201,13 @@ void IconViewImpl::KeyUp( bool bPageUp )
         CursorUp();
 }
 
-long IconViewImpl::GetEntryLine(const SvTreeListEntry* pEntry) const
+tools::Long IconViewImpl::GetEntryLine(const SvTreeListEntry* pEntry) const
 {
     if(!m_pStartEntry )
         return -1; // invisible position
 
-    long nFirstVisPos = m_pView->GetVisiblePos( m_pStartEntry );
-    long nEntryVisPos = m_pView->GetVisiblePos( pEntry );
+    tools::Long nFirstVisPos = m_pView->GetVisiblePos( m_pStartEntry );
+    tools::Long nEntryVisPos = m_pView->GetVisiblePos( pEntry );
     nFirstVisPos = nEntryVisPos - nFirstVisPos;
 
     return nFirstVisPos;
@@ -244,21 +244,21 @@ bool IconViewImpl::IsEntryInView( SvTreeListEntry* pEntry ) const
     if( !m_pView->IsEntryVisible(pEntry) )
         return false;
 
-    long nY = GetEntryLine( pEntry ) / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
+    tools::Long nY = GetEntryLine( pEntry ) / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
     if( nY < 0 )
         return false;
 
-    long nMax = m_nVisibleCount / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
+    tools::Long nMax = m_nVisibleCount / m_pView->GetColumnsCount() * m_pView->GetEntryHeight();
     if( nY >= nMax )
         return false;
 
-    long nStart = GetEntryLine( pEntry ) - GetEntryLine( m_pStartEntry );
+    tools::Long nStart = GetEntryLine( pEntry ) - GetEntryLine( m_pStartEntry );
     return nStart >= 0;
 }
 
 void IconViewImpl::AdjustScrollBars( Size& rSize )
 {
-    long nEntryHeight = m_pView->GetEntryHeight();
+    tools::Long nEntryHeight = m_pView->GetEntryHeight();
     if( !nEntryHeight )
         return;
 
@@ -275,7 +275,7 @@ void IconViewImpl::AdjustScrollBars( Size& rSize )
     // number of entries visible within the view
     m_nVisibleCount = aOSize.Height() / nEntryHeight * m_pView->GetColumnsCount();
 
-    long nRows = ( nTotalCount / m_pView->GetColumnsCount() ) + 1;
+    tools::Long nRows = ( nTotalCount / m_pView->GetColumnsCount() ) + 1;
 
     // do we need a vertical scrollbar?
     if( bVerSBar || nTotalCount > m_nVisibleCount )
@@ -332,7 +332,7 @@ void IconViewImpl::SyncVerThumb()
 {
     if( m_pStartEntry )
     {
-        long nEntryPos = m_pView->GetVisiblePos( m_pStartEntry );
+        tools::Long nEntryPos = m_pView->GetVisiblePos( m_pStartEntry );
         m_aVerSBar->SetThumbPos( nEntryPos );
     }
     else
@@ -383,18 +383,18 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
         m_pStartEntry = m_pView->First();
     }
 
-    long nRectHeight = rRect.GetHeight();
-    long nRectWidth = rRect.GetWidth();
-    long nEntryHeight = m_pView->GetEntryHeight();
-    long nEntryWidth = m_pView->GetEntryWidth();
+    tools::Long nRectHeight = rRect.GetHeight();
+    tools::Long nRectWidth = rRect.GetWidth();
+    tools::Long nEntryHeight = m_pView->GetEntryHeight();
+    tools::Long nEntryWidth = m_pView->GetEntryWidth();
 
     // calculate area for the entries we want to draw
     sal_uInt16 nStartId = static_cast<sal_uInt16>(rRect.Top() / nEntryHeight * m_pView->GetColumnsCount() + (rRect.Left() / nEntryWidth));
     sal_uInt16 nCount = static_cast<sal_uInt16>(( nRectHeight / nEntryHeight + 1 ) * nRectWidth / nEntryWidth);
     nCount += 2; // don't miss an entry
 
-    long nY = nStartId / m_pView->GetColumnsCount() * nEntryHeight;
-    long nX = 0;
+    tools::Long nY = nStartId / m_pView->GetColumnsCount() * nEntryHeight;
+    tools::Long nX = 0;
     SvTreeListEntry* pEntry = m_pStartEntry;
     while (nStartId && pEntry)
     {
@@ -427,13 +427,13 @@ void IconViewImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     m_nFlags &= ~LBoxFlags::InPaint;
 }
 
-void IconViewImpl::InvalidateEntry( long nId ) const
+void IconViewImpl::InvalidateEntry( tools::Long nId ) const
 {
     if( m_nFlags & LBoxFlags::InPaint )
         return;
 
     tools::Rectangle aRect( GetVisibleArea() );
-    long nMaxBottom = aRect.Bottom();
+    tools::Long nMaxBottom = aRect.Bottom();
     aRect.SetTop( nId / m_pView->GetColumnsCount() * m_pView->GetEntryHeight() );
     aRect.SetBottom( aRect.Top() ); aRect.AdjustBottom(m_pView->GetEntryHeight() );
 
@@ -467,8 +467,8 @@ bool IconViewImpl::KeyInput( const KeyEvent& rKEvt )
 
     bool bHandled = true;
 
-    long i;
-    long nColumns = m_pView->GetColumnsCount();
+    tools::Long i;
+    tools::Long nColumns = m_pView->GetColumnsCount();
 
     switch( aCode )
     {

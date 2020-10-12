@@ -462,7 +462,7 @@ SdrObject* SwWW8ImplReader::ReadPolyLine(WW8_DPHEAD const * pHd, SfxAllItemSet &
     return pObj;
 }
 
-static ESelection GetESelection(EditEngine const &rDrawEditEngine, long nCpStart, long nCpEnd)
+static ESelection GetESelection(EditEngine const &rDrawEditEngine, tools::Long nCpStart, tools::Long nCpEnd)
 {
     sal_Int32 nPCnt = rDrawEditEngine.GetParagraphCount();
     sal_Int32 nSP = 0;
@@ -561,15 +561,15 @@ class Chunk
 {
 private:
     OUString msURL;
-    long mnStartPos; // 0x13
-    long mnEndPos;   // 0x15
+    tools::Long mnStartPos; // 0x13
+    tools::Long mnEndPos;   // 0x15
 public:
-    explicit Chunk(long nStart, const OUString &rURL)
+    explicit Chunk(tools::Long nStart, const OUString &rURL)
         : msURL(rURL), mnStartPos(nStart), mnEndPos(0)  {}
 
-    void SetEndPos(long nEnd) { mnEndPos = nEnd; }
-    long GetStartPos() const {return mnStartPos;}
-    long GetEndPos() const {return mnEndPos;}
+    void SetEndPos(tools::Long nEnd) { mnEndPos = nEnd; }
+    tools::Long GetStartPos() const {return mnStartPos;}
+    tools::Long GetEndPos() const {return mnEndPos;}
     const OUString &GetURL() const {return msURL;}
     void Adjust(sal_Int32 nAdjust)
     {
@@ -836,8 +836,8 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
         // special case: entire chain should be determined - done!
         if( USHRT_MAX > nSequence )
         {
-            long nMinStartCp = rStartCp;
-            long nMaxEndCp   = rEndCp;
+            tools::Long nMinStartCp = rStartCp;
+            tools::Long nMaxEndCp   = rEndCp;
             // quickly grab the TextBox-Break-Descriptor-PLCF
             pT = m_xPlcxMan->GetTxbxBkd();
             if (!pT) // It can occur on occasion, Caolan
@@ -882,7 +882,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
 // TxbxText() grabs the text from the WW file and returns that along with
 // the StartCp and the corrected (by -2, or -1 for version 8) EndCp.
-sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, long nEndCp, ManTypes eType)
+sal_Int32 SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, tools::Long nStartCp, tools::Long nEndCp, ManTypes eType)
 {
     WW8_CP nOffset = 0;
     m_xWwFib->GetBaseCp(eType, &nOffset); //TODO: check return value
@@ -1003,9 +1003,9 @@ std::unique_ptr<OutlinerParaObject> SwWW8ImplReader::ImportAsOutliner(OUString &
 
 // InsertTxbxText() adds the Text and the Attributes for TextBoxes and CaptionBoxes
 void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
-    Size const * pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
+    Size const * pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, tools::Long nPosCp,
     SwFrameFormat const * pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,
-    bool* pbTestTxbxContainsText, long* pnStartCp, long* pnEndCp,
+    bool* pbTestTxbxContainsText, tools::Long* pnStartCp, tools::Long* pnEndCp,
     bool* pbContainsGraphics, SvxMSDffImportRec const * pRecord)
 {
     SwFrameFormat* pFlyFormat = nullptr;
@@ -1206,8 +1206,8 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         *pbContainsGraphics = bContainsGraphics;
 }
 
-bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, long& rStartCp,
-    long&  rEndCp)
+bool SwWW8ImplReader::TxbxChainContainsRealText(sal_uInt16 nTxBxS, tools::Long& rStartCp,
+    tools::Long&  rEndCp)
 {
     bool bErase, bContainsText;
     InsertTxbxText( nullptr,nullptr,nTxBxS,USHRT_MAX,0,nullptr,false, bErase, &bContainsText,
@@ -1239,7 +1239,7 @@ SdrObject* SwWW8ImplReader::ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &r
     Size aSize( static_cast<sal_Int16>(SVBT16ToUInt16( pHd->dxa )) ,
         static_cast<sal_Int16>(SVBT16ToUInt16( pHd->dya )) );
 
-    long nStartCpFly,nEndCpFly;
+    tools::Long nStartCpFly,nEndCpFly;
     bool bContainsGraphics;
     InsertTxbxText(pObj, &aSize, 0, 0, 0, nullptr, false,
         bDummy,nullptr,&nStartCpFly,&nEndCpFly,&bContainsGraphics);
@@ -1419,7 +1419,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
     return pRet;
 }
 
-void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
+void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, tools::Long nGrafAnchorCp )
 {
     pPF->SeekPos( nGrafAnchorCp );
     WW8_FC nStartFc;
@@ -2050,7 +2050,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(SvxMSDffImportRec const * pRecord,
             */
             Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
             aMoveHack *= Fraction(15, 1);
-            long nMove(aMoveHack);
+            tools::Long nMove(aMoveHack);
             aPoly.Move(nMove, 0);
 
             Fraction aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);
@@ -2352,7 +2352,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             // convert 'left to page' to 'from left -<width> to page text area'
             eHoriOri = text::HoriOrientation::NONE;
             eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
-            const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
+            const tools::Long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
             pFSPA->nXaLeft = -nWidth;
             pFSPA->nXaRight = 0;
         }
@@ -2361,7 +2361,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             // convert 'right to page' to 'from left 0 to right page border'
             eHoriOri = text::HoriOrientation::NONE;
             eHoriRel = text::RelOrientation::PAGE_RIGHT;
-            const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
+            const tools::Long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
             pFSPA->nXaLeft = 0;
             pFSPA->nXaRight = nWidth;
         }
@@ -2418,7 +2418,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         // Below line in word is a positive value, while in writer its
         // negative
-        long nYPos = pFSPA->nYaTop;
+        tools::Long nYPos = pFSPA->nYaTop;
         // #i22673#
         if ((eVertRel == text::RelOrientation::TEXT_LINE) && (eVertOri == text::VertOrientation::NONE))
             nYPos = -nYPos;
@@ -2501,7 +2501,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTable
     return bIsObjectLayoutInTableCell;
 }
 
-SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
+SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
 {
     if( m_nIniFlags & WW8FL_NO_GRAFLAYER )
         return nullptr;
@@ -2522,7 +2522,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     if( m_bVer67 )
     {
-        long nOldPos = m_pStrm->Tell();
+        tools::Long nOldPos = m_pStrm->Tell();
 
         m_nDrawXOfs = m_nDrawYOfs = 0;
         ReadGrafLayer1( pPF, nGrafAnchorCp );
@@ -2863,7 +2863,7 @@ SwFrameFormat *SwWW8ImplReader::AddAutoAnchor(SwFrameFormat *pFormat)
 }
 
 SwFrameFormat* SwWW8ImplReader::MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
-    long nGrafAnchorCp, SwFrameFormat* pRetFrameFormat)
+    tools::Long nGrafAnchorCp, SwFrameFormat* pRetFrameFormat)
 {
     SdrObject* pTrueObject = pRecord->pObj;
 
@@ -2962,8 +2962,8 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
     WW8_FSPA const *pF, SfxItemSet &rFlySet)
 {
     SwFlyFrameFormat* pRetFrameFormat = nullptr;
-    long nStartCp;
-    long nEndCp;
+    tools::Long nStartCp;
+    tools::Long nEndCp;
 
     // Check if this textbox chain contains text as conversion of an empty
     // chain would not make sense.

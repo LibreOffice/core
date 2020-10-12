@@ -534,11 +534,11 @@ struct SwFillData
         nLineWidth( 0 ), bFirstLine( true ), bInner( false ), bColumn( false ),
         bEmpty( true ){}
     SwFillMode Mode() const { return pCMS->m_pFill->eMode; }
-    long X() const { return rPoint.X(); }
-    long Y() const { return rPoint.Y(); }
-    long Left() const { return aFrame.Left(); }
-    long Right() const { return aFrame.Right(); }
-    long Bottom() const { return aFrame.Bottom(); }
+    tools::Long X() const { return rPoint.X(); }
+    tools::Long Y() const { return rPoint.Y(); }
+    tools::Long Left() const { return aFrame.Left(); }
+    tools::Long Right() const { return aFrame.Right(); }
+    tools::Long Bottom() const { return aFrame.Bottom(); }
     SwFillCursorPos &Fill() const { return *pCMS->m_pFill; }
     void SetTab( sal_uInt16 nNew ) { pCMS->m_pFill->nTabCnt = nNew; }
     void SetSpace( sal_uInt16 nNew ) { pCMS->m_pFill->nSpaceCnt = nNew; }

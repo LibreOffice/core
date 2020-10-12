@@ -96,7 +96,7 @@ ImplAnimView::~ImplAnimView()
     Animation::ImplDecAnimCount();
 }
 
-bool ImplAnimView::matches(const OutputDevice* pOut, long nExtraData) const
+bool ImplAnimView::matches(const OutputDevice* pOut, tools::Long nExtraData) const
 {
     return (!pOut || pOut == mpRenderContext) && (nExtraData == 0 || nExtraData == mnExtraData);
 }

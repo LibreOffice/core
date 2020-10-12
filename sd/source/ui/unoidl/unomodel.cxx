@@ -1569,8 +1569,8 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
             aNote.Contents = xText->getString();
             aNote.maModificationDate = xAnnotation->getDateTime();
 
-            rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
-                static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
+            rPDFExtOutDevData.CreateNote( ::tools::Rectangle( Point( static_cast< ::tools::Long >( aRealPoint2D.X * 100 ),
+                static_cast< ::tools::Long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
         }
     }
     catch (const uno::Exception&)
@@ -2214,7 +2214,7 @@ DrawViewShell* SdXImpressDocument::GetViewShell()
 void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
                             int nOutputWidth, int nOutputHeight,
                             int nTilePosX, int nTilePosY,
-                            long nTileWidth, long nTileHeight )
+                            ::tools::Long nTileWidth, ::tools::Long nTileHeight )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
@@ -2233,8 +2233,8 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // 100th mm rather than TWIP. It makes most sense just to
     // convert here and in getDocumentSize, and leave the tiled
     // rendering API working in TWIPs.
-    long nTileWidthHMM = convertTwipToMm100( nTileWidth );
-    long nTileHeightHMM = convertTwipToMm100( nTileHeight );
+    ::tools::Long nTileWidthHMM = convertTwipToMm100( nTileWidth );
+    ::tools::Long nTileHeightHMM = convertTwipToMm100( nTileHeight );
     int nTilePosXHMM = convertTwipToMm100( nTilePosX );
     int nTilePosYHMM = convertTwipToMm100( nTilePosY );
 

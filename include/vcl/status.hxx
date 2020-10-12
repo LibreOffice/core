@@ -34,7 +34,7 @@ class UserDrawEvent;
 struct ImplStatusItem;
 
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
-                                long nOffset, long nPrgsWidth, long nPrgsHeight,
+                                tools::Long nOffset, tools::Long nPrgsWidth, tools::Long nPrgsHeight,
                                 sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                                 const tools::Rectangle& rFramePosSize);
 
@@ -58,7 +58,7 @@ namespace o3tl
 
 #define STATUSBAR_APPEND            (sal_uInt16(0xFFFF))
 #define STATUSBAR_ITEM_NOTFOUND     (sal_uInt16(0xFFFF))
-#define STATUSBAR_OFFSET            (long(5))
+#define STATUSBAR_OFFSET            (tools::Long(5))
 
 
 class VCL_DLLPUBLIC StatusBar : public vcl::Window
@@ -70,12 +70,12 @@ private:
     OUString            maPrgsTxt;
     Point               maPrgsTxtPos;
     tools::Rectangle           maPrgsFrameRect;
-    long                mnPrgsSize;
-    long                mnItemsWidth;
-    long                mnDX;
-    long                mnDY;
-    long                mnCalcHeight;
-    long                mnTextY;
+    tools::Long                mnPrgsSize;
+    tools::Long                mnItemsWidth;
+    tools::Long                mnDX;
+    tools::Long                mnDY;
+    tools::Long                mnCalcHeight;
+    tools::Long                mnTextY;
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
@@ -125,7 +125,7 @@ public:
 
     void                InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
                                     StatusBarItemBits nBits = StatusBarItemBits::Center | StatusBarItemBits::In,
-                                    long nOffset = STATUSBAR_OFFSET,
+                                    tools::Long nOffset = STATUSBAR_OFFSET,
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
     void                RemoveItem( sal_uInt16 nItemId );
 
@@ -148,7 +148,7 @@ public:
     sal_uLong           GetItemWidth( sal_uInt16 nItemId ) const;
     StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
 
-    long                GetItemOffset( sal_uInt16 nItemId ) const;
+    tools::Long                GetItemOffset( sal_uInt16 nItemId ) const;
 
     /// @param nCharsWidth, if not -1, overrides the normal width calculation
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCharsWidth = -1 );

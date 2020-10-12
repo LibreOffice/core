@@ -402,8 +402,8 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
 
     const Size aSize(mxBitmap->GetOutputSizePixel());
 
-    long nX = rPos.X();
-    long nY = rPos.Y();
+    tools::Long nX = rPos.X();
+    tools::Long nY = rPos.Y();
     if (nX < 0)
         nX = 0;
     else if (nX >= aSize.Width())
@@ -510,7 +510,7 @@ void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, doub
 void ColorFieldControl::UpdatePosition()
 {
     Size aSize(GetOutputSizePixel());
-    ShowPosition(Point(static_cast<long>(mdX * aSize.Width()), static_cast<long>((1.0 - mdY) * aSize.Height())), false);
+    ShowPosition(Point(static_cast<tools::Long>(mdX * aSize.Width()), static_cast<tools::Long>((1.0 - mdY) * aSize.Height())), false);
 }
 
 namespace {
@@ -530,7 +530,7 @@ public:
     virtual void Resize() override;
 
     void UpdateBitmap();
-    void ChangePosition( long nY );
+    void ChangePosition( tools::Long nY );
     void Modify();
 
     void SetValue( const Color& rColor, ColorMode eMode, double dValue );
@@ -582,7 +582,7 @@ void ColorSliderControl::UpdateBitmap()
         mxBitmap->SetOutputSizePixel(aSize);
     }
 
-    const long nY = aSize.Height() - 1;
+    const tools::Long nY = aSize.Height() - 1;
 
     Color aBitmapColor(maColor);
 
@@ -596,7 +596,7 @@ void ColorSliderControl::UpdateBitmap()
     case HUE:
         nSat = 100;
         nBri = 100;
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
             nHue = static_cast<sal_uInt16>((359 * y) / nY);
             mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
@@ -605,7 +605,7 @@ void ColorSliderControl::UpdateBitmap()
 
     case SATURATION:
         nBri = std::max(sal_uInt16(32), nBri);
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
             nSat = static_cast<sal_uInt16>((100 * y) / nY);
             mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
@@ -613,7 +613,7 @@ void ColorSliderControl::UpdateBitmap()
         break;
 
     case BRIGHTNESS:
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
             nBri = static_cast<sal_uInt16>((100 * y) / nY);
             mxBitmap->DrawPixel(Point(0, nY - y), Color::HSBtoRGB(nHue, nSat, nBri));
@@ -621,34 +621,34 @@ void ColorSliderControl::UpdateBitmap()
         break;
 
     case RED:
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
-            aBitmapColor.SetRed(sal_uInt8((long(255) * y) / nY));
+            aBitmapColor.SetRed(sal_uInt8((tools::Long(255) * y) / nY));
             mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
         }
         break;
 
     case GREEN:
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
-            aBitmapColor.SetGreen(sal_uInt8((long(255) * y) / nY));
+            aBitmapColor.SetGreen(sal_uInt8((tools::Long(255) * y) / nY));
             mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
         }
         break;
 
     case BLUE:
-        for (long y = 0; y <= nY; y++)
+        for (tools::Long y = 0; y <= nY; y++)
         {
-            aBitmapColor.SetBlue(sal_uInt8((long(255) * y) / nY));
+            aBitmapColor.SetBlue(sal_uInt8((tools::Long(255) * y) / nY));
             mxBitmap->DrawPixel(Point(0, nY - y), aBitmapColor);
         }
         break;
     }
 }
 
-void ColorSliderControl::ChangePosition(long nY)
+void ColorSliderControl::ChangePosition(tools::Long nY)
 {
-    const long nHeight = GetOutputSizePixel().Height() - 1;
+    const tools::Long nHeight = GetOutputSizePixel().Height() - 1;
 
     if (nY < 0)
         nY = 0;

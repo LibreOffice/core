@@ -55,10 +55,10 @@ private:
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    mbRTL;
     Size                    aPrvSize;
-    long                    mnLabelColWidth;
-    long                    mnDataColWidth1;
-    long                    mnDataColWidth2;
-    long                    mnRowHeight;
+    tools::Long                    mnLabelColWidth;
+    tools::Long                    mnDataColWidth1;
+    tools::Long                    mnDataColWidth2;
+    tools::Long                    mnRowHeight;
     const OUString          aStrJan;
     const OUString          aStrFeb;
     const OUString          aStrMar;

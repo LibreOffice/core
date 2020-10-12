@@ -143,25 +143,25 @@ public:
         rBottomRight = maMaxBottomRight;
 
     }
-    void ChangePreviewLogicTopLeftY(long Y)
+    void ChangePreviewLogicTopLeftY(tools::Long Y)
     {
         Point aPoint(0, Y);
         aPoint = GetPixelPos(aPoint);
         maTopLeft.setY( aPoint.Y() );
     }
-    void ChangePreviewLogicTopLeftX(long X)
+    void ChangePreviewLogicTopLeftX(tools::Long X)
     {
         Point aPoint(X, 0);
         aPoint = GetPixelPos(aPoint);
         maTopLeft.setX( aPoint.X() );
     }
-    void ChangePreviewLogicBottomRightY(long Y)
+    void ChangePreviewLogicBottomRightY(tools::Long Y)
     {
         Point aPoint(0, Y);
         aPoint = GetPixelPos(aPoint);
         maBottomRight.setY( aPoint.Y() );
     }
-    void ChangePreviewLogicBottomRightX(long X)
+    void ChangePreviewLogicBottomRightX(tools::Long X)
     {
         Point aPoint(X, 0);
         aPoint = GetPixelPos(aPoint);
@@ -440,11 +440,11 @@ void SaneDlg::InitFields()
             {
                 if( pDouble )
                 {
-                    pField->set_min( static_cast<long>(pDouble[0]), FieldUnit::NONE );
+                    pField->set_min( static_cast<tools::Long>(pDouble[0]), FieldUnit::NONE );
                     if( nValue )
-                        pField->set_max( static_cast<long>(pDouble[ nValue-1 ]), FieldUnit::NONE );
+                        pField->set_max( static_cast<tools::Long>(pDouble[ nValue-1 ]), FieldUnit::NONE );
                     else
-                        pField->set_max( static_cast<long>(pDouble[ 1 ]), FieldUnit::NONE );
+                        pField->set_max( static_cast<tools::Long>(pDouble[ 1 ]), FieldUnit::NONE );
                 }
                 switch( i ) {
                     case 0: aMinTopLeft.setX( pField->get_min(FieldUnit::NONE) );break;

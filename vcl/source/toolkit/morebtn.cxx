@@ -84,7 +84,7 @@ void MoreButton::Click()
 {
     vcl::Window*     pParent = GetParent();
     Size        aSize( pParent->GetSizePixel() );
-    long nDeltaPixel = LogicToPixel(Size(0, 0), MapMode(MapUnit::MapPixel)).Height();
+    tools::Long nDeltaPixel = LogicToPixel(Size(0, 0), MapMode(MapUnit::MapPixel)).Height();
 
     // Change status
     mbState = !mbState;

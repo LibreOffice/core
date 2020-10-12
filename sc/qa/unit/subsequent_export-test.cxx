@@ -2570,7 +2570,7 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
     {
         SCROW mnRow;
         SvxBorderLineStyle mnStyle;
-        long mnWidth;
+        tools::Long mnWidth;
     } aChecks[] = {
         {  1, SvxBorderLineStyle::SOLID,         1 }, // hair
         {  3, SvxBorderLineStyle::DOTTED,       15 }, // dotted
@@ -2648,7 +2648,7 @@ void ScExportTest::testBordersExchangeXLSX()
     static struct
     {
         SvxBorderLineStyle BorderStyleTop, BorderStyleBottom;
-        long                      WidthTop, WidthBottom;
+        tools::Long                      WidthTop, WidthBottom;
     } aCheckBorderWidth[nMaxCol][nMaxRow] =
     {
 /*  Line               1                                2                              3                            4                             5                                6                              7

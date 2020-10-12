@@ -268,7 +268,7 @@ bool TGAReader::ImplReadBody()
     sal_uInt8   nRed, nGreen, nBlue, nRunCount, nDummy, nDepth;
 
     // this four variables match the image direction
-    long    nY, nYAdd, nX, nXAdd, nXStart;
+    tools::Long    nY, nYAdd, nX, nXAdd, nXStart;
 
     nX = nXStart = nY = 0;
     nXCount = nYCount = 0;

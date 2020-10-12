@@ -4250,7 +4250,7 @@ sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice*
     return 0;
 }
 
-long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+tools::Long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,

@@ -30,21 +30,21 @@ namespace{
 struct XclPaperSize
 {
     Paper               mePaper;            /// SVX paper size identifier.
-    long                mnWidth;            /// Paper width in twips.
-    long                mnHeight;           /// Paper height in twips.
+    tools::Long                mnWidth;            /// Paper width in twips.
+    tools::Long                mnHeight;           /// Paper height in twips.
 };
 
-constexpr long in2twips(double n_inch)
+constexpr tools::Long in2twips(double n_inch)
 {
-    return static_cast<long>( (n_inch * EXC_TWIPS_PER_INCH) + 0.5);
+    return static_cast<tools::Long>( (n_inch * EXC_TWIPS_PER_INCH) + 0.5);
 }
-constexpr long mm2twips(double n_mm)
+constexpr tools::Long mm2twips(double n_mm)
 {
-    return static_cast<long>( (n_mm * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0) + 0.5);
+    return static_cast<tools::Long>( (n_mm * EXC_TWIPS_PER_INCH / CM_PER_INCH / 10.0) + 0.5);
 }
-constexpr long twips2mm(long n_twips)
+constexpr tools::Long twips2mm(tools::Long n_twips)
 {
-    return static_cast<long>((static_cast<double>(n_twips) - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0);
+    return static_cast<tools::Long>((static_cast<double>(n_twips) - 0.5) / EXC_TWIPS_PER_INCH * CM_PER_INCH * 10.0);
 }
 
 constexpr XclPaperSize pPaperSizeTable[] =
@@ -221,7 +221,7 @@ Size XclPageData::GetScPaperSize() const
     if( !mbPortrait )
     {
         // swap width and height
-        long n = aSize.Width();
+        tools::Long n = aSize.Width();
         aSize.setWidth(aSize.Height());
         aSize.setHeight(n);
     }
@@ -233,10 +233,10 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
 {
     mbPortrait = bPortrait;
     mnPaperSize = 0;
-    long nWidth = bPortrait ? rSize.Width() : rSize.Height();
-    long nHeight = bPortrait ? rSize.Height() : rSize.Width();
-    long nMaxWDiff = 80;
-    long nMaxHDiff = 50;
+    tools::Long nWidth = bPortrait ? rSize.Width() : rSize.Height();
+    tools::Long nHeight = bPortrait ? rSize.Height() : rSize.Width();
+    tools::Long nMaxWDiff = 80;
+    tools::Long nMaxHDiff = 50;
 
     mnPaperWidth = twips2mm( nWidth );
     mnPaperHeight = twips2mm( nHeight );
@@ -253,8 +253,8 @@ void XclPageData::SetScPaperSize( const Size& rSize, bool bPortrait, bool bStric
 
     for( const auto &rEntry : pPaperSizeTable)
     {
-        long nWDiff = std::abs( rEntry.mnWidth - nWidth );
-        long nHDiff = std::abs( rEntry.mnHeight - nHeight );
+        tools::Long nWDiff = std::abs( rEntry.mnWidth - nWidth );
+        tools::Long nHDiff = std::abs( rEntry.mnHeight - nHeight );
         if( ((nWDiff <= nMaxWDiff) && (nHDiff < nMaxHDiff)) ||
             ((nWDiff < nMaxWDiff) && (nHDiff <= nMaxHDiff)) )
         {

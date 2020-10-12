@@ -1125,8 +1125,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         {
             // user overridden page size, center Metafile
             o_rMtf.WindStart();
-            long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
-            long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
+            tools::Long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
+            tools::Long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
             o_rMtf.Move( nDX, nDY, mpImplData->mxPrinter->GetDPIX(), mpImplData->mxPrinter->GetDPIY() );
             o_rMtf.WindStart();
             o_rMtf.SetPrefSize( aPaperSize );
@@ -1151,8 +1151,8 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     aMPArea.AdjustHeight(rMPS.nVerticalSpacing );
 
     // determine offsets
-    long nAdvX = aMPArea.Width() / rMPS.nColumns;
-    long nAdvY = aMPArea.Height() / rMPS.nRows;
+    tools::Long nAdvX = aMPArea.Width() / rMPS.nColumns;
+    tools::Long nAdvY = aMPArea.Height() / rMPS.nRows;
 
     // determine size of a "cell" subpage, leave a little space around pages
     Size aSubPageSize( nAdvX - rMPS.nHorizontalSpacing, nAdvY - rMPS.nVerticalSpacing );
@@ -1182,7 +1182,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
             PrinterController::PageSize aPageSize = getPageFile( nPage, aPageFile, i_bMayUseCache );
             if( aPageSize.aSize.Width() && aPageSize.aSize.Height() )
             {
-                long nCellX = 0, nCellY = 0;
+                tools::Long nCellX = 0, nCellY = 0;
                 switch( rMPS.nOrder )
                 {
                 case NupOrderType::LRTB:
@@ -1210,16 +1210,16 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                 aPageFile.WindStart();
 
                 // move the subpage so it is centered in its "cell"
-                long nOffX = (aSubPageSize.Width() - long(double(aPageSize.aSize.Width()) * fScale)) / 2;
-                long nOffY = (aSubPageSize.Height() - long(double(aPageSize.aSize.Height()) * fScale)) / 2;
-                long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
-                long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
+                tools::Long nOffX = (aSubPageSize.Width() - tools::Long(double(aPageSize.aSize.Width()) * fScale)) / 2;
+                tools::Long nOffY = (aSubPageSize.Height() - tools::Long(double(aPageSize.aSize.Height()) * fScale)) / 2;
+                tools::Long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
+                tools::Long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
                 aPageFile.Move( nX, nY, mpImplData->mxPrinter->GetDPIX(), mpImplData->mxPrinter->GetDPIY() );
                 aPageFile.WindStart();
                 // calculate border rectangle
                 tools::Rectangle aSubPageRect( Point( nX, nY ),
-                                        Size( long(double(aPageSize.aSize.Width())*fScale),
-                                              long(double(aPageSize.aSize.Height())*fScale) ) );
+                                        Size( tools::Long(double(aPageSize.aSize.Width())*fScale),
+                                              tools::Long(double(aPageSize.aSize.Height())*fScale) ) );
 
                 // append subpage to page
                 appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );

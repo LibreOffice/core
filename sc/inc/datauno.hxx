@@ -80,7 +80,7 @@ public:
     static void FillProperties(
                     css::uno::Sequence<css::beans::PropertyValue>& rSeq,
                     const ScImportParam& rParam );
-    static long GetPropertyCount() { return 4; }
+    static tools::Long GetPropertyCount() { return 4; }
 };
 
 //  SortDescriptor is not available as Uno-object any longer, only Property-Sequence
@@ -95,7 +95,7 @@ public:
                     css::uno::Sequence<css::beans::PropertyValue>& rSeq,
                     const ScSortParam& rParam );
     //! SortAscending needs to get out of the SheetSortDescriptor service description
-    static long GetPropertyCount()
+    static tools::Long GetPropertyCount()
     {
         return 9;       // TableSortDescriptor and SheetSortDescriptor
     }

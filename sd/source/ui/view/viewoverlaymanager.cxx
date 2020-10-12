@@ -367,7 +367,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
             pDev = Application::GetDefaultDevice();
 
         Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
-        long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
+        ::tools::Long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
 
         bool bLarge = nShapeSizePix > 250;
 
@@ -403,7 +403,7 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         pDev = Application::GetDefaultDevice();
 
     Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
-    long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
+    ::tools::Long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
     if( 50 > nShapeSizePix )
         return;
 
@@ -414,8 +414,8 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     const int nColumns = 2;
     const int nRows = 2;
 
-    long all_width = nColumns * aButtonSize.Width();
-    long all_height = nRows * aButtonSize.Height();
+    ::tools::Long all_width = nColumns * aButtonSize.Width();
+    ::tools::Long all_height = nRows * aButtonSize.Height();
 
     Point aPos( rSnapRect.Center() );
     aPos.AdjustX( -(all_width >> 1) );

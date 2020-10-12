@@ -22,6 +22,7 @@
 
 #include "dxfgrprd.hxx"
 #include "dxfvec.hxx"
+#include <tools/long.hxx>
 
 #include <memory>
 #include <vector>
@@ -64,8 +65,8 @@ public:
     OString m_sLayer;                     //  8
     OString m_sLineType;                  //  6
     double fThickness;                    // 39
-    long nColor;                          // 62
-    long nSpace;                          // 67
+    tools::Long nColor;                          // 62
+    tools::Long nSpace;                          // 67
     DXFVector aExtrusion;                 // 210,220,230
 
 protected:
@@ -192,9 +193,9 @@ public:
     double fXScale;                    // 41
     double fOblAngle;                  // 42
     OString m_sStyle;                  //  7
-    long nGenFlags;                    // 71
-    long nHorzJust;                    // 72
-    long nVertJust;                    // 73
+    tools::Long nGenFlags;                    // 71
+    tools::Long nHorzJust;                    // 72
+    tools::Long nVertJust;                    // 73
     DXFVector aAlign;                  // 11,21,31
 
     DXFTextEntity();
@@ -226,15 +227,15 @@ class DXFInsertEntity : public DXFBasicEntity {
 
 public:
 
-    long nAttrFlag;                   // 66
+    tools::Long nAttrFlag;                   // 66
     OString m_sName;                  //  2
     DXFVector aP0;                    // 10,20,30
     double fXScale;                   // 41
     double fYScale;                   // 42
     double fZScale;                   // 43
     double fRotAngle;                 // 50
-    long nColCount;                   // 70
-    long nRowCount;                   // 71
+    tools::Long nColCount;                   // 70
+    tools::Long nRowCount;                   // 71
     double fColSpace;                 // 44
     double fRowSpace;                 // 45
 
@@ -252,15 +253,15 @@ class DXFAttDefEntity : public DXFBasicEntity {
     OString m_sDefVal;                  //  1
     OString m_sPrompt;                  //  3
     OString m_sTagStr;                  //  2
-    long nAttrFlags;                    // 70
-    long nFieldLen;                     // 73
+    tools::Long nAttrFlags;                    // 70
+    tools::Long nFieldLen;                     // 73
     double fRotAngle;                   // 50
     double fXScale;                     // 41
     double fOblAngle;                   // 51
     OString m_sStyle;                   //  7
-    long nGenFlags;                     // 71
-    long nHorzJust;                     // 72
-    long nVertJust;                     // 74
+    tools::Long nGenFlags;                     // 71
+    tools::Long nHorzJust;                     // 72
+    tools::Long nVertJust;                     // 74
     DXFVector aAlign;                   // 11,21,31
 
 public:
@@ -280,15 +281,15 @@ public:
     double fHeight;                     // 40
     OString m_sText;                    //  1
     OString m_sTagStr;                  //  2
-    long nAttrFlags;                    // 70
-    long nFieldLen;                     // 73
+    tools::Long nAttrFlags;                    // 70
+    tools::Long nFieldLen;                     // 73
     double fRotAngle;                   // 50
     double fXScale;                     // 41
     double fOblAngle;                   // 51
     OString m_sStyle;                   //  7
-    long nGenFlags;                     // 71
-    long nHorzJust;                     // 72
-    long nVertJust;                     // 74
+    tools::Long nGenFlags;                     // 71
+    tools::Long nHorzJust;                     // 72
+    tools::Long nVertJust;                     // 74
     DXFVector aAlign;                   // 11,21,31
 
     DXFAttribEntity();
@@ -302,14 +303,14 @@ class DXFPolyLineEntity : public DXFBasicEntity {
 
 public:
 
-    long nFlags;       // 70
+    tools::Long nFlags;       // 70
     double fSWidth;    // 40
     double fEWidth;    // 41
-    long nMeshMCount;  // 71
-    long nMeshNCount;  // 72
-    long nMDensity;    // 73
-    long nNDensity;    // 74
-    long nCSSType;     // 75
+    tools::Long nMeshMCount;  // 71
+    tools::Long nMeshNCount;  // 72
+    tools::Long nMDensity;    // 73
+    tools::Long nNDensity;    // 74
+    tools::Long nCSSType;     // 75
 
     DXFPolyLineEntity();
 
@@ -456,7 +457,7 @@ public:
     double fSWidth;    // 40 (if <0.0, then one has DXFPolyLine::fSWidth)
     double fEWidth;    // 41 (if <0.0, then one has DXFPolyLine::fEWidth)
     double fBulge;     // 42
-    long nFlags;       // 70
+    tools::Long nFlags;       // 70
     double fCFTDir;    // 50
 
     DXFVertexEntity();
@@ -481,7 +482,7 @@ public:
     DXFVector aP1; // 11,21,31
     DXFVector aP2; // 12,22,32
     DXFVector aP3; // 13,23,33
-    long nIEFlags; // 70
+    tools::Long nIEFlags; // 70
 
     DXF3DFaceEntity();
 

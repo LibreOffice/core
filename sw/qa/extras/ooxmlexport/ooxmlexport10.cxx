@@ -820,7 +820,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123104, "tdf123104.docx")
     // See SwXCell::getPropertyValue(), we really put 'long' into an Any there.
     // Without the accompanying fix in place, this test would have failed with 'Expected: 3;Actual :
     // 2', i.e. the vertical merge covered one less cell, resulting in a cell with white background.
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(3), getProperty<long>(xCell, "RowSpan"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(3), getProperty<tools::Long>(xCell, "RowSpan"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
@@ -1174,7 +1174,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pShape = pPage->GetObj(0);
     SdrObject* pTextBox = pPage->GetObj(1);
-    long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
+    tools::Long nDiff = std::abs(pShape->GetSnapRect().Top() - pTextBox->GetSnapRect().Top());
     // The top of the two shapes were 410 and 3951, now it should be 3950 and 3951.
     CPPUNIT_ASSERT(nDiff < 10);
 }

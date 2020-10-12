@@ -226,7 +226,7 @@ sal_uInt16 GenPspGraphics::GetBitCount() const
     return m_pPrinterGfx->GetBitCount();
 }
 
-long GenPspGraphics::GetGraphicsWidth() const
+tools::Long GenPspGraphics::GetGraphicsWidth() const
 {
     return 0;
 }
@@ -245,11 +245,11 @@ bool GenPspGraphics::setClipRegion( const vcl::Region& i_rClip )
 
     for (auto const& rectangle : aRectangles)
     {
-        const long nW(rectangle.GetWidth());
+        const tools::Long nW(rectangle.GetWidth());
 
         if(nW)
         {
-            const long nH(rectangle.GetHeight());
+            const tools::Long nH(rectangle.GetHeight());
 
             if(nH)
             {
@@ -322,12 +322,12 @@ void GenPspGraphics::SetXORMode( bool bSet, bool )
     SAL_WARN_IF( bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented" );
 }
 
-void GenPspGraphics::drawPixel( long nX, long nY )
+void GenPspGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     m_pPrinterGfx->DrawPixel (Point(nX, nY));
 }
 
-void GenPspGraphics::drawPixel( long nX, long nY, Color nColor )
+void GenPspGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     psp::PrinterColor aColor (nColor.GetRed(),
                               nColor.GetGreen(),
@@ -335,12 +335,12 @@ void GenPspGraphics::drawPixel( long nX, long nY, Color nColor )
     m_pPrinterGfx->DrawPixel (Point(nX, nY), aColor);
 }
 
-void GenPspGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void GenPspGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     m_pPrinterGfx->DrawLine (Point(nX1, nY1), Point(nX2, nY2));
 }
 
-void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
+void GenPspGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     m_pPrinterGfx->DrawRect (tools::Rectangle(Point(nX, nY), Size(nDX, nDY)));
 }
@@ -416,7 +416,7 @@ void GenPspGraphics::invert( sal_uInt32,
     SAL_WARN( "vcl", "Error: PrinterGfx::Invert() not implemented" );
 }
 
-bool GenPspGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uInt32 nSize )
+bool GenPspGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     return m_pPrinterGfx->DrawEPS( tools::Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ), pPtr, nSize );
 }
@@ -427,7 +427,7 @@ void GenPspGraphics::copyBits( const SalTwoRect&,
     OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
-void GenPspGraphics::copyArea ( long,long,long,long,long,long,bool )
+void GenPspGraphics::copyArea ( tools::Long,tools::Long,tools::Long,tools::Long,tools::Long,tools::Long,bool )
 {
     OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }
@@ -461,19 +461,19 @@ void GenPspGraphics::drawMask( const SalTwoRect&,
     OSL_FAIL("Error: PrinterGfx::DrawMask() not implemented");
 }
 
-std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap( long, long, long, long )
+std::shared_ptr<SalBitmap> GenPspGraphics::getBitmap( tools::Long, tools::Long, tools::Long, tools::Long )
 {
     SAL_INFO("vcl", "Warning: PrinterGfx::GetBitmap() not implemented");
     return nullptr;
 }
 
-Color GenPspGraphics::getPixel( long, long )
+Color GenPspGraphics::getPixel( tools::Long, tools::Long )
 {
     OSL_FAIL("Warning: PrinterGfx::GetPixel() not implemented");
     return 0;
 }
 
-void GenPspGraphics::invert(long,long,long,long,SalInvert)
+void GenPspGraphics::invert(tools::Long,tools::Long,tools::Long,tools::Long,SalInvert)
 {
     OSL_FAIL("Warning: PrinterGfx::Invert() not implemented");
 }
@@ -854,7 +854,7 @@ bool GenPspGraphics::drawTransformedBitmap(
     return false;
 }
 
-bool GenPspGraphics::drawAlphaRect( long, long, long, long, sal_uInt8 )
+bool GenPspGraphics::drawAlphaRect( tools::Long, tools::Long, tools::Long, tools::Long, sal_uInt8 )
 {
     return false;
 }
@@ -898,13 +898,13 @@ bool GenPspGraphics::supportsOperation( OutDevSupportType ) const
     return false;
 }
 
-void GenPspGraphics::DoFreeEmbedFontData( const void* pData, long nLen )
+void GenPspGraphics::DoFreeEmbedFontData( const void* pData, tools::Long nLen )
 {
     if( pData )
         munmap( const_cast<void *>(pData), nLen );
 }
 
-const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, long* pDataLen)
+const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, tools::Long* pDataLen)
 {
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -929,12 +929,12 @@ const void* GenPspGraphics::DoGetEmbedFontData(psp::fontID aFont, long* pDataLen
     return pFile;
 }
 
-void GenPspGraphics::FreeEmbedFontData( const void* pData, long nLen )
+void GenPspGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
     DoFreeEmbedFontData( pData, nLen );
 }
 
-const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* GenPspGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF

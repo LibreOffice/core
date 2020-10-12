@@ -26,7 +26,7 @@
 class SVXCORE_DLLPUBLIC XFillBmpSizeXItem final : public SfxMetricItem
 {
 public:
-                            XFillBmpSizeXItem( long nSizeX = 0 );
+                            XFillBmpSizeXItem( tools::Long nSizeX = 0 );
 
     SVX_DLLPRIVATE virtual XFillBmpSizeXItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
@@ -42,7 +42,7 @@ public:
 class SVXCORE_DLLPUBLIC XFillBmpSizeYItem final : public SfxMetricItem
 {
 public:
-                            XFillBmpSizeYItem( long nSizeY = 0 );
+                            XFillBmpSizeYItem( tools::Long nSizeY = 0 );
 
     SVX_DLLPRIVATE virtual XFillBmpSizeYItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 

@@ -1966,8 +1966,8 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     ::ClearFEShellTabCols(*this, nullptr);
     SwSelBoxes aSelBoxes( rBoxes );
     SwTable &rTable = pTableNd->GetTable();
-    long nMin = 0;
-    long nMax = 0;
+    tools::Long nMin = 0;
+    tools::Long nMax = 0;
     if( rTable.IsNewModel() )
     {
         if( bColumn )
@@ -2527,12 +2527,12 @@ namespace {
 
 struct FuzzyCompare
 {
-    bool operator() ( long s1, long s2 ) const;
+    bool operator() ( tools::Long s1, tools::Long s2 ) const;
 };
 
 }
 
-bool FuzzyCompare::operator() ( long s1, long s2 ) const
+bool FuzzyCompare::operator() ( tools::Long s1, tools::Long s2 ) const
 {
     return ( s1 < s2 && std::abs( s1 - s2 ) > ROWFUZZY );
 }
@@ -2588,12 +2588,12 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     // Set fixed points, LeftMin in Document coordinates, all others relative
     SwRectFnSet aRectFnSet(pTab);
     const SwPageFrame* pPage = pTab->FindPageFrame();
-    const long nLeftMin  = ( aRectFnSet.IsVert() ?
+    const tools::Long nLeftMin  = ( aRectFnSet.IsVert() ?
                              pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
                              pTab->GetPrtTop() - pPage->getFrameArea().Top() );
-    const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
-    const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
-    const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
+    const tools::Long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
+    const tools::Long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
+    const tools::Long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
 
     rFill.SetLeftMin( nLeftMin );
     rFill.SetLeft( nLeft );
@@ -2614,8 +2614,8 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
         if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
         {
             // upper and lower borders of current cell frame:
-            long nUpperBorder = aRectFnSet.GetTop(pFrame->getFrameArea());
-            long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
+            tools::Long nUpperBorder = aRectFnSet.GetTop(pFrame->getFrameArea());
+            tools::Long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
 
             // get boundaries for nUpperBorder:
             aIter = aBoundaries.find( nUpperBorder );
@@ -2634,13 +2634,13 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
             else
             {
                 nLowerBorder = (*aIter).first;
-                long nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
+                tools::Long nNewLowerBorderUpperBoundary = std::max( (*aIter).second.first, nUpperBorder );
                 aPair.first = nNewLowerBorderUpperBoundary; aPair.second = LONG_MAX;
             }
             aBoundaries[ nLowerBorder ] = aPair;
 
             // calculate hidden flags for entry nUpperBorder/nLowerBorder:
-            long nTmpVal = nUpperBorder;
+            tools::Long nTmpVal = nUpperBorder;
             for ( sal_uInt8 i = 0; i < 2; ++i )
             {
                 aHiddenIter = aHidden.find( nTmpVal );
@@ -2663,11 +2663,11 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCellFrame* pBoxFrame )
     size_t nIdx = 0;
     for ( const auto& rEntry : aBoundaries )
     {
-        const long nTabTop = aRectFnSet.GetPrtTop(*pTab);
-        const long nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
+        const tools::Long nTabTop = aRectFnSet.GetPrtTop(*pTab);
+        const tools::Long nKey = aRectFnSet.YDiff( rEntry.first, nTabTop );
         const std::pair< long, long > aTmpPair = rEntry.second;
-        const long nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
-        const long nSecond = aTmpPair.second;
+        const tools::Long nFirst = aRectFnSet.YDiff( aTmpPair.first, nTabTop );
+        const tools::Long nSecond = aTmpPair.second;
 
         aHiddenIter = aHidden.find( rEntry.first );
         const bool bHidden = aHiddenIter != aHidden.end() && (*aHiddenIter).second;
@@ -2763,7 +2763,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
     const SwPageFrame* pPage = pTab->FindPageFrame();
 
     aOld.SetRight( aRectFnSet.GetHeight(pTab->getFramePrintArea()) );
-    long nLeftMin;
+    tools::Long nLeftMin;
     if ( aRectFnSet.IsVert() )
     {
         nLeftMin = pTab->GetPrtLeft() - pPage->getFrameArea().Left();
@@ -2793,15 +2793,15 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
         const size_t nIdxStt = aRectFnSet.IsVert() ? nCount - i : i - 1;
         const size_t nIdxEnd = aRectFnSet.IsVert() ? nCount - i - 1 : i;
 
-        const long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
-        const long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];
-        const long nOldRowHeight = nOldRowEnd - nOldRowStart;
+        const tools::Long nOldRowStart = i == 0  ? 0 : aOld[ nIdxStt ];
+        const tools::Long nOldRowEnd =   i == nCount ? aOld.GetRight() : aOld[ nIdxEnd ];
+        const tools::Long nOldRowHeight = nOldRowEnd - nOldRowStart;
 
-        const long nNewRowStart = i == 0  ? 0 : rNew[ nIdxStt ];
-        const long nNewRowEnd =   i == nCount ? rNew.GetRight() : rNew[ nIdxEnd ];
-        const long nNewRowHeight = nNewRowEnd - nNewRowStart;
+        const tools::Long nNewRowStart = i == 0  ? 0 : rNew[ nIdxStt ];
+        const tools::Long nNewRowEnd =   i == nCount ? rNew.GetRight() : rNew[ nIdxEnd ];
+        const tools::Long nNewRowHeight = nNewRowEnd - nNewRowStart;
 
-        const long nDiff = nNewRowHeight - nOldRowHeight;
+        const tools::Long nDiff = nNewRowHeight - nOldRowHeight;
         if ( std::abs( nDiff ) >= ROWFUZZY )
         {
             // For the old table model pTextFrame and pLine will be set for every box.
@@ -2818,7 +2818,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
             {
                 if ( pFrame->IsCellFrame() && pFrame->FindTabFrame() == pTab )
                 {
-                    const long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
+                    const tools::Long nLowerBorder = aRectFnSet.GetBottom(pFrame->getFrameArea());
                     const sal_uLong nTabTop = aRectFnSet.GetPrtTop(*pTab);
                     if ( std::abs( aRectFnSet.YInc( nTabTop, nOldRowEnd ) - nLowerBorder ) <= ROWFUZZY )
                     {
@@ -2829,7 +2829,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                             if ( pContent && pContent->IsTextFrame() )
                             {
                                 const SwTableBox* pBox = static_cast<const SwCellFrame*>(pFrame)->GetTabBox();
-                                const long nRowSpan = pBox->getRowSpan();
+                                const tools::Long nRowSpan = pBox->getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
                                     pTextFrame = static_cast<const SwTextFrame*>(pContent);
                                 if( nRowSpan < 2 ) // Not overlapping for row height
@@ -2838,7 +2838,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                                 {
                                     // The new row height must not to be calculated from an overlapping box
                                     SwFormatFrameSize aNew( pLine->GetFrameFormat()->GetFrameSize() );
-                                    const long nNewSize = aRectFnSet.GetHeight(pFrame->getFrameArea()) + nDiff;
+                                    const tools::Long nNewSize = aRectFnSet.GetHeight(pFrame->getFrameArea()) + nDiff;
                                     if( nNewSize != aNew.GetHeight() )
                                     {
                                         aNew.SetHeight( nNewSize );

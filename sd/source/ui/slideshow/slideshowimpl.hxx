@@ -253,7 +253,7 @@ private:
         This actually starts the slideshow. */
     void onFirstPaint();
 
-    long getRestoreSlide() const { return mnRestoreSlide; }
+    ::tools::Long getRestoreSlide() const { return mnRestoreSlide; }
 
 private:
     bool startShowImpl(
@@ -300,7 +300,7 @@ private:
 
     std::shared_ptr< AnimationSlideController > mpSlideController;
 
-    long            mnRestoreSlide;
+    ::tools::Long            mnRestoreSlide;
     Point           maPopupMousePos;
     Size            maPresSize;
     AnimationMode   meAnimationMode;

@@ -253,12 +253,12 @@ bool Qt5Graphics::CreateFontSubset(const OUString& rToFile, const PhysicalFontFa
                                             pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount);
 }
 
-const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, long* /*pDataLen*/)
+const void* Qt5Graphics::GetEmbedFontData(const PhysicalFontFace*, tools::Long* /*pDataLen*/)
 {
     return nullptr;
 }
 
-void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, long /*nDataLen*/) {}
+void Qt5Graphics::FreeEmbedFontData(const void* /*pData*/, tools::Long /*nDataLen*/) {}
 
 void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* pFontFace, bool bVertical,
                                  std::vector<sal_Int32>& rWidths, Ucs2UIntMap& rUnicodeEnc)

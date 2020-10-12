@@ -313,7 +313,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         pAttr = &GetFormat()->GetCol();
         if ( !bAdjustAttributes )
         {
-            long nAvail = (getFramePrintArea().*fnRect->fnGetWidth)();
+            tools::Long nAvail = (getFramePrintArea().*fnRect->fnGetWidth)();
             for ( SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
                   pCol;
                   pCol = static_cast<SwLayoutFrame*>(pCol->GetNext()) )
@@ -336,7 +336,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
     // bOrtho means we have to adjust the column frames manually. Otherwise
     // we may use the values returned by CalcColWidth:
     const bool bOrtho = pAttr->IsOrtho() && pAttr->GetNumCols() > 0;
-    long nGutter = 0;
+    tools::Long nGutter = 0;
 
     for ( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; ++i ) //i118878, value returned by GetNumCols() can't be trusted
     {
@@ -414,7 +414,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
     if( !bOrtho )
         return;
 
-    long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
+    tools::Long nInnerWidth = ( nAvail - nGutter ) / pAttr->GetNumCols();
     pCol = Lower();
     for( sal_uInt16 i = 0; i < pAttr->GetNumCols() && pCol; pCol = pCol->GetNext(), ++i ) //i118878, value returned by GetNumCols() can't be trusted
     {

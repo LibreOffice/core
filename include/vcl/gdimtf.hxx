@@ -111,12 +111,12 @@ public:
 
     void            Clear();
     void            Mirror( BmpMirrorFlags nMirrorFlags );
-    void            Move( long nX, long nY );
+    void            Move( tools::Long nX, tools::Long nY );
     // additional Move method getting specifics how to handle MapMode( MapUnit::MapPixel )
-    void            Move( long nX, long nY, long nDPIX, long nDPIY );
+    void            Move( tools::Long nX, tools::Long nY, tools::Long nDPIX, tools::Long nDPIY );
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
-    void            Rotate( long nAngle10 );
+    void            Rotate( tools::Long nAngle10 );
     void            Clip( const tools::Rectangle& );
     bool            HasTransparentActions() const;
 

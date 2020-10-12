@@ -232,10 +232,10 @@ public:
     // including PresObj's in higher derivations
     virtual void adaptSizeAndBorderForAllPages(
         const Size& rNewSize,
-        long nLeft = 0,
-        long nRight = 0,
-        long nUpper = 0,
-        long nLower = 0);
+        tools::Long nLeft = 0,
+        tools::Long nRight = 0,
+        tools::Long nUpper = 0,
+        tools::Long nLower = 0);
 
 protected:
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel();
@@ -384,8 +384,8 @@ public:
     void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
 
     static OUString  GetUnitString(FieldUnit eUnit);
-    OUString         GetMetricString(long nVal, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    static OUString  GetAngleString(long nAngle);
+    OUString         GetMetricString(tools::Long nVal, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
+    static OUString  GetAngleString(tools::Long nAngle);
     static OUString  GetPercentString(const Fraction& rVal);
 
     // RecalcPageNums is ordinarily only called by the Page.

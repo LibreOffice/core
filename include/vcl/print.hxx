@@ -197,7 +197,7 @@ protected:
     virtual void                ReleaseGraphics( bool bRelease = true ) override;
     virtual void                ImplReleaseFonts() override;
 
-    virtual long                GetGradientStepCount( long nMinRect ) override;
+    virtual tools::Long                GetGradientStepCount( tools::Long nMinRect ) override;
     virtual bool                UsePolyPolygonForComplexGradient() override;
     virtual void                ClipAndDrawGradientMetafile ( const Gradient &rGradient,
                                     const tools::PolyPolygon &rPolyPoly ) override;
@@ -385,12 +385,12 @@ public:
         int                             nRows;
         int                             nColumns;
         Size                            aPaperSize;
-        long                            nLeftMargin;
-        long                            nTopMargin;
-        long                            nRightMargin;
-        long                            nBottomMargin;
-        long                            nHorizontalSpacing;
-        long                            nVerticalSpacing;
+        tools::Long                            nLeftMargin;
+        tools::Long                            nTopMargin;
+        tools::Long                            nRightMargin;
+        tools::Long                            nBottomMargin;
+        tools::Long                            nHorizontalSpacing;
+        tools::Long                            nVerticalSpacing;
         bool                            bDrawBorder;
         NupOrderType                    nOrder;
 

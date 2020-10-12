@@ -52,7 +52,7 @@ class MSFILTER_DLLPUBLIC CustomToolBarImportHelper
     css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > m_xCfgSupp;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
     SfxObjectShell& mrDocSh;
-    static void ScaleImage( css::uno::Reference< css::graphic::XGraphic >& xGraphic, long nNewSize );
+    static void ScaleImage( css::uno::Reference< css::graphic::XGraphic >& xGraphic, tools::Long nNewSize );
 public:
     CustomToolBarImportHelper( SfxObjectShell& rDocSh, const css::uno::Reference< css::ui::XUIConfigurationManager >& rxAppCfgMgr );
 

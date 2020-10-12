@@ -70,10 +70,10 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
 
     Size aOut = pReportWindow->GetOutputSizePixel();
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
-    aOut.AdjustWidth( -static_cast<long>(aStartWidth) );
+    aOut.AdjustWidth( -static_cast<tools::Long>(aStartWidth) );
     aOut.setHeight( m_pParent->GetOutputSizePixel().Height() );
 
     Point aPos = pScrollWindow->getThumbPos();
@@ -82,7 +82,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     tools::Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     tools::Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
-    aWorkArea.AdjustRight( -static_cast<long>(aStartWidth) );
+    aWorkArea.AdjustRight( -static_cast<tools::Long>(aStartWidth) );
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
@@ -573,8 +573,8 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
                      && (dynamic_cast<OUnoObject*>(pObjIter) != nullptr || dynamic_cast<OOle2Obj*>(pObjIter) != nullptr) )
                 {
                     tools::Rectangle aNewRect = pObjIter->GetLastBoundRect();
-                    long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
-                    long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
+                    tools::Long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
+                    tools::Long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
                     if ( (nDx + aNewRect.Left()) < 0 )
                         nDx = -aNewRect.Left();
                     if ( (nDy + aNewRect.Top()) < 0 )

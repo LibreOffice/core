@@ -473,7 +473,7 @@ public:
     static void DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
                                         const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                         bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                        Color* pSelectionTextColor = nullptr, long nCornerRadius = 0,
+                                        Color* pSelectionTextColor = nullptr, tools::Long nCornerRadius = 0,
                                         Color const * pPaintColor = nullptr);
 };
 
@@ -581,7 +581,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplMirrorFramePos( Point &pt ) const;
 
-    SAL_DLLPRIVATE void                 ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplPosSizeWindow( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags );
 
     SAL_DLLPRIVATE void                 ImplCallResize();
     SAL_DLLPRIVATE void                 ImplCallMove();
@@ -603,8 +603,8 @@ protected:
     SAL_DLLPRIVATE void                 ImplInvalidateParentFrameRegion( vcl::Region& rRegion );
     SAL_DLLPRIVATE void                 ImplValidateFrameRegion( const vcl::Region* rRegion, ValidateFlags nFlags );
     SAL_DLLPRIVATE void                 ImplValidate();
-    SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
-    SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                 ImplMoveInvalidateRegion( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, bool bChildren );
+    SAL_DLLPRIVATE void                 ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, bool bChildren );
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
@@ -614,7 +614,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
 
-    SAL_DLLPRIVATE void                 ImplScroll( const tools::Rectangle& rRect, long nHorzScroll, long nVertScroll, ScrollFlags nFlags );
+    SAL_DLLPRIVATE void                 ImplScroll( const tools::Rectangle& rRect, tools::Long nHorzScroll, tools::Long nVertScroll, ScrollFlags nFlags );
 
     SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller );
     SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
@@ -718,7 +718,7 @@ private:
     SAL_DLLPRIVATE static void          ImplHandleScroll(ScrollBar* pHScrl, double nX, ScrollBar* pVScrl, double nY);
 
     SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
-    SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
+    SAL_DLLPRIVATE tools::Long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hierarchy
     SAL_DLLPRIVATE ::std::vector<VclPtr<vcl::Window> >& ImplGetOwnerDrawList();
@@ -858,7 +858,7 @@ public:
                                                    sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     Size                                CalcWindowSize( const Size& rOutSz ) const;
     Size                                CalcOutputSize( const Size& rWinSz ) const;
-    long                                CalcTitleWidth() const;
+    tools::Long                                CalcTitleWidth() const;
 
     void                                EnableClipSiblings( bool bClipSiblings = true );
 
@@ -886,11 +886,11 @@ public:
     const InputContext&                 GetInputContext() const;
     void                                PostExtTextInputEvent(VclEventId nType, const OUString& rText);
     void                                EndExtTextInput();
-    void                                SetCursorRect( const tools::Rectangle* pRect = nullptr, long nExtTextInputWidth = 0 );
+    void                                SetCursorRect( const tools::Rectangle* pRect = nullptr, tools::Long nExtTextInputWidth = 0 );
     const tools::Rectangle*                    GetCursorRect() const;
-    long                                GetCursorExtTextInputWidth() const;
+    tools::Long                                GetCursorExtTextInputWidth() const;
 
-    void                                SetCompositionCharRect( const tools::Rectangle* pRect, long nCompositionLength, bool bVertical = false );
+    void                                SetCompositionCharRect( const tools::Rectangle* pRect, tools::Long nCompositionLength, bool bVertical = false );
 
     using                               ::OutputDevice::SetSettings;
     virtual void                        SetSettings( const AllSettings& rSettings ) override;
@@ -901,7 +901,7 @@ public:
     void                                SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
     vcl::Font                           GetPointFont(vcl::RenderContext const & rRenderContext) const;
     void                                SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont);
-    long                                GetDrawPixel( ::OutputDevice const * pDev, long nPixels ) const;
+    tools::Long                                GetDrawPixel( ::OutputDevice const * pDev, tools::Long nPixels ) const;
     vcl::Font                           GetDrawPixelFont( ::OutputDevice const * pDev ) const;
 
     void SetControlFont();
@@ -988,8 +988,8 @@ public:
     void                                EnableAlwaysOnTop( bool bEnable = true );
     bool                                IsAlwaysOnTopEnabled() const;
 
-    virtual void                        setPosSizePixel( long nX, long nY,
-                                                         long nWidth, long nHeight,
+    virtual void                        setPosSizePixel( tools::Long nX, tools::Long nY,
+                                                         tools::Long nWidth, tools::Long nHeight,
                                                          PosSizeFlags nFlags = PosSizeFlags::All );
     virtual void                        SetPosPixel( const Point& rNewPos );
     virtual Point                       GetPosPixel() const;
@@ -1015,9 +1015,9 @@ public:
     tools::Rectangle                    GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const;
 
     bool                                IsScrollable() const;
-    virtual void                        Scroll( long nHorzScroll, long nVertScroll,
+    virtual void                        Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
                                                 ScrollFlags nFlags = ScrollFlags::NONE );
-    void                                Scroll( long nHorzScroll, long nVertScroll,
+    void                                Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
                                                 const tools::Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
     virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
     virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
@@ -1097,7 +1097,7 @@ public:
     void                                SetZoom( const Fraction& rZoom );
     const Fraction&                     GetZoom() const;
     bool                                IsZoom() const;
-    long                                CalcZoom( long n ) const;
+    tools::Long                                CalcZoom( tools::Long n ) const;
 
     virtual void                        SetText( const OUString& rStr );
     virtual OUString                    GetText() const;

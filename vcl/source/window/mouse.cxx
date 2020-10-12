@@ -138,8 +138,8 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
         return;
 
     sal_uInt64 nTime   = tools::Time::GetSystemTicks();
-    long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
-    long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
+    tools::Long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
+    tools::Long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
     sal_uInt16  nCode   = nMouseCode;
     MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
     bool    bLeave;

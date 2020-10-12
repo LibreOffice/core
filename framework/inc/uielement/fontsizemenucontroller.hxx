@@ -27,6 +27,7 @@
 
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <memory>
 
@@ -56,7 +57,7 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() override;
-            void setCurHeight( long nHeight, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            void setCurHeight( tools::Long nHeight, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame );
 

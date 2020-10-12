@@ -26,8 +26,8 @@ private:
     std::shared_ptr<WidgetDefinition> m_pWidgetDefinition;
 
     bool resolveDefinition(ControlType eType, ControlPart ePart, ControlState eState,
-                           const ImplControlValue& rValue, long nX, long nY, long nWidth,
-                           long nHeight);
+                           const ImplControlValue& rValue, tools::Long nX, tools::Long nY,
+                           tools::Long nWidth, tools::Long nHeight);
 
 public:
     FileDefinitionWidgetDraw(SalGraphics& rGraphics);

@@ -26,6 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/lang.h>
+#include <tools/long.hxx>
 #include "TextFrameIndex.hxx"
 
 class SwTextNode;
@@ -269,7 +270,7 @@ public:
     // HIDDEN TEXT STUFF END
 
     // modifies the kerning array according to a given compress value
-    long Compress( long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+    tools::Long Compress( tools::Long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    const bool bCentered,
                    Point* pPoint = nullptr ) const;
@@ -290,8 +291,8 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    sal_Int32 KashidaJustify( long* pKernArray, long* pScrArray,
-          TextFrameIndex nStt, TextFrameIndex nLen, long nSpaceAdd = 0) const;
+    sal_Int32 KashidaJustify( tools::Long* pKernArray, tools::Long* pScrArray,
+          TextFrameIndex nStt, TextFrameIndex nLen, tools::Long nSpaceAdd = 0) const;
 
 /** Clears array of kashidas marked as invalid
  */
@@ -363,19 +364,19 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static TextFrameIndex ThaiJustify( const OUString& rText, long* pKernArray,
-                                  long* pScrArray, TextFrameIndex nIdx,
+    static TextFrameIndex ThaiJustify( const OUString& rText, tools::Long* pKernArray,
+                                  tools::Long* pScrArray, TextFrameIndex nIdx,
                                   TextFrameIndex nLen,
                                   TextFrameIndex nNumberOfBlanks = TextFrameIndex(0),
-                                  long nSpaceAdd = 0 );
+                                  tools::Long nSpaceAdd = 0 );
 
     static TextFrameIndex CountCJKCharacters(const OUString &rText,
             TextFrameIndex nPos, TextFrameIndex nEnd, LanguageType aLang);
 
-    static void CJKJustify( const OUString& rText, long* pKernArray,
-                                  long* pScrArray, TextFrameIndex nStt,
+    static void CJKJustify( const OUString& rText, tools::Long* pKernArray,
+                                  tools::Long* pScrArray, TextFrameIndex nStt,
                                   TextFrameIndex nLen, LanguageType aLang,
-                                  long nSpaceAdd, bool bIsSpaceStop );
+                                  tools::Long nSpaceAdd, bool bIsSpaceStop );
 
     /// return a frame for the node, ScriptInfo is its member...
     /// (many clients need both frame and SI, and both have to match)

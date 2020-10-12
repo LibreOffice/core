@@ -59,7 +59,7 @@ namespace
 }
 
 
-static const ChildIndexToPointData* IndexToPoint( long nIndex )
+static const ChildIndexToPointData* IndexToPoint( tools::Long nIndex )
 {
     DBG_ASSERT( nIndex < 9 && nIndex >= 0, "-IndexToPoint(): invalid child index! You have been warned..." );
 
@@ -81,15 +81,15 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex )
 }
 
 
-static long PointToIndex( RectPoint ePoint )
+static tools::Long PointToIndex( RectPoint ePoint )
 {
-    long    nRet( static_cast<long>(ePoint) );
+    tools::Long    nRet( static_cast<tools::Long>(ePoint) );
     // corner control
     // corners are counted from left to right and top to bottom
     DBG_ASSERT( int(RectPoint::LT) == 0 && int(RectPoint::MT) == 1 && int(RectPoint::RT) == 2 && int(RectPoint::LM) == 3 && int(RectPoint::MM) == 4 && int(RectPoint::RM) == 5 &&
                 int(RectPoint::LB) == 6 && int(RectPoint::MB) == 7 && int(RectPoint::RB) == 8, "*PointToIndex(): unexpected enum value!" );
 
-    nRet = static_cast<long>(ePoint);
+    nRet = static_cast<tools::Long>(ePoint);
 
     return nRet;
 }
@@ -121,7 +121,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 
     Reference< XAccessible >    xRet;
 
-    long nChild = mpRepr ? PointToIndex(mpRepr->GetApproxRPFromPixPt(rPoint)) : NOCHILDSELECTED;
+    tools::Long nChild = mpRepr ? PointToIndex(mpRepr->GetApproxRPFromPixPt(rPoint)) : NOCHILDSELECTED;
 
     if (nChild != NOCHILDSELECTED)
         xRet = getAccessibleChild( nChild );
@@ -298,7 +298,7 @@ bool SvxRectCtlAccessibleContext::implIsSelected( sal_Int32 nIndex )
 }
 
 // internals
-void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex )
+void SvxRectCtlAccessibleContext::checkChildIndex( tools::Long nIndex )
 {
     if( nIndex < 0 || nIndex >= getAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();
@@ -307,8 +307,8 @@ void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex )
 void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    long nNew = PointToIndex( eButton );
-    long nNumOfChildren = getAccessibleChildCount();
+    tools::Long nNew = PointToIndex( eButton );
+    tools::Long nNumOfChildren = getAccessibleChildCount();
     if( nNew < nNumOfChildren )
     {
         // select new child
@@ -330,13 +330,13 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RectPoint eButton )
         mnSelectedChild = NOCHILDSELECTED;
 }
 
-void SvxRectCtlAccessibleContext::selectChild( long nNew )
+void SvxRectCtlAccessibleContext::selectChild( tools::Long nNew )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( nNew == mnSelectedChild )
         return;
 
-    long    nNumOfChildren = getAccessibleChildCount();
+    tools::Long    nNumOfChildren = getAccessibleChildCount();
     if( nNew < nNumOfChildren )
     {   // valid index
         if( mnSelectedChild != NOCHILDSELECTED )
@@ -404,7 +404,7 @@ SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const OUString&              rName,
     const OUString&              rDescription,
     const tools::Rectangle& rBoundingBox,
-    long nIndexInParent )
+    tools::Long nIndexInParent )
     : msDescription( rDescription )
     , msName( rName )
     , mxParent(rxParent)
