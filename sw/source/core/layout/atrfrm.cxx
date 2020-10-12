@@ -1495,7 +1495,7 @@ SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     m_eAnchorId( nRnd ),
     m_nPageNumber( nPage ),
     // OD 2004-05-05 #i28701# - get always new increased order number
-    m_nOrder( ++m_nOrderCounter )
+    m_nOrder( ++s_nOrderCounter )
 {}
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
@@ -1505,7 +1505,7 @@ SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
     , m_eAnchorId( rCpy.GetAnchorId() )
     , m_nPageNumber( rCpy.GetPageNum() )
     // OD 2004-05-05 #i28701# - get always new increased order number
-    , m_nOrder( ++m_nOrderCounter )
+    , m_nOrder( ++s_nOrderCounter )
 {
 }
 
@@ -1538,7 +1538,7 @@ SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
         m_eAnchorId  = rAnchor.GetAnchorId();
         m_nPageNumber   = rAnchor.GetPageNum();
         // OD 2004-05-05 #i28701# - get always new increased order number
-        m_nOrder = ++m_nOrderCounter;
+        m_nOrder = ++s_nOrderCounter;
 
         m_pContentAnchor.reset( (rAnchor.GetContentAnchor())
             ? new SwPosition(*(rAnchor.GetContentAnchor()))
@@ -1567,7 +1567,7 @@ SwFormatAnchor* SwFormatAnchor::Clone( SfxItemPool* ) const
 }
 
 // OD 2004-05-05 #i28701#
-sal_uInt32 SwFormatAnchor::m_nOrderCounter = 0;
+sal_uInt32 SwFormatAnchor::s_nOrderCounter = 0;
 
 // OD 2004-05-05 #i28701#
 
@@ -1709,7 +1709,7 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_eAnchorType"), BAD_CAST(OString::number(static_cast<int>(m_eAnchorId)).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPageNumber"), BAD_CAST(OString::number(m_nPageNumber).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrder"), BAD_CAST(OString::number(m_nOrder).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nOrderCounter"), BAD_CAST(OString::number(m_nOrderCounter).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("s_nOrderCounter"), BAD_CAST(OString::number(s_nOrderCounter).getStr()));
     OUString aPresentation;
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation, aIntlWrapper);

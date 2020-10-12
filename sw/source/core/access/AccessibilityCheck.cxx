@@ -697,18 +697,18 @@ class TableHeadingCheck : public NodeCheck
 {
 private:
     // Boolean indicating if heading-in-table warning is already triggered.
-    bool bPrevPassed;
+    bool m_bPrevPassed;
 
 public:
     TableHeadingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
-        , bPrevPassed(true)
+        , m_bPrevPassed(true)
     {
     }
 
     void check(SwNode* pCurrent) override
     {
-        if (!bPrevPassed)
+        if (!m_bPrevPassed)
             return;
 
         const SwTextNode* textNode = pCurrent->GetTextNode();
@@ -719,7 +719,7 @@ public:
 
             if (parentTable)
             {
-                bPrevPassed = false;
+                m_bPrevPassed = false;
                 lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
             }
         }
