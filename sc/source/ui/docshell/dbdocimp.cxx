@@ -233,7 +233,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             //  get column descriptions
 
-            long nColCount = 0;
+            tools::Long nColCount = 0;
             uno::Reference<sdbc::XResultSetMetaData> xMeta;
             uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xRowSet, uno::UNO_QUERY );
             if ( xMetaSupp.is() )
@@ -267,7 +267,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 uno::Sequence<sal_Bool> aColCurr( nColCount );      // currency flag is not in types
                 sal_Int32* pTypeArr = aColTypes.getArray();
                 sal_Bool* pCurrArr = aColCurr.getArray();
-                for (long i=0; i<nColCount; i++)
+                for (tools::Long i=0; i<nColCount; i++)
                 {
                     pTypeArr[i] = xMeta->getColumnType( i+1 );
                     pCurrArr[i] = xMeta->isCurrency( i+1 );
@@ -275,7 +275,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
                 // read column names
                 nCol = rParam.nCol1;
-                for (long i=0; i<nColCount; i++)
+                for (tools::Long i=0; i<nColCount; i++)
                 {
                     pImportDoc->SetString( nCol, nRow, nTab,
                                             xMeta->getColumnLabel( i+1 ) );
@@ -328,7 +328,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                         if ( rDoc.ValidRow(nRow) )
                         {
                             nCol = rParam.nCol1;
-                            for (long i=0; i<nColCount; i++)
+                            for (tools::Long i=0; i<nColCount; i++)
                             {
                                 ScDatabaseDocUtil::PutData( *pImportDoc, nCol, nRow, nTab,
                                                 xRow, i+1, pTypeArr[i], pCurrArr[i] );

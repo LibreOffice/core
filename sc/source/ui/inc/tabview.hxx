@@ -176,7 +176,7 @@ private:
     OUString                sTipString;
     VclPtr<vcl::Window>     sTopParent;
 
-    long                nPrevDragPos;
+    tools::Long                nPrevDragPos;
 
     BlockMode           meBlockMode;           // Marks block
 
@@ -218,20 +218,20 @@ private:
 
     void            DoAddWin( ScGridWindow* pWin );
 
-    void            InitScrollBar( ScrollBar& rScrollBar, long nMaxVal );
+    void            InitScrollBar( ScrollBar& rScrollBar, tools::Long nMaxVal );
     DECL_LINK(ScrollHdl, ScrollBar*, void );
     DECL_LINK(EndScrollHdl, ScrollBar*, void );
 
     DECL_LINK(SplitHdl, Splitter*, void);
-    void            DoHSplit(long nSplitPos);
-    void            DoVSplit(long nSplitPos);
+    void            DoHSplit(tools::Long nSplitPos);
+    void            DoVSplit(tools::Long nSplitPos);
 
     DECL_LINK( TimerHdl, Timer*, void );
 
     void            UpdateVarZoom();
 
-    static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
-    static long     GetScrollBarPos( const ScrollBar& rScroll );
+    static void     SetScrollBar( ScrollBar& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL );
+    static tools::Long     GetScrollBarPos( const ScrollBar& rScroll );
 
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                            SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
@@ -293,7 +293,7 @@ public:
 
     DECL_LINK( TabBarResize, ::TabBar*, void );
     /** Sets an absolute tab bar width (in pixels). */
-    void            SetTabBarWidth( long nNewWidth );
+    void            SetTabBarWidth( tools::Long nNewWidth );
     /** Sets a relative tab bar width.
         @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
     SC_DLLPUBLIC void            SetRelTabBarWidth( double fRelTabBarWidth );
@@ -301,7 +301,7 @@ public:
         @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
     void            SetPendingRelTabBarWidth( double fRelTabBarWidth );
     /** Returns the current tab bar width in pixels. */
-    long            GetTabBarWidth() const;
+    tools::Long            GetTabBarWidth() const;
     /** Returns the current tab bar width relative to the frame window width (0.0 ... 1.0). */
     SC_DLLPUBLIC static double   GetRelTabBarWidth();
     /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
@@ -386,8 +386,8 @@ public:
 
     void            CheckSelectionTransfer();
 
-    void            InvertHorizontal( ScVSplitPos eWhich, long nDragPos );
-    void            InvertVertical( ScHSplitPos eWhich, long nDragPos );
+    void            InvertHorizontal( ScVSplitPos eWhich, tools::Long nDragPos );
+    void            InvertVertical( ScHSplitPos eWhich, tools::Long nDragPos );
 
     Point           GetInsertPos() const;
 
@@ -448,9 +448,9 @@ public:
     void            SetTimer( ScGridWindow* pWin, const MouseEvent& rMEvt );
     void            ResetTimer();
 
-    void            ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars = true );
-    void            ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars = true );
-    SC_DLLPUBLIC void           ScrollLines( long nDeltaX, long nDeltaY );              // active
+    void            ScrollX( tools::Long nDeltaX, ScHSplitPos eWhich, bool bUpdBars = true );
+    void            ScrollY( tools::Long nDeltaY, ScVSplitPos eWhich, bool bUpdBars = true );
+    SC_DLLPUBLIC void           ScrollLines( tools::Long nDeltaX, tools::Long nDeltaY );              // active
 
     bool            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
@@ -486,15 +486,15 @@ public:
     void            CheckNeedsRepaint();
     bool            NeedsRepaint();
 
-    void            PaintRangeFinder( long nNumber );
+    void            PaintRangeFinder( tools::Long nNumber );
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 
     void            DoChartSelection( const css::uno::Sequence< css::chart2::data::HighlightedRange > & rHilightRanges );
     void            DoDPFieldPopup(OUString const & rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize);
 
-    long            GetGridWidth( ScHSplitPos eWhich );
-    long            GetGridHeight( ScVSplitPos eWhich );
+    tools::Long            GetGridWidth( ScHSplitPos eWhich );
+    tools::Long            GetGridHeight( ScVSplitPos eWhich );
 
     void            UpdateScrollBars( HeaderType eHeaderType = BOTH_HEADERS );
     void            SetNewVisArea();

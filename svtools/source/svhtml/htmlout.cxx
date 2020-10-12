@@ -669,7 +669,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                         static_cast<const IMapCircleObject *>(pObj);
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_circ;
                     Point aCenter( pCirc->GetCenter() );
-                    long nOff = pCirc->GetRadius();
+                    tools::Long nOff = pCirc->GetRadius();
 
                     aCoords = OStringBuffer()
                         .append(static_cast<sal_Int32>(aCenter.X()))

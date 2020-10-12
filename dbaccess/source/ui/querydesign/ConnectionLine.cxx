@@ -29,8 +29,8 @@
 #include <vcl/settings.hxx>
 
 using namespace dbaui;
-const long DESCRIPT_LINE_WIDTH = 15;
-const long HIT_SENSITIVE_RADIUS = 5;
+const tools::Long DESCRIPT_LINE_WIDTH = 15;
+const tools::Long HIT_SENSITIVE_RADIUS = 5;
 
 namespace
 {
@@ -55,7 +55,7 @@ namespace
         tools::Rectangle aReturn;
         if ( pListBox )
         {
-            const long nRowHeight = pListBox->get_widget().get_height_rows(1);
+            const tools::Long nRowHeight = pListBox->get_widget().get_height_rows(1);
             aReturn.SetTop( _aConnPos.Y() - nRowHeight );
             aReturn.SetBottom( aReturn.Top() + nRowHeight );
             if (_aDescrLinePos.X() < _aConnPos.X())
@@ -105,10 +105,10 @@ namespace
             else
             {
                 const auto nRowHeight = rTreeView.get_height_rows(1);
-                _rNewConPos.AdjustY( -static_cast<long>( 0.5 * nRowHeight ) );
+                _rNewConPos.AdjustY( -static_cast<tools::Long>( 0.5 * nRowHeight ) );
             }
 
-            long nListBoxBottom = _pWin->GetPosPixel().Y()
+            tools::Long nListBoxBottom = _pWin->GetPosPixel().Y()
                                     + pListBox->GetPosPixel().Y()
                                     + pListBox->GetSizePixel().Height();
             if( _rNewConPos.Y() > nListBoxBottom )
@@ -232,8 +232,8 @@ bool OConnectionLine::RecalcLine()
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
 
-    aSourceCenter.setX( pSourceWin->GetPosPixel().X() + static_cast<long>( 0.5*pSourceWin->GetSizePixel().Width() ) );
-    aDestCenter.setX( pDestWin->GetPosPixel().X() + static_cast<long>( 0.5*pDestWin->GetSizePixel().Width() ) );
+    aSourceCenter.setX( pSourceWin->GetPosPixel().X() + static_cast<tools::Long>( 0.5*pSourceWin->GetSizePixel().Width() ) );
+    aDestCenter.setX( pDestWin->GetPosPixel().X() + static_cast<tools::Long>( 0.5*pDestWin->GetSizePixel().Width() ) );
 
     const OTableWindow* pFirstWin   = pDestWin;
     const OTableWindow* pSecondWin  = pSourceWin;
@@ -311,8 +311,8 @@ static double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Poin
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);
-    q.setX( long(p1.X() + a * v.X()) );
-    q.setY( long(p1.Y() + a * v.Y()) );
+    q.setX( tools::Long(p1.X() + a * v.X()) );
+    q.setY( tools::Long(p1.Y() + a * v.Y()) );
     return l;
 }
 

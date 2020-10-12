@@ -398,21 +398,21 @@ void Edit::ApplySettings(vcl::RenderContext& rRenderContext)
     }
 }
 
-long Edit::ImplGetExtraXOffset() const
+tools::Long Edit::ImplGetExtraXOffset() const
 {
     // MT 09/2002: nExtraOffsetX should become a member, instead of checking every time,
     // but I need an incompatible update for this...
     // #94095# Use extra offset only when edit has a border
-    long nExtraOffset = 0;
+    tools::Long nExtraOffset = 0;
     if( ( GetStyle() & WB_BORDER ) || ( mbIsSubEdit && ( GetParent()->GetStyle() & WB_BORDER ) ) )
         nExtraOffset = 2;
 
     return nExtraOffset;
 }
 
-long Edit::ImplGetExtraYOffset() const
+tools::Long Edit::ImplGetExtraYOffset() const
 {
-    long nExtraOffset = 0;
+    tools::Long nExtraOffset = 0;
     ControlType eCtrlType = ImplGetNativeControlType();
     if (eCtrlType != ControlType::EditboxNoBorder)
     {
@@ -452,7 +452,7 @@ void Edit::ImplInvalidateOrRepaint()
         Invalidate();
 }
 
-long Edit::ImplGetTextYPosition() const
+tools::Long Edit::ImplGetTextYPosition() const
 {
     if ( GetStyle() & WB_TOP )
         return ImplGetExtraXOffset();
@@ -471,9 +471,9 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
     const OUString aText = ImplGetText();
     const sal_Int32 nLen = aText.getLength();
 
-    long nDXBuffer[256];
+    tools::Long nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
-    long* pDX = nDXBuffer;
+    tools::Long* pDX = nDXBuffer;
 
     if (nLen)
     {
@@ -486,7 +486,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const tools::Rectangl
         GetCaretPositions(aText, pDX, 0, nLen);
     }
 
-    long nTH = GetTextHeight();
+    tools::Long nTH = GetTextHeight();
     Point aPos(mnXOffset, ImplGetTextYPosition());
 
     vcl::Cursor* pCursor = GetCursor();
@@ -976,7 +976,7 @@ ControlType Edit::ImplGetNativeControlType() const
     return nCtrl;
 }
 
-void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd )
+void Edit::ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd )
 {
     /*
     * note: at this point the cursor must be switched off already
@@ -1065,11 +1065,11 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     vcl::Cursor* pCursor = GetCursor();
     OUString aText = ImplGetText();
 
-    long nTextPos = 0;
+    tools::Long nTextPos = 0;
 
-    long   nDXBuffer[256];
+    tools::Long   nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
-    long*  pDX = nDXBuffer;
+    tools::Long*  pDX = nDXBuffer;
 
     if( !aText.isEmpty() )
     {
@@ -1087,21 +1087,21 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             nTextPos = pDX[ 2*aText.getLength()-1 ];
     }
 
-    long nCursorWidth = 0;
+    tools::Long nCursorWidth = 0;
     if ( !mbInsertMode && !maSelection.Len() && (maSelection.Max() < aText.getLength()) )
         nCursorWidth = GetTextWidth(aText, maSelection.Max(), 1);
-    long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
+    tools::Long nCursorPosX = nTextPos + mnXOffset + ImplGetExtraXOffset();
 
     // cursor should land in visible area
     const Size aOutSize = GetOutputSizePixel();
     if ( (nCursorPosX < 0) || (nCursorPosX >= aOutSize.Width()) )
     {
-        long nOldXOffset = mnXOffset;
+        tools::Long nOldXOffset = mnXOffset;
 
         if ( nCursorPosX < 0 )
         {
             mnXOffset = - nTextPos;
-            long nMaxX = 0;
+            tools::Long nMaxX = 0;
             mnXOffset += aOutSize.Width() / 5;
             if ( mnXOffset > nMaxX )
                 mnXOffset = nMaxX;
@@ -1112,7 +1112,7 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             // Something more?
             if ( (aOutSize.Width()-ImplGetExtraXOffset()) < nTextPos )
             {
-                long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
+                tools::Long nMaxNegX = (aOutSize.Width()-ImplGetExtraXOffset()) - GetTextWidth( aText );
                 mnXOffset -= aOutSize.Width() / 5;
                 if ( mnXOffset < nMaxNegX )  // both negative...
                     mnXOffset = nMaxNegX;
@@ -1127,8 +1127,8 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
             ImplInvalidateOrRepaint();
     }
 
-    const long nTextHeight = GetTextHeight();
-    const long nCursorPosY = ImplGetTextYPosition();
+    const tools::Long nTextHeight = GetTextHeight();
+    const tools::Long nCursorPosY = ImplGetTextYPosition();
     if (pCursor)
     {
         pCursor->SetPos( Point( nCursorPosX, nCursorPosY ) );
@@ -1145,8 +1145,8 @@ void Edit::ImplAlign()
         return;
     }
 
-    long nTextWidth = GetTextWidth( ImplGetText() );
-    long nOutWidth = GetOutputSizePixel().Width();
+    tools::Long nTextWidth = GetTextWidth( ImplGetText() );
+    tools::Long nOutWidth = GetOutputSizePixel().Width();
 
     if ( mnAlign == EDIT_ALIGN_LEFT )
     {
@@ -1155,7 +1155,7 @@ void Edit::ImplAlign()
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
-        long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraXOffset();
+        tools::Long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraXOffset();
         bool bRTL = IsRTLEnabled();
         if( mbIsSubEdit && GetParent() )
             bRTL = GetParent()->IsRTLEnabled();
@@ -1191,9 +1191,9 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     sal_Int32 nIndex = EDIT_NOLIMIT;
     OUString aText = ImplGetText();
 
-    long   nDXBuffer[256];
+    tools::Long   nDXBuffer[256];
     std::unique_ptr<long[]> pDXBuffer;
-    long*  pDX = nDXBuffer;
+    tools::Long*  pDX = nDXBuffer;
     if( o3tl::make_unsigned(2*aText.getLength()) > SAL_N_ELEMENTS(nDXBuffer) )
     {
         pDXBuffer.reset(new long[2*(aText.getLength()+1)]);
@@ -1201,7 +1201,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     }
 
     GetCaretPositions( aText, pDX, 0, aText.getLength() );
-    long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
+    tools::Long nX = rWindowPos.X() - mnXOffset - ImplGetExtraXOffset();
     for (sal_Int32 i = 0; i < aText.getLength(); aText.iterateCodePoints(&i))
     {
         if( (pDX[2*i] >= nX && pDX[2*i+1] <= nX) ||
@@ -1225,7 +1225,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
     {
         nIndex = 0;
         sal_Int32 nFinalIndex = 0;
-        long nDiff = std::abs( pDX[0]-nX );
+        tools::Long nDiff = std::abs( pDX[0]-nX );
         sal_Int32 i = 0;
         if (!aText.isEmpty())
         {
@@ -1233,7 +1233,7 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         }
         while (i < aText.getLength())
         {
-            long nNewDiff = std::abs( pDX[2*i]-nX );
+            tools::Long nNewDiff = std::abs( pDX[2*i]-nX );
 
             if( nNewDiff < nDiff )
             {
@@ -1786,8 +1786,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
         }
     }
 
-    const long nOnePixel = GetDrawPixel( pDev, 1 );
-    const long nOffX = 3*nOnePixel;
+    const tools::Long nOnePixel = GetDrawPixel( pDev, 1 );
+    const tools::Long nOffX = 3*nOnePixel;
     DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
     tools::Rectangle aTextRect( aPos, aSize );
 
@@ -1802,9 +1802,9 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     aTextRect.AdjustRight( -nOffX );
 
     OUString    aText = ImplGetText();
-    long        nTextHeight = pDev->GetTextHeight();
-    long        nTextWidth = pDev->GetTextWidth( aText );
-    long        nOffY = (aSize.Height() - nTextHeight) / 2;
+    tools::Long        nTextHeight = pDev->GetTextHeight();
+    tools::Long        nTextWidth = pDev->GetTextWidth( aText );
+    tools::Long        nOffY = (aSize.Height() - nTextHeight) / 2;
 
     // Clipping?
     if ( (nOffY < 0) ||
@@ -2130,9 +2130,9 @@ void Edit::Command( const CommandEvent& rCEvt )
         if (mpIMEInfos && mpIMEInfos->nLen > 0)
         {
             OUString aText = ImplGetText();
-            long   nDXBuffer[256];
+            tools::Long   nDXBuffer[256];
             std::unique_ptr<long[]> pDXBuffer;
-            long*  pDX = nDXBuffer;
+            tools::Long*  pDX = nDXBuffer;
 
             if( !aText.isEmpty() )
             {
@@ -2144,7 +2144,7 @@ void Edit::Command( const CommandEvent& rCEvt )
 
                 GetCaretPositions( aText, pDX, 0, aText.getLength() );
             }
-            long    nTH = GetTextHeight();
+            tools::Long    nTH = GetTextHeight();
             Point   aPos( mnXOffset, ImplGetTextYPosition() );
 
             std::unique_ptr<tools::Rectangle[]> aRects(new tools::Rectangle[ mpIMEInfos->nLen ]);
@@ -2264,8 +2264,8 @@ void Edit::ImplShowDDCursor()
 {
     if (!mpDDInfo->bVisCursor)
     {
-        long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
-        long nTextHeight = GetTextHeight();
+        tools::Long nTextWidth = GetTextWidth( maText.toString(), 0, mpDDInfo->nDropPos );
+        tools::Long nTextHeight = GetTextHeight();
         tools::Rectangle aCursorRect( Point( nTextWidth + mnXOffset, (GetOutputSize().Height()-nTextHeight)/2 ), Size( 2, nTextHeight ) );
         mpDDInfo->aCursor.SetWindow( this );
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
@@ -2444,8 +2444,8 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 ImplShowCursor();
 
                 bool bCaret = false, bSelection = false;
-                long nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
-                long nGap = nB-nA, oGap = oB-oA;
+                tools::Long nB=aNew.Max(), nA=aNew.Min(),oB=aTemp.Max(), oA=aTemp.Min();
+                tools::Long nGap = nB-nA, oGap = oB-oA;
                 if (nB != oB)
                     bCaret = true;
                 if (nGap != 0 || oGap != 0)
@@ -2777,7 +2777,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
         {
             if ( aSel.Max() > mpDDInfo->nDropPos )
             {
-                long nLen = aSel.Len();
+                tools::Long nLen = aSel.Len();
                 aSel.Min() += nLen;
                 aSel.Max() += nLen;
             }

@@ -22,6 +22,7 @@
 
 #include "types.hxx"
 #include <sal/types.h>
+#include <tools/long.hxx>
 
 class ScDocument;
 namespace com::sun::star::uno { template <typename > class Reference; }
@@ -42,8 +43,8 @@ public:
     };
     static void PutData( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const css::uno::Reference< css::sdbc::XRow>& xRow,
-                        long nRowPos,
-                        long nType, bool bCurrency, StrData* pStrData = nullptr );
+                        tools::Long nRowPos,
+                        tools::Long nType, bool bCurrency, StrData* pStrData = nullptr );
 };
 
 #endif

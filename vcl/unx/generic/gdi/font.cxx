@@ -94,12 +94,12 @@ bool X11SalGraphics::CreateFontSubset(
             pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const void* X11SalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* X11SalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return mxTextRenderImpl->GetEmbedFontData(pFont, pDataLen);
 }
 
-void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+void X11SalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
     mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }

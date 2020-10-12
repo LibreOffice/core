@@ -1500,8 +1500,8 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             else
             {
                 nUpper = bContextualSpacing ? 0 : std::max(
-                                bHalfContextualSpacingPrev ? 0 : static_cast<long>(nPrevLowerSpace),
-                                bHalfContextualSpacing     ? 0 : static_cast<long>(pAttrs->GetULSpace().GetUpper()) );
+                                bHalfContextualSpacingPrev ? 0 : static_cast<tools::Long>(nPrevLowerSpace),
+                                bHalfContextualSpacing     ? 0 : static_cast<tools::Long>(pAttrs->GetULSpace().GetUpper()) );
 
                 // i#11859 - consideration of the line spacing
                 //      for the upper spacing of a text frame
@@ -1589,7 +1589,7 @@ SwTwips SwFlowFrame::GetUpperSpaceAmountConsideredForPageGrid_(
             const SwFrame* pBodyFrame = pPageFrame->FindBodyCont();
             if ( pBodyFrame )
             {
-                const long nGridLineHeight =
+                const tools::Long nGridLineHeight =
                         pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
 
                 SwRectFnSet aRectFnSet(&m_rThis);
@@ -2170,7 +2170,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
                     !pFlow->IsInDocBody() ) );
         if ( pFlow )
         {
-            long nDiff = pOldPage->GetPhyPageNum() - pFlow->GetPhyPageNum();
+            tools::Long nDiff = pOldPage->GetPhyPageNum() - pFlow->GetPhyPageNum();
             if ( nDiff > 1 )
             {
                 if ( static_cast<SwPageFrame*>(pOldPage->GetPrev())->IsEmptyPage() )

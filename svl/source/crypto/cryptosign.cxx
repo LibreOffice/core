@@ -1099,7 +1099,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             return false;
         }
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, static_cast<long>(timestamp_request->len))) != CURLE_OK ||
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, static_cast<tools::Long>(timestamp_request->len))) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
             SAL_WARN("svl.crypto", "curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));

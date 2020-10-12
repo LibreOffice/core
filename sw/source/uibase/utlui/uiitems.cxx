@@ -86,7 +86,7 @@ bool SwPageFootnoteInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         {
             Fraction aTmp( 100, 1 );
             aTmp *= aFootnoteInfo.GetWidth();
-            rVal <<= static_cast<sal_Int8>(static_cast<long>(aTmp));
+            rVal <<= static_cast<sal_Int8>(static_cast<tools::Long>(aTmp));
         }
         break;
         case MID_LINE_ADJUST       :     rVal <<= static_cast<sal_Int16>(aFootnoteInfo.GetAdj());break;//text::HorizontalAdjust

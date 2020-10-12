@@ -148,7 +148,7 @@ void X11SalFrame::setXEmbedInfo()
     if( !m_bXEmbed )
         return;
 
-    long aInfo[2];
+    tools::Long aInfo[2];
     aInfo[0] = 1; // XEMBED protocol version
     aInfo[1] = (bMapped_ ? 1 : 0); // XEMBED_MAPPED
     XChangeProperty( pDisplay_->GetDisplay(),
@@ -1112,7 +1112,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 
 }
 
-void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void X11SalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     if(  IsChildWindow() )
         return;
@@ -1122,7 +1122,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
         return;
 
     XSizeHints* pHints = XAllocSizeHints();
-    long nSupplied = 0;
+    tools::Long nSupplied = 0;
     XGetWMNormalHints( GetXDisplay(),
                        GetShellWindow(),
                        pHints,
@@ -1137,7 +1137,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
     XFree( pHints );
 }
 
-void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
+void X11SalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     if(  IsChildWindow() )
         return;
@@ -1147,7 +1147,7 @@ void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
         return;
 
     XSizeHints* pHints = XAllocSizeHints();
-    long nSupplied = 0;
+    tools::Long nSupplied = 0;
     XGetWMNormalHints( GetXDisplay(),
                        GetShellWindow(),
                        pHints,
@@ -1425,7 +1425,7 @@ void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
 
-void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
+void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
 {
     if( ! bViewable_  )
     {
@@ -1582,7 +1582,7 @@ void X11SalFrame::updateScreenNumber()
         maGeometry.nDisplayScreenNumber = m_nXScreen.getXScreen();
 }
 
-void X11SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void X11SalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
 {
     if( nStyle_ & SalFrameStyleFlags::PLUG )
         return;
@@ -1663,7 +1663,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             )
         {
             XSizeHints* pHints = XAllocSizeHints();
-            long nSupplied = 0;
+            tools::Long nSupplied = 0;
             XGetWMNormalHints( GetXDisplay(),
                                GetShellWindow(),
                                pHints,
@@ -1706,7 +1706,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             }
             if (pState->mnMask & WindowStateMask::Width)
             {
-                long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
+                tools::Long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
                 aPosSize.setWidth (nWidth);
                 bDoAdjust = true;
             }
@@ -1741,14 +1741,14 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                 }
 
                 // adjust position so that frame fits onto screen
-                if( aPosSize.Right()+static_cast<long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
-                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - static_cast<long>(aGeom.nRightDecoration), 0 );
-                if( aPosSize.Bottom()+static_cast<long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
-                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - static_cast<long>(aGeom.nBottomDecoration) );
-                if( aPosSize.Left() < static_cast<long>(aGeom.nLeftDecoration) )
-                    aPosSize.Move( static_cast<long>(aGeom.nLeftDecoration) - aPosSize.Left(), 0 );
-                if( aPosSize.Top() < static_cast<long>(aGeom.nTopDecoration) )
-                    aPosSize.Move( 0, static_cast<long>(aGeom.nTopDecoration) - aPosSize.Top() );
+                if( aPosSize.Right()+static_cast<tools::Long>(aGeom.nRightDecoration) > aScreenSize.Width()-1 )
+                    aPosSize.Move( aScreenSize.Width() - aPosSize.Right() - static_cast<tools::Long>(aGeom.nRightDecoration), 0 );
+                if( aPosSize.Bottom()+static_cast<tools::Long>(aGeom.nBottomDecoration) > aScreenSize.Height()-1 )
+                    aPosSize.Move( 0, aScreenSize.Height() - aPosSize.Bottom() - static_cast<tools::Long>(aGeom.nBottomDecoration) );
+                if( aPosSize.Left() < static_cast<tools::Long>(aGeom.nLeftDecoration) )
+                    aPosSize.Move( static_cast<tools::Long>(aGeom.nLeftDecoration) - aPosSize.Left(), 0 );
+                if( aPosSize.Top() < static_cast<tools::Long>(aGeom.nTopDecoration) )
+                    aPosSize.Move( 0, static_cast<tools::Long>(aGeom.nTopDecoration) - aPosSize.Top() );
             }
 
             SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
@@ -1848,8 +1848,8 @@ void X11SalFrame::GetPosSize( tools::Rectangle &rPosSize )
     if( maGeometry.nWidth < 1 || maGeometry.nHeight < 1 )
     {
         const Size& aScreenSize = pDisplay_->getDataForScreen( m_nXScreen ).m_aSize;
-        long w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
-        long h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
+        tools::Long w = aScreenSize.Width()  - maGeometry.nLeftDecoration - maGeometry.nRightDecoration;
+        tools::Long h = aScreenSize.Height() - maGeometry.nTopDecoration - maGeometry.nBottomDecoration;
 
         rPosSize = tools::Rectangle( Point( maGeometry.nX, maGeometry.nY ), Size( w, h ) );
     }
@@ -1868,7 +1868,7 @@ void X11SalFrame::SetSize( const Size &rSize )
         && ( nStyle_ & (SalFrameStyleFlags::FLOAT|SalFrameStyleFlags::OWNERDRAWDECORATION) ) != SalFrameStyleFlags::FLOAT )
     {
         XSizeHints* pHints = XAllocSizeHints();
-        long nSupplied = 0;
+        tools::Long nSupplied = 0;
         XGetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints,
@@ -1948,7 +1948,7 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
         )
     {
         XSizeHints* pHints = XAllocSizeHints();
-        long nSupplied = 0;
+        tools::Long nSupplied = 0;
         XGetWMNormalHints( GetXDisplay(),
                            GetShellWindow(),
                            pHints,
@@ -2239,7 +2239,7 @@ void X11SalFrame::SetPointer( PointerStyle ePointerStyle )
                         CurrentTime );
 }
 
-void X11SalFrame::SetPointerPos(long nX, long nY)
+void X11SalFrame::SetPointerPos(tools::Long nX, tools::Long nY)
 {
     /* when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
@@ -4078,7 +4078,7 @@ void X11SalFrame::BeginSetClipRegion( sal_uInt32 /*nRects*/ )
     m_vClipRectangles.clear();
 }
 
-void X11SalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void X11SalFrame::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     m_vClipRectangles.emplace_back( XRectangle { static_cast<short>(nX), static_cast<short>(nY),
                                                  static_cast<unsigned short>(nWidth), static_cast<unsigned short>(nHeight) } );

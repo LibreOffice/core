@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
+#include <tools/long.hxx>
 #include <ostream>
 #include <type_traits>
 
@@ -53,7 +54,7 @@ public:
 
     explicit operator sal_Int32() const;
 #if SAL_TYPES_SIZEOFLONG == 8
-    explicit operator long() const { return sal_Int32(*this); }
+    explicit operator ::tools::Long() const { return sal_Int32(*this); }
 #endif
     explicit operator double() const;
 

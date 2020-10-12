@@ -285,8 +285,8 @@ public:
     static void     SetAutoComplete(bool bSet)  { bAutoComplete = bSet; }
 
     static ReferenceMark GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
-                                    long nX1, long nX2, long nY1, long nY2,
-                                    long nTab, const Color& rColor );
+                                    tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,
+                                    tools::Long nTab, const Color& rColor );
 
     void            LOKPasteFunctionData(const OUString& rFunctionName);
 };

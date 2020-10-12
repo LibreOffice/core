@@ -1001,7 +1001,7 @@ mm/100    mm    cm       m     km  twip point  pica  inch    foot       mile    
 #undef M
 #undef K
 
-static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
+static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, tools::Long& nDecDigits )
 {
     switch( meUnit )
     {
@@ -1076,7 +1076,7 @@ bool checkConversionUnits(MapUnit eInUnit, FieldUnit eOutUnit)
         && eInUnit != MapUnit::MapRelative;
 }
 
-double convertValue( double nValue, long nDigits, FieldUnit eInUnit, FieldUnit eOutUnit )
+double convertValue( double nValue, tools::Long nDigits, FieldUnit eInUnit, FieldUnit eOutUnit )
 {
     if ( nDigits < 0 )
     {
@@ -1124,7 +1124,7 @@ namespace vcl
             return nValue;
         }
 
-        long nDecDigits = nDigits;
+        tools::Long nDecDigits = nDigits;
         FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
 
         // Avoid sal_Int64 <-> double conversion issues if possible:
@@ -1201,7 +1201,7 @@ namespace vcl
             return nValue;
         }
 
-        long nDecDigits = nDigits;
+        tools::Long nDecDigits = nDigits;
         FieldUnit eFieldUnit = ImplMap2FieldUnit( eInUnit, nDecDigits );
 
         return convertValue(nValue, nDecDigits, eFieldUnit, eOutUnit);
@@ -1226,7 +1226,7 @@ namespace vcl
             return nValue;
         }
 
-        long nDecDigits = nDigits;
+        tools::Long nDecDigits = nDigits;
         FieldUnit eFieldUnit = ImplMap2FieldUnit( eOutUnit, nDecDigits );
 
         if ( nDecDigits < 0 )

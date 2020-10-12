@@ -22,6 +22,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <tools/ref.hxx>
+#include <tools/long.hxx>
 #include "xlconst.hxx"
 #include <memory>
 
@@ -103,7 +104,7 @@ struct XclRootData
 
     double              mfScreenPixelX;     /// Width of a screen pixel (1/100 mm).
     double              mfScreenPixelY;     /// Height of a screen pixel (1/100 mm).
-    long                mnCharWidth;        /// Width of '0' in default font (twips).
+    tools::Long                mnCharWidth;        /// Width of '0' in default font (twips).
     SCTAB               mnScTab;            /// Current Calc sheet index.
     const bool          mbExport;           /// false = Import, true = Export.
 
@@ -153,7 +154,7 @@ public:
     /** Returns the default script type, e.g. for blank cells. */
     sal_Int16    GetDefApiScript() const { return mrData.mnDefApiScript; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
-    long         GetCharWidth() const { return mrData.mnCharWidth; }
+    tools::Long         GetCharWidth() const { return mrData.mnCharWidth; }
     /** Returns the current Calc sheet index. */
     bool         IsInGlobals() const { return mrData.mnScTab == SCTAB_GLOBAL; }
     /** Returns the current Calc sheet index. */

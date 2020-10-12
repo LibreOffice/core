@@ -69,8 +69,8 @@ void SdrUIObject::execute(const OUString& rAction,
         if (itrNY == rParameters.end())
             throw css::uno::RuntimeException("missing parameter Y");
 
-        long nX = itrNX->second.toInt32();
-        long nY = itrNY->second.toInt32();
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
         Size aMoveRange(nX, nY);
         pObj->Move(aMoveRange);
     }
@@ -84,8 +84,8 @@ void SdrUIObject::execute(const OUString& rAction,
         if (itrNY == rParameters.end())
             throw css::uno::RuntimeException("missing parameter Y");
 
-        long nX = itrNX->second.toInt32();
-        long nY = itrNY->second.toInt32();
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
         Point aPos(nX, nY);
 
         auto itrFracX = rParameters.find("FRAC_X");
@@ -139,8 +139,8 @@ void SdrUIObject::execute(const OUString& rAction,
         if (itrNY == rParameters.end())
             throw css::uno::RuntimeException("missing parameter Y");
 
-        long nX = itrNX->second.toInt32();
-        long nY = itrNY->second.toInt32();
+        tools::Long nX = itrNX->second.toInt32();
+        tools::Long nY = itrNY->second.toInt32();
         Point aPos(nX, nY);
 
         auto itrAngle = rParameters.find("ANGLE");

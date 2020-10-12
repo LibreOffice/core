@@ -875,7 +875,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
 
     // rotation
-    long nAngle = rTextObj.GetRotateAngle();
+    tools::Long nAngle = rTextObj.GetRotateAngle();
     if( (4500 < nAngle) && (nAngle < 13500) )
         mnRotation = EXC_OBJ_ORIENT_90CCW;
     else if( (22500 < nAngle) && (nAngle < 31500) )

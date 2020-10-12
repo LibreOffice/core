@@ -720,7 +720,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction const & rAct)
         *mpModel,
         rAct.GetRect());
     SetAttributes(pRect);
-    long nRad=(rAct.GetHorzRound()+rAct.GetVertRound())/2;
+    tools::Long nRad=(rAct.GetHorzRound()+rAct.GetVertRound())/2;
     if (nRad!=0) {
         SfxItemSet aSet(*mpLineAttr->GetPool(), svl::Items<SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS>{});
         aSet.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRad));
@@ -742,8 +742,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Arc,
@@ -755,8 +755,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaArcAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Section,
@@ -770,8 +770,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPieAction const & rAct)
 void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction const & rAct)
 {
     Point aCenter(rAct.GetRect().Center());
-    long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
-    long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
+    tools::Long nStart=GetAngle(rAct.GetStartPoint()-aCenter);
+    tools::Long nEnd=GetAngle(rAct.GetEndPoint()-aCenter);
     SdrCircObj* pCirc = new SdrCircObj(
         *mpModel,
         SdrCircKind::Cut,

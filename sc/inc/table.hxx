@@ -786,7 +786,7 @@ public:
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
         ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
 
-    long        GetNeededSize( SCCOL nCol, SCROW nRow,
+    tools::Long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
                                     const Fraction& rZoomX, const Fraction& rZoomY,

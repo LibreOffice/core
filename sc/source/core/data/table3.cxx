@@ -2748,7 +2748,7 @@ bool ScTable::ValidQuery(
     bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new bool[nEntryCount] );
     bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new bool[nEntryCount] );
 
-    long    nPos = -1;
+    tools::Long    nPos = -1;
     QueryEvaluator aEval(rDocument, *this, rParam, pbTestEqualCondition != nullptr);
     ScQueryParam::const_iterator it, itBeg = rParam.begin(), itEnd = rParam.end();
     for (it = itBeg; it != itEnd && (*it)->bDoQuery; ++it)
@@ -2843,7 +2843,7 @@ bool ScTable::ValidQuery(
         }
     }
 
-    for ( long j=1; j <= nPos; j++ )
+    for ( tools::Long j=1; j <= nPos; j++ )
     {
         pPasst[0] = pPasst[0] || pPasst[j];
         pTest[0] = pTest[0] || pTest[j];

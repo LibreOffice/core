@@ -317,12 +317,12 @@ private:
 
     OUString        maEditText;
     Size            maWinSize;
-    long            mnMaxPageWidth;
-    long            mnCurMaxWidth;
-    long            mnOffX;
-    long            mnOffY;
-    long            mnLastOffX;
-    long            mnSplitSize;
+    tools::Long            mnMaxPageWidth;
+    tools::Long            mnCurMaxWidth;
+    tools::Long            mnOffX;
+    tools::Long            mnOffY;
+    tools::Long            mnLastOffX;
+    tools::Long            mnSplitSize;
     sal_uInt64      mnSwitchTime;
     WinBits         mnWinStyle;
     sal_uInt16      mnCurPageId;
@@ -441,7 +441,7 @@ public:
     bool            IsPageSelected( sal_uInt16 nPageId ) const;
     void            SetProtectionSymbol( sal_uInt16 nPageId, bool bProtection );
 
-    void            SetMaxPageWidth( long nMaxWidth );
+    void            SetMaxPageWidth( tools::Long nMaxWidth );
 
     void            EnableEditMode() { mbAutoEditMode = true; }
     bool            StartEditMode( sal_uInt16 nPageId );
@@ -478,7 +478,7 @@ public:
     OUString        GetPageText( sal_uInt16 nPageId ) const;
     OUString        GetHelpText( sal_uInt16 nPageId ) const;
 
-    long            GetSplitSize() const { return mnSplitSize; }
+    tools::Long            GetSplitSize() const { return mnSplitSize; }
 
     using Window::SetHelpText;
     using Window::GetHelpText;

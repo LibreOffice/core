@@ -293,7 +293,7 @@ protected:
     virtual SdrObjGeoData* NewGeoData() const override;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) override;
-    void NbcSetEckenradius(long nRad);
+    void NbcSetEckenradius(tools::Long nRad);
 
     // #115391# new method for SdrObjCustomShape and SdrTextObj to correctly handle and set
     // SdrTextMinFrameWidthItem and SdrTextMinFrameHeightItem based on all settings, necessities
@@ -399,13 +399,13 @@ public:
     const GeoStat& GetGeoStat() const { return aGeo; }
 
     // get corner radius
-    long GetEckenradius() const;
+    tools::Long GetEckenradius() const;
     virtual bool IsAutoGrowHeight() const;
-    long GetMinTextFrameHeight() const;
-    long GetMaxTextFrameHeight() const;
+    tools::Long GetMinTextFrameHeight() const;
+    tools::Long GetMaxTextFrameHeight() const;
     virtual bool IsAutoGrowWidth() const;
-    long GetMinTextFrameWidth() const;
-    long GetMaxTextFrameWidth() const;
+    tools::Long GetMinTextFrameWidth() const;
+    tools::Long GetMaxTextFrameWidth() const;
 
     css::drawing::TextFitToSizeType GetFitToSize() const;
     const tools::Rectangle &GetGeoRect() const;
@@ -426,13 +426,13 @@ public:
     SdrTextVertAdjust GetTextVerticalAdjust() const;
 
     /** Left inner spacing to borders  */
-    long GetTextLeftDistance() const;
+    tools::Long GetTextLeftDistance() const;
     /** Right inner spacing to borders  */
-    long GetTextRightDistance() const;
+    tools::Long GetTextRightDistance() const;
     /** Top inner spacing to borders */
-    long GetTextUpperDistance() const;
+    tools::Long GetTextUpperDistance() const;
     /** Bottom inner spacing to borders */
-    long GetTextLowerDistance() const;
+    tools::Long GetTextLowerDistance() const;
     SdrTextAniKind GetTextAniKind() const;
     SdrTextAniDirection GetTextAniDirection() const;
 
@@ -454,8 +454,8 @@ public:
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
     virtual const tools::Rectangle& GetLogicRect() const override;
-    virtual long GetRotateAngle() const override;
-    virtual long GetShearAngle(bool bVertical = false) const override;
+    virtual tools::Long GetRotateAngle() const override;
+    virtual tools::Long GetShearAngle(bool bVertical = false) const override;
 
     virtual sal_uInt32 GetSnapPointCount() const override;
     virtual Point GetSnapPoint(sal_uInt32 i) const override;
@@ -478,9 +478,9 @@ public:
 
     virtual void NbcMove(const Size& rSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
 
     virtual bool HasTextEdit() const override;
     // returns true if TextEditMode started

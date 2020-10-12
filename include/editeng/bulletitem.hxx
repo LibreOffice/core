@@ -52,7 +52,7 @@ class EDITENG_DLLPUBLIC SvxBulletItem final : public SfxPoolItem
     OUString        aFollowText;
     sal_uInt16      nStart;
     SvxBulletStyle  nStyle;
-    long            nWidth;
+    tools::Long            nWidth;
     sal_uInt16      nScale;
     sal_Unicode     cSymbol;
 
@@ -65,7 +65,7 @@ public:
 
     OUString            GetFullText() const;
 
-    long                GetWidth() const { return nWidth; }
+    tools::Long                GetWidth() const { return nWidth; }
     const vcl::Font&    GetFont() const { return aFont; }
 
     const GraphicObject& GetGraphicObject() const;
@@ -74,7 +74,7 @@ public:
     void                SetSymbol( sal_Unicode c) { cSymbol = c; }
 
     void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
-    void                SetWidth( long nNew ) { nWidth = nNew; }
+    void                SetWidth( tools::Long nNew ) { nWidth = nNew; }
     void                SetStyle( SvxBulletStyle nNew ) { nStyle = nNew; }
     void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }

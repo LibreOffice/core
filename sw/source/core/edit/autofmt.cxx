@@ -1858,7 +1858,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
         SwTextFrameInfo aFInfo( m_pCurTextFrame );
         const SwTextFrame * pNextFrame = GetNextNode();
         while (CanJoin(pNextFrame) &&
-                20 < std::abs( static_cast<long>(nSpaces - aFInfo.SetFrame(
+                20 < std::abs( static_cast<tools::Long>(nSpaces - aFInfo.SetFrame(
                                 EnsureFormatted(*pNextFrame)).GetLineStart()) )
             )
         {

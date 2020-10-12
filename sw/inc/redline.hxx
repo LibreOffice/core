@@ -261,7 +261,7 @@ public:
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
-    void MaybeNotifyRedlinePositionModification(long nTop);
+    void MaybeNotifyRedlinePositionModification(tools::Long nTop);
 };
 
 void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc);

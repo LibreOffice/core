@@ -319,8 +319,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             if (SfxItemState::SET == rSet.GetAttrSet().GetItemState( aFntHeightIem, false, &pItem ))
             {
                 sal_uInt32 nHeight  = static_cast<const SvxFontHeightItem*>(pItem)->GetHeight();
-                long nNewHeight;
-                nNewHeight = OutputDevice::LogicToLogic( static_cast<long>(nHeight), gRTFMapUnit, eDestUnit );
+                tools::Long nNewHeight;
+                nNewHeight = OutputDevice::LogicToLogic( static_cast<tools::Long>(nHeight), gRTFMapUnit, eDestUnit );
 
                 SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIem );
                 aFntHeightItem.SetProp(
@@ -334,8 +334,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     if( SfxItemState::SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, false, &pItem ))
     {
         // the correct one
-        long nEsc = static_cast<const SvxEscapementItem*>(pItem)->GetEsc();
-        long nEscFontHeight = 0;
+        tools::Long nEsc = static_cast<const SvxEscapementItem*>(pItem)->GetEsc();
+        tools::Long nEscFontHeight = 0;
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
         {
             nEsc *= 10; //HalfPoints => Twips was embezzled in RTFITEM.CXX!

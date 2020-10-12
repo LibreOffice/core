@@ -88,7 +88,7 @@ void OTabFieldSizedUndoAct::Undo()
     if ( m_nColumnPosition != BROWSER_INVALIDID )
     {
         sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPosition);
-        long nNextWidth = pOwner->GetColumnWidth(nColumnId);
+        tools::Long nNextWidth = pOwner->GetColumnWidth(nColumnId);
         pOwner->SetColWidth(nColumnId, m_nNextWidth);
         m_nNextWidth = nNextWidth;
     }

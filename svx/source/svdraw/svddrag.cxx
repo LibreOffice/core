@@ -86,9 +86,9 @@ void SdrDragStat::PrevPoint()
 bool SdrDragStat::CheckMinMoved(const Point& rPnt)
 {
     if (!bMinMoved) {
-        long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
-        long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
-        if (dx>=long(nMinMov) || dy>=long(nMinMov))
+        tools::Long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
+        tools::Long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
+        if (dx>=tools::Long(nMinMov) || dy>=tools::Long(nMinMov))
             bMinMoved=true;
     }
     return bMinMoved;
@@ -96,8 +96,8 @@ bool SdrDragStat::CheckMinMoved(const Point& rPnt)
 
 Fraction SdrDragStat::GetXFact() const
 {
-    long nMul=mvPnts.back().X()-aRef1.X();
-    long nDiv=GetPrev().X()-aRef1.X();
+    tools::Long nMul=mvPnts.back().X()-aRef1.X();
+    tools::Long nDiv=GetPrev().X()-aRef1.X();
     if (nDiv==0) nDiv=1;
     if (bHorFixed) { nMul=1; nDiv=1; }
     return Fraction(nMul,nDiv);
@@ -105,8 +105,8 @@ Fraction SdrDragStat::GetXFact() const
 
 Fraction SdrDragStat::GetYFact() const
 {
-    long nMul=mvPnts.back().Y()-aRef1.Y();
-    long nDiv=GetPrev().Y()-aRef1.Y();
+    tools::Long nMul=mvPnts.back().Y()-aRef1.Y();
+    tools::Long nDiv=GetPrev().Y()-aRef1.Y();
     if (nDiv==0) nDiv=1;
     if (bVerFixed) { nMul=1; nDiv=1; }
     return Fraction(nMul,nDiv);

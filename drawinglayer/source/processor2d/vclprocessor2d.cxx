@@ -290,7 +290,8 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
             sal_Int32 nPos = rTextCandidate.getTextPosition();
             sal_Int32 nLen = rTextCandidate.getTextLength();
 
-            long* pDXArray = !aTransformedDXArray.empty() ? aTransformedDXArray.data() : nullptr;
+            tools::Long* pDXArray
+                = !aTransformedDXArray.empty() ? aTransformedDXArray.data() : nullptr;
 
             if (rTextCandidate.isFilled())
             {
@@ -299,12 +300,12 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
                 rTextCandidate.getTextTransform().decompose(aOldFontScaling, aOldTranslate,
                                                             fOldRotate, fOldShearX);
 
-                long nWidthToFill = static_cast<long>(
+                tools::Long nWidthToFill = static_cast<tools::Long>(
                     rTextCandidate.getWidthToFill() * aFontScaling.getX() / aOldFontScaling.getX());
 
-                long nWidth
+                tools::Long nWidth
                     = mpOutputDevice->GetTextArray(rTextCandidate.getText(), pDXArray, 0, 1);
-                long nChars = 2;
+                tools::Long nChars = 2;
                 if (nWidth)
                     nChars = nWidthToFill / nWidth;
 

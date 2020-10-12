@@ -137,7 +137,7 @@ void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
     }
     else
     {
-        long aOldHeight = mpAnnotationWindow->GetPostItTextHeight();
+        ::tools::Long aOldHeight = mpAnnotationWindow->GetPostItTextHeight();
         bool bDone = false;
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner
@@ -341,7 +341,7 @@ void AnnotationWindow::Rescale()
     if ( mpMeta )
     {
         vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetLabelFont() );
-        sal_Int32 nHeight = long(aFont.GetFontHeight() * aMode.GetScaleY());
+        sal_Int32 nHeight = ::tools::Long(aFont.GetFontHeight() * aMode.GetScaleY());
         aFont.SetFontHeight( nHeight );
         mpMeta->SetControlFont( aFont );
     }
@@ -350,10 +350,10 @@ void AnnotationWindow::Rescale()
 void AnnotationWindow::DoResize()
 {
     unsigned long aWidth    =   GetSizePixel().Width();
-    long aHeight            =   GetSizePixel().Height() - POSTIT_META_HEIGHT;
+    ::tools::Long aHeight            =   GetSizePixel().Height() - POSTIT_META_HEIGHT;
 
     mpOutliner->SetPaperSize( PixelToLogic( Size(aWidth,aHeight) ) ) ;
-    long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
+    ::tools::Long aTextHeight        =   LogicToPixel( mpOutliner->CalcTextSize()).Height();
 
     if( aTextHeight > aHeight )
     {   // we need vertical scrollbars and have to reduce the width
@@ -408,7 +408,7 @@ void AnnotationWindow::SetScrollbar()
     mpVScrollbar->SetThumbPos(mpOutlinerView->GetVisArea().Top());
 }
 
-void AnnotationWindow::ResizeIfNecessary(long aOldHeight, long aNewHeight)
+void AnnotationWindow::ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight)
 {
     if (aOldHeight != aNewHeight)
     {
@@ -447,14 +447,14 @@ void AnnotationWindow::ToggleInsMode()
     }
 }
 
-long AnnotationWindow::GetPostItTextHeight()
+::tools::Long AnnotationWindow::GetPostItTextHeight()
 {
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
 IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
-    long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
+    ::tools::Long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     getView()->Scroll( 0, nDiff );
 }
 

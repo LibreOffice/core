@@ -37,8 +37,8 @@ Color OutputDevice::GetPixel(const Point& rPoint) const
 
         if (!mbOutputClipped)
         {
-            const long nX = ImplLogicXToDevicePixel(rPoint.X());
-            const long nY = ImplLogicYToDevicePixel(rPoint.Y());
+            const tools::Long nX = ImplLogicXToDevicePixel(rPoint.X());
+            const tools::Long nY = ImplLogicYToDevicePixel(rPoint.Y());
             aColor = mpGraphics->GetPixel(nX, nY, this);
 
             if (mpAlphaVDev)

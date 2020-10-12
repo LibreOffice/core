@@ -284,7 +284,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
     return 0;
 }
 
-long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
+tools::Long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
 {
     /*
     Ignoring Footnote outside of the normal Text. People will put footnotes
@@ -2406,7 +2406,7 @@ void WW8TabDesc::CreateSwTable()
 
     // Because SW cannot handle multi-page floating frames,
     // _any unnecessary_ floating tables have been converted to inline.
-    long nLeft = 0;
+    tools::Long nLeft = 0;
     if ( m_pIo->m_xSFlyPara && !m_pIo->m_xSFlyPara->pFlyFormat )
     {
         // Get the table orientation from the fly
@@ -2783,7 +2783,7 @@ void WW8TabDesc::FinishSwTable()
                 auto& rRow = groupIt->row(n);
                 for (size_t i = 0; i<rRow.size(); ++i)
                 {
-                    const long nRowSpanSet = (n == 0) && (i == 0) ?
+                    const tools::Long nRowSpanSet = (n == 0) && (i == 0) ?
                         nRowSpan :
                         (-1 * (nRowSpan - n));
                     SwTableBox* pCurrentBox = rRow[i];
@@ -3923,7 +3923,7 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti), nNr, xStd->istdNext);
 
     // if something is interpreted wrong, this should make it work again
-    long nPos = mpStStrm->Tell();
+    tools::Long nPos = mpStStrm->Tell();
 
     //Variable parts of the STD start at even byte offsets, but "inside
     //the STD", which I take to meaning even in relation to the starting

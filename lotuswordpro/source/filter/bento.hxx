@@ -212,7 +212,7 @@ public: // Internal methods
       size_t* pAmtRead);
     BenError ReadKnownSize(void * pBuffer, size_t Amt);
     void SeekToPosition(BenContainerPos Pos);
-    void SeekFromEnd(long Offset);
+    void SeekFromEnd(tools::Long Offset);
 
     void SetNextAvailObjectID(BenObjectID ID) { cNextAvailObjectID = ID; }
     CUtList& GetObjects() { return cObjects; }

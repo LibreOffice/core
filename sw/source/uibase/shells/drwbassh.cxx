@@ -912,7 +912,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
     if(bIsInVertical)
     {
         Point aPos(aBoundRect.Pos());
-        long nTmp = aPos.X();
+        tools::Long nTmp = aPos.X();
         aPos.setX( aPos.Y() );
         aPos.setY( nTmp );
         Size aSize(aBoundRect.SSize());
@@ -1054,7 +1054,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation,
     if(bIsInVertical)
     {
         //restore width/height exchange
-        long nTmp = rValidation.nWidth;
+        tools::Long nTmp = rValidation.nWidth;
         rValidation.nWidth = rValidation.nHeight;
         rValidation.nHeight = nTmp;
     }

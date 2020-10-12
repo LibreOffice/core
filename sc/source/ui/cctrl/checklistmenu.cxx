@@ -1322,7 +1322,7 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
     if (maConfig.mbRTL)
     {
         // In RTL mode, the logical "left" is visual "right".
-        long nLeft = aRect.Left() - aRect.GetWidth();
+        tools::Long nLeft = aRect.Left() - aRect.GetWidth();
         aRect.SetLeft( nLeft );
     }
     else if (mnWndWidth < aRect.GetWidth())
@@ -1330,7 +1330,7 @@ void ScCheckListMenuControl::launch(const tools::Rectangle& rRect)
         // Target rectangle (i.e. cell width) is wider than the window.
         // Simulate right-aligned launch by modifying the target rectangle
         // size.
-        long nDiff = aRect.GetWidth() - mnWndWidth;
+        tools::Long nDiff = aRect.GetWidth() - mnWndWidth;
         aRect.AdjustLeft(nDiff );
     }
 

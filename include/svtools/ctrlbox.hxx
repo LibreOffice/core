@@ -48,12 +48,12 @@ private:
     Color  ( * m_pColor2Fn )( Color );
     Color  ( * m_pColorDistFn )( Color, Color );
 
-    long    m_nMinWidth;
+    tools::Long    m_nMinWidth;
     SvxBorderLineStyle m_nStyle;
 
 public:
     ImpLineListData( BorderWidthImpl aWidthImpl,
-           SvxBorderLineStyle nStyle, long nMinWidth, Color ( *pColor1Fn )( Color ),
+           SvxBorderLineStyle nStyle, tools::Long nMinWidth, Color ( *pColor1Fn )( Color ),
            Color ( *pColor2Fn )( Color ), Color ( *pColorDistFn )( Color, Color ) ) :
         m_aWidthImpl( aWidthImpl ),
         m_pColor1Fn( pColor1Fn ),
@@ -65,13 +65,13 @@ public:
     }
 
     /** Returns the computed width of the line 1 in twips. */
-    long GetLine1ForWidth( long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
+    tools::Long GetLine1ForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetLine1( nWidth ); }
 
     /** Returns the computed width of the line 2 in twips. */
-    long GetLine2ForWidth( long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
+    tools::Long GetLine2ForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetLine2( nWidth ); }
 
     /** Returns the computed width of the gap in twips. */
-    long GetDistForWidth( long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
+    tools::Long GetDistForWidth( tools::Long nWidth ) { return m_aWidthImpl.GetGap( nWidth ); }
 
     Color GetColorLine1( const Color& rMain )
     {
@@ -89,7 +89,7 @@ public:
     }
 
     /** Returns the minimum width in twips */
-    long   GetMinWidth( ) const { return m_nMinWidth;}
+    tools::Long   GetMinWidth( ) const { return m_nMinWidth;}
     SvxBorderLineStyle GetStyle( ) const { return m_nStyle;}
 };
 
@@ -209,18 +209,18 @@ public:
     ~SvtLineListBox();
 
     /** Set the width in Twips */
-    void SetWidth(long nWidth)
+    void SetWidth(tools::Long nWidth)
     {
         m_nWidth = nWidth;
         UpdateEntries();
         UpdatePreview();
     }
 
-    long GetWidth() const { return m_nWidth; }
+    tools::Long GetWidth() const { return m_nWidth; }
 
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry(const BorderWidthImpl& rWidthImpl,
-                        SvxBorderLineStyle nStyle, long nMinWidth = 0,
+                        SvxBorderLineStyle nStyle, tools::Long nMinWidth = 0,
                         ColorFunc pColor1Fn = &sameColor,
                         ColorFunc pColor2Fn = &sameColor,
                         ColorDistFunc pColorDistFn = &sameDistColor);
@@ -245,7 +245,7 @@ public:
 
 private:
 
-    SVT_DLLPRIVATE void         ImpGetLine( long nLine1, long nLine2, long nDistance,
+    SVT_DLLPRIVATE void         ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                     Color nColor1, Color nColor2, Color nColorDist,
                                     SvxBorderLineStyle nStyle, BitmapEx& rBmp );
 
@@ -279,7 +279,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xLineSetWin;
 
     std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
-    long            m_nWidth;
+    tools::Long            m_nWidth;
     ScopedVclPtr<VirtualDevice>   aVirDev;
     Color           aColor;
     Color           maPaintCol;

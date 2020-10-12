@@ -119,8 +119,8 @@ private:
 
     ImpLBSelEng         m_aFctSet;
 
-    long                m_nNodeBmpWidth;
-    long                m_nMostRight;
+    tools::Long                m_nNodeBmpWidth;
+    tools::Long                m_nMostRight;
     short               m_nHorSBarHeight, m_nVerSBarWidth;
 
     bool                m_bUpdateMode : 1;
@@ -136,9 +136,9 @@ private:
 
     DECL_LINK(EditTimerCall, Timer *, void);
 
-    void                InvalidateEntriesFrom( long nY ) const;
-    bool                IsLineVisible( long nY ) const;
-    void                KeyLeftRight( long nDiff );
+    void                InvalidateEntriesFrom( tools::Long nY ) const;
+    bool                IsLineVisible( tools::Long nY ) const;
+    void                KeyLeftRight( tools::Long nDiff );
 
     void                DrawNet(vcl::RenderContext& rRenderContext);
 
@@ -161,7 +161,7 @@ private:
     bool                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
     bool                ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
 
-    bool                EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
+    bool                EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, tools::Long nLine);
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab const * );
 
@@ -198,10 +198,10 @@ protected:
     sal_uLong               m_nVisibleCount;  // Number of lines in control
     bool                    m_bInVScrollHdl : 1;
     bool                    m_bSimpleTravel : 1; // is true if SelectionMode::Single
-    long                    m_nNextVerVisSize;
-    long                    m_nNodeBmpTabDistance; // typical smaller than 0
+    tools::Long                    m_nNextVerVisSize;
+    tools::Long                    m_nNodeBmpTabDistance; // typical smaller than 0
 
-    virtual long        GetEntryLine(const SvTreeListEntry* pEntry) const;
+    virtual tools::Long        GetEntryLine(const SvTreeListEntry* pEntry) const;
     virtual void        CursorDown();
     virtual void        CursorUp();
     virtual void        PageDown( sal_uInt16 nDelta );
@@ -209,7 +209,7 @@ protected:
     // set Thumb to FirstEntryToDraw
     virtual void        SyncVerThumb();
     virtual void        AdjustScrollBars( Size& rSize );
-    virtual void        InvalidateEntry( long nY ) const;
+    virtual void        InvalidateEntry( tools::Long nY ) const;
 
     tools::Rectangle           GetVisibleArea() const;
     void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
@@ -267,7 +267,7 @@ public:
     void                SetCurEntry( SvTreeListEntry* );
     virtual Point       GetEntryPosition(const SvTreeListEntry*) const;
     void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
-    void                ScrollToAbsPos( long nPos );
+    void                ScrollToAbsPos( tools::Long nPos );
 
     void                PaintDDCursor(SvTreeListEntry* pEntry, bool bShow);
 
@@ -368,7 +368,7 @@ inline Point SvImpLBox::GetEntryPosition(const SvTreeListEntry* pEntry) const
     return Point(0, GetEntryLine(pEntry));
 }
 
-inline bool SvImpLBox::IsLineVisible( long nY ) const
+inline bool SvImpLBox::IsLineVisible( tools::Long nY ) const
 {
     bool bRet = true;
     if ( nY < 0 || nY >= m_aOutputSize.Height() )

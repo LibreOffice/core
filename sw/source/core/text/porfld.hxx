@@ -159,7 +159,7 @@ public:
 class SwGrfNumPortion : public SwNumberPortion
 {
     std::unique_ptr<SvxBrushItem> pBrush;
-    long            nId;    // For StopAnimation
+    tools::Long            nId;    // For StopAnimation
     SwTwips         nYPos;  // _Always_ contains the current RelPos
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
@@ -177,15 +177,15 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
     virtual bool Format( SwTextFormatInfo &rInf ) override;
 
-    void SetBase( long nLnAscent, long nLnDescent,
-        long nFlyAscent, long nFlyDescent );
+    void SetBase( tools::Long nLnAscent, tools::Long nLnDescent,
+        tools::Long nFlyAscent, tools::Long nFlyDescent );
 
     void StopAnimation( const OutputDevice* pOut );
 
     bool IsAnimated() const { return m_bAnimated; }
     void SetAnimated( bool bNew ) { m_bAnimated = bNew; }
     void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
-    void SetId( long nNew ) const
+    void SetId( tools::Long nNew ) const
         { const_cast<SwGrfNumPortion*>(this)->nId = nNew; }
     SwTwips GetRelPos() const { return nYPos; }
     SwTwips GetGrfHeight() const { return nGrfHeight; }

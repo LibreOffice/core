@@ -620,7 +620,7 @@ bool SfxVoidItem::IsVoidItem() const
     return true;
 }
 
-void SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )
+void SfxPoolItem::ScaleMetrics( tools::Long /*lMult*/, tools::Long /*lDiv*/ )
 {
 }
 

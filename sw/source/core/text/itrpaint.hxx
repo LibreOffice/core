@@ -30,7 +30,7 @@ class SwTextPainter : public SwTextCursor
 
     SwLinePortion *CalcPaintOfst( const SwRect &rPaint );
     void CheckSpecialUnderline( const SwLinePortion* pPor,
-                                long nAdjustBaseLine = 0 );
+                                tools::Long nAdjustBaseLine = 0 );
 protected:
     void CtorInitTextPainter( SwTextFrame *pFrame, SwTextPaintInfo *pInf );
     explicit SwTextPainter(SwTextNode const * pTextNode)

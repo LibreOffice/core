@@ -787,15 +787,15 @@ public:
     SwViewShell const * pSh;
     sal_uLong &rMin;
     sal_uLong &rAbsMin;
-    long nRowWidth;
-    long nWordWidth;
-    long nWordAdd;
+    tools::Long nRowWidth;
+    tools::Long nWordWidth;
+    tools::Long nWordAdd;
     sal_Int32 nNoLineBreak;
     SwMinMaxArgs( OutputDevice* pOutI, SwViewShell const * pShI, sal_uLong& rMinI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rAbsMin( rAbsI ), nRowWidth(0),
           nWordWidth(0), nWordAdd(0), nNoLineBreak(COMPLETE_STRING)
         { }
-    void Minimum( long nNew ) const { if( static_cast<long>(rMin) < nNew ) rMin = nNew; }
+    void Minimum( tools::Long nNew ) const { if( static_cast<tools::Long>(rMin) < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
@@ -824,14 +824,14 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
             nStop = nEnd;
 
         SwDrawTextInfo aDrawInf(rArg.pSh, *rArg.pOut, rText, nIdx, nStop - nIdx);
-        long nCurrentWidth = pFnt->GetTextSize_( aDrawInf ).Width();
+        tools::Long nCurrentWidth = pFnt->GetTextSize_( aDrawInf ).Width();
         rArg.nRowWidth += nCurrentWidth;
         if( bClear )
             rArg.NewWord();
         else
         {
             rArg.nWordWidth += nCurrentWidth;
-            if( static_cast<long>(rArg.rAbsMin) < rArg.nWordWidth )
+            if( static_cast<tools::Long>(rArg.rAbsMin) < rArg.nWordWidth )
                 rArg.rAbsMin = rArg.nWordWidth;
             rArg.Minimum( rArg.nWordWidth + rArg.nWordAdd );
             bRet = true;
@@ -855,13 +855,13 @@ class SwMinMaxNodeArgs
 {
 public:
     sal_uLong nMaxWidth;    // sum of all frame widths
-    long nMinWidth;         // biggest frame
-    long nLeftRest;         // space not already covered by frames in the left margin
-    long nRightRest;        // space not already covered by frames in the right margin
-    long nLeftDiff;         // Min/Max-difference of the frame in the left margin
-    long nRightDiff;        // Min/Max-difference of the frame in the right margin
+    tools::Long nMinWidth;         // biggest frame
+    tools::Long nLeftRest;         // space not already covered by frames in the left margin
+    tools::Long nRightRest;        // space not already covered by frames in the right margin
+    tools::Long nLeftDiff;         // Min/Max-difference of the frame in the left margin
+    tools::Long nRightDiff;        // Min/Max-difference of the frame in the right margin
     sal_uLong nIndx;        // index of the node
-    void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
+    void Minimum( tools::Long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
 }
@@ -881,7 +881,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
     if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
         return;
 
-    long nMin, nMax;
+    tools::Long nMin, nMax;
     SwHTMLTableLayout *pLayout = nullptr;
     const bool bIsDrawFrameFormat = pNd->Which()==RES_DRAWFRMFMT;
     if( !bIsDrawFrameFormat )
@@ -906,7 +906,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
     const SwFormatHoriOrient& rOrient = pNd->GetHoriOrient();
     sal_Int16 eHoriOri = rOrient.GetHoriOrient();
 
-    long nDiff;
+    tools::Long nDiff;
     if( pLayout )
     {
         nMin = pLayout->GetMin();
@@ -1010,7 +1010,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     rAbsMin = 0;
 
     const SvxLRSpaceItem &rSpace = GetSwAttrSet().GetLRSpace();
-    long nLROffset = rSpace.GetTextLeft() + GetLeftMarginWithNum( true );
+    tools::Long nLROffset = rSpace.GetTextLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
     // For enumerations a negative first line indentation is probably filled already
     if( !GetFirstLineOfsWithNum( nFLOffs ) || nFLOffs > nLROffset )
@@ -1050,8 +1050,8 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     TextFrameIndex nIdx(0);
     aIter.SeekAndChgAttrIter( nIdx, pOut );
     TextFrameIndex nLen(m_Text.getLength());
-    long nCurrentWidth = 0;
-    long nAdd = 0;
+    tools::Long nCurrentWidth = 0;
+    tools::Long nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rAbsMin );
     while( nIdx < nLen )
     {
@@ -1091,7 +1091,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
         {
             case CH_BREAK  :
             {
-                if( static_cast<long>(rMax) < aArg.nRowWidth )
+                if( static_cast<tools::Long>(rMax) < aArg.nRowWidth )
                     rMax = aArg.nRowWidth;
                 aArg.nRowWidth = 0;
                 aArg.NewWord();
@@ -1116,7 +1116,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                 nCurrentWidth = aIter.GetFnt()->GetTextSize_( aDrawInf ).Width();
                 aArg.nWordWidth += nCurrentWidth;
                 aArg.nRowWidth += nCurrentWidth;
-                if( static_cast<long>(rAbsMin) < aArg.nWordWidth )
+                if( static_cast<tools::Long>(rAbsMin) < aArg.nWordWidth )
                     rAbsMin = aArg.nWordWidth;
                 aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
                 aArg.nNoLineBreak = sal_Int32(nIdx++);
@@ -1127,8 +1127,8 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             {
                 if( !pHint )
                     break;
-                long nOldWidth = aArg.nWordWidth;
-                long nOldAdd = aArg.nWordAdd;
+                tools::Long nOldWidth = aArg.nWordWidth;
+                tools::Long nOldAdd = aArg.nWordAdd;
                 aArg.NewWord();
 
                 switch( pHint->Which() )
@@ -1167,7 +1167,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
                         aArg.nWordAdd = nOldWidth + nOldAdd;
                         aArg.nWordWidth = nCurrentWidth;
                         aArg.nRowWidth += nCurrentWidth;
-                        if( static_cast<long>(rAbsMin) < aArg.nWordWidth )
+                        if( static_cast<tools::Long>(rAbsMin) < aArg.nWordWidth )
                             rAbsMin = aArg.nWordWidth;
                         aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
                         break;
@@ -1210,7 +1210,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             break;
         }
     }
-    if( static_cast<long>(rMax) < aArg.nRowWidth )
+    if( static_cast<tools::Long>(rMax) < aArg.nRowWidth )
         rMax = aArg.nRowWidth;
 
     nLROffset += rSpace.GetRight();
@@ -1219,9 +1219,9 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
     rAbsMin += nAdd;
     rMin += nLROffset;
     rMin += nAdd;
-    if( static_cast<long>(rMin) < aNodeArgs.nMinWidth )
+    if( static_cast<tools::Long>(rMin) < aNodeArgs.nMinWidth )
         rMin = aNodeArgs.nMinWidth;
-    if( static_cast<long>(rAbsMin) < aNodeArgs.nMinWidth )
+    if( static_cast<tools::Long>(rAbsMin) < aNodeArgs.nMinWidth )
         rAbsMin = aNodeArgs.nMinWidth;
     rMax += aNodeArgs.nMaxWidth;
     rMax += nLROffset;

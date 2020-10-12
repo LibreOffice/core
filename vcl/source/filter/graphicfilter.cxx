@@ -1259,7 +1259,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
                 {
                     SvMemoryStream aMemStream;
                     ZCodec aCodec;
-                    long nMemoryLength;
+                    tools::Long nMemoryLength;
 
                     aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
                     nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
@@ -1588,7 +1588,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 {
                     SvMemoryStream aMemStream;
                     ZCodec aCodec;
-                    long nMemoryLength;
+                    tools::Long nMemoryLength;
 
                     aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
                     nMemoryLength = aCodec.Decompress(rIStream, aMemStream);

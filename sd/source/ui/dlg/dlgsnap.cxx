@@ -74,7 +74,7 @@ SdSnapLineDlg::SdSnapLineDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, 
 
     // determine max and min values depending on
     // WorkArea, PoolUnit and FieldUnit:
-    auto const map = [ePoolUnit](std::unique_ptr<weld::MetricSpinButton> const & msb, long value) {
+    auto const map = [ePoolUnit](std::unique_ptr<weld::MetricSpinButton> const & msb, tools::Long value) {
             auto const n1 = OutputDevice::LogicToLogic(value, ePoolUnit, MapUnit::Map100thMM);
             auto const n2 = msb->normalize(n1);
             auto const n3 = msb->convert_value_from(n2, FieldUnit::MM_100TH);

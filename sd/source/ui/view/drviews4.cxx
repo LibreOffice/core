@@ -396,18 +396,18 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (!pBmpMask)
         return;
 
-    const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
-    const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
-    const long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
-    const long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
-    long            nRed = 0;
-    long            nGreen = 0;
-    long            nBlue = 0;
+    const ::tools::Long      nStartX = maMousePos.X() - PIPETTE_RANGE;
+    const ::tools::Long      nEndX = maMousePos.X() + PIPETTE_RANGE;
+    const ::tools::Long      nStartY = maMousePos.Y() - PIPETTE_RANGE;
+    const ::tools::Long      nEndY = maMousePos.Y() + PIPETTE_RANGE;
+    ::tools::Long            nRed = 0;
+    ::tools::Long            nGreen = 0;
+    ::tools::Long            nBlue = 0;
     const double    fDiv = ( ( PIPETTE_RANGE << 1 ) + 1 ) * ( ( PIPETTE_RANGE << 1 ) + 1 );
 
-    for ( long nY = nStartY; nY <= nEndY; nY++ )
+    for ( ::tools::Long nY = nStartY; nY <= nEndY; nY++ )
     {
-        for( long nX = nStartX; nX <= nEndX; nX++ )
+        for( ::tools::Long nX = nStartX; nX <= nEndX; nX++ )
         {
             const Color aCol( pWin->GetPixel( pWin->PixelToLogic( Point( nX, nY ) ) ) );
 
@@ -816,8 +816,8 @@ void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
     {
         RulerLine   pHLines[2];
         RulerLine   pVLines[2];
-        long        nHOffs = 0;
-        long        nVOffs = 0;
+        ::tools::Long        nHOffs = 0;
+        ::tools::Long        nVOffs = 0;
         sal_uInt16      nCnt;
 
         if (mpHorizontalRuler)

@@ -95,7 +95,7 @@ public:
             An integer percent value, i.e. nZoom/100 is the actual zoom
             factor.
         */
-    virtual void SetZoom (long int nZoom) override;
+    virtual void SetZoom (::tools::Long nZoom) override;
     virtual void SetZoomRect (const ::tools::Rectangle& rZoomRect) override;
 
     /** This is a callback method used by the active window to delegate its

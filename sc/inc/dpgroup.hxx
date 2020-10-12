@@ -52,24 +52,24 @@ public:
 
 class ScDPGroupDimension
 {
-    long                        nSourceDim;
-    long                        nGroupDim;
+    tools::Long                        nSourceDim;
+    tools::Long                        nGroupDim;
     OUString                    aGroupName;
     std::vector<ScDPGroupItem>  aItems;
     mutable std::vector<SCROW> maMemberEntries;
     bool mbDateDimension;
 public:
-                ScDPGroupDimension( long nSource, const OUString& rNewName );
+                ScDPGroupDimension( tools::Long nSource, const OUString& rNewName );
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
                 ~ScDPGroupDimension();
 
     ScDPGroupDimension& operator=( const ScDPGroupDimension& rOther );
 
     void        AddItem( const ScDPGroupItem& rItem );
-    void        SetGroupDim( long nDim );           // called from AddGroupDimension
+    void        SetGroupDim( tools::Long nDim );           // called from AddGroupDimension
 
-    long        GetSourceDim() const    { return nSourceDim; }
-    long        GetGroupDim() const     { return nGroupDim; }
+    tools::Long        GetSourceDim() const    { return nSourceDim; }
+    tools::Long        GetGroupDim() const     { return nGroupDim; }
     const OUString& GetName() const { return aGroupName; }
 
     const std::vector< SCROW >&  GetColumnEntries( const ScDPFilteredCache&  rCacheTable ) const;
@@ -115,7 +115,7 @@ public:
 class ScDPGroupTableData final : public ScDPTableData
 {
     std::shared_ptr<ScDPTableData> pSourceData;
-    long                    nSourceCount;
+    tools::Long                    nSourceCount;
     std::vector<ScDPGroupDimension>
                             aGroups;
     std::unique_ptr<ScDPNumGroupDimension[]>
@@ -123,10 +123,10 @@ class ScDPGroupTableData final : public ScDPTableData
     ScDocument*             pDoc;
 
     void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
-    virtual long                GetSourceDim( long nDim ) override;
+    virtual tools::Long                GetSourceDim( tools::Long nDim ) override;
 
-    bool        IsNumGroupDimension( long nDimension ) const;
-    void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
+    bool        IsNumGroupDimension( tools::Long nDimension ) const;
+    void GetNumGroupInfo(tools::Long nDimension, ScDPNumGroupInfo& rInfo);
 
     void        ModifyFilterCriteria(::std::vector<ScDPFilteredCache::Criterion>& rCriteria);
 
@@ -138,19 +138,19 @@ public:
     const std::shared_ptr<ScDPTableData>& GetSourceTableData() const { return pSourceData;}
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
-    void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );
-    long        GetDimensionIndex( const OUString& rName );
+    void        SetNumGroupDimension( tools::Long nIndex, const ScDPNumGroupDimension& rGroup );
+    tools::Long        GetDimensionIndex( const OUString& rName );
 
-    virtual long                    GetColumnCount() override;
-    virtual long                    GetMembersCount( long nDim ) override;
-    virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) override ;
-    virtual const ScDPItemData* GetMemberById( long nDim, long nId) override;
-    virtual long Compare( long nDim, long nDataId1, long nDataId2) override;
+    virtual tools::Long                    GetColumnCount() override;
+    virtual tools::Long                    GetMembersCount( tools::Long nDim ) override;
+    virtual const std::vector< SCROW >& GetColumnEntries( tools::Long nColumn ) override ;
+    virtual const ScDPItemData* GetMemberById( tools::Long nDim, tools::Long nId) override;
+    virtual tools::Long Compare( tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2) override;
 
-    virtual OUString                getDimensionName(long nColumn) override;
-    virtual bool                    getIsDataLayoutDimension(long nColumn) override;
-    virtual bool                    IsDateDimension(long nDim) override;
-    virtual sal_uInt32              GetNumberFormat(long nDim) override;
+    virtual OUString                getDimensionName(tools::Long nColumn) override;
+    virtual bool                    getIsDataLayoutDimension(tools::Long nColumn) override;
+    virtual bool                    IsDateDimension(tools::Long nDim) override;
+    virtual sal_uInt32              GetNumberFormat(tools::Long nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 
@@ -165,13 +165,13 @@ public:
     virtual const ScDPFilteredCache&   GetCacheTable() const override;
     virtual void ReloadCacheTable() override;
 
-    virtual bool                    IsBaseForGroup(long nDim) const override;
-    virtual long                    GetGroupBase(long nGroupDim) const override;
-    virtual bool                    IsNumOrDateGroup(long nDim) const override;
-    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                               const ScDPItemData& rBaseData, long nBaseIndex ) const override;
-    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
-                                                      const ScDPItemData& rSecondData, long nSecondIndex ) const override;
+    virtual bool                    IsBaseForGroup(tools::Long nDim) const override;
+    virtual tools::Long                    GetGroupBase(tools::Long nGroupDim) const override;
+    virtual bool                    IsNumOrDateGroup(tools::Long nDim) const override;
+    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, tools::Long nGroupIndex,
+                                               const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const override;
+    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, tools::Long nFirstIndex,
+                                                      const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const override;
 
 #if DUMP_PIVOT_TABLE
     virtual void Dump() const override;

@@ -248,7 +248,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     OUString aId, aStyle, aClass;
 
-    long nWidth=0, nHeight=0;
+    tools::Long nWidth=0, nHeight=0;
     bool bPercentWidth = false, bDirection = false, bBGColor = false;
     Size aSpace( 0, 0 );
     sal_Int16 eVertOri = text::VertOrientation::TOP;
@@ -493,7 +493,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         }
         else
         {
-            long nBrowseWidth = GetCurrentBrowseWidth();
+            tools::Long nBrowseWidth = GetCurrentBrowseWidth();
             aTwipSz.setWidth( !nWidth ? nBrowseWidth
                                       : (nWidth*nBrowseWidth) / 100 );
         }

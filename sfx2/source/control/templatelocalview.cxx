@@ -289,7 +289,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
     updateItems(std::move(aItems));
 }
 
-void TemplateLocalView::updateThumbnailDimensions(long itemMaxSize)
+void TemplateLocalView::updateThumbnailDimensions(tools::Long itemMaxSize)
 {
     mnThumbnailWidth = itemMaxSize;
     mnThumbnailHeight = itemMaxSize;
@@ -403,7 +403,7 @@ void TemplateLocalView::setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &
     maEditTemplateHdl = rLink;
 }
 
-BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, long width, long height)
+BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height)
 {
     BitmapEx aImg = rImg;
 
@@ -453,7 +453,7 @@ BitmapEx TemplateLocalView::getDefaultThumbnail( const OUString& rPath )
     return aImg;
 }
 
-BitmapEx TemplateLocalView::fetchThumbnail (const OUString &msURL, long width, long height)
+BitmapEx TemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
 {
     return TemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }
@@ -1263,7 +1263,7 @@ void SfxTemplateLocalView::setDefaultTemplateHdl(const Link<ThumbnailViewItem*,v
     maDefaultTemplateHdl = rLink;
 }
 
-BitmapEx SfxTemplateLocalView::scaleImg (const BitmapEx &rImg, long width, long height)
+BitmapEx SfxTemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height)
 {
     BitmapEx aImg = rImg;
 
@@ -1327,7 +1327,7 @@ BitmapEx SfxTemplateLocalView::getDefaultThumbnail( const OUString& rPath )
     return aImg;
 }
 
-BitmapEx SfxTemplateLocalView::fetchThumbnail (const OUString &msURL, long width, long height)
+BitmapEx SfxTemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
 {
     return SfxTemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }

@@ -213,7 +213,7 @@ namespace dbaui
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) override;
+        virtual void ActivateCell(tools::Long nRow, sal_uInt16 nCol, bool bSetCellFocus = true) override;
         virtual void DeactivateCell(bool bUpdate = true) override;
         using FmGridControl::ActivateCell;
 
@@ -249,7 +249,7 @@ namespace dbaui
 
         // EditBrowseBox overridables
         virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) override;
-        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol) override;
+        virtual ::svt::CellController* GetController(tools::Long nRow, sal_uInt16 nCol) override;
 
         // DbGridControl overridables
         virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu) override;

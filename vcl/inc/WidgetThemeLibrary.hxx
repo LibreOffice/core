@@ -110,8 +110,8 @@ typedef struct WidgetThemeLibrary_t WidgetThemeLibrary;
 
 typedef struct _rectangle
 {
-    long x, y;
-    long width, height;
+    tools::Long x, y;
+    tools::Long width, height;
 } rectangle_t;
 
 struct WidgetThemeLibrary_t
@@ -123,29 +123,50 @@ struct WidgetThemeLibrary_t
                       const rectangle_t& rBoundingControlRegion, rectangle_t& rNativeBoundingRegion,
                       rectangle_t& rNativeContentRegion);
 
-    bool (*drawPushButton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawRadiobutton)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawCheckbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawCombobox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawEditbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawScrollbar)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawSpinButtons)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawSpinbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawTabItem)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawTabPane)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawTabHeader)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawTabBody)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawSlider)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawFixedline)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawToolbar)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawProgress)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawWindowsBackground)(ControlDrawParameters const& rParameters, long nWidth,
-                                  long nHeight);
-    bool (*drawListbox)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawFrame)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawListNode)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawListNet)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
-    bool (*drawListHeader)(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
+    bool (*drawPushButton)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                           tools::Long nHeight);
+    bool (*drawRadiobutton)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                            tools::Long nHeight);
+    bool (*drawCheckbox)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                         tools::Long nHeight);
+    bool (*drawCombobox)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                         tools::Long nHeight);
+    bool (*drawEditbox)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawScrollbar)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                          tools::Long nHeight);
+    bool (*drawSpinButtons)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                            tools::Long nHeight);
+    bool (*drawSpinbox)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawTabItem)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawTabPane)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawTabHeader)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                          tools::Long nHeight);
+    bool (*drawTabBody)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawSlider)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                       tools::Long nHeight);
+    bool (*drawFixedline)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                          tools::Long nHeight);
+    bool (*drawToolbar)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawProgress)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                         tools::Long nHeight);
+    bool (*drawWindowsBackground)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                                  tools::Long nHeight);
+    bool (*drawListbox)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawFrame)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                      tools::Long nHeight);
+    bool (*drawListNode)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                         tools::Long nHeight);
+    bool (*drawListNet)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                        tools::Long nHeight);
+    bool (*drawListHeader)(ControlDrawParameters const& rParameters, tools::Long nWidth,
+                           tools::Long nHeight);
 
     bool (*updateSettings)(WidgetDrawStyle& rStyle);
 };

@@ -119,14 +119,14 @@ bool SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rX
     return bHorz;
 }
 
-void SdrEdgeInfoRec::ImpSetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal)
+void SdrEdgeInfoRec::ImpSetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP, tools::Long nVal)
 {
     Point& rPt=ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP)) rPt.setY(nVal );
     else rPt.setX(nVal );
 }
 
-long SdrEdgeInfoRec::ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+tools::Long SdrEdgeInfoRec::ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
 {
     const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP))
@@ -599,14 +599,14 @@ SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject const * pObj, const Poi
 {
     if (pObj==nullptr) return SdrEscapeDirection::ALL;
     tools::Rectangle aR(pObj->GetSnapRect());
-    long dxl=rPt.X()-aR.Left();
-    long dyo=rPt.Y()-aR.Top();
-    long dxr=aR.Right()-rPt.X();
-    long dyu=aR.Bottom()-rPt.Y();
+    tools::Long dxl=rPt.X()-aR.Left();
+    tools::Long dyo=rPt.Y()-aR.Top();
+    tools::Long dxr=aR.Right()-rPt.X();
+    tools::Long dyu=aR.Bottom()-rPt.Y();
     bool bxMitt=std::abs(dxl-dxr)<2;
     bool byMitt=std::abs(dyo-dyu)<2;
-    long dx=std::min(dxl,dxr);
-    long dy=std::min(dyo,dyu);
+    tools::Long dx=std::min(dxl,dxr);
+    tools::Long dy=std::min(dyo,dyu);
     bool bDiag=std::abs(dx-dy)<2;
     if (bxMitt && byMitt) return SdrEscapeDirection::ALL; // in the center
     if (bDiag) {  // diagonally
@@ -633,7 +633,7 @@ SdrEscapeDirection SdrEdgeObj::ImpCalcEscAngle(SdrObject const * pObj, const Poi
     }
 }
 
-XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const tools::Rectangle& rRect, const Point& rMeeting)
+XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, tools::Long nEscAngle, const tools::Rectangle& rRect, const Point& rMeeting)
 {
     XPolygon aXP;
     aXP.Insert(XPOLY_APPEND,rStPt,PolyFlags::Normal);
@@ -804,10 +804,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
                 nEsc2=aGP2.GetEscDir();
                 if (nEsc2==SdrEscapeDirection::SMART) nEsc2=ImpCalcEscAngle(rCon2.pObj,aPt2-rCon2.aObjOfs);
             }
-            for (long nA1=0; nA1<36000; nA1+=9000)
+            for (tools::Long nA1=0; nA1<36000; nA1+=9000)
             {
                 SdrEscapeDirection nE1 = nA1==0 ? SdrEscapeDirection::RIGHT : nA1==9000 ? SdrEscapeDirection::TOP : nA1==18000 ? SdrEscapeDirection::LEFT : nA1==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
-                for (long nA2=0; nA2<36000; nA2+=9000)
+                for (tools::Long nA2=0; nA2<36000; nA2+=9000)
                 {
                     SdrEscapeDirection nE2 = nA2==0 ? SdrEscapeDirection::RIGHT : nA2==9000 ? SdrEscapeDirection::TOP : nA2==18000 ? SdrEscapeDirection::LEFT : nA2==27000 ? SdrEscapeDirection::BOTTOM : SdrEscapeDirection::SMART;
                     if ((nEsc1&nE1) && (nEsc2&nE2))
@@ -835,8 +835,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
     return aBestXP;
 }
 
-XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
-    const Point& rPt2, long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
+XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
+    const Point& rPt2, tools::Long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
     sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
     SdrEdgeKind eKind=GetObjectItem(SDRATTR_EDGEKIND).GetValue();
@@ -890,7 +890,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         if (bLks2) aXP[2].setX(aBewareRect2.Left() );   //-=500;
         if (bUnt2) aXP[2].setY(aBewareRect2.Bottom() ); //+=500;
         if (pnQuality!=nullptr) {
-            long nQ=std::abs(aXP[1].X()-aXP[0].X())+std::abs(aXP[1].Y()-aXP[0].Y());
+            tools::Long nQ=std::abs(aXP[1].X()-aXP[0].X())+std::abs(aXP[1].Y()-aXP[0].Y());
             nQ+=std::abs(aXP[2].X()-aXP[1].X())+std::abs(aXP[2].Y()-aXP[1].Y());
             nQ+=std::abs(aXP[3].X()-aXP[2].X())+std::abs(aXP[3].Y()-aXP[2].Y());
             *pnQuality=nQ;
@@ -917,8 +917,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         Point aC2(aBewareRect2.Center());
         if (aBewareRect1.Left()<=aBewareRect2.Right() && aBewareRect1.Right()>=aBewareRect2.Left()) {
             // overlapping on the x axis
-            long n1=std::max(aBewareRect1.Left(),aBewareRect2.Left());
-            long n2=std::min(aBewareRect1.Right(),aBewareRect2.Right());
+            tools::Long n1=std::max(aBewareRect1.Left(),aBewareRect2.Left());
+            tools::Long n2=std::min(aBewareRect1.Right(),aBewareRect2.Right());
             aMeeting.setX((n1+n2+1)/2 );
         } else {
             // otherwise the center point of the empty space
@@ -930,8 +930,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         }
         if (aBewareRect1.Top()<=aBewareRect2.Bottom() && aBewareRect1.Bottom()>=aBewareRect2.Top()) {
             // overlapping on the x axis
-            long n1=std::max(aBewareRect1.Top(),aBewareRect2.Top());
-            long n2=std::min(aBewareRect1.Bottom(),aBewareRect2.Bottom());
+            tools::Long n1=std::max(aBewareRect1.Top(),aBewareRect2.Top());
+            tools::Long n2=std::min(aBewareRect1.Bottom(),aBewareRect2.Bottom());
             aMeeting.setY((n1+n2+1)/2 );
         } else {
             // otherwise the center point of the empty space
@@ -945,10 +945,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         //   1. both go into the same direction
         //   2. both go into opposite directions
         //   3. one is vertical, the other is horizontal
-        long nXMin=std::min(aBewareRect1.Left(),aBewareRect2.Left());
-        long nXMax=std::max(aBewareRect1.Right(),aBewareRect2.Right());
-        long nYMin=std::min(aBewareRect1.Top(),aBewareRect2.Top());
-        long nYMax=std::max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
+        tools::Long nXMin=std::min(aBewareRect1.Left(),aBewareRect2.Left());
+        tools::Long nXMax=std::max(aBewareRect1.Right(),aBewareRect2.Right());
+        tools::Long nYMin=std::min(aBewareRect1.Top(),aBewareRect2.Top());
+        tools::Long nYMax=std::max(aBewareRect1.Bottom(),aBewareRect2.Bottom());
         bool bBewareOverlap=aBewareRect1.Right()>aBewareRect2.Left() && aBewareRect1.Left()<aBewareRect2.Right() &&
                             aBewareRect1.Bottom()>aBewareRect2.Top() && aBewareRect1.Top()<aBewareRect2.Bottom();
         unsigned nMainCase=3;
@@ -1063,11 +1063,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
                             // We need a direct connection (3-line Z connection),
                             // because we have to violate the BewareRects.
                             // Use rule of three to scale down the BewareRects.
-                            long nWant1=aBewR1.Right()-aBndR1.Right(); // distance at Obj1
-                            long nWant2=aBndR2.Left()-aBewR2.Left();   // distance at Obj2
-                            long nSpace=aBndR2.Left()-aBndR1.Right(); // available space
-                            long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
-                            long nGet2=nSpace-nGet1;
+                            tools::Long nWant1=aBewR1.Right()-aBndR1.Right(); // distance at Obj1
+                            tools::Long nWant2=aBndR2.Left()-aBewR2.Left();   // distance at Obj2
+                            tools::Long nSpace=aBndR2.Left()-aBndR1.Right(); // available space
+                            tools::Long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
+                            tools::Long nGet2=nSpace-nGet1;
                             if (bRts1) { // revert normalization
                                 aBewareRect1.AdjustRight(nGet1-nWant1 );
                                 aBewareRect2.AdjustLeft( -(nGet2-nWant2) );
@@ -1124,11 +1124,11 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
                             // We need a direct connection (3-line Z connection),
                             // because we have to violate the BewareRects.
                             // Use rule of three to scale down the BewareRects.
-                            long nWant1=aBewR1.Bottom()-aBndR1.Bottom(); // difference at Obj1
-                            long nWant2=aBndR2.Top()-aBewR2.Top();   // difference at Obj2
-                            long nSpace=aBndR2.Top()-aBndR1.Bottom(); // available space
-                            long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
-                            long nGet2=nSpace-nGet1;
+                            tools::Long nWant1=aBewR1.Bottom()-aBndR1.Bottom(); // difference at Obj1
+                            tools::Long nWant2=aBndR2.Top()-aBewR2.Top();   // difference at Obj2
+                            tools::Long nSpace=aBndR2.Top()-aBndR1.Bottom(); // available space
+                            tools::Long nGet1=BigMulDiv(nWant1,nSpace,nWant1+nWant2);
+                            tools::Long nGet2=nSpace-nGet1;
                             if (bUnt1) { // revert normalization
                                 aBewareRect1.AdjustBottom(nGet1-nWant1 );
                                 aBewareRect2.AdjustTop( -(nGet2-nWant2) );
@@ -1359,10 +1359,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         if (nPointCount>=2) { // check exit angle again
             Point aP1(aXP1[1]); aP1-=aXP1[0];
             Point aP2(aXP1[nPointCount-2]); aP2-=aXP1[nPointCount-1];
-            long nAng1=0; if (aP1.X()<0) nAng1=18000; if (aP1.Y()>0) nAng1=27000;
+            tools::Long nAng1=0; if (aP1.X()<0) nAng1=18000; if (aP1.Y()>0) nAng1=27000;
             if (aP1.Y()<0) nAng1=9000;
             if (aP1.X()!=0 && aP1.Y()!=0) nAng1=1; // slant?!
-            long nAng2=0; if (aP2.X()<0) nAng2=18000; if (aP2.Y()>0) nAng2=27000;
+            tools::Long nAng2=0; if (aP2.X()<0) nAng2=18000; if (aP2.Y()>0) nAng2=27000;
             if (aP2.Y()<0) nAng2=9000;
             if (aP2.X()!=0 && aP2.Y()!=0) nAng2=1; // slant?!
             if (nAng1!=nAngle1) nIntersections++;
@@ -1474,10 +1474,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
         Point* pPt2=&aXP1[1];
         Point* pPt3=&aXP1[nPointCount-2];
         Point* pPt4=&aXP1[nPointCount-1];
-        long dx1=pPt2->X()-pPt1->X();
-        long dy1=pPt2->Y()-pPt1->Y();
-        long dx2=pPt3->X()-pPt4->X();
-        long dy2=pPt3->Y()-pPt4->Y();
+        tools::Long dx1=pPt2->X()-pPt1->X();
+        tools::Long dy1=pPt2->Y()-pPt1->Y();
+        tools::Long dx2=pPt3->X()-pPt4->X();
+        tools::Long dy2=pPt3->Y()-pPt4->Y();
         if (cForm=='L') { // nPointCount==3
             aXP1.SetFlags(1,PolyFlags::Control);
             Point aPt3(*pPt2);
@@ -1502,10 +1502,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
             if (nPointCount==5) {
                 // add a control point before and after center
                 Point aCenter(aXP1[2]);
-                long dx1b=aCenter.X()-aXP1[1].X();
-                long dy1b=aCenter.Y()-aXP1[1].Y();
-                long dx2b=aCenter.X()-aXP1[3].X();
-                long dy2b=aCenter.Y()-aXP1[3].Y();
+                tools::Long dx1b=aCenter.X()-aXP1[1].X();
+                tools::Long dy1b=aCenter.Y()-aXP1[1].Y();
+                tools::Long dx2b=aCenter.X()-aXP1[3].X();
+                tools::Long dy2b=aCenter.Y()-aXP1[3].Y();
                 aXP1.Insert(2,aCenter,PolyFlags::Control);
                 aXP1.SetFlags(3,PolyFlags::Symmetric);
                 aXP1.Insert(4,aCenter,PolyFlags::Control);
@@ -1521,8 +1521,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const too
                 Point aPt2b(aXP1[3]);
                 aXP1.Insert(2,aPt1b,PolyFlags::Control);
                 aXP1.Insert(5,aPt2b,PolyFlags::Control);
-                long dx=aPt1b.X()-aPt2b.X();
-                long dy=aPt1b.Y()-aPt2b.Y();
+                tools::Long dx=aPt1b.X()-aPt2b.X();
+                tools::Long dy=aPt1b.Y()-aPt2b.Y();
                 aXP1[3].AdjustX( -(dx/2) );
                 aXP1[3].AdjustY( -(dy/2) );
                 aXP1.SetFlags(3,PolyFlags::Symmetric);
@@ -2256,10 +2256,10 @@ void SdrEdgeObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     }
     else
     {
-        long nMulX = rRect.Right()  - rRect.Left();
-        long nDivX = aOld.Right()   - aOld.Left();
-        long nMulY = rRect.Bottom() - rRect.Top();
-        long nDivY = aOld.Bottom()  - aOld.Top();
+        tools::Long nMulX = rRect.Right()  - rRect.Left();
+        tools::Long nDivX = aOld.Right()   - aOld.Left();
+        tools::Long nMulY = rRect.Bottom() - rRect.Top();
+        tools::Long nDivY = aOld.Bottom()  - aOld.Top();
         if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
         if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
         Fraction aX(nMulX, nDivX);
@@ -2292,7 +2292,7 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
 }
 
 // #i54102# added rotation support
-void SdrEdgeObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrEdgeObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     if(bEdgeTrackUserDefined)
     {
@@ -2354,7 +2354,7 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 // #i54102# added shear support
-void SdrEdgeObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrEdgeObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     if(bEdgeTrackUserDefined)
     {

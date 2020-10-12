@@ -40,7 +40,7 @@ public:
 
 private:
 
-    long            lMaxHeight;
+    tools::Long            lMaxHeight;
 
     std::unique_ptr<weld::RadioButton> m_xMaxHeightPageBtn;
     std::unique_ptr<weld::RadioButton> m_xMaxHeightBtn;

@@ -45,12 +45,13 @@ public:
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
-    virtual bool SetSize(long nNewDX, long nNewDY) override;
-    virtual bool SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* pBuffer) override;
+    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
+    virtual bool SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
+                                    sal_uInt8* pBuffer) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override;
-    virtual long GetHeight() const override;
+    virtual tools::Long GetWidth() const override;
+    virtual tools::Long GetHeight() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

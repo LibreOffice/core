@@ -51,7 +51,7 @@ class IAccessibleTableProvider
 {
 public:
     /** @return  The count of the rows. */
-    virtual long                    GetRowCount() const = 0;
+    virtual tools::Long                    GetRowCount() const = 0;
     /** @return  The count of the columns. */
     virtual sal_uInt16              GetColumnCount() const = 0;
 
@@ -73,19 +73,19 @@ public:
 
     virtual void                    SetNoSelection() = 0;
     virtual void                    SelectAll() = 0;
-    virtual void                    SelectRow( long _nRow, bool _bSelect = true, bool bExpand = true ) = 0;
+    virtual void                    SelectRow( tools::Long _nRow, bool _bSelect = true, bool bExpand = true ) = 0;
     virtual void                    SelectColumn( sal_uInt16 _nColumnPos, bool _bSelect = true ) = 0;
     virtual sal_Int32               GetSelectedRowCount() const = 0;
     virtual sal_Int32               GetSelectedColumnCount() const = 0;
     /** @return  <TRUE/>, if the row is selected. */
-    virtual bool                    IsRowSelected( long _nRow ) const = 0;
-    virtual bool                    IsColumnSelected( long _nColumnPos ) const = 0;
+    virtual bool                    IsRowSelected( tools::Long _nRow ) const = 0;
+    virtual bool                    IsColumnSelected( tools::Long _nColumnPos ) const = 0;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual OUString                GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
+    virtual OUString                GetAccessibleCellText( tools::Long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
     virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
     virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) = 0;

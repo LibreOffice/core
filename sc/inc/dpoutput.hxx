@@ -59,14 +59,14 @@ private:
                             pColNumFmt;
     std::unique_ptr<sal_uInt32[]>
                             pRowNumFmt;
-    long                    nColFmtCount;
-    long                    nRowFmtCount;
+    tools::Long                    nColFmtCount;
+    tools::Long                    nRowFmtCount;
     sal_uInt32              nSingleNumFmt;
 
     // Output geometry related parameters
-    long                    nColCount;
-    long                    nRowCount;
-    long                    nHeaderSize;
+    tools::Long                    nColCount;
+    tools::Long                    nRowCount;
+    tools::Long                    nHeaderSize;
     SCCOL                   nTabStartCol;
     SCROW                   nTabStartRow;
     SCCOL                   nMemberStartCol;
@@ -85,7 +85,7 @@ private:
                                 const css::sheet::DataResult& rData );
     void            HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const css::sheet::MemberResult& rData,
-                                bool bColHeader, long nLevel );
+                                bool bColHeader, tools::Long nLevel );
 
     void FieldCell(SCCOL nCol, SCROW nRow, SCTAB nTab, const ScDPOutLevelData& rData, bool bInTable);
 
@@ -106,7 +106,7 @@ public:
 
     void            Output();           //! Refresh?
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
-    long            GetHeaderRows() const;
+    tools::Long            GetHeaderRows() const;
     bool            HasError();         // range overflow or exception from source
 
     void            GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);
@@ -115,13 +115,13 @@ public:
         field region. */
     bool            GetDataResultPositionData(::std::vector< css::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
-    long            GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
+    tools::Long            GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
     bool GetHeaderDrag(
-        const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
-        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, long& rDimPos );
+        const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, tools::Long nDragDim,
+        tools::Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, tools::Long& rDimPos );
     bool IsFilterButton( const ScAddress& rPos );
 
-    void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
+    void GetMemberResultNames(ScDPUniqueStringSet& rNames, tools::Long nDimension);
 
     void            SetHeaderLayout(bool bUseGrid);
     bool            GetHeaderLayout() const { return mbHeaderLayout;}

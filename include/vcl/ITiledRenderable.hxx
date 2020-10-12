@@ -61,8 +61,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) = 0;
+                            tools::Long nTileWidth,
+                            tools::Long nTileHeight ) = 0;
 
     /**
      * Get the document size in twips.

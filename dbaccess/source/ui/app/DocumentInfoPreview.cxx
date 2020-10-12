@@ -136,7 +136,7 @@ void ODocumentInfoPreview::insertEntry(
     m_xEditEngine->QuickInsertText(value, InsertAtEnd(*m_xEditEngine));
 }
 
-void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)
+void ODocumentInfoPreview::insertNonempty(tools::Long id, OUString const & value)
 {
     if (!value.isEmpty()) {
         insertEntry(SvtDocInfoTable_Impl::GetString(id), value);
@@ -144,7 +144,7 @@ void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)
 }
 
 void ODocumentInfoPreview::insertDateTime(
-    long id, css::util::DateTime const & value)
+    tools::Long id, css::util::DateTime const & value)
 {
     DateTime aToolsDT(
         Date(value.Day, value.Month, value.Year),

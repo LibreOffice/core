@@ -440,10 +440,10 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         }
 
         const tools::Rectangle aVCLDiscreteRectangle(
-            static_cast<long>(floor(aDiscreteRange.getMinX())),
-            static_cast<long>(floor(aDiscreteRange.getMinY())),
-            static_cast<long>(ceil(aDiscreteRange.getMaxX())),
-            static_cast<long>(ceil(aDiscreteRange.getMaxY())));
+            static_cast<tools::Long>(floor(aDiscreteRange.getMinX())),
+            static_cast<tools::Long>(floor(aDiscreteRange.getMinY())),
+            static_cast<tools::Long>(ceil(aDiscreteRange.getMaxX())),
+            static_cast<tools::Long>(ceil(aDiscreteRange.getMaxY())));
 
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
         rWindow.EnableMapMode(false);
@@ -456,10 +456,10 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         // that the drawinglayer units are 100ths of mm, so they are easy to
         // convert to twips
         const tools::Rectangle aRect100thMM(
-            static_cast<long>(floor(rRange.getMinX())),
-            static_cast<long>(floor(rRange.getMinY())),
-            static_cast<long>(ceil(rRange.getMaxX())),
-            static_cast<long>(ceil(rRange.getMaxY())));
+            static_cast<tools::Long>(floor(rRange.getMinX())),
+            static_cast<tools::Long>(floor(rRange.getMinY())),
+            static_cast<tools::Long>(ceil(rRange.getMaxX())),
+            static_cast<tools::Long>(ceil(rRange.getMaxY())));
 
         const tools::Rectangle aRectTwips = OutputDevice::LogicToLogic(aRect100thMM, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
 

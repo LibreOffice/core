@@ -75,14 +75,14 @@
 
 namespace com::sun::star::accessibility { class XAccessible; }
 
-const long THESIZE = 1000000;            // Should be more than enough!
-const long INPUTLINE_INSET_MARGIN = 2;   // Space between border and interior widgets of input line
-const long LEFT_OFFSET = 5;              // Left offset of input line
-const long BUTTON_OFFSET = 2;            // Space between input line and button to expand/collapse
-const long MULTILINE_BUTTON_WIDTH = 20;  // Width of the button which opens multiline dropdown
-const long INPUTWIN_MULTILINES = 6;      // Initial number of lines within multiline dropdown
-const long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
-const long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
+const tools::Long THESIZE = 1000000;            // Should be more than enough!
+const tools::Long INPUTLINE_INSET_MARGIN = 2;   // Space between border and interior widgets of input line
+const tools::Long LEFT_OFFSET = 5;              // Left offset of input line
+const tools::Long BUTTON_OFFSET = 2;            // Space between input line and button to expand/collapse
+const tools::Long MULTILINE_BUTTON_WIDTH = 20;  // Width of the button which opens multiline dropdown
+const tools::Long INPUTWIN_MULTILINES = 6;      // Initial number of lines within multiline dropdown
+const tools::Long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
+const tools::Long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
@@ -755,7 +755,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     if (bInResize)
     {
         // detect direction
-        long nResizeThreshold = long(TOOLBOX_WINDOW_HEIGHT * 0.7);
+        tools::Long nResizeThreshold = tools::Long(TOOLBOX_WINDOW_HEIGHT * 0.7);
         bool bResetPointerPos = false;
 
         // Detect attempt to expand toolbar too much
@@ -921,12 +921,12 @@ void ScInputBarGroup::Resize()
     }
     Size aSize = GetSizePixel();
     //(-10) to allow margin between sidebar and formulabar
-    long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
+    tools::Long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
     aSize.setWidth(pParent->GetSizePixel().Width() - GetPosPixel().X() - LEFT_OFFSET - margin);
     aSize.setHeight(maTextWndGroup->GetPixelHeightForLines(maTextWndGroup->GetNumLines()));
     SetSizePixel(aSize);
 
-    long nButtonWidth = maButton->IsVisible()? maButton->GetSizePixel().Width() + BUTTON_OFFSET: 0;
+    tools::Long nButtonWidth = maButton->IsVisible()? maButton->GetSizePixel().Width() + BUTTON_OFFSET: 0;
     aSize.setWidth(aSize.Width() - nButtonWidth);
     maTextWndGroup->SetSizePixel(aSize);
     maTextWndGroup->Resize();
@@ -1122,8 +1122,8 @@ void ScInputBarGroup::TextGrabFocus()
     maTextWndGroup->TextGrabFocus();
 }
 
-constexpr long gnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
-constexpr long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
+constexpr tools::Long gnBorderWidth = INPUTLINE_INSET_MARGIN + 1;
+constexpr tools::Long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
 
 ScTextWndGroup::ScTextWndGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     : ScTextWndBase(pParent, WinBits(WB_TABSTOP)),
@@ -1164,17 +1164,17 @@ EditView* ScTextWndGroup::GetEditView()
     return maTextWnd->GetEditView();
 }
 
-long ScTextWndGroup::GetLastNumExpandedLines() const
+tools::Long ScTextWndGroup::GetLastNumExpandedLines() const
 {
     return maTextWnd->GetLastNumExpandedLines();
 }
 
-long ScTextWndGroup::GetNumLines() const
+tools::Long ScTextWndGroup::GetNumLines() const
 {
     return maTextWnd->GetNumLines();
 }
 
-long ScTextWndGroup::GetPixelHeightForLines(long nLines)
+tools::Long ScTextWndGroup::GetPixelHeightForLines(tools::Long nLines)
 {
     return maTextWnd->GetPixelHeightForLines(nLines) + 2 * gnBorderHeight;
 }
@@ -1254,7 +1254,7 @@ void ScTextWndGroup::Resize()
     Invalidate();
 }
 
-void ScTextWndGroup::SetNumLines(long nLines)
+void ScTextWndGroup::SetNumLines(tools::Long nLines)
 {
     maTextWnd->SetNumLines(nLines);
 }
@@ -1316,13 +1316,13 @@ EditView* ScTextWnd::GetEditView()
 
 bool ScTextWnd::HasEditView() const { return mpEditView != nullptr; }
 
-long ScTextWnd::GetPixelHeightForLines(long nLines)
+tools::Long ScTextWnd::GetPixelHeightForLines(tools::Long nLines)
 {
     // add padding (for the borders of the window)
     return LogicToPixel(Size(0, nLines * GetTextHeight())).Height() + 1;
 }
 
-void ScTextWnd::SetNumLines(long nLines)
+void ScTextWnd::SetNumLines(tools::Long nLines)
 {
     mnLines = nLines;
     if ( nLines > 1 )
@@ -1348,7 +1348,7 @@ void ScTextWnd::Resize()
         mpEditView->SetOutputArea( aOutputArea );
 
         // Don't leave an empty area at the bottom if we can move the text down.
-        long nMaxVisAreaTop = mpEditEngine->GetTextHeight() - aOutputArea.GetHeight();
+        tools::Long nMaxVisAreaTop = mpEditEngine->GetTextHeight() - aOutputArea.GetHeight();
         if (mpEditView->GetVisArea().Top() > nMaxVisAreaTop)
         {
             mpEditView->Scroll(0, mpEditView->GetVisArea().Top() - nMaxVisAreaTop);
@@ -1360,7 +1360,7 @@ void ScTextWnd::Resize()
     SetScrollBarRange();
 }
 
-long ScTextWnd::GetEditEngTxtHeight() const
+tools::Long ScTextWnd::GetEditEngTxtHeight() const
 {
     return mpEditView ? mpEditView->GetEditEngine()->GetTextHeight() : 0;
 }
@@ -1371,7 +1371,7 @@ void ScTextWnd::SetScrollBarRange()
     {
         ScrollBar& rVBar = mrGroupBar.GetScrollBar();
         rVBar.SetRange( Range( 0, GetEditEngTxtHeight() ) );
-        long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
+        tools::Long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
     }
 }
@@ -1381,8 +1381,8 @@ void ScTextWnd::DoScroll()
     if ( mpEditView )
     {
         ScrollBar& rVBar = mrGroupBar.GetScrollBar();
-        long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
-        long nDiff = currentDocPos - rVBar.GetThumbPos();
+        tools::Long currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
+        tools::Long nDiff = currentDocPos - rVBar.GetThumbPos();
         mpEditView->Scroll( 0, nDiff );
         currentDocPos = mpEditView->GetVisArea().TopLeft().Y();
         rVBar.SetThumbPos( currentDocPos );
@@ -1463,7 +1463,7 @@ static void lcl_ModifyRTLVisArea( EditView* pEditView )
 {
     tools::Rectangle aVisArea = pEditView->GetVisArea();
     Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
-    long nDiff = aPaper.Width() - aVisArea.Right();
+    tools::Long nDiff = aPaper.Width() - aVisArea.Right();
     aVisArea.AdjustLeft(nDiff );
     aVisArea.AdjustRight(nDiff );
     pEditView->SetVisArea(aVisArea);
@@ -1958,23 +1958,23 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
             }
             else
             {
-                long nTextSize = 0;
+                tools::Long nTextSize = 0;
                 sal_Int32 nDifPos;
                 if (rNewString.getLength() > aString.getLength())
                     nDifPos = findFirstNonMatchingChar(rNewString, aString);
                 else
                     nDifPos = findFirstNonMatchingChar(aString, rNewString);
 
-                long nSize1 = GetTextWidth(aString);
-                long nSize2 = GetTextWidth(rNewString);
+                tools::Long nSize1 = GetTextWidth(aString);
+                tools::Long nSize2 = GetTextWidth(rNewString);
                 if ( nSize1>0 && nSize2>0 )
                     nTextSize = std::max( nSize1, nSize2 );
                 else
                     nTextSize = GetOutputSize().Width(); // Overflow
 
                 Point aLogicStart = PixelToLogic(Point(0,0));
-                long nStartPos = aLogicStart.X();
-                long nInvPos = nStartPos;
+                tools::Long nStartPos = aLogicStart.X();
+                tools::Long nInvPos = nStartPos;
                 if (nDifPos)
                     nInvPos += GetTextWidth(aString,0,nDifPos);
 

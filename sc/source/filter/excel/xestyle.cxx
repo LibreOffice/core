@@ -1456,7 +1456,7 @@ bool XclExpCellAlign::FillFromItemSet(
         case EXC_BIFF8: // attributes new in BIFF8
         {
             // text indent
-            long nTmpIndent = rItemSet.Get( ATTR_INDENT ).GetValue();
+            tools::Long nTmpIndent = rItemSet.Get( ATTR_INDENT ).GetValue();
             nTmpIndent = (nTmpIndent + 100) / 200; // 1 Excel unit == 10 pt == 200 twips
             mnIndent = limit_cast< sal_uInt8 >( nTmpIndent, 0, 15 );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );

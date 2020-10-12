@@ -367,8 +367,8 @@ void ScDocShell::CalcOutputFactor()
 
     OUString aTestString(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
-    long nPrinterWidth = 0;
-    long nWindowWidth = 0;
+    tools::Long nPrinterWidth = 0;
+    tools::Long nWindowWidth = 0;
     const ScPatternAttr* pPattern = &m_aDocument.GetPool()->GetDefaultItem(ATTR_PATTERN);
 
     vcl::Font aDefFont;
@@ -388,7 +388,7 @@ void ScDocShell::CalcOutputFactor()
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pVirtWindow);    // font color doesn't matter here
     pVirtWindow->SetFont(aDefFont);
     nWindowWidth = pVirtWindow->GetTextWidth(aTestString);
-    nWindowWidth = static_cast<long>( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
+    nWindowWidth = static_cast<tools::Long>( nWindowWidth / ScGlobal::nScreenPPTX * HMM_PER_TWIPS );
 
     if (nPrinterWidth && nWindowWidth)
         m_nPrtToScreenFactor = nPrinterWidth / static_cast<double>(nWindowWidth);

@@ -64,7 +64,7 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage> const & rSrc1)
+static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, tools::SvRef<SotStorage> const & rSrc1)
 {
     // Getting the scaling factor:
     //      Information in the PIC-stream (by trying out)
@@ -302,7 +302,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 }
 
 bool SwWW8ImplReader::ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF,
-                                   long& rX, long& rY)
+                                   tools::Long& rX, tools::Long& rY)
 {
     bool bOk = false;
     OLE_MFP aMfp;
@@ -335,7 +335,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
     ::SetProgressState( m_nProgress, m_rDoc.GetDocShell() );     // Update
 
-    long nX=0, nY=0;                // nX, nY is graphic size
+    tools::Long nX=0, nY=0;                // nX, nY is graphic size
     bool bOleOk = true;
 
     // results in the name "_4711"

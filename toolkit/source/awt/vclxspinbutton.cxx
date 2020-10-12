@@ -94,7 +94,7 @@ namespace toolkit
 
     namespace
     {
-        typedef void (SpinButton::*SetSpinButtonValue) (long);
+        typedef void (SpinButton::*SetSpinButtonValue) (tools::Long);
         typedef long (SpinButton::*GetSpinButtonValue) () const;
 
 

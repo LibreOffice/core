@@ -276,7 +276,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
             {
                 // The first Line should be enough
                 FndBoxes_t const& rFndBoxes = pCmpLine->GetBoxes();
-                long nSz = 0;
+                tools::Long nSz = 0;
                 for( auto n = rFndBoxes.size(); n; )
                 {
                     nSz += rFndBoxes[--n]->GetBox()->
@@ -611,17 +611,17 @@ bool SwTable::InsertRow_( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return true;
 }
 
-static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
+static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const tools::Long nOffset,
                             bool bFirst, SwShareBoxFormats& rShareFormats );
 
-static void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
+static void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const tools::Long nOffset,
                                 bool bFirst, SwShareBoxFormats& rShareFormats )
 {
     for ( auto pLine : rLines )
         ::lcl_LastBoxSetWidth( pLine->GetTabBoxes(), nOffset, bFirst, rShareFormats );
 }
 
-static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
+static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const tools::Long nOffset,
                             bool bFirst, SwShareBoxFormats& rShareFormats )
 {
     SwTableBox& rBox = *(bFirst ? rBoxes.front() : rBoxes.back());
@@ -1306,7 +1306,7 @@ static void lcl_CalcWidth( SwTableBox* pBox )
     SwTableLine* pLine = pBox->GetTabLines()[0];
     OSL_ENSURE( pLine, "Box is not within a Line" );
 
-    long nWidth = 0;
+    tools::Long nWidth = 0;
     for( auto pTabBox : pLine->GetTabBoxes() )
         nWidth += pTabBox->GetFrameFormat()->GetFrameSize().GetWidth();
 
@@ -1640,15 +1640,15 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
 static void lcl_CheckRowSpan( SwTable &rTable )
 {
-    const long nLineCount = static_cast<long>(rTable.GetTabLines().size());
-    long nMaxSpan = nLineCount;
-    long nMinSpan = 1;
+    const tools::Long nLineCount = static_cast<tools::Long>(rTable.GetTabLines().size());
+    tools::Long nMaxSpan = nLineCount;
+    tools::Long nMinSpan = 1;
     while( nMaxSpan )
     {
         SwTableLine* pLine = rTable.GetTabLines()[ nLineCount - nMaxSpan ];
         for( auto pBox : pLine->GetTabBoxes() )
         {
-            long nRowSpan = pBox->getRowSpan();
+            tools::Long nRowSpan = pBox->getRowSpan();
             if( nRowSpan > nMaxSpan )
                 pBox->setRowSpan( nMaxSpan );
             else if( nRowSpan < nMinSpan )
@@ -2669,7 +2669,7 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
                 if( ppUndo )
                     ppUndo->reset(new SwUndoAttrTable( *aParam.pTableNd, true ));
 
-                long nFrameWidth = LONG_MAX;
+                tools::Long nFrameWidth = LONG_MAX;
                 LockModify();
                 SwFormatFrameSize aSz( rSz );
                 SvxLRSpaceItem aLR( rLR );
@@ -2940,7 +2940,7 @@ static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewH
         Fraction aTmp( nMyOldH );
         aTmp *= Fraction( nNewHeight, nOldHeight );
         aTmp += Fraction( 1, 2 );       // round up if needed
-        nMyNewH = long(aTmp);
+        nMyNewH = tools::Long(aTmp);
     }
 
     SwFrameSize eSize = SwFrameSize::Minimum;
@@ -3207,7 +3207,7 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
     return bRet;
 }
 
-SwFrameFormat* SwShareBoxFormat::GetFormat( long nWidth ) const
+SwFrameFormat* SwShareBoxFormat::GetFormat( tools::Long nWidth ) const
 {
     SwFrameFormat *pRet = nullptr, *pTmp;
     for( auto n = m_aNewFormats.size(); n; )
@@ -3258,7 +3258,7 @@ SwShareBoxFormats::~SwShareBoxFormats()
 {
 }
 
-SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, long nWidth ) const
+SwFrameFormat* SwShareBoxFormats::GetFormat( const SwFrameFormat& rFormat, tools::Long nWidth ) const
 {
     sal_uInt16 nPos;
     return Seek_Entry( rFormat, &nPos )

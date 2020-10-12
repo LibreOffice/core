@@ -968,17 +968,17 @@ void Chart2ImportTest::testTdf105517()
     Reference<beans::XPropertySet> xPropSet1(xDSContainer->getDataSeries()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPropSet1.is());
 
-    long lineColor;
+    tools::Long lineColor;
     xPropSet1->getPropertyValue("Color") >>= lineColor;
     // incorrect line color was 0x4a7ebb due to not handling themeOverride
-    CPPUNIT_ASSERT_EQUAL(long(0xeaa700), lineColor);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0xeaa700), lineColor);
 
     Reference<beans::XPropertySet> xPropSet2(xDSContainer->getDataSeries()[1], uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPropSet2.is());
 
     xPropSet2->getPropertyValue("Color") >>= lineColor;
     // incorrect line color was 0x98b855
-    CPPUNIT_ASSERT_EQUAL(long(0x1e69a8), lineColor);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0x1e69a8), lineColor);
 }
 
 void Chart2ImportTest::testTdf106217()

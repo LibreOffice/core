@@ -55,7 +55,7 @@ public: // TODO: make data members private
     ImplFontMetricDataRef mxFontMetric;        // Font attributes
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
-    long            mnLineHeight;
+    tools::Long            mnLineHeight;
     short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
     short           mnOrientation;          // text angle in 3600 system
     bool            mbInit;                 // true if maFontMetric member is valid

@@ -254,16 +254,16 @@ struct ImpMeasureRec : public SdrDragStatUserData
     Point                       aPt2;
     css::drawing::MeasureTextHorzPos eWantTextHPos;
     css::drawing::MeasureTextVertPos eWantTextVPos;
-    long                        nLineDist;
-    long                        nHelplineOverhang;
-    long                        nHelplineDist;
-    long                        nHelpline1Len;
-    long                        nHelpline2Len;
+    tools::Long                        nLineDist;
+    tools::Long                        nHelplineOverhang;
+    tools::Long                        nHelplineDist;
+    tools::Long                        nHelpline1Len;
+    tools::Long                        nHelpline2Len;
     bool                        bBelowRefEdge;
     bool                        bTextRota90;
     bool                        bTextUpsideDown;
     bool                        bTextAutoAngle;
-    long                        nTextAutoAngleView;
+    tools::Long                        nTextAutoAngleView;
 };
 
 namespace {
@@ -284,21 +284,21 @@ struct ImpMeasurePoly
     ImpLineRec                  aHelpline1;
     ImpLineRec                  aHelpline2;
     Size                        aTextSize;
-    long                        nLineLen;
-    long                        nLineAngle;
-    long                        nTextAngle;
-    long                        nHlpAngle;
+    tools::Long                        nLineLen;
+    tools::Long                        nLineAngle;
+    tools::Long                        nTextAngle;
+    tools::Long                        nHlpAngle;
     double                      nLineSin;
     double                      nLineCos;
     sal_uInt16                      nMainlineCnt;
     css::drawing::MeasureTextHorzPos eUsedTextHPos;
     css::drawing::MeasureTextVertPos eUsedTextVPos;
-    long                        nLineWdt2;  // half the line width
-    long                        nArrow1Len; // length of 1st arrowhead; for Center, use only half
-    long                        nArrow2Len; // length of 2nd arrowhead; for Center, use only half
-    long                        nArrow1Wdt; // width of 1st arrow
-    long                        nArrow2Wdt; // width of 2nd arrow
-    long                        nShortLineLen; // line length, if PfeileAussen (arrowheads on the outside)
+    tools::Long                        nLineWdt2;  // half the line width
+    tools::Long                        nArrow1Len; // length of 1st arrowhead; for Center, use only half
+    tools::Long                        nArrow2Len; // length of 2nd arrowhead; for Center, use only half
+    tools::Long                        nArrow1Wdt; // width of 1st arrow
+    tools::Long                        nArrow2Wdt; // width of 2nd arrow
+    tools::Long                        nShortLineLen; // line length, if PfeileAussen (arrowheads on the outside)
     bool                        bAutoUpsideDown; // UpsideDown via automation
     bool                        bBreakedLine;
 };
@@ -323,12 +323,12 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.nTextAutoAngleView=static_cast<const SdrMeasureTextAutoAngleViewItem&>(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
 }
 
-static long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, long nNewWidth, bool bCenter)
+static tools::Long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, tools::Long nNewWidth, bool bCenter)
 {
     const basegfx::B2DRange aPolygonRange(rPolyPolygon.getB2DRange());
     const double fOldWidth(std::max(aPolygonRange.getWidth(), 1.0));
     const double fScale(static_cast<double>(nNewWidth) / fOldWidth);
-    long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
+    tools::Long nHeight(basegfx::fround(aPolygonRange.getHeight() * fScale));
 
     if(bCenter)
     {
@@ -348,14 +348,14 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nLineLen=GetLen(aDelt);
 
     rPol.nLineWdt2=0;
-    long nArrow1Len=0; bool bArrow1Center=false;
-    long nArrow2Len=0; bool bArrow2Center=false;
-    long nArrow1Wdt=0;
-    long nArrow2Wdt=0;
+    tools::Long nArrow1Len=0; bool bArrow1Center=false;
+    tools::Long nArrow2Len=0; bool bArrow2Center=false;
+    tools::Long nArrow1Wdt=0;
+    tools::Long nArrow2Wdt=0;
     rPol.nArrow1Wdt=0;
     rPol.nArrow2Wdt=0;
-    long nArrowNeed=0;
-    long nShortLen=0;
+    tools::Long nArrowNeed=0;
+    tools::Long nShortLen=0;
     bool bPfeileAussen = false;
 
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -399,12 +399,12 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.bBreakedLine=bBrkLine;
     if (rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_AUTO) { // if text is too wide, push it outside
         bool bOutside = false;
-        long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
+        tools::Long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
         if (nNeedSiz>rPol.nLineLen) bOutside = true; // text doesn't fit in between
         if (bBrkLine) {
             if (nNeedSiz+nArrowNeed>rPol.nLineLen) bPfeileAussen = true; // text fits in between, if arrowheads are on the outside
         } else {
-            long nSmallNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2/4;
+            tools::Long nSmallNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2/4;
             if (nNeedSiz+nSmallNeed>rPol.nLineLen) bPfeileAussen = true; // text fits in between, if arrowheads are on the outside
         }
         rPol.eUsedTextHPos=bOutside ? css::drawing::MeasureTextHorzPos_LEFTOUTSIDE : css::drawing::MeasureTextHorzPos_INSIDE;
@@ -428,7 +428,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
-        long nTmpAngle=NormAngle36000(rPol.nTextAngle-rRec.nTextAutoAngleView);
+        tools::Long nTmpAngle=NormAngle36000(rPol.nTextAngle-rRec.nTextAutoAngleView);
         if (nTmpAngle>=18000) {
             rPol.nTextAngle+=18000;
             rPol.bAutoUpsideDown=true;
@@ -447,18 +447,18 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         nHlpCos=-nHlpCos;
     }
 
-    long nLineDist=rRec.nLineDist;
-    long nOverhang=rRec.nHelplineOverhang;
-    long nHelplineDist=rRec.nHelplineDist;
+    tools::Long nLineDist=rRec.nLineDist;
+    tools::Long nOverhang=rRec.nHelplineOverhang;
+    tools::Long nHelplineDist=rRec.nHelplineDist;
 
-    long dx= FRound(nLineDist*nHlpCos);
-    long dy=-FRound(nLineDist*nHlpSin);
-    long dxh1a= FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpCos);
-    long dyh1a=-FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpSin);
-    long dxh1b= FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpCos);
-    long dyh1b=-FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpSin);
-    long dxh2= FRound((nLineDist+nOverhang)*nHlpCos);
-    long dyh2=-FRound((nLineDist+nOverhang)*nHlpSin);
+    tools::Long dx= FRound(nLineDist*nHlpCos);
+    tools::Long dy=-FRound(nLineDist*nHlpSin);
+    tools::Long dxh1a= FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpCos);
+    tools::Long dyh1a=-FRound((nHelplineDist-rRec.nHelpline1Len)*nHlpSin);
+    tools::Long dxh1b= FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpCos);
+    tools::Long dyh1b=-FRound((nHelplineDist-rRec.nHelpline2Len)*nHlpSin);
+    tools::Long dxh2= FRound((nLineDist+nOverhang)*nHlpCos);
+    tools::Long dyh2=-FRound((nLineDist+nOverhang)*nHlpSin);
 
     // extension line 1
     rPol.aHelpline1.aP1=Point(aP1.X()+dxh1a,aP1.Y()+dyh1a);
@@ -478,8 +478,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         rPol.aMainline3=rPol.aMainline1;
         rPol.nMainlineCnt=1;
         if (bBrkLine) {
-            long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
-            long nHalfLen=(rPol.nLineLen-nNeedSiz-nArrow1Wdt/4-nArrow2Wdt/4) /2;
+            tools::Long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
+            tools::Long nHalfLen=(rPol.nLineLen-nNeedSiz-nArrow1Wdt/4-nArrow2Wdt/4) /2;
             rPol.nMainlineCnt=2;
             rPol.aMainline1.aP2=aMainlinePt1;
             rPol.aMainline1.aP2.AdjustX(nHalfLen );
@@ -489,9 +489,9 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
             RotatePoint(rPol.aMainline2.aP1,rPol.aMainline2.aP2,nLineSin,nLineCos);
         }
     } else {
-        long nLen1=nShortLen; // arrowhead's width as line length outside of the arrowhead
-        long nLen2=nShortLen;
-        long nTextWdt=rRec.bTextRota90 ? rPol.aTextSize.Height() : rPol.aTextSize.Width();
+        tools::Long nLen1=nShortLen; // arrowhead's width as line length outside of the arrowhead
+        tools::Long nLen2=nShortLen;
+        tools::Long nTextWdt=rRec.bTextRota90 ? rPol.aTextSize.Height() : rPol.aTextSize.Width();
         if (!bBrkLine) {
             if (rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_LEFTOUTSIDE) nLen1=nArrow1Len+nTextWdt;
             if (rPol.eUsedTextHPos==css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE) nLen2=nArrow2Len+nTextWdt;
@@ -616,10 +616,10 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     aTextSize2.AdjustHeight(GetTextUpperDistance()+GetTextLowerDistance() );
 
     Point aPt1b(aMPol.aMainline1.aP1);
-    long nLen=aMPol.nLineLen;
-    long nLWdt=aMPol.nLineWdt2;
-    long nArr1Len=aMPol.nArrow1Len;
-    long nArr2Len=aMPol.nArrow2Len;
+    tools::Long nLen=aMPol.nLineLen;
+    tools::Long nLWdt=aMPol.nLineWdt2;
+    tools::Long nArr1Len=aMPol.nArrow1Len;
+    tools::Long nArr2Len=aMPol.nArrow2Len;
     if (aMPol.bBreakedLine) {
         // In the case of a dashed line and Outside, the text should be
         // placed next to the line at the arrowhead instead of directly
@@ -878,7 +878,7 @@ OUString SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) cons
 
 void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const
 {
-    long nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
+    tools::Long nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
     double a = nLineAngle * F_PI18000;
     double nSin=sin(a);
     double nCos=cos(a);
@@ -909,19 +909,19 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
             Point aMov(rMov);
             Point aFix(bAnf ? rRec.aPt2 : rRec.aPt1);
             if (bOrtho) {
-                long ndx0=aMov.X()-aFix.X();
-                long ndy0=aMov.Y()-aFix.Y();
+                tools::Long ndx0=aMov.X()-aFix.X();
+                tools::Long ndy0=aMov.Y()-aFix.Y();
                 bool bHLin=ndy0==0;
                 bool bVLin=ndx0==0;
                 if (!bHLin || !bVLin) { // else aPt1==aPt2
-                    long ndx=aPt.X()-aFix.X();
-                    long ndy=aPt.Y()-aFix.Y();
+                    tools::Long ndx=aPt.X()-aFix.X();
+                    tools::Long ndy=aPt.Y()-aFix.Y();
                     double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
                     double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
-                    if (bHor) ndy=long(ndy0*nXFact);
-                    if (bVer) ndx=long(ndx0*nYFact);
+                    if (bHor) ndy=tools::Long(ndy0*nXFact);
+                    if (bVer) ndx=tools::Long(ndx0*nYFact);
                     aPt=aFix;
                     aPt.AdjustX(ndx );
                     aPt.AdjustY(ndy );
@@ -930,7 +930,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
             rMov=aPt;
         } break;
         case 4: case 5: {
-            long nVal0=rRec.nLineDist;
+            tools::Long nVal0=rRec.nLineDist;
             RotatePoint(aPt,(nHdlNum==4 ? aPt1 : aPt2),nSin,-nCos);
             rRec.nLineDist=aPt.Y()- (nHdlNum==4 ? aPt1.Y() : aPt2.Y());
             if (bBelow) rRec.nLineDist=-rRec.nLineDist;
@@ -1016,16 +1016,16 @@ void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SetTextDirty();
 }
 
-void SdrMeasureObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrMeasureObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
-    long nLen0=GetLen(aPt2-aPt1);
+    tools::Long nLen0=GetLen(aPt2-aPt1);
     RotatePoint(aPt1,rRef,sn,cs);
     RotatePoint(aPt2,rRef,sn,cs);
-    long nLen1=GetLen(aPt2-aPt1);
+    tools::Long nLen1=GetLen(aPt2-aPt1);
     if (nLen1!=nLen0) { // rounding error!
-        long dx=aPt2.X()-aPt1.X();
-        long dy=aPt2.Y()-aPt1.Y();
+        tools::Long dx=aPt2.X()-aPt1.X();
+        tools::Long dy=aPt2.Y()-aPt1.Y();
         dx=BigMulDiv(dx,nLen0,nLen1);
         dy=BigMulDiv(dy,nLen0,nLen1);
         if (rRef==aPt2) {
@@ -1047,7 +1047,7 @@ void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrMeasureObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrMeasureObj::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     ShearPoint(aPt1,rRef,tn,bVShear);
@@ -1056,7 +1056,7 @@ void SdrMeasureObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVS
     SetTextDirty();
 }
 
-long SdrMeasureObj::GetRotateAngle() const
+tools::Long SdrMeasureObj::GetRotateAngle() const
 {
     return GetAngle(aPt2-aPt1);
 }

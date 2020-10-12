@@ -37,6 +37,7 @@
 #define INCLUDED_SC_INC_PIVOT_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include "types.hxx"
 #include "scdllapi.h"
 #include "dpglobal.hxx"
@@ -69,7 +70,7 @@ struct ScDPLabelData
     OUString   maLayoutName;   ///< Layout name (display name)
     OUString   maSubtotalName;
     SCCOL      mnCol;          ///< 0-based field index (not the source column index)
-    long       mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
+    tools::Long       mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
     PivotFunc  mnFuncMask;     ///< Page/Column/Row subtotal function.
     sal_Int32  mnUsedHier;     ///< Used hierarchy.
     sal_Int32  mnFlags;        ///< Flags from the DataPilotSource dimension
@@ -116,14 +117,14 @@ struct ScPivotField
 {
     css::sheet::DataPilotFieldReference maFieldRef;
 
-    long        mnOriginalDim; ///< >= 0 for duplicated field.
+    tools::Long        mnOriginalDim; ///< >= 0 for duplicated field.
     PivotFunc   nFuncMask;
     SCCOL       nCol;          ///< 0-based dimension index (not source column index)
     sal_uInt8   mnDupCount;
 
     explicit ScPivotField( SCCOL nNewCol = 0 );
 
-    long getOriginalDim() const;
+    tools::Long getOriginalDim() const;
 };
 
 typedef std::vector< ScPivotField > ScPivotFieldVector;
@@ -157,7 +158,7 @@ struct ScPivotFuncData
 {
     css::sheet::DataPilotFieldReference maFieldRef;
 
-    long       mnOriginalDim;
+    tools::Long       mnOriginalDim;
     PivotFunc  mnFuncMask;
     SCCOL      mnCol;
     sal_uInt8  mnDupCount;

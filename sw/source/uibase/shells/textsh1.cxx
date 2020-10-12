@@ -365,12 +365,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         case SID_UNICODE_NOTATION_TOGGLE:
         {
-            long nMaxUnits = 256;
+            tools::Long nMaxUnits = 256;
             sal_Int32 nSelLength = rWrtSh.GetSelText().getLength();
             if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() && (nSelLength < nMaxUnits) )
                 nMaxUnits = nSelLength;
 
-            long index = 0;
+            tools::Long index = 0;
             ToggleUnicodeCodepoint aToggle;
             while( nMaxUnits-- && aToggle.AllowMoreInput(rWrtSh.GetChar(true, index-1)) )
                 --index;
@@ -1029,7 +1029,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             // Left border as offset
             //#i24363# tab stops relative to indent
-            const long nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
+            const tools::Long nOff = rWrtSh.getIDocumentSettingAccess().get(DocumentSettingId::TABS_RELATIVE_TO_INDENT) ?
                 aCoreSet.Get( RES_LR_SPACE ).GetTextLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );

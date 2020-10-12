@@ -579,7 +579,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumera
 sal_Int32 SAL_CALL ScNamedRangesObj::getCount()
 {
     SolarMutexGuard aGuard;
-    long nRet = 0;
+    tools::Long nRet = 0;
     if (pDocShell)
     {
         ScRangeName* pNames = GetRangeName_Impl();
@@ -662,7 +662,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames)
         {
-            long nVisCount = getCount();            // names with lcl_UserVisibleName
+            tools::Long nVisCount = getCount();            // names with lcl_UserVisibleName
             uno::Sequence<OUString> aSeq(nVisCount);
             OUString* pAry = aSeq.getArray();
             sal_uInt16 nVisPos = 0;

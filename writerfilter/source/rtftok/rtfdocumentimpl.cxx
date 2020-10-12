@@ -187,7 +187,7 @@ void putBorderProperty(RTFStack& aStates, Id nId, const RTFValue::Pointer_t& pVa
         pAttributes->set(nId, pValue);
 }
 
-OString DTTM22OString(long nDTTM)
+OString DTTM22OString(tools::Long nDTTM)
 {
     return DateTimeToOString(msfilter::util::DTTM2DateTime(nDTTM));
 }
@@ -1019,12 +1019,12 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     int nYExt = (m_aStates.top().getPicture().nGoalHeight ? m_aStates.top().getPicture().nGoalHeight
                                                           : m_aStates.top().getPicture().nHeight);
     if (m_aStates.top().getPicture().nScaleX != 100)
-        nXExt = (static_cast<long>(m_aStates.top().getPicture().nScaleX)
+        nXExt = (static_cast<tools::Long>(m_aStates.top().getPicture().nScaleX)
                  * (nXExt
                     - (m_aStates.top().getPicture().nCropL + m_aStates.top().getPicture().nCropR)))
                 / 100L;
     if (m_aStates.top().getPicture().nScaleY != 100)
-        nYExt = (static_cast<long>(m_aStates.top().getPicture().nScaleY)
+        nYExt = (static_cast<tools::Long>(m_aStates.top().getPicture().nScaleY)
                  * (nYExt
                     - (m_aStates.top().getPicture().nCropT + m_aStates.top().getPicture().nCropB)))
                 / 100L;

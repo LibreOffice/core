@@ -1555,7 +1555,7 @@ double lclGetCChCorrection(const XclExpRoot& rRoot)
     // 5 pixels are added to the base width: 2 for margin padding on each side, plus 1 for gridline
     // So this should depend on rRoot.GetCharWidth(), not on font height
 
-    long nFontHt = rRoot.GetFontBuffer().GetAppFontData().mnHeight;
+    tools::Long nFontHt = rRoot.GetFontBuffer().GetAppFontData().mnHeight;
     return XclTools::GetXclDefColWidthCorrection(nFontHt) / 256.0;
 }
 

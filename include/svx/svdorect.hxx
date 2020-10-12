@@ -50,7 +50,7 @@ protected:
     std::unique_ptr<XPolygon> mpXPoly;
 
 protected:
-    XPolygon ImpCalcXPoly(const tools::Rectangle& rRect1, long nRad1) const;
+    XPolygon ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nRad1) const;
     void SetXPolyDirty();
 
     /// Subclasses should override RecalcXPoly() by creating an XPolygon
@@ -112,9 +112,9 @@ public:
 
     virtual void NbcMove(const Size& rSiz) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
-    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const override;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const override;

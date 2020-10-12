@@ -1456,7 +1456,7 @@ extern "C" {
 
 static int SfxCompareSIDs_Impl(const void* pSmaller, const void* pBigger)
 {
-    return static_cast<long>(*static_cast<sal_uInt16 const *>(pSmaller)) - static_cast<long>(*static_cast<sal_uInt16 const *>(pBigger));
+    return static_cast<tools::Long>(*static_cast<sal_uInt16 const *>(pSmaller)) - static_cast<tools::Long>(*static_cast<sal_uInt16 const *>(pBigger));
 }
 
 }

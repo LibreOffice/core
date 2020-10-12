@@ -91,7 +91,7 @@ Paper SvxPaperInfo::GetSvxPaper( const Size &rSize, MapUnit eUnit )
 }
 
 
-long SvxPaperInfo::GetSloppyPaperDimension( long nSize )
+tools::Long SvxPaperInfo::GetSloppyPaperDimension( tools::Long nSize )
 {
     nSize = OutputDevice::LogicToLogic(nSize, MapUnit::MapTwip, MapUnit::Map100thMM);
     nSize = PaperInfo::sloppyFitPageDimension(nSize);

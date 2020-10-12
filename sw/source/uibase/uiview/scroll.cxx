@@ -52,7 +52,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 
 void SwScrollbar::ViewPortChgd( const tools::Rectangle &rRect )
 {
-    long nThumb, nVisible;
+    tools::Long nThumb, nVisible;
     if( bHori )
     {
         nThumb = rRect.Left();
@@ -103,8 +103,8 @@ void SwScrollbar::SetAuto(bool bSet)
 
 void SwScrollbar::AutoShow()
 {
-    long nVis = GetVisibleSize();
-    long nLen = GetRange().Len();
+    tools::Long nVis = GetVisibleSize();
+    tools::Long nLen = GetRange().Len();
     if( nVis >= nLen - 1)
     {
         if(ScrollBar::IsVisible())

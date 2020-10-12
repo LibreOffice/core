@@ -56,9 +56,9 @@ void SvxXMeasurePreview::ResizeImpl(const Size& rSize)
     rRefDevice.SetMapMode(m_aMapMode);
 
     Size aSize = rRefDevice.PixelToLogic(rSize);
-    Point aPt1(aSize.Width() / 5, static_cast<long>(aSize.Height() / 2));
+    Point aPt1(aSize.Width() / 5, static_cast<tools::Long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt1, 0);
-    Point aPt2(aSize.Width() * 4 / 5, static_cast<long>(aSize.Height() / 2));
+    Point aPt2(aSize.Width() * 4 / 5, static_cast<tools::Long>(aSize.Height() / 2));
     pMeasureObj->SetPoint(aPt2, 1);
 
     rRefDevice.Pop();
@@ -140,8 +140,8 @@ bool SvxXMeasurePreview::MouseButtonDown(const MouseEvent& rMEvt)
             rRefDevice.Pop();
 
             Point aPt(m_aMapMode.GetOrigin());
-            long nX = long((double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0 + 0.5);
-            long nY = long((double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0 + 0.5);
+            tools::Long nX = tools::Long((double(aOutSize.Width()) - (double(aOutSize.Width()) * double(*pMultFrac))) / 2.0 + 0.5);
+            tools::Long nY = tools::Long((double(aOutSize.Height()) - (double(aOutSize.Height()) * double(*pMultFrac))) / 2.0 + 0.5);
             aPt.AdjustX(nX );
             aPt.AdjustY(nY );
 

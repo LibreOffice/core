@@ -1116,7 +1116,7 @@ void ScTabView::DeselectAllTables()
 }
 
 static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
-                        long nWindowX, long nWindowY, const ScDocument* pDoc, SCTAB nTab,
+                        tools::Long nWindowX, tools::Long nWindowY, const ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
 {
@@ -1124,7 +1124,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
     fScaleX *= fZoomFactor;
     fScaleY *= fZoomFactor;
 
-    long nBlockX = 0;
+    tools::Long nBlockX = 0;
     SCCOL nCol;
     for (nCol=0; nCol<nFixPosX; nCol++)
     {
@@ -1132,7 +1132,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         sal_uInt16 nColTwips = pDoc->GetColWidth( nCol, nTab );
         if (nColTwips)
         {
-            nBlockX += static_cast<long>(nColTwips * fScaleX);
+            nBlockX += static_cast<tools::Long>(nColTwips * fScaleX);
             if (nBlockX > nWindowX)
                 return false;
         }
@@ -1142,13 +1142,13 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         sal_uInt16 nColTwips = pDoc->GetColWidth( nCol, nTab );
         if (nColTwips)
         {
-            nBlockX += static_cast<long>(nColTwips * fScaleX);
+            nBlockX += static_cast<tools::Long>(nColTwips * fScaleX);
             if (nBlockX > nWindowX)
                 return false;
         }
     }
 
-    long nBlockY = 0;
+    tools::Long nBlockY = 0;
     for (SCROW nRow = 0; nRow <= nFixPosY-1; ++nRow)
     {
         if (pDoc->RowHidden(nRow, nTab))
@@ -1158,7 +1158,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         sal_uInt16 nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
-            nBlockY += static_cast<long>(nRowTwips * fScaleY);
+            nBlockY += static_cast<tools::Long>(nRowTwips * fScaleY);
             if (nBlockY > nWindowY)
                 return false;
         }
@@ -1168,7 +1168,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
         sal_uInt16 nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
-            nBlockY += static_cast<long>(nRowTwips * fScaleY);
+            nBlockY += static_cast<tools::Long>(nRowTwips * fScaleY);
             if (nBlockY > nWindowY)
                 return false;
         }
@@ -1314,7 +1314,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         ScSplitMode eHMode = aViewData.GetHSplitMode();
                         if ( eHMode != SC_SPLIT_NONE && pGridWin[SC_SPLIT_BOTTOMRIGHT] )
                         {
-                            long nOtherWidth = pGridWin[SC_SPLIT_BOTTOMRIGHT]->
+                            tools::Long nOtherWidth = pGridWin[SC_SPLIT_BOTTOMRIGHT]->
                                                         GetOutputSizePixel().Width();
                             if ( eHMode == SC_SPLIT_FIX )
                             {
@@ -1329,7 +1329,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         ScSplitMode eVMode = aViewData.GetVSplitMode();
                         if ( eVMode != SC_SPLIT_NONE && pGridWin[SC_SPLIT_TOPLEFT] )
                         {
-                            long nOtherHeight = pGridWin[SC_SPLIT_TOPLEFT]->
+                            tools::Long nOtherHeight = pGridWin[SC_SPLIT_TOPLEFT]->
                                                         GetOutputSizePixel().Height();
                             if ( eVMode == SC_SPLIT_FIX )
                             {
@@ -1345,9 +1345,9 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                         double nPPTX = ScGlobal::nScreenPPTX / aViewData.GetDocShell()->GetOutputFactor();
                         double nPPTY = ScGlobal::nScreenPPTY;
 
-                        long nZoomX = static_cast<long>( aWinSize.Width() * 100 /
+                        tools::Long nZoomX = static_cast<tools::Long>( aWinSize.Width() * 100 /
                                                ( aPageSize.Width() * nPPTX ) );
-                        long nZoomY = static_cast<long>( aWinSize.Height() * 100 /
+                        tools::Long nZoomY = static_cast<tools::Long>( aWinSize.Height() * 100 /
                                                ( aPageSize.Height() * nPPTY ) );
 
                         if (nZoomX > 0)

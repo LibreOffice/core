@@ -78,7 +78,7 @@ namespace vclcanvas
             if( !::basegfx::fTools::equalZero( fDividend) )
                 fStretch /= fDividend;
 
-            const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
+            const ::tools::Long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
 
             maFont->SetAverageFontWidth( nNewWidth );
 

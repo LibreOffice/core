@@ -42,15 +42,15 @@ class SwLabPreview : public weld::CustomWidgetController
     OUString m_aColsStr;
     OUString m_aRowsStr;
 
-    long m_lHDistWidth;
-    long m_lVDistWidth;
-    long m_lHeightWidth;
-    long m_lLeftWidth;
-    long m_lUpperWidth;
-    long m_lColsWidth;
+    tools::Long m_lHDistWidth;
+    tools::Long m_lVDistWidth;
+    tools::Long m_lHeightWidth;
+    tools::Long m_lLeftWidth;
+    tools::Long m_lUpperWidth;
+    tools::Long m_lColsWidth;
 
-    long m_lXWidth;
-    long m_lXHeight;
+    tools::Long m_lXWidth;
+    tools::Long m_lXHeight;
 
     SwLabItem m_aItem;
 

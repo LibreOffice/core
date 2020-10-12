@@ -75,7 +75,7 @@ void SwAttrPool::createAndAddSecondaryPools()
     // #75371# change DefaultItems for the SdrEdgeObj distance items
     // to TWIPS.
     // 1/100th mm in twips
-    const long nDefEdgeDist = (500 * 72) / 127;
+    const tools::Long nDefEdgeDist = (500 * 72) / 127;
 
     pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
     pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));

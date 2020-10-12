@@ -110,7 +110,7 @@ private:
     bool            mbDlgLostFocus;
 
     std::vector<ScOptConditionRow> maConditions;
-    long            nScrollPos;
+    tools::Long            nScrollPos;
 
     css::uno::Sequence<OUString> maImplNames;
     css::uno::Sequence<OUString> maDescriptions;

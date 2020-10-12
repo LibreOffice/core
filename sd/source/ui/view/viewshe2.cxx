@@ -73,21 +73,21 @@ void ViewShell::UpdateScrollBars()
 {
     if (mpHorizontalScrollBar)
     {
-        long nW = static_cast<long>(mpContentWindow->GetVisibleWidth() * 32000);
-        long nX = static_cast<long>(mpContentWindow->GetVisibleX() * 32000);
+        ::tools::Long nW = static_cast<::tools::Long>(mpContentWindow->GetVisibleWidth() * 32000);
+        ::tools::Long nX = static_cast<::tools::Long>(mpContentWindow->GetVisibleX() * 32000);
         mpHorizontalScrollBar->SetVisibleSize(nW);
         mpHorizontalScrollBar->SetThumbPos(nX);
         nW = 32000 - nW;
-        long nLine = static_cast<long>(mpContentWindow->GetScrlLineWidth() * nW);
-        long nPage = static_cast<long>(mpContentWindow->GetScrlPageWidth() * nW);
+        ::tools::Long nLine = static_cast<::tools::Long>(mpContentWindow->GetScrlLineWidth() * nW);
+        ::tools::Long nPage = static_cast<::tools::Long>(mpContentWindow->GetScrlPageWidth() * nW);
         mpHorizontalScrollBar->SetLineSize(nLine);
         mpHorizontalScrollBar->SetPageSize(nPage);
     }
 
     if (mpVerticalScrollBar)
     {
-        long nH = static_cast<long>(mpContentWindow->GetVisibleHeight() * 32000);
-        long nY = static_cast<long>(mpContentWindow->GetVisibleY() * 32000);
+        ::tools::Long nH = static_cast<::tools::Long>(mpContentWindow->GetVisibleHeight() * 32000);
+        ::tools::Long nY = static_cast<::tools::Long>(mpContentWindow->GetVisibleY() * 32000);
 
         if(IsPageFlipMode()) // ie in zoom mode where no panning
         {
@@ -106,8 +106,8 @@ void ViewShell::UpdateScrollBars()
             mpVerticalScrollBar->SetVisibleSize(nH);
             mpVerticalScrollBar->SetThumbPos(nY);
             nH = 32000 - nH;
-            long nLine = static_cast<long>(mpContentWindow->GetScrlLineHeight() * nH);
-            long nPage = static_cast<long>(mpContentWindow->GetScrlPageHeight() * nH);
+            ::tools::Long nLine = static_cast<::tools::Long>(mpContentWindow->GetScrlLineHeight() * nH);
+            ::tools::Long nPage = static_cast<::tools::Long>(mpContentWindow->GetScrlPageHeight() * nH);
             mpVerticalScrollBar->SetLineSize(nLine);
             mpVerticalScrollBar->SetPageSize(nPage);
         }
@@ -133,7 +133,7 @@ IMPL_LINK(ViewShell, HScrollHdl, ScrollBar *, pHScroll, void )
  */
 void ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 {
-    long nDelta = pHScroll->GetDelta();
+    ::tools::Long nDelta = pHScroll->GetDelta();
 
     if (nDelta == 0)
         return;
@@ -254,7 +254,7 @@ void ViewShell::UpdateVRuler()
  * Scroll a specific number of lines. Is used in the automatic scrolling
  * (character/drag).
  */
-void ViewShell::ScrollLines(long nLinesX, long nLinesY)
+void ViewShell::ScrollLines(::tools::Long nLinesX, ::tools::Long nLinesY)
 {
     if ( nLinesX )
     {
@@ -268,16 +268,16 @@ void ViewShell::ScrollLines(long nLinesX, long nLinesY)
     Scroll(nLinesX, nLinesY);
 }
 
-void ViewShell::Scroll(long nScrollX, long nScrollY)
+void ViewShell::Scroll(::tools::Long nScrollX, ::tools::Long nScrollY)
 {
     if (nScrollX)
     {
-        long nNewThumb = mpHorizontalScrollBar->GetThumbPos() + nScrollX;
+        ::tools::Long nNewThumb = mpHorizontalScrollBar->GetThumbPos() + nScrollX;
         mpHorizontalScrollBar->SetThumbPos(nNewThumb);
     }
     if (nScrollY)
     {
-        long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
+        ::tools::Long nNewThumb = mpVerticalScrollBar->GetThumbPos() + nScrollY;
         mpVerticalScrollBar->SetThumbPos(nNewThumb);
     }
     double  fX = static_cast<double>(mpHorizontalScrollBar->GetThumbPos()) /
@@ -312,7 +312,7 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
 /**
  * Set zoom factor for all split windows.
  */
-void ViewShell::SetZoom(long nZoom)
+void ViewShell::SetZoom(::tools::Long nZoom)
 {
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
@@ -347,7 +347,7 @@ void ViewShell::SetZoom(long nZoom)
     UpdateScrollBars();
 }
 
-long ViewShell::GetZoom() const
+::tools::Long ViewShell::GetZoom() const
 {
     if (mpContentWindow)
     {
@@ -363,7 +363,7 @@ long ViewShell::GetZoom() const
  */
 void ViewShell::SetZoomRect(const ::tools::Rectangle& rZoomRect)
 {
-    long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
+    ::tools::Long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
     Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
@@ -454,8 +454,8 @@ void ViewShell::DrawMarkRect(const ::tools::Rectangle& rRect) const
 }
 
 void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
-                                       long nLeft, long nRight,
-                                       long nUpper, long nLower, bool bScaleAll,
+                                       ::tools::Long nLeft, ::tools::Long nRight,
+                                       ::tools::Long nUpper, ::tools::Long nLower, bool bScaleAll,
                                        Orientation eOrientation, sal_uInt16 nPaperBin,
                                        bool bBackgroundFullSize)
 {
@@ -506,8 +506,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SdPage* pPage(0 != nPageCnt
         ? GetDoc()->GetSdPage(0, ePageKind)
         : GetDoc()->GetMasterSdPage(0, ePageKind));
-    const long nWidth(pPage->GetSize().Width());
-    const long nHeight(pPage->GetSize().Height());
+    const ::tools::Long nWidth(pPage->GetSize().Width());
+    const ::tools::Long nHeight(pPage->GetSize().Height());
     const Point aPageOrg(nWidth, nHeight / 2);
     const Size aViewSize(nWidth * 3, nHeight * 2);
     Point aVisAreaPos;
@@ -548,7 +548,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
  */
 void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
-    long nZoom = static_cast<long>(static_cast<double>(rZoomX) * 100);
+    ::tools::Long nZoom = static_cast<::tools::Long>(static_cast<double>(rZoomX) * 100);
     SetZoom(nZoom);
 }
 
@@ -627,7 +627,7 @@ void ViewShell::WriteFrameViewData()
 {
 }
 
-bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+bool ViewShell::ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb)
 {
     ErrCode aErrCode = ERRCODE_NONE;
 

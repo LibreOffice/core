@@ -387,7 +387,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( !pParent || !pBack )
         return;
 
-    long nMenuHeight = 0;
+    tools::Long nMenuHeight = 0;
     vcl::Window* pMenu = pParent->GetWindow(GetWindowType::Next);
     if( pMenu )
         nMenuHeight = pMenu->GetSizePixel().Height();

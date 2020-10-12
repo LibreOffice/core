@@ -429,8 +429,8 @@ handle_r1c1:
 }
 
 ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScDocShell* pDocSh,
-                                    long nX1, long nX2, long nY1, long nY2,
-                                    long nTab, const Color& rColor )
+                                    tools::Long nX1, tools::Long nX2, tools::Long nY1, tools::Long nY2,
+                                    tools::Long nTab, const Color& rColor )
 {
     ScSplitPos eWhich = rViewData.GetActivePart();
 
@@ -447,15 +447,15 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
 
         Point aTopLeft = rViewData.GetPrintTwipsPos(nCol1, nRow1);
         Point aBottomRight = rViewData.GetPrintTwipsPos(nCol2 + 1, nRow2 + 1);
-        long nSizeX = aBottomRight.X() - aTopLeft.X() - 1;
-        long nSizeY = aBottomRight.Y() - aTopLeft.Y() - 1;
+        tools::Long nSizeX = aBottomRight.X() - aTopLeft.X() - 1;
+        tools::Long nSizeY = aBottomRight.Y() - aTopLeft.Y() - 1;
 
         return ReferenceMark(aTopLeft.X(), aTopLeft.Y(), nSizeX, nSizeY, nTab, rColor);
     }
 
     Point aScrPos = rViewData.GetScrPos( nX1, nY1, eWhich );
-    long nScrX = aScrPos.X();
-    long nScrY = aScrPos.Y();
+    tools::Long nScrX = aScrPos.X();
+    tools::Long nScrY = aScrPos.Y();
 
     double nPPTX = rViewData.GetPPTX();
     double nPPTY = rViewData.GetPPTY();
@@ -505,11 +505,11 @@ void ScInputHandler::UpdateLokReferenceMarks()
 
         const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
         Color aRefColor( rColorCfg.GetColorValue( svtools::CALCREFERENCE ).nColor );
-        long nX1 = rViewData.GetRefStartX();
-        long nX2 = rViewData.GetRefEndX();
-        long nY1 = rViewData.GetRefStartY();
-        long nY2 = rViewData.GetRefEndY();
-        long nTab = rViewData.GetTabNo();
+        tools::Long nX1 = rViewData.GetRefStartX();
+        tools::Long nX2 = rViewData.GetRefEndX();
+        tools::Long nY1 = rViewData.GetRefStartY();
+        tools::Long nY2 = rViewData.GetRefEndY();
+        tools::Long nTab = rViewData.GetTabNo();
 
         PutInOrder(nX1, nX2);
         PutInOrder(nY1, nY2);
@@ -532,11 +532,11 @@ void ScInputHandler::UpdateLokReferenceMarks()
             ScRange aRef = rData.aRef;
             aRef.PutInOrder();
 
-            long nX1 = aRef.aStart.Col();
-            long nX2 = aRef.aEnd.Col();
-            long nY1 = aRef.aStart.Row();
-            long nY2 = aRef.aEnd.Row();
-            long nTab = aRef.aStart.Tab();
+            tools::Long nX1 = aRef.aStart.Col();
+            tools::Long nX2 = aRef.aEnd.Col();
+            tools::Long nY1 = aRef.aStart.Row();
+            tools::Long nY2 = aRef.aEnd.Row();
+            tools::Long nTab = aRef.aStart.Tab();
 
             aReferenceMarks[i + nAdditionalMarks] = ScInputHandler::GetReferenceMark( rViewData, pDocSh,
                                                                           nX1, nX2, nY1, nY2,
@@ -613,7 +613,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         DataChanged();
         bInRangeUpdate = false;
 
-        long nDiff = aNewStr.getLength() - static_cast<long>(nOldEnd-nOldStart);
+        tools::Long nDiff = aNewStr.getLength() - static_cast<tools::Long>(nOldEnd-nOldStart);
 
         rData.aRef = rNew;
         rData.nSelEnd = rData.nSelEnd + nDiff;

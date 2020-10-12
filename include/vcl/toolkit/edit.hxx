@@ -63,7 +63,7 @@ private:
     OUString            maPlaceholderText;
     OUString            maSaveValue;
     OUString            maUndoText;
-    long                mnXOffset;
+    tools::Long                mnXOffset;
     Selection           maSelection;
     sal_uInt16          mnAlign;
     sal_Int32           mnMaxTextLen;
@@ -95,7 +95,7 @@ private:
     SAL_DLLPRIVATE void        ImplSetText( const OUString& rStr, const Selection* pNewSelection );
     SAL_DLLPRIVATE void        ImplInsertText( const OUString& rStr, const Selection* pNewSelection = nullptr, bool bIsUserInput = false );
     SAL_DLLPRIVATE static OUString ImplGetValidString( const OUString& rString );
-    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, long nXStart, long nXEnd);
+    SAL_DLLPRIVATE void        ImplClearBackground(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRectangle, tools::Long nXStart, tools::Long nXEnd);
     SAL_DLLPRIVATE void        ImplPaintBorder(vcl::RenderContext const & rRenderContext);
     SAL_DLLPRIVATE void        ImplShowCursor( bool bOnlyIfVisible = true );
     SAL_DLLPRIVATE void        ImplAlign();
@@ -108,7 +108,7 @@ private:
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
-    SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
+    SAL_DLLPRIVATE tools::Long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& ImplGetInputSequenceChecker();
     SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator> const& ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
@@ -120,8 +120,8 @@ protected:
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
     SAL_DLLPRIVATE ControlType ImplGetNativeControlType() const;
-    SAL_DLLPRIVATE long        ImplGetExtraXOffset() const;
-    SAL_DLLPRIVATE long        ImplGetExtraYOffset() const;
+    SAL_DLLPRIVATE tools::Long        ImplGetExtraXOffset() const;
+    SAL_DLLPRIVATE tools::Long        ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );
 
     css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;

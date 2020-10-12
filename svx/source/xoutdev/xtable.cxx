@@ -108,7 +108,7 @@ XPropertyList::XPropertyList(
 //    fprintf (stderr, "Create type %d count %d\n", (int)meType, count++);
 }
 
-bool XPropertyList::isValidIdx(long nIndex) const
+bool XPropertyList::isValidIdx(tools::Long nIndex) const
 {
     return (nIndex >= 0 && o3tl::make_unsigned(nIndex) < maList.size());
 }
@@ -118,7 +118,7 @@ XPropertyList::~XPropertyList()
 {
 }
 
-long XPropertyList::Count() const
+tools::Long XPropertyList::Count() const
 {
     if( mbListDirty )
     {
@@ -128,7 +128,7 @@ long XPropertyList::Count() const
     return maList.size();
 }
 
-XPropertyEntry* XPropertyList::Get( long nIndex ) const
+XPropertyEntry* XPropertyList::Get( tools::Long nIndex ) const
 {
     if( mbListDirty )
     {
@@ -141,7 +141,7 @@ XPropertyEntry* XPropertyList::Get( long nIndex ) const
     return maList[nIndex].get();
 }
 
-long XPropertyList::GetIndex(const OUString& rName) const
+tools::Long XPropertyList::GetIndex(const OUString& rName) const
 {
     if( mbListDirty )
     {
@@ -149,7 +149,7 @@ long XPropertyList::GetIndex(const OUString& rName) const
             const_cast<XPropertyList*>(this)->Create();
     }
 
-    for( long i = 0, n = maList.size(); i < n; ++i ) {
+    for( tools::Long i = 0, n = maList.size(); i < n; ++i ) {
         if (rName == maList[ i ]->GetName()) {
             return i;
         }
@@ -157,7 +157,7 @@ long XPropertyList::GetIndex(const OUString& rName) const
     return -1;
 }
 
-BitmapEx XPropertyList::GetUiBitmap( long nIndex ) const
+BitmapEx XPropertyList::GetUiBitmap( tools::Long nIndex ) const
 {
     BitmapEx aRetval;
     if (!isValidIdx(nIndex))
@@ -174,7 +174,7 @@ BitmapEx XPropertyList::GetUiBitmap( long nIndex ) const
     return aRetval;
 }
 
-void XPropertyList::Insert(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
+void XPropertyList::Insert(std::unique_ptr<XPropertyEntry> pEntry, tools::Long nIndex)
 {
     if (!pEntry)
     {
@@ -189,7 +189,7 @@ void XPropertyList::Insert(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
     }
 }
 
-void XPropertyList::Replace(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
+void XPropertyList::Replace(std::unique_ptr<XPropertyEntry> pEntry, tools::Long nIndex)
 {
     if (!pEntry)
     {
@@ -205,7 +205,7 @@ void XPropertyList::Replace(std::unique_ptr<XPropertyEntry> pEntry, long nIndex)
     maList[nIndex] = std::move(pEntry);
 }
 
-void XPropertyList::Remove(long nIndex)
+void XPropertyList::Remove(tools::Long nIndex)
 {
     if (!isValidIdx(nIndex))
     {

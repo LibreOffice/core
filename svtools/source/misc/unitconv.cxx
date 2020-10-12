@@ -115,7 +115,7 @@ int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
     return nUnitVal;
 }
 
-long CalcToUnit( float nIn, MapUnit eUnit )
+tools::Long CalcToUnit( float nIn, MapUnit eUnit )
 {
     // nIn is in Points
 
@@ -140,15 +140,15 @@ long CalcToUnit( float nIn, MapUnit eUnit )
     }
 
     nTmp *= 20;
-    long nRet = static_cast<long>(nTmp);
+    tools::Long nRet = static_cast<tools::Long>(nTmp);
     return nRet;
 //! return (long)(nTmp * 20);
 }
 
 
-long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
+tools::Long ItemToControl( tools::Long nIn, MapUnit eItem, FieldUnit eCtrl )
 {
-    long nOut = 0;
+    tools::Long nOut = 0;
 
     switch ( eItem )
     {
@@ -202,7 +202,7 @@ long ItemToControl( long nIn, MapUnit eItem, FieldUnit eCtrl )
 }
 
 
-long ControlToItem( long nIn, FieldUnit eCtrl, MapUnit eItem )
+tools::Long ControlToItem( tools::Long nIn, FieldUnit eCtrl, MapUnit eItem )
 {
     return ItemToControl( nIn, eItem, eCtrl );
 }
@@ -237,7 +237,7 @@ FieldUnit MapToFieldUnit( const MapUnit eUnit )
 }
 
 
-long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
+tools::Long CalcToPoint( tools::Long nIn, MapUnit eUnit, sal_uInt16 nFactor )
 {
     DBG_ASSERT( eUnit == MapUnit::MapTwip       ||
                 eUnit == MapUnit::Map100thMM   ||
@@ -245,7 +245,7 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
                 eUnit == MapUnit::MapMM         ||
                 eUnit == MapUnit::MapCM, "this unit is not implemented" );
 
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( MapUnit::MapTwip == eUnit )
         nRet = nIn;
@@ -264,7 +264,7 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
     // round up if necessary
     if ( MapUnit::MapTwip != eUnit )
     {
-        long nTmp = nRet % 10;
+        tools::Long nTmp = nRet % 10;
 
         if ( nTmp >= 4 )
             nRet += 10 - nTmp;
@@ -274,9 +274,9 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
 }
 
 
-static long CMToTwips( long nIn )
+static tools::Long CMToTwips( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567;
@@ -284,9 +284,9 @@ static long CMToTwips( long nIn )
 }
 
 
-static long MMToTwips( long nIn )
+static tools::Long MMToTwips( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567 / 10;
@@ -294,9 +294,9 @@ static long MMToTwips( long nIn )
 }
 
 
-static long InchToTwips( long nIn )
+static tools::Long InchToTwips( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 1440 ) && nIn >= ( LONG_MIN / 1440 ) )
         nRet = nIn * 1440;
@@ -304,9 +304,9 @@ static long InchToTwips( long nIn )
 }
 
 
-long PointToTwips( long nIn )
+tools::Long PointToTwips( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 20 ) && nIn >= ( LONG_MIN / 20 ) )
         nRet = nIn * 20;
@@ -314,9 +314,9 @@ long PointToTwips( long nIn )
 }
 
 
-static long PicaToTwips( long nIn )
+static tools::Long PicaToTwips( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 240 ) && nIn >= ( LONG_MIN / 240 ) )
         nRet = nIn * 240;
@@ -324,16 +324,16 @@ static long PicaToTwips( long nIn )
 }
 
 
-static long TwipsToCM( long nIn )
+static tools::Long TwipsToCM( tools::Long nIn )
 {
-    long nRet = nIn / 567;
+    tools::Long nRet = nIn / 567;
     return nRet;
 }
 
 
-static long InchToCM( long nIn )
+static tools::Long InchToCM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 254 ) && nIn >= ( LONG_MIN / 254 ) )
         nRet = nIn * 254 / 100;
@@ -341,16 +341,16 @@ static long InchToCM( long nIn )
 }
 
 
-static long MMToCM( long nIn )
+static tools::Long MMToCM( tools::Long nIn )
 {
-    long nRet = nIn / 10;
+    tools::Long nRet = nIn / 10;
     return nRet;
 }
 
 
-static long PointToCM( long nIn )
+static tools::Long PointToCM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 20 ) && nIn >= ( LONG_MIN / 20 ) )
         nRet = nIn * 20 / 567;
@@ -358,9 +358,9 @@ static long PointToCM( long nIn )
 }
 
 
-static long PicaToCM( long nIn)
+static tools::Long PicaToCM( tools::Long nIn)
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 12 / 20 ) && nIn >= ( LONG_MIN / 12 / 20 ) )
         nRet = nIn * 12 * 20 / 567;
@@ -368,9 +368,9 @@ static long PicaToCM( long nIn)
 }
 
 
-static long TwipsToMM( long nIn )
+static tools::Long TwipsToMM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
         nRet = nIn * 10 / 566;
@@ -378,9 +378,9 @@ static long TwipsToMM( long nIn )
 }
 
 
-static long CMToMM( long nIn )
+static tools::Long CMToMM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
         nRet = nIn * 10;
@@ -388,9 +388,9 @@ static long CMToMM( long nIn )
 }
 
 
-static long InchToMM( long nIn )
+static tools::Long InchToMM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 254 ) && nIn >= ( LONG_MIN / 254 ) )
         nRet = nIn * 254 / 10;
@@ -398,9 +398,9 @@ static long InchToMM( long nIn )
 }
 
 
-static long PointToMM( long nIn )
+static tools::Long PointToMM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 200 ) && nIn >= ( LONG_MIN / 200 ) )
         nRet = nIn * 200 / 567;
@@ -408,9 +408,9 @@ static long PointToMM( long nIn )
 }
 
 
-static long PicaToMM( long nIn )
+static tools::Long PicaToMM( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 12 / 200 ) && nIn >= ( LONG_MIN / 12 / 200 ) )
         nRet = nIn * 12 * 200 / 567;
@@ -418,16 +418,16 @@ static long PicaToMM( long nIn )
 }
 
 
-static long TwipsToInch( long nIn )
+static tools::Long TwipsToInch( tools::Long nIn )
 {
-    long nRet = nIn / 1440;
+    tools::Long nRet = nIn / 1440;
     return nRet;
 }
 
 
-static long CMToInch( long nIn )
+static tools::Long CMToInch( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 100 ) && nIn >= ( LONG_MIN / 100 ) )
         nRet = nIn * 100 / 254;
@@ -435,9 +435,9 @@ static long CMToInch( long nIn )
 }
 
 
-static long MMToInch( long nIn )
+static tools::Long MMToInch( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 10 ) && nIn >= ( LONG_MIN / 10 ) )
         nRet = nIn * 10 / 254;
@@ -445,30 +445,30 @@ static long MMToInch( long nIn )
 }
 
 
-static long PointToInch( long nIn )
+static tools::Long PointToInch( tools::Long nIn )
 {
-    long nRet = nIn / 72;
+    tools::Long nRet = nIn / 72;
     return nRet;
 }
 
 
-static long PicaToInch( long nIn )
+static tools::Long PicaToInch( tools::Long nIn )
 {
-    long nRet = nIn / 6;
+    tools::Long nRet = nIn / 6;
     return nRet;
 }
 
 
-static long TwipsToPoint( long nIn )
+static tools::Long TwipsToPoint( tools::Long nIn )
 {
-    long nRet = nIn / 20;
+    tools::Long nRet = nIn / 20;
     return nRet;
 }
 
 
-static long InchToPoint( long nIn )
+static tools::Long InchToPoint( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 72 ) && nIn >= ( LONG_MIN / 72 ) )
         nRet = nIn * 72;
@@ -476,9 +476,9 @@ static long InchToPoint( long nIn )
 }
 
 
-static long CMToPoint( long nIn )
+static tools::Long CMToPoint( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567 / 20;
@@ -486,9 +486,9 @@ static long CMToPoint( long nIn )
 }
 
 
-static long MMToPoint( long nIn )
+static tools::Long MMToPoint( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567 / 200;
@@ -496,23 +496,23 @@ static long MMToPoint( long nIn )
 }
 
 
-static long PicaToPoint( long nIn )
+static tools::Long PicaToPoint( tools::Long nIn )
 {
-    long nRet = nIn / 12;
+    tools::Long nRet = nIn / 12;
     return nRet;
 }
 
 
-static long TwipsToPica( long nIn )
+static tools::Long TwipsToPica( tools::Long nIn )
 {
-    long nRet = nIn / 240;
+    tools::Long nRet = nIn / 240;
     return nRet;
 }
 
 
-static long InchToPica( long nIn )
+static tools::Long InchToPica( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 6 ) && nIn >= ( LONG_MIN / 6 ) )
         nRet = nIn * 6;
@@ -520,9 +520,9 @@ static long InchToPica( long nIn )
 }
 
 
-static long PointToPica( long nIn )
+static tools::Long PointToPica( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 12 ) && nIn >= ( LONG_MIN / 12 ) )
         nRet = nIn * 12;
@@ -530,9 +530,9 @@ static long PointToPica( long nIn )
 }
 
 
-static long CMToPica( long nIn )
+static tools::Long CMToPica( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567 / 20 / 12;
@@ -540,9 +540,9 @@ static long CMToPica( long nIn )
 }
 
 
-static long MMToPica( long nIn )
+static tools::Long MMToPica( tools::Long nIn )
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     if ( nIn <= ( LONG_MAX / 567 ) && nIn >= ( LONG_MIN / 567 ) )
         nRet = nIn * 567 / 200 / 12;
@@ -550,9 +550,9 @@ static long MMToPica( long nIn )
 }
 
 
-static long Nothing( long nIn )
+static tools::Long Nothing( tools::Long nIn )
 {
-    long nRet = nIn;
+    tools::Long nRet = nIn;
     return nRet;
 }
 
@@ -568,7 +568,7 @@ FUNC_CONVERT const ConvertTable[6][6] =
 };
 
 
-long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
+tools::Long TransformMetric( tools::Long nVal, FieldUnit aOld, FieldUnit aNew )
 {
     if ( aOld == FieldUnit::NONE   || aNew == FieldUnit::NONE ||
          aOld == FieldUnit::CUSTOM || aNew == FieldUnit::CUSTOM )

@@ -696,7 +696,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     SCSIZE nEntryCount = rParam.GetEntryCount();
     std::vector<bool> aPassed(nEntryCount, false);
 
-    long nPos = -1;
+    tools::Long nPos = -1;
     CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::GetCaseCollator() :
                                   ScGlobal::GetCollator() );
     ::utl::TransliterationWrapper* pTransliteration = (rParam.bCaseSens ?
@@ -875,7 +875,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         }
     }
 
-    for (long j=1; j <= nPos; j++)
+    for (tools::Long j=1; j <= nPos; j++)
         aPassed[0] = aPassed[0] || aPassed[j];
 
     bool bRet = aPassed[0];
@@ -887,7 +887,7 @@ ScDocument& ScDPCache::GetDoc() const
     return mrDoc;
 }
 
-long ScDPCache::GetColumnCount() const
+tools::Long ScDPCache::GetColumnCount() const
 {
     return mnColumnCount;
 }
@@ -899,17 +899,17 @@ bool ScDPCache::IsRowEmpty(SCROW nRow) const
     return bEmpty;
 }
 
-const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
+const ScDPCache::GroupItems* ScDPCache::GetGroupItems(tools::Long nDim) const
 {
     if (nDim < 0)
         return nullptr;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
         return maFields[nDim]->mpGroup.get();
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
         return maGroupFields[nDim].get();
 
     return nullptr;
@@ -982,7 +982,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     return rField.maData[nRow];
 }
 
-const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
+const ScDPItemData* ScDPCache::GetItemDataById(tools::Long nDim, SCROW nId) const
 {
     if (nDim < 0 || nId < 0)
         return nullptr;
@@ -1055,7 +1055,7 @@ const ScDPCache::ScDPItemDataVec& ScDPCache::GetDimMemberValues(SCCOL nDim) cons
     return maFields.at(nDim)->maItems;
 }
 
-sal_uInt32 ScDPCache::GetNumberFormat( long nDim ) const
+sal_uInt32 ScDPCache::GetNumberFormat( tools::Long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
@@ -1065,7 +1065,7 @@ sal_uInt32 ScDPCache::GetNumberFormat( long nDim ) const
     return maFields[nDim]->mnNumFormat;
 }
 
-bool ScDPCache::IsDateDimension( long nDim ) const
+bool ScDPCache::IsDateDimension( tools::Long nDim ) const
 {
     if (nDim >= mnColumnCount)
         return false;
@@ -1078,7 +1078,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     return (eType == SvNumFormatType::DATE) || (eType == SvNumFormatType::DATETIME);
 }
 
-long ScDPCache::GetDimMemberCount(long nDim) const
+tools::Long ScDPCache::GetDimMemberCount(tools::Long nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
     return maFields[nDim]->maItems.size();
@@ -1121,7 +1121,7 @@ const ScDPCache::ScDPObjectSet& ScDPCache::GetAllReferences() const
     return maRefObjects;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
+SCROW ScDPCache::GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) const
 {
     if (nDim < 0)
         return -1;
@@ -1207,7 +1207,7 @@ OUString ScDPCache::GetLocaleIndependentFormattedString( double fValue,
     return aStr;
 }
 
-OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
+OUString ScDPCache::GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {
     if (nDim < 0)
         return rItem.GetString();
@@ -1266,18 +1266,18 @@ SvNumberFormatter* ScDPCache::GetNumberFormatter() const
     return mrDoc.GetFormatTable();
 }
 
-long ScDPCache::AppendGroupField()
+tools::Long ScDPCache::AppendGroupField()
 {
     maGroupFields.push_back(std::make_unique<GroupItems>());
-    return static_cast<long>(maFields.size() + maGroupFields.size() - 1);
+    return static_cast<tools::Long>(maFields.size() + maGroupFields.size() - 1);
 }
 
-void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType)
+void ScDPCache::ResetGroupItems(tools::Long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType)
 {
     if (nDim < 0)
         return;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
     {
         maFields.at(nDim)->mpGroup.reset(new GroupItems(rNumInfo, nGroupType));
@@ -1285,7 +1285,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal
     }
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
     {
         GroupItems& rGI = *maGroupFields[nDim];
         rGI.maItems.clear();
@@ -1294,12 +1294,12 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal
     }
 }
 
-SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
+SCROW ScDPCache::SetGroupItem(tools::Long nDim, const ScDPItemData& rData)
 {
     if (nDim < 0)
         return -1;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
     {
         GroupItems& rGI = *maFields.at(nDim)->mpGroup;
@@ -1309,7 +1309,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     }
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
     {
         ScDPItemDataVec& rItems = maGroupFields.at(nDim)->maItems;
         rItems.push_back(rData);
@@ -1319,12 +1319,12 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     return -1;
 }
 
-void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
+void ScDPCache::GetGroupDimMemberIds(tools::Long nDim, std::vector<SCROW>& rIds) const
 {
     if (nDim < 0)
         return;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
     {
         if (!maFields.at(nDim)->mpGroup)
@@ -1339,7 +1339,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
     }
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
     {
         const ScDPItemDataVec& rGI = maGroupFields.at(nDim)->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
@@ -1370,12 +1370,12 @@ void ScDPCache::ClearAllFields()
     std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
 }
 
-const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
+const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(tools::Long nDim) const
 {
     if (nDim < 0)
         return nullptr;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
     {
         if (!maFields.at(nDim)->mpGroup)
@@ -1385,18 +1385,18 @@ const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
     }
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
         return &maGroupFields.at(nDim)->maInfo;
 
     return nullptr;
 }
 
-sal_Int32 ScDPCache::GetGroupType(long nDim) const
+sal_Int32 ScDPCache::GetGroupType(tools::Long nDim) const
 {
     if (nDim < 0)
         return 0;
 
-    long nSourceCount = static_cast<long>(maFields.size());
+    tools::Long nSourceCount = static_cast<tools::Long>(maFields.size());
     if (nDim < nSourceCount)
     {
         if (!maFields.at(nDim)->mpGroup)
@@ -1406,7 +1406,7 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
     }
 
     nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
+    if (nDim < static_cast<tools::Long>(maGroupFields.size()))
         return maGroupFields.at(nDim)->mnGroupType;
 
     return 0;
@@ -1416,13 +1416,13 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
 
 namespace {
 
-void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
+void dumpItems(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
 {
     for (size_t i = 0; i < rItems.size(); ++i)
         cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << endl;
 }
 
-void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
+void dumpSourceData(const ScDPCache& rCache, tools::Long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
 {
     for (const auto& rIndex : rArray)
         cout << "      '" << rCache.GetFormattedString(nDim, rItems[rIndex], false) << "'" << endl;

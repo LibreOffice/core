@@ -610,8 +610,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
                                         rNumFormat.GetGraphicSize(),
                                         bLeft, bCenter, nMinDist,
                                         bLabelAlignmentPosAndSpaceModeActive );
-            long nTmpA = rInf.GetLast()->GetAscent();
-            long nTmpD = rInf.GetLast()->Height() - nTmpA;
+            tools::Long nTmpA = rInf.GetLast()->GetAscent();
+            tools::Long nTmpD = rInf.GetLast()->Height() - nTmpA;
             if( !rInf.IsTest() )
                 static_cast<SwGrfNumPortion*>(pRet)->SetBase( nTmpA, nTmpD, nTmpA, nTmpD );
         }

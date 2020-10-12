@@ -342,7 +342,7 @@ sal_uInt16 X11SalGraphics::GetBitCount() const
     return mxImpl->GetBitCount();
 }
 
-long X11SalGraphics::GetGraphicsWidth() const
+tools::Long X11SalGraphics::GetGraphicsWidth() const
 {
     return mxImpl->GetGraphicsWidth();
 }
@@ -414,22 +414,22 @@ void X11SalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
     mxImpl->SetXORMode( bSet, bInvertOnly );
 }
 
-void X11SalGraphics::drawPixel( long nX, long nY )
+void X11SalGraphics::drawPixel( tools::Long nX, tools::Long nY )
 {
     mxImpl->drawPixel( nX, nY );
 }
 
-void X11SalGraphics::drawPixel( long nX, long nY, Color nColor )
+void X11SalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
     mxImpl->drawPixel( nX, nY, nColor );
 }
 
-void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
+void X11SalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
 {
     mxImpl->drawLine( nX1, nY1, nX2, nY2 );
 }
 
-void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
+void X11SalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     mxImpl->drawRect( nX, nY, nDX, nDY );
 }
@@ -474,8 +474,8 @@ void X11SalGraphics::invert( sal_uInt32 nPoints,
     mxImpl->invert( nPoints, pPtAry, nFlags );
 }
 
-bool X11SalGraphics::drawEPS( long nX, long nY, long nWidth,
-        long nHeight, void* pPtr, sal_uInt32 nSize )
+bool X11SalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth,
+        tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
 {
     return mxImpl->drawEPS( nX, nY, nWidth, nHeight, pPtr, nSize );
 }

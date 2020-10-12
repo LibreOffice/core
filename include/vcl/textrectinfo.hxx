@@ -28,14 +28,14 @@ class VCL_DLLPUBLIC TextRectInfo
     friend class ::OutputDevice;
 
 private:
-    long                mnMaxWidth;
+    tools::Long                mnMaxWidth;
     sal_uInt16          mnLineCount;
     bool                mbEllipsis;
 
 public:
                         TextRectInfo();
 
-    long                GetMaxLineWidth() const { return mnMaxWidth; }
+    tools::Long                GetMaxLineWidth() const { return mnMaxWidth; }
     bool                IsEllipses() const { return mbEllipsis; }
 
     bool                operator ==( const TextRectInfo& rInfo ) const

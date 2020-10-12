@@ -37,7 +37,7 @@ class ImplHeadItem
 public:
     sal_uInt16          mnId;
     HeaderBarItemBits   mnBits;
-    long                mnSize;
+    tools::Long                mnSize;
     OString             maHelpId;
     Image               maImage;
     OUString            maOutText;
@@ -142,9 +142,9 @@ void HeaderBar::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
         ApplyControlBackground(*this, rStyleSettings.GetFaceColor());
 }
 
-long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
+tools::Long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 {
-    long nX = -mnOffset;
+    tools::Long nX = -mnOffset;
     for ( size_t i = 0; i < nPos; i++ )
         nX += mvItemList[ i ]->mnSize;
     return nX;
@@ -161,11 +161,11 @@ tools::Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 }
 
 sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
-                               long& nMouseOff, sal_uInt16& nPos ) const
+                               tools::Long& nMouseOff, sal_uInt16& nPos ) const
 {
     size_t          nCount = static_cast<sal_uInt16>(mvItemList.size());
     bool            bLastFixed = true;
-    long            nX = -mnOffset;
+    tools::Long            nX = -mnOffset;
 
     for ( size_t i = 0; i < nCount; i++ )
     {
@@ -354,12 +354,12 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     Size aTxtSize(rRenderContext.GetTextWidth(pItem->maOutText), 0);
     if (!pItem->maOutText.isEmpty())
         aTxtSize.setHeight( rRenderContext.GetTextHeight() );
-    long nArrowWidth = 0;
+    tools::Long nArrowWidth = 0;
     if (nBits & (HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW))
         nArrowWidth = HEAD_ARROWSIZE2 + HEADERBAR_ARROWOFF;
 
     // do not draw if there is not enough space for the image
-    long nTestHeight = aImageSize.Height();
+    tools::Long nTestHeight = aImageSize.Height();
     if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
         nTestHeight += aTxtSize.Height();
     if ((aImageSize.Width() > aRect.GetWidth()) || (nTestHeight > aRect.GetHeight()))
@@ -370,10 +370,10 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 
     // cut text to correct length
     bool bLeftText = false;
-    long nMaxTxtWidth = aRect.GetWidth() - (HEADERBAR_TEXTOFF * 2) - nArrowWidth;
+    tools::Long nMaxTxtWidth = aRect.GetWidth() - (HEADERBAR_TEXTOFF * 2) - nArrowWidth;
     if (nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE))
         nMaxTxtWidth -= aImageSize.Width();
-    long nTxtWidth = aTxtSize.Width();
+    tools::Long nTxtWidth = aTxtSize.Width();
     if (nTxtWidth > nMaxTxtWidth)
     {
         bLeftText = true;
@@ -394,7 +394,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
 
     // calculate text/imageposition
-    long nTxtPos;
+    tools::Long nTxtPos;
     if (!bLeftText && (nBits & HeaderBarItemBits::RIGHT))
     {
         nTxtPos = aRect.Right() - nTxtWidth - HEADERBAR_TEXTOFF;
@@ -403,7 +403,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
     else if (!bLeftText && (nBits & HeaderBarItemBits::CENTER))
     {
-        long nTempWidth = nTxtWidth;
+        tools::Long nTempWidth = nTxtWidth;
         if (nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE))
             nTempWidth += aImageSize.Width();
         nTxtPos = aRect.Left() + (aRect.GetWidth() - nTempWidth) / 2;
@@ -429,10 +429,10 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
 
     // calculate text/imageposition
-    long nTxtPosY = 0;
+    tools::Long nTxtPosY = 0;
     if (!pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()))
     {
-        long nTempHeight = aTxtSize.Height();
+        tools::Long nTempHeight = aTxtSize.Height();
         nTempHeight += aImageSize.Height();
         nTxtPosY = aRect.Top()+((aRect.GetHeight()-nTempHeight)/2);
         if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
@@ -456,10 +456,10 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
 
     // calculate the position and draw image if it is available
-    long nImagePosY = 0;
+    tools::Long nImagePosY = 0;
     if (aImageSize.Width() && aImageSize.Height())
     {
-        long nImagePos = nTxtPos;
+        tools::Long nImagePos = nTxtPos;
         if (nBits & HeaderBarItemBits::LEFTIMAGE)
         {
             nImagePos -= aImageSize.Width();
@@ -482,7 +482,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
                 nImagePos = aRect.Left() + HEADERBAR_TEXTOFF;
         }
 
-        long nTempHeight = aImageSize.Height();
+        tools::Long nTempHeight = aImageSize.Height();
         if (!(nBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)))
             nTempHeight += aTxtSize.Height();
         nImagePosY = aRect.Top() + ((aRect.GetHeight() - nTempHeight) / 2);
@@ -499,7 +499,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     if (!(nBits & (HeaderBarItemBits::UPARROW | HeaderBarItemBits::DOWNARROW)))
         return;
 
-    long nArrowX = nTxtPos;
+    tools::Long nArrowX = nTxtPos;
     if (nBits & HeaderBarItemBits::RIGHT)
         nArrowX -= nArrowWidth;
     else
@@ -535,7 +535,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     }
     else
     {
-        long nArrowY;
+        tools::Long nArrowY;
         if (aTxtSize.Height())
             nArrowY = nTxtPosY + (aTxtSize.Height() / 2);
         else if (aImageSize.Width() && aImageSize.Height())
@@ -779,7 +779,7 @@ void HeaderBar::ImplEndDrag( bool bCancel )
         }
         else
         {
-            long nDelta = mnDragPos - mnStartPos;
+            tools::Long nDelta = mnDragPos - mnStartPos;
             if ( nDelta )
             {
                 auto& pItem = mvItemList[ nPos ];
@@ -805,7 +805,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.GetClicks() == 2 )
     {
-        long    nTemp;
+        tools::Long    nTemp;
         sal_uInt16  nPos;
         sal_uInt16  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp, nPos );
         if ( nHitTest )
@@ -827,7 +827,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
 
 void HeaderBar::MouseMove( const MouseEvent& rMEvt )
 {
-    long            nTemp1;
+    tools::Long            nTemp1;
     sal_uInt16          nTemp2;
     PointerStyle    eStyle = PointerStyle::Arrow;
     sal_uInt16          nHitTest = ImplHitTest( rMEvt.GetPosPixel(), nTemp1, nTemp2 );
@@ -1042,7 +1042,7 @@ void HeaderBar::DoubleClick()
 }
 
 void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
-                            long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
+                            tools::Long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "HeaderBar::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == HEADERBAR_ITEM_NOTFOUND,
@@ -1108,7 +1108,7 @@ void HeaderBar::Clear()
     ImplUpdate( 0, true );
 }
 
-void HeaderBar::SetOffset( long nNewOffset )
+void HeaderBar::SetOffset( tools::Long nNewOffset )
 {
     // tdf#129856 (see also #i40393#) invalidate old left and right border area if WB_BORDER was set in ImplInit()
     if (mnBorderOff1 && mnBorderOff2)
@@ -1119,7 +1119,7 @@ void HeaderBar::SetOffset( long nNewOffset )
 
     // move area
     tools::Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2 );
-    long nDelta = mnOffset-nNewOffset;
+    tools::Long nDelta = mnOffset-nNewOffset;
     mnOffset = nNewOffset;
     Scroll( nDelta, 0, aRect );
 }
@@ -1167,7 +1167,7 @@ tools::Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
     return aRect;
 }
 
-void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
+void HeaderBar::SetItemSize( sal_uInt16 nItemId, tools::Long nNewSize )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
@@ -1181,7 +1181,7 @@ void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
     }
 }
 
-long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
+tools::Long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
@@ -1252,13 +1252,13 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 
 Size HeaderBar::CalcWindowSizePixel() const
 {
-    long nMaxImageSize = 0;
+    tools::Long nMaxImageSize = 0;
     Size aSize( 0, GetTextHeight() );
 
     for (auto& pItem : mvItemList)
     {
         // take image size into account
-        long nImageHeight = pItem->maImage.GetSizePixel().Height();
+        tools::Long nImageHeight = pItem->maImage.GetSizePixel().Height();
         if ( !(pItem->mnBits & (HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::RIGHTIMAGE)) && !pItem->maText.isEmpty() )
             nImageHeight += aSize.Height();
         if ( nImageHeight > nMaxImageSize )

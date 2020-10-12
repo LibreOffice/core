@@ -62,7 +62,7 @@ namespace vcl
 
         void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
-        Size const &        CalcMinimumSize( long nMaxWidth ) const;
+        Size const &        CalcMinimumSize( tools::Long nMaxWidth ) const;
     };
 }
 

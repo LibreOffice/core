@@ -220,7 +220,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
         m_rShell.GetFlyMacroLnk().Call( pFlyFrame->GetFormat() );
 }
 
-long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
+tools::Long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
         SwTextNode const & rNd, sal_Int32 nCntPos, bool /*bCalcFrame*/)
 {
     SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot, nullptr, nullptr));

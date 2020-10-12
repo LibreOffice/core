@@ -45,22 +45,22 @@ static int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
     return std::max(std::max(deltaR, deltaG), deltaB);
 }
 
-static bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWidth, Color aExpectedColor, int nMaxDelta)
+static bool checkRect(Bitmap& rBitmap, int aLayerNumber, tools::Long nAreaHeight, tools::Long nAreaWidth, Color aExpectedColor, int nMaxDelta)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
 
-    long nWidth  = std::min(nAreaWidth,  pAccess->Width());
-    long nHeight = std::min(nAreaHeight, pAccess->Height());
+    tools::Long nWidth  = std::min(nAreaWidth,  pAccess->Width());
+    tools::Long nHeight = std::min(nAreaHeight, pAccess->Height());
 
-    long firstX = 0 + aLayerNumber;
-    long firstY = 0 + aLayerNumber;
+    tools::Long firstX = 0 + aLayerNumber;
+    tools::Long firstY = 0 + aLayerNumber;
 
-    long lastX = nWidth  - 1 - aLayerNumber;
-    long lastY = nHeight - 1 - aLayerNumber;
+    tools::Long lastX = nWidth  - 1 - aLayerNumber;
+    tools::Long lastY = nHeight - 1 - aLayerNumber;
 
     int delta;
 
-    for (long y = firstY; y <= lastY; y++)
+    for (tools::Long y = firstY; y <= lastY; y++)
     {
         Color aColorFirst = pAccess->GetPixel(y, firstX);
         delta = deltaColor(aColorFirst, aExpectedColor);
@@ -72,7 +72,7 @@ static bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long 
         if (delta > nMaxDelta)
             return false;
     }
-    for (long x = firstX; x <= lastX; x++)
+    for (tools::Long x = firstX; x <= lastX; x++)
     {
         Color aColorFirst = pAccess->GetPixel(firstY, x);
         delta = deltaColor(aColorFirst, aExpectedColor);

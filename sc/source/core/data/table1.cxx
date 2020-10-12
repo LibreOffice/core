@@ -430,7 +430,7 @@ sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
         bFormula, STD_COL_WIDTH - STD_EXTRA_WIDTH, pMarkData, pParam );
 }
 
-long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
+tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY,
@@ -2059,7 +2059,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     if (!aCell.hasString())
         return;
 
-    long nPixel = rColumn.GetTextWidth(nRow);
+    tools::Long nPixel = rColumn.GetTextWidth(nRow);
 
     // Width already calculated in Idle-Handler ?
     if ( TEXTWIDTH_DIRTY == nPixel )
@@ -2076,10 +2076,10 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         rColumn.SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
 
-    long nTwips = static_cast<long>(nPixel / nPPTX);
-    long nDocW = GetColWidth( rCol );
+    tools::Long nTwips = static_cast<tools::Long>(nPixel / nPPTX);
+    tools::Long nDocW = GetColWidth( rCol );
 
-    long nMissing = nTwips - nDocW;
+    tools::Long nMissing = nTwips - nDocW;
     if ( nMissing > 0 )
     {
         //  look at alignment

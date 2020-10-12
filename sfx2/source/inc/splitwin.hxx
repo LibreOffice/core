@@ -107,7 +107,7 @@ public:
     bool                GetWindowPos( const Point& rTestPos,
                                       sal_uInt16& rLine, sal_uInt16& rPos ) const;
     sal_uInt16              GetLineCount() const;
-    long                GetLineSize( sal_uInt16 ) const;
+    tools::Long                GetLineSize( sal_uInt16 ) const;
     sal_uInt16              GetWindowCount(sal_uInt16 nLine) const;
     sal_uInt16              GetWindowCount() const;
 

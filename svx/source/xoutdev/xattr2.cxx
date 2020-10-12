@@ -474,7 +474,7 @@ void XFillBmpPosItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 
-XFillBmpSizeXItem::XFillBmpSizeXItem( long nSizeX ) :
+XFillBmpSizeXItem::XFillBmpSizeXItem( tools::Long nSizeX ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEX, nSizeX )
 {
 }
@@ -503,7 +503,7 @@ bool XFillBmpSizeXItem::HasMetrics() const
 
 
 
-XFillBmpSizeYItem::XFillBmpSizeYItem( long nSizeY ) :
+XFillBmpSizeYItem::XFillBmpSizeYItem( tools::Long nSizeY ) :
             SfxMetricItem( XATTR_FILLBMP_SIZEY, nSizeY )
 {
 }

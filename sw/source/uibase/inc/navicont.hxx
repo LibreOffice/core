@@ -35,7 +35,7 @@ class NaviContentBookmark
 {
     OUString        aUrl;       // URL including jump mark
     OUString        aDescr;     // description
-    long            nDocSh;     // address of DocShell
+    tools::Long            nDocSh;     // address of DocShell
     RegionMode      nDefDrag;   // description contains defaultDragType
 
 public:

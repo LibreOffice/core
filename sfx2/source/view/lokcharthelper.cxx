@@ -236,7 +236,7 @@ void LokChartHelper::PaintTile(VirtualDevice& rRenderContext, const tools::Recta
 void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
                                           int nOutputWidth, int nOutputHeight,
                                           int nTilePosX, int nTilePosY,
-                                          long nTileWidth, long nTileHeight)
+                                          tools::Long nTileWidth, tools::Long nTileHeight)
 {
     if (comphelper::LibreOfficeKit::isTiledAnnotations())
         return;

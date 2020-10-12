@@ -301,9 +301,9 @@ bool SdrObjGroup::BegCreate(SdrDragStat& /*rStat*/)
 }
 
 
-long SdrObjGroup::GetRotateAngle() const
+tools::Long SdrObjGroup::GetRotateAngle() const
 {
-    long nRetval(0);
+    tools::Long nRetval(0);
 
     if(0 != GetObjCount())
     {
@@ -316,9 +316,9 @@ long SdrObjGroup::GetRotateAngle() const
 }
 
 
-long SdrObjGroup::GetShearAngle(bool /*bVertical*/) const
+tools::Long SdrObjGroup::GetShearAngle(bool /*bVertical*/) const
 {
-    long nRetval(0);
+    tools::Long nRetval(0);
 
     if(0 != GetObjCount())
     {
@@ -334,10 +334,10 @@ long SdrObjGroup::GetShearAngle(bool /*bVertical*/) const
 void SdrObjGroup::NbcSetSnapRect(const tools::Rectangle& rRect)
 {
     tools::Rectangle aOld(GetSnapRect());
-    long nMulX=rRect.Right()-rRect.Left();
-    long nDivX=aOld.Right()-aOld.Left();
-    long nMulY=rRect.Bottom()-rRect.Top();
-    long nDivY=aOld.Bottom()-aOld.Top();
+    tools::Long nMulX=rRect.Right()-rRect.Left();
+    tools::Long nDivX=aOld.Right()-aOld.Left();
+    tools::Long nMulY=rRect.Bottom()-rRect.Top();
+    tools::Long nDivY=aOld.Bottom()-aOld.Top();
     if (nDivX==0) { nMulX=1; nDivX=1; }
     if (nDivY==0) { nMulY=1; nDivY=1; }
     if (nMulX!=nDivX || nMulY!=nDivY) {
@@ -415,7 +415,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 }
 
 
-void SdrObjGroup::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrObjGroup::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     RotatePoint(aRefPoint,rRef,sn,cs);
@@ -449,7 +449,7 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrObjGroup::NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
     ShearPoint(aRefPoint,rRef,tn);
@@ -493,10 +493,10 @@ void SdrObjGroup::SetSnapRect(const tools::Rectangle& rRect)
     }
     else
     {
-        long nMulX=rRect.Right()-rRect.Left();
-        long nDivX=aOld.Right()-aOld.Left();
-        long nMulY=rRect.Bottom()-rRect.Top();
-        long nDivY=aOld.Bottom()-aOld.Top();
+        tools::Long nMulX=rRect.Right()-rRect.Left();
+        tools::Long nDivX=aOld.Right()-aOld.Left();
+        tools::Long nMulY=rRect.Bottom()-rRect.Top();
+        tools::Long nDivY=aOld.Bottom()-aOld.Top();
         if (nDivX==0) { nMulX=1; nDivX=1; }
         if (nDivY==0) { nMulY=1; nDivY=1; }
         if (nMulX!=nDivX || nMulY!=nDivY) {
@@ -612,7 +612,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 }
 
 
-void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrObjGroup::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     if (nAngle==0)
         return;
@@ -675,7 +675,7 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrObjGroup::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     if (nAngle==0)
         return;

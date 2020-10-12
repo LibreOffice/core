@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     basegfx::B2IVector                  m_aFrameSize;
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
-    void CreateSurface(long nNewDX, long nNewDY, sal_uInt8 *const pBuffer);
+    void CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer);
 
 protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);
@@ -51,16 +51,16 @@ public:
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
-    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
-    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
+    virtual bool        SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
+    virtual bool        SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
                                             sal_uInt8 * pBuffer
                                           ) override;
 
     cairo_surface_t* GetSurface() const { return m_pSurface; }
 
     // SalGeometryProvider
-    virtual long GetWidth() const override;
-    virtual long GetHeight() const override;
+    virtual tools::Long GetWidth() const override;
+    virtual tools::Long GetHeight() const override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

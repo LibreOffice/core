@@ -136,7 +136,7 @@ JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans:
     }
 }
 
-void* JPEGWriter::GetScanline( long nY )
+void* JPEGWriter::GetScanline( tools::Long nY )
 {
     void* pScanline = nullptr;
 
@@ -149,13 +149,13 @@ void* JPEGWriter::GetScanline( long nY )
         else if( mpBuffer )
         {
             BitmapColor aColor;
-            long        nWidth = mpReadAccess->Width();
+            tools::Long        nWidth = mpReadAccess->Width();
             sal_uInt8*  pTmp = mpBuffer;
 
             if( mpReadAccess->HasPalette() )
             {
                 Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
                     aColor = mpReadAccess->GetPaletteColor( mpReadAccess->GetIndexFromData( pScanlineRead, nX ) );
                     *pTmp++ = aColor.GetRed();
@@ -169,7 +169,7 @@ void* JPEGWriter::GetScanline( long nY )
             else
             {
                 Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
                     aColor = mpReadAccess->GetPixelFromData( pScanlineRead, nX );
                     *pTmp++ = aColor.GetRed();
@@ -219,12 +219,12 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         {                // check if source is greyscale only
             bool bIsGrey = true;
 
-            long nWidth = mpReadAccess->Width();
-            for ( long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
+            tools::Long nWidth = mpReadAccess->Width();
+            for ( tools::Long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )
             {
                 BitmapColor aColor;
                 Scanline pScanlineRead = mpReadAccess->GetScanline( nY );
-                for( long nX = 0; bIsGrey && ( nX < nWidth ); nX++ )
+                for( tools::Long nX = 0; bIsGrey && ( nX < nWidth ); nX++ )
                 {
                     aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( mpReadAccess->GetIndexFromData( pScanlineRead, nX ) )
                                                 : mpReadAccess->GetPixelFromData( pScanlineRead, nX );

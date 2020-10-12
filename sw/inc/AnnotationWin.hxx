@@ -83,14 +83,14 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         bool IsProtected() const;
 
         void SetSize( const Size& rNewSize );
-        void SetPosSizePixelRect( long nX,
-                                  long nY,
-                                  long nWidth,
-                                  long nHeight,
+        void SetPosSizePixelRect( tools::Long nX,
+                                  tools::Long nY,
+                                  tools::Long nWidth,
+                                  tools::Long nHeight,
                                   const SwRect& aAnchorRect,
-                                  const long PageBorder);
+                                  const tools::Long PageBorder);
         void SetPosAndSize();
-        void TranslateTopPosition(const long aAmount);
+        void TranslateTopPosition(const tools::Long aAmount);
         void CheckMetaText();
 
         Point const & GetAnchorPos() { return mAnchorRect.Pos(); }
@@ -110,7 +110,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         ::sw::sidebarwindows::ShadowOverlayObject* Shadow() { return mpShadow.get();}
         ::sw::overlay::OverlayRanges* TextRange() { return mpTextRangeOverlay.get();}
 
-        long            GetPostItTextHeight();
+        tools::Long            GetPostItTextHeight();
 
         void            SwitchToPostIt(sal_uInt16 aDirection);
         void            SwitchToFieldPos();
@@ -118,7 +118,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
         void            ExecuteCommand(sal_uInt16 nSlot);
         void            InitControls();
         void            DoResize();
-        void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
+        void            ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight);
         void            SetScrollbar();
 
         void            SetVirtualPosSize( const Point& aPoint, const Size& aSize);
@@ -254,7 +254,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin : public vcl::Window
 
         tools::Rectangle       mPosSize;
         SwRect          mAnchorRect;
-        long            mPageBorder;
+        tools::Long            mPageBorder;
         bool            mbAnchorRectChanged;
 
         bool            mbResolvedStateUpdated;

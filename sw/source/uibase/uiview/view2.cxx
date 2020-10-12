@@ -586,7 +586,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ZOOM_IN:
         case SID_ZOOM_OUT:
         {
-            long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+            tools::Long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
             if (SID_ZOOM_OUT == nSlot)
                 nFact = basegfx::zoomtools::zoomIn(nFact);
             else
@@ -894,7 +894,7 @@ void SwView::Execute(SfxRequest &rReq)
                 }
 
                 m_pViewImpl->InitRequest( rReq );
-                long nFound = InsertDoc( nSlot, sFileName, sFilterName, nVersion );
+                tools::Long nFound = InsertDoc( nSlot, sFileName, sFilterName, nVersion );
 
                 if ( bHasFileName )
                 {
@@ -1562,13 +1562,13 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         const Size& rEditSize = GetEditWin().GetOutputSizePixel();
                         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-                        const long nOf = pVOpt->GetDocumentBorder() * 2;
-                        long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+                        const tools::Long nOf = pVOpt->GetDocumentBorder() * 2;
+                        tools::Long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
                         nTmpWidth += nOf;
                         aPageSize.AdjustHeight(nOf );
-                        long nFac = aWindowSize.Width() * 100 / nTmpWidth;
+                        tools::Long nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
-                        long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
+                        tools::Long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
                         nFac = std::min( nFac, nVisPercent );
 
                         if (nFac >= MINZOOM)
@@ -2205,7 +2205,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
             sFilter = static_cast<const SfxStringItem *>(pItem )->GetValue();
 
         bool bHasFileName = !sFile.isEmpty();
-        long nFound = InsertDoc( nSlot, sFile, sFilter );
+        tools::Long nFound = InsertDoc( nSlot, sFile, sFilter );
 
         if ( bHasFileName )
         {
@@ -2215,7 +2215,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
     }
 }
 
-long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUString& rFilterName, sal_Int16 nVersion )
+tools::Long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUString& rFilterName, sal_Int16 nVersion )
 {
     std::unique_ptr<SfxMedium> pMed;
     SwDocShell* pDocSh = GetDocShell();
@@ -2255,10 +2255,10 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
     return InsertMedium( nSlotId, std::move(pMed), nVersion );
 }
 
-long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion )
+tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMedium, sal_Int16 nVersion )
 {
     bool bInsert = false, bCompare = false;
-    long nFound = 0;
+    tools::Long nFound = 0;
     SwDocShell* pDocSh = GetDocShell();
 
     switch( nSlotId )
@@ -2571,7 +2571,7 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
     }
 
     const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
-    long nFound = InsertMedium( nSlot, std::move(pMed), m_pViewImpl->GetParam() );
+    tools::Long nFound = InsertMedium( nSlot, std::move(pMed), m_pViewImpl->GetParam() );
 
     if ( SID_INSERTDOC == nSlot )
     {

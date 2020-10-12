@@ -73,8 +73,8 @@ PageOrientationControl::~PageOrientationControl()
 }
 
 void PageOrientationControl::ExecuteMarginLRChange(
-    const long nPageLeftMargin,
-    const long nPageRightMargin )
+    const tools::Long nPageLeftMargin,
+    const tools::Long nPageRightMargin )
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
@@ -83,8 +83,8 @@ void PageOrientationControl::ExecuteMarginLRChange(
 }
 
 void PageOrientationControl::ExecuteMarginULChange(
-    const long nPageTopMargin,
-    const long nPageBottomMargin )
+    const tools::Long nPageTopMargin,
+    const tools::Long nPageBottomMargin )
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );
@@ -123,8 +123,8 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
         mpPageItem->SetLandscape( bLandscape );
 
         // swap the width and height of the page size
-        const long nRotatedWidth = mpPageSizeItem->GetSize().Height();
-        const long nRotatedHeight = mpPageSizeItem->GetSize().Width();
+        const tools::Long nRotatedWidth = mpPageSizeItem->GetSize().Height();
+        const tools::Long nRotatedHeight = mpPageSizeItem->GetSize().Width();
         mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
         // apply changed attributes
@@ -138,11 +138,11 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
     // check, if margin values still fit to the changed page size.
     // if not, adjust margin values
     {
-        const long nML = mpPageLRMarginItem->GetLeft();
-        const long nMR = mpPageLRMarginItem->GetRight();
-        const long nTmpPW = nML + nMR + MINBODY;
+        const tools::Long nML = mpPageLRMarginItem->GetLeft();
+        const tools::Long nMR = mpPageLRMarginItem->GetRight();
+        const tools::Long nTmpPW = nML + nMR + MINBODY;
 
-        const long nPW  = mpPageSizeItem->GetSize().Width();
+        const tools::Long nPW  = mpPageSizeItem->GetSize().Width();
 
         if ( nTmpPW > nPW )
         {
@@ -156,11 +156,11 @@ void PageOrientationControl::ExecuteOrientationChange( const bool bLandscape )
             }
         }
 
-        const long nMT = mpPageULMarginItem->GetUpper();
-        const long nMB = mpPageULMarginItem->GetLower();
-        const long nTmpPH = nMT + nMB + MINBODY;
+        const tools::Long nMT = mpPageULMarginItem->GetUpper();
+        const tools::Long nMB = mpPageULMarginItem->GetLower();
+        const tools::Long nTmpPH = nMT + nMB + MINBODY;
 
-        const long nPH  = mpPageSizeItem->GetSize().Height();
+        const tools::Long nPH  = mpPageSizeItem->GetSize().Height();
 
         if ( nTmpPH > nPH )
         {

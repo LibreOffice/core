@@ -644,7 +644,7 @@ void ImportExcel::DefColWidth()
     }
 
     // #i3006# additional space for default width - Excel adds space depending on font size
-    long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
+    tools::Long nFontHt = GetFontBuffer().GetAppFontData().mnHeight;
     fDefWidth += XclTools::GetXclDefColWidthCorrection( nFontHt );
 
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( limit_cast< sal_uInt16 >( fDefWidth ), GetCharWidth() );

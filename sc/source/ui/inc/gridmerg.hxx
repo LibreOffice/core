@@ -26,24 +26,24 @@ class ScGridMerger
 {
 private:
     VclPtr<OutputDevice> pDev;
-    long            nOneX;
-    long            nOneY;
-    long            nFixStart;
-    long            nFixEnd;
-    long            nVarStart;
-    long            nVarDiff;
-    long            nCount;
+    tools::Long            nOneX;
+    tools::Long            nOneY;
+    tools::Long            nFixStart;
+    tools::Long            nFixEnd;
+    tools::Long            nVarStart;
+    tools::Long            nVarDiff;
+    tools::Long            nCount;
     bool            bVertical;
     bool            bOptimize;
 
-    void        AddLine( long nStart, long nEnd, long nPos );
+    void        AddLine( tools::Long nStart, tools::Long nEnd, tools::Long nPos );
 
 public:
-                ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY );
+                ScGridMerger( OutputDevice* pOutDev, tools::Long nOnePixelX, tools::Long nOnePixelY );
                 ~ScGridMerger();
 
-    void        AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY, bool bDashed = false);
-    void        AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2, bool bDashed = false);
+    void        AddHorLine(bool bWorksInPixels, tools::Long nX1, tools::Long nX2, tools::Long nY, bool bDashed = false);
+    void        AddVerLine(bool bWorksInPixels, tools::Long nX, tools::Long nY1, tools::Long nY2, bool bDashed = false);
     void        Flush();
 };
 

@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <tools/long.hxx>
 
 namespace framework{
 
@@ -145,7 +146,7 @@ OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyV
     utl::MediaDescriptor aDescriptor( lDescriptor );
     OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
 
-    long nLength = sURL.getLength();
+    tools::Long nLength = sURL.getLength();
     if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
     {
         // "IsSoundFile" differs between different "wav" and "au" file versions...

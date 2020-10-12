@@ -154,7 +154,7 @@ namespace {
         virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) override;
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) override;
 
-        VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, long nWidthPixel, long nHeightPixel ) const;
+        VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, tools::Long nWidthPixel, tools::Long nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo*, void );
 
@@ -376,7 +376,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 
     @return the returned VirtualDevice is owned by the caller
 */
-VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, long nWidthPixel, long nHeightPixel ) const
+VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Long nWidthPixel, tools::Long nHeightPixel ) const
 {
     VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
     MapMode         aMM( MapUnit::Map100thMM );
@@ -647,8 +647,8 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             // For gif pictures there can also be a vector format used (bTranslucent)
             if ( !bVectorType && !rSettings.mbTranslucent )
             {
-                long nWidthPix = 0;
-                long nHeightPix = 0;
+                tools::Long nWidthPix = 0;
+                tools::Long nHeightPix = 0;
                 if ( rSettings.mnWidth > 0 && rSettings.mnHeight > 0 )
                 {
                     nWidthPix = rSettings.mnWidth;
@@ -672,9 +672,9 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                         double fHeightDif = static_cast<double>(aSizePix.Height()) / nHeightPix;
 
                         if (fWidthDif > fHeightDif)
-                            nHeightPix = static_cast<long>(aSizePix.Height() / fWidthDif);
+                            nHeightPix = static_cast<tools::Long>(aSizePix.Height() / fWidthDif);
                         else
-                            nWidthPix = static_cast<long>(aSizePix.Width() / fHeightDif);
+                            nWidthPix = static_cast<tools::Long>(aSizePix.Width() / fHeightDif);
                     }
                     else
                     {

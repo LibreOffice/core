@@ -463,7 +463,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     return false;
 }
 
-static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, long nY )
+static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, tools::Long nY )
 {
     if( rBuf.mnFormat & ScanlineFormat::TopDown )
         return rBuf.mpBits + nY * rBuf.mnScanlineSize;
@@ -471,13 +471,13 @@ static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, long nY )
         return rBuf.mpBits + (rBuf.mnHeight - 1 - nY) * rBuf.mnScanlineSize;
 }
 
-static inline Scanline ImplGetScanline( BitmapBuffer& rBuf, long nY )
+static inline Scanline ImplGetScanline( BitmapBuffer& rBuf, tools::Long nY )
 {
     return const_cast<Scanline>(ImplGetScanline( const_cast<const BitmapBuffer&>(rBuf), nY ));
 }
 
 template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT>
-static bool ImplCopyToScanline( long nY, BitmapBuffer& rDst, TrueColorPixelPtr<SRCFMT>& rSrcLine, long nSrcWidth )
+static bool ImplCopyToScanline( tools::Long nY, BitmapBuffer& rDst, TrueColorPixelPtr<SRCFMT>& rSrcLine, tools::Long nSrcWidth )
 {
     TrueColorPixelPtr<DSTFMT> aDstType;
     aDstType.SetRawPtr( ImplGetScanline( rDst, nY ));
@@ -486,7 +486,7 @@ static bool ImplCopyToScanline( long nY, BitmapBuffer& rDst, TrueColorPixelPtr<S
 }
 
 template <ScanlineFormat SRCFMT>
-static bool ImplCopyFromScanline( long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline, long nSrcWidth )
+static bool ImplCopyFromScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline, tools::Long nSrcWidth )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType;
     aSrcType.SetRawPtr( const_cast<Scanline>( aSrcScanline ));
@@ -513,7 +513,7 @@ static bool ImplCopyFromScanline( long nY, BitmapBuffer& rDst, ConstScanline aSr
 
 }
 
-bool ImplFastCopyScanline( long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline,
+bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSrcScanline,
     ScanlineFormat nSrcScanlineFormat, sal_uInt32 nSrcScanlineSize)
 {
     if( rDst.mnHeight <= nY )
@@ -551,7 +551,7 @@ bool ImplFastCopyScanline( long nY, BitmapBuffer& rDst, ConstScanline aSrcScanli
     return false;
 }
 
-bool ImplFastCopyScanline( long nY, BitmapBuffer& rDst, const BitmapBuffer& rSrc)
+bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, const BitmapBuffer& rSrc)
 {
     if( nY >= rDst.mnHeight )
         return false;
@@ -822,7 +822,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 
     if( bByteFill )
     {
-        long nByteCount = rDst.mnHeight * rDst.mnScanlineSize;
+        tools::Long nByteCount = rDst.mnHeight * rDst.mnScanlineSize;
         memset( rDst.mpBits, nFillByte, nByteCount );
         return true;
     }

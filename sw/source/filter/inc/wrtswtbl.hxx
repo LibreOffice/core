@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwWriteTableCell
     const SwTableBox *pBox;             // SwTableBox of the cell
     const SvxBrushItem *pBackground;    // inherited background of a row
 
-    long nHeight;                   // fix/minimum height of a row
+    tools::Long nHeight;                   // fix/minimum height of a row
 
     sal_uInt32 nWidthOpt;           // width from option;
 
@@ -63,7 +63,7 @@ class SW_DLLPUBLIC SwWriteTableCell
 public:
 
     SwWriteTableCell(const SwTableBox *pB, sal_uInt16 nR, sal_uInt16 nC, sal_uInt16 nRSpan,
-        sal_uInt16 nCSpan, long nHght, const SvxBrushItem *pBGround)
+        sal_uInt16 nCSpan, tools::Long nHght, const SvxBrushItem *pBGround)
     : pBox( pB ), pBackground( pBGround ), nHeight( nHght ), nWidthOpt( 0 ),
     nRow( nR ), nCol( nC ), nRowSpan( nRSpan ), nColSpan( nCSpan ),
     bPercentWidthOpt( false )
@@ -77,7 +77,7 @@ public:
     sal_uInt16 GetRowSpan() const { return nRowSpan; }
     sal_uInt16 GetColSpan() const { return nColSpan; }
 
-    long GetHeight() const { return nHeight; }
+    tools::Long GetHeight() const { return nHeight; }
     sal_Int16 GetVertOri() const;
 
     const SvxBrushItem *GetBackground() const { return pBackground; }
@@ -98,7 +98,7 @@ class SwWriteTableRow final
     SwWriteTableCells m_Cells;       ///< all cells of the rows
     const SvxBrushItem *pBackground; // background
 
-    long nPos;                       // end position (twips) of the row
+    tools::Long nPos;                       // end position (twips) of the row
     bool mbUseLayoutHeights;
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
@@ -114,12 +114,12 @@ public:
     bool bTopBorder : 1;            // which borders are there?
     bool bBottomBorder : 1;
 
-    SwWriteTableRow( long nPos, bool bUseLayoutHeights );
+    SwWriteTableRow( tools::Long nPos, bool bUseLayoutHeights );
 
     SwWriteTableCell *AddCell( const SwTableBox *pBox,
                                  sal_uInt16 nRow, sal_uInt16 nCol,
                                  sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
-                                 long nHeight,
+                                 tools::Long nHeight,
                                  const SvxBrushItem *pBackground );
 
     void SetBackground( const SvxBrushItem *pBGround )
@@ -247,15 +247,15 @@ protected:
     virtual bool ShouldExpandSub( const SwTableBox *pBox,
                                 bool bExpandedBefore, sal_uInt16 nDepth ) const;
 
-    void CollectTableRowsCols( long nStartRPos, sal_uInt32 nStartCPos,
-                               long nParentLineHeight,
+    void CollectTableRowsCols( tools::Long nStartRPos, sal_uInt32 nStartCPos,
+                               tools::Long nParentLineHeight,
                                sal_uInt32 nParentLineWidth,
                                const SwTableLines& rLines,
                                sal_uInt16 nDepth );
 
-    void FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
+    void FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartRow,
                             sal_uInt32 nStartCPos, sal_uInt16 nStartCol,
-                            long nParentLineHeight,
+                            tools::Long nParentLineHeight,
                             sal_uInt32 nParentLineWidth,
                             const SwTableLines& rLines,
                             const SvxBrushItem* pLineBrush,
@@ -280,12 +280,12 @@ public:
     sal_uInt16 GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
     sal_uInt16 GetPercentWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
-    long GetAbsHeight(long nRawWidth, size_t nRow, sal_uInt16 nRowSpan) const;
+    tools::Long GetAbsHeight(tools::Long nRawWidth, size_t nRow, sal_uInt16 nRowSpan) const;
 
     double GetAbsWidthRatio() const { return m_nTabWidth == m_nBaseWidth ? 1.0 : double(m_nTabWidth) / m_nBaseWidth; }
 protected:
-    long GetLineHeight( const SwTableLine *pLine );
-    static long GetLineHeight( const SwTableBox *pBox );
+    tools::Long GetLineHeight( const SwTableLine *pLine );
+    static tools::Long GetLineHeight( const SwTableBox *pBox );
     static const SvxBrushItem *GetLineBrush( const SwTableBox *pBox,
                                       SwWriteTableRow *pRow );
 
@@ -293,7 +293,7 @@ protected:
     sal_uInt16 GetRightSpace(size_t nCol, sal_uInt16 nColSpan) const;
 
 public:
-    SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
+    SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, tools::Long nWidth, sal_uInt32 nBWidth,
                  bool bRel, sal_uInt16 nMaxDepth = USHRT_MAX,
                  sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0, sal_uInt32 nNumOfRowsToRepeat=0);
     SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);

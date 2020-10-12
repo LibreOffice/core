@@ -265,7 +265,7 @@ void ImageManagerImpl::implts_initialize()
     if ( !m_xUserConfigStorage.is() )
         return;
 
-    long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
+    tools::Long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
     try
     {
@@ -578,7 +578,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
         uno::Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            long nOpenMode = 0;
+            tools::Long nOpenMode = 0;
             if ( xPropSet->getPropertyValue("OpenMode") >>= nOpenMode )
                 m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
         }
@@ -1115,7 +1115,7 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
     if ( !(m_bModified && Storage.is()) )
         return;
 
-    long nModes = ElementModes::READWRITE;
+    tools::Long nModes = ElementModes::READWRITE;
 
     uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( IMAGE_FOLDER,
                                                                                 nModes );

@@ -114,16 +114,16 @@ public:
 
     using SwEditShell::Insert;
 
-    long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCursor)(pPt, bProp); }
+    tools::Long CallSetCursor(const Point* pPt, bool bProp) { return (this->*m_fnSetCursor)(pPt, bProp); }
     void Drag         (const Point* pPt, bool bProp) { (this->*m_fnDrag)(pPt, bProp); }
     void EndDrag      (const Point* pPt, bool bProp) { (this->*m_fnEndDrag)(pPt, bProp); }
-    long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
+    tools::Long KillSelection(const Point* pPt, bool bProp) { return (this->*m_fnKillSel)(pPt, bProp); }
 
     bool IsSplitVerticalByDefault() const;
     void SetSplitVerticalByDefault(bool value);
 
     // reset all selections
-    long ResetSelect( const Point *, bool );
+    tools::Long ResetSelect( const Point *, bool );
 
     // resets the cursorstack after movement with PageUp/-Down if a stack is built up
     inline void ResetCursorStack();
@@ -338,7 +338,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                           sal_uInt16 nSlotId = 0);       // SlotId for dialog
 
     bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrameFormat **pFlyFrameFormat = nullptr );
-    void    LaunchOLEObj( long nVerb = 0 );             // start server
+    void    LaunchOLEObj( tools::Long nVerb = 0 );             // start server
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset ) override;
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = nullptr,
@@ -585,9 +585,9 @@ private:
     SAL_DLLPRIVATE void  ResetCursorStack_();
 
     using SwCursorShell::SetCursor;
-    SAL_DLLPRIVATE long  SetCursor(const Point *, bool bProp=false );
+    SAL_DLLPRIVATE tools::Long  SetCursor(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE long  SetCursorKillSel(const Point *, bool bProp );
+    SAL_DLLPRIVATE tools::Long  SetCursorKillSel(const Point *, bool bProp );
 
     SAL_DLLPRIVATE void  BeginDrag(const Point *, bool bProp );
     SAL_DLLPRIVATE void  DefaultDrag(const Point *, bool bProp );
@@ -603,7 +603,7 @@ private:
 
     SAL_DLLPRIVATE void  SttLeaveSelect();
     SAL_DLLPRIVATE void  AddLeaveSelect();
-    SAL_DLLPRIVATE long  Ignore(const Point *, bool bProp );
+    SAL_DLLPRIVATE tools::Long  Ignore(const Point *, bool bProp );
 
     SAL_DLLPRIVATE void  LeaveExtSel() { m_bSelWrd = m_bSelLn = false;}
 

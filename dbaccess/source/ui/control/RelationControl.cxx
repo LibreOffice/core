@@ -59,7 +59,7 @@ namespace dbaui
         VclPtr< ::svt::ListBoxControl>          m_pListCell;
         TTableConnectionData::value_type        m_pConnData;
         OTableListBoxControl*                   m_pBoxControl;
-        long                                    m_nDataPos;
+        tools::Long                                    m_nDataPos;
         Reference< XPropertySet>                m_xSourceDef;
         Reference< XPropertySet>                m_xDestDef;
         enum opcode { DELETE, INSERT, MODIFY };
@@ -108,12 +108,12 @@ namespace dbaui
 
         void Init(const TTableConnectionData::value_type& _pConnData);
         using ORelationControl_Base::Init;
-        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
-        virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+        virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
+        virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
         virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-        virtual bool SeekRow( long nRow ) override;
+        virtual bool SeekRow( tools::Long nRow ) override;
         virtual bool SaveModified() override;
-        virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
+        virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColId ) const override;
 
         virtual void CellModified() override;
 
@@ -177,7 +177,7 @@ namespace dbaui
     void ORelationControl::Resize()
     {
         EditBrowseBox::Resize();
-        long nOutputWidth = GetOutputSizePixel().Width() - 1;
+        tools::Long nOutputWidth = GetOutputSizePixel().Width() - 1;
         SetColumnWidth(1, (nOutputWidth / 2));
         SetColumnWidth(2, (nOutputWidth / 2));
     }
@@ -204,7 +204,7 @@ namespace dbaui
 
     bool ORelationControl::IsTabAllowed(bool bForward) const
     {
-        long nRow = GetCurRow();
+        tools::Long nRow = GetCurRow();
         sal_uInt16 nCol = GetCurColumnId();
 
         bool bRet = !(      ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1))
@@ -215,7 +215,7 @@ namespace dbaui
 
     bool ORelationControl::SaveModified()
     {
-        long nRow = GetCurRow();
+        tools::Long nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
             weld::ComboBox& rListBox = m_pListCell->get_widget();
@@ -263,7 +263,7 @@ namespace dbaui
         return nId;
     }
 
-    OUString ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
+    OUString ORelationControl::GetCellText( tools::Long nRow, sal_uInt16 nColId ) const
     {
         OUString sText;
         if ( m_pConnData->GetConnLineDataList().size() > o3tl::make_unsigned(nRow) )
@@ -282,7 +282,7 @@ namespace dbaui
         return sText;
     }
 
-    void ORelationControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
+    void ORelationControl::InitController( CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColumnId )
     {
 
         OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
@@ -319,12 +319,12 @@ namespace dbaui
         rList.set_help_id(sHelpId);
     }
 
-    CellController* ORelationControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
+    CellController* ORelationControl::GetController( tools::Long /*nRow*/, sal_uInt16 /*nColumnId*/ )
     {
         return new ListBoxCellController( m_pListCell.get() );
     }
 
-    bool ORelationControl::SeekRow( long nRow )
+    bool ORelationControl::SeekRow( tools::Long nRow )
     {
         m_nDataPos = nRow;
         return true;

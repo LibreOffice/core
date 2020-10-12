@@ -52,7 +52,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     if (SvxTabAdjust::End > aToken.eTabAlign) {
         const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwContentNode::GetAttr(RES_LR_SPACE) );
 
-        long nTabPosition = aToken.nTabStopPosition;
+        tools::Long nTabPosition = aToken.nTabStopPosition;
         if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTextLeft()) {
             nTabPosition -= rLR.GetTextLeft();
         }
@@ -64,7 +64,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     if (CanUseLayoutRectangle(targetNode, currentLayout)) {
         aNdRect = targetNode.FindLayoutRect(true);
     }
-    long nRightMargin;
+    tools::Long nRightMargin;
     if (aNdRect.IsEmpty()) {
         nRightMargin = CalculatePageMarginFromPageDescription(targetNode);
     } else {
@@ -82,7 +82,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
     return result;
 }
 
-long
+tools::Long
 DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const
 {
     size_t nPgDescNdIdx = targetNode.GetIndex() + 1;
@@ -93,7 +93,7 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTe
         pPageDesc = &mDefaultPageDescription;
     }
     const SwFrameFormat& rPgDscFormat = pPageDesc->GetMaster();
-    long result = rPgDscFormat.GetFrameSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
+    tools::Long result = rPgDscFormat.GetFrameSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
             - rPgDscFormat.GetLRSpace().GetRight();
     // Also consider borders
     const SvxBoxItem& rBox = rPgDscFormat.GetBox();

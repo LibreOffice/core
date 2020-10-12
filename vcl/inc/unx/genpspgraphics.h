@@ -51,8 +51,8 @@ public:
     void                    Init( psp::JobData* pJob, psp::PrinterGfx* pGfx );
 
     // helper methods
-    static const void *     DoGetEmbedFontData(psp::fontID aFont, long* pDataLen);
-    static void             DoFreeEmbedFontData( const void* pData, long nLen );
+    static const void *     DoGetEmbedFontData(psp::fontID aFont, tools::Long* pDataLen);
+    static void             DoFreeEmbedFontData( const void* pData, tools::Long nLen );
 
     // helper methods for sharing with X11SalGraphics
     static void             DoGetGlyphWidths( psp::fontID aFont,
@@ -68,7 +68,7 @@ public:
     virtual SalGraphicsImpl*GetImpl() const override { return nullptr; };
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
     virtual sal_uInt16      GetBitCount() const override;
-    virtual long            GetGraphicsWidth() const override;
+    virtual tools::Long            GetGraphicsWidth() const override;
 
     virtual void            ResetClipRegion() override;
     virtual bool            setClipRegion( const vcl::Region& ) override;
@@ -103,8 +103,8 @@ public:
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo ) override;
-    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, long* pDataLen) override;
-    virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
+    virtual const void*     GetEmbedFontData(const PhysicalFontFace*, tools::Long* pDataLen) override;
+    virtual void            FreeEmbedFontData( const void* pData, tools::Long nDataLen ) override;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
                                             std::vector< sal_Int32 >& rWidths,
@@ -113,10 +113,10 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
     virtual bool            supportsOperation( OutDevSupportType ) const override;
-    virtual void            drawPixel( long nX, long nY ) override;
-    virtual void            drawPixel( long nX, long nY, Color nColor ) override;
-    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) override;
-    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void            drawPixel( tools::Long nX, tools::Long nY ) override;
+    virtual void            drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
+    virtual void            drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
+    virtual void            drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
@@ -150,12 +150,12 @@ public:
                                                    const PolyFlags* const* pFlgAry ) override;
     virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) override { return false; };
 
-    virtual void            copyArea( long nDestX,
-                                      long nDestY,
-                                      long nSrcX,
-                                      long nSrcY,
-                                      long nSrcWidth,
-                                      long nSrcHeight,
+    virtual void            copyArea( tools::Long nDestX,
+                                      tools::Long nDestY,
+                                      tools::Long nSrcX,
+                                      tools::Long nSrcY,
+                                      tools::Long nSrcWidth,
+                                      tools::Long nSrcHeight,
                                       bool bWindowInvalidate) override;
     virtual void            copyBits( const SalTwoRect& rPosAry,
                                       SalGraphics* pSrcGraphics ) override;
@@ -167,14 +167,14 @@ public:
     virtual void            drawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,
                                       Color nMaskColor ) override;
-    virtual std::shared_ptr<SalBitmap> getBitmap( long nX, long nY, long nWidth, long nHeight ) override;
-    virtual Color           getPixel( long nX, long nY ) override;
-    virtual void            invert( long nX, long nY, long nWidth, long nHeight,
+    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
+    virtual Color           getPixel( tools::Long nX, tools::Long nY ) override;
+    virtual void            invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                     SalInvert nFlags ) override;
     virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry,
                                     SalInvert nFlags ) override;
 
-    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight,
+    virtual bool            drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                      void* pPtr, sal_uInt32 nSize ) override;
     virtual bool            blendBitmap( const SalTwoRect&,
                                          const SalBitmap& rBitmap ) override;
@@ -190,7 +190,7 @@ public:
                                                    const basegfx::B2DPoint& rY,
                                                    const SalBitmap& rSourceBitmap,
                                                    const SalBitmap* pAlphaBitmap) override;
-    virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight,
+    virtual bool            drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                                            sal_uInt8 nTransparency ) override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;

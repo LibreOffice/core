@@ -406,8 +406,8 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
     SolarMutexGuard aGuard;
 
     uno::Reference<sheet::XSheetConditionalEntry> xEntry;
-    long nCount = maEntries.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = maEntries.size();
+    for (tools::Long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
             xEntry.set(GetObjectByIndex_Impl(static_cast<sal_uInt16>(i)));
@@ -424,10 +424,10 @@ uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
 {
     SolarMutexGuard aGuard;
 
-    long nCount = maEntries.size();
+    tools::Long nCount = maEntries.size();
     uno::Sequence<OUString> aNames(nCount);
     OUString* pArray = aNames.getArray();
-    for (long i=0; i<nCount; i++)
+    for (tools::Long i=0; i<nCount; i++)
         pArray[i] = lcl_GetEntryNameFromIndex(i);
 
     return aNames;
@@ -437,8 +437,8 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
 
-    long nCount = maEntries.size();
-    for (long i=0; i<nCount; i++)
+    tools::Long nCount = maEntries.size();
+    for (tools::Long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
             return true;
 

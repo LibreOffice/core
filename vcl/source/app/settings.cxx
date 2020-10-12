@@ -59,10 +59,10 @@ struct ImplMouseData
 {
     MouseSettingsOptions            mnOptions           = MouseSettingsOptions::NONE;
     sal_uInt64                      mnDoubleClkTime     = 500;
-    long                            mnDoubleClkWidth    = 2;
-    long                            mnDoubleClkHeight   = 2;
-    long                            mnStartDragWidth    = 2 ;
-    long                            mnStartDragHeight   = 2;
+    tools::Long                            mnDoubleClkWidth    = 2;
+    tools::Long                            mnDoubleClkHeight   = 2;
+    tools::Long                            mnStartDragWidth    = 2 ;
+    tools::Long                            mnStartDragHeight   = 2;
     sal_uLong                       mnButtonRepeat      = 90;
     sal_uLong                       mnMenuDelay         = 150;
     MouseFollowFlags                mnFollow            = MouseFollowFlags::Menu | MouseFollowFlags::DDList;
@@ -155,12 +155,12 @@ struct ImplStyleData
     vcl::Font                       maIconFont;
     vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
-    long                            mnTitleHeight;
-    long                            mnFloatTitleHeight;
-    long                            mnScrollBarSize;
-    long                            mnSpinSize;
-    long                            mnCursorSize;
-    long                            mnAntialiasedMin;
+    tools::Long                            mnTitleHeight;
+    tools::Long                            mnFloatTitleHeight;
+    tools::Long                            mnScrollBarSize;
+    tools::Long                            mnSpinSize;
+    tools::Long                            mnCursorSize;
+    tools::Long                            mnAntialiasedMin;
     sal_uInt64                      mnCursorBlinkTime;
     DragFullOptions                 mnDragFullOptions;
     SelectionOptions                mnSelectionOptions;
@@ -179,7 +179,7 @@ struct ImplStyleData
     TriState                        meUseImagesInMenus;
     bool                            mnUseFlatBorders;
     bool                            mbPreferredUseImagesInMenus;
-    long                            mnMinThumbSize;
+    tools::Long                            mnMinThumbSize;
     std::shared_ptr<vcl::IconThemeScanner>
                                     mIconThemeScanner;
     std::shared_ptr<vcl::IconThemeSelector>
@@ -271,52 +271,52 @@ MouseSettings::GetDoubleClickTime() const
 }
 
 void
-MouseSettings::SetDoubleClickWidth( long nDoubleClkWidth )
+MouseSettings::SetDoubleClickWidth( tools::Long nDoubleClkWidth )
 {
     CopyData();
     mxData->mnDoubleClkWidth = nDoubleClkWidth;
 }
 
-long
+tools::Long
 MouseSettings::GetDoubleClickWidth() const
 {
     return mxData->mnDoubleClkWidth;
 }
 
 void
-MouseSettings::SetDoubleClickHeight( long nDoubleClkHeight )
+MouseSettings::SetDoubleClickHeight( tools::Long nDoubleClkHeight )
 {
     CopyData();
     mxData->mnDoubleClkHeight = nDoubleClkHeight;
 }
 
-long
+tools::Long
 MouseSettings::GetDoubleClickHeight() const
 {
     return mxData->mnDoubleClkHeight;
 }
 
 void
-MouseSettings::SetStartDragWidth( long nDragWidth )
+MouseSettings::SetStartDragWidth( tools::Long nDragWidth )
 {
     CopyData();
     mxData->mnStartDragWidth = nDragWidth;
 }
 
-long
+tools::Long
 MouseSettings::GetStartDragWidth() const
 {
     return mxData->mnStartDragWidth;
 }
 
 void
-MouseSettings::SetStartDragHeight( long nDragHeight )
+MouseSettings::SetStartDragHeight( tools::Long nDragHeight )
 {
     CopyData();
     mxData->mnStartDragHeight = nDragHeight;
 }
 
-long
+tools::Long
 MouseSettings::GetStartDragHeight() const
 {
     return mxData->mnStartDragHeight;
@@ -1865,91 +1865,91 @@ StyleSettings::GetTabFont() const
     return mxData->maTabFont;
 }
 
-long
+tools::Long
 StyleSettings::GetBorderSize()
 {
     return 1;
 }
 
 void
-StyleSettings::SetTitleHeight( long nSize )
+StyleSettings::SetTitleHeight( tools::Long nSize )
 {
     CopyData();
     mxData->mnTitleHeight = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetTitleHeight() const
 {
     return mxData->mnTitleHeight;
 }
 
 void
-StyleSettings::SetFloatTitleHeight( long nSize )
+StyleSettings::SetFloatTitleHeight( tools::Long nSize )
 {
     CopyData();
     mxData->mnFloatTitleHeight = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetFloatTitleHeight() const
 {
     return mxData->mnFloatTitleHeight;
 }
 
 void
-StyleSettings::SetScrollBarSize( long nSize )
+StyleSettings::SetScrollBarSize( tools::Long nSize )
 {
     CopyData();
     mxData->mnScrollBarSize = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetScrollBarSize() const
 {
     return mxData->mnScrollBarSize;
 }
 
 void
-StyleSettings::SetMinThumbSize( long nSize )
+StyleSettings::SetMinThumbSize( tools::Long nSize )
 {
     CopyData();
     mxData->mnMinThumbSize = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetMinThumbSize() const
 {
     return mxData->mnMinThumbSize;
 }
 
 void
-StyleSettings::SetSpinSize( long nSize )
+StyleSettings::SetSpinSize( tools::Long nSize )
 {
     CopyData();
     mxData->mnSpinSize = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetSpinSize() const
 {
     return mxData->mnSpinSize;
 }
 
-long
+tools::Long
 StyleSettings::GetSplitSize()
 {
     return 3;
 }
 
 void
-StyleSettings::SetCursorSize( long nSize )
+StyleSettings::SetCursorSize( tools::Long nSize )
 {
     CopyData();
     mxData->mnCursorSize = nSize;
 }
 
-long
+tools::Long
 StyleSettings::GetCursorSize() const
 {
     return mxData->mnCursorSize;
@@ -1965,7 +1965,7 @@ StyleSettings::SetCursorBlinkTime( sal_uInt64 nBlinkTime )
 sal_uInt64
 StyleSettings::GetCursorBlinkTime() const
 {
-    return static_cast<long>(mxData->mnCursorBlinkTime);
+    return static_cast<tools::Long>(mxData->mnCursorBlinkTime);
 }
 
 void
@@ -2008,7 +2008,7 @@ StyleSettings::GetDisplayOptions() const
 }
 
 void
-StyleSettings::SetAntialiasingMinPixelHeight( long nMinPixel )
+StyleSettings::SetAntialiasingMinPixelHeight( tools::Long nMinPixel )
 {
     CopyData();
     mxData->mnAntialiasedMin = nMinPixel;

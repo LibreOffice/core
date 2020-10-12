@@ -140,13 +140,13 @@ public:
     // gets the displayed text
     virtual OUString GetDisplayText() const override;
     // returns the bounding box for the character at index nIndex (in control coordinates)
-    tools::Rectangle GetCharacterBounds( long nIndex ) const;
+    tools::Rectangle GetCharacterBounds( tools::Long nIndex ) const;
     // returns the character index for corresponding to rPoint (in control coordinates)
     // -1 is returned if no character is at that point
-    long GetIndexForPoint( const Point& rPoint ) const;
+    tools::Long GetIndexForPoint( const Point& rPoint ) const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
-    Pair GetLineStartEnd( long nLine ) const;
+    Pair GetLineStartEnd( tools::Long nLine ) const;
     /** ToRelativeLineIndex changes a layout data index to a count relative to its line.
 
     This is equivalent to getting the line start/end pairs with
@@ -159,7 +159,7 @@ public:
     the relative index inside the displayed line or -1 if the absolute index does
     not match any line
     */
-    long ToRelativeLineIndex( long nIndex ) const;
+    tools::Long ToRelativeLineIndex( tools::Long nIndex ) const;
 
     void            SetLoseFocusHdl( const Link<Control&,void>& rLink ) { maLoseFocusHdl = rLink; }
 

@@ -81,8 +81,8 @@ struct CmpLPt
             return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() );
     }
 
-    long X() const { return aPos.X(); }
-    long Y() const { return aPos.Y(); }
+    tools::Long X() const { return aPos.X(); }
+    tools::Long Y() const { return aPos.Y(); }
 };
 
 }
@@ -531,15 +531,15 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                         const SwRect& rUnion = pUnion->GetUnion(),
                                     & rFrameRect = pCell->getFrameArea();
 
-                        const long nUnionRight = rUnion.Right();
-                        const long nUnionBottom = rUnion.Bottom();
-                        const long nFrameRight = rFrameRect.Right();
-                        const long nFrameBottom = rFrameRect.Bottom();
+                        const tools::Long nUnionRight = rUnion.Right();
+                        const tools::Long nUnionBottom = rUnion.Bottom();
+                        const tools::Long nFrameRight = rFrameRect.Right();
+                        const tools::Long nFrameBottom = rFrameRect.Bottom();
 
                         // ignore if FrameRect is outside the union
 
-                        const long nXFuzzy = aRectFnSet.IsVert() ? 0 : 20;
-                        const long nYFuzzy = aRectFnSet.IsVert() ? 20 : 0;
+                        const tools::Long nXFuzzy = aRectFnSet.IsVert() ? 0 : 20;
+                        const tools::Long nYFuzzy = aRectFnSet.IsVert() ? 20 : 0;
 
                         if( !(  rUnion.Top()  + nYFuzzy > nFrameBottom ||
                                 nUnionBottom < rFrameRect.Top() + nYFuzzy ||
@@ -586,9 +586,9 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             // they're all adjacent
             size_t n;
             sal_uInt16 nCellCnt = 0;
-            long nYPos = LONG_MAX;
-            long nXPos = 0;
-            long nHeight = 0;
+            tools::Long nYPos = LONG_MAX;
+            tools::Long nXPos = 0;
+            tools::Long nHeight = 0;
 
             for( n = 0 ; n < aCellFrames.size(); ++n )
             {
@@ -961,7 +961,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                         GetSttNd()->FindTableNode());
 
     MergePos aPosArr;      // Sort-Array with the frame positions
-    long nWidth;
+    tools::Long nWidth;
     SwTableBox* pLastBox = nullptr;
 
     SwRectFnSet aRectFnSet(pStart->GetUpper());
@@ -1006,7 +1006,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 nWidth = rUnion.Right() - pCell->getFrameArea().Left();
                                 nWidth = nWidth * aNew.GetWidth() /
                                          pCell->getFrameArea().Width();
-                                long nTmpWidth = aNew.GetWidth() - nWidth;
+                                tools::Long nTmpWidth = aNew.GetWidth() - nWidth;
                                 aNew.SetWidth( nWidth );
                                 pBox->GetFrameFormat()->SetFormatAttr( aNew );
                                 // this box is selected
@@ -1043,10 +1043,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pBox->ClaimFrameFormat();
                             SwFormatFrameSize aNew(
                                         pBox->GetFrameFormat()->GetFrameSize() );
-                            long nLeft = rUnion.Left() - pCell->getFrameArea().Left();
+                            tools::Long nLeft = rUnion.Left() - pCell->getFrameArea().Left();
                             nLeft = nLeft * aNew.GetWidth() /
                                     pCell->getFrameArea().Width();
-                            long nRight = pCell->getFrameArea().Right() - rUnion.Right();
+                            tools::Long nRight = pCell->getFrameArea().Right() - rUnion.Right();
                             nRight = nRight * aNew.GetWidth() /
                                      pCell->getFrameArea().Width();
                             nWidth = aNew.GetWidth() - nLeft - nRight;
@@ -1098,7 +1098,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
 
                             SwFormatFrameSize aNew(pBox->GetFrameFormat()->GetFrameSize() );
-                            long nLeft = rUnion.Left() - pCell->getFrameArea().Left(),
+                            tools::Long nLeft = rUnion.Left() - pCell->getFrameArea().Left(),
                                 nRight = pCell->getFrameArea().Right() - rUnion.Left();
 
                             nLeft = nLeft * aNew.GetWidth() /
@@ -1295,7 +1295,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 // DEL_ALL_EMPTY_BOXES
 
         nWidth = 0;
-        long nY = !aPosArr.empty() ?
+        tools::Long nY = !aPosArr.empty() ?
                     ( aRectFnSet.IsVert() ?
                       aPosArr[ 0 ].X() :
                       aPosArr[ 0 ].Y() ) :
@@ -1517,8 +1517,8 @@ TableMergeErr CheckMergeSel( const SwSelBoxes& rBoxes )
     return eRet;
 }
 
-static SwTwips lcl_CalcWish( const SwLayoutFrame *pCell, long nWish,
-                                                const long nAct )
+static SwTwips lcl_CalcWish( const SwLayoutFrame *pCell, tools::Long nWish,
+                                                const tools::Long nAct )
 {
     const SwLayoutFrame *pTmp = pCell;
     if ( !nWish )
@@ -1629,8 +1629,8 @@ static void lcl_FindStartEndCol( const SwLayoutFrame *&rpStart,
     SwRectFnSet aRectFnSet(pTab);
 
     bool bRTL = pTab->IsRightToLeft();
-    const long nTmpWish = pOrg->GetFormat()->GetFrameSize().GetWidth();
-    const long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
+    const tools::Long nTmpWish = pOrg->GetFormat()->GetFrameSize().GetWidth();
+    const tools::Long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
 
     while ( pTab->IsFollow() )
     {
@@ -1799,8 +1799,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     else
     {
         SwRectFnSet aRectFnSet(pTable);
-        long nSttTop = aRectFnSet.GetTop(pStart->getFrameArea());
-        long nEndTop = aRectFnSet.GetTop(pEnd->getFrameArea());
+        tools::Long nSttTop = aRectFnSet.GetTop(pStart->getFrameArea());
+        tools::Long nEndTop = aRectFnSet.GetTop(pEnd->getFrameArea());
         if( nSttTop == nEndTop )
         {
             if( aRectFnSet.GetLeft(pStart->getFrameArea()) >
@@ -1832,24 +1832,24 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
     pTable = pStart->FindTabFrame();
     pEndTable = pEnd->FindTabFrame();
 
-    const long nStSz = pStart->GetFormat()->GetFrameSize().GetWidth();
-    const long nEdSz = pEnd->GetFormat()->GetFrameSize().GetWidth();
-    const long nWish = std::max( 1L, pTable->GetFormat()->GetFrameSize().GetWidth() );
+    const tools::Long nStSz = pStart->GetFormat()->GetFrameSize().GetWidth();
+    const tools::Long nEdSz = pEnd->GetFormat()->GetFrameSize().GetWidth();
+    const tools::Long nWish = std::max( 1L, pTable->GetFormat()->GetFrameSize().GetWidth() );
     while ( pTable )
     {
         SwRectFnSet aRectFnSet(pTable);
-        const long nOfst = aRectFnSet.GetPrtLeft(*pTable);
-        const long nPrtWidth = aRectFnSet.GetWidth(pTable->getFramePrintArea());
-        long nSt1 = ::lcl_CalcWish( pStart, nWish, nPrtWidth ) + nOfst;
-        long nEd1 = ::lcl_CalcWish( pEnd,   nWish, nPrtWidth ) + nOfst;
+        const tools::Long nOfst = aRectFnSet.GetPrtLeft(*pTable);
+        const tools::Long nPrtWidth = aRectFnSet.GetWidth(pTable->getFramePrintArea());
+        tools::Long nSt1 = ::lcl_CalcWish( pStart, nWish, nPrtWidth ) + nOfst;
+        tools::Long nEd1 = ::lcl_CalcWish( pEnd,   nWish, nPrtWidth ) + nOfst;
 
         if ( nSt1 <= nEd1 )
-            nEd1 += static_cast<long>((nEdSz * nPrtWidth) / nWish) - 1;
+            nEd1 += static_cast<tools::Long>((nEdSz * nPrtWidth) / nWish) - 1;
         else
-            nSt1 += static_cast<long>((nStSz * nPrtWidth) / nWish) - 1;
+            nSt1 += static_cast<tools::Long>((nStSz * nPrtWidth) / nWish) - 1;
 
-        long nSt2;
-        long nEd2;
+        tools::Long nSt2;
+        tools::Long nEd2;
         if( pTable->IsAnLower( pStart ) )
             nSt2 = aRectFnSet.GetTop(pStart->getFrameArea());
         else
@@ -1861,13 +1861,13 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
         Point aSt, aEd;
         if( nSt1 > nEd1 )
         {
-            long nTmp = nSt1;
+            tools::Long nTmp = nSt1;
             nSt1 = nEd1;
             nEd1 = nTmp;
         }
         if( nSt2 > nEd2 )
         {
-            long nTmp = nSt2;
+            tools::Long nTmp = nSt2;
             nSt2 = nEd2;
             nEd2 = nTmp;
         }

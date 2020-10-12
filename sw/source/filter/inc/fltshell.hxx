@@ -165,7 +165,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, long nHand = LONG_MAX, bool consumedByField=false);
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, tools::Long nHand = LONG_MAX, bool consumedByField=false);
 
     void StealAttr(const SwNodeIndex& rNode);
     void MarkAllAttrsOld();
@@ -234,7 +234,7 @@ class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
 private:
 
-    long mnHandle;
+    tools::Long mnHandle;
     OUString maName;
     OUString maVal;
     bool mbIsTOCBookmark;
@@ -242,14 +242,14 @@ private:
 public:
     SwFltBookmark( const OUString& rNa,
                    const OUString& rVa,
-                   long nHand,
+                   tools::Long nHand,
                    const bool bIsTOCBookmark = false );
 
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SwFltBookmark* Clone(SfxItemPool* = nullptr) const override;
 
-    long GetHandle() const              { return mnHandle; }
+    tools::Long GetHandle() const              { return mnHandle; }
     const OUString& GetName() const       { return maName; }
     const OUString& GetValSys() const     { return maVal; }
     bool IsTOCBookmark() const
@@ -261,7 +261,7 @@ public:
 /// Stores RDF statements on a paragraph (key-value pairs where the subject is the paragraph).
 class SW_DLLPUBLIC SwFltRDFMark : public SfxPoolItem
 {
-    long m_nHandle;
+    tools::Long m_nHandle;
     std::vector< std::pair<OUString, OUString> > m_aAttributes;
 
 public:
@@ -270,8 +270,8 @@ public:
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SwFltRDFMark* Clone(SfxItemPool* = nullptr) const override;
 
-    void SetHandle(long nHandle);
-    long GetHandle() const;
+    void SetHandle(tools::Long nHandle);
+    tools::Long GetHandle() const;
     void SetAttributes(const std::vector< std::pair<OUString, OUString> >& rAttributes);
     const std::vector< std::pair<OUString, OUString> >& GetAttributes() const;
 };
@@ -313,7 +313,7 @@ class ImportProgress
 private:
     SwDocShell *m_pDocShell;
 public:
-    ImportProgress(SwDocShell *pDocShell, long nStartVal, long nEndVal)
+    ImportProgress(SwDocShell *pDocShell, tools::Long nStartVal, tools::Long nEndVal)
         : m_pDocShell(pDocShell)
     {
         ::StartProgress(STR_STATSTR_W4WREAD, nStartVal, nEndVal, m_pDocShell);

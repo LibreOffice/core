@@ -43,7 +43,7 @@ void CGM::ImplDoClass6()
     {
         case 0x01 : /*Escape*/
         {
-            long    nIdentifier = ImplGetI( pElement->nIntegerPrecision );
+            tools::Long    nIdentifier = ImplGetI( pElement->nIntegerPrecision );
             switch ( nIdentifier )
             {
                 case 0 : /*inquire function support */break;

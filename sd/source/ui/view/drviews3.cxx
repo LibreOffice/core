@@ -565,8 +565,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
-                    long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
+                    ::tools::Long nLeft = std::max(0L, rLRSpace.GetLeft() - aPagePos.X());
+                    ::tools::Long nRight = std::max(0L, rLRSpace.GetRight() + aPagePos.X() +
                                           aPageSize.Width() - aViewSize.Width());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -631,8 +631,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 }
                 else
                 {
-                    long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
-                    long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
+                    ::tools::Long nUpper = std::max(0L, rULSpace.GetUpper() - aPagePos.Y());
+                    ::tools::Long nLower = std::max(0L, rULSpace.GetLower() + aPagePos.Y() +
                                           aPageSize.Height() - aViewSize.Height());
 
                     sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -840,8 +840,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     // become negative - EditEngine really does not
                     // like that.
                     const auto nAbsLSpace=aFormat.GetAbsLSpace();
-                    const long  nTxtLeft=rItem.GetTextLeft();
-                    const long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
+                    const ::tools::Long  nTxtLeft=rItem.GetTextLeft();
+                    const ::tools::Long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
                     aLRSpaceItem.SetTextLeft(nLeftIndent);
                     // control for clipped left indent - remainder
                     // reduces number format first line indent
@@ -976,7 +976,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
                         const SdrMetricItem& rTLDItem = aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
-                        long nLD = rTLDItem.GetValue();
+                        ::tools::Long nLD = rTLDItem.GetValue();
                         aPos.AdjustX(nLD );
                     }
 
@@ -996,7 +996,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
                         const SdrMetricItem& rTLDItem = aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
-                        long nLD = rTLDItem.GetValue();
+                        ::tools::Long nLD = rTLDItem.GetValue();
                         aLRSpace.SetLeft( aLRSpace.GetLeft() + nLD );
                     }
 
@@ -1005,7 +1005,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_RIGHTDIST ) == SfxItemState::SET )
                     {
                         const SdrMetricItem& rTRDItem = aEditAttr.Get( SDRATTR_TEXT_RIGHTDIST );
-                        long nRD = rTRDItem.GetValue();
+                        ::tools::Long nRD = rTRDItem.GetValue();
                         aLRSpace.SetRight( aLRSpace.GetRight() + nRD );
                     }
 

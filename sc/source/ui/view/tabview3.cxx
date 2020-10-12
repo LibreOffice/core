@@ -647,12 +647,12 @@ namespace {
 Point calcHintWindowPosition(
     const Point& rCellPos, const Size& rCellSize, const Size& rFrameWndSize, const Size& rHintWndSize)
 {
-    const long nMargin = 20;
+    const tools::Long nMargin = 20;
 
-    long nMLeft = rCellPos.X();
-    long nMRight = rFrameWndSize.Width() - rCellPos.X() - rCellSize.Width();
-    long nMTop = rCellPos.Y();
-    long nMBottom = rFrameWndSize.Height() - rCellPos.Y() - rCellSize.Height();
+    tools::Long nMLeft = rCellPos.X();
+    tools::Long nMRight = rFrameWndSize.Width() - rCellPos.X() - rCellSize.Width();
+    tools::Long nMTop = rCellPos.Y();
+    tools::Long nMBottom = rFrameWndSize.Height() - rCellPos.Y() - rCellSize.Height();
 
     // First, see if we can fit the entire hint window in the visible region.
 
@@ -813,8 +813,8 @@ void ScTabView::TestHintWindow()
                 mxInputHintOO->append(std::unique_ptr<sdr::overlay::OverlayObject>(pOverlay));
 
                 Size aHintWndSize = pOverlay->GetSizePixel();
-                long nCellSizeX = 0;
-                long nCellSizeY = 0;
+                tools::Long nCellSizeX = 0;
+                tools::Long nCellSizeY = 0;
                 aViewData.GetMergeSizePixel(nCol, nRow, nCellSizeX, nCellSizeY);
 
                 Point aHintPos = calcHintWindowPosition(
@@ -946,15 +946,15 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         SCCOL nSizeX = aViewData.VisibleCellsX(eAlignX);
         SCROW nSizeY = aViewData.VisibleCellsY(eAlignY);
 
-        long nCellSizeX;
-        long nCellSizeY;
+        tools::Long nCellSizeX;
+        tools::Long nCellSizeY;
         if ( nCurX >= 0 && nCurY >= 0 )
             aViewData.GetMergeSizePixel( nCurX, nCurY, nCellSizeX, nCellSizeY );
         else
             nCellSizeX = nCellSizeY = 0;
         Size aScrSize = aViewData.GetScrSize();
-        long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / 2;
-        long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
+        tools::Long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / 2;
+        tools::Long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
         //  nSpaceY: desired start position of cell for FOLLOW_JUMP, modified if dialog interferes
 
         bool bForceNew = false;     // force new calculation of JUMP position (vertical only)
@@ -990,7 +990,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                         {
                             // cursor is on the screen
                             Point aStart = aViewData.GetScrPos( nCurX, nCurY, eAlign );
-                            long nCSX, nCSY;
+                            tools::Long nCSX, nCSY;
                             aViewData.GetMergeSizePixel( nCurX, nCurY, nCSX, nCSY );
                             tools::Rectangle aCursor( aStart, Size( nCSX, nCSY ) );
                             if ( aCursor.IsOver( aDlgPixel ) )
@@ -1002,11 +1002,11 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                 if (bLimit)
                 {
                     bool bBottom = false;
-                    long nTopSpace = aDlgPixel.Top();
-                    long nBotSpace = aWinSize.Height() - aDlgPixel.Bottom();
+                    tools::Long nTopSpace = aDlgPixel.Top();
+                    tools::Long nBotSpace = aWinSize.Height() - aDlgPixel.Bottom();
                     if ( nBotSpace > 0 && nBotSpace > nTopSpace )
                     {
-                        long nDlgBot = aDlgPixel.Bottom();
+                        tools::Long nDlgBot = aDlgPixel.Bottom();
                         SCCOL nWPosX;
                         SCROW nWPosY;
                         aViewData.GetPosFromPixel( 0,nDlgBot, eAlign, nWPosX, nWPosY );
@@ -2148,9 +2148,9 @@ void ScTabView::UpdateEditView()
         {
             EditView* pEditView = aViewData.GetEditView(eCurrent);
 
-            long nRefTabNo = GetViewData().GetRefTabNo();
-            long nX = GetViewData().GetCurXForTab(nRefTabNo);
-            long nY = GetViewData().GetCurYForTab(nRefTabNo);
+            tools::Long nRefTabNo = GetViewData().GetRefTabNo();
+            tools::Long nX = GetViewData().GetCurXForTab(nRefTabNo);
+            tools::Long nY = GetViewData().GetCurYForTab(nRefTabNo);
 
             aViewData.SetEditEngine(eCurrent,
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
@@ -2368,7 +2368,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             continue;
 
         bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
         Point aStart = aViewData.GetScrPos( nCol1, nRow1, static_cast<ScSplitPos>(i) );
         Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, static_cast<ScSplitPos>(i) );
@@ -2408,7 +2408,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             //!if ( nCol1 > 0 && !aViewData.GetDocument()->IsBlockEmpty(
             //!                     aViewData.GetTabNo(),
             //!                     0, nRow1, nCol1-1, nRow2 ) )
-            long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
+            tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * aViewData.GetPPTX() );
             aStart.AdjustX( -(nMarkPixel * nLayoutSign) );
         }
 
@@ -2485,7 +2485,7 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
         PaintArea( nCol1, nRow1, nCol2, nRow2, ScUpdateMode::Marks );
 }
 
-void ScTabView::PaintRangeFinder( long nNumber )
+void ScTabView::PaintRangeFinder( tools::Long nNumber )
 {
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( aViewData.GetViewShell() );
     if (!pHdl)
@@ -2577,11 +2577,11 @@ void ScTabView::DoChartSelection(
                 {
                     aTargetRange.PutInOrder();
 
-                    long nX1 = aTargetRange.aStart.Col();
-                    long nX2 = aTargetRange.aEnd.Col();
-                    long nY1 = aTargetRange.aStart.Row();
-                    long nY2 = aTargetRange.aEnd.Row();
-                    long nTab = aTargetRange.aStart.Tab();
+                    tools::Long nX1 = aTargetRange.aStart.Col();
+                    tools::Long nX2 = aTargetRange.aEnd.Col();
+                    tools::Long nY1 = aTargetRange.aStart.Row();
+                    tools::Long nY2 = aTargetRange.aEnd.Row();
+                    tools::Long nTab = aTargetRange.aStart.Tab();
 
                     aReferenceMarks[nIndex++] = ScInputHandler::GetReferenceMark( aViewData, aViewData.GetDocShell(),
                                                                             nX1, nX2, nY1, nY2,
@@ -2670,7 +2670,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
 
     ScDocument& rDoc = aViewData.GetDocument();
     bool bLayoutRTL = rDoc.IsLayoutRTL( aViewData.GetTabNo() );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     for (sal_uInt16 i = 0; i < 2; i++)
     {
@@ -2678,8 +2678,8 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
         if (pColBar[eWhich])
         {
             Size aWinSize = pColBar[eWhich]->GetSizePixel();
-            long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
-            long nEndX;
+            tools::Long nStartX = aViewData.GetScrPos( nStartCol, 0, eWhich ).X();
+            tools::Long nEndX;
             if (nEndCol >= rDoc.MaxCol())
                 nEndX = nStartX + (bLayoutRTL ? 0 : ( aWinSize.Width()-1 ));
             else
@@ -2731,8 +2731,8 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
         if (pRowBar[eWhich])
         {
             Size aWinSize = pRowBar[eWhich]->GetSizePixel();
-            long nStartY = aViewData.GetScrPos( 0, nStartRow, eWhich ).Y();
-            long nEndY;
+            tools::Long nStartY = aViewData.GetScrPos( 0, nStartRow, eWhich ).Y();
+            tools::Long nEndY;
             if (nEndRow >= rDoc.MaxRow())
                 nEndY = nStartY + aWinSize.Height() - 1;
             else
@@ -2918,7 +2918,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         pColBar[eOldH]->SetIgnoreMove(true);
         pColBar[eNewH]->SetIgnoreMove(false);
         pHdrSelEng->SetWindow( pColBar[eNewH] );
-        long nWidth = pColBar[eNewH]->GetOutputSizePixel().Width();
+        tools::Long nWidth = pColBar[eNewH]->GetOutputSizePixel().Width();
         pHdrSelEng->SetVisibleArea( tools::Rectangle( 0, LONG_MIN, nWidth-1, LONG_MAX ) );
         pColBar[eNewH]->CaptureMouse();
     }
@@ -2927,7 +2927,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         pRowBar[eOldV]->SetIgnoreMove(true);
         pRowBar[eNewV]->SetIgnoreMove(false);
         pHdrSelEng->SetWindow( pRowBar[eNewV] );
-        long nHeight = pRowBar[eNewV]->GetOutputSizePixel().Height();
+        tools::Long nHeight = pRowBar[eNewV]->GetOutputSizePixel().Height();
         pHdrSelEng->SetVisibleArea( tools::Rectangle( LONG_MIN, 0, LONG_MAX, nHeight-1 ) );
         pRowBar[eNewV]->CaptureMouse();
     }
@@ -2975,7 +2975,7 @@ void ScTabView::UpdateInputContext()
 
 // GetGridWidth - width of an output range (for ViewData)
 
-long ScTabView::GetGridWidth( ScHSplitPos eWhich )
+tools::Long ScTabView::GetGridWidth( ScHSplitPos eWhich )
 {
     ScSplitPos eGridWhich = ( eWhich == SC_SPLIT_LEFT ) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT;
     if (pGridWin[eGridWhich])
@@ -2986,7 +2986,7 @@ long ScTabView::GetGridWidth( ScHSplitPos eWhich )
 
 // GetGridHeight - height of an output range (for ViewData)
 
-long ScTabView::GetGridHeight( ScVSplitPos eWhich )
+tools::Long ScTabView::GetGridHeight( ScVSplitPos eWhich )
 {
     ScSplitPos eGridWhich = ( eWhich == SC_SPLIT_TOP ) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT;
     if (pGridWin[eGridWhich])

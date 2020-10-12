@@ -110,26 +110,26 @@ void ScClient::RequestNewObjectArea( tools::Rectangle& aLogicRect )
 
     if (aLogicRect.Right() > aPageRect.Right())
     {
-        long nDiff = aLogicRect.Right() - aPageRect.Right();
+        tools::Long nDiff = aLogicRect.Right() - aPageRect.Right();
         aLogicRect.AdjustLeft( -nDiff );
         aLogicRect.AdjustRight( -nDiff );
     }
     if (aLogicRect.Bottom() > aPageRect.Bottom())
     {
-        long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
+        tools::Long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
         aLogicRect.AdjustTop( -nDiff );
         aLogicRect.AdjustBottom( -nDiff );
     }
 
     if (aLogicRect.Left() < aPageRect.Left())
     {
-        long nDiff = aLogicRect.Left() - aPageRect.Left();
+        tools::Long nDiff = aLogicRect.Left() - aPageRect.Left();
         aLogicRect.AdjustRight( -nDiff );
         aLogicRect.AdjustLeft( -nDiff );
     }
     if (aLogicRect.Top() < aPageRect.Top())
     {
-        long nDiff = aLogicRect.Top() - aPageRect.Top();
+        tools::Long nDiff = aLogicRect.Top() - aPageRect.Top();
         aLogicRect.AdjustBottom( -nDiff );
         aLogicRect.AdjustTop( -nDiff );
     }
@@ -206,7 +206,7 @@ void ScClient::ViewChanged()
     tools::Rectangle aLogicRect = pDrawObj->GetLogicRect();
     Fraction aFractX = GetScaleWidth() * aVisSize.Width();
     Fraction aFractY = GetScaleHeight() * aVisSize.Height();
-    aVisSize = Size( static_cast<long>(aFractX), static_cast<long>(aFractY) ); // Scaled for Draw model
+    aVisSize = Size( static_cast<tools::Long>(aFractX), static_cast<tools::Long>(aFractY) ); // Scaled for Draw model
 
     //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't
     //  calculate wrong scalings:

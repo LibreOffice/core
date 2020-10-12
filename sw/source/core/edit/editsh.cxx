@@ -871,18 +871,18 @@ sal_uInt16 SwEditShell::GetLineCount()
     return nRet;
 }
 
-long SwEditShell::CompareDoc( const SwDoc& rDoc )
+tools::Long SwEditShell::CompareDoc( const SwDoc& rDoc )
 {
     StartAllAction();
-    long nRet = GetDoc()->CompareDoc( rDoc );
+    tools::Long nRet = GetDoc()->CompareDoc( rDoc );
     EndAllAction();
     return nRet;
 }
 
-long SwEditShell::MergeDoc( const SwDoc& rDoc )
+tools::Long SwEditShell::MergeDoc( const SwDoc& rDoc )
 {
     StartAllAction();
-    long nRet = GetDoc()->MergeDoc( rDoc );
+    tools::Long nRet = GetDoc()->MergeDoc( rDoc );
     EndAllAction();
     return nRet;
 }

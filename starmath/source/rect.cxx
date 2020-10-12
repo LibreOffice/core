@@ -68,14 +68,14 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     Size aFntSize = aFnt.GetFontSize();
 
     // Workaround to avoid HUGE font sizes and resulting problems
-    long nScaleFactor = 1;
+    tools::Long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
 
     aFnt.SetFontSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
     pGlyphDev->SetFont(aFnt);
 
-    long nTextWidth = rDev.GetTextWidth(rText);
+    tools::Long nTextWidth = rDev.GetTextWidth(rText);
     tools::Rectangle   aResult (Point(), Size(nTextWidth, rDev.GetTextHeight())),
                        aTmp;
 
@@ -89,7 +89,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
                             aTmp.Right() * nScaleFactor, aTmp.Bottom() * nScaleFactor);
         if (&rDev != pGlyphDev) /* only when rDev is a printer... */
         {
-            long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
+            tools::Long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
             if (nGDTextWidth != 0  &&
                 nTextWidth != nGDTextWidth)
             {
@@ -101,7 +101,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 
     // move rectangle to match possibly different baselines
     // (because of different devices)
-    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
+    tools::Long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
     aResult.Move(0, nDelta);
 
     pGlyphDev->Pop();
@@ -186,7 +186,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     const FontMetric  aFM (rDev.GetFontMetric());
     bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
-    const long        nFontHeight = rDev.GetFont().GetFontSize().Height();
+    const tools::Long        nFontHeight = rDev.GetFont().GetFontSize().Height();
 
     nBorderWidth  = nBorder;
     bHasAlignInfo = true;
@@ -210,7 +210,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
         pWindow->SetMapMode(rDev.GetMapMode());
         pWindow->SetFont(rDev.GetFontMetric());
 
-        long  nDelta = pWindow->GetFontMetric().GetInternalLeading();
+        tools::Long  nDelta = pWindow->GetFontMetric().GetInternalLeading();
         if (nDelta == 0)
         {   // this value approx. fits a Leading of 80 at a
             // Fontheight of 422 (12pt)
@@ -234,7 +234,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
     if (nItalicRightSpace < 0  &&  !bAllowSmaller)
         nItalicRightSpace = 0;
 
-    long  nDist = 0;
+    tools::Long  nDist = 0;
     if (pFormat)
         nDist = (rDev.GetFont().GetFontSize().Height()
                 * pFormat->GetDistance(DIS_ORNAMENTSIZE)) / 100;
@@ -264,7 +264,7 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
 }
 
 
-SmRect::SmRect(long nWidth, long nHeight)
+SmRect::SmRect(tools::Long nWidth, tools::Long nHeight)
     // this constructor should never be used for anything textlike because
     // it will not provide useful values for baseline, AlignT and AlignB!
     // It's purpose is to get a 'SmRect' for the horizontal line in fractions
@@ -284,7 +284,7 @@ SmRect::SmRect(long nWidth, long nHeight)
 }
 
 
-void SmRect::SetLeft(long nLeft)
+void SmRect::SetLeft(tools::Long nLeft)
 {
     if (nLeft <= GetRight())
     {   aSize.setWidth( GetRight() - nLeft + 1 );
@@ -293,21 +293,21 @@ void SmRect::SetLeft(long nLeft)
 }
 
 
-void SmRect::SetRight(long nRight)
+void SmRect::SetRight(tools::Long nRight)
 {
     if (nRight >= GetLeft())
         aSize.setWidth( nRight - GetLeft() + 1 );
 }
 
 
-void SmRect::SetBottom(long nBottom)
+void SmRect::SetBottom(tools::Long nBottom)
 {
     if (nBottom >= GetTop())
         aSize.setHeight( nBottom - GetTop() + 1 );
 }
 
 
-void SmRect::SetTop(long nTop)
+void SmRect::SetTop(tools::Long nTop)
 {
     if (nTop <= GetBottom())
     {   aSize.setHeight( GetBottom() - nTop + 1 );
@@ -321,7 +321,7 @@ void SmRect::Move(const Point &rPosition)
 {
     aTopLeft  += rPosition;
 
-    long  nDelta = rPosition.Y();
+    tools::Long  nDelta = rPosition.Y();
     nBaseline += nDelta;
     nAlignT   += nDelta;
     nAlignM   += nDelta;
@@ -428,14 +428,14 @@ void SmRect::Union(const SmRect &rRect)
     if (rRect.IsEmpty())
         return;
 
-    long  nL  = rRect.GetLeft(),
+    tools::Long  nL  = rRect.GetLeft(),
           nR  = rRect.GetRight(),
           nT  = rRect.GetTop(),
           nB  = rRect.GetBottom(),
           nGT = rRect.nGlyphTop,
           nGB = rRect.nGlyphBottom;
     if (!IsEmpty())
-    {   long  nTmp;
+    {   tools::Long  nTmp;
 
         if ((nTmp = GetLeft()) < nL)
             nL = nTmp;
@@ -469,7 +469,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 {
     // get some values used for (italic) spaces adaptation
     // ! (need to be done before changing current SmRect) !
-    long  nL = std::min(GetItalicLeft(),  rRect.GetItalicLeft()),
+    tools::Long  nL = std::min(GetItalicLeft(),  rRect.GetItalicLeft()),
           nR = std::max(GetItalicRight(), rRect.GetItalicRight());
 
     Union(rRect);
@@ -511,7 +511,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 
 
 void SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                          long nNewAlignM)
+                          tools::Long nNewAlignM)
     // as 'ExtendBy' but sets AlignM value to 'nNewAlignM'.
     // (this version will be used in 'SmBinVerNode' to provide means to
     // align eg "{a over b} over c" correctly where AlignM should not
@@ -531,7 +531,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
     // (this is used in 'SmSupSubNode' where the sub-/supscripts shouldn't
     // be allowed to modify these values.)
 {
-    long  nOldAlignT   = GetAlignT(),
+    tools::Long  nOldAlignT   = GetAlignT(),
           nOldAlignM   = GetAlignM(),
           nOldAlignB   = GetAlignB(),
           nOldBaseline = nBaseline;     //! depends not on 'HasBaseline'
@@ -551,7 +551,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 }
 
 
-long SmRect::OrientedDist(const Point &rPoint) const
+tools::Long SmRect::OrientedDist(const Point &rPoint) const
     // return oriented distance of rPoint to the current rectangle,
     // especially the return value is <= 0 iff the point is inside the
     // rectangle.
@@ -588,7 +588,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
     // build distance vector
     Point  aDist (aRef - rPoint);
 
-    long nAbsX = labs(aDist.X()),
+    tools::Long nAbsX = labs(aDist.X()),
          nAbsY = labs(aDist.Y());
 
     return bIsInside ? - std::min(nAbsX, nAbsY) : std::max (nAbsX, nAbsY);

@@ -56,7 +56,7 @@ public:
     {
         RegisterIndex( rNds );
     };
-    SwNodeIndex( const SwNodeIndex& rIdx, long nDiff = 0 )
+    SwNodeIndex( const SwNodeIndex& rIdx, tools::Long nDiff = 0 )
         : sw::Ring<SwNodeIndex>()
     {
         if( nDiff )
@@ -66,7 +66,7 @@ public:
         RegisterIndex( m_pNode->GetNodes() );
     }
 
-    SwNodeIndex( const SwNode& rNd, long nDiff = 0 )
+    SwNodeIndex( const SwNode& rNd, tools::Long nDiff = 0 )
     {
         if( nDiff )
             m_pNode = rNd.GetNodes()[ rNd.GetIndex() + nDiff ];
@@ -109,7 +109,7 @@ public:
 
     // Enables assignments without creation of a temporary object.
     inline SwNodeIndex& Assign( SwNodes const & rNds, sal_uLong );
-    inline SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
+    inline SwNodeIndex& Assign( const SwNode& rNd, tools::Long nOffset = 0 );
 
     // Gets pointer on NodesArray.
     inline const SwNodes& GetNodes() const;
@@ -140,9 +140,9 @@ public:
     SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx = 0 )
         : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx ) {};
 
-    SwNodeRange( const SwNodeIndex& rS, long nSttDiff, const SwNodeIndex& rE, long nEndDiff = 0 )
+    SwNodeRange( const SwNodeIndex& rS, tools::Long nSttDiff, const SwNodeIndex& rE, tools::Long nEndDiff = 0 )
         : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
-    SwNodeRange( const SwNode& rS, long nSttDiff, const SwNode& rE, long nEndDiff = 0 )
+    SwNodeRange( const SwNode& rS, tools::Long nSttDiff, const SwNode& rE, tools::Long nEndDiff = 0 )
         : aStart( rS, nSttDiff ), aEnd( rE, nEndDiff ) {};
 };
 
@@ -275,7 +275,7 @@ SwNodeIndex& SwNodeIndex::Assign( SwNodes const & rNds, sal_uLong nIdx )
     return *this;
 }
 
-SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
+SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, tools::Long nOffset )
 {
     *this = rNd;
 

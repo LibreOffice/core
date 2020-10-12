@@ -12,6 +12,7 @@
 
 #include <librevenge-stream/librevenge-stream.h>
 #include <com/sun/star/uno/Reference.h>
+#include <tools/long.hxx>
 #include "writerperfectdllapi.h"
 #include <memory>
 
@@ -39,8 +40,8 @@ public:
     virtual librevenge::RVNGInputStream* getSubStreamById(unsigned id) override;
 
     virtual const unsigned char* read(unsigned long numBytes, unsigned long& numBytesRead) override;
-    virtual int seek(long offset, librevenge::RVNG_SEEK_TYPE seekType) override;
-    virtual long tell() override;
+    virtual int seek(tools::Long offset, librevenge::RVNG_SEEK_TYPE seekType) override;
+    virtual tools::Long tell() override;
     virtual bool isEnd() override;
 
 private:

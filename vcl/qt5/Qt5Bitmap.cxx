@@ -149,7 +149,7 @@ bool Qt5Bitmap::Create(const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount)
         sal_uInt32 nWidth = pBitmap->m_aSize.Height() / 2;
         bool isOdd(0 != pBitmap->m_aSize.Height() % 2);
 
-        for (long h = 0; h < pBitmap->m_aSize.Height(); ++h)
+        for (tools::Long h = 0; h < pBitmap->m_aSize.Height(); ++h)
         {
             sal_uInt8* buffer_data = buffer_data_pos;
             buffer_data_pos += pBitmap->m_nScanline;

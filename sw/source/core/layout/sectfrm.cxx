@@ -117,7 +117,7 @@ void SwSectionFrame::Init()
 {
     assert(GetUpper() && "SwSectionFrame::Init before insertion?!");
     SwRectFnSet aRectFnSet(this);
-    long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
+    tools::Long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1069,7 +1069,7 @@ void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
 void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
 {
     SwRectFnSet aRectFnSet(this);
-    long nDiff;
+    tools::Long nDiff;
     SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
     if( bGrow && ( !IsInFly() || !GetUpper()->IsColBodyFrame() ||
                    !FindFlyFrame()->IsLocked() ) )
@@ -1079,7 +1079,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
             nDiff += Undersize();
         if( nDiff > 0 )
         {
-            long nAdd = GetUpper()->Grow( nDiff );
+            tools::Long nAdd = GetUpper()->Grow( nDiff );
             if( aRectFnSet.IsVert() )
                 nDeadLine -= nAdd;
             else
@@ -1118,7 +1118,7 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
     if( nDiff < 0 )
         nDeadLine = aRectFnSet.GetTop(getFrameArea());
     const Size aOldSz( getFramePrintArea().SSize() );
-    long nTop = aRectFnSet.GetTopMargin(*this);
+    tools::Long nTop = aRectFnSet.GetTopMargin(*this);
 
     {
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1182,8 +1182,8 @@ void SwSectionFrame::SimpleFormat()
             aRectFnSet.SetBottom( aFrm, nDeadLine );
         }
 
-        long nHeight = aRectFnSet.GetHeight(getFrameArea());
-        long nTop = CalcUpperSpace();
+        tools::Long nHeight = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nTop = CalcUpperSpace();
         if( nTop > nHeight )
             nTop = nHeight;
         aRectFnSet.SetYMargins( *this, nTop, 0 );
@@ -1368,7 +1368,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         return;
 
     PROTOCOL_ENTER( this, PROT::Size, DbgAction::NONE, nullptr )
-    const long nOldHeight = aRectFnSet.GetHeight(getFrameArea());
+    const tools::Long nOldHeight = aRectFnSet.GetHeight(getFrameArea());
     bool bOldLock = IsColLocked();
     ColLock();
 
@@ -1403,7 +1403,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
 
     if( GetUpper() )
     {
-        const long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
+        const tools::Long nWidth = aRectFnSet.GetWidth(GetUpper()->getFramePrintArea());
 
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1482,9 +1482,9 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         {
             SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
             {
-                long nBottom = aRectFnSet.GetBottom(getFrameArea());
+                tools::Long nBottom = aRectFnSet.GetBottom(getFrameArea());
                 nBottom = aRectFnSet.YInc( nBottom, -nDiff );
-                long nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
+                tools::Long nTmpDiff = aRectFnSet.YDiff( nBottom, nDeadLine );
                 if( nTmpDiff > 0 )
                 {
                     nTmpDiff = GetUpper()->Grow( nTmpDiff, true );
@@ -1499,8 +1499,8 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         }
         if( nDiff )
         {
-            long nTmp = nRemaining - aRectFnSet.GetHeight(getFrameArea());
-            long nTop = aRectFnSet.GetTopMargin(*this);
+            tools::Long nTmp = nRemaining - aRectFnSet.GetHeight(getFrameArea());
+            tools::Long nTop = aRectFnSet.GetTopMargin(*this);
 
             {
                 SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -1548,7 +1548,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         CheckClipping( true, bMaximize );
     if( !bOldLock )
         ColUnlock();
-    long nDiff = nOldHeight - aRectFnSet.GetHeight(getFrameArea());
+    tools::Long nDiff = nOldHeight - aRectFnSet.GetHeight(getFrameArea());
 
     if( nDiff > 0 )
     {
@@ -2154,7 +2154,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
     if ( !IsColLocked() && !HasFixSize() )
     {
         SwRectFnSet aRectFnSet(this);
-        long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
         if( nFrameHeight > 0 && nDist > (LONG_MAX - nFrameHeight) )
             nDist = LONG_MAX - nFrameHeight;
 
@@ -2228,7 +2228,7 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
                 }
 
                 {
-                    const long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) + nGrow;
+                    const tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) + nGrow;
                     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aRectFnSet.SetHeight( aPrt, nPrtHeight );
                 }
@@ -2296,7 +2296,7 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
         else
         {
             SwRectFnSet aRectFnSet(this);
-            long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+            tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
             if ( nDist > nFrameHeight )
                 nDist = nFrameHeight;
 
@@ -2324,7 +2324,7 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
                 }
 
                 {
-                    const long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) - nDist;
+                    const tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea()) - nDist;
                     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
                     aRectFnSet.SetHeight( aPrt, nPrtHeight );
                 }

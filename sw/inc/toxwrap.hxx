@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
+#include <tools/long.hxx>
 #include "swdllapi.h"
 
 namespace com::sun::star::i18n { class XExtendedIndexEntrySupplier; }
@@ -47,7 +48,7 @@ public:
     GetAlgorithmList( const css::lang::Locale& rLcl ) const;
 
     bool LoadAlgorithm( const css::lang::Locale& rLcl,
-                            const OUString& sSortAlgorithm, long nOptions ) const;
+                            const OUString& sSortAlgorithm, tools::Long nOptions ) const;
 
     sal_Int16 CompareIndexEntry( const OUString& rText1, const OUString& rTextReading1,
                                  const css::lang::Locale& rLcl1,

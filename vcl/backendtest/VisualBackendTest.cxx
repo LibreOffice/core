@@ -37,8 +37,8 @@ using namespace css;
 static void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBitmap,
                         vcl::RenderContext& rRenderContext)
 {
-    long nWidth = rRect.GetWidth();
-    long nHeight = rRect.GetHeight();
+    tools::Long nWidth = rRect.GetWidth();
+    tools::Long nHeight = rRect.GetHeight();
 
     Size aBitmapSize(aBitmap.GetSizePixel());
 
@@ -52,8 +52,8 @@ static void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBit
 
 static void drawBitmapScaledAndCentered(tools::Rectangle const & rRect, Bitmap aBitmap, vcl::RenderContext& rRenderContext, BmpScaleFlag aFlag = BmpScaleFlag::Fast)
 {
-    long nWidth = rRect.GetWidth();
-    long nHeight = rRect.GetHeight();
+    tools::Long nWidth = rRect.GetWidth();
+    tools::Long nHeight = rRect.GetHeight();
 
     Size aBitmapSize(aBitmap.GetSizePixel());
 
@@ -150,10 +150,10 @@ public:
         {
             for (int x = 0; x < nPartitionsX; x++)
             {
-                long x1 =  x    * (nWidth  / nPartitionsX);
-                long y1 =  y    * (nHeight / nPartitionsY);
-                long x2 = (x+1) * (nWidth  / nPartitionsX);
-                long y2 = (y+1) * (nHeight / nPartitionsY);
+                tools::Long x1 =  x    * (nWidth  / nPartitionsX);
+                tools::Long y1 =  y    * (nHeight / nPartitionsY);
+                tools::Long x2 = (x+1) * (nWidth  / nPartitionsX);
+                tools::Long y2 = (y+1) * (nHeight / nPartitionsY);
 
                 aRegions.emplace_back(x1 + 1, y1 + 1, x2 - 6, y2 - 2);
             }
@@ -659,8 +659,8 @@ public:
 
         Size aSize = GetOutputSizePixel();
 
-        long nWidth = aSize.Width();
-        long nHeight = aSize.Height();
+        tools::Long nWidth = aSize.Width();
+        tools::Long nHeight = aSize.Height();
 
         if (mnTest % gnNumberOfTests == 0)
         {

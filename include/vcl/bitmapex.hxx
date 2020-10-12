@@ -233,7 +233,7 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Rotate(
-                            long nAngle10,
+                            tools::Long nAngle10,
                             const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
@@ -436,7 +436,7 @@ public:
     BitmapEx            ModifyBitmapEx( const basegfx::BColorModifierStack& rBColorModifierStack) const;
 
     [[nodiscard]]
-    static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const long aStandardSize );
+    static BitmapEx     AutoScaleBitmap( BitmapEx const & aBitmap, const tools::Long aStandardSize );
 
     /// populate from a canvas implementation
     bool                Create(

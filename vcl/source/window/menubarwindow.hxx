@@ -36,7 +36,7 @@ inserts here the button that leads to the download of the update.
 */
 class DecoToolBox : public ToolBox
 {
-    long lastSize;
+    tools::Long lastSize;
     Size maMinSize;
 
 public:
@@ -44,7 +44,7 @@ public:
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    void    SetImages( long nMaxHeight, bool bForce = false );
+    void    SetImages( tools::Long nMaxHeight, bool bForce = false );
 
     void    calcMinSize();
     const Size& getMinSize() const { return maMinSize;}
@@ -121,7 +121,7 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
 
     void    SetMenu(MenuBar* pMenu);
-    void    SetHeight(long nHeight);
+    void    SetHeight(tools::Long nHeight);
     void    KillActivePopup();
     void    PopupClosed(Menu const * pMenu);
     sal_uInt16 GetHighlightedItem() const { return m_nHighlightedItem; }

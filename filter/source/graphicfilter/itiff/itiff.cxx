@@ -124,9 +124,9 @@ private:
 
     bool HasAlphaChannel() const;
 
-    void SetPixel(long nY, long nX, sal_uInt8 cIndex);
-    void SetPixel(long nY, long nX, Color c);
-    void SetPixelAlpha(long nY, long nX, sal_uInt8 nAlpha);
+    void SetPixel(tools::Long nY, tools::Long nX, sal_uInt8 cIndex);
+    void SetPixel(tools::Long nY, tools::Long nX, Color c);
+    void SetPixelAlpha(tools::Long nY, tools::Long nX, sal_uInt8 nAlpha);
 
 public:
 
@@ -825,13 +825,13 @@ sal_uInt32 TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uInt32 nBitsPos, sal
     return nRes;
 }
 
-void TIFFReader::SetPixel(long nY, long nX, sal_uInt8 cIndex)
+void TIFFReader::SetPixel(tools::Long nY, tools::Long nX, sal_uInt8 cIndex)
 {
     maBitmap[(maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3)] = cIndex;
     nLargestPixelIndex = std::max<int>(nLargestPixelIndex, cIndex);
 }
 
-void TIFFReader::SetPixel(long nY, long nX, Color c)
+void TIFFReader::SetPixel(tools::Long nY, tools::Long nX, Color c)
 {
     auto p = maBitmap.data() + ((maBitmapPixelSize.Width() * nY + nX) * (HasAlphaChannel() ? 4 : 3));
     *p = c.GetRed();
@@ -846,7 +846,7 @@ void TIFFReader::SetPixel(long nY, long nX, Color c)
     }
 }
 
-void TIFFReader::SetPixelAlpha(long nY, long nX, sal_uInt8 nAlpha)
+void TIFFReader::SetPixelAlpha(tools::Long nY, tools::Long nX, sal_uInt8 nAlpha)
 {
     assert(HasAlphaChannel());
     maBitmap[((maBitmapPixelSize.Width() * nY + nX) * 4) + 3] = nAlpha;
@@ -980,7 +980,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                                 nSamp[ ns ]= static_cast<sal_uInt8>(GetBits( getMapData(ns), nx * nBitsPerSample, nBitsPerSample ));
                         }
                     }
-                    const long nBlack = nSamp[ 3 ];
+                    const tools::Long nBlack = nSamp[ 3 ];
                     nRed = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 0 ]) + nBlack - static_cast<sal_Int32>(nMinSampleValue << 1U ) ) *
                                 255L/static_cast<sal_Int32>(nMaxSampleValue-nMinSampleValue) ) ));
                     nGreen = static_cast<sal_uInt8>(std::max( 0L, 255L - ( ( static_cast<sal_Int32>(nSamp[ 1 ]) + nBlack - static_cast<sal_Int32>(nMinSampleValue << 1U ) ) *

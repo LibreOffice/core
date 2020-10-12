@@ -94,8 +94,8 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
             mpView->getSdrModelFromSdrView(),
             ToSdrCircKind(static_cast<SdrObjKind>(mpView->GetCurrentObjIdentifier())),
             aNewRectangle,
-            static_cast<long>(pPhiStart->GetValue () * 10.0),
-            static_cast<long>(pPhiEnd->GetValue () * 10.0));
+            static_cast<::tools::Long>(pPhiStart->GetValue () * 10.0),
+            static_cast<::tools::Long>(pPhiEnd->GetValue () * 10.0));
     SdrPageView *pPV = mpView->GetSdrPageView();
 
     mpView->InsertObjectAtView(pNewCircle, *pPV, SdrInsertFlags::SETDEFLAYER);

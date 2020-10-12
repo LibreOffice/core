@@ -57,13 +57,14 @@ private:
     DECL_STATIC_LINK(SwFieldDialog, KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, long nMinListWidth);
+    SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, tools::Long nMinListWidth);
     virtual ~SwFieldDialog() override;
     virtual void dispose() override;
 };
 }
 
-SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM, long nMinListWidth)
+SwFieldDialog::SwFieldDialog(SwEditWin* parent, sw::mark::IFieldmark* fieldBM,
+                             tools::Long nMinListWidth)
     : FloatingWindow(parent, WB_BORDER | WB_SYSTEMWINDOW)
     , m_xListBox(VclPtr<SwFieldListBox>::Create(this))
     , m_pFieldmark(fieldBM)

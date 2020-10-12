@@ -49,7 +49,7 @@ public:
     virtual ~LinePropertyPanelBase() override;
     virtual void dispose() override;
 
-    void SetWidth(long nWidth);
+    void SetWidth(tools::Long nWidth);
     void SetWidthIcon(int n);
     void SetWidthIcon();
 

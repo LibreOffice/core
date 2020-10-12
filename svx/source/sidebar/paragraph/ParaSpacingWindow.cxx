@@ -210,9 +210,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         m_xFLSpacing->set_sensitive(true);
 
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
-        long aTxtLeft = pSpace->GetTextLeft();
-        long aTxtRight = pSpace->GetRight();
-        long aTxtFirstLineOfst = pSpace->GetTextFirstLineOffset();
+        tools::Long aTxtLeft = pSpace->GetTextLeft();
+        tools::Long aTxtRight = pSpace->GetRight();
+        tools::Long aTxtFirstLineOfst = pSpace->GetTextFirstLineOffset();
 
         aTxtLeft = m_xBeforeSpacing->normalize(aTxtLeft);
 
