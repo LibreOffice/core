@@ -59,15 +59,15 @@ public:
                     ~ZCodec();
 
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool gzLib = false );
-    long            EndCompression();
+    tools::Long            EndCompression();
 
     void            Compress( SvStream& rIStm, SvStream& rOStm );
-    long            Decompress( SvStream& rIStm, SvStream& rOStm );
+    tools::Long            Decompress( SvStream& rIStm, SvStream& rOStm );
     bool            AttemptDecompression( SvStream& rIStm, SvStream& rOStm );
 
     void            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize );
-    long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
-    long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
+    tools::Long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
+    tools::Long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
 
     void            SetBreak( size_t );
     size_t          GetBreak() const;
