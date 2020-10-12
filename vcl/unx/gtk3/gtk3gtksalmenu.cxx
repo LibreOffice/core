@@ -433,6 +433,16 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     GMainLoop* pLoop = g_main_loop_new(nullptr, true);
     g_signal_connect_swapped(G_OBJECT(pWidget), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
 
+
+    // tdf#120764 It isn't allowed under wayland to have two visible popups that share
+    // the same top level parent. The problem is that since gtk 3.24 tooltips are also
+    // implemented as popups, which means that we cannot show any popup if there is a
+    // visible tooltip.
+    // hide any current tooltip
+    mpFrame->HideTooltip();
+    // don't allow any more to appear until menu is dismissed
+    mpFrame->BlockTooltip();
+
 #if GTK_CHECK_VERSION(3,22,0)
     if (gtk_check_version(3, 22, 0) == nullptr)
     {
@@ -508,6 +518,9 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
     g_object_unref(mpActionGroup);
     ClearActionGroupAndMenuModel();
+
+    // undo tooltip blocking
+    mpFrame->UnblockTooltip();
 
     mpFrame = nullptr;
 
