@@ -451,9 +451,12 @@ public:
 
     void FocusObject (const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject);
 
+    ~AccessibleFocusManager();
+
 private:
     static std::shared_ptr<AccessibleFocusManager> mpInstance;
     ::std::vector<rtl::Reference<PresenterAccessible::AccessibleObject> > maFocusableObjects;
+    bool m_isInDtor = false;
 
     AccessibleFocusManager();
 };
@@ -1810,8 +1813,16 @@ std::shared_ptr<AccessibleFocusManager> const & AccessibleFocusManager::Instance
 }
 
 AccessibleFocusManager::AccessibleFocusManager()
-    : maFocusableObjects()
 {
+}
+
+AccessibleFocusManager::~AccessibleFocusManager()
+{
+    // copy member to stack, then drop it - otherwise will get use-after-free
+    // from AccessibleObject::disposing(), it will call ~Reference *twice*
+    auto const temp(std::move(maFocusableObjects));
+    (void) temp;
+    m_isInDtor = true;
 }
 
 void AccessibleFocusManager::AddFocusableObject (
@@ -1833,7 +1844,7 @@ void AccessibleFocusManager::RemoveFocusableObject (
         maFocusableObjects.erase(iObject);
     else
     {
-        OSL_ASSERT(iObject!=maFocusableObjects.end());
+        OSL_ASSERT(m_isInDtor); // in dtor, was removed already
     }
 }
 
