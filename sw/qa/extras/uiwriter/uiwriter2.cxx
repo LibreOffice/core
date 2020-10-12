@@ -305,6 +305,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
     CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
+{
+    load(DATA_DIRECTORY, "try2.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    // these are required so that IsBlank() is true
+    aViewOptions.SetBlank(true);
+    aViewOptions.SetViewMetaChars(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    SwDocShell* const pDocShell = pTextDoc->GetDocShell();
+    SwDoc* const pDoc = pDocShell->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    pWrtShell->CalcLayout();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 18, /*bBasicCall=*/false);
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
+    // crashed
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
+    rUndoManager.Redo();
+    rUndoManager.Undo();
+    rUndoManager.Redo();
+    rUndoManager.Undo();
+    pWrtShell->SplitNode(true);
+    rUndoManager.Undo();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
 {
     load(DATA_DIRECTORY, "tdf132236.odt");
