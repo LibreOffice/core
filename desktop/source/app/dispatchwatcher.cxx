@@ -469,7 +469,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                 aArgs.emplace_back("ReadOnly", 0, Any(true), PropertyState_DIRECT_VALUE);
             }
 
-            // if we are called with -start set Start in mediadescriptor
+            // if we are called with --show set Start in mediadescriptor
             if(aDispatchRequest.aRequestType == REQUEST_START) {
                 aArgs.emplace_back("StartPresentation", 0, Any(true), PropertyState_DIRECT_VALUE);
             }
