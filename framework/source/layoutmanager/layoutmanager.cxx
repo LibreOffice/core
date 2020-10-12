@@ -2325,7 +2325,7 @@ bool LayoutManager::implts_doLayout( bool bForceRequestBorderSpace, bool bOuterR
             // Position the status bar
             if ( aStatusBarSize.Height() > 0 )
             {
-                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), long( 0 ))),
+                implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), tools::Long( 0 ))),
                                             ::Size( aContainerSize.Width(),aStatusBarSize.Height() ));
             }
 
@@ -2445,7 +2445,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes()
     // Position the status bar
     if ( aStatusBarSize.Height() > 0 )
     {
-        implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), long( 0 ))),
+        implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), tools::Long( 0 ))),
                                     ::Size( aContainerClientSize.Width, aStatusBarSize.Height() ));
     }
 }

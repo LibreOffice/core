@@ -85,7 +85,7 @@ namespace vcl
         // So use the travelXXX methods if you need to travel
 
     protected:
-        long                LogicalCoordinateToPixel(int iCoordinate);
+        tools::Long                LogicalCoordinateToPixel(int iCoordinate);
         /**sets the number of buttons which should be left-aligned. Normally, buttons are right-aligned.
 
             only to be used during construction, before any layouting happened
@@ -120,7 +120,7 @@ namespace vcl
         virtual void        queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
 
         bool                ShowPage( sal_uInt16 nLevel );
-        bool                Finish( long nResult = 0 );
+        bool                Finish( tools::Long nResult = 0 );
         sal_uInt16          GetCurLevel() const { return mnCurLevel; }
 
         void                AddPage( TabPage* pPage );
@@ -128,7 +128,7 @@ namespace vcl
         void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
         TabPage*            GetPage( sal_uInt16 nLevel ) const;
 
-        void                AddButton( Button* pButton, long nOffset = 0 );
+        void                AddButton( Button* pButton, tools::Long nOffset = 0 );
         void                RemoveButton( Button* pButton );
 
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }

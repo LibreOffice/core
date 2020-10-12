@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <vcl/timer.hxx>
+#include <tools/long.hxx>
 #include "sddllapi.h"
 #include <list>
 #include <vector>
@@ -432,7 +433,7 @@ protected:
     bool mbTimerMode;
     bool mbRebuilding;
 
-    long mnRebuildLockGuard;
+    ::tools::Long mnRebuildLockGuard;
     bool mbPendingRebuildRequest;
     sal_Int32 mbIgnoreChanges;
 };

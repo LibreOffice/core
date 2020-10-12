@@ -259,8 +259,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxLRSpaceItem aTmpPageLRSpace ( rDesc.GetMaster().GetLRSpace() );
                 const SvxLongLRSpaceItem aLongLR(
-                    static_cast<long>(pPage->GetLeftBorder()),
-                    static_cast<long>(pPage->GetRightBorder()),
+                    static_cast<::tools::Long>(pPage->GetLeftBorder()),
+                    static_cast<::tools::Long>(pPage->GetRightBorder()),
                     SID_ATTR_PAGE_LRSPACE );
                 rSet.Put( aLongLR );
             }
@@ -270,8 +270,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                 SvxLongULSpaceItem aLongUL(
-                    static_cast<long>(pPage->GetUpperBorder()),
-                    static_cast<long>(pPage->GetLowerBorder()),
+                    static_cast<::tools::Long>(pPage->GetUpperBorder()),
+                    static_cast<::tools::Long>(pPage->GetLowerBorder()),
                     SID_ATTR_PAGE_ULSPACE );
                 rSet.Put( aLongUL );
             }

@@ -211,9 +211,9 @@ const unsigned char* DirectoryStream::read(unsigned long, unsigned long& nNumByt
     return nullptr;
 }
 
-int DirectoryStream::seek(long, librevenge::RVNG_SEEK_TYPE) { return -1; }
+int DirectoryStream::seek(tools::Long, librevenge::RVNG_SEEK_TYPE) { return -1; }
 
-long DirectoryStream::tell() { return 0; }
+tools::Long DirectoryStream::tell() { return 0; }
 
 bool DirectoryStream::isEnd() { return true; }
 }

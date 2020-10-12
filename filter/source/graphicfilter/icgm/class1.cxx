@@ -29,7 +29,7 @@
 
 void CGM::ImplDoClass1()
 {
-    long    nInteger, nI0, nI1;
+    tools::Long    nInteger, nI0, nI1;
     sal_uInt32  nUInteger;
 
     switch ( mnElementID )

@@ -31,7 +31,7 @@
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) FixedHyperlink final : public FixedText
 {
 private:
-    long                m_nTextLen;
+    tools::Long                m_nTextLen;
     PointerStyle        m_aOldPointer;
     Link<FixedHyperlink&,void> m_aClickHdl;
     OUString            m_sURL;

@@ -80,7 +80,7 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
         rString = (eValue == awt::FontSlant_ITALIC) ? OUStringLiteral(u"italic")
                                                     : OUStringLiteral(u"normal");
     }
-    else if (long nValueLong; rAny >>= nValueLong)
+    else if (tools::Long nValueLong; rAny >>= nValueLong)
     {
         if (rPropName.indexOf("Color") != -1)
             rString = "0x" + OUString::number(nValueLong, 16);

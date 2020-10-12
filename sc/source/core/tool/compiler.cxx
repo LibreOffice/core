@@ -139,8 +139,8 @@ void ScCompiler::fillFromAddInMap( const NonConstOpCodeMapPtr& xMap,FormulaGramm
 void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& xMap ) const
 {
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
-    long nCount = pColl->GetFuncCount();
-    for (long i=0; i < nCount; ++i)
+    tools::Long nCount = pColl->GetFuncCount();
+    for (tools::Long i=0; i < nCount; ++i)
     {
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
@@ -152,8 +152,8 @@ void ScCompiler::fillFromAddInCollectionUpperName( const NonConstOpCodeMapPtr& x
 void ScCompiler::fillFromAddInCollectionEnglishName( const NonConstOpCodeMapPtr& xMap ) const
 {
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
-    long nCount = pColl->GetFuncCount();
-    for (long i=0; i < nCount; ++i)
+    tools::Long nCount = pColl->GetFuncCount();
+    for (tools::Long i=0; i < nCount; ++i)
     {
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)
@@ -3650,9 +3650,9 @@ bool ScCompiler::IsColRowName( const OUString& rName )
     }
     if ( !bInList && rDoc.GetDocOptions().IsLookUpColRowNames() )
     {   // search in current sheet
-        long nDistance = 0, nMax = 0;
-        long nMyCol = static_cast<long>(aPos.Col());
-        long nMyRow = static_cast<long>(aPos.Row());
+        tools::Long nDistance = 0, nMax = 0;
+        tools::Long nMyCol = static_cast<tools::Long>(aPos.Col());
+        tools::Long nMyRow = static_cast<tools::Long>(aPos.Row());
         bool bTwo = false;
         ScAddress aOne( 0, 0, aPos.Tab() );
         ScAddress aTwo( rDoc.MaxCol(), rDoc.MaxRow(), aPos.Tab() );
@@ -3672,7 +3672,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             {
                 if ( bFound )
                 {   // stop if everything else is further away
-                    if ( nMax < static_cast<long>(aAddress.Col()) )
+                    if ( nMax < static_cast<tools::Long>(aAddress.Col()) )
                         break;      // aIter
                 }
                 if ( aAddress != aPos )
@@ -3681,11 +3681,11 @@ bool ScCompiler::IsColRowName( const OUString& rName )
 
                     SCCOL nCol = aAddress.Col();
                     SCROW nRow = aAddress.Row();
-                    long nC = nMyCol - nCol;
-                    long nR = nMyRow - nRow;
+                    tools::Long nC = nMyCol - nCol;
+                    tools::Long nR = nMyRow - nRow;
                     if ( bFound )
                     {
-                        long nD = nC * nC + nR * nR;
+                        tools::Long nD = nC * nC + nR * nR;
                         if ( nD < nDistance )
                         {
                             if ( nC < 0 || nR < 0 )
@@ -3695,7 +3695,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                 nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                 nDistance = nD;
                             }
-                            else if ( nRow >= aOne.Row() || nMyRow < static_cast<long>(aOne.Row()) )
+                            else if ( nRow >= aOne.Row() || nMyRow < static_cast<tools::Long>(aOne.Row()) )
                             {
                                 // upper left, only if not further up than the
                                 // current entry and nMyRow is below (CellIter
@@ -3725,7 +3725,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             {
                 if ( bFound )
                 {   // stop if everything else is further away
-                    if ( nMax < static_cast<long>(aIter.GetPos().Col()) )
+                    if ( nMax < static_cast<tools::Long>(aIter.GetPos().Col()) )
                         break;      // aIter
                 }
                 CellType eType = aIter.getType();
@@ -3745,11 +3745,11 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                     {
                         SCCOL nCol = aIter.GetPos().Col();
                         SCROW nRow = aIter.GetPos().Row();
-                        long nC = nMyCol - nCol;
-                        long nR = nMyRow - nRow;
+                        tools::Long nC = nMyCol - nCol;
+                        tools::Long nR = nMyRow - nRow;
                         if ( bFound )
                         {
-                            long nD = nC * nC + nR * nR;
+                            tools::Long nD = nC * nC + nR * nR;
                             if ( nD < nDistance )
                             {
                                 if ( nC < 0 || nR < 0 )
@@ -3759,7 +3759,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
                                     nMax = std::max( nMyCol + std::abs( nC ), nMyRow + std::abs( nR ) );
                                     nDistance = nD;
                                 }
-                                else if ( nRow >= aOne.Row() || nMyRow < static_cast<long>(aOne.Row()) )
+                                else if ( nRow >= aOne.Row() || nMyRow < static_cast<tools::Long>(aOne.Row()) )
                                 {
                                     // upper left, only if not further up than the
                                     // current entry and nMyRow is below (CellIter
@@ -3788,23 +3788,23 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             ScAddress aAdr;
             if ( bTwo )
             {
-                if ( nMyCol >= static_cast<long>(aOne.Col()) && nMyRow >= static_cast<long>(aOne.Row()) )
+                if ( nMyCol >= static_cast<tools::Long>(aOne.Col()) && nMyRow >= static_cast<tools::Long>(aOne.Row()) )
                     aAdr = aOne;        // upper left takes precedence
                 else
                 {
-                    if ( nMyCol < static_cast<long>(aOne.Col()) )
+                    if ( nMyCol < static_cast<tools::Long>(aOne.Col()) )
                     {   // two to the right
-                        if ( nMyRow >= static_cast<long>(aTwo.Row()) )
+                        if ( nMyRow >= static_cast<tools::Long>(aTwo.Row()) )
                             aAdr = aTwo;        // directly right
                         else
                             aAdr = aOne;
                     }
                     else
                     {   // two below or below and right, take the nearest
-                        long nC1 = nMyCol - aOne.Col();
-                        long nR1 = nMyRow - aOne.Row();
-                        long nC2 = nMyCol - aTwo.Col();
-                        long nR2 = nMyRow - aTwo.Row();
+                        tools::Long nC1 = nMyCol - aOne.Col();
+                        tools::Long nR1 = nMyRow - aOne.Row();
+                        tools::Long nC2 = nMyCol - aTwo.Col();
+                        tools::Long nR2 = nMyRow - aTwo.Row();
                         if ( nC1 * nC1 + nR1 * nR1 <= nC2 * nC2 + nR2 * nR2 )
                             aAdr = aOne;
                         else
@@ -5377,8 +5377,8 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
     aEntry.Token.OpCode = ocExternal;
 
     ScUnoAddInCollection* pColl = ScGlobal::GetAddInCollection();
-    const long nCount = pColl->GetFuncCount();
-    for (long i=0; i < nCount; ++i)
+    const tools::Long nCount = pColl->GetFuncCount();
+    for (tools::Long i=0; i < nCount; ++i)
     {
         const ScUnoAddInFuncData* pFuncData = pColl->GetFuncData(i);
         if (pFuncData)

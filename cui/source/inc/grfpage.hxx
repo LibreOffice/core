@@ -37,10 +37,10 @@ public:
     virtual void Resize() override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void SetTop( long nVal )                { m_aTopLeft.setX(nVal); }
-    void SetBottom( long nVal )             { m_aBottomRight.setX(nVal); }
-    void SetLeft( long nVal )               { m_aTopLeft.setY(nVal); }
-    void SetRight( long nVal)               { m_aBottomRight.setY(nVal); }
+    void SetTop( tools::Long nVal )                { m_aTopLeft.setX(nVal); }
+    void SetBottom( tools::Long nVal )             { m_aBottomRight.setX(nVal); }
+    void SetLeft( tools::Long nVal )               { m_aTopLeft.setY(nVal); }
+    void SetRight( tools::Long nVal)               { m_aBottomRight.setY(nVal); }
     void SetFrameSize( const Size& rSz );
     void SetGraphic( const Graphic& rGrf )  { m_aGrf = rGrf; }
 };
@@ -53,8 +53,8 @@ class SvxGrfCropPage : public SfxTabPage
     Size            aOrigSize;
     Size            aOrigPixelSize;
     Size            aPageSize;
-    long            nOldWidth;
-    long            nOldHeight;
+    tools::Long            nOldWidth;
+    tools::Long            nOldHeight;
     bool            bSetOrigSize;
 
     SvxCropExample m_aExampleWN;

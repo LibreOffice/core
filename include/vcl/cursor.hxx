@@ -83,9 +83,9 @@ public:
 
     void            SetSize( const Size& rNewSize );
     const Size&     GetSize() const { return maSize; }
-    void            SetWidth( long nNewWidth );
-    long            GetWidth() const { return maSize.Width(); }
-    long            GetHeight() const { return maSize.Height(); }
+    void            SetWidth( tools::Long nNewWidth );
+    tools::Long            GetWidth() const { return maSize.Width(); }
+    tools::Long            GetHeight() const { return maSize.Height(); }
 
     void            SetOrientation( short nOrientation = 0 );
 

@@ -293,31 +293,31 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     Point aStartPos = aCellPos;
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    long nLayoutSign = bLayoutRTL ? -1 : 1;
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = &pPattern->GetItem(ATTR_MERGE);
-    long nCellX = pDoc->GetColWidth(nCol,nTab);
+    tools::Long nCellX = pDoc->GetColWidth(nCol,nTab);
     if (!bInPrintTwips)
-        nCellX = static_cast<long>( nCellX * nPPTX );
+        nCellX = static_cast<tools::Long>( nCellX * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=1; i<nCountX; i++)
         {
-            long nColWidth = pDoc->GetColWidth(nCol+i,nTab);
-            nCellX += (bInPrintTwips ? nColWidth : static_cast<long>( nColWidth * nPPTX ));
+            tools::Long nColWidth = pDoc->GetColWidth(nCol+i,nTab);
+            nCellX += (bInPrintTwips ? nColWidth : static_cast<tools::Long>( nColWidth * nPPTX ));
         }
     }
-    long nCellY = pDoc->GetRowHeight(nRow,nTab);
+    tools::Long nCellY = pDoc->GetRowHeight(nRow,nTab);
     if (!bInPrintTwips)
-        nCellY = static_cast<long>( nCellY * nPPTY );
+        nCellY = static_cast<tools::Long>( nCellY * nPPTY );
     if ( pMerge->GetRowMerge() > 1 )
     {
         SCROW nCountY = pMerge->GetRowMerge();
         if (bInPrintTwips)
             nCellY += pDoc->GetRowHeight(nRow + 1, nRow + nCountY - 1, nTab);
         else
-            nCellY += static_cast<long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
+            nCellY += static_cast<tools::Long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
     }
 
     const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
@@ -325,19 +325,19 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
     if ( pPattern->GetItem(ATTR_HOR_JUSTIFY).GetValue() ==
                 SvxCellHorJustify::Left )
         nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
-    long nDifX = pMargin->GetLeftMargin() + nIndent;
+    tools::Long nDifX = pMargin->GetLeftMargin() + nIndent;
     if (!bInPrintTwips)
-        nDifX = static_cast<long>( nDifX * nPPTX );
+        nDifX = static_cast<tools::Long>( nDifX * nPPTX );
     aStartPos.AdjustX(nDifX * nLayoutSign );
     nCellX -= nDifX + (bInPrintTwips ? pMargin->GetRightMargin() :
-            static_cast<long>( pMargin->GetRightMargin() * nPPTX ));     // due to line feed, etc.
+            static_cast<tools::Long>( pMargin->GetRightMargin() * nPPTX ));     // due to line feed, etc.
 
     //  align vertical position to the one in the table
 
-    long nDifY;
-    long nTopMargin = pMargin->GetTopMargin();
+    tools::Long nDifY;
+    tools::Long nTopMargin = pMargin->GetTopMargin();
     if (!bInPrintTwips)
-        nTopMargin = static_cast<long>( nTopMargin * nPPTY );
+        nTopMargin = static_cast<tools::Long>( nTopMargin * nPPTY );
     SvxCellVerJustify eJust = pPattern->GetItem(ATTR_VER_JUSTIFY).GetValue();
 
     //  asian vertical is always edited top-aligned
@@ -352,7 +352,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         MapMode aMode = pDev->GetMapMode();
         pDev->SetMapMode(MapMode(bInPrintTwips ? MapUnit::MapTwip : MapUnit::MapPixel));
 
-        long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
+        tools::Long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, false /* bWidth */,
                                                 false /* bTotalSize */, bInPrintTwips );
         if (!nTextHeight)
@@ -363,7 +363,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
                             (bInPrintTwips ? pMargin->GetBottomMargin() :
-                                static_cast<long>( pMargin->GetBottomMargin() * nPPTY ));
+                                static_cast<tools::Long>( pMargin->GetBottomMargin() * nPPTY ));
         }
 
         pDev->SetMapMode(aMode);

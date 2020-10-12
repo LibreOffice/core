@@ -147,9 +147,9 @@ public:
     explicit SwPaM( const SwPosition& rPos, SwPaM* pRing = nullptr );
     SwPaM( const SwPosition& rMk, const SwPosition& rPt, SwPaM* pRing = nullptr );
     SwPaM( const SwNodeIndex& rMk, const SwNodeIndex& rPt,
-           long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = nullptr );
+           tools::Long nMkOffset = 0, tools::Long nPtOffset = 0, SwPaM* pRing = nullptr );
     SwPaM( const SwNode& rMk, const SwNode& rPt,
-           long nMkOffset = 0, long nPtOffset = 0, SwPaM* pRing = nullptr );
+           tools::Long nMkOffset = 0, tools::Long nPtOffset = 0, SwPaM* pRing = nullptr );
     SwPaM(  const SwNodeIndex& rMk, sal_Int32 nMkContent,
             const SwNodeIndex& rPt, sal_Int32 nPtContent, SwPaM* pRing = nullptr );
     SwPaM(  const SwNode& rMk, sal_Int32 nMkContent,

@@ -659,9 +659,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     {
         bool        pTrans[4];
         Color       aCol;
-        long        nR;
-        long        nG;
-        long        nB;
+        tools::Long        nR;
+        tools::Long        nG;
+        tools::Long        nB;
         std::unique_ptr<long[]> pMinR(new long[nCount]);
         std::unique_ptr<long[]> pMaxR(new long[nCount]);
         std::unique_ptr<long[]> pMinG(new long[nCount]);
@@ -676,17 +676,17 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         // Prepare Color comparison array
         for( i = 0; i < nCount; i++ )
         {
-            long nTol = ( pTols[i] * 255 ) / 100;
+            tools::Long nTol = ( pTols[i] * 255 ) / 100;
 
-            long nVal = static_cast<long>(pSrcCols[i].GetRed());
+            tools::Long nVal = static_cast<tools::Long>(pSrcCols[i].GetRed());
             pMinR[i] = std::max( nVal - nTol, 0L );
             pMaxR[i] = std::min( nVal + nTol, 255L );
 
-            nVal = static_cast<long>(pSrcCols[i].GetGreen());
+            nVal = static_cast<tools::Long>(pSrcCols[i].GetGreen());
             pMinG[i] = std::max( nVal - nTol, 0L );
             pMaxG[i] = std::min( nVal + nTol, 255L );
 
-            nVal = static_cast<long>(pSrcCols[i].GetBlue());
+            nVal = static_cast<tools::Long>(pSrcCols[i].GetBlue());
             pMinB[i] = std::max( nVal - nTol, 0L );
             pMaxB[i] = std::min( nVal + nTol, 255L );
 

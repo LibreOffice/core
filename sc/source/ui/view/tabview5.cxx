@@ -549,7 +549,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
 
     tools::Rectangle aRect = pWin->LogicToPixel( rHMMRect );
 
-    long nScrollX=0, nScrollY=0;        // pixel
+    tools::Long nScrollX=0, nScrollY=0;        // pixel
 
     if ( aRect.Right() >= aWinSize.Width() )                // right out
     {
@@ -582,12 +582,12 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
     SCCOL nPosX = aViewData.GetPosX(WhichH(eWhich));
     SCROW nPosY = aViewData.GetPosY(WhichV(eWhich));
 
-    long nLinesX=0, nLinesY=0;      // columns/rows - scroll at least nScrollX/Y
+    tools::Long nLinesX=0, nLinesY=0;      // columns/rows - scroll at least nScrollX/Y
 
     if (nScrollX > 0)
         while (nScrollX > 0 && nPosX < rDoc.MaxCol())
         {
-            nScrollX -= static_cast<long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
+            nScrollX -= static_cast<tools::Long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
             ++nPosX;
             ++nLinesX;
         }
@@ -595,14 +595,14 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         while (nScrollX < 0 && nPosX > 0)
         {
             --nPosX;
-            nScrollX += static_cast<long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
+            nScrollX += static_cast<tools::Long>( rDoc.GetColWidth(nPosX, nTab) * nPPTX );
             --nLinesX;
         }
 
     if (nScrollY > 0)
         while (nScrollY > 0 && nPosY < rDoc.MaxRow())
         {
-            nScrollY -= static_cast<long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
+            nScrollY -= static_cast<tools::Long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
             ++nPosY;
             ++nLinesY;
         }
@@ -610,7 +610,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
         while (nScrollY < 0 && nPosY > 0)
         {
             --nPosY;
-            nScrollY += static_cast<long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
+            nScrollY += static_cast<tools::Long>( rDoc.GetRowHeight(nPosY, nTab) * nPPTY );
             --nLinesY;
         }
 

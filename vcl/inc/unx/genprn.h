@@ -43,7 +43,7 @@ public:
     virtual bool                    SetPrinterData( ImplJobSetup* pSetupData ) override;
     virtual bool                    SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData ) override;
     virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
-                                                 long& rOutWidth, long& rOutHeight,
+                                                 tools::Long& rOutWidth, tools::Long& rOutHeight,
                                                  Point& rPageOffset,
                                                  Size& rPaperSize ) override;
     virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) override;

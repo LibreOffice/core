@@ -34,7 +34,7 @@ class SAL_DLLPUBLIC_RTTI ScPreview : public vcl::Window
 private:
     ScMarkData::MarkedTabsType maSelectedTabs;
                                         // set:
-    long            nPageNo;            // Pages in document
+    tools::Long            nPageNo;            // Pages in document
     sal_uInt16          nZoom;              // set Zoom
     Point           aOffset;            // positive
 
@@ -44,11 +44,11 @@ private:
     std::vector<long>       nPages;
     std::vector<long>       nFirstAttr;
     SCTAB           nTab;               // Sheet
-    long            nTabPage;           // Page of sheet
-    long            nTabStart;          // First (real) page of the sheet
-    long            nDisplayStart;      // same as above, relative to the start of counting
+    tools::Long            nTabPage;           // Page of sheet
+    tools::Long            nTabStart;          // First (real) page of the sheet
+    tools::Long            nDisplayStart;      // same as above, relative to the start of counting
     DateTime        aDateTime;
-    long            nTotalPages;
+    tools::Long            nTotalPages;
     ScPrintState    aState;
     std::unique_ptr<ScPreviewLocationData> pLocationData;   // stores table layout for accessibility API
     std::unique_ptr<FmFormView> pDrawView;
@@ -81,14 +81,14 @@ private:
 
     ScRange         aPageArea;
     std::vector<long> mvRight;
-    long            nLeftPosition;
-    long            mnScale;
+    tools::Long            nLeftPosition;
+    tools::Long            mnScale;
     SCCOL           nColNumberButtonDown;
     Point           aButtonDownChangePoint;
     Point           aButtonDownPt;
     Point           aButtonUpPt;
-    long            nHeaderHeight;
-    long            nFooterHeight;
+    tools::Long            nHeaderHeight;
+    tools::Long            nFooterHeight;
 
     void    TestLastPage();
     void    CalcPages();
@@ -123,31 +123,31 @@ public:
     SC_DLLPUBLIC void    DataChanged(bool bNewTime);             //  Instead of calling Invalidate
     void    DoInvalidate();
 
-    void    SetXOffset( long nX );
-    void    SetYOffset( long nY );
+    void    SetXOffset( tools::Long nX );
+    void    SetYOffset( tools::Long nY );
     void    SetZoom(sal_uInt16 nNewZoom);
-    SC_DLLPUBLIC void    SetPageNo( long nPage );
+    SC_DLLPUBLIC void    SetPageNo( tools::Long nPage );
 
     bool    GetPageMargins() const { return bPageMargin; }
     void    SetPageMargins( bool bVal )  { bPageMargin = bVal; }
-    void    DrawInvert( long nDragPos, PointerStyle nFlags );
-    void    DragMove( long nDragMovePos, PointerStyle nFlags );
+    void    DrawInvert( tools::Long nDragPos, PointerStyle nFlags );
+    void    DragMove( tools::Long nDragMovePos, PointerStyle nFlags );
 
     const ScPreviewLocationData& GetLocationData();
 
     OUString  GetPosString();
 
-    long    GetPageNo() const   { return nPageNo; }
+    tools::Long    GetPageNo() const   { return nPageNo; }
     sal_uInt16  GetZoom() const     { return nZoom; }
     const Point& GetOffset() const   { return aOffset; }
 
     SCTAB   GetTab()            { if (!bValid) { CalcPages(); RecalcPages(); } return nTab; }
-    long    GetTotalPages()     { if (!bValid) { CalcPages(); RecalcPages(); } return nTotalPages; }
+    tools::Long    GetTotalPages()     { if (!bValid) { CalcPages(); RecalcPages(); } return nTotalPages; }
 
     bool    AllTested() const   { return bValid && nTabsTested >= nTabCount; }
 
     sal_uInt16  GetOptimalZoom(bool bWidthOnly);
-    SC_DLLPUBLIC long    GetFirstPage(SCTAB nTab);
+    SC_DLLPUBLIC tools::Long    GetFirstPage(SCTAB nTab);
 
     void    CalcAll()           { CalcPages(); }
     void    SetInGetState(bool bSet) { bInGetState = bSet; }

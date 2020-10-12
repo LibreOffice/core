@@ -32,7 +32,7 @@ struct ImplWizButtonData
 {
     ImplWizButtonData*  mpNext;
     VclPtr<Button>      mpButton;
-    long                mnOffset;
+    tools::Long                mnOffset;
 };
 
 namespace vcl

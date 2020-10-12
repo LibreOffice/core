@@ -208,7 +208,7 @@ class SwFlyCache : public SwRect // position and size
 public:
     sal_uLong nOrdNum;      ///< Id to recognize text frames
     sal_uInt16 nPageNum;    ///< page number
-    SwFlyCache( sal_uInt16 nP, sal_uLong nO, long nXL, long nYL, long nWL, long nHL ) :
+    SwFlyCache( sal_uInt16 nP, sal_uLong nO, tools::Long nXL, tools::Long nYL, tools::Long nWL, tools::Long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
 

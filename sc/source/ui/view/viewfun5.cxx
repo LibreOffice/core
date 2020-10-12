@@ -93,13 +93,13 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
             SCTAB nTab = GetViewData().GetTabNo();
-            long nXT = 0;
+            tools::Long nXT = 0;
             for (SCCOL i=0; i<nPosX; i++)
                 nXT += rDoc.GetColWidth(i,nTab);
             if (rDoc.IsNegativePage(nTab))
                 nXT = -nXT;
             sal_uLong nYT = rDoc.GetRowHeight( 0, nPosY-1, nTab);
-            aPos = Point( static_cast<long>(nXT * HMM_PER_TWIPS), static_cast<long>(nYT * HMM_PER_TWIPS) );
+            aPos = Point( static_cast<tools::Long>(nXT * HMM_PER_TWIPS), static_cast<tools::Long>(nYT * HMM_PER_TWIPS) );
         }
     }
 

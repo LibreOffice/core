@@ -658,7 +658,7 @@ VclPtr<BrowserHeader> SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
     return VclPtr<SbaGridHeader>::Create(pParent);
 }
 
-CellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
+CellController* SbaGridControl::GetController(tools::Long nRow, sal_uInt16 nCol)
 {
     if ( m_bActivatingForDrop )
         return nullptr;
@@ -850,7 +850,7 @@ void SbaGridControl::Select()
         m_pMasterListener->SelectionChanged();
 }
 
-void SbaGridControl::ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus /*= sal_True*/ )
+void SbaGridControl::ActivateCell(tools::Long nRow, sal_uInt16 nCol, bool bSetCellFocus /*= sal_True*/ )
 {
     FmGridControl::ActivateCell(nRow, nCol, bSetCellFocus);
     if (m_pMasterListener)
@@ -937,7 +937,7 @@ bool SbaGridControl::IsReadOnlyDB() const
 
 void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 {
-    long nRow = GetRowAtYPosPixel(rMEvt.GetPosPixel().Y());
+    tools::Long nRow = GetRowAtYPosPixel(rMEvt.GetPosPixel().Y());
     sal_uInt16 nColPos = GetColumnAtXPosPixel(rMEvt.GetPosPixel().X());
     sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : nColPos-1;
         // 'the handle column' and 'no valid column' will both result in a view position of -1 !
@@ -963,7 +963,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // (Yes, this is controller (not view) functionality. But collecting and evaluating all the
         // information necessary via UNO would be quite difficult (if not impossible) so
         // my laziness says 'do it here'...)
-        long nRow = GetRowAtYPosPixel(_rPosPixel.Y());
+        tools::Long nRow = GetRowAtYPosPixel(_rPosPixel.Y());
         sal_uInt16 nColPos = GetColumnAtXPosPixel(_rPosPixel.X());
         sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : nColPos-1;
             // 'the handle column' and 'no valid column' will both result in a view position of -1 !
@@ -972,7 +972,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // the current row doesn't really exist: the user's appending a new one and already has entered some data,
         // so the row contains data which has no counter part within the data source
 
-        long nCorrectRowCount = GetRowCount();
+        tools::Long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is an empty row for inserting records
         if (bCurrentRowVirtual)
@@ -1182,10 +1182,10 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // without an empty row we're not in update mode
             break;
 
-        const long        nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+        const tools::Long        nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
         const sal_uInt16  nCol = GetColumnId(GetColumnAtXPosPixel(rEvt.maPosPixel.X()));
 
-        long nCorrectRowCount = GetRowCount();
+        tools::Long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is an empty row for inserting records
         if (IsCurrentAppending())
@@ -1275,10 +1275,10 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
     if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) )
     {
-        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+        tools::Long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
         sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X());
 
-        long nCorrectRowCount = GetRowCount();
+        tools::Long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
             --nCorrectRowCount; // there is an empty row for inserting records
         if (IsCurrentAppending())

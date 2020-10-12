@@ -83,8 +83,8 @@ namespace vcl
     void RoadmapWizard::ImplCalcSize( Size& rSize )
     {
         // calculate ButtonBar height and width
-        long                nMaxHeight = 0;
-        long                nBarWidth = WIZARDDIALOG_BUTTON_DLGOFFSET_X * 2 + LogicalCoordinateToPixel(6);
+        tools::Long                nMaxHeight = 0;
+        tools::Long                nBarWidth = WIZARDDIALOG_BUTTON_DLGOFFSET_X * 2 + LogicalCoordinateToPixel(6);
         ImplWizButtonData*  pBtnData = mpFirstBtn;
         while (pBtnData)
         {
@@ -133,9 +133,9 @@ namespace vcl
     void RoadmapWizard::ImplPosCtrls()
     {
         Size    aDlgSize = GetOutputSizePixel();
-        long    nBtnWidth = 0;
-        long    nMaxHeight = 0;
-        long    nOffY = aDlgSize.Height();
+        tools::Long    nBtnWidth = 0;
+        tools::Long    nMaxHeight = 0;
+        tools::Long    nOffY = aDlgSize.Height();
 
         ImplWizButtonData* pBtnData = mpFirstBtn;
         int j = 0;
@@ -144,7 +144,7 @@ namespace vcl
             if (j >= mnLeftAlignCount)
             {
                 Size aBtnSize = pBtnData->mpButton->GetSizePixel();
-                long nBtnHeight = aBtnSize.Height();
+                tools::Long nBtnHeight = aBtnSize.Height();
                 if ( nBtnHeight > nMaxHeight )
                     nMaxHeight = nBtnHeight;
                 nBtnWidth += aBtnSize.Width();
@@ -156,8 +156,8 @@ namespace vcl
 
         if ( nMaxHeight )
         {
-            long nOffX = aDlgSize.Width()-nBtnWidth-WIZARDDIALOG_BUTTON_DLGOFFSET_X;
-            long nOffLeftAlignX = LogicalCoordinateToPixel(6);
+            tools::Long nOffX = aDlgSize.Width()-nBtnWidth-WIZARDDIALOG_BUTTON_DLGOFFSET_X;
+            tools::Long nOffLeftAlignX = LogicalCoordinateToPixel(6);
             nOffY -= WIZARDDIALOG_BUTTON_OFFSET_Y+nMaxHeight;
 
             pBtnData = mpFirstBtn;
@@ -190,11 +190,11 @@ namespace vcl
         if ( !(mpViewWindow && mpViewWindow->IsVisible()) )
             return;
 
-        long    nViewOffX = 0;
-        long    nViewOffY = 0;
-        long    nViewWidth = 0;
-        long    nViewHeight = 0;
-        long    nDlgHeight = nOffY;
+        tools::Long    nViewOffX = 0;
+        tools::Long    nViewOffY = 0;
+        tools::Long    nViewWidth = 0;
+        tools::Long    nViewHeight = 0;
+        tools::Long    nDlgHeight = nOffY;
         PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
         // align left
         {
@@ -217,7 +217,7 @@ namespace vcl
                                        nViewPosFlags );
     }
 
-    long RoadmapWizard::LogicalCoordinateToPixel(int iCoordinate){
+    tools::Long RoadmapWizard::LogicalCoordinateToPixel(int iCoordinate){
         Size aLocSize = LogicToPixel(Size(iCoordinate, 0), MapMode(MapUnit::MapAppFont));
         int iPixelCoordinate =  aLocSize.Width();
         return iPixelCoordinate;
@@ -237,11 +237,11 @@ namespace vcl
         }
 
         // calculate height of ButtonBar
-        long                nMaxHeight = 0;
+        tools::Long                nMaxHeight = 0;
         ImplWizButtonData*  pBtnData = mpFirstBtn;
         while ( pBtnData )
         {
-            long nBtnHeight = pBtnData->mpButton->GetSizePixel().Height();
+            tools::Long nBtnHeight = pBtnData->mpButton->GetSizePixel().Height();
             if ( nBtnHeight > nMaxHeight )
                 nMaxHeight = nBtnHeight;
             pBtnData = pBtnData->mpNext;
@@ -252,13 +252,13 @@ namespace vcl
         // position TabPage
         Size aDlgSize = GetOutputSizePixel();
         aDlgSize.AdjustHeight( -nMaxHeight );
-        long nOffX = 0;
-        long nOffY = 0;
+        tools::Long nOffX = 0;
+        tools::Long nOffY = 0;
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             Size aViewSize = mpViewWindow->GetSizePixel();
             // align left
-            long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
+            tools::Long nViewOffset = mbEmptyViewMargin ? 0 : WIZARDDIALOG_VIEW_DLGOFFSET_X;
             nOffX += aViewSize.Width() + nViewOffset;
             aDlgSize.AdjustWidth( -nOffX );
         }
@@ -527,7 +527,7 @@ namespace vcl
         return true;
     }
 
-    bool RoadmapWizard::Finish( long nResult )
+    bool RoadmapWizard::Finish( tools::Long nResult )
     {
         if ( IsInExecute() )
             EndDialog( nResult );
@@ -614,7 +614,7 @@ namespace vcl
         return nullptr;
     }
 
-    void RoadmapWizard::AddButton( Button* pButton, long nOffset )
+    void RoadmapWizard::AddButton( Button* pButton, tools::Long nOffset )
     {
         ImplWizButtonData* pNewBtnData = new ImplWizButtonData;
         pNewBtnData->mpNext     = nullptr;

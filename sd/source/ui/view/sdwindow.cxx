@@ -142,7 +142,7 @@ void Window::CalcMinZoom()
         return;
 
     // Get current zoom factor.
-    long nZoom = GetZoom();
+    ::tools::Long nZoom = GetZoom();
 
     // Get the rectangle of the output area in logical coordinates
     // and calculate the scaling factors that would lead to the view
@@ -164,25 +164,25 @@ void Window::CalcMinZoom()
     // If the current zoom factor is smaller than the calculated minimal
     // zoom factor then set the new minimal factor as the current zoom
     // factor.
-    if ( nZoom < static_cast<long>(mnMinZoom) )
+    if ( nZoom < static_cast<::tools::Long>(mnMinZoom) )
         SetZoomFactor(mnMinZoom);
 }
 
-void Window::SetMinZoom (long int nMin)
+void Window::SetMinZoom (::tools::Long nMin)
 {
     mnMinZoom = static_cast<sal_uInt16>(nMin);
 }
 
-void Window::SetMaxZoom (long int nMax)
+void Window::SetMaxZoom (::tools::Long nMax)
 {
     mnMaxZoom = static_cast<sal_uInt16>(nMax);
 }
 
-long Window::GetZoom() const
+::tools::Long Window::GetZoom() const
 {
     if( GetMapMode().GetScaleX().GetDenominator() )
     {
-        return long(GetMapMode().GetScaleX() * 100);
+        return ::tools::Long(GetMapMode().GetScaleX() * 100);
     }
     else
     {
@@ -324,13 +324,13 @@ void Window::SetCenterAllowed (bool bIsAllowed)
     mbCenterAllowed = bIsAllowed;
 }
 
-long Window::SetZoomFactor(long nZoom)
+::tools::Long Window::SetZoomFactor(::tools::Long nZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // calculated by CalcMinZoom() and the constant MAX_ZOOM.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < static_cast<long>(mnMinZoom) )
+    if ( nZoom < static_cast<::tools::Long>(mnMinZoom) )
         nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
@@ -357,20 +357,20 @@ long Window::SetZoomFactor(long nZoom)
     return nZoom;
 }
 
-void Window::SetZoomIntegral(long nZoom)
+void Window::SetZoomIntegral(::tools::Long nZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // previously calculated by <member>CalcMinZoom()</member> and the
     // MAX_ZOOM constant.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < static_cast<long>(mnMinZoom) )
+    if ( nZoom < static_cast<::tools::Long>(mnMinZoom) )
         nZoom = mnMinZoom;
 
     // Calculate the window's new origin.
     Size aSize = PixelToLogic(GetOutputSizePixel());
-    long nW = aSize.Width()  * GetZoom() / nZoom;
-    long nH = aSize.Height() * GetZoom() / nZoom;
+    ::tools::Long nW = aSize.Width()  * GetZoom() / nZoom;
+    ::tools::Long nH = aSize.Height() * GetZoom() / nZoom;
     maWinPos.AdjustX((aSize.Width()  - nW) / 2 );
     maWinPos.AdjustY((aSize.Height() - nH) / 2 );
     if ( maWinPos.X() < 0 ) maWinPos.setX( 0 );
@@ -381,9 +381,9 @@ void Window::SetZoomIntegral(long nZoom)
     SetZoomFactor(nZoom);
 }
 
-long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
+::tools::Long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
 {
-    long nRetZoom = 100;
+    ::tools::Long nRetZoom = 100;
 
     if( (rZoomRect.GetWidth() != 0) && (rZoomRect.GetHeight() != 0))
     {
@@ -428,7 +428,7 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
             // MAX_ZOOM constant.
             if ( nRetZoom > MAX_ZOOM )
                 nRetZoom = MAX_ZOOM;
-            if ( nRetZoom < static_cast<long>(mnMinZoom) )
+            if ( nRetZoom < static_cast<::tools::Long>(mnMinZoom) )
                 nRetZoom = mnMinZoom;
        }
     }
@@ -440,9 +440,9 @@ long Window::GetZoomForRect( const ::tools::Rectangle& rZoomRect )
     is displayed centered and as large as possible while still being fully
     visible in the window.
 */
-long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
+::tools::Long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 {
-    long nNewZoom = 100;
+    ::tools::Long nNewZoom = 100;
 
     if (rZoomRect.GetWidth() == 0 || rZoomRect.GetHeight() == 0)
     {
@@ -486,7 +486,7 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
         // Transform the current zoom factor so that it leads to the desired
         // scaling.
-        long nZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
+        ::tools::Long nZoom = nFact * GetZoom() / ZOOM_MULTIPLICATOR;
 
         // Calculate the new origin.
         if ( nFact == 0 )
@@ -503,9 +503,9 @@ long Window::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
             maWinPos = maViewOrigin + aPos;
 
-            aWinSize.setWidth( static_cast<long>(static_cast<double>(aWinSize.Width()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
+            aWinSize.setWidth( static_cast<::tools::Long>(static_cast<double>(aWinSize.Width()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
             maWinPos.AdjustX((rZoomRect.GetWidth() - aWinSize.Width()) / 2 );
-            aWinSize.setHeight( static_cast<long>(static_cast<double>(aWinSize.Height()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
+            aWinSize.setHeight( static_cast<::tools::Long>(static_cast<double>(aWinSize.Height()) * double(ZOOM_MULTIPLICATOR) / static_cast<double>(nFact)) );
             maWinPos.AdjustY((rZoomRect.GetHeight() - aWinSize.Height()) / 2 );
 
             if ( maWinPos.X() < 0 ) maWinPos.setX( 0 );
@@ -644,13 +644,13 @@ double Window::GetVisibleY() const
  */
 void Window::SetVisibleXY(double fX, double fY)
 {
-    long nOldX = maWinPos.X();
-    long nOldY = maWinPos.Y();
+    ::tools::Long nOldX = maWinPos.X();
+    ::tools::Long nOldY = maWinPos.Y();
 
     if ( fX >= 0 )
-        maWinPos.setX( static_cast<long>(fX * maViewSize.Width()) );
+        maWinPos.setX( static_cast<::tools::Long>(fX * maViewSize.Width()) );
     if ( fY >= 0 )
-        maWinPos.setY( static_cast<long>(fY * maViewSize.Height()) );
+        maWinPos.setY( static_cast<::tools::Long>(fY * maViewSize.Height()) );
     UpdateMapOrigin(false);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), ScrollFlags::Children);
     PaintImmediately();

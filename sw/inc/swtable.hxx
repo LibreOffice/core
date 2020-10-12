@@ -165,7 +165,7 @@ private:
     bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
     bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
     void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
-    void AdjustWidths( const long nOld, const long nNew );
+    void AdjustWidths( const tools::Long nOld, const tools::Long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
                         const SwTableBox *pStart, bool bCurRowOnly );
     void ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox);
@@ -241,8 +241,8 @@ public:
     }
     bool PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         SwSelBoxes& rMerged, SwTableBox** ppMergeBox, SwUndoTableMerge* pUndo );
-    void ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const;
-    void PrepareDeleteCol( long nMin, long nMax );
+    void ExpandColumnSelection( SwSelBoxes& rBoxes, tools::Long &rMin, tools::Long &rMax ) const;
+    void PrepareDeleteCol( tools::Long nMin, tools::Long nMax );
 
     bool InsertCol( SwDoc&, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind );
@@ -404,7 +404,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 
     std::unique_ptr<Color> mpUserColor;
     std::unique_ptr<Color> mpNumFormatColor;
-    long mnRowSpan;
+    tools::Long mnRowSpan;
     bool mbDummyFlag;
 
     /// Do we contain any direct formatting?
@@ -483,8 +483,8 @@ public:
     inline void SetSaveUserColor(const Color* p );
     inline void SetSaveNumFormatColor( const Color* p );
 
-    long getRowSpan() const;
-    void setRowSpan( long nNewRowSpan );
+    tools::Long getRowSpan() const;
+    void setRowSpan( tools::Long nNewRowSpan );
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
 

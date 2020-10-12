@@ -314,7 +314,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             break;
 
         case LLINESPACE_PROP:
-            SetLineSpace(aSpacing, nPos, mxLineDistAtPercentBox->denormalize(static_cast<long>(mxLineDistAtPercentBox->get_value(FieldUnit::PERCENT))));
+            SetLineSpace(aSpacing, nPos, mxLineDistAtPercentBox->denormalize(static_cast<tools::Long>(mxLineDistAtPercentBox->get_value(FieldUnit::PERCENT))));
             break;
 
         case LLINESPACE_MIN:
@@ -331,7 +331,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, { &aSpacing });
 }
 
-void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace, long lValue)
+void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace, tools::Long lValue)
 {
     switch ( eSpace )
     {

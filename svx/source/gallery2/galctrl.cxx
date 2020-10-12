@@ -86,13 +86,13 @@ namespace
 
             if ( fGrfWH < fWinWH )
             {
-                aNewSize.setWidth( static_cast<long>( aWinSize.Height() * fGrfWH ) );
+                aNewSize.setWidth( static_cast<tools::Long>( aWinSize.Height() * fGrfWH ) );
                 aNewSize.setHeight( aWinSize.Height() );
             }
             else
             {
                 aNewSize.setWidth( aWinSize.Width() );
-                aNewSize.setHeight( static_cast<long>( aWinSize.Width() / fGrfWH) );
+                aNewSize.setHeight( static_cast<tools::Long>( aWinSize.Width() / fGrfWH) );
             }
 
             const Point aNewPos( ( aWinSize.Width()  - aNewSize.Width() ) >> 1,

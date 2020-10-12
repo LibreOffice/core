@@ -21,6 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBCONFIG_HXX
 
 #include <unotools/configitem.hxx>
+#include <tools/long.hxx>
 #include <vector>
 #include <memory>
 
@@ -95,8 +96,8 @@ class BibConfig : public utl::ConfigItem
     OUString   sQueryField;
     OUString   sQueryText;
     MappingArray    mvMappings;
-    long            nBeamerSize;
-    long            nViewSize;
+    tools::Long            nBeamerSize;
+    tools::Long            nViewSize;
     bool        bShowColumnAssignmentWarning;
 
     OUString               aColumnDefaults[COLUMN_COUNT];
@@ -121,10 +122,10 @@ public:
                                             {return aColumnDefaults[nIndex];}
 
 
-    void                    setBeamerSize(long nSize) {SetModified(); nBeamerSize = nSize;}
-    long                    getBeamerSize()const {return nBeamerSize;}
-    void                    setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
-    long                    getViewSize() const {return nViewSize;}
+    void                    setBeamerSize(tools::Long nSize) {SetModified(); nBeamerSize = nSize;}
+    tools::Long                    getBeamerSize()const {return nBeamerSize;}
+    void                    setViewSize(tools::Long nSize) {SetModified(); nViewSize = nSize;}
+    tools::Long                    getViewSize() const {return nViewSize;}
 
     const OUString&         getQueryField() const {return sQueryField;}
     void                    setQueryField(const OUString& rSet) {SetModified(); sQueryField = rSet;}

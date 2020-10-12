@@ -338,8 +338,8 @@ public:
                                     sal_uInt16 aColLength);
     void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr );
 
-    void            OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset);
-    void            OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset);
+    void            OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset);
+    void            OnLOKInsertDeleteRow(SCROW nStartRow, tools::Long nOffset);
     void            OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
 
                                                 // Internal helper functions

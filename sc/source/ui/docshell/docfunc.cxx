@@ -2704,8 +2704,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     {
         ScRange aRange = qDecreaseRange.back();
 
-        long nDecreaseRowCount = 0;
-        long nDecreaseColCount = 0;
+        tools::Long nDecreaseRowCount = 0;
+        tools::Long nDecreaseColCount = 0;
         if( eCmd == DelCellCmd::CellsUp || eCmd == DelCellCmd::Rows )
         {
             if( nStartRow >= aRange.aStart.Row() && nStartRow <= aRange.aEnd.Row() && nEndRow>= aRange.aStart.Row() && nEndRow <= aRange.aEnd.Row() )

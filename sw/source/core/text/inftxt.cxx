@@ -430,7 +430,7 @@ void SwTextSizeInfo::GetTextSize( const SwScriptInfo* pSI, const TextFrameIndex 
     nMinSize = aSize.Width();
 }
 
-TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
+TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
                                        vcl::TextLayoutCache const*const pCache) const
@@ -450,7 +450,7 @@ TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
     return m_pFnt->GetTextBreak( aDrawInf, nLineWidth );
 }
 
-TextFrameIndex SwTextSizeInfo::GetTextBreak( const long nLineWidth,
+TextFrameIndex SwTextSizeInfo::GetTextBreak( const tools::Long nLineWidth,
                                        const TextFrameIndex nMaxLen,
                                        const sal_uInt16 nComp,
                                        TextFrameIndex& rExtraCharPos,
@@ -652,7 +652,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
 
     aDrawInf.SetUnderFnt( m_pUnderFnt );
 
-    const long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
+    const tools::Long nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
                              rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
     if ( nSpaceAdd )
     {
@@ -768,7 +768,7 @@ void SwTextPaintInfo::CalcRect( const SwLinePortion& rPor,
 
     if( IsRotated() )
     {
-        long nTmp = aSize.Width();
+        tools::Long nTmp = aSize.Width();
         aSize.setWidth( aSize.Height() );
         aSize.setHeight( nTmp );
         if ( 1 == GetDirection() )

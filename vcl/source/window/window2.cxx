@@ -207,7 +207,7 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::N50, this );
     else
     {
-        long nBorder = 1;
+        tools::Long nBorder = 1;
         if ( nStyle == ShowTrackFlags::Big )
             nBorder = 5;
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SalInvert::N50, this );
@@ -371,9 +371,9 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-static long WinFloatRound( double fVal )
+static tools::Long WinFloatRound( double fVal )
 {
-    return( fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 ) );
+    return( fVal > 0.0 ? static_cast<tools::Long>( fVal + 0.5 ) : -static_cast<tools::Long>( -fVal + 0.5 ) );
 }
 
 void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
@@ -394,7 +394,7 @@ void Window::SetZoomedPointFont(vcl::RenderContext& rRenderContext, const vcl::F
     }
 }
 
-long Window::CalcZoom( long nCalc ) const
+tools::Long Window::CalcZoom( tools::Long nCalc ) const
 {
 
     const Fraction& rZoom = GetZoom();
@@ -560,9 +560,9 @@ vcl::Font Window::GetDrawPixelFont(OutputDevice const * pDev) const
     return aFont;
 }
 
-long Window::GetDrawPixel( OutputDevice const * pDev, long nPixels ) const
+tools::Long Window::GetDrawPixel( OutputDevice const * pDev, tools::Long nPixels ) const
 {
-    long nP = nPixels;
+    tools::Long nP = nPixels;
     if ( pDev->GetOutDevType() != OUTDEV_WINDOW )
     {
         MapMode aMap( MapUnit::Map100thMM );
@@ -579,7 +579,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
     if ( !pScrl || !nN || !pScrl->IsEnabled() || !pScrl->IsInputEnabled() || pScrl->IsInModalMode() )
         return;
 
-    long nNewPos = pScrl->GetThumbPos();
+    tools::Long nNewPos = pScrl->GetThumbPos();
 
     if ( nN == double(-LONG_MAX) )
         nNewPos += pScrl->GetPageSize();
@@ -599,7 +599,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiply
         else if ( !o3tl::convertsToAtMost(fVal, LONG_MAX) )
             nNewPos = LONG_MAX;
         else
-            nNewPos = static_cast<long>(fVal);
+            nNewPos = static_cast<tools::Long>(fVal);
     }
 
     pScrl->DoScroll( nNewPos );
@@ -680,12 +680,12 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         {
                             double visSizeX = double(pHScrl->GetVisibleSize());
                             double ratioX = deltaXInPixels / double(winSize.getWidth());
-                            long deltaXInLogic = long(visSizeX * ratioX);
+                            tools::Long deltaXInLogic = tools::Long(visSizeX * ratioX);
                             // Touch need to work by pixels. Did not apply this to
                             // Android, as android code may require adaptations
                             // to work with this scrolling code
 #ifndef IOS
-                            long lineSizeX = pHScrl->GetLineSize();
+                            tools::Long lineSizeX = pHScrl->GetLineSize();
 
                             if(lineSizeX)
                             {
@@ -711,13 +711,13 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                         {
                             double visSizeY = double(pVScrl->GetVisibleSize());
                             double ratioY = deltaYInPixels / double(winSize.getHeight());
-                            long deltaYInLogic = long(visSizeY * ratioY);
+                            tools::Long deltaYInLogic = tools::Long(visSizeY * ratioY);
 
                             // Touch need to work by pixels. Did not apply this to
                             // Android, as android code may require adaptations
                             // to work with this scrolling code
 #ifndef IOS
-                            long lineSizeY = pVScrl->GetLineSize();
+                            tools::Long lineSizeY = pVScrl->GetLineSize();
                             if(lineSizeY)
                             {
                                 deltaYInLogic /= lineSizeY;
@@ -755,7 +755,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                     }
                     else if(pData->meEventType == GestureEventType::PanningUpdate)
                     {
-                        long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
+                        tools::Long nOriginalPosition = mpWindowImpl->mpFrameData->mnTouchPanPosition;
                         pVScrl->DoScroll(nOriginalPosition + (pData->mfOffset / pVScrl->GetVisibleSize()));
                     }
                     if (pData->meEventType == GestureEventType::PanningEnd)

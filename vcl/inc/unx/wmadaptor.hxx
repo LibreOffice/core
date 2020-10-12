@@ -227,7 +227,7 @@ public:
     /*
      * set _NET_WM_USER_TIME property, if NetWM
      */
-    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const;
+    virtual void setUserTime( X11SalFrame* i_pFrame, tools::Long i_nUserTime ) const;
 
     /*
      *  tells whether fullscreen mode is supported by WM

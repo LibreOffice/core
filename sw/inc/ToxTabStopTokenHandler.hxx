@@ -97,7 +97,7 @@ private:
      *
      * This is the fallback method to determine the position of a tab stop.
      */
-    long
+    tools::Long
     CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const;
 
     sal_uInt32 mIndexOfSectionNode;

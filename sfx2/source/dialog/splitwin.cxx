@@ -330,7 +330,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
 void SfxSplitWindow::StartSplit()
 {
-    long nSize = 0;
+    tools::Long nSize = 0;
     Size aSize = GetSizePixel();
 
     if ( pEmptyWin )
@@ -384,8 +384,8 @@ void SfxSplitWindow::Split()
         if ( rD.pWin )
         {
             const sal_uInt16 nId = rD.nType;
-            const long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
-            const long nSetSize = GetItemSize( GetSet( nId ) );
+            const tools::Long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
+            const tools::Long nSetSize = GetItemSize( GetSet( nId ) );
             Size aSize;
 
             if ( IsHorizontal() )
@@ -640,7 +640,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
 
     SplitWindowItemFlags nItemBits = SplitWindowItemFlags::NONE;
 
-    long nWinSize, nSetSize;
+    tools::Long nWinSize, nSetSize;
     if ( IsHorizontal() )
     {
         nWinSize = rSize.Width();
@@ -742,7 +742,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl const * pDock,
             if ( rD.pWin )
             {
                 const sal_uInt16 nId = rD.nType;
-                const long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
+                const tools::Long nSize    = GetItemSize( nId, SplitWindowItemFlags::Fixed );
                 aNewOrgSizes.emplace_back( nId, nSize );
             }
         }
@@ -864,7 +864,7 @@ sal_uInt16 SfxSplitWindow::GetLineCount() const
 }
 
 
-long SfxSplitWindow::GetLineSize( sal_uInt16 nLine ) const
+tools::Long SfxSplitWindow::GetLineSize( sal_uInt16 nLine ) const
 
 /*  [Description]
 

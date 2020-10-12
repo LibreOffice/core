@@ -116,8 +116,8 @@ void ThumbnailViewItem::setDrawArea (const ::tools::Rectangle &area)
     maDrawArea = area;
 }
 
-void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight,
-                                                const long nPadding, sal_uInt32 nMaxTextLength,
+void ThumbnailViewItem::calculateItemsPosition (const tools::Long nThumbnailHeight,
+                                                const tools::Long nPadding, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;

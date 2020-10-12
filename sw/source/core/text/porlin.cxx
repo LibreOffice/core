@@ -302,7 +302,7 @@ void SwLinePortion::Move( SwTextPaintInfo &rInf )
     rInf.SetIdx( rInf.GetIdx() + GetLen() );
 }
 
-long SwLinePortion::CalcSpacing( long , const SwTextSizeInfo & ) const
+tools::Long SwLinePortion::CalcSpacing( tools::Long , const SwTextSizeInfo & ) const
 {
     return 0;
 }

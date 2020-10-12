@@ -963,7 +963,7 @@ void RtfAttributeOutput::InitTableHelper(
     if (m_pTableWrt && pTable == m_pTableWrt->GetTable())
         return;
 
-    long nPageSize = 0;
+    tools::Long nPageSize = 0;
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans
@@ -2930,7 +2930,7 @@ void RtfAttributeOutput::ParaWidows(const SvxWidowsItem& rWidows)
 
 void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 {
-    long nOffset = 0;
+    tools::Long nOffset = 0;
     // Tabs are absolute by default.
     if (m_rExport.m_rDoc.getIDocumentSettingAccess().get(
             DocumentSettingId::TABS_RELATIVE_TO_INDENT))
@@ -3955,8 +3955,8 @@ static OString ExportPICT(const SwFlyFrameFormat* pFlyFrameFormat, const Size& r
             aRet.append("}"); //"}"
         }
 
-        long nXCroppedSize = rOrig.Width() - (rCr.GetLeft() + rCr.GetRight());
-        long nYCroppedSize = rOrig.Height() - (rCr.GetTop() + rCr.GetBottom());
+        tools::Long nXCroppedSize = rOrig.Width() - (rCr.GetLeft() + rCr.GetRight());
+        tools::Long nYCroppedSize = rOrig.Height() - (rCr.GetTop() + rCr.GetBottom());
         /* Graphic with a zero height or width, typically copied from webpages, caused crashes. */
         if (!nXCroppedSize)
             nXCroppedSize = 100;

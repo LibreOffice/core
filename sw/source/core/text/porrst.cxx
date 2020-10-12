@@ -429,7 +429,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                 break;
                                 case SvxInterLineSpaceRule::Prop:
                                 {
-                                    long nTmp = rSpace.GetPropLineSpace();
+                                    tools::Long nTmp = rSpace.GetPropLineSpace();
                                     if( nTmp < 50 )
                                         nTmp = nTmp ? 50 : 100;
                                     nTmp *= rRegDiff;
@@ -455,7 +455,7 @@ bool SwTextFrame::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                         }
                     }
                 }
-                const long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
+                const tools::Long nTmpDiff = pDesc->GetRegAscent() - rRegDiff;
                 if ( aRectFnSet.IsVert() )
                     rRegStart -= nTmpDiff;
                 else

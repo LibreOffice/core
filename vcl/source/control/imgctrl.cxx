@@ -54,7 +54,7 @@ namespace
         const double nRatioY = 1.0 * aPaintSize.Height() / _rBitmapSize.Height();
         const double nRatioMin = ::std::min( nRatioX, nRatioY );
 
-        return Size( long( _rBitmapSize.Width() * nRatioMin ), long( _rBitmapSize.Height() * nRatioMin ) );
+        return Size( tools::Long( _rBitmapSize.Width() * nRatioMin ), tools::Long( _rBitmapSize.Height() * nRatioMin ) );
     }
 
     Point lcl_centerWithin( const tools::Rectangle& _rArea, const Size& _rObjectSize )

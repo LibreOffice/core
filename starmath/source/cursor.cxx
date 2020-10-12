@@ -39,7 +39,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                 SmCaretLine from_line = SmCaretPos2LineVisitor(pDev, mpPosition->CaretPos).GetResult(),
                             best_line,  //Best approximated line found so far
                             curr_line;  //Current line
-                long dbp_sq = 0;        //Distance squared to best line
+                tools::Long dbp_sq = 0;        //Distance squared to best line
                 for(const auto &pEntry : *mpGraph)
                 {
                     //Reject it if it's the current position
@@ -54,7 +54,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                     //Compare if it to what we have, if we have anything yet
                     if(NewPos){
                         //Compute distance to current line squared, multiplied with a horizontal factor
-                        long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
+                        tools::Long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
                                      curr_line.SquaredDistanceY(from_line);
                         //Discard current line if best line is closer
                         if(dbp_sq <= dp_sq) continue;
@@ -82,7 +82,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
 void SmCursor::MoveTo(OutputDevice* pDev, const Point& pos, bool bMoveAnchor)
 {
     SmCaretPosGraphEntry* NewPos = nullptr;
-    long dp_sq = 0,     //Distance to current line squared
+    tools::Long dp_sq = 0,     //Distance to current line squared
          dbp_sq = 1;    //Distance to best line squared
     for(const auto &pEntry : *mpGraph)
     {

@@ -102,9 +102,9 @@ private:
     std::unique_ptr<SvxRelativeField> mxFLineIndent;
 
     // Data Member
-    long                maTxtLeft;
-    long                    maUpper;
-    long                    maLower;
+    tools::Long                maTxtLeft;
+    tools::Long                    maUpper;
+    tools::Long                    maLower;
 
     FieldUnit                       m_eMetricUnit;
     FieldUnit                       m_last_eMetricUnit;

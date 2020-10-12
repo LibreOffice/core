@@ -239,7 +239,7 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
         basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
         basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
     Point aPos = cellRect.TopLeft();
-    long nRightX = 0;
+    tools::Long nRightX = 0;
 
     Size theMaxStrSize(cellRect.GetWidth() - FRAME_OFFSET, cellRect.GetHeight() - FRAME_OFFSET);
     if (maCurrentData.IsFont())

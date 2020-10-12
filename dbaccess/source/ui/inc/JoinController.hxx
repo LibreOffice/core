@@ -105,9 +105,9 @@ namespace dbaui
         */
         void    removeConnectionData(const TTableConnectionData::value_type& _pData);
 
-        void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
+        void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, tools::Long nOffsetX, tools::Long nOffsetY );
 
-        static void SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffsetX, long nOffsetY);
+        static void SaveTabWinPosSize(OTableWindow const * pTabWin, tools::Long nOffsetX, tools::Long nOffsetY);
 
         // UNO interface overridables
         // XEventListener

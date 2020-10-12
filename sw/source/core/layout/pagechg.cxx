@@ -120,10 +120,10 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         if( pGrid )
         {
             bNoGrid = false;
-            long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
+            tools::Long nSum = pGrid->GetBaseHeight() + pGrid->GetRubyHeight();
             SwRectFnSet aRectFnSet(this);
-            long nSize = aRectFnSet.GetWidth(getFrameArea());
-            long nBorder = 0;
+            tools::Long nSize = aRectFnSet.GetWidth(getFrameArea());
+            tools::Long nBorder = 0;
             if( GRID_LINES_CHARS == pGrid->GetGridType() )
             {
                 //for textgrid refactor
@@ -141,7 +141,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
             nBorder = aRectFnSet.GetHeight(getFrameArea());
 
             // Number of possible lines in area of body frame:
-            long nNumberOfLines = nBorder / nSum;
+            tools::Long nNumberOfLines = nBorder / nSum;
             if( nNumberOfLines > pGrid->GetLines() )
                 nNumberOfLines = pGrid->GetLines();
 
@@ -204,7 +204,7 @@ SwPageFrame::SwPageFrame( SwFrameFormat *pFormat, SwFrame* pSib, SwPageDesc *pPg
         if ( bBrowseMode )
         {
             aFrm.Height( 0 );
-            long nWidth = pSh->VisArea().Width();
+            tools::Long nWidth = pSh->VisArea().Width();
 
             if ( !nWidth )
             {
@@ -647,8 +647,8 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
                 {
                     SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aFrm.Height( std::max( rSz.GetHeight(), long(MINLAY) ) );
-                    aFrm.Width ( std::max( rSz.GetWidth(),  long(MINLAY) ) );
+                    aFrm.Height( std::max( rSz.GetHeight(), tools::Long(MINLAY) ) );
+                    aFrm.Width ( std::max( rSz.GetWidth(),  tools::Long(MINLAY) ) );
                 }
 
                 if ( GetUpper() )
@@ -1433,7 +1433,7 @@ void SwRootFrame::RemoveSuperfluous()
     mbCheckSuperfluous = false;
 
     SwPageFrame *pPage = GetLastPage();
-    long nDocPos = LONG_MAX;
+    tools::Long nDocPos = LONG_MAX;
 
     // Check the corresponding last page if it is empty and stop loop at the last non-empty page.
     do
@@ -1771,7 +1771,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), pFrame );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             const SwFormatHoriOrient &rHori = rAttrs.GetAttrSet().GetHoriOrient();
-            long nWidth = rAttrs.GetSize().Width();
+            tools::Long nWidth = rAttrs.GetSize().Width();
             if ( nWidth < int(USHRT_MAX)-2000 && //-2k, because USHRT_MAX gets missing while trying to resize!  (and cast to int to avoid -Wsign-compare due to broken USHRT_MAX on Android)
                  text::HoriOrientation::FULL != rHori.GetHoriOrient() )
             {
@@ -1810,7 +1810,7 @@ void SwRootFrame::ImplCalcBrowseWidth()
                     continue;
                 }
 
-                long nWidth = 0;
+                tools::Long nWidth = 0;
                 switch ( rFormat.GetAnchor().GetAnchorId() )
                 {
                     case RndStdIds::FLY_AS_CHAR:
@@ -2111,9 +2111,9 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
 
     maPageRects.clear();
 
-    const long nBorder = getFrameArea().Pos().getX();
-    const long nVisWidth = mnViewWidth - 2 * nBorder;
-    const long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
+    const tools::Long nBorder = getFrameArea().Pos().getX();
+    const tools::Long nVisWidth = mnViewWidth - 2 * nBorder;
+    const tools::Long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
                                            : (pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
                                                   : SwViewOption::defGapBetweenPages);
 
@@ -2122,16 +2122,16 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
 
     // will contain the number of pages per row. 0 means that
     // the page does not fit.
-    long nWidthRemain = nVisWidth;
+    tools::Long nWidthRemain = nVisWidth;
 
     // after one row has been processed, these variables contain
     // the width of the row and the maximum of the page heights
-    long nCurrentRowHeight = 0;
-    long nCurrentRowWidth = 0;
+    tools::Long nCurrentRowHeight = 0;
+    tools::Long nCurrentRowWidth = 0;
 
     // these variables are used to finally set the size of the
     // root frame
-    long nSumRowHeight = 0;
+    tools::Long nSumRowHeight = 0;
     SwTwips nMinPageLeft = TWIPS_MAX;
     SwTwips nMaxPageRight = 0;
     SwPageFrame* pStartOfRow = pPageFrame;
@@ -2153,8 +2153,8 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
         const bool bEmptyPage = pPageFrame->IsEmptyPage() && !mbBookMode;
 
         // no half doc border space for first page in each row and
-        long nPageWidth = 0;
-        long nPageHeight = 0;
+        tools::Long nPageWidth = 0;
+        tools::Long nPageHeight = 0;
 
         if ( mbBookMode )
         {
@@ -2245,15 +2245,15 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
             }
 
             // center page if possible
-            long nSizeDiff = 0;
+            tools::Long nSizeDiff = 0;
             if (nVisWidth > nCurrentRowWidth && !comphelper::LibreOfficeKit::isActive())
                 nSizeDiff = ( nVisWidth - nCurrentRowWidth ) / 2;
 
             // adjust positions of pages in current row
-            long nX = nSizeDiff;
+            tools::Long nX = nSizeDiff;
 
-            const long nRowStart = nBorder + nSizeDiff;
-            const long nRowEnd   = nRowStart + nCurrentRowWidth;
+            const tools::Long nRowStart = nBorder + nSizeDiff;
+            const tools::Long nRowEnd   = nRowStart + nCurrentRowWidth;
 
             if ( bFirstRow && mbBookMode )
             {
@@ -2283,7 +2283,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                 // RTL view layout: Calculate mirrored page position
                 if ( bRTL )
                 {
-                    const long nXOffsetInRow = aNewPagePos.getX() - nRowStart;
+                    const tools::Long nXOffsetInRow = aNewPagePos.getX() - nRowStart;
                     aNewPagePos.setX(nRowEnd - nXOffsetInRow - nCurrentPageWidth);
                     aNewPagePosWithLeftOffset = aNewPagePos;
                     aNewPagePosWithLeftOffset.setX(aNewPagePosWithLeftOffset.getX() + nLeftPageAddOffset);
@@ -2311,7 +2311,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
                                              pPageToAdjust->getFrameArea().SSize().Width() + nGapBetweenPages + nSidebarWidth,
                                              nCurrentRowHeight );
 
-                static const long nOuterClickDiff = 1000000;
+                static const tools::Long nOuterClickDiff = 1000000;
 
                 // adjust borders for these special cases:
                 if ( (bFirstColumn && !bRTL) || (bLastColumn && bRTL) )
@@ -2436,8 +2436,8 @@ const SwPageFrame& SwPageFrame::GetFormatPage() const
 
 bool SwPageFrame::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rControl ) const
 {
-    long nUpperLimit = 0;
-    long nLowerLimit = 0;
+    tools::Long nUpperLimit = 0;
+    tools::Long nLowerLimit = 0;
     const SwFrame* pFrame = Lower();
     while ( pFrame )
     {
@@ -2498,7 +2498,7 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
             // Content frame doesn't fit the actual size, check if it fits the nominal one.
             const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetDep());
             const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
-            long nWhitespace = rPageSize.getHeight() - getFrameArea().Height();
+            tools::Long nWhitespace = rPageSize.getHeight() - getFrameArea().Height();
             if (nWhitespace > -nDiff)
             {
                 // It does: don't move it and invalidate our page frame so

@@ -100,10 +100,10 @@ enum LineSpaceList
 
 }
 
-static void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );
+static void SetLineSpace_Impl( SvxLineSpacingItem&, int, tools::Long lValue = 0 );
 
 void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
-                        int eSpace, long lValue )
+                        int eSpace, tools::Long lValue )
 {
     switch ( eSpace )
     {
@@ -247,7 +247,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             case LLINESPACE_PROP:
                 SetLineSpace_Impl( aSpacing, nPos,
-                                   static_cast<long>(m_xLineDistAtPercentBox->denormalize(
+                                   static_cast<tools::Long>(m_xLineDistAtPercentBox->denormalize(
                                    m_xLineDistAtPercentBox->get_value(FieldUnit::NONE) )) );
                 break;
 
@@ -895,8 +895,8 @@ void SvxStdParagraphTabPage::Init_Impl()
 void SvxStdParagraphTabPage::UpdateExample_Impl()
 {
     m_aExampleWin.SetFirstLineOffset( static_cast<short>(m_xFLineIndent->denormalize( m_xFLineIndent->get_value( FieldUnit::TWIP ) )) );
-    m_aExampleWin.SetLeftMargin( static_cast<long>(m_xLeftIndent->denormalize( m_xLeftIndent->get_value( FieldUnit::TWIP ) ) ) );
-    m_aExampleWin.SetRightMargin( static_cast<long>(m_xRightIndent->denormalize( m_xRightIndent->get_value( FieldUnit::TWIP ) ) ) );
+    m_aExampleWin.SetLeftMargin( static_cast<tools::Long>(m_xLeftIndent->denormalize( m_xLeftIndent->get_value( FieldUnit::TWIP ) ) ) );
+    m_aExampleWin.SetRightMargin( static_cast<tools::Long>(m_xRightIndent->denormalize( m_xRightIndent->get_value( FieldUnit::TWIP ) ) ) );
     m_aExampleWin.SetUpper( static_cast<sal_uInt16>(m_xTopDist->denormalize( m_xTopDist->get_value( FieldUnit::TWIP ) )) );
     m_aExampleWin.SetLower( static_cast<sal_uInt16>(m_xBottomDist->denormalize( m_xBottomDist->get_value( FieldUnit::TWIP ) )) );
 
@@ -941,7 +941,7 @@ void SvxStdParagraphTabPage::EnableAutoFirstLine()
     m_xAutoCB->show();
 }
 
-void SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
+void SvxStdParagraphTabPage::EnableAbsLineDist(tools::Long nMinTwip)
 {
     m_xLineDist->append_text(sAbsDist);
     nMinFixDist = nMinTwip;

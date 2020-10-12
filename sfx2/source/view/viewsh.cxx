@@ -744,7 +744,7 @@ void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
 }
 
 
-ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
+ErrCode SfxViewShell::DoVerb(tools::Long /*nVerb*/)
 
 /*  [Description]
 

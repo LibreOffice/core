@@ -217,19 +217,19 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     }
 }
 
-void SvpSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void SvpSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     m_nMinWidth = nWidth;
     m_nMinHeight = nHeight;
 }
 
-void SvpSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void SvpSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     m_nMaxWidth = nWidth;
     m_nMaxHeight = nHeight;
 }
 
-void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void SvpSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
 {
     if( (nFlags & SAL_FRAME_POSSIZE_X) != 0 )
         maGeometry.nX = nX;
@@ -283,7 +283,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 #endif
 }
 
-void SvpSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void SvpSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     rWidth = maGeometry.nWidth;
     rHeight = maGeometry.nHeight;
@@ -313,10 +313,10 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
     if (!(pState->mnMask & FRAMESTATE_MASK_GEOMETRY))
         return;
 
-    long nX = maGeometry.nX;
-    long nY = maGeometry.nY;
-    long nWidth = maGeometry.nWidth;
-    long nHeight = maGeometry.nHeight;
+    tools::Long nX = maGeometry.nX;
+    tools::Long nY = maGeometry.nY;
+    tools::Long nWidth = maGeometry.nWidth;
+    tools::Long nHeight = maGeometry.nHeight;
 
     // change requested properties
     if (pState->mnMask & WindowStateMask::X)
@@ -372,7 +372,7 @@ void SvpSalFrame::CaptureMouse( bool )
 {
 }
 
-void SvpSalFrame::SetPointerPos( long, long )
+void SvpSalFrame::SetPointerPos( tools::Long, tools::Long )
 {
 }
 
@@ -491,7 +491,7 @@ void SvpSalFrame::BeginSetClipRegion( sal_uInt32 )
 {
 }
 
-void SvpSalFrame::UnionClipRegion( long, long, long, long )
+void SvpSalFrame::UnionClipRegion( tools::Long, tools::Long, tools::Long, tools::Long )
 {
 }
 

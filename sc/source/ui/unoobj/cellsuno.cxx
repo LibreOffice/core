@@ -1115,8 +1115,8 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    long nCols = 0;
-    long nRows = aData.getLength();
+    tools::Long nCols = 0;
+    tools::Long nRows = aData.getLength();
     if ( nRows )
         nCols = aData[0].getLength();
 
@@ -1250,8 +1250,8 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         return false;
     }
 
-    long nCols = 0;
-    long nRows = aData.getLength();
+    tools::Long nCols = 0;
+    tools::Long nRows = aData.getLength();
     if ( nRows )
         nCols = aData[0].getLength();
 
@@ -2985,7 +2985,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
     return uno::Sequence< uno::Sequence<double> >(0);
 }
 
-ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const
+ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( tools::Long nDataColumns, tools::Long nDataRows ) const
 {
     if ( aRanges.size() == 1 )
     {
@@ -2998,13 +2998,13 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
 
             SCTAB nTab = rRange.aStart.Tab();
 
-            long nEndColumn = nDataColumns - 1 + ( bChartColAsHdr ? 1 : 0 );
+            tools::Long nEndColumn = nDataColumns - 1 + ( bChartColAsHdr ? 1 : 0 );
             if ( nEndColumn < 0 )
                 nEndColumn = 0;
             if ( nEndColumn > rDoc.MaxCol() )
                 nEndColumn = rDoc.MaxCol();
 
-            long nEndRow = nDataRows - 1 + ( bChartRowAsHdr ? 1 : 0 );
+            tools::Long nEndRow = nDataRows - 1 + ( bChartRowAsHdr ? 1 : 0 );
             if ( nEndRow < 0 )
                 nEndRow = 0;
             if ( nEndRow > rDoc.MaxRow() )
@@ -3022,8 +3022,8 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    long nRowCount = aData.getLength();
-    long nColCount = nRowCount ? aData[0].getLength() : 0;
+    tools::Long nRowCount = aData.getLength();
+    tools::Long nColCount = nRowCount ? aData[0].getLength() : 0;
     ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, nRowCount );
     if ( pDocShell && xChartRanges.is() )
     {
@@ -3036,12 +3036,12 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
             if ( pPosMap->GetColCount() == static_cast<SCCOL>(nColCount) &&
                  pPosMap->GetRowCount() == static_cast<SCROW>(nRowCount) )
             {
-                for (long nRow=0; nRow<nRowCount; nRow++)
+                for (tools::Long nRow=0; nRow<nRowCount; nRow++)
                 {
                     const uno::Sequence<double>& rRowSeq = aData[nRow];
                     const double* pArray = rRowSeq.getConstArray();
                     nColCount = rRowSeq.getLength();
-                    for (long nCol=0; nCol<nColCount; nCol++)
+                    for (tools::Long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetPosition(
                                 sal::static_int_cast<SCCOL>(nCol),
@@ -3094,7 +3094,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
     bool bDone = false;
     if ( bChartColAsHdr )
     {
-        long nRowCount = aRowDescriptions.getLength();
+        tools::Long nRowCount = aRowDescriptions.getLength();
         ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( 1, nRowCount );
         if ( pDocShell && xChartRanges.is() )
         {
@@ -3107,7 +3107,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
                 if ( pPosMap->GetRowCount() == static_cast<SCROW>(nRowCount) )
                 {
                     const OUString* pArray = aRowDescriptions.getConstArray();
-                    for (long nRow=0; nRow<nRowCount; nRow++)
+                    for (tools::Long nRow=0; nRow<nRowCount; nRow++)
                     {
                         const ScAddress* pPos = pPosMap->GetRowHeaderPosition(
                                 static_cast<SCSIZE>(nRow) );
@@ -3163,7 +3163,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
     bool bDone = false;
     if ( bChartRowAsHdr )
     {
-        long nColCount = aColumnDescriptions.getLength();
+        tools::Long nColCount = aColumnDescriptions.getLength();
         ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, 1 );
         if ( pDocShell && xChartRanges.is() )
         {
@@ -3176,7 +3176,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                 if ( pPosMap->GetColCount() == static_cast<SCCOL>(nColCount) )
                 {
                     const OUString* pArray = aColumnDescriptions.getConstArray();
-                    for (long nCol=0; nCol<nColCount; nCol++)
+                    for (tools::Long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetColHeaderPosition(
                             sal::static_int_cast<SCCOL>(nCol) );
@@ -8863,7 +8863,7 @@ void ScCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(long nIndex) const
+ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(tools::Long nIndex) const
 {
     //! access the AttrArrays directly !!!!
 
@@ -8871,7 +8871,7 @@ ScCellRangeObj* ScCellFormatsObj::GetObjectByIndex_Impl(long nIndex) const
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
-        long nPos = 0;
+        tools::Long nPos = 0;
         ScAttrRectIterator aIter( rDoc, aTotalRange.aStart.Tab(),
                                     aTotalRange.aStart.Col(), aTotalRange.aStart.Row(),
                                     aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
@@ -8903,7 +8903,7 @@ sal_Int32 SAL_CALL ScCellFormatsObj::getCount()
 
     //! access the AttrArrays directly !!!!
 
-    long nCount = 0;
+    tools::Long nCount = 0;
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();

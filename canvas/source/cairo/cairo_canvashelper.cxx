@@ -360,8 +360,8 @@ namespace cairocanvas
 
             if( !pSurface )
             {
-                long nWidth;
-                long nHeight;
+                tools::Long nWidth;
+                tools::Long nHeight;
                 vcl::bitmap::CanvasCairoExtractBitmapData(aBmpEx, aBitmap, data, bHasAlpha, nWidth, nHeight);
 
                 SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(

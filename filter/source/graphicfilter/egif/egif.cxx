@@ -38,8 +38,8 @@ class GIFWriter
     sal_uInt32          nMinPercent;
     sal_uInt32          nMaxPercent;
     sal_uInt32          nLastPercent;
-    long                nActX;
-    long                nActY;
+    tools::Long                nActX;
+    tools::Long                nActY;
     sal_Int32           nInterlaced;
     bool                bStatus;
     bool                bTransparent;
@@ -49,7 +49,7 @@ class GIFWriter
     void                WriteGlobalHeader( const Size& rSize );
     void                WriteLoopExtension( const Animation& rAnimation );
     void                WriteLogSizeExtension( const Size& rSize100 );
-    void                WriteImageExtension( long nTimer, Disposal eDisposal );
+    void                WriteImageExtension( tools::Long nTimer, Disposal eDisposal );
     void                WriteLocalHeader();
     void                WritePalette();
     void                WriteAccess();
@@ -60,7 +60,7 @@ class GIFWriter
 
     void                WriteAnimation( const Animation& rAnimation );
     void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, bool bExtended,
-                                       long nTimer = 0, Disposal eDisposal = Disposal::Not );
+                                       tools::Long nTimer = 0, Disposal eDisposal = Disposal::Not );
 
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
@@ -171,7 +171,7 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 
 
 void GIFWriter::WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint,
-                               bool bExtended, long nTimer, Disposal eDisposal )
+                               bool bExtended, tools::Long nTimer, Disposal eDisposal )
 {
     if( !CreateAccess( rBmpEx ) )
         return;
@@ -368,7 +368,7 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
 }
 
 
-void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
+void GIFWriter::WriteImageExtension( tools::Long nTimer, Disposal eDisposal )
 {
     if( !bStatus )
         return;
@@ -458,8 +458,8 @@ void GIFWriter::WritePalette()
 void GIFWriter::WriteAccess()
 {
     GIFLZWCompressor    aCompressor;
-    const long          nWidth = m_pAcc->Width();
-    const long          nHeight = m_pAcc->Height();
+    const tools::Long          nWidth = m_pAcc->Width();
+    const tools::Long          nHeight = m_pAcc->Height();
     std::unique_ptr<sal_uInt8[]> pBuffer;
     bool                bNative = m_pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal;
 
@@ -471,9 +471,9 @@ void GIFWriter::WriteAccess()
 
     aCompressor.StartCompression( m_rGIF, m_pAcc->GetBitCount() );
 
-    long nY, nT;
+    tools::Long nY, nT;
 
-    for( long i = 0; i < nHeight; ++i )
+    for( tools::Long i = 0; i < nHeight; ++i )
     {
         if( nInterlaced )
         {
@@ -505,7 +505,7 @@ void GIFWriter::WriteAccess()
         else
         {
             Scanline pScanline = m_pAcc->GetScanline( nY );
-            for( long nX = 0; nX < nWidth; nX++ )
+            for( tools::Long nX = 0; nX < nWidth; nX++ )
                 pBuffer[ nX ] = m_pAcc->GetIndexFromData( pScanline, nX );
 
             aCompressor.Compress( pBuffer.get(), nWidth );

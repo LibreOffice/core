@@ -99,7 +99,7 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
     if (!rCurrentZoom.GetNumerator())
         throw o3tl::divide_by_zero();
     n /= static_cast<double>(rCurrentZoom.GetNumerator());
-    _nOriginalWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
+    _nOriginalWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
 }
 
 BrowserColumn::~BrowserColumn()
@@ -122,7 +122,7 @@ void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZ
         if (!rCurrentZoom.GetNumerator())
             throw o3tl::divide_by_zero();
         n /= static_cast<double>(rCurrentZoom.GetNumerator());
-        _nOriginalWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
+        _nOriginalWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
     }
 }
 
@@ -153,7 +153,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
     else
     {
         // paint data column
-        long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
+        tools::Long nWidth = Width() == LONG_MAX ? rBox.GetDataWindow().GetSizePixel().Width() : Width();
 
         rBox.DoPaintField( rDev,
             tools::Rectangle(
@@ -168,7 +168,7 @@ void BrowserColumn::Draw( BrowseBox const & rBox, OutputDevice& rDev, const Poin
 void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
     double n(_nOriginalWidth * rNewZoom);
-    _nWidth = n>0 ? static_cast<long>(n+0.5) : -static_cast<long>(-n+0.5);
+    _nWidth = n>0 ? static_cast<tools::Long>(n+0.5) : -static_cast<tools::Long>(-n+0.5);
 }
 
 
@@ -298,14 +298,14 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     BrowseBox *pBox = GetParent();
 
     // seek to row under mouse
-    long nRelRow = rPosPixel.Y() < 0
+    tools::Long nRelRow = rPosPixel.Y() < 0
             ? -1
             : rPosPixel.Y() / pBox->GetDataRowHeight();
-    long nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
+    tools::Long nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
 
     // find column under mouse
-    long nMouseX = rPosPixel.X();
-    long nColX = 0;
+    tools::Long nMouseX = rPosPixel.X();
+    tools::Long nColX = 0;
     size_t nCol;
     for ( nCol = 0;
           nCol < pBox->mvCols.size() && nColX < GetSizePixel().Width();
@@ -376,7 +376,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );
-    long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
+    tools::Long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
     MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
     if ( CommandEventId::ContextMenu == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
@@ -417,7 +417,7 @@ bool BrowserDataWin::ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent )
        )
        return false;
 
-    long nDividerDistance = GetParent()->GetDataRowHeight() - ( _rEvent.GetPosPixel().Y() % GetParent()->GetDataRowHeight() );
+    tools::Long nDividerDistance = GetParent()->GetDataRowHeight() - ( _rEvent.GetPosPixel().Y() % GetParent()->GetDataRowHeight() );
     return ( nDividerDistance <= 4 );
 }
 
@@ -495,9 +495,9 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
 
 void BrowserDataWin::StartRowDividerDrag( const Point& _rStartPos )
 {
-    long nDataRowHeight = GetParent()->GetDataRowHeight();
+    tools::Long nDataRowHeight = GetParent()->GetDataRowHeight();
     // the exact separation pos of the two rows
-    long nDragRowDividerCurrentPos = _rStartPos.Y();
+    tools::Long nDragRowDividerCurrentPos = _rStartPos.Y();
     if ( ( nDragRowDividerCurrentPos % nDataRowHeight ) > nDataRowHeight / 2 )
         nDragRowDividerCurrentPos += nDataRowHeight;
     nDragRowDividerCurrentPos /= nDataRowHeight;
@@ -535,7 +535,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
 
         if ( !rTEvt.IsTrackingCanceled() )
         {
-            long nNewRowHeight = aMousePos.Y() + m_nDragRowDividerOffset - m_nDragRowDividerLimit;
+            tools::Long nNewRowHeight = aMousePos.Y() + m_nDragRowDividerOffset - m_nDragRowDividerLimit;
 
             // care for minimum row height
             if ( nNewRowHeight < GetParent()->QueryMinimumRowHeight() )
@@ -547,7 +547,7 @@ void BrowserDataWin::Tracking( const TrackingEvent& rTEvt )
     }
     else
     {
-        long nDragRowDividerCurrentPos = aMousePos.Y() + m_nDragRowDividerOffset;
+        tools::Long nDragRowDividerCurrentPos = aMousePos.Y() + m_nDragRowDividerOffset;
 
         // care for minimum row height
         if ( nDragRowDividerCurrentPos < m_nDragRowDividerLimit + GetParent()->QueryMinimumRowHeight() )
@@ -574,7 +574,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 
 
 BrowseEvent::BrowseEvent( vcl::Window* pWindow,
-                          long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     pWin(pWindow),
     nRow(nAbsRow),
@@ -594,7 +594,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 
 
 BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
-                          long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     MouseEvent(rEvt),
     BrowseEvent( pWindow, nAbsRow, nColumn, nColumnId, rRect )

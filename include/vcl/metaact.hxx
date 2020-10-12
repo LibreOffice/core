@@ -81,7 +81,7 @@ public:
 
     virtual rtl::Reference<MetaAction> Clone();
 
-    virtual void        Move( long nHorzMove, long nVertMove );
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
@@ -119,7 +119,7 @@ public:
 
                         MetaPixelAction( const Point& rPt, const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
@@ -147,7 +147,7 @@ public:
 
     explicit            MetaPointAction( const Point& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetPoint() const { return maPt; }
@@ -179,7 +179,7 @@ public:
                         MetaLineAction( const Point& rStart, const Point& rEnd,
                                         const LineInfo& rLineInfo );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maStartPt; }
@@ -209,7 +209,7 @@ public:
 
     explicit            MetaRectAction( const tools::Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -240,7 +240,7 @@ public:
                         MetaRoundRectAction( const tools::Rectangle& rRect,
                                              sal_uInt32 nHorzRound, sal_uInt32 nVertRound );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -270,7 +270,7 @@ public:
 
     explicit            MetaEllipseAction( const tools::Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -301,7 +301,7 @@ public:
                         MetaArcAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -334,7 +334,7 @@ public:
                         MetaPieAction( const tools::Rectangle& rRect,
                                        const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -367,7 +367,7 @@ public:
                         MetaChordAction( const tools::Rectangle& rRect,
                                          const Point& rStart, const Point& rEnd );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -399,7 +399,7 @@ public:
     explicit            MetaPolyLineAction( const tools::Polygon& );
     explicit            MetaPolyLineAction( const tools::Polygon&, const LineInfo& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
@@ -428,7 +428,7 @@ public:
 
     explicit            MetaPolygonAction( const tools::Polygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Polygon& GetPolygon() const { return maPoly; }
@@ -456,7 +456,7 @@ public:
 
     explicit            MetaPolyPolygonAction( const tools::PolyPolygon& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
@@ -488,7 +488,7 @@ public:
     MetaTextAction( const Point& rPt, const OUString& rStr,
                     sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     const Point&    GetPoint() const { return maPt; }
@@ -514,14 +514,14 @@ public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
     MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
-                         const long* pDXAry, sal_Int32 nIndex,
+                         const tools::Long* pDXAry, sal_Int32 nIndex,
                          sal_Int32 nLen );
 
     virtual void        Execute( OutputDevice* pOut ) override;
 
     virtual rtl::Reference<MetaAction> Clone() override;
 
-    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     virtual void    Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
@@ -531,7 +531,7 @@ public:
     const OUString& GetText() const { return maStr; }
     sal_Int32       GetIndex() const { return mnIndex; }
     sal_Int32       GetLen() const { return mnLen; }
-    long*           GetDXArray() const { return mpDXAry.get(); }
+    tools::Long*           GetDXArray() const { return mpDXAry.get(); }
 };
 
 class SAL_DLLPUBLIC_RTTI MetaStretchTextAction final : public MetaAction
@@ -562,7 +562,7 @@ public:
                            const OUString& rStr,
                            sal_Int32 nIndex, sal_Int32 nLen );
 
-    virtual void    Move( long nHorzMove, long nVertMove ) override;
+    virtual void    Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void    Scale( double fScaleX, double fScaleY ) override;
 
     const Point&    GetPoint() const { return maPt; }
@@ -597,7 +597,7 @@ public:
     MetaTextRectAction( const tools::Rectangle& rRect,
                         const OUString& rStr, DrawTextFlags nStyle );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -610,7 +610,7 @@ class SAL_DLLPUBLIC_RTTI MetaTextLineAction final : public MetaAction
 private:
 
     Point               maPos;
-    long                mnWidth;
+    tools::Long                mnWidth;
     FontStrikeout       meStrikeout;
     FontLineStyle       meUnderline;
     FontLineStyle       meOverline;
@@ -629,15 +629,15 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaTextLineAction( const Point& rPos, long nWidth,
+                        MetaTextLineAction( const Point& rPos, tools::Long nWidth,
                                             FontStrikeout eStrikeout,
                                             FontLineStyle eUnderline,
                                             FontLineStyle eOverline );
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Point&        GetStartPoint() const { return maPos; }
-    long                GetWidth() const { return mnWidth; }
+    tools::Long                GetWidth() const { return mnWidth; }
     FontStrikeout       GetStrikeout() const { return meStrikeout; }
     FontLineStyle       GetUnderline() const { return meUnderline; }
     FontLineStyle       GetOverline()  const { return meOverline; }
@@ -666,7 +666,7 @@ public:
 
                         MetaBmpAction( const Point& rPt, const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -698,7 +698,7 @@ public:
                         MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                             const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -734,7 +734,7 @@ public:
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const Bitmap& rBmp );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -767,7 +767,7 @@ public:
 
                         MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
@@ -800,7 +800,7 @@ public:
                         MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                               const BitmapEx& rBmpEx ) ;
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
@@ -837,7 +837,7 @@ public:
                                                   const Point& rSrcPt, const Size& rSrcSz,
                                                   const BitmapEx& rBmpEx );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const BitmapEx&     GetBitmapEx() const { return maBmpEx; }
@@ -874,7 +874,7 @@ public:
                                         const Bitmap& rBmp,
                                         const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -909,7 +909,7 @@ public:
                                              const Bitmap& rBmp,
                                              const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -948,7 +948,7 @@ public:
                                                  const Bitmap& rBmp,
                                                  const Color& rColor );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const Bitmap&       GetBitmap() const { return maBmp; }
@@ -982,7 +982,7 @@ public:
 
                         MetaGradientAction( const tools::Rectangle& rRect, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -1012,7 +1012,7 @@ public:
 
                         MetaGradientExAction( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
@@ -1042,7 +1042,7 @@ public:
 
                         MetaHatchAction( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
@@ -1073,7 +1073,7 @@ public:
                         MetaWallpaperAction( const tools::Rectangle& rRect,
                                              const Wallpaper& rPaper );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -1103,7 +1103,7 @@ public:
 
                         MetaClipRegionAction( const vcl::Region& rRegion, bool bClip );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
@@ -1132,7 +1132,7 @@ public:
 
     explicit            MetaISectRectClipRegionAction( const tools::Rectangle& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::Rectangle&    GetRect() const { return maRect; }
@@ -1160,7 +1160,7 @@ public:
 
     explicit            MetaISectRegionClipRegionAction( const vcl::Region& );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const vcl::Region&  GetRegion() const { return maRegion; }
@@ -1170,8 +1170,8 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MetaMoveClipRegionAction final : public Me
 {
 private:
 
-    long                mnHorzMove;
-    long                mnVertMove;
+    tools::Long                mnHorzMove;
+    tools::Long                mnVertMove;
 
 public:
                         MetaMoveClipRegionAction();
@@ -1187,12 +1187,12 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-                        MetaMoveClipRegionAction( long nHorzMove, long nVertMove );
+                        MetaMoveClipRegionAction( tools::Long nHorzMove, tools::Long nVertMove );
 
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
-    long                GetHorzMove() const { return mnHorzMove; }
-    long                GetVertMove() const { return mnVertMove; }
+    tools::Long                GetHorzMove() const { return mnHorzMove; }
+    tools::Long                GetVertMove() const { return mnVertMove; }
 };
 
 class VCL_DLLPUBLIC MetaLineColorAction final : public MetaAction
@@ -1525,7 +1525,7 @@ public:
 
                         MetaTransparentAction( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const tools::PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
@@ -1560,7 +1560,7 @@ public:
                         MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                     const Size& rSize, const Gradient& rGradient );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GDIMetaFile&  GetGDIMetaFile() const { return maMtf; }
@@ -1596,7 +1596,7 @@ public:
                         MetaEPSAction( const Point& rPoint, const Size& rSize,
                                        const GfxLink& rGfxLink, const GDIMetaFile& rSubst );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     const GfxLink&      GetLink() const { return maGfxLink; }
@@ -1652,7 +1652,7 @@ public:
     explicit            MetaCommentAction( const MetaCommentAction& rAct );
     explicit            MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0, const sal_uInt8* pData = nullptr, sal_uInt32 nDataSize = 0 );
 
-    virtual void        Move( long nHorzMove, long nVertMove ) override;
+    virtual void        Move( tools::Long nHorzMove, tools::Long nVertMove ) override;
     virtual void        Scale( double fScaleX, double fScaleY ) override;
 
     virtual void        Execute( OutputDevice* pOut ) override;

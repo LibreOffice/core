@@ -46,9 +46,9 @@ Color DXF2GDIMetaFile::ConvertColor(sal_uInt8 nColor)
         pDXF->aPalette.GetBlue( nColor ) );
 }
 
-long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
+tools::Long DXF2GDIMetaFile::GetEntityColor(const DXFBasicEntity & rE)
 {
-    long nColor;
+    tools::Long nColor;
 
     nColor=rE.nColor;
     if (nColor==256) {
@@ -75,7 +75,7 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
     }
     else {
         aDXFLineInfo.eStyle = LineStyle::Dash;
-        for (long i=0; i < (pLT->nDashCount); i++) {
+        for (tools::Long i=0; i < (pLT->nDashCount); i++) {
             const double x = pLT->fDash[i] * pDXF->getGlobalLineTypeScale();
             if ( x >= 0.0 ) {
                 if ( aDXFLineInfo.nDotCount == 0 ) {
@@ -145,7 +145,7 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 
 bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 {
-    long nColor;
+    tools::Long nColor;
     Color aColor;
 
     nColor=GetEntityColor(rE);
@@ -167,7 +167,7 @@ bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 
 bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 {
-    long nColor;
+    tools::Long nColor;
     Color aColor;
 
     nColor=GetEntityColor(rE);
@@ -189,7 +189,7 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 
 bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight)
 {
-    long nColor;
+    tools::Long nColor;
     Color aColor;
     vcl::Font aFont;
 
@@ -267,8 +267,8 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         pVirDev->DrawEllipse(
-            tools::Rectangle(static_cast<long>(aC.fx-frx+0.5),static_cast<long>(aC.fy-fry+0.5),
-                      static_cast<long>(aC.fx+frx+0.5),static_cast<long>(aC.fy+fry+0.5)));
+            tools::Rectangle(static_cast<tools::Long>(aC.fx-frx+0.5),static_cast<tools::Long>(aC.fy-fry+0.5),
+                      static_cast<tools::Long>(aC.fx+frx+0.5),static_cast<tools::Long>(aC.fy+fry+0.5)));
     }
     else {
         double fAng;
@@ -338,8 +338,8 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
             rTransform.Transform(aVE,aPS);
         }
         pVirDev->DrawArc(
-            tools::Rectangle(static_cast<long>(aC.fx-frx+0.5),static_cast<long>(aC.fy-fry+0.5),
-                      static_cast<long>(aC.fx+frx+0.5),static_cast<long>(aC.fy+fry+0.5)),
+            tools::Rectangle(static_cast<tools::Long>(aC.fx-frx+0.5),static_cast<tools::Long>(aC.fy-fry+0.5),
+                      static_cast<tools::Long>(aC.fx+frx+0.5),static_cast<tools::Long>(aC.fy+fry+0.5)),
             aPS,aPE
         );
     }
@@ -461,7 +461,7 @@ void DXF2GDIMetaFile::DrawInsertEntity(const DXFInsertEntity & rE, const DXFTran
         DXFTransform( aDXFTransform1, aDXFTransform2 ),
         rTransform
     );
-    long nSavedBlockColor, nSavedParentLayerColor;
+    tools::Long nSavedBlockColor, nSavedParentLayerColor;
     DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
     nSavedBlockColor=nBlockColor;
     nSavedParentLayerColor=nParentLayerColor;
@@ -661,7 +661,7 @@ void DXF2GDIMetaFile::DrawDimensionEntity(const DXFDimensionEntity & rE, const D
         DXFTransform(1.0,1.0,1.0,DXFVector(0.0,0.0,0.0)-pB->aBasePoint),
         rTransform
     );
-    long nSavedBlockColor, nSavedParentLayerColor;
+    tools::Long nSavedBlockColor, nSavedParentLayerColor;
     DXFLineInfo aSavedBlockDXFLineInfo, aSavedParentLayerDXFLineInfo;
     nSavedBlockColor=nBlockColor;
     nSavedParentLayerColor=nParentLayerColor;
@@ -854,8 +854,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                                                    pDXF->aBoundingBox.fMaxY*fScale,
                                                   -pDXF->aBoundingBox.fMinZ*fScale));
             }
-            aPrefSize.setWidth(static_cast<long>(fWidth*fScale+1.5) );
-            aPrefSize.setHeight(static_cast<long>(fHeight*fScale+1.5) );
+            aPrefSize.setWidth(static_cast<tools::Long>(fWidth*fScale+1.5) );
+            aPrefSize.setHeight(static_cast<tools::Long>(fHeight*fScale+1.5) );
         }
     }
     else {
@@ -876,8 +876,8 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
                 )
             );
         }
-        aPrefSize.setWidth(static_cast<long>(fWidth*fScale+1.5) );
-        aPrefSize.setHeight(static_cast<long>(fHeight*fScale+1.5) );
+        aPrefSize.setWidth(static_cast<tools::Long>(fWidth*fScale+1.5) );
+        aPrefSize.setHeight(static_cast<tools::Long>(fHeight*fScale+1.5) );
     }
 
     if (bStatus)

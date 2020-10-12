@@ -46,17 +46,17 @@ private:
     rtl::Reference<SvxTableToolBoxControl> mxControl;
     OUString maCommand;
 
-    long                nCol;
-    long                nLine;
+    tools::Long                nCol;
+    tools::Long                nLine;
 
-    static const long TABLE_CELLS_HORIZ;
-    static const long TABLE_CELLS_VERT;
+    static const tools::Long TABLE_CELLS_HORIZ;
+    static const tools::Long TABLE_CELLS_VERT;
 
-    long mnTableCellWidth;
-    long mnTableCellHeight;
+    tools::Long mnTableCellWidth;
+    tools::Long mnTableCellHeight;
 
-    long mnTableWidth;
-    long mnTableHeight;
+    tools::Long mnTableWidth;
+    tools::Long mnTableHeight;
 
     ::Color             aFontColor;
     ::Color             aLineColor;
@@ -64,7 +64,7 @@ private:
     ::Color             aHighlightFillColor;
     ::Color             aBackgroundColor;
 
-    void                Update(long nNewCol, long nNewLine);
+    void                Update(tools::Long nNewCol, tools::Long nNewLine);
     void                InsertTable();
 
 public:
@@ -100,8 +100,8 @@ public:
 
 }
 
-const long TableWidget::TABLE_CELLS_HORIZ = 10;
-const long TableWidget::TABLE_CELLS_VERT = 15;
+const tools::Long TableWidget::TABLE_CELLS_HORIZ = 10;
+const tools::Long TableWidget::TABLE_CELLS_VERT = 15;
 
 IMPL_LINK_NOARG(TableWindow, SelectHdl, weld::Button&, void)
 {
@@ -161,8 +161,8 @@ bool TableWidget::MouseMove(const MouseEvent& rMEvt)
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos( aPos );
 
-    long nNewCol = ( aMousePos.X() + mnTableCellWidth ) / mnTableCellWidth;
-    long nNewLine = ( aMousePos.Y() + mnTableCellHeight ) / mnTableCellHeight;
+    tools::Long nNewCol = ( aMousePos.X() + mnTableCellWidth ) / mnTableCellWidth;
+    tools::Long nNewLine = ( aMousePos.Y() + mnTableCellHeight ) / mnTableCellHeight;
 
     Update( nNewCol, nNewLine );
 
@@ -177,8 +177,8 @@ bool TableWidget::KeyInput(const KeyEvent& rKEvt)
     if ( !nModifier )
     {
         bHandled = true;
-        long nNewCol = nCol;
-        long nNewLine = nLine;
+        tools::Long nNewCol = nCol;
+        tools::Long nNewLine = nLine;
         switch(nKey)
         {
             case KEY_UP:
@@ -261,8 +261,8 @@ void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     aFont.SetTransparent( false );
     rRenderContext.SetFont( aFont );
 
-    const long nSelectionWidth = nCol * mnTableCellWidth;
-    const long nSelectionHeight = nLine * mnTableCellHeight;
+    const tools::Long nSelectionWidth = nCol * mnTableCellWidth;
+    const tools::Long nSelectionHeight = nLine * mnTableCellHeight;
 
     // the non-selected parts of the table
     rRenderContext.SetLineColor(aLineColor);
@@ -280,13 +280,13 @@ void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     // lines inside of the table
     rRenderContext.SetLineColor(aLineColor);
-    for (long i = 1; i < TABLE_CELLS_VERT; ++i)
+    for (tools::Long i = 1; i < TABLE_CELLS_VERT; ++i)
     {
         rRenderContext.DrawLine(Point(0, i*mnTableCellHeight),
                                 Point(mnTableWidth, i*mnTableCellHeight));
     }
 
-    for (long i = 1; i < TABLE_CELLS_HORIZ; ++i)
+    for (tools::Long i = 1; i < TABLE_CELLS_HORIZ; ++i)
     {
         rRenderContext.DrawLine(Point( i*mnTableCellWidth, 0),
                                 Point( i*mnTableCellWidth, mnTableHeight));
@@ -307,9 +307,9 @@ void TableWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
 
     Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());
 
-    long nTextX = nSelectionWidth + mnTableCellWidth;
-    long nTextY = nSelectionHeight + mnTableCellHeight;
-    const long nTipBorder = 2;
+    tools::Long nTextX = nSelectionWidth + mnTableCellWidth;
+    tools::Long nTextY = nSelectionHeight + mnTableCellHeight;
+    const tools::Long nTipBorder = 2;
 
     if (aTextSize.Width() + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
         nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
@@ -347,7 +347,7 @@ void TableWidget::InsertTable()
     }
 }
 
-void TableWidget::Update( long nNewCol, long nNewLine )
+void TableWidget::Update( tools::Long nNewCol, tools::Long nNewLine )
 {
     if ( nNewCol < 0 || nNewCol > TABLE_CELLS_HORIZ )
         nNewCol = 0;
@@ -393,7 +393,7 @@ namespace {
 class ColumnsWidget final : public weld::CustomWidgetController
 {
 private:
-    static constexpr long WIDTH = 5;
+    static constexpr tools::Long WIDTH = 5;
 
     rtl::Reference<SvxColumnsToolBoxControl> mxControl;
     weld::SpinButton& mrSpinButton;
@@ -403,15 +403,15 @@ private:
     ::Color             aFillColor;
     ::Color             aHighlightFillColor;
     ::Color             aFaceColor;
-    long                nCol;
-    long                nMX;
+    tools::Long                nCol;
+    tools::Long                nMX;
     bool                m_bMod1;
 
     DECL_LINK(ValueChangedHdl, weld::SpinButton&, void);
     DECL_LINK(ActivateHdl, weld::Entry&, bool);
 
     void InsertColumns();
-    void UpdateSize_Impl( long nNewCol );
+    void UpdateSize_Impl( tools::Long nNewCol );
 public:
     ColumnsWidget(SvxColumnsToolBoxControl* pControl, weld::SpinButton& rSpinButton);
 
@@ -499,7 +499,7 @@ bool ColumnsWidget::MouseMove(const MouseEvent& rMEvt)
 {
     Point aPos = rMEvt.GetPosPixel();
 
-    long nNewCol = 1;
+    tools::Long nNewCol = 1;
     if ( aPos.X() > 0 )
         nNewCol = aPos.X() / nMX + 1;
     if ( nNewCol > 20 )
@@ -509,7 +509,7 @@ bool ColumnsWidget::MouseMove(const MouseEvent& rMEvt)
     return true;
 }
 
-void ColumnsWidget::UpdateSize_Impl( long nNewCol )
+void ColumnsWidget::UpdateSize_Impl( tools::Long nNewCol )
 {
     if ( nNewCol == nCol )
         return;
@@ -519,7 +519,7 @@ void ColumnsWidget::UpdateSize_Impl( long nNewCol )
     Invalidate( tools::Rectangle( 0, aWinSize.Height() - 2,
                            aWinSize.Width(), aWinSize.Height() ) );
 
-    long nMinCol = 0, nMaxCol = 0;
+    tools::Long nMinCol = 0, nMaxCol = 0;
 
     if ( nNewCol < nCol )
     {
@@ -555,7 +555,7 @@ bool ColumnsWidget::KeyInput(const KeyEvent& rKEvt)
             KEY_UP == nKey)
         {
             bHandled = true;
-            long nNewCol = nCol;
+            tools::Long nNewCol = nCol;
             switch(nKey)
             {
                 case KEY_LEFT :
@@ -604,8 +604,8 @@ void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
     aFont.SetTransparent( false );
     rRenderContext.SetFont( aFont );
 
-    long i;
-    long nLineWidth;
+    tools::Long i;
+    tools::Long nLineWidth;
     Size aSize(GetOutputSizePixel());
 
     for (i = 0; i < WIDTH; i++)
@@ -623,7 +623,7 @@ void ColumnsWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
         rRenderContext.DrawRect(tools::Rectangle(i * nMX - 1, -1, i * nMX + nMX, aSize.Height() - 1));
 
-        long j = 4;
+        tools::Long j = 4;
         while (j < aSize.Height() - 4)
         {
             if (!(j % 16))

@@ -1229,13 +1229,13 @@ void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImp
     SwNodeIndex aEndOfDoc( rExtDoc.GetNodes().GetEndOfContent(), -1 );
     for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
     {
-        ::SetProgressState( static_cast<long>(i), GetDocShell() );
+        ::SetProgressState( static_cast<tools::Long>(i), GetDocShell() );
         const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
 
         const int nLvl = GetNodes()[ nIndex ]->GetTextNode()->GetAttrOutlineLevel()-1;
         if( nLvl > nLevel )
             continue;
-        long nEndOfs = 1;
+        tools::Long nEndOfs = 1;
         sal_uInt8 nWish = nPara;
         sal_uLong nNextOutNd = i + 1 < rOutNds.size() ?
             rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();

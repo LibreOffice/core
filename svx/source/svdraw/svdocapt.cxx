@@ -63,10 +63,10 @@ class ImpCaptParams
 {
 public:
     SdrCaptionType              eType;
-    long                        nGap;
-    long                        nEscRel;
-    long                        nEscAbs;
-    long                        nLineLen;
+    tools::Long                        nGap;
+    tools::Long                        nEscRel;
+    tools::Long                        nEscAbs;
+    tools::Long                        nLineLen;
     SdrCaptionEscDir            eEscDir;
     bool                        bFitLineLen;
     bool                        bEscRel;
@@ -86,7 +86,7 @@ public:
 void ImpCaptParams::CalcEscPos(const Point& rTailPt, const tools::Rectangle& rRect, Point& rPt, EscDir& rDir) const
 {
     Point aTl(rTailPt); // copy locally for performance reasons
-    long nX,nY;
+    tools::Long nX,nY;
     if (bEscRel) {
         nX=rRect.Right()-rRect.Left();
         nX=BigMulDiv(nX,nEscRel,10000);

@@ -140,14 +140,14 @@ public:
     ScPositionHelper(const ScDocument *pDoc, bool bColumn);
     void setDocument(const ScDocument& rDoc, bool bColumn);
 
-    void insert(index_type nIndex, long nPos);
+    void insert(index_type nIndex, tools::Long nPos);
     void removeByIndex(index_type nIndex);
     void invalidateByIndex(index_type nIndex);
-    void invalidateByPosition(long nPos);
+    void invalidateByPosition(tools::Long nPos);
     const value_type& getNearestByIndex(index_type nIndex) const;
-    const value_type& getNearestByPosition(long nPos) const;
-    long getPosition(index_type nIndex) const;
-    long computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx);
+    const value_type& getNearestByPosition(tools::Long nPos) const;
+    tools::Long getPosition(index_type nIndex) const;
+    tools::Long computePosition(index_type nIndex, const std::function<long (index_type)>& getSizePx);
 };
 
 class ScBoundsProvider
@@ -164,43 +164,43 @@ class ScBoundsProvider
     double mfPPTY;
     index_type nFirstIndex;
     index_type nSecondIndex;
-    long nFirstPositionPx;
-    long nSecondPositionPx;
+    tools::Long nFirstPositionPx;
+    tools::Long nSecondPositionPx;
 
 public:
     ScBoundsProvider(const ScViewData &rView, SCTAB nT, bool bColumnHeader);
 
-    void GetStartIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
-    void GetEndIndexAndPosition(SCCOL& nIndex, long& nPosition) const;
-    void GetStartIndexAndPosition(SCROW& nIndex, long& nPosition) const;
-    void GetEndIndexAndPosition(SCROW& nIndex, long& nPosition) const;
+    void GetStartIndexAndPosition(SCCOL& nIndex, tools::Long& nPosition) const;
+    void GetEndIndexAndPosition(SCCOL& nIndex, tools::Long& nPosition) const;
+    void GetStartIndexAndPosition(SCROW& nIndex, tools::Long& nPosition) const;
+    void GetEndIndexAndPosition(SCROW& nIndex, tools::Long& nPosition) const;
 
     void Compute(value_type aFirstNearest, value_type aSecondNearest,
-                 long nFirstBound, long nSecondBound);
+                 tools::Long nFirstBound, tools::Long nSecondBound);
 
-    void EnlargeStartBy(long nOffset);
+    void EnlargeStartBy(tools::Long nOffset);
 
-    void EnlargeEndBy(long nOffset);
+    void EnlargeEndBy(tools::Long nOffset);
 
-    void EnlargeBy(long nOffset)
+    void EnlargeBy(tools::Long nOffset)
     {
         EnlargeStartBy(nOffset);
         EnlargeEndBy(nOffset);
     }
 
 private:
-    long GetSize(index_type nIndex) const;
+    tools::Long GetSize(index_type nIndex) const;
 
-    void GetIndexAndPos(index_type nNearestIndex, long nNearestPosition,
-                        long nBound, index_type& nFoundIndex, long& nPosition,
-                        bool bTowards, long nDiff);
+    void GetIndexAndPos(index_type nNearestIndex, tools::Long nNearestPosition,
+                        tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition,
+                        bool bTowards, tools::Long nDiff);
 
-    void GeIndexBackwards(index_type nNearestIndex, long nNearestPosition,
-                          long nBound, index_type& nFoundIndex, long& nPosition,
+    void GeIndexBackwards(index_type nNearestIndex, tools::Long nNearestPosition,
+                          tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition,
                           bool bTowards);
 
-    void GetIndexTowards(index_type nNearestIndex, long nNearestPosition,
-                         long nBound, index_type& nFoundIndex, long& nPosition,
+    void GetIndexTowards(index_type nNearestIndex, tools::Long nNearestPosition,
+                         tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition,
                          bool bTowards);
 };
 
@@ -214,14 +214,14 @@ private:
     Fraction        aPageZoomX;                 // zoom in page break preview mode
     Fraction        aPageZoomY;
 
-    long            nTPosX[2];                  // MapMode - Offset (Twips)
-    long            nTPosY[2];
-    long            nMPosX[2];                  // MapMode - Offset (1/100 mm)
-    long            nMPosY[2];
-    long            nPixPosX[2];                // Offset in Pixels
-    long            nPixPosY[2];
-    long            nHSplitPos;
-    long            nVSplitPos;
+    tools::Long            nTPosX[2];                  // MapMode - Offset (Twips)
+    tools::Long            nTPosY[2];
+    tools::Long            nMPosX[2];                  // MapMode - Offset (1/100 mm)
+    tools::Long            nMPosY[2];
+    tools::Long            nPixPosX[2];                // Offset in Pixels
+    tools::Long            nPixPosY[2];
+    tools::Long            nHSplitPos;
+    tools::Long            nVSplitPos;
 
     ScSplitMode     eHSplitMode;
     ScSplitMode     eVSplitMode;
@@ -331,7 +331,7 @@ private:
 
     bool                bGrowing;
 
-    long                m_nLOKPageUpDownOffset;
+    tools::Long                m_nLOKPageUpDownOffset;
     tools::Rectangle    maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
 
     DECL_DLLPRIVATE_LINK( EditEngineHdl, EditStatus&, void );
@@ -404,8 +404,8 @@ public:
     SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
-    long            GetLOKDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
-    long            GetLOKDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
+    tools::Long            GetLOKDocWidthPixel() const             { return pThisTab->aWidthHelper.getPosition(pThisTab->nMaxTiledCol); }
+    tools::Long            GetLOKDocHeightPixel() const            { return pThisTab->aHeightHelper.getPosition(pThisTab->nMaxTiledRow); }
 
     ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
     ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
@@ -415,8 +415,8 @@ public:
 
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
-    long            GetHSplitPos() const                    { return pThisTab->nHSplitPos; }
-    long            GetVSplitPos() const                    { return pThisTab->nVSplitPos; }
+    tools::Long            GetHSplitPos() const                    { return pThisTab->nHSplitPos; }
+    tools::Long            GetVSplitPos() const                    { return pThisTab->nVSplitPos; }
     SCCOL           GetFixPosX() const                      { return pThisTab->nFixPosX; }
     SCROW           GetFixPosY() const                      { return pThisTab->nFixPosY; }
     SCCOL           GetMaxTiledCol() const                  { return pThisTab->nMaxTiledCol; }
@@ -437,8 +437,8 @@ public:
 
     void            SetHSplitMode( ScSplitMode eMode )              { pThisTab->eHSplitMode = eMode; }
     void            SetVSplitMode( ScSplitMode eMode )              { pThisTab->eVSplitMode = eMode; }
-    void            SetHSplitPos( long nPos )                       { pThisTab->nHSplitPos = nPos; }
-    void            SetVSplitPos( long nPos )                       { pThisTab->nVSplitPos = nPos; }
+    void            SetHSplitPos( tools::Long nPos )                       { pThisTab->nHSplitPos = nPos; }
+    void            SetVSplitPos( tools::Long nPos )                       { pThisTab->nVSplitPos = nPos; }
     void            SetFixPosX( SCCOL nPos )                        { pThisTab->nFixPosX = nPos; }
     void            SetFixPosY( SCROW nPos )                        { pThisTab->nFixPosY = nPos; }
     void            SetMaxTiledCol( SCCOL nCol );
@@ -502,9 +502,9 @@ public:
     void            SetEditAdjust( SvxAdjust eNewEditAdjust ) { eEditAdjust = eNewEditAdjust; }
 
                     // TRUE: Cell is merged
-    bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
-    bool            GetMergeSizePrintTwips( SCCOL nX, SCROW nY, long& rSizeXTwips, long& rSizeYTwips ) const;
-    void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
+    bool            GetMergeSizePixel( SCCOL nX, SCROW nY, tools::Long& rSizeXPix, tools::Long& rSizeYPix ) const;
+    bool            GetMergeSizePrintTwips( SCCOL nX, SCROW nY, tools::Long& rSizeXTwips, tools::Long& rSizeYTwips ) const;
+    void            GetPosFromPixel( tools::Long nClickX, tools::Long nClickY, ScSplitPos eWhich,
                                         SCCOL& rPosX, SCROW& rPosY,
                                         bool bTestMerge = true, bool bRepair = false, SCTAB nForTab = -1 );
     void            GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
@@ -548,8 +548,8 @@ public:
     bool    IsOutlineMode   () const            { return maOptions.GetOption(VOPT_OUTLINER); }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
-    void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
-    long GetPageUpDownOffset() const { return m_nLOKPageUpDownOffset; }
+    void ForcePageUpDownOffset(tools::Long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
+    tools::Long GetPageUpDownOffset() const { return m_nLOKPageUpDownOffset; }
 
     /// The visible area in the client (set by setClientVisibleArea).
     const tools::Rectangle& getLOKVisibleArea() const { return maLOKVisibleArea; }
@@ -656,16 +656,16 @@ public:
     void            DeriveLOKFreezeIfNeeded(SCTAB nForTab);
     void            OverrideWithLOKFreeze(ScSplitMode& eExHSplitMode, ScSplitMode& eExVSplitMode,
                                           SCCOL& nExFixPosX, SCROW& nExFixPosY,
-                                          long& nExHSplitPos, long& nExVSplitPos, SCTAB nForTab) const;
+                                          tools::Long& nExHSplitPos, tools::Long& nExVSplitPos, SCTAB nForTab) const;
 
-    static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
+    static inline tools::Long ToPixel( sal_uInt16 nTwips, double nFactor );
 
     /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
         segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
         may be > nEndPixels!
      */
-    static void     AddPixelsWhile( long & rScrY, long nEndPixels,
+    static void     AddPixelsWhile( tools::Long & rScrY, tools::Long nEndPixels,
                                     SCROW & rPosY, SCROW nEndRow, double nPPTY,
                                     const ScDocument * pDoc, SCTAB nTabNo );
 
@@ -674,14 +674,14 @@ public:
         segments. Upon return rPosY is the last row evaluated >= nStartRow,
         rScrY may be > nEndPixels!
      */
-    static void     AddPixelsWhileBackward( long & rScrY, long nEndPixels,
+    static void     AddPixelsWhileBackward( tools::Long & rScrY, tools::Long nEndPixels,
                                     SCROW & rPosY, SCROW nStartRow, double nPPTY,
                                     const ScDocument * pDoc, SCTAB nTabNo );
 };
 
-inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
+inline tools::Long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
 {
-    long nRet = static_cast<long>( nTwips * nFactor );
+    tools::Long nRet = static_cast<tools::Long>( nTwips * nFactor );
     if ( !nRet && nTwips )
         nRet = 1;
     return nRet;

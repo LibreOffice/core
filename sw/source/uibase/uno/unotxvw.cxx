@@ -901,11 +901,11 @@ awt::Point SwXTextViewCursor::getPosition()
     const SwFrameFormat& rMaster = rSh.GetPageDesc( rSh.GetCurPageDesc() ).GetMaster();
 
     const SvxULSpaceItem& rUL = rMaster.GetULSpace();
-    const long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
+    const tools::Long nY = aCharRect.Top() - (rUL.GetUpper() + DOCUMENTBORDER);
     aRet.Y = convertTwipToMm100(nY);
 
     const SvxLRSpaceItem& rLR = rMaster.GetLRSpace();
-    const long nX = aCharRect.Left() - (rLR.GetLeft() + DOCUMENTBORDER);
+    const tools::Long nX = aCharRect.Left() - (rLR.GetLeft() + DOCUMENTBORDER);
     aRet.X = convertTwipToMm100(nX);
 
     return aRet;

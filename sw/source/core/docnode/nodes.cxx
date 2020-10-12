@@ -1708,7 +1708,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
     SwNodeIndex aOrigInsPos( rIndex, -1 ); // original insertion position
     int nLevel = 0;                        // level counter
 
-    for( long nNodeCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
+    for( tools::Long nNodeCnt = aRg.aEnd.GetIndex() - aRg.aStart.GetIndex();
             nNodeCnt > 0; --nNodeCnt )
     {
         pCurrentNode = &aRg.aStart.GetNode();
@@ -1720,7 +1720,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                     rDoc.GetNodes().GetEndOfInserts().StartOfSectionIndex()
                     < aInsPos.GetIndex() )
             {
-                const long nDistance =
+                const tools::Long nDistance =
                     pCurrentNode->EndOfSectionIndex() -
                         aRg.aStart.GetIndex();
                 if (nDistance < nNodeCnt)
@@ -1761,7 +1761,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 SwNodeIndex nStt( aInsPos, -1 );
                 SwTableNode* pTableNd = static_cast<SwTableNode*>(pCurrentNode)->
                                         MakeCopy( rDoc, aInsPos );
-                const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                const tools::Long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else
@@ -1789,7 +1789,7 @@ void SwNodes::CopyNodes( const SwNodeRange& rRange,
                 SwSectionNode* pSectNd = static_cast<SwSectionNode*>(pCurrentNode)->
                                     MakeCopy( rDoc, aInsPos );
 
-                const long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
+                const tools::Long nDistance = aInsPos.GetIndex() - nStt.GetIndex() - 2;
                 if (nDistance < nNodeCnt)
                     nNodeCnt -= nDistance;
                 else

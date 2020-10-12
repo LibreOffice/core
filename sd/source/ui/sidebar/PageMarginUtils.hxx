@@ -28,8 +28,8 @@
 
 namespace sd::sidebar{
 
-bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsNone( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_NO_MARGIN) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_NO_MARGIN ) <= SDPAGE_UNIT_THRESHOLD &&
@@ -37,8 +37,8 @@ bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_NO_MARGIN) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetNone( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetNone( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_NO_MARGIN;
     nPageRightMargin = SDPAGE_NO_MARGIN;
@@ -46,8 +46,8 @@ void SetNone( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_NO_MARGIN;
 }
 
-bool IsNarrow( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsNarrow( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_NARROW_VALUE) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_NARROW_VALUE) <= SDPAGE_UNIT_THRESHOLD &&
@@ -55,8 +55,8 @@ bool IsNarrow( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_NARROW_VALUE) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetNarrow( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetNarrow( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_NARROW_VALUE;
     nPageRightMargin = SDPAGE_NARROW_VALUE;
@@ -64,8 +64,8 @@ void SetNarrow( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_NARROW_VALUE;
 }
 
-bool IsModerate( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsModerate( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_MODERATE_LR) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_MODERATE_LR) <= SDPAGE_UNIT_THRESHOLD &&
@@ -73,8 +73,8 @@ bool IsModerate( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetModerate( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetModerate( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_MODERATE_LR;
     nPageRightMargin = SDPAGE_MODERATE_LR;
@@ -82,8 +82,8 @@ void SetModerate( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_WIDE_VALUE1;
 }
 
-bool IsNormal075( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsNormal075( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_NORMAL_VALUE) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_NORMAL_VALUE) <= SDPAGE_UNIT_THRESHOLD &&
@@ -91,8 +91,8 @@ bool IsNormal075( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_NORMAL_VALUE) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetNormal075( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetNormal075( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_NORMAL_VALUE;
     nPageRightMargin = SDPAGE_NORMAL_VALUE;
@@ -100,8 +100,8 @@ void SetNormal075( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_NORMAL_VALUE;
 }
 
-bool IsNormal100( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsNormal100( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD &&
@@ -109,8 +109,8 @@ bool IsNormal100( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetNormal100( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetNormal100( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_WIDE_VALUE1;
     nPageRightMargin = SDPAGE_WIDE_VALUE1;
@@ -118,8 +118,8 @@ void SetNormal100( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_WIDE_VALUE1;
 }
 
-bool IsNormal125( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsNormal125( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_WIDE_VALUE3) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_WIDE_VALUE3) <= SDPAGE_UNIT_THRESHOLD &&
@@ -127,8 +127,8 @@ bool IsNormal125( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetNormal125( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetNormal125( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_WIDE_VALUE3;
     nPageRightMargin = SDPAGE_WIDE_VALUE3;
@@ -136,8 +136,8 @@ void SetNormal125( long& nPageLeftMargin, long& nPageRightMargin,
     nPageBottomMargin = SDPAGE_WIDE_VALUE1;
 }
 
-bool IsWide( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin )
+bool IsWide( const ::tools::Long nPageLeftMargin, const ::tools::Long nPageRightMargin,
+               const ::tools::Long nPageTopMargin, const ::tools::Long nPageBottomMargin )
 {
     return( std::abs(nPageLeftMargin - SDPAGE_WIDE_VALUE2) <= SDPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SDPAGE_WIDE_VALUE2) <= SDPAGE_UNIT_THRESHOLD &&
@@ -145,8 +145,8 @@ bool IsWide( const long nPageLeftMargin, const long nPageRightMargin,
         std::abs(nPageBottomMargin - SDPAGE_WIDE_VALUE1) <= SDPAGE_UNIT_THRESHOLD );
 }
 
-void SetWide( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin )
+void SetWide( ::tools::Long& nPageLeftMargin, ::tools::Long& nPageRightMargin,
+                ::tools::Long& nPageTopMargin, ::tools::Long& nPageBottomMargin )
 {
     nPageLeftMargin = SDPAGE_WIDE_VALUE2;
     nPageRightMargin = SDPAGE_WIDE_VALUE2;

@@ -162,7 +162,7 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     /// will still be set; GetFormatted() is the function that forces
     /// recreation of the SwLineLayout by Format() if necessary.
     static SwCache *s_pTextCache;
-    static constexpr long nMinPrtLine = 0;    // This Line must not be underrun when printing
+    static constexpr tools::Long nMinPrtLine = 0;    // This Line must not be underrun when printing
                                 // Hack for table cells stretching multiple pages
 
     sal_uLong  mnAllLines        :24; // Line count for the Paint (including nThisLines)
@@ -205,8 +205,8 @@ class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
     // Evaluates the Preps in Format()
     bool CalcPreps();
     void PrepWidows( const sal_uInt16 nNeed, bool bNotify );
-    void InvalidateRange_( const SwCharRange &, const long = 0);
-    inline void InvalidateRange( const SwCharRange &, const long = 0);
+    void InvalidateRange_( const SwCharRange &, const tools::Long = 0);
+    inline void InvalidateRange( const SwCharRange &, const tools::Long = 0);
 
     // WidowsAndOrphans, AdjustFrame, AdjustFollow
     void FormatAdjust( SwTextFormatter &rLine, WidowsAndOrphans &rFrameBreak,
@@ -599,7 +599,7 @@ public:
     static SwCache *GetTextCache() { return s_pTextCache; }
     static void     SetTextCache( SwCache *pNew ) { s_pTextCache = pNew; }
 
-    static long GetMinPrtLine() { return nMinPrtLine; }
+    static tools::Long GetMinPrtLine() { return nMinPrtLine; }
 
     sal_uInt16 GetCacheIdx() const { return mnCacheIndex; }
     void   SetCacheIdx( const sal_uInt16 nNew ) { mnCacheIndex = nNew; }
@@ -637,7 +637,7 @@ public:
      * @param _bNoPropLineSpacing: control, whether the value of a
      *        proportional line spacing is returned or not
      */
-    long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
+    tools::Long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
 
     /// Returns the first line height
     sal_uInt16 FirstLineHeight() const;
@@ -687,7 +687,7 @@ public:
      * Calculates the limit value when switching from
      * horizontal to vertical layout
      */
-    long SwitchHorizontalToVertical( long nLimit ) const;
+    tools::Long SwitchHorizontalToVertical( tools::Long nLimit ) const;
 
     /**
      * Calculates the coordinates of a rectangle when switching from
@@ -705,7 +705,7 @@ public:
      * Calculates the a limit value when switching from
      * vertical to horizontal layout
      */
-    long SwitchVerticalToHorizontal( long nLimit ) const;
+    tools::Long SwitchVerticalToHorizontal( tools::Long nLimit ) const;
 
     /**
      * Calculates the coordinates of a rectangle when switching from

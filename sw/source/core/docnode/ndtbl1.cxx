@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 // See swtable.cxx too
 #define COLFUZZY 20L
 
-static bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
+static bool IsSame( tools::Long nA, tools::Long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 namespace {
 
@@ -442,7 +442,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool
         {
             if( !bTstOnly )
             {
-                long nHeight = 0;
+                tools::Long nHeight = 0;
                 sal_Int32 nTotalHeight = 0;
                 for ( auto pLn : aRowArr )
                 {
@@ -1312,7 +1312,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrame *pCell )
     // To compensate for the accuracy of calculation later on in SwTable::SetTabCols
     // we keep adding up a little.
     nRet += COLFUZZY;
-    return static_cast<sal_uInt16>(std::max( long(MINLAY), nRet ));
+    return static_cast<sal_uInt16>(std::max( tools::Long(MINLAY), nRet ));
 }
 
 /* The Line is within the Selection but not outlined by the TabCols.
@@ -1340,23 +1340,23 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
 
     for ( size_t i = 0 ; i <= rCols.Count(); ++i )
     {
-        long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
-        long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
+        tools::Long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
+        tools::Long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
         nColLeft  += rCols.GetLeftMin();
         nColRight += rCols.GetLeftMin();
 
         // Adapt values to the proportions of the Table (Follows)
         if ( rCols.GetLeftMin() != aRectFnSet.GetLeft(pTab->getFrameArea()) )
         {
-            const long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
+            const tools::Long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const long nCellLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
-        const long nCellRight = aRectFnSet.GetRight(pCell->getFrameArea());
+        const tools::Long nCellLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
+        const tools::Long nCellRight = aRectFnSet.GetRight(pCell->getFrameArea());
 
         // Calculate overlapping value
-        long nWidth = 0;
+        tools::Long nWidth = 0;
         if ( nColLeft <= nCellLeft && nColRight >= (nCellLeft+COLFUZZY) )
             nWidth = nColRight - nCellLeft;
         else if ( nColLeft <= (nCellRight-COLFUZZY) && nColRight >= nCellRight )
@@ -1365,7 +1365,7 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
             nWidth = nColRight - nColLeft;
         if ( nWidth && pCell->getFrameArea().Width() )
         {
-            long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
+            tools::Long nTmp = nWidth * nWish / pCell->getFrameArea().Width();
             if ( o3tl::make_unsigned(nTmp) > rToFill[i] )
                 rToFill[i] = sal_uInt16(nTmp);
         }
@@ -1414,20 +1414,20 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
         {
             if ( pCell->IsCellFrame() && pCell->FindTabFrame() == pTab && ::IsFrameInTableSel( rUnion, pCell ) )
             {
-                const long nCLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
-                const long nCRight = aRectFnSet.GetRight(pCell->getFrameArea());
+                const tools::Long nCLeft  = aRectFnSet.GetLeft(pCell->getFrameArea());
+                const tools::Long nCRight = aRectFnSet.GetRight(pCell->getFrameArea());
 
                 bool bNotInCols = true;
 
                 for ( size_t i = 0; i <= rCols.Count(); ++i )
                 {
                     sal_uInt16 nFit = rToFill[i];
-                    long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
-                    long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
+                    tools::Long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
+                    tools::Long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
 
                     if ( bRTL )
                     {
-                        long nTmpRight = nColRight;
+                        tools::Long nTmpRight = nColRight;
                         nColRight = rCols.GetRight() - nColLeft;
                         nColLeft = rCols.GetRight() - nTmpRight;
                     }
@@ -1436,11 +1436,11 @@ static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols
                     nColRight += rCols.GetLeftMin();
 
                     // Adapt values to the proportions of the Table (Follows)
-                    long nLeftA  = nColLeft;
-                    long nRightA = nColRight;
+                    tools::Long nLeftA  = nColLeft;
+                    tools::Long nRightA = nColRight;
                     if ( rCols.GetLeftMin() !=  sal_uInt16(aRectFnSet.GetLeft(pTab->getFrameArea())) )
                     {
-                        const long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
+                        const tools::Long nDiff = aRectFnSet.GetLeft(pTab->getFrameArea()) - rCols.GetLeftMin();
                         nLeftA  += nDiff;
                         nRightA += nDiff;
                     }
@@ -1541,7 +1541,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                 rn = nEqualWidth;
     }
 
-    const long nOldRight = aTabCols.GetRight();
+    const tools::Long nOldRight = aTabCols.GetRight();
 
     // In order to make the implementation easier, but still use the available
     // space properly, we do this twice.
@@ -1582,13 +1582,13 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
                 else
                     nDiff -= aTabCols[i] - aTabCols[i-1];
 
-                long nTabRight = aTabCols.GetRight() + nDiff;
+                tools::Long nTabRight = aTabCols.GetRight() + nDiff;
 
                 // If the Table would become too wide, we restrict the
                 // adjusted amount to the allowed maximum.
                 if ( !bBalance && nTabRight > aTabCols.GetRightMax() )
                 {
-                    const long nTmpD = nTabRight - aTabCols.GetRightMax();
+                    const tools::Long nTmpD = nTabRight - aTabCols.GetRightMax();
                     nDiff     -= nTmpD;
                     nTabRight -= nTmpD;
                 }
@@ -1599,7 +1599,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor,
         }
     }
 
-    const long nNewRight = aTabCols.GetRight();
+    const tools::Long nNewRight = aTabCols.GetRight();
 
     SwFrameFormat *pFormat = pTableNd->GetTable().GetFrameFormat();
     const sal_Int16 nOriHori = pFormat->GetHoriOrient().GetHoriOrient();

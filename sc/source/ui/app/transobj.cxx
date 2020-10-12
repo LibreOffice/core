@@ -763,36 +763,36 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     //      Size
     //! get while copying sizes
 
-    long nPosX = 0;
-    long nPosY = 0;
+    tools::Long nPosX = 0;
+    tools::Long nPosY = 0;
 
     for (nCol=0; nCol<nStartX; nCol++)
         nPosX += rDestDoc.GetColWidth( nCol, 0 );
     nPosY += rDestDoc.GetRowHeight( 0, nStartY-1, 0 );
-    nPosX = static_cast<long>( nPosX * HMM_PER_TWIPS );
-    nPosY = static_cast<long>( nPosY * HMM_PER_TWIPS );
+    nPosX = static_cast<tools::Long>( nPosX * HMM_PER_TWIPS );
+    nPosY = static_cast<tools::Long>( nPosY * HMM_PER_TWIPS );
 
     aPaperSize.setWidth( aPaperSize.Width() * 2 );       // limit OLE object to double of page size
     aPaperSize.setHeight( aPaperSize.Height() * 2 );
 
-    long nSizeX = 0;
-    long nSizeY = 0;
+    tools::Long nSizeX = 0;
+    tools::Long nSizeY = 0;
     for (nCol=nStartX; nCol<=nEndX; nCol++)
     {
-        long nAdd = rDestDoc.GetColWidth( nCol, 0 );
+        tools::Long nAdd = rDestDoc.GetColWidth( nCol, 0 );
         if ( bLimitToPageSize && nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
             break;
         nSizeX += nAdd;
     }
     for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
     {
-        long nAdd = rDestDoc.GetRowHeight( nRow, 0 );
+        tools::Long nAdd = rDestDoc.GetRowHeight( nRow, 0 );
         if ( bLimitToPageSize && nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
             break;
         nSizeY += nAdd;
     }
-    nSizeX = static_cast<long>( nSizeX * HMM_PER_TWIPS );
-    nSizeY = static_cast<long>( nSizeY * HMM_PER_TWIPS );
+    nSizeX = static_cast<tools::Long>( nSizeX * HMM_PER_TWIPS );
+    nSizeY = static_cast<tools::Long>( nSizeY * HMM_PER_TWIPS );
 
 //      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
 

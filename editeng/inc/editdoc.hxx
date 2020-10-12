@@ -350,10 +350,10 @@ namespace o3tl {
 
 struct ExtraPortionInfo
 {
-    long    nOrgWidth;
-    long    nWidthFullCompression;
+    tools::Long    nOrgWidth;
+    tools::Long    nWidthFullCompression;
 
-    long    nPortionOffsetX;
+    tools::Long    nPortionOffsetX;
 
     sal_uInt16  nMaxCompression100thPercent;
 
@@ -368,7 +368,7 @@ struct ExtraPortionInfo
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const long* pDXArray, sal_Int32 nLen );
+    void    SaveOrgDXArray( const tools::Long* pDXArray, sal_Int32 nLen );
 };
 
 
@@ -461,8 +461,8 @@ public:
 
 private:
     CharPosArrayType aPositions;
-    long            nTxtWidth;
-    long            nStartPosX;
+    tools::Long            nTxtWidth;
+    tools::Long            nStartPosX;
     sal_Int32          nStart;     // could be replaced by nStartPortion
     sal_Int32          nEnd;       // could be replaced by nEndPortion
     sal_Int32          nStartPortion;
@@ -504,8 +504,8 @@ public:
     sal_uInt16      GetHeight() const               { return nHeight; }
     sal_uInt16      GetTxtHeight() const            { return nTxtHeight; }
 
-    void            SetTextWidth( long n )          { nTxtWidth = n; }
-    long            GetTextWidth() const            { return nTxtWidth; }
+    void            SetTextWidth( tools::Long n )          { nTxtWidth = n; }
+    tools::Long            GetTextWidth() const            { return nTxtWidth; }
 
     void            SetMaxAscent( sal_uInt16 n )        { nMaxAscent = n; }
     sal_uInt16      GetMaxAscent() const            { return nMaxAscent; }
@@ -515,8 +515,8 @@ public:
 
     sal_Int32       GetLen() const                  { return nEnd - nStart; }
 
-    long            GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( long start );
+    tools::Long            GetStartPosX() const            { return nStartPosX; }
+    void            SetStartPosX( tools::Long start );
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
     bool            IsInvalid() const               { return bInvalid; }
@@ -566,7 +566,7 @@ private:
     EditLineList        aLineList;
     TextPortionList     aTextPortionList;
     ContentNode*        pNode;
-    long                nHeight;
+    tools::Long                nHeight;
 
     ScriptTypePosInfos      aScriptInfos;
     WritingDirectionInfos   aWritingDirectionInfos;
@@ -610,7 +610,7 @@ public:
 
     bool                IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
 
-    long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
+    tools::Long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_Int32           GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
     void                ResetHeight()   { nHeight = 0; nFirstLineOffset = 0; }
 
@@ -638,8 +638,8 @@ public:
                     ~ParaPortionList();
 
     void            Reset();
-    long GetYOffset(const ParaPortion* pPPortion) const;
-    sal_Int32 FindParagraph(long nYOffset) const;
+    tools::Long GetYOffset(const ParaPortion* pPPortion) const;
+    sal_Int32 FindParagraph(tools::Long nYOffset) const;
 
     const ParaPortion* SafeGetObject(sal_Int32 nPos) const;
     ParaPortion* SafeGetObject(sal_Int32 nPos);

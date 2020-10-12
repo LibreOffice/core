@@ -72,7 +72,7 @@ Reference< XGraphic > lclCheckAndApplyDuotoneTransform(const BlipFillProperties&
     return xGraphic;
 }
 
-Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, long nRotation)
+Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const & xGraphic, tools::Long nRotation)
 {
     ::Graphic aGraphic(xGraphic);
     ::Graphic aReturnGraphic;
@@ -770,7 +770,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // When custom shape is rotated, bitmap have to be rotated too.
             if(rPropMap.hasProperty(PROP_RotateAngle))
             {
-                long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<long>();
+                tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<long>();
                 xGraphic = lclRotateGraphic(xGraphic, nAngle/10 );
             }
 

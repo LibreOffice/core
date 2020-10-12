@@ -88,8 +88,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp;
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(0), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(0), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(0), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(0), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Not empty", aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(0),
@@ -102,8 +102,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp(Size(10, 10), 1);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(1),
@@ -116,8 +116,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp(Size(10, 10), 4);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(4),
@@ -130,8 +130,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp(Size(10, 10), 8);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(8),
@@ -144,8 +144,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp(Size(10, 10), 24);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong bit count", static_cast<sal_uInt16>(24),
@@ -163,8 +163,8 @@ void BitmapTest::testCreation()
     {
         Bitmap aBmp(Size(10, 10), 32);
         Size aSize = aBmp.GetSizePixel();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<long>(10), aSize.Width());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<long>(10), aSize.Height());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong width", static_cast<tools::Long>(10), aSize.Width());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong height", static_cast<tools::Long>(10), aSize.Height());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong pref size", Size(), aBmp.GetPrefSize());
         CPPUNIT_ASSERT_MESSAGE("Empty bitmap", !aBmp.IsEmpty());
 
@@ -611,9 +611,9 @@ void BitmapTest::testOctree()
     Bitmap aBitmap(aSize, 24);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        for (long y = 0; y < aSize.Height(); ++y)
+        for (tools::Long y = 0; y < aSize.Height(); ++y)
         {
-            for (long x = 0; x < aSize.Width(); ++x)
+            for (tools::Long x = 0; x < aSize.Width(); ++x)
             {
                 double fPercent = double(x) / double(aSize.Width());
                 pWriteAccess->SetPixel(y, x,
@@ -657,8 +657,8 @@ void BitmapTest::testEmptyAccess()
 {
     Bitmap empty;
     BitmapInfoAccess access(empty);
-    CPPUNIT_ASSERT_EQUAL(long(0), access.Width());
-    CPPUNIT_ASSERT_EQUAL(long(0), access.Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(0), access.Height());
 }
 
 } // namespace

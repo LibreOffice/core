@@ -58,9 +58,9 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
     SCTAB nTab;
     for ( nTab=0; nTab<nTabCount; nTab++ )
     {
-        long nAttrPage = nTab > 0 ? nFirstAttr[nTab-1] : 1;
+        tools::Long nAttrPage = nTab > 0 ? nFirstAttr[nTab-1] : 1;
 
-        long nThisTab = 0;
+        tools::Long nThisTab = 0;
         if ( rMark.GetTableSelect( nTab ) )
         {
             ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange, &aSelection.GetOptions() );
@@ -92,8 +92,8 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         pSelRange = &aRange;
     }
 
-    long nRenderer = 0;     // 0-based physical page number across sheets
-    long nTabStart = 0;
+    tools::Long nRenderer = 0;     // 0-based physical page number across sheets
+    tools::Long nTabStart = 0;
 
     ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
@@ -104,9 +104,9 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
         aFunc.SetRenderFlag( true );
 
-        long nDisplayStart = GetDisplayStart( nTab );
+        tools::Long nDisplayStart = GetDisplayStart( nTab );
 
-        for ( long nPage=0; nPage<nPages[nTab]; nPage++ )
+        for ( tools::Long nPage=0; nPage<nPages[nTab]; nPage++ )
         {
             Range aPageRange( nRenderer+1, nRenderer+1 );
             MultiSelection aPage( aPageRange );
@@ -147,7 +147,7 @@ bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) 
     return aSelection == rStatus;
 }
 
-SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
+SCTAB ScPrintFuncCache::GetTabForPage( tools::Long nPage ) const
 {
     ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
@@ -159,20 +159,20 @@ SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
     return nTab;
 }
 
-long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
+tools::Long ScPrintFuncCache::GetTabStart( SCTAB nTab ) const
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
     const SCTAB maxIndex = std::min(nTab, static_cast<SCTAB>(nPages.size()));
     for ( SCTAB i=0; i<maxIndex; i++ )
         nRet += nPages[i];
     return nRet;
 }
 
-long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
+tools::Long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
 {
     //! merge with lcl_GetDisplayStart in preview?
 
-    long nDisplayStart = 0;
+    tools::Long nDisplayStart = 0;
     ScDocument& rDoc = pDocSh->GetDocument();
     for (SCTAB i=0; i<nTab; i++)
     {

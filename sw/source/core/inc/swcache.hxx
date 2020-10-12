@@ -47,6 +47,7 @@
 #include <vector>
 
 #include <rtl/string.hxx>
+#include <tools/long.hxx>
 
 class SwCacheObj;
 
@@ -65,19 +66,19 @@ class SwCache
 
 #ifdef DBG_UTIL
     OString m_aName;
-    long m_nAppend;           /// number of entries appended
-    long m_nInsertFree;       /// number of entries inserted on freed position
-    long m_nReplace;          /// number of LRU replacements
-    long m_nGetSuccess;
-    long m_nGetFail;
-    long m_nToTop;            /// number of reordering (LRU)
-    long m_nDelete;           /// number of explicit deletes
-    long m_nGetSeek;          /// number of gets without index
-    long m_nAverageSeekCnt;   /// number of seeks for all gets without index
-    long m_nFlushCnt;         /// number of flush calls
-    long m_nFlushedObjects;
-    long m_nIncreaseMax;      /// number of cache size increases
-    long m_nDecreaseMax;      /// number of cache size decreases
+    tools::Long m_nAppend;           /// number of entries appended
+    tools::Long m_nInsertFree;       /// number of entries inserted on freed position
+    tools::Long m_nReplace;          /// number of LRU replacements
+    tools::Long m_nGetSuccess;
+    tools::Long m_nGetFail;
+    tools::Long m_nToTop;            /// number of reordering (LRU)
+    tools::Long m_nDelete;           /// number of explicit deletes
+    tools::Long m_nGetSeek;          /// number of gets without index
+    tools::Long m_nAverageSeekCnt;   /// number of seeks for all gets without index
+    tools::Long m_nFlushCnt;         /// number of flush calls
+    tools::Long m_nFlushedObjects;
+    tools::Long m_nIncreaseMax;      /// number of cache size increases
+    tools::Long m_nDecreaseMax;      /// number of cache size decreases
 
     void Check();
 #endif

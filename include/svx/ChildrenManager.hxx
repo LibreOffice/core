@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/long.hxx>
 
 namespace com::sun::star {
      namespace accessibility { class XAccessible; }
@@ -110,7 +111,7 @@ public:
         @return
             If there are no children a 0 is returned.
     */
-    long GetChildCount() const throw ();
+    tools::Long GetChildCount() const throw ();
 
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
@@ -127,10 +128,10 @@ public:
     */
     css::uno::Reference<
             css::accessibility::XAccessible>
-        GetChild (long nIndex);
+        GetChild (tools::Long nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XShape> GetChildShape (long nIndex);
+    css::uno::Reference< css::drawing::XShape> GetChildShape (tools::Long nIndex);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update

@@ -49,7 +49,7 @@ class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
 
     TriState        nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
-    long            nMaxVertPos;
+    tools::Long            nMaxVertPos;
 
     std::unique_ptr<SfxBroadcaster> pAccessibilityBroadcaster;
     bool            GetPageSize( Size& aPageSize );

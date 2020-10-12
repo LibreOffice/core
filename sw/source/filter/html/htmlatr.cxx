@@ -2057,7 +2057,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
                 const SwFormatCol& rCol = rPgFormat.GetCol();
 
-                long nPageWidth = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
+                tools::Long nPageWidth = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
 
                 if( 1 < rCol.GetNumCols() )
                     nPageWidth /= rCol.GetNumCols();

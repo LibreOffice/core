@@ -172,7 +172,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
                 if (pViewShell)
                 {
-                    const long nSign = bUndo ? -1 : 1;
+                    const tools::Long nSign = bUndo ? -1 : 1;
                     pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
                 }
             }
@@ -191,7 +191,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
 
                 if (pViewShell)
                 {
-                    const long nSign = bUndo ? -1 : 1;
+                    const tools::Long nSign = bUndo ? -1 : 1;
                     pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
                 }
             }
@@ -420,7 +420,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
                 if (pViewShell)
                 {
-                    const long nSign = bUndo ? 1 : -1;
+                    const tools::Long nSign = bUndo ? 1 : -1;
                     pViewShell->OnLOKInsertDeleteRow(aEffRange.aStart.Row(), nSign * (aEffRange.aEnd.Row()-aEffRange.aStart.Row()+1));
                 }
             }
@@ -438,7 +438,7 @@ void ScUndoDeleteCells::DoChange( const bool bUndo )
 
                 if (pViewShell)
                 {
-                    const long nSign = bUndo ? 1 : -1;
+                    const tools::Long nSign = bUndo ? 1 : -1;
                     pViewShell->OnLOKInsertDeleteColumn(aEffRange.aStart.Col(), nSign * (aEffRange.aEnd.Col()-aEffRange.aStart.Col()+1));
                 }
             }

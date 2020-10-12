@@ -39,7 +39,7 @@ public:
     virtual TextFrameIndex GetModelPositionForViewPoint(sal_uInt16 nOfst) const override;
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
-    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
+    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const override;
 
     // Counts the spaces for justified paragraph
     TextFrameIndex GetSpaceCnt(const SwTextSizeInfo &rInf, TextFrameIndex& rCnt) const;

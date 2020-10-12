@@ -382,7 +382,7 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
 
     // We read graphic from the Node, if needed.
     // It may fail, however.
-    long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
+    tools::Long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
     Size aOrigSz( static_cast<const SwNoTextNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
@@ -393,16 +393,16 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     else
     {
         nLeftCrop = std::max( aOrigSz.Width() -
-                            (rCrop.GetRight() + rCrop.GetLeft()), long(1) );
+                            (rCrop.GetRight() + rCrop.GetLeft()), tools::Long(1) );
         const double nScale = double(aFramePrintArea.Width())  / double(nLeftCrop);
-        nLeftCrop  = long(nScale * -rCrop.GetLeft() );
-        nRightCrop = long(nScale * -rCrop.GetRight() );
+        nLeftCrop  = tools::Long(nScale * -rCrop.GetLeft() );
+        nRightCrop = tools::Long(nScale * -rCrop.GetRight() );
     }
 
     // crop values have to be mirrored too
     if( nMirror == MirrorGraph::Vertical || nMirror == MirrorGraph::Both )
     {
-        long nTmpCrop = nLeftCrop;
+        tools::Long nTmpCrop = nLeftCrop;
         nLeftCrop = nRightCrop;
         nRightCrop= nTmpCrop;
     }
@@ -415,16 +415,16 @@ void SwNoTextFrame::GetGrfArea( SwRect &rRect, SwRect* pOrigRect ) const
     }
     else
     {
-        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), long(1) );
+        nTopCrop = std::max( aOrigSz.Height() - (rCrop.GetTop() + rCrop.GetBottom()), tools::Long(1) );
         const double nScale = double(aFramePrintArea.Height()) / double(nTopCrop);
-        nTopCrop   = long(nScale * -rCrop.GetTop() );
-        nBottomCrop= long(nScale * -rCrop.GetBottom() );
+        nTopCrop   = tools::Long(nScale * -rCrop.GetTop() );
+        nBottomCrop= tools::Long(nScale * -rCrop.GetBottom() );
     }
 
     // crop values have to be mirrored too
     if( nMirror == MirrorGraph::Horizontal || nMirror == MirrorGraph::Both )
     {
-        long nTmpCrop = nTopCrop;
+        tools::Long nTmpCrop = nTopCrop;
         nTopCrop   = nBottomCrop;
         nBottomCrop= nTmpCrop;
     }
@@ -1510,7 +1510,7 @@ bool SwNoTextFrame::IsTransparent() const
         // we can be more specific - rotations of multiples of
         // 90 degrees will leave no gaps. Go from [0.0 .. F_2PI]
         // to [0 .. 360] and check modulo 90
-        const long nRot(static_cast<long>(basegfx::rad2deg(getLocalFrameRotation())));
+        const tools::Long nRot(static_cast<tools::Long>(basegfx::rad2deg(getLocalFrameRotation())));
         const bool bMultipleOf90(0 == (nRot % 90));
 
         if(!bMultipleOf90)

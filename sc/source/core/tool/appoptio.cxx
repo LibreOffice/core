@@ -145,13 +145,13 @@ static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 
 static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
-    long nCount = rOpt.GetLRUFuncListCount();
+    tools::Long nCount = rOpt.GetLRUFuncListCount();
     sal_uInt16* pUShorts = rOpt.GetLRUFuncList();
     if ( nCount && pUShorts )
     {
         Sequence<sal_Int32> aSeq( nCount );
         sal_Int32* pArray = aSeq.getArray();
-        for (long i=0; i<nCount; i++)
+        for (tools::Long i=0; i<nCount; i++)
             pArray[i] = pUShorts[i];
         rDest <<= aSeq;
     }
@@ -165,7 +165,7 @@ static void lcl_SetSortList( const Any& rValue )
     if ( !(rValue >>= aSeq) )
         return;
 
-    long nCount = aSeq.getLength();
+    tools::Long nCount = aSeq.getLength();
     const OUString* pArray = aSeq.getConstArray();
     ScUserList aList;
 

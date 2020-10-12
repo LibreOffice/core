@@ -45,7 +45,7 @@ public:
 
     OUString getRenderBackendName() const;
 
-    void initialSetup(long nWidth, long nHeight, Color aColor, bool bEnableAA = false, bool bAlphaVirtualDevice = false);
+    void initialSetup(tools::Long nWidth, tools::Long nHeight, Color aColor, bool bEnableAA = false, bool bAlphaVirtualDevice = false);
 
     static TestResult checkRectangle(Bitmap& rBitmap);
     static TestResult checkRectangleAA(Bitmap& rBitmap);

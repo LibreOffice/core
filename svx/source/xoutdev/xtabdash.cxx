@@ -50,12 +50,12 @@ XDashList::~XDashList()
 {
 }
 
-void XDashList::Replace(std::unique_ptr<XDashEntry> pEntry, long nIndex)
+void XDashList::Replace(std::unique_ptr<XDashEntry> pEntry, tools::Long nIndex)
 {
     XPropertyList::Replace(std::move(pEntry), nIndex);
 }
 
-XDashEntry* XDashList::GetDash(long nIndex) const
+XDashEntry* XDashList::GetDash(tools::Long nIndex) const
 {
     return static_cast<XDashEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -180,7 +180,7 @@ BitmapEx XDashList::ImpCreateBitmapForXDash(const XDash* pDash)
     return aRetval;
 }
 
-BitmapEx XDashList::CreateBitmapForUI( long nIndex )
+BitmapEx XDashList::CreateBitmapForUI( tools::Long nIndex )
 {
     const XDash& rDash = GetDash(nIndex)->GetDash();
 

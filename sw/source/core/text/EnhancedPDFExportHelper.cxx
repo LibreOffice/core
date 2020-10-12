@@ -703,8 +703,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
                 const TableColumnsMapEntry& rCols = SwEnhancedPDFExportHelper::GetTableColumnsMap()[ pTable ];
 
-                const long nLeft  = fnRectX.GetLeft(pThisCell->getFrameArea());
-                const long nRight = fnRectX.GetRight(pThisCell->getFrameArea());
+                const tools::Long nLeft  = fnRectX.GetLeft(pThisCell->getFrameArea());
+                const tools::Long nRight = fnRectX.GetRight(pThisCell->getFrameArea());
                 const TableColumnsMapEntry::const_iterator aLeftIter =  rCols.find( nLeft );
                 const TableColumnsMapEntry::const_iterator aRightIter = rCols.find( nRight );
 
@@ -1191,12 +1191,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         {
                             const SwFrame* pCellFrame = pRowFrame->GetLower();
 
-                            const long nLeft  = aRectFnSet.GetLeft(pCellFrame->getFrameArea());
+                            const tools::Long nLeft  = aRectFnSet.GetLeft(pCellFrame->getFrameArea());
                             rCols.insert( nLeft );
 
                             while ( pCellFrame )
                             {
-                                const long nRight = aRectFnSet.GetRight(pCellFrame->getFrameArea());
+                                const tools::Long nRight = aRectFnSet.GetRight(pCellFrame->getFrameArea());
                                 rCols.insert( nRight );
                                 pCellFrame = pCellFrame->GetNext();
                             }
@@ -1521,9 +1521,9 @@ tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* p
     double fScale = 0.75;
     aRectSize.setWidth( aRectSize.Width() * fScale );
     aRectSize.setHeight( aRectSize.Height() * fScale );
-    long nOrigHeight = pCurrPage->getFrameArea().Height();
-    long nNewHeight = nOrigHeight*fScale;
-    long nShiftY = (nOrigHeight-nNewHeight)/2;
+    tools::Long nOrigHeight = pCurrPage->getFrameArea().Height();
+    tools::Long nNewHeight = nOrigHeight*fScale;
+    tools::Long nShiftY = (nOrigHeight-nNewHeight)/2;
     aRect.SetLeft( aRect.Left() * fScale );
     aRect.SetTop( aRect.Top() * fScale );
     aRect.Move(0, nShiftY);

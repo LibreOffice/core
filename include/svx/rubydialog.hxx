@@ -57,8 +57,8 @@ class SvxRubyDialog : public SfxModelessDialogController
     friend class RubyPreview;
 
 
-    long                nLastPos;
-    long                nCurrentEdit;
+    tools::Long                nLastPos;
+    tools::Long                nCurrentEdit;
     bool                bModified;
     SfxBindings*        pBindings;
     rtl::Reference<SvxRubyData_Impl> m_pImpl;
@@ -117,8 +117,8 @@ class SvxRubyDialog : public SfxModelessDialogController
     void                Update();
     virtual void        Close() override;
 
-    long                GetLastPos() const {return nLastPos;}
-    void                SetLastPos(long nSet) {nLastPos = nSet;}
+    tools::Long                GetLastPos() const {return nLastPos;}
+    void                SetLastPos(tools::Long nSet) {nLastPos = nSet;}
 
     bool                IsModified() const {return bModified;}
     void                SetModified(bool bSet) {bModified = bSet;}

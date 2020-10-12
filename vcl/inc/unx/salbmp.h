@@ -49,11 +49,11 @@ private:
                                 ImplCreateDIB(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
-                                    long nX,
-                                    long nY,
-                                    long nWidth,
-                                    long nHeight,
+                                    tools::Long nDrawableDepth,
+                                    tools::Long nX,
+                                    tools::Long nY,
+                                    tools::Long nWidth,
+                                    tools::Long nHeight,
                                     bool bGrey
                                 );
 
@@ -77,31 +77,31 @@ public:
     bool         ImplCreateFromDrawable(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
-                                    long nX,
-                                    long nY,
-                                    long nWidth,
-                                    long nHeight
+                                    tools::Long nDrawableDepth,
+                                    tools::Long nX,
+                                    tools::Long nY,
+                                    tools::Long nWidth,
+                                    tools::Long nHeight
                                 );
 
     XImage*      ImplCreateXImage(
                                     SalDisplay const * pSalDisp,
                                     SalX11Screen nXScreen,
-                                    long nDepth,
+                                    tools::Long nDepth,
                                     const SalTwoRect& rTwoRect
                                 ) const;
 
     ImplSalDDB*  ImplGetDDB(
                                     Drawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
+                                    tools::Long nDrawableDepth,
                                     const SalTwoRect&
                                 ) const;
 
     void                        ImplDraw(
                                     Drawable aDrawable,
                                     SalX11Screen nXScreen,
-                                    long nDrawableDepth,
+                                    tools::Long nDrawableDepth,
                                     const SalTwoRect& rTwoRect,
                                     const GC& rGC
                                 ) const;
@@ -156,19 +156,19 @@ private:
 
     Pixmap          maPixmap;
     SalTwoRect      maTwoRect;
-    long            mnDepth;
+    tools::Long            mnDepth;
     SalX11Screen    mnXScreen;
 
     static void     ImplDraw(
                         Drawable aSrcDrawable,
-                        long nSrcDrawableDepth,
+                        tools::Long nSrcDrawableDepth,
                         Drawable aDstDrawable,
-                        long nSrcX,
-                        long nSrcY,
-                        long nDestWidth,
-                        long nDestHeight,
-                        long nDestX,
-                        long nDestY,
+                        tools::Long nSrcX,
+                        tools::Long nSrcY,
+                        tools::Long nDestWidth,
+                        tools::Long nDestHeight,
+                        tools::Long nDestX,
+                        tools::Long nDestY,
                         const GC& rGC
                     );
 
@@ -184,22 +184,22 @@ public:
                     ImplSalDDB(
                         Drawable aDrawable,
                         SalX11Screen nXScreen,
-                        long nDrawableDepth,
-                        long nX,
-                        long nY,
-                        long nWidth,
-                        long nHeight
+                        tools::Long nDrawableDepth,
+                        tools::Long nX,
+                        tools::Long nY,
+                        tools::Long nWidth,
+                        tools::Long nHeight
                     );
 
                     ~ImplSalDDB();
 
     Pixmap          ImplGetPixmap() const { return maPixmap; }
-    long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
-    long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
-    long            ImplGetDepth() const { return mnDepth; }
+    tools::Long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
+    tools::Long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
+    tools::Long            ImplGetDepth() const { return mnDepth; }
     const SalX11Screen& ImplGetScreen() const { return mnXScreen; }
 
-    bool            ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
+    bool            ImplMatches( SalX11Screen nXScreen, tools::Long nDepth, const SalTwoRect& rTwoRect ) const;
 
     void            ImplDraw(
                         Drawable aDrawable,

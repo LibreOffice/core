@@ -95,7 +95,7 @@ private:
                                     const Size& rImageSize, tools::Rectangle& rStateRect,
                                     tools::Rectangle& rMouseRect );
     SAL_DLLPRIVATE void         ImplDrawCheckBox(vcl::RenderContext& rRenderContext );
-    SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
+    SAL_DLLPRIVATE tools::Long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
                                 CheckBox(const CheckBox &) = delete;
@@ -152,7 +152,7 @@ public:
 
     static Image    GetCheckImage( const AllSettings& rSettings, DrawButtonFlags nFlags );
 
-    Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    Size            CalcMinimumSize( tools::Long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const override;
 
     void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }

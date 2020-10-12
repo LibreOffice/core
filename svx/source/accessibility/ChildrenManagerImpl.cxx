@@ -109,13 +109,13 @@ void ChildrenManagerImpl::Init()
 }
 
 
-long ChildrenManagerImpl::GetChildCount() const throw ()
+tools::Long ChildrenManagerImpl::GetChildCount() const throw ()
 {
     return maVisibleChildren.size();
 }
 
 
-css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(long nIndex)
+css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(tools::Long nIndex)
 {
     uno::Reference<XAccessible> xAcc = GetChild(nIndex);
     auto I = std::find_if(maVisibleChildren.begin(), maVisibleChildren.end(),
@@ -129,7 +129,7 @@ css::uno::Reference<css::drawing::XShape> ChildrenManagerImpl::GetChildShape(lon
     yet in the cache.
 */
 uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (long nIndex)
+    ChildrenManagerImpl::GetChild (tools::Long nIndex)
 {
     // Check whether the given index is valid.
     if (nIndex < 0 || o3tl::make_unsigned(nIndex) >= maVisibleChildren.size())
@@ -710,7 +710,7 @@ void ChildrenManagerImpl::ViewForwarderChanged()
 bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pCurrentChild,
     const css::uno::Reference< css::drawing::XShape >& _rxShape,
-    const long /*_nIndex*/,
+    const tools::Long /*_nIndex*/,
     const AccessibleShapeTreeInfo& _rShapeTreeInfo)
 {
     // Iterate over the visible children.  If one of them has an already

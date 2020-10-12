@@ -56,16 +56,18 @@
 #ifndef INCLUDED_LOTUSWORDPRO_INC_LOCALTIME_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_LOCALTIME_HXX
 
+#include <tools/long.hxx>
+
 struct LtTm
 {
-    long tm_sec;     /* seconds after the minute - [0,59] */
-    long tm_min;     /* minutes after the hour - [0,59] */
-    long tm_hour;    /* hours since midnight - [0,23] */
-    long tm_mday;    /* day of the month - [1,31] */
-    long tm_mon;     /* months since January - [0,11] */
-    long tm_year;    /* years since 1900 */
-    long tm_wday;    /* days since Sunday - [0,6] */
-    long tm_yday;    /* days since January 1 - [0,365] */
+    tools::Long tm_sec;     /* seconds after the minute - [0,59] */
+    tools::Long tm_min;     /* minutes after the hour - [0,59] */
+    tools::Long tm_hour;    /* hours since midnight - [0,23] */
+    tools::Long tm_mday;    /* day of the month - [1,31] */
+    tools::Long tm_mon;     /* months since January - [0,11] */
+    tools::Long tm_year;    /* years since 1900 */
+    tools::Long tm_wday;    /* days since Sunday - [0,6] */
+    tools::Long tm_yday;    /* days since January 1 - [0,365] */
     LtTm()
         : tm_sec(0)
         , tm_min(0)
@@ -78,8 +80,8 @@ struct LtTm
     {
     }
 };
-bool LtgGmTime(long rtime,LtTm& rtm);
-bool LtgLocalTime(long rtime,LtTm& rtm);
+bool LtgGmTime(tools::Long rtime,LtTm& rtm);
+bool LtgLocalTime(tools::Long rtime,LtTm& rtm);
 
 #endif
 

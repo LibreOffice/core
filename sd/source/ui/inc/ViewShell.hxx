@@ -197,10 +197,10 @@ public:
         bar controls are not modified.
     */
     virtual void UpdateScrollBars();
-    void    Scroll(long nX, long nY);
-    void    ScrollLines(long nX, long nY);
-    virtual void    SetZoom(long nZoom);
-    long    GetZoom() const;
+    void    Scroll(::tools::Long nX, ::tools::Long nY);
+    void    ScrollLines(::tools::Long nX, ::tools::Long nY);
+    virtual void    SetZoom(::tools::Long nZoom);
+    ::tools::Long    GetZoom() const;
     virtual void    SetZoomRect(const ::tools::Rectangle& rZoomRect);
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                         const Point& rWinPos, bool bUpdate = false);
@@ -229,7 +229,7 @@ public:
     void  WriteUserData();
     void  ReadUserData();
 
-    virtual bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
+    virtual bool  ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb);
 
     /** @returns
             current or selected page or 0. This method
@@ -255,7 +255,7 @@ public:
     void DeactivateCurrentFunction( bool bPermanent = false );
 
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
-                            long nLeft, long nRight, long nUpper, long nLower,
+                            ::tools::Long nLeft, ::tools::Long nRight, ::tools::Long nUpper, ::tools::Long nLower,
                             bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
                             bool bBackgroundFullSize );
 
@@ -370,7 +370,7 @@ public:
     /** This function is called from the underlying ViewShellBase
         object to handle a verb execution request.
     */
-    virtual ErrCode DoVerb (long nVerb);
+    virtual ErrCode DoVerb (::tools::Long nVerb);
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );

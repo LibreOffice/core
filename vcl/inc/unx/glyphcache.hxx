@@ -148,8 +148,8 @@ private:
     FreetypeFontInstance& mrFontInstance;
 
     // 16.16 fixed point values used for a rotated font
-    long                    mnCos;
-    long                    mnSin;
+    tools::Long                    mnCos;
+    tools::Long                    mnSin;
 
     int                     mnWidth;
     int                     mnPrioAntiAlias;

@@ -236,7 +236,7 @@ void DataLabelResources::EnableControls()
     // Enable or disable separator, placement and direction based on the check
     // box states. Note that the check boxes are tri-state.
     {
-        long nNumberOfCheckedLabelParts = 0;
+        tools::Long nNumberOfCheckedLabelParts = 0;
         if (m_xCBNumber->get_state() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
         if (m_xCBPercent->get_state() != TRISTATE_FALSE && m_xCBPercent->get_sensitive())

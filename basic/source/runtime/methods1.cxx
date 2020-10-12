@@ -559,13 +559,13 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    long nWait = 0;
+    tools::Long nWait = 0;
     if ( bDurationBased )
     {
         double dWait = rPar.Get32(1)->GetDouble();
         double dNow = Now_Impl();
         double dSecs = ( dWait - dNow ) * 24.0 * 3600.0;
-        nWait = static_cast<long>( dSecs * 1000 ); // wait in thousands of sec
+        nWait = static_cast<tools::Long>( dSecs * 1000 ); // wait in thousands of sec
     }
     else
     {
@@ -1124,7 +1124,7 @@ static void PutGet( SbxArray& rPar, bool bPut )
     SbxVariable* pVar2 = rPar.Get32(2);
     SbxDataType eType2 = pVar2->GetType();
     bool bHasRecordNo = (eType2 != SbxEMPTY && eType2 != SbxERROR);
-    long nRecordNo = pVar2->GetLong();
+    tools::Long nRecordNo = pVar2->GetLong();
     if ( nFileNo < 1 || ( bHasRecordNo && nRecordNo < 1 ) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -1217,7 +1217,7 @@ void SbRtl_Environ(StarBASIC *, SbxArray & rPar, bool)
     rPar.Get32(0)->PutString( aResult );
 }
 
-static double GetDialogZoomFactor( bool bX, long nValue )
+static double GetDialogZoomFactor( bool bX, tools::Long nValue )
 {
     OutputDevice* pDevice = Application::GetDefaultDevice();
     double nResult = 0;

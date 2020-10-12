@@ -37,8 +37,8 @@ Intersection - the Class will process the clipping for the actual band.
 struct ImplRegionBandSep
 {
     ImplRegionBandSep*          mpNextSep;
-    long                        mnXLeft;
-    long                        mnXRight;
+    tools::Long                        mnXLeft;
+    tools::Long                        mnXRight;
     bool                        mbRemoved;
 };
 
@@ -48,8 +48,8 @@ enum class LineType { Ascending, Descending };
 struct ImplRegionBandPoint
 {
     ImplRegionBandPoint*        mpNextBandPoint;
-    long                        mnX;
-    long                        mnLineId;
+    tools::Long                        mnX;
+    tools::Long                        mnLineId;
     bool                        mbEndPoint;
     LineType                    meLineType;
 };
@@ -61,13 +61,13 @@ public:
     ImplRegionBand*             mpPrevBand;         // pointer to the previous element of the list (only used temporarily)
     ImplRegionBandSep*          mpFirstSep;         // root of the list with x-separations
     ImplRegionBandPoint*        mpFirstBandPoint;   // root of the list with lines
-    long                        mnYTop;             // actual boundary of the band
-    long                        mnYBottom;
+    tools::Long                        mnYTop;             // actual boundary of the band
+    tools::Long                        mnYBottom;
 
     bool                        mbTouched : 1;
 
                                 // create y-band with boundaries
-                                ImplRegionBand( long nYTop, long nYBottom );
+                                ImplRegionBand( tools::Long nYTop, tools::Long nYBottom );
                                 /** copy y-band with all data
                                     @param theSourceBand
                                         The new ImplRegionBand object will
@@ -85,8 +85,8 @@ public:
                                                 const bool bIgnorePoints = true);
                                 ~ImplRegionBand();
 
-    long                        GetXLeftBoundary() const;
-    long                        GetXRightBoundary() const;
+    tools::Long                        GetXLeftBoundary() const;
+    tools::Long                        GetXRightBoundary() const;
 
                                 // combine overlapping bands
     void                        OptimizeBand();
@@ -95,18 +95,18 @@ public:
                                 // union with existing separations
     void                        ProcessPoints();
                                 // insert point in the list for later processing
-    bool                        InsertPoint( long nX, long nLineID,
+    bool                        InsertPoint( tools::Long nX, tools::Long nLineID,
                                              bool bEndPoint, LineType eLineType );
 
-    void                        Union( long nXLeft, long nXRight );
-    void                        Intersect( long nXLeft, long nXRight );
-    void                        Exclude( long nXLeft, long nXRight );
-    void                        XOr( long nXLeft, long nXRight );
+    void                        Union( tools::Long nXLeft, tools::Long nXRight );
+    void                        Intersect( tools::Long nXLeft, tools::Long nXRight );
+    void                        Exclude( tools::Long nXLeft, tools::Long nXRight );
+    void                        XOr( tools::Long nXLeft, tools::Long nXRight );
 
-    void                        MoveX( long nHorzMove );
+    void                        MoveX( tools::Long nHorzMove );
     void                        ScaleX( double fHorzScale );
 
-    bool                        IsInside( long nX );
+    bool                        IsInside( tools::Long nX );
 
     bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 

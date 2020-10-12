@@ -483,8 +483,8 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
-        const long nAscent = nOldAscent +
-                             ( static_cast<long>(m_nOrgHeight) * GetEscapement() ) / 100;
+        const tools::Long nAscent = nOldAscent +
+                             ( static_cast<tools::Long>(m_nOrgHeight) * GetEscapement() ) / 100;
         if ( nAscent>0 )
             return std::max<sal_uInt16>( nAscent, m_nOrgAscent );
     }
@@ -996,8 +996,8 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
     if( DFLT_ESC_AUTO_SUPER != GetEscapement() &&
         DFLT_ESC_AUTO_SUB != GetEscapement() )
     {
-        long nDescent = nOldHeight - nOldAscent -
-                             ( static_cast<long>(m_nOrgHeight) * GetEscapement() ) / 100;
+        tools::Long nDescent = nOldHeight - nOldAscent -
+                             ( static_cast<tools::Long>(m_nOrgHeight) * GetEscapement() ) / 100;
         const sal_uInt16 nDesc = nDescent>0
                 ? std::max<sal_uInt16>( nDescent, m_nOrgHeight - m_nOrgAscent)
                 : m_nOrgHeight - m_nOrgAscent;
@@ -1055,7 +1055,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     else
     {
         SV_STAT( nGetTextSize );
-        long nOldKern = rInf.GetKern();
+        tools::Long nOldKern = rInf.GetKern();
         const OUString oldText = rInf.GetText();
         rInf.SetKern( CheckKerning() );
         if ( !IsCaseMap() )
@@ -1102,7 +1102,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
             const sal_uInt16 nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
                                                              rInf.GetOut() );
             aTextSize.setHeight(
-                static_cast<long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent)) );
+                static_cast<tools::Long>(CalcEscHeight( static_cast<sal_uInt16>(aTextSize.Height()), nAscent)) );
         }
     }
 
@@ -1220,7 +1220,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
 
         TextFrameIndex const nOldIdx = rInf.GetIdx();
         TextFrameIndex const nOldLen = rInf.GetLen();
-        long nSpace = 0;
+        tools::Long nSpace = 0;
         if( rInf.GetSpace() )
         {
             TextFrameIndex nTmpEnd = nOldIdx + nOldLen;
@@ -1370,7 +1370,7 @@ TextFrameIndex SwSubFont::GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
     else
     {
         const OUString oldText = rInf.GetText();
-        long nOldKern = rInf.GetKern();
+        tools::Long nOldKern = rInf.GetKern();
         rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
         if ( !IsCaseMap() )
@@ -1388,7 +1388,7 @@ TextFrameIndex SwSubFont::GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
 
 void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
 {
-    long nOfst;
+    tools::Long nOfst;
 
     bool bVert = false;
     bool bVertLRBT = false;
@@ -1439,7 +1439,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo const & rInf, Point& rPos )
 
         break;
     default :
-        nOfst = (static_cast<long>(m_nOrgHeight) * GetEscapement()) / 100;
+        nOfst = (static_cast<tools::Long>(m_nOrgHeight) * GetEscapement()) / 100;
 
         switch ( nDir )
         {
@@ -1507,7 +1507,7 @@ SwUnderlineFont::~SwUnderlineFont()
 }
 
 /// Helper for filters to find true lineheight of a font
-long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
+tools::Long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const vcl::RenderContext &rOut, sal_Int16 nScript)
 {
@@ -1532,7 +1532,7 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
     const vcl::Font aOldFont(rMutableOut.GetFont());
 
     rMutableOut.SetFont(aFont.GetActualFont());
-    long nHeight = rMutableOut.GetTextHeight();
+    tools::Long nHeight = rMutableOut.GetTextHeight();
 
     rMutableOut.SetFont(aOldFont);
     return nHeight;

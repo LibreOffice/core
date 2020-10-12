@@ -271,7 +271,7 @@ public:
     /// long: depth at which namespace map has been backed up into the stack
     ::std::stack< ::std::pair< std::unique_ptr<SvXMLNamespaceMap>, long > > mNamespaceMaps;
     /// counts depth (number of open elements/start tags)
-    long mDepth;
+    tools::Long mDepth;
 
     ::std::unique_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
 

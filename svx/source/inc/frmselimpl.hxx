@@ -125,12 +125,12 @@ struct FrameSelectorImpl
     FrameBorderPtrVec   maEnabBorders;  /// Pointers to enables frame borders.
     Link<LinkParamNone*,void> maSelectHdl;    /// Selection handler.
 
-    long                mnCtrlSize;     /// Size of the control (always square).
-    long                mnArrowSize;    /// Size of an arrow image.
-    long                mnLine1;        /// Middle of left/top frame borders.
-    long                mnLine2;        /// Middle of inner frame borders.
-    long                mnLine3;        /// Middle of right/bottom frame borders.
-    long                mnFocusOffs;    /// Offset from frame border middle to draw focus.
+    tools::Long                mnCtrlSize;     /// Size of the control (always square).
+    tools::Long                mnArrowSize;    /// Size of an arrow image.
+    tools::Long                mnLine1;        /// Middle of left/top frame borders.
+    tools::Long                mnLine2;        /// Middle of inner frame borders.
+    tools::Long                mnLine3;        /// Middle of right/bottom frame borders.
+    tools::Long                mnFocusOffs;    /// Offset from frame border middle to draw focus.
 
     bool                mbHor;          /// true = Inner horizontal frame border enabled.
     bool                mbVer;          /// true = Inner vertical frame border enabled.

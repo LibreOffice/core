@@ -185,7 +185,7 @@ static double lcl_TwipsToPoints( sal_uInt16 nVal )
 static double lcl_Round2DecPlaces( double nVal )
 {
     nVal  = (nVal * double(100));
-    long tmp = static_cast<long>(nVal);
+    tools::Long tmp = static_cast<tools::Long>(nVal);
     if ( ( nVal - tmp ) >= 0.5 )
         ++tmp;
     nVal = double(tmp)/100;
@@ -489,7 +489,7 @@ public:
     }
     uno::Reference< beans::XPropertySet > getNumberProps()
     {
-        long nIndexKey = 0;
+        tools::Long nIndexKey = 0;
         uno::Any aValue = mxRangeProps->getPropertyValue( "NumberFormat" );
         aValue >>= nIndexKey;
 
@@ -2021,7 +2021,7 @@ ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length)
         return xRange->Characters( Start, Length );
     }
 
-    long nIndex = 0, nCount = 0;
+    tools::Long nIndex = 0, nCount = 0;
     OUString rString;
     uno::Reference< text::XTextRange > xTextRange(mxRange, ::uno::UNO_QUERY_THROW );
     rString = xTextRange->getString();
@@ -2591,7 +2591,7 @@ ScVbaRange::getNumberFormat()
 uno::Reference< excel::XRange >
 ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize )
 {
-    long nRowSize = 0, nColumnSize = 0;
+    tools::Long nRowSize = 0, nColumnSize = 0;
     bool bIsRowChanged = ( RowSize >>= nRowSize ), bIsColumnChanged = ( ColumnSize >>= nColumnSize );
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, ::uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellRange > xSheetRange(mxRange, ::uno::UNO_QUERY_THROW);
@@ -3746,7 +3746,7 @@ static double getDefaultCharWidth( ScDocShell* pDocShell )
     vcl::Font aDefFont;
     pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
     pRefDevice->SetFont( aDefFont );
-    long nCharWidth = pRefDevice->GetTextWidth( OUString( '0' ) );        // 1/100th mm
+    tools::Long nCharWidth = pRefDevice->GetTextWidth( OUString( '0' ) );        // 1/100th mm
     return lcl_hmmToPoints( nCharWidth );
 }
 

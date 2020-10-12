@@ -20,6 +20,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
+#include <tools/long.hxx>
 #include <algorithm>
 #include <map>
 #include <unordered_set>
@@ -839,7 +840,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     osl::MutexGuard aGuard( theMutex::get());
 
 #if OSL_DEBUG_LEVEL > 0
-    static long nRunning = 0;
+    static tools::Long nRunning = 0;
     // Entering twice here is ok, which is needed for fallback init in
     // getKnowns() in canonicalize() via pImpl->convertBcp47ToLocale() below,
     // everything else is suspicious.

@@ -1844,7 +1844,7 @@ namespace wmfemfhelper
                     {
                         // prepare DXArray (if used)
                         std::vector< double > aDXArray;
-                        long* pDXArray = pA->GetDXArray();
+                        tools::Long* pDXArray = pA->GetDXArray();
 
                         if(pDXArray)
                         {

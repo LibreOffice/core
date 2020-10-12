@@ -48,13 +48,13 @@ ScDPTableData::~ScDPTableData()
 {
 }
 
-OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
+OUString ScDPTableData::GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {
     const ScDPCache& rCache = GetCacheTable().getCache();
     return rCache.GetFormattedString(nDim, rItem, bLocaleIndependent);
 }
 
-long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
+tools::Long ScDPTableData::GetDatePart( tools::Long nDateVal, tools::Long nHierarchy, tools::Long nLevel )
 {
     if ( nDateVal == nLastDateVal && nHierarchy == nLastHier && nLevel == nLastLevel )
         return nLastRet;
@@ -62,7 +62,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     Date aDate( 30,12,1899 );                   //TODO: get from source data (and cache here)
     aDate.AddDays( nDateVal);
 
-    long nRet = 0;
+    tools::Long nRet = 0;
     switch (nHierarchy)
     {
         case SC_DAPI_HIERARCHY_QUARTER:
@@ -82,7 +82,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
                 //TODO: use settings for different definitions
                 case 0: nRet = aDate.GetYear();                 break;      //!...
                 case 1: nRet = aDate.GetWeekOfYear();           break;
-                case 2: nRet = static_cast<long>(aDate.GetDayOfWeek());      break;
+                case 2: nRet = static_cast<tools::Long>(aDate.GetDayOfWeek());      break;
                 default:
                     OSL_FAIL("GetDatePart: wrong level");
             }
@@ -104,35 +104,35 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-sal_uInt32 ScDPTableData::GetNumberFormat(long)
+sal_uInt32 ScDPTableData::GetNumberFormat(tools::Long)
 {
     return 0;           // default format
 }
 
-bool ScDPTableData::IsBaseForGroup(long) const
+bool ScDPTableData::IsBaseForGroup(tools::Long) const
 {
     return false;       // always false
 }
 
-long ScDPTableData::GetGroupBase(long) const
+tools::Long ScDPTableData::GetGroupBase(tools::Long) const
 {
     return -1;          // always none
 }
 
-bool ScDPTableData::IsNumOrDateGroup(long) const
+bool ScDPTableData::IsNumOrDateGroup(tools::Long) const
 {
     return false;       // always false
 }
 
-bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
-                               const ScDPItemData&, long ) const
+bool ScDPTableData::IsInGroup( const ScDPItemData&, tools::Long,
+                               const ScDPItemData&, tools::Long ) const
 {
     OSL_FAIL("IsInGroup shouldn't be called for non-group data");
     return false;
 }
 
-bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
-                                      const ScDPItemData&, long ) const
+bool ScDPTableData::HasCommonElement( const ScDPItemData&, tools::Long,
+                                      const ScDPItemData&, tools::Long ) const
 {
     OSL_FAIL("HasCommonElement shouldn't be called for non-group data");
     return false;
@@ -149,11 +149,11 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFiltered
     // page dimensions
     GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
 
-    long nCacheColumnCount = rCacheTable.getCache().GetColumnCount();
+    tools::Long nCacheColumnCount = rCacheTable.getCache().GetColumnCount();
     sal_Int32 n = rInfo.aDataSrcCols.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        long nDim = rInfo.aDataSrcCols[i];
+        tools::Long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.emplace_back( );
         // #i111435# GetItemData needs dimension indexes including groups,
         // so the index must be checked here (groups aren't useful as data fields).
@@ -221,7 +221,7 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
     rItemData.reserve(rItemData.size() + nDimSize);
     for (sal_Int32 i = 0; i < nDimSize; ++i)
     {
-        long nDim = rDims[i];
+        tools::Long nDim = rDims[i];
 
         if (getIsDataLayoutDimension(nDim))
         {
@@ -238,14 +238,14 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
     }
 }
 
-long ScDPTableData::GetMembersCount( long nDim )
+tools::Long ScDPTableData::GetMembersCount( tools::Long nDim )
 {
     if ( nDim > MAXCOL )
         return 0;
     return GetCacheTable().getFieldEntries( nDim ).size();
 }
 
-const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
+const ScDPItemData* ScDPTableData::GetMemberByIndex( tools::Long nDim, tools::Long nIndex )
 {
     if ( nIndex >= GetMembersCount( nDim ) )
         return nullptr;
@@ -255,23 +255,23 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
     return GetCacheTable().getCache().GetItemDataById( static_cast<SCCOL>(nDim), static_cast<SCROW>(nMembers[nIndex]) );
 }
 
-const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
+const ScDPItemData* ScDPTableData::GetMemberById( tools::Long nDim, tools::Long nId)
 {
     return GetCacheTable().getCache().GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
-const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )
+const std::vector< SCROW >& ScDPTableData::GetColumnEntries( tools::Long nColumn )
 {
     return GetCacheTable().getFieldEntries( nColumn );
 }
 
-long ScDPTableData::GetSourceDim( long nDim )
+tools::Long ScDPTableData::GetSourceDim( tools::Long nDim )
 {
     return nDim;
 
 }
 
-long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
+tools::Long ScDPTableData::Compare( tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;

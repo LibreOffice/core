@@ -50,7 +50,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;           // Charts are per sheet
 
-    ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
+    ScChartObj*             GetObjectByIndex_Impl(tools::Long nIndex) const;
     ScChartObj*             GetObjectByName_Impl(const OUString& aName) const;
 
 public:

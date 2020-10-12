@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <tools/long.hxx>
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"
@@ -108,7 +109,7 @@ struct SwDSParam : public SwDBData
     css::uno::Sequence<  css::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
-    long nSelectionIndex;
+    tools::Long nSelectionIndex;
 
     SwDSParam(const SwDBData& rData) :
         SwDBData(rData),

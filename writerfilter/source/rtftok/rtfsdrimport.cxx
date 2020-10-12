@@ -251,7 +251,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
         if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
             xPropertySet->setPropertyValue(
                 "RotateAngle",
-                uno::makeAny(sal_Int32(NormAngle36000(static_cast<long>(nRotation) * -1))));
+                uno::makeAny(sal_Int32(NormAngle36000(static_cast<tools::Long>(nRotation) * -1))));
     }
 
     if (nHoriOrient != 0 && xPropertySet.is())

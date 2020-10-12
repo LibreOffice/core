@@ -28,8 +28,8 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pWriteAcc)
         {
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
+            const tools::Long nWidth = pWriteAcc->Width();
+            const tools::Long nHeight = pWriteAcc->Height();
             const int nEntryCount = 1 << pWriteAcc->GetBitCount();
             int n = 0;
             std::vector<PopArtEntry> aPopArtTable(nEntryCount);
@@ -42,10 +42,10 @@ BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const
             }
 
             // get pixel count for each palette entry
-            for (long nY = 0; nY < nHeight; nY++)
+            for (tools::Long nY = 0; nY < nHeight; nY++)
             {
                 Scanline pScanline = pWriteAcc->GetScanline(nY);
-                for (long nX = 0; nX < nWidth; nX++)
+                for (tools::Long nX = 0; nX < nWidth; nX++)
                 {
                     aPopArtTable[pWriteAcc->GetIndexFromData(pScanline, nX)].mnCount++;
                 }

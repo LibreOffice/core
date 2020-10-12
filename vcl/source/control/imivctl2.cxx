@@ -34,7 +34,7 @@ IcnCursor_Impl::~IcnCursor_Impl()
 {
 }
 
-sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, long nValue,
+sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, tools::Long nValue,
     bool bVertical )
 {
     sal_uInt16 nCount = rList.size();
@@ -42,11 +42,11 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, 
         return 0;
 
     sal_uInt16 nCurPos = 0;
-    long nPrevValue = LONG_MIN;
+    tools::Long nPrevValue = LONG_MIN;
     while( nCount )
     {
         const tools::Rectangle& rRect = pView->GetEntryBoundRect( rList[nCurPos] );
-        long nCurValue;
+        tools::Long nCurValue;
         if( bVertical )
             nCurValue = rRect.Top();
         else
@@ -162,7 +162,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     if( nTop > nBottom )
         std::swap(nTop, nBottom);
 
-    long nMinDistance = LONG_MAX;
+    tools::Long nMinDistance = LONG_MAX;
     SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
@@ -173,7 +173,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
             if( nY >= nTop && nY <= nBottom )
             {
                 const tools::Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-                long nDistance = rRect.Top() - rRefRect.Top();
+                tools::Long nDistance = rRect.Top() - rRefRect.Top();
                 if( nDistance < 0 )
                     nDistance *= -1;
                 if( nDistance && nDistance < nMinDistance )
@@ -238,7 +238,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     if( nRight < nLeft )
         std::swap(nRight, nLeft);
 
-    long nMinDistance = LONG_MAX;
+    tools::Long nMinDistance = LONG_MAX;
     SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
@@ -249,7 +249,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
             if( nX >= nLeft && nX <= nRight )
             {
                 const tools::Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-                long nDistance = rRect.Left() - rRefRect.Left();
+                tools::Long nDistance = rRect.Left() - rRefRect.Left();
                 if( nDistance < 0 )
                     nDistance *= -1;
                 if( nDistance && nDistance < nMinDistance )
@@ -299,9 +299,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     if( pResult )
         return pResult;
 
-    long nCurCol = nX;
+    tools::Long nCurCol = nX;
 
-    long nColOffs, nLastCol;
+    tools::Long nColOffs, nLastCol;
     if( bRight )
     {
         nColOffs = 1;
@@ -333,15 +333,15 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
 {
     if( pView->IsAutoArrange() && !(pView->nWinBits & WB_ALIGN_TOP) )
     {
-        const long nPos = static_cast<long>(pView->GetEntryListPos( pStart ));
-        long nEntriesInView = pView->aOutputSize.Height() / pView->nGridDY;
+        const tools::Long nPos = static_cast<tools::Long>(pView->GetEntryListPos( pStart ));
+        tools::Long nEntriesInView = pView->aOutputSize.Height() / pView->nGridDY;
         nEntriesInView *=
             ((pView->aOutputSize.Width()+(pView->nGridDX/2)) / pView->nGridDX );
-        long nNewPos = nPos;
+        tools::Long nNewPos = nPos;
         if( bDown )
         {
             nNewPos += nEntriesInView;
-            if( nNewPos >= static_cast<long>(pView->maEntries.size()) )
+            if( nNewPos >= static_cast<tools::Long>(pView->maEntries.size()) )
                 nNewPos = pView->maEntries.size() - 1;
         }
         else
@@ -354,7 +354,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
             return pView->maEntries[ static_cast<size_t>(nNewPos) ].get();
         return nullptr;
     }
-    long nOpt = pView->GetEntryBoundRect( pStart ).Top();
+    tools::Long nOpt = pView->GetEntryBoundRect( pStart ).Top();
     if( bDown )
     {
         nOpt += pView->aOutputSize.Height();
@@ -368,14 +368,14 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoPageUpDown( SvxIconChoiceCtrlEntry* pS
     if( nOpt < 0 )
         nOpt = 0;
 
-    long nPrevErr = LONG_MAX;
+    tools::Long nPrevErr = LONG_MAX;
 
     SvxIconChoiceCtrlEntry* pPrev = pStart;
     SvxIconChoiceCtrlEntry* pNext = GoUpDown( pStart, bDown );
     while( pNext )
     {
-        long nCur = pView->GetEntryBoundRect( pNext ).Top();
-        long nErr = nOpt - nCur;
+        tools::Long nCur = pView->GetEntryBoundRect( pNext ).Top();
+        tools::Long nErr = nOpt - nCur;
         if( nErr < 0 )
             nErr *= -1;
         if( nErr > nPrevErr )
@@ -418,9 +418,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     if( pResult )
         return pResult;
 
-    long nCurRow = nY;
+    tools::Long nCurRow = nY;
 
-    long nRowOffs, nLastRow;
+    tools::Long nRowOffs, nLastRow;
     if( bDown )
     {
         nRowOffs = 1;
@@ -529,7 +529,7 @@ void IcnGridMap_Impl::Create_Impl()
 
 void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
 {
-    long nX, nY;
+    tools::Long nX, nY;
     if( _pView->nWinBits & WB_ALIGN_TOP )
     {
         // The view grows in vertical direction. Its max. width is _pView->nMaxVirtWidth
@@ -557,8 +557,8 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
     if( !nY )
         nY = DEFAULT_MAX_VIRT_HEIGHT;
 
-    long nDX = nX / _pView->nGridDX;
-    long nDY = nY / _pView->nGridDY;
+    tools::Long nDX = nX / _pView->nGridDX;
+    tools::Long nDY = nY / _pView->nGridDY;
 
     if( !nDX )
         nDX++;
@@ -582,8 +582,8 @@ GridId IcnGridMap_Impl::GetGrid( const Point& rDocPos )
 {
     Create();
 
-    long nX = rDocPos.X();
-    long nY = rDocPos.Y();
+    tools::Long nX = rDocPos.X();
+    tools::Long nY = rDocPos.Y();
     nX -= LROFFS_WINBORDER;
     nY -= TBOFFS_WINBORDER;
     nX /= _pView->nGridDX;
@@ -606,8 +606,8 @@ tools::Rectangle IcnGridMap_Impl::GetGridRect( GridId nId )
     Create();
     sal_uInt16 nGridX, nGridY;
     GetGridCoord( nId, nGridX, nGridY );
-    const long nLeft = nGridX * _pView->nGridDX+ LROFFS_WINBORDER;
-    const long nTop = nGridY * _pView->nGridDY + TBOFFS_WINBORDER;
+    const tools::Long nLeft = nGridX * _pView->nGridDX+ LROFFS_WINBORDER;
+    const tools::Long nTop = nGridY * _pView->nGridDY + TBOFFS_WINBORDER;
     return tools::Rectangle(
         nLeft, nTop,
         nLeft + _pView->nGridDX,
@@ -663,9 +663,9 @@ void IcnGridMap_Impl::Clear()
 
 sal_uLong IcnGridMap_Impl::GetGridCount( const Size& rSizePixel, sal_uInt16 nDX, sal_uInt16 nDY)
 {
-    long ndx = (rSizePixel.Width() - LROFFS_WINBORDER) / nDX;
+    tools::Long ndx = (rSizePixel.Width() - LROFFS_WINBORDER) / nDX;
     if( ndx < 0 ) ndx *= -1;
-    long ndy = (rSizePixel.Height() - TBOFFS_WINBORDER) / nDY;
+    tools::Long ndy = (rSizePixel.Height() - TBOFFS_WINBORDER) / nDY;
     if( ndy < 0 ) ndy *= -1;
     return static_cast<sal_uLong>(ndx * ndy);
 }

@@ -96,7 +96,7 @@ private:
 protected:
     WW8Export& rWrt;
     SvStream* pEscherStrm;
-    long mnEmuMul, mnEmuDiv;
+    tools::Long mnEmuMul, mnEmuDiv;
 
     virtual sal_Int32 WriteFlyFrameAttr(const SwFrameFormat& rFormat, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);

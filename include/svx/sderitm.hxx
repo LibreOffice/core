@@ -22,7 +22,7 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-inline SdrMetricItem makeSdrEckenradiusItem(long nRadius) {
+inline SdrMetricItem makeSdrEckenradiusItem(tools::Long nRadius) {
     return SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius);
 }
 

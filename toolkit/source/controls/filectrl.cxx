@@ -145,14 +145,14 @@ void FileControl::StateChanged( StateChangedType nType )
 
 void FileControl::Resize()
 {
-    static const long ButtonBorder = 10;
+    static const tools::Long ButtonBorder = 10;
 
     if( mnInternalFlags & FileControlMode_Internal::INRESIZE )
         return;
     mnInternalFlags |= FileControlMode_Internal::INRESIZE;//InResize = sal_True
 
     Size aOutSz = GetOutputSizePixel();
-    long nButtonTextWidth = maButton->GetTextWidth( maButtonText );
+    tools::Long nButtonTextWidth = maButton->GetTextWidth( maButtonText );
     if ( !(mnInternalFlags & FileControlMode_Internal::ORIGINALBUTTONTEXT) ||
          ( nButtonTextWidth < aOutSz.Width()/3 ) )
     {
@@ -165,7 +165,7 @@ void FileControl::Resize()
         nButtonTextWidth = maButton->GetTextWidth( aSmallText );
     }
 
-    long nButtonWidth = nButtonTextWidth+ButtonBorder;
+    tools::Long nButtonWidth = nButtonTextWidth+ButtonBorder;
     maEdit->setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
     maButton->setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 

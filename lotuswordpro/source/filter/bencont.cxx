@@ -201,7 +201,7 @@ void LtcBenContainer::SeekToPosition(BenContainerPos Pos)
 *   Seek to position compare to end of bento file
 *   @param  position in container file from end
 */
-void LtcBenContainer::SeekFromEnd(long Offset)
+void LtcBenContainer::SeekFromEnd(tools::Long Offset)
 {
     cpStream->Seek(STREAM_SEEK_TO_END);
     cpStream->SeekRel(Offset);

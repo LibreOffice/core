@@ -546,7 +546,7 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
 //        SetAscent( rInf.GetAscent() );
         OSL_ENSURE( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
-        long nDiff( 0 );
+        tools::Long nDiff( 0 );
 
         if ( !mbLabelAlignmentPosAndSpaceModeActive )
         {
@@ -845,7 +845,7 @@ bool SwGrfNumPortion::Format( SwTextFormatInfo &rInf )
     }
     rInf.SetNumDone( true );
 //    long nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    long nDiff = mbLabelAlignmentPosAndSpaceModeActive
+    tools::Long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
     // The TextPortion should at least always start on the
@@ -891,7 +891,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
             return;
     }
     Point aPos( rInf.X() + GRFNUM_SECURE, rInf.Y() - GetRelPos() + GRFNUM_SECURE );
-    long nTmpWidth = std::max( long(0), static_cast<long>(nFixWidth - 2 * GRFNUM_SECURE) );
+    tools::Long nTmpWidth = std::max( tools::Long(0), static_cast<tools::Long>(nFixWidth - 2 * GRFNUM_SECURE) );
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
     const bool bTmpLeft = mbLabelAlignmentPosAndSpaceModeActive ||
@@ -919,7 +919,7 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( m_bReplace )
     {
-        const long nTmpH = GetNextPortion() ? GetNextPortion()->GetAscent() : 120;
+        const tools::Long nTmpH = GetNextPortion() ? GetNextPortion()->GetAscent() : 120;
         aSize = Size( nTmpH, nTmpH );
         aPos.setY( rInf.Y() - nTmpH );
     }
@@ -998,8 +998,8 @@ void SwGrfNumPortion::Paint( const SwTextPaintInfo &rInf ) const
     }
 }
 
-void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
-                               long nFlyAsc, long nFlyDesc )
+void SwGrfNumPortion::SetBase( tools::Long nLnAscent, tools::Long nLnDescent,
+                               tools::Long nFlyAsc, tools::Long nFlyDesc )
 {
     if ( GetOrient() == text::VertOrientation::NONE )
         return;

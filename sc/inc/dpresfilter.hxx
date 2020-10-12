@@ -11,6 +11,7 @@
 #define INCLUDED_SC_INC_DPRESFILTER_HXX
 
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 #include "calcmacros.hxx"
 
 #include <memory>
@@ -133,8 +134,8 @@ struct ScDPResultFilterContext
 {
     ScDPResultTree maFilterSet;
     std::vector<ScDPResultFilter> maFilters;
-    long mnCol;
-    long mnRow;
+    tools::Long mnCol;
+    tools::Long mnRow;
 
     ScDPResultFilterContext();
 };

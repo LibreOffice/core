@@ -278,7 +278,7 @@ void SmEditWindow::Resize()
         pEditView->ShowCursor();
 
         OSL_ENSURE( pEditView->GetEditEngine(), "EditEngine missing" );
-        const long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
+        const tools::Long nMaxVisAreaStart = pEditView->GetEditEngine()->GetTextHeight() -
                                       pEditView->GetOutputArea().GetHeight();
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
         {
@@ -556,7 +556,7 @@ tools::Rectangle SmEditWindow::AdjustScrollBars()
 
     if (pVScrollBar && pHScrollBar && pScrollBox)
     {
-        const long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
+        const tools::Long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
         Point aPt( aRect.TopRight() ); aPt.AdjustX( -(nTmp -1) );
         pVScrollBar->SetPosSizePixel( aPt, Size(nTmp, aOut.Height() - nTmp));
 
@@ -579,7 +579,7 @@ void SmEditWindow::SetScrollBarRanges()
     EditEngine *pEditEngine = GetEditEngine();
     if (pVScrollBar && pHScrollBar && pEditEngine && pEditView)
     {
-        long nTmp = pEditEngine->GetTextHeight();
+        tools::Long nTmp = pEditEngine->GetTextHeight();
         pVScrollBar->SetRange(Range(0, nTmp));
         pVScrollBar->SetThumbPos(pEditView->GetVisArea().Top());
 

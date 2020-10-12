@@ -306,7 +306,7 @@ void SwLineLayout::InitSpaceAdd()
         SetLLSpaceAdd( 0, 0 );
 }
 
-void SwLineLayout::CreateSpaceAdd( const long nInit )
+void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
 {
     m_pLLSpaceAdd.reset( new std::vector<long> );
     SetLLSpaceAdd( nInit, 0 );
@@ -1939,7 +1939,7 @@ size_t SwScriptInfo::HasKana(TextFrameIndex const nStart, TextFrameIndex const n
     return SAL_MAX_SIZE;
 }
 
-long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
+tools::Long SwScriptInfo::Compress(tools::Long* pKernArray, TextFrameIndex nIdx, TextFrameIndex nLen,
                              const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                              bool bCenter,
                              Point* pPoint ) const
@@ -1951,7 +1951,7 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
     // In asian typography, there are full width and half width characters.
     // Full width punctuation characters can be compressed by 50%
     // to determine this, we compare the font width with 75% of its height
-    const long nMinWidth = ( 3 * nFontHeight ) / 4;
+    const tools::Long nMinWidth = ( 3 * nFontHeight ) / 4;
 
     size_t nCompIdx = HasKana( nIdx, nLen );
 
@@ -1974,8 +1974,8 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
     if( nIdx > nLen || nCompIdx >= nCompCount )
         return 0;
 
-    long nSub = 0;
-    long nLast = nI ? pKernArray[ nI - 1 ] : 0;
+    tools::Long nSub = 0;
+    tools::Long nLast = nI ? pKernArray[ nI - 1 ] : 0;
     do
     {
         const CompType nType = GetCompType( nCompIdx );
@@ -2001,7 +2001,7 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
                 nLast -= pKernArray[ nI ];
 
                 nLast *= nCompress;
-                long nMove = 0;
+                tools::Long nMove = 0;
                 if( SwScriptInfo::KANA != nType )
                 {
                     nLast /= 24000;
@@ -2056,11 +2056,11 @@ long SwScriptInfo::Compress(long* pKernArray, TextFrameIndex nIdx, TextFrameInde
 // total number of kashida positions, or the number of kashida positions after some positions
 // have been dropped, depending on the state of the m_KashidaInvalid set.
 
-sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
-                                        long* pScrArray,
+sal_Int32 SwScriptInfo::KashidaJustify( tools::Long* pKernArray,
+                                        tools::Long* pScrArray,
                                         TextFrameIndex const nStt,
                                         TextFrameIndex const nLen,
-                                        long nSpaceAdd ) const
+                                        tools::Long nSpaceAdd ) const
 {
     SAL_WARN_IF( !nLen, "sw.core", "Kashida justification without text?!" );
 
@@ -2107,7 +2107,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( long* pKernArray,
         TextFrameIndex nIdx = nCntKash < nCntKashEnd && IsKashidaValid(nCntKash)
             ? GetKashida(nCntKash)
             : nEnd;
-        long nKashAdd = nSpaceAdd;
+        tools::Long nKashAdd = nSpaceAdd;
 
         while ( nIdx < nEnd )
         {
@@ -2315,18 +2315,18 @@ void SwScriptInfo::MarkKashidasInvalid(sal_Int32 const nCnt,
     }
 }
 
-TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, TextFrameIndex const nStt,
+TextFrameIndex SwScriptInfo::ThaiJustify( const OUString& rText, tools::Long* pKernArray,
+                                     tools::Long* pScrArray, TextFrameIndex const nStt,
                                      TextFrameIndex const nLen,
                                      TextFrameIndex nNumberOfBlanks,
-                                     long nSpaceAdd )
+                                     tools::Long nSpaceAdd )
 {
     SAL_WARN_IF( nStt + nLen > TextFrameIndex(rText.getLength()), "sw.core", "String in ThaiJustify too small" );
 
     SwTwips nNumOfTwipsToDistribute = nSpaceAdd * sal_Int32(nNumberOfBlanks) /
                                       SPACING_PRECISION_FACTOR;
 
-    long nSpaceSum = 0;
+    tools::Long nSpaceSum = 0;
     TextFrameIndex nCnt(0);
 
     for (sal_Int32 nI = 0; nI < sal_Int32(nLen); ++nI)
@@ -2654,16 +2654,16 @@ TextFrameIndex SwScriptInfo::CountCJKCharacters(const OUString &rText,
     return nCount;
 }
 
-void SwScriptInfo::CJKJustify( const OUString& rText, long* pKernArray,
-                                     long* pScrArray, TextFrameIndex const nStt,
+void SwScriptInfo::CJKJustify( const OUString& rText, tools::Long* pKernArray,
+                                     tools::Long* pScrArray, TextFrameIndex const nStt,
                                      TextFrameIndex const nLen, LanguageType aLang,
-                                     long nSpaceAdd, bool bIsSpaceStop )
+                                     tools::Long nSpaceAdd, bool bIsSpaceStop )
 {
     assert( pKernArray != nullptr && sal_Int32(nStt) >= 0 );
     if (sal_Int32(nLen) <= 0)
         return;
 
-    long nSpaceSum = 0;
+    tools::Long nSpaceSum = 0;
     const lang::Locale &rLocale = g_pBreakIt->GetLocale( aLang );
     sal_Int32 nDone = 0;
     sal_Int32 nNext(nStt);

@@ -41,10 +41,10 @@ class  SVX_DLLPUBLIC NumSettings_Impl
         SvxNumType      nNumberType;
         short           nParentNumbering;
         SvxNumberFormat::LabelFollowedBy eLabelFollowedBy;
-        long            nTabValue;
+        tools::Long            nTabValue;
         SvxAdjust       eNumAlign;
-        long            nNumAlignAt;
-        long            nNumIndentAt;
+        tools::Long            nNumAlignAt;
+        tools::Long            nNumIndentAt;
         OUString   sPrefix;
         OUString   sSuffix;
         OUString   sBulletChar;

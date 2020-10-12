@@ -82,14 +82,14 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
     tools::Rectangle aR0(GetMarkedObjRect());
     DBG_ASSERT(!aR0.IsEmpty(),"SetMarkedObjRect(): GetMarkedObjRect() is empty.");
     if (aR0.IsEmpty()) return;
-    long x0=aR0.Left();
-    long y0=aR0.Top();
-    long w0=aR0.Right()-x0;
-    long h0=aR0.Bottom()-y0;
-    long x1=rRect.Left();
-    long y1=rRect.Top();
-    long w1=rRect.Right()-x1;
-    long h1=rRect.Bottom()-y1;
+    tools::Long x0=aR0.Left();
+    tools::Long y0=aR0.Top();
+    tools::Long w0=aR0.Right()-x0;
+    tools::Long h0=aR0.Bottom()-y0;
+    tools::Long x1=rRect.Left();
+    tools::Long y1=rRect.Top();
+    tools::Long w1=rRect.Right()-x1;
+    tools::Long h1=rRect.Bottom()-y1;
 
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -131,10 +131,10 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
                 } else {
                     t=0; b=h1;
                 }
-                aR1.SetLeft(long(l) );
-                aR1.SetRight(long(r) );
-                aR1.SetTop(long(t) );
-                aR1.SetBottom(long(b) );
+                aR1.SetLeft(tools::Long(l) );
+                aR1.SetRight(tools::Long(r) );
+                aR1.SetTop(tools::Long(t) );
+                aR1.SetBottom(tools::Long(b) );
                 aR1.Move(x1,y1);
             }
             pO->SetSnapRect(aR1);
@@ -280,9 +280,9 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
         EndUndo();
 }
 
-long SdrEditView::GetMarkedObjRotate() const
+tools::Long SdrEditView::GetMarkedObjRotate() const
 {
-    long nRetval(0);
+    tools::Long nRetval(0);
 
     if(GetMarkedObjectCount())
     {
@@ -295,7 +295,7 @@ long SdrEditView::GetMarkedObjRotate() const
     return nRetval;
 }
 
-void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
+void SdrEditView::RotateMarkedObj(const Point& rRef, tools::Long nAngle, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -431,16 +431,16 @@ void SdrEditView::MirrorMarkedObjVertical()
     MirrorMarkedObj(aCenter,aPt2);
 }
 
-long SdrEditView::GetMarkedObjShear() const
+tools::Long SdrEditView::GetMarkedObjShear() const
 {
     bool b1st=true;
     bool bOk=true;
-    long nAngle=0;
+    tools::Long nAngle=0;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkCount && bOk; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
-        long nAngle2=pO->GetShearAngle();
+        tools::Long nAngle2=pO->GetShearAngle();
         if (b1st) nAngle=nAngle2;
         else if (nAngle2!=nAngle) bOk=false;
         b1st=false;
@@ -451,7 +451,7 @@ long SdrEditView::GetMarkedObjShear() const
     return nAngle;
 }
 
-void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, bool bCopy)
+void SdrEditView::ShearMarkedObj(const Point& rRef, tools::Long nAngle, bool bVShear, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
 
@@ -688,25 +688,25 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
     tools::Rectangle aAllSnapRect(GetMarkedObjRect());
     const SfxPoolItem *pPoolItem=nullptr;
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrTransformRef1XItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrTransformRef1XItem*>(pPoolItem)->GetValue();
         SetRef1(Point(n,GetRef1().Y()));
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrTransformRef1YItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrTransformRef1YItem*>(pPoolItem)->GetValue();
         SetRef1(Point(GetRef1().X(),n));
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrTransformRef2XItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrTransformRef2XItem*>(pPoolItem)->GetValue();
         SetRef2(Point(n,GetRef2().Y()));
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrTransformRef2YItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrTransformRef2YItem*>(pPoolItem)->GetValue();
         SetRef2(Point(GetRef2().X(),n));
     }
-    long nAllPosX=0; bool bAllPosX=false;
-    long nAllPosY=0; bool bAllPosY=false;
-    long nAllWdt=0;  bool bAllWdt=false;
-    long nAllHgt=0;  bool bAllHgt=false;
+    tools::Long nAllPosX=0; bool bAllPosX=false;
+    tools::Long nAllPosY=0; bool bAllPosY=false;
+    tools::Long nAllWdt=0;  bool bAllWdt=false;
+    tools::Long nAllHgt=0;  bool bAllHgt=false;
     bool bDoIt=false;
     if (rAttr.GetItemState(SDRATTR_ALLPOSITIONX,true,&pPoolItem)==SfxItemState::SET) {
         nAllPosX=static_cast<const SdrAllPositionXItem*>(pPoolItem)->GetValue();
@@ -741,15 +741,15 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
         ResizeMarkedObj(aAllSnapRect.TopLeft(),Fraction(1,1),aYFact);
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEALL,true,&pPoolItem)==SfxItemState::SET) {
-        long nAngle=static_cast<const SdrRotateAllItem*>(pPoolItem)->GetValue();
+        tools::Long nAngle=static_cast<const SdrRotateAllItem*>(pPoolItem)->GetValue();
         RotateMarkedObj(aAllSnapRect.Center(),nAngle);
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARALL,true,&pPoolItem)==SfxItemState::SET) {
-        long nAngle=static_cast<const SdrHorzShearAllItem*>(pPoolItem)->GetValue();
+        tools::Long nAngle=static_cast<const SdrHorzShearAllItem*>(pPoolItem)->GetValue();
         ShearMarkedObj(aAllSnapRect.Center(),nAngle);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARALL,true,&pPoolItem)==SfxItemState::SET) {
-        long nAngle=static_cast<const SdrVertShearAllItem*>(pPoolItem)->GetValue();
+        tools::Long nAngle=static_cast<const SdrVertShearAllItem*>(pPoolItem)->GetValue();
         ShearMarkedObj(aAllSnapRect.Center(),nAngle,true);
     }
 
@@ -772,10 +772,10 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
 {
     // TODO: Take into account the origin and PvPos.
     tools::Rectangle aAllSnapRect(GetMarkedObjRect()); // TODO: change this for PolyPt's and GluePt's!!!
-    long nAllSnapPosX=aAllSnapRect.Left();
-    long nAllSnapPosY=aAllSnapRect.Top();
-    long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
-    long nAllSnapHgt=aAllSnapRect.GetHeight()-1;
+    tools::Long nAllSnapPosX=aAllSnapRect.Left();
+    tools::Long nAllSnapPosY=aAllSnapRect.Top();
+    tools::Long nAllSnapWdt=aAllSnapRect.GetWidth()-1;
+    tools::Long nAllSnapHgt=aAllSnapRect.GetHeight()-1;
     // TODO: could go into CheckPossibilities
     bool bMovProtect = false, bMovProtectDC = false;
     bool bSizProtect = false, bSizProtectDC = false;
@@ -783,14 +783,14 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
     bool bVisible = true, bVisibleDC = false;
     SdrLayerID nLayerId(0);
     bool bLayerDC=false;
-    long nSnapPosX=0;      bool bSnapPosXDC=false;
-    long nSnapPosY=0;      bool bSnapPosYDC=false;
-    long nSnapWdt=0;       bool bSnapWdtDC=false;
-    long nSnapHgt=0;       bool bSnapHgtDC=false;
-    long nLogicWdt=0;      bool bLogicWdtDC=false,bLogicWdtDiff=false;
-    long nLogicHgt=0;      bool bLogicHgtDC=false,bLogicHgtDiff=false;
-    long nRotAngle=0;      bool bRotAngleDC=false;
-    long nShrAngle=0;      bool bShrAngleDC=false;
+    tools::Long nSnapPosX=0;      bool bSnapPosXDC=false;
+    tools::Long nSnapPosY=0;      bool bSnapPosYDC=false;
+    tools::Long nSnapWdt=0;       bool bSnapWdtDC=false;
+    tools::Long nSnapHgt=0;       bool bSnapHgtDC=false;
+    tools::Long nLogicWdt=0;      bool bLogicWdtDC=false,bLogicWdtDiff=false;
+    tools::Long nLogicHgt=0;      bool bLogicHgtDC=false,bLogicHgtDiff=false;
+    tools::Long nRotAngle=0;      bool bRotAngleDC=false;
+    tools::Long nShrAngle=0;      bool bShrAngleDC=false;
     tools::Rectangle aSnapRect;
     tools::Rectangle aLogicRect;
     const size_t nMarkCount=GetMarkedObjectCount();
@@ -1360,8 +1360,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_POS_Y,aRect.Top()));
 
         // size
-        long nResizeRefX=aRect.Left();
-        long nResizeRefY=aRect.Top();
+        tools::Long nResizeRefX=aRect.Left();
+        tools::Long nResizeRefY=aRect.Top();
         if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for resizing, too
             nResizeRefX=maRef1.X();
             nResizeRefY=maRef1.Y();
@@ -1379,8 +1379,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         // rotation
-        long nRotateRefX=aRect.Center().X();
-        long nRotateRefY=aRect.Center().Y();
+        tools::Long nRotateRefX=aRect.Center().X();
+        tools::Long nRotateRefY=aRect.Center().Y();
         if (meDragMode==SdrDragMode::Rotate) {
             nRotateRefX=aRotateAxe.X();
             nRotateRefY=aRotateAxe.Y();
@@ -1390,8 +1390,8 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         aRetSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_ROT_Y,nRotateRefY));
 
         // shearing
-        long nShearRefX=aRect.Left();
-        long nShearRefY=aRect.Bottom();
+        tools::Long nShearRefX=aRect.Left();
+        tools::Long nShearRefY=aRect.Bottom();
         if (meDragMode==SdrDragMode::Rotate) { // use rotation axis as a reference for shearing, too
             nShearRefX=aRotateAxe.X();
             nShearRefY=aRotateAxe.Y();
@@ -1444,7 +1444,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         eState=aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
-        long nRadius=aMarkAttr.Get(SDRATTR_ECKENRADIUS).GetValue();
+        tools::Long nRadius=aMarkAttr.Get(SDRATTR_ECKENRADIUS).GetValue();
         if (eState==SfxItemState::DONTCARE) {
             aRetSet.InvalidateItem(SDRATTR_ECKENRADIUS);
         } else if (eState==SfxItemState::SET) {
@@ -1523,24 +1523,24 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         GetSdrPageView()->LogicToPagePos(aRect);
     }
 
-    long nOldRotateAngle=GetMarkedObjRotate();
-    long nOldShearAngle=GetMarkedObjShear();
+    tools::Long nOldRotateAngle=GetMarkedObjRotate();
+    tools::Long nOldShearAngle=GetMarkedObjShear();
     const SdrMarkList& rMarkList=GetMarkedObjectList();
     const size_t nMarkCount=rMarkList.GetMarkCount();
     SdrObject* pObj=nullptr;
 
     RectPoint eSizePoint=RectPoint::MM;
-    long nPosDX=0;
-    long nPosDY=0;
-    long nSizX=0;
-    long nSizY=0;
-    long nRotateAngle=0;
+    tools::Long nPosDX=0;
+    tools::Long nPosDY=0;
+    tools::Long nSizX=0;
+    tools::Long nSizY=0;
+    tools::Long nRotateAngle=0;
 
     bool bModeIsRotate(meDragMode == SdrDragMode::Rotate);
-    long nRotateX(0);
-    long nRotateY(0);
-    long nOldRotateX(0);
-    long nOldRotateY(0);
+    tools::Long nRotateX(0);
+    tools::Long nRotateY(0);
+    tools::Long nOldRotateX(0);
+    tools::Long nOldRotateY(0);
     if(bModeIsRotate)
     {
         Point aRotateAxe(maRef1);
@@ -1554,9 +1554,9 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         nRotateY = nOldRotateY = aRotateAxe.Y();
     }
 
-    long nShearAngle=0;
-    long nShearX=0;
-    long nShearY=0;
+    tools::Long nShearAngle=0;
+    tools::Long nShearX=0;
+    tools::Long nShearY=0;
     bool bShearVert=false;
 
     bool bChgPos=false;
@@ -1620,7 +1620,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // shearing
     if (SfxItemState::SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_SHEAR,true,&pPoolItem)) {
-        long nNewShearAngle=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
+        tools::Long nNewShearAngle=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         if (nNewShearAngle>SDRMAXSHEAR) nNewShearAngle=SDRMAXSHEAR;
         if (nNewShearAngle<-SDRMAXSHEAR) nNewShearAngle=-SDRMAXSHEAR;
         if (nNewShearAngle!=nOldShearAngle) {
@@ -1662,7 +1662,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // corner radius
     if (m_bEdgeRadiusAllowed && SfxItemState::SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
-        long nRadius=static_cast<const SdrMetricItem*>(pPoolItem)->GetValue();
+        tools::Long nRadius=static_cast<const SdrMetricItem*>(pPoolItem)->GetValue();
         aSetAttr.Put(makeSdrEckenradiusItem(nRadius));
         bSetAttr=true;
     }
@@ -1930,8 +1930,8 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
         pObj->TakeObjInfo(aInfo);
         if (aInfo.bMoveAllowed && !pObj->IsMoveProtect())
         {
-            long nXMov=0;
-            long nYMov=0;
+            tools::Long nXMov=0;
+            tools::Long nYMov=0;
             tools::Rectangle aObjRect(pObj->GetSnapRect());
             switch (eVert)
             {

@@ -56,8 +56,8 @@ struct ScExtTabSettings
     Point               maSplitPos;         ///< Position of split.
     ScExtPanePos        meActivePane;       ///< Active (focused) pane.
     Color               maGridColor;        ///< Grid color.
-    long                mnNormalZoom;       ///< Zoom in percent for normal view.
-    long                mnPageZoom;         ///< Zoom in percent for pagebreak preview.
+    tools::Long                mnNormalZoom;       ///< Zoom in percent for normal view.
+    tools::Long                mnPageZoom;         ///< Zoom in percent for pagebreak preview.
     bool                mbSelected;         ///< true = Sheet is selected.
     bool                mbFrozenPanes;      ///< true = Frozen panes; false = Normal splits.
     bool                mbPageMode;         ///< true = Pagebreak mode; false = Normal view mode.

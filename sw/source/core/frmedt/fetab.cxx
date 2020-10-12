@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 // also see swtable.cxx
 #define COLFUZZY 20L
 
-static bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
+static bool IsSame( tools::Long nA, tools::Long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 namespace {
 
@@ -576,12 +576,12 @@ void SwFEShell::GetTabRows_(SwTabCols &rToFill, const SwFrame *pBox) const
             bDel = false;
             SwRectFnSet aRectFnSet(pTab);
             const SwPageFrame* pPage = pTab->FindPageFrame();
-            const long nLeftMin  = ( aRectFnSet.IsVert() ?
+            const tools::Long nLeftMin  = ( aRectFnSet.IsVert() ?
                                      pTab->GetPrtLeft() - pPage->getFrameArea().Left() :
                                      pTab->GetPrtTop() - pPage->getFrameArea().Top() );
-            const long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
-            const long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
-            const long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
+            const tools::Long nLeft     = aRectFnSet.IsVert() ? LONG_MAX : 0;
+            const tools::Long nRight    = aRectFnSet.GetHeight(pTab->getFramePrintArea());
+            const tools::Long nRightMax = aRectFnSet.IsVert() ? nRight : LONG_MAX;
 
             if (m_pRowCache->pLastTabFrame != pTab || m_pRowCache->pLastCellFrame != pBox)
                 bDel = true;
@@ -1346,9 +1346,9 @@ size_t SwFEShell::GetCurTabColNum() const
 
     if( pFrame->FindTabFrame()->IsRightToLeft() )
     {
-        long nX = aRectFnSet.GetRight(pFrame->getFrameArea()) - aRectFnSet.GetLeft(pPage->getFrameArea());
+        tools::Long nX = aRectFnSet.GetRight(pFrame->getFrameArea()) - aRectFnSet.GetLeft(pPage->getFrameArea());
 
-        const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
+        const tools::Long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();
 
         if ( !::IsSame( nX, nRight ) )
         {
@@ -1363,10 +1363,10 @@ size_t SwFEShell::GetCurTabColNum() const
     }
     else
     {
-        const long nX = aRectFnSet.GetLeft(pFrame->getFrameArea()) -
+        const tools::Long nX = aRectFnSet.GetLeft(pFrame->getFrameArea()) -
                         aRectFnSet.GetLeft(pPage->getFrameArea());
 
-        const long nLeft = aTabCols.GetLeftMin();
+        const tools::Long nLeft = aTabCols.GetLeftMin();
 
         if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
         {
@@ -2060,13 +2060,13 @@ size_t SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     OSL_ENSURE( pFrame, "Table not found" );
     if( pFrame )
     {
-        const long nX = pFrame->getFrameArea().Left();
+        const tools::Long nX = pFrame->getFrameArea().Left();
 
         // get TabCols, only via these we get the position
         SwTabCols aTabCols;
         GetMouseTabCols( aTabCols, rPt );
 
-        const long nLeft = aTabCols.GetLeftMin();
+        const tools::Long nLeft = aTabCols.GetLeftMin();
 
         if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
         {
@@ -2156,7 +2156,7 @@ void SwFEShell::SetColRowWidthHeight( TableChgWidthHeightType eType, sal_uInt16 
     // then it should be recalculated to absolute values now
     const SwFormatFrameSize& rTableFrameSz = pTab->GetFormat()->GetFrameSize();
     SwRectFnSet aRectFnSet(pTab);
-    long nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
+    tools::Long nPrtWidth = aRectFnSet.GetWidth(pTab->getFramePrintArea());
     TableChgWidthHeightType eTypePos = extractPosition(eType);
     if( TableChgMode::VarWidthChangeAbs == pTab->GetTable()->GetTableChgMode() &&
         ( eTypePos == TableChgWidthHeightType::ColLeft || eTypePos == TableChgWidthHeightType::ColRight ) &&
