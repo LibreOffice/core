@@ -61,8 +61,9 @@ public:
     /// Also insert default values to override attributes of style
     /// (yes, really; that's what Word does).
     /// @param bImplicitPPr implicit dereference of top-level pPr SPRM
-    RTFSprms cloneAndDeduplicate(RTFSprms& rReference, Id nStyleType,
-                                 bool bImplicitPPr = false) const;
+    /// @param pDirect pointer to the root of the direct formatting SPRM tree, if any
+    RTFSprms cloneAndDeduplicate(RTFSprms& rReference, Id nStyleType, bool bImplicitPPr = false,
+                                 RTFSprms* pDirect = nullptr) const;
     /// Inserts default values to override attributes of pAbstract.
     void duplicateList(const RTFValue::Pointer_t& pAbstract);
     /// Removes duplicated values based on in-list properties.
