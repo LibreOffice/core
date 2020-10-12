@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "32f923ff_badace02",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-12T10:22:19Z",
+      "side": 1,
+      "message": "Right, no leak here, I expect.",
+      "parentUuid": "5b8dd5a4_12bffc92",
+      "range": {
+        "startLine": 443,
+        "startChar": 42,
+        "endLine": 443,
+        "endChar": 66
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff7392e9_85858ba8",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 2
@@ -76,6 +100,30 @@
       "writtenOn": "2020-10-12T10:01:55Z",
       "side": 1,
       "message": "This is a const function, so it can\u0027t modify the actual stack. But since it may not be modified, a default copy can just be sent. But is this an expensive function - to copy a std::dequeue? I don\u0027t know how I could do this with a reference. Something like make_unique - but that would require SectionInfo to be a pointer wouldn\u0027t it?\n\nI am kindof stuck on not wanting to use a pointer, but just a reference. So this works nicely the way I want it to work, but ideally this would also return a reference somehow.",
+      "range": {
+        "startLine": 451,
+        "startChar": 69,
+        "endLine": 451,
+        "endChar": 93
+      },
+      "revId": "79d6106beafbd6ae2f9f49e4814147546104f49e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22e6c3d_9dab18bb",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-12T10:22:19Z",
+      "side": 1,
+      "message": "You could also just call .back() unconditionally: you already asserted that it\u0027s valid above. Really depends on how brave you are. :-)",
+      "parentUuid": "ff7392e9_85858ba8",
       "range": {
         "startLine": 451,
         "startChar": 69,
