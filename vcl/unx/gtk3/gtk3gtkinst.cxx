@@ -2354,7 +2354,10 @@ private:
 
     virtual void drag_source_set(const std::vector<GtkTargetEntry>& rGtkTargets, GdkDragAction eDragAction)
     {
-        gtk_drag_source_set(m_pWidget, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
+        if (rGtkTargets.empty() && !eDragAction)
+            gtk_drag_source_unset(m_pWidget);
+        else
+            gtk_drag_source_set(m_pWidget, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
     }
 
     void do_set_background(const Color& rColor)
@@ -11480,7 +11483,10 @@ public:
 
     virtual void drag_source_set(const std::vector<GtkTargetEntry>& rGtkTargets, GdkDragAction eDragAction) override
     {
-        gtk_tree_view_enable_model_drag_source(m_pTreeView, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
+        if (rGtkTargets.empty() && !eDragAction)
+            gtk_tree_view_unset_rows_drag_source(m_pTreeView);
+        else
+            gtk_tree_view_enable_model_drag_source(m_pTreeView, GDK_BUTTON1_MASK, rGtkTargets.data(), rGtkTargets.size(), eDragAction);
     }
 
     virtual void set_selection_mode(SelectionMode eMode) override
