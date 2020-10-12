@@ -68,6 +68,8 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/notebookbar.hxx>
 
+#include <sfx2/sfxsids.hrc>
+
 //  for mouse wheel
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400
@@ -676,7 +678,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 }
             }
             break;
-        case SID_PREVIEW_ZOOMIN:
+        case SID_ZOOM_IN:
             {
                 sal_uInt16 nNew = pPreview->GetZoom() + 20 ;
                 nNew -= nNew % 20;
@@ -685,7 +687,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
-        case SID_PREVIEW_ZOOMOUT:
+        case SID_ZOOM_OUT:
             {
                 sal_uInt16 nNew = pPreview->GetZoom() - 1;
                 nNew -= nNew % 20;
@@ -807,11 +809,11 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                     if (!nTotal || nPage==nTotal-1)
                         rSet.DisableItem(nWhich);
                 break;
-            case SID_PREVIEW_ZOOMIN:
+            case SID_ZOOM_IN:
                 if (nZoom >= 400)
                     rSet.DisableItem(nWhich);
                 break;
-            case SID_PREVIEW_ZOOMOUT:
+            case SID_ZOOM_OUT:
                 if (nZoom <= 20)
                     rSet.DisableItem(nWhich);
                 break;

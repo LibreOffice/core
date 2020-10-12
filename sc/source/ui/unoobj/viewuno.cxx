@@ -1397,6 +1397,8 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
     pViewSh->PaintLeft();
     pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ZOOM_IN);
+    pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ZOOM_OUT);
 }
 
 sal_Int16 ScTabViewObj::GetZoomType() const

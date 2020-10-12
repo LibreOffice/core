@@ -119,8 +119,8 @@ interface TablePrintPreview
         StateMethod = GetState ;
         GroupId = SfxGroupId::Intern ;
     ]
-    SID_PREVIEW_ZOOMIN  [ ExecMethod = Execute; StateMethod = GetState; ]
-    SID_PREVIEW_ZOOMOUT [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_IN  [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_ZOOM_OUT [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_UNDO            [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_REDO            [ ExecMethod = Execute; StateMethod = GetState; ]

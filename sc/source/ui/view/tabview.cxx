@@ -749,6 +749,8 @@ void ScTabView::UpdateVarZoom()
         PaintLeft();
         aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
         aViewData.GetViewShell()->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+        aViewData.GetBindings().Invalidate(SID_ZOOM_IN);
+        aViewData.GetBindings().Invalidate(SID_ZOOM_OUT);
     }
     bInZoomUpdate = false;
 }
@@ -975,6 +977,8 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
                 PaintLeft();
                 aViewData.GetBindings().Invalidate( SID_ATTR_ZOOM );
                 aViewData.GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+                aViewData.GetBindings().Invalidate( SID_ZOOM_IN);
+                aViewData.GetBindings().Invalidate( SID_ZOOM_OUT);
             }
 
             bDone = true;

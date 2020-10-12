@@ -65,6 +65,8 @@
 
 #include <memory>
 
+#include <sfx2/sfxsids.hrc>
+
 #define SC_PREVIEW_SHADOWSIZE   2
 
 static tools::Long lcl_GetDisplayStart( SCTAB nTab, const ScDocument* pDoc, std::vector<tools::Long>& nPages )
@@ -654,9 +656,9 @@ void ScPreview::KeyInput( const KeyEvent& rKEvt )
         sal_uInt16 nSlot = 0;
         switch(nKey)
         {
-            case KEY_ADD:      nSlot = SID_PREVIEW_ZOOMIN;  break;
+            case KEY_ADD:      nSlot = SID_ZOOM_IN;  break;
             case KEY_ESCAPE:   nSlot = ScViewUtil::IsFullScreen( *pViewShell ) ? SID_CANCEL : SID_PREVIEW_CLOSE; break;
-            case KEY_SUBTRACT: nSlot = SID_PREVIEW_ZOOMOUT; break;
+            case KEY_SUBTRACT: nSlot = SID_ZOOM_OUT; break;
         }
         if(nSlot)
         {
@@ -909,8 +911,8 @@ void ScPreview::StaticInvalidate()
     rBindings.Invalidate(SID_PREVIEW_FIRST);
     rBindings.Invalidate(SID_PREVIEW_LAST);
     rBindings.Invalidate(SID_ATTR_ZOOM);
-    rBindings.Invalidate(SID_PREVIEW_ZOOMIN);
-    rBindings.Invalidate(SID_PREVIEW_ZOOMOUT);
+    rBindings.Invalidate(SID_ZOOM_IN);
+    rBindings.Invalidate(SID_ZOOM_OUT);
     rBindings.Invalidate(SID_PREVIEW_SCALINGFACTOR);
     rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
 }

@@ -57,6 +57,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <scabstdlg.hxx>
 
+#include <basegfx/utils/zoomtools.hxx>
+
 namespace
 {
     void collectUIInformation(const OUString& aZoom)
@@ -691,6 +693,44 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        // handling for SID_ZOOM_IN and SID_ZOOM_OUT is ScTabView::ScrollCommand
+        // CommandWheelMode::ZOOM inspired
+        case SID_ZOOM_IN:
+        case SID_ZOOM_OUT:
+            {
+                HideNoteMarker();
+
+                if (!GetViewData().GetViewShell()->GetViewFrame()->GetFrame().IsInPlace())
+                {
+                    //  for ole inplace editing, the scale is defined by the visarea and client size
+                    //  and can't be changed directly
+
+                    const Fraction& rOldY = GetViewData().GetZoomY();
+                    long nOld = static_cast<long>(rOldY * 100);
+                    long nNew;
+                    if (SID_ZOOM_OUT == nSlot)
+                        nNew = std::max(long(MINZOOM), basegfx::zoomtools::zoomOut(nOld));
+                    else
+                        nNew = std::min(long(MAXZOOM), basegfx::zoomtools::zoomIn(nOld));
+                    if ( nNew != nOld)
+                    {
+                        bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                        SetZoomType(SvxZoomType::PERCENT, bSyncZoom);
+                        Fraction aFract(nNew, 100);
+                        SetZoom(aFract, aFract, bSyncZoom);
+                        PaintGrid();
+                        PaintTop();
+                        PaintLeft();
+                        rBindings.Invalidate(SID_ATTR_ZOOM);
+                        rBindings.Invalidate(SID_ATTR_ZOOMSLIDER);
+                        rBindings.Invalidate(SID_ZOOM_IN);
+                        rBindings.Invalidate(SID_ZOOM_OUT);
+                        rReq.Done();
+                    }
+                }
+            }
+            break;
+
         case SID_ATTR_ZOOM: // status row
         case FID_SCALE:
             {
@@ -816,6 +856,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         PaintTop();
                         PaintLeft();
                         rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
+                        rBindings.Invalidate( SID_ZOOM_IN );
+                        rBindings.Invalidate( SID_ZOOM_OUT );
                         rReq.Done();
                     }
                 }
