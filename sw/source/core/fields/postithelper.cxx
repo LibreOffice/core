@@ -206,9 +206,9 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
              : aRet;
 }
 
-long SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
+tools::Long SwPostItHelper::getLayoutHeight( const SwRootFrame* pRoot )
 {
-    long nRet = pRoot ? pRoot->getFrameArea().Height() : 0;
+    tools::Long nRet = pRoot ? pRoot->getFrameArea().Height() : 0;
     return nRet;
 }
 

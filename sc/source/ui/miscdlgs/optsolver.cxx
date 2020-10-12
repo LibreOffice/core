@@ -374,11 +374,11 @@ void ScOptSolverDlg::ReadConditions()
         aRowEntry.aRightStr = mpRightEdit[nRow]->GetText();
         aRowEntry.nOperator = mpOperator[nRow]->get_active();
 
-        long nVecPos = nScrollPos + nRow;
-        if ( nVecPos >= static_cast<long>(maConditions.size()) && !aRowEntry.IsDefault() )
+        tools::Long nVecPos = nScrollPos + nRow;
+        if ( nVecPos >= static_cast<tools::Long>(maConditions.size()) && !aRowEntry.IsDefault() )
             maConditions.resize( nVecPos + 1 );
 
-        if ( nVecPos < static_cast<long>(maConditions.size()) )
+        if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
             maConditions[nVecPos] = aRowEntry;
 
         // remove default entries at the end
@@ -395,8 +395,8 @@ void ScOptSolverDlg::ShowConditions()
     {
         ScOptConditionRow aRowEntry;
 
-        long nVecPos = nScrollPos + nRow;
-        if ( nVecPos < static_cast<long>(maConditions.size()) )
+        tools::Long nVecPos = nScrollPos + nRow;
+        if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
             aRowEntry = maConditions[nVecPos];
 
         mpLeftEdit[nRow]->SetRefString( aRowEntry.aLeftStr );
@@ -405,8 +405,8 @@ void ScOptSolverDlg::ShowConditions()
     }
 
     // allow to scroll one page behind the visible or stored rows
-    long nVisible = nScrollPos + EDIT_ROW_COUNT;
-    long nMax = std::max( nVisible, static_cast<long>(maConditions.size()) );
+    tools::Long nVisible = nScrollPos + EDIT_ROW_COUNT;
+    tools::Long nMax = std::max( nVisible, static_cast<tools::Long>(maConditions.size()) );
     m_xScrollBar->vadjustment_configure(nScrollPos, 0, nMax + EDIT_ROW_COUNT, 1,
                                         EDIT_ROW_COUNT - 1, EDIT_ROW_COUNT);
 
@@ -417,8 +417,8 @@ void ScOptSolverDlg::EnableButtons()
 {
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        long nVecPos = nScrollPos + nRow;
-        mpDelButton[nRow]->set_sensitive(nVecPos < static_cast<long>(maConditions.size()));
+        tools::Long nVecPos = nScrollPos + nRow;
+        mpDelButton[nRow]->set_sensitive(nVecPos < static_cast<tools::Long>(maConditions.size()));
     }
 }
 
@@ -626,8 +626,8 @@ IMPL_LINK(ScOptSolverDlg, DelBtnHdl, weld::Button&, rBtn, void)
             bool bHadFocus = rBtn.has_focus();
 
             ReadConditions();
-            long nVecPos = nScrollPos + nRow;
-            if ( nVecPos < static_cast<long>(maConditions.size()) )
+            tools::Long nVecPos = nScrollPos + nRow;
+            if ( nVecPos < static_cast<tools::Long>(maConditions.size()) )
             {
                 maConditions.erase( maConditions.begin() + nVecPos );
                 ShowConditions();

@@ -238,7 +238,7 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
         // offset to calculate the position in the text taking into
         // account that text may have been replaced with new text of
         // different length. Negative values allowed!
-        long nCorrectionOffset = 0;
+        tools::Long nCorrectionOffset = 0;
 
         OSL_ENSURE(nIndices == 0 || nIndices == nConvTextLen,
                 "mismatch between string length and sequence length!" );

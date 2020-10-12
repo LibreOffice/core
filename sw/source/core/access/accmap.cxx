@@ -3125,7 +3125,7 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
 bool SwAccessibleMap::ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const uno::Reference< drawing::XShape >& _rxShape,
-        const long /*_nIndex*/,
+        const tools::Long /*_nIndex*/,
         const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
     )
 {
@@ -3240,10 +3240,10 @@ Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
     return aPoint;
 }
 
-static long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
-                                          long aRefValue, bool bToLower)
+static tools::Long lcl_CorrectCoarseValue(tools::Long aCoarseValue, tools::Long aFineValue,
+                                          tools::Long aRefValue, bool bToLower)
 {
-    long aResult = aCoarseValue;
+    tools::Long aResult = aCoarseValue;
 
     if (bToLower)
     {

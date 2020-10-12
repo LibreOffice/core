@@ -183,7 +183,7 @@ void BrowseBox::DoubleClick( const BrowserMouseEvent & )
 }
 
 
-long BrowseBox::QueryMinimumRowHeight()
+tools::Long BrowseBox::QueryMinimumRowHeight()
 {
     return CalcZoom( 5 );
 }
@@ -242,18 +242,18 @@ void BrowseBox::ToggleSelection()
 
     // accumulate areas of rows to highlight
     std::vector<tools::Rectangle> aHighlightList;
-    long nLastRowInRect = 0; // for the CFront
+    tools::Long nLastRowInRect = 0; // for the CFront
 
     // don't highlight handle column
     BrowserColumn *pFirstCol = mvCols.empty() ? nullptr : mvCols[ 0 ].get();
-    long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
+    tools::Long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
 
     // accumulate old row selection
-    long nBottomRow = nTopRow +
+    tools::Long nBottomRow = nTopRow +
         pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight();
     if ( nBottomRow > GetRowCount() && GetRowCount() )
         nBottomRow = GetRowCount();
-    for ( long nRow = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
+    for ( tools::Long nRow = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
           nRow != BROWSER_ENDOFSELECTION && nRow <= nBottomRow;
           nRow = bMultiSelection ? uRow.pSel->NextSelected() : BROWSER_ENDOFSELECTION )
     {
@@ -278,7 +278,7 @@ void BrowseBox::ToggleSelection()
     }
 
     // unhighlight old column selection (if any)
-    for ( long nColId = pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
+    for ( tools::Long nColId = pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
           nColId != BROWSER_ENDOFSELECTION;
           nColId = pColSel->NextSelected() )
     {
@@ -496,11 +496,11 @@ void BrowseBox::Resize()
         aHScroll->Hide();
 
     // calculate the size of the data window
-    long nDataHeight = GetOutputSizePixel().Height() - GetTitleHeight();
+    tools::Long nDataHeight = GetOutputSizePixel().Height() - GetTitleHeight();
     if ( aHScroll->IsVisible() || ( nControlAreaWidth != USHRT_MAX ) )
         nDataHeight -= nSBSize;
 
-    long nDataWidth = GetOutputSizePixel().Width();
+    tools::Long nDataWidth = GetOutputSizePixel().Width();
     if ( pVScroll->IsVisible() )
         nDataWidth -= nSBSize;
 
@@ -532,7 +532,7 @@ void BrowseBox::Resize()
     {
         // take the handle column into account
         BrowserColumn *pFirstCol = mvCols[ 0 ].get();
-        long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
+        tools::Long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
         pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
     }
 
@@ -581,7 +581,7 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         return;
 
     // iterate through columns to redraw
-    long nX = 0;
+    tools::Long nX = 0;
     size_t nCol;
     for (nCol = 0; nCol < mvCols.size() && nX < rRect.Right(); ++nCol)
     {
@@ -668,10 +668,10 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     // (as it is based on the settings of our data window, not the foreign device)
     if (!nDataRowHeight)
         ImpGetDataRowHeight();
-    long nHeightLogic = PixelToLogic(Size(0, nDataRowHeight), MapMode(MapUnit::Map10thMM)).Height();
-    long nForeignHeightPixel = pDev->LogicToPixel(Size(0, nHeightLogic), MapMode(MapUnit::Map10thMM)).Height();
+    tools::Long nHeightLogic = PixelToLogic(Size(0, nDataRowHeight), MapMode(MapUnit::Map10thMM)).Height();
+    tools::Long nForeignHeightPixel = pDev->LogicToPixel(Size(0, nHeightLogic), MapMode(MapUnit::Map10thMM)).Height();
 
-    long nOriginalHeight = nDataRowHeight;
+    tools::Long nOriginalHeight = nDataRowHeight;
     nDataRowHeight = nForeignHeightPixel;
 
     // this counts for the column widths, too
@@ -680,8 +680,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     {
         BrowserColumn* pCurrent = mvCols[ nPos ].get();
 
-        long nWidthLogic = PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
-        long nForeignWidthPixel = pDev->LogicToPixel(Size(nWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nWidthLogic = PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nForeignWidthPixel = pDev->LogicToPixel(Size(nWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
 
         pCurrent->SetWidth(nForeignWidthPixel, GetZoom());
         if ( pBar )
@@ -698,7 +698,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     if ( pBar )
     {
         // the title height with respect to the font set for the given device
-        long nTitleHeight = PixelToLogic(Size(0, GetTitleHeight()), MapMode(MapUnit::Map10thMM)).Height();
+        tools::Long nTitleHeight = PixelToLogic(Size(0, GetTitleHeight()), MapMode(MapUnit::Map10thMM)).Height();
         nTitleHeight = pDev->LogicToPixel(Size(0, nTitleHeight), MapMode(MapUnit::Map10thMM)).Height();
 
         BrowserColumn* pFirstCol = !mvCols.empty() ? mvCols[ 0 ].get() : nullptr;
@@ -761,8 +761,8 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, DrawFlags nFlags )
     {
         BrowserColumn* pCurrent = mvCols[ nPos ].get();
 
-        long nForeignWidthLogic = pDev->PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
-        long nWidthPixel = LogicToPixel(Size(nForeignWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nForeignWidthLogic = pDev->PixelToLogic(Size(pCurrent->Width(), 0), MapMode(MapUnit::Map10thMM)).Width();
+        tools::Long nWidthPixel = LogicToPixel(Size(nForeignWidthLogic, 0), MapMode(MapUnit::Map10thMM)).Width();
 
         pCurrent->SetWidth(nWidthPixel, GetZoom());
         if ( pBar )
@@ -778,7 +778,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     Size aOverallAreaSize = _bForeignDevice ? _rRect.GetSize() : pDataWin->GetOutputSizePixel();
     Point aOverallAreaBRPos = _bForeignDevice ? _rRect.BottomRight() : Point( aOverallAreaSize.Width(), aOverallAreaSize.Height() );
 
-    long nDataRowHeigt = GetDataRowHeight();
+    tools::Long nDataRowHeigt = GetDataRowHeight();
 
     // compute relative rows to redraw
     sal_uLong nRelTopRow = 0;
@@ -799,7 +799,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     Color aOldTextColor = _rOut.GetTextColor();
     Color aOldFillColor = _rOut.GetFillColor();
     Color aOldLineColor = _rOut.GetLineColor();
-    long nHLineX = 0 == mvCols[ 0 ]->GetId() ? mvCols[ 0 ]->Width() : 0;
+    tools::Long nHLineX = 0 == mvCols[ 0 ]->GetId() ? mvCols[ 0 ]->Width() : 0;
     nHLineX += aOverallAreaPos.X();
 
     Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
@@ -812,7 +812,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
         // get row
         // check valid area, to be on the safe side:
         DBG_ASSERT( static_cast<sal_uInt16>(nTopRow+nRelRow) < nRowCount, "BrowseBox::ImplPaintData: invalid seek" );
-        if ( (nTopRow+long(nRelRow)) < 0 || static_cast<sal_uInt16>(nTopRow+nRelRow) >= nRowCount )
+        if ( (nTopRow+tools::Long(nRelRow)) < 0 || static_cast<sal_uInt16>(nTopRow+nRelRow) >= nRowCount )
             continue;
 
         // prepare row
@@ -935,11 +935,11 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             _rOut.SetClipRegion();
             _rOut.Push( PushFlags::LINECOLOR );
             _rOut.SetLineColor( aDelimiterLineColor );
-            long nY = aPos.Y() + nDataRowHeigt - 1;
+            tools::Long nY = aPos.Y() + nDataRowHeigt - 1;
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
-                                        ? std::min(long(aPos.X() - 1), aOverallAreaBRPos.X())
+                                        ? std::min(tools::Long(aPos.X() - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
             _rOut.Pop();
@@ -969,7 +969,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
 
     // draw vertical delimitational line between frozen and scrollable cols
     _rOut.SetLineColor( COL_BLACK );
-    long nFrozenWidth = GetFrozenWidth()-1;
+    tools::Long nFrozenWidth = GetFrozenWidth()-1;
     _rOut.DrawLine( Point( aOverallAreaPos.X() + nFrozenWidth, aPos.Y() ),
                    Point( aOverallAreaPos.X() + nFrozenWidth, bHLines
                             ? aPos.Y() - 1
@@ -980,7 +980,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     {
         _rOut.SetLineColor( aDelimiterLineColor );
         Point aVertPos( aOverallAreaPos.X() - 1, aOverallAreaPos.Y() );
-        long nDeltaY = aOverallAreaBRPos.Y();
+        tools::Long nDeltaY = aOverallAreaBRPos.Y();
         for ( size_t nCol = 0; nCol < mvCols.size(); ++nCol )
         {
             // get column
@@ -1049,7 +1049,7 @@ void BrowseBox::UpdateScrollbars()
         nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
-    long nMaxRows = 0;
+    tools::Long nMaxRows = 0;
     if (GetDataRowHeight())
     {
         // needs VScroll?
@@ -1134,14 +1134,14 @@ void BrowseBox::UpdateScrollbars()
 
     if ( pVScroll->GetThumbPos() != nTopRow )
         pVScroll->SetThumbPos( nTopRow );
-    long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), long(nRowCount-nTopRow) );
+    tools::Long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), tools::Long(nRowCount-nTopRow) );
     pVScroll->SetVisibleSize( nVisibleSize ? nVisibleSize : 1 );
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
         Point( aDataWinSize.Width(), GetTitleHeight() ),
         Size( nCornerSize, aDataWinSize.Height()) );
-    long nLclDataRowHeight = GetDataRowHeight();
-    if ( nLclDataRowHeight > 0 && nRowCount < long( aDataWinSize.Height() / nLclDataRowHeight ) )
+    tools::Long nLclDataRowHeight = GetDataRowHeight();
+    if ( nLclDataRowHeight > 0 && nRowCount < tools::Long( aDataWinSize.Height() / nLclDataRowHeight ) )
         ScrollRows( -nTopRow );
     if ( bNeedsVScroll && !pVScroll->IsVisible() )
         pVScroll->Show();
@@ -1179,7 +1179,7 @@ void BrowseBox::UpdateScrollbars()
     // scroll headerbar, if necessary
     if ( pDataWin->pHeaderBar )
     {
-        long nWidth = 0;
+        tools::Long nWidth = 0;
         for ( size_t nCol = 0;
               nCol < mvCols.size() && nCol < nFirstCol;
               ++nCol )
@@ -1237,10 +1237,10 @@ bool BrowseBox::GetUpdateMode() const
 }
 
 
-long BrowseBox::GetFrozenWidth() const
+tools::Long BrowseBox::GetFrozenWidth() const
 {
 
-    long nWidth = 0;
+    tools::Long nWidth = 0;
     for ( size_t nCol = 0;
           nCol < mvCols.size() && mvCols[ nCol ]->IsFrozen();
           ++nCol )
@@ -1298,8 +1298,8 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
     if ( rEvtPos.Y() >= GetTitleHeight() )
         return;
 
-    long nX = 0;
-    long nWidth = GetOutputSizePixel().Width();
+    tools::Long nX = 0;
+    tools::Long nWidth = GetOutputSizePixel().Width();
     for ( size_t nCol = 0; nCol < mvCols.size() && nX < nWidth; ++nCol )
     {
         // is this column visible?
@@ -1307,7 +1307,7 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         if ( pCol->IsFrozen() || nCol >= nFirstCol )
         {
             // compute right end of column
-            long nR = nX + pCol->Width() - 1;
+            tools::Long nR = nX + pCol->Width() - 1;
 
             // at the end of a column (and not handle column)?
             if ( pCol->GetId() && std::abs( nR - rEvtPos.X() ) < 2 )
@@ -1362,7 +1362,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
 
             // show resize-pointer?
             if ( bResizing || ( pCol->GetId() &&
-                 std::abs( static_cast<long>(nR) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
+                 std::abs( static_cast<tools::Long>(nR) - rEvt.GetPosPixel().X() ) < MIN_COLUMNWIDTH ) )
             {
                 aNewPointer = PointerStyle::HSplit;
                 if ( bResizing )
@@ -1372,7 +1372,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
 
                     // check allowed width and new delta
                     nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
-                    long nDeltaX = nDragX - nResizeX;
+                    tools::Long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
                     sal_uLong nOldWidth = GetColumnWidth(nId);
                     nDragX = nOldWidth + nDeltaX + nResizeX - nOldWidth;
@@ -1402,12 +1402,12 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 
         // width changed?
         nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
-        if ( (nDragX - nResizeX) != static_cast<long>(mvCols[ nResizeCol ]->Width()) )
+        if ( (nDragX - nResizeX) != static_cast<tools::Long>(mvCols[ nResizeCol ]->Width()) )
         {
             // resize column
-            long nMaxX = pDataWin->GetSizePixel().Width();
+            tools::Long nMaxX = pDataWin->GetSizePixel().Width();
             nDragX = std::min( nDragX, nMaxX );
-            long nDeltaX = nDragX - nResizeX;
+            tools::Long nDeltaX = nDragX - nResizeX;
             sal_uInt16 nId = GetColumnId(nResizeCol);
             SetColumnWidth( GetColumnId(nResizeCol), GetColumnWidth(nId) + nDeltaX );
             ColumnResized( nId );
@@ -1691,7 +1691,7 @@ bool BrowseBox::ProcessKey( const KeyEvent& rEvt )
 void BrowseBox::Dispatch( sal_uInt16 nId )
 {
 
-    long nRowsOnPage = pDataWin->GetSizePixel().Height() / GetDataRowHeight();
+    tools::Long nRowsOnPage = pDataWin->GetSizePixel().Height() / GetDataRowHeight();
 
     switch ( nId )
     {
@@ -1712,7 +1712,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( GetRowCount() )
             {
                 DoHideCursor( "BROWSER_SELECTHOME" );
-                for ( long nRow = GetCurRow(); nRow >= 0; --nRow )
+                for ( tools::Long nRow = GetCurRow(); nRow >= 0; --nRow )
                     SelectRow( nRow );
                 GoToRow( 0, true );
                 DoShowCursor( "BROWSER_SELECTHOME" );
@@ -1722,8 +1722,8 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( GetRowCount() )
             {
                 DoHideCursor( "BROWSER_SELECTEND" );
-                long nRows = GetRowCount();
-                for ( long nRow = GetCurRow(); nRow < nRows; ++nRow )
+                tools::Long nRows = GetRowCount();
+                for ( tools::Long nRow = GetCurRow(); nRow < nRows; ++nRow )
                     SelectRow( nRow );
                 GoToRow( GetRowCount() - 1, true );
                 DoShowCursor( "BROWSER_SELECTEND" );
@@ -1735,7 +1735,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row above
-                long nRow = GetCurRow();
+                tools::Long nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
                 SelectRow( nRow, bLocalSelect );
@@ -1752,7 +1752,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row under
-                long nRow = GetCurRow();
+                tools::Long nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect );
@@ -1909,8 +1909,8 @@ tools::Rectangle BrowseBox::calcHeaderRect(bool _bIsColumnBar, bool _bOnScreen)
         pParent = GetAccessibleParentWindow();
 
     Point aTopLeft;
-    long nWidth;
-    long nHeight;
+    tools::Long nWidth;
+    tools::Long nHeight;
     if ( _bIsColumnBar )
     {
         nWidth = pDataWin->GetOutputSizePixel().Width();
@@ -1935,8 +1935,8 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     tools::Rectangle aRect( GetWindowExtentsRelative( pParent ) );
     tools::Rectangle aRowBar = calcHeaderRect(false, pParent == nullptr);
 
-    long nX = aRowBar.Right() - aRect.Left();
-    long nY = aRowBar.Top() - aRect.Top();
+    tools::Long nX = aRowBar.Right() - aRect.Left();
+    tools::Long nY = aRowBar.Top() - aRect.Top();
     Size aSize(aRect.GetSize());
 
     return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - GetBarHeight()) );

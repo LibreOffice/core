@@ -601,7 +601,7 @@ void SmGraphicWindow::ZoomToFitInWindow()
 
     if (!aSize.IsEmpty())
     {
-        long nVal = std::min ((85 * aWindowSize.Width())  / aSize.Width(),
+        tools::Long nVal = std::min ((85 * aWindowSize.Width())  / aSize.Width(),
                       (85 * aWindowSize.Height()) / aSize.Height());
         SetZoom ( sal::static_int_cast< sal_uInt16 >(nVal) );
     }
@@ -913,7 +913,7 @@ void SmViewShell::QueryObjAreaPixel( tools::Rectangle& rRect ) const
 void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 {
     const Fraction &rFrac = std::min(rX, rY);
-    GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(long(rFrac * Fraction( 100, 1 ))));
+    GetGraphicWindow().SetZoom(sal::static_int_cast<sal_uInt16>(tools::Long(rFrac * Fraction( 100, 1 ))));
 
     //To avoid rounding errors base class regulates crooked values too
     //if necessary
@@ -923,7 +923,7 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& rLine)
 {
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
-    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
+    const tools::Long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
 
     if (nTabPos)
     {
@@ -943,7 +943,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& 
     return aSize;
 }
 
-Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rText, long MaxWidth)
+Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rText, tools::Long MaxWidth)
 {
     Size aSize;
     Size aTextSize;
@@ -1005,7 +1005,7 @@ Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rTex
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
     Point aPoint(rPosition);
-    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
+    const tools::Long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
 
     if (nTabPos)
     {
@@ -1197,8 +1197,8 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MapUnit::Map100thMM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MapUnit::Map100thMM)));
-                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                          long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+                sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                          tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
                 nZ -= 10;
                 Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
 
@@ -2020,8 +2020,8 @@ void SmViewShell::ZoomByItemSet(const SfxItemSet *pSet)
             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                               OutputRect.GetHeight()), aMap));
             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
-                                                                      long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
+            sal_uInt16 nZ = sal::static_int_cast<sal_uInt16>(std::min(tools::Long(Fraction(OutputSize.Width()  * 100, GraphicSize.Width())),
+                                                                      tools::Long(Fraction(OutputSize.Height() * 100, GraphicSize.Height()))));
             mpGraphic->SetZoom (nZ);
             break;
         }

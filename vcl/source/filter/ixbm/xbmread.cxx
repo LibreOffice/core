@@ -51,9 +51,9 @@ class XBMReader : public GraphicReader
                         pHexTable;
     BitmapColor         aWhite;
     BitmapColor         aBlack;
-    long                nLastPos;
-    long                nWidth;
-    long                nHeight;
+    tools::Long                nLastPos;
+    tools::Long                nWidth;
+    tools::Long                nHeight;
     bool                bStatus;
 
     void            InitTable();
@@ -193,10 +193,10 @@ int XBMReader::ParseDefine( const char* pDefine )
 void XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
 {
     OString    aLine;
-    long            nRow = 0;
-    long            nCol = 0;
-    long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
-    long            nBit;
+    tools::Long            nRow = 0;
+    tools::Long            nCol = 0;
+    tools::Long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
+    tools::Long            nBit;
     sal_uInt16          nValue;
     sal_uInt16          nDigits;
     bool            bFirstLine = true;

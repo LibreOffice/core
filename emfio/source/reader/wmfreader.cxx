@@ -821,9 +821,9 @@ namespace emfio
                 if ( !!aBmp )
                 {
                     Bitmap::ScopedReadAccess pBmp(aBmp);
-                    for ( long y = 0; y < pBmp->Height(); y++ )
+                    for ( tools::Long y = 0; y < pBmp->Height(); y++ )
                     {
-                        for ( long x = 0; x < pBmp->Width(); x++ )
+                        for ( tools::Long x = 0; x < pBmp->Width(); x++ )
                         {
                             const BitmapColor aColor( pBmp->GetColor( y, x ) );
 
@@ -1234,7 +1234,7 @@ namespace emfio
         }
     }
 
-    const long   aMaxWidth = 1024;
+    const tools::Long   aMaxWidth = 1024;
 
     bool WmfReader::ReadHeader()
     {

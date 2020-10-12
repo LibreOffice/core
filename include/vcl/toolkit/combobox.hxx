@@ -46,7 +46,7 @@ protected:
     SAL_DLLPRIVATE void     ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE static WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void     ImplCalcEditHeight();
-    SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
+    SAL_DLLPRIVATE tools::Long     getMaxWidthScrollBarAndDownButton() const;
 
 protected:
     bool            IsDropDownBox() const;
@@ -71,7 +71,7 @@ public:
 
     virtual const Wallpaper& GetDisplayBackground() const override;
 
-    virtual void    setPosSizePixel( long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
+    virtual void    setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags = PosSizeFlags::All ) override;
 
     tools::Rectangle       GetDropDownPosSizePixel() const;
 
@@ -176,13 +176,13 @@ public:
         if no item is at that point.
      */
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
+    tools::Long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
     void setMaxWidthChars(sal_Int32 nWidth);
 
     void SetWidthInChars(sal_Int32 nWidthInChars);
 
-    long GetDropDownEntryHeight() const;
+    tools::Long GetDropDownEntryHeight() const;
 
     virtual bool set_property(const OString &rKey, const OUString &rValue) override;
 

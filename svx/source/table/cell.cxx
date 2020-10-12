@@ -774,25 +774,25 @@ sal_Int32 Cell::getMinimumHeight()
 }
 
 
-long Cell::GetTextLeftDistance() const
+tools::Long Cell::GetTextLeftDistance() const
 {
     return GetItemSet().Get(SDRATTR_TEXT_LEFTDIST).GetValue();
 }
 
 
-long Cell::GetTextRightDistance() const
+tools::Long Cell::GetTextRightDistance() const
 {
     return GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST).GetValue();
 }
 
 
-long Cell::GetTextUpperDistance() const
+tools::Long Cell::GetTextUpperDistance() const
 {
     return GetItemSet().Get(SDRATTR_TEXT_UPPERDIST).GetValue();
 }
 
 
-long Cell::GetTextLowerDistance() const
+tools::Long Cell::GetTextLowerDistance() const
 {
     return GetItemSet().Get(SDRATTR_TEXT_LOWERDIST).GetValue();
 }

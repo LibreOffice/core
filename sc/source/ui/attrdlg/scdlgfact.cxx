@@ -1063,12 +1063,12 @@ VclPtr<AbstractScLinkedAreaDlg> ScAbstractDialogFactory_Impl::CreateScLinkedArea
 
 VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString& sDialogName,
-                                                                long            nCurrent,
-                                                                long            nDefault,
+                                                                tools::Long            nCurrent,
+                                                                tools::Long            nDefault,
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
-                                                                long            nMaximum ,
-                                                                long            nMinimum )
+                                                                tools::Long            nMaximum ,
+                                                                tools::Long            nMinimum )
 {
     return VclPtr<AbstractScMetricInputDlg_Impl>::Create(std::make_unique<ScMetricInputDlg>(pParent, sDialogName, nCurrent ,nDefault, eFUnit,
         nDecimals, nMaximum , nMinimum));

@@ -29,7 +29,7 @@ class SFX2_DLLPUBLIC SvxCharView final : public weld::CustomWidgetController
 {
 private:
     VclPtr<VirtualDevice> mxVirDev;
-    long            mnY;
+    tools::Long            mnY;
     Point           maPosition;
     vcl::Font       maFont;
     bool            maHasInsert;

@@ -46,7 +46,7 @@ class X11SalVirtualDevice : public SalVirtualDevice
     bool        bExternPixmap_;
 
 public:
-    X11SalVirtualDevice(SalGraphics const *pGraphics, long &nDX, long &nDY,
+    X11SalVirtualDevice(SalGraphics const *pGraphics, tools::Long &nDX, tools::Long &nDY,
             DeviceFormat eFormat, const SystemGraphicsData *pData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual ~X11SalVirtualDevice() override;
@@ -67,11 +67,11 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
     /// Set new size, without saving the old contents
-    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
+    virtual bool        SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const override { return nDX_; }
-    virtual long GetHeight() const override { return nDY_; }
+    virtual tools::Long GetWidth() const override { return nDX_; }
+    virtual tools::Long GetHeight() const override { return nDY_; }
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H

@@ -67,8 +67,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     bool bVScroll = bScroll && (eAniDir == SdrTextAniDirection::Up || eAniDir == SdrTextAniDirection::Down);
 
     tools::Rectangle aOldRect = rR;
-    long nHgt = 0, nMinHgt = 0, nMaxHgt = 0;
-    long nWdt = 0, nMinWdt = 0, nMaxWdt = 0;
+    tools::Long nHgt = 0, nMinHgt = 0, nMaxHgt = 0;
+    tools::Long nWdt = 0, nMinWdt = 0, nMaxWdt = 0;
 
     Size aNewSize = rR.GetSize();
     aNewSize.AdjustWidth( -1 ); aNewSize.AdjustHeight( -1 );
@@ -105,8 +105,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
         aNewSize.setHeight( nMaxHgt );
     }
 
-    long nHDist = GetTextLeftDistance() + GetTextRightDistance();
-    long nVDist = GetTextUpperDistance() + GetTextLowerDistance();
+    tools::Long nHDist = GetTextLeftDistance() + GetTextRightDistance();
+    tools::Long nVDist = GetTextUpperDistance() + GetTextLowerDistance();
     aNewSize.AdjustWidth( -nHDist );
     aNewSize.AdjustHeight( -nVDist );
 
@@ -179,8 +179,8 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
     nHgt += nVDist;
     if (nHgt < 1)
         nHgt = 1; // nVDist may be negative
-    long nWdtGrow = nWdt - (rR.Right() - rR.Left());
-    long nHgtGrow = nHgt - (rR.Bottom() - rR.Top());
+    tools::Long nWdtGrow = nWdt - (rR.Right() - rR.Left());
+    tools::Long nHgtGrow = nHgt - (rR.Bottom() - rR.Top());
 
     if (nWdtGrow == 0)
         bWdtGrow = false;
@@ -200,7 +200,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             rR.AdjustLeft( -nWdtGrow );
         else
         {
-            long nWdtGrow2 = nWdtGrow / 2;
+            tools::Long nWdtGrow2 = nWdtGrow / 2;
             rR.AdjustLeft( -nWdtGrow2 );
             rR.SetRight( rR.Left() + nWdt );
         }
@@ -216,7 +216,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( tools::Rectangle& rR, bool bHgt,
             rR.AdjustTop( -nHgtGrow );
         else
         {
-            long nHgtGrow2 = nHgtGrow / 2;
+            tools::Long nHgtGrow2 = nHgtGrow / 2;
             rR.AdjustTop( -nHgtGrow2 );
             rR.SetBottom( rR.Top() + nHgt );
         }

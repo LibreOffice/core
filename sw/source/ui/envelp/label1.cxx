@@ -239,7 +239,7 @@ SwLabPage::SwLabPage(weld::Container* pPage, weld::DialogController* pController
                                      m_xWritingEdit->get_height_rows(10));
     m_xHiddenSortTypeBox->make_sorted();
 
-    long nListBoxWidth = m_xWritingEdit->get_approximate_digit_width() * 25;
+    tools::Long nListBoxWidth = m_xWritingEdit->get_approximate_digit_width() * 25;
     m_xTableLB->set_size_request(nListBoxWidth, -1);
     m_xDatabaseLB->set_size_request(nListBoxWidth, -1);
     m_xDBFieldLB->set_size_request(nListBoxWidth, -1);

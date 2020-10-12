@@ -29,7 +29,7 @@ class SVXCORE_DLLPUBLIC XLineWidthItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-                            XLineWidthItem(long nWidth = 0);
+                            XLineWidthItem(tools::Long nWidth = 0);
     virtual XLineWidthItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

@@ -35,7 +35,7 @@ namespace svt
     using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
 
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState)
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(tools::Long _nRow, sal_uInt16 _nColumnPos,const TriState& eState)
 {
     Reference< XAccessible > xAccessible( GetAccessible() );
     Reference< XAccessibleContext > xAccContext;
@@ -143,7 +143,7 @@ void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
         )
         return;
 
-    long nRows = GetRowCount();
+    tools::Long nRows = GetRowCount();
     sal_uInt16 nCols = ColCount();
 
     if (( nRows <= 0 ) || ( nCols <= 0 ))

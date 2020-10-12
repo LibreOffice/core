@@ -66,7 +66,7 @@ css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
     const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
     css::uno::Sequence<OUString> result(entries.size());
-    long i = 0;
+    tools::Long i = 0;
 
     for (auto const& entry : entries)
     {

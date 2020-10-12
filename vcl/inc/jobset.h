@@ -41,8 +41,8 @@ private:
     DuplexMode      meDuplexMode;       //< Duplex
     sal_uInt16      mnPaperBin;         //< paper bin / in tray
     Paper           mePaperFormat;      //< paper format
-    long            mnPaperWidth;       //< paper width (100th mm)
-    long            mnPaperHeight;      //< paper height (100th mm)
+    tools::Long            mnPaperWidth;       //< paper width (100th mm)
+    tools::Long            mnPaperHeight;      //< paper height (100th mm)
     sal_uInt32      mnDriverDataLen;    //< length of system specific data
     sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
@@ -79,11 +79,11 @@ public:
     Paper            GetPaperFormat() const { return mePaperFormat; }
     void             SetPaperFormat(Paper ePaperFormat);
 
-    long             GetPaperWidth() const { return mnPaperWidth; }
-    void             SetPaperWidth(long nWidth);
+    tools::Long             GetPaperWidth() const { return mnPaperWidth; }
+    void             SetPaperWidth(tools::Long nWidth);
 
-    long             GetPaperHeight() const { return mnPaperHeight; }
-    void             SetPaperHeight(long nHeight);
+    tools::Long             GetPaperHeight() const { return mnPaperHeight; }
+    void             SetPaperHeight(tools::Long nHeight);
 
     sal_uInt32       GetDriverDataLen() const { return mnDriverDataLen; }
     void             SetDriverDataLen(sal_uInt32 nDriverDataLen);

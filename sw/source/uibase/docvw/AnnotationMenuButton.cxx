@@ -194,14 +194,14 @@ void AnnotationMenuButton::Paint(vcl::RenderContext& rRenderContext, const tools
 
     tools::Rectangle aSymbolRect(aRect);
     // 25% distance to the left and right button border
-    const long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
+    const tools::Long nBorderDistanceLeftAndRight = ((aSymbolRect.GetWidth() * 250) + 500) / 1000;
     aSymbolRect.AdjustLeft(nBorderDistanceLeftAndRight );
     aSymbolRect.AdjustRight( -nBorderDistanceLeftAndRight );
     // 40% distance to the top button border
-    const long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
+    const tools::Long nBorderDistanceTop = ((aSymbolRect.GetHeight() * 400) + 500) / 1000;
     aSymbolRect.AdjustTop(nBorderDistanceTop );
     // 15% distance to the bottom button border
-    const long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
+    const tools::Long nBorderDistanceBottom = ((aSymbolRect.GetHeight() * 150) + 500) / 1000;
     aSymbolRect.AdjustBottom( -nBorderDistanceBottom );
     DecorationView aDecoView(&rRenderContext);
     aDecoView.DrawSymbol(aSymbolRect, SymbolType::SPIN_DOWN, (bHighContrast ? COL_WHITE : COL_BLACK));

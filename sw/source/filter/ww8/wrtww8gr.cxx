@@ -118,7 +118,7 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
     don't need to store another preview
     */
     GDIMetaFile aWMF;
-    long nX=0,nY=0;
+    tools::Long nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
         // bGraphicNeeded set to true is right / fixes #i51670#.
@@ -411,7 +411,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
                 SwTwips nHeight = rFlyFormat.GetFrameSize().GetHeight();
                 nHeight/=20; //nHeight was in twips, want it in half points, but
                              //then half of total height.
-                long nFontHeight = GetItem(RES_CHRATR_FONTSIZE).GetHeight();
+                tools::Long nFontHeight = GetItem(RES_CHRATR_FONTSIZE).GetHeight();
                 nHeight-=nFontHeight/20;
 
                 Set_UInt16( pArr, NS_sprm::CHpsPos::val );

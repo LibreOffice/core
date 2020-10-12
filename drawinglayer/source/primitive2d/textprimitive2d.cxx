@@ -202,7 +202,8 @@ TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
     const basegfx::B2DHomMatrix& rNewTransform, const OUString& rText, sal_Int32 nTextPosition,
     sal_Int32 nTextLength, const std::vector<double>& rDXArray,
     const attribute::FontAttribute& rFontAttribute, const css::lang::Locale& rLocale,
-    const basegfx::BColor& rFontColor, bool bFilled, long nWidthToFill, const Color& rTextFillColor)
+    const basegfx::BColor& rFontColor, bool bFilled, tools::Long nWidthToFill,
+    const Color& rTextFillColor)
     : BufferedDecompositionPrimitive2D()
     , maTextTransform(rNewTransform)
     , maText(rText)

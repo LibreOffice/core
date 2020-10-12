@@ -768,7 +768,7 @@ const int* FontList::GetSizeAry( const FontMetric& rInfo ) const
     pDevice->SetMapMode( aMap );
 
     int nRealCount = 0;
-    long    nOldHeight = 0;
+    tools::Long    nOldHeight = 0;
     mpSizeAry.reset(new int[nDevSizeCount+1] );
     for (int i = 0; i < nDevSizeCount; ++i)
     {
@@ -840,7 +840,7 @@ sal_Int32 FontSizeNames::Name2Size( const OUString& rName ) const
             RTL_TEXTENCODING_UTF8));
 
         // linear search is sufficient for this rare case
-        for( long i = mnElem; --i >= 0; )
+        for( tools::Long i = mnElem; --i >= 0; )
             if ( aName == mpArray[i].mszUtf8Name )
                 return mpArray[i].mnSize;
     }
@@ -853,9 +853,9 @@ OUString FontSizeNames::Size2Name( sal_Int32 nValue ) const
     OUString aStr;
 
     // binary search
-    for( long lower = 0, upper = mnElem - 1; lower <= upper; )
+    for( tools::Long lower = 0, upper = mnElem - 1; lower <= upper; )
     {
-        long mid = (upper + lower) >> 1;
+        tools::Long mid = (upper + lower) >> 1;
         if ( nValue == mpArray[mid].mnSize )
         {
             aStr = OUString( mpArray[mid].mszUtf8Name, strlen(mpArray[mid].mszUtf8Name), RTL_TEXTENCODING_UTF8 );

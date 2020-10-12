@@ -104,11 +104,11 @@ class AnnotationWindow : public FloatingWindow
         ::Outliner*             Engine()        { return mpOutliner.get(); }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
-        long            GetPostItTextHeight();
+        tools::Long            GetPostItTextHeight();
 
         void            InitControls();
         void            DoResize();
-        void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
+        void            ResizeIfNecessary(tools::Long aOldHeight, tools::Long aNewHeight);
         void            SetScrollbar();
 
         void            Rescale();

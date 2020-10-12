@@ -139,7 +139,7 @@ public:
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
                                              const SfxItemSet* pCondSet ) const;
 
-    long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
+    tools::Long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
     ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;
 
     void                    SetKey(sal_uInt64 nKey);

@@ -132,7 +132,7 @@ void CGM::ImplDoClass4()
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), i );
+                    aPolygon.SetPoint( Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) ), i );
                 }
                 if ( mbFigure )
                     mpOutAct->RegPolyLine( aPolygon );
@@ -155,7 +155,7 @@ void CGM::ImplDoClass4()
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 0 );
+                            aPolygon.SetPoint( Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) ), 0 );
                         }
                         mpOutAct->RegPolyLine( aPolygon );
                     }
@@ -166,9 +166,9 @@ void CGM::ImplDoClass4()
                         for ( sal_uInt16 i = 0; i < nPoints; i++ )
                         {
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 0 );
+                            aPolygon.SetPoint( Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) ), 0 );
                             ImplGetPoint( aFloatPoint, true );
-                            aPolygon.SetPoint( Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) ), 1);
+                            aPolygon.SetPoint( Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) ), 1);
                             mpOutAct->DrawPolyLine( aPolygon );
                         }
                         mpOutAct->EndGroup();
@@ -195,7 +195,7 @@ void CGM::ImplDoClass4()
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
 
                 awt::Size aSize;
-                awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
+                awt::Point aPoint( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) );
                 mpOutAct->DrawText(aPoint, aSize, aStr, static_cast<FinalFlag>(nType));
                 mnParaSize = mnElementSize;
             }
@@ -231,8 +231,8 @@ void CGM::ImplDoClass4()
 
                 OUString aStr(reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, RTL_TEXTENCODING_ASCII_US);
 
-                awt::Point aPoint( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
-                awt::Size aSize(static_cast<long>(dx), static_cast<long>(dy));
+                awt::Point aPoint( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) );
+                awt::Size aSize(static_cast<tools::Long>(dx), static_cast<tools::Long>(dy));
                 mpOutAct->DrawText(aPoint, aSize , aStr, static_cast<FinalFlag>(nType));
                 mnParaSize = mnElementSize;
             }
@@ -265,7 +265,7 @@ void CGM::ImplDoClass4()
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point ( static_cast<long>( aFloatPoint.X ), static_cast<long>( aFloatPoint.Y ) ), i );
+                    aPolygon.SetPoint( Point ( static_cast<tools::Long>( aFloatPoint.X ), static_cast<tools::Long>( aFloatPoint.Y ) ), i );
                 }
                 mpOutAct->DrawPolygon( aPolygon );
             }
@@ -286,7 +286,7 @@ void CGM::ImplDoClass4()
                 {
                     ImplGetPoint( aFloatPoint, true );
                     nEdgeFlag = ImplGetUI16();
-                    pPoints[ nPoints++ ] = Point( static_cast<long>(aFloatPoint.X), static_cast<long>(aFloatPoint.Y) );
+                    pPoints[ nPoints++ ] = Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) );
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
                         tools::Polygon aPolygon( nPoints );
@@ -414,7 +414,7 @@ void CGM::ImplDoClass4()
                     {
                         tools::Rectangle aBoundingBox(aCenterPoint.X - fRadius, aCenterPoint.Y - fRadius);
                         aBoundingBox.SaturatingSetSize(Size(2 * fRadius, 2 * fRadius));
-                        tools::Polygon aPolygon( aBoundingBox, Point( static_cast<long>(aStartingPoint.X), static_cast<long>(aStartingPoint.Y) ) ,Point( static_cast<long>(aEndingPoint.X), static_cast<long>(aEndingPoint.Y) ), PolyStyle::Arc );
+                        tools::Polygon aPolygon( aBoundingBox, Point( static_cast<tools::Long>(aStartingPoint.X), static_cast<tools::Long>(aStartingPoint.Y) ) ,Point( static_cast<tools::Long>(aEndingPoint.X), static_cast<tools::Long>(aEndingPoint.Y) ), PolyStyle::Arc );
                         if ( nSwitch )
                             mpOutAct->RegPolyLine( aPolygon, true );
                         else
@@ -534,8 +534,8 @@ void CGM::ImplDoClass4()
                     tools::Rectangle aBoundingBox(aCenter.X - aRadius.X, aCenter.Y - aRadius.X);
                     aBoundingBox.SaturatingSetSize(Size(2 * aRadius.X, 2 * aRadius.X));
                     tools::Polygon aPolygon( aBoundingBox,
-                        Point( static_cast<long>(vector[ 0 ]), static_cast<long>(vector[ 1 ]) ),
-                        Point( static_cast<long>(vector[ 2 ]), static_cast<long>(vector[ 3 ]) ), PolyStyle::Arc );
+                        Point( static_cast<tools::Long>(vector[ 0 ]), static_cast<tools::Long>(vector[ 1 ]) ),
+                        Point( static_cast<tools::Long>(vector[ 2 ]), static_cast<tools::Long>(vector[ 3 ]) ), PolyStyle::Arc );
                     mpOutAct->RegPolyLine( aPolygon );
                 }
                 else
@@ -724,7 +724,7 @@ void CGM::ImplDoClass4()
                 {
                     FloatPoint  aFloatPoint;
                     ImplGetPoint( aFloatPoint, true );
-                    aPolygon.SetPoint( Point ( static_cast<long>( aFloatPoint.X ), static_cast<long>( aFloatPoint.Y ) ), i );
+                    aPolygon.SetPoint( Point ( static_cast<tools::Long>( aFloatPoint.X ), static_cast<tools::Long>( aFloatPoint.Y ) ), i );
                 }
                 if ( nOrder & 4 )
                 {

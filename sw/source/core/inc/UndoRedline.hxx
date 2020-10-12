@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <undobj.hxx>
+#include <tools/long.hxx>
 
 struct SwSortOptions;
 class SwRangeRedline;
@@ -68,7 +69,7 @@ public:
     bool CanGrouping( const SwUndoRedlineDelete& rPrev );
 
     // SwUndoTableCpyTable needs this information:
-    long NodeDiff() const { return m_nSttNode - m_nEndNode; }
+    tools::Long NodeDiff() const { return m_nSttNode - m_nEndNode; }
     sal_Int32 ContentStart() const { return m_nSttContent; }
 
     void SetRedlineText(const OUString & rText);

@@ -117,7 +117,7 @@ SdrOle2Obj* findChartsByName(ScDocShell* pDocShell, SCTAB nTab, OUString const &
     return nullptr;
 }
 
-SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, long nIndex, ChartSourceType eChartSourceType)
+SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, ::tools::Long nIndex, ChartSourceType eChartSourceType)
 {
     if (!pDocShell)
         return nullptr;
@@ -125,7 +125,7 @@ SdrOle2Obj* getChartByIndex(ScDocShell* pDocShell, SCTAB nTab, long nIndex, Char
     ChartIterator aIterator(pDocShell, nTab, eChartSourceType);
 
     SdrOle2Obj* pObject = aIterator.next();
-    long i = 0;
+    ::tools::Long i = 0;
     while (pObject)
     {
         if (i == nIndex)

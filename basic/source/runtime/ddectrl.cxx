@@ -53,7 +53,7 @@ ErrCode SbiDdeControl::GetLastErr( const DdeConnection* pConv )
     {
         return ERRCODE_NONE;
     }
-    long nErr = pConv->GetError();
+    tools::Long nErr = pConv->GetError();
     if( !nErr )
     {
         return ERRCODE_NONE;

@@ -777,7 +777,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     if (!xStorage.is())
         return;
 
-    long nOpenModes = css::embed::ElementModes::READWRITE;
+    tools::Long nOpenModes = css::embed::ElementModes::READWRITE;
     css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement("accelerator", nOpenModes);
     if (!xAcceleratorTypeStorage.is())
         return;

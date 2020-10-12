@@ -54,7 +54,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 extern "C" {
-    SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void const * pPtr )
+    SAL_DLLPUBLIC_EXPORT tools::Long basicide_handle_basic_error( void const * pPtr )
     {
         return HandleBasicError( static_cast<StarBASIC const *>(pPtr) );
     }
@@ -368,7 +368,7 @@ void InvalidateDebuggerSlots()
     pBindings->Update( SID_BASICIDE_STAT_TITLE );
 }
 
-long HandleBasicError( StarBASIC const * pBasic )
+tools::Long HandleBasicError( StarBASIC const * pBasic )
 {
     EnsureIde();
     BasicStopped();
@@ -379,7 +379,7 @@ long HandleBasicError( StarBASIC const * pBasic )
     if (GetExtraData()->ShellInCriticalSection())
         return 2;
 
-    long nRet = 0;
+    tools::Long nRet = 0;
     Shell* pShell = nullptr;
     if ( SvtModuleOptions::IsBasicIDE() )
     {
@@ -418,7 +418,7 @@ long HandleBasicError( StarBASIC const * pBasic )
     }
 
     if ( pShell )
-        nRet = long(pShell->CallBasicErrorHdl( pBasic ));
+        nRet = tools::Long(pShell->CallBasicErrorHdl( pBasic ));
     else
         ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
 

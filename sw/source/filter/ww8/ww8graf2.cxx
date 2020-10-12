@@ -267,7 +267,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
     // the first 512 Bytes which are not relevant in a MAC-PICT (they are not
     // interpreted)
     bOk = false;
-    long nData = rPic.lcb - ( pSt->Tell() - nPosFc );
+    tools::Long nData = rPic.lcb - ( pSt->Tell() - nPosFc );
     if (nData > 0)
     {
         rpGraphic.reset(new Graphic());
@@ -281,7 +281,7 @@ bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>
 struct WW8PicDesc
 {
     sal_Int16 nCL, nCR, nCT, nCB;
-    long nWidth, nHeight;
+    tools::Long nWidth, nHeight;
 
     explicit WW8PicDesc( const WW8_PIC& rPic );
 };
@@ -293,12 +293,12 @@ WW8PicDesc::WW8PicDesc( const WW8_PIC& rPic )
     nCB(rPic.dyaCropBottom)
 {
     //See #i21190# before fiddling with this method
-    long nOriWidth = rPic.dxaGoal;        //Size in 1/100 mm before crop
-    long nOriHeight = rPic.dyaGoal;
+    tools::Long nOriWidth = rPic.dxaGoal;        //Size in 1/100 mm before crop
+    tools::Long nOriHeight = rPic.dyaGoal;
 
 
-    long nCurrentWidth  = nOriWidth - (nCL + nCR);  // Size after crop
-    long nCurrentHeight = nOriHeight - (nCT + nCB);
+    tools::Long nCurrentWidth  = nOriWidth - (nCL + nCR);  // Size after crop
+    tools::Long nCurrentHeight = nOriHeight - (nCT + nCB);
     if (!nCurrentWidth)
         nCurrentWidth  = 1;
     if (!nCurrentHeight)

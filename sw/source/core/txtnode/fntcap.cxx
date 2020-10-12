@@ -138,7 +138,7 @@ void SwDoGetCapitalSize::Do()
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 {
     // Start:
-    const long nOldKern = rInf.GetKern();
+    const tools::Long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     rInf.SetPos( Point() );
     rInf.SetSpace( 0 );
@@ -162,11 +162,11 @@ namespace {
 class SwDoGetCapitalBreak : public SwDoCapitals
 {
 protected:
-    long nTextWidth;
+    tools::Long nTextWidth;
     TextFrameIndex m_nBreak;
 
 public:
-    SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long const nWidth)
+    SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, tools::Long const nWidth)
         :   SwDoCapitals ( rInfo )
         ,   nTextWidth( nWidth )
         ,   m_nBreak( -1 )
@@ -218,7 +218,7 @@ void SwDoGetCapitalBreak::Do()
 }
 
 TextFrameIndex SwFont::GetCapitalBreak( SwViewShell const * pSh, const OutputDevice* pOut,
-    const SwScriptInfo* pScript, const OUString& rText, long const nTextWidth,
+    const SwScriptInfo* pScript, const OUString& rText, tools::Long const nTextWidth,
     TextFrameIndex const nIdx, TextFrameIndex const nLen)
 {
     // Start:
@@ -287,7 +287,7 @@ void SwDoDrawCapital::Do()
 
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
-    long nDiff = rInf.GetPos().X() - rPos.X();
+    tools::Long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
     const bool bSwitchL2R = rInf.GetFrame()->IsRightToLeft() &&
@@ -359,7 +359,7 @@ void SwDoCapitalCursorOfst::Do()
     if ( !nOfst )
         return;
 
-    if ( static_cast<long>(nOfst) > rInf.GetSize().Width() )
+    if ( static_cast<tools::Long>(nOfst) > rInf.GetSize().Width() )
     {
         nOfst -= rInf.GetSize().Width();
         nCursor = nCursor + rInf.GetLen();
@@ -393,7 +393,7 @@ void SwDoCapitalCursorOfst::Do()
 
 TextFrameIndex SwSubFont::GetCapitalCursorOfst( SwDrawTextInfo& rInf )
 {
-    const long nOldKern = rInf.GetKern();
+    const tools::Long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     SwDoCapitalCursorOfst aDo( rInf, rInf.GetOffset() );
     rInf.SetPos( Point() );
@@ -426,12 +426,12 @@ public:
 void SwDoDrawStretchCapital::Do()
 {
     SV_STAT( nDrawStretchText );
-    long nPartWidth = rInf.GetSize().Width();
+    tools::Long nPartWidth = rInf.GetSize().Width();
 
     if( rInf.GetLen() )
     {
         // small caps and kerning
-        long nDiff = long(nOrgWidth) - long(nCapWidth);
+        tools::Long nDiff = tools::Long(nOrgWidth) - tools::Long(nCapWidth);
         if( nDiff )
         {
             nDiff *= sal_Int32(rInf.GetLen());
@@ -486,7 +486,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
     OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
-    long nKana = 0;
+    tools::Long nKana = 0;
     const OUString aText( CalcCaseMap( rDo.GetInf().GetText() ) );
     TextFrameIndex nMaxPos = std::min(
         TextFrameIndex(rDo.GetInf().GetText().getLength()) - rDo.GetInf().GetIdx(),
@@ -522,7 +522,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                          || aFont.GetStrikeout() != STRIKEOUT_NONE;
     const bool bWordWise = bTextLines && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
-    const long nTmpKern = rDo.GetInf().GetKern();
+    const tools::Long nTmpKern = rDo.GetInf().GetKern();
 
     if ( bTextLines )
     {
@@ -636,7 +636,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         // The upper ones...
         if( nOldPos != nPos )
         {
-            const long nSpaceAdd = rDo.GetInf().GetSpace() / SPACING_PRECISION_FACTOR;
+            const tools::Long nSpaceAdd = rDo.GetInf().GetSpace() / SPACING_PRECISION_FACTOR;
 
             do
             {

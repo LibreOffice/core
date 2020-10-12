@@ -117,7 +117,7 @@ class SwTextFormatter : public SwTextPainter
         Set all anchored as character objects to the passed BaseLine
         (in Y direction).
      */
-    void AlignFlyInCntBase( long nBaseLine ) const;
+    void AlignFlyInCntBase( tools::Long nBaseLine ) const;
 
     /**
         This is called after the real height of the line has been calculated

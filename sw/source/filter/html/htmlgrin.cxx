@@ -323,8 +323,8 @@ void SwHTMLParser::InsertImage()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     bool bWidthProvided=false, bHeightProvided=false;
-    long nWidth=0, nHeight=0;
-    long nVSpace=0, nHSpace=0;
+    tools::Long nWidth=0, nHeight=0;
+    tools::Long nVSpace=0, nHSpace=0;
 
     sal_uInt16 nBorder = (m_xAttrTab->pINetFormat ? 1 : 0);
     bool bIsMap = false;
@@ -538,11 +538,11 @@ IMAGE_SETEVENT:
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
     // set the border
-    long nHBorderWidth = 0, nVBorderWidth = 0;
+    tools::Long nHBorderWidth = 0, nVBorderWidth = 0;
     if( nBorder )
     {
-        nHBorderWidth = static_cast<long>(nBorder);
-        nVBorderWidth = static_cast<long>(nBorder);
+        nHBorderWidth = static_cast<tools::Long>(nBorder);
+        nVBorderWidth = static_cast<tools::Long>(nBorder);
         SvxCSS1Parser::PixelToTwip( nVBorderWidth, nHBorderWidth );
 
         ::editeng::SvxBorderLine aHBorderLine( nullptr, nHBorderWidth );

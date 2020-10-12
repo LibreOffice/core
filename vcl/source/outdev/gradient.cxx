@@ -244,7 +244,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
 
 namespace
 {
-    sal_uInt8 GetGradientColorValue( long nValue )
+    sal_uInt8 GetGradientColorValue( tools::Long nValue )
     {
         if ( nValue < 0 )
             return 0;
@@ -282,15 +282,15 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // colour-intensities of start- and finish; change if needed
-    long    nFactor;
+    tools::Long    nFactor;
     Color   aStartCol   = rGradient.GetStartColor();
     Color   aEndCol     = rGradient.GetEndColor();
-    long    nStartRed   = aStartCol.GetRed();
-    long    nStartGreen = aStartCol.GetGreen();
-    long    nStartBlue  = aStartCol.GetBlue();
-    long    nEndRed     = aEndCol.GetRed();
-    long    nEndGreen   = aEndCol.GetGreen();
-    long    nEndBlue    = aEndCol.GetBlue();
+    tools::Long    nStartRed   = aStartCol.GetRed();
+    tools::Long    nStartGreen = aStartCol.GetGreen();
+    tools::Long    nStartBlue  = aStartCol.GetBlue();
+    tools::Long    nEndRed     = aEndCol.GetRed();
+    tools::Long    nEndGreen   = aEndCol.GetGreen();
+    tools::Long    nEndBlue    = aEndCol.GetBlue();
     nFactor     = rGradient.GetStartIntensity();
     nStartRed   = (nStartRed   * nFactor) / 100;
     nStartGreen = (nStartGreen * nFactor) / 100;
@@ -303,7 +303,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     // gradient style axial has exchanged start and end colors
     if ( !bLinear)
     {
-        long nTempColor = nStartRed;
+        tools::Long nTempColor = nStartRed;
         nStartRed = nEndRed;
         nEndRed = nTempColor;
         nTempColor = nStartGreen;
@@ -329,7 +329,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
         mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
-        aBorderRect.SetBottom( static_cast<long>( aBorderRect.Top() + fBorder ) );
+        aBorderRect.SetBottom( static_cast<tools::Long>( aBorderRect.Top() + fBorder ) );
         aRect.SetTop( aBorderRect.Bottom() );
         aPoly[0] = aBorderRect.TopLeft();
         aPoly[1] = aBorderRect.TopRight();
@@ -342,7 +342,7 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
         if ( !bLinear)
         {
             aBorderRect = aMirrorRect;
-            aBorderRect.SetTop( static_cast<long>( aBorderRect.Bottom() - fBorder ) );
+            aBorderRect.SetTop( static_cast<tools::Long>( aBorderRect.Bottom() - fBorder ) );
             aMirrorRect.SetBottom( aBorderRect.Top() );
             aPoly[0] = aBorderRect.TopLeft();
             aPoly[1] = aBorderRect.TopRight();
@@ -355,15 +355,15 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     }
 
     // calculate step count
-    long    nStepCount  = GetGradientSteps( rGradient, aRect, false/*bMtf*/ );
+    tools::Long    nStepCount  = GetGradientSteps( rGradient, aRect, false/*bMtf*/ );
 
     // minimal three steps and maximal as max color steps
-    long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
-    long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
-    long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
-    long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
+    tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
+    tools::Long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
+    tools::Long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
+    tools::Long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
     nMaxColorSteps = std::max( nMaxColorSteps, nAbsBlueSteps );
-    long nSteps = std::min( nStepCount, nMaxColorSteps );
+    tools::Long nSteps = std::min( nStepCount, nMaxColorSteps );
     if ( nSteps < 3)
     {
         nSteps = 3;
@@ -378,22 +378,22 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
-    for ( long i = 0; i < nSteps; i++ )
+    for ( tools::Long i = 0; i < nSteps; i++ )
     {
         // linear interpolation of color
         const double fAlpha = static_cast<double>(i) / fStepsMinus1;
         double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<long>(fTempColor));
+        nRed = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<long>(fTempColor));
+        nGreen = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<long>(fTempColor));
+        nBlue = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
 
         mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
         // Polygon for this color step
-        aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(i) * fScanInc ) );
-        aRect.SetBottom( static_cast<long>( fGradientLine + ( static_cast<double>(i) + 1.0 ) * fScanInc ) );
+        aRect.SetTop( static_cast<tools::Long>( fGradientLine + static_cast<double>(i) * fScanInc ) );
+        aRect.SetBottom( static_cast<tools::Long>( fGradientLine + ( static_cast<double>(i) + 1.0 ) * fScanInc ) );
         aPoly[0] = aRect.TopLeft();
         aPoly[1] = aRect.TopRight();
         aPoly[2] = aRect.BottomRight();
@@ -404,8 +404,8 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
         if ( !bLinear )
         {
-            aMirrorRect.SetBottom( static_cast<long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
-            aMirrorRect.SetTop( static_cast<long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
+            aMirrorRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
+            aMirrorRect.SetTop( static_cast<tools::Long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
             aPoly[0] = aMirrorRect.TopLeft();
             aPoly[1] = aMirrorRect.TopRight();
             aPoly[2] = aMirrorRect.BottomRight();
@@ -425,8 +425,8 @@ void OutputDevice::DrawLinearGradient( const tools::Rectangle& rRect,
 
     mpGraphics->SetFillColor( Color( nRed, nGreen, nBlue ) );
 
-    aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(nSteps) * fScanInc ) );
-    aRect.SetBottom( static_cast<long>( fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc ) );
+    aRect.SetTop( static_cast<tools::Long>( fGradientLine + static_cast<double>(nSteps) * fScanInc ) );
+    aRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc ) );
     aPoly[0] = aRect.TopLeft();
     aPoly[1] = aRect.TopRight();
     aPoly[2] = aRect.BottomRight();
@@ -460,15 +460,15 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
     Color           aEndCol( rGradient.GetEndColor() );
-    long            nStartRed = ( static_cast<long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
-    long            nStartGreen = ( static_cast<long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
-    long            nStartBlue = ( static_cast<long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
-    long            nEndRed = ( static_cast<long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
-    long            nEndGreen = ( static_cast<long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
-    long            nEndBlue = ( static_cast<long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
-    long            nRedSteps = nEndRed - nStartRed;
-    long            nGreenSteps = nEndGreen - nStartGreen;
-    long            nBlueSteps = nEndBlue   - nStartBlue;
+    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nRedSteps = nEndRed - nStartRed;
+    tools::Long            nGreenSteps = nEndGreen - nStartGreen;
+    tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
     sal_uInt16      nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
@@ -476,12 +476,12 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     if ( UsePolyPolygonForComplexGradient() )
         xPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
-    long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
+    tools::Long nStepCount = GetGradientSteps( rGradient, rRect, false/*bMtf*/, true/*bComplex*/ );
 
     // at least three steps and at most the number of colour differences
-    long nSteps = std::max( nStepCount, 2L );
-    long nCalcSteps  = std::abs( nRedSteps );
-    long nTempSteps = std::abs( nGreenSteps );
+    tools::Long nSteps = std::max( nStepCount, 2L );
+    tools::Long nCalcSteps  = std::abs( nRedSteps );
+    tools::Long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
     nTempSteps = std::abs( nBlueSteps );
@@ -535,17 +535,17 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
     }
 
     // loop to output Polygon/PolyPolygon sequentially
-    for( long i = 1; i < nSteps; i++ )
+    for( tools::Long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
         fScanLeft += fScanIncX;
-        aRect.SetLeft( static_cast<long>( fScanLeft ) );
+        aRect.SetLeft( static_cast<tools::Long>( fScanLeft ) );
         fScanTop += fScanIncY;
-        aRect.SetTop( static_cast<long>( fScanTop ) );
+        aRect.SetTop( static_cast<tools::Long>( fScanTop ) );
         fScanRight -= fScanIncX;
-        aRect.SetRight( static_cast<long>( fScanRight ) );
+        aRect.SetRight( static_cast<tools::Long>( fScanRight ) );
         fScanBottom -= fScanIncY;
-        aRect.SetBottom( static_cast<long>( fScanBottom ) );
+        aRect.SetBottom( static_cast<tools::Long>( fScanBottom ) );
 
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
@@ -558,7 +558,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
+        const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
@@ -640,15 +640,15 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     }
 
     // colour-intensities of start- and finish; change if needed
-    long    nFactor;
+    tools::Long    nFactor;
     Color   aStartCol   = rGradient.GetStartColor();
     Color   aEndCol     = rGradient.GetEndColor();
-    long    nStartRed   = aStartCol.GetRed();
-    long    nStartGreen = aStartCol.GetGreen();
-    long    nStartBlue  = aStartCol.GetBlue();
-    long    nEndRed     = aEndCol.GetRed();
-    long    nEndGreen   = aEndCol.GetGreen();
-    long    nEndBlue    = aEndCol.GetBlue();
+    tools::Long    nStartRed   = aStartCol.GetRed();
+    tools::Long    nStartGreen = aStartCol.GetGreen();
+    tools::Long    nStartBlue  = aStartCol.GetBlue();
+    tools::Long    nEndRed     = aEndCol.GetRed();
+    tools::Long    nEndGreen   = aEndCol.GetGreen();
+    tools::Long    nEndBlue    = aEndCol.GetBlue();
     nFactor     = rGradient.GetStartIntensity();
     nStartRed   = (nStartRed   * nFactor) / 100;
     nStartGreen = (nStartGreen * nFactor) / 100;
@@ -661,7 +661,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     // gradient style axial has exchanged start and end colors
     if ( !bLinear)
     {
-        long nTempColor = nStartRed;
+        tools::Long nTempColor = nStartRed;
         nStartRed = nEndRed;
         nEndRed = nTempColor;
         nTempColor = nStartGreen;
@@ -687,7 +687,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-        aBorderRect.SetBottom( static_cast<long>( aBorderRect.Top() + fBorder ) );
+        aBorderRect.SetBottom( static_cast<tools::Long>( aBorderRect.Top() + fBorder ) );
         aRect.SetTop( aBorderRect.Bottom() );
         aPoly[0] = aBorderRect.TopLeft();
         aPoly[1] = aBorderRect.TopRight();
@@ -700,7 +700,7 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         if ( !bLinear)
         {
             aBorderRect = aMirrorRect;
-            aBorderRect.SetTop( static_cast<long>( aBorderRect.Bottom() - fBorder ) );
+            aBorderRect.SetTop( static_cast<tools::Long>( aBorderRect.Bottom() - fBorder ) );
             aMirrorRect.SetBottom( aBorderRect.Top() );
             aPoly[0] = aBorderRect.TopLeft();
             aPoly[1] = aBorderRect.TopRight();
@@ -712,15 +712,15 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
         }
     }
 
-    long    nStepCount  = GetGradientSteps( rGradient, aRect, true/*bMtf*/ );
+    tools::Long    nStepCount  = GetGradientSteps( rGradient, aRect, true/*bMtf*/ );
 
     // minimal three steps and maximal as max color steps
-    long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
-    long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
-    long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
-    long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
+    tools::Long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
+    tools::Long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
+    tools::Long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
+    tools::Long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
     nMaxColorSteps = std::max( nMaxColorSteps, nAbsBlueSteps );
-    long nSteps = std::min( nStepCount, nMaxColorSteps );
+    tools::Long nSteps = std::min( nStepCount, nMaxColorSteps );
     if ( nSteps < 3)
     {
         nSteps = 3;
@@ -735,22 +735,22 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
     {
         nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
     }
-    for ( long i = 0; i < nSteps; i++ )
+    for ( tools::Long i = 0; i < nSteps; i++ )
     {
         // linear interpolation of color
         double fAlpha = static_cast<double>(i) / fStepsMinus1;
         double fTempColor = static_cast<double>(nStartRed) * (1.0-fAlpha) + static_cast<double>(nEndRed) * fAlpha;
-        nRed = GetGradientColorValue(static_cast<long>(fTempColor));
+        nRed = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartGreen) * (1.0-fAlpha) + static_cast<double>(nEndGreen) * fAlpha;
-        nGreen = GetGradientColorValue(static_cast<long>(fTempColor));
+        nGreen = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
         fTempColor = static_cast<double>(nStartBlue) * (1.0-fAlpha) + static_cast<double>(nEndBlue) * fAlpha;
-        nBlue = GetGradientColorValue(static_cast<long>(fTempColor));
+        nBlue = GetGradientColorValue(static_cast<tools::Long>(fTempColor));
 
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
         // Polygon for this color step
-        aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(i) * fScanInc ) );
-        aRect.SetBottom( static_cast<long>( fGradientLine + ( static_cast<double>(i) + 1.0 ) * fScanInc ) );
+        aRect.SetTop( static_cast<tools::Long>( fGradientLine + static_cast<double>(i) * fScanInc ) );
+        aRect.SetBottom( static_cast<tools::Long>( fGradientLine + ( static_cast<double>(i) + 1.0 ) * fScanInc ) );
         aPoly[0] = aRect.TopLeft();
         aPoly[1] = aRect.TopRight();
         aPoly[2] = aRect.BottomRight();
@@ -761,8 +761,8 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
         if ( !bLinear )
         {
-            aMirrorRect.SetBottom( static_cast<long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
-            aMirrorRect.SetTop( static_cast<long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
+            aMirrorRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(i) * fScanInc ) );
+            aMirrorRect.SetTop( static_cast<tools::Long>( fMirrorGradientLine - (static_cast<double>(i) + 1.0)* fScanInc ) );
             aPoly[0] = aMirrorRect.TopLeft();
             aPoly[1] = aMirrorRect.TopRight();
             aPoly[2] = aMirrorRect.BottomRight();
@@ -782,8 +782,8 @@ void OutputDevice::DrawLinearGradientToMetafile( const tools::Rectangle& rRect,
 
     mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-    aRect.SetTop( static_cast<long>( fGradientLine + static_cast<double>(nSteps) * fScanInc ) );
-    aRect.SetBottom( static_cast<long>( fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc ) );
+    aRect.SetTop( static_cast<tools::Long>( fGradientLine + static_cast<double>(nSteps) * fScanInc ) );
+    aRect.SetBottom( static_cast<tools::Long>( fMirrorGradientLine - static_cast<double>(nSteps) * fScanInc ) );
     aPoly[0] = aRect.TopLeft();
     aPoly[1] = aRect.TopRight();
     aPoly[2] = aRect.BottomRight();
@@ -810,15 +810,15 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
     Color           aEndCol( rGradient.GetEndColor() );
-    long            nStartRed = ( static_cast<long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
-    long            nStartGreen = ( static_cast<long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
-    long            nStartBlue = ( static_cast<long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
-    long            nEndRed = ( static_cast<long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
-    long            nEndGreen = ( static_cast<long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
-    long            nEndBlue = ( static_cast<long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
-    long            nRedSteps = nEndRed - nStartRed;
-    long            nGreenSteps = nEndGreen - nStartGreen;
-    long            nBlueSteps = nEndBlue   - nStartBlue;
+    tools::Long            nStartRed = ( static_cast<tools::Long>(aStartCol.GetRed()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartGreen = ( static_cast<tools::Long>(aStartCol.GetGreen()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nStartBlue = ( static_cast<tools::Long>(aStartCol.GetBlue()) * rGradient.GetStartIntensity() ) / 100;
+    tools::Long            nEndRed = ( static_cast<tools::Long>(aEndCol.GetRed()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndGreen = ( static_cast<tools::Long>(aEndCol.GetGreen()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nEndBlue = ( static_cast<tools::Long>(aEndCol.GetBlue()) * rGradient.GetEndIntensity() ) / 100;
+    tools::Long            nRedSteps = nEndRed - nStartRed;
+    tools::Long            nGreenSteps = nEndGreen - nStartGreen;
+    tools::Long            nBlueSteps = nEndBlue   - nStartBlue;
     sal_uInt16      nAngle = rGradient.GetAngle() % 3600;
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
@@ -826,12 +826,12 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     xPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
     // last parameter - true if complex gradient, false if linear
-    long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
+    tools::Long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
 
     // at least three steps and at most the number of colour differences
-    long nSteps = std::max( nStepCount, 2L );
-    long nCalcSteps  = std::abs( nRedSteps );
-    long nTempSteps = std::abs( nGreenSteps );
+    tools::Long nSteps = std::max( nStepCount, 2L );
+    tools::Long nCalcSteps  = std::abs( nRedSteps );
+    tools::Long nTempSteps = std::abs( nGreenSteps );
     if ( nTempSteps > nCalcSteps )
         nCalcSteps = nTempSteps;
     nTempSteps = std::abs( nBlueSteps );
@@ -869,17 +869,17 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     xPolyPoly->Insert( aPoly );
 
     // loop to output Polygon/PolyPolygon sequentially
-    for( long i = 1; i < nSteps; i++ )
+    for( tools::Long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
         fScanLeft += fScanIncX;
-        aRect.SetLeft( static_cast<long>( fScanLeft ) );
+        aRect.SetLeft( static_cast<tools::Long>( fScanLeft ) );
         fScanTop += fScanIncY;
-        aRect.SetTop( static_cast<long>( fScanTop ) );
+        aRect.SetTop( static_cast<tools::Long>( fScanTop ) );
         fScanRight -= fScanIncX;
-        aRect.SetRight( static_cast<long>( fScanRight ) );
+        aRect.SetRight( static_cast<tools::Long>( fScanRight ) );
         fScanBottom -= fScanIncY;
-        aRect.SetBottom( static_cast<long>( fScanBottom ) );
+        aRect.SetBottom( static_cast<tools::Long>( fScanBottom ) );
 
         if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
             break;
@@ -892,7 +892,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
+        const tools::Long nStepIndex = ( xPolyPoly ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
@@ -933,18 +933,18 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
 }
 
-long OutputDevice::GetGradientStepCount( long nMinRect )
+tools::Long OutputDevice::GetGradientStepCount( tools::Long nMinRect )
 {
-    long nInc = (nMinRect < 50) ? 2 : 4;
+    tools::Long nInc = (nMinRect < 50) ? 2 : 4;
 
     return nInc;
 }
 
-long OutputDevice::GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex )
+tools::Long OutputDevice::GetGradientSteps( const Gradient& rGradient, const tools::Rectangle& rRect, bool bMtf, bool bComplex )
 {
     // calculate step count
-    long nStepCount  = rGradient.GetSteps();
-    long nMinRect;
+    tools::Long nStepCount  = rGradient.GetSteps();
+    tools::Long nMinRect;
 
     // generate nStepCount, if not passed
     if (bComplex)
@@ -954,7 +954,7 @@ long OutputDevice::GetGradientSteps( const Gradient& rGradient, const tools::Rec
 
     if ( !nStepCount )
     {
-        long nInc;
+        tools::Long nInc;
 
         nInc = GetGradientStepCount (nMinRect);
         if ( !nInc || bMtf )

@@ -672,8 +672,8 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
 
 bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 {
-    long nX = 0;
-    long nY = 0;
+    ::tools::Long nX = 0;
+    ::tools::Long nY = 0;
 
     switch( rKEvt.GetKeyCode().GetCode() )
     {

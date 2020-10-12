@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_ANCHOROVERLAYOBJECT_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-
+#include <tools/long.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 class SwView;
@@ -42,7 +42,7 @@ class AnchorOverlayObject final : public sdr::overlay::OverlayObjectWithBasePosi
     public:
         static std::unique_ptr<AnchorOverlayObject> CreateAnchorOverlayObject( SwView const & rDocView,
                                                                const SwRect& aAnchorRect,
-                                                               long aPageBorder,
+                                                               tools::Long aPageBorder,
                                                                const Point& aLineStart,
                                                                const Point& aLineEnd,
                                                                const Color& aColorAnchor );

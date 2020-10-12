@@ -84,7 +84,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint((Fraction(long(aIt->X)) * rFractionX).operator long(), (Fraction(long(aIt->Y)) * rFractionY).operator long());
+        awt::Point aPoint((Fraction(tools::Long(aIt->X)) * rFractionX).operator long(), (Fraction(tools::Long(aIt->Y)) * rFractionY).operator long());
         pResult->addPoint(aPoint);
         ++aIt;
     }
@@ -96,7 +96,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 {
     WrapPolygon::Pointer_t pResult;
 
-    const long nWrap100Percent = 21600;
+    const tools::Long nWrap100Percent = 21600;
 
     Fraction aMove(nWrap100Percent, rSrcSize.Width);
     aMove = aMove * Fraction(convertTwipToMm100(15), 1);
@@ -128,7 +128,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygonPixel(const awt::Size 
     * polygon units to fit the size of the image. The 21600 value is a legacy
     * artifact from the drawing layer of early versions of Microsoft Office.
     */
-    const long nWrap100Percent = 21600;
+    const tools::Long nWrap100Percent = 21600;
 
     Fraction aScaleX(rSrcSize.Width, nWrap100Percent);
     Fraction aScaleY(rSrcSize.Height, nWrap100Percent);

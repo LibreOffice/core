@@ -277,7 +277,7 @@ public:
     sal_uInt8 GetPropr() const { return m_aSub[m_nActual].GetPropr(); }
     FontItalic GetItalic() const { return m_aSub[m_nActual].GetItalic(); }
     LanguageType GetLanguage() const { return m_aSub[m_nActual].GetLanguage(); }
-    long GetHeight() const { return m_aSub[m_nActual].GetFontSize().Height(); }
+    tools::Long GetHeight() const { return m_aSub[m_nActual].GetFontSize().Height(); }
     FontWeight GetWeight() const { return m_aSub[m_nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return m_aSub[m_nActual].GetEmphasisMark(); }
@@ -290,7 +290,7 @@ public:
         { return m_aSub[nWhich].GetLanguage(); }
     rtl_TextEncoding GetCharSet( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetCharSet(); }
-    long GetHeight( const SwFontScript nWhich ) const
+    tools::Long GetHeight( const SwFontScript nWhich ) const
         { return m_aSub[nWhich].GetFontSize().Height(); }
 
     // makes the logical font be effective in the OutputDevice
@@ -298,7 +298,7 @@ public:
 
     TextFrameIndex GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rText,
-        long nTextWidth, TextFrameIndex nIdx, TextFrameIndex nLen);
+        tools::Long nTextWidth, TextFrameIndex nIdx, TextFrameIndex nLen);
 
     void DoOnCapitals( SwDoCapitals &rDo )
         { m_aSub[m_nActual].DoOnCapitals( rDo ); }
@@ -306,7 +306,7 @@ public:
     Size GetTextSize_( SwDrawTextInfo& rInf )
         { rInf.SetFont( this ); return m_aSub[m_nActual].GetTextSize_( rInf ); }
 
-    TextFrameIndex GetTextBreak( SwDrawTextInfo const & rInf, long nTextWidth );
+    TextFrameIndex GetTextBreak( SwDrawTextInfo const & rInf, tools::Long nTextWidth );
 
     TextFrameIndex GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
         { return m_aSub[m_nActual].GetModelPositionForViewPoint_( rInf ); }

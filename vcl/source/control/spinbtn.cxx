@@ -334,12 +334,12 @@ void SpinButton::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-void SpinButton::SetRangeMin( long nNewRange )
+void SpinButton::SetRangeMin( tools::Long nNewRange )
 {
     SetRange( Range( nNewRange, GetRangeMax() ) );
 }
 
-void SpinButton::SetRangeMax( long nNewRange )
+void SpinButton::SetRangeMax( tools::Long nNewRange )
 {
     SetRange( Range( GetRangeMin(), nNewRange ) );
 }
@@ -349,8 +349,8 @@ void SpinButton::SetRange( const Range& rRange )
     // adjust rage
     Range aRange = rRange;
     aRange.Justify();
-    long nNewMinRange = aRange.Min();
-    long nNewMaxRange = aRange.Max();
+    tools::Long nNewMinRange = aRange.Min();
+    tools::Long nNewMaxRange = aRange.Max();
 
     // do something only if old and new range differ
     if ( (mnMinRange == nNewMinRange) && (mnMaxRange == nNewMaxRange))
@@ -368,7 +368,7 @@ void SpinButton::SetRange( const Range& rRange )
     CompatStateChanged( StateChangedType::Data );
 }
 
-void SpinButton::SetValue( long nValue )
+void SpinButton::SetValue( tools::Long nValue )
 {
     // adjust, if necessary
     if ( nValue > mnMaxRange )

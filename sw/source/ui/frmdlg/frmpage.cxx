@@ -1230,8 +1230,8 @@ void SwFramePage::InitPos(RndStdIds eId,
                                 sal_Int16 nHRel,
                                 sal_Int16 nV,
                                 sal_Int16 nVRel,
-                                long   nX,
-                                long   nY)
+                                tools::Long   nX,
+                                tools::Long   nY)
 {
     auto nPos = m_xVerticalDLB->get_active();
     if (nPos != -1 && m_pVMap)
@@ -1786,9 +1786,9 @@ void SwFramePage::RangeModifyHdl()
     else
         aVal.nVertOrient = text::VertOrientation::NONE;
 
-    const long nAtHorzPosVal = static_cast< long >(
+    const tools::Long nAtHorzPosVal = static_cast< tools::Long >(
                     m_xAtHorzPosED->denormalize(m_xAtHorzPosED->get_value(FieldUnit::TWIP)) );
-    const long nAtVertPosVal = static_cast< long >(
+    const tools::Long nAtVertPosVal = static_cast< tools::Long >(
                     m_xAtVertPosED->denormalize(m_xAtVertPosED->get_value(FieldUnit::TWIP)) );
 
     aVal.nHPos = nAtHorzPosVal;
@@ -2604,16 +2604,16 @@ void BmpWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
     if (!aGrfSize.Width() && !aGrfSize.Height())
         aGrfSize = rRenderContext.PixelToLogic(aBmp.GetSizePixel());
 
-    long nRelGrf = aGrfSize.Width() * 100 / aGrfSize.Height();
-    long nRelWin = aPntSz.Width() * 100 / aPntSz.Height();
+    tools::Long nRelGrf = aGrfSize.Width() * 100 / aGrfSize.Height();
+    tools::Long nRelWin = aPntSz.Width() * 100 / aPntSz.Height();
     if (nRelGrf < nRelWin)
     {
-        const long nWidth = aPntSz.Width();
+        const tools::Long nWidth = aPntSz.Width();
         // if we use a replacement preview, try to draw at original size
         if (!bGraphic && (aGrfSize.Width() <= aPntSz.Width())
                       && (aGrfSize.Height() <= aPntSz.Height()))
         {
-            const long nHeight = aPntSz.Height();
+            const tools::Long nHeight = aPntSz.Height();
             aPntSz.setWidth( aGrfSize.Width() );
             aPntSz.setHeight( aGrfSize.Height() );
             aPntPos.AdjustY((nHeight - aPntSz.Height()) / 2 );

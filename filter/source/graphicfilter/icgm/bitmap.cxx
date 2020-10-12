@@ -87,9 +87,9 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
 
             // the picture may either be read from left to right or right to left, from top to bottom ...
 
-            long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
-            long nyCount = rDesc.mnY + 1;
-            long    nx, ny, nxC;
+            tools::Long nxCount = rDesc.mnX + 1;   // +1 because we are using prefix decreasing
+            tools::Long nyCount = rDesc.mnY + 1;
+            tools::Long    nx, ny, nxC;
 
             switch ( rDesc.mnDstBitsPerPixel ) {
             case 1 : {
@@ -291,7 +291,7 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     rDesc.mnScanSize = 0;
     switch( rDesc.mnLocalColorPrecision )
     {
-        case long(0x80000001) :                 // monochrome ( bit = 0->backgroundcolor )
+        case tools::Long(0x80000001) :                 // monochrome ( bit = 0->backgroundcolor )
         case 0 :                                //              bit = 1->fillcolor
             rDesc.mnDstBitsPerPixel = 1;
             break;
@@ -420,7 +420,7 @@ std::unique_ptr<CGMBitmap> CGMBitmap::GetNext()
     if (!!pCGMBitmapDescriptor->mxBitmap && pCGMBitmapDescriptor->mbStatus)
     {
         xCGMTempBitmap.reset(new CGMBitmap(*mpCGM));
-        if ( ( static_cast<long>(xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation) == static_cast<long>(pCGMBitmapDescriptor->mnOrientation) ) &&
+        if ( ( static_cast<tools::Long>(xCGMTempBitmap->pCGMBitmapDescriptor->mnOrientation) == static_cast<tools::Long>(pCGMBitmapDescriptor->mnOrientation) ) &&
             ( ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.X == pCGMBitmapDescriptor->mnQ.X ) &&
                     ( xCGMTempBitmap->pCGMBitmapDescriptor->mnR.Y == pCGMBitmapDescriptor->mnQ.Y ) ) ||
             ( ( xCGMTempBitmap->pCGMBitmapDescriptor->mnQ.X == pCGMBitmapDescriptor->mnR.X ) &&

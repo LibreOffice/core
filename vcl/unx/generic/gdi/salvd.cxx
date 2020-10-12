@@ -38,7 +38,7 @@
 #endif
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGraphics const * pGraphics,
-        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
+        tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData,
         std::unique_ptr<X11SalGraphics> pNewGraphics)
 {
     assert(pNewGraphics);
@@ -54,7 +54,7 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(SalGrap
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics* pGraphics,
-        long &nDX, long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
+        tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData *pData)
 {
     return CreateX11VirtualDevice(pGraphics, nDX, nDY, eFormat, pData, std::make_unique<X11SalGraphics>());
 }
@@ -92,7 +92,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
     mxImpl->Init();
 }
 
-X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nDX, long &nDY,
+X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, tools::Long &nDX, tools::Long &nDY,
                                          DeviceFormat eFormat, const SystemGraphicsData *pData,
                                          std::unique_ptr<X11SalGraphics> pNewGraphics) :
     pGraphics_(std::move(pNewGraphics)),
@@ -132,8 +132,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(SalGraphics const * pGraphics, long &nD
                 break;
             nScreen++;
         }
-        nDX_ = static_cast<long>(w);
-        nDY_ = static_cast<long>(h);
+        nDX_ = static_cast<tools::Long>(w);
+        nDY_ = static_cast<tools::Long>(h);
         nDX = nDX_;
         nDY = nDY_;
         m_nXScreen = SalX11Screen( nScreen );
@@ -199,7 +199,7 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
 
-bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
+bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
 {
     if( bExternPixmap_ )
         return false;

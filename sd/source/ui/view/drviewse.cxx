@@ -1132,12 +1132,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.AdjustX(aPageSize.Width()  / 2 );
-                aPageSize.setWidth( static_cast<long>(aPageSize.Width() * 1.03) );
+                aPageSize.setWidth( static_cast<::tools::Long>(aPageSize.Width() * 1.03) );
 
                 if( rReq.GetSlot() == SID_SIZE_PAGE )
                 {
                     aPagePos.AdjustY(aPageSize.Height() / 2 );
-                    aPageSize.setHeight( static_cast<long>(aPageSize.Height() * 1.03) );
+                    aPageSize.setHeight( static_cast<::tools::Long>(aPageSize.Height() * 1.03) );
                     aPagePos.AdjustY( -(aPageSize.Height() / 2) );
                 }
                 else
@@ -1228,8 +1228,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->AreObjectsMarked() )
             {
                 maMarkRect = mpDrawView->GetAllMarkedRect();
-                long nW = static_cast<long>(maMarkRect.GetWidth()  * 1.03);
-                long nH = static_cast<long>(maMarkRect.GetHeight() * 1.03);
+                ::tools::Long nW = static_cast<::tools::Long>(maMarkRect.GetWidth()  * 1.03);
+                ::tools::Long nH = static_cast<::tools::Long>(maMarkRect.GetHeight() * 1.03);
                 Point aPos = maMarkRect.Center();
                 aPos.AdjustX( -(nW / 2) );
                 aPos.AdjustY( -(nH / 2) );
@@ -1260,8 +1260,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             {
                 ::tools::Rectangle aBoundRect( pPageView->GetObjList()->GetAllObjBoundRect() );
 
-                long nW = static_cast<long>(aBoundRect.GetWidth() * 1.03);
-                long nH = static_cast<long>(aBoundRect.GetHeight() * 1.03);
+                ::tools::Long nW = static_cast<::tools::Long>(aBoundRect.GetWidth() * 1.03);
+                ::tools::Long nH = static_cast<::tools::Long>(aBoundRect.GetHeight() * 1.03);
                 Point aPos = aBoundRect.Center();
                 aPos.AdjustX( -(nW / 2) );
                 aPos.AdjustY( -(nH / 2) );

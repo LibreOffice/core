@@ -894,10 +894,10 @@ void SdrObject::RecalcBoundRect()
     if(!aRange.isEmpty())
     {
         aOutRect = tools::Rectangle(
-            static_cast<long>(floor(aRange.getMinX())),
-            static_cast<long>(floor(aRange.getMinY())),
-            static_cast<long>(ceil(aRange.getMaxX())),
-            static_cast<long>(ceil(aRange.getMaxY())));
+            static_cast<tools::Long>(floor(aRange.getMinX())),
+            static_cast<tools::Long>(floor(aRange.getMinY())),
+            static_cast<tools::Long>(ceil(aRange.getMaxX())),
+            static_cast<tools::Long>(ceil(aRange.getMaxY())));
         return;
     }
 }
@@ -1059,7 +1059,7 @@ void SdrObject::ImpForcePlusData()
         pPlusData.reset( new SdrObjPlusData );
 }
 
-OUString SdrObject::GetMetrStr(long nVal) const
+OUString SdrObject::GetMetrStr(tools::Long nVal) const
 {
     return getSdrModelFromSdrObject().GetMetricString(nVal);
 }
@@ -1215,12 +1215,12 @@ tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (bTop) aTmpRect.SetTop(aPos.Y() );
     if (bBtm) aTmpRect.SetBottom(aPos.Y() );
     if (bOrtho) { // Ortho
-        long nWdt0=aRect.Right() -aRect.Left();
-        long nHgt0=aRect.Bottom()-aRect.Top();
-        long nXMul=aTmpRect.Right() -aTmpRect.Left();
-        long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
-        long nXDiv=nWdt0;
-        long nYDiv=nHgt0;
+        tools::Long nWdt0=aRect.Right() -aRect.Left();
+        tools::Long nHgt0=aRect.Bottom()-aRect.Top();
+        tools::Long nXMul=aTmpRect.Right() -aTmpRect.Left();
+        tools::Long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
+        tools::Long nXDiv=nWdt0;
+        tools::Long nYDiv=nHgt0;
         bool bXNeg=(nXMul<0)!=(nXDiv<0);
         bool bYNeg=(nYMul<0)!=(nYDiv<0);
         nXMul=std::abs(nXMul);
@@ -1236,26 +1236,26 @@ tools::Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
-                long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nNeed=tools::Long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
                 if (bTop) aTmpRect.SetTop(aTmpRect.Bottom()-nNeed );
                 if (bBtm) aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             } else {
-                long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nNeed=tools::Long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
                 if (bXNeg) nNeed=-nNeed;
                 if (bLft) aTmpRect.SetLeft(aTmpRect.Right()-nNeed );
                 if (bRgt) aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
-                long nHgt0b=aRect.Bottom()-aRect.Top();
-                long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                tools::Long nHgt0b=aRect.Bottom()-aRect.Top();
+                tools::Long nNeed=tools::Long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
                 aTmpRect.AdjustTop( -((nNeed-nHgt0b)/2) );
                 aTmpRect.SetBottom(aTmpRect.Top()+nNeed );
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                long nWdt0b=aRect.Right()-aRect.Left();
-                long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                tools::Long nWdt0b=aRect.Right()-aRect.Left();
+                tools::Long nNeed=tools::Long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
                 aTmpRect.AdjustLeft( -((nNeed-nWdt0b)/2) );
                 aTmpRect.SetRight(aTmpRect.Left()+nNeed );
             }
@@ -1398,7 +1398,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     SetRectsDirty();
 }
 
-void SdrObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrObject::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef.X(),-rRef.Y());
@@ -1431,8 +1431,8 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef1.X(),-rRef1.Y());
     tools::Rectangle R(aOutRect);
-    long dx=rRef2.X()-rRef1.X();
-    long dy=rRef2.Y()-rRef1.Y();
+    tools::Long dx=rRef2.X()-rRef1.X();
+    tools::Long dy=rRef2.Y()-rRef1.Y();
     if (dx==0) {          // vertical axis
         aOutRect.SetLeft(-R.Right() );
         aOutRect.SetRight(-R.Left() );
@@ -1457,7 +1457,7 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrObject::NbcShear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear)
+void SdrObject::NbcShear(const Point& rRef, tools::Long /*nAngle*/, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
     NbcShearGluePoints(rRef,tn,bVShear);
@@ -1509,7 +1509,7 @@ void SdrObject::Crop(const basegfx::B2DPoint& rRef, double fxFact, double fyFact
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrObject::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     if (nAngle!=0) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
@@ -1529,7 +1529,7 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-void SdrObject::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrObject::Shear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear)
 {
     if (nAngle!=0) {
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
@@ -1638,12 +1638,12 @@ void SdrObject::SetLogicRect(const tools::Rectangle& rRect)
     SendUserCall(SdrUserCallType::Resize,aBoundRect0);
 }
 
-long SdrObject::GetRotateAngle() const
+tools::Long SdrObject::GetRotateAngle() const
 {
     return 0;
 }
 
-long SdrObject::GetShearAngle(bool /*bVertical*/) const
+tools::Long SdrObject::GetShearAngle(bool /*bVertical*/) const
 {
     return 0;
 }
@@ -1956,27 +1956,27 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
 
     tools::Rectangle aNewSnap(rSnap);
     if (rAttr.GetItemState(SDRATTR_MOVEX,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrMoveXItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrMoveXItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(n,0);
     }
     if (rAttr.GetItemState(SDRATTR_MOVEY,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrMoveYItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrMoveYItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(0,n);
     }
     if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrOnePositionXItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrOnePositionXItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(n-aNewSnap.Left(),0);
     }
     if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrOnePositionYItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrOnePositionYItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(0,n-aNewSnap.Top());
     }
     if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrOneSizeWidthItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrOneSizeWidthItem*>(pPoolItem)->GetValue();
         aNewSnap.SetRight(aNewSnap.Left()+n );
     }
     if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrOneSizeHeightItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrOneSizeHeightItem*>(pPoolItem)->GetValue();
         aNewSnap.SetBottom(aNewSnap.Top()+n );
     }
     if (aNewSnap!=rSnap) {
@@ -1988,7 +1988,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_SHEARANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
         n-=GetShearAngle();
         if (n!=0) {
             double nTan = tan(n * F_PI18000);
@@ -1996,7 +1996,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
             double nSin = sin(n * F_PI18000);
@@ -2005,18 +2005,18 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
         double nSin = sin(n * F_PI18000);
         double nCos = cos(n * F_PI18000);
         NbcRotate(aRef1,n,nSin,nCos);
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
         double nTan = tan(n * F_PI18000);
         NbcShear(aRef1,n,nTan,false);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
         double nTan = tan(n * F_PI18000);
         NbcShear(aRef1,n,nTan,true);
     }
@@ -2071,11 +2071,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
     tools::Rectangle aNewLogic(rLogic);
     if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrLogicSizeWidthItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrLogicSizeWidthItem*>(pPoolItem)->GetValue();
         aNewLogic.SetRight(aNewLogic.Left()+n );
     }
     if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
-        long n=static_cast<const SdrLogicSizeHeightItem*>(pPoolItem)->GetValue();
+        tools::Long n=static_cast<const SdrLogicSizeHeightItem*>(pPoolItem)->GetValue();
         aNewLogic.SetBottom(aNewLogic.Top()+n );
     }
     if (aNewLogic!=rLogic) {
@@ -2227,7 +2227,7 @@ void SdrObject::SetGlueReallyAbsolute(bool bOn)
     }
 }
 
-void SdrObject::NbcRotateGluePoints(const Point& rRef, long nAngle, double sn, double cs)
+void SdrObject::NbcRotateGluePoints(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     // First a const call to see whether there are any glue points.
     // Force const call!

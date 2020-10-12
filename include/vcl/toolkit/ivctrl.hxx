@@ -126,15 +126,15 @@ public:
 
 class SvxIconChoiceCtrlColumnInfo
 {
-    long                    nWidth;
+    tools::Long                    nWidth;
 
 public:
                             SvxIconChoiceCtrlColumnInfo() :
                                 nWidth( 100 ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
-    void                    SetWidth( long nWd ) { nWidth = nWd; }
-    long                    GetWidth() const { return nWidth; }
+    void                    SetWidth( tools::Long nWd ) { nWidth = nWd; }
+    tools::Long                    GetWidth() const { return nWidth; }
 };
 
 

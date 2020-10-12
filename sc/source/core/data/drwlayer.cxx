@@ -199,15 +199,15 @@ ScTabSizeChangedHint::~ScTabSizeChangedHint()
 
 #define MAXMM   10000000
 
-static long TwipsToHmm (long nVal)
+static tools::Long TwipsToHmm (tools::Long nVal)
 {
-    return static_cast< long >( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+    return static_cast< tools::Long >( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
             FieldUnit::TWIP, FieldUnit::MM_100TH) );
 }
 
-static long HmmToTwips (long nVal)
+static tools::Long HmmToTwips (tools::Long nVal)
 {
-    return static_cast< long > ( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
+    return static_cast< tools::Long > ( vcl::ConvertDoubleValue (static_cast<sal_Int64>(nVal), 0, 0,
             FieldUnit::MM_100TH, FieldUnit::TWIP) );
 }
 
@@ -611,8 +611,8 @@ namespace
     Point lcl_calcAvailableDiff(const ScDocument &rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const Point &aWantedDiff)
     {
         Point aAvailableDiff(aWantedDiff);
-        long nHeight = static_cast<long>(rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS);
-        long nWidth  = static_cast<long>(rDoc.GetColWidth(  nCol, nTab ) * HMM_PER_TWIPS);
+        tools::Long nHeight = static_cast<tools::Long>(rDoc.GetRowHeight( nRow, nTab ) * HMM_PER_TWIPS);
+        tools::Long nWidth  = static_cast<tools::Long>(rDoc.GetColWidth(  nCol, nTab ) * HMM_PER_TWIPS);
         if (aAvailableDiff.Y() > nHeight)
             aAvailableDiff.setY( nHeight );
         if (aAvailableDiff.X() > nWidth)
@@ -624,8 +624,8 @@ namespace
     {
         rCalcPoly.setB2DPoint(nWhichPoint, basegfx::B2DPoint(rPos.X(), rPos.Y()));
         basegfx::B2DRange aRange(basegfx::utils::getRange(rCalcPoly));
-        return tools::Rectangle(static_cast<long>(aRange.getMinX()), static_cast<long>(aRange.getMinY()),
-            static_cast<long>(aRange.getMaxX()), static_cast<long>(aRange.getMaxY()));
+        return tools::Rectangle(static_cast<tools::Long>(aRange.getMinX()), static_cast<tools::Long>(aRange.getMinY()),
+            static_cast<tools::Long>(aRange.getMaxX()), static_cast<tools::Long>(aRange.getMaxY()));
     }
 }
 
@@ -674,10 +674,10 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
             // as much as the cell was scaled.
             // Still, we keep the image in its current cell (to keep start anchor == end anchor)
             const tools::Rectangle aCurrentCellRect(GetCellRect(*GetDocument(), rData.maStart, true));
-            long nCurrentWidth(aCurrentCellRect.GetWidth());
-            long nCurrentHeight(aCurrentCellRect.GetHeight());
-            const long nLastWidth(aLastCellRect.GetWidth());
-            const long nLastHeight(aLastCellRect.GetHeight());
+            tools::Long nCurrentWidth(aCurrentCellRect.GetWidth());
+            tools::Long nCurrentHeight(aCurrentCellRect.GetHeight());
+            const tools::Long nLastWidth(aLastCellRect.GetWidth());
+            const tools::Long nLastHeight(aLastCellRect.GetHeight());
 
             // tdf#116931 Avoid and correct nifty numerical problems with the integer
             // based and converted values (GetCellRect uses multiplies with HMM_PER_TWIPS)
@@ -710,11 +710,11 @@ void ScDrawLayer::ResizeLastRectFromAnchor(const SdrObject* pObj, ScDrawObjData&
                 tools::Rectangle aRectIncludingOffset = aRect;
                 aRectIncludingOffset.setWidth(aRect.GetWidth() + rData.maStartOffset.X());
                 aRectIncludingOffset.setHeight(aRect.GetHeight() + rData.maStartOffset.Y());
-                long nWidth = aRectIncludingOffset.GetWidth();
+                tools::Long nWidth = aRectIncludingOffset.GetWidth();
                 assert(nWidth && "div-by-zero");
                 double fMaxWidthFactor = static_cast<double>(nCurrentWidth)
                                          / static_cast<double>(nWidth);
-                long nHeight = aRectIncludingOffset.GetHeight();
+                tools::Long nHeight = aRectIncludingOffset.GetHeight();
                 assert(nHeight && "div-by-zero");
                 double fMaxHeightFactor = static_cast<double>(nCurrentHeight)
                                           / static_cast<double>(nHeight);
@@ -1024,8 +1024,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
                 if (bRecording)
                     AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *pObj ) );
-                long nOldWidth = aOld.GetWidth();
-                long nOldHeight = aOld.GetHeight();
+                tools::Long nOldWidth = aOld.GetWidth();
+                tools::Long nOldHeight = aOld.GetHeight();
                 if (pObj->IsPolyObj() && nOldWidth && nOldHeight)
                 {
                     // Polyline objects need special treatment.
@@ -1091,10 +1091,10 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     bool bNegativePage = pDoc->IsNegativePage( nTab );
 
     bool bAny = false;
-    long nEndX = 0;
-    long nEndY = 0;
-    long nStartX = LONG_MAX;
-    long nStartY = LONG_MAX;
+    tools::Long nEndX = 0;
+    tools::Long nEndY = 0;
+    tools::Long nStartX = LONG_MAX;
+    tools::Long nStartY = LONG_MAX;
 
     // Calculate borders
 
@@ -1179,7 +1179,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
         {
             nStartX = HmmToTwips( nStartX );
             nEndX = HmmToTwips( nEndX );
-            long nWidth;
+            tools::Long nWidth;
 
             nWidth = 0;
             rRange.aStart.SetCol( 0 );
@@ -1673,13 +1673,13 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     // first mirror, then move
     Size aMove( rDestRange.Left() - aMirroredSource.Left(), rDestRange.Top() - aMirroredSource.Top() );
 
-    long nDestWidth = rDestRange.GetWidth();
-    long nDestHeight = rDestRange.GetHeight();
-    long nSourceWidth = rSourceRange.GetWidth();
-    long nSourceHeight = rSourceRange.GetHeight();
+    tools::Long nDestWidth = rDestRange.GetWidth();
+    tools::Long nDestHeight = rDestRange.GetHeight();
+    tools::Long nSourceWidth = rSourceRange.GetWidth();
+    tools::Long nSourceHeight = rSourceRange.GetHeight();
 
-    long nWidthDiff = nDestWidth - nSourceWidth;
-    long nHeightDiff = nDestHeight - nSourceHeight;
+    tools::Long nWidthDiff = nDestWidth - nSourceWidth;
+    tools::Long nHeightDiff = nDestHeight - nSourceHeight;
 
     Fraction aHorFract(1,1);
     Fraction aVerFract(1,1);
@@ -1840,7 +1840,7 @@ void ScDrawLayer::MirrorRTL( SdrObject* pObj )
 void ScDrawLayer::MirrorRectRTL( tools::Rectangle& rRect )
 {
     //  mirror and swap left/right
-    long nTemp = rRect.Left();
+    tools::Long nTemp = rRect.Left();
     rRect.SetLeft( -rRect.Right() );
     rRect.SetRight( -nTemp );
 }
@@ -1874,10 +1874,10 @@ tools::Rectangle ScDrawLayer::GetCellRect( const ScDocument& rDoc, const ScAddre
         aBotRight.AdjustY(rDoc.GetRowHeight( rPos.Row(), aEndPos.Row(), rPos.Tab() ) );
 
         // twips -> 1/100 mm
-        aTopLeft.setX( static_cast< long >( aTopLeft.X() * HMM_PER_TWIPS ) );
-        aTopLeft.setY( static_cast< long >( aTopLeft.Y() * HMM_PER_TWIPS ) );
-        aBotRight.setX( static_cast< long >( aBotRight.X() * HMM_PER_TWIPS ) );
-        aBotRight.setY( static_cast< long >( aBotRight.Y() * HMM_PER_TWIPS ) );
+        aTopLeft.setX( static_cast< tools::Long >( aTopLeft.X() * HMM_PER_TWIPS ) );
+        aTopLeft.setY( static_cast< tools::Long >( aTopLeft.Y() * HMM_PER_TWIPS ) );
+        aBotRight.setX( static_cast< tools::Long >( aBotRight.X() * HMM_PER_TWIPS ) );
+        aBotRight.setY( static_cast< tools::Long >( aBotRight.Y() * HMM_PER_TWIPS ) );
 
         aCellRect = tools::Rectangle( aTopLeft, aBotRight );
         if( rDoc.IsNegativePage( rPos.Tab() ) )
@@ -1940,14 +1940,14 @@ SdrObject* ScDrawLayer::GetNamedObject( const OUString& rName, sal_uInt16 nId, S
     return nullptr;
 }
 
-OUString ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
+OUString ScDrawLayer::GetNewGraphicName( tools::Long* pnCounter ) const
 {
     OUString aBase = ScResId(STR_GRAPHICNAME) + " ";
 
     bool bThere = true;
     OUString aGraphicName;
     SCTAB nDummy;
-    long nId = pnCounter ? *pnCounter : 0;
+    tools::Long nId = pnCounter ? *pnCounter : 0;
     while (bThere)
     {
         ++nId;
@@ -1978,7 +1978,7 @@ void ScDrawLayer::EnsureGraphicNames()
             /* The index passed to GetNewGraphicName() will be set to
                 the used index in each call. This prevents the repeated search
                 for all names from 1 to current index. */
-            long nCounter = 0;
+            tools::Long nCounter = 0;
 
             while (pObject)
             {

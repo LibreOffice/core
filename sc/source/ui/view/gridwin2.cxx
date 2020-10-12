@@ -65,7 +65,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     if (nCol > 0)
     {
         // look for the dimension header left of the drop-down arrow
-        long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
+        tools::Long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
         if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
         {
             bool bIsDataLayout = false;
@@ -78,7 +78,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     nOrient = DataPilotFieldOrientation_HIDDEN;
 
     // Now, check for row/column field.
-    long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
+    tools::Long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
     if (nField >= 0 && (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW) )
     {
         bool bIsDataLayout = false;
@@ -113,7 +113,7 @@ bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent&
     if ( bLayoutRTL )
         aDiffPix.setX( -aDiffPix.X() );
 
-    long nSizeX, nSizeY;
+    tools::Long nSizeX, nSizeY;
     mrViewData.GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
     // The button height should not use the merged cell height, should still use single row height
     nSizeY = ScViewData::ToPixel(rDoc.GetRowHeight(nRow, nTab), mrViewData.GetPPTY());
@@ -161,7 +161,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
             // For page field selection cell, the real field position is to the left.
             aDimPos.IncCol(-1);
 
-        long nField = pDPObj->GetHeaderDim(aDimPos, nOrient);
+        tools::Long nField = pDPObj->GetHeaderDim(aDimPos, nOrient);
         if ( nField >= 0 )
         {
             bDPMouse   = false;
@@ -273,7 +273,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
 
     tools::Rectangle aPosRect;
     DataPilotFieldOrientation nOrient;
-    long nDimPos;
+    tools::Long nDimPos;
     bool bHasRange = pDragDPObj->GetHeaderDrag( aPos, bMouseLeft, bMouseTop, nDPField,
                                                 aPosRect, nOrient, nDimPos );
     UpdateDragRect( bHasRange && bMove, aPosRect );
@@ -346,7 +346,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
 
     // Get the geometry of the cell.
     Point aScrPos = mrViewData.GetScrPos(rPos.Col(), rPos.Row(), eWhich);
-    long nSizeX, nSizeY;
+    tools::Long nSizeX, nSizeY;
     mrViewData.GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
     Size aScrSize(nSizeX-1, nSizeY-1);
 
@@ -374,7 +374,7 @@ struct DPFieldPopupData : public ScCheckListMenuControl::ExtendedData
 {
     ScDPLabelData   maLabels;
     ScDPObject*     mpDPObj;
-    long            mnDim;
+    tools::Long            mnDim;
 };
 
 class DPFieldPopupOKAction : public ScCheckListMenuControl::Action
@@ -396,7 +396,7 @@ class PopupSortAction : public ScCheckListMenuControl::Action
 public:
     enum SortType { ASCENDING, DESCENDING, CUSTOM };
 
-    explicit PopupSortAction(ScDPObject* pDPObject, long nDimIndex, SortType eType,
+    explicit PopupSortAction(ScDPObject* pDPObject, tools::Long nDimIndex, SortType eType,
                              sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell)
         : mpDPObject(pDPObject)
         , mnDimIndex(nDimIndex)
@@ -425,7 +425,7 @@ public:
 
 private:
     ScDPObject*     mpDPObject;
-    long            mnDimIndex;
+    tools::Long            mnDimIndex;
     SortType        meType;
     sal_uInt16      mnUserListIndex;
     ScTabViewShell* mpViewShell;
@@ -437,13 +437,13 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Si
                                           const ScAddress& rAddress, ScDPObject* pDPObject)
 {
     DataPilotFieldOrientation nOrient;
-    long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
+    tools::Long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
 
     DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);
 }
 
 void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
-                                          long nDimIndex, ScDPObject* pDPObj)
+                                          tools::Long nDimIndex, ScDPObject* pDPObj)
 {
     std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
     pDPData->mnDim = nDimIndex;
@@ -704,8 +704,8 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         SCCOL nHitX = 0;
         SCROW nHitY = 0;
 
-        long nMouseX = rMouse.X();
-        long nMouseY = rMouse.Y();
+        tools::Long nMouseX = rMouse.X();
+        tools::Long nMouseY = rMouse.Y();
         SCCOL nPosX;
         SCROW nPosY;
         mrViewData.GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );

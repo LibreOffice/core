@@ -72,9 +72,9 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ZOOM_IN:
             case SID_ZOOM_OUT:
             {
-                long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
-                if ((SID_ZOOM_OUT == nWhich && nFact >= long(600)) ||
-                        (SID_ZOOM_IN == nWhich && nFact <= long(20)))
+                tools::Long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
+                if ((SID_ZOOM_OUT == nWhich && nFact >= tools::Long(600)) ||
+                        (SID_ZOOM_IN == nWhich && nFact <= tools::Long(20)))
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -430,8 +430,8 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
                 {
-                    const long nBottom = m_pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
-                    const long nAct = GetVisArea().Bottom();
+                    const tools::Long nBottom = m_pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
+                    const tools::Long nAct = GetVisArea().Bottom();
                     rSet.Put(SfxBoolItem(SID_MAIL_SCROLLBODY_PAGEDOWN, nAct < nBottom ));
                 }
                 break;

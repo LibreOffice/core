@@ -86,7 +86,7 @@ namespace SwPostItHelper
         const SwPosition& rAnchorPos,
         const sw::mark::IMark* pAnnotationMark = nullptr );
 
-    long getLayoutHeight( const SwRootFrame* pRoot );
+    tools::Long getLayoutHeight( const SwRootFrame* pRoot );
     void setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode );
     unsigned long getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
 }

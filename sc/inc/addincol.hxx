@@ -28,6 +28,7 @@
 #include <i18nlangtag/lang.h>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include "types.hxx"
 
@@ -88,10 +89,10 @@ private:
     OUString            aDescription;
     css::uno::Reference< css::reflection::XIdlMethod> xFunction;
     css::uno::Any       aObject;
-    long                nArgCount;
+    tools::Long                nArgCount;
     std::unique_ptr<ScAddInArgDesc[]>
                         pArgDescs;
-    long                nCallerPos;
+    tools::Long                nCallerPos;
     sal_uInt16          nCategory;
     OString             sHelpId;
     mutable ::std::vector< LocalizedName > maCompNames;
@@ -103,8 +104,8 @@ public:
                                     sal_uInt16 nCat, const OString&,
                                     const css::uno::Reference< css::reflection::XIdlMethod>& rFunc,
                                     const css::uno::Any& rO,
-                                    long nAC, const ScAddInArgDesc* pAD,
-                                    long nCP );
+                                    tools::Long nAC, const ScAddInArgDesc* pAD,
+                                    tools::Long nCP );
                 ~ScUnoAddInFuncData();
 
     const OUString&  GetOriginalName() const     { return aOriginalName; }
@@ -114,9 +115,9 @@ public:
     const css::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
     const css::uno::Any& GetObject() const   { return aObject; }
-    long                    GetArgumentCount() const    { return nArgCount; }
+    tools::Long                    GetArgumentCount() const    { return nArgCount; }
     const ScAddInArgDesc*   GetArguments() const        { return pArgDescs.get(); }
-    long                    GetCallerPos() const        { return nCallerPos; }
+    tools::Long                    GetCallerPos() const        { return nCallerPos; }
     const OUString&         GetDescription() const      { return aDescription; }
     sal_uInt16              GetCategory() const         { return nCategory; }
     const OString&          GetHelpId() const           { return sHelpId; }
@@ -126,15 +127,15 @@ public:
 
     void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
                          const css::uno::Any& rNewObj );
-    void    SetArguments( long nNewCount, const ScAddInArgDesc* pNewDescs );
-    void    SetCallerPos( long nNewPos );
+    void    SetArguments( tools::Long nNewCount, const ScAddInArgDesc* pNewDescs );
+    void    SetCallerPos( tools::Long nNewPos );
     void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
 };
 
 class SC_DLLPUBLIC ScUnoAddInCollection
 {
 private:
-    long                    nFuncCount;
+    tools::Long                    nFuncCount;
     std::unique_ptr<std::unique_ptr<ScUnoAddInFuncData>[]> ppFuncData;
     std::unique_ptr<ScAddInHashMap>       pExactHashMap;      ///< exact internal name
     std::unique_ptr<ScAddInHashMap>       pNameHashMap;       ///< internal name upper
@@ -164,14 +165,14 @@ public:
                             @param nIndex
                                 0 <= nIndex < GetFuncCount()
                          */
-    const ScUnoAddInFuncData*   GetFuncData( long nIndex );
+    const ScUnoAddInFuncData*   GetFuncData( tools::Long nIndex );
 
     void                Clear();
 
     void                LocalizeString( OUString& rName );    ///< modify rName - input: exact name
 
-    long                GetFuncCount();
-    bool                FillFunctionDesc( long nFunc, ScFuncDesc& rDesc );
+    tools::Long                GetFuncCount();
+    bool                FillFunctionDesc( tools::Long nFunc, ScFuncDesc& rDesc );
 
     static bool         FillFunctionDescFromData( const ScUnoAddInFuncData& rFuncData, ScFuncDesc& rDesc );
                   /// leave rRetExcelName unchanged, if no matching name is found
@@ -201,7 +202,7 @@ private:
 public:
                     // exact name
                     ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
-                                    long nParamCount );
+                                    tools::Long nParamCount );
                     ~ScUnoAddInCall();
 
     bool                NeedsCaller() const;
@@ -209,8 +210,8 @@ public:
     void                SetCallerFromObjectShell( const SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}
-    ScAddInArgumentType GetArgType( long nPos );
-    void                SetParam( long nPos, const css::uno::Any& rValue );
+    ScAddInArgumentType GetArgType( tools::Long nPos );
+    void                SetParam( tools::Long nPos, const css::uno::Any& rValue );
 
     void                ExecuteCall();
 

@@ -229,8 +229,8 @@ inline const tools::Rectangle& SdrDragMethod::GetMarkedRect() const
 class SVXCORE_DLLPUBLIC SdrDragMove : public SdrDragMethod
 {
 private:
-    long                        nBestXSnap;
-    long                        nBestYSnap;
+    tools::Long                        nBestXSnap;
+    tools::Long                        nBestYSnap;
     bool                        bXSnapped;
     bool                        bYSnapped;
 

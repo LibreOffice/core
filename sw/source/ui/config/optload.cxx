@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, weld::ComboBox&, void)
     // Double-Cast for VA3.0
     FieldUnit eFieldUnit = static_cast<FieldUnit>(m_xMetricLB->get_id(nMPos).toUInt32());
     bool bModified = m_xTabMF->get_value_changed_from_saved();
-    long nVal = bModified ?
+    tools::Long nVal = bModified ?
         sal::static_int_cast<sal_Int32, sal_Int64 >( m_xTabMF->denormalize( m_xTabMF->get_value( FieldUnit::TWIP ) )) :
             m_nLastTab;
     ::SetFieldUnit( *m_xTabMF, eFieldUnit );

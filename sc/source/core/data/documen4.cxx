@@ -1178,7 +1178,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 aTabName +
                 aTemplate.getToken( 0, '#', nIndex );
             ScProgress aProgress( GetDocumentShell(), aProText, 3*nThisEndRow, true );  // 2x FindOrder, 1x here
-            long nProgressStart = 2*nThisEndRow;                    // start for here
+            tools::Long nProgressStart = 2*nThisEndRow;                    // start for here
 
             std::unique_ptr<SCCOLROW[]> pTempRows(new SCCOLROW[nThisEndRow+1]);
             std::unique_ptr<SCCOLROW[]> pOtherRows(new SCCOLROW[nThisEndRow+1]);

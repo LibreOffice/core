@@ -279,7 +279,7 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
         Point aPos(aBoundRect.Pos());
-        long nTmp = aPos.X();
+        tools::Long nTmp = aPos.X();
         aPos.setX( aPos.Y() );
         aPos.setY( nTmp );
         Size aSize(aBoundRect.SSize());
@@ -477,7 +477,7 @@ void SwFlyFrameAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
         //restore width/height exchange
-        long nTmp = rVal.nWidth;
+        tools::Long nTmp = rVal.nWidth;
         rVal.nWidth = rVal.nHeight;
         rVal.nHeight = nTmp;
     }
@@ -523,7 +523,7 @@ void SwFlyFrameAttrMgr::DelAttr( sal_uInt16 nId )
     m_aSet.ClearItem( nId );
 }
 
-void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
+void SwFlyFrameAttrMgr::SetLRSpace( tools::Long nLeft, tools::Long nRight )
 {
     OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Which border to set?" );
 
@@ -535,7 +535,7 @@ void SwFlyFrameAttrMgr::SetLRSpace( long nLeft, long nRight )
     m_aSet.Put( aTmp );
 }
 
-void SwFlyFrameAttrMgr::SetULSpace( long nTop, long nBottom )
+void SwFlyFrameAttrMgr::SetULSpace( tools::Long nTop, tools::Long nBottom )
 {
     OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Which border to set?" );
 
@@ -600,7 +600,7 @@ void SwFlyFrameAttrMgr::SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size
 void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 {
     SwFormatFrameSize aSize( GetFrameSize() );
-    aSize.SetSize(Size(std::max(rSize.Width(), long(MINFLY)), std::max(rSize.Height(), long(MINFLY))));
+    aSize.SetSize(Size(std::max(rSize.Width(), tools::Long(MINFLY)), std::max(rSize.Height(), tools::Long(MINFLY))));
     m_aSet.Put( aSize );
 }
 

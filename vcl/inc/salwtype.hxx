@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <tools/long.hxx>
 #include <vcl/GestureEvent.hxx>
 
 class LogicalFontInstance;
@@ -91,8 +92,8 @@ enum class SalEvent {
 struct SalAbstractMouseEvent
 {
     sal_uInt64 mnTime;  // Time in ms, when event is created
-    long mnX;           // X-Position (Pixel, TopLeft-Output)
-    long mnY;           // Y-Position (Pixel, TopLeft-Output)
+    tools::Long mnX;           // X-Position (Pixel, TopLeft-Output)
+    tools::Long mnY;           // Y-Position (Pixel, TopLeft-Output)
     sal_uInt16 mnCode;  // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2|MOUSE_LEFT|MOUSE_MIDDLE|MOUSE_RIGHT)
 
 protected:
@@ -139,13 +140,13 @@ struct SalKeyModEvent
 
 struct SalPaintEvent
 {
-    long            mnBoundX;           // BoundRect - X
-    long            mnBoundY;           // BoundRect - Y
-    long            mnBoundWidth;       // BoundRect - Width
-    long            mnBoundHeight;      // BoundRect - Height
+    tools::Long            mnBoundX;           // BoundRect - X
+    tools::Long            mnBoundY;           // BoundRect - Y
+    tools::Long            mnBoundWidth;       // BoundRect - Width
+    tools::Long            mnBoundHeight;      // BoundRect - Height
     bool            mbImmediateUpdate;  // set to true to force an immediate update
 
-    SalPaintEvent( long x, long y, long w, long h, bool bImmediate = false ) :
+    SalPaintEvent( tools::Long x, tools::Long y, tools::Long w, tools::Long h, bool bImmediate = false ) :
         mnBoundX( x ), mnBoundY( y ),
         mnBoundWidth( w ), mnBoundHeight( h ),
         mbImmediateUpdate( bImmediate )
@@ -155,8 +156,8 @@ struct SalPaintEvent
 #define SAL_WHEELMOUSE_EVENT_PAGESCROLL     (sal_uLong(0xFFFFFFFF))
 struct SalWheelMouseEvent final : public SalAbstractMouseEvent
 {
-    long            mnDelta;        // Number of rotations
-    long            mnNotchDelta;   // Number of fixed rotations
+    tools::Long            mnDelta;        // Number of rotations
+    tools::Long            mnNotchDelta;   // Number of fixed rotations
     double          mnScrollLines;  // Actual number of lines to scroll
     bool        mbHorz;         // Horizontal
     bool        mbDeltaIsPixel; // delta value is a pixel value (on touch devices)
@@ -176,11 +177,11 @@ struct SalExtTextInputEvent
 
 struct SalExtTextInputPosEvent
 {
-    long            mnX;            // Cursor-X-Position to upper left corner of frame
-    long            mnY;            // Cursor-Y-Position to upper left corner of frame
-    long            mnWidth;        // Cursor-Width in Pixel
-    long            mnHeight;       // Cursor-Height in Pixel
-    long            mnExtWidth;     // Width of the PreEdit area
+    tools::Long            mnX;            // Cursor-X-Position to upper left corner of frame
+    tools::Long            mnY;            // Cursor-Y-Position to upper left corner of frame
+    tools::Long            mnWidth;        // Cursor-Width in Pixel
+    tools::Long            mnHeight;       // Cursor-Height in Pixel
+    tools::Long            mnExtWidth;     // Width of the PreEdit area
     bool            mbVertical;     // true if in vertical mode
     SalExtTextInputPosEvent()
         : mnX(0)
@@ -215,10 +216,10 @@ struct SalQueryCharPositionEvent
     bool            mbValid;                // The data is valid or not.
     sal_uLong       mnCharPos;              // The index of character in a composition.
     bool            mbVertical;             // The text is vertical or not.
-    long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
-    long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y
-    long            mnCursorBoundWidth;     // The cursor bounds corresponding to the character specified by mnCharPos - Width
-    long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
+    tools::Long            mnCursorBoundX;         // The cursor bounds corresponding to the character specified by mnCharPos - X
+    tools::Long            mnCursorBoundY;         // The cursor bounds corresponding to the character specified by mnCharPos - Y
+    tools::Long            mnCursorBoundWidth;     // The cursor bounds corresponding to the character specified by mnCharPos - Width
+    tools::Long            mnCursorBoundHeight;    // The cursor bounds corresponding to the character specified by mnCharPos - Height
 };
 
 typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
@@ -232,14 +233,14 @@ enum class SalObjEvent {
 struct SalFrameState
 {
     WindowStateMask mnMask;
-    long            mnX;
-    long            mnY;
-    long            mnWidth;
-    long            mnHeight;
-    long            mnMaximizedX;
-    long            mnMaximizedY;
-    long            mnMaximizedWidth;
-    long            mnMaximizedHeight;
+    tools::Long            mnX;
+    tools::Long            mnY;
+    tools::Long            mnWidth;
+    tools::Long            mnHeight;
+    tools::Long            mnMaximizedX;
+    tools::Long            mnMaximizedY;
+    tools::Long            mnMaximizedWidth;
+    tools::Long            mnMaximizedHeight;
     WindowStateState mnState;
 };
 
@@ -253,14 +254,14 @@ struct SalSwipeEvent
 {
     double mnVelocityX;
     double mnVelocityY;
-    long mnX;
-    long mnY;
+    tools::Long mnX;
+    tools::Long mnY;
 };
 
 struct SalLongPressEvent
 {
-    long mnX;
-    long mnY;
+    tools::Long mnX;
+    tools::Long mnY;
 };
 
 struct SalGestureEvent
@@ -268,8 +269,8 @@ struct SalGestureEvent
     GestureEventType meEventType;
     PanningOrientation meOrientation;
     double mfOffset;
-    long mnX;
-    long mnY;
+    tools::Long mnX;
+    tools::Long mnY;
 };
 
 typedef void (*SALTIMERPROC)();

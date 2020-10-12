@@ -440,18 +440,18 @@ namespace
             const SvxFontHeightItem& rOldItem = static_cast<const SvxFontHeightItem&>(_pPage->GetItemSet().GetParent()->Get( _nFontHeightWhich ));
 
             // old value, scaled
-            long nHeight;
+            tools::Long nHeight;
             if ( _pFontSizeLB->IsPtRelative() )
-                nHeight = rOldItem.GetHeight() + PointToTwips( static_cast<long>(_pFontSizeLB->get_value() / 10) );
+                nHeight = rOldItem.GetHeight() + PointToTwips( static_cast<tools::Long>(_pFontSizeLB->get_value() / 10) );
             else
-                nHeight = static_cast<long>(rOldItem.GetHeight() * _pFontSizeLB->get_value() / 100);
+                nHeight = static_cast<tools::Long>(rOldItem.GetHeight() * _pFontSizeLB->get_value() / 100);
 
             // conversion twips for the example-window
             aSize.setHeight(
                 ItemToControl( nHeight, _pPage->GetItemSet().GetPool()->GetMetric( _nFontHeightWhich ), FieldUnit::TWIP ) );
         }
         else if ( !_pFontSizeLB->get_active_text().isEmpty() )
-            aSize.setHeight( PointToTwips( static_cast<long>(_pFontSizeLB->get_value() / 10) ) );
+            aSize.setHeight( PointToTwips( static_cast<tools::Long>(_pFontSizeLB->get_value() / 10) ) );
         else
             aSize.setHeight( 200 );   // default 10pt
         aFontMetrics.SetFontSize( aSize );
@@ -1012,11 +1012,11 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
         rSet.InvalidateItem(nWhich);
 
     // FontSize
-    long nSize = pSizeBox->get_value();
+    tools::Long nSize = pSizeBox->get_value();
 
     if ( pSizeBox->get_active_text().isEmpty() )   // GetValue() returns the min-value
         nSize = 0;
-    long nSavedSize = pSizeBox->get_saved_value();
+    tools::Long nSavedSize = pSizeBox->get_saved_value();
     const bool bRel = pSizeBox->IsRelative();
 
     switch ( eLangGrp )
@@ -1033,7 +1033,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
          pExampleSet->GetItemState( nWhich, false, &pItem ) == SfxItemState::SET )
     {
         float fSize = static_cast<float>(nSize) / 10;
-        long nVal = CalcToUnit( fSize, rSet.GetPool()->GetMetric( nWhich ) );
+        tools::Long nVal = CalcToUnit( fSize, rSet.GetPool()->GetMetric( nWhich ) );
         if ( static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != static_cast<sal_uInt32>(nVal) )
             bChanged = true;
     }
@@ -2583,9 +2583,9 @@ IMPL_LINK_NOARG(SvxCharPositionPage, FitToLineHdl_Impl, weld::ToggleButton&, voi
 
 IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl, weld::MetricSpinButton&, void)
 {
-    long nVal = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
+    tools::Long nVal = static_cast<tools::Long>(m_xKerningMF->get_value(FieldUnit::POINT));
     nVal = OutputDevice::LogicToLogic( nVal, MapUnit::MapPoint, MapUnit::MapTwip );
-    long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
+    tools::Long nKern = static_cast<short>(m_xKerningMF->denormalize(nVal));
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -2761,17 +2761,17 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     {
         const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>(rSet->Get( nWhich ));
         MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
-        long nBig = static_cast<long>(m_xKerningMF->normalize( static_cast<long>(rItem.GetValue()) ));
-        long nKerning = OutputDevice::LogicToLogic(nBig, eUnit, MapUnit::MapPoint);
+        tools::Long nBig = static_cast<tools::Long>(m_xKerningMF->normalize( static_cast<tools::Long>(rItem.GetValue()) ));
+        tools::Long nKerning = OutputDevice::LogicToLogic(nBig, eUnit, MapUnit::MapPoint);
 
         // set Kerning at the Font, convert into Twips before
-        long nKern = OutputDevice::LogicToLogic(rItem.GetValue(), eUnit, MapUnit::MapTwip);
+        tools::Long nKern = OutputDevice::LogicToLogic(rItem.GetValue(), eUnit, MapUnit::MapTwip);
         rFont.SetFixKerning( static_cast<short>(nKern) );
         rCJKFont.SetFixKerning( static_cast<short>(nKern) );
         rCTLFont.SetFixKerning( static_cast<short>(nKern) );
 
         //the attribute value must be displayed also if it's above the maximum allowed value
-        long nVal = static_cast<long>(m_xKerningMF->get_max(FieldUnit::POINT));
+        tools::Long nVal = static_cast<tools::Long>(m_xKerningMF->get_max(FieldUnit::POINT));
         if(nVal < nKerning)
             m_xKerningMF->set_max(nKerning, FieldUnit::POINT);
         m_xKerningMF->set_value(nKerning, FieldUnit::POINT);
@@ -2929,8 +2929,8 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
     short nKerning = 0;
     MapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
 
-    long nTmp = static_cast<long>(m_xKerningMF->get_value(FieldUnit::POINT));
-    long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, eUnit);
+    tools::Long nTmp = static_cast<tools::Long>(m_xKerningMF->get_value(FieldUnit::POINT));
+    tools::Long nVal = OutputDevice::LogicToLogic(nTmp, MapUnit::MapPoint, eUnit);
     nKerning = static_cast<short>(m_xKerningMF->denormalize( nVal ));
 
     SfxItemState eOldKernState = rOldSet.GetItemState( nWhich, false );

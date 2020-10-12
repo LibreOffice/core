@@ -95,7 +95,7 @@ private:
     bool                m_bNewSize;
     /// a graphic to be displayed in the preview in case that an automatic symbol is chosen
     Graphic             m_aAutoSymbolGraphic;
-    long                m_nSymbolType;
+    tools::Long                m_nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
     SfxItemSet*         m_pSymbolAttr;
 

@@ -1381,7 +1381,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 {
     bool    bFound = false;
-    long        nPos = GetEntryPos( rName, bFound );
+    tools::Long        nPos = GetEntryPos( rName, bFound );
 
     if ( bFound )
         return maEntries[ nPos ].get();

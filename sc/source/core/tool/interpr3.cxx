@@ -4141,7 +4141,7 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
         QuickSort( rSortArray, pIndexOrder);
 }
 
-static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vector<long>* pIndexOrder )
+static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
     // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
 
@@ -4158,8 +4158,8 @@ static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vecto
         return;
     }
 
-    long ni = nLo;
-    long nj = nHi;
+    tools::Long ni = nLo;
+    tools::Long nj = nHi;
     do
     {
         double fLo = rSortArray[nLo];
@@ -4194,13 +4194,13 @@ static void lcl_QuickSort( long nLo, long nHi, vector<double>& rSortArray, vecto
 
 void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
-    long n = static_cast<long>(rSortArray.size());
+    tools::Long n = static_cast<tools::Long>(rSortArray.size());
 
     if (pIndexOrder)
     {
         pIndexOrder->clear();
         pIndexOrder->reserve(n);
-        for (long i = 0; i < n; ++i)
+        for (tools::Long i = 0; i < n; ++i)
             pIndexOrder->push_back(i);
     }
 

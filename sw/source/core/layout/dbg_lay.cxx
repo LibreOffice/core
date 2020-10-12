@@ -195,7 +195,7 @@ namespace {
 
 class SwSizeEnterLeave : public SwImplEnterLeave
 {
-    long m_nFrameHeight;
+    tools::Long m_nFrameHeight;
 
 public:
     SwSizeEnterLeave(const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar)
@@ -490,7 +490,7 @@ static void lcl_Padded(OStringBuffer& rOut, const OString& s, size_t length)
     }
 }
 
-static void lcl_Padded(OStringBuffer& rOut, const long n, size_t length = 5)
+static void lcl_Padded(OStringBuffer& rOut, const tools::Long n, size_t length = 5)
 {
     char sz[RTL_STR_MAX_VALUEOFINT64];
     rtl_str_valueOfInt64(sz, n, 10);
@@ -703,7 +703,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
                             if( pParam )
                             {
                                 aOut.append(' ');
-                                aOut.append(static_cast<sal_Int64>(*static_cast<long*>(pParam)));
+                                aOut.append(static_cast<sal_Int64>(*static_cast<tools::Long*>(pParam)));
                             }
                             break;
         case PROT::PrintArea:  aOut.append("PROT::PrintArea");

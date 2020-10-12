@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
+#include <tools/long.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
@@ -42,7 +43,7 @@ struct UnoControlComponentInfos
 {
     bool    bVisible;
     bool    bEnable;
-    long        nX, nY, nWidth, nHeight;
+    tools::Long        nX, nY, nWidth, nHeight;
     sal_uInt16  nFlags;
     float       nZoomX, nZoomY;
 

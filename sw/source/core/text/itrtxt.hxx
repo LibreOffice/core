@@ -232,7 +232,7 @@ class SwTextAdjuster : public SwTextMargin
     SwMarginPortion* CalcRightMargin( SwLineLayout *pCurr, SwTwips nReal = 0 );
 
     // Calculate the adjustment (FlyPortions)
-    SwFlyPortion *CalcFlyPortion( const long nRealWidth,
+    SwFlyPortion *CalcFlyPortion( const tools::Long nRealWidth,
                                   const SwRect &rCurrRect );
 
 protected:
@@ -277,9 +277,9 @@ public:
         CtorInitTextCursor(pTextFrame, pTextSizeInf);
     }
     void GetCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
-        const long nMax = 0 );
+        const tools::Long nMax = 0 );
     void GetEndCharRect(SwRect *, TextFrameIndex, SwCursorMoveState* = nullptr,
-        const long nMax = 0 );
+        const tools::Long nMax = 0 );
     TextFrameIndex GetModelPositionForViewPoint( SwPosition *pPos, const Point &rPoint,
                 bool bChgNode, SwCursorMoveState* = nullptr ) const;
     // Respects ambiguities: For the implementation see below

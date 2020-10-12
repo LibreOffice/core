@@ -141,7 +141,7 @@ Date SwDateTimeField::GetDate() const
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     const Date& rNullDate = pFormatter->GetNullDate();
 
-    long nVal = static_cast<long>( GetValue() );
+    tools::Long nVal = static_cast<tools::Long>( GetValue() );
 
     Date aDate = rNullDate + nVal;
 

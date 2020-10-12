@@ -46,18 +46,18 @@ private:
     tools::Rectangle       maThumbRect;
     tools::Rectangle       maTrackRect;
     std::unique_ptr<ImplScrollBarData> mpData;
-    long            mnStartPos;
-    long            mnMouseOff;
-    long            mnThumbPixRange;
-    long            mnThumbPixPos;
-    long            mnThumbPixSize;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnThumbPos;
-    long            mnVisibleSize;
-    long            mnLineSize;
-    long            mnPageSize;
-    long            mnDelta;
+    tools::Long            mnStartPos;
+    tools::Long            mnMouseOff;
+    tools::Long            mnThumbPixRange;
+    tools::Long            mnThumbPixPos;
+    tools::Long            mnThumbPixSize;
+    tools::Long            mnMinRange;
+    tools::Long            mnMaxRange;
+    tools::Long            mnThumbPos;
+    tools::Long            mnVisibleSize;
+    tools::Long            mnLineSize;
+    tools::Long            mnPageSize;
+    tools::Long            mnDelta;
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
@@ -70,13 +70,13 @@ private:
     SAL_DLLPRIVATE void         ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void         ImplUpdateRects( bool bUpdate = true );
-    SAL_DLLPRIVATE long         ImplCalcThumbPos( long nPixPos );
-    SAL_DLLPRIVATE long         ImplCalcThumbPosPix( long nPos );
+    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPos( tools::Long nPixPos );
+    SAL_DLLPRIVATE tools::Long         ImplCalcThumbPosPix( tools::Long nPos );
     SAL_DLLPRIVATE void         ImplCalc( bool bUpdate = true );
     SAL_DLLPRIVATE void         ImplDraw(vcl::RenderContext& rRenderContext);
     using Window::ImplScroll;
-    SAL_DLLPRIVATE long         ImplScroll( long nNewPos, bool bCallEndScroll );
-    SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );
+    SAL_DLLPRIVATE tools::Long         ImplScroll( tools::Long nNewPos, bool bCallEndScroll );
+    SAL_DLLPRIVATE tools::Long         ImplDoAction( bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
     SAL_DLLPRIVATE bool         ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
@@ -107,27 +107,27 @@ public:
     void            Scroll();
     virtual void    EndScroll();
 
-    long            DoScroll( long nNewPos );
-    long            DoScrollAction( ScrollType eScrollType );
+    tools::Long            DoScroll( tools::Long nNewPos );
+    tools::Long            DoScrollAction( ScrollType eScrollType );
 
     void            EnableDrag() { mbFullDrag = true; }
 
-    void            SetRangeMin( long nNewRange );
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax( long nNewRange );
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin( tools::Long nNewRange );
+    tools::Long            GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax( tools::Long nNewRange );
+    tools::Long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
     Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
-    void            SetThumbPos( long nThumbPos );
-    long            GetThumbPos() const { return mnThumbPos; }
-    void            SetLineSize( long nNewSize ) { mnLineSize = nNewSize; }
-    long            GetLineSize() const { return mnLineSize; }
-    void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
-    long            GetPageSize() const { return mnPageSize; }
-    void            SetVisibleSize( long nNewSize );
-    long            GetVisibleSize() const { return mnVisibleSize; }
+    void            SetThumbPos( tools::Long nThumbPos );
+    tools::Long            GetThumbPos() const { return mnThumbPos; }
+    void            SetLineSize( tools::Long nNewSize ) { mnLineSize = nNewSize; }
+    tools::Long            GetLineSize() const { return mnLineSize; }
+    void            SetPageSize( tools::Long nNewSize ) { mnPageSize = nNewSize; }
+    tools::Long            GetPageSize() const { return mnPageSize; }
+    void            SetVisibleSize( tools::Long nNewSize );
+    tools::Long            GetVisibleSize() const { return mnVisibleSize; }
 
-    long            GetDelta() const { return mnDelta; }
+    tools::Long            GetDelta() const { return mnDelta; }
     ScrollType      GetType() const { return meScrollType; }
 
     void            SetScrollHdl( const Link<ScrollBar*,void>& rLink ) { maScrollHdl = rLink; }

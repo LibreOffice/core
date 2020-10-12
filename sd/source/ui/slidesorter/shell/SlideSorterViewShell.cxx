@@ -554,7 +554,7 @@ void SlideSorterViewShell::WriteFrameViewData()
     }
 }
 
-void SlideSorterViewShell::SetZoom (long int )
+void SlideSorterViewShell::SetZoom (::tools::Long )
 {
     // Ignored.
     // The zoom scale is adapted internally to fit a number of columns in
@@ -570,7 +570,7 @@ void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
     if (aRect.GetWidth()  < aPageSize.Width())
     {
-        long nWidthDiff  = (aPageSize.Width() - aRect.GetWidth()) / 2;
+        ::tools::Long nWidthDiff  = (aPageSize.Width() - aRect.GetWidth()) / 2;
 
         aRect.AdjustLeft( -nWidthDiff );
         aRect.AdjustRight(nWidthDiff );
@@ -583,7 +583,7 @@ void SlideSorterViewShell::SetZoomRect (const ::tools::Rectangle& rZoomRect)
 
     if (aRect.GetHeight()  < aPageSize.Height())
     {
-        long nHeightDiff  = (aPageSize.Height() - aRect.GetHeight()) / 2;
+        ::tools::Long nHeightDiff  = (aPageSize.Height() - aRect.GetHeight()) / 2;
 
         aRect.AdjustTop( -nHeightDiff );
         aRect.AdjustBottom(nHeightDiff );

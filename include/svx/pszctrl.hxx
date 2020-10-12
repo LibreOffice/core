@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SvxPosSizeStatusBarControl final : public SfxStatusBarContro
 {
 private:
     std::unique_ptr<SvxPosSizeStatusBarControl_Impl>    pImpl;
-    SVX_DLLPRIVATE OUString       GetMetricStr_Impl( long nVal );
+    SVX_DLLPRIVATE OUString       GetMetricStr_Impl( tools::Long nVal );
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 

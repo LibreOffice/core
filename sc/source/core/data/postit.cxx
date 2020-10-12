@@ -55,13 +55,13 @@ using namespace com::sun::star;
 
 namespace {
 
-const long SC_NOTECAPTION_WIDTH             =  2900;    /// Default width of note caption textbox.
-const long SC_NOTECAPTION_MAXWIDTH_TEMP     = 12000;    /// Maximum width of temporary note caption textbox.
-const long SC_NOTECAPTION_HEIGHT            =  1800;    /// Default height of note caption textbox.
-const long SC_NOTECAPTION_CELLDIST          =   600;    /// Default distance of note captions to border of anchor cell.
-const long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of note captions to top border of anchor cell.
-const long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
-const long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
+const tools::Long SC_NOTECAPTION_WIDTH             =  2900;    /// Default width of note caption textbox.
+const tools::Long SC_NOTECAPTION_MAXWIDTH_TEMP     = 12000;    /// Maximum width of temporary note caption textbox.
+const tools::Long SC_NOTECAPTION_HEIGHT            =  1800;    /// Default height of note caption textbox.
+const tools::Long SC_NOTECAPTION_CELLDIST          =   600;    /// Default distance of note captions to border of anchor cell.
+const tools::Long SC_NOTECAPTION_OFFSET_Y          = -1500;    /// Default Y offset of note captions to top border of anchor cell.
+const tools::Long SC_NOTECAPTION_OFFSET_X          =  1500;    /// Default X offset of note captions to left border of anchor cell.
+const tools::Long SC_NOTECAPTION_BORDERDIST_TEMP   =   100;    /// Distance of temporary note captions to visible sheet area.
 
 /** Static helper functions for caption objects. */
 class ScCaptionUtil
@@ -263,18 +263,18 @@ void ScCaptionCreator::AutoPlaceCaption( const tools::Rectangle* pVisRect )
 
     // caption rectangle
     tools::Rectangle aCaptRect = mxCaption->GetLogicRect();
-    long nWidth = aCaptRect.GetWidth();
-    long nHeight = aCaptRect.GetHeight();
+    tools::Long nWidth = aCaptRect.GetWidth();
+    tools::Long nHeight = aCaptRect.GetHeight();
 
     // n***Space contains available space between border of visible area and cell
-    long nLeftSpace = maCellRect.Left() - rVisRect.Left() + 1;
-    long nRightSpace = rVisRect.Right() - maCellRect.Right() + 1;
-    long nTopSpace = maCellRect.Top() - rVisRect.Top() + 1;
-    long nBottomSpace = rVisRect.Bottom() - maCellRect.Bottom() + 1;
+    tools::Long nLeftSpace = maCellRect.Left() - rVisRect.Left() + 1;
+    tools::Long nRightSpace = rVisRect.Right() - maCellRect.Right() + 1;
+    tools::Long nTopSpace = maCellRect.Top() - rVisRect.Top() + 1;
+    tools::Long nBottomSpace = rVisRect.Bottom() - maCellRect.Bottom() + 1;
 
     // nNeeded*** contains textbox dimensions plus needed distances to cell or border of visible area
-    long nNeededSpaceX = nWidth + SC_NOTECAPTION_CELLDIST;
-    long nNeededSpaceY = nHeight + SC_NOTECAPTION_CELLDIST;
+    tools::Long nNeededSpaceX = nWidth + SC_NOTECAPTION_CELLDIST;
+    tools::Long nNeededSpaceY = nHeight + SC_NOTECAPTION_CELLDIST;
 
     // bFitsWidth*** == true means width of textbox fits into horizontal free space of visible area
     bool bFitsWidthLeft = nNeededSpaceX <= nLeftSpace;      // text box width fits into the width left of cell
@@ -338,9 +338,9 @@ void ScCaptionCreator::UpdateCaptionPos()
             pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoGeoObj>( *mxCaption ) );
         // calculate new caption rectangle (#i98141# handle LTR<->RTL switch correctly)
         tools::Rectangle aCaptRect = mxCaption->GetLogicRect();
-        long nDiffX = (rOldTailPos.X() >= 0) ? (aCaptRect.Left() - rOldTailPos.X()) : (rOldTailPos.X() - aCaptRect.Right());
+        tools::Long nDiffX = (rOldTailPos.X() >= 0) ? (aCaptRect.Left() - rOldTailPos.X()) : (rOldTailPos.X() - aCaptRect.Right());
         if( mbNegPage ) nDiffX = -nDiffX - aCaptRect.GetWidth();
-        long nDiffY = aCaptRect.Top() - rOldTailPos.Y();
+        tools::Long nDiffY = aCaptRect.Top() - rOldTailPos.Y();
         aCaptRect.SetPos( aTailPos + Point( nDiffX, nDiffY ) );
         // set new tail position and caption rectangle
         mxCaption->SetTailPos( aTailPos );
@@ -1072,8 +1072,8 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     {
         tools::Rectangle aCellRect = ScDrawLayer::GetCellRect( mrDoc, rPos, true );
         bool bNegPage = mrDoc.IsNegativePage( rPos.Tab() );
-        long nPosX = bNegPage ? (aCellRect.Left() - xInitData->maCaptionOffset.X()) : (aCellRect.Right() + xInitData->maCaptionOffset.X());
-        long nPosY = aCellRect.Top() + xInitData->maCaptionOffset.Y();
+        tools::Long nPosX = bNegPage ? (aCellRect.Left() - xInitData->maCaptionOffset.X()) : (aCellRect.Right() + xInitData->maCaptionOffset.X());
+        tools::Long nPosY = aCellRect.Top() + xInitData->maCaptionOffset.Y();
         tools::Rectangle aCaptRect( Point( nPosX, nPosY ), xInitData->maCaptionSize );
         maNoteData.mxCaption->SetLogicRect( aCaptRect );
         aCreator.FitCaptionToRect();
@@ -1207,7 +1207,7 @@ ScCaptionPtr ScNoteUtil::CreateTempCaption(
         pCaption->SetText( aBuffer.makeStringAndClear() );
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc, nullptr );
         // adjust caption size to text size
-        long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
+        tools::Long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
         pCaption->SetMergedItem( makeSdrTextAutoGrowWidthItem( true ) );
         pCaption->SetMergedItem( makeSdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( makeSdrTextMaxFrameWidthItem( nMaxWidth ) );

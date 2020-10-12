@@ -545,7 +545,8 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
             // If the scrollbar has a mnMin == 0 and mnMax == 0 then mnVisibleSize is set to -1?!
             // I don't know if a negative mnVisibleSize makes any sense, so just handle this case
             // without crashing LO with a SIGFPE in the Qt library.
-            const long nVisibleSize = (sbVal->mnMin == sbVal->mnMax) ? 0 : sbVal->mnVisibleSize;
+            const tools::Long nVisibleSize
+                = (sbVal->mnMin == sbVal->mnMax) ? 0 : sbVal->mnVisibleSize;
 
             option.minimum = sbVal->mnMin;
             option.maximum = sbVal->mnMax - nVisibleSize;

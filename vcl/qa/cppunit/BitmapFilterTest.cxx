@@ -83,8 +83,8 @@ void BitmapFilterTest::testBlurCorrectness()
     sal_uInt16 nBPP = aBitmap24Bit.GetBitCount();
 
     {
-        long aMargin1 = 1;
-        long aMargin2 = 3;
+        tools::Long aMargin1 = 1;
+        tools::Long aMargin2 = 3;
         BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
         scanlineFormat = aWriteAccess->GetScanlineFormat();
         aWriteAccess->Erase(COL_WHITE);
@@ -121,8 +121,8 @@ void BitmapFilterTest::testBlurCorrectness()
     }
 
     // Check blurred bitmap parameters
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(41), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(31), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(41), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(31), aBitmap24Bit.GetSizePixel().Height());
 
     CPPUNIT_ASSERT_EQUAL(nBPP, aBitmap24Bit.GetBitCount());
 
@@ -174,7 +174,7 @@ void BitmapFilterTest::testPerformance()
     // Prepare bitmap
     Bitmap aBigBitmap(aSize, 24);
     {
-        long aMargin = 500;
+        tools::Long aMargin = 500;
         BitmapScopedWriteAccess aWriteAccess(aBigBitmap);
         aWriteAccess->Erase(COL_WHITE);
         aWriteAccess->SetLineColor(COL_BLACK);
@@ -214,14 +214,15 @@ void BitmapFilterTest::testPerformance()
 void BitmapFilterTest::testGenerateStripRanges()
 {
     {
-        constexpr long nFirstIndex = 0;
-        constexpr long nLastIndex = 100;
-        constexpr long nStripSize = 32;
+        constexpr tools::Long nFirstIndex = 0;
+        constexpr tools::Long nLastIndex = 100;
+        constexpr tools::Long nStripSize = 32;
 
-        std::vector<std::tuple<long, long, bool>> aRanges;
+        std::vector<std::tuple<tools::Long, tools::Long, bool>> aRanges;
 
         vcl::bitmap::generateStripRanges<nStripSize>(
-            nFirstIndex, nLastIndex, [&](long const nStart, long const nEnd, bool const bLast) {
+            nFirstIndex, nLastIndex,
+            [&](tools::Long const nStart, tools::Long const nEnd, bool const bLast) {
                 aRanges.emplace_back(nStart, nEnd, bLast);
             });
 
@@ -245,14 +246,15 @@ void BitmapFilterTest::testGenerateStripRanges()
     }
 
     {
-        constexpr long nFirstIndex = 0;
-        constexpr long nLastIndex = 95;
-        constexpr long nStripSize = 32;
+        constexpr tools::Long nFirstIndex = 0;
+        constexpr tools::Long nLastIndex = 95;
+        constexpr tools::Long nStripSize = 32;
 
-        std::vector<std::tuple<long, long, bool>> aRanges;
+        std::vector<std::tuple<tools::Long, tools::Long, bool>> aRanges;
 
         vcl::bitmap::generateStripRanges<nStripSize>(
-            nFirstIndex, nLastIndex, [&](long const nStart, long const nEnd, bool const bLast) {
+            nFirstIndex, nLastIndex,
+            [&](tools::Long const nStart, tools::Long const nEnd, bool const bLast) {
                 aRanges.emplace_back(nStart, nEnd, bLast);
             });
 

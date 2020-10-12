@@ -104,12 +104,12 @@ public:
     void         Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     Point        GetAbsolutePos(const SdrObject& rObj) const;
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
-    long         GetAlignAngle() const;
-    void         SetAlignAngle(long nAngle);
-    static long  EscDirToAngle(SdrEscapeDirection nEsc);
-    static SdrEscapeDirection EscAngleToDir(long nAngle);
-    void         Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
-    void         Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
+    tools::Long         GetAlignAngle() const;
+    void         SetAlignAngle(tools::Long nAngle);
+    static tools::Long  EscDirToAngle(SdrEscapeDirection nEsc);
+    static SdrEscapeDirection EscAngleToDir(tools::Long nAngle);
+    void         Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj);
+    void         Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj);
     void         Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 
@@ -137,9 +137,9 @@ public:
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     // temp for transformations on the reference object
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
-    void                Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
+    void                Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
-    void                Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
+    void                Mirror(const Point& rRef1, const Point& rRef2, tools::Long nAngle, const SdrObject* pObj);
     void                Shear (const Point& rRef, double tn, bool bVShear, const SdrObject* pObj);
 };
 

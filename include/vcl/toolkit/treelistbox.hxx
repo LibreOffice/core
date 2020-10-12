@@ -102,19 +102,19 @@ enum class SvLBoxItemType {String, Button, ContextBmp};
 
 class SvLBoxTab
 {
-    long    nPos;
+    tools::Long    nPos;
 public:
             SvLBoxTab();
-            SvLBoxTab( long nPos, SvLBoxTabFlags nFlags );
+            SvLBoxTab( tools::Long nPos, SvLBoxTabFlags nFlags );
             SvLBoxTab( const SvLBoxTab& );
             ~SvLBoxTab();
 
     SvLBoxTabFlags nFlags;
 
     bool    IsDynamic() const { return bool(nFlags & SvLBoxTabFlags::DYNAMIC); }
-    void    SetPos( long nNewPos) { nPos = nNewPos; }
-    long    GetPos() const { return nPos; }
-    long    CalcOffset( long nItemLength, long nTabWidth );
+    void    SetPos( tools::Long nNewPos) { nPos = nNewPos; }
+    tools::Long    GetPos() const { return nPos; }
+    tools::Long    CalcOffset( tools::Long nItemLength, tools::Long nTabWidth );
     bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
 };
 
@@ -214,7 +214,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     short           nFocusWidth;
     sal_uInt16      nFirstSelTab;
     sal_uInt16      nLastSelTab;
-    long mnCheckboxItemWidth;
+    tools::Long mnCheckboxItemWidth;
     bool mbContextBmpExpanded;
     bool mbAlternatingRowColors;
     bool mbUpdateAlternatingRows;
@@ -475,10 +475,10 @@ protected:
     VCL_DLLPRIVATE void         AdjustEntryHeight();
 
     VCL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext );
+    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, tools::Long nLine, vcl::RenderContext& rRenderContext );
 
     VCL_DLLPRIVATE void         InitTreeView();
-    VCL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );
+    VCL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab );
     VCL_DLLPRIVATE void         ImplInitStyle();
 
     void            SetupDragOrigin();
@@ -489,7 +489,7 @@ protected:
     // Recalculate all tabs depending on TreeListStyle and Bitmap sizes
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
-    void            AddTab( long nPos, SvLBoxTabFlags nFlags );
+    void            AddTab( tools::Long nPos, SvLBoxTabFlags nFlags );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
@@ -502,7 +502,7 @@ protected:
 
     void            NotifyScrolled();
     void            SetScrolledHdl( const Link<SvTreeListBox*,void>& rLink ) { aScrolledHdl = rLink; }
-    long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
+    tools::Long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
 
     virtual void    Command( const CommandEvent& rCEvt ) override;
 
@@ -629,12 +629,12 @@ public:
 
     SvTreeListEntry*    GetEntry( const Point& rPos, bool bHit = false ) const;
 
-    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, long nLine );
+    virtual tools::Rectangle GetFocusRect(const SvTreeListEntry*, tools::Long nLine );
     // Respects indentation
     sal_IntPtr      GetTabPos(const SvTreeListEntry*, const SvLBoxTab*);
     void            InvalidateEntry( SvTreeListEntry* );
-    SvLBoxItem*     GetItem( SvTreeListEntry*, long nX, SvLBoxTab** ppTab);
-    SvLBoxItem*     GetItem( SvTreeListEntry*, long nX );
+    SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX, SvLBoxTab** ppTab);
+    SvLBoxItem*     GetItem( SvTreeListEntry*, tools::Long nX );
 
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
@@ -662,9 +662,9 @@ public:
 
     SvTreeListEntry*    GetFirstEntryInView() const;
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
-    void            ScrollToAbsPos( long nPos );
+    void            ScrollToAbsPos( tools::Long nPos );
 
-    long            getPreferredDimensions(std::vector<long> &rWidths) const;
+    tools::Long            getPreferredDimensions(std::vector<long> &rWidths) const;
 
     virtual Size    GetOptimalSize() const override;
 

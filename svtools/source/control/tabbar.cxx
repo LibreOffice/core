@@ -102,8 +102,8 @@ public:
     void drawText(const OUString& aText)
     {
         tools::Rectangle aRect = maRect;
-        long nTextWidth = mrRenderContext.GetTextWidth(aText);
-        long nTextHeight = mrRenderContext.GetTextHeight();
+        tools::Long nTextWidth = mrRenderContext.GetTextWidth(aText);
+        tools::Long nTextHeight = mrRenderContext.GetTextHeight();
         Point aPos = aRect.TopLeft();
         aPos.AdjustX((aRect.getWidth()  - nTextWidth) / 2 );
         aPos.AdjustY((aRect.getHeight() - nTextHeight) / 2 );
@@ -196,7 +196,7 @@ struct ImplTabBarItem
     OUString maHelpText;
     OUString maAuxiliaryText; // used in LayerTabBar for real layer name
     tools::Rectangle maRect;
-    long mnWidth;
+    tools::Long mnWidth;
     OString maHelpId;
     bool mbShort : 1;
     bool mbSelect : 1;
@@ -310,7 +310,7 @@ private:
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect ) override;
 
     Point           maStartPos;
-    long            mnStartWidth;
+    tools::Long            mnStartWidth;
 };
 
 ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
@@ -324,7 +324,7 @@ ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
 void ImplTabSizer::ImplTrack( const Point& rScreenPos )
 {
     TabBar* pParent = GetParent();
-    long nDiff = rScreenPos.X() - maStartPos.X();
+    tools::Long nDiff = rScreenPos.X() - maStartPos.X();
     pParent->mnSplitSize = mnStartWidth + (pParent->IsMirrored() ? -nDiff : nDiff);
     if ( pParent->mnSplitSize < TABBAR_MINSIZE )
         pParent->mnSplitSize = TABBAR_MINSIZE;
@@ -656,7 +656,7 @@ bool TabBar::ImplCalcWidth()
     bool bChanged = false;
     for (auto& pItem : mpImpl->mpItemList)
     {
-        long nNewWidth = GetTextWidth(pItem->GetRenderText());
+        tools::Long nNewWidth = GetTextWidth(pItem->GetRenderText());
         if (mnCurMaxWidth && (nNewWidth > mnCurMaxWidth))
         {
             pItem->mbShort = true;
@@ -668,7 +668,7 @@ bool TabBar::ImplCalcWidth()
         }
 
         // Padding is dependent on font height - bigger font = bigger padding
-        long nFontWidth = aFont.GetFontHeight();
+        tools::Long nFontWidth = aFont.GetFontHeight();
         if (pItem->mbProtect)
             nNewWidth += 24;
         nNewWidth += nFontWidth * 2;
@@ -693,7 +693,7 @@ void TabBar::ImplFormat()
         return;
 
     sal_uInt16 nItemIndex = 0;
-    long x = mnOffX;
+    tools::Long x = mnOffX;
     for (auto & pItem : mpImpl->mpItemList)
     {
         // At all non-visible tabs an empty rectangle is set
@@ -717,8 +717,8 @@ void TabBar::ImplFormat()
 
             if (mbMirrored)
             {
-                long nNewLeft  = mnOffX + mnLastOffX - pItem->maRect.Right();
-                long nNewRight = mnOffX + mnLastOffX - pItem->maRect.Left();
+                tools::Long nNewLeft  = mnOffX + mnLastOffX - pItem->maRect.Right();
+                tools::Long nNewRight = mnOffX + mnLastOffX - pItem->maRect.Left();
                 pItem->maRect.SetRight(nNewRight);
                 pItem->maRect.SetLeft(nNewLeft);
             }
@@ -740,8 +740,8 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
         return 0;
 
     sal_uInt16  nLastFirstPos = nCount - 1;
-    long nWinWidth = mnLastOffX - mnOffX - ADDNEWPAGE_AREAWIDTH;
-    long nWidth = mpImpl->mpItemList[nLastFirstPos]->mnWidth;
+    tools::Long nWinWidth = mnLastOffX - mnOffX - ADDNEWPAGE_AREAWIDTH;
+    tools::Long nWidth = mpImpl->mpItemList[nLastFirstPos]->mnWidth;
 
     while (nLastFirstPos && (nWidth < nWinWidth))
     {
@@ -860,7 +860,7 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
         return;
 
     // calculate width
-    long nWidth = GetOutputSizePixel().Width();
+    tools::Long nWidth = GetOutputSizePixel().Width();
 
     auto& pItem = mpImpl->mpItemList[nPos];
     if (nPos < mnFirstPos)
@@ -1241,8 +1241,8 @@ void TabBar::Resize()
 {
     Size aNewSize = GetOutputSizePixel();
 
-    long nSizerWidth = 0;
-    long nButtonWidth = 0;
+    tools::Long nSizerWidth = 0;
+    tools::Long nButtonWidth = 0;
 
     // order the Sizer
     if ( mpImpl->mpSizer )
@@ -1255,14 +1255,14 @@ void TabBar::Resize()
     }
 
     // order the scroll buttons
-    long const nHeight = aNewSize.Height();
+    tools::Long const nHeight = aNewSize.Height();
     // adapt font height?
     ImplInitSettings( true, false );
 
-    long nButtonMargin = BUTTON_MARGIN * GetDPIScaleFactor();
+    tools::Long nButtonMargin = BUTTON_MARGIN * GetDPIScaleFactor();
 
-    long nX = mbMirrored ? (aNewSize.Width() - nHeight - nButtonMargin) : nButtonMargin;
-    long const nXDiff = mbMirrored ? -nHeight : nHeight;
+    tools::Long nX = mbMirrored ? (aNewSize.Width() - nHeight - nButtonMargin) : nButtonMargin;
+    tools::Long const nXDiff = mbMirrored ? -nHeight : nHeight;
 
     nButtonWidth += nButtonMargin;
 
@@ -1865,7 +1865,7 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
         else
         {
             // calculate visible width
-            long nWidth = mnLastOffX;
+            tools::Long nWidth = mnLastOffX;
             if (nWidth > ADDNEWPAGE_AREAWIDTH)
                 nWidth -= ADDNEWPAGE_AREAWIDTH;
 
@@ -1919,7 +1919,7 @@ void TabBar::MakeVisible(sal_uInt16 nPageId)
         auto& pItem = mpImpl->mpItemList[nPos];
 
         // calculate visible area
-        long nWidth = mnLastOffX;
+        tools::Long nWidth = mnLastOffX;
 
         if (mbFormat || pItem->maRect.IsEmpty())
         {
@@ -2051,8 +2051,8 @@ bool TabBar::StartEditMode(sal_uInt16 nPageId)
 
         mpImpl->mxEdit.disposeAndReset(VclPtr<TabBarEdit>::Create(this));
         tools::Rectangle aRect = GetPageRect( mnEditId );
-        long nX = aRect.Left();
-        long nWidth = aRect.GetWidth();
+        tools::Long nX = aRect.Left();
+        tools::Long nWidth = aRect.GetWidth();
         if (mnEditId != GetCurPageId())
             nX += 1;
         if (nX + nWidth > mnLastOffX)
@@ -2178,7 +2178,7 @@ bool TabBar::IsEffectiveRTL() const
     return IsMirrored() != AllSettings::GetLayoutRTL();
 }
 
-void TabBar::SetMaxPageWidth(long nMaxWidth)
+void TabBar::SetMaxPageWidth(tools::Long nMaxWidth)
 {
     if (mnMaxPageWidth != nMaxWidth)
     {
@@ -2360,8 +2360,8 @@ sal_uInt16 TabBar::ShowDropPos(const Point& rPos)
 
     // draw drop position arrows
     Color aBlackColor(COL_BLACK);
-    long nX;
-    long nY = (maWinSize.Height() / 2) - 1;
+    tools::Long nX;
+    tools::Long nY = (maWinSize.Height() / 2) - 1;
     sal_uInt16 nCurPos = GetPagePos(mnCurPageId);
 
     sal_Int32 nTriangleWidth = 3 * GetDPIScaleFactor();
@@ -2419,9 +2419,9 @@ void TabBar::HideDropPos()
     if (!mbDropPos)
         return;
 
-    long nX;
-    long nY1 = (maWinSize.Height() / 2) - 3;
-    long nY2 = nY1 + 5;
+    tools::Long nX;
+    tools::Long nY1 = (maWinSize.Height() / 2) - 3;
+    tools::Long nY2 = nY1 + 5;
     sal_uInt16 nItemCount = mpImpl->getItemSize();
 
     if (mnDropPos < nItemCount)
@@ -2500,7 +2500,7 @@ void TabBar::SetStyle(WinBits nStyle)
 
 Size TabBar::CalcWindowSizePixel() const
 {
-    long nWidth = 0;
+    tools::Long nWidth = 0;
 
     if (!mpImpl->mpItemList.empty())
     {

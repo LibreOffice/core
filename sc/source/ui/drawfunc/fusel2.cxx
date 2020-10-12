@@ -32,11 +32,11 @@
 #include <drawview.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-static long Diff( const Point& rP1, const Point& rP2 )
+static tools::Long Diff( const Point& rP1, const Point& rP2 )
 {
-    long nX = rP1.X() - rP2.X();
+    tools::Long nX = rP1.X() - rP2.X();
     if (nX<0) nX = -nX;
-    long nY = rP1.Y() - rP2.Y();
+    tools::Long nY = rP1.Y() - rP2.Y();
     if (nY<0) nY = -nY;
     return nX+nY;
 }

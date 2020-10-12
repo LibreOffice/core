@@ -41,17 +41,17 @@ namespace svt::table
         {
         }
 
-        MutableColumnMetrics( long const i_startPixel, long const i_endPixel )
+        MutableColumnMetrics( tools::Long const i_startPixel, tools::Long const i_endPixel )
             :ColumnMetrics( i_startPixel, i_endPixel )
         {
         }
 
-        long getStart() const { return nStartPixel; }
-        long getEnd() const { return nEndPixel; }
+        tools::Long getStart() const { return nStartPixel; }
+        tools::Long getEnd() const { return nEndPixel; }
 
-        void move( long const i_offset ) { nStartPixel += i_offset; nEndPixel += i_offset; }
+        void move( tools::Long const i_offset ) { nStartPixel += i_offset; nEndPixel += i_offset; }
 
-        long getWidth() const { return nEndPixel - nStartPixel; }
+        tools::Long getWidth() const { return nEndPixel - nStartPixel; }
     };
 
     struct ColumnInfoPositionLess
@@ -90,11 +90,11 @@ namespace svt::table
         ColumnPositions         m_aColumnWidths;
 
         /// the height of a single row in the table, measured in pixels
-        long                    m_nRowHeightPixel;
+        tools::Long                    m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
-        long                    m_nColHeaderHeightPixel;
+        tools::Long                    m_nColHeaderHeightPixel;
         /// the width of the row header column in the table, measured in pixels
-        long                    m_nRowHeaderWidthPixel;
+        tools::Long                    m_nRowHeaderWidthPixel;
 
         /// the number of columns in the table control. Cached model value.
         TableSize               m_nColumnCount;
@@ -256,7 +256,7 @@ namespace svt::table
         virtual void                captureMouse() override;
         virtual void                releaseMouse() override;
         virtual void                invalidate( TableArea const i_what ) override;
-        virtual long                pixelWidthToAppFont( long const i_pixels ) const override;
+        virtual tools::Long                pixelWidthToAppFont( tools::Long const i_pixels ) const override;
         virtual void                hideTracking() override;
         virtual void                showTracking( tools::Rectangle const & i_location, ShowTrackFlags const i_flags ) override;
         RowPos                      getRowAtPoint( const Point& rPoint ) const;
@@ -266,7 +266,7 @@ namespace svt::table
         virtual bool                isRowSelected( RowPos i_row ) const override;
 
 
-        long                        appFontWidthToPixel( long const i_appFontUnits ) const;
+        tools::Long                        appFontWidthToPixel( tools::Long const i_appFontUnits ) const;
 
         TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
         const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
@@ -372,7 +372,7 @@ namespace svt::table
             @return
                 the overall width of the grid, which is available for columns
         */
-        long        impl_ni_calculateColumnWidths(
+        tools::Long        impl_ni_calculateColumnWidths(
                         ColPos const i_assumeInflexibleColumnsUpToIncluding,
                         bool const i_assumeVerticalScrollbar,
                         ::std::vector< long >& o_newColWidthsPixel
@@ -438,11 +438,11 @@ namespace svt::table
 
         /** retrieves the column which covers the given ordinate
         */
-        ColPos      impl_getColumnForOrdinate( long const i_ordinate ) const;
+        ColPos      impl_getColumnForOrdinate( tools::Long const i_ordinate ) const;
 
         /** retrieves the row which covers the given abscissa
         */
-        RowPos      impl_getRowForAbscissa( long const i_abscissa ) const;
+        RowPos      impl_getRowForAbscissa( tools::Long const i_abscissa ) const;
 
         /// invalidates the window area occupied by the given column
         void        impl_invalidateColumn( ColPos const i_column );

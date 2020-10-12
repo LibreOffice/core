@@ -180,7 +180,7 @@ DocumentListsManager::~DocumentListsManager()
 
 OUString DocumentListsManager::MakeListIdUnique( const OUString& aSuggestedUniqueListId )
 {
-    long nHitCount = 0;
+    tools::Long nHitCount = 0;
     OUString aTmpStr = aSuggestedUniqueListId;
     while ( getListByName( aTmpStr ) )
     {

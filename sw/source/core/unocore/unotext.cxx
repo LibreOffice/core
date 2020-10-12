@@ -1885,7 +1885,7 @@ void SwXText::Impl::ConvertCell(
     {
         // increment on each StartNode and decrement on each EndNode
         // we must reach zero at the end and must not go below zero
-        long nOpenNodeBlock = 0;
+        tools::Long nOpenNodeBlock = 0;
         SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
         while (aCellIndex < aEndCellPam.End()->nNode.GetIndex())
         {

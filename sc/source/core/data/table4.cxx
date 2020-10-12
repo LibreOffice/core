@@ -308,9 +308,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     if (nValueCount >= 2)
                     {
-                        long nCmpInc = 0;
+                        tools::Long nCmpInc = 0;
                         FillDateCmd eType = FILL_YEAR;  // just some temporary default values
-                        long nDDiff = 0, nMDiff = 0, nYDiff = 0; // to avoid warnings
+                        tools::Long nDDiff = 0, nMDiff = 0, nYDiff = 0; // to avoid warnings
                         Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
                         Date aCurrDate = aNullDate, aPrevDate = aNullDate;
                         aCurrDate.AddDays(aCurrCell.mfValue);
@@ -326,11 +326,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 aCurrDate = aNullDate + static_cast<sal_Int32>(aCurrCell.mfValue);
                                 if (eType != FILL_DAY) {
                                     nDDiff = aCurrDate.GetDay()
-                                             - static_cast<long>(aPrevDate.GetDay());
+                                             - static_cast<tools::Long>(aPrevDate.GetDay());
                                     nMDiff = aCurrDate.GetMonth()
-                                             - static_cast<long>(aPrevDate.GetMonth());
+                                             - static_cast<tools::Long>(aPrevDate.GetMonth());
                                     nYDiff = aCurrDate.GetYear()
-                                             - static_cast<long>(aPrevDate.GetYear());
+                                             - static_cast<tools::Long>(aPrevDate.GetYear());
                                 }
                                 if (i == 1)
                                 {
@@ -447,11 +447,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 aDate2.AddDays(nVal);
                 if ( aDate1 != aDate2 )
                 {
-                    long nCmpInc = 0;
+                    tools::Long nCmpInc = 0;
                     FillDateCmd eType;
-                    long nDDiff = aDate2.GetDay()   - static_cast<long>(aDate1.GetDay());
-                    long nMDiff = aDate2.GetMonth() - static_cast<long>(aDate1.GetMonth());
-                    long nYDiff = aDate2.GetYear()  - static_cast<long>(aDate1.GetYear());
+                    tools::Long nDDiff = aDate2.GetDay()   - static_cast<tools::Long>(aDate1.GetDay());
+                    tools::Long nMDiff = aDate2.GetMonth() - static_cast<tools::Long>(aDate1.GetMonth());
+                    tools::Long nYDiff = aDate2.GetYear()  - static_cast<tools::Long>(aDate1.GetYear());
                     if ( nDDiff )
                     {
                         eType = FILL_DAY;
@@ -480,9 +480,9 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             }
                             else
                             {
-                                nDDiff = aDate2.GetDay()   - static_cast<long>(aDate1.GetDay());
-                                nMDiff = aDate2.GetMonth() - static_cast<long>(aDate1.GetMonth());
-                                nYDiff = aDate2.GetYear()  - static_cast<long>(aDate1.GetYear());
+                                nDDiff = aDate2.GetDay()   - static_cast<tools::Long>(aDate1.GetDay());
+                                nMDiff = aDate2.GetMonth() - static_cast<tools::Long>(aDate1.GetMonth());
+                                nYDiff = aDate2.GetYear()  - static_cast<tools::Long>(aDate1.GetYear());
                                 if (nDDiff || ( nMDiff + 12 * nYDiff != nCmpInc ))
                                     bVal = false;
                             }
@@ -1064,7 +1064,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     SCCOL nCol2 = rSource.aEnd.Col();
     SCROW nRow2 = rSource.aEnd.Row();
     bool bOk = true;
-    long nIndex = 0;
+    tools::Long nIndex = 0;
     sal_uLong nSrcCount = 0;
     FillDir eFillDir = FILL_TO_BOTTOM;
     if ( nEndX == nCol2 && nEndY == nRow2 )     // empty
@@ -1073,7 +1073,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     {
         nCol2 = nCol1;                          // use only first column
         nSrcCount = nRow2 - nRow1 + 1;
-        nIndex = static_cast<long>(nEndY) - nRow1;         // can be negative
+        nIndex = static_cast<tools::Long>(nEndY) - nRow1;         // can be negative
         if ( nEndY >= nRow1 )
             eFillDir = FILL_TO_BOTTOM;
         else
@@ -1083,7 +1083,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     {
         nEndY = nRow2 = nRow1;                  // use only first row
         nSrcCount = nCol2 - nCol1 + 1;
-        nIndex = static_cast<long>(nEndX) - nCol1;         // can be negative
+        nIndex = static_cast<tools::Long>(nEndX) - nCol1;         // can be negative
         if ( nEndX >= nCol1 )
             eFillDir = FILL_TO_RIGHT;
         else
@@ -1126,8 +1126,8 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         {
             if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
             {
-                long nBegin = 0;
-                long nEnd = 0;
+                tools::Long nBegin = 0;
+                tools::Long nEnd = 0;
                 if (nEndY > nRow1)
                 {
                     nBegin = nRow2+1;
@@ -1139,8 +1139,8 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     nEnd = nRow1 -1;
                 }
 
-                long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
-                long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
+                tools::Long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
+                tools::Long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
 
                 if (nIndex > 0)
                     nIndex = nIndex - nFiltered;
@@ -1148,7 +1148,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     nIndex = nIndex + nFiltered;
             }
 
-            long nPosIndex = nIndex;
+            tools::Long nPosIndex = nIndex;
             while ( nPosIndex < 0 )
                 nPosIndex += nSrcCount;
             sal_uLong nPos = nPosIndex % nSrcCount;
@@ -1289,7 +1289,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                     nIndex = -nIndex;
                     nInc = -nInc;
                 }
-                for (long i=0; i<nIndex; i++)
+                for (tools::Long i=0; i<nIndex; i++)
                     IncDate( nStart, nDayOfMonth, nInc, eDateCmd );
             }
 
@@ -1341,7 +1341,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
     const sal_uInt16 nMinYear = 1583;
     const sal_uInt16 nMaxYear = 9956;
 
-    long nInc = static_cast<long>(nStep);       // upper/lower limits ?
+    tools::Long nInc = static_cast<tools::Long>(nStep);       // upper/lower limits ?
     Date aNullDate = rDocument.GetFormatTable()->GetNullDate();
     Date aDate = aNullDate;
     aDate.AddDays(rVal);
@@ -1371,8 +1371,8 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
             {
                 if ( nDayOfMonth == 0 )
                     nDayOfMonth = aDate.GetDay();       // init
-                long nMonth = aDate.GetMonth();
-                long nYear = aDate.GetYear();
+                tools::Long nMonth = aDate.GetMonth();
+                tools::Long nYear = aDate.GetYear();
 
                 nMonth += nInc;
 
@@ -1380,7 +1380,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                 {
                     if (nMonth > 12)
                     {
-                        long nYAdd = (nMonth-1) / 12;
+                        tools::Long nYAdd = (nMonth-1) / 12;
                         nMonth -= nYAdd * 12;
                         nYear += nYAdd;
                     }
@@ -1389,7 +1389,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
                 {
                     if (nMonth < 1)
                     {
-                        long nYAdd = 1 - nMonth / 12;       // positive
+                        tools::Long nYAdd = 1 - nMonth / 12;       // positive
                         nMonth += nYAdd * 12;
                         nYear -= nYAdd;
                     }
@@ -1409,7 +1409,7 @@ void ScTable::IncDate(double& rVal, sal_uInt16& nDayOfMonth, double nStep, FillD
             break;
         case FILL_YEAR:
             {
-                long nYear = aDate.GetYear();
+                tools::Long nYear = aDate.GetYear();
                 nYear += nInc;
                 if ( nYear < nMinYear )
                     aDate = Date( 1,1, nMinYear );
@@ -2118,7 +2118,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 const double nStartVal = (eCellType == CELLTYPE_VALUE ? aSrcCell.mfValue :
                         aSrcCell.mpFormula->GetValue());
                 double nVal = nStartVal;
-                long nIndex = 0;
+                tools::Long nIndex = 0;
 
                 bool bError = false;
                 bool bOverflow = false;
@@ -2222,7 +2222,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     const double nStartVal = static_cast<double>(nStringValue);
                     double nVal = nStartVal;
-                    long nIndex = 0;
+                    tools::Long nIndex = 0;
                     bool bError = false;
                     bool bOverflow = false;
 

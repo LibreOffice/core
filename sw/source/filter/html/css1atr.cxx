@@ -366,7 +366,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         Strm().WriteOString( sOut.makeStringAndClear() );
 }
 
-static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
+static void AddUnitPropertyValue(OStringBuffer &rOut, tools::Long nVal,
     FieldUnit eUnit)
 {
     if( nVal < 0 )
@@ -377,9 +377,9 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     }
 
     // the recalculated unit results from (x * nMul)/(nDiv*nFac*10)
-    long nMul = 1000;
-    long nDiv = 1;
-    long nFac = 100;
+    tools::Long nMul = 1000;
+    tools::Long nDiv = 1;
+    tools::Long nFac = 100;
     const char *pUnit;
     switch( eUnit )
     {
@@ -441,7 +441,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         break;
     }
 
-    long nLongVal = 0;
+    tools::Long nLongVal = 0;
     bool bOutLongVal = true;
     if( nVal > LONG_MAX / nMul )
     {
@@ -454,7 +454,7 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
         if( nBigVal <= LONG_MAX )
         {
             // a long is sufficient
-            nLongVal = static_cast<long>(nBigVal);
+            nLongVal = static_cast<tools::Long>(nBigVal);
         }
         else
         {
@@ -496,14 +496,14 @@ static void AddUnitPropertyValue(OStringBuffer &rOut, long nVal,
     rOut.append(pUnit);
 }
 
-void SwHTMLWriter::OutCSS1_UnitProperty( const char *pProp, long nVal )
+void SwHTMLWriter::OutCSS1_UnitProperty( const char *pProp, tools::Long nVal )
 {
     OStringBuffer sOut;
     AddUnitPropertyValue(sOut, nVal, m_eCSS1Unit);
     OutCSS1_PropertyAscii(pProp, sOut.makeStringAndClear());
 }
 
-void SwHTMLWriter::OutCSS1_PixelProperty( const char *pProp, long nVal,
+void SwHTMLWriter::OutCSS1_PixelProperty( const char *pProp, tools::Long nVal,
                                           bool bVert )
 {
     OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
@@ -1684,7 +1684,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
         aRefSz = pRefPageDesc->GetMaster().GetFrameSize().GetSize();
         if( bRefLandscape != rPageDesc.GetLandscape() )
         {
-            long nTmp = aRefSz.Height();
+            tools::Long nTmp = aRefSz.Height();
             aRefSz.setHeight( aRefSz.Width() );
             aRefSz.setWidth( nTmp );
         }
@@ -1871,9 +1871,9 @@ Writer& OutCSS1_NumberBulletListStyleOpt( Writer& rWrt, const SwNumRule& rNumRul
 
     const SwNumFormat& rNumFormat = rNumRule.Get( nLevel );
 
-    long nLSpace = rNumFormat.GetAbsLSpace();
-    long nFirstLineOffset = rNumFormat.GetFirstLineOffset();
-    long nDfltFirstLineOffset = HTML_NUMBER_BULLET_INDENT;
+    tools::Long nLSpace = rNumFormat.GetAbsLSpace();
+    tools::Long nFirstLineOffset = rNumFormat.GetFirstLineOffset();
+    tools::Long nDfltFirstLineOffset = HTML_NUMBER_BULLET_INDENT;
     if( nLevel > 0 )
     {
         const SwNumFormat& rPrevNumFormat = rNumRule.Get( nLevel-1 );
@@ -1942,7 +1942,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 // case the Orient-Attribute contains the correct position.
 
                 // top
-                long nXPos=0, nYPos=0;
+                tools::Long nXPos=0, nYPos=0;
                 bool bOutXPos = false, bOutYPos = false;
                 if( RES_DRAWFRMFMT == rFrameFormat.Which() )
                 {
@@ -2724,7 +2724,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     if( nHeight )
-        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, static_cast<long>(nHeight) );
+        rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_line_height, static_cast<tools::Long>(nHeight) );
     else if( nPercentHeight &&
         !(nPercentHeight < 115 && rHTMLWrt.m_bParaDotLeaders )) // avoid HTML scrollbars and missing descenders
     {
@@ -2896,14 +2896,14 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     // match that of the current template
 
     // A left margin can exist because of a list nearby
-    long nLeftMargin = rLRItem.GetTextLeft() - rHTMLWrt.m_nLeftMargin;
+    tools::Long nLeftMargin = rLRItem.GetTextLeft() - rHTMLWrt.m_nLeftMargin;
     if( rHTMLWrt.m_nDfltLeftMargin != nLeftMargin )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_left, nLeftMargin );
 
         // max-width = max-width - margin-left for TOC paragraphs with dot leaders
         if( rHTMLWrt.m_bParaDotLeaders )
-            rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
+            rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_max_width, tools::Long(DOT_LEADERS_MAX_WIDTH/2.54*72*20) - nLeftMargin );
 
     }
 
@@ -2913,7 +2913,7 @@ static Writer& OutCSS1_SvxLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     // The LineIndent of the first line might contain the room for numbering
-    long nFirstLineIndent = static_cast<long>(rLRItem.GetTextFirstLineOffset()) -
+    tools::Long nFirstLineIndent = static_cast<tools::Long>(rLRItem.GetTextFirstLineOffset()) -
         rHTMLWrt.m_nFirstLineIndent;
     if( rHTMLWrt.m_nDfltFirstLineIndent != nFirstLineIndent )
     {
@@ -2933,13 +2933,13 @@ static Writer& OutCSS1_SvxULSpace( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.m_nDfltTopMargin != rULItem.GetUpper() )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_top,
-                                     static_cast<long>(rULItem.GetUpper()) );
+                                     static_cast<tools::Long>(rULItem.GetUpper()) );
     }
 
     if( rHTMLWrt.m_nDfltBottomMargin != rULItem.GetLower() )
     {
         rHTMLWrt.OutCSS1_UnitProperty( sCSS1_P_margin_bottom,
-                                     static_cast<long>(rULItem.GetLower()) );
+                                     static_cast<tools::Long>(rULItem.GetLower()) );
     }
 
     return rWrt;
@@ -3402,10 +3402,10 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
         OutCSS1_SvxBorderLine( rHTMLWrt, sCSS1_P_border_right, pRight );
     }
 
-    long nTopDist = pTop ? rBoxItem.GetDistance( SvxBoxItemLine::TOP ) : 0;
-    long nBottomDist = pBottom ? rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) : 0;
-    long nLeftDist = pLeft ? rBoxItem.GetDistance( SvxBoxItemLine::LEFT ) : 0;
-    long nRightDist = pRight ? rBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) : 0;
+    tools::Long nTopDist = pTop ? rBoxItem.GetDistance( SvxBoxItemLine::TOP ) : 0;
+    tools::Long nBottomDist = pBottom ? rBoxItem.GetDistance( SvxBoxItemLine::BOTTOM ) : 0;
+    tools::Long nLeftDist = pLeft ? rBoxItem.GetDistance( SvxBoxItemLine::LEFT ) : 0;
+    tools::Long nRightDist = pRight ? rBoxItem.GetDistance( SvxBoxItemLine::RIGHT ) : 0;
 
     if( nTopDist == nBottomDist && nLeftDist == nRightDist )
     {

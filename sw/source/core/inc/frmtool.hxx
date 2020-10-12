@@ -157,7 +157,7 @@ extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
 SwTwips CalcRowRstHeight( SwLayoutFrame *pRow );
-long CalcHeightWithFlys( const SwFrame *pFrame );
+tools::Long CalcHeightWithFlys( const SwFrame *pFrame );
 
 namespace sw {
 
@@ -392,8 +392,8 @@ public:
     inline sal_uInt16 CalcTop() const;
     inline sal_uInt16 CalcBottom() const;
     inline sal_uInt16 CalcLineSpacing() const;
-           long CalcLeft( const SwFrame *pCaller ) const;
-           long CalcRight( const SwFrame *pCaller ) const;
+           tools::Long CalcLeft( const SwFrame *pCaller ) const;
+           tools::Long CalcRight( const SwFrame *pCaller ) const;
 
     inline bool IsLine() const;
 

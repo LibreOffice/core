@@ -328,7 +328,7 @@ css::awt::Rectangle XclImpChRoot::CalcHmmFromChartRect( const XclChRectangle& rR
 
 double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
 {
-    const long nWidth = mxChData->maChartRect.GetWidth();
+    const tools::Long nWidth = mxChData->maChartRect.GetWidth();
     if (!nWidth)
         throw o3tl::divide_by_zero();
     return static_cast<double>(nPosX) / nWidth;
@@ -336,7 +336,7 @@ double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
 
 double XclImpChRoot::CalcRelativeFromHmmY( sal_Int32 nPosY ) const
 {
-    const long nHeight = mxChData->maChartRect.GetHeight();
+    const tools::Long nHeight = mxChData->maChartRect.GetHeight();
     if (!nHeight)
         throw o3tl::divide_by_zero();
     return static_cast<double >(nPosY) / nHeight;
@@ -4268,10 +4268,10 @@ tools::Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor
         in the cell address components of the client anchor. In old BIFF3-BIFF5
         objects, the position is stored in the offset components of the anchor. */
     tools::Rectangle aRect(
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
-        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ) );
+        static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
+        static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< tools::Long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ) );
     aRect.Justify();
     // move shapes into chart area for sheet charts
     if( mbOwnTab )

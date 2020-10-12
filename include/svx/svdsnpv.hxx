@@ -104,8 +104,8 @@ protected:
     Fraction                    aSnapWdtY;
 
     sal_uInt16                  nMagnSizPix;
-    long                        nSnapAngle;
-    long                        nEliminatePolyPointLimitAngle;
+    tools::Long                        nSnapAngle;
+    tools::Long                        nEliminatePolyPointLimitAngle;
 
     SdrCrookMode                eCrookMode;
 
@@ -158,7 +158,7 @@ public:
     // SdrSnap::YSNAPPED or SdrSnap::XYSNAPPED
     SdrSnap SnapPos(Point& rPnt, const SdrPageView* pPV) const;
     Point GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const;
-    void CheckSnap(const Point& rPt, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
+    void CheckSnap(const Point& rPt, tools::Long& nBestXSnap, tools::Long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // All attitudes to snap are persistent.
     bool IsSnapEnabled() const { return bSnapEnab; }
@@ -220,8 +220,8 @@ public:
     // persistent.
     void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
     bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
-    void SetSnapAngle(long nAngle) { nSnapAngle=nAngle; }
-    long GetSnapAngle() const { return nSnapAngle; }
+    void SetSnapAngle(tools::Long nAngle) { nSnapAngle=nAngle; }
+    tools::Long GetSnapAngle() const { return nSnapAngle; }
 
     // different effects from Ortho (depending on the context):
     // - Create
@@ -280,8 +280,8 @@ public:
     // if its adjacent lines are almost a solid line.
     void SetEliminatePolyPoints(bool bOn) { bEliminatePolyPoints=bOn; }
     bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
-    void SetEliminatePolyPointLimitAngle(long nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
-    long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
+    void SetEliminatePolyPointLimitAngle(tools::Long nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
+    tools::Long GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
 };
 
 #endif // INCLUDED_SVX_SVDSNPV_HXX

@@ -116,7 +116,7 @@ SwFootNotePage::SwFootNotePage(weld::Container* pPage, weld::DialogController* p
     ::SetFieldUnit(*m_xDistEdit, aMetric);
     ::SetFieldUnit(*m_xLineDistEdit, aMetric);
     MeasurementSystem eSys = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    long nHeightValue = MeasurementSystem::Metric != eSys ? 1440 : 1134;
+    tools::Long nHeightValue = MeasurementSystem::Metric != eSys ? 1440 : 1134;
     m_xMaxHeightEdit->set_value(m_xMaxHeightEdit->normalize(nHeightValue),FieldUnit::TWIP);
 }
 
@@ -201,7 +201,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // width
     Fraction aTmp( 100, 1 );
     aTmp *= pFootnoteInfo->GetWidth();
-    m_xLineLengthEdit->set_value(static_cast<long>(aTmp), FieldUnit::PERCENT);
+    m_xLineLengthEdit->set_value(static_cast<tools::Long>(aTmp), FieldUnit::PERCENT);
 
     // gap footnote area
     m_xDistEdit->set_value(m_xDistEdit->normalize(pFootnoteInfo->GetTopDist()), FieldUnit::TWIP);
@@ -236,7 +236,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
     // Separator width
     sal_Int64 nWidth = m_xLineWidthEdit->get_value(FieldUnit::NONE);
-    nWidth = static_cast<long>(vcl::ConvertDoubleValue(
+    nWidth = static_cast<tools::Long>(vcl::ConvertDoubleValue(
                    nWidth,
                    m_xLineWidthEdit->get_digits(),
                    m_xLineWidthEdit->get_unit(), MapUnit::MapTwip ));

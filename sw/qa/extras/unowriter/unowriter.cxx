@@ -747,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     for (const auto& pItem : *pPostItMgr)
     {
         const SwRect& rAnchor = pItem->mpPostIt->GetAnchorRect();
-        CPPUNIT_ASSERT_GREATEREQUAL(static_cast<long>(5892), rAnchor.Left());
+        CPPUNIT_ASSERT_GREATEREQUAL(static_cast<tools::Long>(5892), rAnchor.Left());
     }
 }
 

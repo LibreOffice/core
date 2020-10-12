@@ -197,8 +197,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         aNewRange.PutInOrder();    //! really?
 
         const auto & rDoc = GetDocShell()->GetDocument();
-        long nEndX = aNewRange.aStart.Col() + nColumns - 1;
-        long nEndY = aNewRange.aStart.Row() + nRows - 1;
+        tools::Long nEndX = aNewRange.aStart.Col() + nColumns - 1;
+        tools::Long nEndY = aNewRange.aStart.Row() + nRows - 1;
         if ( nEndX < 0 )      nEndX = 0;
         if ( nEndX > rDoc.MaxCol() ) nEndX = rDoc.MaxCol();
         if ( nEndY < 0 )      nEndY = 0;

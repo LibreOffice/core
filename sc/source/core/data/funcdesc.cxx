@@ -958,8 +958,8 @@ ScFunctionList::ScFunctionList()
     // StarOne AddIns
 
     ScUnoAddInCollection* pUnoAddIns = ScGlobal::GetAddInCollection();
-    long nUnoCount = pUnoAddIns->GetFuncCount();
-    for (long nFunc=0; nFunc<nUnoCount; nFunc++)
+    tools::Long nUnoCount = pUnoAddIns->GetFuncCount();
+    for (tools::Long nFunc=0; nFunc<nUnoCount; nFunc++)
     {
         pDesc = new ScFuncDesc;
         pDesc->nFIndex = nNextId++;

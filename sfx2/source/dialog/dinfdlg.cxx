@@ -993,7 +993,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     if ( aTime.Month > 0 )
         m_xPrintValFt->set_label( ConvertDateTime_Impl( rInfoItem.getPrintedBy(),
             aTime, rLocaleWrapper ) );
-    const long nTime = rInfoItem.getEditingDuration();
+    const tools::Long nTime = rInfoItem.getEditingDuration();
     if ( bUseUserData )
     {
         const tools::Time aT( nTime/3600, (nTime%3600)/60, nTime%60 );

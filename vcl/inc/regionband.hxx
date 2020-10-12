@@ -52,22 +52,22 @@ public:
 
     bool isSingleRectangle() const;
     ImplRegionBand* ImplGetFirstRegionBand() const { return mpFirstBand; }
-    void ImplAddMissingBands(const long nTop, const long nBottom);
+    void ImplAddMissingBands(const tools::Long nTop, const tools::Long nBottom);
     void InsertBand(ImplRegionBand* pPreviousBand, ImplRegionBand* pBandToInsert);
     void processPoints();
-    void CreateBandRange(long nYTop, long nYBottom);
-    void InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId);
-    void InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType);
+    void CreateBandRange(tools::Long nYTop, tools::Long nYBottom);
+    void InsertLine(const Point& rStartPt, const Point& rEndPt, tools::Long nLineId);
+    void InsertPoint(const Point &rPoint, tools::Long nLineID, bool bEndPoint, LineType eLineType);
     bool OptimizeBandList();
-    void Move(long nHorzMove, long nVertMove);
+    void Move(tools::Long nHorzMove, tools::Long nVertMove);
     void Scale(double fScaleX, double fScaleY);
-    void InsertBands(long nTop, long nBottom);
-    static bool InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition);
-    void Union(long nLeft, long nTop, long nRight, long nBottom);
-    void Intersect(long nLeft, long nTop, long nRight, long nBottom);
+    void InsertBands(tools::Long nTop, tools::Long nBottom);
+    static bool InsertSingleBand(ImplRegionBand* pBand, tools::Long nYBandPosition);
+    void Union(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom);
+    void Intersect(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom);
     void Union(const RegionBand& rSource);
-    void Exclude(long nLeft, long nTop, long nRight, long nBottom);
-    void XOr(long nLeft, long nTop, long nRight, long nBottom);
+    void Exclude(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom);
+    void XOr(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom);
     void Intersect(const RegionBand& rSource);
     bool Exclude(const RegionBand& rSource);
     void XOr(const RegionBand& rSource);

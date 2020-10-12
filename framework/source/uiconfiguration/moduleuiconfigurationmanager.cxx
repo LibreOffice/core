@@ -879,7 +879,7 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            long nOpenMode = 0;
+            tools::Long nOpenMode = 0;
             Any a = xPropSet->getPropertyValue("OpenMode");
             if ( a >>= nOpenMode )
                 m_bReadOnly = !( nOpenMode & ElementModes::WRITE );

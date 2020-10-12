@@ -52,7 +52,7 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-static bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,long& _nXMov, long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification)
+static bool lcl_getNewRectSize(const tools::Rectangle& _aObjRect,tools::Long& _nXMov, tools::Long& _nYMov,SdrObject const * _pObj,SdrView const * _pView, ControlModification _nControlModification)
 {
     bool bMoveAllowed = _nXMov != 0 || _nYMov != 0;
     if ( bMoveAllowed )
@@ -202,7 +202,7 @@ void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Poin
     {
         aSectionSize.setHeight( nMinHeight );
     }
-    aSectionSize.AdjustHeight(static_cast<long>(StyleSettings::GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY())) );
+    aSectionSize.AdjustHeight(static_cast<tools::Long>(StyleSettings::GetSplitSize() * static_cast<double>(_rSectionWindow.GetMapMode().GetScaleY())) );
 
     if ( _bSet )
         _rSectionWindow.SetPosSizePixel(_rStartPoint,aSectionSize);
@@ -257,7 +257,7 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     rRenderContext.SetTextFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
 
     Size aOut(GetOutputSizePixel());
-    long nStartWidth = long(REPORT_STARTMARKER_WIDTH * rRenderContext.GetMapMode().GetScaleX());
+    tools::Long nStartWidth = tools::Long(REPORT_STARTMARKER_WIDTH * rRenderContext.GetMapMode().GetScaleX());
 
     aOut.AdjustWidth( -nStartWidth );
     aOut = rRenderContext.PixelToLogic(aOut);
@@ -755,9 +755,9 @@ void OViewsWindow::alignMarkedObjects(ControlModification _nControlModification,
         pObj->TakeObjInfo(aInfo);
         if (aInfo.bMoveAllowed && !pObj->IsMoveProtect())
         {
-            long nXMov = 0;
-            long nYMov = 0;
-            long* pValue = &nXMov;
+            tools::Long nXMov = 0;
+            tools::Long nYMov = 0;
+            tools::Long* pValue = &nXMov;
             switch(_nControlModification)
             {
                 case ControlModification::TOP   :
@@ -983,7 +983,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const tools::Recta
 
             rView.MarkObj( pNewObj, rView.GetSdrPageView() );
         }
-        const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewPos.AdjustY( -nSectionHeight );
     }
 }
@@ -1003,7 +1003,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         OSectionView* pView = &rReportSection.getSectionView();
         if (pView == _pSection)
             break;
-        const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aAbsolutePnt.AdjustY(nSectionHeight );
     }
     m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
@@ -1054,7 +1054,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
         aClipRect.SetTop( -aNewObjPos.Y() );
         rView.SetWorkArea( aClipRect );
 
-        const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewObjPos.AdjustY(nSectionHeight );
     }
 
@@ -1086,7 +1086,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                 << nViewCount++);
         rReportSection.getSectionView().BegDragObj(aNewPos, nullptr, pHdl, nDrgLog);
 
-        const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aNewPos.AdjustY( -nSectionHeight );
     }
 }
@@ -1102,7 +1102,7 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
     bool bAdd = true;
     Point aNewPos = _aPnt;
 
-    long nLastSectionHeight = 0;
+    tools::Long nLastSectionHeight = 0;
     for (const auto& rxSection : m_aSections)
     {
         OReportSection& rReportSection = rxSection->getReportSection();
@@ -1113,7 +1113,7 @@ void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
         }
         else if ( bAdd )
         {
-            const long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+            const tools::Long nSectionHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
             aNewPos.AdjustY(nSectionHeight );
         }
         else
@@ -1156,7 +1156,7 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
         for (; aIter != aEnd; ++aIter)
         {
             OReportSection& rReportSection = (*aIter)->getReportSection();
-            const long nHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+            const tools::Long nHeight = rReportSection.PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
             if ( (_rPnt.Y() - nHeight) < 0  )
                 break;
             _rPnt.AdjustY( -nHeight );
@@ -1305,7 +1305,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
         OReportSection& rReportSection = rxSection->getReportSection();
         if ( &rReportSection.getSectionView() == _pSection )
             break;
-        const long nSectionHeight = rxSection->PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rxSection->PixelToLogic(rReportSection.GetOutputSizePixel()).Height();
         aCurrentSectionPos.AdjustY(nSectionHeight );
     }
     aRealMousePos += aCurrentSectionPos;
@@ -1316,7 +1316,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
     {
         OReportSection& rReportSection = rxSection->getReportSection();
         OSectionView& rView = rReportSection.getSectionView();
-        const long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
 
         if (_bControlKeySet)
         {
@@ -1342,7 +1342,7 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection, b
         if ( pCurrentHdl && aRealMousePos.Y() > 0 )
             aRealMousePos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
         rReportSection.getSectionView().MovAction ( aRealMousePos );
-        const long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
+        const tools::Long nSectionHeight = rxSection->PixelToLogic(rxSection->GetOutputSizePixel()).Height();
         aRealMousePos.AdjustY( -nSectionHeight );
     }
 }
@@ -1382,8 +1382,8 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
     for (const auto& rxSection : m_aSections)
     {
         OReportSection& rReportSection = rxSection->getReportSection();
-        long nX = 0;
-        long nY = 0;
+        tools::Long nX = 0;
+        tools::Long nY = 0;
 
         if ( nCode == KEY_UP )
             nY = -1;
@@ -1617,7 +1617,7 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
 {
     const MapMode& aMapMode = GetMapMode();
 
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
     if ( _aZoom < aMapMode.GetScaleX() )
         aStartWidth *= aMapMode.GetScaleX();
     else
@@ -1633,7 +1633,7 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
     Resize();
 
     Size aOut = GetOutputSizePixel();
-    aOut.setWidth( long(aStartWidth) );
+    aOut.setWidth( tools::Long(aStartWidth) );
     aOut = PixelToLogic(aOut);
 
     tools::Rectangle aRect(PixelToLogic(Point(0,0)),aOut);

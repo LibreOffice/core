@@ -402,8 +402,8 @@ void AnnotationTag::Move( int nDX, int nDY )
 
 bool AnnotationTag::OnMove( const KeyEvent& rKEvt )
 {
-    long nX = 0;
-    long nY = 0;
+    ::tools::Long nX = 0;
+    ::tools::Long nY = 0;
 
     switch( rKEvt.GetKeyCode().GetCode() )
     {
@@ -477,7 +477,7 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
     pHdl->SetPageView( mrView.GetSdrPageView() );
 
     RealPoint2D aPosition( mxAnnotation->getPosition() );
-    Point aBasePos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
+    Point aBasePos( static_cast<::tools::Long>(aPosition.X * 100.0), static_cast<::tools::Long>(aPosition.Y * 100.0) );
     pHdl->SetPos( aBasePos );
 
     rHandlerList.AddHdl( std::move(pHdl) );
@@ -511,7 +511,7 @@ void AnnotationTag::select()
     if( pWindow )
     {
         RealPoint2D aPosition( mxAnnotation->getPosition() );
-        Point aPos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
+        Point aPos( static_cast<::tools::Long>(aPosition.X * 100.0), static_cast<::tools::Long>(aPosition.Y * 100.0) );
 
         ::tools::Rectangle aVisRect( aPos, pWindow->PixelToLogic(maSize) );
         mrView.MakeVisible(aVisRect, *pWindow);
@@ -586,7 +586,7 @@ void AnnotationTag::OpenPopup( bool bEdit )
         if( pWindow )
         {
             RealPoint2D aPosition( mxAnnotation->getPosition() );
-            Point aPos( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( Point( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) ) ) ) );
+            Point aPos( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( Point( static_cast<::tools::Long>(aPosition.X * 100.0), static_cast<::tools::Long>(aPosition.Y * 100.0) ) ) ) );
 
             aPos.AdjustX(4 ); // magic!
             aPos.AdjustY(1 );

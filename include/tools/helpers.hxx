@@ -11,6 +11,7 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
+#include <tools/long.hxx>
 #include <o3tl/safeint.hxx>
 #include <cassert>
 #include <type_traits>
@@ -19,13 +20,13 @@ template<typename T>
 inline
 typename std::enable_if<
              std::is_signed<T>::value || std::is_floating_point<T>::value, long >::type
-MinMax(T nVal, long nMin, long nMax)
+MinMax(T nVal, tools::Long nMin, tools::Long nMax)
 {
     assert(nMin <= nMax);
     if (nVal >= nMin)
     {
         if (nVal <= nMax)
-            return static_cast<long>(nVal);
+            return static_cast<tools::Long>(nVal);
         else
            return nMax;
     }
@@ -39,7 +40,7 @@ template<typename T>
 inline
 typename std::enable_if<
              std::is_unsigned<T>::value, long >::type
-MinMax(T nVal, long nMin, long nMax)
+MinMax(T nVal, tools::Long nMin, tools::Long nMax)
 {
     assert(nMin <= nMax);
     if (nMax < 0)
@@ -51,7 +52,7 @@ MinMax(T nVal, long nMin, long nMax)
         if (nMin < 0 || nVal >= static_cast<unsigned long>(nMin))
         {
             if (nVal <= static_cast<unsigned long>(nMax))
-                return static_cast<long>(nVal);
+                return static_cast<tools::Long>(nVal);
             else
                 return nMax;
         }
@@ -71,9 +72,9 @@ inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
     return (nWidthBits >> 5) << 2;
 }
 
-inline long FRound( double fVal )
+inline tools::Long FRound( double fVal )
 {
-    return fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 );
+    return fVal > 0.0 ? static_cast<tools::Long>( fVal + 0.5 ) : -static_cast<tools::Long>( -fVal + 0.5 );
 }
 
 //valid range:  (-180,180]

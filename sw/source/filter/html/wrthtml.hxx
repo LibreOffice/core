@@ -458,8 +458,8 @@ public:
     inline void OutCSS1_Property( const char *pProp, const OUString& rVal );
     void OutCSS1_Property( const char *pProp, const char *pVal,
                            const OUString *pSVal );
-    void OutCSS1_UnitProperty( const char *pProp, long nVal );
-    void OutCSS1_PixelProperty( const char *pProp, long nVal, bool bVert );
+    void OutCSS1_UnitProperty( const char *pProp, tools::Long nVal );
+    void OutCSS1_PixelProperty( const char *pProp, tools::Long nVal, bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
 
     // events of BODY tag from SFX configuration

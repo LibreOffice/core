@@ -561,7 +561,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         case SwFieldTypesEnum::Time:
         {
             nFormat = m_xNumFormatLB->GetFormat();
-            long nVal = static_cast< long >(m_xDateOffsetED->get_value());
+            tools::Long nVal = static_cast< tools::Long >(m_xDateOffsetED->get_value());
             if (nTypeId == SwFieldTypesEnum::Date)
                 aVal = OUString::number(nVal * 60 * 24);
             else

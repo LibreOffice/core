@@ -56,7 +56,7 @@
 // static ----------------------------------------------------------------
 
 // #i19922# - tdf#126051 see svx/source/dialog/hdft.cxx and sw/source/uibase/sidebar/PageMarginControl.hxx
-const long MINBODY = 56;  // 1mm in twips rounded
+const tools::Long MINBODY = 56;  // 1mm in twips rounded
 
 const sal_uInt16 SvxPageDescPage::pRanges[] =
 {
@@ -107,7 +107,7 @@ static Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxIt
 }
 
 
-static long ConvertLong_Impl( const long nIn, MapUnit eUnit )
+static tools::Long ConvertLong_Impl( const tools::Long nIn, MapUnit eUnit )
 {
     return OutputDevice::LogicToLogic( nIn, eUnit, MapUnit::MapTwip );
 }
@@ -117,8 +117,8 @@ static bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
     if ( pSize )
     {
         Size aSize = pSize->GetSize();
-        long nDiffW = std::abs( rSize.Width () - aSize.Width () );
-        long nDiffH = std::abs( rSize.Height() - aSize.Height() );
+        tools::Long nDiffW = std::abs( rSize.Width () - aSize.Width () );
+        tools::Long nDiffH = std::abs( rSize.Height() - aSize.Height() );
         return ( nDiffW < 10 && nDiffH < 10 );
     }
     else
@@ -344,10 +344,10 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(*pItem);
         SetMetricValue( *m_xTopMarginEdit, rULSpace.GetUpper(), eUnit );
         m_aBspWin.SetTop(
-            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<long>(rULSpace.GetUpper()), eUnit )) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetUpper()), eUnit )) );
         SetMetricValue( *m_xBottomMarginEdit, rULSpace.GetLower(), eUnit );
         m_aBspWin.SetBottom(
-            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<long>(rULSpace.GetLower()), eUnit )) );
+            static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetLower()), eUnit )) );
     }
 
     // general page data
@@ -855,7 +855,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeSelect_Impl, weld::ComboBox&, void)
         return;
 
     // Draw: if paper format the margin shall be 1 cm
-    long nTmp = 0;
+    tools::Long nTmp = 0;
     bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
 
     if ( !bScreen )
@@ -908,8 +908,8 @@ IMPL_LINK(SvxPageDescPage, SwapOrientation_Impl, weld::Button&, rBtn, void)
 
     bLandscape = m_xLandscapeBtn->get_active();
 
-    const long lWidth = GetCoreValue( *m_xPaperWidthEdit, MapUnit::Map100thMM );
-    const long lHeight = GetCoreValue( *m_xPaperHeightEdit, MapUnit::Map100thMM );
+    const tools::Long lWidth = GetCoreValue( *m_xPaperWidthEdit, MapUnit::Map100thMM );
+    const tools::Long lHeight = GetCoreValue( *m_xPaperHeightEdit, MapUnit::Map100thMM );
 
     // swap width and height
     SetMetricValue(*m_xPaperWidthEdit, lHeight, MapUnit::Map100thMM);
@@ -956,10 +956,10 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     sal_Int64 nSetB = m_xBottomMarginEdit->denormalize(
                     m_xBottomMarginEdit->get_value( FieldUnit::TWIP ) );
 
-    long nNewL = aPrintOffset.X();
-    long nNewR = aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X();
-    long nNewT = aPrintOffset.Y();
-    long nNewB = aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y();
+    tools::Long nNewL = aPrintOffset.X();
+    tools::Long nNewR = aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X();
+    tools::Long nNewT = aPrintOffset.Y();
+    tools::Long nNewB = aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y();
 
     nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(nNewL), FieldUnit::TWIP);
     nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(nNewR), FieldUnit::TWIP);
@@ -1139,7 +1139,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
             const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
                 rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
-            long nDist = rUL.GetLower();
+            tools::Long nDist = rUL.GetLower();
             m_aBspWin.SetHdHeight( rSize.GetSize().Height() - nDist );
             m_aBspWin.SetHdDist( nDist );
             const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
@@ -1194,7 +1194,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
         const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
             rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
-        long nDist = rUL.GetUpper();
+        tools::Long nDist = rUL.GetUpper();
         m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
         m_aBspWin.SetFtDist( nDist );
         const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
@@ -1298,20 +1298,20 @@ DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 void SvxPageDescPage::RangeHdl_Impl()
 {
     // example window
-    long nHHeight = m_aBspWin.GetHdHeight();
-    long nHDist = m_aBspWin.GetHdDist();
+    tools::Long nHHeight = m_aBspWin.GetHdHeight();
+    tools::Long nHDist = m_aBspWin.GetHdDist();
 
-    long nFHeight = m_aBspWin.GetFtHeight();
-    long nFDist = m_aBspWin.GetFtDist();
+    tools::Long nFHeight = m_aBspWin.GetFtHeight();
+    tools::Long nFDist = m_aBspWin.GetFtDist();
 
-    long nHFLeft = std::max(m_aBspWin.GetHdLeft(), m_aBspWin.GetFtLeft());
-    long nHFRight = std::max(m_aBspWin.GetHdRight(), m_aBspWin.GetFtRight());
+    tools::Long nHFLeft = std::max(m_aBspWin.GetHdLeft(), m_aBspWin.GetFtLeft());
+    tools::Long nHFRight = std::max(m_aBspWin.GetHdRight(), m_aBspWin.GetFtRight());
 
     // current values for page margins
-    long nBT = static_cast<long>(m_xTopMarginEdit->denormalize(m_xTopMarginEdit->get_value(FieldUnit::TWIP)));
-    long nBB = static_cast<long>(m_xBottomMarginEdit->denormalize(m_xBottomMarginEdit->get_value(FieldUnit::TWIP)));
-    long nBL = static_cast<long>(m_xLeftMarginEdit->denormalize(m_xLeftMarginEdit->get_value(FieldUnit::TWIP)));
-    long nBR = static_cast<long>(m_xRightMarginEdit->denormalize(m_xRightMarginEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nBT = static_cast<tools::Long>(m_xTopMarginEdit->denormalize(m_xTopMarginEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nBB = static_cast<tools::Long>(m_xBottomMarginEdit->denormalize(m_xBottomMarginEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nBL = static_cast<tools::Long>(m_xLeftMarginEdit->denormalize(m_xLeftMarginEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nBR = static_cast<tools::Long>(m_xRightMarginEdit->denormalize(m_xRightMarginEdit->get_value(FieldUnit::TWIP)));
 
     // calculate width of page border
     const SfxItemSet* _pSet = &GetItemSet();
@@ -1330,18 +1330,18 @@ void SvxPageDescPage::RangeHdl_Impl()
     // limits paper
     // maximum is 54 cm
 
-    long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
+    tools::Long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
                 MINBODY + aBorder.Height();
     m_xPaperHeightEdit->set_min(m_xPaperHeightEdit->normalize(nMin), FieldUnit::TWIP);
 
     nMin = MINBODY + nBL + nBR + aBorder.Width();
     m_xPaperWidthEdit->set_min(m_xPaperWidthEdit->normalize(nMin), FieldUnit::TWIP);
 
-    long nH = static_cast<long>(m_xPaperHeightEdit->denormalize(m_xPaperHeightEdit->get_value(FieldUnit::TWIP)));
-    long nW = static_cast<long>(m_xPaperWidthEdit->denormalize(m_xPaperWidthEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nH = static_cast<tools::Long>(m_xPaperHeightEdit->denormalize(m_xPaperHeightEdit->get_value(FieldUnit::TWIP)));
+    tools::Long nW = static_cast<tools::Long>(m_xPaperWidthEdit->denormalize(m_xPaperWidthEdit->get_value(FieldUnit::TWIP)));
 
     // Top
-    long nMax = nH - nBB - aBorder.Height() - MINBODY -
+    tools::Long nMax = nH - nBB - aBorder.Height() - MINBODY -
                 nFDist - nFHeight - nHDist - nHHeight;
 
     m_xTopMarginEdit->set_max(m_xTopMarginEdit->normalize(nMax), FieldUnit::TWIP);
@@ -1364,24 +1364,24 @@ void SvxPageDescPage::RangeHdl_Impl()
 void SvxPageDescPage::CalcMargin_Impl()
 {
     // current values for page margins
-    long nBT = GetCoreValue( *m_xTopMarginEdit, MapUnit::MapTwip );
-    long nBB = GetCoreValue( *m_xBottomMarginEdit, MapUnit::MapTwip );
+    tools::Long nBT = GetCoreValue( *m_xTopMarginEdit, MapUnit::MapTwip );
+    tools::Long nBB = GetCoreValue( *m_xBottomMarginEdit, MapUnit::MapTwip );
 
-    long nBL = GetCoreValue( *m_xLeftMarginEdit, MapUnit::MapTwip );
-    long nBR = GetCoreValue( *m_xRightMarginEdit, MapUnit::MapTwip );
+    tools::Long nBL = GetCoreValue( *m_xLeftMarginEdit, MapUnit::MapTwip );
+    tools::Long nBR = GetCoreValue( *m_xRightMarginEdit, MapUnit::MapTwip );
 
-    long nH  = GetCoreValue( *m_xPaperHeightEdit, MapUnit::MapTwip );
-    long nW  = GetCoreValue( *m_xPaperWidthEdit, MapUnit::MapTwip );
+    tools::Long nH  = GetCoreValue( *m_xPaperHeightEdit, MapUnit::MapTwip );
+    tools::Long nW  = GetCoreValue( *m_xPaperWidthEdit, MapUnit::MapTwip );
 
-    long nWidth = nBL + nBR + MINBODY;
-    long nHeight = nBT + nBB + MINBODY;
+    tools::Long nWidth = nBL + nBR + MINBODY;
+    tools::Long nHeight = nBT + nBB + MINBODY;
 
     if ( nWidth <= nW && nHeight <= nH )
         return;
 
     if ( nWidth > nW )
     {
-        long nTmp = nBL <= nBR ? nBR : nBL;
+        tools::Long nTmp = nBL <= nBR ? nBR : nBL;
         nTmp -= nWidth - nW;
 
         if ( nBL <= nBR )
@@ -1392,7 +1392,7 @@ void SvxPageDescPage::CalcMargin_Impl()
 
     if ( nHeight > nH )
     {
-        long nTmp = nBT <= nBB ? nBB : nBT;
+        tools::Long nTmp = nBT <= nBB ? nBB : nBT;
         nTmp -= nHeight - nH;
 
         if ( nBT <= nBB )
@@ -1457,11 +1457,11 @@ IMPL_LINK_NOARG(SvxPageDescPage, FrameDirectionModify_Impl, weld::ComboBox&, voi
 }
 
 bool SvxPageDescPage::IsPrinterRangeOverflow(
-    weld::MetricSpinButton& rField, long nFirstMargin, long nLastMargin, MarginPosition nPos )
+    weld::MetricSpinButton& rField, tools::Long nFirstMargin, tools::Long nLastMargin, MarginPosition nPos )
 {
     bool bRet = false;
     bool bCheck = ( ( m_nPos & nPos ) == 0 );
-    long nValue = rField.get_value(FieldUnit::NONE);
+    tools::Long nValue = rField.get_value(FieldUnit::NONE);
     if ( bCheck &&
          (  nValue < nFirstMargin || nValue > nLastMargin ) &&
          rField.get_value_changed_from_saved() )

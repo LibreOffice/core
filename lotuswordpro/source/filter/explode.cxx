@@ -309,7 +309,7 @@ sal_Int32 Decompression::explode()
 
         m_pOutStream->Flush();
         // point back to copy position and read bytes
-        m_pOutStream->SeekRel(-static_cast<long>(distance));
+        m_pOutStream->SeekRel(-static_cast<tools::Long>(distance));
         sal_uInt8 sTemp[MAXWIN];
         sal_uInt32 nRead = std::min(distance, Length);
         m_pOutStream->ReadBytes(sTemp, nRead);

@@ -311,7 +311,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, weld::ComboBox&, void)
 {
     OUString aStrLb = mxLbDocs->get_active_text();
-    long   nPos = mxLbDocs->get_active();
+    tools::Long   nPos = mxLbDocs->get_active();
     bool   bFound = false;
     ::sd::DrawDocShell* pDocShell = nullptr;
     NavDocInfo* pInfo = GetDocInfo();

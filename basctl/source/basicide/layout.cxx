@@ -29,7 +29,7 @@ namespace basctl
 namespace
 {
 // the thickness of the splitting lines
-long const nSplitThickness = 3;
+tools::Long const nSplitThickness = 3;
 } // namespace
 
 // ctor for derived classes
@@ -89,7 +89,7 @@ void Layout::ArrangeWindows ()
     bInArrangeWindows = true;
 
     Size const aSize = GetOutputSizePixel();
-    long const nWidth = aSize.Width(), nHeight = aSize.Height();
+    tools::Long const nWidth = aSize.Width(), nHeight = aSize.Height();
     if (nWidth && nHeight) // non-empty size
     {
         // On first call the derived classes initializes the sizes of the
@@ -186,8 +186,8 @@ void Layout::SplittedSide::dispose()
 // Add() -- adds a new window to the side (after construction)
 void Layout::SplittedSide::Add (DockingWindow* pWin, Size const& rSize)
 {
-    long const nSize1 = (bVertical ? rSize.Width() : rSize.Height()) + nSplitThickness;
-    long const nSize2 = bVertical ? rSize.Height() : rSize.Width();
+    tools::Long const nSize1 = (bVertical ? rSize.Width() : rSize.Height()) + nSplitThickness;
+    tools::Long const nSize2 = bVertical ? rSize.Height() : rSize.Width();
     // nSize
     if (nSize1 > nSize)
         nSize = nSize1;
@@ -229,11 +229,11 @@ void Layout::SplittedSide::Remove (DockingWindow* pWin)
 
 // creating a Point or a Size object
 // The coordinate order depends on bVertical (reversed if true).
-inline Size Layout::SplittedSide::MakeSize (long A, long B) const
+inline Size Layout::SplittedSide::MakeSize (tools::Long A, tools::Long B) const
 {
     return bVertical ? Size(B, A) : Size(A, B);
 }
-inline Point Layout::SplittedSide::MakePoint (long A, long B) const
+inline Point Layout::SplittedSide::MakePoint (tools::Long A, tools::Long B) const
 {
     return bVertical ? Point(B, A) : Point(A, B);
 }
@@ -254,7 +254,7 @@ bool Layout::SplittedSide::IsEmpty () const
 }
 
 // GetSize() -- returns the width or height of the strip (depending on the direction)
-long Layout::SplittedSide::GetSize () const
+tools::Long Layout::SplittedSide::GetSize () const
 {
     return IsEmpty() ? 0 : nSize;
 }
@@ -267,13 +267,13 @@ void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
     aRect = rRect;
 
     // the length of the side
-    long const nLength = bVertical ? aRect.GetSize().Height() : aRect.GetSize().Width();
-    long const nOtherSize = bVertical ? aRect.GetSize().Width() : aRect.GetSize().Height();
+    tools::Long const nLength = bVertical ? aRect.GetSize().Height() : aRect.GetSize().Width();
+    tools::Long const nOtherSize = bVertical ? aRect.GetSize().Width() : aRect.GetSize().Height();
     // bVertical ? horizontal position : vertical position
-    long const nPos1 = (bVertical ? aRect.Left() : aRect.Top()) +
+    tools::Long const nPos1 = (bVertical ? aRect.Left() : aRect.Top()) +
         (bLower ? 0 : nOtherSize - (nSize - nSplitThickness));
     // bVertical ? vertical position : horizontal position
-    long const nPos2 = bVertical ? aRect.Top() : aRect.Left();
+    tools::Long const nPos2 = bVertical ? aRect.Top() : aRect.Left();
 
     // main line
     bool const bEmpty = IsEmpty();
@@ -296,7 +296,7 @@ void Layout::SplittedSide::ArrangeIn (tools::Rectangle const& rRect)
 
     // positioning separator lines and windows
     bool bPrevDocking = false; // is the previous window docked?
-    long nStartPos = 0; // window position in the strip
+    tools::Long nStartPos = 0; // window position in the strip
     std::vector<Item>::size_type iLastWin = vItems.size(); // index of last docking window in the strip
 
     for (std::vector<Item>::size_type i = 0; i != vItems.size(); ++i)
@@ -395,18 +395,18 @@ IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
 void Layout::SplittedSide::CheckMarginsFor (Splitter* pSplitter)
 {
     // The splitter line cannot be closer to the edges than nMargin pixels.
-    static long const nMargin = 16;
+    static tools::Long const nMargin = 16;
     // Checking margins:
-    long const nLength = pSplitter->IsHorizontal() ?
+    tools::Long const nLength = pSplitter->IsHorizontal() ?
         aRect.GetWidth() : aRect.GetHeight();
     if (!nLength)
         return;
 
     // bounds
-    long const nLower = (pSplitter->IsHorizontal() ? aRect.Left() : aRect.Top()) + nMargin;
-    long const nUpper = nLower + nLength - 2*nMargin;
+    tools::Long const nLower = (pSplitter->IsHorizontal() ? aRect.Left() : aRect.Top()) + nMargin;
+    tools::Long const nUpper = nLower + nLength - 2*nMargin;
     // split position
-    long const nPos = pSplitter->GetSplitPosPixel();
+    tools::Long const nPos = pSplitter->GetSplitPosPixel();
     // checking bounds
     if (nPos < nLower)
         pSplitter->SetSplitPosPixel(nLower);

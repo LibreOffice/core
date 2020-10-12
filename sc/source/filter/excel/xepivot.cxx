@@ -366,7 +366,7 @@ void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const Sc
     maGroupOrder.resize( maFieldInfo.mnBaseItems, EXC_PC_NOITEM );
 
     // loop over all groups of this field
-    for( long nGroupIdx = 0, nGroupCount = rGroupDim.GetGroupCount(); nGroupIdx < nGroupCount; ++nGroupIdx )
+    for( tools::Long nGroupIdx = 0, nGroupCount = rGroupDim.GetGroupCount(); nGroupIdx < nGroupCount; ++nGroupIdx )
     {
         const ScDPSaveGroupItem& rGroupItem = rGroupDim.GetGroupByIndex( nGroupIdx );
         // the index of the new item containing the grouping name
@@ -523,7 +523,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         return;
 
     ScSheetDPData aDPData(&GetDoc(), *pSrcDesc, *pCache);
-    long nDim = GetFieldIndex();
+    tools::Long nDim = GetFieldIndex();
     // get the string collection with generated grouping elements
     ScDPNumGroupDimension aTmpDim( rNumInfo );
     if( nDatePart != 0 )
@@ -1021,7 +1021,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     // subtotals
     XclPTSubtotalVec aSubtotals;
     aSubtotals.reserve( static_cast< size_t >( rSaveDim.GetSubTotalsCount() ) );
-    for( long nSubtIdx = 0, nSubtCount = rSaveDim.GetSubTotalsCount(); nSubtIdx < nSubtCount; ++nSubtIdx )
+    for( tools::Long nSubtIdx = 0, nSubtCount = rSaveDim.GetSubTotalsCount(); nSubtIdx < nSubtCount; ++nSubtIdx )
         aSubtotals.push_back( rSaveDim.GetSubTotalFunc( nSubtIdx ) );
     maFieldInfo.SetSubtotals( aSubtotals );
 

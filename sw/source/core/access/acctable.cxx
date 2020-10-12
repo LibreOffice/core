@@ -1567,10 +1567,10 @@ sal_Bool SAL_CALL SwAccessibleTable::selectRow( sal_Int32 row )
     if( isAccessibleColumnSelected( row ) )
         return true;
 
-    long lColumnCount = getAccessibleColumnCount();
-    for(long lCol = 0; lCol < lColumnCount; lCol ++)
+    tools::Long lColumnCount = getAccessibleColumnCount();
+    for(tools::Long lCol = 0; lCol < lColumnCount; lCol ++)
     {
-        long lChildIndex = getAccessibleIndex(row, lCol);
+        tools::Long lChildIndex = getAccessibleIndex(row, lCol);
         selectAccessibleChild(lChildIndex);
     }
 
@@ -1583,11 +1583,11 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     if( isAccessibleColumnSelected( column ) )
         return true;
 
-    long lRowCount = getAccessibleRowCount();
+    tools::Long lRowCount = getAccessibleRowCount();
 
-    for(long lRow = 0; lRow < lRowCount; lRow ++)
+    for(tools::Long lRow = 0; lRow < lRowCount; lRow ++)
     {
-        long lChildIndex = getAccessibleIndex(lRow, column);
+        tools::Long lChildIndex = getAccessibleIndex(lRow, column);
         selectAccessibleChild(lChildIndex);
     }
     return true;

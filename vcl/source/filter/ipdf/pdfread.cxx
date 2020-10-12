@@ -462,8 +462,8 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         // 1 pt = 20 twips
         constexpr double pointToTwipconversionRatio = 20;
 
-        long nPageWidth = convertTwipToMm100(aPageSize.getX() * pointToTwipconversionRatio);
-        long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
+        tools::Long nPageWidth = convertTwipToMm100(aPageSize.getX() * pointToTwipconversionRatio);
+        tools::Long nPageHeight = convertTwipToMm100(aPageSize.getY() * pointToTwipconversionRatio);
 
         auto aVectorGraphicDataPtr = std::make_shared<VectorGraphicData>(
             aPdfDataArray, OUString(), VectorGraphicDataType::Pdf, nPageIndex);

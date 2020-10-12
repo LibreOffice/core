@@ -31,7 +31,7 @@
 class SVXCORE_DLLPUBLIC XLineEndWidthItem final : public SfxMetricItem
 {
 public:
-                            XLineEndWidthItem(long nWidth = LINE_END_WIDTH_DEFAULT);
+                            XLineEndWidthItem(tools::Long nWidth = LINE_END_WIDTH_DEFAULT);
     virtual XLineEndWidthItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

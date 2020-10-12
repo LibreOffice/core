@@ -253,7 +253,7 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
         if (comphelper::LibreOfficeKit::isActive())
             SetMapMode(oldMapMode);
 
-        long aOldHeight = mrSidebarWin.GetPostItTextHeight();
+        tools::Long aOldHeight = mrSidebarWin.GetPostItTextHeight();
         bool bDone = false;
 
         /// HACK: need to switch off processing of Undo/Redo in Outliner

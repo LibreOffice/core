@@ -1725,7 +1725,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 double fHeight = 0;
                 if ( pPropHeight->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertTwipToMM100( static_cast<long>(fHeight * 20.0 + 0.5) );
+                    nCharWidth = ConversionHelper::convertTwipToMM100( static_cast<tools::Long>(fHeight * 20.0 + 0.5) );
             }
         }
 

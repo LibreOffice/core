@@ -199,7 +199,7 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
         {
             const IMapCircleObject*   pIMapCircleObj = static_cast<const IMapCircleObject*>(pIMapObj);
             const Point         aCenter( pIMapCircleObj->GetCenter( false ) );
-            const long          nRadius = pIMapCircleObj->GetRadius( false );
+            const tools::Long          nRadius = pIMapCircleObj->GetRadius( false );
             const Point         aOffset( nRadius, nRadius );
             tools::Rectangle           aCircle( aCenter - aOffset, aCenter + aOffset );
 

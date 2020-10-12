@@ -508,11 +508,11 @@ namespace o3tl {
 
 struct RulerBorder
 {
-    long             nPos;
-    long             nWidth;
+    tools::Long             nPos;
+    tools::Long             nWidth;
     RulerBorderStyle nStyle;
-    long             nMinPos; //minimum/maximum position, supported for table borders/rows
-    long             nMaxPos;
+    tools::Long             nMinPos; //minimum/maximum position, supported for table borders/rows
+    tools::Long             nMaxPos;
 };
 
 enum class RulerIndentStyle {
@@ -521,7 +521,7 @@ enum class RulerIndentStyle {
 
 struct RulerIndent
 {
-    long              nPos;
+    tools::Long              nPos;
     RulerIndentStyle  nStyle;
     bool              bInvisible;
 };
@@ -537,20 +537,20 @@ constexpr sal_uInt16 RULER_TAB_RTL = 0x0010;
 
 struct RulerTab
 {
-    long        nPos;
+    tools::Long        nPos;
     sal_uInt16  nStyle;
 };
 
 
 struct RulerLine
 {
-    long    nPos;
+    tools::Long    nPos;
 };
 
 
 struct RulerSelection
 {
-    long          nPos;
+    tools::Long          nPos;
     RulerType     eType;
     sal_uInt16    nAryPos;
     RulerDragSize mnDragSize;
@@ -573,7 +573,7 @@ struct RulerSelection
 struct RulerUnitData
 {
     MapUnit         eMapUnit;           // MAP_UNIT for calculation
-    long            nTickUnit;          // Unit divider
+    tools::Long            nTickUnit;          // Unit divider
     double          nTick1;             // Minimal step
     double          nTick2;             // Tick quarter unit
     double          nTick3;             // Tick half unit
@@ -611,17 +611,17 @@ class SVT_DLLPUBLIC Ruler : public vcl::Window
 private:
     ScopedVclPtr<VirtualDevice>   maVirDev;
     MapMode         maMapMode;
-    long            mnBorderOff;
-    long            mnWinOff;
-    long            mnWinWidth;
-    long            mnWidth;
-    long            mnHeight;
-    long            mnVirOff;
-    long            mnVirWidth;
-    long            mnVirHeight;
-    long            mnBorderWidth;
-    long            mnStartDragPos;
-    long            mnDragPos;
+    tools::Long            mnBorderOff;
+    tools::Long            mnWinOff;
+    tools::Long            mnWinWidth;
+    tools::Long            mnWidth;
+    tools::Long            mnHeight;
+    tools::Long            mnVirOff;
+    tools::Long            mnVirWidth;
+    tools::Long            mnVirHeight;
+    tools::Long            mnBorderWidth;
+    tools::Long            mnStartDragPos;
+    tools::Long            mnDragPos;
     std::unique_ptr<ImplRulerData>  mpSaveData;
     ImplRulerData*  mpData;
     std::unique_ptr<ImplRulerData>  mpDragData;
@@ -632,8 +632,8 @@ private:
     RulerDragSize   mnDragSize;
     sal_uInt16      mnDragModifier;
     sal_uInt16      mnExtraStyle;
-    long            mnCharWidth;
-    long            mnLineHeight;
+    tools::Long            mnCharWidth;
+    tools::Long            mnLineHeight;
 
     RulerExtra      meExtraType;
     RulerType       meDragType;
@@ -659,22 +659,22 @@ private:
 
     std::map<OUString, SalLayoutGlyphs> maTextGlyphs;
 
-    SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawRect(vcl::RenderContext& rRenderContext, long nX1, long nY1, long nX2, long nY2 );
-    SVT_DLLPRIVATE void ImplVDrawText(vcl::RenderContext& rRenderContext, long nX, long nY, const OUString& rText,
-                                      long nMin = LONG_MIN, long nMax = LONG_MAX );
+    SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawRect(vcl::RenderContext& rRenderContext, tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );
+    SVT_DLLPRIVATE void ImplVDrawText(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY, const OUString& rText,
+                                      tools::Long nMin = LONG_MIN, tools::Long nMax = LONG_MAX );
 
     SVT_DLLPRIVATE void ImplDrawTicks(vcl::RenderContext& rRenderContext,
-                                      long nMin, long nMax, long nStart, long nVirTop, long nVirBottom);
+                                      tools::Long nMin, tools::Long nMax, tools::Long nStart, tools::Long nVirTop, tools::Long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawBorders(vcl::RenderContext& rRenderContext,
-                                        long nMin, long nMax, long nVirTop, long nVirBottom);
+                                        tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
     SVT_DLLPRIVATE static void ImplDrawIndent(vcl::RenderContext& rRenderContext,
                                        const tools::Polygon& rPoly, bool bIsHit);
     SVT_DLLPRIVATE void ImplDrawIndents(vcl::RenderContext& rRenderContext,
-                                        long nMin, long nMax, long nVirTop, long nVirBottom);
+                                        tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
     SVT_DLLPRIVATE void ImplDrawTab(vcl::RenderContext& rRenderContext, const Point& rPos, sal_uInt16 nStyle);
     SVT_DLLPRIVATE void ImplDrawTabs(vcl::RenderContext& rRenderContext,
-                                     long nMin, long nMax, long nVirTop, long nVirBottom);
+                                     tools::Long nMin, tools::Long nMax, tools::Long nVirTop, tools::Long nVirBottom);
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void ImplInit( WinBits nWinBits );
@@ -703,7 +703,7 @@ private:
     Ruler& operator= (const Ruler &) = delete;
 
 protected:
-    long            GetRulerVirHeight() const { return mnVirHeight;}
+    tools::Long            GetRulerVirHeight() const { return mnVirHeight;}
     const MapMode&  GetCurrentMapMode() const { return maMapMode; }
     const RulerUnitData& GetCurrentRulerUnit() const;
 
@@ -730,12 +730,12 @@ public:
     void            Activate() override;
     void            Deactivate() override;
 
-    void            SetWinPos( long nOff, long nWidth = 0 );
-    long            GetWinOffset() const { return mnWinOff; }
-    void            SetPagePos( long nOff = 0, long nWidth = 0 );
-    long            GetPageOffset() const;
-    void            SetBorderPos( long nOff = 0 );
-    long            GetBorderOffset() const { return mnBorderOff; }
+    void            SetWinPos( tools::Long nOff, tools::Long nWidth = 0 );
+    tools::Long            GetWinOffset() const { return mnWinOff; }
+    void            SetPagePos( tools::Long nOff = 0, tools::Long nWidth = 0 );
+    tools::Long            GetPageOffset() const;
+    void            SetBorderPos( tools::Long nOff = 0 );
+    tools::Long            GetBorderOffset() const { return mnBorderOff; }
     const tools::Rectangle& GetExtraRect() const { return maExtraRect; }
 
     void            SetUnit( FieldUnit eNewUnit );
@@ -747,7 +747,7 @@ public:
     bool            StartDocDrag( const MouseEvent& rMEvt,
                                   RulerType eDragType );
     RulerType       GetDragType() const { return meDragType; }
-    long            GetDragPos() const { return mnDragPos; }
+    tools::Long            GetDragPos() const { return mnDragPos; }
     sal_uInt16      GetDragAryPos() const { return mnDragAryPos; }
     RulerDragSize   GetDragSize() const { return mnDragSize; }
     bool            IsDragDelete() const { return mbDragDelete; }
@@ -755,7 +755,7 @@ public:
     sal_uInt16      GetDragModifier() const { return mnDragModifier; }
     bool            IsDrag() const { return mbDrag; }
     void            CancelDrag();
-    long            GetClickPos() const { return mnDragPos; }
+    tools::Long            GetClickPos() const { return mnDragPos; }
     RulerType       GetClickType() const { return meDragType; }
 
     const RulerSelection& GetHoverSelection() const { return maHoverSelection; }
@@ -763,17 +763,17 @@ public:
     using Window::GetType;
     RulerType       GetType( const Point& rPos, sal_uInt16* pAryPos = nullptr );
 
-    void            SetNullOffset( long nPos );
-    long            GetNullOffset() const;
+    void            SetNullOffset( tools::Long nPos );
+    tools::Long            GetNullOffset() const;
     void            SetMargin1() { SetMargin1( 0, RulerMarginStyle::Invisible ); }
-    void            SetMargin1( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
-    long            GetMargin1() const;
+    void            SetMargin1( tools::Long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
+    tools::Long            GetMargin1() const;
     void            SetMargin2() { SetMargin2( 0, RulerMarginStyle::Invisible ); }
-    void            SetMargin2( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
-    long            GetMargin2() const;
+    void            SetMargin2( tools::Long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
+    tools::Long            GetMargin2() const;
 
-    void            SetLeftFrameMargin( long nPos );
-    void            SetRightFrameMargin( long nPos );
+    void            SetLeftFrameMargin( tools::Long nPos );
+    void            SetRightFrameMargin( tools::Long nPos );
     void            SetLines( sal_uInt32 n = 0, const RulerLine* pLineAry = nullptr );
     void            SetBorders( sal_uInt32 n = 0, const RulerBorder* pBrdAry = nullptr );
     void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = nullptr );
@@ -791,8 +791,8 @@ public:
 
     void            SetTextRTL(bool bRTL);
     bool            GetTextRTL() const;
-    void            SetCharWidth( long nWidth ) { mnCharWidth = nWidth ; }
-    void            SetLineHeight( long nHeight ) { mnLineHeight = nHeight ; }
+    void            SetCharWidth( tools::Long nWidth ) { mnCharWidth = nWidth ; }
+    void            SetLineHeight( tools::Long nHeight ) { mnLineHeight = nHeight ; }
 
     void            DrawTicks();
 

@@ -1158,9 +1158,9 @@ static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, S
 
     vcl::bitmap::RawBitmap aBitmap(aBitmapSizePixel, 24);
 
-    for ( long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
+    for ( tools::Long nY = 0; nY < aBitmapSizePixel.Height(); nY++ )
     {
-        for ( long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
+        for ( tools::Long nX = 0; nX < aBitmapSizePixel.Width(); nX++ )
         {
             double fX = static_cast< double >( nX ) / aBitmapSizePixel.Width();
             double fY = static_cast< double >( nY ) / aBitmapSizePixel.Height();
@@ -1406,10 +1406,10 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                             {
                                 Bitmap::ScopedReadAccess pRead(aBmp);
 
-                                for (long y = 0; y < aResult.Height(); ++y)
+                                for (tools::Long y = 0; y < aResult.Height(); ++y)
                                 {
                                     Scanline pScanlineRead = pRead->GetScanline( y );
-                                    for (long x = 0; x < aResult.Width(); ++x)
+                                    for (tools::Long x = 0; x < aResult.Width(); ++x)
                                     {
                                         Color aReadColor;
                                         if (pRead->HasPalette())
@@ -3126,8 +3126,8 @@ sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 {
     MapUnit eMap = pSdrModel->GetScaleUnit();
     Fraction aFact( GetMapFactor( MapUnit::MapPoint, eMap ).X() );
-    long aMul = aFact.GetNumerator();
-    long aDiv = aFact.GetDenominator() * 65536;
+    tools::Long aMul = aFact.GetNumerator();
+    tools::Long aDiv = aFact.GetDenominator() * 65536;
     aFact = Fraction( aMul, aDiv ); // try again to shorten it
     return BigMulDiv( nVal, aFact.GetNumerator(), aFact.GetDenominator() );
 }
@@ -3137,7 +3137,7 @@ sal_Int32 SvxMSDffManager::ScalePoint( sal_Int32 nVal ) const
     return BigMulDiv( nVal, nPntMul, nPntDiv );
 };
 
-void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
+void SvxMSDffManager::SetModel(SdrModel* pModel, tools::Long nApplicationScale)
 {
     pSdrModel = pModel;
     if( pModel && (0 < nApplicationScale) )
@@ -3146,8 +3146,8 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
         // WW on the other side uses twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
         Fraction aFact( GetMapFactor(MapUnit::MapInch, eMap).X() );
-        long nMul=aFact.GetNumerator();
-        long nDiv=aFact.GetDenominator()*nApplicationScale;
+        tools::Long nMul=aFact.GetNumerator();
+        tools::Long nDiv=aFact.GetDenominator()*nApplicationScale;
         aFact=Fraction(nMul,nDiv); // try again to shorten it
         // For 100TH_MM -> 2540/576=635/144
         // For Twip     -> 1440/576=5/2
@@ -4077,8 +4077,8 @@ SdrObject* SvxMSDffManager::ImportGroup( const DffRecordHeader& rHd, SvStream& r
                 sal_Int32 nHalfHeight = ( aClientRect.GetHeight() + 1 ) >> 1;
                 Point aTopLeft( aClientRect.Left() + nHalfWidth - nHalfHeight,
                                 aClientRect.Top() + nHalfHeight - nHalfWidth );
-                const long nRotatedWidth = aClientRect.GetHeight();
-                const long nRotatedHeight = aClientRect.GetWidth();
+                const tools::Long nRotatedWidth = aClientRect.GetHeight();
+                const tools::Long nRotatedHeight = aClientRect.GetWidth();
                 Size aNewSize(nRotatedWidth, nRotatedHeight);
                 tools::Rectangle aNewRect( aTopLeft, aNewSize );
                 aClientRect = aNewRect;
@@ -4286,7 +4286,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     {   // apply rotation to the BoundingBox BEFORE an object has been generated
         if( mnFix16Angle )
         {
-            long nAngle = mnFix16Angle;
+            tools::Long nAngle = mnFix16Angle;
             if ( ( nAngle > 4500 && nAngle <= 13500 ) || ( nAngle > 22500 && nAngle <= 31500 ) )
             {
                 sal_Int32 nHalfWidth = ( aObjData.aBoundRect.GetWidth() + 1 ) >> 1;
@@ -5258,7 +5258,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     case 9000:
                         {
-                            long nWidth = rTextRect.GetWidth();
+                            tools::Long nWidth = rTextRect.GetWidth();
                             rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
                             rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
@@ -5275,7 +5275,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                         break;
                     case 27000:
                         {
-                            long nWidth = rTextRect.GetWidth();
+                            tools::Long nWidth = rTextRect.GetWidth();
                             rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
                             rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
@@ -5429,7 +5429,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (nTextRotationAngle)
             {
-                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                tools::Long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
                     rTextRect.GetWidth() : rTextRect.GetHeight();
                 nMinWH /= 2;
                 Point aPivot(rTextRect.TopLeft());
@@ -5677,7 +5677,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  sal_uInt32 nOffsDgg_,
                                  SvStream* pStData_,
                                  SdrModel* pSdrModel_,// see SetModel() below
-                                 long      nApplicationScale,
+                                 tools::Long      nApplicationScale,
                                  Color     mnDefaultColor_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
@@ -6078,7 +6078,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
                                                   sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
-    long nStartShapeGroupCont = rSt.Tell();
+    tools::Long nStartShapeGroupCont = rSt.Tell();
     // We are now in a shape group container (conditionally multiple per page)
     // and we now have to iterate through all contained shape containers
     bool  bFirst = !bPatriarch;
@@ -6121,7 +6121,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                                              sal_uInt16 nDrawingContainerId )
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
-    long  nStartShapeCont = rSt.Tell();
+    tools::Long  nStartShapeCont = rSt.Tell();
 
     // We are in a shape container (possibly more than one per shape group) and we now
     // have to fetch the shape id and file position (to be able to access them again later)

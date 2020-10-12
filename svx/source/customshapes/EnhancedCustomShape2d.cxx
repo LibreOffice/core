@@ -942,7 +942,7 @@ Point EnhancedCustomShape2d::GetPoint( const css::drawing::EnhancedCustomShapePa
                                         const bool bScale, const bool bReplaceGeoSize ) const
 {
     basegfx::B2DPoint aPoint(GetPointAsB2DPoint(rPair, bScale, bReplaceGeoSize));
-    return Point(static_cast<long>(aPoint.getX()), static_cast<long>(aPoint.getY()));
+    return Point(static_cast<tools::Long>(aPoint.getX()), static_cast<tools::Long>(aPoint.getY()));
 }
 
 void EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCustomShapeParameter& rParameter,

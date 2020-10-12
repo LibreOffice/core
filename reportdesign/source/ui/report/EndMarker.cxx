@@ -44,9 +44,9 @@ OEndMarker::~OEndMarker()
 
 void OEndMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    Fraction aCornerSpace(long(CORNER_SPACE));
+    Fraction aCornerSpace(tools::Long(CORNER_SPACE));
     aCornerSpace *= rRenderContext.GetMapMode().GetScaleX();
-    const long nCornerSpace = long(aCornerSpace);
+    const tools::Long nCornerSpace = tools::Long(aCornerSpace);
 
     Size aSize = GetSizePixel();
     aSize.AdjustWidth(nCornerSpace );

@@ -43,7 +43,7 @@ class CGMBitmapDescriptor
         double                  mnOrientation;
 
         sal_uInt32              mnX, mnY;
-        long                    mnLocalColorPrecision;
+        tools::Long                    mnLocalColorPrecision;
         sal_uInt32              mnCompressionMode;
 
         CGMBitmapDescriptor()

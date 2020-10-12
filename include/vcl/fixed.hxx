@@ -63,9 +63,9 @@ public:
 
     void            setMaxWidthChars(sal_Int32 nWidth);
     void            setMinWidthChars(sal_Int32 nWidth);
-    static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
-    static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
-    Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
+    static Size     CalcMinimumTextSize(Control const* pControl, tools::Long nMaxWidth = 0x7fffffff);
+    static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, tools::Long nMaxWidth);
+    Size            CalcMinimumSize(tools::Long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const override;
     virtual bool    set_property(const OString &rKey, const OUString &rValue) override;
     void            set_mnemonic_widget(vcl::Window *pWindow);

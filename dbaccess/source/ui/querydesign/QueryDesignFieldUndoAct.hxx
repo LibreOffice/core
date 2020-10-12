@@ -71,12 +71,12 @@ namespace dbaui
 
     class OTabFieldSizedUndoAct final : public OQueryDesignFieldUndoAct
     {
-        long        m_nNextWidth;
+        tools::Long        m_nNextWidth;
 
     public:
         explicit OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
 
-        void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
+        void SetOriginalWidth(tools::Long nWidth) { m_nNextWidth = nWidth; }
 
         virtual void Undo() override;
         virtual void Redo() override { Undo(); }

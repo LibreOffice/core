@@ -107,7 +107,7 @@ void ScInterpreter::ScGetActDate()
 {
     nFuncFmtType = SvNumFormatType::DATE;
     Date aActDate( Date::SYSTEM );
-    long nDiff = aActDate - pFormatter->GetNullDate();
+    tools::Long nDiff = aActDate - pFormatter->GetNullDate();
     PushDouble(static_cast<double>(nDiff));
 }
 
@@ -115,7 +115,7 @@ void ScInterpreter::ScGetActTime()
 {
     nFuncFmtType = SvNumFormatType::DATETIME;
     DateTime aActTime( DateTime::SYSTEM );
-    long nDiff = aActTime - pFormatter->GetNullDate();
+    tools::Long nDiff = aActTime - pFormatter->GetNullDate();
     double fTime = aActTime.GetHour()    / static_cast<double>(::tools::Time::hourPerDay)   +
                    aActTime.GetMin()     / static_cast<double>(::tools::Time::minutePerDay) +
                    aActTime.GetSec()     / static_cast<double>(::tools::Time::secondPerDay) +
@@ -876,7 +876,7 @@ void ScInterpreter::ScGetDateDif()
         // to 2011-03-01 so the result is 0. Same for day 31 in months with
         // only 30 days.
 
-        long nd;
+        tools::Long nd;
         if (d1 <= d2)
             nd = d2 - d1;
         else
@@ -2668,9 +2668,9 @@ void ScInterpreter::ScStyle()
         OUString aStyle2;                           // Template after timer
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
-        long nTimeOut = 0;                          // timeout
+        tools::Long nTimeOut = 0;                          // timeout
         if (nParamCount >= 2)
-            nTimeOut = static_cast<long>(GetDouble()*1000.0);
+            nTimeOut = static_cast<tools::Long>(GetDouble()*1000.0);
         OUString aStyle1 = GetString().getString(); // Template for immediate
 
         if (nTimeOut < 0)

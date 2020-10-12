@@ -332,8 +332,8 @@ namespace accessibility
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( pParent );
         sal_Int32 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
-        long nX = aGridRect.Left() + aCellRect.Left();
-        long nY = aGridRect.Top() + aCellRect.Top();
+        tools::Long nX = aGridRect.Left() + aCellRect.Left();
+        tools::Long nY = aGridRect.Top() + aCellRect.Top();
         tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }
@@ -343,8 +343,8 @@ namespace accessibility
         tools::Rectangle aGridRect = m_aTable.GetWindowExtentsRelative( nullptr );
         sal_Int32 nIndex = getAccessibleIndexInParent();
         tools::Rectangle aCellRect = m_aTable.calcCellRect(nIndex%m_aTable.GetColumnCount(), nIndex/m_aTable.GetColumnCount());
-        long nX = aGridRect.Left() + aCellRect.Left();
-        long nY = aGridRect.Top() + aCellRect.Top();
+        tools::Long nX = aGridRect.Left() + aCellRect.Left();
+        tools::Long nY = aGridRect.Top() + aCellRect.Top();
         tools::Rectangle aCell( Point( nX, nY ), aCellRect.GetSize());
         return aCell;
     }

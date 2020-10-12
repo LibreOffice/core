@@ -44,7 +44,7 @@ class SwOutlineContent : public SwContent
                             SwOutlineNodes::size_type nArrPos,
                             sal_uInt8 nLevel,
                             bool bMove,
-                            long nYPos) :
+                            tools::Long nYPos) :
             SwContent(pCnt, rName, nYPos),
             nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
@@ -62,7 +62,7 @@ class SwRegionContent : public SwContent
         SwRegionContent(    const SwContentType* pCnt,
                             const OUString& rName,
                             sal_uInt8 nLevel,
-                            long nYPos) :
+                            tools::Long nYPos) :
             SwContent(pCnt, rName, nYPos),
                         nRegionLevel(nLevel){}
     sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
@@ -78,7 +78,7 @@ public:
                             const OUString& rName,
                             const OUString& rURL,
                             const SwTextINetFormat* pAttr,
-                            long nYPos )
+                            tools::Long nYPos )
         : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
     {}
 
@@ -94,7 +94,7 @@ public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
                             const SwFormatField* pFormatField,
-                            long nYPos )
+                            tools::Long nYPos )
         : SwContent(pCnt, rName, nYPos)
         , pField(pFormatField)
     {}
@@ -107,7 +107,7 @@ class SwGraphicContent : public SwContent
 {
     OUString      sLink;
 public:
-    SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, long nYPos)
+    SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, tools::Long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
         {}
     virtual ~SwGraphicContent() override;
@@ -119,7 +119,7 @@ class SwTOXBaseContent : public SwContent
 {
     const SwTOXBase* pBase;
 public:
-    SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, long nYPos, const SwTOXBase& rBase)
+    SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos, const SwTOXBase& rBase)
         : SwContent( pCnt, rName, nYPos ), pBase(&rBase)
         {}
     virtual ~SwTOXBaseContent() override;

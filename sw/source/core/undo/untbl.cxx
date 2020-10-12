@@ -159,7 +159,7 @@ class SaveBox
 
     SaveBox* pNext;
     sal_uLong nSttNode;
-    long nRowSpan;
+    tools::Long nRowSpan;
     sal_uInt16 nItemSet;
     union
     {
@@ -1470,7 +1470,7 @@ void SwUndoTableAutoFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTableNd,
-                                    long nMn, long nMx,
+                                    tools::Long nMn, tools::Long nMx,
                                     sal_uInt16 nCnt, bool bFlg, bool bSmHght )
     : SwUndo( nAction, &rTableNd.GetDoc() ),
     m_nMin( nMn ), m_nMax( nMx ),

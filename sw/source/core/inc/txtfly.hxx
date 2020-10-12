@@ -58,9 +58,9 @@ class SwContourCache
         std::unique_ptr<TextRanger> mxTextRanger;
     };
     std::vector<CacheItem> mvItems;
-    long mnPointCount;
+    tools::Long mnPointCount;
     SwRect ContourRect( const SwFormat* pFormat, const SdrObject* pObj,
-        const SwTextFrame* pFrame, const SwRect &rLine, const long nXPos,
+        const SwTextFrame* pFrame, const SwRect &rLine, const tools::Long nXPos,
         const bool bRight );
 
 public:
@@ -80,7 +80,7 @@ public:
     static SwRect CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
                                        const SwRect &rLine,
                                        const SwTextFrame* pFrame,
-                                       const long nXPos,
+                                       const tools::Long nXPos,
                                        const bool bRight );
 };
 
@@ -124,8 +124,8 @@ class SwTextFly
     const SwTextFrame                * m_pMaster;
     std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
-    long m_nMinBottom;
-    long m_nNextTop;  /// Stores the upper edge of the "next" frame
+    tools::Long m_nMinBottom;
+    tools::Long m_nNextTop;  /// Stores the upper edge of the "next" frame
     sal_uLong m_nCurrFrameNodeIndex;
 
     bool m_bOn : 1;
@@ -230,8 +230,8 @@ public:
     const SwTextFrame* GetMaster() const;
 
     // This temporary variable needs to be manipulated in const methods
-    long GetNextTop() const;
-    void SetNextTop( long nNew ) const;
+    tools::Long GetNextTop() const;
+    void SetNextTop( tools::Long nNew ) const;
 
     /**
       Determines the demanded rectangle for an anchored object,
@@ -343,12 +343,12 @@ inline const SwTextFrame* SwTextFly::GetMaster() const
     return m_pMaster ? m_pMaster : const_cast<SwTextFly*>(this)->GetMaster_();
 }
 
-inline long SwTextFly::GetNextTop() const
+inline tools::Long SwTextFly::GetNextTop() const
 {
     return m_nNextTop;
 }
 
-inline void SwTextFly::SetNextTop( long nNew ) const
+inline void SwTextFly::SetNextTop( tools::Long nNew ) const
 {
     const_cast<SwTextFly*>(this)->m_nNextTop = nNew;
 }

@@ -17,7 +17,7 @@
 
 #define S2(a, b)                                                                                   \
     {                                                                                              \
-        long t;                                                                                    \
+        tools::Long t;                                                                             \
         if ((t = b - a) < 0)                                                                       \
         {                                                                                          \
             a += t;                                                                                \
@@ -64,8 +64,8 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
 
         if (pWriteAcc)
         {
-            const long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
-            const long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
+            const tools::Long nWidth = pWriteAcc->Width(), nWidth2 = nWidth + 2;
+            const tools::Long nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             std::unique_ptr<long[]> pColm(new long[nWidth2]);
             std::unique_ptr<long[]> pRows(new long[nHeight2]);
             std::unique_ptr<BitmapColor[]> pColRow1(new BitmapColor[nWidth2]);
@@ -75,10 +75,10 @@ BitmapEx BitmapMedianFilter::execute(BitmapEx const& rBitmapEx) const
             BitmapColor* pRowTmp2 = pColRow2.get();
             BitmapColor* pRowTmp3 = pColRow3.get();
             BitmapColor* pColor;
-            long nY, nX, i;
-            long nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
-            long nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
-            long nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
+            tools::Long nY, nX, i;
+            tools::Long nR1, nR2, nR3, nR4, nR5, nR6, nR7, nR8, nR9;
+            tools::Long nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
+            tools::Long nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
 
             // create column LUT
             for (i = 0; i < nWidth2; i++)

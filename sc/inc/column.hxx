@@ -279,7 +279,7 @@ public:
     void CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, size_t nColOffset );
 
     void CopyFromClip(
-        sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
+        sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, tools::Long nDy, ScColumn& rColumn );
 
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 
@@ -516,7 +516,7 @@ public:
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    long GetNeededSize(
+    tools::Long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
         const Fraction& rZoomX, const Fraction& rZoomY,
         bool bWidth, const ScNeededSizeOptions& rOptions, const ScPatternAttr** pPatternChange,

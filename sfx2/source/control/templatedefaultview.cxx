@@ -25,7 +25,7 @@
 VCL_BUILDER_FACTORY(TemplateDefaultView)
 
 constexpr int gnItemPadding(5); //TODO:: Change padding to 10. It looks really crowded and occupied.
-constexpr long gnTextHeight = 30;
+constexpr tools::Long gnTextHeight = 30;
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent)

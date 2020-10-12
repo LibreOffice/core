@@ -734,12 +734,12 @@ public:
 
     virtual VclPtr<AbstractScMetricInputDlg> CreateScMetricInputDlg(weld::Window* pParent,
                                                                 const OString&  sDialogName,
-                                                                long            nCurrent,
-                                                                long            nDefault,
+                                                                tools::Long            nCurrent,
+                                                                tools::Long            nDefault,
                                                                 FieldUnit       eFUnit,
                                                                 sal_uInt16      nDecimals,
-                                                                long            nMaximum,
-                                                                long            nMinimum  = 0 ) override;
+                                                                tools::Long            nMaximum,
+                                                                tools::Long            nMinimum  = 0 ) override;
 
     virtual VclPtr<AbstractScMoveTableDlg> CreateScMoveTableDlg(weld::Window * pParent,
         const OUString& rDefault) override;

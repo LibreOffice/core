@@ -51,8 +51,8 @@ struct ScPrintHFParam
     bool                bEnable;
     bool                bDynamic;
     bool                bShared;
-    long                nHeight;            // in total (height + distance + frames)
-    long                nManHeight;         // set size (min when dynamic)
+    tools::Long                nHeight;            // in total (height + distance + frames)
+    tools::Long                nManHeight;         // set size (min when dynamic)
     sal_uInt16          nDistance;
     sal_uInt16          nLeft;              // edges
     sal_uInt16          nRight;
@@ -154,10 +154,10 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
     sal_uInt16  nZoom;
     size_t  nPagesX;
     size_t  nPagesY;
-    long    nTabPages;
-    long    nTotalPages;
-    long    nPageStart;
-    long    nDocPages;
+    tools::Long    nTabPages;
+    tools::Long    nTotalPages;
+    tools::Long    nPageStart;
+    tools::Long    nDocPages;
 
     // Additional state of page ranges
     bool bSavedStateRanges;
@@ -205,8 +205,8 @@ private:
     bool                bIsRender;
 
     SCTAB               nPrintTab;
-    long                nPageStart;         //  Offset for the first page
-    long                nDocPages;          //  Number of Pages in Document
+    tools::Long                nPageStart;         //  Offset for the first page
+    tools::Long                nDocPages;          //  Number of Pages in Document
 
     const ScRange*      pUserArea;          //  Selection, if set in dialog
 
@@ -240,8 +240,8 @@ private:
     bool                bPrintCurrentTable;
     bool                bMultiArea;
     bool                mbHasPrintRange;
-    long                nTabPages;
-    long                nTotalPages;
+    tools::Long                nTabPages;
+    tools::Long                nTotalPages;
 
     tools::Rectangle           aPageRect;          // Document Twips
 
@@ -275,7 +275,7 @@ private:
 
 public:
                     ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
-                                 long nPage = 0, long nDocP = 0,
+                                 tools::Long nPage = 0, tools::Long nDocP = 0,
                                  const ScRange* pArea = nullptr,
                                  const ScPrintOptions* pOptions = nullptr,
                                  ScPageBreakData* pData = nullptr );
@@ -286,7 +286,7 @@ public:
                     // ctors for device other than printer - for preview and pdf:
 
                     ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
-                                 long nPage = 0, long nDocP = 0,
+                                 tools::Long nPage = 0, tools::Long nDocP = 0,
                                  const ScRange* pArea = nullptr,
                                  const ScPrintOptions* pOptions = nullptr );
 
@@ -314,18 +314,18 @@ public:
     bool            UpdatePages();
 
     void            ApplyPrintSettings();       // Already called from DoPrint()
-    long            DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart, bool bDoPrint,
+    tools::Long            DoPrint( const MultiSelection& rPageRanges,
+                                tools::Long nStartPage, tools::Long nDisplayStart, bool bDoPrint,
                                 ScPreviewLocationData* pLocationData );
 
                     // Query values - immediately
 
     const Size&     GetPageSize() const { return aPageSize; }
     Size            GetDataSize() const;
-    void            GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
-    long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
+    void            GetScaleData( Size& rPhysSize, tools::Long& rDocHdr, tools::Long& rDocFtr );
+    tools::Long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
 
-    long            GetTotalPages() const { return nTotalPages; }
+    tools::Long            GetTotalPages() const { return nTotalPages; }
     sal_uInt16      GetZoom() const { return nZoom; }
 
     void            ResetBreaks( SCTAB nTab );
@@ -346,45 +346,45 @@ private:
     void            InitParam( const ScPrintOptions* pOptions );
     void            CalcZoom( sal_uInt16 nRangeNo );
     void            CalcPages();
-    long            CountPages();
-    long            CountNotePages();
+    tools::Long            CountPages();
+    tools::Long            CountNotePages();
 
     bool            AdjustPrintArea( bool bNew );
 
     Size            GetDocPageSize();
 
-    long            TextHeight( const EditTextObject* pObject );
+    tools::Long            TextHeight( const EditTextObject* pObject );
     void            MakeEditEngine();
     void            UpdateHFHeight( ScPrintHFParam& rParam );
 
     void            InitModes();
 
-    bool            IsLeft( long nPageNo );
-    bool            IsMirror( long nPageNo );
+    bool            IsLeft( tools::Long nPageNo );
+    bool            IsMirror( tools::Long nPageNo );
     void            MakeTableString();                  // sets aTableStr
 
-    void            PrintPage( long nPageNo,
+    void            PrintPage( tools::Long nPageNo,
                                     SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     bool bDoPrint, ScPreviewLocationData* pLocationData );
     void            PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    long nScrX, long nScrY,
+                                    tools::Long nScrX, tools::Long nScrY,
                                     bool bShLeft, bool bShTop, bool bShRight, bool bShBottom );
     void            LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    long nScrX, long nScrY, bool bRepCol, bool bRepRow,
+                                    tools::Long nScrX, tools::Long nScrY, bool bRepCol, bool bRepRow,
                                     ScPreviewLocationData& rLocationData );
-    void            PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY );
-    void            PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY );
-    void            LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
+    void            PrintColHdr( SCCOL nX1, SCCOL nX2, tools::Long nScrX, tools::Long nScrY );
+    void            PrintRowHdr( SCROW nY1, SCROW nY2, tools::Long nScrX, tools::Long nScrY );
+    void            LocateColHdr( SCCOL nX1, SCCOL nX2, tools::Long nScrX, tools::Long nScrY,
                                 bool bRepCol, ScPreviewLocationData& rLocationData );
-    void            LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
+    void            LocateRowHdr( SCROW nY1, SCROW nY2, tools::Long nScrX, tools::Long nScrY,
                                 bool bRepRow, ScPreviewLocationData& rLocationData );
-    void            PrintHF( long nPageNo, bool bHeader, long nStartY,
+    void            PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStartY,
                                     bool bDoPrint, ScPreviewLocationData* pLocationData );
 
-    long            PrintNotes( long nPageNo, long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
-    long            DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
+    tools::Long            PrintNotes( tools::Long nPageNo, tools::Long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
+    tools::Long            DoNotes( tools::Long nNoteStart, bool bDoPrint, ScPreviewLocationData* pLocationData );
 
-    void            DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
+    void            DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long nScrW, tools::Long nScrH,
                                     const SvxBoxItem* pBorderData,
                                     const SvxBrushItem* pBackground,
                                     const SvxShadowItem* pShadow );

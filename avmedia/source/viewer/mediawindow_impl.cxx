@@ -595,13 +595,13 @@ void MediaWindowImpl::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
 
         if (fLogoWH < (double(aVideoRect.GetWidth()) / aVideoRect.GetHeight()))
         {
-            aLogoSize.setWidth( long(aVideoRect.GetHeight() * fLogoWH) );
+            aLogoSize.setWidth( tools::Long(aVideoRect.GetHeight() * fLogoWH) );
             aLogoSize.setHeight( aVideoRect.GetHeight() );
         }
         else
         {
             aLogoSize.setWidth( aVideoRect.GetWidth() );
-            aLogoSize.setHeight( long(aVideoRect.GetWidth() / fLogoWH) );
+            aLogoSize.setHeight( tools::Long(aVideoRect.GetWidth() / fLogoWH) );
         }
     }
 

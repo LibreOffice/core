@@ -27,6 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/long.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <vector>
@@ -119,7 +120,7 @@ private:
     bool mbFilled;
 
     // the width to fill
-    long mnWidthToFill;
+    tools::Long mnWidthToFill;
 
     /// The fill color of the text
     Color maTextFillColor;
@@ -141,7 +142,7 @@ public:
                                  const attribute::FontAttribute& rFontAttribute,
                                  const css::lang::Locale& rLocale,
                                  const basegfx::BColor& rFontColor, bool bFilled = false,
-                                 long nWidthToFill = 0,
+                                 tools::Long nWidthToFill = 0,
                                  const Color& rTextFillColor = COL_TRANSPARENT);
 
     /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -161,7 +162,7 @@ public:
     const basegfx::BColor& getFontColor() const { return maFontColor; }
     const Color& getTextFillColor() const { return maTextFillColor; }
     bool isFilled() const { return mbFilled; }
-    long getWidthToFill() const { return mnWidthToFill; }
+    tools::Long getWidthToFill() const { return mnWidthToFill; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

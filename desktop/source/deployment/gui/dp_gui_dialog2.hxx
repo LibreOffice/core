@@ -64,7 +64,7 @@ public:
     virtual void    showProgress( bool bStart ) = 0;
     virtual void    updateProgress( const OUString &rText,
                                     const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) = 0;
-    virtual void    updateProgress( const long nProgress ) = 0;
+    virtual void    updateProgress( const tools::Long nProgress ) = 0;
 
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) = 0;
     virtual void    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &xPackage,
@@ -101,7 +101,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;
     bool                 m_bClosed;
-    long                 m_nProgress;
+    tools::Long                 m_nProgress;
     Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
@@ -143,7 +143,7 @@ public:
     virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
                                     const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) override;
-    virtual void    updateProgress( const long nProgress ) override;
+    virtual void    updateProgress( const tools::Long nProgress ) override;
 
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 
@@ -187,7 +187,7 @@ class UpdateRequiredDialog : public weld::GenericDialogController
     bool                 m_bStartProgress;
     bool                 m_bStopProgress;
     bool                 m_bHasLockedEntries;
-    long                 m_nProgress;
+    tools::Long                 m_nProgress;
     Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
@@ -222,7 +222,7 @@ public:
     virtual void    showProgress( bool bStart ) override;
     virtual void    updateProgress( const OUString &rText,
                                     const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) override;
-    virtual void    updateProgress( const long nProgress ) override;
+    virtual void    updateProgress( const tools::Long nProgress ) override;
 
     virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) override;
 

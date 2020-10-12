@@ -263,7 +263,7 @@ class SwTokenWindow
     SwTOXWidget* InsertItem(const OUString& rText, const SwFormToken& aToken);
     void        AdjustPositions();
     void        AdjustScrolling();
-    void        MoveControls(long nOffset);
+    void        MoveControls(tools::Long nOffset);
 
 public:
     SwTokenWindow(std::unique_ptr<weld::Container> xParent);

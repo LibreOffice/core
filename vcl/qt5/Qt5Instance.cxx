@@ -285,10 +285,9 @@ void Qt5Instance::DestroyObject(SalObject* pObject)
     }
 }
 
-std::unique_ptr<SalVirtualDevice> Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics,
-                                                                   long& nDX, long& nDY,
-                                                                   DeviceFormat eFormat,
-                                                                   const SystemGraphicsData* pGd)
+std::unique_ptr<SalVirtualDevice>
+Qt5Instance::CreateVirtualDevice(SalGraphics* pGraphics, tools::Long& nDX, tools::Long& nDY,
+                                 DeviceFormat eFormat, const SystemGraphicsData* pGd)
 {
     if (m_bUseCairo)
     {

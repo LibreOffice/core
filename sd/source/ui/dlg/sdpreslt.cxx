@@ -67,7 +67,7 @@ SdPresLayoutDlg::~SdPresLayoutDlg()
 void SdPresLayoutDlg::Reset()
 {
     const SfxPoolItem *pPoolItem = nullptr;
-    long nName;
+    tools::Long nName;
 
     // replace master page
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SfxItemState::SET )

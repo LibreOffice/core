@@ -378,7 +378,7 @@ bool SwVirtFlyDrawObj::HasLimitedRotation() const
     return ContainsSwGrfNode();
 }
 
-void SwVirtFlyDrawObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
+void SwVirtFlyDrawObj::Rotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     if(ContainsSwGrfNode())
     {
@@ -665,7 +665,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         const SwFrameFormat *pTmpFormat = GetFormat();
         const SwFormatVertOrient &rVert = pTmpFormat->GetVertOrient();
         const SwFormatHoriOrient &rHori = pTmpFormat->GetHoriOrient();
-        long lXDiff = aNewPos.X() - aOldPos.X();
+        tools::Long lXDiff = aNewPos.X() - aOldPos.X();
         if( rHori.IsPosToggle() && text::HoriOrientation::NONE == eHori &&
             !GetFlyFrame()->FindPageFrame()->OnRightPage() )
             lXDiff = -lXDiff;
@@ -674,7 +674,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             text::HoriOrientation::NONE == eHori )
             lXDiff = -lXDiff;
 
-        long lYDiff = aNewPos.Y() - aOldPos.Y();
+        tools::Long lYDiff = aNewPos.Y() - aOldPos.Y();
         if( GetFlyFrame()->GetAnchorFrame()->IsVertical() )
         {
             //lXDiff -= rVert.GetPos();
@@ -842,8 +842,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     const tools::Rectangle aOldRect(
         GetFlyFrame()->getFrameArea().TopLeft() + GetFlyFrame()->getFramePrintArea().TopLeft(),
         GetFlyFrame()->getFramePrintArea().SSize());
-    const long nOldWidth(aOldRect.GetWidth());
-    const long nOldHeight(aOldRect.GetHeight());
+    const tools::Long nOldWidth(aOldRect.GetWidth());
+    const tools::Long nOldHeight(aOldRect.GetHeight());
 
     if (!nOldWidth || !nOldHeight)
     {
@@ -904,8 +904,8 @@ void SwVirtFlyDrawObj::NbcCrop(const basegfx::B2DPoint& rRef, double fxFact, dou
     // Set new frame size
     SwFrameFormat *pFormat = GetFormat();
     SwFormatFrameSize aSz( pFormat->GetFrameSize() );
-    const long aNewWidth(aNewRect.GetWidth() + (aOutRect.GetWidth() - aOldRect.GetWidth()));
-    const long aNewHeight(aNewRect.GetHeight() + (aOutRect.GetHeight() - aOldRect.GetHeight()));
+    const tools::Long aNewWidth(aNewRect.GetWidth() + (aOutRect.GetWidth() - aOldRect.GetWidth()));
+    const tools::Long aNewHeight(aNewRect.GetHeight() + (aOutRect.GetHeight() - aOldRect.GetHeight()));
     aSz.SetWidth(aNewWidth);
     aSz.SetHeight(aNewHeight);
     pFormat->GetDoc()->SetAttr( aSz, *pFormat );
@@ -1033,7 +1033,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), GetFlyFrame() );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
-            long nMin = rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
+            tools::Long nMin = rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
             const SwFormatCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().size() > 1 )
             {
@@ -1053,7 +1053,7 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
 
         if ( aFrameSz.GetWidthPercent() || aFrameSz.GetHeightPercent() )
         {
-            long nRelWidth, nRelHeight;
+            tools::Long nRelWidth, nRelHeight;
             const SwFrame *pRel = GetFlyFrame()->IsFlyLayFrame() ?
                                 GetFlyFrame()->GetAnchorFrame() :
                                 GetFlyFrame()->GetAnchorFrame()->GetUpper();
@@ -1167,7 +1167,7 @@ sal_uInt16 SwVirtFlyDrawObj::getPossibleRotationFromFraphicFrame(Size& rSize) co
     return nRetval;
 }
 
-long SwVirtFlyDrawObj::GetRotateAngle() const
+tools::Long SwVirtFlyDrawObj::GetRotateAngle() const
 {
     if(ContainsSwGrfNode())
     {

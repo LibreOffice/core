@@ -431,12 +431,12 @@ Size SdrGrafObj::getOriginalSize() const
 
     if (aGrafInfo.IsCropped())
     {
-        const long aCroppedTop(OutputDevice::LogicToLogic(aGrafInfo.GetTopCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const long aCroppedBottom(OutputDevice::LogicToLogic(aGrafInfo.GetBottomCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const long aCroppedLeft(OutputDevice::LogicToLogic(aGrafInfo.GetLeftCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const long aCroppedRight(OutputDevice::LogicToLogic(aGrafInfo.GetRightCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
-        const long aCroppedWidth(aSize.getWidth() - aCroppedLeft + aCroppedRight);
-        const long aCroppedHeight(aSize.getHeight() - aCroppedTop + aCroppedBottom);
+        const tools::Long aCroppedTop(OutputDevice::LogicToLogic(aGrafInfo.GetTopCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
+        const tools::Long aCroppedBottom(OutputDevice::LogicToLogic(aGrafInfo.GetBottomCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
+        const tools::Long aCroppedLeft(OutputDevice::LogicToLogic(aGrafInfo.GetLeftCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
+        const tools::Long aCroppedRight(OutputDevice::LogicToLogic(aGrafInfo.GetRightCrop(), getSdrModelFromSdrObject().GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit()));
+        const tools::Long aCroppedWidth(aSize.getWidth() - aCroppedLeft + aCroppedRight);
+        const tools::Long aCroppedHeight(aSize.getHeight() - aCroppedTop + aCroppedBottom);
 
         aSize = Size ( aCroppedWidth, aCroppedHeight);
     }
@@ -1078,13 +1078,13 @@ void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrink
         // Scale graphic to page size
         if ( fGrfWH < fWinWH )
         {
-            aSize.setWidth( static_cast<long>(aMaxSize.Height() * fGrfWH) );
+            aSize.setWidth( static_cast<tools::Long>(aMaxSize.Height() * fGrfWH) );
             aSize.setHeight( aMaxSize.Height() );
         }
         else if ( fGrfWH > 0.F )
         {
             aSize.setWidth( aMaxSize.Width() );
-            aSize.setHeight( static_cast<long>(aMaxSize.Width() / fGrfWH) );
+            aSize.setHeight( static_cast<tools::Long>(aMaxSize.Width() / fGrfWH) );
         }
 
         aPos = rMaxRect.Center();

@@ -91,8 +91,8 @@ public:
 private:
     struct ImplToolSize
     {
-        long mnWidth;
-        long mnHeight;
+        tools::Long mnWidth;
+        tools::Long mnHeight;
         ImplToolItems::size_type mnLines;
     };
 
@@ -103,18 +103,18 @@ private:
     tools::Rectangle           maLowerRect;
     tools::Rectangle           maPaintRect;
     VclPtr<FloatingWindow> mpFloatWin;
-    long                mnDX;
-    long                mnDY;
-    long                mnMaxItemWidth;    // max item width
-    long                mnMaxItemHeight;   // max item height (for standard items)
-    long                mnWinHeight;    // max window height (for window items)
-    long                mnLeftBorder;   // inner border
-    long                mnTopBorder;
-    long                mnRightBorder;
-    long                mnBottomBorder;
-    long                mnLastResizeDY;
-    long                mnActivateCount;
-    long                mnImagesRotationAngle;
+    tools::Long                mnDX;
+    tools::Long                mnDY;
+    tools::Long                mnMaxItemWidth;    // max item width
+    tools::Long                mnMaxItemHeight;   // max item height (for standard items)
+    tools::Long                mnWinHeight;    // max window height (for window items)
+    tools::Long                mnLeftBorder;   // inner border
+    tools::Long                mnTopBorder;
+    tools::Long                mnRightBorder;
+    tools::Long                mnBottomBorder;
+    tools::Long                mnLastResizeDY;
+    tools::Long                mnActivateCount;
+    tools::Long                mnImagesRotationAngle;
     sal_uInt16          mnLastFocusItemId;
     sal_uInt16          mnOutStyle;
     sal_uInt16          mnHighItemId;
@@ -177,7 +177,7 @@ private:
     SAL_DLLPRIVATE void            ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE bool            ImplCalcItem();
-    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalcHorz ) const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcBreaks( tools::Long nWidth, tools::Long* pMaxLineWidth, bool bCalcHorz ) const;
     SAL_DLLPRIVATE void            ImplFormat( bool bResize = false );
     SAL_DLLPRIVATE void            ImplDrawSpin(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE void            ImplDrawSeparator(vcl::RenderContext& rRenderContext, ImplToolItems::size_type nPos, const tools::Rectangle& rRect);
@@ -221,8 +221,8 @@ public:
     static SAL_DLLPRIVATE int ImplGetDragWidth( const vcl::RenderContext& rRenderContext,
                                                 bool bHorz );
     SAL_DLLPRIVATE void ImplUpdateDragArea() const;
-    SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
-                                               long& rRight, long& rBottom ) const;
+    SAL_DLLPRIVATE void ImplCalcBorder( WindowAlign eAlign, tools::Long& rLeft, tools::Long& rTop,
+                                               tools::Long& rRight, tools::Long& rBottom ) const;
     SAL_DLLPRIVATE void ImplCheckUpdate();
     static SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext,
                                             const tools::Rectangle &aDragArea, int nDragWidth,
@@ -244,7 +244,7 @@ public:
     SAL_DLLPRIVATE Size ImplCalcFloatSize( ImplToolItems::size_type& rLines );
     SAL_DLLPRIVATE void ImplCalcMinMaxFloatSize( Size& rMinSize, Size& rMaxSize );
     SAL_DLLPRIVATE void ImplSetMinMaxFloatSize();
-    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( long nToolSize ) const;
+    SAL_DLLPRIVATE ImplToolItems::size_type ImplCalcLines( tools::Long nToolSize ) const;
     SAL_DLLPRIVATE sal_uInt16 ImplTestLineSize( const Point& rPos ) const;
     SAL_DLLPRIVATE void ImplLineSizing( const Point& rPos, tools::Rectangle& rRect, sal_uInt16 nLineMode );
     SAL_DLLPRIVATE static ImplToolItems::size_type ImplFindItemPos( const ImplToolItem* pItem, const ImplToolItems& rList );
@@ -369,7 +369,7 @@ public:
     void*               GetItemData( sal_uInt16 nItemId ) const;
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
-    void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
+    void                SetItemImageAngle( sal_uInt16 nItemId, tools::Long nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;
@@ -493,10 +493,10 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex );
+    tools::Rectangle GetCharacterBounds( sal_uInt16 nItemId, tools::Long nIndex );
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
-    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID );
+    tools::Long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID );
 
     static Size         GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize);
     Size                GetDefaultImageSize() const;

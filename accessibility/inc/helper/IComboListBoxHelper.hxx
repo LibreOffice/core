@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/wintypes.hxx>
+#include <tools/long.hxx>
 
 namespace com::sun::star::datatransfer::clipboard {
     class XClipboard;
@@ -57,7 +58,7 @@ namespace accessibility
         virtual sal_Int32       GetSelectedEntryPos( sal_Int32  nSelIndex ) const = 0;
         virtual bool            IsInDropDown() const = 0;
         virtual tools::Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
-        virtual long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;
+        virtual tools::Long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;
         virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard >
                                 GetClipboard() = 0;
     };

@@ -266,7 +266,7 @@ void ValueSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
-        long nOffY = maVirDev->GetOutputSizePixel().Height();
+        tools::Long nOffY = maVirDev->GetOutputSizePixel().Height();
         Size aWinSize(GetOutputSizePixel());
         rRenderContext.DrawRect(tools::Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
     }
@@ -649,8 +649,8 @@ tools::Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
 
     const size_t row = mnCols ? nPos/mnCols : 0;
     const size_t col = mnCols ? nPos%mnCols : 0;
-    const long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
-    const long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
+    const tools::Long x = maItemListRect.Left()+col*(mnItemWidth+mnSpacing);
+    const tools::Long y = maItemListRect.Top()+row*(mnItemHeight+mnSpacing);
 
     return tools::Rectangle( Point(x, y), Size(mnItemWidth, mnItemHeight) );
 }
@@ -865,10 +865,10 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();
     WinBits nStyle = GetStyle();
-    long nTxtHeight = rRenderContext.GetTextHeight();
-    long nOff;
-    long nNoneHeight;
-    long nNoneSpace;
+    tools::Long nTxtHeight = rRenderContext.GetTextHeight();
+    tools::Long nOff;
+    tools::Long nNoneHeight;
+    tools::Long nNoneSpace;
 
     if (mxScrolledWindow && !(nStyle & WB_VSCROLL) && mxScrolledWindow->get_vpolicy() != VclPolicyType::NEVER)
         TurnOffScrollBar();
@@ -936,7 +936,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     auto nOldLines = mnLines;
     // Floor( (M+N-1)/N )==Ceiling( M/N )
-    mnLines = (static_cast<long>(nItemCount) + mnCols - 1) / mnCols;
+    mnLines = (static_cast<tools::Long>(nItemCount) + mnCols - 1) / mnCols;
     if (mnLines <= 0)
         mnLines = 1;
 
@@ -944,7 +944,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
     auto nOldVisLines = mnVisLines;
 
-    long nCalcHeight = aWinSize.Height() - nNoneHeight;
+    tools::Long nCalcHeight = aWinSize.Height() - nNoneHeight;
     if (mnUserVisLines)
     {
         mnVisLines = mnUserVisLines;
@@ -976,8 +976,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
 
     // calculate item size
-    const long nColSpace  = (mnCols - 1) * static_cast<long>(mnSpacing);
-    const long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
+    const tools::Long nColSpace  = (mnCols - 1) * static_cast<tools::Long>(mnSpacing);
+    const tools::Long nLineSpace = ((mnVisLines - 1) * mnSpacing) + nNoneSpace;
     if (mnUserItemWidth && !mnUserCols)
     {
         mnItemWidth = mnUserItemWidth;
@@ -1061,12 +1061,12 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
 
         // calculate offsets
-        long nStartX;
-        long nStartY;
+        tools::Long nStartX;
+        tools::Long nStartY;
         if (mbFullMode)
         {
-            long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
-            long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
+            tools::Long nAllItemWidth = (mnItemWidth * mnCols) + nColSpace;
+            tools::Long nAllItemHeight = (mnItemHeight * mnVisLines) + nNoneHeight + nLineSpace;
             nStartX = (aWinSize.Width() - nAllItemWidth) / 2;
             nStartY = (aWinSize.Height() - nAllItemHeight) / 2;
         }
@@ -1078,8 +1078,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
         // calculate and draw items
         maVirDev->SetLineColor();
-        long x = nStartX;
-        long y = nStartY;
+        tools::Long x = nStartX;
+        tools::Long y = nStartY;
 
         // create NoSelection field and show it
         if (nStyle & WB_NONEFIELD)
@@ -1165,7 +1165,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             bool bTurnScrollbarOn = mxScrolledWindow->get_vpolicy() != VclPolicyType::ALWAYS;
             if (bAdjustmentOutOfDate || bTurnScrollbarOn)
             {
-                long nPageSize = mnVisLines;
+                tools::Long nPageSize = mnVisLines;
                 if (nPageSize < 1)
                     nPageSize = 1;
                 mxScrolledWindow->vadjustment_configure(mnFirstLine, 0, mnLines, 1,
@@ -1364,7 +1364,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
         maVirDev->SetFillColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuColor() : rStyleSettings.GetWindowColor());
         maVirDev->DrawRect(aRect);
         Point aTxtPos(aRect.Left() + 2, aRect.Top());
-        long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
+        tools::Long nTxtWidth = rRenderContext.GetTextWidth(pItem->maText);
         if ((aTxtPos.X() + nTxtWidth) > aRect.Right())
         {
             maVirDev->SetClipRegion(vcl::Region(aRect));
@@ -1426,7 +1426,7 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
                 maVirDev->SetTextColor((nStyle & WB_MENUSTYLEVALUESET) ? rStyleSettings.GetMenuTextColor() : rStyleSettings.GetWindowTextColor());
                 maVirDev->SetTextFillColor();
 
-                long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
+                tools::Long nTxtWidth = maVirDev->GetTextWidth(pItem->maText);
 
                 if (nTxtWidth > aRect.GetWidth())
                     maVirDev->SetClipRegion(vcl::Region(aRect));
@@ -1464,8 +1464,8 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
         return;
 
     Size aWinSize(GetOutputSizePixel());
-    long nTxtWidth = rRenderContext.GetTextWidth(rText);
-    long nTxtOffset = mnTextOffset;
+    tools::Long nTxtWidth = rRenderContext.GetTextWidth(rText);
+    tools::Long nTxtOffset = mnTextOffset;
 
     // delete rectangle and show text
     if (GetStyle() & WB_FLATVALUESET)
@@ -1589,8 +1589,8 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
 
     Size        aSize( rItemSize.Width() * nCalcCols, rItemSize.Height() * nCalcLines );
     WinBits     nStyle = GetStyle();
-    long        nTxtHeight = GetTextHeight();
-    long        n;
+    tools::Long        nTxtHeight = GetTextHeight();
+    tools::Long        n;
 
     if ( nStyle & WB_ITEMBORDER )
     {
@@ -1709,7 +1709,7 @@ Size ValueSet::CalcItemSizePixel( const Size& rItemSize) const
     WinBits nStyle = GetStyle();
     if ( nStyle & WB_ITEMBORDER )
     {
-        long n;
+        tools::Long n;
 
         if ( nStyle & WB_DOUBLEBORDER )
             n = ITEM_OFFSET_DOUBLE;
@@ -1732,7 +1732,7 @@ void ValueSet::SetLineCount( sal_uInt16 nNewLines )
     }
 }
 
-void ValueSet::SetItemWidth( long nNewItemWidth )
+void ValueSet::SetItemWidth( tools::Long nNewItemWidth )
 {
     if ( mnUserItemWidth != nNewItemWidth )
     {
@@ -1754,7 +1754,7 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t nPo
     ImplInsertItem( std::move(pItem), nPos );
 }
 
-void ValueSet::SetItemHeight( long nNewItemHeight )
+void ValueSet::SetItemHeight( tools::Long nNewItemHeight )
 {
     if ( mnUserItemHeight != nNewItemHeight )
     {

@@ -96,12 +96,12 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     const bool bAutomatic       = 1 == mpImpl->mnState;
     const bool bBookMode        = 2 == mpImpl->mnState;
 
-    const long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
+    const tools::Long nImageWidthSum = mpImpl->maImageSingleColumn.GetSizePixel().Width() +
                                 mpImpl->maImageAutomatic.GetSizePixel().Width() +
                                 mpImpl->maImageBookMode.GetSizePixel().Width();
 
-    const long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
-    const long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
+    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum) / 2;
+    const tools::Long nYOffset = (aControlRect.GetHeight() - mpImpl->maImageSingleColumn.GetSizePixel().Height()) / 2;
 
     aRect.AdjustLeft( nXOffset );
     aRect.AdjustTop( nYOffset );
@@ -122,17 +122,17 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 {
     const tools::Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
-    const long nXDiff = aPoint.X() - aRect.Left();
+    const tools::Long nXDiff = aPoint.X() - aRect.Left();
 
     sal_uInt16 nColumns = 1;
     bool bBookMode = false;
 
-    const long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
-    const long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
-    const long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
-    const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+    const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+    const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+    const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+    const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
 
-    const long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
+    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
 
     if ( nXDiff < nXOffset + nImageWidthSingle )
     {
@@ -170,14 +170,14 @@ bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
 {
     const tools::Rectangle aRect = getControlRect();
     const Point aPoint = rEvt.GetPosPixel();
-    const long nXDiff = aPoint.X() - aRect.Left();
+    const tools::Long nXDiff = aPoint.X() - aRect.Left();
 
-    const long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
-    const long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
-    const long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
-    const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+    const tools::Long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+    const tools::Long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+    const tools::Long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+    const tools::Long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
 
-    const long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
+    const tools::Long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
 
     if ( nXDiff < nXOffset + nImageWidthSingle )
     {

@@ -221,7 +221,7 @@ protected:
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const OUString &rStyleName);
     void            SetupEntry(vcl::RenderContext& rRenderContext, sal_Int32 nItem, const tools::Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
-    static bool     AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, long nHeight);
+    static bool     AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight);
     DECL_LINK(MenuSelectHdl, const OString&, void);
     DECL_STATIC_LINK(SvxStyleBox_Base, ShowMoreHdl, void*, void);
 };
@@ -498,9 +498,9 @@ private:
         LineListBox();
 
         /** Set the width in Twips */
-        Size SetWidth( long nWidth )
+        Size SetWidth( tools::Long nWidth )
         {
-            long nOldWidth = m_nWidth;
+            tools::Long nOldWidth = m_nWidth;
             m_nWidth = nWidth;
             return UpdateEntries( nOldWidth );
         }
@@ -512,7 +512,7 @@ private:
 
         /** Insert a listbox entry with all widths in Twips. */
         void            InsertEntry(const BorderWidthImpl& rWidthImpl,
-                            SvxBorderLineStyle nStyle, long nMinWidth = 0,
+                            SvxBorderLineStyle nStyle, tools::Long nMinWidth = 0,
                             ColorFunc pColor1Fn = &sameColor,
                             ColorFunc pColor2Fn = &sameColor,
                             ColorDistFunc pColorDistFn = &sameDistColor);
@@ -528,14 +528,14 @@ private:
         virtual void    SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     private:
 
-        void         ImpGetLine(long nLine1, long nLine2, long nDistance,
+        void         ImpGetLine(tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color nColor1, Color nColor2, Color nColorDist,
                                 SvxBorderLineStyle nStyle, BitmapEx& rBmp);
 
         void            UpdatePaintLineColor();       // returns sal_True if maPaintCol has changed
 
-        Size            UpdateEntries( long nOldWidth );
-        sal_Int32       GetStylePos( sal_Int32  nListPos, long nWidth );
+        Size            UpdateEntries( tools::Long nOldWidth );
+        sal_Int32       GetStylePos( sal_Int32  nListPos, tools::Long nWidth );
 
         const Color& GetPaintColor() const
         {
@@ -550,7 +550,7 @@ private:
         LineListBox&    operator =( const LineListBox& ) = delete;
 
         std::vector<std::unique_ptr<ImpLineListData>> m_vLineList;
-        long            m_nWidth;
+        tools::Long            m_nWidth;
         OUString        m_sNone;
         ScopedVclPtr<VirtualDevice>   aVirDev;
         Size            aTxtSize;
@@ -573,7 +573,7 @@ private:
         return nStyle;
     }
 
-    void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
+    void LineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::Long nDistance,
                                 Color aColor1, Color aColor2, Color aColorDist,
                                 SvxBorderLineStyle nStyle, BitmapEx& rBmp )
     {
@@ -592,10 +592,10 @@ private:
 
         // Paint the lines
         aSize = aVirDev->PixelToLogic( aSize );
-        long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
+        tools::Long nPix = aVirDev->PixelToLogic( Size( 0, 1 ) ).Height();
         sal_uInt32 n1 = nLine1;
         sal_uInt32 n2 = nLine2;
-        long nDist  = nDistance;
+        tools::Long nDist  = nDistance;
         n1 += nPix-1;
         n1 -= n1%nPix;
         if ( n2 )
@@ -605,7 +605,7 @@ private:
             n2    += nPix-1;
             n2    -= n2%nPix;
         }
-        long nVirHeight = n1+nDist+n2;
+        tools::Long nVirHeight = n1+nDist+n2;
         if ( nVirHeight > aSize.Height() )
             aSize.setHeight( nVirHeight );
         // negative width should not be drawn
@@ -657,7 +657,7 @@ private:
         UpdatePaintLineColor();
     }
 
-    sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, long nWidth )
+    sal_Int32 LineListBox::GetStylePos( sal_Int32 nListPos, tools::Long nWidth )
     {
         sal_Int32 nPos = -1;
         if (!m_sNone.isEmpty())
@@ -682,7 +682,7 @@ private:
     }
 
     void LineListBox::InsertEntry(
-        const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, long nMinWidth,
+        const BorderWidthImpl& rWidthImpl, SvxBorderLineStyle nStyle, tools::Long nMinWidth,
         ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
     {
         m_vLineList.emplace_back(new ImpLineListData(
@@ -706,7 +706,7 @@ private:
             maPaintCol = aNewCol;
     }
 
-    Size LineListBox::UpdateEntries( long nOldWidth )
+    Size LineListBox::UpdateEntries( tools::Long nOldWidth )
     {
         Size aSize;
 
@@ -1081,7 +1081,7 @@ void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     InterimItemWindow::DataChanged( rDCEvt );
 }
 
-bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, long nHeight)
+bool SvxStyleBox_Base::AdjustFontForItemHeight(OutputDevice& rDevice, tools::Rectangle const & rTextRect, tools::Long nHeight)
 {
     if (rTextRect.Bottom() > nHeight)
     {
@@ -1294,7 +1294,7 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
     if (m_nMaxUserDrawFontWidth)
         return;
 
-    long nMaxNormalFontWidth = 0;
+    tools::Long nMaxNormalFontWidth = 0;
     sal_Int32 nEntryCount = m_xWidget->get_count();
     for (sal_Int32 i = 0; i < nEntryCount; ++i)
     {
@@ -1302,7 +1302,7 @@ void SvxStyleBox_Base::CalcOptimalExtraUserWidth(vcl::RenderContext& rRenderCont
         tools::Rectangle aTextRectForDefaultFont;
         rRenderContext.GetTextBoundRect(aTextRectForDefaultFont, sStyleName);
 
-        const long nWidth = aTextRectForDefaultFont.GetWidth();
+        const tools::Long nWidth = aTextRectForDefaultFont.GetWidth();
 
         nMaxNormalFontWidth = std::max(nWidth, nMaxNormalFontWidth);
     }
@@ -3902,9 +3902,9 @@ void ColorListBox::Selected(const NamedColor& rColor)
 void ColorListBox::LockWidthRequest()
 {
     NamedColor aLongestColor;
-    long nMaxStandardColorTextWidth = 0;
+    tools::Long nMaxStandardColorTextWidth = 0;
     XColorListRef const xColorTable = XColorList::CreateStdColorList();
-    for (long i = 0; i != xColorTable->Count(); ++i)
+    for (tools::Long i = 0; i != xColorTable->Count(); ++i)
     {
         XColorEntry& rEntry = *xColorTable->GetColor(i);
         auto nColorTextWidth = m_xButton->get_pixel_size(rEntry.GetName()).Width();

@@ -141,7 +141,7 @@ public:
 
 }
 
-void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, tools::Long nVerb )
 {
     // Do not leave the hint message box on top of the object
     RemoveHintWindow();
@@ -259,7 +259,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     //xIPObj->SetDocumentName( GetViewData().GetDocShell()->GetTitle() );
 }
 
-ErrCode ScTabViewShell::DoVerb(long nVerb)
+ErrCode ScTabViewShell::DoVerb(tools::Long nVerb)
 {
     SdrView* pView = GetScDrawView();
     if (!pView)

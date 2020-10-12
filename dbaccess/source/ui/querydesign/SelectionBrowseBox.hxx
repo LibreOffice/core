@@ -52,7 +52,7 @@ namespace dbaui
         std::vector<bool>                 m_bVisibleRow;              // at pos we find the RowId
         Timer                               m_timerInvalidate;
 
-        long                                m_nSeekRow;
+        tools::Long                                m_nSeekRow;
         BrowserMode                         m_nMode;                    // remember the BrowseModes
         VclPtr< ::svt::EditControl>                 m_pTextCell;
         VclPtr< ::svt::CheckBoxControl>             m_pVisibleCell;
@@ -104,14 +104,14 @@ namespace dbaui
         OQueryDesignView*           getDesignView() const;
         sal_uInt16                  FieldsCount();
 
-        void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
+        void                        SetColWidth(sal_uInt16 nColId, tools::Long lNewWidth);
                                         // unlike SetColumnWidth of the base class it checks an active cell in this column
 
         OUString                    GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId);
         void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const OUString& strNewText);
                                         // cell content (formatted as string) set/return
         sal_Int32                   GetNoneVisibleRows() const;
-        void                        SetNoneVisibleRow(long nRows);
+        void                        SetNoneVisibleRow(tools::Long nRows);
         bool                        IsRowVisible(sal_uInt16 _nWhich) const;
         void                        SetRowVisible(sal_uInt16 _nWhich, bool _bVis);
 
@@ -150,7 +150,7 @@ namespace dbaui
             @return
                 the text out of the cell
         */
-        virtual OUString            GetCellText(long _nRow, sal_uInt16 _nColId) const override;
+        virtual OUString            GetCellText(tools::Long _nRow, sal_uInt16 _nColId) const override;
 
         /** returns the description of the row.
             @param  _nRow
@@ -178,7 +178,7 @@ namespace dbaui
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
     private:
-        virtual bool                SeekRow( long nRow ) override;
+        virtual bool                SeekRow( tools::Long nRow ) override;
 
         virtual void                PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const override;
         virtual void                PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
@@ -191,14 +191,14 @@ namespace dbaui
         virtual void                KeyInput( const KeyEvent& rEvt ) override;
         virtual void                Command(const CommandEvent& rEvt) override;
 
-        virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
-        virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;
+        virtual ::svt::CellController*  GetController(tools::Long nRow, sal_uInt16 nCol) override;
+        virtual void                InitController(::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol) override;
         virtual void                CellModified() override;
         virtual bool                SaveModified() override;
         virtual void                Init() override;
         virtual void                ColumnResized( sal_uInt16 nColId ) override;
 
-        virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
+        virtual sal_uInt32          GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId) override;
 
         // if you want to have an own header ...
         virtual VclPtr<BrowserHeader> imp_CreateHeaderBar(BrowseBox* pParent) override;
@@ -216,8 +216,8 @@ namespace dbaui
 
         void            RemoveField( sal_uInt16 nId );
         tools::Rectangle       GetInvalidRect( sal_uInt16 nColId );
-        long            GetRealRow(long nRow) const;
-        long            GetBrowseRow(long nRowId) const;
+        tools::Long            GetRealRow(tools::Long nRow) const;
+        tools::Long            GetBrowseRow(tools::Long nRowId) const;
         bool            GetFunctionName(sal_uInt32 _nFunctionTokenId, OUString& rFkt);
         void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow, bool& _bListAction);
         void            appendUndoAction(const OUString& _rOldValue,const OUString& _rNewValue,sal_Int32 _nRow);

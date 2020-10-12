@@ -86,8 +86,8 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
 OUString SwEditWin::ClipLongToolTip(const OUString& rText)
 {
     OUString sDisplayText(rText);
-    long nTextWidth = GetTextWidth(sDisplayText);
-    long nMaxWidth = GetDesktopRectPixel().GetWidth() * 2 / 3;
+    tools::Long nTextWidth = GetTextWidth(sDisplayText);
+    tools::Long nMaxWidth = GetDesktopRectPixel().GetWidth() * 2 / 3;
     nMaxWidth = PixelToLogic(Size(nMaxWidth, 0)).Width();
     if (nTextWidth > nMaxWidth)
         sDisplayText = GetEllipsisString(sDisplayText, nMaxWidth, DrawTextFlags::CenterEllipsis);

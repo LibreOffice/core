@@ -319,7 +319,7 @@ public:
 };
 
 //Helper for filters to find true lineheight of a font
-SW_DLLPUBLIC long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
+SW_DLLPUBLIC tools::Long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
                           const SwAttrSet &rSet,
                           const vcl::RenderContext &rOut, sal_Int16 nScript);
 #endif
