@@ -380,6 +380,13 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             aNotebookBarAddonsItem.aImageValues = aImageValues;
 
             // setup if necessary
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                // update the current LOK language and locale for the dialog tunneling
+                comphelper::LibreOfficeKit::setLanguageTag(pViewShell->GetLOKLanguageTag());
+                comphelper::LibreOfficeKit::setLocale(pViewShell->GetLOKLocale());
+            }
+
             pSysWindow->SetNotebookBar(aBuf, xFrame, aNotebookBarAddonsItem , bReloadNotebookbar);
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
