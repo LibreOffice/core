@@ -641,16 +641,16 @@ void SwViewShell::UpdateFields(bool bCloseDB)
 {
     CurrShell aCurr( this );
 
-    bool bCursor = dynamic_cast<const SwCursorShell*>( this ) !=  nullptr;
-    if ( bCursor )
-        static_cast<SwCursorShell*>(this)->StartAction();
+    auto pCursorShell = dynamic_cast<SwCursorShell*>( this );
+    if ( pCursorShell )
+        pCursorShell->StartAction();
     else
         StartAction();
 
     GetDoc()->getIDocumentFieldsAccess().UpdateFields(bCloseDB);
 
-    if ( bCursor )
-        static_cast<SwCursorShell*>(this)->EndAction();
+    if ( pCursorShell )
+        pCursorShell->EndAction();
     else
         EndAction();
 }
@@ -716,14 +716,14 @@ void SwViewShell::LayoutIdle()
 
 static void lcl_InvalidateAllContent( SwViewShell& rSh, SwInvalidateFlags nInv )
 {
-    bool bCursor = dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr;
-    if ( bCursor )
-        static_cast<SwCursorShell&>(rSh).StartAction();
+    auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh);
+    if ( pCursorShell )
+        pCursorShell->StartAction();
     else
         rSh.StartAction();
     rSh.GetLayout()->InvalidateAllContent( nInv );
-    if ( bCursor )
-        static_cast<SwCursorShell&>(rSh).EndAction();
+    if ( pCursorShell )
+        pCursorShell->EndAction();
     else
         rSh.EndAction();
 
@@ -736,16 +736,16 @@ static void lcl_InvalidateAllContent( SwViewShell& rSh, SwInvalidateFlags nInv )
  */
 static void lcl_InvalidateAllObjPos( SwViewShell &_rSh )
 {
-    const bool bIsCursorShell = dynamic_cast<const SwCursorShell*>( &_rSh) !=  nullptr;
-    if ( bIsCursorShell )
-        static_cast<SwCursorShell&>(_rSh).StartAction();
+    auto pCursorShell = dynamic_cast<SwCursorShell*>( &_rSh);
+    if ( pCursorShell )
+        pCursorShell->StartAction();
     else
         _rSh.StartAction();
 
     _rSh.GetLayout()->InvalidateAllObjPos();
 
-    if ( bIsCursorShell )
-        static_cast<SwCursorShell&>(_rSh).EndAction();
+    if ( pCursorShell )
+        pCursorShell->EndAction();
     else
         _rSh.EndAction();
 

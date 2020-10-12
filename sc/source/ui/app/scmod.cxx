@@ -196,9 +196,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
                 SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
                 while ( pObjSh )
                 {
-                    if ( dynamic_cast<const ScDocShell * >(pObjSh) != nullptr )
+                    if ( auto pDocSh = dynamic_cast<ScDocShell * >(pObjSh) )
                     {
-                        ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
                         if ( bArrows )
                             ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
                         if ( bComments )
@@ -239,9 +238,8 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, Configura
         SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while ( pObjSh )
         {
-            if ( dynamic_cast<const ScDocShell *>(pObjSh) != nullptr )
+            if ( auto pDocSh = dynamic_cast<ScDocShell *>(pObjSh) )
             {
-                ScDocShell* pDocSh = static_cast<ScDocShell*>(pObjSh);
                 OutputDevice* pPrinter = pDocSh->GetPrinter();
                 if ( pPrinter )
                     pPrinter->SetDigitLanguage( GetOptDigitLanguage() );

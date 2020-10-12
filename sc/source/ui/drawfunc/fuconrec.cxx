@@ -136,8 +136,8 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 //  create OutlinerParaObject now so it can be set to vertical
-                if ( dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr )
-                    static_cast<SdrTextObj*>(pObj)->ForceOutlinerParaObject();
+                if ( auto pSdrTextObj = dynamic_cast<SdrTextObj*>( pObj) )
+                    pSdrTextObj->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
                     pOPO->SetVertical( true );

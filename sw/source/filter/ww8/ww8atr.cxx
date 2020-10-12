@@ -3637,9 +3637,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             nNumId = 0;
         }
     }
-    else if ( dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) != nullptr  )
+    else if ( auto pC = dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) )
     {
-        const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
         if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
             nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
     }
@@ -3801,12 +3800,12 @@ void WW8AttributeOutput::TableRowEnd(sal_uInt32 nDepth)
 
 void AttributeOutputBase::FormatPageDescription( const SwFormatPageDesc& rPageDesc )
 {
-    if ( GetExport().m_bStyDef && dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) )
-    {
-        const SwTextFormatColl* pC = static_cast<const SwTextFormatColl*>(GetExport().m_pOutFormatNode);
-        if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
-            FormatBreak( SvxFormatBreakItem( SvxBreak::PageBefore, RES_BREAK ) );
-    }
+    if ( GetExport().m_bStyDef )
+        if (auto pC = dynamic_cast< const SwTextFormatColl *>( GetExport().m_pOutFormatNode ) )
+        {
+            if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
+                FormatBreak( SvxFormatBreakItem( SvxBreak::PageBefore, RES_BREAK ) );
+        }
 }
 
 void WW8AttributeOutput::PageBreakBefore( bool bBreak )
@@ -4803,15 +4802,13 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     if (m_rWW8Export.m_pOutFormatNode)
     {
         SvxFrameDirection nDirection = SvxFrameDirection::Horizontal_LR_TB;
-        if (dynamic_cast<const SwTextNode*>(m_rWW8Export.m_pOutFormatNode) != nullptr)
+        if (auto pTN = dynamic_cast<const SwTextNode*>(m_rWW8Export.m_pOutFormatNode))
         {
-            SwPosition aPos(*static_cast<const SwContentNode*>(m_rWW8Export.m_pOutFormatNode));
+            SwPosition aPos(*pTN);
             nDirection = m_rWW8Export.m_rDoc.GetTextDirection(aPos);
         }
-        else if (dynamic_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode) != nullptr)
+        else if (auto pC = dynamic_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode))
         {
-            const SwTextFormatColl* pC =
-                static_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode);
             const SvxFrameDirectionItem &rItem =
                 ItemGet<SvxFrameDirectionItem>(*pC, RES_FRAMEDIR);
             nDirection = rItem.GetValue();

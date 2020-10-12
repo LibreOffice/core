@@ -940,8 +940,8 @@ void ScContentTree::GetLinkNames()
     for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = rLinks[i].get();
-        if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
-            InsertContent( ScContentId::AREALINK, static_cast<ScAreaLink*>(pBase)->GetSource() );
+        if (auto pScAreaLink = dynamic_cast<const ScAreaLink*>( pBase))
+            InsertContent( ScContentId::AREALINK, pScAreaLink->GetSource() );
 
             //  insert in list the names of source areas
     }

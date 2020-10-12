@@ -2348,8 +2348,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             if(pObj)
                             {
                                 EnterDrawTextMode(pObj->GetLogicRect().Center());
-                                if ( dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
-                                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+                                if ( auto pSwDrawTextShell = dynamic_cast< SwDrawTextShell *>(  m_rView.GetCurShell() )  )
+                                    pSwDrawTextShell->Init();
                                 rSh.GetDrawView()->KeyInput( rKEvt, this );
                             }
                         }
@@ -2393,8 +2393,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if(pObj)
                 {
                     EnterDrawTextMode(pObj->GetLogicRect().Center());
-                    if (dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
-                        static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+                    if (auto pSwDrawTextShell = dynamic_cast< SwDrawTextShell *>(  m_rView.GetCurShell() )  )
+                        pSwDrawTextShell->Init();
                 }
             }
             eKeyState = SwKeyState::End;
@@ -3356,8 +3356,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             case SelectionType::DrawObject:
                                 RstMBDownFlags();
                                 EnterDrawTextMode(aDocPos);
-                                if ( dynamic_cast< const SwDrawTextShell *>(  m_rView.GetCurShell() ) != nullptr  )
-                                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+                                if ( auto pSwDrawTextShell = dynamic_cast< SwDrawTextShell *>(  m_rView.GetCurShell() )  )
+                                    pSwDrawTextShell->Init();
                                 return;
 
                             default: break;
@@ -5090,8 +5090,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         if (SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj())
         {
             EnterDrawTextMode(pObj->GetLogicRect().Center());
-            if ( dynamic_cast< const SwDrawTextShell *>( m_rView.GetCurShell() ) != nullptr )
-                static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
+            if ( auto pSwDrawTextShell = dynamic_cast< SwDrawTextShell *>( m_rView.GetCurShell() ) )
+                pSwDrawTextShell->Init();
         }
     }
 }

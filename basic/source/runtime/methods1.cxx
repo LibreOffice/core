@@ -115,11 +115,9 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
     SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
-    if( !pObj && dynamic_cast<const SbxVariable*>( pObjVar) )
-    {
-        SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
-        pObj = dynamic_cast<SbxObject*>( pObjVarObj );
-    }
+    if( !pObj )
+        if (auto pSbxVar = dynamic_cast<const SbxVariable*>( pObjVar))
+            pObj = dynamic_cast<SbxObject*>( pSbxVar->GetObject() );
     if( !pObj )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_PARAMETER );
@@ -854,11 +852,9 @@ void SbRtl_FindPropertyObject(StarBASIC *, SbxArray & rPar, bool)
     {
         pObj = dynamic_cast<SbxObject*>( pObjVar );
     }
-    if( !pObj && dynamic_cast<const SbxVariable*>( pObjVar) )
-    {
-        SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
-        pObj = dynamic_cast<SbxObject*>( pObjVarObj );
-    }
+    if( !pObj )
+        if (auto pSbxVar = dynamic_cast<const SbxVariable*>( pObjVar))
+            pObj = dynamic_cast<SbxObject*>( pSbxVar->GetObject() );
 
     OUString aNameStr = rPar.Get32(2)->GetOUString();
 

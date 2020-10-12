@@ -288,9 +288,9 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
     mbLayout = bFocus;
 
     SwSidebarItem* pAnnotationItem = nullptr;
-    if (dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr)
+    if (auto pSwFormatField = dynamic_cast< SwFormatField *>( pItem ))
     {
-        mvPostItFields.push_back(std::make_unique<SwAnnotationItem>(static_cast<SwFormatField&>(*pItem), bFocus));
+        mvPostItFields.push_back(std::make_unique<SwAnnotationItem>(*pSwFormatField, bFocus));
         pAnnotationItem = mvPostItFields.back().get();
     }
     OSL_ENSURE(dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr,"Mgr::InsertItem: seems like new stuff was added");

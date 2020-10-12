@@ -632,9 +632,9 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
         sal_uInt16 nShellIdx = 0;
         SfxShell* pShell;
         while(nullptr != (pShell = pDispatch->GetShell(nShellIdx++)))
-            if(dynamic_cast< const SwView *>( pShell ) !=  nullptr)
+            if(auto pSwView = dynamic_cast< SwView *>( pShell ))
             {
-                pView = static_cast<SwView* >(pShell);
+                pView = pSwView;
                 break;
             }
     }

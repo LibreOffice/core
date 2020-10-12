@@ -668,8 +668,8 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
         return false;
     }
     // Test downcast!!!
-    if( dynamic_cast<const SbxVariable*>( this) != nullptr )
-        const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SfxHintId::BasicDataWanted );
+    if( auto pSbxVar = dynamic_cast<const SbxVariable*>( this) )
+        const_cast<SbxVariable*>(pSbxVar)->Broadcast( SfxHintId::BasicDataWanted );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
     {
