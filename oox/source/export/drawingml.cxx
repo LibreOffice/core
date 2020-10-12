@@ -3554,7 +3554,8 @@ sal_Int32 DrawingML::GetCustomGeometryPointValue(
     return nValue;
 }
 
-void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const bool bClosed )
+void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
+                                 const tools::PolyPolygon& rPolyPolygon, const bool bClosed)
 {
     // In case of Writer, the parent element is <wps:spPr>, and there the
     // <a:custGeom> element is not optional.
@@ -3571,9 +3572,15 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon, const 
 
     const tools::Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
+    // tdf#101122
+    std::optional<OString> sFill;
+    if (HasEnhancedCustomShapeSegmentCommand(rXShape, css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL))
+        sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
+
     // Put all polygons of rPolyPolygon in the same path element
     // to subtract the overlapped areas.
     mpFS->startElementNS( XML_a, XML_path,
+            XML_fill, sFill,
             XML_w, OString::number(aRect.GetWidth()),
             XML_h, OString::number(aRect.GetHeight()) );
 
@@ -4161,6 +4168,44 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
     aProps[0].Value <<= aAttribs;
 
     WriteShapeEffect("softEdge", aProps);
+}
+
+bool DrawingML::HasEnhancedCustomShapeSegmentCommand(
+    const css::uno::Reference<css::drawing::XShape>& rXShape, const sal_Int16 nCommand)
+{
+    try
+    {
+        uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY_THROW);
+        if (!GetProperty(xPropSet, "CustomShapeGeometry"))
+            return false;
+        Sequence<PropertyValue> aCustomShapeGeometryProps;
+        mAny >>= aCustomShapeGeometryProps;
+        for (const beans::PropertyValue& rGeomProp : aCustomShapeGeometryProps)
+        {
+            if (rGeomProp.Name == "Path")
+            {
+                uno::Sequence<beans::PropertyValue> aPathProps;
+                rGeomProp.Value >>= aPathProps;
+                for (const beans::PropertyValue& rPathProp : std::as_const(aPathProps))
+                {
+                    if (rPathProp.Name == "Segments")
+                    {
+                        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+                        rPathProp.Value >>= aSegments;
+                        for (const auto& rSegment : std::as_const(aSegments))
+                        {
+                            if (rSegment.Command == nCommand)
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (const ::uno::Exception&)
+    {
+    }
+    return false;
 }
 
 void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
