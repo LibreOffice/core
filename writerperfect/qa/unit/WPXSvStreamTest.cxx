@@ -182,7 +182,7 @@ void WPXSvStreamTest::testRead()
 void WPXSvStreamTest::testSeekSet()
 {
     const shared_ptr<RVNGInputStream> pInput(lcl_createStream());
-    const long nLen = sizeof aText;
+    const tools::Long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT_EQUAL(0L, pInput->tell());
@@ -220,7 +220,7 @@ void WPXSvStreamTest::testSeekSet()
 void WPXSvStreamTest::testSeekCur()
 {
     const shared_ptr<RVNGInputStream> pInput(lcl_createStream());
-    const long nLen = sizeof aText;
+    const tools::Long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT(!pInput->isEnd());
@@ -257,7 +257,7 @@ void WPXSvStreamTest::testSeekCur()
 void WPXSvStreamTest::testSeekEnd()
 {
     const shared_ptr<RVNGInputStream> pInput(lcl_createStream());
-    const long nLen = sizeof aText;
+    const tools::Long nLen = sizeof aText;
 
     // check initial state
     CPPUNIT_ASSERT(!pInput->isEnd());

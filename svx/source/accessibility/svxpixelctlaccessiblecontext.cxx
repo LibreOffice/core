@@ -148,7 +148,7 @@ uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoin
 
     if (mpPixelCtl)
     {
-        long nIndex = mpPixelCtl->PointToIndex(Point(rPoint.X, rPoint.Y));
+        tools::Long nIndex = mpPixelCtl->PointToIndex(Point(rPoint.X, rPoint.Y));
         xRet = CreateChild(nIndex, mpPixelCtl->IndexToPoint(nIndex));
     }
 
@@ -210,7 +210,7 @@ void SvxPixelCtlAccessible::implSelect(sal_Int32 nChildIndex, bool bSelect)
     if (!mpPixelCtl)
         return;
 
-    long nIndex = mpPixelCtl->ShowPosition(mpPixelCtl->IndexToPoint(nChildIndex));
+    tools::Long nIndex = mpPixelCtl->ShowPosition(mpPixelCtl->IndexToPoint(nChildIndex));
     NotifyChild(nIndex, bSelect, false);
 }
 
@@ -232,7 +232,7 @@ void SAL_CALL SvxPixelCtlAccessible::disposing()
     mpPixelCtl = nullptr;
 }
 
-void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
+void SvxPixelCtlAccessible::NotifyChild(tools::Long nIndex,bool bSelect ,bool bCheck)
 {
     DBG_ASSERT( !(!bSelect && !bCheck),"" );//non is false
 
@@ -279,7 +279,7 @@ void SvxPixelCtlAccessible::NotifyChild(long nIndex,bool bSelect ,bool bCheck)
     m_xCurChild= xNewChild;
 }
 
-uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (long nIndex,Point mPoint)
+uno::Reference<XAccessible> SvxPixelCtlAccessible::CreateChild (tools::Long nIndex,Point mPoint)
 {
     bool bPixelColorOrBG = mpPixelCtl->GetBitmapPixel(sal_uInt16(nIndex)) != 0;
     Size size(mpPixelCtl->GetWidth() / SvxPixelCtl::GetLineCount(), mpPixelCtl->GetHeight() / SvxPixelCtl::GetLineCount());
@@ -324,7 +324,7 @@ void SvxPixelCtlAccessibleChild::SelectChild( bool bSelect)
 
 SvxPixelCtlAccessibleChild::SvxPixelCtlAccessibleChild( SvxPixelCtl& rWindow, bool bPixelColorOrBG,
     const tools::Rectangle& rBoundingBox, const rtl::Reference<SvxPixelCtlAccessible>& rxParent,
-    long nIndexInParent)
+    tools::Long nIndexInParent)
     : mrParentWindow( rWindow )
     , mxParent(rxParent)
     , m_bPixelColorOrBG(bPixelColorOrBG)
@@ -425,7 +425,7 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvxPixelCtlAccessibleChild::getAc
         pStateSetHelper->AddState( AccessibleStateType::SHOWING );
         pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
 
-        long nIndex = mrParentWindow.GetFocusPosIndex();
+        tools::Long nIndex = mrParentWindow.GetFocusPosIndex();
         if ( nIndex == mnIndexInParent)
         {
             pStateSetHelper->AddState( AccessibleStateType::SELECTED );

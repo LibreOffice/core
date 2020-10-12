@@ -43,11 +43,11 @@ XColorListRef XColorList::GetStdColorList()
     return aTable;
 }
 
-void XColorList::Replace(long nIndex, std::unique_ptr<XColorEntry> pEntry)
+void XColorList::Replace(tools::Long nIndex, std::unique_ptr<XColorEntry> pEntry)
 {
     XPropertyList::Replace(std::move(pEntry), nIndex);
 }
-XColorEntry* XColorList::GetColor(long nIndex) const
+XColorEntry* XColorList::GetColor(tools::Long nIndex) const
 {
     return static_cast<XColorEntry*>( XPropertyList::Get(nIndex) );
 }
@@ -153,14 +153,14 @@ bool XColorList::Create()
     return(165 == Count());
 }
 
-BitmapEx XColorList::CreateBitmapForUI( long /*nIndex*/ )
+BitmapEx XColorList::CreateBitmapForUI( tools::Long /*nIndex*/ )
 {
     return BitmapEx();
 }
 
-long XColorList::GetIndexOfColor( const Color& rColor ) const
+tools::Long XColorList::GetIndexOfColor( const Color& rColor ) const
 {
-    for( long i = 0, n = maList.size(); i < n; ++i )
+    for( tools::Long i = 0, n = maList.size(); i < n; ++i )
     {
         const Color aColor = static_cast<XColorEntry*>( maList[i].get() )->GetColor();
 

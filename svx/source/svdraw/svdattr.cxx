@@ -848,21 +848,21 @@ bool SdrMetricItem::HasMetrics() const
     return true;
 }
 
-void SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
+void SdrMetricItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
     if (GetValue()!=0) {
         BigInt aVal(GetValue());
         aVal*=nMul;
         aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
-        SetValue(long(aVal));
+        SetValue(tools::Long(aVal));
     }
 }
 
 bool SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
                       MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const
 {
-    long nValue=GetValue();
+    tools::Long nValue=GetValue();
     SdrFormatter aFmt(eCoreMetric,ePresMetric);
     rText = aFmt.GetStr(nValue);
     rText += " " + SdrFormatter::GetUnitStr(ePresMetric);
@@ -1247,7 +1247,7 @@ bool SdrTextAniAmountItem::HasMetrics() const
     return GetValue()>0;
 }
 
-void SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
+void SdrTextAniAmountItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
     if (GetValue()>0) {
         BigInt aVal(GetValue());

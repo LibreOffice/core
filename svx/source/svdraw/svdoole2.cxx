@@ -180,8 +180,8 @@ tools::Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
     tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
-    aLogicRect.SetSize( Size( long( aLogicRect.GetWidth() * m_aScaleWidth),
-                              long( aLogicRect.GetHeight() * m_aScaleHeight) ) );
+    aLogicRect.SetSize( Size( tools::Long( aLogicRect.GetWidth() * m_aScaleWidth),
+                              tools::Long( aLogicRect.GetHeight() * m_aScaleHeight) ) );
     return aLogicRect;
 }
 
@@ -259,8 +259,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
         aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
         aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(aObjMapUnit), MapMode(aContainerMapUnit));
-        Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
-                            static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
+        Size aScaledSize( static_cast< tools::Long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
+                            static_cast< tools::Long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
         tools::Rectangle aLogicRect( mpObj->GetLogicRect() );
 
         // react to the change if the difference is bigger than one pixel
@@ -500,8 +500,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
     // new size of the object area without scaling
-    Size aNewObjSize( long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
-                      long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
+    Size aNewObjSize( tools::Long( aNewLogicRect.GetWidth() / m_aScaleWidth ),
+                      tools::Long( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
 
     // now remove scaling from new placement and keep this at the new object area
     aNewLogicRect.SetSize( aNewObjSize );
@@ -1488,8 +1488,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             // objects' visual area. The scaling will not change, but it might exist already and must
             // be used in calculations
             MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-            Size aVisSize( static_cast<long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
-                            static_cast<long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
+            Size aVisSize( static_cast<tools::Long>( Fraction( maRect.GetWidth() ) / aScaleWidth ),
+                            static_cast<tools::Long>( Fraction( maRect.GetHeight() ) / aScaleHeight ) );
 
             aVisSize = OutputDevice::LogicToLogic(
                 aVisSize,
@@ -1508,8 +1508,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {}
 
             tools::Rectangle aAcceptedVisArea;
-            aAcceptedVisArea.SetSize( Size( static_cast<long>( Fraction( long( aSz.Width ) ) * aScaleWidth ),
-                                            static_cast<long>( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
+            aAcceptedVisArea.SetSize( Size( static_cast<tools::Long>( Fraction( tools::Long( aSz.Width ) ) * aScaleWidth ),
+                                            static_cast<tools::Long>( Fraction( tools::Long( aSz.Height ) ) * aScaleHeight ) ) );
             if (aVisSize != aAcceptedVisArea.GetSize())
             {
                 // server changed VisArea to its liking and the VisArea is different than the suggested one

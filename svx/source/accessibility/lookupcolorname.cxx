@@ -41,7 +41,7 @@ public:
     ColorNameMap(const ColorNameMap&) = delete;
     ColorNameMap& operator=(const ColorNameMap&) = delete;
 
-    OUString lookUp(long color) const;
+    OUString lookUp(tools::Long color) const;
 
 private:
     typedef std::unordered_map< long, OUString > Map;
@@ -83,7 +83,7 @@ ColorNameMap::ColorNameMap() {
         try
         {
             css::uno::Any aColor = xNA->getByName(rName);
-            long nColor = 0;
+            tools::Long nColor = 0;
             aColor >>= nColor;
             map_[nColor] = rName;
         }
@@ -95,7 +95,7 @@ ColorNameMap::ColorNameMap() {
     }
 }
 
-OUString ColorNameMap::lookUp(long color) const {
+OUString ColorNameMap::lookUp(tools::Long color) const {
     Map::const_iterator i(map_.find(color));
     if (i != map_.end()) {
         return i->second;
@@ -110,7 +110,7 @@ struct theColorNameMap: public rtl::Static< ColorNameMap, theColorNameMap > {};
 
 namespace accessibility {
 
-OUString lookUpColorName(long color) {
+OUString lookUpColorName(tools::Long color) {
     return theColorNameMap::get().lookUp(color);
 }
 

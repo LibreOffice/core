@@ -238,9 +238,9 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     Point                   aRectP1;
     Point                   aRectP2;
     Point                   aRectP3;
-    long                    nCircRadius;
-    long                    nCircStAngle;
-    long                    nCircRelAngle;
+    tools::Long                    nCircRadius;
+    tools::Long                    nCircStAngle;
+    tools::Long                    nCircRelAngle;
     bool                    bBezier;
     bool                    bBezHasCtrl0;
     bool                    bCircle;
@@ -266,7 +266,7 @@ public:
     void CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
     XPolygon GetCirclePoly() const;
     void CalcLine(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
-    static Point    CalcLine(const Point& rCsr, long nDirX, long nDirY, SdrView const * pView);
+    static Point    CalcLine(const Point& rCsr, tools::Long nDirX, tools::Long nDirY, SdrView const * pView);
     XPolygon GetLinePoly() const;
     void CalcRect(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView);
     XPolygon GetRectPoly() const;
@@ -308,17 +308,17 @@ XPolygon ImpPathCreateUser::GetBezierPoly() const
 
 void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Point& rDir, SdrView const * pView)
 {
-    long nTangAngle=GetAngle(rDir);
+    tools::Long nTangAngle=GetAngle(rDir);
     aCircStart=rP1;
     aCircEnd=rP2;
     aCircCenter=rP1;
-    long dx=rP2.X()-rP1.X();
-    long dy=rP2.Y()-rP1.Y();
-    long dAngle=GetAngle(Point(dx,dy))-nTangAngle;
+    tools::Long dx=rP2.X()-rP1.X();
+    tools::Long dy=rP2.Y()-rP1.Y();
+    tools::Long dAngle=GetAngle(Point(dx,dy))-nTangAngle;
     dAngle=NormAngle36000(dAngle);
-    long nTmpAngle=NormAngle36000(9000-dAngle);
+    tools::Long nTmpAngle=NormAngle36000(9000-dAngle);
     bool bRet=nTmpAngle!=9000 && nTmpAngle!=27000;
-    long nRad=0;
+    tools::Long nRad=0;
     if (bRet) {
         double cs = cos(nTmpAngle * F_PI18000);
         double nR=static_cast<double>(GetLen(Point(dx,dy)))/cs/2;
@@ -337,7 +337,7 @@ void ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     }
     bAngleSnap=pView!=nullptr && pView->IsAngleSnapEnabled();
     if (bAngleSnap) {
-        long nSA=pView->GetSnapAngle();
+        tools::Long nSA=pView->GetSnapAngle();
         if (nSA!=0) { // angle snapping
             bool bNeg=nCircRelAngle<0;
             if (bNeg) nCircRelAngle=-nCircRelAngle;
@@ -378,21 +378,21 @@ XPolygon ImpPathCreateUser::GetCirclePoly() const
     }
 }
 
-Point ImpPathCreateUser::CalcLine(const Point& aCsr, long nDirX, long nDirY, SdrView const * pView)
+Point ImpPathCreateUser::CalcLine(const Point& aCsr, tools::Long nDirX, tools::Long nDirY, SdrView const * pView)
 {
-    long x=aCsr.X();
-    long y=aCsr.Y();
+    tools::Long x=aCsr.X();
+    tools::Long y=aCsr.Y();
     bool bHLin=nDirY==0;
     bool bVLin=nDirX==0;
     if (bHLin) y=0;
     else if (bVLin) x=0;
     else {
-        long x1=BigMulDiv(y,nDirX,nDirY);
-        long y1=y;
-        long x2=x;
-        long y2=BigMulDiv(x,nDirY,nDirX);
-        long l1=std::abs(x1)+std::abs(y1);
-        long l2=std::abs(x2)+std::abs(y2);
+        tools::Long x1=BigMulDiv(y,nDirX,nDirY);
+        tools::Long y1=y;
+        tools::Long x2=x;
+        tools::Long y2=BigMulDiv(x,nDirY,nDirX);
+        tools::Long l1=std::abs(x1)+std::abs(y1);
+        tools::Long l2=std::abs(x2)+std::abs(y2);
         if ((l1<=l2) != (pView!=nullptr && pView->IsBigOrtho())) {
             x=x1; y=y1;
         } else {
@@ -409,10 +409,10 @@ void ImpPathCreateUser::CalcLine(const Point& rP1, const Point& rP2, const Point
     bLine90=false;
     if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bLine=false; return; }
     Point aTmpPt(rP2-rP1);
-    long nDirX=rDir.X();
-    long nDirY=rDir.Y();
-    Point aP1(CalcLine(aTmpPt, nDirX, nDirY,pView)); aP1-=aTmpPt; long nQ1=std::abs(aP1.X())+std::abs(aP1.Y());
-    Point aP2(CalcLine(aTmpPt, nDirY,-nDirX,pView)); aP2-=aTmpPt; long nQ2=std::abs(aP2.X())+std::abs(aP2.Y());
+    tools::Long nDirX=rDir.X();
+    tools::Long nDirY=rDir.Y();
+    Point aP1(CalcLine(aTmpPt, nDirX, nDirY,pView)); aP1-=aTmpPt; tools::Long nQ1=std::abs(aP1.X())+std::abs(aP1.Y());
+    Point aP2(CalcLine(aTmpPt, nDirY,-nDirX,pView)); aP2-=aTmpPt; tools::Long nQ2=std::abs(aP2.X())+std::abs(aP2.Y());
     if (pView!=nullptr && pView->IsOrtho()) nQ1=0; // Ortho turns off at right angle
     bLine90=nQ1>2*nQ2;
     if (!bLine90) { // smooth transition
@@ -438,18 +438,18 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
     aRectP3=rP2;
     if (rP1==rP2 || (rDir.X()==0 && rDir.Y()==0)) { bRect=false; return; }
     Point aTmpPt(rP2-rP1);
-    long nDirX=rDir.X();
-    long nDirY=rDir.Y();
-    long x=aTmpPt.X();
-    long y=aTmpPt.Y();
+    tools::Long nDirX=rDir.X();
+    tools::Long nDirY=rDir.Y();
+    tools::Long x=aTmpPt.X();
+    tools::Long y=aTmpPt.Y();
     bool bHLin=nDirY==0;
     bool bVLin=nDirX==0;
     if (bHLin) y=0;
     else if (bVLin) x=0;
     else {
         y=BigMulDiv(x,nDirY,nDirX);
-        long nHypLen=aTmpPt.Y()-y;
-        long nTangAngle=-GetAngle(rDir);
+        tools::Long nHypLen=aTmpPt.Y()-y;
+        tools::Long nTangAngle=-GetAngle(rDir);
         // sin=g/h, g=h*sin
         double a = nTangAngle * F_PI18000;
         double sn=sin(a);
@@ -461,21 +461,21 @@ void ImpPathCreateUser::CalcRect(const Point& rP1, const Point& rP2, const Point
     aRectP2.AdjustX(x );
     aRectP2.AdjustY(y );
     if (pView!=nullptr && pView->IsOrtho()) {
-        long dx1=aRectP2.X()-aRectP1.X(); long dx1a=std::abs(dx1);
-        long dy1=aRectP2.Y()-aRectP1.Y(); long dy1a=std::abs(dy1);
-        long dx2=aRectP3.X()-aRectP2.X(); long dx2a=std::abs(dx2);
-        long dy2=aRectP3.Y()-aRectP2.Y(); long dy2a=std::abs(dy2);
+        tools::Long dx1=aRectP2.X()-aRectP1.X(); tools::Long dx1a=std::abs(dx1);
+        tools::Long dy1=aRectP2.Y()-aRectP1.Y(); tools::Long dy1a=std::abs(dy1);
+        tools::Long dx2=aRectP3.X()-aRectP2.X(); tools::Long dx2a=std::abs(dx2);
+        tools::Long dy2=aRectP3.Y()-aRectP2.Y(); tools::Long dy2a=std::abs(dy2);
         bool b1MoreThan2=dx1a+dy1a>dx2a+dy2a;
         if (b1MoreThan2 != pView->IsBigOrtho()) {
-            long xtemp=dy2a-dx1a; if (dx1<0) xtemp=-xtemp;
-            long ytemp=dx2a-dy1a; if (dy1<0) ytemp=-ytemp;
+            tools::Long xtemp=dy2a-dx1a; if (dx1<0) xtemp=-xtemp;
+            tools::Long ytemp=dx2a-dy1a; if (dy1<0) ytemp=-ytemp;
             aRectP2.AdjustX(xtemp );
             aRectP2.AdjustY(ytemp );
             aRectP3.AdjustX(xtemp );
             aRectP3.AdjustY(ytemp );
         } else {
-            long xtemp=dy1a-dx2a; if (dx2<0) xtemp=-xtemp;
-            long ytemp=dx1a-dy2a; if (dy2<0) ytemp=-ytemp;
+            tools::Long xtemp=dy1a-dx2a; if (dx2<0) xtemp=-xtemp;
+            tools::Long ytemp=dx1a-dy2a; if (dy2<0) ytemp=-ytemp;
             aRectP3.AdjustX(xtemp );
             aRectP3.AdjustY(ytemp );
         }
@@ -675,20 +675,20 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             }
             if (nPnt1!=0xFFFF && !bPrevIsControl) {
                 Point aPnt1=mpSdrPathDragData->aXP[nPnt1];
-                long ndx0=aPnt.X()-aPnt1.X();
-                long ndy0=aPnt.Y()-aPnt1.Y();
+                tools::Long ndx0=aPnt.X()-aPnt1.X();
+                tools::Long ndy0=aPnt.Y()-aPnt1.Y();
                 bool bHLin=ndy0==0;
                 bool bVLin=ndx0==0;
                 if (!bHLin || !bVLin) {
-                    long ndx=aPos.X()-aPnt1.X();
-                    long ndy=aPos.Y()-aPnt1.Y();
+                    tools::Long ndx=aPos.X()-aPnt1.X();
+                    tools::Long ndy=aPos.Y()-aPnt1.Y();
                     bPnt1=true;
                     double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
                     double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
-                    if (bHor) ndy=long(ndy0*nXFact);
-                    if (bVer) ndx=long(ndx0*nYFact);
+                    if (bHor) ndy=tools::Long(ndy0*nXFact);
+                    if (bVer) ndx=tools::Long(ndx0*nYFact);
                     aNewPos1=aPnt1;
                     aNewPos1.AdjustX(ndx );
                     aNewPos1.AdjustY(ndy );
@@ -696,20 +696,20 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             }
             if (nPnt2!=0xFFFF && !bNextIsControl) {
                 Point aPnt2=mpSdrPathDragData->aXP[nPnt2];
-                long ndx0=aPnt.X()-aPnt2.X();
-                long ndy0=aPnt.Y()-aPnt2.Y();
+                tools::Long ndx0=aPnt.X()-aPnt2.X();
+                tools::Long ndy0=aPnt.Y()-aPnt2.Y();
                 bool bHLin=ndy0==0;
                 bool bVLin=ndx0==0;
                 if (!bHLin || !bVLin) {
-                    long ndx=aPos.X()-aPnt2.X();
-                    long ndy=aPos.Y()-aPnt2.Y();
+                    tools::Long ndx=aPos.X()-aPnt2.X();
+                    tools::Long ndy=aPos.Y()-aPnt2.Y();
                     bPnt2=true;
                     double nXFact=0; if (!bVLin) nXFact=static_cast<double>(ndx)/static_cast<double>(ndx0);
                     double nYFact=0; if (!bHLin) nYFact=static_cast<double>(ndy)/static_cast<double>(ndy0);
                     bool bHor=bHLin || (!bVLin && (nXFact>nYFact) ==bBigOrtho);
                     bool bVer=bVLin || (!bHLin && (nXFact<=nYFact)==bBigOrtho);
-                    if (bHor) ndy=long(ndy0*nXFact);
-                    if (bVer) ndx=long(ndx0*nYFact);
+                    if (bHor) ndy=tools::Long(ndy0*nXFact);
+                    if (bVer) ndx=tools::Long(ndx0*nYFact);
                     aNewPos2=aPnt2;
                     aNewPos2.AdjustX(ndx );
                     aNewPos2.AdjustY(ndy );
@@ -736,11 +736,11 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         {
             Point aPt(mpSdrPathDragData->aXP[nNextPnt]);
             aPt-=rDrag.GetNow();
-            long nAngle1=GetAngle(aPt);
+            tools::Long nAngle1=GetAngle(aPt);
             aPt=rDrag.GetNow();
             aPt-=mpSdrPathDragData->aXP[nPrevPnt];
-            long nAngle2=GetAngle(aPt);
-            long nDiff=nAngle1-nAngle2;
+            tools::Long nAngle2=GetAngle(aPt);
+            tools::Long nDiff=nAngle1-nAngle2;
             nDiff=std::abs(nDiff);
             mpSdrPathDragData->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
             if (mpSdrPathDragData->bEliminate) { // adapt position, Smooth is true for the ends
@@ -1305,15 +1305,15 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
         if (pU->nBezierStartPoint>nCurrentPoint) pU->nBezierStartPoint=nCurrentPoint;
         if (rStat.IsMouseDown() && nCurrentPoint>0) {
             // don't allow two consecutive points to occupy too similar positions
-            long nMinDist=1;
+            tools::Long nMinDist=1;
             if (pView!=nullptr) nMinDist=pView->GetFreeHandMinDistPix();
             if (pOut!=nullptr) nMinDist=pOut->PixelToLogic(Size(nMinDist,0)).Width();
             if (nMinDist<1) nMinDist=1;
 
             Point aPt0(rXPoly[nCurrentPoint-1]);
             Point aPt1(rStat.GetNow());
-            long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
-            long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
+            tools::Long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
+            tools::Long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
             if (dx<nMinDist && dy<nMinDist) return false;
 
             // TODO: the following is copied from EndCreate (with a few smaller modifications)
@@ -2293,7 +2293,7 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SdrTextObj::NbcResize(rRef,xFact,yFact);
 }
 
-void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
+void SdrPathObj::NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs)
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
     const basegfx::B2DHomMatrix aTrans(
@@ -2304,7 +2304,7 @@ void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
 }
 
-void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear)
+void SdrPathObj::NbcShear(const Point& rRefPnt, tools::Long nAngle, double fTan, bool bVShear)
 {
     basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-rRefPnt.X(), -rRefPnt.Y()));
 
@@ -2383,14 +2383,14 @@ void SdrPathObj::NbcSetSnapRect(const tools::Rectangle& rRect)
     }
 
     // Take empty into account when calculating scale factors
-    long nMulX = rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left();
+    tools::Long nMulX = rRect.IsWidthEmpty() ? 0 : rRect.Right()  - rRect.Left();
 
-    long nDivX = aOld.Right()   - aOld.Left();
+    tools::Long nDivX = aOld.Right()   - aOld.Left();
 
     // Take empty into account when calculating scale factors
-    long nMulY = rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top();
+    tools::Long nMulY = rRect.IsHeightEmpty() ? 0 : rRect.Bottom() - rRect.Top();
 
-    long nDivY = aOld.Bottom()  - aOld.Top();
+    tools::Long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
     if ( nDivX == nMulX ) { nMulX = 1; nDivX = 1; }

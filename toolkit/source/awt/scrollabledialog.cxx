@@ -88,10 +88,10 @@ void ScrollableDialog::dispose()
     Dialog::dispose();
 }
 
-void ScrollableDialog::lcl_Scroll( long nX, long nY )
+void ScrollableDialog::lcl_Scroll( tools::Long nX, tools::Long nY )
 {
-    long nXScroll = mnScrollPos.X() - nX;
-    long nYScroll = mnScrollPos.Y() - nY;
+    tools::Long nXScroll = mnScrollPos.X() - nX;
+    tools::Long nYScroll = mnScrollPos.Y() - nY;
     mnScrollPos = Point( nX, nY );
 
     tools::Rectangle aScrollableArea( 0, 0, maScrollArea.Width(), maScrollArea.Height() );
@@ -118,7 +118,7 @@ IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
         lcl_Scroll(nPos, mnScrollPos.Y() );
 }
 
-void ScrollableDialog::SetScrollTop( long nTop )
+void ScrollableDialog::SetScrollTop( tools::Long nTop )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
@@ -126,7 +126,7 @@ void ScrollableDialog::SetScrollTop( long nTop )
     // new pos is 0,0
     mnScrollPos = aOld;
 }
-void ScrollableDialog::SetScrollLeft( long nLeft )
+void ScrollableDialog::SetScrollLeft( tools::Long nLeft )
 {
     Point aOld = mnScrollPos;
     lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
@@ -135,13 +135,13 @@ void ScrollableDialog::SetScrollLeft( long nLeft )
     mnScrollPos = aOld;
 }
 
-void ScrollableDialog::SetScrollWidth( long nWidth )
+void ScrollableDialog::SetScrollWidth( tools::Long nWidth )
 {
     maScrollArea.setWidth( nWidth );
     ResetScrollBars();
 }
 
-void ScrollableDialog::SetScrollHeight( long nHeight )
+void ScrollableDialog::SetScrollHeight( tools::Long nHeight )
 {
     maScrollArea.setHeight( nHeight );
     ResetScrollBars();

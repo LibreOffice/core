@@ -146,8 +146,8 @@ class AbstractFmInputRecordNoDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractFmInputRecordNoDialog() override = default;
 public:
-    virtual void SetValue(long dNew) = 0;
-    virtual long GetValue() const = 0;
+    virtual void SetValue(tools::Long dNew) = 0;
+    virtual tools::Long GetValue() const = 0;
 };
 
 class AbstractSvxNewDictionaryDialog :public VclAbstractDialog
@@ -287,7 +287,7 @@ protected:
 public:
     virtual bool IsHorizontal() const = 0;
     virtual bool IsProportional() const = 0;
-    virtual long GetCount() const = 0;
+    virtual tools::Long GetCount() const = 0;
     virtual void SetSplitVerticalByDefault() = 0;
 };
 
@@ -440,7 +440,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel )=0;
 
-    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) = 0;
+    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical) = 0;
 
     virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) = 0;
 

@@ -101,7 +101,7 @@ private:
 
     virtual void SAL_CALL disposing() override;
 
-    void checkChildIndex(long nIndex);
+    void checkChildIndex(tools::Long nIndex);
 
     /** Selects a new child by index.
 
@@ -111,7 +111,7 @@ private:
         @param nIndexOfChild
             Index of the new child which should be selected.
     */
-    void selectChild( long nIndexOfChild );
+    void selectChild( tools::Long nIndexOfChild );
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
@@ -129,7 +129,7 @@ private:
     std::vector<rtl::Reference<SvxRectCtlChildAccessibleContext>>  mvChildren;
 
     /// actual selected child
-    long                                mnSelectedChild;
+    tools::Long                                mnSelectedChild;
 };
 
 typedef ::cppu::ImplHelper3 <   css::accessibility::XAccessible,
@@ -145,7 +145,7 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         const OUString& rName, const OUString& rDescription,
         const tools::Rectangle& rBoundingBox,
-        long nIndexInParent );
+        tools::Long nIndexInParent );
 
     DECLARE_XINTERFACE( )
     DECLARE_XTYPEPROVIDER( )
@@ -221,7 +221,7 @@ private:
     tools::Rectangle             maBoundingBox;
 
     /// index of child in parent
-    long                         mnIndexInParent;
+    tools::Long                         mnIndexInParent;
 
     /// Indicates, if object is checked
     bool                         mbIsChecked;

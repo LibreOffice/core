@@ -244,7 +244,7 @@ void ShadowPropertyPanel::UpdateControls()
     mxShadowDistance->set_value(nXY, FieldUnit::MM_100TH);
 }
 
-void ShadowPropertyPanel::SetTransparencyValue(long nVal)
+void ShadowPropertyPanel::SetTransparencyValue(tools::Long nVal)
 {
     mxShadowTransSlider->set_value(nVal);
     mxShadowTransMetric->set_value(nVal, FieldUnit::PERCENT);

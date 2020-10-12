@@ -301,10 +301,10 @@ namespace sdr::contact {
         ::basegfx::B2DPoint aBottomRight( _rLogicBoundingRect.Right(), _rLogicBoundingRect.Bottom() );
         aBottomRight *= _rViewTransformation;
 
-        const tools::Rectangle aPaintRectPixel(static_cast<long>(std::round(aTopLeft.getX())),
-                                               static_cast<long>(std::round(aTopLeft.getY())),
-                                               static_cast<long>(std::round(aBottomRight.getX())),
-                                               static_cast<long>(std::round(aBottomRight.getY())));
+        const tools::Rectangle aPaintRectPixel(static_cast<tools::Long>(std::round(aTopLeft.getX())),
+                                               static_cast<tools::Long>(std::round(aTopLeft.getY())),
+                                               static_cast<tools::Long>(std::round(aBottomRight.getX())),
+                                               static_cast<tools::Long>(std::round(aBottomRight.getY())));
         _rControl.setPosSize( aPaintRectPixel );
 
         // determine the scale from the current view transformation, and the normalization matrix

@@ -287,13 +287,13 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
     if(nDestWidth != nSourceWidth)
     {
         float zoomX = static_cast<float>(nDestWidth) / static_cast<float>(nSourceWidth);
-        aSz.setWidth( static_cast<long>(static_cast<float>(aSz.Width()) * zoomX) );
+        aSz.setWidth( static_cast<tools::Long>(static_cast<float>(aSz.Width()) * zoomX) );
     }
 
     if(nDestHeight != nSourceHeight)
     {
         float zoomY = static_cast<float>(nDestHeight) / static_cast<float>(nSourceHeight);
-        aSz.setHeight( static_cast<long>(static_cast<float>(aSz.Height()) * zoomY) );
+        aSz.setHeight( static_cast<tools::Long>(static_cast<float>(aSz.Height()) * zoomY) );
     }
 
     if(nSourceX || nSourceY || aSz.Width() != nSourceWidth || aSz.Height() != nSourceHeight)

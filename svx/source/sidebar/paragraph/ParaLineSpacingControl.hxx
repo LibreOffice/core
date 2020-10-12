@@ -59,7 +59,8 @@ private:
     void ExecuteLineSpace();
 
     /// Set one particular value.
-    static void SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace, long lValue = 0);
+    static void SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace,
+                             tools::Long lValue = 0);
 
     /// For the buttons - set the values, and close the popup.
     void ExecuteLineSpacing(sal_Int32 aEntry);

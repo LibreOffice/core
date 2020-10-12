@@ -383,7 +383,7 @@ static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void
     RotatePoint(rPt,*static_cast<const Point*>(p1),*static_cast<const double*>(p3),*static_cast<const double*>(p4));
 }
 
-void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nAngle, bool bCopy)
+void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, tools::Long nAngle, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(SvxResId(STR_EditRotate));

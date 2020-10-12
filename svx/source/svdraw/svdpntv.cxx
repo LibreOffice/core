@@ -1030,11 +1030,11 @@ void SdrPaintView::MakeVisible(const tools::Rectangle& rRect, vcl::Window& rWin)
         aActualSize=rWin.GetOutputSize();
     }
     Point aOrg(aMap.GetOrigin());
-    long dx=0,dy=0;
-    long l=-aOrg.X();
-    long r=-aOrg.X()+aActualSize.Width()-1;
-    long o=-aOrg.Y();
-    long u=-aOrg.Y()+aActualSize.Height()-1;
+    tools::Long dx=0,dy=0;
+    tools::Long l=-aOrg.X();
+    tools::Long r=-aOrg.X()+aActualSize.Width()-1;
+    tools::Long o=-aOrg.Y();
+    tools::Long u=-aOrg.Y()+aActualSize.Height()-1;
     if (l>rRect.Left()) dx=rRect.Left()-l;
     else if (r<rRect.Right()) dx=rRect.Right()-r;
     if (o>rRect.Top()) dy=rRect.Top()-o;

@@ -621,7 +621,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
 }
 
 // internals
-void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( long nIndex )
+void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( tools::Long nIndex )
 {
     if( nIndex < 0 || nIndex >= getSelectedAccessibleChildCount() )
         throw lang::IndexOutOfBoundsException();

@@ -50,7 +50,7 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
     virtual bool            HasMetrics() const override;
-    virtual void            ScaleMetrics(long nMul, long nDiv) override;
+    virtual void            ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;
 
     const XHatch&           GetHatchValue() const { return aHatch;} // GetValue -> GetHatchValue
 

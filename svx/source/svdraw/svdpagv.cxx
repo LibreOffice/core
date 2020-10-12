@@ -351,10 +351,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     if (GetPage()==nullptr)
         return;
 
-    long nx1=GetView().maGridBig.Width();
-    long nx2=GetView().maGridFin.Width();
-    long ny1=GetView().maGridBig.Height();
-    long ny2=GetView().maGridFin.Height();
+    tools::Long nx1=GetView().maGridBig.Width();
+    tools::Long nx2=GetView().maGridFin.Width();
+    tools::Long ny1=GetView().maGridBig.Height();
+    tools::Long ny2=GetView().maGridFin.Height();
 
     if (nx1==0) nx1=nx2;
     if (nx2==0) nx2=nx1;
@@ -371,10 +371,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         return;
 
     // no more global output size, use window size instead to decide grid sizes
-    long nScreenWdt = rOut.GetOutputSizePixel().Width();
+    tools::Long nScreenWdt = rOut.GetOutputSizePixel().Width();
 
-    long nMinDotPix=2;
-    long nMinLinPix=4;
+    tools::Long nMinDotPix=2;
+    tools::Long nMinLinPix=4;
 
     if (nScreenWdt>=1600)
     {
@@ -398,10 +398,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     // enlarge line offset (minimum 4 pixels)
     // enlarge by: *2 *5 *10 *20 *50 *100 ...
     int nTgl=0;
-    long nVal0=nx1;
+    tools::Long nVal0=nx1;
     while (nx1<aMinLinDist.Width())
     {
-        long a=nx1;
+        tools::Long a=nx1;
 
         if (nTgl==0) nx1*=2;
         if (nTgl==1) nx1=nVal0*5; // => nx1*=2.5
@@ -414,7 +414,7 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     nVal0=ny1;
     while (ny1<aMinLinDist.Height())
     {
-        long a=ny1;
+        tools::Long a=ny1;
 
         if (nTgl==0) ny1*=2;
         if (nTgl==1) ny1=nVal0*5; // => ny1*=2.5
@@ -436,13 +436,13 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
 
     bool bMap0=rOut.IsMapModeEnabled();
 
-    long nWrX=0;
-    long nWrY=0;
+    tools::Long nWrX=0;
+    tools::Long nWrY=0;
     Point aOrg(aPgOrg);
-    long x1=GetPage()->GetLeftBorder()+1+nWrX;
-    long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
-    long y1=GetPage()->GetUpperBorder()+1+nWrX;
-    long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
+    tools::Long x1=GetPage()->GetLeftBorder()+1+nWrX;
+    tools::Long x2=GetPage()->GetWidth()-GetPage()->GetRightBorder()-1+nWrY;
+    tools::Long y1=GetPage()->GetUpperBorder()+1+nWrX;
+    tools::Long y2=GetPage()->GetHeight()-GetPage()->GetLowerBorder()-1+nWrY;
     const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
     sal_uInt16 nGridPaintCnt=1;
@@ -461,25 +461,25 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
         }
         if (!rRect.IsEmpty()) {
             Size a1PixSiz(rOut.PixelToLogic(Size(1,1)));
-            long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
-            long nY1Pix=a1PixSiz.Height();
+            tools::Long nX1Pix=a1PixSiz.Width();  // add 1 pixel of tolerance
+            tools::Long nY1Pix=a1PixSiz.Height();
             if (x1<rRect.Left()  -nX1Pix) x1=rRect.Left()  -nX1Pix;
             if (x2>rRect.Right() +nX1Pix) x2=rRect.Right() +nX1Pix;
             if (y1<rRect.Top()   -nY1Pix) y1=rRect.Top()   -nY1Pix;
             if (y2>rRect.Bottom()+nY1Pix) y2=rRect.Bottom()+nY1Pix;
         }
 
-        long xBigOrg=aOrg.X()+nWrX;
+        tools::Long xBigOrg=aOrg.X()+nWrX;
         while (xBigOrg>=x1) xBigOrg-=nx1;
         while (xBigOrg<x1) xBigOrg+=nx1;
-        long xFinOrg=xBigOrg;
+        tools::Long xFinOrg=xBigOrg;
         while (xFinOrg>=x1) xFinOrg-=nx2;
         while (xFinOrg<x1) xFinOrg+=nx2;
 
-        long yBigOrg=aOrg.Y()+nWrY;
+        tools::Long yBigOrg=aOrg.Y()+nWrY;
         while (yBigOrg>=y1) yBigOrg-=ny1;
         while (yBigOrg<y1) yBigOrg+=ny1;
-        long yFinOrg=yBigOrg;
+        tools::Long yFinOrg=yBigOrg;
         while (yFinOrg>=y1) yFinOrg-=ny2;
         while (yFinOrg<y1) yFinOrg+=ny2;
 

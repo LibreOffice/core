@@ -84,8 +84,8 @@ public:
     Point                       aMiddleLine;
 
     // Following values are set by ImpCalcEdgeTrack
-    long                        nAngle1;           // exit angle at Obj1
-    long                        nAngle2;           // exit angle at Obj2
+    tools::Long                        nAngle1;           // exit angle at Obj1
+    tools::Long                        nAngle2;           // exit angle at Obj2
     sal_uInt16                  nObj1Lines;        // 1..3
     sal_uInt16                  nObj2Lines;        // 1..3
     sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwise point number of the beginning of the line
@@ -102,8 +102,8 @@ public:
     Point& ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode);
     sal_uInt16 ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
     bool ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
-    void ImpSetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal);
-    long ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
+    void ImpSetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP, tools::Long nVal);
+    tools::Long ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
 };
 
 
@@ -171,11 +171,11 @@ public:
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    static XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const tools::Rectangle& rRect, const Point& rCenter);
+    static XPolygon ImpCalcObjToCenter(const Point& rStPt, tools::Long nEscAngle, const tools::Rectangle& rRect, const Point& rCenter);
     void ImpRecalcEdgeTrack();   // recalculation of the connection track
     XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
-    XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
-        const Point& rPt2, long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
+    XPolygon ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, const tools::Rectangle& rBoundRect1, const tools::Rectangle& rBewareRect1,
+        const Point& rPt2, tools::Long nAngle2, const tools::Rectangle& rBoundRect2, const tools::Rectangle& rBewareRect2,
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr);
     static SdrEscapeDirection ImpCalcEscAngle(SdrObject const * pObj, const Point& aPt2);
@@ -242,9 +242,9 @@ public:
     virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact) override;
 
     // #i54102# added rotate, mirror and shear support
-    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
+    virtual void NbcRotate(const Point& rRef, tools::Long nAngle, double sn, double cs) override;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) override;
-    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) override;
+    virtual void NbcShear(const Point& rRef, tools::Long nAngle, double tn, bool bVShear) override;
 
     // #102344# Added missing implementation
     virtual void NbcSetAnchorPos(const Point& rPnt) override;

@@ -81,10 +81,10 @@ public:
     SVX_DLLPRIVATE sal_Int32 getMinimumWidth() const;
     SVX_DLLPRIVATE sal_Int32 getMinimumHeight();
 
-    SVX_DLLPRIVATE long GetTextLeftDistance() const;
-    SVX_DLLPRIVATE long GetTextRightDistance() const;
-    SVX_DLLPRIVATE long GetTextUpperDistance() const;
-    SVX_DLLPRIVATE long GetTextLowerDistance() const;
+    SVX_DLLPRIVATE tools::Long GetTextLeftDistance() const;
+    SVX_DLLPRIVATE tools::Long GetTextRightDistance() const;
+    SVX_DLLPRIVATE tools::Long GetTextUpperDistance() const;
+    SVX_DLLPRIVATE tools::Long GetTextLowerDistance() const;
 
     SVX_DLLPRIVATE SdrTextVertAdjust GetTextVerticalAdjust() const;
     SdrTextHorzAdjust GetTextHorizontalAdjust() const;

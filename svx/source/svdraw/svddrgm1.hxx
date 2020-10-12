@@ -49,8 +49,8 @@ class SdrDragRotate : public SdrDragMethod
 private:
     double                      nSin;
     double                      nCos;
-    long                        nAngle0;
-    long                        nAngle;
+    tools::Long                        nAngle0;
+    tools::Long                        nAngle;
     bool                        bRight;
 
 public:
@@ -70,8 +70,8 @@ class SdrDragShear : public SdrDragMethod
 {
 private:
     Fraction                    aFact;
-    long                        nAngle0;
-    long                        nAngle;
+    tools::Long                        nAngle0;
+    tools::Long                        nAngle;
     double                      nTan;
     bool                        bVertical;   // contort vertically
     bool                        bResize;     // shear and resize
@@ -95,7 +95,7 @@ class SdrDragMirror : public SdrDragMethod
 {
 private:
     Point                       aDif;
-    long                        nAngle;
+    tools::Long                        nAngle;
     bool                        bMirrored;
     bool                        bSide0;
 
@@ -159,8 +159,8 @@ private:
     bool                        bUpr;
     bool                        bLwr;
     bool                        bAtCenter;
-    long                        nAngle;
-    long                        nMarkSize;
+    tools::Long                        nAngle;
+    tools::Long                        nMarkSize;
     SdrCrookMode                eMode;
 
     // helpers for applyCurrentTransformationToPolyPolygon

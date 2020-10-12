@@ -31,8 +31,8 @@ private:
     struct SvxZoomSliderControl_Impl;
     std::unique_ptr<SvxZoomSliderControl_Impl> mxImpl;
 
-    sal_uInt16 Offset2Zoom( long nOffset ) const;
-    long Zoom2Offset( sal_uInt16 nZoom ) const;
+    sal_uInt16 Offset2Zoom( tools::Long nOffset ) const;
+    tools::Long Zoom2Offset( sal_uInt16 nZoom ) const;
 
     void repaintAndExecute();
     void forceRepaint() const;

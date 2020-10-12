@@ -90,7 +90,7 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
-static long ScaleMetricValue( long nVal, long nMul, long nDiv )
+static tools::Long ScaleMetricValue( tools::Long nVal, tools::Long nMul, tools::Long nDiv )
 {
     BigInt aVal( nVal );
 
@@ -103,7 +103,7 @@ static long ScaleMetricValue( long nVal, long nMul, long nDiv )
 
     aVal/=nDiv;
 
-    return long( aVal );
+    return tools::Long( aVal );
 }
 
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
@@ -617,7 +617,7 @@ bool XLineDashItem::HasMetrics() const
     return true;
 }
 
-void XLineDashItem::ScaleMetrics(long nMul, long nDiv)
+void XLineDashItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
     aDash.SetDotLen( ScaleMetricValue( aDash.GetDotLen(), nMul, nDiv ) );
     aDash.SetDashLen( ScaleMetricValue( aDash.GetDashLen(), nMul, nDiv ) );
@@ -892,7 +892,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel* pMod
 
 SfxPoolItem* XLineWidthItem::CreateDefault() {return new XLineWidthItem;}
 
-XLineWidthItem::XLineWidthItem(long nWidth) :
+XLineWidthItem::XLineWidthItem(tools::Long nWidth) :
     SfxMetricItem(XATTR_LINEWIDTH, nWidth)
 {
 }
@@ -910,7 +910,7 @@ bool XLineWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( static_cast<long>(GetValue()),
+    rText = GetMetricText( static_cast<tools::Long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -1577,7 +1577,7 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
+XLineStartWidthItem::XLineStartWidthItem(tools::Long nWidth) :
     SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth)
 {
 }
@@ -1595,7 +1595,7 @@ bool XLineStartWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( static_cast<long>(GetValue()),
+    rText = GetMetricText( static_cast<tools::Long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -1615,7 +1615,7 @@ bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemb
     return true;
 }
 
-XLineEndWidthItem::XLineEndWidthItem(long nWidth) :
+XLineEndWidthItem::XLineEndWidthItem(tools::Long nWidth) :
    SfxMetricItem(XATTR_LINEENDWIDTH, nWidth)
 {
 }
@@ -1633,7 +1633,7 @@ bool XLineEndWidthItem::GetPresentation
     OUString&           rText, const IntlWrapper& rIntl
 )   const
 {
-    rText = GetMetricText( static_cast<long>(GetValue()),
+    rText = GetMetricText( static_cast<tools::Long>(GetValue()),
                             eCoreUnit, ePresUnit, &rIntl) +
             " " + EditResId( GetMetricId( ePresUnit) );
     return true;
@@ -2531,7 +2531,7 @@ boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
     return aTree;
 }
 
-XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, long nTheDistance,
+XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, tools::Long nTheDistance,
                Degree10 nTheAngle) :
     eStyle(eTheStyle),
     aColor(rCol),
@@ -2598,7 +2598,7 @@ bool XFillHatchItem::HasMetrics() const
     return true;
 }
 
-void XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
+void XFillHatchItem::ScaleMetrics(tools::Long nMul, tools::Long nDiv)
 {
     aHatch.SetDistance( ScaleMetricValue( aHatch.GetDistance(), nMul, nDiv ) );
 }
@@ -2848,7 +2848,7 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 SfxPoolItem* XFormTextDistanceItem::CreateDefault() { return new XFormTextDistanceItem; }
 
-XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
+XFormTextDistanceItem::XFormTextDistanceItem(tools::Long nDist) :
     SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist)
 {
 }
@@ -2860,7 +2860,7 @@ XFormTextDistanceItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) cons
 
 SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
 
-XFormTextStartItem::XFormTextStartItem(long nStart) :
+XFormTextStartItem::XFormTextStartItem(tools::Long nStart) :
     SfxMetricItem(XATTR_FORMTXTSTART, nStart)
 {
 }
@@ -2942,7 +2942,7 @@ XFormTextShadowColorItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/
 
 SfxPoolItem* XFormTextShadowXValItem::CreateDefault() { return new XFormTextShadowXValItem; }
 
-XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
+XFormTextShadowXValItem::XFormTextShadowXValItem(tools::Long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal)
 {
 }
@@ -2954,7 +2954,7 @@ XFormTextShadowXValItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) 
 
 SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
 
-XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
+XFormTextShadowYValItem::XFormTextShadowYValItem(tools::Long nVal) :
     SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal)
 {
 }

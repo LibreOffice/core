@@ -49,7 +49,7 @@ public:
                 bool bPixelColorOrBG,
                 const tools::Rectangle& rBounds,
                 const rtl::Reference<SvxPixelCtlAccessible>& xParent,
-                long nIndexInParent );
+                tools::Long nIndexInParent );
 
     DECLARE_XINTERFACE( )
     DECLARE_XTYPEPROVIDER( )
@@ -93,7 +93,7 @@ private:
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
     tools::Rectangle  maBoundingBox;
     /// index of child in parent
-    long mnIndexInParent;
+    tools::Long mnIndexInParent;
 };
 
 class SvxPixelCtlAccessible final : public ::comphelper::OAccessibleSelectionHelper,
@@ -125,7 +125,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     css::uno::Reference< css::accessibility::XAccessible >
-         CreateChild (long nIndex, Point mPoint);
+         CreateChild (tools::Long nIndex, Point mPoint);
 
 private:
     virtual ~SvxPixelCtlAccessible() override;
@@ -146,7 +146,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessible> m_xCurChild;
 
 public:
-    void NotifyChild(long nIndex, bool bSelect, bool bCheck);
+    void NotifyChild(tools::Long nIndex, bool bSelect, bool bCheck);
 };
 
 #endif

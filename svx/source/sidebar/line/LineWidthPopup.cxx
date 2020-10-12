@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(LineWidthPopup, VSSelectHdl, ValueSet*, void)
         //modified
         if (m_bCustom)
         {
-            long nVal = OutputDevice::LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
+            tools::Long nVal = OutputDevice::LogicToLogic(m_nCustomWidth , MapUnit::MapPoint, m_eMapUnit);
             nVal = m_xMFWidth->denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             m_rParent.setLineWidth(aWidthItem);
@@ -143,14 +143,14 @@ IMPL_LINK_NOARG(LineWidthPopup, MFModifyHdl, weld::MetricSpinButton&, void)
         m_xVSWidth->SetFormat();
         m_xVSWidth->Invalidate();
     }
-    long nTmp = static_cast<long>(m_xMFWidth->get_value(FieldUnit::NONE));
-    long nVal = OutputDevice::LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
+    tools::Long nTmp = static_cast<tools::Long>(m_xMFWidth->get_value(FieldUnit::NONE));
+    tools::Long nVal = OutputDevice::LogicToLogic( nTmp, MapUnit::MapPoint, m_eMapUnit );
     sal_Int32 nNewWidth = static_cast<short>(m_xMFWidth->denormalize( nVal ));
     XLineWidthItem aWidthItem(nNewWidth);
     m_rParent.setLineWidth(aWidthItem);
 }
 
-void LineWidthPopup::SetWidthSelect(long lValue, bool bValuable, MapUnit eMapUnit)
+void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit eMapUnit)
 {
     m_bVSFocus = true;
     m_xVSWidth->SetSelItem(0);

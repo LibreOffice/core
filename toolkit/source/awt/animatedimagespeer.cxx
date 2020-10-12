@@ -219,7 +219,7 @@ namespace toolkit
 
                     // find the set with the smallest difference between window size and image size
                     const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
-                    long nMinimalDistance = ::std::numeric_limits< long >::max();
+                    tools::Long nMinimalDistance = ::std::numeric_limits< long >::max();
                     for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
                             check != aImageSizes.end();
                             ++check

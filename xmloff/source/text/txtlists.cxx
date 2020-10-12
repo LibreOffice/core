@@ -23,6 +23,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <tools/datetime.hxx>
+#include <tools/long.hxx>
 #include <sal/log.hxx>
 
 #include <xmloff/txtimp.hxx>
@@ -209,7 +210,7 @@ OUString XMLTextListsHelper::GenerateNewListId() const
     OUString sNewListId( sTmpStr );
     if ( mpProcessedLists )
     {
-        long nHitCount = 0;
+        tools::Long nHitCount = 0;
         while ( mpProcessedLists->find( sNewListId ) != mpProcessedLists->end() )
         {
             ++nHitCount;

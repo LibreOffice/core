@@ -42,7 +42,7 @@ public:
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
 class SdrMeasureTextFixedAngleItem: public SdrAngleItem {
 public:
-    SdrMeasureTextFixedAngleItem(long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
+    SdrMeasureTextFixedAngleItem(tools::Long nVal=0): SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
     virtual ~SdrMeasureTextFixedAngleItem() override;
     virtual SdrMeasureTextFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

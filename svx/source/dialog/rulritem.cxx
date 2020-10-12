@@ -134,7 +134,7 @@ SvxLongLRSpaceItem* SvxLongLRSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongLRSpaceItem(*this);
 }
 
-SvxLongLRSpaceItem::SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
+SvxLongLRSpaceItem::SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId) :
     SfxPoolItem (nId),
     mlLeft      (lLeft),
     mlRight     (lRight)
@@ -146,12 +146,12 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem() :
     mlRight     (0)
 {}
 
-void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
+void SvxLongLRSpaceItem::SetLeft(tools::Long lArgLeft)
 {
     mlLeft = lArgLeft;
 }
 
-void SvxLongLRSpaceItem::SetRight(long lArgRight)
+void SvxLongLRSpaceItem::SetRight(tools::Long lArgRight)
 {
     mlRight = lArgRight;
 }
@@ -253,7 +253,7 @@ SvxLongULSpaceItem* SvxLongULSpaceItem::Clone(SfxItemPool *) const
     return new SvxLongULSpaceItem(*this);
 }
 
-SvxLongULSpaceItem::SvxLongULSpaceItem(long lLeft, long lRight, sal_uInt16 nId) :
+SvxLongULSpaceItem::SvxLongULSpaceItem(tools::Long lLeft, tools::Long lRight, sal_uInt16 nId) :
     SfxPoolItem (nId),
     mlLeft       (lLeft),
     mlRight      (lRight)
@@ -266,12 +266,12 @@ SvxLongULSpaceItem::SvxLongULSpaceItem() :
 {}
 
 
-void SvxLongULSpaceItem::SetUpper(long lArgLeft)
+void SvxLongULSpaceItem::SetUpper(tools::Long lArgLeft)
 {
     mlLeft = lArgLeft;
 }
 
-void SvxLongULSpaceItem::SetLower(long lArgRight)
+void SvxLongULSpaceItem::SetLower(tools::Long lArgRight)
 {
     mlRight = lArgRight;
 }
@@ -368,7 +368,7 @@ SvxPagePosSizeItem* SvxPagePosSizeItem::Clone(SfxItemPool *) const
     return new SvxPagePosSizeItem(*this);
 }
 
-SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, long lW, long lH) :
+SvxPagePosSizeItem::SvxPagePosSizeItem(const Point &rP, tools::Long lW, tools::Long lH) :
     SfxPoolItem (SID_RULER_PAGE_POS),
     aPos        (rP),
     lWidth      (lW),
@@ -444,7 +444,7 @@ bool SvxColumnItem::CalcOrtho() const
     if(nCount < 2)
         return false;
 
-    long nColWidth = (*this)[0].GetWidth();
+    tools::Long nColWidth = (*this)[0].GetWidth();
     for(sal_uInt16 i = 1; i < nCount; ++i) {
         if( (*this)[i].GetWidth() != nColWidth)
             return false;
@@ -550,12 +550,12 @@ void SvxColumnItem::Append(const SvxColumnDescription &rDesc)
     aColumns.push_back(rDesc);
 }
 
-void SvxColumnItem::SetLeft(long left)
+void SvxColumnItem::SetLeft(tools::Long left)
 {
     nLeft = left;
 }
 
-void SvxColumnItem::SetRight(long right)
+void SvxColumnItem::SetRight(tools::Long right)
 {
     nRight = right;
 }
@@ -571,7 +571,7 @@ bool SvxColumnItem::IsLastAct() const
     return nActColumn == Count() - 1;
 }
 
-SvxColumnDescription::SvxColumnDescription(long start, long end, bool bVis) :
+SvxColumnDescription::SvxColumnDescription(tools::Long start, tools::Long end, bool bVis) :
     nStart   (start),
     nEnd     (end),
     bVisible (bVis),
@@ -579,7 +579,7 @@ SvxColumnDescription::SvxColumnDescription(long start, long end, bool bVis) :
     nEndMax  (0)
 {}
 
-SvxColumnDescription::SvxColumnDescription(long start, long end, long endMin, long endMax, bool bVis) :
+SvxColumnDescription::SvxColumnDescription(tools::Long start, tools::Long end, tools::Long endMin, tools::Long endMax, bool bVis) :
     nStart   (start),
     nEnd     (end),
     bVisible (bVis),
@@ -602,7 +602,7 @@ bool SvxColumnDescription::operator!=(const SvxColumnDescription& rCmp) const
     return !operator==(rCmp);
 }
 
-long SvxColumnDescription::GetWidth() const
+tools::Long SvxColumnDescription::GetWidth() const
 {
     return nEnd - nStart;
 }
@@ -643,8 +643,8 @@ SvxObjectItem* SvxObjectItem::Clone(SfxItemPool *) const
     return new SvxObjectItem(*this);
 }
 
-SvxObjectItem::SvxObjectItem( long nSX, long nEX,
-                              long nSY, long nEY ) :
+SvxObjectItem::SvxObjectItem( tools::Long nSX, tools::Long nEX,
+                              tools::Long nSY, tools::Long nEY ) :
     SfxPoolItem (SID_RULER_OBJECT),
     nStartX     (nSX),
     nEndX       (nEX),
@@ -709,22 +709,22 @@ bool SvxObjectItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 
-void SvxObjectItem::SetStartX(long lValue)
+void SvxObjectItem::SetStartX(tools::Long lValue)
 {
     nStartX = lValue;
 }
 
-void SvxObjectItem::SetEndX(long lValue)
+void SvxObjectItem::SetEndX(tools::Long lValue)
 {
     nEndX = lValue;
 }
 
-void SvxObjectItem::SetStartY(long lValue)
+void SvxObjectItem::SetStartY(tools::Long lValue)
 {
     nStartY = lValue;
 }
 
-void SvxObjectItem::SetEndY(long lValue)
+void SvxObjectItem::SetEndY(tools::Long lValue)
 {
     nEndY = lValue;
 }

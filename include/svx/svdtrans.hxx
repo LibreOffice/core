@@ -113,8 +113,8 @@ inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, 
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
 {
-    long dx=rPnt.X()-rRef.X();
-    long dy=rPnt.Y()-rRef.Y();
+    tools::Long dx=rPnt.X()-rRef.X();
+    tools::Long dy=rPnt.Y()-rRef.Y();
     rPnt.setX(FRound(rRef.X()+dx*cs+dy*sn));
     rPnt.setY(FRound(rRef.Y()+dy*cs-dx*sn));
 }
@@ -136,11 +136,11 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
 {
     double nAngle;
     if (bVertical) {
-        long dy=rPnt.Y()-rCenter.Y();
+        tools::Long dy=rPnt.Y()-rCenter.Y();
         nAngle=static_cast<double>(dy)/static_cast<double>(rRad.Y());
         rPnt.setY(rCenter.Y());
     } else {
-        long dx=rCenter.X()-rPnt.X();
+        tools::Long dx=rCenter.X()-rPnt.X();
         nAngle=static_cast<double>(dx)/static_cast<double>(rRad.X());
         rPnt.setX(rCenter.X());
     }
@@ -159,19 +159,19 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
  * @return the returned value is in the range of -180.00..179.99 deg
  * and is in 1/100 deg units
  */
-SVXCORE_DLLPUBLIC long GetAngle(const Point& rPnt);
+SVXCORE_DLLPUBLIC tools::Long GetAngle(const Point& rPnt);
 
-long NormAngle18000(long a); /// Normalize angle to -180.00..179.99
+tools::Long NormAngle18000(tools::Long a); /// Normalize angle to -180.00..179.99
 
-SVXCORE_DLLPUBLIC long NormAngle36000(long a); /// Normalize angle to 0.00..359.99
+SVXCORE_DLLPUBLIC tools::Long NormAngle36000(tools::Long a); /// Normalize angle to 0.00..359.99
 
-sal_uInt16 GetAngleSector(long nAngle); /// Determine sector within the cartesian coordinate system
+sal_uInt16 GetAngleSector(tools::Long nAngle); /// Determine sector within the cartesian coordinate system
 
 /**
  * Calculates the length of (0,0) via a^2 + b^2 = c^2
  * In order to avoid overflows, we ignore some decimal places.
  */
-long GetLen(const Point& rPnt);
+tools::Long GetLen(const Point& rPnt);
 
 /**
  * The transformation of a rectangle into a polygon, by
@@ -213,8 +213,8 @@ long GetLen(const Point& rPnt);
 
 class GeoStat { // Geometric state for a rect
 public:
-    long     nRotationAngle;
-    long     nShearAngle;
+    tools::Long     nRotationAngle;
+    tools::Long     nShearAngle;
     double   nTan;      // tan(nShearAngle)
     double   nSin;      // sin(nRotationAngle)
     double   nCos;      // cos(nRotationAngle)
@@ -232,7 +232,7 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho);
 
 // Multiplication and subsequent division
 // Calculation and intermediate values are in BigInt
-SVXCORE_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
+SVXCORE_DLLPUBLIC tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv);
 
 class FrPair {
     Fraction aX;
@@ -240,8 +240,8 @@ class FrPair {
 public:
     FrPair(const Fraction& rBoth)                     : aX(rBoth),aY(rBoth)         {}
     FrPair(const Fraction& rX, const Fraction& rY)    : aX(rX),aY(rY)               {}
-    FrPair(long nMul, long nDiv)                      : aX(nMul,nDiv),aY(nMul,nDiv) {}
-    FrPair(long xMul, long xDiv, long yMul, long yDiv): aX(xMul,xDiv),aY(yMul,yDiv) {}
+    FrPair(tools::Long nMul, tools::Long nDiv)                      : aX(nMul,nDiv),aY(nMul,nDiv) {}
+    FrPair(tools::Long xMul, tools::Long xDiv, tools::Long yMul, tools::Long yDiv): aX(xMul,xDiv),aY(yMul,yDiv) {}
     const Fraction& X() const { return aX; }
     const Fraction& Y() const { return aY; }
     Fraction& X()             { return aX; }
@@ -273,8 +273,8 @@ inline bool IsInch(FieldUnit eU) {
 }
 
 class SVXCORE_DLLPUBLIC SdrFormatter {
-    long      nMul_;
-    long      nDiv_;
+    tools::Long      nMul_;
+    tools::Long      nDiv_;
     short     nComma_;
     bool      bDirty;
     MapUnit   eSrcMU;
@@ -291,7 +291,7 @@ public:
         , eDstMU(eDst)
     {
     }
-    OUString GetStr(long nVal) const;
+    OUString GetStr(tools::Long nVal) const;
     static OUString GetUnitStr(MapUnit eUnit);
     static OUString GetUnitStr(FieldUnit eUnit);
 };

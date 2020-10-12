@@ -507,7 +507,7 @@ bool NavigationBar::GetState(DbGridControlNavigationBarState nWhich) const
         // check if we have a master state provider
         if (pParent->m_aMasterStateProvider.IsSet())
         {
-            long nState = pParent->m_aMasterStateProvider.Call( nWhich );
+            tools::Long nState = pParent->m_aMasterStateProvider.Call( nWhich );
             if (nState>=0)
                 return (nState>0);
         }
@@ -1590,7 +1590,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     m_aColumns.insert( m_aColumns.begin() + nNewModelPos, std::move(temp) );
 }
 
-bool DbGridControl::SeekRow(long nRow)
+bool DbGridControl::SeekRow(tools::Long nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
     if ( !SeekCursor( nRow ) )
@@ -1623,12 +1623,12 @@ bool DbGridControl::SeekRow(long nRow)
 }
 
 // Is called whenever the visible amount of data changes
-void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScreen )
+void DbGridControl::VisibleRowsChanged( tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen )
 {
     RecalcRows(nNewTopRow, nLinesOnScreen, false);
 }
 
-void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
+void DbGridControl::RecalcRows(tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
 {
     // If no cursor -> no rows in the browser.
     if (!m_pSeekCursor)
@@ -1649,9 +1649,9 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     bool bCacheAligned   = false;
     // no further cursor movements after initializing (m_nSeekPos < 0) because it is already
     // positioned on the first sentence
-    long nDelta = nNewTopRow - GetTopRow();
+    tools::Long nDelta = nNewTopRow - GetTopRow();
     // limit for relative positioning
-    long nLimit = nCacheSize ? nCacheSize / 2 : 0;
+    tools::Long nLimit = nCacheSize ? nCacheSize / 2 : 0;
 
     // more lines on screen than in cache
     if (nLimit < nLinesOnScreen)
@@ -1684,7 +1684,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     EnablePaint(true);
 }
 
-void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
+void DbGridControl::RowInserted(tools::Long nRow, tools::Long nNumRows, bool bDoPaint)
 {
     if (!nNumRows)
         return;
@@ -1704,7 +1704,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
     m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
-void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
+void DbGridControl::RowRemoved(tools::Long nRow, tools::Long nNumRows, bool bDoPaint)
 {
     if (!nNumRows)
         return;
@@ -1753,7 +1753,7 @@ void DbGridControl::AdjustRows()
 
     if (nRecordCount != GetRowCount())
     {
-        long nDelta = GetRowCount() - static_cast<long>(nRecordCount);
+        tools::Long nDelta = GetRowCount() - static_cast<tools::Long>(nRecordCount);
         if (nDelta > 0) // too many
         {
             RowRemoved(GetRowCount() - nDelta, nDelta, false);
@@ -1786,7 +1786,7 @@ void DbGridControl::AdjustRows()
     m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
-svt::EditBrowseBox::RowStatus DbGridControl::GetRowStatus(long nRow) const
+svt::EditBrowseBox::RowStatus DbGridControl::GetRowStatus(tools::Long nRow) const
 {
     if (IsFilterRow(nRow))
         return EditBrowseBox::FILTER;
@@ -1829,7 +1829,7 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
     }
 }
 
-bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
+bool DbGridControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol)
 {
 
     DeactivateCell( false );
@@ -1846,7 +1846,7 @@ bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return EditBrowseBox::CursorMoving( nNewRow, nNewCol );
 }
 
-bool DbGridControl::SetCurrent(long nNewRow)
+bool DbGridControl::SetCurrent(tools::Long nNewRow)
 {
     // Each movement of the datacursor must start with BeginCursorAction and end with
     // EndCursorAction to block all notifications during the movement
@@ -1899,7 +1899,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                 m_xDataRow->SetState(m_pDataCursor.get(), false);
                 m_xCurrentRow = m_xDataRow;
 
-                long nPaintPos = -1;
+                tools::Long nPaintPos = -1;
                 // do we have to repaint the last regular row in case of setting defaults or autovalues
                 if (m_nCurrentPos >= 0 && m_nCurrentPos >= (GetRowCount() - 2))
                     nPaintPos = m_nCurrentPos;
@@ -2101,7 +2101,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     return m_nSeekPos;
 }
 
-bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
+bool DbGridControl::SeekCursor(tools::Long nRow, bool bAbsolute)
 {
     // position SeekCursor onto the data cursor, no data transmission
 
@@ -2135,7 +2135,7 @@ bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
     else
     {
         bool bSuccess = false;
-        long nSteps = 0;
+        tools::Long nSteps = 0;
         try
         {
             if ( m_pSeekCursor->rowDeleted() )
@@ -2267,7 +2267,7 @@ void DbGridControl::MoveToLast()
 
 void DbGridControl::MoveToPrev()
 {
-    long nNewRow = std::max(GetCurRow() - 1, 0L);
+    tools::Long nNewRow = std::max(GetCurRow() - 1, 0L);
     if (GetCurRow() != nNewRow)
         MoveToPosition(nNewRow);
 }
@@ -2280,7 +2280,7 @@ void DbGridControl::MoveToNext()
     if (m_nTotalCount > 0)
     {
         // move the data cursor to the right position
-        long nNewRow = std::min(GetRowCount() - 1, GetCurRow() + 1);
+        tools::Long nNewRow = std::min(GetRowCount() - 1, GetCurRow() + 1);
         if (GetCurRow() != nNewRow)
             MoveToPosition(nNewRow);
     }
@@ -2319,7 +2319,7 @@ void DbGridControl::MoveToPosition(sal_uInt32 nPos)
     if (!m_pSeekCursor)
         return;
 
-    if (m_nTotalCount < 0 && static_cast<long>(nPos) >= GetRowCount())
+    if (m_nTotalCount < 0 && static_cast<tools::Long>(nPos) >= GetRowCount())
     {
         try
         {
@@ -2366,7 +2366,7 @@ void DbGridControl::AppendNew()
         }
     }
 
-    long nNewRow = m_nTotalCount + 1;
+    tools::Long nNewRow = m_nTotalCount + 1;
     if (nNewRow > 0 && GetCurRow() != nNewRow)
         MoveToPosition(nNewRow - 1);
 }
@@ -2432,7 +2432,7 @@ void DbGridControl::SetFilterMode(bool bMode)
         setDataSource(Reference< XRowSet > ());
 }
 
-OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
+OUString DbGridControl::GetCellText(tools::Long _nRow, sal_uInt16 _nColId) const
 {
     size_t Location = GetModelColumnPos( _nColId );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ].get() : nullptr;
@@ -2451,7 +2451,7 @@ OUString DbGridControl::GetCurrentRowCellText(DbGridColumn const * pColumn,const
     return aText;
 }
 
-sal_uInt32 DbGridControl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
+sal_uInt32 DbGridControl::GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId)
 {
     if (SeekRow(nRow))
     {
@@ -2555,7 +2555,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         return;
 
     sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(rPosPixel.X()));
-    long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
+    tools::Long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
     if (nColId != HandleColumnId && nRow >= 0)
     {
         if (GetDataWindow().IsMouseCaptured())
@@ -2584,7 +2584,7 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
     OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
 }
 
-void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredPos )
+void DbGridControl::executeRowContextMenu( tools::Long _nRow, const Point& _rPreferredPos )
 {
     VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
@@ -2610,7 +2610,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             {   // context menu requested by keyboard
                 if ( GetSelectRowCount() )
                 {
-                    long nRow = FirstSelectedRow( );
+                    tools::Long nRow = FirstSelectedRow( );
 
                     ::tools::Rectangle aRowRect( GetRowRectPixel( nRow ) );
                     executeRowContextMenu( nRow, aRowRect.LeftCenter() );
@@ -2621,7 +2621,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
 
             sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X()));
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            tools::Long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if (nColId == HandleColumnId)
             {
@@ -2661,7 +2661,7 @@ void DbGridControl::DeleteSelectedRows()
         return;
 }
 
-CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId)
+CellController* DbGridControl::GetController(tools::Long /*nRow*/, sal_uInt16 nColumnId)
 {
     if (!IsValid(m_xCurrentRow) || !IsEnabled())
         return nullptr;
@@ -2854,7 +2854,7 @@ void DbGridControl::resetCurrentRow()
     RowModified(GetCurRow()); // will update the current controller if affected
 }
 
-void DbGridControl::RowModified( long nRow )
+void DbGridControl::RowModified( tools::Long nRow )
 {
     if (nRow == m_nCurrentPos && IsEditing())
     {
@@ -2875,7 +2875,7 @@ bool DbGridControl::IsCurrentAppending() const
     return m_xCurrentRow.is() && m_xCurrentRow->IsNew();
 }
 
-bool DbGridControl::IsInsertionRow(long nRow) const
+bool DbGridControl::IsInsertionRow(tools::Long nRow) const
 {
     return (m_nOptions & DbGridControlOptions::Insert) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
@@ -3071,7 +3071,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
 {
     if (rEvt.GetKeyCode().GetFunction() == KeyFuncType::COPY)
     {
-        long nRow = GetCurRow();
+        tools::Long nRow = GetCurRow();
         sal_uInt16 nColId = GetCurColumnId();
         if (nRow >= 0 && nRow < GetRowCount() && nColId < ColCount())
         {
@@ -3094,7 +3094,7 @@ void DbGridControl::HideColumn(sal_uInt16 nId)
         ? GetColumnIdFromViewPos(nPos-1)    // last col is to be removed -> take the previous
         : GetColumnIdFromViewPos(nPos+1);   // take the next
 
-    long lCurrentWidth = GetColumnWidth(nId);
+    tools::Long lCurrentWidth = GetColumnWidth(nId);
     EditBrowseBox::RemoveColumn(nId);
         // don't use my own RemoveColumn, this would remove it from m_aColumns, too
 

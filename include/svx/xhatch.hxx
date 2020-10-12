@@ -22,6 +22,7 @@
 
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
+#include <tools/long.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/HatchStyle.hpp>
 
@@ -32,24 +33,24 @@ class SVXCORE_DLLPUBLIC XHatch final
 {
     css::drawing::HatchStyle     eStyle;
     Color           aColor;
-    long            nDistance;
+    tools::Long     nDistance;
     Degree10        nAngle;
 
 public:
                     XHatch() : eStyle(css::drawing::HatchStyle_SINGLE), nDistance(0), nAngle(0) {}
                     XHatch(const Color& rCol, css::drawing::HatchStyle eStyle = css::drawing::HatchStyle_SINGLE,
-                           long nDistance = 20, Degree10 nAngle = Degree10(0));
+                           tools::Long nDistance = 20, Degree10 nAngle = Degree10(0));
 
     bool operator==(const XHatch& rHatch) const;
 
     void            SetHatchStyle(css::drawing::HatchStyle eNewStyle) { eStyle = eNewStyle; }
     void            SetColor(const Color& rColor) { aColor = rColor; }
-    void            SetDistance(long nNewDistance) { nDistance = nNewDistance; }
+    void            SetDistance(tools::Long nNewDistance) { nDistance = nNewDistance; }
     void            SetAngle(Degree10 nNewAngle) { nAngle = nNewAngle; }
 
     css::drawing::HatchStyle     GetHatchStyle() const { return eStyle; }
     const Color&    GetColor() const { return aColor; }
-    long            GetDistance() const { return nDistance; }
+    tools::Long     GetDistance() const { return nDistance; }
     Degree10        GetAngle() const { return nAngle; }
 };
 

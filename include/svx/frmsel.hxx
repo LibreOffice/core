@@ -121,7 +121,7 @@ public:
     /** Returns true, if all visible frame borders have equal widths.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the width in the passed parameter. */
-    bool                GetVisibleWidth( long& rnWidth, SvxBorderLineStyle& rnStyle ) const;
+    bool                GetVisibleWidth( tools::Long& rnWidth, SvxBorderLineStyle& rnStyle ) const;
     /** Returns true, if all visible frame borders have equal color.
         @descr  Ignores hidden and "don't care" frame borders. On success,
         returns the color in the passed parameter. */
@@ -149,7 +149,7 @@ public:
     void                SelectAllVisibleBorders();
 
     /** Sets the passed line widths to all selected frame borders (in twips). */
-    void                SetStyleToSelection( long nWidth, SvxBorderLineStyle nStyle );
+    void                SetStyleToSelection( tools::Long nWidth, SvxBorderLineStyle nStyle );
     /** Sets the passed color to all selected frame borders. */
     void                SetColorToSelection( const Color& rColor );
 

@@ -459,7 +459,7 @@ void SdrTextObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
-void SdrTextObj::NbcSetEckenradius(long nRad)
+void SdrTextObj::NbcSetEckenradius(tools::Long nRad)
 {
     SetObjectItem(makeSdrEckenradiusItem(nRad));
 }
@@ -491,8 +491,8 @@ void SdrTextObj::AdaptTextMinSize()
     if(bW)
     {
         // Set minimum width.
-        const long nDist = GetTextLeftDistance() + GetTextRightDistance();
-        const long nW = std::max<long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
+        const tools::Long nDist = GetTextLeftDistance() + GetTextRightDistance();
+        const tools::Long nW = std::max<long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
 
         aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
@@ -506,8 +506,8 @@ void SdrTextObj::AdaptTextMinSize()
     if(bH)
     {
         // Set Minimum height.
-        const long nDist = GetTextUpperDistance() + GetTextLowerDistance();
-        const long nH = std::max<long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
+        const tools::Long nDist = GetTextUpperDistance() + GetTextLowerDistance();
+        const tools::Long nH = std::max<long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
 
         aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 
@@ -585,10 +585,10 @@ void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 
 void SdrTextObj::TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const
 {
-    long nLeftDist=GetTextLeftDistance();
-    long nRightDist=GetTextRightDistance();
-    long nUpperDist=GetTextUpperDistance();
-    long nLowerDist=GetTextLowerDistance();
+    tools::Long nLeftDist=GetTextLeftDistance();
+    tools::Long nRightDist=GetTextRightDistance();
+    tools::Long nUpperDist=GetTextUpperDistance();
+    tools::Long nLowerDist=GetTextLowerDistance();
     tools::Rectangle aAnkRect(maRect); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
@@ -643,12 +643,12 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
     if (!bFitToSize && !bContourFrame)
     {
-        long nAnkWdt=aAnkRect.GetWidth();
-        long nAnkHgt=aAnkRect.GetHeight();
+        tools::Long nAnkWdt=aAnkRect.GetWidth();
+        tools::Long nAnkHgt=aAnkRect.GetHeight();
         if (bFrame)
         {
-            long nWdt=nAnkWdt;
-            long nHgt=nAnkHgt;
+            tools::Long nWdt=nAnkWdt;
+            tools::Long nHgt=nAnkHgt;
 
             bool bInEditMode = IsInEditMode();
 
@@ -762,7 +762,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
 
     if (eHAdj==SDRTEXTHORZADJUST_CENTER || eHAdj==SDRTEXTHORZADJUST_RIGHT)
     {
-        long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
+        tools::Long nFreeWdt=aAnkRect.GetWidth()-aTextSiz.Width();
         if (eHAdj==SDRTEXTHORZADJUST_CENTER)
             aTextPos.AdjustX(nFreeWdt/2 );
         if (eHAdj==SDRTEXTHORZADJUST_RIGHT)
@@ -770,7 +770,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRe
     }
     if (eVAdj==SDRTEXTVERTADJUST_CENTER || eVAdj==SDRTEXTVERTADJUST_BOTTOM)
     {
-        long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
+        tools::Long nFreeHgt=aAnkRect.GetHeight()-aTextSiz.Height();
         if (eVAdj==SDRTEXTVERTADJUST_CENTER)
             aTextPos.AdjustY(nFreeHgt/2 );
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
@@ -852,21 +852,21 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     }
     unsigned nLoopCount=0;
     bool bNoMoreLoop = false;
-    long nXDiff0=0x7FFFFFFF;
-    long nWantWdt=rShapeSize.Width();
-    long nIsWdt=rTextSize.Width();
+    tools::Long nXDiff0=0x7FFFFFFF;
+    tools::Long nWantWdt=rShapeSize.Width();
+    tools::Long nIsWdt=rTextSize.Width();
     if (nIsWdt==0) nIsWdt=1;
 
-    long nWantHgt=rShapeSize.Height();
-    long nIsHgt=rTextSize.Height();
+    tools::Long nWantHgt=rShapeSize.Height();
+    tools::Long nIsHgt=rTextSize.Height();
     if (nIsHgt==0) nIsHgt=1;
 
-    long nXTolPl=nWantWdt/100; // tolerance: +1%
-    long nXTolMi=nWantWdt/25;  // tolerance: -4%
-    long nXCorr =nWantWdt/20;  // correction scale: 5%
+    tools::Long nXTolPl=nWantWdt/100; // tolerance: +1%
+    tools::Long nXTolMi=nWantWdt/25;  // tolerance: -4%
+    tools::Long nXCorr =nWantWdt/20;  // correction scale: 5%
 
-    long nX=(nWantWdt*100) /nIsWdt; // calculate X stretching
-    long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
+    tools::Long nX=(nWantWdt*100) /nIsWdt; // calculate X stretching
+    tools::Long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
     bool bChkX = true;
     if (bNoStretching) { // might only be possible proportionally
         if (nX>nY) { nX=nY; bChkX=false; }
@@ -899,14 +899,14 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         rOutliner.SetGlobalCharStretching(static_cast<sal_uInt16>(nX),static_cast<sal_uInt16>(nY));
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
-        long nXDiff=aSiz.Width()-nWantWdt;
+        tools::Long nXDiff=aSiz.Width()-nWantWdt;
         rFitXCorrection=Fraction(nWantWdt,aSiz.Width());
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0) {
             bNoMoreLoop = true;
         } else {
             // correct stretching factors
-            long nMul=nWantWdt;
-            long nDiv=aSiz.Width();
+            tools::Long nMul=nWantWdt;
+            tools::Long nDiv=aSiz.Width();
             if (std::abs(nXDiff)<=2*nXCorr) {
                 if (nMul>nDiv) nDiv+=(nMul-nDiv)/2; // but only add half of what we calculated,
                 else nMul+=(nDiv-nMul)/2;           // because the EditEngine calculates wrongly later on
@@ -1704,27 +1704,27 @@ bool SdrTextObj::IsReallyEdited() const
 
 // moved inlines here form hxx
 
-long SdrTextObj::GetEckenradius() const
+tools::Long SdrTextObj::GetEckenradius() const
 {
     return GetObjectItemSet().Get(SDRATTR_ECKENRADIUS).GetValue();
 }
 
-long SdrTextObj::GetMinTextFrameHeight() const
+tools::Long SdrTextObj::GetMinTextFrameHeight() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEHEIGHT).GetValue();
 }
 
-long SdrTextObj::GetMaxTextFrameHeight() const
+tools::Long SdrTextObj::GetMaxTextFrameHeight() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEHEIGHT).GetValue();
 }
 
-long SdrTextObj::GetMinTextFrameWidth() const
+tools::Long SdrTextObj::GetMinTextFrameWidth() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEWIDTH).GetValue();
 }
 
-long SdrTextObj::GetMaxTextFrameWidth() const
+tools::Long SdrTextObj::GetMaxTextFrameWidth() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEWIDTH).GetValue();
 }
@@ -1747,22 +1747,22 @@ bool SdrTextObj::IsContourTextFrame() const
         && GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME).GetValue();
 }
 
-long SdrTextObj::GetTextLeftDistance() const
+tools::Long SdrTextObj::GetTextLeftDistance() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_LEFTDIST).GetValue();
 }
 
-long SdrTextObj::GetTextRightDistance() const
+tools::Long SdrTextObj::GetTextRightDistance() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_RIGHTDIST).GetValue();
 }
 
-long SdrTextObj::GetTextUpperDistance() const
+tools::Long SdrTextObj::GetTextUpperDistance() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_UPPERDIST).GetValue();
 }
 
-long SdrTextObj::GetTextLowerDistance() const
+tools::Long SdrTextObj::GetTextLowerDistance() const
 {
     return GetObjectItemSet().Get(SDRATTR_TEXT_LOWERDIST).GetValue();
 }

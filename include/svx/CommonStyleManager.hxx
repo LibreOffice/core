@@ -31,7 +31,7 @@ public:
 
     virtual std::unique_ptr<sfx2::StylePreviewRenderer> CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
-                                            long nMaxHeight) override;
+                                            tools::Long nMaxHeight) override;
 };
 
 } // end namespace svx
