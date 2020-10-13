@@ -434,9 +434,9 @@ void ScDrawView::MarkListHasChanged()
         for (size_t i=0; i<nMarkCount; ++i)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-            if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
+            if ( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObj) )
             {
-                const SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
+                const SdrObjList *pLst = pObjGroup->GetSubList();
                 const size_t nListCount = pLst->GetObjCount();
                 if ( nListCount == 0 )
                 {
@@ -923,9 +923,9 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
 void ScDrawView::SyncForGrid( SdrObject* pObj )
 {
     // process members of a group shape separately
-    if ( dynamic_cast<const SdrObjGroup*>( pObj) !=  nullptr )
+    if ( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObj) )
     {
-        SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
+        SdrObjList *pLst = pObjGroup->GetSubList();
         for ( size_t i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
             SyncForGrid( pLst->GetObj( i ) );
     }

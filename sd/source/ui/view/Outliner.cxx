@@ -355,8 +355,8 @@ bool SdOutliner::SpellNextDocument()
     }
     else
     {
-        if( dynamic_cast< const sd::OutlineView *>( mpView ) !=  nullptr)
-            static_cast<sd::OutlineView*>(mpView)->PrepareClose();
+        if( auto pOutlineView = dynamic_cast<sd::OutlineView *>( mpView ))
+            pOutlineView->PrepareClose();
         mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);

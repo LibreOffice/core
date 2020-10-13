@@ -775,10 +775,10 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 nRet = nDropAction;
                             }
                         }
-                        else if( dynamic_cast< const DrawViewShell *>( mpViewSh ) !=  nullptr )
+                        else if( auto pDrawViewShell = dynamic_cast< DrawViewShell *>( mpViewSh ) )
                         {
                             // insert as normal URL button
-                            static_cast<DrawViewShell*>( mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
+                            pDrawViewShell->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
                             nRet = nDropAction;
                         }
                     }

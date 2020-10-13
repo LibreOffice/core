@@ -2737,13 +2737,11 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
         }
     }
-    else if ( dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
+    else if ( auto pUndoHint = dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
     {
-        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
-
         do
         {
-            if (rUndoHint.GetObjectId() != m_nObjectId)
+            if (pUndoHint->GetObjectId() != m_nObjectId)
                 break;
 
             // The hint object provides the old ranges.  Restore the old state
@@ -2755,7 +2753,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 break;
             }
 
-            const ScRangeList& rRanges = rUndoHint.GetRanges();
+            const ScRangeList& rRanges = pUndoHint->GetRanges();
 
             size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())

@@ -1544,19 +1544,17 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
         return;
     }
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
-
         ScDocument& rDoc = pDocShell->GetDocument();
         std::unique_ptr<ScRangeList> pUndoRanges;
         if ( rDoc.HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList( aRanges ));
 
-        if ( aRanges.UpdateReference( rRef.GetMode(), &rDoc, rRef.GetRange(),
-                                    rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
+        if ( aRanges.UpdateReference( pRefHint->GetMode(), &rDoc, pRefHint->GetRange(),
+                                    pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() ) )
         {
-            if (  rRef.GetMode() == URM_INSDEL
+            if (  pRefHint->GetMode() == URM_INSDEL
                && aRanges.size() == 1
                && comphelper::getUnoTunnelImplementation<ScTableSheetObj>(xThis)
                )
@@ -1578,14 +1576,13 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 rDoc.AddUnoRefChange( nObjectId, *pUndoRanges );
         }
     }
-    else if ( dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
+    else if ( auto pUndoHint = dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
     {
-        const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
-        if ( rUndoHint.GetObjectId() == nObjectId )
+        if ( pUndoHint->GetObjectId() == nObjectId )
         {
             // restore ranges from hint
 
-            aRanges = rUndoHint.GetRanges();
+            aRanges = pUndoHint->GetRanges();
 
             RefChanged();
             if ( !aValueListeners.empty() )
@@ -7408,9 +7405,8 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
     for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
-        if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
+        if (auto pTabLink = dynamic_cast<ScTableLink*>( pBase))
         {
-            ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
             if ( aFileString == pTabLink->GetFileName() )
                 pTabLink->Update();                         // include Paint&Undo
 
@@ -8673,11 +8669,10 @@ ScCellsObj::~ScCellsObj()
 
 void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
-        aRanges.UpdateReference( rRef.GetMode(), &pDocShell->GetDocument(), rRef.GetRange(),
-                                        rRef.GetDx(), rRef.GetDy(), rRef.GetDz() );
+        aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
+                                        pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {

@@ -511,10 +511,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                     {
                                         ImpRememberOrigAndClone* pRem = &aConnectorContainer[a];
 
-                                        if(dynamic_cast< const SdrEdgeObj *>( pRem->pClone ) !=  nullptr)
+                                        if(auto pCloneEdge = dynamic_cast<SdrEdgeObj *>( pRem->pClone ))
                                         {
                                             SdrEdgeObj* pOrigEdge = static_cast<SdrEdgeObj*>(pRem->pOrig);
-                                            SdrEdgeObj* pCloneEdge = static_cast<SdrEdgeObj*>(pRem->pClone);
 
                                             // test first connection
                                             SdrObjConnection& rConn0 = pOrigEdge->GetConnection(false);

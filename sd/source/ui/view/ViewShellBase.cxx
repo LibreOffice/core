@@ -234,9 +234,8 @@ ViewShellBase::ViewShellBase (
     _pFrame->GetWindow().SetBackground(Application::GetSettings().GetStyleSettings().GetLightColor());
 
     // Set up the members in the correct order.
-    if (nullptr != dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
-        mpDocShell = static_cast<DrawDocShell*>(
-            GetViewFrame()->GetObjectShell());
+    if (auto pDrawDocShell = dynamic_cast< DrawDocShell *>( GetViewFrame()->GetObjectShell() ))
+        mpDocShell = pDrawDocShell;
     if (mpDocShell != nullptr)
         mpDocument = mpDocShell->GetDoc();
     mpImpl->mpViewShellManager = std::make_shared<ViewShellManager>(*this);

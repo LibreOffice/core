@@ -93,10 +93,9 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( auto pRefreshHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == ScLinkRefType::SHEET && rLH.GetUrl() == aFileName )
+        if ( pRefreshHint->GetLinkType() == ScLinkRefType::SHEET && pRefreshHint->GetUrl() == aFileName )
             Refreshed_Impl();
     }
     else
@@ -115,9 +114,8 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
         for (size_t i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
-            if (dynamic_cast<const ScTableLink*>( pBase) !=  nullptr)
+            if (auto pTabLink = dynamic_cast<ScTableLink*>( pBase))
             {
-                ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
                 if ( pTabLink->GetFileName() == aFileName )
                     return pTabLink;
             }
@@ -560,10 +558,10 @@ static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
         for (size_t i=0; i<nTotalCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = pLinkManager->GetLinks()[i].get();
-            if (dynamic_cast<const ScAreaLink*>( pBase) !=  nullptr)
+            if (auto pAreaLink = dynamic_cast<ScAreaLink*>( pBase))
             {
                 if ( nAreaCount == nPos )
-                    return static_cast<ScAreaLink*>(pBase);
+                    return pAreaLink;
                 ++nAreaCount;
             }
         }
@@ -592,14 +590,13 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( auto pRefreshedHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == ScLinkRefType::AREA )
+        if ( pRefreshedHint->GetLinkType() == ScLinkRefType::AREA )
         {
             //  get this link to compare dest position
             ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
-            if ( pLink && pLink->GetDestArea().aStart == rLH.GetDestPos() )
+            if ( pLink && pLink->GetDestArea().aStart == pRefreshedHint->GetDestPos() )
                 Refreshed_Impl();
         }
     }
@@ -1014,13 +1011,12 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( auto pRefreshedHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == ScLinkRefType::DDE &&
-             rLH.GetDdeAppl()  == aAppl &&
-             rLH.GetDdeTopic() == aTopic &&
-             rLH.GetDdeItem()  == aItem )       //! mode is ignored
+        if ( pRefreshedHint->GetLinkType() == ScLinkRefType::DDE &&
+             pRefreshedHint->GetDdeAppl()  == aAppl &&
+             pRefreshedHint->GetDdeTopic() == aTopic &&
+             pRefreshedHint->GetDdeItem()  == aItem )       //! mode is ignored
             Refreshed_Impl();
     }
     else

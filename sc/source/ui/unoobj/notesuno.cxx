@@ -75,13 +75,7 @@ ScAnnotationObj::~ScAnnotationObj()
 
 void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
-    {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
-
-        //! Ref-Update
-    }
-    else if ( rHint.GetId() == SfxHintId::Dying )
+    if ( rHint.GetId() == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // became invalid
     }

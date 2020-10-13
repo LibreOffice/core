@@ -655,9 +655,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
 
     uno::Any anyAttribute;
     OUStringBuffer sValue;
-    if (nullptr != dynamic_cast<const ::sd::DrawViewShell* > (mpViewShell))
+    if (auto pDrViewSh = dynamic_cast<::sd::DrawViewShell* > (mpViewShell))
     {
-        ::sd::DrawViewShell* pDrViewSh = static_cast< ::sd::DrawViewShell*>(mpViewShell);
         OUString sDisplay;
         OUString sName = "page-name:";
         // MT IA2: Not used...
@@ -708,9 +707,8 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             sValue.append(";");
         }
     }
-    if (dynamic_cast<const ::sd::PresentationViewShell* >(mpViewShell) !=  nullptr )
+    if (auto pPresViewSh = dynamic_cast<::sd::PresentationViewShell* >(mpViewShell))
     {
-        ::sd::PresentationViewShell* pPresViewSh = static_cast< ::sd::PresentationViewShell*>(mpViewShell);
         SdPage* pCurrPge = pPresViewSh->getCurrentPage();
         SdDrawDocument* pDoc = pPresViewSh->GetDoc();
         SdPage* pNotesPge = pDoc->GetSdPage((pCurrPge->GetPageNum()-1)>>1, PageKind::Notes);

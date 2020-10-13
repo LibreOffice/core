@@ -179,10 +179,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(rKEvt.GetKeyCode().IsMod1())
             {
-                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+                if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
                 {
-                    DrawViewShell* pDrawViewShell =
-                        static_cast<DrawViewShell*>(mpViewShell);
                     SdPage* pActualPage = pDrawViewShell->GetActualPage();
                     SdrTextObj* pCandidate = nullptr;
 
@@ -298,9 +296,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // increase zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
-                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
-                    static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(false);
+                if( auto pViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                    pViewShell->SetZoomOnPage(false);
 
                 bReturn = true;
             }
@@ -314,9 +311,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 // decrease zoom
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
-                if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
-                    static_cast<DrawViewShell*>(mpViewShell)
-                        ->SetZoomOnPage(false);
+                if( auto pViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
+                    pViewShell->SetZoomOnPage(false);
 
                 bReturn = true;
             }

@@ -328,9 +328,8 @@ void SwFlyFrame::DeleteCnt()
             {
                 // consider 'virtual' drawing objects
                 SdrObject* pObj = pAnchoredObj->DrawObj();
-                if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr )
+                if ( auto pDrawVirtObj = dynamic_cast<SwDrawVirtObj*>( pObj) )
                 {
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
                     pDrawVirtObj->RemoveFromWriterLayout();
                     pDrawVirtObj->RemoveFromDrawingPage();
                 }
@@ -2331,9 +2330,8 @@ void SwFrame::InvalidateObjs( const bool _bNoInvaOfAsCharAnchoredObjs )
             pAnchoredObj->SetClearedEnvironment( false );
         }
         // distinguish between writer fly frames and drawing objects
-        if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
         {
-            SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
             pFly->Invalidate_();
             pFly->InvalidatePos_();
         }
@@ -2366,10 +2364,8 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         // for at-character/as-character anchored objects the anchor character
         // text frame is taken.
         const SwFrame* pAnchorFrame = pObj->GetAnchorFrameContainingAnchPos();
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
-
             if ( pFly->getFrameArea().Left() == FAR_AWAY )
                 continue;
 
@@ -2865,9 +2861,8 @@ SwTwips SwFlyFrame::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) !=  nullptr )
+                if ( auto pFly = dynamic_cast<SwFlyFrame*>( pAnchoredObj) )
                 {
-                    SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     // consider only Writer fly frames, which follow the text flow.
                     if ( pFly->IsFlyLayFrame() &&
                         pFly->getFrameArea().Top() != FAR_AWAY &&

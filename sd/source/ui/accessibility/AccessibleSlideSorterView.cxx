@@ -822,10 +822,9 @@ void AccessibleSlideSorterView::Implementation::Notify (
                 break;
         }
     }
-    else if (dynamic_cast<const sd::ViewShellHint*>(&rHint))
+    else if (auto pViewShellHint = dynamic_cast<const sd::ViewShellHint*>(&rHint))
     {
-        const sd::ViewShellHint& rViewShellHint = static_cast<const sd::ViewShellHint&>(rHint);
-        switch (rViewShellHint.GetHintId())
+        switch (pViewShellHint->GetHintId())
         {
             case sd::ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:
                 mbModelChangeLocked = true;
