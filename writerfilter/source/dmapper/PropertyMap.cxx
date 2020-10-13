@@ -1133,6 +1133,7 @@ bool SectionPropertyMap::FloatingTableConversion( const DomainMapper_Impl& rDM_I
 
     // If there is an explicit section break right after a table, then there
     // will be no wrapping anyway.
+
     if (rDM_Impl.m_bConvertedTable && !rDM_Impl.GetIsLastSectionGroup() && rInfo.m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage)
         return false;
 
@@ -1892,8 +1893,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
     }
     m_xRelativeWidthShapes.clear();
-
-    rDM_Impl.SetIsLastSectionGroup( false );
 
     if ( !rDM_Impl.IsInFootOrEndnote() )
     {
