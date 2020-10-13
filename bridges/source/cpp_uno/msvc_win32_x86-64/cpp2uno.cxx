@@ -44,7 +44,12 @@ extern "C" typelib_TypeClass cpp_vtable_call(sal_Int64 nOffsetAndIndex, void ** 
 }
 
 int const codeSnippetSize = 48;
+
+namespace {
+
 typedef enum { REGPARAM_INT, REGPARAM_FLT } RegParamKind;
+
+}
 
 extern "C" char privateSnippetExecutor;
 
