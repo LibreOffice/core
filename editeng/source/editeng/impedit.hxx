@@ -392,6 +392,7 @@ public:
 
     void ScrollStateChange();
 
+    OutputDevice&   GetOutputDevice() const;
     vcl::Window*    GetWindow() const           { return pOutWin; }
 
     void            SetSelectionMode( EESelectionMode eMode );
