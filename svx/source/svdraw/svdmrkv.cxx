@@ -2110,9 +2110,9 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
                 // adjustment hit point for virtual objects
                 Point aPnt( rPnt );
 
-                if ( dynamic_cast<const SdrVirtObj*>( pObj) !=  nullptr )
+                if ( auto pVirtObj = dynamic_cast<const SdrVirtObj*>( pObj) )
                 {
-                    Point aOffset = static_cast<SdrVirtObj*>(pObj)->GetOffset();
+                    Point aOffset = pVirtObj->GetOffset();
                     aPnt.Move( -aOffset.X(), -aOffset.Y() );
                 }
 

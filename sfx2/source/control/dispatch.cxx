@@ -1964,8 +1964,8 @@ SfxModule* SfxDispatcher::GetModule() const
         SfxShell *pSh = GetShell(nShell);
         if ( pSh == nullptr )
             return nullptr;
-        if ( dynamic_cast< const SfxModule *>( pSh ) !=  nullptr )
-            return static_cast<SfxModule*>(pSh);
+        if ( auto pModule = dynamic_cast<SfxModule *>( pSh ) )
+            return pModule;
     }
 }
 

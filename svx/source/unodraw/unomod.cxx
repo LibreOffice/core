@@ -604,8 +604,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
     {
         SdrPage* pPage;
 
-        if( dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
-            pPage = new FmFormPage(*static_cast<FmFormModel*>(mrModel.mpDoc));
+        if( auto pFormModel = dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
+            pPage = new FmFormPage(*pFormModel);
         else
             pPage = new SdrPage(*mrModel.mpDoc);
 

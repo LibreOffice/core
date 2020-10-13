@@ -242,11 +242,11 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     if (bRet)
     {
         SetRectsDirty();
-        if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
-            static_cast<SdrRectObj*>(this)->SetXPolyDirty();
+        if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) { // this is a hack
+            pRectObj->SetXPolyDirty();
         }
-        if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
-            static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
+        if (auto pCaptionObj = dynamic_cast<SdrCaptionObj *>(this)) { // this is a hack
+            pCaptionObj->ImpRecalcTail();
         }
     }
     return bRet;
@@ -260,11 +260,11 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight()
         tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
         maRect = aNewRect;
         SetRectsDirty();
-        if (dynamic_cast<const SdrRectObj *>(this) != nullptr) { // this is a hack
-            static_cast<SdrRectObj*>(this)->SetXPolyDirty();
+        if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) { // this is a hack
+            pRectObj->SetXPolyDirty();
         }
-        if (dynamic_cast<const SdrCaptionObj *>(this) != nullptr) { // this is a hack
-            static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
+        if (auto pCaptionObj = dynamic_cast<SdrCaptionObj *>(this)) { // this is a hack
+            pCaptionObj->ImpRecalcTail();
         }
 
         // to not slow down EditView visualization on Overlay (see

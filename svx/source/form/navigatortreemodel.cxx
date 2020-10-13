@@ -379,8 +379,8 @@ namespace svxform
         }
 
         // now real deletion of data form model
-        if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
-            RemoveForm(static_cast<FmFormData*>(pEntry));
+        if (auto pFormData = dynamic_cast<FmFormData*>( pEntry))
+            RemoveForm(pFormData);
         else
             RemoveFormComponent(static_cast<FmControlData*>(pEntry));
 
@@ -451,10 +451,10 @@ namespace svxform
 
 
             // Child is form -> recursive call
-            if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
-                RemoveForm( static_cast<FmFormData*>(pEntryData));
-            else if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
-                RemoveFormComponent(static_cast<FmControlData*>(pEntryData));
+            if( auto pChildFormData = dynamic_cast<FmFormData*>( pEntryData) )
+                RemoveForm(pChildFormData);
+            else if( auto pChildControlData = dynamic_cast<FmControlData*>( pEntryData) )
+                RemoveFormComponent(pChildControlData);
         }
 
 
@@ -594,9 +594,10 @@ namespace svxform
     {
         FmEntryData* pData = FindData(xOld, GetRootList());
         assert(dynamic_cast<const FmControlData*>( pData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
-        if (!dynamic_cast<const FmControlData*>( pData))
+        auto pControlData = dynamic_cast<FmControlData*>( pData);
+        if (!pControlData)
             return;
-        static_cast<FmControlData*>(pData)->ModelReplaced(xNew);
+        pControlData->ModelReplaced(xNew);
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );
@@ -737,9 +738,9 @@ namespace svxform
 
     bool NavigatorTreeModel::InsertFormComponent(FmNavRequestSelectHint& rHint, SdrObject* pObject)
     {
-        if ( dynamic_cast<const SdrObjGroup*>( pObject) !=  nullptr )
+        if ( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObject) )
         {   // descend recursively
-            const SdrObjList *pChildren = static_cast<SdrObjGroup*>(pObject)->GetSubList();
+            const SdrObjList *pChildren = pObjGroup->GetSubList();
             for ( size_t i=0; i<pChildren->GetObjCount(); ++i )
             {
                 SdrObject* pCurrent = pChildren->GetObj(i);
@@ -879,15 +880,13 @@ namespace svxform
         // get PropertySet
         Reference< XFormComponent >  xFormComponent;
 
-        if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
+        if( auto pFormData = dynamic_cast<FmFormData*>( pEntryData))
         {
-            FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
             xFormComponent = pFormData->GetFormIface();
         }
 
-        if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
+        if( auto pControlData = dynamic_cast<FmControlData*>( pEntryData) )
         {
-            FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
             xFormComponent = pControlData->GetFormComponent();
         }
 

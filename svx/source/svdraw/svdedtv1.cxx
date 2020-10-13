@@ -1195,10 +1195,8 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             }
         }
 
-        if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+        if(auto pTextObj = dynamic_cast<SdrTextObj*>( pObj))
         {
-            SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pObj);
-
             if(!aCharWhichIds.empty())
             {
                 tools::Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();

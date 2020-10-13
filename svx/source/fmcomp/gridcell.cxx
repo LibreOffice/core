@@ -502,8 +502,8 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             rDev.DrawText(rRect, OUString(OBJECTTEXT), nStyle);
         }
     }
-    else if ( dynamic_cast<const FmXFilterCell*>( m_pCell.get() ) !=  nullptr )
-        static_cast< FmXFilterCell* >( m_pCell.get() )->PaintCell( rDev, rRect );
+    else if ( auto pFilterCell = dynamic_cast<FmXFilterCell*>( m_pCell.get() ) )
+        pFilterCell->PaintCell( rDev, rRect );
 }
 
 

@@ -198,8 +198,8 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     maRect = aRect1; // for ObjName
     SetBoundRectDirty();
     bSnapRectDirty=true;
-    if (dynamic_cast<const SdrRectObj *>(this) != nullptr) {
-        static_cast<SdrRectObj*>(this)->SetXPolyDirty();
+    if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) {
+        pRectObj->SetXPolyDirty();
     }
     return true;
 }
@@ -212,8 +212,8 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     AdaptTextMinSize();
 
     SetRectsDirty();
-    if (dynamic_cast<const SdrRectObj *>(this) != nullptr) {
-        static_cast<SdrRectObj*>(this)->SetXPolyDirty();
+    if (auto pRectObj = dynamic_cast<SdrRectObj *>(this)) {
+        pRectObj->SetXPolyDirty();
     }
     return (eCmd==SdrCreateCmd::ForceEnd || rStat.GetPointCount()>=2);
 }
