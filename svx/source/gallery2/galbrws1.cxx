@@ -38,7 +38,8 @@
 #include <svx/strings.hrc>
 #include <algorithm>
 #include <svx/dialmgr.hxx>
-
+#include <comphelper/dispatchcommand.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/svxdlg.hxx>
 #include <memory>
 #include <bitmaps.hlst>
@@ -52,6 +53,7 @@ GalleryBrowser1::GalleryBrowser1(
     :
     mxNewTheme(rBuilder.weld_button("insert")),
     mxThemes(rBuilder.weld_tree_view("themelist")),
+    mxMoreGalleries(rBuilder.weld_button("btnMoreGalleries")),
     mpGallery             ( pGallery ),
     mpExchangeData        ( new ExchangeData ),
     aImgNormal            ( RID_SVXBMP_THEME_NORMAL ),
@@ -68,6 +70,9 @@ GalleryBrowser1::GalleryBrowser1(
     mxThemes->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl));
     mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
+
+    mxMoreGalleries->set_from_icon_name("cmd/sc_additionsdialog.png");
+    mxMoreGalleries->connect_clicked(LINK(this, GalleryBrowser1, OnMoreGalleriesClick));
 
     // disable creation of new themes if a writable directory is not available
     if( mpGallery->GetUserURL().GetProtocol() == INetProtocol::NotValid )
@@ -365,6 +370,14 @@ void GalleryBrowser1::Notify( SfxBroadcaster&, const SfxHint& rHint )
         default:
         break;
     }
+}
+
+IMPL_STATIC_LINK_NOARG( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void)
+{
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "AdditionsTag";
+    aArgs[0].Value <<= OUString("Gallery");
+    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
 IMPL_LINK(GalleryBrowser1, KeyInputHdl, const KeyEvent&, rKEvt, bool)
