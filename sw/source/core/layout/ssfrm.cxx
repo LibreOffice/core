@@ -265,8 +265,8 @@ void SwFrame::CheckDirChange()
     for ( size_t i = 0; i < nCnt; ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-        if( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
-            static_cast<SwFlyFrame*>(pAnchoredObj)->CheckDirChange();
+        if( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
+            pFlyFrame->CheckDirChange();
         else
         {
             // OD 2004-04-06 #i26791# - direct object
@@ -349,9 +349,9 @@ void SwFrame::DestroyImpl()
     for (size_t i = m_pDrawObjs->size(); i; )
     {
         SwAnchoredObject* pAnchoredObj = (*m_pDrawObjs)[--i];
-        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+        if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
-            SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
+            SwFrame::DestroyFrame(pFlyFrame);
         }
         else
         {
@@ -532,9 +532,9 @@ void SwLayoutFrame::DestroyImpl()
 
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
-            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
             {
-                SwFrame::DestroyFrame(static_cast<SwFlyFrame*>(pAnchoredObj));
+                SwFrame::DestroyFrame(pFlyFrame);
                 assert(!GetDrawObjs() || nCnt > GetDrawObjs()->size());
             }
             else

@@ -866,8 +866,8 @@ const SwSectionFormat* SwSectionFrame::GetEndSectFormat_() const
     const SwSectionFormat *pFormat = m_pSection->GetFormat();
     while( !pFormat->GetEndAtTextEnd().IsAtEnd() )
     {
-        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
-            pFormat = static_cast<const SwSectionFormat*>(pFormat->GetRegisteredIn());
+        if( auto pNewFormat = dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) )
+            pFormat = pNewFormat;
         else
             return nullptr;
     }
@@ -2515,8 +2515,8 @@ bool SwSectionFrame::IsDescendantFrom( const SwSectionFormat* pFormat ) const
     const SwSectionFormat *pMyFormat = m_pSection->GetFormat();
     while( pFormat != pMyFormat )
     {
-        if( dynamic_cast< const SwSectionFormat *>( pMyFormat->GetRegisteredIn()) !=  nullptr )
-            pMyFormat = static_cast<const SwSectionFormat*>(pMyFormat->GetRegisteredIn());
+        if( auto pNewFormat = dynamic_cast< const SwSectionFormat *>( pMyFormat->GetRegisteredIn()) )
+            pMyFormat = pNewFormat;
         else
             return false;
     }
@@ -2532,8 +2532,8 @@ void SwSectionFrame::CalcFootnoteAtEndFlag()
                  FTNEND_ATTXTEND_OWNNUMANDFMT == nVal;
     while( !m_bFootnoteAtEnd && !m_bOwnFootnoteNum )
     {
-        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
-            pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
+        if( auto pNewFormat = dynamic_cast<SwSectionFormat *>( pFormat->GetRegisteredIn()) )
+            pFormat = pNewFormat;
         else
             break;
         nVal = pFormat->GetFootnoteAtTextEnd( false ).GetValue();
@@ -2557,8 +2557,8 @@ void SwSectionFrame::CalcEndAtEndFlag()
     m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();
     while( !m_bEndnAtEnd )
     {
-        if( dynamic_cast< const SwSectionFormat *>( pFormat->GetRegisteredIn()) !=  nullptr )
-            pFormat = static_cast<SwSectionFormat*>(pFormat->GetRegisteredIn());
+        if( auto pNewFormat = dynamic_cast<SwSectionFormat *>( pFormat->GetRegisteredIn()) )
+            pFormat = pNewFormat;
         else
             break;
         m_bEndnAtEnd = pFormat->GetEndAtTextEnd( false ).IsAtEnd();

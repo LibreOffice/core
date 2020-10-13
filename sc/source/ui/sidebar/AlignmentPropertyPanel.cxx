@@ -245,11 +245,9 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_H_ALIGNCELL:
         {
             SvxCellHorJustify meHorAlignState = SvxCellHorJustify::Standard;
-            if(eState >= SfxItemState::DEFAULT && dynamic_cast<const SvxHorJustifyItem*>( pState) )
-            {
-                const SvxHorJustifyItem* pItem = static_cast<const SvxHorJustifyItem*>(pState);
-                meHorAlignState = pItem->GetValue();
-            }
+            if(eState >= SfxItemState::DEFAULT)
+                if (auto pItem = dynamic_cast<const SvxHorJustifyItem*>( pState) )
+                    meHorAlignState = pItem->GetValue();
 
             if( meHorAlignState == SvxCellHorJustify::Repeat )
             {

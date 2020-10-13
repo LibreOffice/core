@@ -163,10 +163,10 @@ void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
             TextFrameIndex const nIndex(MapModelToViewPos(*pPos));
             if (nStart <= nIndex && nIndex < nEnd)
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    RemoveFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
-                    pNew->AppendFly( static_cast<SwFlyFrame*>(pAnchoredObj) );
+                    RemoveFly( pFlyFrame );
+                    pNew->AppendFly( pFlyFrame );
                 }
                 else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
                 {

@@ -2746,9 +2746,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
             {
-                SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                 const SwRect aFlyRect = pFly->GetObjRectWithSpaces();
                 // #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
@@ -4868,9 +4867,8 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva )
                             default: break;
                         }
                     }
-                    if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                    if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                     {
-                        SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
 
                         // OD 2004-05-18 #i28701# - no direct move of objects,
                         // which are anchored to-paragraph/to-character, if
