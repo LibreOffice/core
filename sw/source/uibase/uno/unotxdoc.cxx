@@ -3471,6 +3471,8 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
             // switch.
             m_pDocShell->SetView(pView);
         }
+        else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
+            aViewOption.SetOnlineSpell(rValue.Value.get<bool>());
     }
 
     // Set the initial zoom value to 1; usually it is set in setClientZoom and

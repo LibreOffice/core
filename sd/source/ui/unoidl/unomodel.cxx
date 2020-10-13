@@ -2443,6 +2443,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
                 pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
             else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
                 pDrawView->SetAuthor(rValue.Value.get<OUString>());
+            else if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
+                mpDoc->SetOnlineSpell(rValue.Value.get<bool>());
         }
 
         // Disable comments if requested

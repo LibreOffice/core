@@ -1163,7 +1163,7 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
     }
 }
 
-void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
+void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -1171,6 +1171,16 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     ScAppOptions aAppOptions( SC_MOD()->GetAppOptions() );
     aAppOptions.SetAutoComplete(false);
     SC_MOD()->SetAppOptions(aAppOptions);
+
+    for (const beans::PropertyValue& rValue : rArguments)
+    {
+        if (rValue.Name == ".uno:SpellOnline" && rValue.Value.has<bool>())
+         {
+            ScDocOptions options = GetDocument()->GetDocOptions();
+            options.SetAutoSpell(rValue.Value.get<bool>());
+            GetDocument()->SetDocOptions(options);
+         }
+    }
 
     // show us the text exactly
     ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
