@@ -180,9 +180,9 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         adjustAnchoredPosition(*pSdrHint, rDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }
-    else if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
+    else if (auto pDeletedHint = dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
     {
-        SCTAB nDelTab = static_cast<const ScTabDeletedHint&>(rHint).GetTab();
+        SCTAB nDelTab = pDeletedHint->GetTab();
         if (ValidTab(nDelTab))
         {
             // used to be: HidePagePgNum(nDelTab) - hide only if the deleted sheet is shown here
@@ -190,9 +190,9 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Size has been changed
+    else if (auto pChangedHint = dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Size has been changed
     {
-        if ( nTab == static_cast<const ScTabSizeChangedHint&>(rHint).GetTab() )
+        if ( nTab == pChangedHint->GetTab() )
             UpdateWorkArea();
     }
     else
@@ -217,8 +217,8 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
     SfxViewFrame::GetTargetList( aTargetList );
 
     // handle graphics from object
-    if ( dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr )
-        aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
+    if ( auto pGrafObj = dynamic_cast<SdrGrafObj*>( pObj) )
+        aGraphic = pGrafObj->GetGraphic();
     else
     {
         const Graphic* pGraphic = static_cast<const SdrOle2Obj*>(pObj)->GetGraphic();

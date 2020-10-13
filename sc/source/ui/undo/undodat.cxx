@@ -213,9 +213,9 @@ void ScUndoMakeOutline::Redo()
 
 void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
 
         if (bMake)
             rViewShell.MakeOutline( bColumns );
@@ -303,8 +303,8 @@ void ScUndoOutlineLevel::Redo()
 
 void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SelectLevel( bColumns, nLevel );
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->SelectLevel( bColumns, nLevel );
 }
 
 bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -400,9 +400,9 @@ void ScUndoOutlineBlock::Redo()
 
 void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
 
         if (bShow)
             rViewShell.ShowMarkedOutlines();
@@ -493,8 +493,8 @@ void ScUndoRemoveAllOutlines::Redo()
 
 void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveAllOutlines();
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->RemoveAllOutlines();
 }
 
 bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -590,8 +590,8 @@ void ScUndoAutoOutline::Redo()
 
 void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoOutline();
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->AutoOutline();
 }
 
 bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1217,9 +1217,9 @@ void ScUndoImportData::Redo()
 
 void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
 
         SCTAB nDummy;
         ScImportParam aNewParam(aImportParam);
@@ -1393,8 +1393,8 @@ void ScUndoRepeatDB::Redo()
 
 void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RepeatDB();
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->RepeatDB();
 }
 
 bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const

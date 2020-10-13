@@ -234,14 +234,12 @@ void MasterPageObserver::Implementation::Notify(
             // filters out events that are sent in between the insertion
             // of a new standard master page and a new notes master
             // page.
-            if (dynamic_cast< const SdDrawDocument *>( &rBroadcaster ) !=  nullptr)
+            if (auto pDrawDocument = dynamic_cast<SdDrawDocument *>( &rBroadcaster ))
             {
-                SdDrawDocument& rDocument (
-                    static_cast<SdDrawDocument&>(rBroadcaster));
-                if (rDocument.GetMasterSdPageCount(PageKind::Standard)
-                    == rDocument.GetMasterSdPageCount(PageKind::Notes))
+                if (pDrawDocument->GetMasterSdPageCount(PageKind::Standard)
+                    == pDrawDocument->GetMasterSdPageCount(PageKind::Notes))
                 {
-                    AnalyzeUsedMasterPages (rDocument);
+                    AnalyzeUsedMasterPages (*pDrawDocument);
                 }
             }
             break;

@@ -1760,8 +1760,8 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
     if( !pViewSh )
         return;
 
-    if( dynamic_cast<const ::sd::DrawViewShell* >(pViewSh) !=  nullptr )
-        static_cast< ::sd::DrawViewShell*>(pViewSh)->ResetActualPage();
+    if( auto pDrawViewShell = dynamic_cast<::sd::DrawViewShell* >(pViewSh) )
+        pDrawViewShell->ResetActualPage();
 
     Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
     const long nWidth = aPageSize.Width();
@@ -1891,8 +1891,9 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
-                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
+            if( aStr.isEmpty() )
+                if (auto pOleObj = dynamic_cast< const SdrOle2Obj *>( pObj ))
+                    aStr = pOleObj->GetPersistName();
             if( !aStr.isEmpty() )
                 return true;
         }
@@ -1936,8 +1937,9 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
-                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
+            if( aStr.isEmpty() )
+                if (auto pOleObj = dynamic_cast< const SdrOle2Obj *>( pObj ))
+                    aStr = pOleObj->GetPersistName();
             if( !aStr.isEmpty() )
                 nObjCount++;
         }
@@ -1953,8 +1955,9 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         {
             SdrObject* pObj = aIter.Next();
             OUString aStr( pObj->GetName() );
-            if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
-                aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
+            if( aStr.isEmpty() )
+                if (auto pOleObj = dynamic_cast< const SdrOle2Obj *>( pObj ))
+                    aStr = pOleObj->GetPersistName();
             if( !aStr.isEmpty() )
                 *pStr++ = aStr;
         }
@@ -1982,8 +1985,9 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
     {
         SdrObject* pObj = aIter.Next();
         OUString aStr( pObj->GetName() );
-        if( aStr.isEmpty() && dynamic_cast< const SdrOle2Obj *>( pObj ) !=  nullptr )
-            aStr = static_cast< const SdrOle2Obj* >( pObj )->GetPersistName();
+        if( aStr.isEmpty() )
+            if (auto pOleObj = dynamic_cast< const SdrOle2Obj *>( pObj ))
+                aStr = pOleObj->GetPersistName();
         if( !aStr.isEmpty() && (aStr == rName) )
             return pObj;
     }

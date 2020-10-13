@@ -230,10 +230,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     {
         if (bOnMaster)
         {
-            if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
+            if( auto pDrawViewShell = dynamic_cast<DrawViewShell *>( mpViewShell ))
             {
-                ::sd::View* pView =
-                      static_cast<DrawViewShell*>(mpViewShell)->GetView();
+                ::sd::View* pView = pDrawViewShell->GetView();
                 for (auto pSelectedPage : aSelectedPages)
                 {
                     sal_uInt16 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();

@@ -65,9 +65,8 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         m_xRbtVar->get_state_changed_from_saved() ||
         m_xLbFormat->get_value_changed_from_saved() )
     {
-        if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
+        if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
         {
-            const SvxDateField* pDateField = static_cast<const SvxDateField*>(m_pField);
             SvxDateType   eType;
             SvxDateFormat eFormat;
 
@@ -82,9 +81,8 @@ SvxFieldData* SdModifyFieldDlg::GetField()
             static_cast<SvxDateField*>( pNewField )->SetType( eType );
             static_cast<SvxDateField*>( pNewField )->SetFormat( eFormat );
         }
-        else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
+        else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
         {
-            const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( m_pField );
             SvxTimeType   eType;
             SvxTimeFormat eFormat;
 
@@ -154,9 +152,8 @@ void SdModifyFieldDlg::FillFormatList()
 
     m_xLbFormat->clear();
 
-    if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
+    if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
     {
-        const SvxDateField* pDateField = static_cast<const SvxDateField*>( m_pField );
         SvxDateField aDateField( *pDateField );
 
         //SvxDateFormat::AppDefault,     // not used
@@ -180,9 +177,8 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_xLbFormat->set_active( static_cast<sal_uInt16>(pDateField->GetFormat()) - 2 );
     }
-    else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
+    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
     {
-        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>( m_pField );
         SvxExtTimeField aTimeField( *pTimeField );
 
         //SvxTimeFormat::AppDefault,     // not used
@@ -208,10 +204,8 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_xLbFormat->set_active( static_cast<sal_uInt16>(pTimeField->GetFormat()) - 2 );
     }
-    else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
+    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( m_pField ) )
     {
-        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( m_pField );
-
         m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_NAME_EXT ) );
         m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_FULLPATH ) );
         m_xLbFormat->append_text( SdResId( STR_FILEFORMAT_PATH ) );
@@ -219,9 +213,8 @@ void SdModifyFieldDlg::FillFormatList()
 
         m_xLbFormat->set_active( static_cast<sal_uInt16>( pFileField->GetFormat() ) );
     }
-    else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
+    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( m_pField ) )
     {
-        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>( m_pField );
         SvxAuthorField aAuthorField( *pAuthorField );
 
         for( sal_uInt16 i = 0; i < 4; i++ )
@@ -240,37 +233,29 @@ void SdModifyFieldDlg::FillControls()
 {
     m_xLbFormat->clear();
 
-    if( dynamic_cast< const SvxDateField *>( m_pField ) !=  nullptr )
+    if( auto pDateField = dynamic_cast< const SvxDateField *>( m_pField ) )
     {
-        const SvxDateField* pDateField = static_cast<const SvxDateField*>(m_pField);
-
         if( pDateField->GetType() == SvxDateType::Fix )
             m_xRbtFix->set_active(true);
         else
             m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxExtTimeField *>( m_pField ) !=  nullptr )
+    else if( auto pTimeField = dynamic_cast< const SvxExtTimeField *>( m_pField ) )
     {
-        const SvxExtTimeField* pTimeField = static_cast<const SvxExtTimeField*>(m_pField);
-
         if( pTimeField->GetType() == SvxTimeType::Fix )
             m_xRbtFix->set_active(true);
         else
             m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxExtFileField *>( m_pField ) !=  nullptr )
+    else if( auto pFileField = dynamic_cast< const SvxExtFileField *>( m_pField ) )
     {
-        const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>(m_pField);
-
         if( pFileField->GetType() == SvxFileType::Fix )
             m_xRbtFix->set_active(true);
         else
             m_xRbtVar->set_active(true);
     }
-    else if( dynamic_cast< const SvxAuthorField *>( m_pField ) !=  nullptr )
+    else if( auto pAuthorField = dynamic_cast< const SvxAuthorField *>( m_pField ) )
     {
-        const SvxAuthorField* pAuthorField = static_cast<const SvxAuthorField*>(m_pField);
-
         if( pAuthorField->GetType() == SvxAuthorType::Fix )
             m_xRbtFix->set_active(true);
         else

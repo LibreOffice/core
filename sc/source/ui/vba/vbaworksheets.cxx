@@ -500,10 +500,10 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     dispatchExecute( pViewShell, SID_VIEWSHELL1 );
     SfxViewShell*  pShell = SfxViewShell::Get( pViewFrame->GetFrame().GetFrameInterface()->getController() );
 
-    if (  dynamic_cast<const ScPreviewShell*>( pShell) ==  nullptr )
+    ScPreviewShell* pPrvShell = dynamic_cast< ScPreviewShell* >( pShell );
+    if ( !pPrvShell )
         return;
 
-    ScPreviewShell* pPrvShell = static_cast<  ScPreviewShell* >( pShell );
     ScPreview* pPrvView = pPrvShell->GetPreview();
     const ScDocument& rDoc = pViewShell->GetViewData().GetDocument();
     ScMarkData aMarkData(rDoc.GetSheetLimits());

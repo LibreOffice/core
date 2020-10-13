@@ -1936,15 +1936,16 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
         if( COMPLETE_STRING == nTextPos )
         {
             --nTextPos;
-            if( dynamic_cast< const SwCursorShell *>( pSh ) != nullptr  && !static_cast<SwCursorShell*>(pSh)->IsTableMode() )
-            {
-                SwPaM *pCursor = static_cast<SwCursorShell*>(pSh)->GetCursor();
-                if( !pCursor->HasMark() && !pCursor->IsMultiSelection() )
+            if( auto pCursorShell = dynamic_cast<SwCursorShell *>( pSh ) )
+                if( !pCursorShell->IsTableMode() )
                 {
-                    pContentNode = pCursor->GetContentNode();
-                    nTextPos =  pCursor->GetPoint()->nContent.GetIndex();
+                    SwPaM *pCursor = pCursorShell->GetCursor();
+                    if( !pCursor->HasMark() && !pCursor->IsMultiSelection() )
+                    {
+                        pContentNode = pCursor->GetContentNode();
+                        nTextPos =  pCursor->GetPoint()->nContent.GetIndex();
+                    }
                 }
-            }
         }
         sal_Int32 const nPos((pContentNode && pTextNode == pContentNode)
                 ? nTextPos
@@ -2003,9 +2004,8 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
         const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
         for (SwAnchoredObject* pObj : rObjs)
         {
-            if ( dynamic_cast< const SwFlyFrame *>( pObj ) !=  nullptr )
+            if ( auto pFly = dynamic_cast<SwFlyFrame *>( pObj ) )
             {
-                SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObj);
                 if ( pFly->IsFlyInContentFrame() )
                 {
                     const SwContentFrame *pC = pFly->ContainsContent();
@@ -2173,9 +2173,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
         {
             ++rSh.mnStartAction;
             bool bVis = false;
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
+            if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
             {
-                bVis = static_cast<SwCursorShell*>(&rSh)->GetCharRect().IsOver(rSh.VisArea());
+                bVis = pCursorShell->GetCharRect().IsOver(rSh.VisArea());
             }
             aBools.push_back( bVis );
         }
@@ -2210,11 +2210,9 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
                 // and the cursor is visible.
                 bActions |= aTmp != rSh.VisArea();
-                if ( aTmp == rSh.VisArea() && dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                {
-                    bActions |= aBools[nBoolIdx] !=
-                                 static_cast<SwCursorShell*>(&rSh)->GetCharRect().IsOver( rSh.VisArea() );
-                }
+                if ( aTmp == rSh.VisArea() )
+                    if ( auto pCursorShell = dynamic_cast< SwCursorShell*>( &rSh) )
+                        bActions |= aBools[nBoolIdx] != pCursorShell->GetCharRect().IsOver( rSh.VisArea() );
             }
 
             ++nBoolIdx;
@@ -2227,9 +2225,7 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             nBoolIdx = 0;
             for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
             {
-                SwCursorShell* pCursorShell = nullptr;
-                if(dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr)
-                    pCursorShell = static_cast<SwCursorShell*>(&rSh);
+                SwCursorShell* pCursorShell = dynamic_cast<SwCursorShell*>( &rSh);
 
                 if ( pCursorShell )
                     pCursorShell->SttCursorMove();

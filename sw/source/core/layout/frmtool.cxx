@@ -338,9 +338,8 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
                 // perform notification via the corresponding invalidations
                 if ( bNotify )
                 {
-                    if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+                    if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pObj) )
                     {
-                        SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
                         if ( bNotifySize )
                             pFlyFrame->InvalidateSize_();
                         // #115759# - no invalidation of
@@ -2252,9 +2251,8 @@ static bool lcl_hasTabFrame(const SwTextFrame* pTextFrame)
         if (pSortedObjs->size() > 0)
         {
             SwAnchoredObject* pObject = (*pSortedObjs)[0];
-            if (dynamic_cast<const SwFlyFrame*>(pObject) !=  nullptr)
+            if (auto pFly = dynamic_cast<SwFlyFrame*>(pObject))
             {
-                SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pObject);
                 if (pFly->Lower() && pFly->Lower()->IsTabFrame())
                     return true;
             }
@@ -2701,10 +2699,8 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
         pObj->ResetLayoutProcessBools();
         // #115759# - remove also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
-
             // #115759# - remove also direct lowers of Writer
             // fly frame from page
             if ( pFlyFrame->GetDrawObjs() )
@@ -2727,13 +2723,12 @@ static void lcl_RemoveObjsFromPage( SwFrame* _pFrame )
             }
         }
         // #115759# - remove also drawing objects from page
-        else if ( dynamic_cast<const SwAnchoredDrawObject*>( pObj) !=  nullptr )
+        else if ( auto pDrawObj = dynamic_cast<SwAnchoredDrawObject*>( pObj) )
         {
             if (pObj->GetFrameFormat().GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
             {
                 if (SwPageFrame *pPg = pObj->GetPageFrame())
-                    pPg->RemoveDrawObjFromPage(
-                                *static_cast<SwAnchoredDrawObject*>(pObj) );
+                    pPg->RemoveDrawObjFromPage( *pDrawObj );
             }
         }
     }
@@ -2863,9 +2858,8 @@ static void lcl_AddObjsToPage( SwFrame* _pFrame, SwPageFrame* _pPage )
         pObj->UnlockPosition();
         // #115759# - add also lower objects of as-character
         // anchored Writer fly frames from page
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pObj);
             if ( dynamic_cast<const SwFlyFreeFrame*>( pObj) !=  nullptr )
             {
                 _pPage->AppendFlyToPage( pFlyFrame );
@@ -3256,9 +3250,8 @@ static void lcl_NotifyContent( const SdrObject *pThis, SwContentFrame *pCnt,
     const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for (SwAnchoredObject* pObj : rObjs)
     {
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
             if ( pFly->IsFlyInContentFrame() )
             {
                 SwContentFrame *pContent = pFly->ContainsContent();

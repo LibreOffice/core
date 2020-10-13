@@ -334,9 +334,9 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         if (pView)
         {
-            if( dynamic_cast< const OutlineView *>( pView ) !=  nullptr)
+            if( auto pOutlineView = dynamic_cast<OutlineView *>( pView ))
             {
-                pPage = static_cast<OutlineView*>(pView)->GetActualPage();
+                pPage = pOutlineView->GetActualPage();
             }
             else
             {

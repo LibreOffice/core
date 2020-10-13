@@ -716,9 +716,8 @@ static void lcl_CheckObjects(SwSortedObjs& rSortedObjs, const SwFrame* pFrame, l
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
         long nTmp = 0;
-        if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame*>( pObj) )
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pObj);
             if( pFly->getFrameArea().Top() != FAR_AWAY &&
                 ( pFrame->IsPageFrame() ? pFly->IsFlyLayFrame() :
                   ( pFly->IsFlyAtContentFrame() &&
