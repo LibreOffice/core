@@ -336,7 +336,7 @@ public:
 };
 
 
-// Spiegelachse
+// Mirror axis
 class SdrHdlLine final : public SdrHdl
 {
     // create marker for this kind
