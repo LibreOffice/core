@@ -76,13 +76,13 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
-    if ((nCurrentTip + 1 > nNumberOfTips) || (nCurrentTip < 0))
-        nCurrentTip = 0;
-    m_xDialog->set_title(CuiResId(STR_TITLE) + ": " + OUString::number(nCurrentTip + 1) + "/"
+    if ((nCurrentTip > nNumberOfTips) || (nCurrentTip < 1))
+        nCurrentTip = 1;
+    m_xDialog->set_title(CuiResId(STR_TITLE) + ": " + OUString::number(nCurrentTip) + "/"
                          + OUString::number(nNumberOfTips));
 
     // text
-    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
+    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]));
 //replace MOD1 & MOD2 shortcuts depending on platform
 #ifdef MACOSX
     const OUString aMOD1 = CuiResId(STR_CMD);
@@ -107,7 +107,7 @@ void TipOfTheDayDialog::UpdateTip()
     m_pText->set_label(aText);
 
     // hyperlink
-    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]);
     if (aLink.isEmpty())
     {
         m_pLink->set_visible(false);
@@ -148,7 +148,7 @@ void TipOfTheDayDialog::UpdateTip()
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]);
     // use default image if none is available with the number
     if (aImage.isEmpty() || !file_exists(aURL + aImage))
         aImage = "tipoftheday.png";
