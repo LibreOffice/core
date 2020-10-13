@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f2689f63_825aacd4",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-13T11:40:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1116a78_4a6dbe2f",
+      "revId": "b6cb1692459d2735fe4f9b2b7bd495e2cf98297f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b620b2e7_b420f3b7",
         "filename": "include/tools/long.hxx",
         "patchSetId": 4
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "ab2f14dc_889cbcdd",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-13T11:40:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b620b2e7_b420f3b7",
+      "range": {
+        "startLine": 9,
+        "startChar": 3,
+        "endLine": 9,
+        "endChar": 71
+      },
+      "revId": "b6cb1692459d2735fe4f9b2b7bd495e2cf98297f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f251d06a_5f53ea16",
         "filename": "include/tools/long.hxx",
         "patchSetId": 4
@@ -53,6 +95,30 @@
       "writtenOn": "2020-10-12T09:42:18Z",
       "side": 1,
       "message": "I thought the plan was to \"switch the typedef [...] to point to sal_Int64\", for all platforms?",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 25
+      },
+      "revId": "b6cb1692459d2735fe4f9b2b7bd495e2cf98297f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c217692b_8dd24f78",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-13T11:40:28Z",
+      "side": 1,
+      "message": "I guess I don\u0027t understand your plan after all.  My understanding was that you wanted to first replace all relevant occurrences of `long` with ´tools::Long` as a \"no functional change\" (i.e., unconditionally make `tools::Long` a typedef for `long` for the first step), and only then in a second step change the `tools::Long` typedef from `long` to `sal_Int64`, again unconditionally.\n\nWhat patchset 5 now does is introduce a functional change for e.g. 32-bit Linux, turning the affected places from using 32-bit `long` to using 64-bit `sal_Int64`?",
+      "parentUuid": "f251d06a_5f53ea16",
       "range": {
         "startLine": 36,
         "startChar": 2,
