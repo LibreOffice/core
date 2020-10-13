@@ -815,9 +815,16 @@ void ImpEditView::SetSelectionMode( EESelectionMode eNewMode )
     }
 }
 
+OutputDevice& ImpEditView::GetOutputDevice() const
+{
+    if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
+        return pCallbacks->EditViewOutputDevice();
+    return *pOutWin;
+}
+
 void ImpEditView::SetOutputArea( const tools::Rectangle& rRect )
 {
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *pOutWin;
+    const OutputDevice& rOutDev = GetOutputDevice();
     // should be better be aligned on pixels!
     tools::Rectangle aNewRect(rOutDev.LogicToPixel(rRect));
     aNewRect = rOutDev.PixelToLogic(aNewRect);
@@ -1244,7 +1251,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aEditCursor.SetTop( GetVisDocTop() );
     }
 
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *pOutWin;
+    const OutputDevice& rOutDev = GetOutputDevice();
 
     long nOnePixel = rOutDev.PixelToLogic( Size( 1, 0 ) ).Width();
 
@@ -1443,7 +1450,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
     if ( !ndX && !ndY )
         return Pair( 0, 0 );
 
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+    const OutputDevice& rOutDev = GetOutputDevice();
 
 #ifdef DBG_UTIL
     tools::Rectangle aR( aOutArea );
@@ -2020,7 +2027,7 @@ bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
         return true;
 
     // Logical units ...
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+    const OutputDevice& rOutDev = GetOutputDevice();
     Point aMousePos = rOutDev.PixelToLogic(rPosPixel);
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
@@ -2040,7 +2047,7 @@ bool ImpEditView::SetCursorAtPoint( const Point& rPointPixel )
     Point aMousePos( rPointPixel );
 
     // Logical units ...
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+    const OutputDevice& rOutDev = GetOutputDevice();
     aMousePos = rOutDev.PixelToLogic( aMousePos );
 
     if ( ( !GetOutputArea().IsInside( aMousePos ) ) && !pEditEngine->pImpEditEngine->IsInSelectionMode() )
@@ -2090,7 +2097,7 @@ void ImpEditView::HideDDCursor()
 {
     if ( pDragAndDropInfo && pDragAndDropInfo->bVisCursor )
     {
-        OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+        OutputDevice& rOutDev = GetOutputDevice();
         rOutDev.DrawOutDev( pDragAndDropInfo->aCurSavedCursor.TopLeft(), pDragAndDropInfo->aCurSavedCursor.GetSize(),
                             Point(0,0), pDragAndDropInfo->aCurSavedCursor.GetSize(),*pDragAndDropInfo->pBackground );
         pDragAndDropInfo->bVisCursor = false;
@@ -2105,7 +2112,7 @@ void ImpEditView::ShowDDCursor( const tools::Rectangle& rRect )
     if (pOutWin && pOutWin->GetCursor())
         pOutWin->GetCursor()->Hide();
 
-    OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+    OutputDevice& rOutDev = GetOutputDevice();
     Color aOldFillColor = rOutDev.GetFillColor();
     rOutDev.SetFillColor( Color(4210752) );    // GRAY BRUSH_50, OLDSV, change to DDCursor!
 
@@ -2439,7 +2446,7 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
 {
     SolarMutexGuard aVclGuard;
 
-    const OutputDevice& rOutDev = getEditViewCallbacks() ? getEditViewCallbacks()->EditViewOutputDevice() : *GetWindow();
+    const OutputDevice& rOutDev = GetOutputDevice();
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
     aMousePos = rOutDev.PixelToLogic( aMousePos );
