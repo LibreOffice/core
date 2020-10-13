@@ -1649,12 +1649,12 @@ void SdrPage::SetInserted( bool bIns )
     while ( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
-        if ( dynamic_cast<const SdrOle2Obj* >(pObj) !=  nullptr )
+        if ( auto pOleObj = dynamic_cast<SdrOle2Obj* >(pObj) )
         {
             if( mbInserted )
-                static_cast<SdrOle2Obj*>(pObj)->Connect();
+                pOleObj->Connect();
             else
-                static_cast<SdrOle2Obj*>(pObj)->Disconnect();
+                pOleObj->Disconnect();
         }
     }
 }

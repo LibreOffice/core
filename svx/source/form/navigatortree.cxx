@@ -554,24 +554,20 @@ namespace svxform
 
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        if( dynamic_cast<const FmNavRemovedHint*>(&rHint) )
+        if( auto pRemovedHint = dynamic_cast<const FmNavRemovedHint*>(&rHint) )
         {
-            const FmNavRemovedHint* pRemovedHint = static_cast<const FmNavRemovedHint*>(&rHint);
             FmEntryData* pEntryData = pRemovedHint->GetEntryData();
             Remove( pEntryData );
         }
-
-        else if( dynamic_cast<const FmNavInsertedHint*>(&rHint) )
+        else if( auto pInsertedHint = dynamic_cast<const FmNavInsertedHint*>(&rHint) )
         {
-            const FmNavInsertedHint* pInsertedHint = static_cast<const FmNavInsertedHint*>(&rHint);
             FmEntryData* pEntryData = pInsertedHint->GetEntryData();
             sal_uInt32 nRelPos = pInsertedHint->GetRelPos();
             Insert( pEntryData, nRelPos );
         }
-
-        else if( dynamic_cast<const FmNavModelReplacedHint*>(&rHint) )
+        else if( auto pReplacedHint = dynamic_cast<const FmNavModelReplacedHint*>(&rHint) )
         {
-            FmEntryData* pData = static_cast<const FmNavModelReplacedHint*>(&rHint)->GetEntryData();
+            FmEntryData* pData = pReplacedHint->GetEntryData();
             std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pData);
             if (xEntry)
             {
@@ -579,14 +575,11 @@ namespace svxform
                 m_xTreeView->set_image(*xEntry, pData->GetNormalImage());
             }
         }
-
-        else if( dynamic_cast<const FmNavNameChangedHint*>(&rHint) )
+        else if( auto pNameChangedHint = dynamic_cast<const FmNavNameChangedHint*>(&rHint) )
         {
-            const FmNavNameChangedHint* pNameChangedHint = static_cast<const FmNavNameChangedHint*>(&rHint);
             std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pNameChangedHint->GetEntryData());
             m_xTreeView->set_text(*xEntry, pNameChangedHint->GetNewName());
         }
-
         else if( dynamic_cast<const FmNavClearedHint*>(&rHint) )
         {
             m_aCutEntries.clear();
@@ -1686,9 +1679,9 @@ namespace svxform
 
             // one remaining subtile problem, before deleting it : if it's a form and the shell
             // knows it as CurrentObject, I have to tell it something else
-            if (dynamic_cast<const FmFormData*>( pCurrent) !=  nullptr)
+            if (auto pFormData = dynamic_cast<FmFormData*>( pCurrent))
             {
-                Reference< XForm >  xCurrentForm( static_cast< FmFormData* >( pCurrent )->GetFormIface() );
+                Reference< XForm >  xCurrentForm( pFormData->GetFormIface() );
                 if (pFormShell->GetImpl()->getCurrentForm_Lock() == xCurrentForm)  // shell knows form to be deleted ?
                     pFormShell->GetImpl()->forgetCurrentForm_Lock();                 // -> take away ...
             }
@@ -1980,17 +1973,16 @@ namespace svxform
     void NavigatorTree::CollectObjects(FmFormData const * pFormData, bool bDeep, ::std::set< Reference< XFormComponent > >& _rObjects)
     {
         FmEntryDataList* pChildList = pFormData->GetChildList();
-        FmControlData* pControlData;
         for( size_t i = 0; i < pChildList->size(); ++i )
         {
             FmEntryData* pEntryData = pChildList->at( i );
-            if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
+            if( auto pControlData = dynamic_cast<FmControlData*>( pEntryData) )
             {
-                pControlData = static_cast<FmControlData*>(pEntryData);
                 _rObjects.insert(pControlData->GetFormComponent());
             } // if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
-            else if (bDeep && (dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr))
-                CollectObjects(static_cast<FmFormData*>(pEntryData), bDeep, _rObjects);
+            else if (bDeep)
+                if (auto pEntryFormData = dynamic_cast<FmFormData*>( pEntryData))
+                    CollectObjects(pEntryFormData, bDeep, _rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
 

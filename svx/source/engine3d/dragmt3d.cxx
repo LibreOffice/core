@@ -338,9 +338,9 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
 
     // Get modifier
     sal_uInt16 nModifier = 0;
-    if(dynamic_cast<const E3dView*>(&getSdrDragView()))
+    if(auto pDragView = dynamic_cast<const E3dView*>(&getSdrDragView()))
     {
-        const MouseEvent& rLastMouse = static_cast<E3dView&>(getSdrDragView()).GetMouseEvent();
+        const MouseEvent& rLastMouse = pDragView->GetMouseEvent();
         nModifier = rLastMouse.GetModifier();
     }
 
@@ -520,9 +520,9 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
         // Get modifier
         sal_uInt16 nModifier(0);
 
-        if(dynamic_cast<const E3dView*>(&getSdrDragView()))
+        if(auto pDragView = dynamic_cast<const E3dView*>(&getSdrDragView()))
         {
-            const MouseEvent& rLastMouse = static_cast<E3dView&>(getSdrDragView()).GetMouseEvent();
+            const MouseEvent& rLastMouse = pDragView->GetMouseEvent();
             nModifier = rLastMouse.GetModifier();
         }
 

@@ -116,10 +116,10 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene const & rScene)
 
         if(pCandidate)
         {
-            if(dynamic_cast< const E3dCompoundObject*>(pCandidate))
+            if(auto pCompoundObj = dynamic_cast< const E3dCompoundObject*>(pCandidate))
             {
                 // single 3d object, calc depth
-                const double fMinimalDepth(getMinimalDepthInViewCoordinates(static_cast< const E3dCompoundObject& >(*pCandidate)));
+                const double fMinimalDepth(getMinimalDepthInViewCoordinates(*pCompoundObj));
                 ImpRemap3DDepth aEntry(a, fMinimalDepth);
                 maVector.push_back(aEntry);
             }
@@ -378,10 +378,8 @@ void E3dScene::removeAllNonSelectedObjects()
         {
             bool bRemoveObject(false);
 
-            if(dynamic_cast< const E3dScene*>(pObj))
+            if(auto pScene = dynamic_cast<E3dScene*>(pObj))
             {
-                E3dScene* pScene = static_cast<E3dScene*>(pObj);
-
                 // iterate over this sub-scene
                 pScene->removeAllNonSelectedObjects();
 
@@ -394,10 +392,8 @@ void E3dScene::removeAllNonSelectedObjects()
                     bRemoveObject = true;
                 }
             }
-            else if(dynamic_cast< const E3dCompoundObject*>(pObj))
+            else if(auto pCompound = dynamic_cast<E3dCompoundObject*>(pObj))
             {
-                E3dCompoundObject* pCompound = static_cast<E3dCompoundObject*>(pObj);
-
                 if(!pCompound->GetSelected())
                 {
                     bRemoveObject = true;

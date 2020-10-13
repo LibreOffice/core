@@ -256,9 +256,9 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 {
     if(this == pEntryData)
         return true;
-    if( dynamic_cast<const FmFormData*>( pEntryData) ==  nullptr )
+    FmFormData* pFormData = dynamic_cast<FmFormData*>(pEntryData);
+    if( !pFormData )
         return false;
-    FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
     if( m_xForm.get() != pFormData->GetFormIface().get() )
         return false;
 
@@ -412,9 +412,9 @@ bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     if(this == pEntryData)
         return true;
 
-    if( dynamic_cast<const FmControlData*>( pEntryData) ==  nullptr )
+    FmControlData* pControlData = dynamic_cast<FmControlData*>(pEntryData);
+    if( !pControlData )
         return false;
-    FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
 
     if( m_xFormComponent.get() != pControlData->GetFormComponent().get() )
         return false;

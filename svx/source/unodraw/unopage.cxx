@@ -538,9 +538,8 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
 
         pScene->SetRectsDirty();
     }
-    else if(dynamic_cast<const E3dExtrudeObj* >(pNewObj) !=  nullptr)
+    else if(auto pObj = dynamic_cast<E3dExtrudeObj* >(pNewObj))
     {
-        E3dExtrudeObj* pObj = static_cast<E3dExtrudeObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
@@ -551,18 +550,17 @@ SdrObject* SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xS
         // #107245# pObj->SetExtrudeCharacterMode(sal_True);
         pObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
-    else if(dynamic_cast<const E3dLatheObj* >(pNewObj) !=  nullptr)
+    else if(auto pLatheObj = dynamic_cast<E3dLatheObj* >(pNewObj))
     {
-        E3dLatheObj* pObj = static_cast<E3dLatheObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
         aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
         aNewPolygon.setClosed(true);
-        pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
+        pLatheObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
         // #107245# pObj->SetLatheCharacterMode(sal_True);
-        pObj->SetMergedItem(Svx3DCharacterModeItem(true));
+        pLatheObj->SetMergedItem(Svx3DCharacterModeItem(true));
     }
 
     return pNewObj;

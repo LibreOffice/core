@@ -126,9 +126,9 @@ namespace sdr::properties
             const sal_uInt32 nCount(rChange.GetRectangleCount());
 
             // invalidate all new rectangles
-            if(dynamic_cast<const SdrObjGroup*>( &GetSdrObject() ) != nullptr)
+            if(auto pObjGroup = dynamic_cast<SdrObjGroup*>( &GetSdrObject() ))
             {
-                SdrObjListIter aIter(static_cast<SdrObjGroup&>(GetSdrObject()), SdrIterMode::DeepNoGroups);
+                SdrObjListIter aIter(pObjGroup, SdrIterMode::DeepNoGroups);
 
                 while(aIter.IsMore())
                 {
