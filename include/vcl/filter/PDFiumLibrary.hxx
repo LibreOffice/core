@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 
@@ -81,6 +82,7 @@ public:
     std::vector<basegfx::B2DPoint> getVertices();
 };
 
+class PDFiumPage;
 class PDFiumTextPage;
 
 class VCL_DLLPUBLIC PDFiumPathSegment final
@@ -131,6 +133,7 @@ public:
     // Path
     int getPathSegmentCount();
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);
+    Size getImageSize(PDFiumPage& rPage);
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
