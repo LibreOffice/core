@@ -14646,21 +14646,6 @@ private:
         return true;
     }
 
-    // Since tdf#131120 we don't use the original ComboBox menu, but it's still
-    // listening to additions to the ListStore and slowing things down (tdf#136455)
-    void destroy_unused_menu()
-    {
-        AtkObject* pAtkObj = gtk_combo_box_get_popup_accessible(m_pComboBox);
-        if (!pAtkObj)
-            return;
-        if (!GTK_IS_ACCESSIBLE(pAtkObj))
-            return;
-        GtkWidget* pWidget = gtk_accessible_get_widget(GTK_ACCESSIBLE(pAtkObj));
-        if (!pWidget)
-            return;
-        gtk_widget_destroy(pWidget);
-    }
-
 public:
     GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
@@ -14703,7 +14688,13 @@ public:
         gtk_widget_set_no_show_all(GTK_WIDGET(m_pComboBox), true);
 
         gtk_tree_view_set_model(m_pTreeView, m_pTreeModel);
-        gtk_combo_box_set_model(m_pComboBox, nullptr);
+        /* tdf#136455 gtk_combo_box_set_model with a null Model should be good
+           enough. But in practice, while the ComboBox model is unset, GTK
+           doesn't unset the ComboBox menus model, so that remains listening to
+           additions to the ListStore and slowing things down massively.
+           Using a new model does reset the menu to listen to that unused one instead */
+        gtk_combo_box_set_model(m_pComboBox, GTK_TREE_MODEL(gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING)));
+
         GtkTreeViewColumn* pCol = gtk_tree_view_column_new();
         gtk_tree_view_append_column(m_pTreeView, pCol);
 
@@ -14802,8 +14793,6 @@ public:
         gtk_overlay_add_overlay(m_pOverlay, GTK_WIDGET(m_pOverlayButton));
         g_signal_connect(m_pOverlayButton, "leave-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
         g_signal_connect(m_pOverlayButton, "enter-notify-event", G_CALLBACK(signalOverlayButtonCrossing), this);
-
-        destroy_unused_menu();
     }
 
     virtual int get_active() const override
