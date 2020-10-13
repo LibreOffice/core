@@ -247,7 +247,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
                           + " vtable index " + OUString::number(nFunctionIndex) + "/"
                           + OUString::number(pInterfaceTD->nMapFunctionIndexToMemberIndex);
         SAL_WARN("bridges", sError);
-        throw uno::RuntimeException(sError, reinterpret_cast<uno::XInterface*>(pThis));
+        throw uno::RuntimeException(sError, static_cast<uno::XInterface*>(pThis));
     }
 
     // determine called method
@@ -345,7 +345,7 @@ typelib_TypeClass __cdecl cpp_mediate(void** pCallStack, const sal_Int32 nFuncti
         }
         default:
             throw uno::RuntimeException("no member description found!",
-                                        reinterpret_cast<uno::XInterface*>(pThis));
+                                        static_cast<uno::XInterface*>(pThis));
     }
 
     return eRet;

@@ -133,7 +133,7 @@ ExceptionInfos::~ExceptionInfos() throw()
 
     osl::MutexGuard aGuard(m_aMutex);
     for (auto& rEntry : m_allRaiseInfos)
-        delete reinterpret_cast<RaiseInfo*>(rEntry.second);
+        delete static_cast<RaiseInfo*>(rEntry.second);
 }
 
 RaiseInfo* ExceptionInfos::getRaiseInfo(typelib_TypeDescription* pTD) throw()
