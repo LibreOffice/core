@@ -31,7 +31,7 @@ const std::tuple<const char*, OUString, OUString> TOOLBARMODES_ARRAY[] =
 };
 
 //hide experimental UIs
-constexpr int nContextSingle = 7;
-constexpr int nContextGroup = 8;
+constexpr int nGroupedbarFull = 6;
+constexpr int nContextualGroups = 8;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
