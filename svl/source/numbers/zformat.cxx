@@ -63,6 +63,7 @@ const double EXP_ABS_UPPER_BOUND = 1.0E15;  // use exponential notation above th
 } // namespace
 
 const double D_MAX_U_INT32 = double(0xffffffff);      // 4294967295.0
+constexpr double D_MAX_INTEGER = (sal_uInt64(1) << 53) - 1;
 
 const double D_MAX_D_BY_100  = 1.7E306;
 const double D_MIN_M_BY_1000 = 2.3E-305;
@@ -2759,7 +2760,7 @@ double SvNumberformat::GetRoundFractionValue ( double fNumber ) const
 {
     sal_uInt16 nIx = GetSubformatIndex ( fNumber );
     double fIntPart = 0.0;           // integer part of fraction
-    sal_uInt64 nFrac = 0, nDiv = 1;  // numerator and denominator
+    sal_Int64 nFrac = 0, nDiv = 1;  // numerator and denominator
     double fSign = (fNumber < 0.0) ? -1.0 : 1.0;
     // fNumber is modified in ImpGetFractionElements to absolute fractional part
     ImpGetFractionElements ( fNumber, nIx, fIntPart, nFrac, nDiv );
@@ -2770,7 +2771,7 @@ double SvNumberformat::GetRoundFractionValue ( double fNumber ) const
 }
 
 void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
-                                              double& fIntPart, sal_uInt64& nFrac, sal_uInt64& nDiv ) const
+                                              double& fIntPart, sal_Int64& nFrac, sal_Int64& nDiv ) const
 {
     if ( fNumber < 0.0 )
         fNumber = -fNumber;
@@ -2780,7 +2781,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
     nDiv = lcl_GetDenominatorString( rInfo, NumFor[nIx].GetCount() ).toInt32();
     if( nDiv > 0 )
     {   // Forced Denominator
-        nFrac = static_cast<sal_uInt64>(floor ( fNumber * nDiv ));
+        nFrac = static_cast<sal_Int64>(floor ( fNumber * nDiv ));
         double fFracNew = static_cast<double>(nFrac) / static_cast<double>(nDiv);
         double fFracNew1 = static_cast<double>(nFrac + 1) / static_cast<double>(nDiv);
         double fDiff = fNumber - fFracNew;
@@ -2792,8 +2793,8 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
     else // Calculated Denominator
     {
         nDiv = 1;
-        sal_uInt64 nBasis = static_cast<sal_uInt64>(floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
-        sal_uInt64 nFracPrev = 1, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
+        sal_Int64 nBasis = static_cast<sal_Int64>(floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
+        sal_Int64 nFracPrev = 1, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
         double fRemainder = fNumber;
 
         // Use continued fraction representation of fNumber
@@ -2801,7 +2802,7 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
         while ( fRemainder > 0.0 )
         {
             double fTemp = 1.0 / fRemainder;             // 64bits precision required when fRemainder is very weak
-            nPartialDenom = static_cast<sal_uInt64>(floor(fTemp));   // due to floating point notation with double precision
+            nPartialDenom = static_cast<sal_Int64>(floor(fTemp));   // due to floating point notation with double precision
             fRemainder = fTemp - static_cast<double>(nPartialDenom);
             nDivNext = nPartialDenom * nDiv + nDivPrev;
             if ( nDivNext <= nBasis )  // continue loop
@@ -2814,11 +2815,11 @@ void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
             }
             else // calculate collateral fraction and exit
             {
-                sal_uInt64 nCollat = (nBasis - nDivPrev) / nDiv;
+                sal_Int64 nCollat = (nBasis - nDivPrev) / nDiv;
                 if ( 2 * nCollat >= nPartialDenom )
                 {
-                    sal_uInt64 nFracTest = nCollat * nFrac + nFracPrev;
-                    sal_uInt64 nDivTest  = nCollat * nDiv  + nDivPrev;
+                    sal_Int64 nFracTest = nCollat * nFrac + nFracPrev;
+                    sal_Int64 nDivTest  = nCollat * nDiv  + nDivPrev;
                     double fSign = (static_cast<double>(nFrac) > fNumber * static_cast<double>(nDiv))?1.0:-1.0;
                     if ( fSign * ( double(nFrac * nDivTest + nDiv * nFracTest) - 2.0 * double(nDiv * nDivTest) * fNumber ) > 0.0 )
                     {
@@ -2850,7 +2851,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nCnt);
     const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nCnt);
 
-    sal_uInt64 nFrac = 0, nDiv = 1;
+    sal_Int64 nFrac = 0, nDiv = 1;
     double fNum = floor(fNumber); // Integral part
 
     if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
@@ -2871,12 +2872,12 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     {
         double fNum1 = fNum * static_cast<double>(nDiv) + static_cast<double>(nFrac);
 
-        if (fNum1 > D_MAX_U_INT32)
+        if (fNum1 > D_MAX_INTEGER)
         {
             sBuff = ImpSvNumberformatScan::sErrStr;
             return false;
         }
-        nFrac = static_cast<sal_uInt64>(floor(fNum1));
+        nFrac = static_cast<sal_Int64>(floor(fNum1));
     }
     else if (fNum == 0.0 && nFrac != 0)
     {
@@ -5478,7 +5479,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
 }
 
 OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
-                                           sal_Int32 nVal, sal_uInt16 nMinDigits ) const
+                                           sal_Int64 nVal, sal_uInt16 nMinDigits ) const
 {
     OUString aStr;
     if ( nMinDigits )
