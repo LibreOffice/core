@@ -107,20 +107,20 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
     if ( pPasteUndo )
         return pPasteUndo->Merge( pNextAction );
 
-    if ( bPartOfPaste && dynamic_cast<const ScUndoWrapper*>( pNextAction) !=  nullptr )
-    {
-        ScUndoWrapper* pWrapper = static_cast<ScUndoWrapper*>(pNextAction);
-        SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
-        if ( dynamic_cast<const ScUndoPaste*>( pWrappedAction) )
+    if ( bPartOfPaste )
+        if ( auto pWrapper = dynamic_cast<ScUndoWrapper*>( pNextAction) )
         {
-            //  Store paste action if this is part of paste with inserting cells.
-            //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
+            SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
+            if ( dynamic_cast<const ScUndoPaste*>( pWrappedAction) )
+            {
+                //  Store paste action if this is part of paste with inserting cells.
+                //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
 
-            pPasteUndo.reset( pWrappedAction );
-            pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
-            return true;
+                pPasteUndo.reset( pWrappedAction );
+                pWrapper->ForgetWrappedUndo();      // pWrapper is deleted by UndoManager
+                return true;
+            }
         }
-    }
 
     //  Call base class for detective handling
     return ScMoveUndo::Merge( pNextAction );
@@ -627,8 +627,8 @@ void ScUndoDeleteCells::Redo()
 
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( eCmd );
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget) )
+        pViewTarget->GetViewShell()->DeleteCells( eCmd );
 }
 
 bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -904,8 +904,8 @@ void ScUndoCut::Redo()
 
 void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->CutToClip();
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->CutToClip();
 }
 
 bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1169,10 +1169,11 @@ void ScUndoPaste::Redo()
 
 void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) ==  nullptr)
+    auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget);
+    if (!pViewTarget)
         return;
 
-    ScTabViewShell* pViewSh = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+    ScTabViewShell* pViewSh = pViewTarget->GetViewShell();
     // keep a reference in case the clipboard is changed during PasteFromClip
     const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(ScTabViewShell::GetClipData(pViewSh->GetViewData().GetActiveWin()));
     if (pOwnClip)
@@ -1758,18 +1759,18 @@ void ScUndoUseScenario::Redo()
 
 void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
         OUString aTemp = aName;
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->UseScenario(aTemp);
+        pViewTarget->GetViewShell()->UseScenario(aTemp);
     }
 }
 
 bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
+        ScViewData& rViewData = pViewTarget->GetViewShell()->GetViewData();
         return !rViewData.GetDocument().IsScenario( rViewData.GetTabNo() );
     }
     return false;
@@ -2019,8 +2020,8 @@ void ScUndoIndent::Redo()
 
 void ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->ChangeIndent( bIsIncrement );
 }
 
 bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -2074,8 +2075,8 @@ void ScUndoTransliterate::Redo()
 
 void ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->TransliterateText( nTransliterationType );
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->TransliterateText( nTransliterationType );
 }
 
 bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -2132,9 +2133,9 @@ void ScUndoClearItems::Redo()
 
 void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
+        ScViewData& rViewData = pViewTarget->GetViewShell()->GetViewData();
         rViewData.GetDocFunc().ClearItems( rViewData.GetMarkData(), pWhich.get(), false );
     }
 }
@@ -2195,9 +2196,9 @@ void ScUndoRemoveBreaks::Redo()
 
 void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
     {
-        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *pViewTarget->GetViewShell();
         rViewShell.RemoveManualBreaks();
     }
 }
@@ -2325,8 +2326,8 @@ void ScUndoRemoveMerge::Redo()
 
 void ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
 {
-    if (dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr)
-        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveMerge();
+    if (auto pViewTarget = dynamic_cast<ScTabViewTarget*>( &rTarget))
+        pViewTarget->GetViewShell()->RemoveMerge();
 }
 
 bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const

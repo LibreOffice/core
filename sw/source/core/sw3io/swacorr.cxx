@@ -64,10 +64,10 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
                                  const OUString& rFileName, const OUString& rShort,
                                  SfxObjectShell& rObjSh, OUString& rLong )
 {
-    if( nullptr == dynamic_cast<const SwDocShell*>( &rObjSh) )
+    SwDocShell* pDShell = dynamic_cast<SwDocShell*>(&rObjSh);
+    if( !pDShell )
         return false;
 
-    SwDocShell& rDShell = static_cast<SwDocShell&>(rObjSh);
     ErrCode nRet = ERRCODE_NONE;
 
     // mba: relative URLs don't make sense here
@@ -77,7 +77,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
     nRet = aBlk.BeginPutDoc( rShort, rShort );
     if( ! nRet.IsError() )
     {
-        rDShell.GetEditShell()->CopySelToDoc( *pDoc );
+        pDShell->GetEditShell()->CopySelToDoc( *pDoc );
         nRet = aBlk.PutDoc();
         aBlk.AddName ( rShort, rShort );
         if( ! nRet.IsError() )

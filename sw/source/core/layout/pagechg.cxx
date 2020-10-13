@@ -430,9 +430,8 @@ static void lcl_MakeObjs( const SwFrameFormats &rTable, SwPageFrame *pPage )
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
                 SwDrawContact *pContact =
                             static_cast<SwDrawContact*>(::GetUserCall(pSdrObj));
-                if ( dynamic_cast< const SwDrawVirtObj *>( pSdrObj ) !=  nullptr )
+                if ( auto pDrawVirtObj = dynamic_cast<SwDrawVirtObj *>( pSdrObj ) )
                 {
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
                     if ( pContact )
                     {
                         pDrawVirtObj->RemoveFromWriterLayout();
@@ -851,9 +850,8 @@ void SwPageFrame::Cut()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
 
-                if ( dynamic_cast< const SwFlyAtContentFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast<SwFlyAtContentFrame *>( pAnchoredObj ) )
                 {
-                    SwFlyFrame* pFly = static_cast<SwFlyAtContentFrame*>(pAnchoredObj);
                     SwPageFrame *pAnchPage = pFly->GetAnchorFrame() ?
                                 pFly->AnchorFrame()->FindPageFrame() : nullptr;
                     if ( pAnchPage && (pAnchPage != this) )
@@ -949,9 +947,8 @@ static void lcl_PrepFlyInCntRegister( SwContentFrame *pFrame )
     for(SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
     {
         // #i28701#
-        if ( dynamic_cast< const SwFlyInContentFrame *>( pAnchoredObj ) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyInContentFrame *>( pAnchoredObj ) )
         {
-            SwFlyFrame* pFly = static_cast<SwFlyInContentFrame*>(pAnchoredObj);
             SwContentFrame *pCnt = pFly->ContainsContent();
             while ( pCnt )
             {
@@ -978,9 +975,8 @@ void SwPageFrame::PrepareRegisterChg()
     for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
     {
         // #i28701#
-        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
             pFrame = pFly->ContainsContent();
             while ( pFrame )
             {
@@ -1867,8 +1863,8 @@ void SwRootFrame::StartAllAction()
     if ( GetCurrShell() )
         for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                static_cast<SwCursorShell*>(&rSh)->StartAction();
+            if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
+                pCursorShell->StartAction();
             else
                 rSh.StartAction();
         }
@@ -1883,12 +1879,12 @@ void SwRootFrame::EndAllAction( bool bVirDev )
     {
         const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
         rSh.SetEndActionByVirDev( bVirDev );
-        if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
+        if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
         {
-            static_cast<SwCursorShell*>(&rSh)->EndAction();
-            static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
-            if ( dynamic_cast<const SwFEShell*>( &rSh) !=  nullptr )
-                static_cast<SwFEShell*>(&rSh)->SetChainMarker();
+            pCursorShell->EndAction();
+            pCursorShell->CallChgLnk();
+            if ( auto pFEShell = dynamic_cast<SwFEShell*>( &rSh) )
+                pFEShell->SetChainMarker();
         }
         else
             rSh.EndAction();
@@ -1941,8 +1937,8 @@ void SwRootFrame::UnoRestoreAllActions()
         sal_uInt16 nActions = rSh.GetRestoreActions();
         while( nActions-- )
         {
-            if ( dynamic_cast<const SwCursorShell*>( &rSh) !=  nullptr )
-                static_cast<SwCursorShell*>(&rSh)->StartAction();
+            if ( auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh) )
+                pCursorShell->StartAction();
             else
                 rSh.StartAction();
         }
@@ -1979,9 +1975,8 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
         SwObjPositioningInProgress aPosInProgress( *pAnchoredObj );
 
-        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) != nullptr )
+        if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
-            SwFlyFrame* pFlyFrame( static_cast<SwFlyFrame*>(pAnchoredObj) );
             lcl_MoveAllLowers( pFlyFrame, rOffset );
             pFlyFrame->NotifyDrawObj();
             // --> let the active embedded object be moved
@@ -2010,10 +2005,8 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
                 }
             }
         }
-        else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
+        else if ( auto pAnchoredDrawObj = dynamic_cast<SwAnchoredDrawObject *>( pAnchoredObj ) )
         {
-            SwAnchoredDrawObject* pAnchoredDrawObj( static_cast<SwAnchoredDrawObject*>(pAnchoredObj) );
-
             // don't touch objects that are not yet positioned:
             if ( pAnchoredDrawObj->NotYetPositioned() )
                 continue;

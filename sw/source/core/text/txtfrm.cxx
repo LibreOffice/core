@@ -2412,9 +2412,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                    if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                    if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                     {
-                        SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                         if( !pFly->IsFlyInContentFrame() )
                         {
                             const SvxBrushItem &rBack =

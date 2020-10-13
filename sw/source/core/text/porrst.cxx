@@ -205,8 +205,7 @@ SwTwips SwTextFrame::EmptyHeight() const
 {
     if (IsCollapse()) {
         SwViewShell *pSh = getRootFrame()->GetCurrShell();
-        if ( dynamic_cast<const SwCursorShell*>( pSh ) !=  nullptr ) {
-            SwCursorShell *pCrSh = static_cast<SwCursorShell*>(pSh);
+        if ( auto pCrSh = dynamic_cast<SwCursorShell*>( pSh ) ) {
             // this is called during formatting so avoid recursive layout
             SwContentFrame const*const pCurrFrame = pCrSh->GetCurrFrame(false);
             if (pCurrFrame==static_cast<SwContentFrame const *>(this)) {

@@ -388,9 +388,9 @@ bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) c
             const SwSortedObjs &rObjs = *GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr )
+                const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+                if( !pFly )
                     continue;
-                const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
                 if( pFly->FillSelection( rList, rRect ) )
                     bRet = true;
             }
@@ -2568,9 +2568,9 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr )
+                const SwFlyFrame* pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+                if ( !pFly )
                     continue;
-                const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFormatSurround &rSur = pFly->GetFormat()->GetSurround();
                 SwFormatAnchor const& rAnchor(pAnchoredObj->GetFrameFormat().GetAnchor());

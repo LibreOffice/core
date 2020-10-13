@@ -1875,9 +1875,8 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             OSL_ENSURE( pBoss->IsPageFrame(), "Header/Footer out of page?" );
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     OSL_ENSURE( !pFly->IsFlyInContentFrame(), "FlyInCnt at Page?" );
                     const SwFormatVertOrient &rVert =
                                         pFly->GetFormat()->GetVertOrient();
@@ -2045,10 +2044,10 @@ void SwFrame::ValidateThisAndAllLowers( const sal_uInt16 nStage )
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchObj = (*pObjs)[i];
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchObj ) !=  nullptr )
-                    static_cast<SwFlyFrame*>(pAnchObj)->ValidateThisAndAllLowers( 2 );
-                else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchObj ) !=  nullptr )
-                    static_cast<SwAnchoredDrawObject*>(pAnchObj)->ValidateThis();
+                if ( auto pFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchObj ) )
+                    pFlyFrame->ValidateThisAndAllLowers( 2 );
+                else if ( auto pAnchoredDrawObj = dynamic_cast<SwAnchoredDrawObject *>( pAnchObj ) )
+                    pAnchoredDrawObj->ValidateThis();
             }
         }
     }
@@ -3478,9 +3477,8 @@ static void InvaPercentFlys( SwFrame *pFrame, SwTwips nDiff )
     OSL_ENSURE( pFrame->GetDrawObjs(), "Can't find any Objects" );
     for (SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
     {
-        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
             const SwFormatFrameSize &rSz = pFly->GetFormat()->GetFrameSize();
             if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
             {
@@ -3610,9 +3608,8 @@ static bool lcl_IsFlyHeightClipped( SwLayoutFrame *pLay )
             for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     if ( pFly->IsHeightClipped() &&
                          ( !pFly->IsFlyFreeFrame() || pFly->GetPageFrame() ) )
                         return true;
@@ -4088,9 +4085,8 @@ static void lcl_InvalidateAllContent( SwContentFrame *pCnt, SwInvalidateFlags nI
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for (SwAnchoredObject* pAnchoredObj : rObjs)
     {
-        if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+        if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
         {
-            SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
             if ( pFly->IsFlyInContentFrame() )
             {
                 ::lcl_InvalidateContent( pFly->ContainsContent(), nInv );
@@ -4119,9 +4115,8 @@ void SwRootFrame::InvalidateAllContent( SwInvalidateFlags nInv )
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pFly = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    SwFlyFrame* pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
                     ::lcl_InvalidateContent( pFly->ContainsContent(), nInv );
                     if ( nInv & SwInvalidateFlags::Direction )
                         pFly->CheckDirChange();

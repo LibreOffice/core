@@ -1395,10 +1395,9 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         if (!pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(pSdrObj->GetLayer()))
             continue;
 
-        if (dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr)
+        const SwFlyFrame *pFly = dynamic_cast<const SwFlyFrame*>(pAnchoredObj);
+        if (!pFly)
             continue;
-
-        const SwFlyFrame *pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
 
         if (pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.IsOver(pFly->getFrameArea()))
             continue;
@@ -3815,9 +3814,9 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         {
             bPaint = false;
         }
-        if ( dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr )
+        if ( auto pFlyDraw = dynamic_cast<SwVirtFlyDrawObj *>( pObj ) )
         {
-            SwFlyFrame *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame();
+            SwFlyFrame *pFly = pFlyDraw->GetFlyFrame();
             if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )
                 return true;
 
@@ -6472,18 +6471,16 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                 for (SwAnchoredObject* pAnchoredObj : rObjs)
                 {
                     if ( pPage->GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
-                                    pAnchoredObj->GetDrawObj()->GetLayer() ) &&
-                         dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
-                    {
-                        const SwFlyFrame *pFly =
-                                    static_cast<const SwFlyFrame*>(pAnchoredObj);
-                        if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().IsOver( rRect ) )
+                                    pAnchoredObj->GetDrawObj()->GetLayer() ) )
+                        if (auto pFly = dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) )
                         {
-                            if ( !pFly->Lower() || !pFly->Lower()->IsNoTextFrame() ||
-                                 !static_cast<const SwNoTextFrame*>(pFly->Lower())->HasAnimation())
-                                pFly->RefreshLaySubsidiary( pPage, rRect );
+                            if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().IsOver( rRect ) )
+                            {
+                                if ( !pFly->Lower() || !pFly->Lower()->IsNoTextFrame() ||
+                                     !static_cast<const SwNoTextFrame*>(pFly->Lower())->HasAnimation())
+                                    pFly->RefreshLaySubsidiary( pPage, rRect );
+                            }
                         }
-                    }
                 }
             }
         }
