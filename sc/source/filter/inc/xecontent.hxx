@@ -343,6 +343,7 @@ private:
     XclExpStringRef     mxString1;      /// String for first condition formula.
     XclTokenArrayRef    mxTokArr1;      /// Formula for first condition.
     OUString            msFormula1;     /// OOXML Formula for first condition.
+    OUString            msList;         /// x12ac:list for first condition.
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
     OUString            msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.

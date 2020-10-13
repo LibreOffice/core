@@ -93,6 +93,7 @@ public:
     ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
 
     void test();
+    void testTdf90104();
     void testTdf111876();
     void testPasswordExportODS();
     void testTdf134332();
@@ -276,6 +277,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testTdf90104);
     CPPUNIT_TEST(testTdf111876);
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testTdf134332);
@@ -478,6 +480,7 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("ContentType"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types") },
         { BAD_CAST("x14"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2009/9/main") },
         { BAD_CAST("xm"), BAD_CAST("http://schemas.microsoft.com/office/excel/2006/main") },
+        { BAD_CAST("x12ac"), BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac") },
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -539,6 +542,27 @@ void ScExportTest::test()
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf90104()
+{
+    ScDocShellRef xShell = loadDoc("tdf90104.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile
+        = ScBootstrapFixture::exportTo(&(*xDocSh), FORMAT_XLSX);
+
+    xmlDocUniquePtr pDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/mc:AlternateContent"
+                       "/mc:Choice/x12ac:list", "1,\"2,3\",4,\"5,6\"");
+    assertXPathContent(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation/mc:AlternateContent"
+                       "/mc:Fallback/x:formula1", "\"1,2,3,4,5,6\"");
 }
 
 void ScExportTest::testTdf111876()
