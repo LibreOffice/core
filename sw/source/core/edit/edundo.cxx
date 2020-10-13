@@ -222,10 +222,10 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
     OSL_ENSURE( pShell != nullptr, "need shell!" );
     OSL_ENSURE( pSdrMarkList != nullptr, "need mark list" );
 
-    if( dynamic_cast<const SwFEShell*>( pShell) ==  nullptr )
+    SwFEShell* pFEShell = dynamic_cast<SwFEShell*>( pShell );
+    if( !pFEShell )
         return;
 
-    SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
     bool bFirst = true;
     for( size_t i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
     {

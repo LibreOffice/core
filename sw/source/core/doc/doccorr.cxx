@@ -95,9 +95,9 @@ void PaMCorrAbs( const SwPaM& rRange,
     {
         for(const SwViewShell& rShell : pShell->GetRingContainer())
         {
-            if(dynamic_cast<const SwCursorShell *>(&rShell) == nullptr)
+            const SwCursorShell* pCursorShell = dynamic_cast<const SwCursorShell*>(&rShell);
+            if(!pCursorShell)
                 continue;
-            const SwCursorShell* pCursorShell = static_cast<const SwCursorShell*>(&rShell);
             SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
                 for (;;)
@@ -252,9 +252,9 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     {
         for(const SwViewShell& rShell : pShell->GetRingContainer())
         {
-            if(dynamic_cast<const SwCursorShell *>(&rShell) == nullptr)
+            SwCursorShell* pCursorShell = const_cast<SwCursorShell*>(dynamic_cast<const SwCursorShell*>(&rShell));
+            if(!pCursorShell)
                 continue;
-            SwCursorShell* pCursorShell = const_cast<SwCursorShell*>(static_cast<const SwCursorShell*>(&rShell));
             SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
                 for (;;)
@@ -333,9 +333,9 @@ SwEditShell const * SwDoc::GetEditShell() const
         for(const SwViewShell& rCurrentSh : pCurrentView->GetRingContainer())
         {
             // look for an EditShell (if it exists)
-            if( dynamic_cast<const SwEditShell *>(&rCurrentSh) != nullptr )
+            if( auto pEditShell = dynamic_cast<const SwEditShell *>(&rCurrentSh) )
             {
-                return static_cast<const SwEditShell*>(&rCurrentSh);
+                return pEditShell;
             }
         }
     }

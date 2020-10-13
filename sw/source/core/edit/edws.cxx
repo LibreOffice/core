@@ -98,8 +98,8 @@ void SwEditShell::EndAllAction()
 {
     for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if( dynamic_cast<const SwEditShell *>(&rCurrentShell) != nullptr )
-            static_cast<SwEditShell*>(&rCurrentShell)->EndAction();
+        if( auto pEditShell = dynamic_cast<SwEditShell *>(&rCurrentShell))
+            pEditShell->EndAction();
         else
             rCurrentShell.EndAction();
     }

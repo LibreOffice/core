@@ -2687,10 +2687,10 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
 {
     SwRect aRet;
     SwFrame *pFrame = nullptr;
-    if( dynamic_cast<const SwSectionFormat*>( this ) !=  nullptr )
+    if( auto pSectionFormat = dynamic_cast<const SwSectionFormat*>( this ))
     {
         // get the Frame using Node2Layout
-        const SwSectionNode* pSectNd = static_cast<const SwSectionFormat*>(this)->GetSectionNode();
+        const SwSectionNode* pSectNd = pSectionFormat->GetSectionNode();
         if( pSectNd )
         {
             SwNode2Layout aTmp( *pSectNd, pSectNd->GetIndex() - 1 );

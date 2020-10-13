@@ -2881,9 +2881,8 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
     // take care of all shells
     for(SwViewShell& rTmp : GetRingContainer())
     {
-        if( dynamic_cast<const SwCursorShell *>(&rTmp) != nullptr)
+        if( auto pSh = dynamic_cast<SwCursorShell *>(&rTmp))
         {
-            SwCursorShell* pSh = static_cast<SwCursorShell*>(&rTmp);
             if (pSh->m_pStackCursor)
                 pSh->ParkPams(pNew.get(), &pSh->m_pStackCursor);
 

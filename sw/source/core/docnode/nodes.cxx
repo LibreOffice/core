@@ -558,10 +558,9 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if( dynamic_cast<const SwDDETable*>(&pTableNd->GetTable()) != nullptr )
+                        if( auto pDDETable = dynamic_cast<SwDDETable*>(&pTableNd->GetTable()) )
                         {
-                            SwDDEFieldType* pTyp = static_cast<SwDDETable&>(pTableNd->
-                                                GetTable()).GetDDEFieldType();
+                            SwDDEFieldType* pTyp = pDDETable->GetDDEFieldType();
                             if( pTyp )
                             {
                                 if( rNodes.IsDocNodes() )

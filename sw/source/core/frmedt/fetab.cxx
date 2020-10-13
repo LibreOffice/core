@@ -1630,10 +1630,9 @@ const SwFrame* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) c
             for ( size_t i = 0; !pFrame && i < pPage->GetSortedObjs()->size(); ++i )
             {
                 SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
-                if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
+                if ( auto pFlyFrame = dynamic_cast<SwFlyFrame*>( pObj) )
                 {
-                    pFrame = lcl_FindFrame( static_cast<SwFlyFrame*>(pObj),
-                                        rPt, nFuzzy, pbRow, pbCol );
+                    pFrame = lcl_FindFrame( pFlyFrame, rPt, nFuzzy, pbRow, pbCol );
                 }
             }
         }
