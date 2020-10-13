@@ -70,7 +70,7 @@ static OUString toUNOname(OUString const& rRTTIname) throw()
 static OUString toRTTIname(OUString const& rUNOname) throw()
 {
     OUStringBuffer aRet(64);
-    aRet.appendAscii(".?AV"); // class ".?AV"; struct ".?AU"
+    aRet.append(".?AV"); // class ".?AV"; struct ".?AU"
     sal_Int32 nPos = rUNOname.getLength();
     while (nPos > 0)
     {
