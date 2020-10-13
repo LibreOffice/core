@@ -234,7 +234,7 @@ public:
     PageKind        GetPageKind() const { return mePageKind; }
     void            SetPageKind( PageKind ePageKind ) { mePageKind = ePageKind; }
     const Point&    GetMousePos() const { return maMousePos; }
-    void            SetMousePosFreezed( bool bIn ) { mbMousePosFreezed = bIn; }
+    void            SetMousePosFreezed() { mbMousePosFreezed = false; }
 
     EditMode        GetEditMode() const { return meEditMode; }
     virtual SdPage* GetActualPage() override { return mpActualPage; }
