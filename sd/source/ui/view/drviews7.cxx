@@ -284,6 +284,45 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
     }
 }
 
+bool DrawViewShell::ShouldDisableEditHyperlink()
+{
+    if (!mpDrawView)
+        return true;
+    if (!mpDrawView->AreObjectsMarked())
+       return true;
+    if (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1)
+        return true;
+
+    bool bDisableEditHyperlink = true;
+    if( mpDrawView->IsTextEdit() )
+    {
+        if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+            bDisableEditHyperlink = false;
+    }
+    else
+    {
+        SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
+
+        if ( pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor() )
+        {
+            const uno::Reference< awt::XControlModel >& xControlModel( pUnoCtrl->GetUnoControlModel() );
+            if( xControlModel.is() )
+            {
+                uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
+                if( xPropSet.is() )
+                {
+                    uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
+                    if( xPropInfo.is() && xPropInfo->hasPropertyByName( "TargetURL") )
+                    {
+                        bDisableEditHyperlink = false;
+                    }
+                }
+            }
+        }
+    }
+    return bDisableEditHyperlink;
+}
+
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if (mpDrawView == nullptr)
@@ -1443,36 +1482,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
 
-    bool bDisableEditHyperlink = true;
-    if( mpDrawView->AreObjectsMarked() && ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 1 ) )
-    {
-        if( mpDrawView->IsTextEdit() )
-        {
-            if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
-                bDisableEditHyperlink = false;
-        }
-        else
-        {
-            SdrUnoObj* pUnoCtrl = dynamic_cast<SdrUnoObj*>( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
-
-            if ( pUnoCtrl && SdrInventor::FmForm == pUnoCtrl->GetObjInventor() )
-            {
-                const uno::Reference< awt::XControlModel >& xControlModel( pUnoCtrl->GetUnoControlModel() );
-                if( xControlModel.is() )
-                {
-                    uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
-                    if( xPropSet.is() )
-                    {
-                        uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo() );
-                        if( xPropInfo.is() && xPropInfo->hasPropertyByName( "TargetURL") )
-                        {
-                            bDisableEditHyperlink = false;
-                        }
-                    }
-                }
-            }
-        }
-    }
+    bool bDisableEditHyperlink = ShouldDisableEditHyperlink();
 
     //highlight selected custom shape
     {
