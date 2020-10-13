@@ -1932,7 +1932,7 @@ void VclScrolledWindow::doSetAllocation(const Size &rAllocation, bool bRetryOnFa
 
     if (m_pVScroll->IsVisible())
     {
-        Point aScrollPos(rAllocation.Width() - nScrollBarWidth - 2, 1);
+        Point aScrollPos(rAllocation.Width() - nScrollBarWidth - 1, 1);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height() - 2);
         if (bBothVisible)
             aScrollSize.AdjustHeight(-nScrollBarHeight);
