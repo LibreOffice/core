@@ -118,8 +118,8 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
 
     if (!SvtMiscOptions().IsExperimentalMode())
     {
-        m_pRadioButtons[nContextSingle]->set_visible(false);
-        m_pRadioButtons[nContextGroup]->set_visible(false);
+        m_pRadioButtons[nGroupedbarFull]->set_visible(false);
+        m_pRadioButtons[nContextualGroups]->set_visible(false);
     }
 }
 
