@@ -657,8 +657,8 @@ private:
     SVL_DLLPRIVATE void ImpGetFractionElements( double& fNumber,
                                                 sal_uInt16 nIx,
                                                 double& fIntPart,
-                                                sal_uInt64& nFrac,
-                                                sal_uInt64& nDiv ) const;
+                                                sal_Int64& nFrac,
+                                                sal_Int64& nDiv ) const;
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              OUStringBuffer& OutString);
@@ -697,10 +697,10 @@ private:
 
     // normal digits or other digits, depending on ImpSvNumFor.aNatNum,
     // [NatNum1], [NatNum2], ...
-    SVL_DLLPRIVATE OUString ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int32 nVal,
+    SVL_DLLPRIVATE OUString ImpGetNatNumString( const SvNumberNatNum& rNum, sal_Int64 nVal,
                                               sal_uInt16 nMinDigits  ) const;
 
-    OUString ImpIntToString( sal_uInt16 nIx, sal_Int32 nVal, sal_uInt16 nMinDigits = 0 ) const
+    OUString ImpIntToString( sal_uInt16 nIx, sal_Int64 nVal, sal_uInt16 nMinDigits = 0 ) const
     {
         const SvNumberNatNum& rNum = NumFor[nIx].GetNatNum();
         if ( nMinDigits || rNum.IsComplete() )
