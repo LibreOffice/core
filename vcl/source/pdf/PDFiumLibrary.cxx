@@ -355,6 +355,13 @@ std::unique_ptr<PDFiumPathSegment> PDFiumPageObject::getPathSegment(int index)
     return pPDFiumPathSegment;
 }
 
+Size PDFiumPageObject::getImageSize(PDFiumPage& rPage)
+{
+    FPDF_IMAGEOBJ_METADATA aMeta;
+    FPDFImageObj_GetImageMetadata(mpPageObject, rPage.getPointer(), &aMeta);
+    return Size(aMeta.width, aMeta.height);
+}
+
 BitmapChecksum PDFiumPage::getChecksum()
 {
     size_t nPageWidth = getWidth();

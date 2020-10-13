@@ -29,7 +29,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <osl/endian.h>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -1422,11 +1421,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
 
     // Check width of the image.
     std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(/*index=*/0);
-    FPDF_IMAGEOBJ_METADATA aMeta;
-    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject->getPointer(), pPdfPage->getPointer(), &aMeta));
+    Size aMeta = pPageObject->getImageSize(*pPdfPage);
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
-    CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
+    CPPUNIT_ASSERT_LESS(static_cast<long>(250), aMeta.getWidth());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
@@ -1611,16 +1609,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115262)
         }
         else if (pPageObject->getType() == FPDF_PAGEOBJ_TEXT)
         {
-            unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 0);
-            std::vector<sal_Unicode> aText(nTextSize);
-            FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
-#if defined OSL_BIGENDIAN
-            // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
-            for (auto & j: aText) {
-                j = OSL_SWAPWORD(j);
-            }
-#endif
-            OUString sText(aText.data(), nTextSize / 2 - 1);
+            OUString sText = pPageObject->getText(pTextPage);
             if (sText == "400")
                 nRowTop = fTop;
         }
@@ -1651,16 +1640,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121962)
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
         if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
             continue;
-        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 0);
-        std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
-#if defined OSL_BIGENDIAN
-        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
-        for (auto & j: aText) {
-            j = OSL_SWAPWORD(j);
-        }
-#endif
-        OUString sText(aText.data(), nTextSize / 2 - 1);
+        OUString sText = pPageObject->getText(pTextPage);
         CPPUNIT_ASSERT(sText != "** Expression is faulty **");
     }
 }
@@ -1687,16 +1667,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
         std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPdfPage->getObject(i);
         if (pPageObject->getType() != FPDF_PAGEOBJ_TEXT)
             continue;
-        unsigned long nTextSize = FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), nullptr, 2);
-        std::vector<sal_Unicode> aText(nTextSize);
-        FPDFTextObj_GetText(pPageObject->getPointer(), pTextPage->getPointer(), aText.data(), nTextSize);
-#if defined OSL_BIGENDIAN
-        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
-        for (auto & j: aText) {
-            j = OSL_SWAPWORD(j);
-        }
-#endif
-        OUString sChar(aText.data(), nTextSize / 2 - 1);
+        OUString sChar = pPageObject->getText(pTextPage);
         sText += sChar.trim();
     }
     CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
@@ -2227,18 +2198,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormFontName)
     // Examine the default appearance.
     CPPUNIT_ASSERT(pAnnot->hasKey("DA"));
     CPPUNIT_ASSERT_EQUAL(FPDF_OBJECT_STRING, FPDFAnnot_GetValueType(pAnnot->getPointer(), "DA"));
-    size_t nDALength = FPDFAnnot_GetStringValue(pAnnot->getPointer(), "DA", nullptr, 0);
-    CPPUNIT_ASSERT_EQUAL(std::size_t(0), nDALength % 2);
-    std::vector<sal_Unicode> aDABuf(nDALength / 2);
-    FPDFAnnot_GetStringValue(
-        pAnnot->getPointer(), "DA", reinterpret_cast<FPDF_WCHAR *>(aDABuf.data()), nDALength);
-#if defined OSL_BIGENDIAN
-    // The data returned by FPDFAnnot_GetStringValue is documented to always be UTF-16LE:
-    for (auto & i: aDABuf) {
-        i = OSL_SWAPWORD(i);
-    }
-#endif
-    OUString aDA(reinterpret_cast<sal_Unicode*>(aDABuf.data()));
+    OUString aDA = pAnnot->getString("DA");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0 0 0 rg /TiRo 12 Tf
