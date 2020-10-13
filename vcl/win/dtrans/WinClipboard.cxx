@@ -93,7 +93,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
     // use the shortcut or create a transferable from
     // system clipboard
     {
-        osl::MutexGuard aGuard(m_ClipContentMutex);
+        osl::MutexGuard aGuard2(m_ClipContentMutex);
 
         if (nullptr != m_pCurrentClipContent)
             return m_pCurrentClipContent->m_XTransferable;
@@ -121,7 +121,7 @@ uno::Reference<datatransfer::XTransferable> SAL_CALL CWinClipboard::getContents(
         // remember pIDo destroys itself due to the smart pointer
         rClipContent = CDOTransferable::create(m_xContext, pIDo);
 
-        osl::MutexGuard aGuard(m_ClipContentMutex);
+        osl::MutexGuard aGuard2(m_ClipContentMutex);
         m_foreignContent = rClipContent;
     }
 
@@ -143,7 +143,7 @@ void SAL_CALL CWinClipboard::setContents(
     if (xTransferable.is())
     {
         {
-            osl::MutexGuard aGuard(m_ClipContentMutex);
+            osl::MutexGuard aGuard2(m_ClipContentMutex);
 
             m_foreignContent.clear();
 
