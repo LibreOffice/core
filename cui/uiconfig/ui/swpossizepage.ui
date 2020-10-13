@@ -576,7 +576,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="followtextflow">
-                    <property name="label" translatable="yes" context="swpossizepage|followtextflow">Follow te_xt flow</property>
+                    <property name="label" translatable="yes" context="swpossizepage|followtextflow">Keep inside te_xt boundaries</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
