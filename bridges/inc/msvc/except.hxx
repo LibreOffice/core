@@ -90,7 +90,7 @@ class RTTInfos final
     osl::Mutex m_aMutex;
     t_string2PtrMap m_allRTTI;
 
-    RTTInfos();
+    RTTInfos() throw();
     ExceptionTypeInfoWrapper* getInfo(OUString const& rUNOname) throw();
 
 public:
