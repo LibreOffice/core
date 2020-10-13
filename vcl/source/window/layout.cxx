@@ -1800,7 +1800,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
 
     AllSettings aAllSettings = GetSettings();
     StyleSettings aStyle = aAllSettings.GetStyleSettings();
-    aStyle.SetMonoColor(aStyle.GetActiveBorderColor());
+    aStyle.SetMonoColor(aStyle.GetShadowColor());
     aAllSettings.SetStyleSettings(aStyle);
     SetSettings(aAllSettings);
 
