@@ -73,6 +73,9 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_uiwriter))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_uiwriter, \
     modules/swriter \
+    sfx \
+    svt \
+    svx \
 ))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_uiwriter, \
