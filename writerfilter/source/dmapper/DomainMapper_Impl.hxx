@@ -433,11 +433,13 @@ struct SectionInfo
     bool bFirstPara; // this is the first paragraph in this section
     bool bFirstParaAfterRedline; // this is the first real, non-deleted paragraph in this section
     bool bDummyParaAddedForTable;
+    bool bLastSection; // this is the last text section in the document (only valid for CloseSectionGroup)
 
     SectionInfo()
         : bFirstPara(true)
         , bFirstParaAfterRedline(true)
         , bDummyParaAddedForTable(false)
+        , bLastSection(false)
     {
     }
 };
@@ -566,7 +568,6 @@ private:
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bIsPreviousParagraphFramed;
     bool                            m_bIsLastParaInSection;
-    bool                            m_bIsLastSectionGroup;
     bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
@@ -659,7 +660,7 @@ public:
     void SetRubyInfo(const RubyInfo & rInfo) { m_aRubyInfo = rInfo;}
 
     void SetIsLastSectionGroup( bool bIsLast );
-    bool GetIsLastSectionGroup() const { return m_bIsLastSectionGroup;}
+    bool GetIsLastSectionGroup() const;
     void SetIsFirstParagraphInSection( bool bIsFirst );
     void SetIsFirstParagraphInSectionAfterRedline( bool bIsFirstAfterRedline );
     bool GetIsFirstParagraphInSection( bool bAfterRedline = false ) const;
