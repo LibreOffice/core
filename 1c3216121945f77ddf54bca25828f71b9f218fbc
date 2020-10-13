@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e8f3640a_acee1d42",
+        "filename": "sdext/source/presenter/PresenterAccessibility.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1825,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-13T08:46:40Z",
+      "side": 1,
+      "message": "probably, but a cast to void also helps...",
+      "parentUuid": "f850c57f_f1c63f6b",
+      "revId": "1c3216121945f77ddf54bca25828f71b9f218fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f992953_e4ffd5e0",
         "filename": "sdext/source/presenter/PresenterAccessibility.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-10-12T11:03:29Z",
       "side": 1,
       "message": "rather make this a real assert?",
+      "revId": "1c3216121945f77ddf54bca25828f71b9f218fbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d87beb_84a8531e",
+        "filename": "sdext/source/presenter/PresenterAccessibility.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-13T08:46:40Z",
+      "side": 1,
+      "message": "that\u0027s a good idea; i\u0027ll leave this change and the resulting bugfixing when the assert actually triggers unexpectedly as an exercise for the reader.",
+      "parentUuid": "7f992953_e4ffd5e0",
       "revId": "1c3216121945f77ddf54bca25828f71b9f218fbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
