@@ -2714,8 +2714,40 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         // CheckSetForceArrayParameter() and later PutCode().
         return;
 
-    if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
+    const OpCode eOp = rCurr->GetOpCode();
+    const StackVar eType = rCurr->GetType();
+    bool bInlineArray = false;
+    if (!(eOp != ocPush && (eType == svByte || eType == svJump))
+            && !(bInlineArray = (eOp == ocPush && eType == svMatrix)))
         return;
+
+    // Return class for inline arrays and functions returning array/matrix.
+    // It's somewhat unclear what Excel actually does there and in
+    // ECMA-376-1:2016 OOXML mentions "call to ... shall be an array formula"
+    // only for FREQUENCY() and TRANSPOSE() but not for any other function
+    // returning array/matrix or inline arrays, though for the latter has one
+    // example in 18.17.2 Syntax:
+    // "SUM(SQRT({1,2,3,4})) returns 6.14 when entered normally". However,
+    // these need to be treated similar but not as ParamClass::ForceArray
+    // (which would contradict the example in
+    // https://bugs.documentfoundation.org/show_bug.cgi?id=122301#c19 and A6 of
+    // https://bugs.documentfoundation.org/show_bug.cgi?id=133260#c10 ).
+    // See also
+    // commit d0ded163d8e93dc5b10d7a7c9bdab1d0a6a50bac
+    // commit 5413c8871dec08eff19f514f5f391b946a45c86c
+    constexpr ParamClass eArrayReturn = ParamClass::ForceArrayReturn;
+
+    if (bInlineArray)
+    {
+        // rCurr->SetInForceArray() can not be used with ocPush.
+        if (pCurrentFactorToken && pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
+        {
+            // Propagate to caller as if a function returning an array/matrix
+            // was called (see also below).
+            pCurrentFactorToken->SetInForceArray( eArrayReturn);
+        }
+        return;
+    }
 
     if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
     {
@@ -2760,14 +2792,14 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
         return;
 
     // Actual current parameter's class.
-    const formula::ParamClass eType = GetForceArrayParameter(
+    const formula::ParamClass eParamType = GetForceArrayParameter(
             pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1));
-    if (eType == ParamClass::ForceArray)
-        rCurr->SetInForceArray( eType);
-    else if (eType == ParamClass::ReferenceOrForceArray)
+    if (eParamType == ParamClass::ForceArray)
+        rCurr->SetInForceArray( eParamType);
+    else if (eParamType == ParamClass::ReferenceOrForceArray)
     {
         if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) != ParamClass::Reference)
-            rCurr->SetInForceArray( eType);
+            rCurr->SetInForceArray( eParamType);
         else
             rCurr->SetInForceArray( formula::ParamClass::SuppressedReferenceOrForceArray);
     }
@@ -2775,9 +2807,13 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef const & rCurr )
     // Propagate a ForceArrayReturn to caller if the called function
     // returns one and the caller so far does not have a stronger array
     // mode set.
-    if (pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown
-            && GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) == ParamClass::ForceArrayReturn)
-        pCurrentFactorToken->SetInForceArray( ParamClass::ForceArrayReturn);
+    if (pCurrentFactorToken->GetInForceArray() == ParamClass::Unknown)
+    {
+        if (IsMatrixFunction( eOp))
+            pCurrentFactorToken->SetInForceArray( eArrayReturn);
+        else if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) == ParamClass::ForceArrayReturn)
+            pCurrentFactorToken->SetInForceArray( ParamClass::ForceArrayReturn);
+    }
 }
 
 void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef const & rCurr, sal_uInt8 nParam )
