@@ -71,6 +71,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <vcl/svapp.hxx>
@@ -698,6 +699,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
     , m_xMousePosLB(m_xBuilder->weld_combo_box("mousepos"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
+    , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
 {
     if (Application::GetToolkitName() == "gtk3")
     {
@@ -757,11 +759,22 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     if (officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
         m_xForceSkiaRaster->set_sensitive(false);
 
+    m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
+    m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
+
     UpdateSkiaStatus();
 }
 
 OfaViewTabPage::~OfaViewTabPage()
 {
+}
+
+IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
+{
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "AdditionsTag";
+    aArgs[0].Value <<= OUString("Icons");
+    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
 IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, void )
