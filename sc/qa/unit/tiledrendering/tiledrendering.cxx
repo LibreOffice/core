@@ -112,6 +112,7 @@ public:
     void testSheetGeometryDataCorrectness();
     void testDeleteCellMultilineContent();
     void testSpellOnlineParameter();
+    void testSpellOnlineRenderParameter();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -157,6 +158,7 @@ public:
     CPPUNIT_TEST(testSheetGeometryDataCorrectness);
     CPPUNIT_TEST(testDeleteCellMultilineContent);
     CPPUNIT_TEST(testSpellOnlineParameter);
+    CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -601,6 +603,21 @@ void ScTiledRenderingTest::testViewCursors()
     Scheduler::ProcessEventsToIdle();
     SfxLokHelper::destroyView(SfxLokHelper::getView());
     CPPUNIT_ASSERT(aView1.m_bViewCursorInvalidated);
+}
+
+void ScTiledRenderingTest::testSpellOnlineRenderParameter()
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    bool bSet = pDoc->GetDocOptions().IsAutoSpell();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    {
+        comphelper::makePropertyValue(".uno:SpellOnline", uno::makeAny(!bSet)),
+    };
+    pModelObj->initializeForTiledRendering(aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
 }
 
 void ScTiledRenderingTest::testTextViewSelection()

@@ -128,6 +128,7 @@ public:
     void testRegenerateDiagram();
     void testLanguageAllText();
     void testInsertDeletePageInvalidation();
+    void testSpellOnlineRenderParameter();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testCreateDestroy);
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testRegenerateDiagram);
     CPPUNIT_TEST(testLanguageAllText);
     CPPUNIT_TEST(testInsertDeletePageInvalidation);
+    CPPUNIT_TEST(testSpellOnlineRenderParameter);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2459,6 +2461,20 @@ void SdTiledRenderingTest::testInsertDeletePageInvalidation()
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
+}
+
+void SdTiledRenderingTest::testSpellOnlineRenderParameter()
+{
+    // Load the document.
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    bool bSet = pXImpressDocument->GetDoc()->GetOnlineSpell();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    {
+        comphelper::InitPropertySequence({ { ".uno:SpellOnline", uno::makeAny(!bSet) } }),
+    };
+    pXImpressDocument->initializeForTiledRendering(aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pXImpressDocument->GetDoc()->GetOnlineSpell());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
