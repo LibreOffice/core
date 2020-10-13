@@ -1690,14 +1690,14 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
                 ++itSpanStart;
                 for (SCROW nIdx = nSpanStart+1; nIdx <= nSpanEnd; ++nIdx, ++itSpanStart)
                 {
-                    if( !(*itSpanStart)->Interpret()) // We know for sure that this cell is dirty so directly call Interpret().
+                    (*itSpanStart)->Interpret(); // We know for sure that this cell is dirty so directly call Interpret().
+                    if ((*itSpanStart)->NeedsInterpret())
                     {
                         SAL_WARN("sc.core.formulagroup", "Internal error, cell " << (*itSpanStart)->aPos
                             << " failed running Interpret(), not allowing threading");
                         bAllowThreading = false;
                         return bAnyDirty;
                     }
-                    assert(!(*itSpanStart)->NeedsInterpret());
 
                     // Allow early exit like above.
                     if ((mxParentGroup && mxParentGroup->mbPartOfCycle) || !rRecursionHelper.AreGroupsIndependent())
@@ -1804,14 +1804,14 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                         if( (*itCell)->NeedsInterpret())
                         {
                             bDirtyFlag = true;
-                            if(!(*itCell)->Interpret())
+                            (*itCell)->Interpret();
+                            if ((*itCell)->NeedsInterpret())
                             {
                                 SAL_WARN("sc.core.formulagroup", "Internal error, cell " << (*itCell)->aPos
                                     << " failed running Interpret(), not allowing threading");
                                 bAllowThreading = false;
                                 return;
                             }
-                            assert(!(*itCell)->NeedsInterpret());
                         }
                         bIsDirty = bIsDirty || bDirtyFlag;
 
