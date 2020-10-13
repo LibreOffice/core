@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d5a30b2f_7ede0179",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-13T12:59:39Z",
+      "side": 1,
+      "message": "It seems that the end result is 64-bit type on all platforms, including 32-bit non-Windows?",
+      "range": {
+        "startLine": 21,
+        "startChar": 63,
+        "endLine": 21,
+        "endChar": 70
+      },
+      "revId": "61dcc10d8eb3d0a4af3e355c45fa550a066c76ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a185a04_91ccef64",
         "filename": "include/tools/long.hxx",
         "patchSetId": 6
