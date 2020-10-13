@@ -80,7 +80,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
             // request.  Determine it from the mouse position.
 
             aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
-            static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( false );
+            static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed();
 
             if ( aLinePos.X() >= 0 )
             {
