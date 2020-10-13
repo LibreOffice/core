@@ -45,6 +45,7 @@ private:
 
     std::unique_ptr<weld::Button> mxNewTheme;
     std::unique_ptr<weld::TreeView> mxThemes;
+    std::unique_ptr<weld::Button> mxMoreGalleries;
     Gallery* mpGallery;
     std::unique_ptr<ExchangeData> mpExchangeData;
     std::unique_ptr<SfxItemSet> mpThemePropsDlgItemSet;
@@ -71,6 +72,7 @@ private:
                             DECL_LINK( SelectThemeHdl, weld::TreeView&, void );
                             DECL_LINK( PopupMenuHdl, const CommandEvent&, bool );
                             DECL_LINK( KeyInputHdl, const KeyEvent&, bool );
+                            DECL_STATIC_LINK( GalleryBrowser1, OnMoreGalleriesClick, weld::Button&, void );
 
 public:
 
