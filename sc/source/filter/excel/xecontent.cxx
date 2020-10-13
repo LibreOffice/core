@@ -1738,6 +1738,8 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                 OUString aString;
                 if( XclTokenArrayHelper::GetStringList( aString, *xScTokArr, '\n' ) )
                 {
+                    bool bList = false;
+                    OUStringBuffer sListBuf;
                     OUStringBuffer sFormulaBuf;
                     sFormulaBuf.append( '"' );
                     /*  Formula is a list of string tokens -> build the Excel string.
@@ -1750,12 +1752,22 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         for(;;)
                         {
                             const OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
+                            if (aToken.indexOf(",") != -1)
+                            {
+                                sListBuf.append('"');
+                                sListBuf.append(aToken);
+                                sListBuf.append('"');
+                                bList = true;
+                            }
+                            else
+                                sListBuf.append(aToken);
                             mxString1->Append( aToken );
                             sFormulaBuf.append( aToken );
                             if (nStringIx<0)
                                 break;
                             mxString1->Append(OUString(u'\0'));
                             sFormulaBuf.append( ',' );
+                            sListBuf.append( ',' );
                         }
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
@@ -1774,6 +1786,10 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
                     sFormulaBuf.append( '"' );
                     msFormula1 = sFormulaBuf.makeStringAndClear();
+                    if (bList)
+                        msList = sListBuf.makeStringAndClear();
+                    else
+                        sListBuf.remove(0, sListBuf.getLength());
                 }
                 else
                 {
@@ -1869,7 +1885,24 @@ void XclExpDV::SaveXml( XclExpXmlStream& rStrm )
             XML_showInputMessage,   ToPsz( ::get_flag( mnFlags, EXC_DV_SHOWPROMPT ) ),
             XML_sqref,              XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), maScRanges),
             XML_type,               lcl_GetValidationType(mnFlags) );
-    if( !msFormula1.isEmpty() )
+    if (!msList.isEmpty())
+    {
+        rWorksheet->startElement(FSNS(XML_mc, XML_AlternateContent),
+            FSNS(XML_xmlns, XML_x12ac),rStrm.getNamespaceURL(OOX_NS(x12ac)),
+            FSNS(XML_xmlns, XML_mc),rStrm.getNamespaceURL(OOX_NS(mce)));
+        rWorksheet->startElement(FSNS(XML_mc, XML_Choice), XML_Requires, "x12ac");
+        rWorksheet->startElement(FSNS(XML_x12ac, XML_list));
+        rWorksheet->writeEscaped(msList);
+        rWorksheet->endElement(FSNS(XML_x12ac, XML_list));
+        rWorksheet->endElement(FSNS(XML_mc, XML_Choice));
+        rWorksheet->startElement(FSNS(XML_mc, XML_Fallback));
+        rWorksheet->startElement(XML_formula1);
+        rWorksheet->writeEscaped(msFormula1);
+        rWorksheet->endElement(XML_formula1);
+        rWorksheet->endElement(FSNS(XML_mc, XML_Fallback));
+        rWorksheet->endElement(FSNS(XML_mc, XML_AlternateContent));
+    }
+    if (msList.isEmpty() && !msFormula1.isEmpty())
     {
         rWorksheet->startElement(XML_formula1);
         rWorksheet->writeEscaped( msFormula1 );
