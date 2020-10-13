@@ -307,16 +307,16 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
             for ( size_t i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-                if ( dynamic_cast<const SdrObjGroup*>(pObj) !=  nullptr )
+                if ( auto pObjGroup = dynamic_cast<SdrObjGroup*>(pObj) )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
-                    SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
+                    SdrObjList *pLst = pObjGroup->GetSubList();
 
                     SwUndoDrawUnGroup* pUndo = nullptr;
                     if( bUndo )
                     {
-                        pUndo = new SwUndoDrawUnGroup( static_cast<SdrObjGroup*>(pObj), *this );
+                        pUndo = new SwUndoDrawUnGroup( pObjGroup, *this );
                         GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
                     }
 
@@ -381,10 +381,9 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
         if( 1 == rMrkList.GetMarkCount() )
         {
             SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-            if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
+            if( auto pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>( pObj) )
             {
-                SwFlyFrameFormat* pFrameFormat =
-                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetFormat();
+                SwFlyFrameFormat* pFrameFormat = pDrawObj->GetFlyFrame()->GetFormat();
                 if( pFrameFormat )
                 {
                     getIDocumentLayoutAccess().DelLayoutFormat( pFrameFormat );

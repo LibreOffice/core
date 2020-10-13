@@ -695,9 +695,9 @@ void SwDoc::PrtOLENotify( bool bAll )
         {
             for(SwViewShell& rShell : pSh->GetRingContainer())
             {
-                if(dynamic_cast<const SwFEShell*>( &rShell) !=  nullptr)
+                if(auto pFEShell = dynamic_cast<SwFEShell*>( &rShell))
                 {
-                    pShell = static_cast<SwFEShell*>(&rShell);
+                    pShell = pFEShell;
                     break;
                 }
             }

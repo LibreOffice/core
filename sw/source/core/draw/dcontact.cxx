@@ -1666,11 +1666,10 @@ void SwDrawContact::RemoveMasterFromDrawPage()
 // also working.
 void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 {
-    if ( dynamic_cast<const SwDrawVirtObj*>( _pDrawObj) !=  nullptr )
+    if ( auto pSwDrawVirtObj = dynamic_cast<SwDrawVirtObj*>( _pDrawObj) )
     {
-        SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(_pDrawObj);
-        pDrawVirtObj->RemoveFromWriterLayout();
-        pDrawVirtObj->RemoveFromDrawingPage();
+        pSwDrawVirtObj->RemoveFromWriterLayout();
+        pSwDrawVirtObj->RemoveFromDrawingPage();
     }
     else
     {

@@ -486,9 +486,8 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     Point aBest;
                     for(SwAnchoredObject* pAnchObj : *pPage->GetSortedObjs())
                     {
-                        if( dynamic_cast<const SwFlyFrame*>( pAnchObj) !=  nullptr )
+                        if( auto pTmp = dynamic_cast<SwFlyFrame*>( pAnchObj) )
                         {
-                            SwFlyFrame* pTmp = static_cast<SwFlyFrame*>(pAnchObj);
                             if( pTmp == pOld )
                                 bOld = true;
                             else
@@ -768,8 +767,8 @@ void SwFEShell::EndDrag()
     for(SwViewShell& rSh : GetRingContainer())
     {
         rSh.EndAction();
-        if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
-            static_cast<SwCursorShell*>(&rSh)->CallChgLnk();
+        if( auto pCursorShell = dynamic_cast<SwCursorShell *>(&rSh) )
+            pCursorShell->CallChgLnk();
     }
 
     GetDoc()->getIDocumentState().SetModified();
@@ -873,10 +872,10 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         for ( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
-            if ( dynamic_cast<const SwFlyFrame*>( pAnchoredObj) ==  nullptr )
+            SwFlyFrame* pAct = dynamic_cast<SwFlyFrame*>(pAnchoredObj);
+            if ( !pAct )
                 continue;
 
-            SwFlyFrame* pAct = static_cast<SwFlyFrame*>(pAnchoredObj);
             SwRect aTmpCalcPnt( pAct->getFramePrintArea() );
             aTmpCalcPnt += pAct->getFrameArea().Pos();
             if ( aRect.IsOver( aTmpCalcPnt ) )
@@ -3076,17 +3075,17 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 
             static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
         }
-        else if(dynamic_cast<const SdrMeasureObj*>( pObj) !=  nullptr)
+        else if(auto pMeasureObj = dynamic_cast<SdrMeasureObj*>( pObj))
         {
             sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-            static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
-            static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+            pMeasureObj->SetPoint(Point(aStart.X(), nYMiddle), 0);
+            pMeasureObj->SetPoint(Point(aEnd.X(), nYMiddle), 1);
 
             SfxItemSet aAttr(pObj->getSdrModelFromSdrObject().GetItemPool());
             SetLineEnds(aAttr, *pObj, nSlotId);
             pObj->SetMergedItemSet(aAttr);
         }
-        else if(dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr)
+        else if(auto pCationObj = dynamic_cast<SdrCaptionObj*>( pObj))
         {
             bool bVerticalText = ( SID_DRAW_TEXT_VERTICAL == nSlotId ||
                                             SID_DRAW_CAPTION_VERTICAL == nSlotId );
@@ -3099,13 +3098,12 @@ long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
                 pObj->SetMergedItemSet(aSet);
             }
 
-            static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
-            static_cast<SdrCaptionObj*>(pObj)->SetTailPos(
+            pCationObj->SetLogicRect(aRect);
+            pCationObj->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
         }
-        else if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+        else if(auto pText = dynamic_cast<SdrTextObj*>( pObj))
         {
-            SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(aRect);
 
             bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotId);

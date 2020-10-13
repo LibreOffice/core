@@ -1389,8 +1389,8 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                         } while( pTmp->IsFollow() );
                         pAnchor = pTmp;
                     }
-                    if( dynamic_cast<const SdrCaptionObj*>( pOldObj) !=  nullptr)
-                        aNullPt = static_cast<SdrCaptionObj*>(pOldObj)->GetTailPos();
+                    if( auto pCaptionObj = dynamic_cast<SdrCaptionObj*>( pOldObj))
+                        aNullPt = pCaptionObj->GetTailPos();
                     else
                         aNullPt = aOldObjRect.TopLeft();
 

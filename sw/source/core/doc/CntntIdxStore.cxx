@@ -438,9 +438,9 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int
         return;
     for(SwViewShell& rCurShell : pShell->GetRingContainer())
     {
-        if( dynamic_cast<const SwCursorShell *>(&rCurShell) != nullptr )
+        if( auto pCursorShell = dynamic_cast<SwCursorShell *>(&rCurShell) )
         {
-            SwPaM *_pStackCursor = static_cast<SwCursorShell*>(&rCurShell)->GetStackCursor();
+            SwPaM *_pStackCursor = pCursorShell->GetStackCursor();
             if( _pStackCursor )
                 for (;;)
                 {
@@ -448,11 +448,11 @@ void ContentIdxStoreImpl::SaveShellCursors(SwDoc& rDoc, sal_uLong nNode, sal_Int
                     if (!_pStackCursor)
                         break;
                     _pStackCursor = _pStackCursor->GetNext();
-                    if (_pStackCursor == static_cast<SwCursorShell*>(&rCurShell)->GetStackCursor())
+                    if (_pStackCursor == pCursorShell->GetStackCursor())
                         break;
                 }
 
-            for(SwPaM& rPaM : static_cast<SwCursorShell*>(&rCurShell)->GetCursor_()->GetRingContainer())
+            for(SwPaM& rPaM : pCursorShell->GetCursor_()->GetRingContainer())
             {
                 lcl_ChkPaMBoth( m_aShellCursorEntries, nNode, nContent, rPaM);
             }

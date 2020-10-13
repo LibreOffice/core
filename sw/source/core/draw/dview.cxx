@@ -371,9 +371,8 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                         nNewPos );
             pDrawPage->RecalcObjOrdNums();
             // adjustments for accessibility API
-            if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+            if ( auto pTmpFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
             {
-                const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
                 m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
                 m_rImp.AddAccessibleFrame( pTmpFlyFrame );
             }
@@ -405,9 +404,8 @@ void SwDrawView::MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                             nTmpNewPos );
                 pDrawPage->RecalcObjOrdNums();
                 // adjustments for accessibility API
-                if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
+                if ( auto pTmpFlyFrame = dynamic_cast<SwFlyFrame *>( pAnchoredObj ) )
                 {
-                    const SwFlyFrame *pTmpFlyFrame = static_cast<SwFlyFrame*>(pAnchoredObj);
                     m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
                     m_rImp.AddAccessibleFrame( pTmpFlyFrame );
                 }
@@ -580,10 +578,8 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
     std::vector< SdrObject* > aMovedChildObjs;
 
     // move 'children' accordingly
-    if ( dynamic_cast< const SwFlyFrame *>( pMovedAnchoredObj ) !=  nullptr )
+    if ( auto pFlyFrame = dynamic_cast< SwFlyFrame *>( pMovedAnchoredObj ) )
     {
-        const SwFlyFrame* pFlyFrame = static_cast<SwFlyFrame*>(pMovedAnchoredObj);
-
         // adjustments for accessibility API
         m_rImp.DisposeAccessibleFrame( pFlyFrame );
         m_rImp.AddAccessibleFrame( pFlyFrame );
@@ -613,10 +609,9 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, size_t nOldPos,
                 // collect 'child' object
                 aMovedChildObjs.push_back( pTmpObj );
                 // adjustments for accessibility API
-                if ( dynamic_cast< const SwVirtFlyDrawObj *>( pTmpObj ) !=  nullptr )
+                if ( auto pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj *>( pTmpObj ) )
                 {
-                    const SwFlyFrame *pTmpFlyFrame =
-                        static_cast<SwVirtFlyDrawObj*>(pTmpObj)->GetFlyFrame();
+                    const SwFlyFrame *pTmpFlyFrame = pFlyDrawObj->GetFlyFrame();
                     m_rImp.DisposeAccessibleFrame( pTmpFlyFrame );
                     m_rImp.AddAccessibleFrame( pTmpFlyFrame );
                 }
@@ -678,11 +673,11 @@ const SwFrame* SwDrawView::CalcAnchor()
     //current anchor. Search only if we currently drag.
     const SwFrame* pAnch;
     tools::Rectangle aMyRect;
-    const bool bFly = dynamic_cast< const SwVirtFlyDrawObj *>( pObj ) !=  nullptr;
-    if ( bFly )
+    auto pFlyDrawObj = dynamic_cast<SwVirtFlyDrawObj *>( pObj );
+    if ( pFlyDrawObj )
     {
-        pAnch = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->GetAnchorFrame();
-        aMyRect = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrame()->getFrameArea().SVRect();
+        pAnch = pFlyDrawObj->GetFlyFrame()->GetAnchorFrame();
+        aMyRect = pFlyDrawObj->GetFlyFrame()->getFrameArea().SVRect();
     }
     else
     {
@@ -726,7 +721,7 @@ const SwFrame* SwDrawView::CalcAnchor()
             bool bBodyOnly = CheckControlLayer( pObj );
             pAnch = ::FindAnchor( static_cast<const SwContentFrame*>(pAnch), aPt, bBodyOnly );
         }
-        else if ( !bFly )
+        else if ( !pFlyDrawObj )
         {
             const SwRect aRect( aPt.getX(), aPt.getY(), 1, 1 );
 
@@ -919,9 +914,9 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
     while ( !aMarkedObjs.empty() )
     {
         SdrObject* pMarkObj = aMarkedObjs.back();
-        if ( dynamic_cast< const SwDrawVirtObj *>( pMarkObj ) !=  nullptr )
+        if ( auto pVirtObj = dynamic_cast<SwDrawVirtObj *>( pMarkObj ) )
         {
-            SdrObject* pRefObj = &(static_cast<SwDrawVirtObj*>(pMarkObj)->ReferencedObj());
+            SdrObject* pRefObj = &(pVirtObj->ReferencedObj());
             if ( !_rMarkView.IsObjMarked( pRefObj )  )
             {
                 _rMarkView.MarkObj( pRefObj, pDrawPageView );

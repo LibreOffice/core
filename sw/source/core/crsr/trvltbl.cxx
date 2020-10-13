@@ -917,9 +917,9 @@ bool SwCursorShell::EndAllTableBoxEdit()
     bool bRet = false;
     for(SwViewShell& rSh : GetRingContainer())
     {
-        if( dynamic_cast<const SwCursorShell *>(&rSh) != nullptr )
-            bRet |= static_cast<SwCursorShell*>(&rSh)->CheckTableBoxContent(
-                        static_cast<SwCursorShell*>(&rSh)->m_pCurrentCursor->GetPoint() );
+        if( auto pCursorShell = dynamic_cast<SwCursorShell *>(&rSh) )
+            bRet |= pCursorShell->CheckTableBoxContent(
+                        pCursorShell->m_pCurrentCursor->GetPoint() );
 
     }
     return bRet;
