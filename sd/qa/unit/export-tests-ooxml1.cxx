@@ -56,6 +56,7 @@ class SdOOXMLExportTest1 : public SdModelTestBaseXML
 public:
     void testFdo90607();
     void testTdf127237();
+    void testBnc887230();
     void testBnc870233_1();
     void testBnc870233_2();
     void testN828390_4();
@@ -103,6 +104,7 @@ public:
 
     CPPUNIT_TEST(testFdo90607);
     CPPUNIT_TEST(testTdf127237);
+    CPPUNIT_TEST(testBnc887230);
     CPPUNIT_TEST(testBnc870233_1);
     CPPUNIT_TEST(testBnc870233_2);
     CPPUNIT_TEST(testN828390_4);
@@ -214,6 +216,22 @@ void SdOOXMLExportTest1::testTdf127237()
     uno::Reference< beans::XPropertySet > xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nFillColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x0070C0), nFillColor);
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest1::testBnc887230()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/bnc887230.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX );
+
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
+    // Without the fix in place, this test would have failed with
+    //- Expected: 255
+    //- Actual  : 13421823
+    checkFontAttributes<Color, SvxColorItem>( pObj, Color(0x0000ff) );
 
     xDocShRef->DoClose();
 }
