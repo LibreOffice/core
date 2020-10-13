@@ -147,6 +147,7 @@ public:
     void testDropDownFormFieldButtonNoSelection();
     void testDropDownFormFieldButtonNoItem();
     void testTablePaintInvalidate();
+    void testSpellOnlineRenderParameter();
     void testExtTextInputReadOnly();
     void testBulletDeleteInvalidation();
     void testBulletNoNumInvalidation();
@@ -223,6 +224,7 @@ public:
     CPPUNIT_TEST(testDropDownFormFieldButtonNoSelection);
     CPPUNIT_TEST(testDropDownFormFieldButtonNoItem);
     CPPUNIT_TEST(testTablePaintInvalidate);
+    CPPUNIT_TEST(testSpellOnlineRenderParameter);
     CPPUNIT_TEST(testExtTextInputReadOnly);
     CPPUNIT_TEST(testBulletDeleteInvalidation);
     CPPUNIT_TEST(testBulletNoNumInvalidation);
@@ -2883,6 +2885,21 @@ void SwTiledRenderingTest::testTablePaintInvalidate()
     // - Actual  : 5
     // i.e. paint generated an invalidation, which caused a loop.
     CPPUNIT_ASSERT_EQUAL(0, m_nInvalidations);
+}
+
+void SwTiledRenderingTest::testSpellOnlineRenderParameter()
+{
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    bool bSet = pOpt->IsOnlineSpell();
+
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {".uno:SpellOnline", uno::makeAny(!bSet)},
+    }));
+    pXTextDocument->initializeForTiledRendering(aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
 
 void SwTiledRenderingTest::testExtTextInputReadOnly()
