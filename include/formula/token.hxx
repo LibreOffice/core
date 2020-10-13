@@ -361,26 +361,22 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaToken
+class FORMULA_DLLPUBLIC FormulaExternalToken final : public FormulaByteToken
 {
 private:
-            OUString              aExternal;
-            sal_uInt8           nByte;
+            OUString            aExternal;
 public:
                                 FormulaExternalToken( OpCode e, sal_uInt8 n, const OUString& r ) :
-                                    FormulaToken( svExternal, e ), aExternal( r ),
-                                    nByte( n ) {}
+                                    FormulaByteToken( e, n, svExternal, ParamClass::Unknown ),
+                                    aExternal( r ) {}
                                 FormulaExternalToken( OpCode e, const OUString& r ) :
-                                    FormulaToken(svExternal, e ), aExternal( r ),
-                                    nByte( 0 ) {}
+                                    FormulaByteToken( e, 0, svExternal, ParamClass::Unknown ),
+                                    aExternal( r ) {}
                                 FormulaExternalToken( const FormulaExternalToken& r ) :
-                                    FormulaToken( r ), aExternal( r.aExternal ),
-                                    nByte( r.nByte ) {}
+                                    FormulaByteToken( r ), aExternal( r.aExternal ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaExternalToken(*this); }
-    virtual const OUString&       GetExternal() const override;
-    virtual sal_uInt8           GetByte() const override;
-    virtual void                SetByte( sal_uInt8 n ) override;
+    virtual const OUString&     GetExternal() const override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 };
 
