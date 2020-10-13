@@ -269,11 +269,11 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
         }
 
         Fraction aFrac(1,1);
-        if (bWdh && bHgt)
+        if (bWdh && xFact.IsValid() && bHgt && yFact.IsValid())
             pO->Resize(rRef, xFact, yFact);
-        else if (bWdh)
+        else if (bWdh && xFact.IsValid())
             pO->Resize(rRef, xFact, aFrac);
-        else if (bHgt)
+        else if (bHgt && yFact.IsValid())
             pO->Resize(rRef, aFrac, yFact);
     }
     if( bUndo )
