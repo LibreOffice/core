@@ -201,7 +201,6 @@ DrawViewShell::~DrawViewShell()
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
     mpActualPage = nullptr;
-    mbMousePosFreezed = false;
     mbReadOnly = GetDocSh()->IsReadOnly();
     mxClipEvtLstnr.clear();
     mbPastePossible = false;
