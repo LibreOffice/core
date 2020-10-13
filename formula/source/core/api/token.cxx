@@ -1929,12 +1929,9 @@ bool FormulaIndexToken::operator==( const FormulaToken& r ) const
         mnSheet == r.GetSheet();
 }
 const OUString& FormulaExternalToken::GetExternal() const       { return aExternal; }
-sal_uInt8       FormulaExternalToken::GetByte() const           { return nByte; }
-void            FormulaExternalToken::SetByte( sal_uInt8 n )    { nByte = n; }
 bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
-        aExternal == r.GetExternal();
+    return FormulaByteToken::operator==( r ) && aExternal == r.GetExternal();
 }
 
 
