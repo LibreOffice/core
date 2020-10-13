@@ -1336,8 +1336,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 FuPoor::HITPIX, 0 ) ).Width());
             sal_uInt16  nHelpLine;
 
-            mbMousePosFreezed = false;
-
             if( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
             {
                 pPV->DeleteHelpLine( nHelpLine );

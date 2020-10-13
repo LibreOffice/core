@@ -364,8 +364,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
     ViewShell::MouseMove(rMEvt, pWin);
 
-    if( !mbMousePosFreezed )
-        maMousePos = rMEvt.GetPosPixel();
+    maMousePos = rMEvt.GetPosPixel();
 
     ::tools::Rectangle aRect;
 
@@ -788,7 +787,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 //open context menu at that point
                 GetViewFrame()->GetDispatcher()->ExecutePopup( aPopupId, GetActiveWindow(), &aMenuPos );
             }
-            mbMousePosFreezed = false;
         }
     }
     else
