@@ -220,76 +220,93 @@ public:
     virtual void addCropHandles(SdrHdlList& rTarget) const override;
 
     // Signature Line
-    void setIsSignatureLine(bool bIsSignatureLine) { mbIsSignatureLine = bIsSignatureLine; };
-    bool isSignatureLine() const { return mbIsSignatureLine; };
+    void setIsSignatureLine(bool bIsSignatureLine) { mbIsSignatureLine = bIsSignatureLine; }
+    bool isSignatureLine() const { return mbIsSignatureLine; }
+
     void setSignatureLineId(const OUString& rSignatureLineId)
     {
         maSignatureLineId = rSignatureLineId;
-    };
-    const OUString& getSignatureLineId() const { return maSignatureLineId; };
+    }
+
+    const OUString& getSignatureLineId() const { return maSignatureLineId; }
+
     void setSignatureLineSuggestedSignerName(const OUString& rSuggestedSignerName)
     {
         maSignatureLineSuggestedSignerName = rSuggestedSignerName;
-    };
+    }
+
     const OUString& getSignatureLineSuggestedSignerName() const
     {
         return maSignatureLineSuggestedSignerName;
-    };
+    }
+
     void setSignatureLineSuggestedSignerTitle(const OUString& rSuggestedSignerTitle)
     {
         maSignatureLineSuggestedSignerTitle = rSuggestedSignerTitle;
-    };
+    }
+
     const OUString& getSignatureLineSuggestedSignerTitle() const
     {
         return maSignatureLineSuggestedSignerTitle;
-    };
+    }
+
     void setSignatureLineSuggestedSignerEmail(const OUString& rSuggestedSignerEmail)
     {
         maSignatureLineSuggestedSignerEmail = rSuggestedSignerEmail;
-    };
+    }
     const OUString& getSignatureLineSuggestedSignerEmail() const
     {
         return maSignatureLineSuggestedSignerEmail;
-    };
+    }
+
     void setSignatureLineSigningInstructions(const OUString& rSigningInstructions)
     {
         maSignatureLineSigningInstructions = rSigningInstructions;
-    };
+    }
+
     const OUString& getSignatureLineSigningInstructions() const
     {
         return maSignatureLineSigningInstructions;
-    };
+    }
+
     void setSignatureLineShowSignDate(bool bIsSignatureLineShowSignDate)
     {
         mbIsSignatureLineShowSignDate = bIsSignatureLineShowSignDate;
-    };
-    bool isSignatureLineShowSignDate() const { return mbIsSignatureLineShowSignDate; };
+    }
+
+    bool isSignatureLineShowSignDate() const { return mbIsSignatureLineShowSignDate; }
+
     void setSignatureLineCanAddComment(bool bIsSignatureCanAddComment)
     {
         mbIsSignatureLineCanAddComment = bIsSignatureCanAddComment;
-    };
-    bool isSignatureLineCanAddComment() const { return mbIsSignatureLineCanAddComment; };
+    }
+
+    bool isSignatureLineCanAddComment() const { return mbIsSignatureLineCanAddComment; }
+
     css::uno::Reference<css::graphic::XGraphic> const & getSignatureLineUnsignedGraphic() const
     {
         return mpSignatureLineUnsignedGraphic;
-    };
+    }
+
     void setSignatureLineUnsignedGraphic(css::uno::Reference<css::graphic::XGraphic> rGraphic)
     {
         mpSignatureLineUnsignedGraphic = rGraphic;
-    };
-    bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; };
+    }
+
+    bool isSignatureLineSigned() const { return mbSignatureLineIsSigned; }
+
     void setSignatureLineIsSigned(bool bIsSigned) { mbSignatureLineIsSigned = bIsSigned; }
 
     // Qr Code
     void setQrCode(css::drawing::QRCode& rQrCode)
     {
         mpQrCode = std::make_unique<css::drawing::QRCode>(rQrCode);
-    };
+    }
 
     css::drawing::QRCode* getQrCode() const
     {
         return mpQrCode.get();
-    };
+    }
 };
 
 #endif // INCLUDED_SVX_SVDOGRAF_HXX
