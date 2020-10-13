@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a185a04_91ccef64",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-13T12:55:46Z",
+      "side": 1,
+      "message": "unsigned long",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 12
+      },
+      "revId": "61dcc10d8eb3d0a4af3e355c45fa550a066c76ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

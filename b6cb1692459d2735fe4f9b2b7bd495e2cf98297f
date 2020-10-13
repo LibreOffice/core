@@ -152,6 +152,30 @@
       "revId": "b6cb1692459d2735fe4f9b2b7bd495e2cf98297f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdae0be9_94468641",
+        "filename": "include/tools/long.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-13T12:55:46Z",
+      "side": 1,
+      "message": "patchset 6 still uses\n\n  #if defined _WIN32\n\nthough the typedefs shall always be the same for all platforms, in all steps?",
+      "parentUuid": "fbd32644_2a100a6e",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 25
+      },
+      "revId": "b6cb1692459d2735fe4f9b2b7bd495e2cf98297f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
