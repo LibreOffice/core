@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8280f5c7_672acb4d",
+        "filename": "offapi/com/sun/star/text/RelOrientation.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "bottom page border",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 76,
+        "endChar": 72
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1befa9dd_a7778dff",
+        "filename": "offapi/com/sun/star/text/RelOrientation.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "top page border\n\n(This is the UNO, not writerfilter, so it\u0027s better not to refer DOCX elements.)",
+      "range": {
+        "startLine": 82,
+        "startChar": 8,
+        "endLine": 82,
+        "endChar": 81
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b677da3e_989c63c8",
+        "filename": "offapi/com/sun/star/text/RelOrientation.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "1",
+      "range": {
+        "startLine": 84,
+        "startChar": 29,
+        "endLine": 84,
+        "endChar": 30
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "926b9c8f_f0befcee",
+        "filename": "sw/inc/fmtornt.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "Please, avoid unnecessary fancy formatting to speed up the review process.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 79
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d19410d_02798d88",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "Please, avoid unnecessary fancy formatting to speed up the review process.",
+      "range": {
+        "startLine": 1299,
+        "startChar": 0,
+        "endLine": 1305,
+        "endChar": 1
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a046b25a_f2327f00",
+        "filename": "sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "avoid \"auto\" to help code reading, for example\n\nconst SwPageFrame* pHeaderFrame...",
+      "range": {
+        "startLine": 252,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 91
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b9375c_f8eaaedf",
+        "filename": "sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T15:36:27Z",
+      "side": 1,
+      "message": "nHeightBetweenOffsetAndMargin - (nObjHeight + nLowerSpace)",
+      "range": {
+        "startLine": 361,
+        "startChar": 43,
+        "endLine": 361,
+        "endChar": 105
+      },
+      "revId": "e1809bbcc37af8d5c45f366a759fbc15351849b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
