@@ -1546,7 +1546,6 @@ public:
     SFErrCodes open(void const * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum, const FontCharMapRef xCharMap = nullptr);
 
     TrueTypeFont * get() const { return m_pFont; }
-    TrueTypeFont* operator->() { return m_pFont; }
 
 private:
     TrueTypeFont * m_pFont;
