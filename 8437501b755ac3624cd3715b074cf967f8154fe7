@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88e532dd_c5b27d1d",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "Copy shape attributes to the text frame",
+      "range": {
+        "startLine": 72,
+        "startChar": 8,
+        "endLine": 72,
+        "endChar": 79
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "866b8a3b_5021bf87",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "According to the coding standard, avoid abbreviation in function names, also follow the capitalization of the class:\n\nupdateTextBoxMargin",
+      "range": {
+        "startLine": 73,
+        "startChar": 16,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599b7b4d_c9ef9c0f",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "isTextBox or hasTextFrame",
+      "range": {
+        "startLine": 102,
+        "startChar": 16,
+        "endLine": 102,
+        "endChar": 30
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43745e4c_b3ab07c1",
+        "filename": "sw/inc/textboxhelper.hxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "We don\u0027t need this, yet.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 64
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bcd33cb_67f0e181",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "these",
+      "range": {
+        "startLine": 841,
+        "startChar": 21,
+        "endLine": 841,
+        "endChar": 27
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35c61fca_61e0cf27",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "to copy to the associated text frame after modification:",
+      "range": {
+        "startLine": 841,
+        "startChar": 34,
+        "endLine": 841,
+        "endChar": 35
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad630673_a3b252aa",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "Padding (it won\u0027t exceed the 100-character limit)",
+      "range": {
+        "startLine": 842,
+        "startChar": 4,
+        "endLine": 845,
+        "endChar": 99
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c622a6c2_7e6369dc",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "// TODO: modify shape distance via UNO with text frame synchronization",
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "160ee02f_2ec7592e",
+        "filename": "sw/qa/extras/layout/layout.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-13T09:02:33Z",
+      "side": 1,
+      "message": "It\u0027s not true for this patch, only in the case of using \"Text\" dialog window, so it\u0027s better to remove it.",
+      "range": {
+        "startLine": 868,
+        "startChar": 0,
+        "endLine": 869,
+        "endChar": 63
+      },
+      "revId": "8437501b755ac3624cd3715b074cf967f8154fe7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
