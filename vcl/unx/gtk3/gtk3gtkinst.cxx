@@ -13726,7 +13726,10 @@ private:
         {
             OUString aText = get_text_including_mru(nPos);
             if (aText != aStartText)
-                set_active_text(aText);
+            {
+                SolarMutexGuard aGuard;
+                set_active_including_mru(nPos, true);
+            }
             select_entry_region(aText.getLength(), aStartText.getLength());
         }
         enable_notify_events();
@@ -14648,6 +14651,13 @@ private:
         return true;
     }
 
+    int include_mru(int pos)
+    {
+        if (m_nMRUCount && pos != -1)
+            pos += (m_nMRUCount + 1);
+        return pos;
+    }
+
 public:
     GtkInstanceComboBox(GtkBuilder* pComboBuilder, GtkComboBox* pComboBox, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(gtk_builder_get_object(pComboBuilder, "box")), pBuilder, bTakeOwnership)
@@ -14865,9 +14875,7 @@ public:
 
     virtual void set_active(int pos) override
     {
-        if (m_nMRUCount && pos != -1)
-            pos += (m_nMRUCount + 1);
-        set_active_including_mru(pos, false);
+        set_active_including_mru(include_mru(pos), false);
     }
 
     virtual OUString get_active_text() const override
@@ -14940,9 +14948,7 @@ public:
 
     virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
-        if (m_nMRUCount && pos != -1)
-            pos += (m_nMRUCount + 1);
-        insert_including_mru(pos, rText, pId, pIconName, pImageSurface);
+        insert_including_mru(include_mru(pos), rText, pId, pIconName, pImageSurface);
     }
 
     virtual void insert_separator(int pos, const OUString& rId) override
