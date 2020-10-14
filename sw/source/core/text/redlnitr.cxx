@@ -804,7 +804,7 @@ bool SwRedlineItr::ChkSpecialUnderline_() const
 
 bool SwRedlineItr::CheckLine(
         sal_uLong const nStartNode, sal_Int32 const nChkStart,
-        sal_uLong const nEndNode, sal_Int32 nChkEnd)
+        sal_uLong const nEndNode, sal_Int32 nChkEnd, OUString& rRedlineText)
 {
     // note: previously this would return true in the (!m_bShow && m_pExt)
     // case, but surely that was a bug?
@@ -820,13 +820,19 @@ bool SwRedlineItr::CheckLine(
 
     for (m_nAct = m_nFirst; m_nAct < m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++m_nAct)
     {
-        m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ]->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
+        SwRangeRedline const*const pRedline(
+            m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nAct ] );
+        pRedline->CalcStartEnd( m_nNdIdx, m_nStart, m_nEnd );
         if (nChkEnd < m_nStart)
             break;
         if (nChkStart <= m_nEnd && (nChkEnd > m_nStart || COMPLETE_STRING == m_nEnd))
         {
             bRet = true;
-            break;
+            if ( pRedline->GetType() == RedlineType::Delete )
+            {
+                rRedlineText = const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true);
+                break;
+            }
         }
     }
 

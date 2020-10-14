@@ -1072,10 +1072,18 @@
           <value>true</value>
         </prop>
         <prop oor:name="ShowOutlineContentVisibilityButton" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options - Writer - View - [Section] Display -->
+          <!-- UIHints: Tools - Options - Writer - View - [Section] Outline mode -->
           <info>
             <desc>Enables the writer to show the outline content visibility button.</desc>
             <label>Show outline content visibility button</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="ShowChangesInMargin" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Writer - View - [Section] Display tracked changes -->
+          <info>
+            <desc>Enables the writer to show tracked deletions in margin.</desc>
+            <label>Show tracked deletions in margin</label>
           </info>
           <value>false</value>
         </prop>
