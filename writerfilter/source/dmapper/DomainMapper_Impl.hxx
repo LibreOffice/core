@@ -433,12 +433,14 @@ struct SectionInfo
     bool bFirstPara; // this is the first paragraph in this section
     bool bFirstParaAfterRedline; // this is the first real, non-deleted paragraph in this section
     bool bDummyParaAddedForTable;
+    bool bNextCellParaWillBeFirst; // current paragraph in a table is first paragraph of a cell
     bool bLastSection; // this is the last text section in the document (only valid for CloseSectionGroup)
 
     SectionInfo()
         : bFirstPara(true)
         , bFirstParaAfterRedline(true)
         , bDummyParaAddedForTable(false)
+        , bNextCellParaWillBeFirst(true)
         , bLastSection(false)
     {
     }
@@ -649,6 +651,7 @@ public:
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
+    bool IsFirstParagraphInCell() const;
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
@@ -1097,9 +1100,6 @@ private:
     css::uno::Reference<css::beans::XPropertySet> m_xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool m_bParaAutoBefore;
-    /// Current paragraph in a table is first paragraph of a cell
-    bool m_bFirstParagraphInCell;
-    bool m_bSaveFirstParagraphInCell;
     /// Current paragraph had at least one inline object in it.
     bool m_bParaWithInlineObject;
 };
