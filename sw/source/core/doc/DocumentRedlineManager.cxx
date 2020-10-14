@@ -993,7 +993,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
         bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
         m_rDoc.SetInXMLImport( false );
         // and then hide/display everything
-        void (SwRangeRedline::*pFnc)(sal_uInt16, size_t); // Allow compiler warn if use of
+        void (SwRangeRedline::*pFnc)(sal_uInt16, size_t, bool); // Allow compiler warn if use of
                                                           // uninitialized ptr is possible
 
         RedlineFlags eShowMode = RedlineFlags::ShowMask & eMode;
@@ -1035,7 +1035,7 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             for (size_t i = 0; i < mpRedlineTable->size(); ++i)
             {
                 SwRangeRedline *const pRedline((*mpRedlineTable)[i]);
-                (pRedline->*pFnc)(nLoop, i);
+                (pRedline->*pFnc)(nLoop, i, false);
                 while (mpRedlineTable->size() <= i
                     || (*mpRedlineTable)[i] != pRedline)
                 {        // ensure current position
@@ -2273,7 +2273,7 @@ void DocumentRedlineManager::CompressRedlines()
 {
     CHECK_REDLINE( *this )
 
-    void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = nullptr;
+    void (SwRangeRedline::*pFnc)(sal_uInt16, size_t, bool) = nullptr;
     RedlineFlags eShow = RedlineFlags::ShowMask & meRedlineFlags;
     if( eShow == (RedlineFlags::ShowInsert | RedlineFlags::ShowDelete))
         pFnc = &SwRangeRedline::Show;
@@ -2305,7 +2305,7 @@ void DocumentRedlineManager::CompressRedlines()
             mpRedlineTable->DeleteAndDestroy( n );
             --n;
             if( pFnc )
-                (pPrev->*pFnc)(0, nPrevIndex);
+                (pPrev->*pFnc)(0, nPrevIndex, false);
         }
     }
     CHECK_REDLINE( *this )
@@ -2603,6 +2603,8 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
       SetRedlineFlags( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete | meRedlineFlags );
 
     SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
+    pTmp->Show(0, mpRedlineTable->GetPos(pTmp), /*bForced=*/true);
+    pTmp->Show(1, mpRedlineTable->GetPos(pTmp), /*bForced=*/true);
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -2745,6 +2747,8 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
       SetRedlineFlags( RedlineFlags::ShowInsert | RedlineFlags::ShowDelete | meRedlineFlags );
 
     SwRangeRedline* pTmp = (*mpRedlineTable)[ nPos ];
+    pTmp->Show(0, mpRedlineTable->GetPos(pTmp), /*bForced=*/true);
+    pTmp->Show(1, mpRedlineTable->GetPos(pTmp), /*bForced=*/true);
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
