@@ -379,6 +379,7 @@ public:
     void testDataArea();
     void testAutofilter();
     void testAutoFilterTimeValue();
+    void testTdf137453();
     void testAdvancedFilter();
     void testCopyPaste();
     void testCopyPasteAsLink();
@@ -742,6 +743,7 @@ public:
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST(testAutoFilterTimeValue);
+    CPPUNIT_TEST(testTdf137453);
     CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
