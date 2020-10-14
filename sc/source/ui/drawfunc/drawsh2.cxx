@@ -54,7 +54,6 @@
 
 #include <svx/xflclit.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <sfx2/ipclient.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
