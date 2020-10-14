@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "19757c0b_bc072f75",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T11:10:17Z",
+      "side": 1,
+      "message": "sorry can\u0027t parse that - what do you mean?",
+      "parentUuid": "cb5df16a_055dc5c9",
+      "range": {
+        "startLine": 276,
+        "startChar": 58,
+        "endLine": 276,
+        "endChar": 82
+      },
+      "revId": "16f052347aa3481c6d6870af6b20b33fd481c070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5479ee2_3dd9acf7",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 2
