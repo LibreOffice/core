@@ -68,7 +68,9 @@ public:
 private:
     //ui controls
     std::unique_ptr<weld::CheckButton> mxCBTitle;
+    std::unique_ptr<weld::Entry>       mxEditTitle;
     std::unique_ptr<weld::CheckButton> mxCBSubtitle;
+    std::unique_ptr<weld::Entry>       mxEditSubtitle;
     std::unique_ptr<weld::CheckButton> mxCBXAxis;
     std::unique_ptr<weld::CheckButton> mxCBXAxisTitle;
     std::unique_ptr<weld::CheckButton> mxCBYAxis;
@@ -108,6 +110,7 @@ private:
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
     DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(EditHdl, weld::Entry&, void);
     DECL_LINK(LegendPosHdl, weld::ComboBox&, void);
 };
 

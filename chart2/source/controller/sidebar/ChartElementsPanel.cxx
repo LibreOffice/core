@@ -302,7 +302,9 @@ ChartElementsPanel::ChartElementsPanel(
     ChartController* pController)
     : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame)
     , mxCBTitle(m_xBuilder->weld_check_button("checkbutton_title"))
+    , mxEditTitle(m_xBuilder->weld_entry("edit_title"))
     , mxCBSubtitle(m_xBuilder->weld_check_button("checkbutton_subtitle"))
+    , mxEditSubtitle(m_xBuilder->weld_entry("edit_subtitle"))
     , mxCBXAxis(m_xBuilder->weld_check_button("checkbutton_x_axis"))
     , mxCBXAxisTitle(m_xBuilder->weld_check_button("checkbutton_x_axis_title"))
     , mxCBYAxis(m_xBuilder->weld_check_button("checkbutton_y_axis"))
@@ -346,7 +348,9 @@ void ChartElementsPanel::dispose()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
     mxCBTitle.reset();
+    mxEditTitle.reset();
     mxCBSubtitle.reset();
+    mxEditSubtitle.reset();
     mxCBXAxis.reset();
     mxCBXAxisTitle.reset();
     mxCBYAxis.reset();
@@ -403,6 +407,10 @@ void ChartElementsPanel::Initialize()
     mxCBGridHorizontalMinor->connect_toggled(aLink);
 
     mxLBLegendPosition->connect_changed(LINK(this, ChartElementsPanel, LegendPosHdl));
+
+    Link<weld::Entry&, void> aEditLink = LINK(this, ChartElementsPanel, EditHdl);
+    mxEditTitle->connect_changed(aEditLink);
+    mxEditSubtitle->connect_changed(aEditLink);
 }
 
 namespace {
@@ -447,8 +455,27 @@ void ChartElementsPanel::updateData()
     mxCBLegendNoOverlay->set_sensitive(isLegendVisible(mxModel));
     mxCBLegendNoOverlay->set_active(!isLegendOverlay(mxModel));
     mxBoxLegend->set_sensitive(isLegendVisible(mxModel));
-    mxCBTitle->set_active(isTitleVisible(mxModel, TitleHelper::MAIN_TITLE));
-    mxCBSubtitle->set_active(isTitleVisible(mxModel, TitleHelper::SUB_TITLE));
+
+    bool hasTitle = isTitleVisible(mxModel, TitleHelper::MAIN_TITLE);
+    mxCBTitle->set_active(hasTitle);
+
+    OUString title = mxEditTitle->get_text();
+    OUString newTitle = TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::MAIN_TITLE, mxModel));
+    if (title != newTitle)
+        mxEditTitle->set_text(newTitle);
+    if (mxEditTitle->get_sensitive() != hasTitle)
+         mxEditTitle->set_sensitive(hasTitle);
+
+    bool hasSubtitle = isTitleVisible(mxModel, TitleHelper::SUB_TITLE);
+    mxCBSubtitle->set_active(hasSubtitle);
+
+    OUString subtitle = mxEditSubtitle->get_text();
+    OUString newSubtitle = TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::SUB_TITLE, mxModel));
+    if (subtitle != newSubtitle)
+        mxEditSubtitle->set_text(newSubtitle);
+    if (mxEditSubtitle->get_sensitive() != hasSubtitle)
+         mxEditSubtitle->set_sensitive(hasSubtitle);
+
     mxCBXAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::X_AXIS_TITLE));
     mxCBYAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::Y_AXIS_TITLE));
     mxCBZAxisTitle->set_active(isTitleVisible(mxModel, TitleHelper::Z_AXIS_TITLE));
@@ -463,7 +490,6 @@ void ChartElementsPanel::updateData()
     mxCBZAxis->set_active(isAxisVisible(mxModel, AxisType::Z_MAIN));
     mxCB2ndXAxis->set_active(isAxisVisible(mxModel, AxisType::X_SECOND));
     mxCB2ndYAxis->set_active(isAxisVisible(mxModel, AxisType::Y_SECOND));
-
 
     bool bSupportsMainAxis = ChartTypeHelper::isSupportingMainAxis(
             getChartType(mxModel), 0, 0);
@@ -608,6 +634,18 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, weld::ToggleButton&, rCheckBox, void)
         setGridVisible(mxModel, GridType::VERT_MINOR, bChecked);
     else if (&rCheckBox == mxCBGridHorizontalMinor.get())
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
+}
+
+IMPL_LINK(ChartElementsPanel, EditHdl, weld::Entry&, rEdit, void)
+{
+    // title or subtitle?
+    TitleHelper::eTitleType aTitleType = TitleHelper::MAIN_TITLE;
+    if (&rEdit == mxEditSubtitle.get())
+        aTitleType = TitleHelper::SUB_TITLE;
+
+    // set it
+    OUString aText(rEdit.get_text());
+    TitleHelper::setCompleteString(aText, TitleHelper::getTitle(aTitleType, mxModel), comphelper::getProcessComponentContext());
 }
 
 IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl, weld::ComboBox&, void)
