@@ -384,6 +384,11 @@ protected:
     VclPtr<TabControl>  maTabControl;
     EditMode            meEditMode;
     PageKind            mePageKind;
+    // tdf#137445 at context menu popup time set if the EditHyperlink entry
+    // should be disabled and use that state if queried about it if
+    // EditHyperlink is dispatched from the menu. So ignoring where the mouse
+    // currently happens to be when the menu was dismissed.
+    std::optional<bool> moAtContextMenu_DisableEditHyperlink;
     bool                mbZoomOnPage;
     bool                mbIsRulerDrag;
     sal_uLong           mnLockCount;
