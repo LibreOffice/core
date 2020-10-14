@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "093238ce_79c7a892",
+        "filename": "sc/source/filter/oox/worksheetfragment.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-10-14T10:43:36Z",
+      "side": 1,
+      "message": "I think this is wrong because it would also encode an actual target \u0027#\u0027 fragment separator, not just embedded hash characters in file paths.\n\nIf actually the URI is to be encoded, shouldn\u0027t this rather use a general URI file path forbidden characters encoding than picking just these two? I.e. INetURLObject::encode() from include/tools/urlobj.hxx for example\n\n aModel.maTarget \u003d INetURLObject::encode( aModel.maTarget, INetURLObject::PART_FPATH, INetURLObject::EncodeMechanism::All);\n\nor maybe, as the protocol is transparent here\n\n  INetURLObject::PART_FPATH | INetURLObject::PART_HTTP_PATH\n\nI don\u0027t know the actual context of the hyperlink model\u0027s content or destination here, so take my remark with a grain of salt..",
+      "revId": "4a605ab6498f3f12dc53b764465e5da89acddb27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
