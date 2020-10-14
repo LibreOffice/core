@@ -310,8 +310,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bParaHadField(false),
         m_bSaveParaHadField(false),
         m_bParaAutoBefore(false),
-        m_bFirstParagraphInCell(true),
-        m_bSaveFirstParagraphInCell(false),
         m_bParaWithInlineObject(false)
 
 {
@@ -573,6 +571,12 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     }
 }
 
+bool DomainMapper_Impl::IsFirstParagraphInCell() const
+{
+    return m_nTableDepth > 0
+           && m_nTableDepth == m_nTableCellDepth
+           && GetSectionInfo().bNextCellParaWillBeFirst;
+}
 
 void DomainMapper_Impl::SetIsLastSectionGroup( bool bIsLast )
 {
@@ -1540,7 +1544,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
         {
             if ( GetIsFirstParagraphInShape() ||
                  (GetIsFirstParagraphInSection() && GetSectionContext() && GetSectionContext()->IsFirstSection()) ||
-                 (m_bFirstParagraphInCell && m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth) )
+                 IsFirstParagraphInCell() )
             {
                 nBeforeAutospacing = 0;
                 // export requires grabbag to match top_margin, so keep them in sync
@@ -1744,7 +1748,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         }
                         else if ( m_xPreviousParagraph->getPropertySetInfo()->hasPropertyByName("NumberingStyleName") &&
                                 // don't update before tables
-                                (m_nTableDepth == 0 || !m_bFirstParagraphInCell))
+                                (m_nTableDepth == 0 || !IsFirstParagraphInCell()))
                         {
                             aCurrentNumberingName = GetListStyleName(nListId);
                             m_xPreviousParagraph->getPropertyValue("NumberingStyleName") >>= aPreviousNumberingName;
@@ -2093,9 +2097,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     SetIsOutsideAParagraph(true);
     m_bParaHadField = false;
 
-    // don't overwrite m_bFirstParagraphInCell in table separator nodes
-    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth)
-        m_bFirstParagraphInCell = false;
+    if (IsFirstParagraphInCell())
+        GetSectionInfo().bNextCellParaWillBeFirst = false;
 
     m_bParaAutoBefore = false;
     m_bParaWithInlineObject = false;
@@ -2588,7 +2591,6 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
     SAL_WARN_IF(m_bInFootOrEndnote, "writerfilter.dmapper", "PushFootOrEndnote() is called from another foot or endnote");
     m_bInFootOrEndnote = true;
     m_bCheckFirstFootnoteTab = true;
-    m_bSaveFirstParagraphInCell = m_bFirstParagraphInCell;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -2819,7 +2821,6 @@ void DomainMapper_Impl::PopFootOrEndnote()
     m_eSkipFootnoteState = SkipFootnoteSeparator::OFF;
     m_bInFootOrEndnote = false;
     m_pFootnoteContext = nullptr;
-    m_bFirstParagraphInCell = m_bSaveFirstParagraphInCell;
 }
 
 void DomainMapper_Impl::PopAnnotation()
@@ -3260,7 +3261,7 @@ void DomainMapper_Impl::ClearPreviousParagraph()
     m_xPreviousParagraph.clear();
 
     // next table paragraph will be first paragraph in a cell
-    m_bFirstParagraphInCell = true;
+    GetSectionInfo().bNextCellParaWillBeFirst = true;
 }
 
 static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
