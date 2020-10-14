@@ -706,6 +706,11 @@ void WorksheetFragment::importHyperlink( const AttributeList& rAttribs )
         aModel.maLocation = rAttribs.getXString( XML_location, OUString() );
         aModel.maDisplay  = rAttribs.getXString( XML_display, OUString() );
         aModel.maTooltip  = rAttribs.getXString( XML_tooltip, OUString() );
+
+        //tdf#129969 encode special characters
+        aModel.maTarget = aModel.maTarget.replaceAll("%", "%25");
+        aModel.maTarget = aModel.maTarget.replaceAll("#", "%23");
+
         setHyperlink( aModel );
     }
 }
