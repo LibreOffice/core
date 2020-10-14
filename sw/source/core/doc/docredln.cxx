@@ -46,6 +46,8 @@
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
 #include <view.hxx>
+#include <viewopt.hxx>
+#include <usrpref.hxx>
 #include <viewsh.hxx>
 #include <viscrs.hxx>
 #include <rootfrm.hxx>
@@ -1105,12 +1107,23 @@ void SwRangeRedline::CallDisplayFunc(size_t nMyPos)
         ShowOriginal(0, nMyPos);
 }
 
-void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
+void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos, bool bForced)
 {
-    if( 1 > nLoop )
+    SwDoc& rDoc = GetDoc();
+
+    bool bIsShowChangesInMargin = false;
+    if ( !bForced )
+    {
+        SwViewShell* pSh = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+        if (pSh)
+            bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
+        else
+            bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
+    }
+
+    if( 1 > nLoop && !bIsShowChangesInMargin )
         return;
 
-    SwDoc& rDoc = GetDoc();
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -1123,8 +1136,19 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
         break;
 
     case RedlineType::Delete:           // Content has been deleted
-        m_bIsVisible = true;
-        MoveFromSection(nMyPos);
+        m_bIsVisible = !bIsShowChangesInMargin;
+
+        if (m_bIsVisible)
+            MoveFromSection(nMyPos);
+        else
+        {
+            switch( nLoop )
+            {
+            case 0: MoveToSection();    break;
+            case 1: CopyToSection();    break;
+            case 2: DelCopyOfSection(nMyPos); break;
+            }
+        }
         break;
 
     case RedlineType::Format:           // Attributes have been applied
@@ -1137,7 +1161,7 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
-void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
+void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos, bool /*bForced*/)
 {
     SwDoc& rDoc = GetDoc();
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
@@ -1173,7 +1197,7 @@ void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
 
-void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
+void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool /*bForced*/)
 {
     SwDoc& rDoc = GetDoc();
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
@@ -1766,7 +1790,7 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(const sal_uInt16 nPos) cons
     return *pCur;
 }
 
-OUString SwRangeRedline::GetDescr()
+OUString SwRangeRedline::GetDescr(bool bSimplified)
 {
     // get description of redline data (e.g.: "insert $1")
     OUString aResult = GetRedlineData().GetDescr();
@@ -1786,24 +1810,35 @@ OUString SwRangeRedline::GetDescr()
         bDeletePaM = true;
     }
 
-    OUString sDescr = DenoteSpecialCharacters(pPaM->GetText());
+    OUString sDescr = DenoteSpecialCharacters(pPaM->GetText().replace('\n', ' '), /*bQuoted=*/!bSimplified);
     if (const SwTextNode *pTextNode = pPaM->GetNode().GetTextNode())
     {
         if (const SwTextAttr* pTextAttr = pTextNode->GetFieldTextAttrAt(pPaM->GetPoint()->nContent.GetIndex() - 1, true ))
         {
-            sDescr = SwResId(STR_START_QUOTE)
+            sDescr = ( bSimplified ? "" : SwResId(STR_START_QUOTE) )
                 + pTextAttr->GetFormatField().GetField()->GetFieldName()
-                + SwResId(STR_END_QUOTE);
+                + ( bSimplified ? "" : SwResId(STR_END_QUOTE) );
         }
     }
 
     // replace $1 in description by description of the redlines text
     const OUString aTmpStr = ShortenString(sDescr, nUndoStringLength, SwResId(STR_LDOTS));
 
-    SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, aTmpStr);
+    if (!bSimplified)
+    {
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, aTmpStr);
 
-    aResult = aRewriter.Apply(aResult);
+        aResult = aRewriter.Apply(aResult);
+    }
+    else
+    {
+        aResult = aTmpStr;
+        // more shortening
+        sal_Int32 nPos = aTmpStr.indexOf(SwResId(STR_LDOTS));
+        if (nPos > 5)
+            aResult = aTmpStr.copy(0, nPos + SwResId(STR_LDOTS).getLength());
+    }
 
     if (bDeletePaM)
         delete pPaM;

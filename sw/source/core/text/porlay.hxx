@@ -97,6 +97,8 @@ private:
     bool m_bHanging : 1; // Contains a hanging portion in the margin
     bool m_bUnderscore : 1;
 
+    OUString m_sRedlineText; // shortened text of (first) tracked deletion shown in margin
+
     SwTwips GetHangingMargin_() const;
 
     void DeleteNext();
@@ -128,6 +130,8 @@ public:
     bool HasContent() const { return m_bContent; }
     void SetRedline( const bool bNew ) { m_bRedline = bNew; }
     bool HasRedline() const { return m_bRedline; }
+    void SetRedlineText ( const OUString& sText ) { m_sRedlineText = sText; }
+    const OUString* GetRedlineText() const { return &m_sRedlineText; }
     void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
     bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     void SetHanging( const bool bNew ) { m_bHanging = bNew; }

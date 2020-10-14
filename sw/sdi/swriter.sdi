@@ -7930,7 +7930,7 @@ SfxVoidItem NavElement FN_NAV_ELEMENT
     GroupId = SfxGroupId::Navigator;
 ]
 
-SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
+SfxBoolItem ShowChangesInMargin FN_SHOW_CHANGES_IN_MARGIN
 ()
 [
     AutoUpdate = FALSE,
@@ -7968,6 +7968,23 @@ SfxBoolItem ShowOutlineContentVisibilityButton FN_SHOW_OUTLINECONTENTVISIBILITYB
 ()
 [
     AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
+
+SfxBoolItem ShowInlineTooltips FN_SHOW_INLINETOOLTIPS
+()
+[
+    AutoUpdate = FALSE,
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,

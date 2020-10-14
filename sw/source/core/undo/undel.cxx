@@ -659,7 +659,7 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     return false;
 }
 
-static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_Int32 nEnd)
+static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_Int32 nEnd, bool bQuoted)
 {
     OUString aResult;
 
@@ -701,18 +701,20 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
             aRewriter.AddRule(UndoArg1, OUString::number(nCount));
             aResult = aRewriter.Apply(aResult);
         }
-        else
+        else if (bQuoted)
         {
             aResult = SwResId(STR_START_QUOTE) +
                 rStr.copy(nStart, nCount) +
                 SwResId(STR_END_QUOTE);
         }
+        else
+            aResult = rStr.copy(nStart, nCount);
     }
 
     return aResult;
 }
 
-OUString DenoteSpecialCharacters(const OUString & rStr)
+OUString DenoteSpecialCharacters(const OUString & rStr, bool bQuoted)
 {
     OUStringBuffer aResult;
 
@@ -738,7 +740,7 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
 
             if (bStart)
             {
-                aResult.append(lcl_DenotedPortion(rStr, nStart, i));
+                aResult.append(lcl_DenotedPortion(rStr, nStart, i, bQuoted));
 
                 nStart = i;
                 bStart = false;
@@ -747,7 +749,7 @@ OUString DenoteSpecialCharacters(const OUString & rStr)
             cLast = rStr[i];
         }
 
-        aResult.append(lcl_DenotedPortion(rStr, nStart, rStr.getLength()));
+        aResult.append(lcl_DenotedPortion(rStr, nStart, rStr.getLength(), bQuoted));
     }
     else
         aResult = SwRewriter::GetPlaceHolder(UndoArg2);

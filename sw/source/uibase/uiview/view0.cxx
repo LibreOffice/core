@@ -339,6 +339,9 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON:
               aBool.SetValue( pOpt->IsShowOutlineContentVisibilityButton() );
             break;
+            case FN_SHOW_CHANGES_IN_MARGIN:
+              aBool.SetValue( pOpt->IsShowChangesInMargin() );
+            break;
         }
 
         if( nWhich )
@@ -595,6 +598,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsShowOutlineContentVisibilityButton();
 
         pOpt->SetShowOutlineContentVisibilityButton( bFlag );
+        break;
+
+    case FN_SHOW_CHANGES_IN_MARGIN:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowChangesInMargin();
+
+        pOpt->SetShowChangesInMargin( bFlag );
         break;
 
     default:
