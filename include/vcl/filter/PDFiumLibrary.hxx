@@ -57,6 +57,20 @@ public:
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
 };
 
+class VCL_DLLPUBLIC PDFiumBitmap final
+{
+private:
+    FPDF_BITMAP mpBitmap;
+
+    PDFiumBitmap(const PDFiumBitmap&) = delete;
+    PDFiumBitmap& operator=(const PDFiumBitmap&) = delete;
+
+public:
+    PDFiumBitmap(FPDF_BITMAP pBitmap);
+    ~PDFiumBitmap();
+    FPDF_BITMAP getPointer() { return mpBitmap; }
+};
+
 class VCL_DLLPUBLIC PDFiumAnnotation final
 {
 private:
@@ -134,6 +148,7 @@ public:
     int getPathSegmentCount();
     std::unique_ptr<PDFiumPathSegment> getPathSegment(int index);
     Size getImageSize(PDFiumPage& rPage);
+    std::unique_ptr<PDFiumBitmap> getImageBitmap();
 };
 
 class VCL_DLLPUBLIC PDFiumTextPage final
