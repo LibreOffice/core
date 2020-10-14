@@ -284,6 +284,8 @@
 <block-list:block block-list:abbreviated-name="autonomos" block-list:name="autónomos"/>
 <block-list:block block-list:abbreviated-name="autoritario" block-list:name="autoritário"/>
 <block-list:block block-list:abbreviated-name="autoritarios" block-list:name="autoritários"/>
+<block-list:block block-list:abbreviated-name="autumatico" block-list:name="automático"/>
+<block-list:block block-list:abbreviated-name="autumaticos" block-list:name="automáticos"/>
 <block-list:block block-list:abbreviated-name="avisinha" block-list:name="avizinha"/>
 <block-list:block block-list:abbreviated-name="axa" block-list:name="acha"/>
 <block-list:block block-list:abbreviated-name="axam" block-list:name="acham"/>
@@ -363,6 +365,8 @@
 <block-list:block block-list:abbreviated-name="bujiar" block-list:name="bugiar"/>
 <block-list:block block-list:abbreviated-name="bujiganga" block-list:name="bugiganga"/>
 <block-list:block block-list:abbreviated-name="bujigangas" block-list:name="bugigangas"/>
+<block-list:block block-list:abbreviated-name="bulacha" block-list:name="bolacha"/>
+<block-list:block block-list:abbreviated-name="bulachas" block-list:name="bolachas"/>
 <block-list:block block-list:abbreviated-name="bulemia" block-list:name="bulimia"/>
 <block-list:block block-list:abbreviated-name="butão" block-list:name="botão"/>
 <block-list:block block-list:abbreviated-name="butões" block-list:name="botões"/>
@@ -1099,6 +1103,7 @@
 <block-list:block block-list:abbreviated-name="feitisseras" block-list:name="feiticeiras"/>
 <block-list:block block-list:abbreviated-name="feitissero" block-list:name="feiticeiro"/>
 <block-list:block block-list:abbreviated-name="feitisseros" block-list:name="feiticeiros"/>
+<block-list:block block-list:abbreviated-name="felecidade" block-list:name="felicidade"/>
 <block-list:block block-list:abbreviated-name="felecidades" block-list:name="felicidades"/>
 <block-list:block block-list:abbreviated-name="feliçidade" block-list:name="felicidade"/>
 <block-list:block block-list:abbreviated-name="feliçidades" block-list:name="felicidades"/>
@@ -1276,6 +1281,8 @@
 <block-list:block block-list:abbreviated-name="impôr" block-list:name="impor"/>
 <block-list:block block-list:abbreviated-name="importancia" block-list:name="importância"/>
 <block-list:block block-list:abbreviated-name="importancias" block-list:name="importâncias"/>
+<block-list:block block-list:abbreviated-name="importatne" block-list:name="importante"/>
+<block-list:block block-list:abbreviated-name="importatnes" block-list:name="importantes"/>
 <block-list:block block-list:abbreviated-name="imprecionante" block-list:name="impressionante"/>
 <block-list:block block-list:abbreviated-name="imprecionantes" block-list:name="impressionantes"/>
 <block-list:block block-list:abbreviated-name="imprensora" block-list:name="impressora"/>
@@ -1419,6 +1426,8 @@
 <block-list:block block-list:abbreviated-name="lazanhas" block-list:name="lasanhas"/>
 <block-list:block block-list:abbreviated-name="lcitação" block-list:name="licitação"/>
 <block-list:block block-list:abbreviated-name="legau" block-list:name="legal"/>
+<block-list:block block-list:abbreviated-name="legeslativa" block-list:name="legislativa"/>
+<block-list:block block-list:abbreviated-name="legeslativas" block-list:name="legislativas"/>
 <block-list:block block-list:abbreviated-name="lençois" block-list:name="lençóis"/>
 <block-list:block block-list:abbreviated-name="lêr" block-list:name="ler"/>
 <block-list:block block-list:abbreviated-name="leucémia" block-list:name="leucemia"/>
@@ -1521,6 +1530,7 @@
 <block-list:block block-list:abbreviated-name="melitantes" block-list:name="militantes"/>
 <block-list:block block-list:abbreviated-name="mema" block-list:name="mesma"/>
 <block-list:block block-list:abbreviated-name="menas" block-list:name="menos"/>
+<block-list:block block-list:abbreviated-name="méninas" block-list:name="meninas"/>
 <block-list:block block-list:abbreviated-name="mensão" block-list:name="menção"/>
 <block-list:block block-list:abbreviated-name="mensionada" block-list:name="mencionada"/>
 <block-list:block block-list:abbreviated-name="mensionadas" block-list:name="mencionadas"/>
@@ -1598,6 +1608,7 @@
 <block-list:block block-list:abbreviated-name="muinto" block-list:name="muito"/>
 <block-list:block block-list:abbreviated-name="muintos" block-list:name="muitos"/>
 <block-list:block block-list:abbreviated-name="muiot" block-list:name="muito"/>
+<block-list:block block-list:abbreviated-name="mulhers" block-list:name="mulheres"/>
 <block-list:block block-list:abbreviated-name="ñ" block-list:name="não"/>
 <block-list:block block-list:abbreviated-name="nao" block-list:name="não"/>
 <block-list:block block-list:abbreviated-name="nas mos" block-list:name="nas mãos"/>
