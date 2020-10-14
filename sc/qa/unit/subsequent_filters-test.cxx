@@ -276,6 +276,7 @@ public:
     void testCharacterSetXLSXML();
     void testTdf137091();
     void testTdf62268();
+    void testTdf137453();
     void testTdf35636();
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
@@ -449,6 +450,7 @@ public:
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf137091);
     CPPUNIT_TEST(testTdf62268);
+    CPPUNIT_TEST(testTdf137453);
     CPPUNIT_TEST(testTdf35636);
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
@@ -4798,6 +4800,21 @@ void ScFiltersTest::testTdf62268()
     CPPUNIT_ASSERT_LESSEQUAL( 3, abs( 256 - nHeight ) );
     nHeight = rDoc.GetRowHeight(1, nTab, false);
     CPPUNIT_ASSERT_LESSEQUAL( 19, abs( 1905 - nHeight ) );
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf137453()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf137453.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3333333333/100
+    // - Actual  : -961633963/100
+    CPPUNIT_ASSERT_EQUAL(OUString("3333333333/100"), rDoc.GetString(ScAddress(0,0,0)));
 
     xDocSh->DoClose();
 }
