@@ -30,6 +30,10 @@
 #include <fmtfollowtextflow.hxx>
 #include <layact.hxx>
 #include <ftnfrm.hxx>
+#include <fmtornt.hxx>
+#include <textboxhelper.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
 
 using namespace ::com::sun::star;
 
@@ -340,6 +344,30 @@ bool SwObjectFormatterTextFrame::DoFormatObjs()
            ( !mrAnchorTextFrame.IsFollow() &&
              AtLeastOneObjIsTmpConsiderWrapInfluence() ) ) )
     {
+        // tdf#135198: force text box to stay inside shape after layout changes
+        if (mrAnchorTextFrame.GetDrawObjs())
+        {
+            for (SwAnchoredObject* const pObj : *mrAnchorTextFrame.GetDrawObjs())
+            {
+                SwFrameFormat& rFormat = pObj->GetFrameFormat();
+                if (SwTextBoxHelper::isTextBox(&rFormat, RES_DRAWFRMFMT))
+                {
+                    SfxItemSet aSet(rFormat.GetDoc()->GetAttrPool(),
+                                    svl::Items<RES_VERT_ORIENT, RES_ANCHOR>{});
+                    if (const SwPageFrame* pPageFrame = pObj->GetPageFrame())
+                    {
+                        const SwRect& rPageFrameArea = pPageFrame->getFrameArea();
+                        aSet.Put(SwFormatVertOrient(pObj->GetObjRect().Top() - rPageFrameArea.Top(),
+                                                    text::VertOrientation::NONE,
+                                                    text::RelOrientation::PAGE_FRAME));
+                        aSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, pObj->GetPageFrame()->GetPhyPageNum()));
+
+                        SwTextBoxHelper::syncFlyFrameAttr(rFormat, aSet);
+                    }
+                }
+            }
+        }
+
         const bool bDoesAnchorHadPrev = ( mrAnchorTextFrame.GetIndPrev() != nullptr );
 
         // Format anchor text frame after its objects are formatted.
