@@ -13901,7 +13901,7 @@ private:
         m_bChangedByMenu = false;
         enable_notify_events();
 
-        if (bInteractive && !m_bPopupActive && !m_pEntry)
+        if (bInteractive && !m_bPopupActive)
             signal_changed();
     }
 
