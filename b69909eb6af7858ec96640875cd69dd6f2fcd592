@@ -45,6 +45,30 @@
       "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba39126_5fe93324",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-14T13:35:22Z",
+      "side": 1,
+      "message": "auto [sTip, sLink, sImage] \u003d TIPOFTHEDAY_STRINGARRAY[nCurrentTip];\n...\ntipofthedaydlg.cxx:99:16: error: member reference base type \u0027std::tuple_element\u003c0, std::tuple\u003cconst char *, rtl::OUString, rtl::OUString\u003e \u003e::type\u0027 (aka \u0027const char *\u0027) is not a structure or union\n    aPos \u003d sTip.indexOf(\"%MOD1\");\n\nHow do I solve this?",
+      "parentUuid": "1929bbe2_5978941f",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 41
+      },
+      "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
