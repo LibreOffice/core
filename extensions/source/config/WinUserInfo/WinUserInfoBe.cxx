@@ -185,7 +185,7 @@ private:
         if (FAILED((pUser->*func)(&sBstr)))
             return "";
         BSTRGuard aBstrGuard(sBstr, SysFreeString);
-        return o3tl::toU(sBstr);
+        return OUString(o3tl::toU(sBstr));
     }
     static OUString Str(IADsUser* pUser, const wchar_t* property)
     {
@@ -207,7 +207,7 @@ private:
             if (FAILED(SafeArrayGetElement(sa, &i, &varItem)))
                 continue;
             if (varItem.vt == VT_BSTR)
-                return o3tl::toU(V_BSTR(&varItem));
+                return OUString(o3tl::toU(V_BSTR(&varItem)));
             VariantClear(&varItem);
         }
         return "";

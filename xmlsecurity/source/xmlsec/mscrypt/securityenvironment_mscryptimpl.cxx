@@ -249,7 +249,7 @@ static OUString get_system_name(const void *pvSystemStore,
     {
         ppwszSystemName = static_cast<LPCWSTR>(pvSystemStore);
     }
-    return o3tl::toU(ppwszSystemName);
+    return OUString(o3tl::toU(ppwszSystemName));
 }
 
 extern "C" {

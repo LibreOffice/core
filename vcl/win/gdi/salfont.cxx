@@ -1019,7 +1019,7 @@ static int CALLBACK SalEnumFontsProcExW( const LOGFONTW* lpelfe,
         // Ignore vertical fonts
         if ( pLogFont->elfLogFont.lfFaceName[0] != '@' )
         {
-            OUString aName = o3tl::toU(pLogFont->elfLogFont.lfFaceName);
+            OUString aName(o3tl::toU(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
             memcpy(pInfo->mpLogFont->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.getLength()+1)*sizeof(wchar_t));
             pInfo->mpLogFont->lfCharSet = pLogFont->elfLogFont.lfCharSet;

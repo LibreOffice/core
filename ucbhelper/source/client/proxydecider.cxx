@@ -513,7 +513,7 @@ DWORD WINAPI GetPACProxyThread(_In_ LPVOID lpParameter)
             GlobalFree(ProxyInfo.lpszProxyBypass);
         if (ProxyInfo.lpszProxy)
         {
-            OUString sProxyResult = o3tl::toU(ProxyInfo.lpszProxy);
+            OUString sProxyResult(o3tl::toU(ProxyInfo.lpszProxy));
             GlobalFree(ProxyInfo.lpszProxy);
             // Get the first of possibly multiple results
             sProxyResult = sProxyResult.getToken(0, ';');
