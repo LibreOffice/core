@@ -351,9 +351,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         sal_uInt16 nLevel;
         bool bRel;
-        /* TODO: should we differentiate between BIFF and OOXML and write IURI
-         * encoded for OOXML? */
-        OUString aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot, false ) );
+        OUString aFileName(
+            BuildFileName(nLevel, bRel, rUrl, rRoot, rRoot.GetOutput() == EXC_OUTPUT_XML_2007));
 
         if( eProtocol == INetProtocol::Smb )
         {
