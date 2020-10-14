@@ -35,6 +35,7 @@ constexpr char constDictionaryKeyTitle[] = "T";
 constexpr char constDictionaryKeyContents[] = "Contents";
 constexpr char constDictionaryKeyPopup[] = "Popup";
 constexpr char constDictionaryKeyModificationDate[] = "M";
+constexpr char constDictionaryKeyInteriorColor[] = "IC";
 
 class PDFiumDocument;
 class PDFiumPageObject;
