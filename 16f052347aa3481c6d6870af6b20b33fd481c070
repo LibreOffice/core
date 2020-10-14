@@ -22,6 +22,29 @@
       "revId": "16f052347aa3481c6d6870af6b20b33fd481c070",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5479ee2_3dd9acf7",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T10:53:35Z",
+      "side": 1,
+      "message": "Please don\u0027t do this. Just\n\n    m_xDialog-\u003eset_title(CuiResId(STR_TITLE)\n                             .replaceFirst(\"%CURRENT\", OUString::number(nCurrentTip + 1))\n                             .replaceFirst(\"%TOTAL\", OUString::number(nNumberOfTips)));",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 92,
+        "endChar": 33
+      },
+      "revId": "16f052347aa3481c6d6870af6b20b33fd481c070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
