@@ -273,7 +273,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 #define STR_MORE_LINK                   NC_("STR_MORE_LINK", "More info")
 #define STR_UNO_LINK                    NC_("STR_UNO_LINK", "Run this action now...")
 #define STR_UNO_EXECUTE                 NC_("STR_UNO_EXECUTE", "Execute the command %COMMAND") //tooltip for STR_UNO_LINK
-#define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day")
+#define STR_TITLE                       NC_("STR_TITLE", "Tip of the Day: %CURRENT/%TOTAL")
 #define STR_CMD                         NC_("STR_CMD", "⌘ Cmd") //use narrow no-break space U+202F here
 #define STR_CTRL                        NC_("STR_CTRL", "Ctrl")
 #define STR_Alt                         NC_("STR_CMD", "Alt")
