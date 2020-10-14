@@ -487,6 +487,49 @@ Color PDFiumAnnotation::getInteriorColor()
     return aColor;
 }
 
+namespace
+{
+bool getBorderProperties(FPDF_ANNOTATION mpAnnotation, float& rHorizontalCornerRadius,
+                         float& rVerticalCornerRadius, float& rBorderWidth)
+{
+    float fHoriRadius = 0.0f;
+    float fVertRadius = 0.0f;
+    float fWidth = 0.0f;
+
+    if (!FPDFAnnot_GetBorder(mpAnnotation, &fHoriRadius, &fVertRadius, &fWidth))
+        return false;
+
+    rHorizontalCornerRadius = fHoriRadius;
+    rVerticalCornerRadius = fVertRadius;
+    rBorderWidth = fWidth;
+    return true;
+}
+}
+
+float PDFiumAnnotation::getBorderWidth()
+{
+    float fHorizontalCornerRadius;
+    float fVerticalCornerRadius;
+    float fBorderWidth;
+
+    if (!getBorderProperties(mpAnnotation, fHorizontalCornerRadius, fVerticalCornerRadius,
+                             fBorderWidth))
+        return 0.0f;
+    return fBorderWidth;
+}
+
+basegfx::B2DSize PDFiumAnnotation::getBorderCornerRadius()
+{
+    float fHorizontalCornerRadius;
+    float fVerticalCornerRadius;
+    float fBorderWidth;
+
+    if (!getBorderProperties(mpAnnotation, fHorizontalCornerRadius, fVerticalCornerRadius,
+                             fBorderWidth))
+        return basegfx::B2DSize(0.0, 0.0);
+    return basegfx::B2DSize(fHorizontalCornerRadius, fVerticalCornerRadius);
+}
+
 bool PDFiumAnnotation::hasKey(OString const& rKey)
 {
     return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());

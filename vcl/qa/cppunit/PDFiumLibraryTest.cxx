@@ -338,6 +338,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         auto const& aInkStrokes = pAnnotation->getInkStrokes();
         auto const& aPoints = aInkStrokes[0];
         CPPUNIT_ASSERT_EQUAL(size_t(74), aPoints.size());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
     }
 
     {
@@ -359,6 +360,7 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(OUString("Polygon Text"), aContentsString);
         auto const& aVertices = pAnnotation->getVertices();
         CPPUNIT_ASSERT_EQUAL(size_t(3), aVertices.size());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
     }
 
     {
