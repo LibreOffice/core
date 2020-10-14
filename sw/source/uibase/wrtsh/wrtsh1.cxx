@@ -219,7 +219,11 @@ void SwWrtShell::Insert( const OUString &rStr )
 
         StartUndo(SwUndoId::REPLACE, &aRewriter);
         bStarted = true;
+        Push();
         bDeleted = DelRight();
+        Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore selection (if tracking changes)
+        NormalizePam(false); // tdf#127635 put point at the end of deletion
+        ClearMark();
     }
 
     bCallIns ?
