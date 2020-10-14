@@ -5621,7 +5621,7 @@
           <info>
               <desc>The last shown Tip-of-the-Day.</desc>
           </info>
-          <value>0</value>
+          <value>-1</value>
       </prop>
       <prop oor:name="UseOpenCL" oor:type="xs:boolean" oor:nillable="false">
         <info>
