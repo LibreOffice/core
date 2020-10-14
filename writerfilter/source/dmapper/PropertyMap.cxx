@@ -1896,7 +1896,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     rDM_Impl.SetIsLastSectionGroup( false );
     rDM_Impl.SetIsFirstParagraphInSection( true );
 
-    if ( !rDM_Impl.IsInFootOrEndnote() )
+    if ( !rDM_Impl.IsInFootOrEndnote() && !rDM_Impl.IsInComments() )
     {
         rDM_Impl.m_bHasFtn = false;
         rDM_Impl.m_bHasFtnSep = false;
