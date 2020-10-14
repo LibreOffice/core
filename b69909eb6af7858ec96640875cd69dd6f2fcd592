@@ -93,6 +93,30 @@
       "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d494103_067a5f73",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-14T13:50:58Z",
+      "side": 1,
+      "message": "Not much benefit then. Just the get\u003c\u003e into s*.",
+      "parentUuid": "52779170_ac4bfe77",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 41
+      },
+      "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
