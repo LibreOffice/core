@@ -81,11 +81,6 @@
 namespace
 {
 double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
-
-struct FPDFBitmapDeleter
-{
-    void operator()(FPDF_BITMAP bitmap) { FPDFBitmap_Destroy(bitmap); }
-};
 }
 
 using namespace com::sun::star;
@@ -882,15 +877,14 @@ void ImpSdrPdfImport::MapScaling()
 void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> const& pPageObject,
                                   int /*nPageObjectIndex*/)
 {
-    std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
-        FPDFImageObj_GetBitmap(pPageObject->getPointer()));
+    std::unique_ptr<vcl::pdf::PDFiumBitmap> bitmap = pPageObject->getImageBitmap();
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
         return;
     }
 
-    const int format = FPDFBitmap_GetFormat(bitmap.get());
+    const int format = FPDFBitmap_GetFormat(bitmap->getPointer());
     if (format == FPDFBitmap_Unknown)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE format");
@@ -898,10 +892,10 @@ void ImpSdrPdfImport::ImportImage(std::unique_ptr<vcl::pdf::PDFiumPageObject> co
     }
 
     const unsigned char* pBuf
-        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap.get()));
-    const int nWidth = FPDFBitmap_GetWidth(bitmap.get());
-    const int nHeight = FPDFBitmap_GetHeight(bitmap.get());
-    const int nStride = FPDFBitmap_GetStride(bitmap.get());
+        = static_cast<const unsigned char*>(FPDFBitmap_GetBuffer(bitmap->getPointer()));
+    const int nWidth = FPDFBitmap_GetWidth(bitmap->getPointer());
+    const int nHeight = FPDFBitmap_GetHeight(bitmap->getPointer());
+    const int nStride = FPDFBitmap_GetStride(bitmap->getPointer());
     BitmapEx aBitmap(Size(nWidth, nHeight), 24);
 
     switch (format)

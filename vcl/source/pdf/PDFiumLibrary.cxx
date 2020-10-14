@@ -362,6 +362,17 @@ Size PDFiumPageObject::getImageSize(PDFiumPage& rPage)
     return Size(aMeta.width, aMeta.height);
 }
 
+std::unique_ptr<PDFiumBitmap> PDFiumPageObject::getImageBitmap()
+{
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(mpPageObject);
+    if (pBitmap)
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmap>(pBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
 BitmapChecksum PDFiumPage::getChecksum()
 {
     size_t nPageWidth = getWidth();
@@ -413,6 +424,19 @@ basegfx::B2DPoint PDFiumPathSegment::getPoint() const
 bool PDFiumPathSegment::isClosed() const { return FPDFPathSegment_GetClose(mpPathSegment); }
 
 int PDFiumPathSegment::getType() const { return FPDFPathSegment_GetType(mpPathSegment); }
+
+PDFiumBitmap::PDFiumBitmap(FPDF_BITMAP pBitmap)
+    : mpBitmap(pBitmap)
+{
+}
+
+PDFiumBitmap::~PDFiumBitmap()
+{
+    if (mpBitmap)
+    {
+        FPDFBitmap_Destroy(mpBitmap);
+    }
+}
 
 PDFiumAnnotation::PDFiumAnnotation(FPDF_ANNOTATION pAnnotation)
     : mpAnnotation(pAnnotation)

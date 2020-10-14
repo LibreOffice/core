@@ -1448,11 +1448,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
         if (pPageObject->getType() != FPDF_PAGEOBJ_IMAGE)
             continue;
 
-        FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
+        std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
         CPPUNIT_ASSERT(pBitmap);
-        int nWidth = FPDFBitmap_GetWidth(pBitmap);
-        int nHeight = FPDFBitmap_GetHeight(pBitmap);
-        FPDFBitmap_Destroy(pBitmap);
+        int nWidth = FPDFBitmap_GetWidth(pBitmap->getPointer());
+        int nHeight = FPDFBitmap_GetHeight(pBitmap->getPointer());
         // Without the accompanying fix in place, this test would have failed with:
         // assertion failed
         // - Expression: nWidth != nHeight
@@ -1789,11 +1788,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceSmallImage)
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
 
     // Make sure we don't scale down a tiny bitmap.
-    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
+    std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
     CPPUNIT_ASSERT(pBitmap);
-    int nWidth = FPDFBitmap_GetWidth(pBitmap);
-    int nHeight = FPDFBitmap_GetHeight(pBitmap);
-    FPDFBitmap_Destroy(pBitmap);
+    int nWidth = FPDFBitmap_GetWidth(pBitmap->getPointer());
+    int nHeight = FPDFBitmap_GetHeight(pBitmap->getPointer());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 16
     // - Actual  : 6
@@ -1845,11 +1843,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
     CPPUNIT_ASSERT_EQUAL(FPDF_PAGEOBJ_IMAGE, pPageObject->getType());
 
     // Make sure we don't scale down a bitmap.
-    FPDF_BITMAP pBitmap = FPDFImageObj_GetBitmap(pPageObject->getPointer());
+    std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap = pPageObject->getImageBitmap();
     CPPUNIT_ASSERT(pBitmap);
-    int nWidth = FPDFBitmap_GetWidth(pBitmap);
-    int nHeight = FPDFBitmap_GetHeight(pBitmap);
-    FPDFBitmap_Destroy(pBitmap);
+    int nWidth = FPDFBitmap_GetWidth(pBitmap->getPointer());
+    int nHeight = FPDFBitmap_GetHeight(pBitmap->getPointer());
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 160
     // - Actual  : 6
