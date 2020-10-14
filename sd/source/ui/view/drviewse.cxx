@@ -249,8 +249,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
             rReq.Done();
 
-            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
-
             const SfxItemSet* pArgs = rReq.GetArgs();
             if (pArgs && pArgs->HasItem(FN_PARAM_1))
                 bCreateDirectly = static_cast<const SfxBoolItem&>(pArgs->Get(FN_PARAM_1)).GetValue();
