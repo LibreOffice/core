@@ -117,6 +117,30 @@
       "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ded7f4c_4ec23e8d",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T13:55:15Z",
+      "side": 1,
+      "message": "Oh no, there\u0027s *big* benefit.\n\nThings like\n\n    auto [sTip, sLink, sImage] \u003d TIPOFTHEDAY_STRINGARRAY[nCurrentTip];\n\nshow exactly what is contained at what position, in a clear and concise syntax. While things like\n\n    OUString aText \u003d CuiResId(std::get\u003c0\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));\n    ...\n    aLink \u003d std::get\u003c1\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);\n    ...\n    OUString aImage \u003d std::get\u003c2\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);\n\nsplit this into many unconnected bulky lines, with unclear std::get\u003c\u003e syntax, with indices not connected to each other, with possibility to introduce bugs because of changing indexes, like\n\n    OUString aText \u003d CuiResId(std::get\u003c0\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));\n    ...\n    aLink \u003d std::get\u003c1\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);\n    ...\n    OUString aImage \u003d std::get\u003c1\u003e(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);\n\nwhere I inadvertently used get\u003c1\u003e twice, without noticing.\n\n*This* is readability.",
+      "parentUuid": "9d494103_067a5f73",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 41
+      },
+      "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
