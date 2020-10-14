@@ -92,7 +92,7 @@ OUString PromptNew(long hWnd)
     piTmpConnection->Release( );
     dlPrompt->Release( );
     // Don't we need SysFreeString(_result)?
-    return o3tl::toU(_result);
+    return OUString(o3tl::toU(_result));
 }
 
 OUString PromptEdit(long hWnd, OUString const & connstr)
@@ -184,7 +184,7 @@ OUString PromptEdit(long hWnd, OUString const & connstr)
     dlPrompt->Release( );
     CoUninitialize();
     // Don't we need SysFreeString(_result)?
-    return o3tl::toU(_result);
+    return OUString(o3tl::toU(_result));
 }
 
 }

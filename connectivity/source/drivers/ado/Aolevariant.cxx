@@ -378,7 +378,7 @@ void OLEVariant::set(double n)
 OUString OLEVariant::getString() const
 {
     if (V_VT(this) == VT_BSTR)
-        return o3tl::toU(LPCOLESTR(V_BSTR(this)));
+        return OUString(o3tl::toU(LPCOLESTR(V_BSTR(this))));
 
     if(isNull())
         return OUString();
@@ -387,7 +387,7 @@ OUString OLEVariant::getString() const
 
     varDest.ChangeType(VT_BSTR, this);
 
-    return o3tl::toU(LPCOLESTR(V_BSTR(&varDest)));
+    return OUString(o3tl::toU(LPCOLESTR(V_BSTR(&varDest))));
 }
 
 

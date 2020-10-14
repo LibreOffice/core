@@ -432,7 +432,7 @@ OUString SpinfieldToolbarController::FormatOutputString( double fValue )
         else
             _snwprintf( o3tl::toW(aBuffer), SAL_N_ELEMENTS(aBuffer), o3tl::toW(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
-        return aBuffer;
+        return OUString(aBuffer);
 #else
         // Currently we have no support for a format string using sal_Unicode. wchar_t
         // is 32 bit on Unix platform!
