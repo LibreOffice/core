@@ -270,6 +270,7 @@ public:
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf76047_externalLink();
+    void testTdf129969();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -438,6 +439,7 @@ public:
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf76047_externalLink);
+    CPPUNIT_TEST(testTdf129969);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5516,8 +5518,10 @@ void ScExportTest::testTdf76047_externalLink()
     ScDocument& rDoc = pShell->GetDocument();
 
     // compare the loaded data (from external links) to the data copied manually to the testfile
-    for (int nCol = 1; nCol <= 5; nCol++) {
-        for (int nRow = 3; nRow <= 5; nRow++) {
+    for (int nCol = 1; nCol <= 5; nCol++)
+    {
+        for (int nRow = 3; nRow <= 5; nRow++)
+        {
             OUString aStr1 = rDoc.GetString(ScAddress(nCol, nRow, 0));
             OUString aStr2 = rDoc.GetString(ScAddress(nCol, nRow + 5, 0));
             OUString aStr3 = rDoc.GetString(ScAddress(nCol, nRow + 11, 0));
@@ -5526,6 +5530,23 @@ void ScExportTest::testTdf76047_externalLink()
             CPPUNIT_ASSERT_EQUAL(aStr2, aStr3);
         }
     }
+}
+
+void ScExportTest::testTdf129969()
+{
+    ScDocShellRef xShell = loadDoc("external_hyperlink.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScAddress aPos(0, 0, 0);
+    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT(pURLData->GetURL().endsWith("/%23folder/test.ods#Sheet2.B10"));
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
