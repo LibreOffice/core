@@ -31,6 +31,7 @@ namespace framework{
 #define FRAME_PROPNAME_ASCII_LAYOUTMANAGER              "LayoutManager"
 #define FRAME_PROPNAME_ASCII_TITLE                      "Title"
 #define FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION      "IndicatorInterception"
+#define FRAME_PROPNAME_ASCII_URL "URL"
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
@@ -40,8 +41,9 @@ namespace framework{
 #define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
 #define FRAME_PROPHANDLE_TITLE                          3
 #define FRAME_PROPHANDLE_INDICATORINTERCEPTION          4
+#define FRAME_PROPHANDLE_URL 5
 
-#define FRAME_PROPCOUNT                                 5
+#define FRAME_PROPCOUNT 6
 
 /** properties for "PathSettings" class */
 

@@ -1154,6 +1154,13 @@ bool LoadEnv::impl_loadContent()
     }
     else if (xSyncLoader.is())
     {
+        uno::Reference<beans::XPropertySet> xTargetFrameProps(xTargetFrame, uno::UNO_QUERY);
+        if (xTargetFrameProps.is())
+        {
+            // Set the URL on the frame itself, for the duration of the load, when it has no
+            // controller.
+            xTargetFrameProps->setPropertyValue("URL", uno::makeAny(sURL));
+        }
         bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
         // code can ask for it later.
@@ -1319,23 +1326,38 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             if (!xTask.is())
                 continue;
 
+            OUString sURL;
             css::uno::Reference< css::frame::XController > xController = xTask->getController();
             if (!xController.is())
             {
-                xTask.clear ();
-                continue;
+                // If we have no controller, then perhaps there is a load in progress. The frame
+                // itself has the URL in this case.
+                uno::Reference<beans::XPropertySet> xTaskProps(xTask, uno::UNO_QUERY);
+                if (xTaskProps.is())
+                {
+                    xTaskProps->getPropertyValue("URL") >>= sURL;
+                }
+                if (sURL.isEmpty())
+                {
+                    xTask.clear();
+                    continue;
+                }
             }
 
-            css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
-            if (!xModel.is())
+            uno::Reference<frame::XModel> xModel;
+            if (sURL.isEmpty())
             {
-                xTask.clear ();
-                continue;
-            }
+                xModel = xController->getModel();
+                if (!xModel.is())
+                {
+                    xTask.clear();
+                    continue;
+                }
 
-            // don't check the complete URL here.
-            // use its main part - ignore optional jumpmarks!
-            const OUString sURL = xModel->getURL();
+                // don't check the complete URL here.
+                // use its main part - ignore optional jumpmarks!
+                sURL = xModel->getURL();
+            }
             if (!::utl::UCBContentHelper::EqualURLs( m_aURL.Main, sURL ))
             {
                 xTask.clear ();
@@ -1346,12 +1368,18 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // and decide if it's really the same then the one will be.
             // It must be visible and must use the same file revision ...
             // or must not have any file revision set (-1 == -1!)
-            utl::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
-
-            if (lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_VERSION(), sal_Int32(-1)) != nNewVersion)
+            utl::MediaDescriptor lOldDocDescriptor;
+            if (xModel.is())
             {
-                xTask.clear ();
-                continue;
+                lOldDocDescriptor = xModel->getArgs();
+
+                if (lOldDocDescriptor.getUnpackedValueOrDefault(
+                        utl::MediaDescriptor::PROP_VERSION(), sal_Int32(-1))
+                    != nNewVersion)
+                {
+                    xTask.clear();
+                    continue;
+                }
             }
 
             // Hidden frames are special.
