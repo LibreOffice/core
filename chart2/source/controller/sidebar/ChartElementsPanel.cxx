@@ -277,7 +277,9 @@ ChartElementsPanel::ChartElementsPanel(
     mbModelValid(true)
 {
     get(mpCBTitle,  "checkbutton_title");
+    get(mpEditTitle, "edit_title");
     get(mpCBSubtitle,  "checkbutton_subtitle");
+    get(mpEditSubtitle, "edit_subtitle");
     get(mpCBXAxis,  "checkbutton_x_axis");
     get(mpCBXAxisTitle,  "checkbutton_x_axis_title");
     get(mpCBYAxis,  "checkbutton_y_axis");
@@ -319,7 +321,9 @@ void ChartElementsPanel::dispose()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
     mpCBTitle.clear();
+    mpEditTitle.clear();
     mpCBSubtitle.clear();
+    mpEditSubtitle.clear();
     mpCBXAxis.clear();
     mpCBXAxisTitle.clear();
     mpCBYAxis.clear();
@@ -374,6 +378,10 @@ void ChartElementsPanel::Initialize()
     mpCBGridHorizontalMinor->SetClickHdl(aLink);
 
     mpLBLegendPosition->SetSelectHdl(LINK(this, ChartElementsPanel, LegendPosHdl));
+
+    Link<Edit&, void> aEditLink = LINK(this, ChartElementsPanel, EditHdl);
+    mpEditTitle->SetModifyHdl(aEditLink);
+    mpEditSubtitle->SetModifyHdl(aEditLink);
 }
 
 namespace {
@@ -416,8 +424,23 @@ void ChartElementsPanel::updateData()
 
     mpCBLegend->Check(isLegendVisible(mxModel));
     mpBoxLegend->Enable( isLegendVisible(mxModel) );
-    mpCBTitle->Check(isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE));
-    mpCBSubtitle->Check(isTitleVisisble(mxModel, TitleHelper::SUB_TITLE));
+
+    bool hasTitle = isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE);
+    mpCBTitle->Check(hasTitle);
+    if (!mpEditTitle->HasFocus())
+    {
+        mpEditTitle->SetText(TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::MAIN_TITLE, mxModel)));
+        mpEditTitle->Enable(hasTitle);
+    }
+
+    bool hasSubtitle = isTitleVisisble(mxModel, TitleHelper::SUB_TITLE);
+    mpCBSubtitle->Check(hasSubtitle);
+    if (!mpEditSubtitle->HasFocus())
+    {
+        mpEditSubtitle->SetText(TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::SUB_TITLE, mxModel)));
+        mpEditSubtitle->Enable(hasSubtitle);
+    }
+
     mpCBXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::X_AXIS_TITLE));
     mpCBYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Y_AXIS_TITLE));
     mpCBZAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Z_AXIS_TITLE));
@@ -575,6 +598,18 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
         setGridVisible(mxModel, GridType::VERT_MINOR, bChecked);
     else if (pCheckBox == mpCBGridHorizontalMinor.get())
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
+}
+
+IMPL_LINK(ChartElementsPanel, EditHdl, Edit&, rEdit, void)
+{
+    // title or subtitle?
+    TitleHelper::eTitleType aTitleType = TitleHelper::MAIN_TITLE;
+    if (&rEdit == mpEditSubtitle.get())
+        aTitleType = TitleHelper::SUB_TITLE;
+
+    // set it
+    OUString aText(rEdit.GetText());
+    TitleHelper::setCompleteString(aText, TitleHelper::getTitle(aTitleType, mxModel), comphelper::getProcessComponentContext());
 }
 
 IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl, ListBox&, void)
