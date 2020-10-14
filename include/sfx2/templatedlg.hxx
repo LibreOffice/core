@@ -84,7 +84,7 @@ protected:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
     void OnTemplateImportCategory(const OUString& sCategory);
-    static void OnTemplateLink ();
+//    static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateExport ();
 
@@ -130,7 +130,7 @@ protected:
     std::unique_ptr<weld::Button> mxMoveButton;
     std::unique_ptr<weld::Button> mxExportButton;
     std::unique_ptr<weld::Button> mxImportButton;
-    std::unique_ptr<weld::Button> mxLinkButton;
+    std::unique_ptr<weld::Button> mxMoreTemplatesButton;
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateSearchView> mxSearchView;

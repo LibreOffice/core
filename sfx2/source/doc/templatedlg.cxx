@@ -55,6 +55,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
@@ -162,7 +163,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxMoveButton(m_xBuilder->weld_button("move_btn"))
     , mxExportButton(m_xBuilder->weld_button("export_btn"))
     , mxImportButton(m_xBuilder->weld_button("import_btn"))
-    , mxLinkButton(m_xBuilder->weld_button("online_link"))
+    , mxMoreTemplatesButton(m_xBuilder->weld_button("btnMoreTemplates"))
     , mxCBXHideDlg(m_xBuilder->weld_check_button("hidedialogcb"))
     , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
     , mxSearchView(new TemplateSearchView(m_xBuilder->weld_scrolled_window("scrollsearch", true),
@@ -214,7 +215,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxMoveButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, MoveClickHdl));
     mxExportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ExportClickHdl));
     mxImportButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, ImportClickHdl));
-    mxLinkButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
+    mxMoreTemplatesButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
 
     mxSearchFilter->connect_changed(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mxSearchFilter->connect_focus_in(LINK( this, SfxTemplateManagerDlg, GetFocusHdl ));
@@ -581,7 +582,10 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, weld::Button&, void)
 
 IMPL_STATIC_LINK_NOARG(SfxTemplateManagerDlg, LinkClickHdl, weld::Button&, void)
 {
-    OnTemplateLink();
+    uno::Sequence<beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "AdditionsTag";
+    aArgs[0].Value <<= OUString("Templates");
+    comphelper::dispatchCommand(".uno:AdditionsDialog", aArgs);
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
@@ -1027,34 +1031,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
     }
 }
 
-void SfxTemplateManagerDlg::OnTemplateLink ()
-{
-    try
-    {
-        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        uno::Sequence<uno::Any> args(comphelper::InitAnyPropertySequence(
-        {
-            {"nodepath", uno::Any(OUString("/org.openoffice.Office.Common/Help/StartCenter"))}
-        }));
-        Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args), UNO_QUERY);
-        if( xNameAccess.is() )
-        {
-            OUString sURL;
-            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
-            Any value( xNameAccess->getByName("TemplateRepositoryURL") );
-            sURL = value.get<OUString> ();
-            localizeWebserviceURI(sURL);
-
-            Reference< css::system::XSystemShellExecute > xSystemShellExecute(
-                css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
-        }
-    }
-    catch (const Exception&)
-    {
-    }
-}
-
 void SfxTemplateManagerDlg::OnTemplateOpen ()
 {
     ThumbnailViewItem *pItem = const_cast<ThumbnailViewItem*>(*maSelTemplates.begin());
@@ -1359,7 +1335,7 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
 
     mxCBApp->set_sensitive(false);
     mxActionBar->hide();
-    mxLinkButton->hide();
+    mxMoreTemplatesButton->hide();
     mxMoveButton->hide();
     mxExportButton->hide();
     mxCBXHideDlg->show();
