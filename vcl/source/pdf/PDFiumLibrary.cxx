@@ -465,6 +465,28 @@ basegfx::B2DRectangle PDFiumAnnotation::getRectangle()
     return aB2DRectangle;
 }
 
+Color PDFiumAnnotation::getColor()
+{
+    Color aColor = COL_TRANSPARENT;
+    unsigned int nR, nG, nB, nA;
+    if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_Color, &nR, &nG, &nB, &nA))
+    {
+        aColor = Color(0xFF - nA, nR, nG, nB);
+    }
+    return aColor;
+}
+
+Color PDFiumAnnotation::getInteriorColor()
+{
+    Color aColor = COL_TRANSPARENT;
+    unsigned int nR, nG, nB, nA;
+    if (FPDFAnnot_GetColor(mpAnnotation, FPDFANNOT_COLORTYPE_InteriorColor, &nR, &nG, &nB, &nA))
+    {
+        aColor = Color(0xFF - nA, nR, nG, nB);
+    }
+    return aColor;
+}
+
 bool PDFiumAnnotation::hasKey(OString const& rKey)
 {
     return FPDFAnnot_HasKey(mpAnnotation, rKey.getStr());

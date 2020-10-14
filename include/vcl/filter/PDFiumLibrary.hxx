@@ -94,6 +94,8 @@ public:
     std::unique_ptr<PDFiumPageObject> getObject(int nIndex);
     std::vector<std::vector<basegfx::B2DPoint>> getInkStrokes();
     std::vector<basegfx::B2DPoint> getVertices();
+    Color getColor();
+    Color getInteriorColor();
 };
 
 class PDFiumPage;
