@@ -2214,7 +2214,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
 #if 0
                     pDoc->GetNodes().MoveNodes(content, pDoc->GetNodes(), insPos, false);
 #else
-                    pDoc->getIDocumentContentOperations().MoveNodeRange(content, insPos, SwMoveFlags::NO_DELFRMS);
+                    pDoc->getIDocumentContentOperations().MoveNodeRange(content, insPos, SwMoveFlags::NO_DELFRMS|SwMoveFlags::REDLINES);
 #endif
                     // delete the empty node that was bundled in the new box
                     pDoc->GetNodes().Delete(insPos);
