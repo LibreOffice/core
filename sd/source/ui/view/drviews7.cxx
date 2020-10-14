@@ -1481,8 +1481,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
-
-    bool bDisableEditHyperlink = ShouldDisableEditHyperlink();
+    bool bDisableEditHyperlink;
+    if (!moAtContextMenu_DisableEditHyperlink)
+        bDisableEditHyperlink = ShouldDisableEditHyperlink();
+    else
+    {
+        // tdf#137445 if a popup menu was active, use the state as of when the popup was launched and then drop
+        // moAtContextMenu_DisableEditHyperlink
+        bDisableEditHyperlink = *moAtContextMenu_DisableEditHyperlink;
+        moAtContextMenu_DisableEditHyperlink.reset();
+    }
 
     //highlight selected custom shape
     {
