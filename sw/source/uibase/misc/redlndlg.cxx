@@ -421,13 +421,15 @@ void SwRedlineAcceptDlg::Activate()
 
         if(rRedln.GetComment() != pParent->sComment)
         {
+            const OUString sComment = rRedln.GetComment().isEmpty()
+                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    : rRedln.GetComment();
             if (pParent->xTLBParent)
             {
                 // update only comment
-                const OUString& sComment(rRedln.GetComment());
                 rTreeView.set_text(*pParent->xTLBParent, sComment.replace('\n', ' '), 3);
             }
-            pParent->sComment = rRedln.GetComment();
+            pParent->sComment = sComment;
         }
     }
 
@@ -727,7 +729,10 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
         pRedlineParent->pNext    = nullptr;
-        const OUString& sComment(rRedln.GetComment());
+        const OUString& sComment =
+            ( rRedln.GetType() == RedlineType::Delete && rRedln.GetComment().isEmpty() )
+                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    : rRedln.GetComment();
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         m_RedlineParents.insert(m_RedlineParents.begin() + i,
                 std::unique_ptr<SwRedlineDataParent>(pRedlineParent));

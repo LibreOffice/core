@@ -290,6 +290,12 @@ published service ViewSettings
     */
     [optional, property] boolean ShowOutlineContentVisibilityButton;
 
+    /** If this property is `TRUE`, tracked deletions are shown in margin.
+
+        @since LibreOffice 7.1
+    */
+    [optional, property] boolean ShowChangesInMargin;
+
 };
 
 }; }; }; };

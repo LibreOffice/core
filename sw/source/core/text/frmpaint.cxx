@@ -38,6 +38,7 @@
 #include "txtcache.hxx"
 #include <flyfrm.hxx>
 #include "redlnitr.hxx"
+#include <redline.hxx>
 #include <swmodule.hxx>
 #include <tabfrm.hxx>
 #include <numrule.hxx>
@@ -86,7 +87,7 @@ public:
         return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
     }
 
-    void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed );
+    void PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed, const OUString* pRedlineText = nullptr );
     void PaintRedline( SwTwips nY, long nMax );
 };
 
@@ -113,7 +114,6 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
             m_aRect.Bottom( nBottom );
     }
     std::optional<bool> oIsRightPage;
-    if( bLineNum )
     {
         /* Initializes the Members necessary for line numbering:
 
@@ -132,6 +132,10 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         m_pFnt->Invalidate();
         m_pFnt->ChgPhysFnt( m_pSh, *m_pSh->GetOut() );
         m_pFnt->SetVertical( 0, pFrame->IsVertical() );
+    }
+
+    if( bLineNum )
+    {
         m_nLineNr += pFrame->GetAllLines() - pFrame->GetThisLines();
         LineNumberPosition ePos = m_rLineInf.GetPos();
         if( ePos != LINENUMBER_POS_LEFT && ePos != LINENUMBER_POS_RIGHT )
@@ -179,14 +183,25 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         pTmpFrame->getFrameArea().Right() + REDLINE_DISTANCE;
 }
 
-void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
+void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed, const OUString* pRedlineText )
 {
-  // Line number is stronger than the divider
-    const OUString aTmp( HasNumber() ? m_rLineInf.GetNumType().GetNumStr( m_nLineNr )
-                                : m_rLineInf.GetDivider() );
+    const OUString aTmp( pRedlineText
+                             // Tracked change is stronger than the line number
+                             ? *pRedlineText
+                             : ( HasNumber()
+                                 // Line number is stronger than the divider
+                                 ? m_rLineInf.GetNumType().GetNumStr( m_nLineNr )
+                                 : m_rLineInf.GetDivider() ) );
 
     // Get script type of line numbering:
     m_pFnt->SetActual( SwScriptInfo::WhichFont(0, aTmp) );
+
+    if ( pRedlineText )
+    {
+        m_pFnt->SetColor(NON_PRINTING_CHARACTER_COLOR);
+        m_pFnt->SetStrikeout( STRIKEOUT_SINGLE );
+        m_pFnt->SetSize( Size( 0, 200), m_pFnt->GetActual() );
+    }
 
     SwDrawTextInfo aDrawInf( m_pSh, *m_pSh->GetOut(), aTmp, 0, aTmp.getLength() );
     aDrawInf.SetSpace( 0 );
@@ -215,6 +230,11 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, bool bRed )
         pTmpFnt = GetFont();
     Point aTmpPos( m_nX, nY );
     aTmpPos.AdjustY(nAsc );
+    if ( pRedlineText )
+    {
+        Size aSize = pTmpFnt->GetTextSize_( aDrawInf );
+        aTmpPos.AdjustX( -(aSize.Width()) - 200 );
+    }
     bool bPaint = true;
     if( !IsClipChg() )
     {
@@ -359,6 +379,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
             }
             bNoPrtLine = aLine.Y() >= GetMinPrtLine();
         }
+        const bool bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
         if( bNoPrtLine )
         {
             do
@@ -368,14 +389,28 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
                     bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
                     if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
                     {
-                        if( bLineNum &&
-                            ( aExtra.HasNumber() || aExtra.HasDivider() ) )
+                        bool bRedInMargin = bIsShowChangesInMargin && bRed;
+                        bool bNum = bLineNum && ( aExtra.HasNumber() || aExtra.HasDivider() );
+                        if( bRedInMargin || bNum )
                         {
                             sal_uInt16 nTmpHeight, nTmpAscent;
                             aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-                            aExtra.PaintExtra( aLine.Y(), nTmpAscent,
-                                nTmpHeight, bRed );
-                            bRed = false;
+                            if ( bRedInMargin )
+                            {
+                                const OUString* pRedlineText = aLine.GetCurr()->GetRedlineText();
+                                if( !pRedlineText->isEmpty() )
+                                {
+                                    aExtra.PaintExtra( aLine.Y(), nTmpAscent,
+                                        nTmpHeight, bRed, pRedlineText );
+                                    bRed = false;
+                                    bNum = false;
+                                }
+                            }
+                            if ( bNum )
+                            {
+                                aExtra.PaintExtra( aLine.Y(), nTmpAscent, nTmpHeight, bRed );
+                                bRed = false;
+                            }
                         }
                         aExtra.IncLineNr();
                     }

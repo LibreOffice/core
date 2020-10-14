@@ -227,9 +227,9 @@ public:
     // Otherwise at Move the attribution would be handled incorrectly.
     // All other callers must always give 0.
     void CallDisplayFunc(size_t nMyPos);
-    void Show(sal_uInt16 nLoop , size_t nMyPos);
-    void Hide(sal_uInt16 nLoop , size_t nMyPos);
-    void ShowOriginal(sal_uInt16 nLoop, size_t nMyPos);
+    void Show(sal_uInt16 nLoop , size_t nMyPos, bool bForced = false);
+    void Hide(sal_uInt16 nLoop , size_t nMyPos, bool bForced = false);
+    void ShowOriginal(sal_uInt16 nLoop, size_t nMyPos, bool bForced = false);
 
     /// Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd(sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd) const;
@@ -253,8 +253,10 @@ public:
        kind of redline and the possibly shortened text of the redline.
 
        @return textual description of the selected redline data element
+
+       bSimplified = simplified shortened text to show deletions on margin
      */
-    OUString GetDescr();
+    OUString GetDescr(bool bSimplified = false);
 
     bool operator<( const SwRangeRedline& ) const;
     void dumpAsXml(xmlTextWriterPtr pWriter) const;

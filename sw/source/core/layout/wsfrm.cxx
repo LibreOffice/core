@@ -4554,10 +4554,12 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         AppendAllObjs(rDoc.GetSpzFrameFormats(), this);
     }
 
+    const bool bIsShowChangesInMargin = GetCurrShell()->GetViewOptions()->IsShowChangesInMargin();
     for (auto const pRedline : rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {   // DELETE are handled by the code above; for other types, need to
         // trigger repaint of text frames to add/remove the redline color font
-        if (pRedline->GetType() != RedlineType::Delete)
+        // (handle deletions showed in margin also here)
+        if (bIsShowChangesInMargin || pRedline->GetType() != RedlineType::Delete)
         {
             pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }
