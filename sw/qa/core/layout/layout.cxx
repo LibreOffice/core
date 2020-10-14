@@ -14,6 +14,11 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <flyfrm.hxx>
+#include <fmtornt.hxx>
+//#include <frameformats.hxx>
+#include <frmtool.hxx>
+#include <textboxhelper.hxx>
 
 char const DATA_DIRECTORY[] = "/sw/qa/core/layout/data/";
 
@@ -161,6 +166,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testAnchorPositionBasedOnParagraph)
     assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[2]/bounds", "bottom", "2008");
     assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "top", "3783");
     assertXPath(pXmlDoc, "(//SwAnchoredDrawObject)[3]/bounds", "bottom", "3844");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxStaysInsideShape)
+{
+    // tdf#135198: check whether text box stays inside shape after moving it upwards
+    load(DATA_DIRECTORY, "shape-textbox.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SdrObject* pTextBoxObj = pWrtShell->GetObjAt({ 8000, 3000 });
+
+    xmlDocUniquePtr pLayoutBefore = parseLayoutDump();
+    CPPUNIT_ASSERT(pLayoutBefore);
+    const int nTextBoxTopBefore = getXPath(pLayoutBefore, "//fly/infos/bounds", "top").toInt32();
+
+    uno::Reference<drawing::XShape> xShape(pTextBoxObj->getUnoShape(), uno::UNO_QUERY_THROW);
+    auto aPosition = xShape->getPosition();
+    aPosition.Y -= 500;
+    xShape->setPosition(aPosition);
+
+    discardDumpedLayout();
+    xmlDocUniquePtr pLayoutAfter = parseLayoutDump();
+    CPPUNIT_ASSERT(pLayoutAfter);
+    const int nTextBoxTopAfter = getXPath(pLayoutAfter, "//fly/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("text box was supposed to stay inside its shape",
+                           nTextBoxTopAfter < nTextBoxTopBefore);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

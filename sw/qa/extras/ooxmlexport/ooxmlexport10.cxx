@@ -661,9 +661,11 @@ DECLARE_OOXMLEXPORT_TEST(testChartSize, "chart-size.docx")
     // This was 10954.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6008), getProperty<sal_Int32>(xEmbeddedObjects->getByIndex(0), "Width"));
 
+    // The following assert no longer applies due to tdf#135198
+
     // Layout modified the document when it had this chart.
-    uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(false, bool(xModifiable->isModified()));
+    //uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(false, bool(xModifiable->isModified()));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testInlineGroupshape, "inline-groupshape.docx")
