@@ -644,11 +644,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
     m_xShowSet->SetFont( aFont );
     m_xSearchSet->SetFont( aFont );
     m_aShowChar.SetFont( aFont );
-    if (isSearchMode)
-    {
-        SearchUpdateHdl(*m_xSearchText);
-        SearchCharHighlightHdl(m_xSearchSet.get());
-    }
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
@@ -675,6 +670,14 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
 
     m_xSubsetText->set_sensitive(bNeedSubset);
     m_xSubsetLB->set_sensitive(bNeedSubset);
+
+    if (isSearchMode)
+    {
+        // tdf#137294 do this after modifying m_xSubsetLB sensitivity to
+        // restore insensitive for the search case
+        SearchUpdateHdl(*m_xSearchText);
+        SearchCharHighlightHdl(m_xSearchSet.get());
+    }
 
     // tdf#118304 reselect current glyph to see if its still there in new font
     selectCharByCode(Radix::hexadecimal);
