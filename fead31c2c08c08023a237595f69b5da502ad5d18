@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6bc32513_c9329047",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2020-10-14T00:29:19Z",
+      "side": 1,
+      "message": "That may well be. Looking at extras/CustomTarget_autocorr.mk the pt-PT/ XML files are not used.",
+      "revId": "fead31c2c08c08023a237595f69b5da502ad5d18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
