@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c946287_3c8d4325",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T10:19:11Z",
+      "side": 1,
+      "message": "By the way, this way of forming translatable strings is, again, wrong. The full message with placeholders must be in the translatable string template, and here you should only replace placeholders with values.",
+      "range": {
+        "startLine": 81,
+        "startChar": 25,
+        "endLine": 82,
+        "endChar": 58
+      },
+      "revId": "2b7ccc1ee083abee812a4e9917c1324179ec97cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
