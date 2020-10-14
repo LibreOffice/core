@@ -967,5 +967,12 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
+    FN_SHOW_CHANGES_IN_MARGIN
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+    ]
+
 }
 
