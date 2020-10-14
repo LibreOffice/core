@@ -69,6 +69,30 @@
       "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52779170_ac4bfe77",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T13:39:40Z",
+      "side": 1,
+      "message": ":-) your \"sTip\" is what you get from the tuple: it\u0027s a char* (not OUString), and is English text expected to be used in CuiResId, like:\n\n    auto [sEngTip, sLink, sImage] \u003d TIPOFTHEDAY_STRINGARRAY[nCurrentTip];\n    OUString sTip \u003d CuiResId(sEngTip);\n    ...\n\njust the same way that you used this value before.",
+      "parentUuid": "4ba39126_5fe93324",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 41
+      },
+      "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
