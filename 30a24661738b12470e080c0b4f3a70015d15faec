@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6409ae6_503239fa",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5536,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-14T07:37:43Z",
+      "side": 1,
+      "message": "has to be in the same",
+      "range": {
+        "startLine": 5536,
+        "startChar": 17,
+        "endLine": 5536,
+        "endChar": 36
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8adbc3a_4824c2b2",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5540,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-14T07:37:43Z",
+      "side": 1,
+      "message": "compare the data loaded from external links with the expected result stored in the test file",
+      "range": {
+        "startLine": 5540,
+        "startChar": 7,
+        "endLine": 5540,
+        "endChar": 96
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a07687_3876b2b6",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5541,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-14T07:37:43Z",
+      "side": 1,
+      "message": "bad coding standard",
+      "range": {
+        "startLine": 5541,
+        "startChar": 42,
+        "endLine": 5541,
+        "endChar": 43
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bc68f47_91b8399b",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5542,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-14T07:37:43Z",
+      "side": 1,
+      "message": "bad coding standard",
+      "range": {
+        "startLine": 5542,
+        "startChar": 46,
+        "endLine": 5542,
+        "endChar": 47
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
