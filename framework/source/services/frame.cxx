@@ -424,6 +424,11 @@ private:
     css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
 
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
+    /**
+     * URL of the file that is being loaded, when the load already started by we have no controller
+     * yet.
+     */
+    OUString m_aURL;
 };
 
 
@@ -551,6 +556,9 @@ void XFrameImpl::initListeners()
             FRAME_PROPHANDLE_TITLE,
             cppu::UnoType<OUString>::get(),
             css::beans::PropertyAttribute::TRANSIENT));
+    impl_addPropertyInfo(css::beans::Property(FRAME_PROPNAME_ASCII_URL, FRAME_PROPHANDLE_URL,
+                                              cppu::UnoType<OUString>::get(),
+                                              css::beans::PropertyAttribute::TRANSIENT));
 }
 
 /*-************************************************************************************************************
@@ -1533,6 +1541,10 @@ sal_Bool SAL_CALL XFrameImpl::setComponent(const css::uno::Reference< css::awt::
     SolarMutexResettableGuard aWriteLock;
     m_xComponentWindow = xComponentWindow;
     m_xController      = xController;
+
+    // Clear the URL on the frame itself, now that the controller has it.
+    m_aURL.clear();
+
     m_bConnected       = (m_xComponentWindow.is() || m_xController.is());
     bool bIsConnected       = m_bConnected;
     aWriteLock.clear();
@@ -2769,6 +2781,11 @@ void XFrameImpl::impl_setPropertyValue(sal_Int32 nHandle,
                 }
                 break;
 
+        case FRAME_PROPHANDLE_URL:
+        {
+            aValue >>= m_aURL;
+        }
+        break;
         default :
                 SAL_INFO("fwk.frame",  "XFrameImpl::setFastPropertyValue_NoBroadcast(): Invalid handle detected!" );
                 break;
@@ -2812,6 +2829,11 @@ css::uno::Any XFrameImpl::impl_getPropertyValue(sal_Int32 nHandle)
                 }
                 break;
 
+        case FRAME_PROPHANDLE_URL:
+        {
+            aValue <<= m_aURL;
+        }
+        break;
         default :
                 SAL_INFO("fwk.frame", "XFrameImpl::getFastPropertyValue(): Invalid handle detected!" );
                 break;
