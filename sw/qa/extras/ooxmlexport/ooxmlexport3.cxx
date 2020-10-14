@@ -95,6 +95,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf108944_footnoteSeparator2, "tdf108944_footnoteSeparator2.odt")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    //This was zero. The comment was causing the bHasFtnSep flag to be reset to false, so the separator was missing.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
