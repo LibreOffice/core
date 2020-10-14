@@ -8504,6 +8504,31 @@ void Test::testTdf97587()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testTdf137248()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetString(ScAddress(0,1,0), "=B2*$A$1");
+    m_pDoc->SetString(ScAddress(0,2,0), "=B3*$A$1");
+    m_pDoc->SetString(ScAddress(0,3,0), "=SUM(A2:A3)");
+    m_pDoc->SetValue(ScAddress(1,1,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,2,0), 2.0);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), m_pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), m_pDoc->GetString(ScAddress(0,3,0)));
+
+    // Change A1
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.0);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), m_pDoc->GetString(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("4"), m_pDoc->GetString(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), m_pDoc->GetString(ScAddress(0,3,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testTdf107459()
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));

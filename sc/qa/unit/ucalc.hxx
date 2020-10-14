@@ -565,6 +565,7 @@ public:
 
     void testTdf97369();
     void testTdf97587();
+    void testTdf137248();
     void testTdf107459();
 
     void testEmptyCalcDocDefaults();
@@ -873,6 +874,7 @@ public:
     CPPUNIT_TEST(testMultipleDataCellsInRange);
     CPPUNIT_TEST(testTdf97369);
     CPPUNIT_TEST(testTdf97587);
+    CPPUNIT_TEST(testTdf137248);
     CPPUNIT_TEST(testTdf107459);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
     CPPUNIT_TEST(testPrecisionAsShown);
