@@ -3224,13 +3224,16 @@ namespace
 
 namespace
 {
-    GdkPixbuf* load_icon_from_stream(SvMemoryStream& rStream, const OString& image_type)
+    GdkPixbuf* load_icon_from_stream(SvMemoryStream& rStream)
     {
-        // if we know the image type, it's a little faster to hand the type over and skip the type
-        // detection.
-        GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new_with_type(image_type.getStr(), nullptr);
-        gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(rStream.GetData()),
-                                rStream.TellEnd(), nullptr);
+        auto nLength = rStream.TellEnd();
+        if (!nLength)
+            return nullptr;
+        const guchar* pData = static_cast<const guchar*>(rStream.GetData());
+        assert((*pData == 137 || *pData == '<') && "if we want to support more than png or svg this function must change");
+        // if we know the image type, it's a little faster to hand the type over and skip the type detection.
+        GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new_with_type(*pData == 137 ? "png" : "svg", nullptr);
+        gdk_pixbuf_loader_write(pixbuf_loader, pData, nLength, nullptr);
         gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
         GdkPixbuf* pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
         if (pixbuf)
@@ -3244,8 +3247,7 @@ namespace
         auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
         if (!xMemStm)
             return nullptr;
-        OUString sImageType = rIconName.copy(rIconName.lastIndexOf('.')+1).toAsciiLowerCase();
-        return load_icon_from_stream(*xMemStm, sImageType.toUtf8());
+        return load_icon_from_stream(*xMemStm);
     }
 }
 
@@ -3276,7 +3278,7 @@ namespace
         vcl::PNGWriter aWriter(aImage.GetBitmapEx(), &aFilterData);
         aWriter.Write(*xMemStm);
 
-        return load_icon_from_stream(*xMemStm, "png");
+        return load_icon_from_stream(*xMemStm);
     }
 
     GdkPixbuf* getPixbuf(const VirtualDevice& rDevice)
