@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9b45dee_4534780a",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T10:49:40Z",
+      "side": 1,
+      "message": "\"Tip of the Day: %CURRENT / %TOTAL\"",
+      "range": {
+        "startLine": 276,
+        "startChar": 58,
+        "endLine": 276,
+        "endChar": 82
+      },
+      "revId": "16f052347aa3481c6d6870af6b20b33fd481c070",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
