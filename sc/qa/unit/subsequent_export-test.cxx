@@ -272,6 +272,7 @@ public:
     void testTdf91251_missingOverflowRoundtrip();
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
+    void testTdf129969();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -438,6 +439,7 @@ public:
     CPPUNIT_TEST(testTdf91251_missingOverflowRoundtrip);
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
+    CPPUNIT_TEST(testTdf129969);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5521,6 +5523,23 @@ void ScExportTest::testTdf126305_DataValidatyErrorAlert()
     assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[1]", "errorStyle", "stop");
     assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[2]", "errorStyle", "warning");
     assertXPath(pDoc, "/x:worksheet/x:dataValidations/x:dataValidation[3]", "errorStyle", "information");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf129969()
+{
+    ScDocShellRef xShell = loadDoc("external_hyperlink.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScAddress aPos(0, 0, 0);
+    const EditTextObject* pEditText = rDoc.GetEditText(aPos);
+    const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
+    const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
+    CPPUNIT_ASSERT(pURLData->GetURL().endsWith("/%23folder/test.docx"));
 
     xDocSh->DoClose();
 }
