@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkTreeStore" id="liststore2">
@@ -44,61 +44,64 @@
       <column type="gboolean"/>
     </columns>
   </object>
+  <!-- n-columns=3 n-rows=3 -->
   <object class="GtkGrid" id="OptLinguPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
-    <property name="border_width">6</property>
-    <property name="row_spacing">12</property>
+    <property name="border-width">6</property>
+    <property name="row-spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="top-padding">6</property>
+            <property name="left-padding">12</property>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column-spacing">12</property>
                 <child>
+                  <!-- n-columns=3 n-rows=3 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="column_spacing">12</property>
+                    <property name="column-spacing">12</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="lingumodules">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
-                            <property name="headers_visible">False</property>
-                            <property name="search_column">1</property>
-                            <property name="show_expanders">False</property>
+                            <property name="headers-visible">False</property>
+                            <property name="search-column">1</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                             </child>
@@ -106,7 +109,7 @@
                               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
                                 <property name="resizable">True</property>
                                 <property name="spacing">6</property>
-                                <property name="alignment">0.50000000000000000000</property>
+                                <property name="alignment">0.5</property>
                                 <child>
                                   <object class="GtkCellRendererToggle" id="cellrenderer5"/>
                                   <attributes>
@@ -137,18 +140,18 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="lingumodulesedit">
                         <property name="label" translatable="yes" context="optlingupage|lingumodulesedit">_Edit...</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="valign">start</property>
-                        <property name="use_underline">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingumodulesedit-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingumodulesedit-atkobject">Edit Available language modules</property>
@@ -157,15 +160,60 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -174,10 +222,10 @@
         <child type="label">
           <object class="GtkLabel" id="lingumodulesft">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="optlingupage|lingumodulesft">_Available Language Modules</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">lingumodules</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">lingumodules</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -186,46 +234,47 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkAlignment">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="can-focus">False</property>
+            <property name="top-padding">6</property>
+            <property name="left-padding">12</property>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="column_spacing">12</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTreeView" id="lingudicts">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="hexpand">True</property>
                         <property name="model">liststore3</property>
-                        <property name="headers_visible">False</property>
-                        <property name="search_column">1</property>
-                        <property name="show_expanders">False</property>
+                        <property name="headers-visible">False</property>
+                        <property name="search-column">1</property>
+                        <property name="show-expanders">False</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                         </child>
@@ -233,7 +282,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn44">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0.50000000000000000000</property>
+                            <property name="alignment">0.5</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer55"/>
                               <attributes>
@@ -264,24 +313,24 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButtonBox" id="buttonbox1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
-                    <property name="layout_style">start</property>
+                    <property name="layout-style">start</property>
                     <child>
                       <object class="GtkButton" id="lingudictsnew">
                         <property name="label" translatable="yes" context="optlingupage|lingudictsnew">_New...</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingudictsnew-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="lingudictsnew">Opens the New Dictionary dialog, in which you can name a new user-defined dictionary or dictionary of exceptions and specify the language.</property>
@@ -298,9 +347,9 @@
                       <object class="GtkButton" id="lingudictsedit">
                         <property name="label" translatable="yes" context="optlingupage|lingudictsedit">Ed_it...</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingudictsedit-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|lingudictsedit-atkobject">Edit User-defined dictionaries</property>
@@ -318,9 +367,9 @@
                       <object class="GtkButton" id="lingudictsdelete">
                         <property name="label" translatable="yes" context="optlingupage|lingudictsdelete">_Delete</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="use-underline">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lingudictsdelete-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="lingudictsdelete">Deletes the selected dictionary after a confirmation, provided it is not write-protected.</property>
@@ -335,9 +384,30 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -346,10 +416,10 @@
         <child type="label">
           <object class="GtkLabel" id="lingudictsft">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="optlingupage|lingudictsft">_User-defined Dictionaries</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">lingudicts</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">lingudicts</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -358,63 +428,49 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkFrame">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
           <object class="GtkAlignment">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="top_padding">6</property>
-            <property name="left_padding">12</property>
+            <property name="can-focus">False</property>
+            <property name="top-padding">6</property>
+            <property name="left-padding">12</property>
             <child>
+              <!-- n-columns=3 n-rows=3 -->
               <object class="GtkGrid" id="grid4">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="row_spacing">3</property>
-                <property name="column_spacing">12</property>
-                <child>
-                  <object class="GtkLinkButton" id="moredictslink">
-                    <property name="label" translatable="yes" context="optlingupage|moredictslink">Get more dictionaries online...</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="relief">none</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
+                <property name="row-spacing">3</property>
+                <property name="column-spacing">12</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTreeView" id="linguoptions">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="model">liststore4</property>
-                        <property name="headers_visible">False</property>
-                        <property name="search_column">1</property>
-                        <property name="show_expanders">False</property>
+                        <property name="headers-visible">False</property>
+                        <property name="search-column">1</property>
+                        <property name="show-expanders">False</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Macro Library List-selection3"/>
                         </child>
@@ -422,7 +478,7 @@
                           <object class="GtkTreeViewColumn" id="treeviewcolumn444">
                             <property name="resizable">True</property>
                             <property name="spacing">6</property>
-                            <property name="alignment">0.50000000000000000000</property>
+                            <property name="alignment">0.5</property>
                             <child>
                               <object class="GtkCellRendererToggle" id="cellrenderer555"/>
                               <attributes>
@@ -453,18 +509,18 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="linguoptionsedit">
                     <property name="label" translatable="yes" context="optlingupage|linguoptionsedit">Edi_t...</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="valign">start</property>
-                    <property name="use_underline">True</property>
+                    <property name="use-underline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="linguoptionsedit-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="optlingupage|linguoptionsedit-atkobject">Edit Options</property>
@@ -473,9 +529,62 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">cmd/sc_additionsdialog.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLinkButton" id="moredictslink">
+                        <property name="label" translatable="yes" context="optlingupage|moredictslink">Get more dictionaries online...</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="relief">none</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -484,10 +593,10 @@
         <child type="label">
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="optlingupage|label4">_Options</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">linguoptions</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">linguoptions</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -496,9 +605,27 @@
         </child>
       </object>
       <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">2</property>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptLinguPage-atkobject">
