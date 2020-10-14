@@ -22,6 +22,29 @@
       "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1929bbe2_5978941f",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-14T11:55:59Z",
+      "side": 1,
+      "message": "Since we use C++17 now, it\u0027s good to use its nice improvements. E.g., many (most) cases of std::get\u003c\u003e may be changed to something like this:\n\n    auto [sEngTip, sLink, sImage] \u003d TIPOFTHEDAY_STRINGARRAY[nCurrentTip];\n\nand use those, instead of explicit get\u003c\u003es in lines 88, 113, and 154. This makes the code also much clearer.",
+      "range": {
+        "startLine": 88,
+        "startChar": 30,
+        "endLine": 88,
+        "endChar": 41
+      },
+      "revId": "b69909eb6af7858ec96640875cd69dd6f2fcd592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
