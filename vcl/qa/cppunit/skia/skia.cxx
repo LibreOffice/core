@@ -282,7 +282,7 @@ void SkiaTest::testBitmapCopyOnWrite()
     CPPUNIT_ASSERT(bitmap2.unittestHasAlphaImage());
     CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetImage(), bitmap2.unittestGetImage());
     CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetAlphaImage(), bitmap2.unittestGetAlphaImage());
-    // Reading still should keep the data shrared.
+    // Reading still should keep the data shared.
     const SkImage* oldImage = bitmap.unittestGetImage();
     const SkImage* oldAlphaImage = bitmap.unittestGetAlphaImage();
     BitmapBuffer* buffer = bitmap.AcquireBuffer(BitmapAccessMode::Read);
