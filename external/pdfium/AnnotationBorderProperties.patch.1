@@ -1,0 +1,60 @@
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index c1471220b..229651d82 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -756,6 +756,35 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColor(FPDF_ANNOTATION annot,
+   return true;
+ }
+
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetBorder(FPDF_ANNOTATION annot,
++                                                        float* hor_radius,
++                                                        float* vert_radius,
++                                                        float* width) {
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++  if (!pAnnotDict || !hor_radius || !vert_radius || !width)
++    return false;
++
++  // If BA entry exists, then Border is ignored
++  if (pAnnotDict->KeyExist("BA"))
++    return false;
++
++  CPDF_Array* pBorderArray = pAnnotDict->GetArrayFor("Border");
++  if (!pBorderArray) {
++    *hor_radius = 0.0f;
++    *vert_radius = 0.0f;
++    *width = 1.0f;
++    return true;
++  }
++  if (pBorderArray->size() < 3)
++    return false;
++
++  *hor_radius = pBorderArray->GetNumberAt(0);
++  *vert_radius = pBorderArray->GetNumberAt(1);
++  *width = pBorderArray->GetNumberAt(2);
++
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFAnnot_HasAttachmentPoints(FPDF_ANNOTATION annot) {
+   if (!annot)
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index 2176450c8..ce033cde3 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -313,6 +313,12 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetColor(FPDF_ANNOTATION annot,
+                                                        unsigned int* A);
+
+ // Experimental API.
++// TODO
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetBorder(FPDF_ANNOTATION annot,
++                                                        float* hor_radius,
++                                                        float* vert_radius,
++                                                        float* width);
++// Experimental API.
+ // Check if the annotation is of a type that has attachment points
+ // (i.e. quadpoints). Quadpoints are the vertices of the rectangle that
+ // encompasses the texts affected by the annotation. They provide the
+--
+2.26.2
+

@@ -81,6 +81,8 @@ public:
     std::vector<basegfx::B2DPoint> getVertices();
     Color getColor();
     Color getInteriorColor();
+    float getBorderWidth();
+    basegfx::B2DSize getBorderCornerRadius();
 };
 
 class PDFiumTextPage;
