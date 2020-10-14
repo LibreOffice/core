@@ -1560,6 +1560,36 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testAlignmentRelativeFromTopMargin, "tdf137641_RelativeFromTopMargin.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
+                "wp:anchor/wp:positionV",
+                "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "top");
+    assertXPath(pXmlDoc,
+        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
+        "wp:anchor/wp:positionV",
+        "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "bottom");
+    assertXPath(pXmlDoc,
+        "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
+        "wp:anchor/wp:positionV",
+        "relativeFrom", "topMargin");
+    assertXPathContent(pXmlDoc,
+                       "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/"
+                       "wp:anchor/wp:positionV/wp:align",
+                       "center");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
