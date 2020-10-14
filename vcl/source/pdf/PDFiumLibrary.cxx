@@ -487,6 +487,26 @@ Color PDFiumAnnotation::getInteriorColor()
     return aColor;
 }
 
+size_t PDFiumAnnotation::getAttachmentPointsCount()
+{
+    return FPDFAnnot_CountAttachmentPoints(mpAnnotation);
+}
+
+std::vector<basegfx::B2DPoint> PDFiumAnnotation::getAttachmentPoints(size_t nIndex)
+{
+    std::vector<basegfx::B2DPoint> aQuads;
+
+    FS_QUADPOINTSF aQuadpoints;
+    if (FPDFAnnot_GetAttachmentPoints(mpAnnotation, nIndex, &aQuadpoints))
+    {
+        aQuads.emplace_back(aQuadpoints.x1, aQuadpoints.y1);
+        aQuads.emplace_back(aQuadpoints.x2, aQuadpoints.y2);
+        aQuads.emplace_back(aQuadpoints.x3, aQuadpoints.y3);
+        aQuads.emplace_back(aQuadpoints.x4, aQuadpoints.y4);
+    }
+    return aQuads;
+}
+
 namespace
 {
 bool getBorderProperties(FPDF_ANNOTATION mpAnnotation, float& rHorizontalCornerRadius,

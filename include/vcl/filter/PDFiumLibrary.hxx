@@ -98,6 +98,8 @@ public:
     Color getInteriorColor();
     float getBorderWidth();
     basegfx::B2DSize getBorderCornerRadius();
+    size_t getAttachmentPointsCount();
+    std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex);
 };
 
 class PDFiumPage;
