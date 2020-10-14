@@ -76,13 +76,23 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
-    if ((nCurrentTip > nNumberOfTips) || (nCurrentTip < 1))
-        nCurrentTip = 1;
-    m_xDialog->set_title(CuiResId(STR_TITLE) + ": " + OUString::number(nCurrentTip) + "/"
-                         + OUString::number(nNumberOfTips));
+    if ((nCurrentTip >= nNumberOfTips) || (nCurrentTip < 0))
+        nCurrentTip = 0;
+
+    //title
+    OUString sTitle = CuiResId(STR_TITLE);
+    const OUString sCurrent
+        = OUString::number(nCurrentTip + 1) + "/" + OUString::number(nNumberOfTips);
+    sal_Int32 aPos;
+    aPos = sTitle.indexOf("%CURRENT");
+    if (aPos != -1)
+        sTitle = sTitle.replaceAt(aPos, 8, sCurrent);
+    else
+        sTitle = sTitle + ": " + sCurrent;
+    m_xDialog->set_title(sTitle);
 
     // text
-    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]));
+    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
 //replace MOD1 & MOD2 shortcuts depending on platform
 #ifdef MACOSX
     const OUString aMOD1 = CuiResId(STR_CMD);
@@ -91,7 +101,7 @@ void TipOfTheDayDialog::UpdateTip()
     const OUString aMOD1 = CuiResId(STR_CTRL);
     const OUString aMOD2 = CuiResId(STR_Alt);
 #endif
-    sal_Int32 aPos;
+
     aPos = aText.indexOf("%MOD1");
     while (aPos != -1)
     {
@@ -107,7 +117,7 @@ void TipOfTheDayDialog::UpdateTip()
     m_pText->set_label(aText);
 
     // hyperlink
-    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]);
+    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
     if (aLink.isEmpty())
     {
         m_pLink->set_visible(false);
@@ -148,7 +158,7 @@ void TipOfTheDayDialog::UpdateTip()
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip - 1]);
+    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
     // use default image if none is available with the number
     if (aImage.isEmpty() || !file_exists(aURL + aImage))
         aImage = "tipoftheday.png";
