@@ -4291,7 +4291,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
 bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
         const bool bRegExReplace )
 {
-    if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark() )
+    if (!rPam.HasMark())
         return false;
 
     bool bJoinText, bJoinPrev;
