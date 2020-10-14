@@ -118,7 +118,8 @@ public:
         sal_Int32 nNext, SwTextNode const* pNode, SwRedlineTable::size_type & rAct);
     bool ChkSpecialUnderline() const
         { return IsOn() && ChkSpecialUnderline_(); }
-    bool CheckLine(sal_uLong nStartNode, sal_Int32 nChkStart, sal_uLong nEndNode, sal_Int32 nChkEnd);
+    bool CheckLine(sal_uLong nStartNode, sal_Int32 nChkStart, sal_uLong nEndNode,
+        sal_Int32 nChkEnd, OUString& rRedlineText);
     bool LeaveExtend(SwFont& rFnt, sal_uLong const nNode, sal_Int32 const nNew)
         { return m_pExt->Leave(rFnt, nNode, nNew); }
     bool ExtOn() {

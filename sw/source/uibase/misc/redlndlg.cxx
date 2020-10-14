@@ -50,6 +50,7 @@
 #include <docsh.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
+#include <usrpref.hxx>
 #include <memory>
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID(SwRedlineAcceptChild, FN_REDLINE_ACCEPT)
@@ -414,6 +415,7 @@ void SwRedlineAcceptDlg::Activate()
 
     // check comment
     weld::TreeView& rTreeView = m_pTable->GetWidget();
+    bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
     for (SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -421,13 +423,17 @@ void SwRedlineAcceptDlg::Activate()
 
         if(rRedln.GetComment() != pParent->sComment)
         {
+            bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
+                RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
+            const OUString sComment = bShowDeletedTextAsComment
+                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    : rRedln.GetComment();
             if (pParent->xTLBParent)
             {
                 // update only comment
-                const OUString& sComment(rRedln.GetComment());
                 rTreeView.set_text(*pParent->xTLBParent, sComment.replace('\n', ' '), 3);
             }
-            pParent->sComment = rRedln.GetComment();
+            pParent->sComment = sComment;
         }
     }
 
@@ -719,6 +725,8 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     rTreeView.freeze();
     if (m_pTable->IsSorted())
         rTreeView.make_unsorted();
+
+    bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
     for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -727,7 +735,12 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
         pRedlineParent->pNext    = nullptr;
-        const OUString& sComment(rRedln.GetComment());
+
+        bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
+                RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
+        const OUString& sComment = bShowDeletedTextAsComment
+                    ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
+                    : rRedln.GetComment();
         pRedlineParent->sComment = sComment.replace('\n', ' ');
         m_RedlineParents.insert(m_RedlineParents.begin() + i,
                 std::unique_ptr<SwRedlineDataParent>(pRedlineParent));

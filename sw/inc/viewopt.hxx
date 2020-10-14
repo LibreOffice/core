@@ -37,7 +37,7 @@ class SwDocShell;
 namespace svtools{ class ColorConfig;}
 enum class SwFillMode;
 
-enum class ViewOptFlags1 : sal_uInt32 {
+enum class ViewOptFlags1 : sal_uInt64 {
     UseHeaderFooterMenu = 0x00000001,
     Tab           = 0x00000002,
     Blank         = 0x00000004,
@@ -65,10 +65,11 @@ enum class ViewOptFlags1 : sal_uInt32 {
     ShowInlineTooltips = 0x10000000, //tooltips on tracked changes
     ViewMetachars = 0x20000000,
     Pageback      = 0x40000000,
-    ShowOutlineContentVisibilityButton = 0x80000000
+    ShowOutlineContentVisibilityButton = 0x80000000,
+    ShowChangesInMargin = 0x100000000 //tracked deletions in margin
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0xF7dfcfff> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x1F7dfcfff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -287,6 +288,12 @@ public:
         { return bool(m_nCoreOptions & ViewOptFlags1::ShowInlineTooltips); }
     void SetShowInlineTooltips( bool b )
         { SetCoreOption(b, ViewOptFlags1::ShowInlineTooltips); }
+
+    //show/hide tracked deletions in text
+    bool IsShowChangesInMargin() const
+        { return bool(m_nCoreOptions & ViewOptFlags1::ShowChangesInMargin); }
+    void SetShowChangesInMargin( bool b )
+        { SetCoreOption(b, ViewOptFlags1::ShowChangesInMargin); }
 
     //show/hide interactive header/footer on top/bottom of pages
     bool IsUseHeaderFooterMenu() const
