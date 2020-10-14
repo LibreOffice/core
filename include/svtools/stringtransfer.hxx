@@ -32,11 +32,7 @@ namespace svt
     {
     public:
         OStringTransferable(const OUString& rContent);
-
-        void UpdateData(const OUString& rContent)
-        {
-            m_sContent = rContent;
-        }
+        void SetData(const OUString& rContent);
 
     private:
         // TransferableHelper overridables

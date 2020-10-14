@@ -44,6 +44,12 @@ namespace svt
         AddFormat(SotClipboardFormatId::STRING);
     }
 
+    void OStringTransferable::SetData(const OUString& rContent)
+    {
+        m_sContent = rContent;
+        ClearFormats(); // invalidate m_aAny so new data will take effect
+    }
+
     bool OStringTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         SotClipboardFormatId nFormat = SotExchange::GetFormat( _rFlavor );
