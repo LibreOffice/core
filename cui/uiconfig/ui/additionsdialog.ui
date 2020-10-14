@@ -127,6 +127,9 @@
                         <property name="AtkObject::accessible-description" translatable="yes" context="additionsdialog|ProgressLabel">This label shows that the progress of the operations such as loading extensions, not found, etc.</property>
                       </object>
                     </child>
+                    <accessibility>
+                      <role type="static"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">True</property>

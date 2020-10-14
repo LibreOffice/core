@@ -87,6 +87,9 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelLicense">License:</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -100,6 +103,9 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelVersion">Required version:</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -113,6 +119,9 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelComments">Comments:</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -126,6 +135,9 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelComments">Downloads:</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -139,6 +151,9 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -168,6 +183,9 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -181,6 +199,9 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -362,6 +383,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <role type="static"/>
+            </accessibility>
           </object>
           <packing>
             <property name="left-attach">1</property>
