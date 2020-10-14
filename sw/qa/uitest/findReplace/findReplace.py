@@ -15,12 +15,9 @@ from uitest.debug import sleep
 import org.libreoffice.unotest
 import pathlib
 from uitest.path import get_srcdir_url
+
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-
-#tdf116242  ţ ț - DONE
-#Bug 98417 - FIND & REPLACE: Add 'Find Previous' button - DONE
-#Bug 39022 - find-replace->$1, not pattern  - DONE
 
 class findReplace(UITestCase):
     def test_find_writer(self):
@@ -194,4 +191,36 @@ class findReplace(UITestCase):
         self.ui_test.close_dialog_through_button(xcloseBtn)
 
         self.ui_test.close_doc()
+
+    def test_tdf136577(self):
+        self.ui_test.create_doc_in_start_center("writer")
+
+        xWriterDoc = self.xUITest.getTopFocusWindow()
+        xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+        document = self.ui_test.get_component()
+
+        type_text(xWriterEdit, "x")
+
+        self.assertEqual(document.Text.String, "x")
+
+        self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog")
+        xDialog = self.xUITest.getTopFocusWindow()
+
+        searchterm = xDialog.getChild("searchterm")
+        searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"x"}))
+
+
+        replaceall = xDialog.getChild("replaceall")
+        replaceall.executeAction("CLICK", tuple())
+
+        self.assertEqual(document.Text.String, "")
+
+        self.xUITest.executeCommand(".uno:Undo")
+
+        # Without the fix in place, this test would have failed with AssertionError: '' != 'x'
+        self.assertEqual(document.Text.String, "x")
+
+        self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
