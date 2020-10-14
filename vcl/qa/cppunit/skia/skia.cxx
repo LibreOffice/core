@@ -34,12 +34,14 @@ public:
     void testDrawShaders();
     void testInterpretAs8Bit();
     void testAlphaBlendWith();
+    void testBitmapCopyOnWrite();
 
     CPPUNIT_TEST_SUITE(SkiaTest);
     CPPUNIT_TEST(testBitmapErase);
     CPPUNIT_TEST(testDrawShaders);
     CPPUNIT_TEST(testInterpretAs8Bit);
     CPPUNIT_TEST(testAlphaBlendWith);
+    CPPUNIT_TEST(testBitmapCopyOnWrite);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -259,6 +261,46 @@ void SkiaTest::testAlphaBlendWith()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), alpha.GetBitCount());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(112),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+}
+
+void SkiaTest::testBitmapCopyOnWrite()
+{
+    if (!SkiaHelper::isVCLSkiaEnabled())
+        return;
+    SkiaSalBitmap bitmap;
+    CPPUNIT_ASSERT(bitmap.Create(Size(10, 10), 24, BitmapPalette()));
+    bitmap.GetSkImage();
+    bitmap.GetAlphaSkImage();
+    CPPUNIT_ASSERT(bitmap.unittestHasBuffer());
+    CPPUNIT_ASSERT(bitmap.unittestHasImage());
+    CPPUNIT_ASSERT(bitmap.unittestHasAlphaImage());
+    SkiaSalBitmap bitmap2;
+    CPPUNIT_ASSERT(bitmap2.Create(bitmap));
+    // Data should be shared.
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetBuffer(), bitmap2.unittestGetBuffer());
+    CPPUNIT_ASSERT(bitmap2.unittestHasImage());
+    CPPUNIT_ASSERT(bitmap2.unittestHasAlphaImage());
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetImage(), bitmap2.unittestGetImage());
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetAlphaImage(), bitmap2.unittestGetAlphaImage());
+    // Reading still should keep the data shrared.
+    const SkImage* oldImage = bitmap.unittestGetImage();
+    const SkImage* oldAlphaImage = bitmap.unittestGetAlphaImage();
+    BitmapBuffer* buffer = bitmap.AcquireBuffer(BitmapAccessMode::Read);
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetBuffer(), bitmap2.unittestGetBuffer());
+    bitmap.ReleaseBuffer(buffer, BitmapAccessMode::Read);
+    // Images get possibly updated only after releasing the buffer.
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetImage(), bitmap2.unittestGetImage());
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetAlphaImage(), bitmap2.unittestGetAlphaImage());
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetImage(), oldImage);
+    CPPUNIT_ASSERT_EQUAL(bitmap.unittestGetAlphaImage(), oldAlphaImage);
+    // Writing should unshare.
+    buffer = bitmap.AcquireBuffer(BitmapAccessMode::Write);
+    CPPUNIT_ASSERT(bitmap.unittestGetBuffer() != bitmap2.unittestGetBuffer());
+    bitmap.ReleaseBuffer(buffer, BitmapAccessMode::Write);
+    CPPUNIT_ASSERT(bitmap.unittestGetImage() != bitmap2.unittestGetImage());
+    CPPUNIT_ASSERT(bitmap.unittestGetAlphaImage() != bitmap2.unittestGetAlphaImage());
+    CPPUNIT_ASSERT(bitmap.unittestGetImage() != oldImage);
+    CPPUNIT_ASSERT(bitmap.unittestGetAlphaImage() != oldAlphaImage);
 }
 
 } // namespace
