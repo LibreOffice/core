@@ -31,7 +31,7 @@ if [ "$1" = "configure" ] ; then  # first install
     update-menus
   fi
   # update icon-cache if already present
-  for theme in gnome hicolor locolor; do
+  for theme in gnome hicolor; do
     if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
       # touch it, just in case we cannot find the binary...
       touch /usr/share/icons/$theme

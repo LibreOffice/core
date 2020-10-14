@@ -171,7 +171,7 @@ do
 done
 
 #run always
-for theme in gnome hicolor locolor; do
+for theme in gnome hicolor; do
     if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
         # touch it, just in case we cannot find the binary...
         touch /usr/share/icons/$theme
@@ -371,7 +371,7 @@ if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled
 fi
 
 #run always
-for theme in gnome hicolor locolor; do
+for theme in gnome hicolor; do
   if [ -e /usr/share/icons/$theme/icon-theme.cache ] ; then
    # touch it, just in case we cannot find the binary...
     touch /usr/share/icons/$theme
@@ -411,9 +411,5 @@ done
 /usr/share/icons/hicolor/*/apps/*svg
 /usr/share/icons/hicolor/*/mimetypes/*png
 /usr/share/icons/hicolor/*/mimetypes/*svg
-/usr/share/icons/locolor/*/apps/*png
-/usr/share/icons/locolor/*/apps/*svg
-/usr/share/icons/locolor/*/mimetypes/*png
-/usr/share/icons/locolor/*/mimetypes/*svg
 /usr/share/mime/packages/*
 /usr/share/appdata/*
