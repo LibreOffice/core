@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
 #include <TitleHelper.hxx>
@@ -71,7 +72,9 @@ public:
 private:
     //ui controls
     VclPtr<CheckBox> mpCBTitle;
+    VclPtr<Edit>     mpEditTitle;
     VclPtr<CheckBox> mpCBSubtitle;
+    VclPtr<Edit>     mpEditSubtitle;
     VclPtr<CheckBox> mpCBXAxis;
     VclPtr<CheckBox> mpCBXAxisTitle;
     VclPtr<CheckBox> mpCBYAxis;
@@ -110,6 +113,7 @@ private:
     void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
     DECL_LINK(CheckBoxHdl, Button*, void);
+    DECL_LINK(EditHdl, Edit&, void);
     DECL_LINK(LegendPosHdl, ListBox&, void);
 };
 
