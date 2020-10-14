@@ -84,7 +84,7 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION <= 110000
+#if CLANG_VERSION <= 100000
     bool TraverseBinComma(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
 #endif
 

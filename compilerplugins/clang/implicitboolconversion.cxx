@@ -253,7 +253,7 @@ public:
 
     bool TraverseBinaryOperator(BinaryOperator * expr);
 
-#if CLANG_VERSION <= 110000
+#if CLANG_VERSION <= 100000
     bool TraverseBinLT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
     bool TraverseBinLE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
     bool TraverseBinGT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
@@ -265,7 +265,7 @@ public:
 
     bool TraverseCompoundAssignOperator(CompoundAssignOperator * expr);
 
-#if CLANG_VERSION <= 110000
+#if CLANG_VERSION <= 100000
     bool TraverseBinAndAssign(CompoundAssignOperator * expr)
     { return TraverseCompoundAssignOperator(expr); }
     bool TraverseBinOrAssign(CompoundAssignOperator * expr)

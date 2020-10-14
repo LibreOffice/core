@@ -87,7 +87,7 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION <= 110000
+#if CLANG_VERSION <= 100000
     bool TraverseUnaryLNot(UnaryOperator* expr) { return TraverseUnaryOperator(expr); }
 #endif
 
@@ -121,7 +121,7 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION <= 110000
+#if CLANG_VERSION <= 100000
     bool TraverseBinLAnd(BinaryOperator* expr) { return TraverseBinaryOperator(expr); }
 #endif
 
