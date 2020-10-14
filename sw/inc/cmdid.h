@@ -188,6 +188,7 @@
 
 #define FN_SHOW_OUTLINECONTENTVISIBILITYBUTTON (FN_VIEW + 63)  /* Show outline content visibility toggle button */
 #define FN_TOGGLE_OUTLINE_CONTENT_VISIBILITY   (FN_VIEW + 64)
+#define FN_SHOW_CHANGES_IN_MARGIN              (FN_VIEW + 65)  /* Show tracked deletions in margin */
 
 // Region: Insert
 #define FN_INSERT_BOOKMARK      (FN_INSERT + 2 )  /* Bookmark */

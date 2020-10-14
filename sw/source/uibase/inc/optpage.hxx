@@ -54,6 +54,7 @@ class SwContentOptPage : public SfxTabPage
 
     std::unique_ptr<weld::CheckButton> m_xShowInlineTooltips;
     std::unique_ptr<weld::CheckButton> m_xShowOutlineContentVisibilityButton;
+    std::unique_ptr<weld::CheckButton> m_xShowChangesInMargin;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenCB;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
 

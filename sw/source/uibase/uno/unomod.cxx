@@ -95,7 +95,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_HIDE_WHITESPACE,
     HANDLE_VIEWSET_USE_HEADERFOOTERMENU,
     HANDLE_VIEWSET_BOOKMARKS,
-    HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON
+    HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON,
+    HANDLE_VIEWSET_CHANGES_IN_MARGIN
 };
 
 enum SwPrintSettingsPropertyHandles
@@ -135,6 +136,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "ShowInlineTooltips" ),  HANDLE_VIEWSET_INLINECHANGES_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "UseHeaderFooterMenu" ), HANDLE_VIEWSET_USE_HEADERFOOTERMENU , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowOutlineContentVisibilityButton" ), HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowChangesInMargin" ), HANDLE_VIEWSET_CHANGES_IN_MARGIN,       cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
@@ -598,6 +600,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_INLINECHANGES_TIPS    : mpViewOption->SetShowInlineTooltips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_USE_HEADERFOOTERMENU  : mpViewOption->SetUseHeaderFooterMenu(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON : mpViewOption->SetShowOutlineContentVisibilityButton(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_CHANGES_IN_MARGIN     : mpViewOption->SetShowChangesInMargin(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
             sal_Int32 nTmp = 0;
@@ -837,6 +840,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   bBoolVal = mpConstViewOption->IsShowContentTips(); break;
         case  HANDLE_VIEWSET_INLINECHANGES_TIPS    :   bBoolVal = mpConstViewOption->IsShowInlineTooltips(); break;
+        case  HANDLE_VIEWSET_CHANGES_IN_MARGIN     :   bBoolVal = mpConstViewOption->IsShowChangesInMargin(); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : bBoolVal = mpConstViewOption->IsShowScrollBarTips(); break;

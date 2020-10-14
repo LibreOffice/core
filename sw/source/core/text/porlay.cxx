@@ -601,9 +601,16 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             rInf.GetTextFrame()->MapViewToModel(rLine.GetStart()));
     std::pair<SwTextNode const*, sal_Int32> const end(
             rInf.GetTextFrame()->MapViewToModel(rLine.GetEnd()));
-    SetRedline( rLine.GetRedln() &&
-        rLine.GetRedln()->CheckLine(start.first->GetIndex(), start.second,
-            end.first->GetIndex(), end.second) );
+    bool bHasRedline = rLine.GetRedln();
+    if( bHasRedline )
+    {
+        OUString sRedlineText;
+        bHasRedline = rLine.GetRedln()->CheckLine(start.first->GetIndex(), start.second,
+            end.first->GetIndex(), end.second, sRedlineText );
+        if( bHasRedline )
+            SetRedlineText( sRedlineText );
+    }
+    SetRedline( bHasRedline );
 }
 
 // #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
