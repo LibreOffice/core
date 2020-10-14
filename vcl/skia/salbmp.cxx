@@ -289,6 +289,7 @@ void SkiaSalBitmap::ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode)
     assert(pBuffer->mnWidth == mSize.Width());
     assert(pBuffer->mnHeight == mSize.Height());
     assert(pBuffer->mnBitCount == mBitCount);
+    assert(pBuffer->mpBits == mBuffer.get());
     verify();
     delete pBuffer;
 }

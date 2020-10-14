@@ -94,6 +94,9 @@ public:
     bool unittestHasImage() const { return mImage.get(); }
     bool unittestHasAlphaImage() const { return mAlphaImage.get(); }
     bool unittestHasEraseColor() const { return mEraseColorSet; }
+    const sal_uInt8* unittestGetBuffer() const { return mBuffer.get(); }
+    const SkImage* unittestGetImage() const { return mImage.get(); }
+    const SkImage* unittestGetAlphaImage() const { return mAlphaImage.get(); }
 
 private:
     // Reset the state to pixel data (resets cached images allocated in GetSkImage()/GetAlphaSkImage()).
