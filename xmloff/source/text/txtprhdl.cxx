@@ -153,6 +153,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_VertRel_Enum[] =
     // DVO, OD 17.09.2003 #i18732# - allow vertical alignment at page
     { XML_PAGE,                 RelOrientation::PAGE_FRAME  },
     { XML_PAGE_CONTENT,         RelOrientation::PAGE_PRINT_AREA },
+    { XML_PAGE_CONTENT_TOP,     RelOrientation::PAGE_PRINT_AREA_TOP },
     { XML_PAGE_CONTENT_BOTTOM,  RelOrientation::PAGE_PRINT_AREA_BOTTOM },
     { XML_FRAME,                RelOrientation::FRAME   },      // import only
     { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  // import only
@@ -167,6 +168,7 @@ SvXMLEnumMapEntry<sal_uInt16> const pXML_VertRelPage_Enum[] =
     { XML_PAGE_CONTENT, RelOrientation::PRINT_AREA  },
     { XML_PAGE,         RelOrientation::PAGE_FRAME  },
     { XML_PAGE_CONTENT, RelOrientation::PAGE_PRINT_AREA },
+    { XML_PAGE_CONTENT_TOP,    RelOrientation::PAGE_PRINT_AREA_TOP },
     { XML_PAGE_CONTENT_BOTTOM, RelOrientation::PAGE_PRINT_AREA_BOTTOM },
     { XML_TOKEN_INVALID, 0 }
 };
