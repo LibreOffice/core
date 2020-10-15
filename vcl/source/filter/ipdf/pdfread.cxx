@@ -243,6 +243,14 @@ bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 #if HAVE_FEATURE_PDFIUM
 namespace
 {
+basegfx::B2DPoint convertFromPDFInternalToHMM(basegfx::B2DSize const& rInputPoint,
+                                              basegfx::B2DSize const& rPageSize)
+{
+    double x = convertPointToMm100(rInputPoint.getX());
+    double y = convertPointToMm100(rPageSize.getY() - rInputPoint.getY());
+    return basegfx::B2DPoint(x, y);
+}
+
 std::vector<PDFGraphicAnnotation>
 findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2DSize aPageSize)
 {
@@ -303,9 +311,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         rPDFGraphicAnnotation.mpMarker = pMarker;
                         for (auto const& rVertex : rVertices)
                         {
-                            double x = convertPointToMm100(rVertex.getX());
-                            double y = convertPointToMm100(aPageSize.getY() - rVertex.getY());
-                            pMarker->maPolygon.append({ x, y });
+                            auto aPoint = convertFromPDFInternalToHMM(rVertex, aPageSize);
+                            pMarker->maPolygon.append(aPoint);
                         }
                         pMarker->maPolygon.setClosed(true);
                         pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
@@ -341,9 +348,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                             basegfx::B2DPolygon aPolygon;
                             for (auto const& rVertex : rStrokes)
                             {
-                                double x = convertPointToMm100(rVertex.getX());
-                                double y = convertPointToMm100(aPageSize.getY() - rVertex.getY());
-                                aPolygon.append({ x, y });
+                                auto aPoint = convertFromPDFInternalToHMM(rVertex, aPageSize);
+                                aPolygon.append(aPoint);
                             }
                             pMarker->maStrokes.push_back(aPolygon);
                         }
@@ -366,29 +372,21 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                             auto aAttachmentPoints = pAnnotation->getAttachmentPoints(i);
                             if (!aAttachmentPoints.empty())
                             {
-                                double x, y;
                                 basegfx::B2DPolygon aPolygon;
                                 aPolygon.setClosed(true);
 
-                                x = convertPointToMm100(aAttachmentPoints[0].getX());
-                                y = convertPointToMm100(aPageSize.getY()
-                                                        - aAttachmentPoints[0].getY());
-                                aPolygon.append({ x, y });
-
-                                x = convertPointToMm100(aAttachmentPoints[1].getX());
-                                y = convertPointToMm100(aPageSize.getY()
-                                                        - aAttachmentPoints[1].getY());
-                                aPolygon.append({ x, y });
-
-                                x = convertPointToMm100(aAttachmentPoints[3].getX());
-                                y = convertPointToMm100(aPageSize.getY()
-                                                        - aAttachmentPoints[3].getY());
-                                aPolygon.append({ x, y });
-
-                                x = convertPointToMm100(aAttachmentPoints[2].getX());
-                                y = convertPointToMm100(aPageSize.getY()
-                                                        - aAttachmentPoints[2].getY());
-                                aPolygon.append({ x, y });
+                                auto aPoint1
+                                    = convertFromPDFInternalToHMM(aAttachmentPoints[0], aPageSize);
+                                aPolygon.append(aPoint1);
+                                auto aPoint2
+                                    = convertFromPDFInternalToHMM(aAttachmentPoints[1], aPageSize);
+                                aPolygon.append(aPoint2);
+                                auto aPoint3
+                                    = convertFromPDFInternalToHMM(aAttachmentPoints[3], aPageSize);
+                                aPolygon.append(aPoint3);
+                                auto aPoint4
+                                    = convertFromPDFInternalToHMM(aAttachmentPoints[2], aPageSize);
+                                aPolygon.append(aPoint4);
 
                                 pMarker->maQuads.push_back(aPolygon);
                             }
@@ -400,17 +398,14 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     auto const& rLineGeometry = pAnnotation->getLineGeometry();
                     if (!rLineGeometry.empty())
                     {
-                        double x, y;
                         auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerLine>();
                         rPDFGraphicAnnotation.mpMarker = pMarker;
 
-                        x = convertPointToMm100(rLineGeometry[0].getX());
-                        y = convertPointToMm100(aPageSize.getY() - rLineGeometry[0].getY());
-                        pMarker->maLineStart = basegfx::B2DPoint(x, y);
+                        auto aPoint1 = convertFromPDFInternalToHMM(rLineGeometry[0], aPageSize);
+                        pMarker->maLineStart = aPoint1;
 
-                        x = convertPointToMm100(rLineGeometry[1].getX());
-                        y = convertPointToMm100(aPageSize.getY() - rLineGeometry[1].getY());
-                        pMarker->maLineEnd = basegfx::B2DPoint(x, y);
+                        auto aPoint2 = convertFromPDFInternalToHMM(rLineGeometry[1], aPageSize);
+                        pMarker->maLineEnd = aPoint2;
 
                         float fWidth = pAnnotation->getBorderWidth();
                         pMarker->mnWidth = convertPointToMm100(fWidth);
