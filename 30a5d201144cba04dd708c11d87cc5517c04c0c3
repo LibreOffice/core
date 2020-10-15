@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb94455e_33eef0dc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T08:17:20Z",
+      "side": 1,
+      "message": "Please next time:\n\n1. Keep first line of commit message under 100 characters;\n2. Use an empty line between the first and following lines.\n\nThanks!",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 43
+      },
+      "revId": "30a5d201144cba04dd708c11d87cc5517c04c0c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
