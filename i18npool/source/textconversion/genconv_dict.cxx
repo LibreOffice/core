@@ -357,7 +357,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         sal_Int32  len = Ostr.getLength();
         if (char_total + len + 1 > 0xFFFF) {
-            fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %ld)", sal::static_int_cast< long >(line));
+            fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %" SAL_PRIdINT32 ")", line);
             return;
         }
         sal_Int32 sep=-1, eq=-1, gt=-1, lt=-1;
@@ -379,7 +379,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
                 STC_WordData[char_total++] = (i == sep) ? 0 : Ostr[i];
             STC_WordData[char_total++] = 0;
         } else {
-            fprintf(stderr, "Invalid entry in stc_word.dic (line %ld)", sal::static_int_cast< long >(line));
+            fprintf(stderr, "Invalid entry in stc_word.dic (line %" SAL_PRIdINT64 ")", sal_Int64(line));
             return;
         }
         line++;
@@ -393,7 +393,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %ld;\n", sal::static_int_cast< long >(char_total));
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %" SAL_PRIdINT32 ";\n", sal_Int32(char_total));
 
         // create function to return arrays
         fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = STC_WordData_Count; return STC_WordData; }\n");
@@ -428,7 +428,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_S2T_Count = %ld;\n", sal::static_int_cast< long >(length));
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_S2T_Count = %" SAL_PRIdINT64 ";\n", sal_Int64(length));
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_S2T() { return STC_WordEntry_S2T; }\n");
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_S2T(sal_Int32& count) { count = STC_WordIndex_S2T_Count; return STC_WordIndex_S2T; }\n");
     } else {
@@ -461,7 +461,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         }
         fprintf(cfp, "\n};\n");
 
-        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_T2S_Count = %ld;\n\n", sal::static_int_cast< long >(length));
+        fprintf(cfp, "\nstatic sal_Int32 STC_WordIndex_T2S_Count = %" SAL_PRIdINT64 ";\n\n", sal_Int64(length));
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordEntry_T2S() { return STC_WordEntry_T2S; }\n");
         fprintf (cfp, "\tconst sal_uInt16* getSTC_WordIndex_T2S(sal_Int32& count) { count = STC_WordIndex_T2S_Count; return STC_WordIndex_T2S; }\n");
     } else {

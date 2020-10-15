@@ -498,13 +498,13 @@ static void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, const too
 
     SdrObject* pObj = pPage->GetObj(0);
     const tools::Rectangle& aSnap = pObj->GetSnapRect();
-    printf("expected height %ld actual %ld\n", aRect.GetHeight(), aSnap.GetHeight() );
+    printf("expected height %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.GetHeight()), sal_Int64(aSnap.GetHeight()) );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-    printf("expected width %ld actual %ld\n", aRect.GetWidth(), aSnap.GetWidth() );
+    printf("expected width %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.GetWidth()), sal_Int64(aSnap.GetWidth()) );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
-    printf("expected left %ld actual %ld\n", aRect.Left(), aSnap.Left() );
+    printf("expected left %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Left()), sal_Int64(aSnap.Left()) );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Left(), aSnap.Left(), TOLERANCE ) );
-    printf("expected right %ld actual %ld\n", aRect.Top(), aSnap.Top() );
+    printf("expected right %" SAL_PRIdINT64 " actual %" SAL_PRIdINT64 "\n", sal_Int64(aRect.Top()), sal_Int64(aSnap.Top()) );
     CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRect.Top(), aSnap.Top(), TOLERANCE ) );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );

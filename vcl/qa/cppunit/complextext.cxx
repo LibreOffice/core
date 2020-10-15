@@ -109,9 +109,9 @@ void VclComplexTextTest::testArabic()
     tools::Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // Check that we did do the rotation...
-    fprintf( stderr, "%ld %ld %ld %ld\n",
-             aRect.GetWidth(), aRect.GetHeight(),
-             aRectRot.GetWidth(), aRectRot.GetHeight() );
+    fprintf( stderr, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 "\n",
+             sal_Int64(aRect.GetWidth()), sal_Int64(aRect.GetHeight()),
+             sal-Int64(aRectRot.GetWidth()), sal_Int64(aRectRot.GetHeight()) );
     CPPUNIT_ASSERT( aRectRot.GetWidth() == aRect.GetHeight() );
     CPPUNIT_ASSERT( aRectRot.GetHeight() == aRect.GetWidth() );
 #endif

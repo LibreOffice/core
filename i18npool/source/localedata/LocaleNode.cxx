@@ -156,9 +156,9 @@ OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
     if (nLen < nMinLen)
     {
         ++nError;
-        fprintf( stderr, "Error: less than %ld character%s (%ld) in %s '%s'.\n",
-                sal::static_int_cast< long >(nMinLen), (nMinLen > 1 ? "s" : ""),
-                sal::static_int_cast< long >(nLen),
+        fprintf( stderr, "Error: less than %" SAL_PRIdINT32 " character%s (%" SAL_PRIdINT32 ") in %s '%s'.\n",
+                nMinLen, (nMinLen > 1 ? "s" : ""),
+                nLen,
                 (pNode ? OSTR( pNode->getName()) : ""),
                 OSTR( aVal));
     }
