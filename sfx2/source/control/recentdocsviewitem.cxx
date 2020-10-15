@@ -211,7 +211,7 @@ void RecentDocsViewItem::OpenDocument()
     pLoadRecentFile->aArgSeq = aArgsList;
     pLoadRecentFile->pView = &mrParentView;
 
-    Application::PostUserEvent(LINK(nullptr, sfx2::RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile, true);
+    mrParentView.PostLoadRecentUsedFile(pLoadRecentFile);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

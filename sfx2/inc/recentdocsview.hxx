@@ -22,12 +22,14 @@ namespace com::sun::star::frame { class XDispatch; }
 namespace sfx2
 {
 
+class RecentDocsView;
+
 struct LoadRecentFile
 {
     css::util::URL                                    aTargetURL;
     css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
     css::uno::Reference< css::frame::XDispatch >      xDispatch;
-    VclPtr< ThumbnailView >                           pView;
+    RecentDocsView*                                   pView;
 };
 
 enum class ApplicationType
@@ -53,10 +55,11 @@ template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::Appl
 namespace sfx2
 {
 
-class RecentDocsView final : public ThumbnailView
+class RecentDocsView final : public SfxThumbnailView
 {
 public:
-    RecentDocsView( vcl::Window* pParent );
+    RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
+    virtual ~RecentDocsView() override;
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
@@ -70,12 +73,16 @@ public:
     /// Update the information in the view.
     virtual void Reload() override;
 
-    DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
+    // launch load of recently used file
+    void PostLoadRecentUsedFile(LoadRecentFile* pLoadRecentFile);
+
+    // received on load of recently used file
+    void DispatchedLoadRecentUsedFile();
 
 private:
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
@@ -85,6 +92,8 @@ private:
 
     bool isAcceptedFile(const OUString &rURL) const;
 
+    DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
+
     tools::Long mnItemMaxSize;
     size_t mnLastMouseDownItem;
 
@@ -92,6 +101,8 @@ private:
     BitmapEx maWelcomeImage;
     OUString maWelcomeLine1;
     OUString maWelcomeLine2;
+
+    sfx2::LoadRecentFile* mpLoadRecentFile;
 };
 
 } // namespace sfx2
