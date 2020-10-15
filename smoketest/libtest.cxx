@@ -12,6 +12,7 @@
 #include <malloc.h>
 #include <assert.h>
 #include <math.h>
+#include <sal/types.h>
 
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
@@ -111,7 +112,7 @@ int main (int argc, char **argv)
     }
 
     end = getTimeMS();
-    fprintf( stderr, "init time: %ld ms\n", (end-start) );
+    fprintf( stderr, "init time: %" SAL_PRIdINT64 " ms\n", sal_Int64(end-start) );
     start = end;
 
     fprintf( stderr, "start to load document '%s'\n", argv[2] );
@@ -126,7 +127,7 @@ int main (int argc, char **argv)
     }
 
     end = getTimeMS();
-    fprintf( stderr, "load time: %ld ms\n", (end-start) );
+    fprintf( stderr, "load time: %" SAL_PRIdINT64 " ms\n", sal_Int64(end-start) );
     start = end;
 
     if( argc > 3 )
@@ -145,7 +146,7 @@ int main (int argc, char **argv)
         {
             fprintf( stderr, "Save succeeded\n" );
             end = getTimeMS();
-            fprintf( stderr, "save time: %ld ms\n", (end-start) );
+            fprintf( stderr, "save time: %" SAL_PRIdINT64 " ms\n", sal_Int64(end-start) );
         }
     }
     fprintf( stderr, "all tests passed.\n" );

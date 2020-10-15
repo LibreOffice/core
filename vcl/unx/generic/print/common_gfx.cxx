@@ -483,7 +483,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const Po
     PSSetColor ();
     PSSetLineWidth ();
 
-    snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
+    snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " moveto\n", sal_Int64(pPath[0].X()), sal_Int64(pPath[0].Y()));
     WritePS(mpPageBody, pString);
 
     // Handle the drawing of mixed lines mixed with curves
@@ -493,7 +493,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const Po
     {
         if (pFlgAry[i] != PolyFlags::Control) //If the next point is a PolyFlags::Normal, we're drawing a line
         {
-            snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
+            snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " lineto\n", sal_Int64(pPath[i].X()), sal_Int64(pPath[i].Y()));
             i++;
         }
         else //Otherwise we're drawing a spline
@@ -503,10 +503,10 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const Po
             if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
                 (pFlgAry[i+2] != PolyFlags::Control))
             {
-                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
-                         pPath[i].X(), pPath[i].Y(),
-                         pPath[i+1].X(), pPath[i+1].Y(),
-                         pPath[i+2].X(), pPath[i+2].Y());
+                snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " curveto\n",
+                         sal_Int64(pPath[i].X()), sal_Int64(pPath[i].Y()),
+                         sal_Int64(pPath[i+1].X()), sal_Int64(pPath[i+1].Y()),
+                         sal_Int64(pPath[i+2].X()), sal_Int64(pPath[i+2].Y()));
             }
             else
             {
@@ -530,13 +530,14 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const Pol
     if (nPoints <= 0 || (pPath == nullptr) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-    snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
+    snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " moveto\n", sal_Int64(pPath[0].X()), sal_Int64(pPath[0].Y()));
     WritePS(mpPageBody, pString); //Move to the starting point for the PolyPolygon
     for (unsigned int i=1; i < nPoints;)
     {
         if (pFlgAry[i] != PolyFlags::Control)
         {
-            snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
+            snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " lineto\n",
+                sal_Int64(pPath[i].X()), sal_Int64(pPath[i].Y()));
             WritePS(mpPageBody, pString);
             i++;
         }
@@ -547,10 +548,10 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const Pol
             if ((pFlgAry[i] == PolyFlags::Control) && (pFlgAry[i+1] == PolyFlags::Control) &&
                     (pFlgAry[i+2] != PolyFlags::Control))
             {
-                snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
-                        pPath[i].X(), pPath[i].Y(),
-                        pPath[i+1].X(), pPath[i+1].Y(),
-                        pPath[i+2].X(), pPath[i+2].Y());
+                snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " curveto\n",
+                        sal_Int64(pPath[i].X()), sal_Int64(pPath[i].Y()),
+                        sal_Int64(pPath[i+1].X()), sal_Int64(pPath[i+1].Y()),
+                        sal_Int64(pPath[i+2].X()), sal_Int64(pPath[i+2].Y()));
                 WritePS(mpPageBody, pString);
             }
             else
@@ -592,7 +593,8 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
         if( nPoints == 0 || pPtAry[i] == nullptr )
             continue;
 
-        snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
+        snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " moveto\n",
+            sal_Int64(pPtAry[i][0].X()), sal_Int64(pPtAry[i][0].Y())); //Move to the starting point
         WritePS(mpPageBody, pString);
         for (unsigned int j=1; j < nPoints;)
         {
@@ -600,7 +602,8 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
             // polygon without beziers
             if ( ! pFlgAry[i] || pFlgAry[i][j] != PolyFlags::Control)
             {
-                snprintf(pString, nBezString, "%li %li lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
+                snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " lineto\n",
+                    sal_Int64(pPtAry[i][j].X()), sal_Int64(pPtAry[i][j].Y()));
                 WritePS(mpPageBody, pString);
                 j++;
             }
@@ -610,10 +613,10 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                     break; //Error: wrong sequence of control/normal points somehow
                 if ((pFlgAry[i][j] == PolyFlags::Control) && (pFlgAry[i][j+1] == PolyFlags::Control) && (pFlgAry[i][j+2] != PolyFlags::Control))
                 {
-                    snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
-                            pPtAry[i][j].X(), pPtAry[i][j].Y(),
-                            pPtAry[i][j+1].X(), pPtAry[i][j+1].Y(),
-                            pPtAry[i][j+2].X(), pPtAry[i][j+2].Y());
+                    snprintf(pString, nBezString, "%" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " %" SAL_PRIdINT64 " curveto\n",
+                            sal_Int64(pPtAry[i][j].X()), sal_Int64(pPtAry[i][j].Y()),
+                            sal_Int64(pPtAry[i][j+1].X()), sal_Int64(pPtAry[i][j+1].Y()),
+                            sal_Int64(pPtAry[i][j+2].X()), sal_Int64(pPtAry[i][j+2].Y()));
                     WritePS(mpPageBody, pString);
                 }
                 else
