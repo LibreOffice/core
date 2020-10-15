@@ -731,9 +731,9 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
 {
     char pAnchor[100];
     sax_fastparser::FSHelperPtr pVmlDrawing = GetFS();
-    snprintf( pAnchor, 100, "%ld, %ld, %ld, %ld, %ld, %ld, %ld, %ld",
-                  maFrom.Left(), maFrom.Top(), maFrom.Right(), maFrom.Bottom(),
-                  maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
+    snprintf( pAnchor, 100, "%" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 ", %" SAL_PRIdINT64,
+                  sal_Int64(maFrom.Left()), sal_Int64(maFrom.Top()), sal_Int64(maFrom.Right()), sal_Int64(maFrom.Bottom()),
+                  sal_Int64(maTo.Left()), sal_Int64(maTo.Top()), sal_Int64(maTo.Right()), sal_Int64(maTo.Bottom()) );
 
     // Getting comment text alignments
     const char* pVertAlign = lcl_GetVertAlignFromItemSetChar(mpCaption->GetMergedItemSet());
