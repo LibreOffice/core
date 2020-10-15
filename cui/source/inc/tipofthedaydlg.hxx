@@ -30,7 +30,6 @@ private:
     std::unique_ptr<weld::LinkButton> m_pLink;
 
     sal_Int32 nCurrentTip;
-    sal_Int32 nNumberOfTips;
     sal_Int32 nDay;
     OUString aLink;
     void UpdateTip();
