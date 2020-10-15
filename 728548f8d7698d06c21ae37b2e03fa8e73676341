@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d60c3796_47d9103f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T11:20:41Z",
+      "side": 1,
+      "message": "This actually reverted 2b7ccc1ee083abee812a4e9917c1324179ec97cb",
+      "range": {
+        "startLine": 9,
+        "startChar": 10,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "728548f8d7698d06c21ae37b2e03fa8e73676341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01e08eba_5293d4ed",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 4
