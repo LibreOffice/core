@@ -1,0 +1,48 @@
+diff --git a/fpdfsdk/fpdf_annot.cpp b/fpdfsdk/fpdf_annot.cpp
+index 229651d82..b43f378bc 100644
+--- a/fpdfsdk/fpdf_annot.cpp
++++ b/fpdfsdk/fpdf_annot.cpp
+@@ -552,6 +552,25 @@ FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
+   return true;
+ }
+
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_GetLine(FPDF_ANNOTATION annot,
++                                                      FS_POINTF* start,
++                                                      FS_POINTF* end) {
++  CPDF_Dictionary* pAnnotDict = GetAnnotDictFromFPDFAnnotation(annot);
++  if (!pAnnotDict || !start || !end)
++    return false;
++
++  CPDF_Array* pLineArray = pAnnotDict->GetArrayFor("L");
++  if (!pLineArray || pLineArray->size() < 4)
++    return false;
++
++  start->x = pLineArray->GetNumberAt(0);
++  start->y = pLineArray->GetNumberAt(1);
++  end->x = pLineArray->GetNumberAt(2);
++  end->y = pLineArray->GetNumberAt(3);
++
++  return true;
++}
++
+ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFAnnot_AppendObject(FPDF_ANNOTATION annot, FPDF_PAGEOBJECT obj) {
+   CPDF_AnnotContext* pAnnot = CPDFAnnotContextFromFPDFAnnotation(annot);
+diff --git a/public/fpdf_annot.h b/public/fpdf_annot.h
+index ce033cde3..c4b0f71b3 100644
+--- a/public/fpdf_annot.h
++++ b/public/fpdf_annot.h
+@@ -232,6 +232,10 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+ FPDFAnnot_GetInkStrokePoints(FPDF_ANNOTATION annot, int index,
+                              FS_POINTF* points);
+
++FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
++FPDFAnnot_GetLine(FPDF_ANNOTATION annot, FS_POINTF* start,
++                  FS_POINTF* end);
++
+ // Experimental API.
+ // Add |obj| to |annot|. |obj| must have been created by
+ // FPDFPageObj_CreateNew{Path|Rect}() or FPDFPageObj_New{Text|Image}Obj(), and
+--
+2.26.2
+
