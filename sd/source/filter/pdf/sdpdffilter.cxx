@@ -170,6 +170,19 @@ bool SdPdfFilter::Import()
                     if (rCustomAnnotationMarker.maFillColor.GetTransparency() == 0)
                         rCustomAnnotationMarker.maFillColor.SetTransparency(0x90);
                 }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Line)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerLine*>(
+                        rPDFAnnotation.mpMarker.get());
+
+                    basegfx::B2DPolygon aPoly;
+                    aPoly.append(pMarker->maLineStart);
+                    aPoly.append(pMarker->maLineEnd);
+                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+
+                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
+                    rCustomAnnotationMarker.maFillColor = COL_TRANSPARENT;
+                }
             }
         }
     }
