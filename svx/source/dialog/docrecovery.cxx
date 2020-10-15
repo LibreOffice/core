@@ -236,6 +236,35 @@ void RecoveryCore::forgetBrokenRecoveryEntries()
     }
 }
 
+void RecoveryCore::forgetAllRecoveryEntriesMarkedForDiscard()
+{
+    // checked by ONLY caller - doRecovery()
+  /*
+    if (!m_xRealCore.is())
+        return;
+  */
+
+    // potential to move in a separate function
+    css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
+    css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
+    lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    lRemoveArgs[0].Value <<= false;
+    lRemoveArgs[1].Name    = PROP_ENTRYID;
+
+    // work on a copied list only ...
+    // Reason: We will get notifications from the core for every
+    // changed or removed element. And that will change our m_lURLs list.
+    // That's not a good idea, if we use a stl iterator inbetween .-)
+    TURLList lURLs = m_lURLs;
+    for (const TURLInfo& rInfo : lURLs)
+    {
+        if(!rInfo.ShouldDiscard)
+            continue;
+
+        lRemoveArgs[1].Value <<= rInfo.ID;
+        m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
+    }
+}
 
 void RecoveryCore::setProgressHandler(const css::uno::Reference< css::task::XStatusIndicator >& xProgress)
 {
@@ -285,6 +314,8 @@ void RecoveryCore::doRecovery()
 {
     if (!m_xRealCore.is())
         return;
+
+    forgetAllRecoveryEntriesMarkedForDiscard();
 
     css::util::URL aURL = impl_getParsedURL(RECOVERY_CMD_DO_RECOVERY);
 
@@ -646,23 +677,29 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     , m_aRecovFailedStr(SvxResId(RID_SVXSTR_RECOVFAILED))
     , m_aRecovInProgrStr(SvxResId(RID_SVXSTR_RECOVINPROGR))
     , m_aNotRecovYetStr(SvxResId(RID_SVXSTR_NOTRECOVYET))
+    , m_aWillBeDiscStr(SvxResId(RID_SVXSTR_WILLDISCARD))
     , m_xDescrFT(m_xBuilder->weld_label("desc"))
     , m_xProgressBar(m_xBuilder->weld_progress_bar("progress"))
     , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
     , m_xNextBtn(m_xBuilder->weld_button("next"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xToggleAllBtn(m_xBuilder->weld_check_button("selectall"))
 {
-    const auto nWidth = m_xFileListLB->get_approximate_digit_width() * 70;
+    const auto nWidth = m_xFileListLB->get_approximate_digit_width() * 100;
     m_xFileListLB->set_size_request(nWidth, m_xFileListLB->get_height_rows(10));
     m_xProgressBar->set_size_request(m_xProgressBar->get_approximate_digit_width() * 50, -1);
     PluginProgress* pProgress = new PluginProgress(m_xProgressBar.get());
     m_xProgress.set(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     std::vector<int> aWidths;
+    aWidths.push_back(m_xFileListLB->get_checkbox_column_width() + m_xFileListLB->get_approximate_digit_width() * 7);
     aWidths.push_back(m_xFileListLB->get_checkbox_column_width());
     aWidths.push_back(60 * nWidth / 100);
     aWidths.push_back(m_xFileListLB->get_checkbox_column_width());
     m_xFileListLB->set_column_fixed_widths(aWidths);
+    m_xFileListLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xFileListLB->connect_column_clicked( LINK( this, RecoveryDialog, ToggleAllButtonHdl ) );
+    m_xFileListLB->connect_toggled( LINK(this, RecoveryDialog, ToggleRowHdl) );
 
     m_xNextBtn->set_sensitive(true);
     m_xNextBtn->connect_clicked( LINK( this, RecoveryDialog, NextButtonHdl ) );
@@ -674,6 +711,7 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     {
         const TURLInfo& rInfo = rURLList[i];
         m_xFileListLB->append();
+        m_xFileListLB->set_toggle(i,TRISTATE_TRUE);
         m_xFileListLB->set_id(i, OUString::number(reinterpret_cast<sal_IntPtr>(&rInfo)));
         m_xFileListLB->set_image(i, rInfo.StandardImageId, 0);
         m_xFileListLB->set_text(i, rInfo.DisplayName, 1);
@@ -899,6 +937,9 @@ void RecoveryDialog::end()
 
 IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl, weld::Button&, void)
 {
+    // disable any further row selection
+    m_xFileListLB->set_sensitive(false);
+
     switch (m_eRecoveryState)
     {
         case RecoveryDialog::E_RECOVERY_PREPARED:
@@ -940,6 +981,45 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl, weld::Button&, void)
     }
 }
 
+IMPL_LINK_NOARG(RecoveryDialog, ToggleAllButtonHdl, int, void)
+{
+    TriState eState;
+    switch (m_xToggleAllBtn->get_state()) {
+        case TRISTATE_TRUE:
+            // when all true, set all false
+            m_xToggleAllBtn->set_state(TRISTATE_FALSE);
+            eState = TRISTATE_FALSE;
+            m_xNextBtn->set_sensitive(false);
+            break;
+        case TRISTATE_FALSE:
+            // when all false, set all true
+            m_xToggleAllBtn->set_state(TRISTATE_TRUE);
+            eState = TRISTATE_TRUE;
+            m_xNextBtn->set_sensitive(true);
+            break;
+        default:
+            // some are true & some false, set all true
+            m_xToggleAllBtn->set_state(TRISTATE_TRUE);
+            eState = TRISTATE_TRUE;
+            m_xNextBtn->set_sensitive(true);
+            break;
+    }
+
+    impl_setSelectionStatusAll(eState);
+}
+
+IMPL_LINK_NOARG(RecoveryDialog, ToggleRowHdl, const weld::TreeView::iter_col&, void)
+{
+    // reset or TRISTATE_INDET won't take effect
+    m_xToggleAllBtn->set_state(TRISTATE_FALSE);
+    m_xToggleAllBtn->set_state(impl_getSelectionStatusAll());
+
+    if(m_xToggleAllBtn->get_state() == TRISTATE_FALSE)
+        m_xNextBtn->set_sensitive(false);
+    else
+        m_xNextBtn->set_sensitive(true);
+}
+
 OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 {
     OUString sStatus;
@@ -959,6 +1039,9 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
             break;
         case E_NOT_RECOVERED_YET :
             sStatus = m_aNotRecovYetStr;
+            break;
+        case E_WILL_BE_DISCARDED:
+            sStatus = m_aWillBeDiscStr;
             break;
         default:
             break;
@@ -984,6 +1067,66 @@ OUString RecoveryDialog::impl_getStatusImage( const TURLInfo& rInfo )
             break;
     }
     return sStatus;
+}
+
+TriState RecoveryDialog::impl_getSelectionStatusAll(){
+    /*
+        This is only called from 'ToggleSelectionHdl' as the explicit row is not known
+        we have to update the descriptions as we go through them
+    */
+    TriState eState;
+    int c = m_xFileListLB->n_children();
+    for(int i = 0; i < c; i++){
+        if(i == 0){
+            eState = m_xFileListLB->get_toggle(i);  // make first value count as a valid TriState (from list)
+            impl_updateItemDescription(i, eState);
+        }else{
+            TriState eNewState = m_xFileListLB->get_toggle(i);
+            impl_updateItemDescription(i, eNewState);
+            switch (eNewState) {
+                case TRISTATE_FALSE:
+                    if(eState != TRISTATE_FALSE)
+                        eState = TRISTATE_INDET;
+                    break;
+                case TRISTATE_TRUE:
+                    if(eState != TRISTATE_TRUE)
+                        eState = TRISTATE_INDET;
+                    break;
+                default:
+                    // model only allows boolean, thus 2 STATES!
+                    break;
+            }
+        }
+    }
+    return eState;
+}
+
+void RecoveryDialog::impl_setSelectionStatusAll(const TriState& rState){
+    int c = m_xFileListLB->n_children();
+    for(int i = 0; i < c; i++){
+        m_xFileListLB->set_toggle(i, rState);
+        impl_updateItemDescription(i, rState);
+    }
+}
+
+void RecoveryDialog::impl_updateItemDescription(int row, const TriState& rState){
+
+    TURLInfo* pInfo = reinterpret_cast<TURLInfo*>(m_xFileListLB->get_id(row).toInt64());
+    if (!pInfo)
+        return;
+
+    // model only allows 2 states (boolean)
+    if(rState != TRISTATE_TRUE){
+        pInfo->RecoveryState = ERecoveryState::E_WILL_BE_DISCARDED;
+        pInfo->ShouldDiscard = true;
+    }else{
+        pInfo->RecoveryState = ERecoveryState::E_NOT_RECOVERED_YET;
+        pInfo->ShouldDiscard = false;
+    }
+
+    OUString sStatus = impl_getStatusString( *pInfo );
+    if (!sStatus.isEmpty())
+        m_xFileListLB->set_text(row, sStatus, 3);
 }
 
 BrokenRecoveryDialog::BrokenRecoveryDialog(weld::Window* pParent,

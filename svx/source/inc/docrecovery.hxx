@@ -101,7 +101,8 @@ enum ERecoveryState
     E_ORIGINAL_DOCUMENT_RECOVERED,
     E_RECOVERY_FAILED,
     E_RECOVERY_IS_IN_PROGRESS,
-    E_NOT_RECOVERED_YET
+    E_NOT_RECOVERED_YET,
+    E_WILL_BE_DISCARDED
 };
 
 
@@ -139,12 +140,16 @@ struct TURLInfo
     /// standard icon
     OUString StandardImageId;
 
+    /// user choice to discard
+    bool ShouldDiscard;
+
     public:
 
     TURLInfo()
         : ID           (-1                 )
         , DocState     (EDocStates::Unknown)
         , RecoveryState(E_NOT_RECOVERED_YET)
+        , ShouldDiscard(false)
     {}
 };
 
@@ -233,6 +238,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
         void forgetBrokenTempEntries();
         void forgetAllRecoveryEntries();
         void forgetBrokenRecoveryEntries();
+        void forgetAllRecoveryEntriesMarkedForDiscard();
 
 
         /** @short  TODO */
@@ -410,12 +416,14 @@ class RecoveryDialog : public weld::GenericDialogController
         OUString m_aRecovFailedStr;
         OUString m_aRecovInProgrStr;
         OUString m_aNotRecovYetStr;
+        OUString m_aWillBeDiscStr;
 
         std::unique_ptr<weld::Label> m_xDescrFT;
         std::unique_ptr<weld::ProgressBar> m_xProgressBar;
         std::unique_ptr<weld::TreeView> m_xFileListLB;
         std::unique_ptr<weld::Button> m_xNextBtn;
         std::unique_ptr<weld::Button> m_xCancelBtn;
+        std::unique_ptr<weld::CheckButton> m_xToggleAllBtn;
 
     // member
     public:
@@ -436,9 +444,14 @@ class RecoveryDialog : public weld::GenericDialogController
     private:
         DECL_LINK(NextButtonHdl, weld::Button&, void);
         DECL_LINK(CancelButtonHdl, weld::Button&, void);
+        DECL_LINK(ToggleAllButtonHdl, int, void);
+        DECL_LINK(ToggleRowHdl, const weld::TreeView::iter_col&, void);
 
         OUString impl_getStatusString( const TURLInfo& rInfo ) const;
         static OUString impl_getStatusImage( const TURLInfo& rInfo );
+        TriState impl_getSelectionStatusAll();
+        void impl_setSelectionStatusAll(const TriState& rState);
+        void impl_updateItemDescription(int row, const TriState& rState);
 };
 
 
