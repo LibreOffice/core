@@ -640,17 +640,44 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
         FSNS(XML_xmlns, XML_dcmitype), rSelf.getNamespaceURL(OOX_NS(dcmiType)),
         FSNS(XML_xmlns, XML_xsi),      rSelf.getNamespaceURL(OOX_NS(xsi)));
 
-#ifdef OOXTODO
-    writeElement( pCoreProps, FSNS( XML_cp, XML_category ),         "category" );
-    writeElement( pCoreProps, FSNS( XML_cp, XML_contentStatus ),    "status" );
-    writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ),      "contentType" );
-#endif  /* def OOXTODO */
+    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
+    comphelper::SequenceAsHashMap::iterator it;
+
+    it = aUserDefinedProperties.find("OOXMLCorePropertyCategory");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pCoreProps, FSNS( XML_cp, XML_category ), aValue );
+    }
+
+    it = aUserDefinedProperties.find("OOXMLCorePropertyContentStatus");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pCoreProps, FSNS( XML_cp, XML_contentStatus ), aValue );
+    }
+
+    it = aUserDefinedProperties.find("OOXMLCorePropertyContentType");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pCoreProps, FSNS( XML_cp, XML_contentType ), aValue );
+    }
     writeElement( pCoreProps, FSNS( XML_dcterms, XML_created ),     xProperties->getCreationDate() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_creator ),          xProperties->getAuthor() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_description ),      xProperties->getDescription() );
-#ifdef OOXTODO
-    writeElement( pCoreProps, FSNS( XML_dc, XML_identifier ),       "ident" );
-#endif  /* def OOXTODO */
+
+    it = aUserDefinedProperties.find("OOXMLCorePropertyIdentifier");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pCoreProps, FSNS( XML_dc, XML_identifier ), aValue );
+    }
     writeElement( pCoreProps, FSNS( XML_cp, XML_keywords ),         xProperties->getKeywords() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_language ),         LanguageTag( xProperties->getLanguage()) );
     writeElement( pCoreProps, FSNS( XML_cp, XML_lastModifiedBy ),   xProperties->getModifiedBy() );
@@ -659,9 +686,14 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
     writeElement( pCoreProps, FSNS( XML_cp, XML_revision ),         xProperties->getEditingCycles() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_subject ),          xProperties->getSubject() );
     writeElement( pCoreProps, FSNS( XML_dc, XML_title ),            xProperties->getTitle() );
-#ifdef OOXTODO
-    writeElement( pCoreProps, FSNS( XML_cp, XML_version ),          "version" );
-#endif  /* def OOXTODO */
+
+    it = aUserDefinedProperties.find("OOXMLCorePropertyVersion");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pCoreProps, FSNS( XML_cp, XML_version ), aValue );
+    }
 
     pCoreProps->endElementNS( XML_cp, XML_coreProperties );
 }
@@ -679,9 +711,21 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
             XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeExtPr)),
             FSNS(XML_xmlns, XML_vt), rSelf.getNamespaceURL(OOX_NS(officeDocPropsVT)));
 
+    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
+    comphelper::SequenceAsHashMap::iterator it;
+
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
+
+    it = aUserDefinedProperties.find("Manager");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pAppProps, XML_Manager,       aValue );
+    }
+
 #ifdef OOXTODO
-    writeElement( pAppProps, XML_Manager,               "manager" );
     writeElement( pAppProps, XML_PresentationFormat,    "presentation format" );
     writeElement( pAppProps, XML_Lines,                 "lines" );
     writeElement( pAppProps, XML_Slides,                "slides" );
@@ -697,19 +741,37 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
     writeElement( pAppProps, XML_TitlesOfParts,         "titles of parts" );
     writeElement( pAppProps, XML_LinksUpToDate,         "links up-to-date" );
     writeElement( pAppProps, XML_SharedDoc,             "shared doc" );
-    writeElement( pAppProps, XML_HyperlinkBase,         "hyperlink base" );
     writeElement( pAppProps, XML_HLinks,                "hlinks" );
     writeElement( pAppProps, XML_HyperlinksChanged,     "hyperlinks changed" );
     writeElement( pAppProps, XML_DigSig,                "digital signature" );
 #endif  /* def OOXTODO */
     writeElement( pAppProps, XML_Application,           utl::DocInfoHelper::GetGeneratorString() );
-#ifdef OOXTODO
-    writeElement( pAppProps, XML_AppVersion,            "app version" );
-    writeElement( pAppProps, XML_DocSecurity,           "doc security" );
-#endif  /* def OOXTODO */
+
+    it = aUserDefinedProperties.find("HyperlinkBase");
+    if (it != aUserDefinedProperties.end())
+    {
+        OUString aValue;
+        if (it->second >>= aValue)
+            writeElement( pAppProps, XML_HyperlinkBase, aValue );
+    }
+    // AppVersion specifies the version of the application which produced document
+    // It is strictly connected with MS Office versions:
+    //     * 12:  [Office 2007]  [LO < 7.0]
+    //     * 14:  [Office 2010]
+    //     * 15:  [Office 2013/2016/2019]  [LO >= 7.0]
+    // The LibreOffice is application on 2013/2016/2019 level
+    writeElement( pAppProps, XML_AppVersion, "15.0000" );
+
+    // OOXTODO Calculate DocSecurity value based on security (password, read-only etc.)
+    it = aUserDefinedProperties.find("DocSecurity");
+    if (it != aUserDefinedProperties.end())
+    {
+        sal_Int32 nValue;
+        if (it->second >>= nValue)
+            writeElement( pAppProps, XML_DocSecurity, nValue );
+    }
 
     comphelper::SequenceAsHashMap aStats = xProperties->getDocumentStatistics();
-    comphelper::SequenceAsHashMap::iterator it;
     sal_Int32 nValue = 0;
 
     it = aStats.find("PageCount");
@@ -747,8 +809,6 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
                 writeElement(pAppProps, XML_Paragraphs, nValue);
     }
 
-    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties(xProperties->getUserDefinedProperties(), uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefinedProperties->getPropertyValues());
     it = aUserDefinedProperties.find("Company");
     if (it != aUserDefinedProperties.end())
     {
@@ -797,6 +857,19 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
         if ( !rProp.Name.isEmpty() )
         {
             OString aName = OUStringToOString( rProp.Name, RTL_TEXTENCODING_ASCII_US );
+            // Skip storing these values in Custom Properties as it will be stored in Core/Extended Properties
+            if (( aName == "OOXMLCorePropertyCategory" ) || // stored in cp:category
+                ( aName == "OOXMLCorePropertyContentStatus" ) || // stored in cp:contentStatus
+                ( aName == "OOXMLCorePropertyContentType" ) || // stored in cp:contentType
+                ( aName == "OOXMLCorePropertyIdentifier" ) || // stored in dc:identifier
+                ( aName == "OOXMLCorePropertyVersion" ) || // stored in cp:version
+                ( aName == "HyperlinkBase" ) || // stored in Extended File Properties
+                ( aName == "AppVersion" ) || // stored in Extended File Properties
+                ( aName == "DocSecurity" ) || // stored in Extended File Properties
+                ( aName == "Manager" ) || // stored in Extended File Properties
+                ( aName == "Company" )) // stored in Extended File Properties
+                continue;
+
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
@@ -818,16 +891,25 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val ? 1 : 0);
                 }
                 break;
+                case TypeClass_DOUBLE:
+                {
+                    double num = {}; // spurious -Werror=maybe-uninitialized
+                    if ( rProp.Value >>= num )
+                    {
+                        // r8 - 8-byte real number
+                        writeElement( pAppProps, FSNS( XML_vt, XML_r8 ), OUString::number(num) );
+                    }
+                }
+                break;
                 default:
                 {
-                    double num;
+                    double num = {}; // spurious -Werror=maybe-uninitialized
                     util::Date aDate;
                     util::Duration aDuration;
                     util::DateTime aDateTime;
                     if ( rProp.Value >>= num )
                     {
                         // i4 - 4-byte signed integer
-                        // r8 - 8-byte real number
                         writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), num );
                     }
                     else if ( rProp.Value >>= aDate )
