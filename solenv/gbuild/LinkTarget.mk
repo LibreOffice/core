@@ -1624,7 +1624,7 @@ endef
 # function to set it manually. This variant should be used if gb_LinkTarget_use_clang is used.
 # call gb_LinkTarget_set_clang_precompiled_header,linktarget,pchcxxfile,,linktargetmakefilename
 define gb_LinkTarget_set_clang_precompiled_header
-$(call gb_LinkTarget_set_precompiled_header,$(1),$(2),$(3),$(4),$(CLANG_CXX))
+$(call gb_LinkTarget_set_precompiled_header,$(1),$(2),$(3),$(4),$(LO_CLANG_CXX))
 
 endef
 
@@ -1783,8 +1783,8 @@ endef
 # C/C++ files will be build with Clang (if possible) instead of the default compiler.
 # call gb_LinkTarget_use_clang,linktarget,,linktargetmakefilename
 define gb_LinkTarget_use_clang
-$(call gb_LinkTarget_get_target,$(1)) : T_CC := $(CLANG_CC)
-$(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(CLANG_CXX)
+$(call gb_LinkTarget_get_target,$(1)) : T_CC := $(LO_CLANG_CC)
+$(call gb_LinkTarget_get_target,$(1)) : T_CXX := $(LO_CLANG_CXX)
 $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_LD))
 
 endef

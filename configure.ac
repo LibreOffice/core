@@ -11594,47 +11594,47 @@ fi
 AC_SUBST(ENABLE_SKIA)
 AC_SUBST(ENABLE_SKIA_DEBUG)
 
-CLANG_CXXFLAGS_INTRINSICS_SSE2=
-CLANG_CXXFLAGS_INTRINSICS_SSSE3=
-CLANG_CXXFLAGS_INTRINSICS_SSE41=
-CLANG_CXXFLAGS_INTRINSICS_SSE42=
-CLANG_CXXFLAGS_INTRINSICS_AVX=
-CLANG_CXXFLAGS_INTRINSICS_AVX2=
-CLANG_CXXFLAGS_INTRINSICS_AVX512=
-CLANG_CXXFLAGS_INTRINSICS_F16C=
-CLANG_CXXFLAGS_INTRINSICS_FMA=
+LO_CLANG_CXXFLAGS_INTRINSICS_SSE2=
+LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3=
+LO_CLANG_CXXFLAGS_INTRINSICS_SSE41=
+LO_CLANG_CXXFLAGS_INTRINSICS_SSE42=
+LO_CLANG_CXXFLAGS_INTRINSICS_AVX=
+LO_CLANG_CXXFLAGS_INTRINSICS_AVX2=
+LO_CLANG_CXXFLAGS_INTRINSICS_AVX512=
+LO_CLANG_CXXFLAGS_INTRINSICS_F16C=
+LO_CLANG_CXXFLAGS_INTRINSICS_FMA=
 
 if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT" -a "$CPUNAME" = "ARM64" \); then
-    if test -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
+    if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
         AC_MSG_CHECKING([for Clang])
-        AC_MSG_RESULT([$CLANG_CC / $CLANG_CXX])
+        AC_MSG_RESULT([$LO_CLANG_CC / $LO_CLANG_CXX])
     else
         if test "$_os" = "WINNT"; then
             AC_MSG_CHECKING([for clang-cl])
             if test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"; then
-                CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
+                LO_CLANG_CC=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/clang-cl.exe"`
                 dnl explicitly set -m32/-m64
-                CLANG_CC="$CLANG_CC -m$WIN_HOST_BITS"
-                CLANG_CXX="$CLANG_CC"
-                AC_MSG_RESULT([$CLANG_CC])
+                LO_CLANG_CC="$LO_CLANG_CC -m$WIN_HOST_BITS"
+                LO_CLANG_CXX="$LO_CLANG_CC"
+                AC_MSG_RESULT([$LO_CLANG_CC])
             else
                 AC_MSG_RESULT([no])
             fi
         else
-            AC_CHECK_PROG(CLANG_CC,clang,clang,[])
-            AC_CHECK_PROG(CLANG_CXX,clang++,clang++,[])
+            AC_CHECK_PROG(LO_CLANG_CC,clang,clang,[])
+            AC_CHECK_PROG(LO_CLANG_CXX,clang++,clang++,[])
         fi
     fi
-    if test -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
-        clang2_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $CLANG_CC -E - | tail -1 | sed 's/ //g'`
+    if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
+        clang2_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $LO_CLANG_CC -E - | tail -1 | sed 's/ //g'`
         clang2_ver=`echo "$clang2_version" | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
         if test "$clang2_ver" -lt 50002; then
             AC_MSG_WARN(["$clang2_version" is too old or unrecognized, must be at least Clang 5.0.2])
-            CLANG_CC=
-            CLANG_CXX=
+            LO_CLANG_CC=
+            LO_CLANG_CXX=
         fi
     fi
-    if test -z "$CLANG_CC" -o -z "$CLANG_CXX"; then
+    if test -z "$LO_CLANG_CC" -o -z "$LO_CLANG_CXX"; then
         # Skia is the default on Windows, so hard-require Clang.
         # Elsewhere it's used just by the 'gen' VCL backend which is rarely used.
         if test "$_os" = "WINNT"; then
@@ -11645,7 +11645,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
     else
 
         save_CXX="$CXX"
-        CXX="$CLANG_CXX"
+        CXX="$LO_CLANG_CXX"
         # copy&paste (and adjust) of intrinsics checks, since MSVC's -arch doesn't work well for Clang-cl
         flag_sse2=-msse2
         flag_ssse3=-mssse3
@@ -11675,7 +11675,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_sse2}])
         if test "${can_compile_sse2}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_SSE2="$flag_sse2"
+            LO_CLANG_CXXFLAGS_INTRINSICS_SSE2="$flag_sse2"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile SSSE3 intrinsics])
@@ -11696,7 +11696,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_ssse3}])
         if test "${can_compile_ssse3}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_SSSE3="$flag_ssse3"
+            LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3="$flag_ssse3"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile SSE4.1 intrinsics])
@@ -11717,7 +11717,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_sse41}])
         if test "${can_compile_sse41}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_SSE41="$flag_sse41"
+            LO_CLANG_CXXFLAGS_INTRINSICS_SSE41="$flag_sse41"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile SSE4.2 intrinsics])
@@ -11738,7 +11738,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_sse42}])
         if test "${can_compile_sse42}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_SSE42="$flag_sse42"
+            LO_CLANG_CXXFLAGS_INTRINSICS_SSE42="$flag_sse42"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile AVX intrinsics])
@@ -11759,7 +11759,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_avx}])
         if test "${can_compile_avx}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_AVX="$flag_avx"
+            LO_CLANG_CXXFLAGS_INTRINSICS_AVX="$flag_avx"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile AVX2 intrinsics])
@@ -11780,7 +11780,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_avx2}])
         if test "${can_compile_avx2}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_AVX2="$flag_avx2"
+            LO_CLANG_CXXFLAGS_INTRINSICS_AVX2="$flag_avx2"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile AVX512 intrinsics])
@@ -11800,7 +11800,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_avx512}])
         if test "${can_compile_avx512}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_AVX512="$flag_avx512"
+            LO_CLANG_CXXFLAGS_INTRINSICS_AVX512="$flag_avx512"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile F16C intrinsics])
@@ -11822,7 +11822,7 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_f16c}])
         if test "${can_compile_f16c}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_F16C="$flag_f16c"
+            LO_CLANG_CXXFLAGS_INTRINSICS_F16C="$flag_f16c"
         fi
 
         AC_MSG_CHECKING([whether $CXX can compile FMA intrinsics])
@@ -11843,20 +11843,20 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE -a ! \( "$_os" = "WINNT
         CXXFLAGS=$save_CXXFLAGS
         AC_MSG_RESULT([${can_compile_fma}])
         if test "${can_compile_fma}" = "yes" ; then
-            CLANG_CXXFLAGS_INTRINSICS_FMA="$flag_fma"
+            LO_CLANG_CXXFLAGS_INTRINSICS_FMA="$flag_fma"
         fi
 
         CXX="$save_CXX"
     fi
 fi
 #
-# prefix CLANG_CC/CLANG_CXX with ccache if needed
+# prefix LO_CLANG_CC/LO_CLANG_CXX with ccache if needed
 #
-if test "$CCACHE" != "" -a -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
-    AC_MSG_CHECKING([whether $CLANG_CC is already ccached])
+if test "$CCACHE" != "" -a -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
+    AC_MSG_CHECKING([whether $LO_CLANG_CC is already ccached])
     AC_LANG_PUSH([C])
     save_CC="$CC"
-    CC="$CLANG_CC"
+    CC="$LO_CLANG_CC"
     save_CFLAGS=$CFLAGS
     CFLAGS="$CFLAGS --ccache-skip -O2"
     dnl an empty program will do, we're checking the compiler flags
@@ -11865,17 +11865,17 @@ if test "$CCACHE" != "" -a -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
     if test $use_ccache = yes; then
         AC_MSG_RESULT([yes])
     else
-        CLANG_CC="$CCACHE $CLANG_CC"
+        LO_CLANG_CC="$CCACHE $LO_CLANG_CC"
         AC_MSG_RESULT([no])
     fi
     CFLAGS=$save_CFLAGS
     CC=$save_CC
     AC_LANG_POP([C])
 
-    AC_MSG_CHECKING([whether $CLANG_CXX is already ccached])
+    AC_MSG_CHECKING([whether $LO_CLANG_CXX is already ccached])
     AC_LANG_PUSH([C++])
     save_CXX="$CXX"
-    CXX="$CLANG_CXX"
+    CXX="$LO_CLANG_CXX"
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
     dnl an empty program will do, we're checking the compiler flags
@@ -11884,7 +11884,7 @@ if test "$CCACHE" != "" -a -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
     if test $use_ccache = yes; then
         AC_MSG_RESULT([yes])
     else
-        CLANG_CXX="$CCACHE $CLANG_CXX"
+        LO_CLANG_CXX="$CCACHE $LO_CLANG_CXX"
         AC_MSG_RESULT([no])
     fi
     CXXFLAGS=$save_CXXFLAGS
@@ -11892,17 +11892,17 @@ if test "$CCACHE" != "" -a -n "$CLANG_CC" -a -n "$CLANG_CXX"; then
     AC_LANG_POP([C++])
 fi
 
-AC_SUBST(CLANG_CC)
-AC_SUBST(CLANG_CXX)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSE2)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSSE3)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSE41)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_SSE42)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_AVX)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_AVX2)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_AVX512)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_F16C)
-AC_SUBST(CLANG_CXXFLAGS_INTRINSICS_FMA)
+AC_SUBST(LO_CLANG_CC)
+AC_SUBST(LO_CLANG_CXX)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE2)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE41)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_SSE42)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
+AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
 AC_SUBST(CLANG_USE_LD)
 
 SYSTEM_GPGMEPP=
