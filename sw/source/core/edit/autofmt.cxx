@@ -1248,7 +1248,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     // delete blanks in empty paragraph
     m_aDelPam.DeleteMark();
     *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
-            TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
+            TextFrameIndex(0));
     m_aDelPam.SetMark();
 
     m_aDelPam.GetMark()->nNode = m_pCurTextFrame->GetTextNodeFirst()->GetIndex() - 1;
@@ -1267,16 +1267,25 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
         if( pTNd )
         {
             m_aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
-            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
+            *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
+                TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
         }
     }
-    else
-    {
-        *m_aDelPam.GetMark() = m_pCurTextFrame->MapViewToModelPos(TextFrameIndex(0));
-        pTNd = m_pCurTextNd;
-    }
     if( pTNd )
-        DeleteSel( m_aDelPam );
+    {   // join with previous or next paragraph
+        DeleteSel(m_aDelPam);
+    }
+    assert(m_aDelPam.GetNode().IsTextNode());
+    assert(!m_aDelPam.HasMark());
+    m_aDelPam.SetMark(); // mark remains at join position
+    m_pCurTextFrame = GetFrame(*m_aDelPam.GetNode().GetTextNode());
+    // replace until the end of the merged paragraph
+    *m_aDelPam.GetPoint() = m_pCurTextFrame->MapViewToModelPos(
+        TextFrameIndex(m_pCurTextFrame->GetText().getLength()));
+    if (*m_aDelPam.GetPoint() != *m_aDelPam.GetMark())
+    {   // tdf#137245 replace (not delete) to preserve any flys
+        m_pDoc->getIDocumentContentOperations().ReplaceRange(m_aDelPam, "", false);
+    }
 
     m_aDelPam.DeleteMark();
     ClearRedlineText();
