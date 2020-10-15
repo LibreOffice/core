@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
 #include <svx/svdograf.hxx>
 
@@ -29,8 +30,12 @@
 #include <vcl/graph.hxx>
 #include <vcl/pdfread.hxx>
 
+#include <Annotation.hxx>
+
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/text/XText.hpp>
+
+#include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace css;
 
@@ -97,6 +102,25 @@ bool SdPdfFilter::Import()
             xAnnotation->setPosition(aUnoPosition);
             xAnnotation->setSize(aUnoSize);
             xAnnotation->setDateTime(rPDFAnnotation.maDateTime);
+
+            if (rPDFAnnotation.mpMarker)
+            {
+                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
+                pAnnotation->createCustomAnnotationMarker();
+                sd::CustomAnnotationMarker& rCustomAnnotationMarker
+                    = pAnnotation->getCustomAnnotationMarker();
+
+                rCustomAnnotationMarker.maLineColor = rPDFAnnotation.maColor;
+
+                if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Polygon)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerPolygon*>(
+                        rPDFAnnotation.mpMarker.get());
+                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
+                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
+                    rCustomAnnotationMarker.maPolygons.push_back(pMarker->maPolygon);
+                }
+            }
         }
     }
     mrDocument.setLock(bWasLocked);

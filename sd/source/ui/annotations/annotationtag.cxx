@@ -28,6 +28,7 @@
 
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
+#include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -40,6 +41,7 @@
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"
+#include <Annotation.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>
@@ -182,7 +184,7 @@ void AnnotationHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if( !mxAnnotation.is() )
+    if (!mxAnnotation.is())
         return;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -221,16 +223,39 @@ void AnnotationHdl::CreateB2dIAObject()
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
-            // animate focused handles
-            if(bFocused)
-            {
-                const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
+            auto* pAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
 
-                pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 ));
+            if (pAnnotation && pAnnotation->hasCustomAnnotationMarker())
+            {
+                CustomAnnotationMarker& rCustomAnnotationMarker = pAnnotation->getCustomAnnotationMarker();
+
+                auto& rPolygons = rCustomAnnotationMarker.maPolygons;
+                if (!rPolygons.empty())
+                {
+                    basegfx::B2DPolyPolygon aPolyPolygon;
+                    for (auto const & rPolygon : rPolygons)
+                        aPolyPolygon.append(rPolygon);
+
+                    pOverlayObject.reset(new sdr::overlay::OverlayPolyPolygon(
+                            aPolyPolygon,
+                            rCustomAnnotationMarker.maLineColor,
+                            rCustomAnnotationMarker.mnLineWidth,
+                            rCustomAnnotationMarker.maFillColor));
+                }
             }
             else
             {
-                pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
+                // animate focused handles
+                if(bFocused)
+                {
+                    const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
+
+                    pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBitmapEx, aBitmapEx2, nBlinkTime, 0, 0, 0, 0 ));
+                }
+                else
+                {
+                    pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
+                }
             }
 
             // OVERLAYMANAGER

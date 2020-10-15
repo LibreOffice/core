@@ -21,10 +21,56 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonMarkerPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonSelectionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 
 
 namespace sdr::overlay
 {
+        OverlayPolyPolygon::OverlayPolyPolygon(
+                            const basegfx::B2DPolyPolygon& rLinePolyPolygon,
+                            Color const & rLineColor,
+                            double fLineWidth,
+                            Color const & rFillColor)
+            : OverlayObject(rLineColor)
+            , maLinePolyPolygon(rLinePolyPolygon)
+            , mfLineWidth(fLineWidth)
+            , maFillColor(rFillColor)
+        {
+        }
+
+        OverlayPolyPolygon::~OverlayPolyPolygon() = default;
+
+        drawinglayer::primitive2d::Primitive2DContainer OverlayPolyPolygon::createOverlayObjectPrimitive2DSequence()
+        {
+            drawinglayer::primitive2d::Primitive2DContainer aReturnContainer;
+
+            if (getOverlayManager())
+            {
+                const drawinglayer::attribute::LineAttribute aLineAttribute(getBaseColor().getBColor(), mfLineWidth);
+
+                auto aLine(new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(maLinePolyPolygon, aLineAttribute));
+
+                aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer { aLine };
+                if (maFillColor.GetTransparency() != 255)
+                {
+                    auto aFill(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(maLinePolyPolygon, maFillColor.getBColor()));
+                    aReturnContainer.push_back(aFill);
+                }
+
+                sal_Int8 nTransparency = getBaseColor().GetTransparency();
+                if (nTransparency != 0)
+                {
+                    const drawinglayer::primitive2d::Primitive2DReference aTransparencePrimitive(
+                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aReturnContainer, nTransparency / 255.0));
+                    aReturnContainer = drawinglayer::primitive2d::Primitive2DContainer{ aTransparencePrimitive };
+                }
+            }
+
+            return aReturnContainer;
+        }
+
         drawinglayer::primitive2d::Primitive2DContainer OverlayPolyPolygonStripedAndFilled::createOverlayObjectPrimitive2DSequence()
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
