@@ -105,8 +105,6 @@ public:
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void updateThumbnailDimensions(tools::Long itemMaxSize);
-
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
@@ -137,7 +135,7 @@ protected:
     std::vector<TemplateItemProperties > maAllTemplates;
 };
 
-class SfxTemplateLocalView final : public SfxThumbnailView
+class SfxTemplateLocalView : public SfxThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
@@ -154,9 +152,9 @@ public:
     // Fill view with template folders thumbnails
     void Populate ();
 
-    void reload ();
+    virtual void reload ();
 
-    void showAllTemplates ();
+    virtual void showAllTemplates ();
 
     void showRegion (TemplateContainerItem const *pItem);
 
@@ -220,6 +218,8 @@ public:
 
     void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
+    void updateThumbnailDimensions(tools::Long itemMaxSize);
+
     void RemoveDefaultTemplateIcon( const OUString& rPath);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
@@ -230,12 +230,15 @@ public:
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
-private:
+protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
     sal_uInt16 mnCurRegionId;
 
     TemplateViewItem *maSelectedItem;
+
+    long mnThumbnailWidth;
+    long mnThumbnailHeight;
 
     Point maPosition; //store the point of click event
 

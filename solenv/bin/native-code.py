@@ -719,9 +719,7 @@ custom_widgets = [
     'ManagedMenuButton',
     'PriorityHBox',
     'PriorityMergedHBox',
-    'RecentDocsView',
     'SidebarToolBox',
-    'TemplateDefaultView',
     ]
 
 def get_constructor_guard(constructor):
