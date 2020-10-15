@@ -161,6 +161,7 @@
                       <object class="GtkCheckButton" id="checkCB_AUTO">
                         <property name="label" translatable="yes" context="paraindentspacing|checkCB_AUTO">_Automatic</property>
                         <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_AUTO">Indent paragraph automatically according to font size and line spacing.</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -323,7 +324,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_CONTEXTUALSPACING">
-                        <property name="label" translatable="yes" context="paraindentspacing|checkCB_CONTEXTUALSPACING">Don't add space between paragraphs of the same style</property>
+                        <property name="label" translatable="yes" context="paraindentspacing|checkCB_CONTEXTUALSPACING">Do not add space between paragraphs of the same style</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -488,30 +489,26 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkCheckButton" id="checkCB_REGISTER">
-                    <property name="label" translatable="yes" context="paraindentspacing|checkCB_REGISTER">A_ctivate</property>
+                    <property name="label" translatable="yes" context="paraindentspacing|checkCB_REGISTER">Activate page li_ne-spacing</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
+                    <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_REGISTER" comments="xdds">Applies page line-spacing (register-true) if set for the Page Style.</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="checkCB_REGISTER-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkCB_REGISTER">If page line-spacing is activated and the Page style uses page line-spacing, then this paragraph will align to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
-            <child type="label">
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="paraindentspacing|label3">Follow Page Line Spacing</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
+             <property name="left_attach">0</property>
+             <property name="top_attach">3</property>
           </packing>
         </child>
       </object>
