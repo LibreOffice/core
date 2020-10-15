@@ -482,8 +482,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
 
 void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(const OString& rIdent)
 {
-    fprintf(stderr, "DefaultTemplateMenuSelectHdl ident %s\n", rIdent.getStr());
-
     OUString aServiceName = SfxObjectShell::GetServiceNameFromFactory(OUString::fromUtf8(rIdent));
 
     OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );

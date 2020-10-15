@@ -725,6 +725,7 @@ gboolean GtkSalMenu::SignalKey(GdkEventKey const * pEvent)
 {
     if (pEvent->keyval == GDK_KEY_F6)
     {
+        fprintf(stderr, "GtkSalMenu::SignalKey\n");
         mbReturnFocusToDocument = false;
         gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
         //because we return false here, the keypress will continue

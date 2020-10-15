@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.36.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="3.0"/>
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/ods_32_8.png</property>
+    <property name="icon_name">res/ods_32_8.png</property>
   </object>
   <object class="GtkMenu" id="clearmenu">
     <property name="visible">True</property>
@@ -22,12 +21,12 @@
   <object class="GtkImage" id="database_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odb_32_8.png</property>
+    <property name="icon_name">res/odb_32_8.png</property>
   </object>
   <object class="GtkImage" id="draw_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odg_32_8.png</property>
+    <property name="icon_name">res/odg_32_8.png</property>
   </object>
   <object class="GtkMenu" id="filtermenu">
     <property name="visible">True</property>
@@ -77,40 +76,51 @@
   <object class="GtkImage" id="impress_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odp_32_8.png</property>
+    <property name="icon_name">res/odp_32_8.png</property>
+  </object>
+  <object class="GtkMenu" id="localmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
   </object>
   <object class="GtkImage" id="math_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odf_32_8.png</property>
+    <property name="icon_name">res/odf_32_8.png</property>
   </object>
   <object class="GtkImage" id="open_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/folder_32.png</property>
+    <property name="icon_name">framework/res/folder_32.png</property>
   </object>
   <object class="GtkImage" id="open_all_image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/recent-documents.png</property>
+    <property name="icon_name">framework/res/recent-documents.png</property>
   </object>
   <object class="GtkImage" id="open_all_image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/remote-documents.png</property>
+    <property name="icon_name">framework/res/remote-documents.png</property>
+  </object>
+  <object class="GtkMenu" id="recentmenu">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
   </object>
   <object class="GtkImage" id="templates_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">framework/res/templates_32.png</property>
+    <property name="icon_name">framework/res/templates_32.png</property>
   </object>
   <object class="GtkImage" id="writer_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">res/odt_32_8.png</property>
+    <property name="icon_name">res/odt_32_8.png</property>
   </object>
   <object class="GtkBox" id="StartCenter">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -137,7 +147,6 @@
                       <object class="GtkBox" id="buttons_box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">3</property>
@@ -154,6 +163,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -173,6 +183,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -194,8 +205,9 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToggleButton" id="open_recent:clearmenu">
+                          <object class="GtkMenuButton" id="open_recent">
                             <property name="label" translatable="yes" context="startcenter|open_recent">_Recent Files</property>
+                            <property name="name">MenuToggleButton</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -205,6 +217,10 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="popup">clearmenu</property>
+                            <property name="use_popover">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -213,8 +229,9 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToggleButton" id="templates_all:filtermenu">
+                          <object class="GtkMenuButton" id="templates_all">
                             <property name="label" translatable="yes" context="startcenter|templates_all">T_emplates</property>
+                            <property name="name">MenuToggleButton</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -224,6 +241,10 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="popup">filtermenu</property>
+                            <property name="use_popover">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -271,6 +292,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -290,6 +312,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -309,6 +332,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -328,6 +352,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -347,6 +372,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -366,6 +392,7 @@
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="always_show_image">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -474,6 +501,8 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="all_recent_label">
@@ -502,12 +531,29 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-RecentDocsView" id="all_recent">
+              <object class="GtkScrolledWindow" id="scrollrecent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin">0</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="all_recent">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -516,12 +562,29 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-TemplateDefaultView" id="local_view">
+              <object class="GtkScrolledWindow" id="scrolllocal">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="margin">0</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="local_view">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

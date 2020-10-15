@@ -329,7 +329,7 @@ public:
 
     void RemoveItem(sal_uInt16 nItemId);
 
-    void Clear();
+    virtual void Clear();
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
     void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
@@ -412,6 +412,9 @@ protected:
     void DrawItem (ThumbnailViewItem const *pItem);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
+
+    // Set Item colors from the SfxThumbnailView colors
+    void UpdateColors();
 
 protected:
 
