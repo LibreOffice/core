@@ -1706,4 +1706,16 @@ std::unique_ptr<UIObject> MenuButtonUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new MenuButtonUIObject(pMenuButton));
 }
 
+DrawingAreaUIObject::DrawingAreaUIObject(const VclPtr<vcl::Window>& rDrawingArea)
+    : WindowUIObject(rDrawingArea)
+    , mxDrawingArea(dynamic_cast<VclDrawingArea*>(rDrawingArea.get()))
+{
+    assert(mxDrawingArea);
+    mpController = static_cast<weld::CustomWidgetController*>(mxDrawingArea->GetUserData());
+}
+
+DrawingAreaUIObject::~DrawingAreaUIObject()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

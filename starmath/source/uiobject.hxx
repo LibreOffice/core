@@ -35,14 +35,14 @@ private:
     SmElement* get_element();
 };
 
-class ElementSelectorUIObject : public WindowUIObject
+class ElementSelectorUIObject : public DrawingAreaUIObject
 {
 private:
     SmElementsControl* mpElementsSelector;
 
 public:
 
-    explicit ElementSelectorUIObject(vcl::Window* pElementSelectorWindow, SmElementsControl* pElementSelector);
+    explicit ElementSelectorUIObject(vcl::Window* pElementSelectorWindow);
 
     virtual StringMap get_state() override;
 

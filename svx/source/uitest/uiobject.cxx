@@ -10,13 +10,12 @@
 #include <memory>
 #include <uiobject.hxx>
 #include <svx/charmap.hxx>
-#include <vcl/layout.hxx>
 
 #include <svx/numvset.hxx>
 
-SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet):
-    WindowUIObject(xCharSetWin),
-    mpCharSet(pCharSet)
+SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<vcl::Window>& rCharSetWin)
+    : DrawingAreaUIObject(rCharSetWin)
+    , mpCharSet(static_cast<SvxShowCharSet*>(mpController))
 {
 }
 
@@ -51,9 +50,7 @@ void SvxShowCharSetUIObject::execute(const OUString& rAction,
 
 std::unique_ptr<UIObject> SvxShowCharSetUIObject::create(vcl::Window* pWindow)
 {
-    VclDrawingArea* pCharSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
-    assert(pCharSetWin);
-    return std::unique_ptr<UIObject>(new SvxShowCharSetUIObject(pCharSetWin, static_cast<SvxShowCharSet*>(pCharSetWin->GetUserData())));
+    return std::unique_ptr<UIObject>(new SvxShowCharSetUIObject(pWindow));
 }
 
 OUString SvxShowCharSetUIObject::get_name() const
@@ -62,9 +59,9 @@ OUString SvxShowCharSetUIObject::get_name() const
 }
 
 
-SvxNumValueSetUIObject::SvxNumValueSetUIObject(vcl::Window*  xNumValueSetWin , SvxNumValueSet* pNumValueSet):
-    WindowUIObject(xNumValueSetWin),
-    mpNumValueSet(pNumValueSet)
+SvxNumValueSetUIObject::SvxNumValueSetUIObject(vcl::Window* pNumValueSetWin)
+    : DrawingAreaUIObject(pNumValueSetWin)
+    , mpNumValueSet(static_cast<SvxNumValueSet*>(mpController))
 {
 }
 
@@ -82,14 +79,12 @@ void SvxNumValueSetUIObject::execute(const OUString& rAction,
         }
     }
     else
-       WindowUIObject::execute(rAction, rParameters);
+       DrawingAreaUIObject::execute(rAction, rParameters);
 }
 
 std::unique_ptr<UIObject> SvxNumValueSetUIObject::create(vcl::Window* pWindow)
 {
-    VclDrawingArea* pNumValueSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
-    assert(pNumValueSetWin);
-    return std::unique_ptr<UIObject>(new SvxNumValueSetUIObject(pNumValueSetWin, static_cast<SvxNumValueSet*>(pNumValueSetWin->GetUserData())));
+    return std::unique_ptr<UIObject>(new SvxNumValueSetUIObject(pWindow));
 }
 
 OUString SvxNumValueSetUIObject::get_name() const
