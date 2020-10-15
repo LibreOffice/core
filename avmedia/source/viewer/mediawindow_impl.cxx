@@ -476,7 +476,7 @@ void MediaWindowImpl::setPointer(PointerStyle aPointer)
     if (!mxPlayerWindow.is())
         return;
 
-    long nPointer;
+    sal_Int32 nPointer;
 
     switch (aPointer)
     {
