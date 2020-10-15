@@ -27,7 +27,7 @@ struct LoadRecentFile
     css::util::URL                                    aTargetURL;
     css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
     css::uno::Reference< css::frame::XDispatch >      xDispatch;
-    VclPtr< ThumbnailView >                           pView;
+    SfxThumbnailView*                                 pView;
 };
 
 enum class ApplicationType
@@ -53,10 +53,10 @@ template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::Appl
 namespace sfx2
 {
 
-class RecentDocsView final : public ThumbnailView
+class RecentDocsView final : public SfxThumbnailView
 {
 public:
-    RecentDocsView( vcl::Window* pParent );
+    RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
@@ -73,9 +73,9 @@ public:
     DECL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, void );
 
 private:
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonUp( const MouseEvent& rMEvt ) override;
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
