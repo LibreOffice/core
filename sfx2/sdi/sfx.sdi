@@ -2343,7 +2343,7 @@ SfxBoolItem ShowLines SID_SHOWLINES
 ]
 
 
-SfxVoidItem RunMacro SID_RUNMACRO
+SfxStringItem RunMacro SID_RUNMACRO
 ()
 [
     AutoUpdate = FALSE,
