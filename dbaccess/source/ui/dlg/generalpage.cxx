@@ -454,6 +454,7 @@ namespace dbaui
         , m_xFT_HelpText(m_xBuilder->weld_label("helpText"))
         , m_xLB_DocumentList(new OpenDocumentListBox(m_xBuilder->weld_combo_box("documentList"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_xPB_OpenDatabase(new OpenDocumentButton(m_xBuilder->weld_button("openDatabase"), "com.sun.star.sdb.OfficeDatabaseDocument"))
+        , m_xFT_NoEmbeddedDBLabel(m_xBuilder->weld_label("noembeddeddbLabel"))
         , m_eOriginalCreationMode(eCreateNew)
         , m_bInitEmbeddedDBList(true)
     {
@@ -488,6 +489,7 @@ namespace dbaui
         m_xRB_OpenExistingDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xLB_DocumentList->connect_changed( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
         m_xPB_OpenDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
+        m_xFT_NoEmbeddedDBLabel->hide();
 
         pController->SetGeneralPage(this);
     }
@@ -511,6 +513,13 @@ namespace dbaui
 
         initializeEmbeddedDBList();
         m_xEmbeddedDBType->set_active_text(getEmbeddedDBName(_rSet));
+
+#ifdef IOS //We have not embedded database in this case.
+        m_xRB_CreateDatabase->set_sensitive(false);
+        m_xFT_EmbeddedDBLabel->hide();
+        m_xEmbeddedDBType->hide();
+        m_xFT_NoEmbeddedDBLabel->show();
+#endif
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;

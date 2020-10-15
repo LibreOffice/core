@@ -139,6 +139,8 @@ namespace dbaui
         std::unique_ptr<OpenDocumentListBox> m_xLB_DocumentList;
         std::unique_ptr<OpenDocumentButton> m_xPB_OpenDatabase;
 
+        std::unique_ptr<weld::Label> m_xFT_NoEmbeddedDBLabel;
+
         // state
         OUString                       m_aBrowsedDocumentURL;
         CreationMode                   m_eOriginalCreationMode;
