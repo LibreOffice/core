@@ -291,6 +291,7 @@ public:
     void testTdf84695Tab();
     void testTableStyleUndo();
     void testRedlineCopyPaste();
+    void testTdf135260();
     void testRedlineParam();
     void testRedlineViewAuthor();
     void testTdf91292();
@@ -504,6 +505,7 @@ public:
     CPPUNIT_TEST(testTdf84695Tab);
     CPPUNIT_TEST(testTableStyleUndo);
     CPPUNIT_TEST(testRedlineCopyPaste);
+    CPPUNIT_TEST(testTdf135260);
     CPPUNIT_TEST(testRedlineParam);
     CPPUNIT_TEST(testRedlineViewAuthor);
     CPPUNIT_TEST(testTdf91292);
@@ -5577,6 +5579,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134436)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), pWrtShell->GetCursor()->GetText());
+}
+
+void SwUiWriterTest::testTdf135260()
+{
+    SwDoc* pDoc = createDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("test");
+
+    // Turn on track changes
+    uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
+    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+
+    for(int i = 0; i < 4; i++) {
+        pWrtShell->DelLeft();
+    }
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:
+    // - Actual  : tes
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
 void SwUiWriterTest::testRedlineParam()
