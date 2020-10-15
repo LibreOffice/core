@@ -46,6 +46,9 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/scopeguard.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <swacorr.hxx>
 #include <txtfrm.hxx>
 #include <redline.hxx>
 #include <view.hxx>
@@ -345,6 +348,86 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     rUndoManager.Undo();
     pWrtShell->SplitNode(true);
     rUndoManager.Undo();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
+{
+    SwDoc* const pDoc(createDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    corr.GetSwFlags().bSetBorder = true;
+    // sigh, it's a global... err i mean Singleton design pattern *eyeroll*
+    SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
+    comphelper::ScopeGuard const g([=]() { SwEditShell::SetAutoFormatFlags(&flags); });
+    flags.bSetBorder = true;
+    SwEditShell::SetAutoFormatFlags(&flags);
+
+    {
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+    {
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+    // move cursor back to body
+    pWrtShell->SttEndDoc(false);
+    // keep first paragraph empty so that its flys may be deleted too
+    //pWrtShell->Insert("abc");
+    pWrtShell->SplitNode(false);
+
+    {
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_PARA);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+    {
+        SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+        anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+        SfxItemSet flySet(pDoc->GetAttrPool(),
+                          svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
+        flySet.Put(anchor);
+        SwFormatFrameSize size(SwFrameSize::Minimum, 1000, 1000);
+        flySet.Put(size); // set a size, else we get 1 char per line...
+        SwFrameFormat const* pFly = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
+        CPPUNIT_ASSERT(pFly != nullptr);
+    }
+
+    const SwFrameFormats& rFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rFormats.size());
+
+    // move cursor back to body
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->Insert("---");
+    pWrtShell->SplitNode(true);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rFormats.size());
+
+    // check that the AutoFormat did something
+    pWrtShell->SttEndDoc(true);
+    SfxItemSet set{ pDoc->GetAttrPool(), svl::Items<RES_BOX, RES_BOX>{} };
+    pWrtShell->GetCurParAttr(set);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, set.GetItemState(RES_BOX, false));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
