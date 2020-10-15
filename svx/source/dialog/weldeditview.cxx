@@ -40,9 +40,11 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/uitest/uiobject.hxx>
 
 WeldEditView::WeldEditView() {}
 
@@ -1494,5 +1496,41 @@ void WeldEditView::LoseFocus()
             pHelper->SetFocus(false);
     }
 }
+
+namespace
+{
+class WeldEditViewUIObject final : public WindowUIObject
+{
+private:
+    WeldEditView* mpEditView;
+
+public:
+    WeldEditViewUIObject(vcl::Window* pEditViewWin, WeldEditView* pEditView)
+        : WindowUIObject(pEditViewWin)
+        , mpEditView(pEditView)
+    {
+    }
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow)
+    {
+        VclDrawingArea* pEditViewWin = dynamic_cast<VclDrawingArea*>(pWindow);
+        assert(pEditViewWin);
+        return std::unique_ptr<UIObject>(new WeldEditViewUIObject(
+            pEditViewWin, static_cast<WeldEditView*>(pEditViewWin->GetUserData())));
+    }
+
+    virtual StringMap get_state() override
+    {
+        StringMap aMap = WindowUIObject::get_state();
+        aMap["Text"] = mpEditView->GetText();
+        return aMap;
+    }
+
+private:
+    virtual OUString get_name() const override { return "WeldEditViewUIObject"; }
+};
+}
+
+FactoryFunction WeldEditView::GetUITestFactory() const { return WeldEditViewUIObject::create; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
