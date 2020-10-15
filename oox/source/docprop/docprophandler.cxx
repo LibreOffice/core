@@ -414,27 +414,27 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 switch( m_nBlock )
                 {
                 case COREPR_TOKEN( category ):
-                    m_aCustomPropertyName = "category";
+                    m_aCustomPropertyName = "OOXMLCorePropertyCategory";
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( contentStatus ):
-                    m_aCustomPropertyName = "contentStatus";
+                    m_aCustomPropertyName = "OOXMLCorePropertyContentStatus";
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( contentType ):
-                    m_aCustomPropertyName = "contentType";
+                    m_aCustomPropertyName = "OOXMLCorePropertyContentType";
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
-                case COREPR_TOKEN( identifier ):
-                    m_aCustomPropertyName = "identifier";
+                case DC_TOKEN( identifier ):
+                    m_aCustomPropertyName = "OOXMLCorePropertyIdentifier";
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( version ):
-                    m_aCustomPropertyName = "version";
+                    m_aCustomPropertyName = "OOXMLCorePropertyVersion";
                     AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
                     break;
 
@@ -537,47 +537,68 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 
                 case EXTPR_TOKEN( HyperlinksChanged ):
                     m_aCustomPropertyName = "HyperlinksChanged";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toBoolean() )
+                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( LinksUpToDate ):
                     m_aCustomPropertyName = "LinksUpToDate";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toBoolean() )
+                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( ScaleCrop ):
                     m_aCustomPropertyName = "ScaleCrop";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toBoolean() )
+                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( SharedDoc ):
                     m_aCustomPropertyName = "ShareDoc";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toBoolean() )
+                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( DocSecurity ):
                     m_aCustomPropertyName = "DocSecurity";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    // tdf#103987 Don't create custom property if the value is default
+                    // OOXTODO Instead of storing value, enable security
+                    // 1 - password protected, 2 - recommended read-only
+                    // 4 - enforced read-only, 8 - locked for annotation
+                    if ( aChars.toInt32() != 0 )
+                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( HiddenSlides ):
                     m_aCustomPropertyName = "HiddenSlides";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toInt32() != 0 )
+                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( MMClips ):
                     m_aCustomPropertyName = "MMClips";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toInt32() != 0 )
+                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( Notes ):
                     m_aCustomPropertyName = "Notes";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toInt32() != 0 )
+                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( Slides ):
                     m_aCustomPropertyName = "Slides";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    // tdf#103987 Don't create custom property if the value is default
+                    if ( aChars.toInt32() != 0 )
+                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( AppVersion ):
