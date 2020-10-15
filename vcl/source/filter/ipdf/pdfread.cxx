@@ -259,7 +259,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Circle
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Square
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Ink
-                || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight)
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -392,6 +393,27 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                                 pMarker->maQuads.push_back(aPolygon);
                             }
                         }
+                    }
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
+                {
+                    auto const& rLineGeometry = pAnnotation->getLineGeometry();
+                    if (!rLineGeometry.empty())
+                    {
+                        double x, y;
+                        auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerLine>();
+                        rPDFGraphicAnnotation.mpMarker = pMarker;
+
+                        x = convertPointToMm100(rLineGeometry[0].getX());
+                        y = convertPointToMm100(aPageSize.getY() - rLineGeometry[0].getY());
+                        pMarker->maLineStart = basegfx::B2DPoint(x, y);
+
+                        x = convertPointToMm100(rLineGeometry[1].getX());
+                        y = convertPointToMm100(aPageSize.getY() - rLineGeometry[1].getY());
+                        pMarker->maLineEnd = basegfx::B2DPoint(x, y);
+
+                        float fWidth = pAnnotation->getBorderWidth();
+                        pMarker->mnWidth = convertPointToMm100(fWidth);
                     }
                 }
             }
