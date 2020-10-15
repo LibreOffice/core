@@ -41,7 +41,7 @@
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"
-#include "Annotation.hxx"
+#include <Annotation.hxx>
 #include <ViewShell.hxx>
 #include <Window.hxx>
 #include <drawdoc.hxx>

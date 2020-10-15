@@ -45,6 +45,12 @@ struct VCL_DLLPUBLIC PDFAnnotationMarkerPolygon : public PDFAnnotationMarker
     basegfx::B2DPolygon maPolygon;
 };
 
+struct VCL_DLLPUBLIC PDFAnnotationMarkerLine : public PDFAnnotationMarker
+{
+    basegfx::B2DPoint maLineStart;
+    basegfx::B2DPoint maLineEnd;
+};
+
 enum class PDFTextMarkerType
 {
     Highlight,
