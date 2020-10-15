@@ -27,6 +27,14 @@ struct VCL_DLLPUBLIC PDFAnnotationMarker
     Color maFillColor;
 };
 
+struct VCL_DLLPUBLIC PDFAnnotationMarkerCircle : public PDFAnnotationMarker
+{
+};
+
+struct VCL_DLLPUBLIC PDFAnnotationMarkerSquare : public PDFAnnotationMarker
+{
+};
+
 struct VCL_DLLPUBLIC PDFAnnotationMarkerPolygon : public PDFAnnotationMarker
 {
     basegfx::B2DPolygon maPolygon;
