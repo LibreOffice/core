@@ -160,6 +160,7 @@ namespace dbaui
                     if( !aMiscOptions.IsExperimentalMode() && sURLPrefix.startsWith("sdbc:embedded:firebird") )
                         continue;
                     aDisplayedTypes.emplace_back( sURLPrefix, sDisplayName );
+                    m_bIsDisplayedTypesEmpty = false;
                 }
             }
         }
@@ -454,8 +455,10 @@ namespace dbaui
         , m_xFT_HelpText(m_xBuilder->weld_label("helpText"))
         , m_xLB_DocumentList(new OpenDocumentListBox(m_xBuilder->weld_combo_box("documentList"), "com.sun.star.sdb.OfficeDatabaseDocument"))
         , m_xPB_OpenDatabase(new OpenDocumentButton(m_xBuilder->weld_button("openDatabase"), "com.sun.star.sdb.OfficeDatabaseDocument"))
+        , m_xFT_NoEmbeddedDBLabel(m_xBuilder->weld_label("noembeddeddbLabel"))
         , m_eOriginalCreationMode(eCreateNew)
         , m_bInitEmbeddedDBList(true)
+        , m_bIsDisplayedTypesEmpty(true)
     {
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( dbaccess::ODsnTypeCollection::getEmbeddedDatabase() );
@@ -488,6 +491,7 @@ namespace dbaui
         m_xRB_OpenExistingDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnSetupModeSelected ) );
         m_xLB_DocumentList->connect_changed( LINK( this, OGeneralPageWizard, OnDocumentSelected ) );
         m_xPB_OpenDatabase->connect_clicked( LINK( this, OGeneralPageWizard, OnOpenDocument ) );
+        m_xFT_NoEmbeddedDBLabel->hide();
 
         pController->SetGeneralPage(this);
     }
@@ -511,6 +515,15 @@ namespace dbaui
 
         initializeEmbeddedDBList();
         m_xEmbeddedDBType->set_active_text(getEmbeddedDBName(_rSet));
+
+        if(m_bIsDisplayedTypesEmpty)
+        {
+            m_xRB_CreateDatabase->set_sensitive(false);
+            m_xFT_EmbeddedDBLabel->hide();
+            m_xEmbeddedDBType->hide();
+            m_xFT_NoEmbeddedDBLabel->show();
+            m_xRB_OpenExistingDatabase->set_active(true);
+        }
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
         bool bValid, bReadonly;
