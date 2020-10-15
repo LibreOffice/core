@@ -1080,6 +1080,12 @@ void SvXMLExportPropertyMapper::_exportXML(
                             XML_NAMESPACE_LO_EXT,
                             mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
                 }
+                if (IsXMLToken(aValue, XML_PAGE_CONTENT_TOP))
+                {
+                    sName = rNamespaceMap.GetQNameByKey(
+                            XML_NAMESPACE_LO_EXT,
+                            mpImpl->mxPropMapper->GetEntryXMLName(rProperty.mnIndex));
+                }
             }
 
             rAttrList.AddAttribute( sName, aValue );
