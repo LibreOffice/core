@@ -500,9 +500,9 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
     // Collect paragraph direct formatting
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(),
-                                                         uno::UNO_QUERY_THROW);
-    InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties);
+    uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(), uno::UNO_QUERY);
+    if (xThisParagraphRange.is())
+        InsertValues(xThisParagraphRange, aIsDefined, aParaDFNode, false, aHiddenProperties);
 
     xStyleFamily.set(xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW);
 
