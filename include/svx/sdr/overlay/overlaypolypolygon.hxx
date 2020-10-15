@@ -25,7 +25,24 @@
 
 
 namespace sdr::overlay
-    {
+{
+        class SVXCORE_DLLPUBLIC OverlayPolyPolygon final : public OverlayObject
+        {
+        private:
+            basegfx::B2DPolyPolygon maLinePolyPolygon;
+            double mfLineWidth;
+            Color maFillColor;
+
+            virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
+
+        public:
+            explicit OverlayPolyPolygon(const basegfx::B2DPolyPolygon& rLinePolyPolygon,
+                                        Color const & rLineColor,
+                                        double mfLineWidth,
+                                        Color const & rFillColor);
+            virtual ~OverlayPolyPolygon() override;
+        };
+
         class SVXCORE_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
         {
             // geometry

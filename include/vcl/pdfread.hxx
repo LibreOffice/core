@@ -13,11 +13,13 @@
 #include <vector>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <tools/color.hxx>
 #include <vcl/graph.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
+#include <vcl/pdf/PDFAnnotationMarker.hxx>
 
 namespace com::sun::star::uno
 {
@@ -43,7 +45,10 @@ struct PDFGraphicAnnotation
     basegfx::B2DRectangle maRectangle; // In HMM
     css::util::DateTime maDateTime;
 
+    Color maColor;
+
     pdf::PDFAnnotationSubType meSubType;
+    std::shared_ptr<pdf::PDFAnnotationMarker> mpMarker;
 };
 
 class PDFGraphicResult
