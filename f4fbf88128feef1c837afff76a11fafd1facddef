@@ -22,6 +22,29 @@
       "revId": "f4fbf88128feef1c837afff76a11fafd1facddef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "168146a6_b0947f11",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T10:37:28Z",
+      "side": 1,
+      "message": "I don\u0027t see why do you use the aLink a all. Don\u0027t you prepare a modified link at lines 126-137, and save it into m_pLink\u0027s uri on line 138? so here you just discard the information and use the old data.\n\nIMO you need to drop the aLink member completely (by the way: don\u0027t you know that all member fields must start with m_ prefix?), and use the control\u0027s uri where needed.",
+      "range": {
+        "startLine": 180,
+        "startChar": 38,
+        "endLine": 180,
+        "endChar": 43
+      },
+      "revId": "f4fbf88128feef1c837afff76a11fafd1facddef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
