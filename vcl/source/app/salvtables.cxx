@@ -3311,7 +3311,8 @@ namespace
         UpdateGuard(SvTabListBox& rTreeView)
             : m_rTreeView(rTreeView)
             , m_bOrigUpdate(m_rTreeView.IsUpdateMode())
-            , m_bOrigEnableInvalidate(m_rTreeView.GetModel()->IsEnableInvalidate())
+            // tdf#137432 only do the EnableInvalidate(false) optimization if the widget is currently hidden
+            , m_bOrigEnableInvalidate(!m_rTreeView.IsVisible() && m_rTreeView.GetModel()->IsEnableInvalidate())
         {
             if (m_bOrigUpdate)
                 m_rTreeView.SetUpdateMode(false);
@@ -3321,10 +3322,10 @@ namespace
 
         ~UpdateGuard()
         {
-            if (m_bOrigUpdate)
-                m_rTreeView.SetUpdateMode(true);
             if (m_bOrigEnableInvalidate)
                 m_rTreeView.GetModel()->EnableInvalidate(true);
+            if (m_bOrigUpdate)
+                m_rTreeView.SetUpdateMode(true);
         }
     };
 }
