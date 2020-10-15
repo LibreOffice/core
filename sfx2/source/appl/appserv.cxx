@@ -1577,6 +1577,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xScriptContext = xController;
 
                 SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OUString()));
             }
             while ( false );
             rReq.Done();

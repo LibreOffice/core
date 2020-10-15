@@ -2767,7 +2767,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:AcceptTrackedChange"),
         OUString(".uno:RejectTrackedChange"),
         OUString(".uno:BorderInner"),
-        OUString(".uno:BorderOuter")
+        OUString(".uno:BorderOuter"),
+        OUString(".uno:RunMacro")
     };
 
     util::URL aCommandURL;
