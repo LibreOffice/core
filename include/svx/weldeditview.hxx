@@ -32,6 +32,8 @@ public:
 
     OUString GetText() const { return m_xEditEngine->GetText(); }
 
+    virtual FactoryFunction GetUITestFactory() const override;
+
     void SetModifyHdl(const Link<LinkParamNone*, void>& rLink)
     {
         m_xEditEngine->SetModifyHdl(rLink);
