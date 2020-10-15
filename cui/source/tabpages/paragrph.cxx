@@ -588,7 +588,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(*rSet);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        m_xRegisterFL->hide();
         m_xRegisterCB->hide();
         m_xAutoCB->hide();
     }
@@ -692,7 +691,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xLineDistAtMetricBox(m_xBuilder->weld_metric_spin_button("spinED_LINEDISTMETRIC", FieldUnit::CM))
     , m_xLineDistAtLabel(m_xBuilder->weld_label("labelFT_LINEDIST"))
     , m_xAbsDist(m_xBuilder->weld_label("labelST_LINEDIST_ABS"))
-    , m_xRegisterFL(m_xBuilder->weld_widget("frameFL_REGISTER"))
     , m_xRegisterCB(m_xBuilder->weld_check_button("checkCB_REGISTER"))
     , m_xExampleWin(new weld::CustomWeld(*m_xBuilder, "drawingareaWN_EXAMPLE", m_aExampleWin))
 {
@@ -921,7 +919,6 @@ void SvxStdParagraphTabPage::UpdateExample_Impl()
 void SvxStdParagraphTabPage::EnableRegisterMode()
 {
     m_xRegisterCB->show();
-    m_xRegisterFL->show();
 }
 
 void SvxStdParagraphTabPage::EnableContextualMode()
