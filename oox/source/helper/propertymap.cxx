@@ -567,7 +567,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
     sal_uInt32 uintValue;
     sal_Int16 int16Value;
     sal_uInt16 uint16Value;
-    long longValue;
+    sal_Int64 int64Value;
     float floatValue = 0;
     bool boolValue;
     LineSpacing spacing;
@@ -779,10 +779,10 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
                 lclGetEnhancedParameterType(par.Type));
         return "aParameter";
     }
-    else if( value >>= longValue )
+    else if( value >>= int64Value )
     {
         printLevel (level);
-        fprintf (stderr,"Any aAny ((sal_Int32) %ld);\n", longValue);
+        fprintf (stderr,"Any aAny ((sal_Int64) %" SAL_PRIdINT64 ");\n", int64Value);
         return "aAny";
     }
     else if( value >>= intValue )

@@ -90,10 +90,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             nErrors = compileFile(&sysFileName);
 
             if ( idlc()->getWarningCount() && !options.quiet() )
-                fprintf(stdout, "%s: detected %lu warnings compiling file '%s'\n",
+                fprintf(stdout, "%s: detected %" SAL_PRIdINT64 " warnings compiling file '%s'\n",
                         options.getProgramName().getStr(),
-                        sal::static_int_cast< unsigned long >(
-                            idlc()->getWarningCount()),
+                        sal_Int64(idlc()->getWarningCount()),
                         elem.getStr());
 
             // prepare output file name
@@ -140,9 +139,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         if ( nErrors > 0 )
         {
-            fprintf(stderr, "%s: detected %ld errors%s",
+            fprintf(stderr, "%s: detected %" SAL_PRIdINT64 " errors%s",
                 options.getProgramName().getStr(),
-                sal::static_int_cast< long >(nErrors),
+                sal_Int64(nErrors),
                 options.prepareVersion().getStr());
         } else
         {

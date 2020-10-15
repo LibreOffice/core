@@ -1278,7 +1278,7 @@ std::string WW8TableCellGrid::toString()
     static char sBuffer[1024];
     while (aTopsIt != getRowTopsEnd())
     {
-        sprintf(sBuffer, "<row y=\"%ld\">", *aTopsIt);
+        sprintf(sBuffer, "<row y=\"%" SAL_PRIdINT64 "\">", sal_Int64(*aTopsIt));
         sResult += sBuffer;
 
         CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
@@ -1286,8 +1286,8 @@ std::string WW8TableCellGrid::toString()
 
         while (aCellIt != aCellsEnd)
         {
-            snprintf(sBuffer, sizeof(sBuffer), "<cellInfo top=\"%ld\" bottom=\"%ld\" left=\"%ld\" right=\"%ld\">",
-                     aCellIt->top(), aCellIt->bottom(), aCellIt->left(), aCellIt->right());
+            snprintf(sBuffer, sizeof(sBuffer), "<cellInfo top=\"%" SAL_PRIdINT64 "\" bottom=\"%" SAL_PRIdINT64 "\" left=\"%" SAL_PRIdINT64 "\" right=\"%" SAL_PRIdINT64 "\">",
+                     sal_Int64(aCellIt->top()), sal_Int64(aCellIt->bottom()), sal_Int64(aCellIt->left()), sal_Int64(aCellIt->right()));
             sResult += sBuffer;
 
             WW8TableNodeInfo * pInfo = aCellIt->getTableNodeInfo();

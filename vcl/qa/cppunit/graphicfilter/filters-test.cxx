@@ -94,7 +94,7 @@ void VclFiltersTest::testScaling()
         fprintf( stderr, "scale with type %d\n", int( i ) );
         CPPUNIT_ASSERT( aBitmapEx.Scale( 0.1937046, 0.193154, i ) );
         Size aAfter( aBitmapEx.GetSizePixel() );
-        fprintf( stderr, "size %ld, %ld\n", aAfter.Width(), aAfter.Height() );
+        fprintf( stderr, "size %" SAL_PRIdINT64 ", %" SAL_PRIdINT64 "\n", sal_Int64(aAfter.Width()), sal_Int64(aAfter.Height()) );
         CPPUNIT_ASSERT( labs (aAfter.Height() - aAfter.Width()) <= 1 );
     }
 }
