@@ -258,7 +258,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Circle
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Square
-                || eSubtype == vcl::pdf::PDFAnnotationSubType::Ink)
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Ink
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -349,6 +350,48 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         pMarker->mnWidth = convertPointToMm100(fWidth);
                         if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
                             pMarker->maFillColor = pAnnotation->getInteriorColor();
+                    }
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Highlight)
+                {
+                    size_t nCount = pAnnotation->getAttachmentPointsCount();
+                    if (nCount > 0)
+                    {
+                        auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerHighlight>(
+                            vcl::pdf::PDFTextMarkerType::Highlight);
+                        rPDFGraphicAnnotation.mpMarker = pMarker;
+                        for (size_t i = 0; i < nCount; ++i)
+                        {
+                            auto aAttachmentPoints = pAnnotation->getAttachmentPoints(i);
+                            if (!aAttachmentPoints.empty())
+                            {
+                                double x, y;
+                                basegfx::B2DPolygon aPolygon;
+                                aPolygon.setClosed(true);
+
+                                x = convertPointToMm100(aAttachmentPoints[0].getX());
+                                y = convertPointToMm100(aPageSize.getY()
+                                                        - aAttachmentPoints[0].getY());
+                                aPolygon.append({ x, y });
+
+                                x = convertPointToMm100(aAttachmentPoints[1].getX());
+                                y = convertPointToMm100(aPageSize.getY()
+                                                        - aAttachmentPoints[1].getY());
+                                aPolygon.append({ x, y });
+
+                                x = convertPointToMm100(aAttachmentPoints[3].getX());
+                                y = convertPointToMm100(aPageSize.getY()
+                                                        - aAttachmentPoints[3].getY());
+                                aPolygon.append({ x, y });
+
+                                x = convertPointToMm100(aAttachmentPoints[2].getX());
+                                y = convertPointToMm100(aPageSize.getY()
+                                                        - aAttachmentPoints[2].getY());
+                                aPolygon.append({ x, y });
+
+                                pMarker->maQuads.push_back(aPolygon);
+                            }
+                        }
                     }
                 }
             }
