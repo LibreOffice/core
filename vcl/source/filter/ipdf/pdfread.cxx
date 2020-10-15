@@ -257,7 +257,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
             if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon
                 || eSubtype == vcl::pdf::PDFAnnotationSubType::Circle
-                || eSubtype == vcl::pdf::PDFAnnotationSubType::Square)
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Square
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Ink)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -325,6 +326,30 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
                     if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
                         pMarker->maFillColor = pAnnotation->getInteriorColor();
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Ink)
+                {
+                    auto const& rStrokesList = pAnnotation->getInkStrokes();
+                    if (!rStrokesList.empty())
+                    {
+                        auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerInk>();
+                        rPDFGraphicAnnotation.mpMarker = pMarker;
+                        for (auto const& rStrokes : rStrokesList)
+                        {
+                            basegfx::B2DPolygon aPolygon;
+                            for (auto const& rVertex : rStrokes)
+                            {
+                                double x = convertPointToMm100(rVertex.getX());
+                                double y = convertPointToMm100(aPageSize.getY() - rVertex.getY());
+                                aPolygon.append({ x, y });
+                            }
+                            pMarker->maStrokes.push_back(aPolygon);
+                        }
+                        float fWidth = pAnnotation->getBorderWidth();
+                        pMarker->mnWidth = convertPointToMm100(fWidth);
+                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                            pMarker->maFillColor = pAnnotation->getInteriorColor();
+                    }
                 }
             }
         }
