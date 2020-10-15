@@ -153,7 +153,7 @@ static inline void out( sal_Int64 nVal, FILE * stream = stderr,
                         sal_Int32 nStart = -1, char cFillchar = ' ' )
 {
     char ar[128];
-    ::snprintf( ar, sizeof(ar), "%ld", nVal );
+    ::snprintf( ar, sizeof(ar), "%" SAL_PRIdINT64, nVal );
     out( ar, stream, nStart, cFillchar );
 }
 

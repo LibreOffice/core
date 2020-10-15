@@ -970,7 +970,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                     sal_uInt32 nU1, nU2;
                     mrStCtrl.ReadUInt32(nU1).ReadUInt32(nU2);
 
-                    fprintf( mpFile, "<unknown_0xf136 nU1=\"%ld\" nU2=\"%ld\"/>\n", nU1, nU2 );
+                    fprintf( mpFile, "<unknown_0xf136 nU1=\"%" SAL_PRIdINT32 "\" nU2=\"%" SAL_PRIdINT32 "\"/>\n", nU1, nU2 );
 #endif
                 }
                 break;
@@ -1971,7 +1971,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 fprintf( mpFile, " to=\"%g\"", (double)fTo );
 
             if( nU1 )
-                fprintf( mpFile, " rotation_1=\"%ld\"", nU1 );
+                fprintf( mpFile, " rotation_1=\"%" SAL_PRIdINT32 "\"", nU1 );
 #endif
         }
         break;
@@ -2699,7 +2699,7 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
 
                         if( aValue >>= nInt )
                         {
-                            fprintf(mpFile, " value=\"%ld\"", nInt );
+                            fprintf(mpFile, " value=\"%" SAL_PRIdINT32 "\"", nInt );
                         }
                         else if( aValue >>= aString )
                         {
@@ -2858,7 +2858,7 @@ void AnimationImporter::dump( Any& rAny )
     }
     else if( rAny >>= nInt )
     {
-        fprintf( mpFile, "%ld", nInt );
+        fprintf( mpFile, "%" SAL_PRIdINT32, nInt );
     }
     else if( rAny >>= bBool )
     {
@@ -2974,7 +2974,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             sal_Int32 nPresetId ;
             if( aAny >>= nPresetId )
             {
-                fprintf(mpFile, " presetid=\"%ld\"", nPresetId );
+                fprintf(mpFile, " presetid=\"%" SAL_PRIdINT32 "\"", nPresetId );
                 bKnown = true;
             }
         }
@@ -2985,7 +2985,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             sal_Int32 nPointsType ;
             if( aAny >>= nPointsType )
             {
-                fprintf(mpFile, " presetSubType=\"%ld\"", nPointsType );
+                fprintf(mpFile, " presetSubType=\"%" SAL_PRIdINT32 "\"", nPointsType );
                 bKnown = true;
             }
         }
@@ -3009,7 +3009,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
                 default:
                 {
                     static char buffer[128];
-                    sprintf( buffer, "%ld", nPresetClass );
+                    sprintf( buffer, "%" SAL_PRIdINT32, nPresetClass );
                     pMode = buffer;
                 }
                 break;
@@ -3038,7 +3038,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
                     default :
                     {
                         static char buffer[128];
-                        sprintf( buffer, "%ld", nNodeType );
+                        sprintf( buffer, "%" SAL_PRIdINT32, nNodeType );
                         pNode = buffer;
                     }
                     break;
@@ -3055,7 +3055,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             sal_Int32 nGroupId;
             if ( aAny >>= nGroupId )
             {
-                fprintf( mpFile, " groupId=\"%ld\"", nGroupId );
+                fprintf( mpFile, " groupId=\"%" SAL_PRIdINT32 "\"", nGroupId );
                 bKnown = true;
             }
         }
@@ -3092,7 +3092,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             sal_Int32 nEndAfterSlide;
             if( aAny >>= nEndAfterSlide )
             {
-                fprintf(mpFile, " endAfterSlide=\"%ld\"", nEndAfterSlide );
+                fprintf(mpFile, " endAfterSlide=\"%" SAL_PRIdINT32 "\"", nEndAfterSlide );
             bKnown = true;
             }
         }
@@ -3149,7 +3149,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         if( !bKnown )
         {
-            fprintf( mpFile, " unknown_%lu=\"", nInstance );
+            fprintf( mpFile, " unknown_%" SAL_PRIdINT32 "=\"", nInstance );
             dump( aAny );
             fprintf( mpFile, "\"" );
         }

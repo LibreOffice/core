@@ -389,10 +389,10 @@ static void errorHeader(ErrorCode eCode, sal_Int32 lineNumber, sal_uInt32 start,
     else
         file = idlc()->getFileName();
 
-    fprintf(stderr, "%s:%lu [%lu:%lu] : %s", file.getStr(),
-            sal::static_int_cast< unsigned long >(lineNumber),
-            sal::static_int_cast< unsigned long >(start),
-            sal::static_int_cast< unsigned long >(end),
+    fprintf(stderr, "%s:%" SAL_PRIdINT64 " [%" SAL_PRIdINT64 ":%" SAL_PRIdINT64 "] : %s", file.getStr(),
+            sal_Int64(lineNumber),
+            sal_Int64(start),
+            sal_Int64(end),
             errorCodeToMessage(eCode));
 }
 
@@ -416,8 +416,8 @@ static void warningHeader(WarningCode wCode)
     else
         file = idlc()->getFileName();
 
-    fprintf(stderr, "%s(%lu) : WARNING, %s", file.getStr(),
-            sal::static_int_cast< unsigned long >(idlc()->getLineNumber()),
+    fprintf(stderr, "%s(%" SAL_PRIdINT64 ") : WARNING, %s", file.getStr(),
+            sal_Int64(idlc()->getLineNumber()),
             warningCodeToMessage(wCode));
 }
 
