@@ -120,6 +120,31 @@ bool SdPdfFilter::Import()
                     rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
                     rCustomAnnotationMarker.maPolygons.push_back(pMarker->maPolygon);
                 }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Square)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerSquare*>(
+                        rPDFAnnotation.mpMarker.get());
+                    basegfx::B2DPolygon aPoly
+                        = basegfx::utils::createPolygonFromRect(rPDFAnnotation.maRectangle);
+                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
+                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
+                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+                }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Circle)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerCircle*>(
+                        rPDFAnnotation.mpMarker.get());
+
+                    basegfx::B2DPoint rCenter = rPDFAnnotation.maRectangle.getCenter();
+                    double fRadiusX = rPDFAnnotation.maRectangle.getWidth() / 2;
+                    double fRadiusY = rPDFAnnotation.maRectangle.getHeight() / 2;
+
+                    basegfx::B2DPolygon aPoly
+                        = basegfx::utils::createPolygonFromEllipse(rCenter, fRadiusX, fRadiusY);
+                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
+                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
+                    rCustomAnnotationMarker.maPolygons.push_back(aPoly);
+                }
             }
         }
     }
