@@ -139,6 +139,21 @@ std::unique_ptr<PDFiumDocument> PDFium::openDocument(const void* pData, int nSiz
     return pPDFiumDocument;
 }
 
+std::unique_ptr<PDFiumBitmap> PDFium::createBitmap(int nWidth, int nHeight, int nAlpha)
+{
+    std::unique_ptr<PDFiumBitmap> pPDFiumBitmap;
+    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nWidth, nHeight, nAlpha);
+    if (!pPdfBitmap)
+    {
+        maLastError = "Failed to create bitmap";
+    }
+    else
+    {
+        pPDFiumBitmap = std::make_unique<PDFiumBitmap>(pPdfBitmap);
+    }
+    return pPDFiumBitmap;
+}
+
 PDFiumDocument::PDFiumDocument(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
 {
@@ -377,7 +392,8 @@ BitmapChecksum PDFiumPage::getChecksum()
 {
     size_t nPageWidth = getWidth();
     size_t nPageHeight = getHeight();
-    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+    auto pPdfBitmap
+        = std::make_unique<PDFiumBitmap>(FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1));
     if (!pPdfBitmap)
     {
         return 0;
@@ -385,13 +401,15 @@ BitmapChecksum PDFiumPage::getChecksum()
 
     // Intentionally not using FPDF_ANNOT here, annotations/commenting is OK to not affect the
     // checksum, signature verification wants this.
-    FPDF_RenderPageBitmap(pPdfBitmap, mpPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight,
+    FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), mpPage, /*start_x=*/0, /*start_y=*/0,
+                          nPageWidth, nPageHeight,
                           /*rotate=*/0, /*flags=*/0);
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
-        const auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
-        const int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+        const auto pPdfBuffer
+            = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap->getPointer()));
+        const int nStride = FPDFBitmap_GetStride(pPdfBitmap->getPointer());
         for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
         {
             ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);

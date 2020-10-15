@@ -155,24 +155,24 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
 
     // Load the buffer using pdfium.
-    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(pBuffer, nSize, /*password=*/nullptr);
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = pPdfium->openDocument(pBuffer, nSize);
     if (!pPdfDocument)
         return 0;
 
-    const int nPageCount = FPDF_GetPageCount(pPdfDocument);
+    const int nPageCount = pPdfDocument->getPageCount();
     if (nPages <= 0)
         nPages = nPageCount;
     const size_t nLastPage = std::min<int>(nPageCount, nFirstPage + nPages) - 1;
     for (size_t nPageIndex = nFirstPage; nPageIndex <= nLastPage; ++nPageIndex)
     {
         // Render next page.
-        FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, nPageIndex);
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPageIndex);
         if (!pPdfPage)
             break;
 
         // Calculate the bitmap size in points.
-        size_t nPageWidthPoints = FPDF_GetPageWidth(pPdfPage);
-        size_t nPageHeightPoints = FPDF_GetPageHeight(pPdfPage);
+        size_t nPageWidthPoints = pPdfPage->getWidth();
+        size_t nPageHeightPoints = pPdfPage->getHeight();
         if (pSizeHint && pSizeHint->getX() && pSizeHint->getY())
         {
             // Have a size hint, prefer that over the logic size from the PDF.
@@ -183,21 +183,24 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         // Returned unit is points, convert that to pixel.
         const size_t nPageWidth = pointToPixel(nPageWidthPoints, fResolutionDPI);
         const size_t nPageHeight = pointToPixel(nPageHeightPoints, fResolutionDPI);
-        FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+        std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
+            = pPdfium->createBitmap(nPageWidth, nPageHeight, /*alpha=*/1);
         if (!pPdfBitmap)
             break;
 
-        const FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
-        FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
-        FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth,
-                              nPageHeight, /*rotate=*/0, /*flags=*/0);
+        const FPDF_DWORD nColor
+            = FPDFPage_HasTransparency(pPdfPage->getPointer()) ? 0x00000000 : 0xFFFFFFFF;
+        FPDFBitmap_FillRect(pPdfBitmap->getPointer(), 0, 0, nPageWidth, nPageHeight, nColor);
+        FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), pPdfPage->getPointer(), /*start_x=*/0,
+                              /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
 
         // Save the buffer as a bitmap.
         Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
-            const auto pPdfBuffer = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap));
-            const int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+            const auto pPdfBuffer
+                = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap->getPointer()));
+            const int nStride = FPDFBitmap_GetStride(pPdfBitmap->getPointer());
             for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
             {
                 ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
@@ -207,11 +210,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         }
 
         rBitmaps.emplace_back(std::move(aBitmap));
-        FPDFBitmap_Destroy(pPdfBitmap);
-        FPDF_ClosePage(pPdfPage);
     }
-
-    FPDF_CloseDocument(pPdfDocument);
 
     return rBitmaps.size();
 #else
