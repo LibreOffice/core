@@ -35,6 +35,11 @@ struct VCL_DLLPUBLIC PDFAnnotationMarkerSquare : public PDFAnnotationMarker
 {
 };
 
+struct VCL_DLLPUBLIC PDFAnnotationMarkerInk : public PDFAnnotationMarker
+{
+    std::vector<basegfx::B2DPolygon> maStrokes;
+};
+
 struct VCL_DLLPUBLIC PDFAnnotationMarkerPolygon : public PDFAnnotationMarker
 {
     basegfx::B2DPolygon maPolygon;
