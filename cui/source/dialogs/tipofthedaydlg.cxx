@@ -84,8 +84,9 @@ void TipOfTheDayDialog::UpdateTip()
                              .replaceFirst("%CURRENT", OUString::number(nCurrentTip + 1))
                              .replaceFirst("%TOTAL", OUString::number(nNumberOfTips)));
 
+    auto [sTip, sLink, sImage] = TIPOFTHEDAY_STRINGARRAY[nCurrentTip];
     // text
-    OUString aText = CuiResId(std::get<0>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]));
+    OUString aText = CuiResId(sTip);
 //replace MOD1 & MOD2 shortcuts depending on platform
 #ifdef MACOSX
     const OUString aMOD1 = CuiResId(STR_CMD);
@@ -110,7 +111,7 @@ void TipOfTheDayDialog::UpdateTip()
     m_pText->set_label(aText);
 
     // hyperlink
-    aLink = std::get<1>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    aLink = sLink;
     if (aLink.isEmpty())
     {
         m_pLink->set_visible(false);
@@ -151,7 +152,7 @@ void TipOfTheDayDialog::UpdateTip()
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aImage = std::get<2>(TIPOFTHEDAY_STRINGARRAY[nCurrentTip]);
+    OUString aImage = sImage;
     // use default image if none is available with the number
     if (aImage.isEmpty() || !file_exists(aURL + aImage))
         aImage = "tipoftheday.png";
@@ -169,14 +170,14 @@ void TipOfTheDayDialog::UpdateTip()
 
 IMPL_LINK_NOARG(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, bool)
 {
-    if (aLink.startsWith("http"))
-    {
-        Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
-    }
-    else if (aLink.startsWith(".uno:"))
+    if (aLink.startsWith(".uno:"))
     {
         comphelper::dispatchCommand(aLink, {});
         TipOfTheDayDialog::response(RET_OK);
+    }
+    else
+    {
+        Application::GetHelp()->Start(aLink, static_cast<weld::Widget*>(nullptr));
     }
     return true;
 }
