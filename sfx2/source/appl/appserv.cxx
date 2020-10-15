@@ -1557,27 +1557,36 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     break;
                 pDlg->SetRunLabel();
 
-                short nDialogResult = pDlg->Execute();
-                if ( !nDialogResult )
-                    break;
+                if ( !comphelper::LibreOfficeKit::isActive() )
+                {
+                    short nDialogResult = pDlg->Execute();
+                    if ( !nDialogResult )
+                        break;
 
-                Sequence< Any > args;
-                Sequence< sal_Int16 > outIndex;
-                Sequence< Any > outArgs;
-                Any ret;
+                    Sequence< Any > args;
+                    Sequence< sal_Int16 > outIndex;
+                    Sequence< Any > outArgs;
+                    Any ret;
 
-                Reference< XInterface > xScriptContext;
+                    Reference< XInterface > xScriptContext;
 
-                Reference< XController > xController;
-                if ( xFrame.is() )
-                    xController = xFrame->getController();
-                if ( xController.is() )
-                    xScriptContext = xController->getModel();
-                if ( !xScriptContext.is() )
-                    xScriptContext = xController;
+                    Reference< XController > xController;
+                    if ( xFrame.is() )
+                        xController = xFrame->getController();
+                    if ( xController.is() )
+                        xScriptContext = xController->getModel();
+                    if ( !xScriptContext.is() )
+                        xScriptContext = xController;
 
-                SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
-                rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OUString()));
+                    SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                    rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OUString()));
+                }
+                else
+                {
+                    std::stringstream aStream;
+                    boost::property_tree::write_json(aStream, pDlg->DumpAsPropertyTree());
+                    rReq.SetReturnValue(SfxStringItem(rReq.GetSlot(), OStringToOUString(aStream.str().c_str(), RTL_TEXTENCODING_UTF8)));
+                }
             }
             while ( false );
             rReq.Done();
