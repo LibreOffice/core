@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "01e08eba_5293d4ed",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T10:25:25Z",
+      "side": 1,
+      "message": "Oh I didn\u0027t notice this ... also shouldn\u0027t be that complex! So the cleaned up thing should be like\n\n        auto [sEngTip, sLink, sImage] \u003d TIPOFTHEDAY_STRINGARRAY[nCurrentTip];\n    #ifdef MACOSX\n        const OUString aMOD1 \u003d CuiResId(STR_CMD);\n        const OUString aMOD2 \u003d CuiResId(STR_Option);\n    #else\n        const OUString aMOD1 \u003d CuiResId(STR_CTRL);\n        const OUString aMOD2 \u003d CuiResId(STR_Alt);\n    #endif\n        m_pText-\u003eset_label(CuiResId(sEngTip).replaceAll(\"%MOD1\", aMOD1).replaceAll(\"%MOD2\", aMOD2));\n    \n        // hyperlink\n        if (sLink.isEmpty())\n        ...",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 5
+      },
+      "revId": "728548f8d7698d06c21ae37b2e03fa8e73676341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a04157f4_a7b1c9f4",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T10:25:25Z",
+      "side": 1,
+      "message": "same here...",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 136,
+        "endChar": 9
+      },
+      "revId": "728548f8d7698d06c21ae37b2e03fa8e73676341",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
