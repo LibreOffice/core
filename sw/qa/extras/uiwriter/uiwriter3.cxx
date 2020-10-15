@@ -772,6 +772,71 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107893)
     CPPUNIT_ASSERT_MESSAGE("Textbox cannot be readd after Undo!", pTxBxFrm);
 }
 
+<<<<<<< HEAD   (26b492 tdf#137546 sw: fix text position at textbox alignment)
+=======
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121031)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::makeAny(sal_Int32(3)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
+
+    dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    // Without the fix in place, the table would be hidden
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestTextBoxCrashAfterLineDel)
+{
+    // Open the desired file
+    load(DATA_DIRECTORY, "txbx_crash.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // Get the Writer shell
+    SwWrtShell* pWrtSh = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Get the format of the shape
+    const SwFrameFormats& rFrmFormats = *pWrtSh->GetDoc()->GetSpzFrameFormats();
+    CPPUNIT_ASSERT(rFrmFormats.size() >= size_t(o3tl::make_unsigned(1)));
+    SwFrameFormat* pShape = rFrmFormats.front();
+    CPPUNIT_ASSERT(pShape);
+
+    // Add a textbox
+    SwTextBoxHelper::create(pShape);
+    SwFrameFormat* pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
+    CPPUNIT_ASSERT(pTxBxFrm);
+
+    // remove the last paragraph
+    auto xCursor = getParagraph(1)->getText()->createTextCursor();
+    xCursor->gotoEnd(false);
+    xCursor->goLeft(3, true);
+
+    // This caused crash before, now it should pass with the patch.
+    xCursor->setString(OUString());
+}
+
+>>>>>>> CHANGE (056933 tdf#137802 sw: fix crash on deleting last paragraph)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
