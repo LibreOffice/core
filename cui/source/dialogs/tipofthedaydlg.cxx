@@ -47,7 +47,6 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
 
-    nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
     nCurrentTip = officecfg::Office::Common::Misc::LastTipOfTheDayID::get();
 
     const auto t0 = std::chrono::system_clock::now().time_since_epoch();
@@ -76,6 +75,8 @@ static bool file_exists(const OUString& fileName)
 
 void TipOfTheDayDialog::UpdateTip()
 {
+    constexpr sal_Int32 nNumberOfTips = SAL_N_ELEMENTS(TIPOFTHEDAY_STRINGARRAY);
+
     if ((nCurrentTip >= nNumberOfTips) || (nCurrentTip < 0))
         nCurrentTip = 0;
 
