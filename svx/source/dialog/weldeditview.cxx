@@ -40,7 +40,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/event.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -1499,24 +1498,21 @@ void WeldEditView::LoseFocus()
 
 namespace
 {
-class WeldEditViewUIObject final : public WindowUIObject
+class WeldEditViewUIObject final : public DrawingAreaUIObject
 {
 private:
     WeldEditView* mpEditView;
 
 public:
-    WeldEditViewUIObject(vcl::Window* pEditViewWin, WeldEditView* pEditView)
-        : WindowUIObject(pEditViewWin)
-        , mpEditView(pEditView)
+    WeldEditViewUIObject(const VclPtr<vcl::Window>& rDrawingArea)
+        : DrawingAreaUIObject(rDrawingArea)
+        , mpEditView(static_cast<WeldEditView*>(mpController))
     {
     }
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow)
     {
-        VclDrawingArea* pEditViewWin = dynamic_cast<VclDrawingArea*>(pWindow);
-        assert(pEditViewWin);
-        return std::unique_ptr<UIObject>(new WeldEditViewUIObject(
-            pEditViewWin, static_cast<WeldEditView*>(pEditViewWin->GetUserData())));
+        return std::unique_ptr<UIObject>(new WeldEditViewUIObject(pWindow));
     }
 
     virtual StringMap get_state() override

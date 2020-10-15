@@ -17,12 +17,12 @@
 class SvxShowCharSet;
 class SvxNumValueSet;
 
-class SvxShowCharSetUIObject final : public WindowUIObject
+class SvxShowCharSetUIObject final : public DrawingAreaUIObject
 {
     SvxShowCharSet* mpCharSet;
 
 public:
-    SvxShowCharSetUIObject(const VclPtr<vcl::Window>& xCharSetWin, SvxShowCharSet* pCharSet);
+    SvxShowCharSetUIObject(const VclPtr<vcl::Window>& rCharSetWin);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
@@ -35,13 +35,13 @@ private:
 };
 
 
-class SvxNumValueSetUIObject final : public WindowUIObject
+class SvxNumValueSetUIObject final : public DrawingAreaUIObject
 {
     SvxNumValueSet* mpNumValueSet;
 
 public:
 
-    SvxNumValueSetUIObject(vcl::Window*  xNumValueSetWin, SvxNumValueSet* pNumValueSet);
+    SvxNumValueSetUIObject(vcl::Window* pNumValueSetWin);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;

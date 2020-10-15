@@ -16,12 +16,12 @@
 
 class ValueSet;
 
-class ValueSetUIObject final : public WindowUIObject
+class ValueSetUIObject final : public DrawingAreaUIObject
 {
     ValueSet* mpSet;
 
 public:
-    ValueSetUIObject(const VclPtr<vcl::Window>& xSetWin, ValueSet* pSet);
+    ValueSetUIObject(const VclPtr<vcl::Window>& xSetWin);
 
     virtual void execute(const OUString& rAction, const StringMap& rParameters) override;
 

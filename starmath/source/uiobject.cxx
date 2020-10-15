@@ -9,7 +9,6 @@
 
 #include <memory>
 #include "uiobject.hxx"
-#include <vcl/layout.hxx>
 #include <ElementsDockingWindow.hxx>
 
 ElementUIObject::ElementUIObject(SmElementsControl* pElementSelector,
@@ -52,15 +51,15 @@ void ElementUIObject::execute(const OUString& rAction,
     }
 }
 
-ElementSelectorUIObject::ElementSelectorUIObject(vcl::Window* pElementSelectorWindow, SmElementsControl* pElementSelector)
-    : WindowUIObject(pElementSelectorWindow)
-    , mpElementsSelector(pElementSelector)
+ElementSelectorUIObject::ElementSelectorUIObject(vcl::Window* pElementSelectorWindow)
+    : DrawingAreaUIObject(pElementSelectorWindow)
+    , mpElementsSelector(static_cast<SmElementsControl*>(mpController))
 {
 }
 
 StringMap ElementSelectorUIObject::get_state()
 {
-    StringMap aMap = WindowUIObject::get_state();
+    StringMap aMap = DrawingAreaUIObject::get_state();
 
     SmElement* pElement = mpElementsSelector->current();
     if (pElement)
@@ -96,9 +95,7 @@ std::set<OUString> ElementSelectorUIObject::get_children() const
 
 std::unique_ptr<UIObject> ElementSelectorUIObject::create(vcl::Window* pWindow)
 {
-    VclDrawingArea* pSmElementsWin = dynamic_cast<VclDrawingArea*>(pWindow);
-    assert(pSmElementsWin);
-    return std::unique_ptr<UIObject>(new ElementSelectorUIObject(pSmElementsWin, static_cast<SmElementsControl*>(pSmElementsWin->GetUserData())));
+    return std::unique_ptr<UIObject>(new ElementSelectorUIObject(pWindow));
 }
 
 OUString ElementSelectorUIObject::get_name() const
