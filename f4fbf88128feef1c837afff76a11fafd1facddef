@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b739ff0_bf2308da",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T10:32:24Z",
+      "side": 1,
+      "message": "Please see my last comment at https://gerrit.libreoffice.org/c/core/+/104276",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 111,
+        "endChar": 30
+      },
+      "revId": "f4fbf88128feef1c837afff76a11fafd1facddef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
