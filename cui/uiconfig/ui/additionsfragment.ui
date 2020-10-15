@@ -87,9 +87,11 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelLicense">License:</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="labelLicense-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -103,9 +105,11 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelVersion">Required version:</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="labelVersion-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -119,9 +123,11 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelComments">Comments:</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="labelComments-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -135,9 +141,11 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes" context="additionsEntry|labelComments">Downloads:</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="labelComments1-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
@@ -151,9 +159,11 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="labelDownloadNumber-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -183,9 +193,11 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="lbVersionText-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -199,9 +211,11 @@
             <property name="halign">start</property>
             <property name="label">label</property>
             <property name="xalign">0</property>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="lbLicenseText-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">2</property>
@@ -383,9 +397,11 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
-            <accessibility>
-              <role type="static"/>
-            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="lbName-atkobject">
+                <property name="AtkObject::accessible-role" translatable="no">static</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">1</property>
