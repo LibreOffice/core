@@ -379,6 +379,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Rectangle Text"), aContentsString);
+        CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xE0, 0x00), pAnnotation->getColor());
+        CPPUNIT_ASSERT_EQUAL(false, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor));
     }
 }
 
