@@ -11,18 +11,19 @@
 
 #include <sfx2/templatelocalview.hxx>
 
-class TemplateDefaultView final : public TemplateLocalView
+class TemplateDefaultView : public SfxTemplateLocalView
 {
 public:
-    TemplateDefaultView(Window *pParent);
+    TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                        std::unique_ptr<weld::Menu> xMenu);
 
-    virtual void reload() override;
+//TODO    virtual void reload() override;
 
     virtual void showAllTemplates () override;
 
-    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+    virtual bool KeyInput( const KeyEvent& rKEvt ) override;
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+    virtual bool MouseButtonDown( const MouseEvent& rMEvt ) override;
 
     void createContextMenu();
 

@@ -23,7 +23,6 @@
 #include <sfx2/sfxresid.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/historyoptions.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/ptrstyle.hxx>
@@ -42,6 +41,8 @@
 #include <sfx2/app.hxx>
 
 #include <officecfg/Office/Common.hxx>
+
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
@@ -121,18 +122,21 @@ static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
 constexpr long gnTextHeight = 30;
 constexpr long gnItemPadding = 5;
 
-RecentDocsView::RecentDocsView( vcl::Window* pParent )
-    : ThumbnailView(pParent)
+RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
+    : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeImage()
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
     , maWelcomeLine2(SfxResId(STR_WELCOME_LINE2))
+    , mpLoadRecentFile(nullptr)
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
 
+#if 0
     SetStyle(GetStyle() | WB_VSCROLL);
+#endif
     setItemMaxTextLength( 30 );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
@@ -141,9 +145,18 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
     maHighlightTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
     mfHighlightTransparence = 0.25;
+
+    UpdateColors();
 }
 
-VCL_BUILDER_FACTORY(RecentDocsView)
+RecentDocsView::~RecentDocsView()
+{
+    if (mpLoadRecentFile)
+    {
+        mpLoadRecentFile->pView = nullptr;
+        mpLoadRecentFile = nullptr;
+    }
+}
 
 bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &rExt)
 {
@@ -288,25 +301,25 @@ void RecentDocsView::Reload()
     Invalidate();
 }
 
-void RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
+bool RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (rMEvt.IsLeft())
     {
         mnLastMouseDownItem = ImplGetItem(rMEvt.GetPosPixel());
 
-        // ignore to avoid stuff done in ThumbnailView; we don't do selections etc.
-        return;
+        // ignore to avoid stuff done in SfxThumbnailView; we don't do selections etc.
+        return true;
     }
 
-    ThumbnailView::MouseButtonDown(rMEvt);
+    return SfxThumbnailView::MouseButtonDown(rMEvt);
 }
 
-void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
+bool RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (rMEvt.IsLeft())
     {
         if( rMEvt.GetClicks() > 1 )
-            return;
+            return true;
 
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         ThumbnailViewItem* pItem = ImplGetItem(nPos);
@@ -323,9 +336,9 @@ void RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
         mnLastMouseDownItem = THUMBNAILVIEW_ITEM_NOTFOUND;
 
         if (pItem)
-            return;
+            return true;
     }
-    ThumbnailView::MouseButtonUp(rMEvt);
+    return SfxThumbnailView::MouseButtonUp(rMEvt);
 }
 
 void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
@@ -342,14 +355,20 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     {
         rRenderContext.Push(PushFlags::FONT);
         SetMessageFont(rRenderContext);
+#if 0
         set_width_request(std::max(rRenderContext.GetTextWidth(maWelcomeLine1),
                                    rRenderContext.GetTextWidth(maWelcomeLine2)));
+#endif
         rRenderContext.Pop();
     }
     else
     {
+#if 0
         set_width_request(gnTextHeight + mnItemMaxSize + 2 * gnItemPadding);
+#endif
     }
+
+    SfxThumbnailView::Paint(rRenderContext, aRect);
 
     if (mItemList.empty())
     {
@@ -362,12 +381,12 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         // No recent files to be shown yet. Show a welcome screen.
         rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
         SetMessageFont(rRenderContext);
-        SetTextColor(maTextColor);
+        rRenderContext.SetTextColor(maTextColor);
 
         long nTextHeight = rRenderContext.GetTextHeight();
 
         const Size& rImgSize = maWelcomeImage.GetSizePixel();
-        const Size& rSize = GetSizePixel();
+        const Size& rSize = GetOutputSizePixel();
 
         const int nX = (rSize.Width() - rImgSize.Width())/2;
         int nY = (rSize.Height() - 3 * nTextHeight - rImgSize.Height())/2;
@@ -384,28 +403,36 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
 
         rRenderContext.Pop();
     }
-    else
-    {
-        ThumbnailView::Paint(rRenderContext, aRect);
-    }
 }
 
 void RecentDocsView::LoseFocus()
 {
     deselectItems();
 
-    ThumbnailView::LoseFocus();
+    SfxThumbnailView::LoseFocus();
 }
 
 void RecentDocsView::Clear()
 {
     Invalidate();
-    ThumbnailView::Clear();
+    SfxThumbnailView::Clear();
+}
+
+void RecentDocsView::PostLoadRecentUsedFile(LoadRecentFile* pLoadRecentFile)
+{
+    assert(!mpLoadRecentFile);
+    mpLoadRecentFile = pLoadRecentFile;
+    Application::PostUserEvent(LINK(nullptr, RecentDocsView, ExecuteHdl_Impl), pLoadRecentFile);
+}
+
+void RecentDocsView::DispatchedLoadRecentUsedFile()
+{
+    mpLoadRecentFile = nullptr;
 }
 
 IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
 {
-    LoadRecentFile* pLoadRecentFile = static_cast< LoadRecentFile*>(p);
+    LoadRecentFile* pLoadRecentFile = static_cast<LoadRecentFile*>(p);
     try
     {
         // Asynchronous execution as this can lead to our own destruction!
@@ -417,8 +444,11 @@ IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
     {
     }
 
-    if ( !pLoadRecentFile->pView->IsDisposed() )
-        pLoadRecentFile->pView->SetPointer( PointerStyle::Arrow );
+    if (pLoadRecentFile->pView)
+    {
+        pLoadRecentFile->pView->DispatchedLoadRecentUsedFile();
+        pLoadRecentFile->pView->SetPointer(PointerStyle::Arrow);
+    }
 
     delete pLoadRecentFile;
 }
