@@ -11,28 +11,23 @@
 #include <sfx2/thumbnailview.hxx>
 #include <templateviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/strings.hrc>
 
-#define MNI_OPEN               1
-#define MNI_EDIT               2
-
 #include <officecfg/Office/Common.hxx>
-
-VCL_BUILDER_FACTORY(TemplateDefaultView)
 
 constexpr int gnItemPadding(5); //TODO:: Change padding to 10. It looks really crowded and occupied.
 constexpr tools::Long gnTextHeight = 30;
 
-TemplateDefaultView::TemplateDefaultView( Window* pParent)
-    : TemplateLocalView(pParent)
+TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+                                         std::unique_ptr<weld::Menu> xMenu)
+    : SfxTemplateLocalView(std::move(xWindow), std::move(xMenu))
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
-    ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
+    SfxThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
     updateThumbnailDimensions(mnItemMaxSize);
 
     // startcenter specific settings
@@ -41,13 +36,8 @@ TemplateDefaultView::TemplateDefaultView( Window* pParent)
     maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
     maHighlightTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
     mfHighlightTransparence = 0.25;
-}
 
-void TemplateDefaultView::reload()
-{
-    TemplateLocalView::reload();
-    // Set preferred width
-    set_width_request(gnTextHeight + mnItemMaxSize + 2*gnItemPadding);
+    UpdateColors();
 }
 
 void TemplateDefaultView::showAllTemplates()
@@ -57,12 +47,12 @@ void TemplateDefaultView::showAllTemplates()
     insertItems(maAllTemplates, false);
 }
 
-void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
+bool TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
 {
-    ThumbnailView::KeyInput(rKEvt);
+    return SfxThumbnailView::KeyInput(rKEvt);
 }
 
-void TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
+bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
@@ -71,21 +61,21 @@ void TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
         if(pViewItem)
             maOpenTemplateHdl.Call(pViewItem);
-        return;
+        return true;
     }
 
-    TemplateLocalView::MouseButtonDown(rMEvt);
+    return SfxTemplateLocalView::MouseButtonDown(rMEvt);
 }
 
 void TemplateDefaultView::createContextMenu()
 {
-    ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN));
-    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
+    mxContextMenu->clear();
+    mxContextMenu->append("open",SfxResId(STR_OPEN));
+    mxContextMenu->append("edit",SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
     maSelectedItem->setSelection(true);
-    pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
-    pItemMenu->Execute(this, tools::Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    maItemStateHdl.Call(maSelectedItem);
+    ContextMenuSelectHdl(mxContextMenu->popup_at_rect(GetDrawingArea(), tools::Rectangle(maPosition, Size(1,1))));
     Invalidate();
 }
 

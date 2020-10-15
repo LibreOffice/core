@@ -32,7 +32,6 @@ sfx2/uiconfig/ui/loadtemplatedialog.ui://GtkDrawingArea[@id='image'] no-labelled
 sfx2/uiconfig/ui/managestylepage.ui://GtkLabel[@id='desc'] orphan-label
 sfx2/uiconfig/ui/password.ui://GtkLabel[@id='minlenft'] orphan-label
 sfx2/uiconfig/ui/startcenter.ui://GtkLabel[@id='create_label'] orphan-label
-sfx2/uiconfig/ui/startcenter.ui://GtkImage[@id='motif'] no-labelled-by
 sfx2/uiconfig/ui/startcenter.ui://GtkLabel[@id='althelplabel'] orphan-label
 sfx2/uiconfig/ui/templatepanel.ui://GtkToggleToolButton[@id='1'] button-no-label
 sfx2/uiconfig/ui/templatepanel.ui://GtkToggleToolButton[@id='2'] button-no-label

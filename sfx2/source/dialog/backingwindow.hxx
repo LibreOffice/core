@@ -22,11 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vcl/builder.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
-
-#include <vcl/menubtn.hxx>
+#include <vcl/InterimItemWindow.hxx>
 
 #include <recentdocsview.hxx>
 #include <templatedefaultview.hxx>
@@ -40,7 +36,7 @@
 
 #include <memory>
 
-class BackingWindow : public vcl::Window, public VclBuilderContainer
+class BackingWindow : public InterimItemWindow
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::frame::XDispatchProvider> mxDesktopDispatchProvider;
@@ -49,49 +45,53 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     /** helper for drag&drop. */
     css::uno::Reference<css::datatransfer::dnd::XDropTargetListener> mxDropTargetListener;
 
-    VclPtr<PushButton> mpOpenButton;
-    VclPtr<MenuToggleButton> mpRecentButton;
-    VclPtr<PushButton> mpRemoteButton;
-    VclPtr<MenuToggleButton> mpTemplateButton;
+    std::unique_ptr<weld::Button> mxOpenButton;
+    std::unique_ptr<weld::MenuToggleButton> mxRecentButton;
+    std::unique_ptr<weld::Button> mxRemoteButton;
+    std::unique_ptr<weld::MenuToggleButton> mxTemplateButton;
 
-    VclPtr<FixedText>  mpCreateLabel;
+    std::unique_ptr<weld::Label> mxCreateLabel;
+    std::unique_ptr<weld::Label> mxAltHelpLabel;
 
-    VclPtr<PushButton> mpWriterAllButton;
-    VclPtr<PushButton> mpCalcAllButton;
-    VclPtr<PushButton> mpImpressAllButton;
-    VclPtr<PushButton> mpDrawAllButton;
-    VclPtr<PushButton> mpDBAllButton;
-    VclPtr<PushButton> mpMathAllButton;
+    std::unique_ptr<weld::Button> mxWriterAllButton;
+    std::unique_ptr<weld::Button> mxCalcAllButton;
+    std::unique_ptr<weld::Button> mxImpressAllButton;
+    std::unique_ptr<weld::Button> mxDrawAllButton;
+    std::unique_ptr<weld::Button> mxDBAllButton;
+    std::unique_ptr<weld::Button> mxMathAllButton;
 
-    VclPtr<PushButton> mpHelpButton;
-    VclPtr<PushButton> mpExtensionsButton;
+    std::unique_ptr<weld::Button> mxHelpButton;
+    std::unique_ptr<weld::Button> mxExtensionsButton;
 
-    VclPtr<VclBox> mpAllButtonsBox;
-    VclPtr<VclBox> mpButtonsBox;
-    VclPtr<VclBox> mpSmallButtonsBox;
+    std::unique_ptr<weld::Container> mxAllButtonsBox;
+    std::unique_ptr<weld::Container> mxButtonsBox;
+    std::unique_ptr<weld::Container> mxSmallButtonsBox;
 
-    VclPtr<sfx2::RecentDocsView> mpAllRecentThumbnails;
-    VclPtr<TemplateDefaultView> mpLocalView;
+    std::unique_ptr<sfx2::RecentDocsView> mxAllRecentThumbnails;
+    std::unique_ptr<weld::CustomWeld> mxAllRecentThumbnailsWin;
+    std::unique_ptr<TemplateDefaultView> mxLocalView;
+    std::unique_ptr<weld::CustomWeld> mxLocalViewWin;
     bool mbLocalViewInitialized;
 
-    std::vector< VclPtr<vcl::Window> > maDndWindows;
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> mxDropTarget;
 
     tools::Rectangle maStartCentButtons;
 
     bool mbInitControls;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
-    void setupButton(PushButton* pButton);
-    void setupButton(MenuToggleButton* pButton);
+    void setupButton(weld::Button& rButton);
+    void setupButton(weld::MenuButton& rButton);
 
     void dispatchURL(const OUString& i_rURL,
                      const OUString& i_rTarget = OUString("_default"),
                      const css::uno::Reference<css::frame::XDispatchProvider >& i_xProv = css::uno::Reference<css::frame::XDispatchProvider>(),
                      const css::uno::Sequence<css::beans::PropertyValue >& = css::uno::Sequence<css::beans::PropertyValue>());
 
-    DECL_LINK(ClickHdl, Button*, void);
-    DECL_LINK(MenuSelectHdl, MenuButton*, void);
-    DECL_LINK(ExtLinkClickHdl, Button*, void);
+    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ClickHelpHdl, weld::Button&, void);
+    DECL_LINK(MenuSelectHdl, const OString&, void);
+    DECL_LINK(ExtLinkClickHdl, weld::Button&, void);
     DECL_LINK(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK(EditTemplateHdl, ThumbnailViewItem*, void);
@@ -107,12 +107,8 @@ public:
     virtual ~BackingWindow() override;
     virtual void dispose() override;
 
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual void Resize() override;
     virtual bool PreNotify(NotifyEvent& rNEvt) override;
     virtual void GetFocus() override;
-
-    virtual Size GetOptimalSize() const override;
 
     void setOwningFrame(const css::uno::Reference<css::frame::XFrame>& xFrame );
 
