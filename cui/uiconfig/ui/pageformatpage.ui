@@ -527,14 +527,19 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkRegisterTrue">
-                        <property name="label" translatable="yes" context="pageformatpage|checkRegisterTrue">Page li_ne spacing</property>
+                        <property name="label" translatable="yes" context="pageformatpage|checkRegisterTrue">Use page li_ne-spacing</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="tooltip_text" translatable="yes" context="pageformatpage|checkRegisterTrue" comments="xdds">All paragraph styles with the option Page line spacing checked will be affected, assuming the line spacing defined here. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
+                        <property name="tooltip_text" translatable="yes" context="pageformatpage|checkRegisterTrue" comments="xdds">Enables page line-spacing (register-true) using the selected Reference Style</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkRegisterTrue-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|checkRegisterTrue">If enabled, then all paragraph styles with the option page line-spacing activated will be affected, assuming the line spacing of the Reference Style. This will align them to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
+                          </object>
+                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
