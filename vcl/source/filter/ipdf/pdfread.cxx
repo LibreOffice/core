@@ -254,7 +254,8 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
         {
             auto eSubtype = pAnnotation->getSubType();
 
-            if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text)
+            if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -276,13 +277,37 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                     utl::ISO8601parseDateTime(sISO8601String, aDateTime);
                 }
 
-                PDFGraphicAnnotation aPDFGraphicAnnotation;
-                aPDFGraphicAnnotation.maRectangle = rRectangleHMM;
-                aPDFGraphicAnnotation.maAuthor = sAuthor;
-                aPDFGraphicAnnotation.maText = sText;
-                aPDFGraphicAnnotation.maDateTime = aDateTime;
-                aPDFGraphicAnnotation.meSubType = eSubtype;
-                aPDFGraphicAnnotations.push_back(aPDFGraphicAnnotation);
+                Color aColor = pAnnotation->getColor();
+
+                aPDFGraphicAnnotations.emplace_back();
+
+                auto& rPDFGraphicAnnotation = aPDFGraphicAnnotations.back();
+                rPDFGraphicAnnotation.maRectangle = rRectangleHMM;
+                rPDFGraphicAnnotation.maAuthor = sAuthor;
+                rPDFGraphicAnnotation.maText = sText;
+                rPDFGraphicAnnotation.maDateTime = aDateTime;
+                rPDFGraphicAnnotation.meSubType = eSubtype;
+                rPDFGraphicAnnotation.maColor = aColor;
+
+                if (eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon)
+                {
+                    auto const& rVertices = pAnnotation->getVertices();
+                    if (!rVertices.empty())
+                    {
+                        auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerPolygon>();
+                        rPDFGraphicAnnotation.mpMarker = pMarker;
+                        for (auto const& rVertex : rVertices)
+                        {
+                            double x = convertPointToMm100(rVertex.getX());
+                            double y = convertPointToMm100(aPageSize.getY() - rVertex.getY());
+                            pMarker->maPolygon.append({ x, y });
+                        }
+                        pMarker->maPolygon.setClosed(true);
+                        pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
+                        if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                            pMarker->maFillColor = pAnnotation->getInteriorColor();
+                    }
+                }
             }
         }
     }

@@ -31,6 +31,10 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "textapi.hxx"
+#include "sddllapi.h"
+
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <tools/color.hxx>
 
 class SdrUndoAction;
 
@@ -62,7 +66,15 @@ void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
 void LOKCommentNotifyAll(CommentNotificationType nType,
         css::uno::Reference<css::office::XAnnotation> const & rxAnnotation);
 
-class Annotation : private ::cppu::BaseMutex,
+struct SD_DLLPUBLIC CustomAnnotationMarker
+{
+    Color maLineColor;
+    Color maFillColor;
+    float mnLineWidth;
+    std::vector<basegfx::B2DPolygon> maPolygons;
+};
+
+class SD_DLLPUBLIC Annotation : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
@@ -107,6 +119,21 @@ public:
 
     void createChangeUndo();
 
+    void createCustomAnnotationMarker()
+    {
+        m_pCustomAnnotationMarker = std::make_unique<CustomAnnotationMarker>();
+    }
+
+    CustomAnnotationMarker& getCustomAnnotationMarker()
+    {
+        return *m_pCustomAnnotationMarker;
+    }
+
+    bool hasCustomAnnotationMarker()
+    {
+        return bool(m_pCustomAnnotationMarker);
+    }
+
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
 
@@ -124,6 +151,8 @@ private:
     OUString m_Initials;
     css::util::DateTime m_DateTime;
     rtl::Reference<TextApiObject> m_TextRange;
+
+    std::unique_ptr<CustomAnnotationMarker> m_pCustomAnnotationMarker;
 };
 
 }
