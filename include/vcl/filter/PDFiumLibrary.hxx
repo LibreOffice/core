@@ -101,6 +101,7 @@ public:
     basegfx::B2DSize getBorderCornerRadius();
     size_t getAttachmentPointsCount();
     std::vector<basegfx::B2DPoint> getAttachmentPoints(size_t nIndex);
+    std::vector<basegfx::B2DPoint> getLineGeometry();
 };
 
 class PDFiumPage;
