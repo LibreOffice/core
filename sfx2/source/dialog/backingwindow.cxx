@@ -20,11 +20,10 @@
 #include "backingwindow.hxx"
 
 #include <vcl/accel.hxx>
+#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/fixed.hxx>
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -32,8 +31,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
 #include <templateviewitem.hxx>
-
-#include <vcl/menubtn.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -65,32 +62,43 @@ const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.Configurati
 // increase size of the text in the buttons on the left fMultiplier-times
 float const fMultiplier = 1.4f;
 
-BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
-    Window( i_pParent ),
-    mbLocalViewInitialized(false),
-    mbInitControls( false )
+BackingWindow::BackingWindow(vcl::Window* i_pParent)
+    : InterimItemWindow(i_pParent, "sfx/ui/startcenter.ui", "StartCenter", false)
+    , mxOpenButton(m_xBuilder->weld_button("open_all"))
+    , mxRecentButton(m_xBuilder->weld_menu_toggle_button("open_recent"))
+    , mxRemoteButton(m_xBuilder->weld_button("open_remote"))
+    , mxTemplateButton(m_xBuilder->weld_menu_toggle_button("templates_all"))
+    , mxCreateLabel(m_xBuilder->weld_label("create_label"))
+    , mxAltHelpLabel(m_xBuilder->weld_label("althelplabel"))
+    , mxWriterAllButton(m_xBuilder->weld_button("writer_all"))
+    , mxCalcAllButton(m_xBuilder->weld_button("calc_all"))
+    , mxImpressAllButton(m_xBuilder->weld_button("impress_all"))
+    , mxDrawAllButton(m_xBuilder->weld_button("draw_all"))
+    , mxDBAllButton(m_xBuilder->weld_button("database_all"))
+    , mxMathAllButton(m_xBuilder->weld_button("math_all"))
+    , mxHelpButton(m_xBuilder->weld_button("help"))
+    , mxExtensionsButton(m_xBuilder->weld_button("extensions"))
+    , mxAllButtonsBox(m_xBuilder->weld_container("all_buttons_box"))
+    , mxButtonsBox(m_xBuilder->weld_container("buttons_box"))
+    , mxSmallButtonsBox(m_xBuilder->weld_container("small_buttons_box"))
+    , mxAllRecentThumbnails(new sfx2::RecentDocsView(m_xBuilder->weld_scrolled_window("scrollrecent", true),
+                                                     m_xBuilder->weld_menu("recentmenu")))
+    , mxAllRecentThumbnailsWin(new weld::CustomWeld(*m_xBuilder, "all_recent", *mxAllRecentThumbnails))
+    , mxLocalView(new TemplateDefaultView(m_xBuilder->weld_scrolled_window("scrolllocal", true),
+                                          m_xBuilder->weld_menu("localmenu")))
+    , mxLocalViewWin(new weld::CustomWeld(*m_xBuilder, "local_view", *mxLocalView))
+    , mbLocalViewInitialized(false)
+    , mbInitControls(false)
 {
-    m_pUIBuilder.reset(new VclBuilder(this, AllSettings::GetUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" ));
+    // init background
+    SetPaintTransparent(false);
+    SetBackground(svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
 
-    get(mpOpenButton, "open_all");
-    get(mpRemoteButton, "open_remote");
-    get(mpRecentButton, "open_recent");
-    get(mpTemplateButton, "templates_all");
-
-    get(mpCreateLabel, "create_label");
-
-    get(mpWriterAllButton, "writer_all");
-    get(mpCalcAllButton, "calc_all");
-    get(mpImpressAllButton, "impress_all");
-    get(mpDrawAllButton, "draw_all");
-    get(mpDBAllButton, "database_all");
-    get(mpMathAllButton, "math_all");
-
-    get(mpHelpButton, "help");
     //set an alternative help label that doesn't hotkey the H of the Help menu
-    mpHelpButton->SetText(get<Window>("althelplabel")->GetText());
-    get(mpExtensionsButton, "extensions");
+    mxHelpButton->set_label(mxAltHelpLabel->get_label());
+    mxHelpButton->connect_clicked(LINK(this, BackingWindow, ClickHelpHdl));
 
+#if 0
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
     //extension button is considered as a candidate
@@ -104,21 +112,16 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     //of a group, i.e. allow it to be grouped with the preceding
     //PushButton so when seen as a candidate by cursor travelling
     //it will be accepted as a continuation of the group.
-    WinBits nBits = mpExtensionsButton->GetStyle();
+    WinBits nBits = mxExtensionsButton->GetStyle();
     nBits &= ~WB_GROUP;
     nBits |= WB_NOGROUP;
-    mpExtensionsButton->SetStyle(nBits);
+    mxExtensionsButton->SetStyle(nBits);
     assert(mpHelpButton->GetStyle() & WB_GROUP);
-    assert(!(mpExtensionsButton->GetStyle() & WB_GROUP));
+    assert(!(mxExtensionsButton->GetStyle() & WB_GROUP));
 
-    get(mpAllButtonsBox, "all_buttons_box");
-    get(mpButtonsBox, "buttons_box");
-    get(mpSmallButtonsBox, "small_buttons_box");
+    maDndWindows.emplace_back(mxAllRecentThumbnails);
 
-    get(mpAllRecentThumbnails, "all_recent");
-    get(mpLocalView, "local_view");
-
-    maDndWindows.emplace_back(mpAllRecentThumbnails);
+#endif
 
     try
     {
@@ -133,16 +136,19 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     // so we should handle data changed events (font changing) of the last child
     // control, at this point all the controls have updated settings (i.e. font).
 
-    EnableChildTransparentMode();
+//TODO    EnableChildTransparentMode();
 
-    SetStyle( GetStyle() | WB_DIALOGCONTROL );
+//TODO    SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     // get dispatch provider
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
+}
 
-    // init background
-    SetBackground();
+IMPL_LINK(BackingWindow, ClickHelpHdl, weld::Button&, rButton, void)
+{
+    if (Help* pHelp = Application::GetHelp())
+        pHelp->Start(OUString::fromUtf8(m_xContainer->get_help_id()), &rButton);
 }
 
 BackingWindow::~BackingWindow()
@@ -167,27 +173,29 @@ void BackingWindow::dispose()
         }
         mxDropTargetListener.clear();
     }
-    disposeBuilder();
     maDndWindows.clear();
-    mpOpenButton.clear();
-    mpRemoteButton.clear();
-    mpRecentButton.clear();
-    mpTemplateButton.clear();
-    mpCreateLabel.clear();
-    mpWriterAllButton.clear();
-    mpCalcAllButton.clear();
-    mpImpressAllButton.clear();
-    mpDrawAllButton.clear();
-    mpDBAllButton.clear();
-    mpMathAllButton.clear();
-    mpHelpButton.clear();
-    mpExtensionsButton.clear();
-    mpAllButtonsBox.clear();
-    mpButtonsBox.clear();
-    mpSmallButtonsBox.clear();
-    mpAllRecentThumbnails.clear();
-    mpLocalView.clear();
-    vcl::Window::dispose();
+    mxOpenButton.reset();
+    mxRemoteButton.reset();
+    mxRecentButton.reset();
+    mxTemplateButton.reset();
+    mxCreateLabel.reset();
+    mxAltHelpLabel.reset();
+    mxWriterAllButton.reset();
+    mxCalcAllButton.reset();
+    mxImpressAllButton.reset();
+    mxDrawAllButton.reset();
+    mxDBAllButton.reset();
+    mxMathAllButton.reset();
+    mxHelpButton.reset();
+    mxExtensionsButton.reset();
+    mxAllButtonsBox.reset();
+    mxButtonsBox.reset();
+    mxSmallButtonsBox.reset();
+    mxAllRecentThumbnailsWin.reset();
+    mxAllRecentThumbnails.reset();
+    mxLocalViewWin.reset();
+    mxLocalView.reset();
+    InterimItemWindow::dispose();
 }
 
 void BackingWindow::initControls()
@@ -201,69 +209,70 @@ void BackingWindow::initControls()
     SvtModuleOptions    aModuleOptions;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_WRITER;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_WRITER;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::CALC))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_CALC;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_CALC;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_IMPRESS;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_IMPRESS;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DRAW;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DRAW;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DATABASE;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DATABASE;
 
     if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::MATH))
-        mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_MATH;
+        mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_MATH;
 
-    mpAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_OTHER;
-    mpAllRecentThumbnails->Reload();
-    mpAllRecentThumbnails->ShowTooltips( true );
-    mpRecentButton->SetActive(true);
+    mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_OTHER;
+    mxAllRecentThumbnails->Reload();
+    mxAllRecentThumbnails->ShowTooltips( true );
+//TODO    mxRecentButton->SetActive(true);
+    mxRecentButton->set_active(true);
 
     //initialize Template view
-    mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
-    mpLocalView->Hide();
+    mxLocalView->Hide();
 
-    mpTemplateButton->SetDelayMenu(true);
-    mpTemplateButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
-    mpRecentButton->SetDelayMenu(true);
-    mpRecentButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
+#if 0
+    mxTemplateButton->SetDelayMenu(true);
+    mxTemplateButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
+    mxRecentButton->SetDelayMenu(true);
+    mxRecentButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
+#endif
 
     //set handlers
-    mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
-    mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
-    mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
-    mpLocalView->ShowTooltips( true );
+    mxLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
+    mxLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
+    mxLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
+    mxLocalView->ShowTooltips( true );
 
-    setupButton( mpOpenButton );
-    setupButton( mpRemoteButton );
-    setupButton( mpRecentButton );
-    setupButton( mpTemplateButton );
-    setupButton( mpWriterAllButton );
-    setupButton( mpDrawAllButton );
-    setupButton( mpCalcAllButton );
-    setupButton( mpDBAllButton );
-    setupButton( mpImpressAllButton );
-    setupButton( mpMathAllButton );
+    setupButton(*mxOpenButton);
+    setupButton(*mxRemoteButton);
+    setupButton(*mxRecentButton);
+    setupButton(*mxTemplateButton);
+    setupButton(*mxWriterAllButton);
+    setupButton(*mxDrawAllButton);
+    setupButton(*mxCalcAllButton);
+    setupButton(*mxDBAllButton);
+    setupButton(*mxImpressAllButton);
+    setupButton(*mxMathAllButton);
 
     checkInstalledModules();
 
-    mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
+    mxExtensionsButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
 
-    // setup nice colors
-    vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
+    // setup larger font
+    vcl::Font aFont(mxCreateLabel->get_font());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    mpCreateLabel->SetControlFont(aFont);
+    mxCreateLabel->set_font(aFont);
 
+#if 0
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
     aWallpaper.SetStyle(WallpaperStyle::BottomRight);
-
-    mpButtonsBox->SetBackground(aWallpaper);
-
+    mxButtonsBox->SetBackground(aWallpaper);
     Resize();
 
     // compute the menubar height
@@ -276,8 +285,9 @@ void BackingWindow::initControls()
             nMenuHeight = pMenuBar->ImplGetWindow()->GetOutputSizePixel().Height();
     }
 
-    set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
-    set_height_request(nMenuHeight + mpAllButtonsBox->GetOptimalSize().Height());
+    set_width_request(mxAllRecentThumbnails->get_width_request() + mxAllButtonsBox->GetOptimalSize().Width());
+    set_height_request(nMenuHeight + mxAllButtonsBox->GetOptimalSize().Height());
+#endif
 }
 
 void BackingWindow::initializeLocalView()
@@ -285,51 +295,49 @@ void BackingWindow::initializeLocalView()
     if (!mbLocalViewInitialized)
     {
         mbLocalViewInitialized = true;
-        mpLocalView->Populate();
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
-        mpLocalView->showAllTemplates();
+        mxLocalView->Populate();
+        mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
+        mxLocalView->showAllTemplates();
     }
 }
 
-void BackingWindow::setupButton( PushButton* pButton )
+void BackingWindow::setupButton(weld::Button& rButton)
 {
     // the buttons should have a bit bigger font
-    vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    vcl::Font aFont(rButton.get_font());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    pButton->SetControlFont(aFont);
-    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
+    rButton.set_font(aFont);
+    rButton.connect_clicked( LINK( this, BackingWindow, ClickHdl ) );
 }
 
-void BackingWindow::setupButton( MenuToggleButton* pButton )
+void BackingWindow::setupButton(weld::MenuButton& rButton)
 {
-    vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    vcl::Font aFont(rButton.get_font());
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    pButton->SetControlFont(aFont);
+    rButton.set_font(aFont);
 
-    PopupMenu* pMenu = pButton->GetPopupMenu();
+#if 0
+    PopupMenu* pMenu = rButton.GetPopupMenu();
     pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries);
+#endif
 
-    pButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
-    pButton->SetSelectHdl(LINK(this, BackingWindow, MenuSelectHdl));
+    rButton.connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    rButton.connect_selected(LINK(this, BackingWindow, MenuSelectHdl));
 }
 
 void BackingWindow::checkInstalledModules()
 {
     SvtModuleOptions aModuleOpt;
 
-    mpWriterAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ));
-
-    mpCalcAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) );
-
-    mpImpressAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) );
-
-    mpDrawAllButton->Enable( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) );
-
-    mpMathAllButton->Enable(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ));
-
-    mpDBAllButton->Enable(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ));
+    mxWriterAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ));
+    mxCalcAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) );
+    mxImpressAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) );
+    mxDrawAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) );
+    mxMathAllButton->set_sensitive(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ));
+    mxDBAllButton->set_sensitive(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ));
 }
 
+#if 0
 void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     Resize();
@@ -354,7 +362,9 @@ void BackingWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
                               Point(0, 0), maStartCentButtons.GetSize(),
                               *pVDev);
 }
+#endif
 
+#if 0
 bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
 {
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -367,7 +377,7 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
         {
             if( rKeyCode.IsShift() ) // Shift + F6
             {
-                if( mpAllRecentThumbnails->HasFocus() || mpLocalView->HasFocus())
+                if( mxAllRecentThumbnails->HasFocus() || mxLocalView->HasFocus())
                 {
                     mpOpenButton->GrabFocus();
                     return true;
@@ -375,29 +385,29 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
             }
             else if ( rKeyCode.IsMod1() ) // Ctrl + F6
             {
-                if(mpAllRecentThumbnails->IsVisible())
+                if(mxAllRecentThumbnails->IsVisible())
                 {
-                    mpAllRecentThumbnails->GrabFocus();
+                    mxAllRecentThumbnails->GrabFocus();
                     return true;
                 }
-                else if(mpLocalView->IsVisible())
+                else if(mxLocalView->IsVisible())
                 {
-                    mpLocalView->GrabFocus();
+                    mxLocalView->GrabFocus();
                     return true;
                 }
             }
             else // F6
             {
-                if( mpAllButtonsBox->HasChildPathFocus() )
+                if( mxAllButtonsBox->HasChildPathFocus() )
                 {
-                    if(mpAllRecentThumbnails->IsVisible())
+                    if(mxAllRecentThumbnails->IsVisible())
                     {
-                        mpAllRecentThumbnails->GrabFocus();
+                        mxAllRecentThumbnails->GrabFocus();
                         return true;
                     }
-                    else if(mpLocalView->IsVisible())
+                    else if(mxLocalView->IsVisible())
                     {
-                        mpLocalView->GrabFocus();
+                        mxLocalView->GrabFocus();
                         return true;
                     }
                 }
@@ -422,7 +432,9 @@ bool BackingWindow::PreNotify(NotifyEvent& rNEvt)
 
     return Window::PreNotify( rNEvt );
 }
+#endif
 
+#if 0
 void BackingWindow::GetFocus()
 {
     GetFocusFlags nFlags = GetParent()->GetGetFocusFlags();
@@ -435,12 +447,13 @@ void BackingWindow::GetFocus()
         }
         else // Shift + F6 or Ctrl + F6
         {
-            mpAllRecentThumbnails->GrabFocus();
+            mxAllRecentThumbnails->GrabFocus();
             return;
         }
     }
     Window::GetFocus();
 }
+#endif
 
 void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
@@ -463,6 +476,7 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
     }
 }
 
+#if 0
 void BackingWindow::Resize()
 {
     maStartCentButtons = tools::Rectangle( Point(0, 0), GetOutputSizePixel() );
@@ -474,12 +488,13 @@ void BackingWindow::Resize()
     if (!IsInPaint())
         Invalidate();
 }
+#endif
 
-IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
+IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton, void)
 {
     OUString aNode;
 
-    if (pButton == mpExtensionsButton)
+    if (&rButton == mxExtensionsButton.get())
         aNode = "AddFeatureURL";
 
     if (aNode.isEmpty())
@@ -515,22 +530,22 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton, void )
+IMPL_LINK( BackingWindow, ClickHdl, weld::Button&, rButton, void )
 {
     // dispatch the appropriate URL and end the dialog
-    if( pButton == mpWriterAllButton )
+    if( &rButton == mxWriterAllButton.get() )
         dispatchURL( "private:factory/swriter" );
-    else if( pButton == mpCalcAllButton )
+    else if( &rButton == mxCalcAllButton.get() )
         dispatchURL( "private:factory/scalc" );
-    else if( pButton == mpImpressAllButton )
+    else if( &rButton == mxImpressAllButton.get() )
         dispatchURL( "private:factory/simpress?slot=6686" );
-    else if( pButton == mpDrawAllButton )
+    else if( &rButton == mxDrawAllButton.get() )
         dispatchURL( "private:factory/sdraw" );
-    else if( pButton == mpDBAllButton )
+    else if( &rButton == mxDBAllButton.get() )
         dispatchURL( "private:factory/sdatabase?Interactive" );
-    else if( pButton == mpMathAllButton )
+    else if( &rButton == mxMathAllButton.get() )
         dispatchURL( "private:factory/smath" );
-    else if( pButton == mpOpenButton )
+    else if( &rButton == mxOpenButton.get() )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -541,7 +556,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton, void )
 
         dispatchURL( ".uno:Open", OUString(), xFrame, aArgs );
     }
-    else if( pButton == mpRemoteButton )
+    else if( &rButton == mxRemoteButton.get() )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -549,60 +564,68 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton, void )
 
         dispatchURL( ".uno:OpenRemote", OUString(), xFrame, aArgs );
     }
-    else if( pButton == mpRecentButton )
+    else if( &rButton == mxRecentButton.get() )
     {
-        mpLocalView->Hide();
-        mpAllRecentThumbnails->Show();
-        mpAllRecentThumbnails->GrabFocus();
-        mpRecentButton->SetActive(true);
-        mpTemplateButton->SetActive(false);
-        mpTemplateButton->Invalidate();
+        mxLocalView->Hide();
+        mxAllRecentThumbnails->Show();
+        mxAllRecentThumbnails->GrabFocus();
+#if 0
+        mxRecentButton->SetActive(true);
+        mxTemplateButton->SetActive(false);
+        mxTemplateButton->Invalidate();
+#else
+        mxRecentButton->set_active(true);
+        mxTemplateButton->set_active(false);
+#endif
     }
-    else if( pButton == mpTemplateButton )
+    else if( &rButton == mxTemplateButton.get() )
     {
-        mpAllRecentThumbnails->Hide();
+        mxAllRecentThumbnails->Hide();
         initializeLocalView();
-        mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
-        mpLocalView->Show();
-        mpLocalView->reload();
-        mpLocalView->GrabFocus();
-        mpRecentButton->SetActive(false);
-        mpRecentButton->Invalidate();
-        mpTemplateButton->SetActive(true);
+        mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
+        mxLocalView->Show();
+        mxLocalView->reload();
+        mxLocalView->GrabFocus();
+#if 0
+        mxRecentButton->SetActive(false);
+        mxRecentButton->Invalidate();
+        mxTemplateButton->SetActive(true);
+#else
+        mxRecentButton->set_active(false);
+        mxTemplateButton->set_active(true);
+#endif
     }
 }
 
-IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
+IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
 {
-    if(pButton == mpRecentButton)
+    if (rId == "clear_all")
     {
         SvtHistoryOptions().Clear(ePICKLIST);
-        mpAllRecentThumbnails->Reload();
+        mxAllRecentThumbnails->Reload();
         return;
     }
-    else if(pButton == mpTemplateButton)
+    else if (!rId.isEmpty())
     {
         initializeLocalView();
 
-        OString sId = pButton->GetCurItemIdent();
-
-        if( sId == "filter_writer" )
+        if( rId == "filter_writer" )
         {
-            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
+            mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::WRITER));
         }
-        else if( sId == "filter_calc" )
+        else if( rId == "filter_calc" )
         {
-            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::CALC));
+            mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::CALC));
         }
-        else if( sId == "filter_impress" )
+        else if( rId == "filter_impress" )
         {
-            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::IMPRESS));
+            mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::IMPRESS));
         }
-        else if( sId == "filter_draw" )
+        else if( rId == "filter_draw" )
         {
-            mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
+            mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
         }
-        else if( sId == "manage" )
+        else if( rId == "manage" )
         {
             Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
@@ -615,13 +638,18 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
             return;
         }
 
-        mpAllRecentThumbnails->Hide();
-        mpLocalView->Show();
-        mpLocalView->reload();
-        mpLocalView->GrabFocus();
-        mpRecentButton->SetActive(false);
-        mpTemplateButton->SetActive(true);
-        mpRecentButton->Invalidate();
+        mxAllRecentThumbnails->Hide();
+        mxLocalView->Show();
+        mxLocalView->reload();
+        mxLocalView->GrabFocus();
+#if 0
+        mxRecentButton->SetActive(false);
+        mxTemplateButton->SetActive(true);
+        mxRecentButton->Invalidate();
+#else
+        mxRecentButton->set_active(false);
+        mxTemplateButton->set_active(true);
+#endif
     }
 }
 
@@ -630,7 +658,7 @@ IMPL_LINK(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
     const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
     if (pViewItem)
-        mpLocalView->createContextMenu();
+        mxLocalView->createContextMenu();
 }
 
 IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
@@ -759,6 +787,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
     }
 }
 
+#if 0
 Size BackingWindow::GetOptimalSize() const
 {
     if (isLayoutEnabled(this))
@@ -766,10 +795,11 @@ Size BackingWindow::GetOptimalSize() const
 
     return Window::GetOptimalSize();
 }
+#endif
 
 void BackingWindow::clearRecentFileList()
 {
-    mpAllRecentThumbnails->Clear();
-    set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
+    mxAllRecentThumbnails->Clear();
+//TODO    set_width_request(mxAllRecentThumbnails->get_width_request() + mxAllButtonsBox->GetOptimalSize().Width());
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab:*/

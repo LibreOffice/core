@@ -25,13 +25,6 @@
         </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
-                        generic-name="Icon View" parent="GtkIconView"
-                        icon-name="widget-gtk-iconview"/>
-    <glade-widget-class title="Template Thumbnail View" name="sfxlo-TemplateDefaultView"
-                        generic-name="Template Icon View" parent="GtkIconView"
-                        icon-name="widget-gtk-iconview"/>
-
     <glade-widget-class title="Notebook switching tabs depending on context" name="sfxlo-NotebookbarTabControl"
                         generic-name="NotebookbarTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
