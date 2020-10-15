@@ -45,6 +45,30 @@
       "revId": "f4fbf88128feef1c837afff76a11fafd1facddef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c49b9f1_645f83c3",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-15T10:42:21Z",
+      "side": 1,
+      "message": "Hmm, this branch works only for non-HTTP(S) case... well, then it should work indeed. Just still don\u0027t understand why don\u0027t you put this into the control\u0027s uri, and avoid the member field? It would likely also provide a useful tooltip then. Both for .UNO:, and for FILE: cases.",
+      "parentUuid": "168146a6_b0947f11",
+      "range": {
+        "startLine": 180,
+        "startChar": 38,
+        "endLine": 180,
+        "endChar": 43
+      },
+      "revId": "f4fbf88128feef1c837afff76a11fafd1facddef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
