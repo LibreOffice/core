@@ -45,6 +45,25 @@ struct VCL_DLLPUBLIC PDFAnnotationMarkerPolygon : public PDFAnnotationMarker
     basegfx::B2DPolygon maPolygon;
 };
 
+enum class PDFTextMarkerType
+{
+    Highlight,
+    Underline,
+    Squiggly,
+    StrikeOut
+};
+
+struct VCL_DLLPUBLIC PDFAnnotationMarkerHighlight : public PDFAnnotationMarker
+{
+    std::vector<basegfx::B2DPolygon> maQuads;
+    PDFTextMarkerType meTextMarkerType;
+
+    PDFAnnotationMarkerHighlight(PDFTextMarkerType eTextMarkerType)
+        : meTextMarkerType(eTextMarkerType)
+    {
+    }
+};
+
 } // namespace vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
