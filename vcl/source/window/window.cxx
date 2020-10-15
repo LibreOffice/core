@@ -3317,7 +3317,6 @@ const char* windowTypeName(WindowType nWindowType)
         case WindowType::LISTBOXWINDOW:             return "listboxwindow";
         case WindowType::DOCKINGAREA:               return "dockingarea";
         case WindowType::RULER:                     return "ruler";
-        case WindowType::CALCINPUTLINE:             return "calcinputline";
         case WindowType::HEADERBAR:                 return "headerbar";
         case WindowType::VERTICALTABCONTROL:        return "verticaltabcontrol";
 

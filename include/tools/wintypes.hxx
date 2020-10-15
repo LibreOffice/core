@@ -96,7 +96,6 @@ enum class WindowType : sal_uInt16
     LISTBOXWINDOW        ,
     DOCKINGAREA          ,
     RULER                ,
-    CALCINPUTLINE        ,
     HEADERBAR            ,
     VERTICALTABCONTROL   ,
     LAST                 = VERTICALTABCONTROL,

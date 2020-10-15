@@ -263,8 +263,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::PATTERNFIELD:
         case WindowType::EDIT: nRole = static_cast<Edit const *>(this)->IsPassword() ? accessibility::AccessibleRole::PASSWORD_TEXT : accessibility::AccessibleRole::TEXT; break;
 
-        case WindowType::CALCINPUTLINE: nRole = accessibility::AccessibleRole::TEXT; break;
-
         case WindowType::PATTERNBOX:
         case WindowType::NUMERICBOX:
         case WindowType::METRICBOX:
@@ -390,7 +388,6 @@ OUString Window::getDefaultAccessibleName() const
         case WindowType::PATTERNFIELD:
         case WindowType::METRICFIELD:
         case WindowType::CURRENCYFIELD:
-        case WindowType::CALCINPUTLINE:
         case WindowType::EDIT:
 
         case WindowType::DATEBOX:
