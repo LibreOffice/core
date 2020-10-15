@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#ifdef HAVE_SYS_SYSMACROS_H
+#ifdef LINUX
 #include <sys/sysmacros.h>
 #endif
 #include <sys/types.h>

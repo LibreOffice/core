@@ -5289,11 +5289,6 @@ dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
 
-dnl ===================================================================
-dnl Check for sysmacros header
-dnl ===================================================================
-AC_CHECK_HEADER(sys/sysmacros.h, AC_DEFINE(HAVE_SYS_SYSMACROS_H))
-
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
