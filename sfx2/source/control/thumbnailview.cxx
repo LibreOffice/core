@@ -1327,6 +1327,13 @@ void SfxThumbnailView::ImplInit()
 
     mpStartSelRange = mFilteredItemList.end();
 
+    UpdateColors();
+
+    mpItemAttrs->nMaxTextLength = 0;
+}
+
+void SfxThumbnailView::UpdateColors()
+{
     mpItemAttrs->aFillColor = maFillColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
@@ -1334,8 +1341,6 @@ void SfxThumbnailView::ImplInit()
     mpItemAttrs->aSelectHighlightColor = maSelectHighlightColor.getBColor();
     mpItemAttrs->aSelectHighlightTextColor = maSelectHighlightTextColor.getBColor();
     mpItemAttrs->fHighlightTransparence = mfHighlightTransparence;
-
-    mpItemAttrs->nMaxTextLength = 0;
 }
 
 void SfxThumbnailView::ImplDeleteItems()
