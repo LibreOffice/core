@@ -281,6 +281,8 @@ class AbstractScriptSelectorDialog_Impl : public AbstractScriptSelectorDialog
     virtual OUString GetScriptURL() const override;
 
     virtual void SetRunLabel() override;
+
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 class GalleryIdDialog;
