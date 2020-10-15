@@ -33,9 +33,11 @@ class SvTreeListEntry;
 class SpinButton;
 class SpinField;
 class VerticalTabControl;
+class VclDrawingArea;
 class VclMultiLineEdit;
 class MenuButton;
 class ToolBox;
+namespace weld { class CustomWidgetController; }
 
 typedef std::map<const OUString, OUString> StringMap;
 
@@ -529,6 +531,16 @@ private:
     virtual OUString get_name() const override;
 };
 
+class UITEST_DLLPUBLIC DrawingAreaUIObject : public WindowUIObject
+{
+private:
+    VclPtr<VclDrawingArea> mxDrawingArea;
+protected:
+    weld::CustomWidgetController* mpController;
+public:
+    DrawingAreaUIObject(const VclPtr<vcl::Window>& rDrawingArea);
+    virtual ~DrawingAreaUIObject() override;
+};
 
 #endif
 

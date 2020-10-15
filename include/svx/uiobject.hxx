@@ -35,13 +35,13 @@ public:
     virtual SdrObject* get_object() = 0;
 };
 
-class SvxColorValueSetUIObject final : public WindowUIObject
+class SvxColorValueSetUIObject final : public DrawingAreaUIObject
 {
     SvxColorValueSet* mpColorSet;
 
 public:
 
-    SvxColorValueSetUIObject(vcl::Window*  xColorSetWin, SvxColorValueSet* pColorSet);
+    SvxColorValueSetUIObject(vcl::Window* pColorSetWin);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
