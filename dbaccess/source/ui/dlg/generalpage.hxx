@@ -139,6 +139,8 @@ namespace dbaui
         std::unique_ptr<OpenDocumentListBox> m_xLB_DocumentList;
         std::unique_ptr<OpenDocumentButton> m_xPB_OpenDatabase;
 
+        std::unique_ptr<weld::Label> m_xFT_NoEmbeddedDBLabel;
+
         // state
         OUString                       m_aBrowsedDocumentURL;
         CreationMode                   m_eOriginalCreationMode;
@@ -148,6 +150,7 @@ namespace dbaui
         Link<OGeneralPageWizard&,void> m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
 
         bool                    m_bInitEmbeddedDBList : 1;
+        bool                    m_bIsDisplayedTypesEmpty : 1;
         void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
 
         void                    EnableControls();
