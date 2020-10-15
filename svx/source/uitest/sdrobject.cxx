@@ -15,7 +15,6 @@
 
 #include <memory>
 #include <svx/SvxColorValueSet.hxx>
-#include <vcl/layout.hxx>
 
 SdrUIObject::~SdrUIObject()
 {
@@ -166,9 +165,9 @@ OUString SdrUIObject::get_type() const
 }
 
 
-SvxColorValueSetUIObject::SvxColorValueSetUIObject(vcl::Window*  xColorSetWin, SvxColorValueSet* pColorSet):
-    WindowUIObject(xColorSetWin),
-    mpColorSet(pColorSet)
+SvxColorValueSetUIObject::SvxColorValueSetUIObject(vcl::Window* pColorSetWin)
+    : DrawingAreaUIObject(pColorSetWin)
+    , mpColorSet(static_cast<SvxColorValueSet*>(mpController))
 {
 }
 
@@ -186,14 +185,12 @@ void SvxColorValueSetUIObject::execute(const OUString& rAction,
         }
     }
     else
-       WindowUIObject::execute(rAction, rParameters);
+       DrawingAreaUIObject::execute(rAction, rParameters);
 }
 
 std::unique_ptr<UIObject> SvxColorValueSetUIObject::create(vcl::Window* pWindow)
 {
-    VclDrawingArea* pColorSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
-    assert(pColorSetWin);
-    return std::unique_ptr<UIObject>(new SvxColorValueSetUIObject(pColorSetWin, static_cast<SvxColorValueSet*>(pColorSetWin->GetUserData())));
+    return std::unique_ptr<UIObject>(new SvxColorValueSetUIObject(pWindow));
 }
 
 OUString SvxColorValueSetUIObject::get_name() const
@@ -203,7 +200,7 @@ OUString SvxColorValueSetUIObject::get_name() const
 
 StringMap SvxColorValueSetUIObject::get_state()
 {
-    StringMap aMap = WindowUIObject::get_state();
+    StringMap aMap = DrawingAreaUIObject::get_state();
     aMap["CurrColorId"] = OUString::number( mpColorSet->GetSelectedItemId() );
     aMap["CurrColorPos"] = OUString::number( mpColorSet->GetSelectItemPos() );
     aMap["ColorsCount"] = OUString::number(mpColorSet->GetItemCount());

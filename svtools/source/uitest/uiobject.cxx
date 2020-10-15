@@ -10,11 +10,10 @@
 #include <memory>
 #include <uiobject.hxx>
 #include <svtools/valueset.hxx>
-#include <vcl/layout.hxx>
 
-ValueSetUIObject::ValueSetUIObject(const VclPtr<vcl::Window>& xSetWin, ValueSet* pSet)
-    : WindowUIObject(xSetWin)
-    , mpSet(pSet)
+ValueSetUIObject::ValueSetUIObject(const VclPtr<vcl::Window>& rSetWin)
+    : DrawingAreaUIObject(rSetWin)
+    , mpSet(static_cast<ValueSet*>(mpController))
 {
 }
 
@@ -32,22 +31,19 @@ void ValueSetUIObject::execute(const OUString& rAction, const StringMap& rParame
         }
     }
     else
-        WindowUIObject::execute(rAction, rParameters);
+        DrawingAreaUIObject::execute(rAction, rParameters);
 }
 
 std::unique_ptr<UIObject> ValueSetUIObject::create(vcl::Window* pWindow)
 {
-    VclDrawingArea* pSetWin = dynamic_cast<VclDrawingArea*>(pWindow);
-    assert(pSetWin);
-    return std::unique_ptr<UIObject>(
-        new ValueSetUIObject(pSetWin, static_cast<ValueSet*>(pSetWin->GetUserData())));
+    return std::unique_ptr<UIObject>(new ValueSetUIObject(pWindow));
 }
 
 OUString ValueSetUIObject::get_name() const { return "ValueSetUIObject"; }
 
 StringMap ValueSetUIObject::get_state()
 {
-    StringMap aMap = WindowUIObject::get_state();
+    StringMap aMap = DrawingAreaUIObject::get_state();
     aMap["SelectedItemId"] = OUString::number(mpSet->GetSelectedItemId());
     aMap["SelectedItemPos"] = OUString::number(mpSet->GetSelectItemPos());
     aMap["ItemsCount"] = OUString::number(mpSet->GetItemCount());
