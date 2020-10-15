@@ -23,7 +23,7 @@ extern "C"
 #  define LOK_TOLERATE_UNUSED
 #endif
 
-#if defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) ||\
+#if defined(__linux__) || defined (__FreeBSD__) || defined(_AIX) ||\
     defined(_WIN32) || defined(__APPLE__) || defined (__NetBSD__) ||\
     defined (__sun) || defined(__OpenBSD__)
 
