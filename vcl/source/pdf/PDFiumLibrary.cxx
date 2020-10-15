@@ -525,6 +525,19 @@ std::vector<basegfx::B2DPoint> PDFiumAnnotation::getAttachmentPoints(size_t nInd
     return aQuads;
 }
 
+std::vector<basegfx::B2DPoint> PDFiumAnnotation::getLineGeometry()
+{
+    std::vector<basegfx::B2DPoint> aLine;
+    FS_POINTF aStart;
+    FS_POINTF aEnd;
+    if (FPDFAnnot_GetLine(mpAnnotation, &aStart, &aEnd))
+    {
+        aLine.emplace_back(aStart.x, aStart.y);
+        aLine.emplace_back(aEnd.x, aEnd.y);
+    }
+    return aLine;
+}
+
 namespace
 {
 bool getBorderProperties(FPDF_ANNOTATION mpAnnotation, float& rHorizontalCornerRadius,

@@ -325,6 +325,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Inline Note"), aContentsString);
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
 
     {
@@ -339,6 +341,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         auto const& aPoints = aInkStrokes[0];
         CPPUNIT_ASSERT_EQUAL(size_t(74), aPoints.size());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
 
     {
@@ -348,6 +352,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Line Text"), aContentsString);
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(false, rLineGeometry.empty());
     }
 
     {
@@ -361,6 +367,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         auto const& aVertices = pAnnotation->getVertices();
         CPPUNIT_ASSERT_EQUAL(size_t(3), aVertices.size());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
 
     {
@@ -370,6 +378,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(OUString("Ellipse Text"), aContentsString);
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
 
     {
@@ -381,6 +391,8 @@ void PDFiumLibraryTest::testAnnotationsDifferentTypes()
         CPPUNIT_ASSERT_EQUAL(OUString("Rectangle Text"), aContentsString);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xE0, 0x00), pAnnotation->getColor());
         CPPUNIT_ASSERT_EQUAL(false, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor));
+        auto const& rLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
     }
 }
 
