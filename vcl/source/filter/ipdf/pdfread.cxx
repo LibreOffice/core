@@ -255,7 +255,9 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
             auto eSubtype = pAnnotation->getSubType();
 
             if (eSubtype == vcl::pdf::PDFAnnotationSubType::Text
-                || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon)
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Circle
+                || eSubtype == vcl::pdf::PDFAnnotationSubType::Square)
             {
                 OUString sAuthor = pAnnotation->getString(vcl::pdf::constDictionaryKeyTitle);
                 OUString sText = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
@@ -307,6 +309,22 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
                             pMarker->maFillColor = pAnnotation->getInteriorColor();
                     }
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Square)
+                {
+                    auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerSquare>();
+                    rPDFGraphicAnnotation.mpMarker = pMarker;
+                    pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                        pMarker->maFillColor = pAnnotation->getInteriorColor();
+                }
+                else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Circle)
+                {
+                    auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerCircle>();
+                    rPDFGraphicAnnotation.mpMarker = pMarker;
+                    pMarker->mnWidth = convertPointToMm100(pAnnotation->getBorderWidth());
+                    if (pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor))
+                        pMarker->maFillColor = pAnnotation->getInteriorColor();
                 }
             }
         }
