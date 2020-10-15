@@ -145,6 +145,15 @@ bool SdPdfFilter::Import()
                     rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
                     rCustomAnnotationMarker.maPolygons.push_back(aPoly);
                 }
+                else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::Ink)
+                {
+                    auto* pMarker = static_cast<vcl::pdf::PDFAnnotationMarkerInk*>(
+                        rPDFAnnotation.mpMarker.get());
+                    for (auto const& rPolygon : pMarker->maStrokes)
+                        rCustomAnnotationMarker.maPolygons.push_back(rPolygon);
+                    rCustomAnnotationMarker.mnLineWidth = pMarker->mnWidth;
+                    rCustomAnnotationMarker.maFillColor = pMarker->maFillColor;
+                }
             }
         }
     }
