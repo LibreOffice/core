@@ -1112,6 +1112,16 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
         pDlg->SetRunLabel();
 }
 
+boost::property_tree::ptree AbstractScriptSelectorDialog_Impl::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree;
+
+    if (pDlg)
+        aTree = pDlg->DumpAsPropertyTree();
+
+    return aTree;
+}
+
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( vcl::Window* pParent,
                                             const OUString& rLanguage)
 {
