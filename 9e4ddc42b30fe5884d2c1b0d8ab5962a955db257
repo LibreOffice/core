@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80aad600_eb4dc45e",
+        "filename": "dbaccess/source/ui/dlg/generalpage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-10-15T12:49:01Z",
+      "side": 1,
+      "message": "What do you think about this control, is it ok?",
+      "range": {
+        "startLine": 517,
+        "startChar": 0,
+        "endLine": 517,
+        "endChar": 10
+      },
+      "revId": "9e4ddc42b30fe5884d2c1b0d8ab5962a955db257",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
