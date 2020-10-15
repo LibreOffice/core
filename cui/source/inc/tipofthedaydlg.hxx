@@ -29,9 +29,8 @@ private:
     std::unique_ptr<weld::Button> m_pNext;
     std::unique_ptr<weld::LinkButton> m_pLink;
 
-    sal_Int32 nCurrentTip;
-    sal_Int32 nDay;
-    OUString aLink;
+    sal_Int32 m_nCurrentTip;
+    sal_Int32 m_nDay;
     void UpdateTip();
     DECL_LINK(OnNextClick, weld::Button&, void);
     DECL_LINK(OnLinkClick, weld::LinkButton&, bool);
