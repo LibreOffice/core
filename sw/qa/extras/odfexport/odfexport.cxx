@@ -2624,6 +2624,15 @@ DECLARE_ODFEXPORT_TEST(testRovasNumbering, "rovas-numbering.odt")
                          aMap["NumberingType"].get<sal_uInt16>());
 }
 
+DECLARE_ODFEXPORT_TEST(testPageContentTop, "page-content-top.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    sal_Int16 nExpected = text::RelOrientation::PAGE_PRINT_AREA_TOP;
+    CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
 DECLARE_ODFEXPORT_TEST(testPageContentBottom, "page-content-bottom.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
