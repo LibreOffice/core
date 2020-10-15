@@ -3740,43 +3740,36 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
             WindowUIObject aUIObject(pWindow);
             std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
             if (pUIWindow) {
-                bool bIsClickAction = false;
+                OUString sAction((aMap.find("cmd") != aMap.end())? aMap["cmd"]: "");
 
-                if (aMap.find("cmd") != aMap.end()) {
-                    if (aMap["cmd"] == "selected")
-                    {
-                        aMap["POS"] = aMap["data"];
-                        aMap["TEXT"] = aMap["data"];
+                if (sAction == "selected")
+                {
+                    aMap["POS"] = aMap["data"];
+                    aMap["TEXT"] = aMap["data"];
 
-                        pUIWindow->execute(sSelectAction, aMap);
-                    }
-                    else if (aMap["cmd"] == "plus")
-                    {
-                        pUIWindow->execute(sUpAction, aMap);
-                    }
-                    else if (aMap["cmd"] == "minus")
-                    {
-                        pUIWindow->execute(sDownAction, aMap);
-                    }
-                    else if (aMap["cmd"] == "set")
-                    {
-                        aMap["TEXT"] = aMap["data"];
+                    pUIWindow->execute(sSelectAction, aMap);
+                }
+                else if (sAction == "plus")
+                {
+                    pUIWindow->execute(sUpAction, aMap);
+                }
+                else if (sAction == "minus")
+                {
+                    pUIWindow->execute(sDownAction, aMap);
+                }
+                else if (sAction == "set")
+                {
+                    aMap["TEXT"] = aMap["data"];
 
-                        pUIWindow->execute(sClearAction, aMap);
-                        pUIWindow->execute(sTypeAction, aMap);
-                    }
-                    else if (aMap["cmd"] == "value")
-                    {
-                        aMap["VALUE"] = aMap["data"];
-                        pUIWindow->execute(sValue, aMap);
-                    }
-                    else
-                        bIsClickAction = true;
+                    pUIWindow->execute(sClearAction, aMap);
+                    pUIWindow->execute(sTypeAction, aMap);
+                }
+                else if (sAction == "value")
+                {
+                    aMap["VALUE"] = aMap["data"];
+                    pUIWindow->execute(sValue, aMap);
                 }
                 else
-                    bIsClickAction = true;
-
-                if (bIsClickAction)
                     pUIWindow->execute(sClickAction, aMap);
             }
         }
