@@ -792,6 +792,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl, weld::Button&, void)
 {
     weld::WaitObject aWait(m_xDialog.get());
 
+    m_xPrefBox->hide();
     m_xPrefBox->clear();
     m_xPrefBox->freeze();
 
@@ -845,6 +846,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl, weld::Button&, void)
         m_xPrefBox->expand_row(rEntry);
         return false;
     });
+    m_xPrefBox->show();
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
