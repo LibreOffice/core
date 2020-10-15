@@ -27,11 +27,21 @@ class tdf124675(UITestCase):
         xWriterDoc = self.xUITest.getTopFocusWindow()
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
+        self.assertEqual(document.CurrentController.PageCount, 2)
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
+
         for i in range(52):
             xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
-        self.xUITest.executeCommand(".uno:Undo")
+        self.assertEqual(document.CurrentController.PageCount, 4)
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "2")
 
-        self.assertEqual(document.CurrentController.PageCount, 15)
+        for i in range(52):
+            self.xUITest.executeCommand(".uno:Undo")
+
+        self.assertEqual(document.CurrentController.PageCount, 2)
+        self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "1")
+
         self.ui_test.close_doc()
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
