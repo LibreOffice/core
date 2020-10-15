@@ -46,14 +46,14 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libpng,\
 
 # At least on Linux, with --enable-lto, when building both this external/libpng and external/skia,
 # and building with GCC but building skia with Clang (which should be the sole combination that
-# matches "CLANG_CC is non-empty"), build this as a fat archive (including both the intermediate GCC
+# matches "LO_CLANG_CC is non-empty"), build this as a fat archive (including both the intermediate GCC
 # object code for LTO and machine object code).  Besides targets like Library_vcl (which benefit
 # from the  intermediate GCC object code for LTO), also Library_skia (built with the Clang toolchain
 # lld, which does not understand intermediate GCC object code) includes this, so would otherwise
 # fail to link (but now does not benefit from LTO for this included StaticLibrary_libpng):
 ifeq ($(OS)-$(ENABLE_LTO),LINUX-TRUE)
 ifneq ($(filter SKIA,$(BUILD_TYPE)),)
-ifneq ($(CLANG_CC),)
+ifneq ($(LO_CLANG_CC),)
 $(eval $(call gb_StaticLibrary_add_cflags,libpng,-ffat-lto-objects))
 endif
 endif
