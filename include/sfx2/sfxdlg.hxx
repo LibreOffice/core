@@ -119,6 +119,7 @@ protected:
 public:
     virtual OUString       GetScriptURL() const = 0;
     virtual void                SetRunLabel() = 0;
+    virtual boost::property_tree::ptree DumpAsPropertyTree() = 0;
 };
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
