@@ -88,7 +88,7 @@
   <object class="GtkImage" id="imageGear">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">cmd/sc_menubar.png</property>
+    <property name="icon_name">sfx2/res/menu.png</property>
   </object>
   <object class="GtkDialog" id="AdditionsDialog">
     <property name="width_request">550</property>
