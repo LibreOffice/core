@@ -51,7 +51,7 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION <= 100000
+#if CLANG_VERSION < 110000
     bool TraverseBinEQ(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
     bool TraverseBinNE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
 #endif
