@@ -492,6 +492,8 @@ void EditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bActivat
 
     if (pImpEditView->mpViewShell && !bActivate)
     {
+        if (!pImpEditView->pOutWin)
+            return;
         VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
@@ -508,6 +510,8 @@ void EditView::HideCursor(bool bDeactivate)
 
     if (pImpEditView->mpViewShell && !bDeactivate)
     {
+        if (!pImpEditView->pOutWin)
+            return;
         VclPtr<vcl::Window> pParent = pImpEditView->pOutWin->GetParentWithLOKNotifier();
         if (pParent && pParent->GetLOKWindowId() != 0)
             return;
