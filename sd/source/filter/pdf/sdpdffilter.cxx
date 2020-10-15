@@ -83,6 +83,9 @@ bool SdPdfFilter::Import()
 
         SdrGrafObj* pSdrGrafObj = new SdrGrafObj(pPage->getSdrModelFromSdrPage(), rGraphic,
                                                  tools::Rectangle(Point(), aSizeHMM));
+        pSdrGrafObj->SetResizeProtect(true);
+        pSdrGrafObj->SetMoveProtect(true);
+
         pPage->InsertObject(pSdrGrafObj);
 
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
