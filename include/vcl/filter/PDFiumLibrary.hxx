@@ -38,6 +38,7 @@ constexpr char constDictionaryKeyPopup[] = "Popup";
 constexpr char constDictionaryKeyModificationDate[] = "M";
 constexpr char constDictionaryKeyInteriorColor[] = "IC";
 
+class PDFiumBitmap;
 class PDFiumDocument;
 class PDFiumPageObject;
 
@@ -56,6 +57,7 @@ public:
     OUString getLastError() const { return maLastError; }
 
     std::unique_ptr<PDFiumDocument> openDocument(const void* pData, int nSize);
+    std::unique_ptr<PDFiumBitmap> createBitmap(int nWidth, int nHeight, int nAlpha);
 };
 
 class VCL_DLLPUBLIC PDFiumBitmap final
