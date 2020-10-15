@@ -73,7 +73,6 @@ private:
     std::unique_ptr<weld::Label> m_xAbsDist;
 
     // only writer
-    std::unique_ptr<weld::Widget> m_xRegisterFL;
     std::unique_ptr<weld::CheckButton> m_xRegisterCB;
 
     // preview

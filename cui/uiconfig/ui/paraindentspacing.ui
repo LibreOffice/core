@@ -161,6 +161,7 @@
                       <object class="GtkCheckButton" id="checkCB_AUTO">
                         <property name="label" translatable="yes" context="paraindentspacing|checkCB_AUTO">_Automatic</property>
                         <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_AUTO|tooltip_text">Indent paragraph automatically according to font size and line spacing.</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -323,7 +324,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkCB_CONTEXTUALSPACING">
-                        <property name="label" translatable="yes" context="paraindentspacing|checkCB_CONTEXTUALSPACING">Don't add space between paragraphs of the same style</property>
+                        <property name="label" translatable="yes" context="paraindentspacing|checkCB_CONTEXTUALSPACING">Do not add space between paragraphs of the same style</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -370,89 +371,123 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkGrid" id="grid3">
+                  <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
-                      <object class="GtkBox" id="box3">
+                      <object class="GtkGrid" id="grid3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">12</property>
+                        <property name="column_spacing">12</property>
                         <child>
-                          <object class="GtkComboBoxText" id="comboLB_LINEDIST">
+                          <object class="GtkBox" id="box3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <items>
-                              <item id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Single</item>
-                              <item id="1" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.15 Lines</item>
-                              <item id="2" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.5 Lines</item>
-                              <item id="3" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Double</item>
-                              <item id="4" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</item>
-                              <item id="5" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</item>
-                              <item id="6" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</item>
-                            </items>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkComboBoxText" id="comboLB_LINEDIST">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <items>
+                                  <item id="0" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Single</item>
+                                  <item id="1" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.15 Lines</item>
+                                  <item id="2" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">1.5 Lines</item>
+                                  <item id="3" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Double</item>
+                                  <item id="4" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Proportional</item>
+                                  <item id="5" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">At least</item>
+                                  <item id="6" translatable="yes" context="paraindentspacing|liststoreLB_LINEDIST">Leading</item>
+                                </items>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="labelFT_LINEDIST">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes" context="paraindentspacing|labelFT_LINEDIST">of</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="labelFT_LINEDIST">
+                          <object class="GtkBox" id="box1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes" context="paraindentspacing|labelFT_LINEDIST">of</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSpinButton" id="spinED_LINEDISTPERCENT">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustmentLINEDISTPERCENT</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinButton" id="spinED_LINEDISTMETRIC">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="activates_default">True</property>
+                                <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
+                                <property name="digits">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="box1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkSpinButton" id="spinED_LINEDISTPERCENT">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustmentLINEDISTPERCENT</property>
+                      <object class="GtkCheckButton" id="checkCB_REGISTER">
+                        <property name="label" translatable="yes" context="paraindentspacing|checkCB_REGISTER">Activate page li_ne-spacing</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes" context="paraindentspacing|checkCB_REGISTER|tooltip_text" comments="xdds">Applies page line-spacing (register-true) if set for the Page Style.</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="checkCB_REGISTER-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="paraindentspacing|extended_tip|checkCB_REGISTER">If page line-spacing is activated and the Page style uses page line-spacing, then this paragraph will align to an invisible vertical page grid, regardless of their font size, so that each line is the same height.</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="spinED_LINEDISTMETRIC">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="activates_default">True</property>
-                            <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
-                            <property name="digits">1</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -473,45 +508,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkFrame" id="frameFL_REGISTER">
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
-            <property name="shadow_type">none</property>
-            <child>
-              <object class="GtkAlignment" id="alignment4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="top_padding">6</property>
-                <property name="left_padding">12</property>
-                <child>
-                  <object class="GtkCheckButton" id="checkCB_REGISTER">
-                    <property name="label" translatable="yes" context="paraindentspacing|checkCB_REGISTER">A_ctivate</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label3">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="paraindentspacing|label3">Follow Page Line Spacing</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
           </packing>
         </child>
       </object>
