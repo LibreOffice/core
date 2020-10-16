@@ -985,7 +985,11 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("m"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/math"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("ContentType"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/content-types"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("lc"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("cp"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/metadata/core-properties"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("extended-properties"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("custom-properties"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("vt"), BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"));
+        xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dcterms"), BAD_CAST("http://purl.org/dc/terms/"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a14"), BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("o"), BAD_CAST("urn:schemas-microsoft-com:office:office"));
