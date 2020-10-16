@@ -1081,6 +1081,43 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(39409), pOleNative->GetSize());
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
+{
+    // Load the bug document, which has OLE1 data in it, which is not a wrapper around OLE2 data.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paint-ole.xhtml";
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    mxComponent
+        = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+
+    // Save it as ODT to inspect the result of the OLE1 -> OLE2 conversion.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable.set(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("writer8")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      maTempFile.GetURL());
+    uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("Object 2"),
+                                                  uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    tools::SvRef<SotStorage> pStorage = new SotStorage(*pStream);
+    // Check the clsid of the root stream of the OLE2 storage.
+    SvGlobalName aActual = pStorage->GetClassName();
+    SvGlobalName aExpected(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0003000A-0000-0000-c000-000000000046
+    // - Actual  : 0003000C-0000-0000-c000-000000000046
+    // i.e. the "Package" clsid was used on the OLE2 storage unconditionally, even for an mspaint
+    // case, which has its own clsid.
+    CPPUNIT_ASSERT_EQUAL(aExpected.GetHexName(), aActual.GetHexName());
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
 {
     // Create a document with 3 list items: A, B&C and D.

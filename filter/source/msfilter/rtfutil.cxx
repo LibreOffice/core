@@ -18,12 +18,31 @@
 
 namespace
 {
-/// If rOle1 is native OLE1 data of size nOle1Size, wraps it in an OLE2 container.
-void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2)
+/**
+ * If rOle1 is native OLE1 data of size nOle1Size, wraps it in an OLE2 container.
+ *
+ * The OLE2 root's CLSID is set based on rClassName.
+ */
+void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2,
+                    const OString& rClassName)
 {
     tools::SvRef<SotStorage> pStorage = new SotStorage(rOle2);
-    // OLE Package Object
-    SvGlobalName aName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
+    OString aAnsiUserType;
+    SvGlobalName aName;
+    if (rClassName == "PBrush")
+    {
+        aAnsiUserType = "Bitmap Image";
+        aName = SvGlobalName(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
+    }
+    else
+    {
+        if (!rClassName.isEmpty() && rClassName != "Package")
+        {
+            SAL_WARN("filter.ms", "WrapOle1InOle2: unexpected class name: '" << rClassName << "'");
+        }
+        aAnsiUserType = "OLE Package";
+        aName = SvGlobalName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46);
+    }
     pStorage->SetClass(aName, SotClipboardFormatId::NONE, "");
 
     // [MS-OLEDS] 2.3.7 CompObjHeader
@@ -40,14 +59,13 @@ void WrapOle1InOle2(SvStream& rOle1, sal_uInt32 nOle1Size, SvStream& rOle2)
     pCompObj->WriteUInt32(0x46000000);
     // Rest of CompObjStream
     // AnsiUserType
-    OString aAnsiUserType("OLE Package");
     pCompObj->WriteUInt32(aAnsiUserType.getLength() + 1);
     pCompObj->WriteOString(aAnsiUserType);
     pCompObj->WriteChar(0);
     // AnsiClipboardFormat
     pCompObj->WriteUInt32(0x00000000);
     // Reserved1
-    OString aReserved1("Package");
+    OString aReserved1(rClassName);
     pCompObj->WriteUInt32(aReserved1.getLength() + 1);
     pCompObj->WriteOString(aReserved1);
     pCompObj->WriteChar(0);
@@ -330,7 +348,14 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
         aStream.ReadUInt32(nData); // OLEVersion
         aStream.ReadUInt32(nData); // FormatID
         aStream.ReadUInt32(nData); // ClassName
-        aStream.SeekRel(nData);
+        OString aClassName;
+        if (nData)
+        {
+            // -1 because it is null-terminated.
+            aClassName = read_uInt8s_ToOString(aStream, nData - 1);
+            // Skip null-termination.
+            aStream.SeekRel(1);
+        }
         aStream.ReadUInt32(nData); // TopicName
         aStream.SeekRel(nData);
         aStream.ReadUInt32(nData); // ItemName
@@ -354,7 +379,7 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
             else
             {
                 SvMemoryStream aStorage;
-                WrapOle1InOle2(aStream, nData, aStorage);
+                WrapOle1InOle2(aStream, nData, aStorage, aClassName);
                 rOle2.WriteStream(aStorage);
             }
             rOle2.Seek(0);
