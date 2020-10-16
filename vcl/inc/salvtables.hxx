@@ -994,6 +994,8 @@ public:
 
     virtual OUString get_label() const override;
 
+    virtual void set_font(const vcl::Font& rFont) override;
+
     virtual ~SalInstanceButton() override;
 };
 

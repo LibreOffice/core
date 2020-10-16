@@ -2477,6 +2477,12 @@ void SalInstanceButton::set_label_line_wrap(bool wrap)
     m_xButton->queue_resize();
 }
 
+void SalInstanceButton::set_font(const vcl::Font& rFont)
+{
+    m_xButton->SetPointFont(*m_xButton, rFont);
+    m_xButton->Invalidate();
+}
+
 OUString SalInstanceButton::get_label() const { return m_xButton->GetText(); }
 
 SalInstanceButton::~SalInstanceButton() { m_xButton->SetClickHdl(Link<::Button*, void>()); }
