@@ -2047,6 +2047,7 @@ res/fp010.png svtools/res/up_small.png
 res/fileopen.png cmd/sc_open.png
 res/foldercl.png svtools/res/folder.png
 res/folderop.png cmd/sc_open.png
+res/hlinettp.png cmd/32/inserthyperlink.png
 res/im30820.png cmd/sc_scriptorganizer.png
 res/im30821.png cmd/sc_choosemacro.png
 res/info.png cmd/lc_helpindex.png
@@ -2231,7 +2232,7 @@ res/sx18003.png res/minus.png
 sc/res/date.png cmd/sc_datefield.png
 sc/res/dropcopy.png cmd/sc_copy.png
 sc/res/droplink.png cmd/sc_insertbookmark.png
-sc/res/dropurl.png cmd/sc_inserthyperlink.png
+sc/res/dropurl.png cmd/sc_inserthyperlinkcontrol.png
 sc/res/file.png cmd/sc_open.png
 sc/res/fx.png cmd/sc_dbviewfunctions.png
 sc/res/lc26047.png cmd/lc_dbviewfunctions.png
@@ -2722,3 +2723,22 @@ cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
+
+# LibreLogo
+cmd/32/librelogo-gobackward.png cmd/32/arrowshapes.down-arrow.png
+cmd/32/librelogo-goforward.png cmd/32/arrowshapes.up-arrow.png
+cmd/32/librelogo-run.png cmd/32/runbasic.png
+cmd/32/librelogo-stop.png cmd/32/basicstop.png
+cmd/32/librelogo-translate.png cmd/32/editglossary.png
+
+cmd/lc_librelogo-gobackward.png cmd/lc_arrowshapes.down-arrow.png
+cmd/lc_librelogo-goforward.png cmd/lc_arrowshapes.up-arrow.png
+cmd/lc_librelogo-run.png cmd/lc_runbasic.png
+cmd/lc_librelogo-stop.png cmd/lc_basicstop.png
+cmd/lc_librelogo-translate.png cmd/lc_editglossary.png
+
+cmd/sc_librelogo-gobackward.png cmd/sc_arrowshapes.down-arrow.png
+cmd/sc_librelogo-goforward.png cmd/sc_arrowshapes.up-arrow.png
+cmd/sc_librelogo-run.png cmd/sc_runbasic.png
+cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
+cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
