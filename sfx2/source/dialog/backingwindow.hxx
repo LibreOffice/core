@@ -40,8 +40,6 @@
 
 #include <memory>
 
-class ToolBox;
-
 class BackingWindow : public vcl::Window, public VclBuilderContainer
 {
     css::uno::Reference<css::uno::XComponentContext> mxContext;
