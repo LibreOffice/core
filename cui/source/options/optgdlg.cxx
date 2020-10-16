@@ -107,7 +107,6 @@ class SkiaCfg
 {
 private:
     bool mbUseSkia;
-    bool mbForceSkia;
     bool mbForceSkiaRaster;
     bool mbModified;
 
@@ -116,11 +115,9 @@ public:
     ~SkiaCfg();
 
     bool useSkia() const;
-    bool forceSkia() const;
     bool forceSkiaRaster() const;
 
     void setUseSkia(bool bSkia);
-    void setForceSkia(bool bSkia);
     void setForceSkiaRaster(bool bSkia);
 
     void reset();
@@ -135,7 +132,6 @@ SkiaCfg::SkiaCfg():
 void SkiaCfg::reset()
 {
     mbUseSkia = officecfg::Office::Common::VCL::UseSkia::get();
-    mbForceSkia = officecfg::Office::Common::VCL::ForceSkia::get();
     mbForceSkiaRaster = officecfg::Office::Common::VCL::ForceSkiaRaster::get();
     mbModified = false;
 }
@@ -150,8 +146,6 @@ SkiaCfg::~SkiaCfg()
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         if (!officecfg::Office::Common::VCL::UseSkia::isReadOnly())
             officecfg::Office::Common::VCL::UseSkia::set(mbUseSkia, batch);
-        if (!officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
-            officecfg::Office::Common::VCL::ForceSkia::set(mbForceSkia, batch);
         if (!officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
             officecfg::Office::Common::VCL::ForceSkiaRaster::set(mbForceSkiaRaster, batch);
         batch->commit();
@@ -166,11 +160,6 @@ bool SkiaCfg::useSkia() const
     return mbUseSkia;
 }
 
-bool SkiaCfg::forceSkia() const
-{
-    return mbForceSkia;
-}
-
 bool SkiaCfg::forceSkiaRaster() const
 {
     return mbForceSkiaRaster;
@@ -181,15 +170,6 @@ void SkiaCfg::setUseSkia(bool bSkia)
     if (bSkia != mbUseSkia)
     {
         mbUseSkia = bSkia;
-        mbModified = true;
-    }
-}
-
-void SkiaCfg::setForceSkia(bool bSkia)
-{
-    if (mbForceSkia != bSkia)
-    {
-        mbForceSkia = bSkia;
         mbModified = true;
     }
 }
@@ -693,7 +673,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
     , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
     , m_xUseSkia(m_xBuilder->weld_check_button("useskia"))
-    , m_xForceSkia(m_xBuilder->weld_check_button("forceskia"))
     , m_xForceSkiaRaster(m_xBuilder->weld_check_button("forceskiaraster"))
     , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
@@ -704,7 +683,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     if (Application::GetToolkitName() == "gtk3")
     {
         m_xUseSkia->hide();
-        m_xForceSkia->hide();
         m_xForceSkiaRaster->hide();
         m_xSkiaStatusEnabled->hide();
         m_xSkiaStatusDisabled->hide();
@@ -716,7 +694,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     // For now Skia is used mainly on Windows, hide the controls everywhere else.
     // It can also be used on Linux, but only with the rarely used 'gen' backend.
     m_xUseSkia->hide();
-    m_xForceSkia->hide();
     m_xForceSkiaRaster->hide();
     m_xSkiaStatusEnabled->hide();
     m_xSkiaStatusDisabled->hide();
@@ -724,7 +701,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
 
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
-    m_xForceSkia->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaToggled));
     m_xForceSkiaRaster->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaRasterToggled));
 
     // Set known icon themes
@@ -754,8 +730,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     // FIXME: should really add code to show a 'lock' icon here.
     if (officecfg::Office::Common::VCL::UseSkia::isReadOnly())
         m_xUseSkia->set_sensitive(false);
-    if (officecfg::Office::Common::VCL::ForceSkia::isReadOnly())
-        m_xForceSkia->set_sensitive(false);
     if (officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
         m_xForceSkiaRaster->set_sensitive(false);
 
@@ -783,15 +757,6 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, voi
 
     m_xAAPointLimitLabel->set_sensitive(bAAEnabled);
     m_xAAPointLimit->set_sensitive(bAAEnabled);
-}
-
-IMPL_LINK_NOARG(OfaViewTabPage, OnForceSkiaToggled, weld::ToggleButton&, void)
-{
-    if (m_xForceSkia->get_active())
-    {
-        // Ignoring the Skia denylist implies that Skia is on.
-        m_xUseSkia->set_active(true);
-    }
 }
 
 IMPL_LINK_NOARG(OfaViewTabPage, OnForceSkiaRasterToggled, weld::ToggleButton&, void)
@@ -961,11 +926,9 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     if (m_xUseSkia->get_state_changed_from_saved() ||
-        m_xForceSkia->get_state_changed_from_saved() ||
         m_xForceSkiaRaster->get_state_changed_from_saved())
     {
         mpSkiaConfig->setUseSkia(m_xUseSkia->get_active());
-        mpSkiaConfig->setForceSkia(m_xForceSkia->get_active());
         mpSkiaConfig->setForceSkiaRaster(m_xForceSkiaRaster->get_active());
         bModified = true;
     }
@@ -998,7 +961,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     if (m_xUseSkia->get_state_changed_from_saved() ||
-        m_xForceSkia->get_state_changed_from_saved() ||
         m_xForceSkiaRaster->get_state_changed_from_saved())
     {
         SolarMutexGuard aGuard;
@@ -1109,7 +1071,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         m_xUseAntiAliase->save_state();
     }
     m_xUseSkia->set_active(mpSkiaConfig->useSkia());
-    m_xForceSkia->set_active(mpSkiaConfig->forceSkia());
     m_xForceSkiaRaster->set_active(mpSkiaConfig->forceSkiaRaster());
 
     m_xFontAntiAliasing->save_state();
@@ -1117,7 +1078,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xFontShowCB->save_state();
 
     m_xUseSkia->save_state();
-    m_xForceSkia->save_state();
     m_xForceSkiaRaster->save_state();
 
     OnAntialiasingToggled(*m_xFontAntiAliasing);
