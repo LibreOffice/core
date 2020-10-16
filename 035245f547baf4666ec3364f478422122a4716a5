@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "951e14d8_d37bd02d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "Please don\u0027t put bug title as title of the change. The commit message\u0027s first line should refer to the bug using the tdf# syntax (as you correctly did), followed by short *description of what patch does*, not what the problem was. Something like \"tdf#114508: allow individual selection in recovery dialog\" or something like that would be nice, with an empty line and then some more explanations.",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 78
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ffccf1d_dbf5ac32",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "Please remove the commented out code.\nThe precondition is best expressed by a combination of the comment above (edited to tell something like \"Validity of m_xRealCore is checked by the only caller - doRecovery\"), and an assertion. Possibly the comment could even be moved before line 239, stating the precondition, like \"must only be called with valid m_xRealCore\".",
+      "range": {
+        "startLine": 242,
+        "startChar": 2,
+        "endLine": 245,
+        "endChar": 4
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "997b9c74_8d2c04e5",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "Please make sure that *every* new or modified code line follows out clang-format rules.",
+      "range": {
+        "startLine": 248,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 42
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17e6e6a_37720971",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "Please make sure that *every* new or modified code line follows out clang-format rules.",
+      "range": {
+        "startLine": 695,
+        "startChar": 4,
+        "endLine": 695,
+        "endChar": 117
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4a92376_9968fd1e",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "Please make sure that *every* new or modified code line follows out clang-format rules.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 0,
+        "endLine": 1130,
+        "endChar": 1
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b84e61f0_a7f84b49",
+        "filename": "svx/source/inc/docrecovery.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T06:07:47Z",
+      "side": 1,
+      "message": "As seen here, when the last enum member is not followed by a comma, the following extensions to the enum will not only add new lines, but also modify old lines. That will introduce git history changes to those modified lines.\n\nTherefore, please put a comma also after your new item.",
+      "range": {
+        "startLine": 104,
+        "startChar": 23,
+        "endLine": 104,
+        "endChar": 24
+      },
+      "revId": "035245f547baf4666ec3364f478422122a4716a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
