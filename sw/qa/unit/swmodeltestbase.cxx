@@ -729,8 +729,18 @@ void SwModelTestBase::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("lc"),
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"));
     xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("cp"),
+        BAD_CAST("http://schemas.openxmlformats.org/package/2006/metadata/core-properties"));
+    xmlXPathRegisterNs(
         pXmlXpathCtx, BAD_CAST("extended-properties"),
         BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"));
+    xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("custom-properties"),
+        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"));
+    xmlXPathRegisterNs(
+        pXmlXpathCtx, BAD_CAST("vt"),
+        BAD_CAST("http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("dcterms"), BAD_CAST("http://purl.org/dc/terms/"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a14"),
                        BAD_CAST("http://schemas.microsoft.com/office/drawing/2010/main"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"),
