@@ -1321,7 +1321,7 @@ static bool HasParentDockingWindow(const vcl::Window* pWindow)
         pWindow = pWindow->GetParent();
     }
 
-    return pWindow && pWindow->IsDockingWindow();
+    return false;
 }
 
 void Window::queue_resize(StateChangedType eReason)
