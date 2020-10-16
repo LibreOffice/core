@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/lok.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
@@ -109,7 +110,8 @@ ProviderCache::getAllProviders()
                 }
                 catch ( const Exception& )
                 {
-                    DBG_UNHANDLED_EXCEPTION("scripting");
+                    if (!comphelper::LibreOfficeKit::isActive())
+                        DBG_UNHANDLED_EXCEPTION("scripting");
                 }
             }
         }
@@ -143,7 +145,6 @@ ProviderCache::populateCache()
 
             Reference< lang::XSingleComponentFactory > factory( xEnum->nextElement(), UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
-
             Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
             if ( serviceNames.hasElements() )
