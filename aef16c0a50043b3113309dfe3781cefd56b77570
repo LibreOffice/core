@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eed6b0da_ecc0e52d",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T14:06:15Z",
+      "side": 1,
+      "message": "The \"!\" must be a typo :-)",
+      "range": {
+        "startLine": 242,
+        "startChar": 4,
+        "endLine": 242,
+        "endChar": 25
+      },
+      "revId": "aef16c0a50043b3113309dfe3781cefd56b77570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
