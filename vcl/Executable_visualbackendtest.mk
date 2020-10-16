@@ -41,10 +41,10 @@ $(eval $(call gb_Executable_use_static_libraries,visualbackendtest,\
     vclmain \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD, $(OS)))
 $(eval $(call gb_Executable_add_libs,visualbackendtest,\
 	-lm \
-	-ldl \
+	$(DLOPEN_LIBS) \
     -lX11 \
 ))
 
