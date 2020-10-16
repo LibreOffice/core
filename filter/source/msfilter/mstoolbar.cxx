@@ -211,9 +211,9 @@ void TBCHeader::Print( FILE* fp )
     indent_printf(fp,"  tbct 0x%x\n", static_cast< unsigned int >( tbct ));
     indent_printf(fp,"  bPriority 0x%x\n", bPriority );
     if ( width.get() )
-        indent_printf(fp,"  width 0x%d(0x%x)\n", *width, *width);
+        indent_printf(fp,"  width %d(0x%x)\n", *width, *width);
     if ( height.get() )
-        indent_printf(fp,"  height 0x%d(0x%x)\n", *height, *height);
+        indent_printf(fp,"  height %d(0x%x)\n", *height, *height);
 }
 #endif
 
@@ -698,16 +698,16 @@ void TBCCDData::Print( FILE* fp)
 {
     Indent a;
     indent_printf(fp,"[ 0x%x ] TBCCDData -- dump\n", nOffSet );
-    indent_printf(fp,"  cwstrItems items in wstrList 0x%d\n", cwstrItems);
+    indent_printf(fp,"  cwstrItems items in wstrList %d\n", cwstrItems);
     for ( sal_Int32 index=0; index < cwstrItems; ++index )
     {
         Indent b;
         indent_printf(fp, "  wstrList[%d] %s", static_cast< int >( index ), OUStringToOString( wstrList[index].getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    indent_printf(fp,"  cwstrMRU num most recently used string 0x%d item\n", cwstrMRU);
-    indent_printf(fp,"  iSel index of selected item 0x%d item\n", iSel);
-    indent_printf(fp,"  cLines num of suggested lines to display 0x%d", cLines);
-    indent_printf(fp,"  dxWidth width in pixels 0x%d", dxWidth);
+    indent_printf(fp,"  cwstrMRU num most recently used string %d item\n", cwstrMRU);
+    indent_printf(fp,"  iSel index of selected item %d item\n", iSel);
+    indent_printf(fp,"  cLines num of suggested lines to display %d", cLines);
+    indent_printf(fp,"  dxWidth width in pixels %d", dxWidth);
     indent_printf(fp,"  wstrEdit %s", OUStringToOString( wstrEdit.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 #endif
