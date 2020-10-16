@@ -720,7 +720,7 @@ void EditUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
     bool bHandled = true;
-    if (rAction == "SET")
+    if (rAction == "TYPE")
     {
         if (rParameters.find("TEXT") != rParameters.end())
         {
@@ -742,6 +742,17 @@ void EditUIObject::execute(const OUString& rAction,
         {
             bHandled = false;
         }
+    }
+    else if (rAction == "SET")
+    {
+        auto it = rParameters.find("TEXT");
+        if (it != rParameters.end())
+        {
+            mxEdit->SetText(it->second);
+            mxEdit->Modify();
+        }
+        else
+            bHandled = false;
     }
     else if (rAction == "SELECT")
     {
