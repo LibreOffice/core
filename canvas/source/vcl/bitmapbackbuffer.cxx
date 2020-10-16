@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include "bitmapbackbuffer.hxx"
-
+#include "impltools.hxx"
 
 namespace vclcanvas
 {
@@ -120,16 +120,7 @@ namespace vclcanvas
 
         mpVDev->SetOutputSizePixel( maBitmap->GetSizePixel() );
 
-        // #i95645#
-#if defined( MACOSX )
-        // use AA on VCLCanvas for Mac
-        mpVDev->SetAntialiasing( AntialiasingFlags::Enable | mpVDev->GetAntialiasing() );
-#else
-        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-        // is not required to do AA. It would need to be adapted to use it correctly
-        // (especially gradient painting). This will need extra work.
-        mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~AntialiasingFlags::Enable);
-#endif
+        tools::SetDefaultDeviceAntiAliasing( mpVDev );
     }
 
     void BitmapBackBuffer::updateVDev() const

@@ -171,6 +171,7 @@ namespace vclcanvas
         ::BitmapEx transformBitmap( const BitmapEx&                                     rBitmap,
                                     const ::basegfx::B2DHomMatrix&                      rTransform );
 
+        void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice );
     }
 }
 

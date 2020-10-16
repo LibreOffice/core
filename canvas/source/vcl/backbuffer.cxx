@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 
 #include "backbuffer.hxx"
+#include "impltools.hxx"
 
 
 namespace vclcanvas
@@ -34,16 +35,7 @@ namespace vclcanvas
         if( bMonochromeBuffer )
             return;
 
-        // #i95645#
-#if defined( MACOSX )
-        // use AA on VCLCanvas for Mac
-        maVDev->SetAntialiasing( AntialiasingFlags::Enable | maVDev->GetAntialiasing() );
-#else
-        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-        // is not required to do AA. It would need to be adapted to use it correctly
-        // (especially gradient painting). This will need extra work.
-        maVDev->SetAntialiasing( maVDev->GetAntialiasing() & ~AntialiasingFlags::Enable);
-#endif
+        tools::SetDefaultDeviceAntiAliasing( maVDev );
     }
 
     BackBuffer::~BackBuffer()

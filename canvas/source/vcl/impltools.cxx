@@ -33,6 +33,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -216,6 +217,23 @@ namespace vclcanvas::tools
 
             return vcl::bitmap::CanvasTransformBitmap(rBitmap, rTransform, aDestRect, aLocalTransform);
         }
+
+        void SetDefaultDeviceAntiAliasing( OutputDevice* pDevice )
+        {
+#if defined( MACOSX )
+            // use AA on VCLCanvas for Mac
+            pDevice->SetAntialiasing( AntialiasingFlags::Enable | pDevice->GetAntialiasing() );
+#else
+            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
+            // is not required to do AA. It would need to be adapted to use it correctly
+            // (especially gradient painting). This will need extra work.
+            if( SkiaHelper::isVCLSkiaEnabled()) // But Skia handles AA fine.
+                pDevice->SetAntialiasing( AntialiasingFlags::Enable | pDevice->GetAntialiasing() );
+            else
+                pDevice->SetAntialiasing(pDevice->GetAntialiasing() & ~AntialiasingFlags::Enable);
+#endif
+        }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

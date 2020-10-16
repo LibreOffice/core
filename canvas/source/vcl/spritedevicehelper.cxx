@@ -25,6 +25,7 @@
 #include <tools/stream.hxx>
 
 #include "spritedevicehelper.hxx"
+#include "impltools.hxx"
 
 using namespace ::com::sun::star;
 
@@ -44,16 +45,7 @@ namespace vclcanvas
         mpBackBuffer = std::make_shared<BackBuffer>( rOutDev );
         mpBackBuffer->setSize( rOutDev.GetOutputSizePixel() );
 
-        // #i95645#
-#if defined( MACOSX )
-        // use AA on VCLCanvas for Mac
-        mpBackBuffer->getOutDev().SetAntialiasing( AntialiasingFlags::Enable | mpBackBuffer->getOutDev().GetAntialiasing() );
-#else
-        // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-        // is not required to do AA. It would need to be adapted to use it correctly
-        // (especially gradient painting). This will need extra work.
-        mpBackBuffer->getOutDev().SetAntialiasing(mpBackBuffer->getOutDev().GetAntialiasing() & ~AntialiasingFlags::Enable);
-#endif
+        tools::SetDefaultDeviceAntiAliasing( &mpBackBuffer->getOutDev());
     }
 
     bool SpriteDeviceHelper::showBuffer( bool, bool )
