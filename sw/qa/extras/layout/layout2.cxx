@@ -878,6 +878,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3018, nY, 50);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
+{
+    SwDoc* pDoc = createDoc("piechart_leaderline.odt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Check the custom leader line on pie chart.
+    assertXPath(pXmlDoc, "//polyline", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 {
     SwDoc* pDoc = createDoc("tdf130380.docx");

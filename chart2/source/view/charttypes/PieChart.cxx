@@ -102,6 +102,29 @@ struct PieChart::ShapeParam
         mfDepth(0.0) {}
 };
 
+namespace
+{
+::basegfx::B2IRectangle lcl_getRect(const uno::Reference<drawing::XShape>& xShape)
+{
+    ::basegfx::B2IRectangle aRect;
+    if (xShape.is())
+        aRect = BaseGFXHelper::makeRectangle(xShape->getPosition(), xShape->getSize());
+    return aRect;
+}
+
+bool lcl_isInsidePage(const awt::Point& rPos, const awt::Size& rSize, const awt::Size& rPageSize)
+{
+    if (rPos.X < 0 || rPos.Y < 0)
+        return false;
+    if ((rPos.X + rSize.Width) > rPageSize.Width)
+        return false;
+    if ((rPos.Y + rSize.Height) > rPageSize.Height)
+        return false;
+    return true;
+}
+
+} //end anonymous namespace
+
 class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
@@ -349,17 +372,22 @@ void PieChart::createTextLabelShape(
             aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY() );
     double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
     double fPieRadius = sqrt( fSquaredPieRadius );
+    double fAngleDegree
+        = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
+    while (fAngleDegree > 360.0)
+        fAngleDegree -= 360.0;
+    while (fAngleDegree < 0.0)
+        fAngleDegree += 360.0;
+
+    awt::Point aOuterPosition = PlottingPositionHelper::transformSceneToScreenPosition(
+        m_pPosHelper->transformUnitCircleToScene(fAngleDegree, rParam.mfUnitCircleOuterRadius, 0),
+        m_xLogicTarget, m_pShapeFactory, m_nDimension);
+    aPieLabelInfo.aOuterPosition = basegfx::B2IVector(aOuterPosition.X, aOuterPosition.Y);
 
     // set the maximum text width to be used when text wrapping is enabled
     double fTextMaximumFrameWidth = 0.8 * fPieRadius;
     if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE && m_aAvailableOuterRect.getWidth() )
     {
-        double fAngleDegree = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
-        while (fAngleDegree > 360.0)
-            fAngleDegree -= 360.0;
-        while (fAngleDegree < 0.0)
-            fAngleDegree += 360.0;
-
         if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
             fTextMaximumFrameWidth = m_aAvailableOuterRect.getMaxX() - aPieLabelInfo.aFirstPosition.getX();
         else if (fAngleDegree < 112.5 || fAngleDegree >= 247.5)
@@ -396,13 +424,6 @@ void PieChart::createTextLabelShape(
         {
             if (m_aAvailableOuterRect.getWidth())
             {
-                double fAngleDegree = rParam.mfUnitCircleStartAngleDegree
-                                      + rParam.mfUnitCircleWidthAngleDegree / 2.0;
-                while (fAngleDegree > 360.0)
-                    fAngleDegree -= 360.0;
-                while (fAngleDegree < 0.0)
-                    fAngleDegree += 360.0;
-
                 if (fAngleDegree < 67.5 || fAngleDegree >= 292.5)
                     fTextMaximumFrameWidth
                         = 0.8
@@ -451,10 +472,50 @@ void PieChart::createTextLabelShape(
         }
     }
 
+    bool bShowLeaderLine = rSeries.getPropertiesOfSeries()
+                                        ->getPropertyValue("ShowCustomLeaderLines")
+                                        .get<sal_Bool>();
+    if (m_bPieLabelsAllowToMove && rSeries.isLabelCustomPos(nPointIndex) && bShowLeaderLine)
+    {
+        sal_Int32 nX1 = aPieLabelInfo.aOuterPosition.getX();
+        sal_Int32 nY1 = aPieLabelInfo.aOuterPosition.getY();
+        sal_Int32 nX2 = nX1;
+        sal_Int32 nY2 = nY1;
+        ::basegfx::B2IRectangle aRect(lcl_getRect(aPieLabelInfo.xLabelGroupShape));
+        if (nX1 < aRect.getMinX())
+            nX2 = aRect.getMinX();
+        else if (nX1 > aRect.getMaxX())
+            nX2 = aRect.getMaxX();
+
+        if (nY1 < aRect.getMinY())
+            nY2 = aRect.getMinY();
+        else if (nY1 > aRect.getMaxY())
+            nY2 = aRect.getMaxY();
+
+        drawing::PointSequenceSequence aPoints(1);
+        aPoints[0].realloc(2);
+        aPoints[0][0].X = nX1;
+        aPoints[0][0].Y = nY1;
+        aPoints[0][1].X = nX2;
+        aPoints[0][1].Y = nY2;
+
+        uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape, uno::UNO_QUERY);
+        VLineProperties aVLineProperties;
+        if (xProp.is())
+        {
+            sal_Int32 nColor = 0;
+            xProp->getPropertyValue("CharColor") >>= nColor;
+            if (nColor != -1) //automatic font color does not work for lines -> fallback to black
+                aVLineProperties.Color <<= nColor;
+        }
+        m_pShapeFactory->createLine2D(xTextTarget, aPoints, &aVLineProperties);
+    }
+
     aPieLabelInfo.fValue = nVal;
     aPieLabelInfo.bMovementAllowed = bMovementAllowed;
     aPieLabelInfo.bMoved = false;
     aPieLabelInfo.xTextTarget = xTextTarget;
+    aPieLabelInfo.bShowLeaderLine = bShowLeaderLine && !rSeries.isLabelCustomPos(nPointIndex);
 
     m_aLabelInfoList.push_back(aPieLabelInfo);
 }
@@ -799,30 +860,6 @@ void PieChart::createShapes()
         }//next category
     }//next x slot
 }
-
-namespace
-{
-
-::basegfx::B2IRectangle lcl_getRect( const uno::Reference< drawing::XShape >& xShape )
-{
-    ::basegfx::B2IRectangle aRect;
-    if( xShape.is() )
-        aRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),xShape->getSize() );
-    return aRect;
-}
-
-bool lcl_isInsidePage( const awt::Point& rPos, const awt::Size& rSize, const awt::Size& rPageSize )
-{
-    if( rPos.X < 0  || rPos.Y < 0 )
-        return false;
-    if( (rPos.X + rSize.Width) > rPageSize.Width  )
-        return false;
-    if( (rPos.Y + rSize.Height) > rPageSize.Height )
-        return false;
-    return true;
-}
-
-}//end anonymous namespace
 
 PieChart::PieLabelInfo::PieLabelInfo()
     : aFirstPosition(), aOrigin(), fValue(0.0)
@@ -1206,10 +1243,10 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     VLineProperties aVLineProperties;
     for (auto const& labelInfo : m_aLabelInfoList)
     {
-        if( labelInfo.bMoved )
+        if( labelInfo.bMoved && labelInfo.bShowLeaderLine )
         {
-            sal_Int32 nX1 = labelInfo.aFirstPosition.getX();
-            sal_Int32 nY1 = labelInfo.aFirstPosition.getY();
+            sal_Int32 nX1 = labelInfo.aOuterPosition.getX();
+            sal_Int32 nY1 = labelInfo.aOuterPosition.getY();
             sal_Int32 nX2 = nX1;
             sal_Int32 nY2 = nY1;
             ::basegfx::B2IRectangle aRect( lcl_getRect( labelInfo.xLabelGroupShape ) );
