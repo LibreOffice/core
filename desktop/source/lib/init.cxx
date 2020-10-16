@@ -3724,6 +3724,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
     {
         static const OUString sClickAction("CLICK");
         static const OUString sSelectAction("SELECT");
+        static const OUString sSetAction("SET");
         static const OUString sClearAction("CLEAR");
         static const OUString sTypeAction("TYPE");
         static const OUString sUpAction("UP");
@@ -3749,6 +3750,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
 
             if (!bIsWeldedDialog)
             {
+                OUString sControlType = aMap["type"];
                 OUString sAction((aMap.find("cmd") != aMap.end())? aMap["cmd"]: "");
                 WindowUIObject aUIObject(pWindow);
                 std::unique_ptr<UIObject> pUIWindow(aUIObject.get_visible_child(aMap["id"]));
@@ -3774,8 +3776,14 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned long
                     {
                         aMap["TEXT"] = aMap["data"];
 
-                        pUIWindow->execute(sClearAction, aMap);
+                        pUIWindow->execute(sClearAction, aMap); // FIXME - change the "CLEAR"&"TYPE" to "SET" and test thoroughly; the "TYPE" really types a character by character
                         pUIWindow->execute(sTypeAction, aMap);
+                    }
+                    else if (sControlType == "edit" && sAction == "change") // FIXME - shouldn't "edit" issue "set" instead of "change"?
+                    {
+                        aMap["TEXT"] = aMap["data"];
+
+                        pUIWindow->execute(sSetAction, aMap);
                     }
                     else if (sAction == "value")
                     {

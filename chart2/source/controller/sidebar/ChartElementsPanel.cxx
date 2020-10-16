@@ -427,19 +427,23 @@ void ChartElementsPanel::updateData()
 
     bool hasTitle = isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE);
     mpCBTitle->Check(hasTitle);
-    if (!mpEditTitle->HasFocus())
-    {
-        mpEditTitle->SetText(TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::MAIN_TITLE, mxModel)));
+
+    OUString title = mpEditTitle->GetText();
+    OUString newTitle = TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::MAIN_TITLE, mxModel));
+    if (title != newTitle)
+        mpEditTitle->SetText(newTitle);
+    if (mpEditTitle->IsEnabled() != hasTitle)
         mpEditTitle->Enable(hasTitle);
-    }
 
     bool hasSubtitle = isTitleVisisble(mxModel, TitleHelper::SUB_TITLE);
     mpCBSubtitle->Check(hasSubtitle);
-    if (!mpEditSubtitle->HasFocus())
-    {
-        mpEditSubtitle->SetText(TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::SUB_TITLE, mxModel)));
+
+    OUString subtitle = mpEditSubtitle->GetText();
+    OUString newSubtitle = TitleHelper::getCompleteString(TitleHelper::getTitle(TitleHelper::SUB_TITLE, mxModel));
+    if (subtitle != newSubtitle)
+        mpEditSubtitle->SetText(newSubtitle);
+    if (mpEditSubtitle->IsEnabled() != hasSubtitle)
         mpEditSubtitle->Enable(hasSubtitle);
-    }
 
     mpCBXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::X_AXIS_TITLE));
     mpCBYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Y_AXIS_TITLE));
