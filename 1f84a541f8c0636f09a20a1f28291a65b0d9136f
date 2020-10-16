@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f7149_9d152464",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-16T13:08:22Z",
+      "side": 1,
+      "message": "Why does this fit better in SectionInfo than in ParaInfo?\n\nBecause a new section doesn\u0027t yet define a new paragraph. So a flag outside of paragraphs is needed anyway to identify the first one. Perhaps ParaInfo ALSO needs a bIsFirstPara to separate out headers/shapes/frames etc, which could reset the SectionInfo flag - making it an internal use flag instead of a public one.\n\nBut there is no example of needing such a thing, so I\u0027m not going to propose to jump immediately to such a complication.",
+      "range": {
+        "startLine": 7,
+        "startChar": 13,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "1f84a541f8c0636f09a20a1f28291a65b0d9136f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
