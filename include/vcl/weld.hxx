@@ -1280,6 +1280,9 @@ public:
     virtual void set_label_line_wrap(bool wrap) = 0;
     void clicked() { signal_clicked(); }
 
+    // font size is in points, not pixels, e.g. see Window::[G]etPointFont
+    virtual void set_font(const vcl::Font& rFont) = 0;
+
     void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 

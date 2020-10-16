@@ -6668,6 +6668,88 @@ public:
     }
 };
 
+PangoAttrList* create_attr_list(const vcl::Font& rFont)
+{
+    PangoAttrList* pAttrList = pango_attr_list_new();
+    pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
+    pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
+    switch (rFont.GetItalic())
+    {
+        case ITALIC_NONE:
+            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
+            break;
+        case ITALIC_NORMAL:
+            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
+            break;
+        case ITALIC_OBLIQUE:
+            pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
+            break;
+        default:
+            break;
+    }
+    switch (rFont.GetWeight())
+    {
+        case WEIGHT_ULTRALIGHT:
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
+            break;
+        case WEIGHT_LIGHT:
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
+            break;
+        case WEIGHT_NORMAL:
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
+            break;
+        case WEIGHT_BOLD:
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
+            break;
+        case WEIGHT_ULTRABOLD:
+            pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
+            break;
+        default:
+            break;
+    }
+    switch (rFont.GetWidthType())
+    {
+        case WIDTH_ULTRA_CONDENSED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
+            break;
+        case WIDTH_EXTRA_CONDENSED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
+            break;
+        case WIDTH_CONDENSED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
+            break;
+        case WIDTH_SEMI_CONDENSED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
+            break;
+        case WIDTH_NORMAL:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
+            break;
+        case WIDTH_SEMI_EXPANDED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
+            break;
+        case WIDTH_EXPANDED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
+            break;
+        case WIDTH_EXTRA_EXPANDED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
+            break;
+        case WIDTH_ULTRA_EXPANDED:
+            pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
+            break;
+        default:
+            break;
+    }
+    return pAttrList;
+}
+
+void set_font(GtkLabel* pLabel, const vcl::Font& rFont)
+{
+    // TODO?, clear old props like set_text_foreground_color does
+    PangoAttrList* pAttrList = create_attr_list(rFont);
+    gtk_label_set_attributes(pLabel, pAttrList);
+    pango_attr_list_unref(pAttrList);
+}
+
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
 private:
@@ -6686,6 +6768,44 @@ private:
         // The GtkButton is sufficient to get mouse events without an intermediate GtkEventBox
         if (!m_pMouseEventBox)
             m_pMouseEventBox = m_pWidget;
+    }
+
+    static GtkWidget* find_label_widget(GtkContainer* pContainer)
+    {
+        GList* pChildren = gtk_container_get_children(pContainer);
+
+        GtkWidget* pChild = nullptr;
+        for (GList* pCandidate = pChildren; pCandidate; pCandidate = pCandidate->next)
+        {
+            if (GTK_IS_LABEL(pCandidate->data))
+            {
+                pChild = GTK_WIDGET(pCandidate->data);
+                break;
+            }
+            else if (GTK_IS_CONTAINER(pCandidate->data))
+            {
+                pChild = find_label_widget(GTK_CONTAINER(pCandidate->data));
+                if (pChild)
+                    break;
+            }
+        }
+        g_list_free(pChildren);
+
+        return pChild;
+    }
+
+    GtkWidget* get_label_widget()
+    {
+        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
+        if (GTK_IS_ALIGNMENT(pChild))
+            pChild = gtk_bin_get_child(GTK_BIN(pChild));
+
+        if (GTK_IS_CONTAINER(pChild))
+            pChild = find_label_widget(GTK_CONTAINER(pChild));
+        else if (!GTK_IS_LABEL(pChild))
+            pChild = nullptr;
+
+        return pChild;
     }
 
 public:
@@ -6743,8 +6863,14 @@ public:
 
     virtual void set_label_line_wrap(bool wrap) override
     {
-        GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
+        GtkWidget* pChild = get_label_widget();
         gtk_label_set_line_wrap(GTK_LABEL(pChild), wrap);
+    }
+
+    virtual void set_font(const vcl::Font& rFont) override
+    {
+        GtkWidget* pChild = get_label_widget();
+        ::set_font(GTK_LABEL(pChild), rFont);
     }
 
     // allow us to block buttons with click handlers making dialogs return a response
@@ -8568,80 +8694,6 @@ public:
         g_signal_handler_disconnect(m_pCalendar, m_nDaySelectedSignalId);
     }
 };
-
-    PangoAttrList* create_attr_list(const vcl::Font& rFont)
-    {
-        PangoAttrList* pAttrList = pango_attr_list_new();
-        pango_attr_list_insert(pAttrList, pango_attr_family_new(OUStringToOString(rFont.GetFamilyName(), RTL_TEXTENCODING_UTF8).getStr()));
-        pango_attr_list_insert(pAttrList, pango_attr_size_new(rFont.GetFontSize().Height() * PANGO_SCALE));
-        switch (rFont.GetItalic())
-        {
-            case ITALIC_NONE:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_NORMAL));
-                break;
-            case ITALIC_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_ITALIC));
-                break;
-            case ITALIC_OBLIQUE:
-                pango_attr_list_insert(pAttrList, pango_attr_style_new(PANGO_STYLE_OBLIQUE));
-                break;
-            default:
-                break;
-        }
-        switch (rFont.GetWeight())
-        {
-            case WEIGHT_ULTRALIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRALIGHT));
-                break;
-            case WEIGHT_LIGHT:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_LIGHT));
-                break;
-            case WEIGHT_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_NORMAL));
-                break;
-            case WEIGHT_BOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
-                break;
-            case WEIGHT_ULTRABOLD:
-                pango_attr_list_insert(pAttrList, pango_attr_weight_new(PANGO_WEIGHT_ULTRABOLD));
-                break;
-            default:
-                break;
-        }
-        switch (rFont.GetWidthType())
-        {
-            case WIDTH_ULTRA_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_CONDENSED));
-                break;
-            case WIDTH_EXTRA_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_CONDENSED));
-                break;
-            case WIDTH_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_CONDENSED));
-                break;
-            case WIDTH_SEMI_CONDENSED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_CONDENSED));
-                break;
-            case WIDTH_NORMAL:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_NORMAL));
-                break;
-            case WIDTH_SEMI_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_SEMI_EXPANDED));
-                break;
-            case WIDTH_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXPANDED));
-                break;
-            case WIDTH_EXTRA_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_EXTRA_EXPANDED));
-                break;
-            case WIDTH_ULTRA_EXPANDED:
-                pango_attr_list_insert(pAttrList, pango_attr_stretch_new(PANGO_STRETCH_ULTRA_EXPANDED));
-                break;
-            default:
-                break;
-        }
-        return pAttrList;
-    }
 }
 
 namespace
@@ -12696,10 +12748,7 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
-        // TODO, clear old props like set_text_foreground_color does
-        PangoAttrList* pAttrList = create_attr_list(rFont);
-        gtk_label_set_attributes(m_pLabel, pAttrList);
-        pango_attr_list_unref(pAttrList);
+        ::set_font(m_pLabel, rFont);
     }
 
     virtual void set_font_color(const Color& rColor) override
