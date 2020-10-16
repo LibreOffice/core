@@ -3641,6 +3641,7 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
     {
         static const OUString sClickAction("CLICK");
         static const OUString sSelectAction("SELECT");
+        static const OUString sSetAction("SET");
         static const OUString sClearAction("CLEAR");
         static const OUString sTypeAction("TYPE");
         static const OUString sUpAction("UP");
@@ -3656,12 +3657,11 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
 
             bIsWeldedDialog = pWidget != nullptr;
             bool bContinueWithLOKWindow = false;
+            OUString sControlType = aMap["type"];
             OUString sAction = aMap["cmd"];
 
             if (bIsWeldedDialog)
             {
-                OUString sControlType = aMap["type"];
-
                 if (sControlType == "tabcontrol")
                 {
                     auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
@@ -3765,8 +3765,14 @@ static void doc_sendDialogEvent(LibreOfficeKitDocument* /*pThis*/, unsigned nWin
                     {
                         aMap["TEXT"] = aMap["data"];
 
-                        pUIWindow->execute(sClearAction, aMap);
+                        pUIWindow->execute(sClearAction, aMap); // FIXME - change the "CLEAR"&"TYPE" to "SET" and test thoroughly; the "TYPE" really types a character by character
                         pUIWindow->execute(sTypeAction, aMap);
+                    }
+                    else if (sControlType == "edit" && sAction == "change") // FIXME - shouldn't "edit" issue "set" instead of "change"?
+                    {
+                        aMap["TEXT"] = aMap["data"];
+
+                        pUIWindow->execute(sSetAction, aMap);
                     }
                     else if (sAction == "value")
                     {
