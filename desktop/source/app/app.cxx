@@ -2435,6 +2435,7 @@ void Desktop::CloseSplashScreen()
 {
     if(m_rSplashScreen.is())
     {
+        SolarMutexGuard ensureSolarMutex;
         m_rSplashScreen->end();
         m_rSplashScreen = nullptr;
     }
