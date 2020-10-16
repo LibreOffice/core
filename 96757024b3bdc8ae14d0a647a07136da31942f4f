@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d8c79237_93ef7954",
+        "filename": "sd/source/filter/ppt/pptinanimations.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3017,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-16T18:50:33Z",
+      "side": 1,
+      "message": "is that a typo in this\n\n  #ifdef DBG_ANIM_LOG\n\ncode?",
+      "range": {
+        "startLine": 3017,
+        "startChar": 20,
+        "endLine": 3017,
+        "endChar": 28
+      },
+      "revId": "96757024b3bdc8ae14d0a647a07136da31942f4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "20fbf8ee_01b82268",
         "filename": "sd/source/filter/ppt/pptinanimations.cxx",
         "patchSetId": 1
