@@ -219,6 +219,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_pdfexport \
+	CppunitTest_vcl_filter_ipdf \
 ))
 endif
 
