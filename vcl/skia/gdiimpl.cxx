@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <rtl/math.hxx>
 
 namespace
 {
@@ -1676,11 +1677,18 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
                       * SkMatrix::Scale(1.0 * rPosAry.mnDestWidth / rPosAry.mnSrcWidth,
                                         1.0 * rPosAry.mnDestHeight / rPosAry.mnSrcHeight)
                       * SkMatrix::Translate(-rPosAry.mnSrcX, -rPosAry.mnSrcY);
-    assert(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY)
-           == SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY));
-    assert(matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight)
-           == SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
-                            rPosAry.mnDestY + rPosAry.mnDestHeight));
+#ifndef NDEBUG
+    // Handle floating point imprecisions, round p1 to 2 decimal places.
+    auto compareRounded = [](const SkPoint& p1, const SkPoint& p2) {
+        return rtl::math::round(p1.x(), 2) == p2.x() && rtl::math::round(p1.y(), 2) == p2.y();
+    };
+#endif
+    assert(compareRounded(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY),
+                          SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY)));
+    assert(compareRounded(
+        matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight),
+        SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
+                      rPosAry.mnDestY + rPosAry.mnDestHeight)));
     canvas->concat(matrix);
     SkRect sourceRect
         = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
