@@ -31,6 +31,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/filter/pdfdocument.hxx>
 
 using namespace ::com::sun::star;
 
@@ -145,6 +146,26 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     CPPUNIT_ASSERT_EQUAL(1, FPDFPage_GetAnnotCount(pPdfPage.get()));
     ScopedFPDFAnnotation pAnnot(FPDFPage_GetAnnot(pPdfPage.get(), 0));
     CPPUNIT_ASSERT_EQUAL(4, FPDFAnnot_GetObjectCount(pAnnot.get()));
+}
+
+CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testDictArrayDict)
+{
+    // Load a file that has markup like this:
+    // 3 0 obj <<
+    //   /Key[<</InnerKey 42>>]
+    // >>
+    OUString aSourceURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "dict-array-dict.pdf";
+    SvFileStream aFile(aSourceURL, StreamMode::READ);
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(aFile));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT(!aPages.empty());
+    vcl::filter::PDFObjectElement* pPage = aPages[0];
+    auto pKey = dynamic_cast<vcl::filter::PDFArrayElement*>(pPage->Lookup("Key"));
+
+    // Without the accompanying fix in place, this test would have failed, because the value of Key
+    // was a dictionary element, not an array element.
+    CPPUNIT_ASSERT(pKey);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
