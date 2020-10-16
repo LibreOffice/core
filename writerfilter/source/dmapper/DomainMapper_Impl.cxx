@@ -283,6 +283,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsParaMarkerChange( false ),
         m_bParaChanged( false ),
         m_bIsPreviousParagraphFramed( false ),
+        m_bIsLastParaInSection( false ),
         m_bIsInComments( false ),
         m_bParaSectpr( false ),
         m_bUsingEnhancedFields( false ),
@@ -589,13 +590,9 @@ bool DomainMapper_Impl::GetIsLastSectionGroup() const
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {
-    GetSectionInfo().bLastPara= bIsLast;
+    m_bIsLastParaInSection = bIsLast;
 }
 
-bool DomainMapper_Impl::GetIsLastParagraphInSection() const
-{
-    return GetSectionInfo().bLastPara;
-}
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {

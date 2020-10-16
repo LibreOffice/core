@@ -434,7 +434,6 @@ struct SectionInfo
     bool bFirstParaAfterRedline; // this is the first real, non-deleted paragraph in this section
     bool bDummyParaAddedForTable;
     bool bNextCellParaWillBeFirst; // current paragraph in a table is first paragraph of a cell
-    bool bLastPara; // this is the last paragraph in the section (only valid for text sections)
     bool bLastSection; // this is the last text section in the document (only valid for CloseSectionGroup)
 
     SectionInfo()
@@ -442,7 +441,6 @@ struct SectionInfo
         , bFirstParaAfterRedline(true)
         , bDummyParaAddedForTable(false)
         , bNextCellParaWillBeFirst(true)
-        , bLastPara(false)
         , bLastSection(false)
     {
     }
@@ -571,6 +569,7 @@ private:
     bool                            m_bParaChanged;
     bool                            m_bIsFirstParaInShape = false;
     bool                            m_bIsPreviousParagraphFramed;
+    bool                            m_bIsLastParaInSection;
     bool                            m_bIsInComments;
     /// If the current paragraph contains section property definitions.
     bool                            m_bParaSectpr;
@@ -654,7 +653,7 @@ public:
     void RemoveLastParagraph( );
     bool IsFirstParagraphInCell() const;
     void SetIsLastParagraphInSection( bool bIsLast );
-    bool GetIsLastParagraphInSection() const;
+    bool GetIsLastParagraphInSection() const { return m_bIsLastParaInSection;}
     void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
     void SetRubyText( OUString const &sText, OUString const &sStyle) {
         m_aRubyInfo.sRubyText = sText;
