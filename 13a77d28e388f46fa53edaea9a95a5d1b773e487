@@ -22,6 +22,30 @@
       "revId": "13a77d28e388f46fa53edaea9a95a5d1b773e487",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7436459f_6965186f",
+        "filename": "sd/source/filter/ppt/pptinanimations.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-16T06:57:27Z",
+      "side": 1,
+      "message": "yeah, that is very nasty, should definitely not be static",
+      "parentUuid": "6bf9285c_ca51f922",
+      "range": {
+        "startLine": 3011,
+        "startChar": 20,
+        "endLine": 3011,
+        "endChar": 44
+      },
+      "revId": "13a77d28e388f46fa53edaea9a95a5d1b773e487",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
