@@ -28,7 +28,7 @@
 namespace svt
 {
     //= OStringTransferable
-    class UNLESS_MERGELIBS(SVT_DLLPUBLIC) OStringTransferable final : public TransferDataContainer
+    class SVT_DLLPUBLIC OStringTransferable final : public TransferDataContainer
     {
     public:
         OStringTransferable(const OUString& rContent);
