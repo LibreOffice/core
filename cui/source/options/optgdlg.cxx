@@ -681,27 +681,11 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
 {
     if (Application::GetToolkitName() == "gtk3")
-    {
-        m_xUseSkia->hide();
-        m_xForceSkiaRaster->hide();
-        m_xSkiaStatusEnabled->hide();
-        m_xSkiaStatusDisabled->hide();
         m_xMenuIconBox->hide();
-    }
-
-#if !HAVE_FEATURE_SKIA || !defined(_WIN32)
-    // Duplicated also in UpdateSkiaStatus().
-    // For now Skia is used mainly on Windows, hide the controls everywhere else.
-    // It can also be used on Linux, but only with the rarely used 'gen' backend.
-    m_xUseSkia->hide();
-    m_xForceSkiaRaster->hide();
-    m_xSkiaStatusEnabled->hide();
-    m_xSkiaStatusDisabled->hide();
-#endif
 
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
-    m_xForceSkiaRaster->connect_toggled(LINK(this, OfaViewTabPage, OnForceSkiaRasterToggled));
+    m_xUseSkia->connect_toggled(LINK(this, OfaViewTabPage, OnUseSkiaToggled));
 
     // Set known icon themes
     OUString sAutoStr( m_xIconStyleLB->get_text( 0 ) );
@@ -726,12 +710,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
         m_xIconStyleLB->append(installIconTheme.GetThemeId(), installIconTheme.GetDisplayName());
 
     m_xIconStyleLB->set_active(0);
-
-    // FIXME: should really add code to show a 'lock' icon here.
-    if (officecfg::Office::Common::VCL::UseSkia::isReadOnly())
-        m_xUseSkia->set_sensitive(false);
-    if (officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly())
-        m_xForceSkiaRaster->set_sensitive(false);
 
     m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
@@ -759,13 +737,39 @@ IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::ToggleButton&, voi
     m_xAAPointLimit->set_sensitive(bAAEnabled);
 }
 
-IMPL_LINK_NOARG(OfaViewTabPage, OnForceSkiaRasterToggled, weld::ToggleButton&, void)
+IMPL_LINK_NOARG(OfaViewTabPage, OnUseSkiaToggled, weld::ToggleButton&, void)
 {
-    if (m_xForceSkiaRaster->get_active())
+    UpdateSkiaStatus();
+}
+
+void OfaViewTabPage::UpdateSkiaStatus()
+{
+    bool skiaHidden = true;
+#if HAVE_FEATURE_SKIA
+    // For now Skia is used mainly on Windows, enable the controls there.
+    if (Application::GetToolkitName() == "win")
+        skiaHidden = false;
+    // It can also be used on Linux, but only with the rarely used 'gen' backend.
+    if (Application::GetToolkitName() == "x11")
+        skiaHidden = false;
+#endif
+    if (skiaHidden)
     {
-        // Forcing Skia raster implies that Skia is on.
-        m_xUseSkia->set_active(true);
+        m_xUseSkia->hide();
+        m_xForceSkiaRaster->hide();
+        m_xSkiaStatusEnabled->hide();
+        m_xSkiaStatusDisabled->hide();
+        return;
     }
+
+    // Easier than a custom translation string.
+    bool bEnabled = SkiaHelper::isVCLSkiaEnabled();
+    m_xSkiaStatusEnabled->set_visible(bEnabled);
+    m_xSkiaStatusDisabled->set_visible(!bEnabled);
+
+    // FIXME: should really add code to show a 'lock' icon here.
+    m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
+    m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
 }
 
 std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet )
@@ -1081,18 +1085,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xForceSkiaRaster->save_state();
 
     OnAntialiasingToggled(*m_xFontAntiAliasing);
-}
-
-void OfaViewTabPage::UpdateSkiaStatus()
-{
-    if (Application::GetToolkitName() == "gtk3")
-        return;
-#if HAVE_FEATURE_SKIA && defined(_WIN32)
-    // Easier than a custom translation string.
-    bool bEnabled = SkiaHelper::isVCLSkiaEnabled();
-    m_xSkiaStatusEnabled->set_visible(bEnabled);
-    m_xSkiaStatusDisabled->set_visible(!bEnabled);
-#endif
 }
 
 struct LanguageConfig_Impl
