@@ -254,11 +254,6 @@ $(eval $(call gb_Module_add_screenshot_targets,vcl,\
 ifneq ($(DISPLAY),)
 $(eval $(call gb_Module_add_slowcheck_targets,vcl,\
     CppunitTest_vcl_gen \
-))
-endif
-
-ifneq (,$(filter PDFIUM,$(BUILD_TYPE)))
-$(eval $(call gb_Module_add_slowcheck_targets,vcl,\
     CppunitTest_vcl_filter_ipdf \
 ))
 endif
