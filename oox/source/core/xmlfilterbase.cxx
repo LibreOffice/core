@@ -826,11 +826,13 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                     util::DateTime aDateTime;
                     if ( rProp.Value >>= num )
                     {
+                        // i4 - 4-byte signed integer
+                        // r8 - 8-byte real number
                         writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), num );
                     }
                     else if ( rProp.Value >>= aDate )
                     {
-                        aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Year, aDate.Month, aDate.Day, true );
+                        aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Day, aDate.Month, aDate.Year, true );
                         writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime);
                     }
                     else if ( rProp.Value >>= aDuration )
