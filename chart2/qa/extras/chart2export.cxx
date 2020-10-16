@@ -180,6 +180,7 @@ public:
     void testTdf134977();
     void testTdf123647();
     void testTdf136267();
+    void testDataLabelPlacementPieChart();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -322,6 +323,7 @@ public:
     CPPUNIT_TEST(testTdf134977);
     CPPUNIT_TEST(testTdf123647);
     CPPUNIT_TEST(testTdf136267);
+    CPPUNIT_TEST(testDataLabelPlacementPieChart);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1432,7 +1434,7 @@ void Chart2ExportTest::testPieChartDataLabels()
     load("/chart2/qa/extras/data/docx/", "PieChartDataLabels.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "bestFit");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", "outEnd");
 }
 
 void Chart2ExportTest::testSeriesIdxOrder()
@@ -2947,6 +2949,24 @@ void Chart2ExportTest::testTdf136267()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPathContent(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:cat/c:strRef/c:strCache/c:pt/c:v", "John");
+}
+
+void Chart2ExportTest::testDataLabelPlacementPieChart()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf134978.xlsx");
+    reload("calc8");
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, mxComponent),
+                                                     UNO_QUERY_THROW);
+    // test the placement of the manually positioned label
+    Reference<beans::XPropertySet>
+            xDataPointPropSet(xChartDoc->getDiagram()->getDataPointProperties(2, 0),
+                              uno::UNO_SET_THROW);
+    uno::Any aAny = xDataPointPropSet->getPropertyValue("LabelPlacement");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    sal_Int32 nLabelPlacement = 0;
+    CPPUNIT_ASSERT(aAny >>= nLabelPlacement);
+    CPPUNIT_ASSERT_EQUAL(chart::DataLabelPlacement::OUTSIDE, nLabelPlacement);
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
