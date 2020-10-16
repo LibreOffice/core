@@ -73,6 +73,7 @@ DrawModelWrapper::DrawModelWrapper()
     }
     pPool->SetSecondaryPool(m_pChartItemPool);
     pMasterPool->FreezeIdRanges();
+    SetTextDefaults();
 
     //this factory needs to be created before first use of 3D scenes once upon an office runtime
     //@todo in future this should be done by drawing engine itself on demand
