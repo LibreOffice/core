@@ -85,6 +85,39 @@ DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testCustomProperties, "custom-properties.docx")
+{
+    // tdf#133377 FILESAVE XLSX: Make sure the custom/core/application file properties
+    // are stored correctly after roundtrip to .docx
+
+    // Core file properties - common for all packages (eg. creation date, modify date)
+    xmlDocUniquePtr pXmlDoc = parseExport("docProps/core.xml");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:creator", "Bartosz Kosiorek");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:description", "cccckomentarzglowny");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:lastPrinted", "2020-10-15T07:42:00Z");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created", "2020-10-14T16:23:00Z");
+
+    // Extended file properties - specific to Office package, eg. docx - Pages, pptx - Slides
+    pXmlDoc = parseExport("docProps/app.xml");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Paragraphs", "1");
+    //assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Lines", "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Pages", "1");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Words", "3");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Characters", "21");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:CharactersWithSpaces", "23");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "hhhhkompany");
+
+    // Custom file properties - defined by user
+    pXmlDoc = parseExport("docProps/custom.xml");
+
+    //assertXPath(pXmlDoc, "/custom-properties:Properties/custom-properties:property", 1);
+    //assertXPath(pXmlDoc, "/custom-properties:Properties/custom-properties:property[1]", "name"
+    //                   "testDateProperty");
+    //assertXPathContent(pXmlDoc, "/custom-properties:Properties/custom-properties:property[1]/vt:lpwstr",
+      //                 "1982-04-19T10:00:00Z");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
