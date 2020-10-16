@@ -1325,7 +1325,7 @@ void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     Color aFillColor(pDev->GetFillColor());
     Color aLineColor(pDev->GetLineColor());
     pDev->SetFillColor(rStyleSettings.GetFieldColor());
-    pDev->SetLineColor(SwViewOption::GetFontColor());
+    pDev->SetLineColor(rStyleSettings.GetFieldTextColor());
 
     long nStep = std::abs(std::abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;
