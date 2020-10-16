@@ -63,6 +63,7 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/TimeIncrement.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -3405,6 +3406,17 @@ void SchXMLExportHelper_Impl::exportDataPoints(
                 {
                     lcl_createDataLabelProperties(aDataLabelPropertyStates, xPropSet,
                                                   mxExpPropMapper);
+                }
+
+                if (nCurrentODFVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+                {
+                    sal_Int32 nPlacement = 0;
+                    xPropSet->getPropertyValue("LabelPlacement") >>= nPlacement;
+                    if (nPlacement == chart::DataLabelPlacement::CUSTOM)
+                    {
+                        xPropSet->setPropertyValue("LabelPlacement",
+                                                  uno::Any(chart::DataLabelPlacement::OUTSIDE));
+                    }
                 }
 
                 aPropertyStates = mxExpPropMapper->Filter(xPropSet);
