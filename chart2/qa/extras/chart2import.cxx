@@ -31,6 +31,8 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
@@ -164,6 +166,7 @@ public:
     void testTdf134225();
     void testTdf91250();
     void testTdf134111();
+    void testTdf137505();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -276,6 +279,7 @@ public:
     CPPUNIT_TEST(testTdf134225);
     CPPUNIT_TEST(testTdf91250);
     CPPUNIT_TEST(testTdf134111);
+    CPPUNIT_TEST(testTdf137505);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2613,6 +2617,26 @@ void Chart2ImportTest::testTdf134111()
     xAxisProp->getPropertyValue("TextBreak") >>= bTextBreak;
     // Expected value of 'TextBreak' is true
     CPPUNIT_ASSERT(bTextBreak);
+}
+
+void Chart2ImportTest::testTdf137505()
+{
+    load("/chart2/qa/extras/data/xlsx/", "tdf137505.xlsx");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+        UNO_QUERY_THROW);
+
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShape> xCustomShape(xDrawPage->getByIndex(1), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCustomShape.is());
+
+    float nFontSize;
+    Reference< text::XText > xRange(xCustomShape, uno::UNO_QUERY_THROW);
+    Reference < text::XTextCursor > xAt = xRange->createTextCursor();
+    Reference< beans::XPropertySet > xProps(xAt, UNO_QUERY);
+    // check the text size of custom shape, inside the chart.
+    CPPUNIT_ASSERT(xProps->getPropertyValue("CharHeight") >>= nFontSize);
+    CPPUNIT_ASSERT_EQUAL(float(12), nFontSize);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
