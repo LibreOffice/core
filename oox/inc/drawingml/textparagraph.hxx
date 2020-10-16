@@ -69,8 +69,7 @@ public:
                                     const css::uno::Reference < css::text::XTextCursor > &xAt,
                                     const TextCharacterProperties& rTextStyleProperties,
                                     const TextListStyle& rTextListStyle,
-                                    bool bFirst,
-                                    float nDefaultCharHeight) const;
+                                    bool bFirst) const;
 
     bool HasMathXml() const
     {

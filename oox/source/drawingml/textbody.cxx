@@ -64,12 +64,10 @@ void TextBody::insertAt(
     aCombinedTextStyle.apply( *pMasterTextListStylePtr );
     aCombinedTextStyle.apply( maTextListStyle );
 
-    Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
-    float nCharHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
     size_t nIndex = 0;
     for (auto const& paragraph : maParagraphs)
     {
-        paragraph->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, (nIndex == 0), nCharHeight );
+        paragraph->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, (nIndex == 0) );
         ++nIndex;
     }
 }
