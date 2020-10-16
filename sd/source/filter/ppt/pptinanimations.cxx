@@ -3007,15 +3007,14 @@ void AnimationImporter::dump( const PropertySet& rSet )
                 case DFF_ANIM_PRESS_CLASS_OLE_ACTION:       pMode = "oleaction"; break;
                 case DFF_ANIM_PRESS_CLASS_MEDIACALL:        pMode = "mediacall"; break;
                 default:
-                {
-                    static char buffer[128];
-                    sprintf( buffer, "%" SAL_PRIdINT32, nPresetClass );
-                    pMode = buffer;
-                }
+                    pMode = nullptr;
                 break;
                 }
 
-                fprintf(mpFile, " class=\"%s\"", pMode);
+                if (pMode)
+                    fprintf(mpFile, " class=\"%s\"", pMode);
+                else
+                    fprintpf(mpFile, " class =\"%" SAL_PRIdINT32 "\"", nPresetClass);
                 bKnown = true;
             }
         }
