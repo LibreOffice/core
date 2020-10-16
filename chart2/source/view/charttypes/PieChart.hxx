@@ -123,10 +123,12 @@ private: //member
         css::uno::Reference< css::drawing::XShape > xTextShape;
         css::uno::Reference< css::drawing::XShape > xLabelGroupShape;
         ::basegfx::B2IVector aFirstPosition;
+        ::basegfx::B2IVector aOuterPosition;
         ::basegfx::B2IVector aOrigin;
         double fValue;
         bool bMovementAllowed;
         bool bMoved;
+        bool bShowLeaderLine;
         css::uno::Reference< css::drawing::XShapes > xTextTarget;
         PieLabelInfo* pPrevious;
         PieLabelInfo* pNext;
