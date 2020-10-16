@@ -2288,6 +2288,29 @@ void SvTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvTreeListBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    // tdf#116675 clicking on an entry should toggle its checkbox
+    if (rMEvt.IsLeft() && (nTreeFlags & SvTreeFlags::CHKBTN))
+    {
+        const Point aPnt = rMEvt.GetPosPixel();
+        SvTreeListEntry* pEntry = GetEntry(aPnt);
+        if (pEntry && pEntry->m_Items.size() > 0)
+        {
+            SvLBoxItem* pItem = GetItem(pEntry, aPnt.X());
+            // if the checkbox button was clicked, that will be toggled later, do not toggle here
+            // anyway users probably don't want to toggle the checkbox by clickink on another button
+            if (!pItem || pItem->GetType() != SvLBoxItemType::Button)
+            {
+                SvLBoxButton* pItemCheckBox
+                    = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
+                if (pItemCheckBox)
+                {
+                    pItemCheckBox->ClickHdl(pEntry);
+                    InvalidateEntry(pEntry);
+                }
+            }
+        }
+    }
+
     pImpl->MouseButtonUp( rMEvt );
 }
 
