@@ -251,6 +251,7 @@ public:
     void testShapeAnchorUndo();
 #if HAVE_FEATURE_UI
     void testTdf134250();
+    void testTdf127635();
     void testDde();
 #endif
     void testDocModState();
@@ -456,6 +457,7 @@ public:
     CPPUNIT_TEST(testShapeAnchorUndo);
 #if HAVE_FEATURE_UI
     CPPUNIT_TEST(testTdf134250);
+    CPPUNIT_TEST(testTdf127635);
     CPPUNIT_TEST(testDde);
 #endif
     CPPUNIT_TEST(testDocModState);
@@ -4166,6 +4168,49 @@ void SwUiWriterTest::testDde()
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xField, "TextPortionType"));
     CPPUNIT_ASSERT(xField->getString().endsWith("asdf"));
 }
+
+void SwUiWriterTest::testTdf127635()
+{
+    SwDoc* pDoc = createDoc();
+
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'b', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+
+    //Select 'a'
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+
+    // enable redlining
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, ' ', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'd', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: C d b
+    // - Actual  : Cd  b
+    CPPUNIT_ASSERT_EQUAL(OUString("C d b"), getParagraph(1)->getString());
+}
+
 #endif
 //IdleTask class to add a low priority Idle task
 class IdleTask
