@@ -595,23 +595,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="forceskia">
-                        <property name="label" translatable="yes" context="optviewpage|forceskia">Ignore Skia denylist</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes" context="optviewpage|forceskia|tooltip_text">Requires restart. Enabling this may expose driver bugs</property>
-                        <property name="margin-left">12</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkCheckButton" id="forceskiaraster">
                         <property name="label" translatable="yes" context="optviewpage|forceskiaraster">Force Skia software rendering</property>
                         <property name="visible">True</property>
@@ -625,7 +608,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -637,7 +620,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">5</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
@@ -649,7 +632,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">6</property>
+                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                     <child>
