@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79347f50_037c984a",
+        "filename": "vcl/Executable_visualbackendtest.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-16T16:41:59Z",
+      "side": 1,
+      "message": "I feel that something like\n\n    ifneq (,$(filter LINUX %BSD, $(OS)))\n\nwould look maybe better?",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 41
+      },
+      "revId": "aed1e9631193f6662d346c09ea7fe43000395413",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
