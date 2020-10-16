@@ -126,11 +126,11 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
         m_nSttNode = pTmpPos->nNode.GetIndex();
         m_nSttContent = pTmpPos->nContent.GetIndex();
 
+        m_nDeleteTextNodes = nDeleteTextNodes;
         if (m_nDeleteTextNodes == 0) // if a table selection is added...
         {
             ++m_nSttNode;         // ... then the CopyPam is not fully correct
         }
-        m_nDeleteTextNodes = nDeleteTextNodes;
     }
 
     // Fill m_FlyUndos with flys anchored to first and last paragraphs
