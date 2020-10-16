@@ -2229,8 +2229,17 @@ size_t PDFDictionaryElement::Parse(const std::vector<std::unique_ptr<PDFElement>
                 if (nexti >= i) // ensure we go forwards and not endlessly loop
                 {
                     i = nexti;
-                    rDictionary[aName] = pDictionary;
-                    aName.clear();
+                    if (pArray)
+                    {
+                        // Dictionary value inside an array.
+                        pArray->PushBack(pDictionary);
+                    }
+                    else
+                    {
+                        // Dictionary toplevel value.
+                        rDictionary[aName] = pDictionary;
+                        aName.clear();
+                    }
                 }
             }
         }
