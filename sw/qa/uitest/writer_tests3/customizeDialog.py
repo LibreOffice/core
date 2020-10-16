@@ -35,7 +35,7 @@ class ConfigureDialog(UITestCase):
         initialEntryCount = get_state_as_dict(xfunc)["Children"]
         self.assertTrue(initialEntryCount != 0)
 
-        xSearch.executeAction("SET", mkPropertyValues({"TEXT":"format"}))
+        xSearch.executeAction("TYPE", mkPropertyValues({"TEXT":"format"}))
 
         # Wait for the search/filter op to be completed
         timeout = time.time() + 1
