@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3df3a894_5db778f6",
+        "filename": "vcl/source/treelist/treelistbox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2300,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-16T10:52:13Z",
+      "side": 1,
+      "message": "anyway users probably don\u0027t want to toggle the checkbox by clickink on other button\n-\u003e\nanyway users probably don\u0027t want to toggle the checkbox by clicking on another button",
+      "revId": "0361377c06aadee0a452fcd566be7dac4fd94683",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
