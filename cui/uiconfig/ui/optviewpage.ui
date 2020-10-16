@@ -525,6 +525,7 @@
                       </packing>
                     </child>
                     <child>
+<<<<<<< HEAD   (a9bad3 tdf#137594 prevent converting unallocated columns.)
                       <object class="GtkCheckButton" id="forceskia">
                         <property name="label" translatable="yes" context="optviewpage|forceskia">Ignore Skia blacklist</property>
                         <property name="visible">True</property>
@@ -542,6 +543,8 @@
                       </packing>
                     </child>
                     <child>
+=======
+>>>>>>> CHANGE (fea1d3 remove ui for 'forceskia' AKA 'ignore skia denylist' (tdf#13)
                       <object class="GtkCheckButton" id="forceskiaraster">
                         <property name="label" translatable="yes" context="optviewpage|forceskiaraster">Force Skia software rendering</property>
                         <property name="visible">True</property>
@@ -554,8 +557,13 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
+<<<<<<< HEAD   (a9bad3 tdf#137594 prevent converting unallocated columns.)
                         <property name="left_attach">0</property>
                         <property name="top_attach">4</property>
+=======
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+>>>>>>> CHANGE (fea1d3 remove ui for 'forceskia' AKA 'ignore skia denylist' (tdf#13)
                       </packing>
                     </child>
                     <child>
@@ -566,8 +574,13 @@
                         <property name="xalign">0</property>
                       </object>
                       <packing>
+<<<<<<< HEAD   (a9bad3 tdf#137594 prevent converting unallocated columns.)
                         <property name="left_attach">0</property>
                         <property name="top_attach">5</property>
+=======
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+>>>>>>> CHANGE (fea1d3 remove ui for 'forceskia' AKA 'ignore skia denylist' (tdf#13)
                       </packing>
                     </child>
                     <child>
@@ -578,8 +591,13 @@
                         <property name="xalign">0</property>
                       </object>
                       <packing>
+<<<<<<< HEAD   (a9bad3 tdf#137594 prevent converting unallocated columns.)
                         <property name="left_attach">0</property>
                         <property name="top_attach">6</property>
+=======
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+>>>>>>> CHANGE (fea1d3 remove ui for 'forceskia' AKA 'ignore skia denylist' (tdf#13)
                       </packing>
                     </child>
                   </object>
