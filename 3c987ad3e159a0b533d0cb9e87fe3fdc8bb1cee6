@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "747f96fc_7e65f73a",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-17T08:15:13Z",
+      "side": 1,
+      "message": "Sometimes you need BCP47, never sure about this.",
+      "range": {
+        "startLine": 132,
+        "startChar": 82,
+        "endLine": 132,
+        "endChar": 96
+      },
+      "revId": "3c987ad3e159a0b533d0cb9e87fe3fdc8bb1cee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "783d0d85_94d0c772",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-17T08:15:13Z",
+      "side": 1,
+      "message": "Check officecfg/registry/data/org/openoffice/Office/Common.xcu (search for hub.libreoffice) how these variables are stored usually.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 91
+      },
+      "revId": "3c987ad3e159a0b533d0cb9e87fe3fdc8bb1cee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
