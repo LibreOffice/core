@@ -3190,10 +3190,13 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
+    bool bFocusInAnotherGtkWidget = false;
+
     if (GTK_IS_WINDOW(pThis->m_pWindow))
     {
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
-        if (pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer))
+        bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
+        if (bFocusInAnotherGtkWidget)
         {
             gpointer pClass = g_type_class_ref(GTK_TYPE_WINDOW);
             GtkWidgetClass* pWindowClass = GTK_WIDGET_CLASS(pClass);
@@ -3306,7 +3309,7 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             pThis->m_nKeyModifiers = ModKeyFlags::NONE;
     }
 
-    if( !aDel.isDeleted() && pThis->m_pIMHandler )
+    if (!bFocusInAnotherGtkWidget && !aDel.isDeleted() && pThis->m_pIMHandler)
         pThis->m_pIMHandler->updateIMSpotLocation();
 
     return bStopProcessingKey;
