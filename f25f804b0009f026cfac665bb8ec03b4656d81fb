@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8ecfb63_91855ef2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-10-17T11:08:15Z",
+      "side": 1,
+      "message": "should you use DECLARE_OOXMLEXPORT_EXPORTONLY_TEST here instead ?",
+      "revId": "f25f804b0009f026cfac665bb8ec03b4656d81fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
