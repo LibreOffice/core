@@ -2479,7 +2479,7 @@ void SalInstanceButton::set_label_line_wrap(bool wrap)
 
 void SalInstanceButton::set_font(const vcl::Font& rFont)
 {
-    m_xButton->SetPointFont(*m_xButton, rFont);
+    m_xButton->SetControlFont(rFont);
     m_xButton->Invalidate();
 }
 
@@ -5559,7 +5559,7 @@ void SalInstanceLabel::set_font_color(const Color& rColor)
 
 void SalInstanceLabel::set_font(const vcl::Font& rFont)
 {
-    m_xLabel->SetPointFont(*m_xLabel, rFont);
+    m_xLabel->SetControlFont(rFont);
     m_xLabel->Invalidate();
 }
 
