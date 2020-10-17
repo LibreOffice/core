@@ -76,6 +76,7 @@ class SdrLayerIDSet;
 class Fraction;
 enum class PointerStyle;
 class Graphic;
+class SvxShape;
 
 namespace basegfx
 {
@@ -84,31 +85,13 @@ namespace basegfx
     class B2DHomMatrix;
 }
 
-namespace sdr
-{
-    namespace properties
-    {
-        class BaseProperties;
-    }
+namespace sdr { class ObjectUser; }
+namespace sdr::properties { class BaseProperties; }
+namespace sdr::contact { class ViewContact; }
 
-    class ObjectUser;
-}
+namespace svx { class PropertyChangeNotifier; }
 
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewContact;
-    } // end of namespace contact
-}
 
-namespace svx
-{
-    class PropertyChangeNotifier;
-}
-
-class SvxShape;
-class SdrObject;
 struct SVXCORE_DLLPUBLIC SdrObjectFreeOp;
 
 // helper for constructing std::unique_ptr for SdrObjects where a
