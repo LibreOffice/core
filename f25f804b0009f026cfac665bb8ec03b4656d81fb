@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9132af35_dd7811ad",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-10-17T19:16:49Z",
+      "side": 1,
+      "message": "Unfortunately float-point numbers (eg. 3.3333), is not supported and the value is saved without fraction (eg. 3).\n\n@michael @xisco Do you know how to detect if the number is floating number?",
+      "revId": "f25f804b0009f026cfac665bb8ec03b4656d81fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ecfb63_91855ef2",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
         "patchSetId": 4
