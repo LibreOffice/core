@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f887e0be_42abde7b",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-17T14:40:42Z",
+      "side": 1,
+      "message": "What about the case when we have executed the\n\n  std::move(pSalLayout)\n\non line 1389 but not the\n\n  pSalLayout \u003d ...\n\non line 1404?  Then we would deref null here.  (The original code didn\u0027t need to worry about that case, as it never caused pSalLayout to become null.)",
+      "revId": "8f54136caa786523fd224f6c98fc8e7c45cd805d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
