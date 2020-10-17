@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
-#define INCLUDED_UNOIDL_SOURCE_LEGACYPROVIDER_HXX
-
+#pragma once
 #include <sal/config.h>
 
 #include <registry/registry.hxx>
@@ -38,7 +36,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
