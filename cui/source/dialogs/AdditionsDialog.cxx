@@ -123,6 +123,7 @@ std::string curlGet(const OString& rURL)
     if (http_code != 200)
     {
         SAL_WARN("cui.dialogs", "Download failed. Error code: " << http_code);
+        response_body.clear();
     }
 
     if (cc != CURLE_OK)
