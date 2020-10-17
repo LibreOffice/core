@@ -12,8 +12,6 @@
 
 #include <sfx2/thumbnailviewitem.hxx>
 
-class ThumbnailView;
-
 namespace sfx2
 {
     class RecentDocsView;

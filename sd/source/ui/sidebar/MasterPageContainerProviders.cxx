@@ -83,7 +83,7 @@ Image TemplatePreviewProvider::operator() (
     SdPage*,
     ::sd::PreviewRenderer&)
 {
-    return Image(ThumbnailView::readThumbnail(msURL));
+    return Image(SfxThumbnailView::readThumbnail(msURL));
 }
 
 int TemplatePreviewProvider::GetCostIndex()

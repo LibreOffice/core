@@ -54,7 +54,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
     if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INetProtocol::File &&
             officecfg::Office::Common::History::RecentDocsThumbnail::get())
-        aThumbnail = ThumbnailView::readThumbnail(rURL);
+        aThumbnail = SfxThumbnailView::readThumbnail(rURL);
 
     if (aThumbnail.IsEmpty())
     {

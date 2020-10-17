@@ -35,7 +35,6 @@
 #include <vcl/vclptr.hxx>
 #include <vector>
 
-class ThumbnailView;
 class SfxThumbnailView;
 class ThumbnailViewItem;
 
@@ -48,14 +47,14 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XUnoTunnel >
     ValueSetAccComponentBase;
 
-class ThumbnailViewAcc :
+class SfxThumbnailViewAcc :
     public ::cppu::BaseMutex,
     public ValueSetAccComponentBase
 {
 public:
 
-    ThumbnailViewAcc( ThumbnailView* pParent );
-    virtual ~ThumbnailViewAcc() override;
+    SfxThumbnailViewAcc( SfxThumbnailView* pParent );
+    virtual ~SfxThumbnailViewAcc() override;
 
     void FireAccessibleEvent( short nEventId,
                               const css::uno::Any& rOldValue,
@@ -63,10 +62,9 @@ public:
 
     bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static ThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static SfxThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:
-
     /** Called by the corresponding ValueSet when it gets the focus.
         Stores the new focus state and broadcasts a state change event.
     */
@@ -123,98 +121,9 @@ public:
 private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    VclPtr<ThumbnailView>                                               mpParent;
+    SfxThumbnailView*                                               mpParent;
     /// The current FOCUSED state.
     bool mbIsFocused;
-
-    /** Tell all listeners that the object is dying.  This callback is
-        usually called from the WeakComponentImplHelper class.
-    */
-    virtual void SAL_CALL disposing() override;
-
-    /** Return the number of items.  This takes the None-Item into account.
-    */
-    sal_uInt16 getItemCount() const;
-
-    /** Return the item associated with the given index.  The None-Item is
-        taken into account which, when present, is taken to be the first
-        (with index 0) item.
-        @param nIndex
-            Index of the item to return.  The index 0 denotes the None-Item
-            when present.
-        @return
-            Returns NULL when the given index is out of range.
-    */
-    ThumbnailViewItem* getItem (sal_uInt16 nIndex) const;
-
-    /** Check whether or not the object has been disposed (or is in the
-        state of being disposed).  If that is the case then
-        DisposedException is thrown to inform the (indirect) caller of the
-        foul deed.
-
-        @throws css::lang::DisposedException
-    */
-    void ThrowIfDisposed();
-};
-
-class SfxThumbnailViewAcc :
-    public ::cppu::BaseMutex,
-    public ValueSetAccComponentBase
-{
-public:
-
-    SfxThumbnailViewAcc( SfxThumbnailView* pParent );
-    virtual ~SfxThumbnailViewAcc() override;
-
-public:
-
-    // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
-
-    // XAccessibleEventBroadcaster
-    virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-
-    // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
-
-    // XAccessibleComponent
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds(  ) override;
-    virtual css::awt::Point SAL_CALL getLocation(  ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual css::awt::Size SAL_CALL getSize(  ) override;
-    virtual void SAL_CALL grabFocus(  ) override;
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-    // XAccessibleSelection
-    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) override;
-    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) override;
-    virtual void SAL_CALL clearAccessibleSelection(  ) override;
-    virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
-    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-    virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) override;
-
-    // XUnoTunnel
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
-
-private:
-    ::std::vector< css::uno::Reference<
-        css::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    SfxThumbnailView*                                               mpParent;
 
     /** Tell all listeners that the object is dying.  This callback is
         usually called from the WeakComponentImplHelper class.
