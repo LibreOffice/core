@@ -143,11 +143,6 @@ namespace svgio::svgreader
             }
         }
 
-} // end of namespace svgio::svgreader
-
-
-namespace svgio::svgreader
-{
         namespace {
 
         class localTextBreakupHelper : public drawinglayer::primitive2d::TextBreakupHelper
@@ -188,11 +183,6 @@ namespace svgio::svgreader
             return true;
         }
 
-} // end of namespace svgio::svgreader
-
-
-namespace svgio::svgreader
-{
         SvgCharacterNode::SvgCharacterNode(
             SvgDocument& rDocument,
             SvgNode* pParent,
@@ -567,11 +557,7 @@ namespace svgio::svgreader
             }
         }
 
-} // end of namespace svgio::svgreader
 
-
-namespace svgio::svgreader
-{
         SvgTextPosition::SvgTextPosition(
             SvgTextPosition* pParent,
             const InfoProvider& rInfoProvider,
