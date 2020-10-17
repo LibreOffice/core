@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5967975_ded2e127",
+        "filename": "oox/source/docprop/docprophandler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-17T11:25:01Z",
+      "side": 1,
+      "message": "this should be !\u003d 0, no?",
+      "revId": "7d2d8e1a253e00f99e767b7ac3d194cb4d670802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05dd630b_2ac34fd5",
+        "filename": "oox/source/docprop/docprophandler.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-17T11:25:01Z",
+      "side": 1,
+      "message": "same here... etc.",
+      "revId": "7d2d8e1a253e00f99e767b7ac3d194cb4d670802",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
