@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4162e9dd_72f5906b",
+        "filename": "svx/uiconfig/ui/sidebareffect.ui",
+        "patchSetId": 16
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2020-10-17T12:21:47Z",
+      "side": 1,
+      "message": "any translatable entry needs to have context attribute, but numbers likely don\u0027t need translation, right?",
+      "revId": "0e080ca38cf4db5ececc85cdbce6c07be7c74653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
