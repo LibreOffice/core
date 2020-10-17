@@ -1537,13 +1537,13 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     mbScroll = mnLines > mnVisLines;
 
     mxScrolledWindow->vadjustment_set_upper((nCurCount+mnCols-1)*gnFineness/mnCols);
-    mxScrolledWindow->vadjustment_set_page_size(mnVisLines);
+    mxScrolledWindow->vadjustment_set_page_size(mnVisLines*gnFineness);
     if (!bScrollBarUsed)
         mxScrolledWindow->vadjustment_set_value(static_cast<long>(mnFirstLine)*gnFineness);
     long nPageSize = mnVisLines;
     if ( nPageSize < 1 )
         nPageSize = 1;
-    mxScrolledWindow->vadjustment_set_page_increment(nPageSize);
+    mxScrolledWindow->vadjustment_set_page_increment(nPageSize*gnFineness);
     if (mbAllowVScrollBar)
         mxScrolledWindow->set_vpolicy(mbScroll ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
 }
