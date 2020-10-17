@@ -1,0 +1,13 @@
+/* Configuration of high-level features that either 1) depend on the
+ * platform (but are common to several platforms so just checking for
+ * the feature is simpler than checking for several platforms), or 2)
+ * are build-time configurable.
+ */
+
+#ifndef CONFIG_BOX2D_H
+#define CONFIG_BOX2D_H
+
+/* Box2D/Box2D.h is 2.3, 2.4 has box2d/box2d.h */
+#define BOX2D_HEADER <Box2D/Box2D.h>
+
+#endif

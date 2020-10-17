@@ -8,7 +8,8 @@
  */
 
 #include <box2dtools.hxx>
-#include <Box2D/Box2D.h>
+#include <config_box2d.h>
+#include BOX2D_HEADER
 
 #include <shapemanager.hxx>
 #include <attributableshape.hxx>
