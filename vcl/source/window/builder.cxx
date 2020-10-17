@@ -62,6 +62,7 @@
 #include <xmlreader/xmlreader.hxx>
 #include <desktop/crashreport.hxx>
 #include <calendar.hxx>
+#include <menutogglebutton.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
 #include <treeglue.hxx>
