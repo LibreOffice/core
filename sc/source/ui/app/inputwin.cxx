@@ -1304,7 +1304,7 @@ void ScTextWnd::SetScrollBarRange()
            lower = gtk_adjustment_get_lower
            upper = gtk_adjustment_get_upper - gtk_adjustment_get_page_size
 
-           and requires that upper > lower or the decelaration animation never ends
+           and requires that upper > lower or the deceleration animation never ends
         */
         nPageSize = std::min(nPageSize, nUpper);
 
