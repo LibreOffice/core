@@ -16,6 +16,24 @@
       "revId": "f25f804b0009f026cfac665bb8ec03b4656d81fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0683381_c53527c0",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-10-17T19:03:25Z",
+      "side": 1,
+      "message": "Sure, will fix that in the review:\nhttps://gerrit.libreoffice.org/c/core/+/104384",
+      "parentUuid": "e8ecfb63_91855ef2",
+      "revId": "f25f804b0009f026cfac665bb8ec03b4656d81fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
