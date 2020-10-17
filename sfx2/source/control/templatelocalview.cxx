@@ -942,7 +942,7 @@ BitmapEx SfxTemplateLocalView::getDefaultThumbnail( const OUString& rPath )
 
 BitmapEx SfxTemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
 {
-    return SfxTemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
+    return SfxTemplateLocalView::scaleImg(SfxThumbnailView::readThumbnail(msURL), width, height);
 }
 
 void SfxTemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
