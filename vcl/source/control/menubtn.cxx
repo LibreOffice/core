@@ -27,6 +27,7 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <menutogglebutton.hxx>
 
 namespace
 {
