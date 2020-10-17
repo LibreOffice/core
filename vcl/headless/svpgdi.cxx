@@ -447,7 +447,9 @@ namespace
                 assert(nFormat == CAIRO_FORMAT_RGB24_888 && "Expected RGB24_888 image");
             else
 #endif
-            assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
+            {
+                assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
+            }
 
             rStride = cairo_format_stride_for_width(nFormat, cairo_image_surface_get_width(implGetSurface()));
 
