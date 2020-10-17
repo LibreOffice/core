@@ -84,7 +84,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
         if (aExtSize.Width() > aThumbnailSize.Width() || aExtSize.Height() > aThumbnailSize.Height())
         {
-            aExt = TemplateLocalView::scaleImg(aExt, aThumbnailSize.Width(), aThumbnailSize.Height());
+            aExt = SfxTemplateLocalView::scaleImg(aExt, aThumbnailSize.Width(), aThumbnailSize.Height());
             aExtSize = aExt.GetSizePixel();
         }
 
@@ -99,7 +99,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     }
 
     maTitle = aTitle;
-    maPreview1 = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
+    maPreview1 = SfxTemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
