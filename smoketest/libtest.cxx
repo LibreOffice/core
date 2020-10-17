@@ -38,7 +38,6 @@
 
 #else
 #include <sys/time.h>
-#include <sal/types.h>
     static long getTimeMS()
     {
         struct timeval t;
