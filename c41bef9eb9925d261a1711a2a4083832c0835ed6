@@ -34,6 +34,24 @@
       "revId": "c41bef9eb9925d261a1711a2a4083832c0835ed6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "185c6917_de497e0b",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-10-17T14:37:27Z",
+      "side": 1,
+      "message": "ah gotcha - LGTM then",
+      "parentUuid": "00399d71_0672345d",
+      "revId": "c41bef9eb9925d261a1711a2a4083832c0835ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
