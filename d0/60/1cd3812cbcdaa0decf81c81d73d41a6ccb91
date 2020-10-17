@@ -1,0 +1,8 @@
+Verified+1: René Engelhard <rene@debian.org>
+Verified+1: Jenkins
+Code-Review+2: Caolán McNamara <caolanm@redhat.com>
+Submitted-by: Caolán McNamara <caolanm@redhat.com>
+Submitted-at: Sat, 17 Oct 2020 14:19:44 +0200
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/104456
+Project: core
+Branch: refs/heads/master
