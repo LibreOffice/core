@@ -2789,11 +2789,38 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     // in "SaveAs" title and password will be cleared ( maybe the new itemset contains new values, otherwise they will be empty )
     // #i119366# - As the SID_ENCRYPTIONDATA and SID_PASSWORD are using for setting password together, we need to clear them both.
     // Also, ( maybe the new itemset contains new values, otherwise they will be empty )
-    if (xMergedParams->HasItem( SID_PASSWORD ))
+    if (xMergedParams->HasItem(SID_ENCRYPTIONDATA))
     {
-        xMergedParams->ClearItem( SID_PASSWORD );
-        xMergedParams->ClearItem( SID_ENCRYPTIONDATA );
+        bool bPasswordProtected = true;
+        const SfxUnoAnyItem* pEncryptionDataItem
+            = xMergedParams->GetItem<SfxUnoAnyItem>(SID_ENCRYPTIONDATA, false);
+        if (pEncryptionDataItem)
+        {
+            uno::Sequence<beans::NamedValue> aEncryptionData;
+            pEncryptionDataItem->GetValue() >>= aEncryptionData;
+            for (const auto& rItem : std::as_const(aEncryptionData))
+            {
+                if (rItem.Name == "CryptoType")
+                {
+                    OUString aValue;
+                    rItem.Value >>= aValue;
+                    if (aValue != "StrongEncryptionDataSpace")
+                    {
+                        // This is not just a password protected document. Let's keep encryption data as is.
+                        bPasswordProtected = false;
+                    }
+                    break;
+                }
+            }
+        }
+        if (bPasswordProtected)
+        {
+            // For password protected documents remove encryption data during "Save as..."
+            xMergedParams->ClearItem(SID_PASSWORD);
+            xMergedParams->ClearItem(SID_ENCRYPTIONDATA);
+        }
     }
+
     xMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
     xMergedParams->ClearItem( SID_INPUTSTREAM );
