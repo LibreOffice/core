@@ -180,16 +180,10 @@ void RecentDocsViewItem::OpenDocument()
     mrParentView.SetPointer(PointerStyle::Wait);
 
     Reference<frame::XDispatch> xDispatch;
-    Reference<frame::XDispatchProvider> xDispatchProvider;
     css::util::URL aTargetURL;
     Sequence<beans::PropertyValue> aArgsList;
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    uno::Reference<frame::XFrame> xActiveFrame = xDesktop->getActiveFrame();
-
-    //osl::ClearableMutexGuard aLock(m_aMutex);
-    xDispatchProvider.set(xActiveFrame, UNO_QUERY);
-    //aLock.clear();
 
     aTargetURL.Complete = maURL;
     Reference<util::XURLTransformer> xTrans(util::URLTransformer::create(::comphelper::getProcessComponentContext()));
@@ -203,7 +197,7 @@ void RecentDocsViewItem::OpenDocument()
     aArgsList[1].Name = "AsTemplate";
     aArgsList[1].Value <<= false;
 
-    xDispatch = xDispatchProvider->queryDispatch(aTargetURL, "_default", 0);
+    xDispatch = xDesktop->queryDispatch(aTargetURL, "_default", 0);
 
     if (!xDispatch.is())
         return;
