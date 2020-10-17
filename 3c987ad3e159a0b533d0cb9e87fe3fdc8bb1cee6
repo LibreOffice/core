@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "675c3e5b_80500a34",
+        "filename": "svtools/source/java/javainteractionhandler.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-17T08:25:37Z",
+      "side": 1,
+      "message": "Just checked: in this case, it happily accepts BCP-47 (e.g., both de-DE and de lead to German translation). So please just use BCP-47 unconditionally here, it would automatically allow to correctly process variants like traditional/simplified Chinese, etc.",
+      "parentUuid": "0d3e7421_74af21d0",
+      "range": {
+        "startLine": 132,
+        "startChar": 82,
+        "endLine": 132,
+        "endChar": 96
+      },
+      "revId": "3c987ad3e159a0b533d0cb9e87fe3fdc8bb1cee6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "783d0d85_94d0c772",
         "filename": "svtools/source/java/javainteractionhandler.cxx",
         "patchSetId": 11
