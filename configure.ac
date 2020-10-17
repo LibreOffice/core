@@ -10724,11 +10724,21 @@ if test "$with_system_box2d" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_BOX2D=TRUE
     AC_LANG_PUSH([C++])
-    AC_CHECK_HEADER(Box2D/Box2D.h, [],
-        [AC_MSG_ERROR(box2d headers not found.)], [])
-    AC_CHECK_LIB([Box2D], [main], [:],
-        [ AC_MSG_ERROR(box2d library not found.) ], [])
-    BOX2D_LIBS=-lBox2D
+    AC_CHECK_HEADER(box2d/box2d.h, [BOX2D_H_FOUND='TRUE'],
+        [BOX2D_H_FOUND='FALSE'])
+    if test "$BOX2D_H_FOUND" = "TRUE"; then # 2.4.0+
+    	_BOX2D_LIB=box2d
+    	AC_DEFINE(BOX2D_HEADER,<box2d/box2d.h>)
+    else
+	# fail this. there's no other alternative to check when we are here.
+    	AC_CHECK_HEADER([Box2D/Box2D.h], [],
+		[AC_MSG_ERROR(box2d headers not found.)])
+    	_BOX2D_LIB=Box2D
+    	AC_DEFINE(BOX2D_HEADER,<Box2D/Box2D.h>)
+    fi
+    AC_CHECK_LIB([$_BOX2D_LIB], [main], [:],
+    	[ AC_MSG_ERROR(box2d library not found.) ], [])
+    BOX2D_LIBS=-l$_BOX2D_LIB
     AC_LANG_POP([C++])
     BOX2D_CFLAGS=$(printf '%s' "$BOX2D_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${BOX2D_LIBS}"
@@ -13946,6 +13956,7 @@ AC_CONFIG_FILES([config_host.mk
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
+AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
