@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2a59edb_ecd53846",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-17T10:44:40Z",
+      "side": 1,
+      "message": "oh, that is an unintuitive order...",
+      "revId": "b626cf84ee19db444dbc70d4508a8cb737fa7e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
