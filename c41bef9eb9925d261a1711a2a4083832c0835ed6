@@ -16,6 +16,24 @@
       "revId": "c41bef9eb9925d261a1711a2a4083832c0835ed6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00399d71_0672345d",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-17T11:51:34Z",
+      "side": 1,
+      "message": "Hopefully we do not bundle more fonts. Thought this one is about the correct replacement.",
+      "parentUuid": "02dd849d_3a5eaecc",
+      "revId": "c41bef9eb9925d261a1711a2a4083832c0835ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
