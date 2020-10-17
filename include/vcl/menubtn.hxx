@@ -91,17 +91,6 @@ public:
 
 };
 
-
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) MenuToggleButton final : public MenuButton
-{
-public:
-    explicit        MenuToggleButton( vcl::Window* pParent, WinBits nStyle );
-    virtual         ~MenuToggleButton() override;
-
-    void            SetActive( bool bSel );
-    bool            GetActive() const;
-};
-
 #endif // INCLUDED_VCL_MENUBTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
