@@ -1,0 +1,7 @@
+#ifndef CONFIG_BOX2D_H
+#define CONFIG_BOX2D_H
+
+/* Box2D/Box2D.h is 2.3, 2.4 has box2d/box2d.h */
+#define BOX2D_HEADER <Box2D/Box2D.h>
+
+#endif
