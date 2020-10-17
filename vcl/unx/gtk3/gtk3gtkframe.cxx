@@ -3216,11 +3216,8 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     vcl::DeletionListener aDel( pThis );
 
-    if( pThis->m_pIMHandler )
-    {
-        if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
-            return true;
-    }
+    if (!bFocusInAnotherGtkWidget && pThis->m_pIMHandler && pThis->m_pIMHandler->handleKeyEvent(pEvent))
+        return true;
 
     bool bStopProcessingKey = false;
 
