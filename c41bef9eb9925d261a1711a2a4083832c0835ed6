@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02dd849d_3a5eaecc",
+        "filename": "officecfg/registry/data/org/openoffice/VCL.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2020-10-17T09:17:43Z",
+      "side": 1,
+      "message": "The discussion in tdf#137393 has settled on _adding_ the new fonts, I thought?",
+      "revId": "c41bef9eb9925d261a1711a2a4083832c0835ed6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
