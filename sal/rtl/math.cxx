@@ -433,6 +433,12 @@ void doubleToString(typename T::String ** pResult,
         break;
     }
 
+    // Too large values for nDecPlaces make no sense; it might also be
+    // rtl_math_DecimalPlaces_Max was passed with rtl_math_StringFormat_F or
+    // others, but we don't want to allocate/deallocate 2GB just to fill it
+    // with trailing '0' characters..
+    nDecPlaces = std::max<sal_Int32>(std::min<sal_Int32>(nDecPlaces, 20), -20);
+
     sal_Int32 nDigits = nDecPlaces + 1;
 
     if (eFormat == rtl_math_StringFormat_F)
