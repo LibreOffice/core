@@ -89,6 +89,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	filter/source/xsltfilter/xsltfilter \
 	formula/util/for \
 	$(call gb_Helper_optional,DESKTOP,fpicker/source/office/fps_office) \
+	$(if $(filter MACOSX,$(OS)),fpicker/source/aqua/fps_aqua) \
 	hwpfilter/source/hwp \
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
