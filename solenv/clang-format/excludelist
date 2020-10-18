@@ -2636,7 +2636,6 @@ cui/qa/unit/cui-dialogs-test.cxx
 cui/qa/unit/cui-dialogs-test_2.cxx
 cui/qa/unit/cui-dialogs-test_3.cxx
 cui/qa/unit/cui-dialogs-test_4.cxx
-cui/source/customize/SvxConfigPageHelper.cxx
 cui/source/customize/SvxMenuConfigPage.cxx
 cui/source/customize/SvxToolbarConfigPage.cxx
 cui/source/customize/cfg.cxx
@@ -2687,7 +2686,6 @@ cui/source/factory/dlgfact.cxx
 cui/source/factory/dlgfact.hxx
 cui/source/factory/init.cxx
 cui/source/inc/SpellDialog.hxx
-cui/source/inc/SvxConfigPageHelper.hxx
 cui/source/inc/SvxMenuConfigPage.hxx
 cui/source/inc/SvxToolbarConfigPage.hxx
 cui/source/inc/align.hxx
