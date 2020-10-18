@@ -34,6 +34,24 @@
       "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a0740d6_800f4fff",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-10-18T19:36:45Z",
+      "side": 1,
+      "message": "Oh, and I think our iOS code is using that kCGColorSpaceSRGB, too.",
+      "parentUuid": "8ed90c25_13255150",
+      "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
