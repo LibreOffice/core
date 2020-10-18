@@ -161,6 +161,7 @@ std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform)
 std::ostream &operator <<(std::ostream& s, CGColorSpaceRef cs)
 {
 #ifndef SAL_LOG_INFO
+    (void) s;
     (void) cs;
 #else
     if (cs == nullptr)
