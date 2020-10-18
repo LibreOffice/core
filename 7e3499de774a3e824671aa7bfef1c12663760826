@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5b1de3e_98b01207",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-18T15:49:41Z",
+      "side": 1,
+      "message": "is this not the same thing as \n    CGColorSpaceCreateDeviceRGB()\nwhich is what our iOS code is doing?",
+      "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
