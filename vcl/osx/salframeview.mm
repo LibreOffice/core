@@ -203,6 +203,11 @@ static AquaSalFrame* getMouseContainerFrame()
     // Disable window restoration until we support it directly
     [pNSWindow setRestorable: NO];
 
+    // tdf#137468: Restrict to 24-bit RGB as that is all that we can
+    // handle anyway. HDR is far off in the future for LibreOffice.
+    [pNSWindow setDynamicDepthLimit: NO];
+    [pNSWindow setDepthLimit: NSWindowDepthTwentyfourBitRGB];
+
     return static_cast<SalFrameWindow *>(pNSWindow);
 }
 
