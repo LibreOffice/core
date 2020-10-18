@@ -23,6 +23,7 @@
 #include <osx/saldata.hxx>
 #include <osx/salnsmenu.h>
 #include <osx/salinst.h>
+#include <quartz/utils.h>
 #include <o3tl/enumarray.hxx>
 #include <tools/stream.hxx>
 #include <vcl/ImageTree.hxx>
@@ -51,7 +52,7 @@ SalData::SalData()
     mpFirstPrinter( nullptr ),
     mpFontList( nullptr ),
     mpStatusItem( nil ),
-    mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceSRGB) ),
+    mxRGBSpace( CGDisplayCopyColorSpace( CGMainDisplayID() ) ),
     mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGrayGamma2_2) ),
     maCursors(),
     mbIsScrollbarDoubleMax( false ),
