@@ -36,473 +36,423 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 
-
 // VDev RevDevice provider
 
 namespace
 {
-    class ImpTimedRefDev;
+class ImpTimedRefDev;
 
-    //the scoped_timed_RefDev owns an ImpTimeRefDev and releases it on dtor
-    //or disposing of the default XComponentContext which causes the underlying
-    //OutputDevice to get released
+//the scoped_timed_RefDev owns an ImpTimeRefDev and releases it on dtor
+//or disposing of the default XComponentContext which causes the underlying
+//OutputDevice to get released
 
-    //The ImpTimerRefDev itself, if the timeout ever gets hit, will call
-    //reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
-    //if it's unused for a few minutes
-    class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
+//The ImpTimerRefDev itself, if the timeout ever gets hit, will call
+//reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
+//if it's unused for a few minutes
+class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
+{
+public:
+    scoped_timed_RefDev()
+        : comphelper::unique_disposing_ptr<ImpTimedRefDev>(
+              (css::uno::Reference<css::lang::XComponent>(
+                  ::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW)))
     {
-    public:
-        scoped_timed_RefDev() : comphelper::unique_disposing_ptr<ImpTimedRefDev>((css::uno::Reference<css::lang::XComponent>(::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW)))
-        {
-        }
-    };
+    }
+};
 
-    class the_scoped_timed_RefDev : public rtl::Static<scoped_timed_RefDev, the_scoped_timed_RefDev> {};
+class the_scoped_timed_RefDev : public rtl::Static<scoped_timed_RefDev, the_scoped_timed_RefDev>
+{
+};
 
-    class ImpTimedRefDev : public Timer
+class ImpTimedRefDev : public Timer
+{
+    scoped_timed_RefDev& mrOwnerOfMe;
+    VclPtr<VirtualDevice> mpVirDev;
+    sal_uInt32 mnUseCount;
+
+public:
+    explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
+    virtual ~ImpTimedRefDev() override;
+    virtual void Invoke() override;
+
+    VirtualDevice& acquireVirtualDevice();
+    void releaseVirtualDevice();
+};
+
+ImpTimedRefDev::ImpTimedRefDev(scoped_timed_RefDev& rOwnerOfMe)
+    : Timer("drawinglayer ImpTimedRefDev destroy mpVirDev")
+    , mrOwnerOfMe(rOwnerOfMe)
+    , mpVirDev(nullptr)
+    , mnUseCount(0)
+{
+    SetTimeout(3L * 60L * 1000L); // three minutes
+    Start();
+}
+
+ImpTimedRefDev::~ImpTimedRefDev()
+{
+    OSL_ENSURE(0 == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
+    const SolarMutexGuard aSolarGuard;
+    mpVirDev.disposeAndClear();
+}
+
+void ImpTimedRefDev::Invoke()
+{
+    // for obvious reasons, do not call anything after this
+    mrOwnerOfMe.reset();
+}
+
+VirtualDevice& ImpTimedRefDev::acquireVirtualDevice()
+{
+    if (!mpVirDev)
     {
-        scoped_timed_RefDev&                mrOwnerOfMe;
-        VclPtr<VirtualDevice>               mpVirDev;
-        sal_uInt32                          mnUseCount;
+        mpVirDev = VclPtr<VirtualDevice>::Create();
+        mpVirDev->SetReferenceDevice(VirtualDevice::RefDevMode::MSO1);
+    }
 
-    public:
-        explicit ImpTimedRefDev(scoped_timed_RefDev& rOwnerofMe);
-        virtual ~ImpTimedRefDev() override;
-        virtual void Invoke() override;
-
-        VirtualDevice& acquireVirtualDevice();
-        void releaseVirtualDevice();
-    };
-
-    ImpTimedRefDev::ImpTimedRefDev(scoped_timed_RefDev& rOwnerOfMe)
-    :   Timer( "drawinglayer ImpTimedRefDev destroy mpVirDev" ),
-        mrOwnerOfMe(rOwnerOfMe),
-        mpVirDev(nullptr),
-        mnUseCount(0)
+    if (!mnUseCount)
     {
-        SetTimeout(3L * 60L * 1000L); // three minutes
+        Stop();
+    }
+
+    mnUseCount++;
+
+    return *mpVirDev;
+}
+
+void ImpTimedRefDev::releaseVirtualDevice()
+{
+    OSL_ENSURE(mnUseCount, "mismatch call number to releaseVirtualDevice() (!)");
+    mnUseCount--;
+
+    if (!mnUseCount)
+    {
         Start();
     }
-
-    ImpTimedRefDev::~ImpTimedRefDev()
-    {
-        OSL_ENSURE(0 == mnUseCount, "destruction of a still used ImpTimedRefDev (!)");
-        const SolarMutexGuard aSolarGuard;
-        mpVirDev.disposeAndClear();
-    }
-
-    void ImpTimedRefDev::Invoke()
-    {
-        // for obvious reasons, do not call anything after this
-        mrOwnerOfMe.reset();
-    }
-
-    VirtualDevice& ImpTimedRefDev::acquireVirtualDevice()
-    {
-        if(!mpVirDev)
-        {
-            mpVirDev = VclPtr<VirtualDevice>::Create();
-            mpVirDev->SetReferenceDevice( VirtualDevice::RefDevMode::MSO1 );
-        }
-
-        if(!mnUseCount)
-        {
-            Stop();
-        }
-
-        mnUseCount++;
-
-        return *mpVirDev;
-    }
-
-    void ImpTimedRefDev::releaseVirtualDevice()
-    {
-        OSL_ENSURE(mnUseCount, "mismatch call number to releaseVirtualDevice() (!)");
-        mnUseCount--;
-
-        if(!mnUseCount)
-        {
-            Start();
-        }
-    }
+}
 } // end of anonymous namespace
-
 
 // access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
 
 namespace drawinglayer::primitive2d
 {
-        // static methods here
-        static VirtualDevice& acquireGlobalVirtualDevice()
+// static methods here
+static VirtualDevice& acquireGlobalVirtualDevice()
+{
+    scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
+
+    if (!rStdRefDevice)
+        rStdRefDevice.reset(new ImpTimedRefDev(rStdRefDevice));
+
+    return rStdRefDevice->acquireVirtualDevice();
+}
+
+static void releaseGlobalVirtualDevice()
+{
+    scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
+
+    OSL_ENSURE(rStdRefDevice,
+               "releaseGlobalVirtualDevice() without prior acquireGlobalVirtualDevice() call(!)");
+    rStdRefDevice->releaseVirtualDevice();
+}
+
+TextLayouterDevice::TextLayouterDevice()
+    : maSolarGuard()
+    , mrDevice(acquireGlobalVirtualDevice())
+{
+}
+
+TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE { releaseGlobalVirtualDevice(); }
+
+void TextLayouterDevice::setFont(const vcl::Font& rFont) { mrDevice.SetFont(rFont); }
+
+void TextLayouterDevice::setFontAttribute(const attribute::FontAttribute& rFontAttribute,
+                                          double fFontScaleX, double fFontScaleY,
+                                          const css::lang::Locale& rLocale)
+{
+    setFont(getVclFontFromFontAttribute(rFontAttribute, fFontScaleX, fFontScaleY, 0.0, rLocale));
+}
+
+double TextLayouterDevice::getOverlineOffset() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    double fRet = (rMetric.GetInternalLeading() / 2.0) - rMetric.GetAscent();
+    return fRet;
+}
+
+double TextLayouterDevice::getUnderlineOffset() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    double fRet = rMetric.GetDescent() / 2.0;
+    return fRet;
+}
+
+double TextLayouterDevice::getStrikeoutOffset() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    double fRet = (rMetric.GetAscent() - rMetric.GetInternalLeading()) / 3.0;
+    return fRet;
+}
+
+double TextLayouterDevice::getOverlineHeight() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    double fRet = rMetric.GetInternalLeading() / 2.5;
+    return fRet;
+}
+
+double TextLayouterDevice::getUnderlineHeight() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    double fRet = rMetric.GetDescent() / 4.0;
+    return fRet;
+}
+
+double TextLayouterDevice::getTextHeight() const { return mrDevice.GetTextHeight(); }
+
+double TextLayouterDevice::getTextWidth(const OUString& rText, sal_uInt32 nIndex,
+                                        sal_uInt32 nLength) const
+{
+    return mrDevice.GetTextWidth(rText, nIndex, nLength);
+}
+
+void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
+                                         const OUString& rText, sal_uInt32 nIndex,
+                                         sal_uInt32 nLength,
+                                         const std::vector<double>& rDXArray) const
+{
+    const sal_uInt32 nDXArrayCount(rDXArray.size());
+    sal_uInt32 nTextLength(nLength);
+    const sal_uInt32 nStringLength(rText.getLength());
+
+    if (nTextLength + nIndex > nStringLength)
+    {
+        nTextLength = nStringLength - nIndex;
+    }
+
+    if (nDXArrayCount)
+    {
+        OSL_ENSURE(nDXArrayCount == nTextLength,
+                   "DXArray size does not correspond to text portion size (!)");
+        std::vector<tools::Long> aIntegerDXArray(nDXArrayCount);
+
+        for (sal_uInt32 a(0); a < nDXArrayCount; a++)
         {
-            scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
-
-            if(!rStdRefDevice)
-                rStdRefDevice.reset(new ImpTimedRefDev(rStdRefDevice));
-
-            return rStdRefDevice->acquireVirtualDevice();
+            aIntegerDXArray[a] = basegfx::fround(rDXArray[a]);
         }
 
-        static void releaseGlobalVirtualDevice()
+        mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0,
+                                 aIntegerDXArray.data());
+    }
+    else
+    {
+        mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength);
+    }
+}
+
+basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sal_uInt32 nIndex,
+                                                       sal_uInt32 nLength) const
+{
+    sal_uInt32 nTextLength(nLength);
+    const sal_uInt32 nStringLength(rText.getLength());
+
+    if (nTextLength + nIndex > nStringLength)
+    {
+        nTextLength = nStringLength - nIndex;
+    }
+
+    if (nTextLength)
+    {
+        ::tools::Rectangle aRect;
+
+        mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
+
+        // #i104432#, #i102556# take empty results into account
+        if (!aRect.IsEmpty())
         {
-            scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
-
-            OSL_ENSURE(rStdRefDevice, "releaseGlobalVirtualDevice() without prior acquireGlobalVirtualDevice() call(!)");
-            rStdRefDevice->releaseVirtualDevice();
+            return vcl::unotools::b2DRectangleFromRectangle(aRect);
         }
+    }
 
-        TextLayouterDevice::TextLayouterDevice()
-        :   maSolarGuard(),
-            mrDevice(acquireGlobalVirtualDevice())
-        {
-        }
+    return basegfx::B2DRange();
+}
 
-        TextLayouterDevice::~TextLayouterDevice() COVERITY_NOEXCEPT_FALSE
-        {
-            releaseGlobalVirtualDevice();
-        }
+double TextLayouterDevice::getFontAscent() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    return rMetric.GetAscent();
+}
 
-        void TextLayouterDevice::setFont(const vcl::Font& rFont)
-        {
-            mrDevice.SetFont( rFont );
-        }
+double TextLayouterDevice::getFontDescent() const
+{
+    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+    return rMetric.GetDescent();
+}
 
-        void TextLayouterDevice::setFontAttribute(
-            const attribute::FontAttribute& rFontAttribute,
-            double fFontScaleX,
-            double fFontScaleY,
-            const css::lang::Locale& rLocale)
-        {
-            setFont(getVclFontFromFontAttribute(
-                rFontAttribute,
-                fFontScaleX,
-                fFontScaleY,
-                0.0,
-                rLocale));
-        }
+void TextLayouterDevice::addTextRectActions(const ::tools::Rectangle& rRectangle,
+                                            const OUString& rText, DrawTextFlags nStyle,
+                                            GDIMetaFile& rGDIMetaFile) const
+{
+    mrDevice.AddTextRectActions(rRectangle, rText, nStyle, rGDIMetaFile);
+}
 
-        double TextLayouterDevice::getOverlineOffset() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = (rMetric.GetInternalLeading() / 2.0) - rMetric.GetAscent();
-            return fRet;
-        }
+std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_uInt32 nIndex,
+                                                     sal_uInt32 nLength) const
+{
+    std::vector<double> aRetval;
+    sal_uInt32 nTextLength(nLength);
+    const sal_uInt32 nStringLength(rText.getLength());
 
-        double TextLayouterDevice::getUnderlineOffset() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = rMetric.GetDescent() / 2.0;
-            return fRet;
-        }
+    if (nTextLength + nIndex > nStringLength)
+    {
+        nTextLength = nStringLength - nIndex;
+    }
 
-        double TextLayouterDevice::getStrikeoutOffset() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = (rMetric.GetAscent() - rMetric.GetInternalLeading()) / 3.0;
-            return fRet;
-        }
+    if (nTextLength)
+    {
+        aRetval.reserve(nTextLength);
+        std::vector<tools::Long> aArray(nTextLength);
+        mrDevice.GetTextArray(rText, aArray.data(), nIndex, nLength);
+        aRetval.assign(aArray.begin(), aArray.end());
+    }
 
-        double TextLayouterDevice::getOverlineHeight() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = rMetric.GetInternalLeading() / 2.5;
-            return fRet;
-        }
+    return aRetval;
+}
 
-        double TextLayouterDevice::getUnderlineHeight() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            double fRet = rMetric.GetDescent() / 4.0;
-            return fRet;
-        }
+std::vector<double> TextLayouterDevice::getCaretPositions(const OUString& rText, sal_uInt32 nIndex,
+                                                          sal_uInt32 nLength) const
+{
+    std::vector<double> aRetval;
+    sal_uInt32 nTextLength(nLength);
+    const sal_uInt32 nStringLength(rText.getLength());
 
-        double TextLayouterDevice::getTextHeight() const
-        {
-            return mrDevice.GetTextHeight();
-        }
+    if (nTextLength + nIndex > nStringLength)
+    {
+        nTextLength = nStringLength - nIndex;
+    }
 
-        double TextLayouterDevice::getTextWidth(
-            const OUString& rText,
-            sal_uInt32 nIndex,
-            sal_uInt32 nLength) const
-        {
-            return mrDevice.GetTextWidth(rText, nIndex, nLength);
-        }
+    if (nTextLength)
+    {
+        aRetval.reserve(2 * nTextLength);
+        std::vector<tools::Long> aArray(2 * nTextLength);
+        mrDevice.GetCaretPositions(rText, aArray.data(), nIndex, nLength);
+        aRetval.assign(aArray.begin(), aArray.end());
+    }
 
-        void TextLayouterDevice::getTextOutlines(
-            basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector,
-            const OUString& rText,
-            sal_uInt32 nIndex,
-            sal_uInt32 nLength,
-            const std::vector< double >& rDXArray) const
-        {
-            const sal_uInt32 nDXArrayCount(rDXArray.size());
-            sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.getLength());
-
-            if(nTextLength + nIndex > nStringLength)
-            {
-                nTextLength = nStringLength - nIndex;
-            }
-
-            if(nDXArrayCount)
-            {
-                OSL_ENSURE(nDXArrayCount == nTextLength, "DXArray size does not correspond to text portion size (!)");
-                std::vector< tools::Long > aIntegerDXArray(nDXArrayCount);
-
-                for(sal_uInt32 a(0); a < nDXArrayCount; a++)
-                {
-                    aIntegerDXArray[a] = basegfx::fround(rDXArray[a]);
-                }
-
-                mrDevice.GetTextOutlines(
-                    rB2DPolyPolyVector,
-                    rText,
-                    nIndex,
-                    nIndex,
-                    nLength,
-                    0,
-                    aIntegerDXArray.data());
-            }
-            else
-            {
-                mrDevice.GetTextOutlines(
-                    rB2DPolyPolyVector,
-                    rText,
-                    nIndex,
-                    nIndex,
-                    nLength);
-            }
-        }
-
-        basegfx::B2DRange TextLayouterDevice::getTextBoundRect(
-            const OUString& rText,
-            sal_uInt32 nIndex,
-            sal_uInt32 nLength) const
-        {
-            sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.getLength());
-
-            if(nTextLength + nIndex > nStringLength)
-            {
-                nTextLength = nStringLength - nIndex;
-            }
-
-            if(nTextLength)
-            {
-                ::tools::Rectangle aRect;
-
-                mrDevice.GetTextBoundRect(
-                    aRect,
-                    rText,
-                    nIndex,
-                    nIndex,
-                    nLength);
-
-                // #i104432#, #i102556# take empty results into account
-                if(!aRect.IsEmpty())
-                {
-                    return vcl::unotools::b2DRectangleFromRectangle(aRect);
-                }
-            }
-
-            return basegfx::B2DRange();
-        }
-
-        double TextLayouterDevice::getFontAscent() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            return rMetric.GetAscent();
-        }
-
-        double TextLayouterDevice::getFontDescent() const
-        {
-            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-            return rMetric.GetDescent();
-        }
-
-        void TextLayouterDevice::addTextRectActions(
-            const ::tools::Rectangle& rRectangle,
-            const OUString& rText,
-            DrawTextFlags nStyle,
-            GDIMetaFile& rGDIMetaFile) const
-        {
-            mrDevice.AddTextRectActions(
-                rRectangle, rText, nStyle, rGDIMetaFile);
-        }
-
-        std::vector< double > TextLayouterDevice::getTextArray(
-            const OUString& rText,
-            sal_uInt32 nIndex,
-            sal_uInt32 nLength) const
-        {
-            std::vector< double > aRetval;
-            sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.getLength());
-
-            if(nTextLength + nIndex > nStringLength)
-            {
-                nTextLength = nStringLength - nIndex;
-            }
-
-            if(nTextLength)
-            {
-                aRetval.reserve(nTextLength);
-                std::vector<tools::Long> aArray(nTextLength);
-                mrDevice.GetTextArray(rText, aArray.data(), nIndex, nLength);
-                aRetval.assign(aArray.begin(), aArray.end());
-            }
-
-            return aRetval;
-        }
-
-        std::vector< double > TextLayouterDevice::getCaretPositions(
-            const OUString& rText,
-            sal_uInt32 nIndex,
-            sal_uInt32 nLength) const
-        {
-            std::vector< double > aRetval;
-            sal_uInt32 nTextLength(nLength);
-            const sal_uInt32 nStringLength(rText.getLength());
-
-            if(nTextLength + nIndex > nStringLength)
-            {
-                nTextLength = nStringLength - nIndex;
-            }
-
-            if(nTextLength)
-            {
-                aRetval.reserve(2 * nTextLength);
-                std::vector<tools::Long> aArray(2 * nTextLength);
-                mrDevice.GetCaretPositions(rText, aArray.data(), nIndex, nLength);
-                aRetval.assign(aArray.begin(), aArray.end());
-            }
-
-            return aRetval;
-        }
-
+    return aRetval;
+}
 
 // helper methods for vcl font handling
 
-        vcl::Font getVclFontFromFontAttribute(
-            const attribute::FontAttribute& rFontAttribute,
-            double fFontScaleX,
-            double fFontScaleY,
-            double fFontRotation,
-            const css::lang::Locale& rLocale)
-        {
-            // detect FontScaling
-            const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
-            const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
-            const bool bFontIsScaled(nHeight != nWidth);
+vcl::Font getVclFontFromFontAttribute(const attribute::FontAttribute& rFontAttribute,
+                                      double fFontScaleX, double fFontScaleY, double fFontRotation,
+                                      const css::lang::Locale& rLocale)
+{
+    // detect FontScaling
+    const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
+    const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+    const bool bFontIsScaled(nHeight != nWidth);
 
 #ifdef _WIN32
-            // for WIN32 systems, start with creating an unscaled font. If FontScaling
-            // is wanted, that width needs to be adapted using FontMetric again to get a
-            // width of the unscaled font
-            vcl::Font aRetval(
-                rFontAttribute.getFamilyName(),
-                rFontAttribute.getStyleName(),
-                Size(0, nHeight));
+    // for WIN32 systems, start with creating an unscaled font. If FontScaling
+    // is wanted, that width needs to be adapted using FontMetric again to get a
+    // width of the unscaled font
+    vcl::Font aRetval(rFontAttribute.getFamilyName(), rFontAttribute.getStyleName(),
+                      Size(0, nHeight));
 #else
-            // for non-WIN32 systems things are easier since these accept a Font creation
-            // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
-            // FontWidth when no scaling is used to explicitly have that zero when e.g. the
-            // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
-            // set FontWidth; import that in a WIN32 system, and trouble is there)
-            vcl::Font aRetval(
-                rFontAttribute.getFamilyName(),
-                rFontAttribute.getStyleName(),
-                Size(bFontIsScaled ? std::max<sal_uInt32>(nWidth, 1) : 0, nHeight));
+    // for non-WIN32 systems things are easier since these accept a Font creation
+    // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
+    // FontWidth when no scaling is used to explicitly have that zero when e.g. the
+    // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
+    // set FontWidth; import that in a WIN32 system, and trouble is there)
+    vcl::Font aRetval(rFontAttribute.getFamilyName(), rFontAttribute.getStyleName(),
+                      Size(bFontIsScaled ? std::max<sal_uInt32>(nWidth, 1) : 0, nHeight));
 #endif
-            // define various other FontAttribute
-            aRetval.SetAlignment(ALIGN_BASELINE);
-            aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttribute.getVertical());
-            aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
-            aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
-            aRetval.SetOutline(rFontAttribute.getOutline());
-            aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
-            aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
+    // define various other FontAttribute
+    aRetval.SetAlignment(ALIGN_BASELINE);
+    aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL
+                                                  : RTL_TEXTENCODING_UNICODE);
+    aRetval.SetVertical(rFontAttribute.getVertical());
+    aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
+    aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
+    aRetval.SetOutline(rFontAttribute.getOutline());
+    aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
+    aRetval.SetLanguage(LanguageTag::convertToLanguageType(rLocale, false));
 
 #ifdef _WIN32
-            // for WIN32 systems, correct the FontWidth if FontScaling is used
-            if(bFontIsScaled && nHeight > 0)
-            {
-                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
+    // for WIN32 systems, correct the FontWidth if FontScaling is used
+    if (bFontIsScaled && nHeight > 0)
+    {
+        const FontMetric aUnscaledFontMetric(
+            Application::GetDefaultDevice()->GetFontMetric(aRetval));
 
-                if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
-                {
-                    const double fScaleFactor(static_cast<double>(nWidth) / static_cast<double>(nHeight));
-                    const sal_uInt32 nScaledWidth(basegfx::fround(static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor));
-                    aRetval.SetAverageFontWidth(nScaledWidth);
-                }
-            }
-#endif
-            // handle FontRotation (if defined)
-            if(!basegfx::fTools::equalZero(fFontRotation))
-            {
-                sal_Int16 aRotate10th(static_cast<sal_Int16>(fFontRotation * (-1800.0/F_PI)));
-                aRetval.SetOrientation(Degree10(aRotate10th % 3600));
-            }
-
-            return aRetval;
-        }
-
-        attribute::FontAttribute getFontAttributeFromVclFont(
-            basegfx::B2DVector& o_rSize,
-            const vcl::Font& rFont,
-            bool bRTL,
-            bool bBiDiStrong)
+        if (aUnscaledFontMetric.GetAverageFontWidth() > 0)
         {
-            const attribute::FontAttribute aRetval(
-                rFont.GetFamilyName(),
-                rFont.GetStyleName(),
-                static_cast<sal_uInt16>(rFont.GetWeight()),
-                RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
-                rFont.IsVertical(),
-                ITALIC_NONE != rFont.GetItalic(),
-                PITCH_FIXED == rFont.GetPitch(),
-                rFont.IsOutline(),
-                bRTL,
-                bBiDiStrong);
-            // TODO: eKerning
+            const double fScaleFactor(static_cast<double>(nWidth) / static_cast<double>(nHeight));
+            const sal_uInt32 nScaledWidth(basegfx::fround(
+                static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()) * fScaleFactor));
+            aRetval.SetAverageFontWidth(nScaledWidth);
+        }
+    }
+#endif
+    // handle FontRotation (if defined)
+    if (!basegfx::fTools::equalZero(fFontRotation))
+    {
+        sal_Int16 aRotate10th(static_cast<sal_Int16>(fFontRotation * (-1800.0 / F_PI)));
+        aRetval.SetOrientation(Degree10(aRotate10th % 3600));
+    }
 
-            // set FontHeight and init to no FontScaling
-            o_rSize.setY(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
-            o_rSize.setX(o_rSize.getY());
+    return aRetval;
+}
+
+attribute::FontAttribute getFontAttributeFromVclFont(basegfx::B2DVector& o_rSize,
+                                                     const vcl::Font& rFont, bool bRTL,
+                                                     bool bBiDiStrong)
+{
+    const attribute::FontAttribute aRetval(
+        rFont.GetFamilyName(), rFont.GetStyleName(), static_cast<sal_uInt16>(rFont.GetWeight()),
+        RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(), rFont.IsVertical(),
+        ITALIC_NONE != rFont.GetItalic(), PITCH_FIXED == rFont.GetPitch(), rFont.IsOutline(), bRTL,
+        bBiDiStrong);
+    // TODO: eKerning
+
+    // set FontHeight and init to no FontScaling
+    o_rSize.setY(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
+    o_rSize.setX(o_rSize.getY());
 
 #ifdef _WIN32
-            // for WIN32 systems, the FontScaling at the Font is detected by
-            // checking that FontWidth != 0. When FontScaling is used, WIN32
-            // needs to do extra stuff to detect the correct width (since it's
-            // zero and not equal the font height) and its relationship to
-            // the height
-            if(rFont.GetFontSize().getWidth() > 0)
-            {
-                vcl::Font aUnscaledFont(rFont);
-                aUnscaledFont.SetAverageFontWidth(0);
-                const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
+    // for WIN32 systems, the FontScaling at the Font is detected by
+    // checking that FontWidth != 0. When FontScaling is used, WIN32
+    // needs to do extra stuff to detect the correct width (since it's
+    // zero and not equal the font height) and its relationship to
+    // the height
+    if (rFont.GetFontSize().getWidth() > 0)
+    {
+        vcl::Font aUnscaledFont(rFont);
+        aUnscaledFont.SetAverageFontWidth(0);
+        const FontMetric aUnscaledFontMetric(
+            Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
 
-                if(aUnscaledFontMetric.GetAverageFontWidth() > 0)
-                {
-                    const double fScaleFactor(static_cast<double>(rFont.GetFontSize().getWidth()) / static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()));
-                    o_rSize.setX(fScaleFactor * o_rSize.getY());
-                }
-            }
-#else
-            // For non-WIN32 systems the detection is the same, but the value
-            // is easier achieved since width == height is interpreted as no
-            // scaling. Ergo, Width == 0 means width == height, and width != 0
-            // means the scaling is in the direct relation of width to height
-            if(rFont.GetFontSize().getWidth() > 0)
-            {
-                o_rSize.setX(static_cast<double>(rFont.GetFontSize().getWidth()));
-            }
-#endif
-            return aRetval;
+        if (aUnscaledFontMetric.GetAverageFontWidth() > 0)
+        {
+            const double fScaleFactor(
+                static_cast<double>(rFont.GetFontSize().getWidth())
+                / static_cast<double>(aUnscaledFontMetric.GetAverageFontWidth()));
+            o_rSize.setX(fScaleFactor * o_rSize.getY());
         }
+    }
+#else
+    // For non-WIN32 systems the detection is the same, but the value
+    // is easier achieved since width == height is interpreted as no
+    // scaling. Ergo, Width == 0 means width == height, and width != 0
+    // means the scaling is in the direct relation of width to height
+    if (rFont.GetFontSize().getWidth() > 0)
+    {
+        o_rSize.setX(static_cast<double>(rFont.GetFontSize().getWidth()));
+    }
+#endif
+    return aRetval;
+}
 
 } // end of namespace
 
