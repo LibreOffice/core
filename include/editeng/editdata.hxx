@@ -42,6 +42,8 @@ enum class EEAnchorMode {
             VCenterLeft, VCenterHCenter, VCenterRight,
             BottomLeft,  BottomHCenter,  BottomRight };
 
+enum class EERemoveParaAttribsMode { RemoveAll, RemoveCharItems, RemoveNone };
+
 #define EE_PARA_NOT_FOUND       SAL_MAX_INT32
 #define EE_PARA_APPEND          SAL_MAX_INT32
 #define EE_PARA_ALL             SAL_MAX_INT32

@@ -515,7 +515,7 @@ void TextConvWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttri
         // all attributes now. (Those attributes that may take effect left
         // to the position where the new text gets inserted after the old text
         // was deleted)
-        m_pEditView->RemoveAttribs();
+        m_pEditView->RemoveAttribs(EERemoveParaAttribsMode::RemoveNone, 0);
         // apply saved attributes to new inserted text
         m_pEditView->SetAttribs( aSet );
     }
