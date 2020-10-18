@@ -577,13 +577,13 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
     }
 }
 
-void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttribs, sal_uInt16 nWhich )
+void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, EERemoveParaAttribsMode eMode, sal_uInt16 nWhich )
 {
     aSel.Adjust( aEditDoc );
 
     sal_Int32 nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     sal_Int32 nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
-
+    bool bRemoveParaAttribs = eMode == EERemoveParaAttribsMode::RemoveAll;
     const SfxItemSet* _pEmptyItemSet = bRemoveParaAttribs ? &GetEmptyItemSet() : nullptr;
 
     if ( IsUndoEnabled() && !IsInUndo() && aStatus.DoUndoAttribs() )
@@ -614,7 +614,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttri
         {
             SetParaAttribs( nNode, *_pEmptyItemSet );   // Invalidated
         }
-        else
+        else if (eMode == EERemoveParaAttribsMode::RemoveCharItems)
         {
             // For 'Format-Standard' also the character attributes should
             // disappear, which were set as paragraph attributes by the

@@ -568,10 +568,15 @@ void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
 
 void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
+    RemoveAttribs(bRemoveParaAttribs ? EERemoveParaAttribsMode::RemoveAll
+            : EERemoveParaAttribsMode::RemoveCharItems, nWhich);
+}
 
+void EditView::RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich )
+{
     pImpEditView->DrawSelectionXOR();
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
-    pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), bRemoveParaAttribs, nWhich  );
+    pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), eMode, nWhich  );
     pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }

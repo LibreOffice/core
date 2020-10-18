@@ -754,7 +754,15 @@ void EditEngine::RemoveCharAttribs(sal_Int32 nPara, sal_uInt16 nWhich, bool bRem
 
 void EditEngine::RemoveCharAttribs(const EditSelection& rSel, bool bRemoveParaAttribs, sal_uInt16 nWhich)
 {
-    pImpEditEngine->RemoveCharAttribs(rSel, bRemoveParaAttribs, nWhich);
+    const EERemoveParaAttribsMode eMode = bRemoveParaAttribs?
+        EERemoveParaAttribsMode::RemoveAll :
+        EERemoveParaAttribsMode::RemoveCharItems;
+    pImpEditEngine->RemoveCharAttribs(rSel, eMode, nWhich);
+}
+
+void EditEngine::RemoveCharAttribs(const EditSelection& rSel, EERemoveParaAttribsMode eMode, sal_uInt16 nWhich)
+{
+    pImpEditEngine->RemoveCharAttribs(rSel, eMode, nWhich);
 }
 
 EditEngine::ViewsType& EditEngine::GetEditViews()
@@ -1770,10 +1778,13 @@ SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 
 
 void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )
 {
+    const EERemoveParaAttribsMode eMode = bRemoveParaAttribs?
+        EERemoveParaAttribsMode::RemoveAll :
+        EERemoveParaAttribsMode::RemoveCharItems;
 
     pImpEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     EditSelection aSel( pImpEditEngine->ConvertSelection( rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos ) );
-    pImpEditEngine->RemoveCharAttribs( aSel, bRemoveParaAttribs, nWhich  );
+    pImpEditEngine->RemoveCharAttribs( aSel, eMode, nWhich  );
     pImpEditEngine->UndoActionEnd();
     pImpEditEngine->FormatAndUpdate();
 }
