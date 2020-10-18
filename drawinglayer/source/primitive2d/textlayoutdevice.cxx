@@ -36,11 +36,13 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 
-// VDev RevDevice provider
-
+namespace drawinglayer::primitive2d
+{
 namespace
 {
 class ImpTimedRefDev;
+
+// VDev RevDevice provider
 
 //the scoped_timed_RefDev owns an ImpTimeRefDev and releases it on dtor
 //or disposing of the default XComponentContext which causes the underlying
@@ -130,14 +132,8 @@ void ImpTimedRefDev::releaseVirtualDevice()
         Start();
     }
 }
-} // end of anonymous namespace
 
-// access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
-
-namespace drawinglayer::primitive2d
-{
-// static methods here
-static VirtualDevice& acquireGlobalVirtualDevice()
+VirtualDevice& acquireGlobalVirtualDevice()
 {
     scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
 
@@ -147,7 +143,7 @@ static VirtualDevice& acquireGlobalVirtualDevice()
     return rStdRefDevice->acquireVirtualDevice();
 }
 
-static void releaseGlobalVirtualDevice()
+void releaseGlobalVirtualDevice()
 {
     scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
 
@@ -155,6 +151,8 @@ static void releaseGlobalVirtualDevice()
                "releaseGlobalVirtualDevice() without prior acquireGlobalVirtualDevice() call(!)");
     rStdRefDevice->releaseVirtualDevice();
 }
+
+} // end of anonymous namespace
 
 TextLayouterDevice::TextLayouterDevice()
     : maSolarGuard()
