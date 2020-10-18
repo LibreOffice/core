@@ -29,48 +29,44 @@
 class SvxToolbarConfigPage : public SvxConfigPage
 {
 private:
+    DECL_LINK(SelectToolbarEntry, weld::TreeView&, void);
+    DECL_LINK(MoveHdl, weld::Button&, void);
 
-    DECL_LINK( SelectToolbarEntry, weld::TreeView&, void );
-    DECL_LINK( MoveHdl, weld::Button&, void );
+    DECL_LINK(GearHdl, const OString&, void);
 
-    DECL_LINK( GearHdl, const OString&, void );
+    DECL_LINK(SelectCategory, weld::ComboBox&, void);
 
-    DECL_LINK( SelectCategory, weld::ComboBox&, void );
+    DECL_LINK(ContentContextMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(FunctionContextMenuHdl, const CommandEvent&, bool);
 
-    DECL_LINK( ContentContextMenuHdl, const CommandEvent&, bool );
-    DECL_LINK( FunctionContextMenuHdl, const CommandEvent&, bool );
+    DECL_LINK(AddCommandHdl, weld::Button&, void);
+    DECL_LINK(RemoveCommandHdl, weld::Button&, void);
 
-    DECL_LINK( AddCommandHdl, weld::Button&, void );
-    DECL_LINK( RemoveCommandHdl, weld::Button&, void );
-
-    DECL_LINK( InsertHdl, const OString&, void );
-    DECL_LINK( ModifyItemHdl, const OString&, void );
-    DECL_LINK( ResetToolbarHdl, weld::Button&, void );
+    DECL_LINK(InsertHdl, const OString&, void);
+    DECL_LINK(ModifyItemHdl, const OString&, void);
+    DECL_LINK(ResetToolbarHdl, weld::Button&, void);
 
     virtual void ListModified() override;
 
-    void            UpdateButtonStates() override;
-    short           QueryReset() override;
-    void            Init() override;
-    void            DeleteSelectedContent() override;
-    void            DeleteSelectedTopLevel() override;
-    virtual void    SelectElement() override;
+    void UpdateButtonStates() override;
+    short QueryReset() override;
+    void Init() override;
+    void DeleteSelectedContent() override;
+    void DeleteSelectedTopLevel() override;
+    virtual void SelectElement() override;
 
 public:
-    SvxToolbarConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet);
+    SvxToolbarConfigPage(weld::Container* pPage, weld::DialogController* pController,
+                         const SfxItemSet& rItemSet);
     virtual ~SvxToolbarConfigPage() override;
 
-    void            AddFunction(int nTarget = -1);
+    void AddFunction(int nTarget = -1);
 
-    void            MoveEntry( bool bMoveUp ) override;
+    void MoveEntry(bool bMoveUp) override;
 
-    SaveInData*     CreateSaveInData(
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const OUString& aModuleId,
-        bool docConfig ) override;
+    SaveInData* CreateSaveInData(const css::uno::Reference<css::ui::XUIConfigurationManager>&,
+                                 const css::uno::Reference<css::ui::XUIConfigurationManager>&,
+                                 const OUString& aModuleId, bool docConfig) override;
 };
 
 class SvxToolbarEntriesListBox final : public SvxMenuEntriesListBox
@@ -81,7 +77,6 @@ class SvxToolbarEntriesListBox final : public SvxMenuEntriesListBox
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-
     SvxToolbarEntriesListBox(std::unique_ptr<weld::TreeView> xControl, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox() override;
 };
