@@ -51,39 +51,36 @@
 #include <cfg.hxx> //for SaveInData
 
 CommandCategoryListBox::CommandCategoryListBox(std::unique_ptr<weld::ComboBox> xControl)
-    : pStylesInfo( nullptr )
+    : pStylesInfo(nullptr)
     , m_xControl(std::move(xControl))
 {
     //Initialize search util
     m_searchOptions.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
     m_searchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     m_searchOptions.searchFlag |= (css::util::SearchFlags::REG_NOT_BEGINOFLINE
-                                | css::util::SearchFlags::REG_NOT_ENDOFLINE);
+                                   | css::util::SearchFlags::REG_NOT_ENDOFLINE);
 }
 
-CommandCategoryListBox::~CommandCategoryListBox()
-{
-    ClearAll();
-}
+CommandCategoryListBox::~CommandCategoryListBox() { ClearAll(); }
 
 void CommandCategoryListBox::ClearAll()
 {
     // Clear objects from m_aGroupInfo vector to avoid memory leak
-    for (const auto & It : m_aGroupInfo)
+    for (const auto& It : m_aGroupInfo)
     {
-        if ( It->nKind == SfxCfgKind::GROUP_STYLES && It->pObject )
+        if (It->nKind == SfxCfgKind::GROUP_STYLES && It->pObject)
         {
             SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(It->pObject);
             delete pStyle;
         }
-        else if ( It->nKind == SfxCfgKind::FUNCTION_SCRIPT && It->pObject )
+        else if (It->nKind == SfxCfgKind::FUNCTION_SCRIPT && It->pObject)
         {
             OUString* pScriptURI = static_cast<OUString*>(It->pObject);
             delete pScriptURI;
         }
-        else if ( It->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER && It->pObject)
+        else if (It->nKind == SfxCfgKind::GROUP_SCRIPTCONTAINER && It->pObject)
         {
-            css::uno::XInterface* xi = static_cast<css::uno::XInterface *>(It->pObject);
+            css::uno::XInterface* xi = static_cast<css::uno::XInterface*>(It->pObject);
             if (xi != nullptr)
             {
                 xi->release();
@@ -95,10 +92,9 @@ void CommandCategoryListBox::ClearAll()
     m_xControl->clear();
 }
 
-void CommandCategoryListBox::Init(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XFrame >& xFrame,
-        const OUString& sModuleLongName)
+void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+                                  const css::uno::Reference<css::frame::XFrame>& xFrame,
+                                  const OUString& sModuleLongName)
 {
     // User will not see incomplete UI
     m_xControl->freeze();
@@ -108,9 +104,10 @@ void CommandCategoryListBox::Init(
     m_xFrame = xFrame;
 
     m_sModuleLongName = sModuleLongName;
-    m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
-    m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
-    m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
+    m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get(m_xContext);
+    m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName),
+                              css::uno::UNO_QUERY_THROW);
+    m_xUICmdDescription = css::frame::theUICommandDescription::get(m_xContext);
 
     // Support style commands
     css::uno::Reference<css::frame::XController> xController;
@@ -125,16 +122,20 @@ void CommandCategoryListBox::Init(
 
     try
     {
-        css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider(m_xFrame, css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence< sal_Int16 > lGroups = xProvider->getSupportedCommandGroups();
+        css::uno::Reference<css::frame::XDispatchInformationProvider> xProvider(
+            m_xFrame, css::uno::UNO_QUERY_THROW);
+        css::uno::Sequence<sal_Int16> lGroups = xProvider->getSupportedCommandGroups();
 
         sal_Int32 nGroupsLength = lGroups.getLength();
 
-        if ( nGroupsLength > 0 )
+        if (nGroupsLength > 0)
         {
             // Add the category of "All commands"
-            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
-            m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), CuiResId(RID_SVXSTR_ALLFUNCTIONS));
+            m_aGroupInfo.push_back(
+                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
+            m_xControl->append(
+                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                CuiResId(RID_SVXSTR_ALLFUNCTIONS));
         }
 
         // Separate the "All commands"category from the actual categories
@@ -146,9 +147,9 @@ void CommandCategoryListBox::Init(
         // Add the actual categories
         for (sal_Int32 i = 0; i < nGroupsLength; ++i)
         {
-            sal_Int16   nGroupID = lGroups[i];
-            OUString    sGroupID = OUString::number(nGroupID);
-            OUString    sGroupName;
+            sal_Int16 nGroupID = lGroups[i];
+            OUString sGroupID = OUString::number(nGroupID);
+            OUString sGroupName;
 
             try
             {
@@ -156,7 +157,7 @@ void CommandCategoryListBox::Init(
                 if (sGroupName.isEmpty())
                     continue;
             }
-            catch(const css::container::NoSuchElementException&)
+            catch (const css::container::NoSuchElementException&)
             {
                 continue;
             }
@@ -168,16 +169,20 @@ void CommandCategoryListBox::Init(
             Application::GetSettings().GetUILanguageTag().getLocale());
 
         std::sort(aCategories.begin(), aCategories.end(),
-                  [&sort](const str_id& a, const str_id& b)
-                  { return sort.compare(a.first, b.first) < 0; });
+                  [&sort](const str_id& a, const str_id& b) {
+                      return sort.compare(a.first, b.first) < 0;
+                  });
 
         // Add the actual categories
-        for (const auto &a : aCategories)
+        for (const auto& a : aCategories)
         {
             const OUString& rGroupName = a.first;
             sal_Int16 nGroupID = a.second;
-            m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_FUNCTION, nGroupID));
-            m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), rGroupName);
+            m_aGroupInfo.push_back(
+                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_FUNCTION, nGroupID));
+            m_xControl->append(
+                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                rGroupName);
         }
 
         // Separate regular commands from styles and macros
@@ -185,19 +190,24 @@ void CommandCategoryListBox::Init(
 
         // Add macros category
         m_aGroupInfo.push_back(
-            std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr) );
-        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), CuiResId(RID_SVXSTR_MACROS));
+            std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr));
+        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                           CuiResId(RID_SVXSTR_MACROS));
 
         // Add styles category
         //TODO: last param should contain user data?
         m_aGroupInfo.push_back(
-            std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) );
-        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), CuiResId(RID_SVXSTR_GROUP_STYLES));
+            std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, nullptr));
+        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                           CuiResId(RID_SVXSTR_GROUP_STYLES));
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-    {}
+    catch (const css::uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const css::uno::Exception&)
+    {
+    }
 
     // Reveal the updated UI to user
     m_xControl->thaw();
@@ -206,31 +216,29 @@ void CommandCategoryListBox::Init(
 
 void CommandCategoryListBox::FillFunctionsList(
     const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
-    CuiConfigFunctionListBox*  pFunctionListBox,
-    const OUString& filterTerm,
-    SaveInData *pCurrentSaveInData )
+    CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,
+    SaveInData* pCurrentSaveInData)
 {
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
-    utl::TextSearch textSearch( m_searchOptions );
+    utl::TextSearch textSearch(m_searchOptions);
 
-    for (const auto & rInfo : xCommands)
+    for (const auto& rInfo : xCommands)
     {
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
+        auto aProperties
+            = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
 
-        OUString sUIName    = getCommandName(rInfo.Command);
-        OUString sLabel     = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
-        OUString sTooltipLabel = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
-        OUString sPopupLabel =
-                (vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties))
-                .replaceFirst("~", "");
+        OUString sUIName = getCommandName(rInfo.Command);
+        OUString sLabel = vcl::CommandInfoProvider::GetLabelForCommand(aProperties);
+        OUString sTooltipLabel
+            = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
+        OUString sPopupLabel = (vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties))
+                                   .replaceFirst("~", "");
 
         // Apply the search filter
-        if (!filterTerm.isEmpty()
-            && !textSearch.searchForward( sUIName )
-            && !textSearch.searchForward( sLabel )
-            && !textSearch.searchForward( sTooltipLabel )
-            && !textSearch.searchForward( sPopupLabel ) )
+        if (!filterTerm.isEmpty() && !textSearch.searchForward(sUIName)
+            && !textSearch.searchForward(sLabel) && !textSearch.searchForward(sTooltipLabel)
+            && !textSearch.searchForward(sPopupLabel))
         {
             continue;
         }
@@ -239,12 +247,14 @@ void CommandCategoryListBox::FillFunctionsList(
         if (pCurrentSaveInData)
             xImage = pCurrentSaveInData->GetImage(rInfo.Command);
 
-        m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
+        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::FUNCTION_SLOT, 0));
         SfxGroupInfo_Impl* pGrpInfo = m_aGroupInfo.back().get();
         pGrpInfo->sCommand = rInfo.Command;
-        pGrpInfo->sLabel   = sUIName;
+        pGrpInfo->sLabel = sUIName;
         pGrpInfo->sTooltip = sTooltipLabel;
-        pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, xImage);
+        pFunctionListBox->append(
+            OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
+            xImage);
     }
 }
 
@@ -253,7 +263,7 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
     OUString sUIName;
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xModuleConf;
+        css::uno::Reference<css::container::XNameAccess> xModuleConf;
         m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
         if (xModuleConf.is())
         {
@@ -261,10 +271,14 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
             sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
         }
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(css::uno::Exception&)
-        { sUIName.clear(); }
+    catch (const css::uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (css::uno::Exception&)
+    {
+        sUIName.clear();
+    }
 
     // fallback for missing UINames !?
     if (sUIName.isEmpty())
@@ -276,39 +290,42 @@ OUString CommandCategoryListBox::getCommandName(const OUString& sCommand)
 }
 
 void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctionListBox,
-                                              const OUString& filterTerm, SaveInData *pCurrentSaveInData)
+                                              const OUString& filterTerm,
+                                              SaveInData* pCurrentSaveInData)
 {
-    SfxGroupInfo_Impl *pInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_active_id().toInt64());
+    SfxGroupInfo_Impl* pInfo
+        = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_active_id().toInt64());
     std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
     pFunctionListBox->freeze();
     pFunctionListBox->ClearAll();
 
-    switch ( pInfo->nKind )
+    switch (pInfo->nKind)
     {
         case SfxCfgKind::GROUP_ALLFUNCTIONS:
         {
-            css::uno::Reference< css::frame::XDispatchInformationProvider >
-                xProvider( m_xFrame, css::uno::UNO_QUERY );
+            css::uno::Reference<css::frame::XDispatchInformationProvider> xProvider(
+                m_xFrame, css::uno::UNO_QUERY);
             sal_Int32 nEntryCount = m_xControl->get_count();
 
             for (sal_Int32 nCurPos = 0; nCurPos < nEntryCount; ++nCurPos)
             {
-                SfxGroupInfo_Impl *pCurrentInfo =
-                    reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
+                SfxGroupInfo_Impl* pCurrentInfo
+                    = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
 
                 if (!pCurrentInfo) //separator
                     continue;
 
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
-                    css::uno::Sequence< css::frame::DispatchInformation > lCommands;
+                    css::uno::Sequence<css::frame::DispatchInformation> lCommands;
                     try
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation(
-                                        pCurrentInfo->nUniqueID );
-                        FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
+                            pCurrentInfo->nUniqueID);
+                        FillFunctionsList(lCommands, pFunctionListBox, filterTerm,
+                                          pCurrentSaveInData);
                     }
-                    catch( css::container::NoSuchElementException& )
+                    catch (css::container::NoSuchElementException&)
                     {
                     }
                 }
@@ -319,56 +336,59 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
         case SfxCfgKind::GROUP_FUNCTION:
         {
             sal_uInt16 nGroup = pInfo->nUniqueID;
-            css::uno::Reference< css::frame::XDispatchInformationProvider >
-                xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence< css::frame::DispatchInformation > lCommands =
-                xProvider->getConfigurableDispatchInformation(nGroup);
-            FillFunctionsList( lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData );
+            css::uno::Reference<css::frame::XDispatchInformationProvider> xProvider(
+                m_xFrame, css::uno::UNO_QUERY_THROW);
+            css::uno::Sequence<css::frame::DispatchInformation> lCommands
+                = xProvider->getConfigurableDispatchInformation(nGroup);
+            FillFunctionsList(lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData);
             break;
         }
         case SfxCfgKind::GROUP_SCRIPTCONTAINER: //Macros
         {
             SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");
             // Add Scripting Framework entries
-            css::uno::Reference< css::script::browse::XBrowseNode > rootNode;
+            css::uno::Reference<css::script::browse::XBrowseNode> rootNode;
             try
             {
-                css::uno::Reference< css::script::browse::XBrowseNodeFactory > xFac
-                    = css::script::browse::theBrowseNodeFactory::get( m_xContext );
-                rootNode.set( xFac->createView( css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+                css::uno::Reference<css::script::browse::XBrowseNodeFactory> xFac
+                    = css::script::browse::theBrowseNodeFactory::get(m_xContext);
+                rootNode.set(xFac->createView(
+                    css::script::browse::BrowseNodeFactoryViewTypes::MACROSELECTOR));
             }
-            catch( css::uno::Exception const & )
+            catch (css::uno::Exception const&)
             {
-                TOOLS_WARN_EXCEPTION("cui.customize", "Caught some exception whilst retrieving browse nodes from factory");
+                TOOLS_WARN_EXCEPTION(
+                    "cui.customize",
+                    "Caught some exception whilst retrieving browse nodes from factory");
                 // TODO exception handling
             }
 
-            if ( rootNode.is() && rootNode->hasChildNodes() )
+            if (rootNode.is() && rootNode->hasChildNodes())
             {
                 //We call acquire on the XBrowseNode so that it does not
                 //get autodestructed and become invalid when accessed later.
                 rootNode->acquire();
 
-                m_aGroupInfo.push_back(
-                    std::make_unique<SfxGroupInfo_Impl>(
-                        SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void *>(rootNode.get()) ) );
+                m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                    SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(rootNode.get())));
 
                 // Add main macro groups
-                const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes = rootNode->getChildNodes();
-                for ( auto const & childGroup : aChildNodes )
+                const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
+                    aChildNodes = rootNode->getChildNodes();
+                for (auto const& childGroup : aChildNodes)
                 {
                     childGroup->acquire();
 
-                    if ( childGroup->hasChildNodes() )
+                    if (childGroup->hasChildNodes())
                     {
                         OUString sUIName;
-                        if ( childGroup->getName() == "user" )
+                        if (childGroup->getName() == "user")
                         {
-                            sUIName = CuiResId( RID_SVXSTR_MYMACROS );
+                            sUIName = CuiResId(RID_SVXSTR_MYMACROS);
                         }
-                        else if ( childGroup->getName() == "share" )
+                        else if (childGroup->getName() == "share")
                         {
-                            sUIName = CuiResId( RID_SVXSTR_PRODMACROS );
+                            sUIName = CuiResId(RID_SVXSTR_PRODMACROS);
                         }
                         else
                         {
@@ -380,10 +400,12 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                             continue;
                         }
 
-                        m_aGroupInfo.push_back(
-                            std::make_unique<SfxGroupInfo_Impl>(
-                                SfxCfgKind::GROUP_SCRIPTCONTAINER, 0 ) );
-                        std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName));
+                        m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                            SfxCfgKind::GROUP_SCRIPTCONTAINER, 0));
+                        std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(
+                            OUString::number(
+                                reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                            sUIName));
 
                         {
                             // tdf#128010: Do not nag user asking to enable JRE: if it's disabled,
@@ -412,28 +434,30 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
         }
         case SfxCfgKind::GROUP_STYLES:
         {
-            const std::vector< SfxStyleInfo_Impl > lStyleFamilies = pStylesInfo->getStyleFamilies();
+            const std::vector<SfxStyleInfo_Impl> lStyleFamilies = pStylesInfo->getStyleFamilies();
 
-            for ( const auto & pIt : lStyleFamilies )
+            for (const auto& pIt : lStyleFamilies)
             {
-                if ( pIt.sLabel.isEmpty() )
+                if (pIt.sLabel.isEmpty())
                 {
                     continue;
                 }
 
-
-                m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0 ) );
+                m_aGroupInfo.push_back(
+                    std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0));
                 // pIt.sLabel is Name of the style family
-                std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), pIt.sLabel));
+                std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->tree_append(
+                    OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                    pIt.sLabel));
 
-                const std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pIt.sFamily);
+                const std::vector<SfxStyleInfo_Impl> lStyles = pStylesInfo->getStyles(pIt.sFamily);
 
                 // Setup search filter parameters
                 m_searchOptions.searchString = filterTerm;
-                utl::TextSearch textSearch( m_searchOptions );
+                utl::TextSearch textSearch(m_searchOptions);
 
                 // Insert children (styles)
-                for ( const auto & pStyleIt : lStyles )
+                for (const auto& pStyleIt : lStyles)
                 {
                     OUString sUIName = pStyleIt.sLabel;
                     sal_Int32 aStartPos = 0;
@@ -441,7 +465,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
 
                     // Apply the search filter
                     if (!filterTerm.isEmpty()
-                            && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+                        && !textSearch.SearchForward(sUIName, &aStartPos, &aEndPos))
                     {
                         continue;
                     }
@@ -449,13 +473,14 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(pStyleIt);
 
                     m_aGroupInfo.push_back(
-                                std::make_unique<SfxGroupInfo_Impl>(
-                                    SfxCfgKind::GROUP_STYLES, 0, pStyle ) );
+                        std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
 
                     m_aGroupInfo.back()->sCommand = pStyle->sCommand;
                     m_aGroupInfo.back()->sLabel = pStyle->sLabel;
 
-                    pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, xFuncEntry.get());
+                    pFunctionListBox->append(
+                        OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+                        sUIName, xFuncEntry.get());
                 }
 
                 // Remove the style group from the list if no children
@@ -473,7 +498,8 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
         }
         default:
             // Do nothing, the list box will stay empty
-            SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  static_cast<int>(pInfo->nKind) );
+            SAL_INFO("cui.customize",
+                     "Ignoring unexpected SfxCfgKind: " << static_cast<int>(pInfo->nKind));
             break;
     }
 
@@ -487,22 +513,21 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
         pFunctionListBox->expand_row(*it);
 }
 
-void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
-{
-    pStylesInfo = pStyles;
-}
+void CommandCategoryListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles) { pStylesInfo = pStyles; }
 
 void CommandCategoryListBox::addChildren(
-    const weld::TreeIter* parentEntry, const css::uno::Reference< css::script::browse::XBrowseNode > &parentNode,
-    CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm , SaveInData *pCurrentSaveInData,
-    std::vector<std::unique_ptr<weld::TreeIter>> &rNodesToExpand)
+    const weld::TreeIter* parentEntry,
+    const css::uno::Reference<css::script::browse::XBrowseNode>& parentNode,
+    CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,
+    SaveInData* pCurrentSaveInData, std::vector<std::unique_ptr<weld::TreeIter>>& rNodesToExpand)
 {
     // Setup search filter parameters
     m_searchOptions.searchString = filterTerm;
-    utl::TextSearch textSearch( m_searchOptions );
+    utl::TextSearch textSearch(m_searchOptions);
 
-    const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes = parentNode->getChildNodes();
-    for (auto const & child : aChildNodes)
+    const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes
+        = parentNode->getChildNodes();
+    for (auto const& child : aChildNodes)
     {
         // Acquire to prevent auto-destruction
         child->acquire();
@@ -511,11 +536,14 @@ void CommandCategoryListBox::addChildren(
         {
             OUString sUIName = child->getName();
 
-            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
-                                                                         0, static_cast<void *>( child.get())));
-            std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->tree_append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, parentEntry));
+            m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
+                SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(child.get())));
+            std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->tree_append(
+                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
+                parentEntry));
 
-            addChildren(xNewEntry.get(), child, pFunctionListBox, filterTerm, pCurrentSaveInData, rNodesToExpand);
+            addChildren(xNewEntry.get(), child, pFunctionListBox, filterTerm, pCurrentSaveInData,
+                        rNodesToExpand);
 
             // Remove the group if empty
             if (!pFunctionListBox->iter_has_child(*xNewEntry))
@@ -523,7 +551,7 @@ void CommandCategoryListBox::addChildren(
             else
                 rNodesToExpand.emplace_back(std::move(xNewEntry));
         }
-        else if ( child->getType() == css::script::browse::BrowseNodeTypes::SCRIPT )
+        else if (child->getType() == css::script::browse::BrowseNodeTypes::SCRIPT)
         {
             // Prepare for filtering
             OUString sUIName = child->getName();
@@ -531,15 +559,14 @@ void CommandCategoryListBox::addChildren(
             sal_Int32 aEndPos = sUIName.getLength();
 
             // Apply the search filter
-            if (!filterTerm.isEmpty()
-                    && !textSearch.SearchForward( sUIName, &aStartPos, &aEndPos ) )
+            if (!filterTerm.isEmpty() && !textSearch.SearchForward(sUIName, &aStartPos, &aEndPos))
             {
                 continue;
             }
 
             OUString uri, description;
 
-            css::uno::Reference < css::beans::XPropertySet >xPropSet( child, css::uno::UNO_QUERY );
+            css::uno::Reference<css::beans::XPropertySet> xPropSet(child, css::uno::UNO_QUERY);
 
             if (!xPropSet.is())
             {
@@ -554,26 +581,30 @@ void CommandCategoryListBox::addChildren(
                 value = xPropSet->getPropertyValue("Description");
                 value >>= description;
             }
-            catch (css::uno::Exception &) {
+            catch (css::uno::Exception&)
+            {
                 // do nothing, the description will be empty
             }
 
             if (description.isEmpty())
             {
-                description = CuiResId( RID_SVXSTR_NOMACRODESC );
+                description = CuiResId(RID_SVXSTR_NOMACRODESC);
             }
 
-            OUString* pScriptURI = new OUString( uri );
+            OUString* pScriptURI = new OUString(uri);
 
             css::uno::Reference<css::graphic::XGraphic> xImage;
             if (pCurrentSaveInData)
                 xImage = pCurrentSaveInData->GetImage(uri);
 
-            m_aGroupInfo.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+            m_aGroupInfo.push_back(
+                std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI));
             m_aGroupInfo.back()->sCommand = uri;
             m_aGroupInfo.back()->sLabel = sUIName;
             m_aGroupInfo.back()->sHelpText = description;
-            pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName, xImage, parentEntry);
+            pFunctionListBox->append(
+                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
+                xImage, parentEntry);
         }
     }
 }
