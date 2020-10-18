@@ -158,4 +158,60 @@ std::ostream &operator <<(std::ostream& s, const CGAffineTransform &aXform)
     return s;
 }
 
+std::ostream &operator <<(std::ostream& s, CGColorSpaceRef cs)
+{
+#ifndef SAL_LOG_INFO
+    (void) cs;
+#else
+    if (cs == nullptr)
+    {
+        s << "null";
+        return s;
+    }
+
+    CGColorSpaceModel model = CGColorSpaceGetModel(cs);
+    switch (model)
+    {
+    case kCGColorSpaceModelUnknown:
+        s << "Unknown";
+        break;
+    case kCGColorSpaceModelMonochrome:
+        s << "Monochrome";
+        break;
+    case kCGColorSpaceModelRGB:
+        s << "RGB";
+        if (CGColorSpaceIsWideGamutRGB(cs))
+            s << " (wide gamut)";
+        break;
+    case kCGColorSpaceModelCMYK:
+        s << "CMYK";
+        break;
+    case kCGColorSpaceModelLab:
+        s << "Lab";
+        break;
+    case kCGColorSpaceModelDeviceN:
+        s << "DeviceN";
+        break;
+    case kCGColorSpaceModelIndexed:
+        s << "Indexed (" << CGColorSpaceGetColorTableCount(cs) << ")";
+        break;
+    case kCGColorSpaceModelPattern:
+        s << "Pattern";
+        break;
+    case kCGColorSpaceModelXYZ:
+        s << "XYZ";
+        break;
+    default:
+        s << "?(" << model << ")";
+        break;
+    }
+
+    CFStringRef name = CGColorSpaceCopyName(cs);
+    if (name != NULL)
+        s << " (" << [(NSString *)name UTF8String] << ")";
+
+    return s;
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
