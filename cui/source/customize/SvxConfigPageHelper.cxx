@@ -27,52 +27,43 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
 
-static sal_Int16 theImageType =
-    css::ui::ImageType::COLOR_NORMAL |
-    css::ui::ImageType::SIZE_DEFAULT;
+static sal_Int16 theImageType = css::ui::ImageType::COLOR_NORMAL | css::ui::ImageType::SIZE_DEFAULT;
 
-void SvxConfigPageHelper::RemoveEntry( SvxEntries* pEntries, SvxConfigEntry const * pChildEntry )
+void SvxConfigPageHelper::RemoveEntry(SvxEntries* pEntries, SvxConfigEntry const* pChildEntry)
 {
     SvxEntries::iterator iter = pEntries->begin();
 
-    while ( iter != pEntries->end() )
+    while (iter != pEntries->end())
     {
-        if ( pChildEntry == *iter )
+        if (pChildEntry == *iter)
         {
-            pEntries->erase( iter );
+            pEntries->erase(iter);
             break;
         }
         ++iter;
     }
 }
 
-OUString SvxConfigPageHelper::replaceSaveInName( const OUString& rMessage, const OUString& rSaveInName )
+OUString SvxConfigPageHelper::replaceSaveInName(const OUString& rMessage,
+                                                const OUString& rSaveInName)
 {
     OUString name = rMessage.replaceFirst("%SAVE IN SELECTION%", rSaveInName);
 
     return name;
 }
 
-OUString SvxConfigPageHelper::stripHotKey( const OUString& str )
+OUString SvxConfigPageHelper::stripHotKey(const OUString& str) { return str.replaceFirst("~", ""); }
+
+OUString SvxConfigPageHelper::replaceSixteen(const OUString& str, sal_Int32 nReplacement)
 {
-    return str.replaceFirst("~", "");
+    return str.replaceAll(OUString::number(16), OUString::number(nReplacement));
 }
 
-OUString SvxConfigPageHelper::replaceSixteen( const OUString& str, sal_Int32 nReplacement )
-{
-    return str.replaceAll( OUString::number( 16 ), OUString::number( nReplacement ));
-}
-
-sal_Int16 SvxConfigPageHelper::GetImageType()
-{
-    return theImageType;
-}
+sal_Int16 SvxConfigPageHelper::GetImageType() { return theImageType; }
 
 void SvxConfigPageHelper::InitImageType()
 {
-    theImageType =
-        css::ui::ImageType::COLOR_NORMAL |
-        css::ui::ImageType::SIZE_DEFAULT;
+    theImageType = css::ui::ImageType::COLOR_NORMAL | css::ui::ImageType::SIZE_DEFAULT;
 
     if (SvtMiscOptions().GetCurrentSymbolsSize() == SFX_SYMBOLS_SIZE_LARGE)
     {
@@ -84,30 +75,29 @@ void SvxConfigPageHelper::InitImageType()
     }
 }
 
-css::uno::Reference< css::graphic::XGraphic > SvxConfigPageHelper::GetGraphic(
-    const css::uno::Reference< css::ui::XImageManager >& xImageManager,
-    const OUString& rCommandURL )
+css::uno::Reference<css::graphic::XGraphic>
+SvxConfigPageHelper::GetGraphic(const css::uno::Reference<css::ui::XImageManager>& xImageManager,
+                                const OUString& rCommandURL)
 {
-    css::uno::Reference< css::graphic::XGraphic > result;
+    css::uno::Reference<css::graphic::XGraphic> result;
 
-    if ( xImageManager.is() )
+    if (xImageManager.is())
     {
         // TODO handle large graphics
-        css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > aGraphicSeq;
+        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq;
 
-        css::uno::Sequence<OUString> aImageCmdSeq { rCommandURL };
+        css::uno::Sequence<OUString> aImageCmdSeq{ rCommandURL };
 
         try
         {
-            aGraphicSeq =
-                xImageManager->getImages( GetImageType(), aImageCmdSeq );
+            aGraphicSeq = xImageManager->getImages(GetImageType(), aImageCmdSeq);
 
-            if ( aGraphicSeq.hasElements() )
+            if (aGraphicSeq.hasElements())
             {
-                result =  aGraphicSeq[0];
+                result = aGraphicSeq[0];
             }
         }
-        catch ( css::uno::Exception& )
+        catch (css::uno::Exception&)
         {
             // will return empty XGraphic
         }
@@ -116,22 +106,19 @@ css::uno::Reference< css::graphic::XGraphic > SvxConfigPageHelper::GetGraphic(
     return result;
 }
 
-OUString
-SvxConfigPageHelper::generateCustomName(
-    const OUString& prefix,
-    SvxEntries* entries,
-    sal_Int32 suffix /*= 1*/ )
+OUString SvxConfigPageHelper::generateCustomName(const OUString& prefix, SvxEntries* entries,
+                                                 sal_Int32 suffix /*= 1*/)
 {
     OUString name;
     sal_Int32 pos = 0;
 
     // find and replace the %n placeholder in the prefix string
-    name = prefix.replaceFirst( "%n", OUString::number( suffix ), &pos );
+    name = prefix.replaceFirst("%n", OUString::number(suffix), &pos);
 
-    if ( pos == -1 )
+    if (pos == -1)
     {
         // no placeholder found so just append the suffix
-        name += OUString::number( suffix );
+        name += OUString::number(suffix);
     }
 
     if (!entries)
@@ -141,7 +128,7 @@ SvxConfigPageHelper::generateCustomName(
     bool bFoundEntry = false;
     for (auto const& entry : *entries)
     {
-        if ( name.equals(entry->GetName()) )
+        if (name.equals(entry->GetName()))
         {
             bFoundEntry = true;
             break;
@@ -151,17 +138,15 @@ SvxConfigPageHelper::generateCustomName(
     if (bFoundEntry)
     {
         // name already exists so try the next number up
-        return generateCustomName( prefix, entries, ++suffix );
+        return generateCustomName(prefix, entries, ++suffix);
     }
 
     return name;
 }
 
-OUString SvxConfigPageHelper::generateCustomMenuURL(
-    SvxEntries* entries,
-    sal_Int32 suffix /*= 1*/ )
+OUString SvxConfigPageHelper::generateCustomMenuURL(SvxEntries* entries, sal_Int32 suffix /*= 1*/)
 {
-    OUString url = "vnd.openoffice.org:CustomMenu" + OUString::number( suffix );
+    OUString url = "vnd.openoffice.org:CustomMenu" + OUString::number(suffix);
     if (!entries)
         return url;
 
@@ -169,7 +154,7 @@ OUString SvxConfigPageHelper::generateCustomMenuURL(
     bool bFoundEntry = false;
     for (auto const& entry : *entries)
     {
-        if ( url.equals(entry->GetCommand()) )
+        if (url.equals(entry->GetCommand()))
         {
             bFoundEntry = true;
             break;
@@ -179,7 +164,7 @@ OUString SvxConfigPageHelper::generateCustomMenuURL(
     if (bFoundEntry)
     {
         // url already exists so try the next number up
-        return generateCustomMenuURL( entries, ++suffix );
+        return generateCustomMenuURL(entries, ++suffix);
     }
 
     return url;
@@ -190,17 +175,17 @@ sal_uInt32 SvxConfigPageHelper::generateRandomValue()
     return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<unsigned int>::max());
 }
 
-OUString SvxConfigPageHelper::generateCustomURL( SvxEntries* entries )
+OUString SvxConfigPageHelper::generateCustomURL(SvxEntries* entries)
 {
     OUString url = OUStringLiteral(ITEM_TOOLBAR_URL) + CUSTOM_TOOLBAR_STR +
-    // use a random number to minimize possible clash with existing custom toolbars
-        OUString::number( generateRandomValue(), 16 );
+                   // use a random number to minimize possible clash with existing custom toolbars
+                   OUString::number(generateRandomValue(), 16);
 
     // now check is there is an already existing entry with this url
     bool bFoundEntry = false;
     for (auto const& entry : *entries)
     {
-        if ( url.equals(entry->GetCommand()) )
+        if (url.equals(entry->GetCommand()))
         {
             bFoundEntry = true;
             break;
@@ -210,38 +195,38 @@ OUString SvxConfigPageHelper::generateCustomURL( SvxEntries* entries )
     if (bFoundEntry)
     {
         // url already exists so try the next number up
-        return generateCustomURL( entries );
+        return generateCustomURL(entries);
     }
 
     return url;
 }
 
-OUString SvxConfigPageHelper::GetModuleName( const OUString& aModuleId )
+OUString SvxConfigPageHelper::GetModuleName(const OUString& aModuleId)
 {
-    if ( aModuleId == "com.sun.star.text.TextDocument" ||
-         aModuleId == "com.sun.star.text.GlobalDocument" )
+    if (aModuleId == "com.sun.star.text.TextDocument"
+        || aModuleId == "com.sun.star.text.GlobalDocument")
         return "Writer";
-    else if ( aModuleId == "com.sun.star.text.WebDocument" )
+    else if (aModuleId == "com.sun.star.text.WebDocument")
         return "Writer/Web";
-    else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
+    else if (aModuleId == "com.sun.star.drawing.DrawingDocument")
         return "Draw";
-    else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
+    else if (aModuleId == "com.sun.star.presentation.PresentationDocument")
         return "Impress";
-    else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
+    else if (aModuleId == "com.sun.star.sheet.SpreadsheetDocument")
         return "Calc";
-    else if ( aModuleId == "com.sun.star.script.BasicIDE" )
+    else if (aModuleId == "com.sun.star.script.BasicIDE")
         return "Basic";
-    else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
+    else if (aModuleId == "com.sun.star.formula.FormulaProperties")
         return "Math";
-    else if ( aModuleId == "com.sun.star.sdb.RelationDesign" )
+    else if (aModuleId == "com.sun.star.sdb.RelationDesign")
         return "Relation Design";
-    else if ( aModuleId == "com.sun.star.sdb.QueryDesign" )
+    else if (aModuleId == "com.sun.star.sdb.QueryDesign")
         return "Query Design";
-    else if ( aModuleId == "com.sun.star.sdb.TableDesign" )
+    else if (aModuleId == "com.sun.star.sdb.TableDesign")
         return "Table Design";
-    else if ( aModuleId == "com.sun.star.sdb.DataSourceBrowser" )
+    else if (aModuleId == "com.sun.star.sdb.DataSourceBrowser")
         return "Data Source Browser";
-    else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
+    else if (aModuleId == "com.sun.star.sdb.DatabaseDocument")
         return "Database";
 
     return OUString();
@@ -249,7 +234,7 @@ OUString SvxConfigPageHelper::GetModuleName( const OUString& aModuleId )
 
 OUString SvxConfigPageHelper::GetUIModuleName(
     const OUString& aModuleId,
-    const css::uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
+    const css::uno::Reference<css::frame::XModuleManager2>& rModuleManager)
 {
     assert(rModuleManager.is());
 
@@ -257,14 +242,14 @@ OUString SvxConfigPageHelper::GetUIModuleName(
 
     try
     {
-        css::uno::Any a = rModuleManager->getByName( aModuleId );
-        css::uno::Sequence< css::beans::PropertyValue > aSeq;
+        css::uno::Any a = rModuleManager->getByName(aModuleId);
+        css::uno::Sequence<css::beans::PropertyValue> aSeq;
 
-        if ( a >>= aSeq )
+        if (a >>= aSeq)
         {
-            for ( css::beans::PropertyValue const & rProp : std::as_const(aSeq) )
+            for (css::beans::PropertyValue const& rProp : std::as_const(aSeq))
             {
-                if ( rProp.Name == "ooSetupFactoryUIName" )
+                if (rProp.Name == "ooSetupFactoryUIName")
                 {
                     rProp.Value >>= aModuleUIName;
                     break;
@@ -272,53 +257,49 @@ OUString SvxConfigPageHelper::GetUIModuleName(
             }
         }
     }
-    catch ( css::uno::RuntimeException& )
+    catch (css::uno::RuntimeException&)
     {
         throw;
     }
-    catch ( css::uno::Exception& )
+    catch (css::uno::Exception&)
     {
     }
 
-    if ( aModuleUIName.isEmpty() )
-        aModuleUIName = GetModuleName( aModuleId );
+    if (aModuleUIName.isEmpty())
+        aModuleUIName = GetModuleName(aModuleId);
 
     return aModuleUIName;
 }
 
 bool SvxConfigPageHelper::GetMenuItemData(
-    const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
-    sal_Int32 nIndex,
-    OUString& rCommandURL,
-    OUString& rLabel,
-    sal_uInt16& rType,
-    sal_Int32& rStyle,
-    css::uno::Reference< css::container::XIndexAccess >& rSubMenu )
+    const css::uno::Reference<css::container::XIndexAccess>& rItemContainer, sal_Int32 nIndex,
+    OUString& rCommandURL, OUString& rLabel, sal_uInt16& rType, sal_Int32& rStyle,
+    css::uno::Reference<css::container::XIndexAccess>& rSubMenu)
 {
     try
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProps;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProps )
+        css::uno::Sequence<css::beans::PropertyValue> aProps;
+        if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
-            for ( css::beans::PropertyValue const & rProp : std::as_const(aProps) )
+            for (css::beans::PropertyValue const& rProp : std::as_const(aProps))
             {
-                if ( rProp.Name == ITEM_DESCRIPTOR_COMMANDURL )
+                if (rProp.Name == ITEM_DESCRIPTOR_COMMANDURL)
                 {
                     rProp.Value >>= rCommandURL;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_CONTAINER )
+                else if (rProp.Name == ITEM_DESCRIPTOR_CONTAINER)
                 {
                     rProp.Value >>= rSubMenu;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_STYLE )
+                else if (rProp.Name == ITEM_DESCRIPTOR_STYLE)
                 {
                     rProp.Value >>= rStyle;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_LABEL )
+                else if (rProp.Name == ITEM_DESCRIPTOR_LABEL)
                 {
                     rProp.Value >>= rLabel;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_TYPE )
+                else if (rProp.Name == ITEM_DESCRIPTOR_TYPE)
                 {
                     rProp.Value >>= rType;
                 }
@@ -327,7 +308,7 @@ bool SvxConfigPageHelper::GetMenuItemData(
             return true;
         }
     }
-    catch ( css::lang::IndexOutOfBoundsException& )
+    catch (css::lang::IndexOutOfBoundsException&)
     {
     }
 
@@ -335,38 +316,33 @@ bool SvxConfigPageHelper::GetMenuItemData(
 }
 
 bool SvxConfigPageHelper::GetToolbarItemData(
-    const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
-    sal_Int32 nIndex,
-    OUString& rCommandURL,
-    OUString& rLabel,
-    sal_uInt16& rType,
-    bool& rIsVisible,
-    sal_Int32& rStyle )
+    const css::uno::Reference<css::container::XIndexAccess>& rItemContainer, sal_Int32 nIndex,
+    OUString& rCommandURL, OUString& rLabel, sal_uInt16& rType, bool& rIsVisible, sal_Int32& rStyle)
 {
     try
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProps;
-        if ( rItemContainer->getByIndex( nIndex ) >>= aProps )
+        css::uno::Sequence<css::beans::PropertyValue> aProps;
+        if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
-            for ( css::beans::PropertyValue const & rProp : std::as_const(aProps) )
+            for (css::beans::PropertyValue const& rProp : std::as_const(aProps))
             {
-                if ( rProp.Name == ITEM_DESCRIPTOR_COMMANDURL )
+                if (rProp.Name == ITEM_DESCRIPTOR_COMMANDURL)
                 {
                     rProp.Value >>= rCommandURL;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_STYLE )
+                else if (rProp.Name == ITEM_DESCRIPTOR_STYLE)
                 {
                     rProp.Value >>= rStyle;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_LABEL )
+                else if (rProp.Name == ITEM_DESCRIPTOR_LABEL)
                 {
                     rProp.Value >>= rLabel;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_TYPE )
+                else if (rProp.Name == ITEM_DESCRIPTOR_TYPE)
                 {
                     rProp.Value >>= rType;
                 }
-                else if ( rProp.Name == ITEM_DESCRIPTOR_ISVISIBLE )
+                else if (rProp.Name == ITEM_DESCRIPTOR_ISVISIBLE)
                 {
                     rProp.Value >>= rIsVisible;
                 }
@@ -375,17 +351,17 @@ bool SvxConfigPageHelper::GetToolbarItemData(
             return true;
         }
     }
-    catch ( css::lang::IndexOutOfBoundsException& )
+    catch (css::lang::IndexOutOfBoundsException&)
     {
     }
 
     return false;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxConfigEntry(
-        const SvxConfigEntry* pEntry )
+css::uno::Sequence<css::beans::PropertyValue>
+SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
 {
-    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 4 );
+    css::uno::Sequence<css::beans::PropertyValue> aPropSeq(4);
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= pEntry->GetCommand();
@@ -397,7 +373,7 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxC
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
+    if (!pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty())
     {
         aPropSeq[2].Value <<= OUString();
     }
@@ -412,10 +388,10 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertSvxC
     return aPropSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertToolbarEntry(
-    const SvxConfigEntry* pEntry )
+css::uno::Sequence<css::beans::PropertyValue>
+SvxConfigPageHelper::ConvertToolbarEntry(const SvxConfigEntry* pEntry)
 {
-    css::uno::Sequence< css::beans::PropertyValue > aPropSeq( 5 );
+    css::uno::Sequence<css::beans::PropertyValue> aPropSeq(5);
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
     aPropSeq[0].Value <<= pEntry->GetCommand();
@@ -427,7 +403,7 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertTool
     // as an empty string.
     // It will be initialised again later using the command to label map.
     aPropSeq[2].Name = ITEM_DESCRIPTOR_LABEL;
-    if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
+    if (!pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty())
     {
         aPropSeq[2].Value <<= OUString();
     }
@@ -445,20 +421,20 @@ css::uno::Sequence< css::beans::PropertyValue > SvxConfigPageHelper::ConvertTool
     return aPropSeq;
 }
 
-bool SvxConfigPageHelper::EntrySort( SvxConfigEntry const * a, SvxConfigEntry const * b )
+bool SvxConfigPageHelper::EntrySort(SvxConfigEntry const* a, SvxConfigEntry const* b)
 {
-    return a->GetName().compareTo( b->GetName() ) < 0;
+    return a->GetName().compareTo(b->GetName()) < 0;
 }
 
-bool SvxConfigPageHelper::SvxConfigEntryModified( SvxConfigEntry const * pEntry )
+bool SvxConfigPageHelper::SvxConfigEntryModified(SvxConfigEntry const* pEntry)
 {
     SvxEntries* pEntries = pEntry->GetEntries();
-    if ( !pEntries )
+    if (!pEntries)
         return false;
 
-    for ( const auto& entry : *pEntries )
+    for (const auto& entry : *pEntries)
     {
-        if ( entry->IsModified() || SvxConfigEntryModified( entry ) )
+        if (entry->IsModified() || SvxConfigEntryModified(entry))
             return true;
     }
     return false;
