@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c000c6fc_35e0f641",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-10-18T18:12:25Z",
+      "side": 0,
+      "message": "this can go now. See tdf#129423",
+      "revId": "d89a2b67ee74998b12ca7d23fb2b1717301a3f95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
