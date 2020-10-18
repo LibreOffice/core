@@ -10554,7 +10554,7 @@ if test "$enable_openssl" = "yes"; then
 
         with_system_openssl=no
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
-    elif test "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "DragonFly" \
+    elif test "$_os" = "FreeBSD" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "DragonFly" \
             && test "$with_system_openssl" != "no"; then
         with_system_openssl=yes
         SYSTEM_OPENSSL=TRUE
