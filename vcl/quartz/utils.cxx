@@ -209,9 +209,8 @@ std::ostream &operator <<(std::ostream& s, CGColorSpaceRef cs)
     CFStringRef name = CGColorSpaceCopyName(cs);
     if (name != NULL)
         s << " (" << [(NSString *)name UTF8String] << ")";
-
-    return s;
 #endif
+    return s;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
