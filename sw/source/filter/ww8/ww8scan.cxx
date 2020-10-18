@@ -2334,24 +2334,38 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 void WW8PLCF::MakeFailedPLCF()
 {
     nIMax = 0;
-    pPLCF_PosArray.reset( new sal_Int32[2] );
+    pPLCF_PosArray.reset( new WW8_CP[2] );
     pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
     pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
 }
 
+namespace
+{
+    sal_Int32 TruncToSortedRange(const sal_Int32* pPLCF_PosArray, sal_Int32 nIMax)
+    {
+        //Docs state that: ... all Plcs ... are sorted in ascending order.
+        //So ensure that here for broken documents.
+        for (auto nI = 0; nI < nIMax; ++nI)
+        {
+            if (pPLCF_PosArray[nI] > pPLCF_PosArray[nI+1])
+            {
+                SAL_WARN("sw.ww8", "Document has unsorted PLCF, truncated to sorted portion");
+                nIMax = nI;
+                break;
+            }
+        }
+        return nIMax;
+    }
+}
+
+void WW8PLCFpcd::TruncToSortedRange()
+{
+    nIMax = ::TruncToSortedRange(pPLCF_PosArray.get(), nIMax);
+}
+
 void WW8PLCF::TruncToSortedRange()
 {
-    //Docs state that: ... all Plcs ... are sorted in ascending order.
-    //So ensure that here for broken documents.
-    for (auto nI = 0; nI < nIMax; ++nI)
-    {
-        if (pPLCF_PosArray[nI] > pPLCF_PosArray[nI+1])
-        {
-            SAL_WARN("sw.ww8", "Document has unsorted PLCF, truncated to sorted portion");
-            nIMax = nI;
-            break;
-        }
-    }
+    nIMax = ::TruncToSortedRange(pPLCF_PosArray.get(), nIMax);
 }
 
 void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
@@ -2375,7 +2389,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     {
         size_t nSiz = (4 + nStru) * nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
-        pPLCF_PosArray.reset( new sal_Int32[ nElems ] ); // Pointer to Pos-array
+        pPLCF_PosArray.reset( new WW8_CP[ nElems ] ); // Pointer to Pos-array
 
         for (sal_Int32 i = 0; i < ncpN && !failure; ++i)
         {
@@ -2509,7 +2523,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
         bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
-    pPLCF_PosArray.reset( new sal_Int32[ ( nPLCF + 3 ) / 4 ] );    // Pointer to Pos-array
+    pPLCF_PosArray.reset( new WW8_CP[ ( nPLCF + 3 ) / 4 ] );    // Pointer to Pos-array
     pPLCF_PosArray[0] = 0;
 
     nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray.get(), nPLCF) : nValidMin;
@@ -2523,6 +2537,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 
     // Pointer to content array
     pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+    TruncToSortedRange();
 
     pSt->Seek( nOldPos );
 }
