@@ -52,6 +52,24 @@
       "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5cfcc23_0a4de1ab",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-10-18T19:45:53Z",
+      "side": 1,
+      "message": "(And after some reading up, it doesn\u0027t even have to be a \"modern iMac\" to have a colour space wider than sRGB; the 2015 iMac had it, including iPhone 7 and newer.)",
+      "parentUuid": "6a0740d6_800f4fff",
+      "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
