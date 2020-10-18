@@ -339,13 +339,15 @@ class WW8PLCFpcd
 {
     friend class WW8PLCFpcd_Iter;
 
-    std::unique_ptr<sal_Int32[]> pPLCF_PosArray;  // pointer to Pos-array and the whole structure
+    std::unique_ptr<WW8_CP[]> pPLCF_PosArray;  // pointer to Pos-array and the whole structure
     sal_uInt8*  pPLCF_Contents;  // pointer to content-array-part of Pos-array
-    long nIMax;
+    sal_Int32 nIMax;
     sal_uInt32 nStru;
 
     WW8PLCFpcd(const WW8PLCFpcd&) = delete;
     WW8PLCFpcd& operator=(const WW8PLCFpcd&) = delete;
+
+    void TruncToSortedRange();
 
 public:
     WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
