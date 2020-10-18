@@ -240,6 +240,7 @@ public:
     SfxItemSet          GetAttribs();
     void                SetAttribs( const SfxItemSet& rSet );
     void                RemoveAttribs( bool bRemoveParaAttribs = false, sal_uInt16 nWhich = 0 );
+    void                RemoveAttribs( EERemoveParaAttribsMode eMode, sal_uInt16 nWhich );
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
