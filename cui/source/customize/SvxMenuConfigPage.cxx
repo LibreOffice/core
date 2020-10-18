@@ -36,13 +36,15 @@
 
 #include <dlgname.hxx>
 
-SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet, bool bIsMenuBar)
+SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController,
+                                     const SfxItemSet& rSet, bool bIsMenuBar)
     : SvxConfigPage(pPage, pController, rSet)
     , m_bIsMenuBar(bIsMenuBar)
 {
     m_xGearBtn = m_xBuilder->weld_menu_button("menugearbtn");
     m_xGearBtn->show();
-    m_xContentsListBox.reset(new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
+    m_xContentsListBox.reset(
+        new SvxMenuEntriesListBox(m_xBuilder->weld_tree_view("menucontents"), this));
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
     m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(*this, rTreeView));
     rTreeView.connect_size_allocate(LINK(this, SvxMenuConfigPage, MenuEntriesSizeAllocHdl));
@@ -53,36 +55,32 @@ SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogControl
     rTreeView.set_vexpand(true);
     rTreeView.show();
 
-    rTreeView.connect_changed(
-        LINK( this, SvxMenuConfigPage, SelectMenuEntry ) );
-    rTreeView.connect_popup_menu( LINK( this, SvxMenuConfigPage, ContentContextMenuHdl ) );
+    rTreeView.connect_changed(LINK(this, SvxMenuConfigPage, SelectMenuEntry));
+    rTreeView.connect_popup_menu(LINK(this, SvxMenuConfigPage, ContentContextMenuHdl));
 
     m_xFunctions->get_widget().connect_popup_menu(
-        LINK( this, SvxMenuConfigPage, FunctionContextMenuHdl ) );
+        LINK(this, SvxMenuConfigPage, FunctionContextMenuHdl));
 
     m_xGearBtn->connect_selected(LINK(this, SvxMenuConfigPage, GearHdl));
 
     m_xCommandCategoryListBox->connect_changed(LINK(this, SvxMenuConfigPage, SelectCategory));
 
-    m_xMoveUpButton->connect_clicked( LINK( this, SvxConfigPage, MoveHdl) );
-    m_xMoveDownButton->connect_clicked( LINK( this, SvxConfigPage, MoveHdl) );
+    m_xMoveUpButton->connect_clicked(LINK(this, SvxConfigPage, MoveHdl));
+    m_xMoveDownButton->connect_clicked(LINK(this, SvxConfigPage, MoveHdl));
 
-    m_xAddCommandButton->connect_clicked( LINK( this, SvxMenuConfigPage, AddCommandHdl ) );
-    m_xRemoveCommandButton->connect_clicked( LINK( this, SvxMenuConfigPage, RemoveCommandHdl ) );
+    m_xAddCommandButton->connect_clicked(LINK(this, SvxMenuConfigPage, AddCommandHdl));
+    m_xRemoveCommandButton->connect_clicked(LINK(this, SvxMenuConfigPage, RemoveCommandHdl));
 
-    m_xInsertBtn->connect_selected(
-        LINK( this, SvxMenuConfigPage, InsertHdl ) );
-    m_xModifyBtn->connect_selected(
-        LINK( this, SvxMenuConfigPage, ModifyItemHdl ) );
-    m_xResetBtn->connect_clicked(
-        LINK( this, SvxMenuConfigPage, ResetMenuHdl ) );
+    m_xInsertBtn->connect_selected(LINK(this, SvxMenuConfigPage, InsertHdl));
+    m_xModifyBtn->connect_selected(LINK(this, SvxMenuConfigPage, ModifyItemHdl));
+    m_xResetBtn->connect_clicked(LINK(this, SvxMenuConfigPage, ResetMenuHdl));
 
     // These operations are not possible on menus/context menus yet
     m_xModifyBtn->remove_item("changeIcon");
     m_xModifyBtn->remove_item("resetIcon");
     m_xModifyBtn->remove_item("restoreItem");
 
-    if ( !bIsMenuBar )
+    if (!bIsMenuBar)
     {
         //TODO: Remove this when the gear button is implemented for context menus
         m_xGearBtn->set_sensitive(false);
@@ -102,7 +100,8 @@ void SvxMenuConfigPage::ListModified()
     pEntries->clear();
 
     for (int i = 0; i < m_xContentsListBox->n_children(); ++i)
-        pEntries->push_back(reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(i).toInt64()));
+        pEntries->push_back(
+            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(i).toInt64()));
 
     GetSaveInData()->SetModified();
     GetTopLevelSelection()->SetModified();
@@ -140,36 +139,32 @@ void SvxMenuConfigPage::Init()
     m_xTopLevelListBox->set_active(0);
     SelectElement();
 
-    m_xCommandCategoryListBox->Init(
-        comphelper::getProcessComponentContext(),
-        m_xFrame, m_aModuleId);
+    m_xCommandCategoryListBox->Init(comphelper::getProcessComponentContext(), m_xFrame,
+                                    m_aModuleId);
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), OUString(), GetSaveInData());
     SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
-IMPL_LINK_NOARG(SvxMenuConfigPage, SelectMenuEntry, weld::TreeView&, void)
-{
-    UpdateButtonStates();
-}
+IMPL_LINK_NOARG(SvxMenuConfigPage, SelectMenuEntry, weld::TreeView&, void) { UpdateButtonStates(); }
 
 void SvxMenuConfigPage::UpdateButtonStates()
 {
     // Disable Up and Down buttons depending on current selection
     int selection = m_xContentsListBox->get_selected_index();
 
-    bool  bIsSeparator =
-        selection != -1 && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(selection).toInt64())->IsSeparator();
-    bool bIsValidSelection =
-        (m_xContentsListBox->n_children() != 0 && selection != -1);
+    bool bIsSeparator
+        = selection != -1
+          && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(selection).toInt64())
+                 ->IsSeparator();
+    bool bIsValidSelection = (m_xContentsListBox->n_children() != 0 && selection != -1);
 
-    m_xMoveUpButton->set_sensitive(
-        bIsValidSelection &&  selection != 0 );
-    m_xMoveDownButton->set_sensitive(
-        bIsValidSelection && selection != m_xContentsListBox->n_children() - 1);
+    m_xMoveUpButton->set_sensitive(bIsValidSelection && selection != 0);
+    m_xMoveDownButton->set_sensitive(bIsValidSelection
+                                     && selection != m_xContentsListBox->n_children() - 1);
 
-    m_xRemoveCommandButton->set_sensitive( bIsValidSelection );
+    m_xRemoveCommandButton->set_sensitive(bIsValidSelection);
 
-    m_xModifyBtn->set_sensitive( bIsValidSelection && !bIsSeparator);
+    m_xModifyBtn->set_sensitive(bIsValidSelection && !bIsSeparator);
 
     // If there is no top level selection (menu), then everything working on the right box
     // which contains the functions of the selected menu/toolbar needs to be disabled
@@ -184,9 +179,9 @@ void SvxMenuConfigPage::UpdateButtonStates()
     if (pMenuData && m_bIsMenuBar)
     {
         // Add option (gear_add) will always be enabled
-        m_xGearBtn->set_item_sensitive( "menu_gear_delete", pMenuData->IsDeletable() );
-        m_xGearBtn->set_item_sensitive( "menu_gear_rename", pMenuData->IsRenamable() );
-        m_xGearBtn->set_item_sensitive( "menu_gear_move", pMenuData->IsMovable() );
+        m_xGearBtn->set_item_sensitive("menu_gear_delete", pMenuData->IsDeletable());
+        m_xGearBtn->set_item_sensitive("menu_gear_rename", pMenuData->IsRenamable());
+        m_xGearBtn->set_item_sensitive("menu_gear_move", pMenuData->IsMovable());
     }
 }
 
@@ -194,15 +189,14 @@ void SvxMenuConfigPage::DeleteSelectedTopLevel()
 {
     SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-    SvxEntries* pParentEntries =
-        FindParentForChild( GetSaveInData()->GetEntries(), pMenuData );
+    SvxEntries* pParentEntries = FindParentForChild(GetSaveInData()->GetEntries(), pMenuData);
 
-    SvxConfigPageHelper::RemoveEntry( pParentEntries, pMenuData );
+    SvxConfigPageHelper::RemoveEntry(pParentEntries, pMenuData);
     delete pMenuData;
 
     ReloadTopLevelListBox();
 
-    GetSaveInData()->SetModified( );
+    GetSaveInData()->SetModified();
 }
 
 void SvxMenuConfigPage::DeleteSelectedContent()
@@ -213,20 +207,20 @@ void SvxMenuConfigPage::DeleteSelectedContent()
         return;
 
     // get currently selected menu entry
-    SvxConfigEntry* pMenuEntry =
-        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+    SvxConfigEntry* pMenuEntry
+        = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
     // get currently selected menu
     SvxConfigEntry* pMenu = GetTopLevelSelection();
 
     // remove menu entry from the list for this menu
-    SvxConfigPageHelper::RemoveEntry( pMenu->GetEntries(), pMenuEntry );
+    SvxConfigPageHelper::RemoveEntry(pMenu->GetEntries(), pMenuEntry);
 
     // remove menu entry from UI
     m_xContentsListBox->remove(nActEntry);
 
     // if this is a submenu entry, redraw the menus list box
-    if ( pMenuEntry->IsPopup() )
+    if (pMenuEntry->IsPopup())
     {
         ReloadTopLevelListBox();
     }
@@ -240,15 +234,14 @@ void SvxMenuConfigPage::DeleteSelectedContent()
 
 short SvxMenuConfigPage::QueryReset()
 {
-    OUString msg = CuiResId( RID_SVXSTR_CONFIRM_MENU_RESET );
+    OUString msg = CuiResId(RID_SVXSTR_CONFIRM_MENU_RESET);
 
     OUString saveInName = m_xSaveInListBox->get_active_text();
 
-    OUString label = SvxConfigPageHelper::replaceSaveInName( msg, saveInName );
+    OUString label = SvxConfigPageHelper::replaceSaveInName(msg, saveInName);
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                   VclMessageType::Question, VclButtonsType::YesNo,
-                                                   label));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
+        GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo, label));
     return xQueryBox->run();
 }
 
@@ -263,12 +256,13 @@ void SvxMenuConfigPage::SelectElement()
     {
         SvxEntries* pEntries = pMenuData->GetEntries();
 
-        rTreeView.bulk_insert_for_each(pEntries->size(), [this, &rTreeView, pEntries](weld::TreeIter& rIter, int nIdx) {
-            auto const& entry = (*pEntries)[nIdx];
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
-            rTreeView.set_id(rIter, sId);
-            InsertEntryIntoUI(entry, rTreeView, rIter, true);
-        });
+        rTreeView.bulk_insert_for_each(
+            pEntries->size(), [this, &rTreeView, pEntries](weld::TreeIter& rIter, int nIdx) {
+                auto const& entry = (*pEntries)[nIdx];
+                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
+                rTreeView.set_id(rIter, sId);
+                InsertEntryIntoUI(entry, rTreeView, rIter, true);
+            });
     }
 
     UpdateButtonStates();
@@ -278,8 +272,8 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
 {
     if (rIdent == "menu_gear_add")
     {
-        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(),
-            GetSaveInData()->GetEntries(), nullptr, true );
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(), nullptr,
+                                           true);
 
         if (aDialog.run() == RET_OK)
         {
@@ -296,21 +290,21 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        OUString sCurrentName( SvxConfigPageHelper::stripHotKey( pMenuData->GetName() ) );
-        OUString sDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString sCurrentName(SvxConfigPageHelper::stripHotKey(pMenuData->GetName()));
+        OUString sDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), sCurrentName, sDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU);
         aNameDialog.set_title(CuiResId(RID_SVXSTR_RENAME_MENU));
 
-        if ( aNameDialog.run() == RET_OK )
+        if (aNameDialog.run() == RET_OK)
         {
             OUString sNewName = aNameDialog.GetName();
 
-            if ( sCurrentName == sNewName )
+            if (sCurrentName == sNewName)
                 return;
 
-            pMenuData->SetName( sNewName );
+            pMenuData->SetName(sNewName);
 
             ReloadTopLevelListBox();
 
@@ -321,8 +315,8 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
     {
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
-        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(),
-                pMenuData, false );
+        SvxMainMenuOrganizerDialog aDialog(GetFrameWeld(), GetSaveInData()->GetEntries(), pMenuData,
+                                           false);
         if (aDialog.run() == RET_OK)
         {
             GetSaveInData()->SetEntries(aDialog.ReleaseEntries());
@@ -344,28 +338,27 @@ IMPL_LINK(SvxMenuConfigPage, GearHdl, const OString&, rIdent, void)
 
 IMPL_LINK_NOARG(SvxMenuConfigPage, SelectCategory, weld::ComboBox&, void)
 {
-    OUString aSearchTerm( m_xSearchEdit->get_text() );
+    OUString aSearchTerm(m_xSearchEdit->get_text());
 
     m_xCommandCategoryListBox->categorySelected(m_xFunctions.get(), aSearchTerm, GetSaveInData());
 
     SelectFunctionHdl(m_xFunctions->get_widget());
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandHdl, weld::Button&, void )
+IMPL_LINK_NOARG(SvxMenuConfigPage, AddCommandHdl, weld::Button&, void)
 {
-    int nPos = AddFunction(-1, /*bAllowDuplicates*/false);
+    int nPos = AddFunction(-1, /*bAllowDuplicates*/ false);
     if (nPos == -1)
         return;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
-    SvxConfigEntry* pEntry =
-        reinterpret_cast<SvxConfigEntry*>(rTreeView.get_id(nPos).toInt64());
+    SvxConfigEntry* pEntry = reinterpret_cast<SvxConfigEntry*>(rTreeView.get_id(nPos).toInt64());
     InsertEntryIntoUI(pEntry, rTreeView, nPos, true);
 }
 
-IMPL_LINK_NOARG( SvxMenuConfigPage, RemoveCommandHdl, weld::Button&, void )
+IMPL_LINK_NOARG(SvxMenuConfigPage, RemoveCommandHdl, weld::Button&, void)
 {
     DeleteSelectedContent();
-    if ( GetSaveInData()->IsModified() )
+    if (GetSaveInData()->IsModified())
     {
         UpdateButtonStates();
     }
@@ -384,19 +377,19 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
     else if (rIdent == "insertsubmenu")
     {
         OUString aNewName;
-        OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
+        OUString aDesc = CuiResId(RID_SVXSTR_SUBMENU_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_NAME_SUBMENU);
-        aNameDialog.set_title(CuiResId( RID_SVXSTR_ADD_SUBMENU));
+        aNameDialog.set_title(CuiResId(RID_SVXSTR_ADD_SUBMENU));
 
         if (aNameDialog.run() == RET_OK)
         {
             aNewName = aNameDialog.GetName();
 
-            SvxConfigEntry* pNewEntryData =
-                new SvxConfigEntry( aNewName, aNewName, true, /*bParentData*/false );
-            pNewEntryData->SetName( aNewName );
+            SvxConfigEntry* pNewEntryData
+                = new SvxConfigEntry(aNewName, aNewName, true, /*bParentData*/ false);
+            pNewEntryData->SetName(aNewName);
             pNewEntryData->SetUserDefined();
 
             int nPos = AppendEntry(pNewEntryData, -1);
@@ -409,7 +402,6 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
 
             GetSaveInData()->SetModified();
         }
-
     }
     else
     {
@@ -418,7 +410,7 @@ IMPL_LINK(SvxMenuConfigPage, InsertHdl, const OString&, rIdent, void)
         return;
     }
 
-    if ( GetSaveInData()->IsModified() )
+    if (GetSaveInData()->IsModified())
     {
         UpdateButtonStates();
     }
@@ -429,11 +421,11 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
     if (rIdent == "renameItem")
     {
         int nActEntry = m_xContentsListBox->get_selected_index();
-        SvxConfigEntry* pEntry =
-            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+        SvxConfigEntry* pEntry
+            = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
 
-        OUString aNewName( SvxConfigPageHelper::stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aNewName(SvxConfigPageHelper::stripHotKey(pEntry->GetName()));
+        OUString aDesc = CuiResId(RID_SVXSTR_LABEL_NEW_NAME);
 
         SvxNameDialog aNameDialog(GetFrameWeld(), aNewName, aDesc);
         aNameDialog.set_help_id(HID_SVX_CONFIG_RENAME_MENU_ITEM);
@@ -443,7 +435,7 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         {
             aNewName = aNameDialog.GetName();
 
-            pEntry->SetName( aNewName );
+            pEntry->SetName(aNewName);
             m_xContentsListBox->set_text(nActEntry, aNewName, 0);
 
             GetSaveInData()->SetModified();
@@ -457,7 +449,7 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
         return;
     }
 
-    if ( GetSaveInData()->IsModified() )
+    if (GetSaveInData()->IsModified())
     {
         UpdateButtonStates();
     }
@@ -469,13 +461,14 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 
     if (pMenuData == nullptr)
     {
-        SAL_WARN("cui.customize", "RHB top level selection is null. A menu must be selected to reset!");
+        SAL_WARN("cui.customize",
+                 "RHB top level selection is null. A menu must be selected to reset!");
         return;
     }
 
-    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                   VclMessageType::Question, VclButtonsType::YesNo,
-                                                   CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(
+        GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT_MENU)));
 
     // Resetting individual top-level menus is not possible at the moment.
     // So we are resetting only if it is a context menu
@@ -483,7 +476,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
         return;
 
     sal_Int32 nPos = m_xTopLevelListBox->get_active();
-    ContextMenuSaveInData* pSaveInData = static_cast< ContextMenuSaveInData* >(GetSaveInData());
+    ContextMenuSaveInData* pSaveInData = static_cast<ContextMenuSaveInData*>(GetSaveInData());
 
     pSaveInData->ResetContextMenu(pMenuData);
 
@@ -499,18 +492,19 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, ResetMenuHdl, weld::Button&, void)
 }
 
 SaveInData* SvxMenuConfigPage::CreateSaveInData(
-    const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
-    const css::uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
-    const OUString& aModuleId,
-    bool bDocConfig )
+    const css::uno::Reference<css::ui::XUIConfigurationManager>& xCfgMgr,
+    const css::uno::Reference<css::ui::XUIConfigurationManager>& xParentCfgMgr,
+    const OUString& aModuleId, bool bDocConfig)
 {
-    if ( !m_bIsMenuBar )
-        return static_cast< SaveInData* >( new ContextMenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ) );
+    if (!m_bIsMenuBar)
+        return static_cast<SaveInData*>(
+            new ContextMenuSaveInData(xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig));
 
-    return static_cast< SaveInData* >( new MenuSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ) );
+    return static_cast<SaveInData*>(
+        new MenuSaveInData(xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig));
 }
 
-IMPL_LINK( SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt, bool )
+IMPL_LINK(SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
@@ -519,19 +513,21 @@ IMPL_LINK( SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt,
 
     // Select clicked entry
     std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (! rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false ))
+    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
         return false;
     rTreeView.select(*xIter);
-    SelectMenuEntry( rTreeView );
+    SelectMenuEntry(rTreeView);
 
     int nSelectIndex = m_xContentsListBox->get_selected_index();
 
-    bool  bIsSeparator =
-        nSelectIndex != -1 && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nSelectIndex).toInt64())->IsSeparator();
-    bool bIsValidSelection =
-        ( m_xContentsListBox->n_children() != 0 && nSelectIndex != -1 );
+    bool bIsSeparator
+        = nSelectIndex != -1
+          && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nSelectIndex).toInt64())
+                 ->IsSeparator();
+    bool bIsValidSelection = (m_xContentsListBox->n_children() != 0 && nSelectIndex != -1);
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder( &rTreeView, "cui/ui/entrycontextmenu.ui" ) );
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(&rTreeView, "cui/ui/entrycontextmenu.ui"));
     auto xContextMenu = xBuilder->weld_menu("menu");
     xContextMenu->set_visible("add", false);
     xContextMenu->set_visible("remove", bIsValidSelection);
@@ -539,22 +535,23 @@ IMPL_LINK( SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt,
     xContextMenu->set_visible("changeIcon", false);
     xContextMenu->set_visible("resetIcon", false);
     xContextMenu->set_visible("restoreDefault", false);
-    OString sCommand(xContextMenu->popup_at_rect( &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1) ) ) );
+    OString sCommand(xContextMenu->popup_at_rect(
+        &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
 
-    if ( sCommand == "remove")
+    if (sCommand == "remove")
     {
-        RemoveCommandHdl( *m_xRemoveCommandButton );
+        RemoveCommandHdl(*m_xRemoveCommandButton);
     }
-    else if ( sCommand == "rename" )
+    else if (sCommand == "rename")
     {
-        ModifyItemHdl( "renameItem" );
+        ModifyItemHdl("renameItem");
     }
-    else if ( !sCommand.isEmpty() )
-        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    else if (!sCommand.isEmpty())
+        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand);
     return true;
 }
 
-IMPL_LINK( SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt, bool )
+IMPL_LINK(SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt, bool)
 {
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
@@ -563,12 +560,13 @@ IMPL_LINK( SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt
 
     // Select clicked entry
     std::unique_ptr<weld::TreeIter> xIter(rTreeView.make_iterator());
-    if (! rTreeView.get_dest_row_at_pos( rCEvt.GetMousePosPixel(), xIter.get(), false ))
+    if (!rTreeView.get_dest_row_at_pos(rCEvt.GetMousePosPixel(), xIter.get(), false))
         return false;
     rTreeView.select(*xIter);
-    SelectFunctionHdl( rTreeView );
+    SelectFunctionHdl(rTreeView);
 
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder( &rTreeView, "cui/ui/entrycontextmenu.ui" ) );
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(&rTreeView, "cui/ui/entrycontextmenu.ui"));
     auto xContextMenu = xBuilder->weld_menu("menu");
     xContextMenu->set_visible("add", true);
     xContextMenu->set_visible("remove", false);
@@ -576,15 +574,16 @@ IMPL_LINK( SvxMenuConfigPage, FunctionContextMenuHdl, const CommandEvent&, rCEvt
     xContextMenu->set_visible("changeIcon", false);
     xContextMenu->set_visible("resetIcon", false);
     xContextMenu->set_visible("restoreDefault", false);
-    OString sCommand(xContextMenu->popup_at_rect( &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1,1) ) ) );
+    OString sCommand(xContextMenu->popup_at_rect(
+        &rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
 
-    if ( sCommand == "add")
+    if (sCommand == "add")
     {
-        AddCommandHdl( *m_xAddCommandButton );
+        AddCommandHdl(*m_xAddCommandButton);
     }
-    else if ( !sCommand.isEmpty() )
-        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand );
+    else if (!sCommand.isEmpty())
+        SAL_WARN("cui.customize", "Unknown context menu action: " << sCommand);
     return true;
 }
 
- /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

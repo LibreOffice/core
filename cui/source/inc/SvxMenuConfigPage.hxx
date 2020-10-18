@@ -29,44 +29,41 @@ class SvxMenuConfigPage : public SvxConfigPage
 private:
     bool m_bIsMenuBar;
 
-    DECL_LINK( SelectMenuEntry, weld::TreeView&, void );
-    DECL_LINK( ContentContextMenuHdl, const CommandEvent&, bool );
-    DECL_LINK( FunctionContextMenuHdl, const CommandEvent&, bool );
+    DECL_LINK(SelectMenuEntry, weld::TreeView&, void);
+    DECL_LINK(ContentContextMenuHdl, const CommandEvent&, bool);
+    DECL_LINK(FunctionContextMenuHdl, const CommandEvent&, bool);
 
-    DECL_LINK( GearHdl, const OString&, void );
+    DECL_LINK(GearHdl, const OString&, void);
 
-    DECL_LINK( SelectCategory, weld::ComboBox&, void );
+    DECL_LINK(SelectCategory, weld::ComboBox&, void);
 
-    DECL_LINK( AddCommandHdl, weld::Button&, void );
-    DECL_LINK( RemoveCommandHdl, weld::Button&, void );
+    DECL_LINK(AddCommandHdl, weld::Button&, void);
+    DECL_LINK(RemoveCommandHdl, weld::Button&, void);
 
-    DECL_LINK( InsertHdl, const OString&, void );
-    DECL_LINK( ModifyItemHdl, const OString&, void );
-    DECL_LINK( ResetMenuHdl, weld::Button&, void );
+    DECL_LINK(InsertHdl, const OString&, void);
+    DECL_LINK(ModifyItemHdl, const OString&, void);
+    DECL_LINK(ResetMenuHdl, weld::Button&, void);
 
-    DECL_LINK( MenuEntriesSizeAllocHdl, const Size&, void );
+    DECL_LINK(MenuEntriesSizeAllocHdl, const Size&, void);
 
     virtual void ListModified() override;
 
-    void            Init() override;
-    void            UpdateButtonStates() override;
-    short           QueryReset() override;
-    void            DeleteSelectedContent() override;
-    void            DeleteSelectedTopLevel() override;
+    void Init() override;
+    void UpdateButtonStates() override;
+    short QueryReset() override;
+    void DeleteSelectedContent() override;
+    void DeleteSelectedTopLevel() override;
 
-    virtual void    SelectElement() override;
+    virtual void SelectElement() override;
 
 public:
-    SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rItemSet, bool bIsMenuBar = true);
+    SvxMenuConfigPage(weld::Container* pPage, weld::DialogController* pController,
+                      const SfxItemSet& rItemSet, bool bIsMenuBar = true);
     virtual ~SvxMenuConfigPage() override;
 
-    SaveInData* CreateSaveInData(
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const css::uno::Reference <
-            css::ui::XUIConfigurationManager >&,
-        const OUString& aModuleId,
-        bool docConfig ) override;
+    SaveInData* CreateSaveInData(const css::uno::Reference<css::ui::XUIConfigurationManager>&,
+                                 const css::uno::Reference<css::ui::XUIConfigurationManager>&,
+                                 const OUString& aModuleId, bool docConfig) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
