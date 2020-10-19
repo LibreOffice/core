@@ -52,11 +52,14 @@ bool PDFSignatureHelper::ReadAndVerifySignature(
 
     m_aSignatureInfos.clear();
 
+    int nMDPPerm = aDocument.GetMDPPerm();
+
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
         SignatureInformation aInfo(i);
 
-        if (!xmlsecurity::pdfio::ValidateSignature(*pStream, aSignatures[i], aInfo, aDocument))
+        if (!xmlsecurity::pdfio::ValidateSignature(*pStream, aSignatures[i], aInfo, aDocument,
+                                                   nMDPPerm))
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
 
         m_aSignatureInfos.push_back(aInfo);
