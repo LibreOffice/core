@@ -10,6 +10,7 @@ import unittest
 from uitest.uihelper.testDialog import testDialog
 
 dialogs = [
+    {"command": ".uno:AdditionsDialog", "closeButton": "buttonClose"},
     {"command": ".uno:OpenRemote", "closeButton": "cancel"},
     {"command": ".uno:SaveAsTemplate", "closeButton": "cancel"},
     {"command": ".uno:SaveAsRemote", "closeButton": "cancel"},
