@@ -29,7 +29,7 @@ namespace pdfio
  * @param rDocument the parsed document to see if the signature is partial.
  * @return If we can determinate a result.
  */
-XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument);
+XMLSECURITY_DLLPUBLIC bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument, int nMDPPerm);
 
 } // namespace pdfio
 } // namespace xmlsecurity
