@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06953fec_3bd7d05c",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T09:51:23Z",
+      "side": 1,
+      "message": "\u003e Don\u0027t see how #116ff (aText \u003d Translate::ExpandVariables(sLink)) can be replaced with a shorter solution.\n\nThe solution is not always much shorter. But using a \"indexOf\" plus \"replaceAt\" with a hardcoded length is always worse than a single \"replaceFirst\":\n\n        OUString aText \u003d Translate::ExpandVariables(sLink);\n        OUString aLang \u003d LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();\n        if (aLang \u003d\u003d \"en\" || aLang \u003d\u003d \"pt\" || aLang \u003d\u003d \"zh\") //en-US/GB, pt-BR, zh-CH/TW\n            aLang \u003d LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();\n        m_pLink-\u003eset_uri(aText.replaceFirst(\"%LANGUAGENAME\", aLang));\n\nIt\u0027s absolutely not required to consider a possible \"optimization\" - avoiding the creation of aLang - in *buggy* case of a translation having no \"%LANGUAGENAME\". We should always assume that present.",
+      "range": {
+        "startLine": 116,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 32
+      },
+      "revId": "a082d45b1e1e1718d54c7ebb166cad0b8d3ba0d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
