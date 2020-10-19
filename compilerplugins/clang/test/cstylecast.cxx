@@ -23,7 +23,7 @@ using T = unsigned int;
 
 void FunctionalCast(void* p)
 {
-    // expected-error@+1 {{Function-style cast from 'void *' to 'sal_IntPtr' (aka 'long') (performs: reinterpret_cast) (PointerToIntegral) [loplugin:cstylecast]}}
+    // expected-error-re@+1 {{Function-style cast from 'void *' to 'sal_IntPtr' (aka '{{.+}}') (performs: reinterpret_cast) (PointerToIntegral) [loplugin:cstylecast]}}
     auto n = sal_IntPtr(p);
     (void(n)); // no warning expected (outer parens to disambiguate expr vs. decl)
 }

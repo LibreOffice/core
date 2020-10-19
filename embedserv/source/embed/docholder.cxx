@@ -284,7 +284,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
             xWin.set(
                 xToolkit->createSystemChild(
-                    uno::Any(sal_Int64(hWndxWinParent)),
+                    uno::Any(reinterpret_cast<sal_Int64>(hWndxWinParent)),
                     aProcessIdent,
                     lang::SystemDependent::SYSTEM_WIN32),
                 uno::UNO_QUERY);
@@ -367,7 +367,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                     aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
                 sal_Int64 tmp;
                 if( aAny >>= tmp )
-                    m_nMenuHandle = HMENU(tmp);
+                    m_nMenuHandle = reinterpret_cast<HMENU>(tmp);
                 m_xLayoutManager->hideElement(
                     "private:resource/menubar/menubar" );
             }
@@ -1205,7 +1205,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 
         xWin.set(
             xToolkit->createSystemChild(
-                uno::Any(sal_Int64(hWnd)),
+                uno::Any(reinterpret_cast<sal_Int64>(hWnd)),
                 aProcessIdent,
                 lang::SystemDependent::SYSTEM_WIN32),
             uno::UNO_QUERY);
