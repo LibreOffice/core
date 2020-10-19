@@ -484,9 +484,6 @@ void Desktop::Init()
         }
     }
 
-    if ( !(true) )
-        return;
-
     // start ipc thread only for non-remote offices
     RequestHandler::Status aStatus = RequestHandler::Enable(true);
     if ( aStatus == RequestHandler::IPC_STATUS_PIPE_ERROR )
