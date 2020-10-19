@@ -40,7 +40,7 @@ public:
     static Size     GetPaperSize( Paper ePaper, MapUnit eUnit = MapUnit::MapTwip );
     static Size     GetPaperSize( const Printer* pPrinter );
     static Paper    GetSvxPaper( const Size &rSize, MapUnit eUnit );
-    static long     GetSloppyPaperDimension( long nSize );
+    static tools::Long     GetSloppyPaperDimension( tools::Long nSize );
     static OUString GetName( Paper ePaper );
 };
 
@@ -48,7 +48,7 @@ public:
 
 inline Size &Swap(Size &rSize)
 {
-    const long lVal = rSize.Width();
+    const tools::Long lVal = rSize.Width();
     rSize.setWidth( rSize.Height() );
     rSize.setHeight( lVal );
     return rSize;

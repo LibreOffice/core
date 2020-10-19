@@ -269,7 +269,7 @@ bool SvxSizeItem::GetPresentation
 }
 
 
-void SvxSizeItem::ScaleMetrics( long nMult, long nDiv )
+void SvxSizeItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     m_aSize.setWidth( Scale( m_aSize.Width(), nMult, nDiv ) );
     m_aSize.setHeight( Scale( m_aSize.Height(), nMult, nDiv ) );
@@ -300,8 +300,8 @@ SvxLRSpaceItem::SvxLRSpaceItem( const sal_uInt16 nId ) :
 }
 
 
-SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
-                                const long nTLeft, const short nOfset,
+SvxLRSpaceItem::SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
+                                const tools::Long nTLeft, const short nOfset,
                                 const sal_uInt16 nId )
 :   SfxPoolItem( nId ),
 
@@ -514,7 +514,7 @@ bool SvxLRSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( static_cast<long>(nFirstLineOffset),
+                rText += GetMetricText( static_cast<tools::Long>(nFirstLineOffset),
                                         eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nRightMargin )
@@ -547,7 +547,7 @@ bool SvxLRSpaceItem::GetPresentation
                                 Application::GetSettings().GetUILanguageTag());
                 else
                 {
-                    rText += GetMetricText( static_cast<long>(nFirstLineOffset),
+                    rText += GetMetricText( static_cast<tools::Long>(nFirstLineOffset),
                                             eCoreUnit, ePresUnit, &rIntl ) +
                             " " + EditResId(GetMetricId(ePresUnit));
                 }
@@ -571,7 +571,7 @@ bool SvxLRSpaceItem::GetPresentation
 }
 
 
-void SvxLRSpaceItem::ScaleMetrics( long nMult, long nDiv )
+void SvxLRSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     nFirstLineOffset = static_cast<short>(Scale( nFirstLineOffset, nMult, nDiv ));
     nTxtLeft = Scale( nTxtLeft, nMult, nDiv );
@@ -780,7 +780,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText = GetMetricText( static_cast<long>(nUpper), eCoreUnit, ePresUnit, &rIntl );
+                rText = GetMetricText( static_cast<tools::Long>(nUpper), eCoreUnit, ePresUnit, &rIntl );
             rText += OUString(cpDelim);
             if ( 100 != nPropLower )
             {
@@ -788,7 +788,7 @@ bool SvxULSpaceItem::GetPresentation
                     Application::GetSettings().GetUILanguageTag());
             }
             else
-                rText += GetMetricText( static_cast<long>(nLower), eCoreUnit, ePresUnit, &rIntl );
+                rText += GetMetricText( static_cast<tools::Long>(nLower), eCoreUnit, ePresUnit, &rIntl );
             return true;
         }
         case SfxItemPresentation::Complete:
@@ -801,7 +801,7 @@ bool SvxULSpaceItem::GetPresentation
             }
             else
             {
-                rText += GetMetricText( static_cast<long>(nUpper), eCoreUnit, ePresUnit, &rIntl ) +
+                rText += GetMetricText( static_cast<tools::Long>(nUpper), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += cpDelim + EditResId(RID_SVXITEMS_ULSPACE_LOWER);
@@ -812,7 +812,7 @@ bool SvxULSpaceItem::GetPresentation
             }
             else
             {
-                rText += GetMetricText( static_cast<long>(nLower), eCoreUnit, ePresUnit, &rIntl ) +
+                rText += GetMetricText( static_cast<tools::Long>(nLower), eCoreUnit, ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             return true;
@@ -823,7 +823,7 @@ bool SvxULSpaceItem::GetPresentation
 }
 
 
-void SvxULSpaceItem::ScaleMetrics( long nMult, long nDiv )
+void SvxULSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     nUpper = static_cast<sal_uInt16>(Scale( nUpper, nMult, nDiv ));
     nLower = static_cast<sal_uInt16>(Scale( nLower, nMult, nDiv ));
@@ -1193,7 +1193,7 @@ bool SvxShadowItem::GetPresentation
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
-                    GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( static_cast<tools::Long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
                     cpDelim +
                     EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]);
             return true;
@@ -1209,7 +1209,7 @@ bool SvxShadowItem::GetPresentation
                 pId = RID_SVXITEMS_TRANSPARENT_TRUE;
             rText += EditResId(pId) +
                     cpDelim +
-                    GetMetricText( static_cast<long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
+                    GetMetricText( static_cast<tools::Long>(nWidth), eCoreUnit, ePresUnit, &rIntl ) +
                     " " + EditResId(GetMetricId(ePresUnit)) +
                     cpDelim +
                     EditResId(RID_SVXITEMS_SHADOW[static_cast<int>(eLocation)]);
@@ -1221,7 +1221,7 @@ bool SvxShadowItem::GetPresentation
 }
 
 
-void SvxShadowItem::ScaleMetrics( long nMult, long nDiv )
+void SvxShadowItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     nWidth = static_cast<sal_uInt16>(Scale( nWidth, nMult, nDiv ));
 }
@@ -1628,7 +1628,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case LINE_WIDTH:
             {
                 // Set the line width on all borders
-                long nWidth(0);
+                tools::Long nWidth(0);
                 rVal >>= nWidth;
                 if( bConvert )
                     nWidth = convertMm100ToTwip( nWidth );
@@ -1761,17 +1761,17 @@ bool SvxBoxItem::GetPresentation
                     rText += pRight->GetValueString( eCoreUnit, ePresUnit, &rIntl ) + cpDelimTmp;
                 }
             }
-            rText += GetMetricText( static_cast<long>(nTopDist), eCoreUnit, ePresUnit, &rIntl );
+            rText += GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit, ePresUnit, &rIntl );
             if( nTopDist != nBottomDist || nTopDist != nLeftDist ||
                 nTopDist != nRightDist )
             {
                 rText += cpDelimTmp +
-                        GetMetricText( static_cast<long>(nBottomDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nBottomDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<long>(nLeftDist), eCoreUnit, ePresUnit, &rIntl ) +
+                        GetMetricText( static_cast<tools::Long>(nLeftDist), eCoreUnit, ePresUnit, &rIntl ) +
                         cpDelimTmp +
-                        GetMetricText( static_cast<long>(nRightDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nRightDist), eCoreUnit,
                                         ePresUnit, &rIntl );
             }
             return true;
@@ -1823,29 +1823,29 @@ bool SvxBoxItem::GetPresentation
             if( nTopDist == nBottomDist && nTopDist == nLeftDist &&
                 nTopDist == nRightDist )
             {
-                rText += GetMetricText( static_cast<long>(nTopDist), eCoreUnit,
+                rText += GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit,
                                             ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             else
             {
                 rText += EditResId(RID_SVXITEMS_BORDER_TOP) +
-                        GetMetricText( static_cast<long>(nTopDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nTopDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_BOTTOM) +
-                        GetMetricText( static_cast<long>(nBottomDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nBottomDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_LEFT) +
-                        GetMetricText( static_cast<long>(nLeftDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nLeftDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit)) +
                         cpDelimTmp +
                         EditResId(RID_SVXITEMS_BORDER_RIGHT) +
-                        GetMetricText( static_cast<long>(nRightDist), eCoreUnit,
+                        GetMetricText( static_cast<tools::Long>(nRightDist), eCoreUnit,
                                         ePresUnit, &rIntl ) +
                         " " + EditResId(GetMetricId(ePresUnit));
             }
@@ -1857,7 +1857,7 @@ bool SvxBoxItem::GetPresentation
 }
 
 
-void SvxBoxItem::ScaleMetrics( long nMult, long nDiv )
+void SvxBoxItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     if ( pTop )     pTop->ScaleMetrics( nMult, nDiv );
     if ( pBottom )  pBottom->ScaleMetrics( nMult, nDiv );
@@ -2159,7 +2159,7 @@ bool SvxBoxInfoItem::GetPresentation
 }
 
 
-void SvxBoxInfoItem::ScaleMetrics( long nMult, long nDiv )
+void SvxBoxInfoItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     if ( pHori ) pHori->ScaleMetrics( nMult, nDiv );
     if ( pVert ) pVert->ScaleMetrics( nMult, nDiv );
@@ -2472,10 +2472,10 @@ void BorderDistancesToWord(const SvxBoxItem& rBox, const WordPageMargins& rMargi
     const SvxBorderLine* pLnR = rBox.GetLine(SvxBoxItemLine::RIGHT);
 
     // We need to take border widths into account
-    const long nWidthT = pLnT ? pLnT->GetScaledWidth() : 0;
-    const long nWidthL = pLnL ? pLnL->GetScaledWidth() : 0;
-    const long nWidthB = pLnB ? pLnB->GetScaledWidth() : 0;
-    const long nWidthR = pLnR ? pLnR->GetScaledWidth() : 0;
+    const tools::Long nWidthT = pLnT ? pLnT->GetScaledWidth() : 0;
+    const tools::Long nWidthL = pLnL ? pLnL->GetScaledWidth() : 0;
+    const tools::Long nWidthB = pLnB ? pLnB->GetScaledWidth() : 0;
+    const tools::Long nWidthR = pLnR ? pLnR->GetScaledWidth() : 0;
 
     // Resulting distances from text to borders
     const sal_Int32 nT2BT = pLnT ? nT : 0;
@@ -2760,7 +2760,7 @@ bool SvxLineItem::GetPresentation
 }
 
 
-void SvxLineItem::ScaleMetrics( long nMult, long nDiv )
+void SvxLineItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     if ( pLine ) pLine->ScaleMetrics( nMult, nDiv );
 }
@@ -2882,7 +2882,7 @@ bool SvxBrushItem::isUsed() const
 }
 
 
-static sal_Int8 lcl_PercentToTransparency(long nPercent)
+static sal_Int8 lcl_PercentToTransparency(tools::Long nPercent)
 {
     // 0xff must not be returned!
     return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);

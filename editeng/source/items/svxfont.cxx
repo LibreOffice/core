@@ -89,11 +89,11 @@ void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
 void SvxFont::DrawArrow( OutputDevice &rOut, const tools::Rectangle& rRect,
     const Size& rSize, const Color& rCol, bool bLeft )
 {
-    long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;
-    long nRight = nLeft + rSize.Width();
-    long nMid = ( rRect.Top() + rRect.Bottom() ) / 2;
-    long nTop = nMid - rSize.Height() / 2;
-    long nBottom = nTop + rSize.Height();
+    tools::Long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;
+    tools::Long nRight = nLeft + rSize.Width();
+    tools::Long nMid = ( rRect.Top() + rRect.Bottom() ) / 2;
+    tools::Long nTop = nMid - rSize.Height() / 2;
+    tools::Long nBottom = nTop + rSize.Height();
     if( nLeft < rRect.Left() )
     {
         nLeft = rRect.Left();
@@ -403,7 +403,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     }
 
     if( IsKern() && ( nLen > 1 ) )
-        aTxtSize.AdjustWidth( ( nLen-1 ) * long( nKern ) );
+        aTxtSize.AdjustWidth( ( nLen-1 ) * tools::Long( nKern ) );
 
     return aTxtSize;
 }
@@ -424,7 +424,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, long* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, tools::Long* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -440,12 +440,12 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
     if( IsKern() && ( nLen > 1 ) )
     {
-        aTxtSize.AdjustWidth( ( nLen-1 ) * long( nKern ) );
+        aTxtSize.AdjustWidth( ( nLen-1 ) * tools::Long( nKern ) );
 
         if ( pDXArray )
         {
             for ( sal_Int32 i = 0; i < nLen; i++ )
-                pDXArray[i] += ( (i+1) * long( nKern ) );
+                pDXArray[i] += ( (i+1) * tools::Long( nKern ) );
             // The last one is a nKern too big:
             pDXArray[nLen-1] -= nKern;
         }
@@ -474,7 +474,7 @@ Size SvxFont::GetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
-    const sal_Int32 nIdx, const sal_Int32 nLen, const long* pDXArray ) const
+    const sal_Int32 nIdx, const sal_Int32 nLen, const tools::Long* pDXArray ) const
 {
 
     // Font has to be selected in OutputDevice...
@@ -488,7 +488,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     if ( nEsc )
     {
-        long nDiff = GetFontSize().Height();
+        tools::Long nDiff = GetFontSize().Height();
         nDiff *= nEsc;
         nDiff /= 100;
 
@@ -655,7 +655,7 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
         aPartSize.setHeight( pOut->GetTextHeight() );
     }
     aTxtSize.AdjustWidth(aPartSize.Width() );
-    aTxtSize.AdjustWidth( _nLen * long( nKern ) );
+    aTxtSize.AdjustWidth( _nLen * tools::Long( nKern ) );
 }
 
 Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
@@ -748,11 +748,11 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
 
     aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
     aPartSize.setHeight( pOut->GetTextHeight() );
-    long nWidth = aPartSize.Width();
+    tools::Long nWidth = aPartSize.Width();
     if ( nKern )
     {
         aPos.AdjustX(nKern/2);
-        if ( _nLen ) nWidth += (_nLen*long(nKern));
+        if ( _nLen ) nWidth += (_nLen*tools::Long(nKern));
     }
     pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
 

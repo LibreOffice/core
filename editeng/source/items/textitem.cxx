@@ -701,7 +701,7 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
             short nTemp = static_cast<short>(nProp);
             nDiff = nTemp * 20;
             if(!bCoreInTwip)
-                nDiff = static_cast<short>(convertTwipToMm100(static_cast<long>(nDiff)));
+                nDiff = static_cast<short>(convertTwipToMm100(static_cast<tools::Long>(nDiff)));
             break;
         }
         case MapUnit::Map100thMM:
@@ -740,7 +740,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 if( fPoint < 0. || fPoint > 10000. )
                     return false;
 
-                nHeight = static_cast<long>( fPoint * 20.0 + 0.5 );        // Twips
+                nHeight = static_cast<tools::Long>( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
                     nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
 
@@ -765,7 +765,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(fPoint < 0. || fPoint > 10000.)
                     return false;
 
-            nHeight = static_cast<long>( fPoint * 20.0 + 0.5 );        // Twips
+            nHeight = static_cast<tools::Long>( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
                 nHeight = convertTwipToMm100(nHeight);  // Convert, if the item contains 1/100mm
         }
@@ -823,7 +823,7 @@ bool SvxFontHeightItem::GetPresentation
     }
     else if( 100 == nProp )
     {
-        rText = GetMetricText( static_cast<long>(nHeight),
+        rText = GetMetricText( static_cast<tools::Long>(nHeight),
                                 eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                 " " + EditResId(GetMetricId(MapUnit::MapPoint));
     }
@@ -833,7 +833,7 @@ bool SvxFontHeightItem::GetPresentation
 }
 
 
-void SvxFontHeightItem::ScaleMetrics( long nMult, long nDiv )
+void SvxFontHeightItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     nHeight = static_cast<sal_uInt32>(Scale( nHeight, nMult, nDiv ));
 }
@@ -1494,7 +1494,7 @@ SvxKerningItem* SvxKerningItem::Clone( SfxItemPool * ) const
     return new SvxKerningItem( *this );
 }
 
-void SvxKerningItem::ScaleMetrics( long nMult, long nDiv )
+void SvxKerningItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     SetValue( static_cast<sal_Int16>(Scale( GetValue(), nMult, nDiv )) );
 }
@@ -1517,7 +1517,7 @@ bool SvxKerningItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Nameless:
-            rText = GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+            rText = GetMetricText( static_cast<tools::Long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         case SfxItemPresentation::Complete:
@@ -1532,7 +1532,7 @@ bool SvxKerningItem::GetPresentation
 
             if (pId)
                 rText += EditResId(pId);
-            rText += GetMetricText( static_cast<long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
+            rText += GetMetricText( static_cast<tools::Long>(GetValue()), eCoreUnit, MapUnit::MapPoint, &rIntl ) +
                     " " + EditResId(GetMetricId(MapUnit::MapPoint));
             return true;
         }
