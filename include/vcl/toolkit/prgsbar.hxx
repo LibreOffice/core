@@ -55,8 +55,8 @@ class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ProgressBar final : public vcl::Window
 {
 private:
     Point               maPos;
-    long                mnPrgsWidth;
-    long                mnPrgsHeight;
+    tools::Long                mnPrgsWidth;
+    tools::Long                mnPrgsHeight;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
     bool                mbCalcNew;

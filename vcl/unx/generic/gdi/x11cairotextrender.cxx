@@ -46,7 +46,7 @@ void X11CairoTextRender::clipRegion(cairo_t* cr)
     Region pClipRegion = mrParent.mpClipRegion;
     if( pClipRegion && !XEmptyRegion( pClipRegion ) )
     {
-        for (long i = 0; i < pClipRegion->numRects; ++i)
+        for (tools::Long i = 0; i < pClipRegion->numRects; ++i)
         {
             cairo_rectangle(cr,
                 pClipRegion->rects[i].x1,

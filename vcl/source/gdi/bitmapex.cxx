@@ -383,7 +383,7 @@ bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
     return bRet;
 }
 
-bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
+bool BitmapEx::Rotate( tools::Long nAngle10, const Color& rFillColor )
 {
     bool bRet = false;
 
@@ -621,7 +621,7 @@ void BitmapEx::Draw( OutputDevice* pOutDev,
     pOutDev->DrawBitmapEx( rDestPt, rDestSize, *this );
 }
 
-BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStandardSize)
+BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const tools::Long aStandardSize)
 {
     Point aEmptyPoint(0,0);
     double imgposX = 0;
@@ -669,7 +669,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx const & aBitmap, const long aStanda
 
     // Draw a rect into virDevice
     aVirDevice->DrawRect( aRect );
-    Point aPointPixel( static_cast<long>(imgposX), static_cast<long>(imgposY) );
+    Point aPointPixel( static_cast<tools::Long>(imgposX), static_cast<tools::Long>(imgposY) );
     aVirDevice->DrawBitmapEx( aPointPixel, aRet );
     aRet = aVirDevice->GetBitmapEx( aEmptyPoint, aStdSize );
 
@@ -826,10 +826,10 @@ namespace
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
                 const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
-                for(long y(0); y < aDestinationSizePixel.getHeight(); y++)
+                for(tools::Long y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
                     Scanline pScanline = xWrite->GetScanline( y );
-                    for(long x(0); x < aDestinationSizePixel.getWidth(); x++)
+                    for(tools::Long x(0); x < aDestinationSizePixel.getWidth(); x++)
                     {
                         const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
 
@@ -1080,11 +1080,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
                 {
-                    for(long y(0); y < xContent->Height(); y++)
+                    for(tools::Long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(long x(0); x < xContent->Width(); x++)
+                        for(tools::Long x(0); x < xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *(pScan + 2)* fConvertColor,
@@ -1099,11 +1099,11 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
                 {
-                    for(long y(0); y < xContent->Height(); y++)
+                    for(tools::Long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScan = xContent->GetScanline(y);
 
-                        for(long x(0); x < xContent->Width(); x++)
+                        for(tools::Long x(0); x < xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *pScan * fConvertColor,
@@ -1118,10 +1118,10 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else
                 {
-                    for(long y(0); y < xContent->Height(); y++)
+                    for(tools::Long y(0); y < xContent->Height(); y++)
                     {
                         Scanline pScanline = xContent->GetScanline( y );
-                        for(long x(0); x < xContent->Width(); x++)
+                        for(tools::Long x(0); x < xContent->Width(); x++)
                         {
                             const BitmapColor aBMCol(xContent->GetColor(y, x));
                             const basegfx::BColor aBSource(
@@ -1214,8 +1214,8 @@ BitmapEx createBlendFrame(
     pBlendFrameCache->m_aLastColorBottomLeft = aColorBottomLeft;
     pBlendFrameCache->m_aLastResult.Clear();
 
-    const long nW(rSize.Width());
-    const long nH(rSize.Height());
+    const tools::Long nW(rSize.Width());
+    const tools::Long nH(rSize.Height());
 
     if(nW > 1 && nH > 1)
     {
@@ -1230,8 +1230,8 @@ BitmapEx createBlendFrame(
 
         if(pContent && pAlpha)
         {
-            long x(0);
-            long y(0);
+            tools::Long x(0);
+            tools::Long y(0);
             Scanline pScanContent = pContent->GetScanline( 0 );
             Scanline pScanAlpha = pContent->GetScanline( 0 );
 
@@ -1363,14 +1363,14 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
 
             if( pReadAcc )
             {
-                const long          nWidth = aSize.Width();
-                const long          nWidth2 = nWidth - 2;
-                const long          nHeight = aSize.Height();
-                const long          nHeight2 = nHeight - 2;
-                const long          lThres2 = static_cast<long>(cEdgeDetectThreshold) * cEdgeDetectThreshold;
-                long                nSum1;
-                long                nSum2;
-                long                lGray;
+                const tools::Long          nWidth = aSize.Width();
+                const tools::Long          nWidth2 = nWidth - 2;
+                const tools::Long          nHeight = aSize.Height();
+                const tools::Long          nHeight2 = nHeight - 2;
+                const tools::Long          lThres2 = static_cast<tools::Long>(cEdgeDetectThreshold) * cEdgeDetectThreshold;
+                tools::Long                nSum1;
+                tools::Long                nSum2;
+                tools::Long                lGray;
 
                 // initialize border with white pixels
                 pVirDev->SetLineColor( COL_WHITE );
@@ -1379,31 +1379,31 @@ static Bitmap DetectEdges( const Bitmap& rBmp )
                 pVirDev->DrawLine( Point( nWidth - 1, nHeight - 1 ), Point( 0L, nHeight - 1 ) );
                 pVirDev->DrawLine( Point( 0, nHeight - 1 ), Point() );
 
-                for( long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
+                for( tools::Long nY = 0, nY1 = 1, nY2 = 2; nY < nHeight2; nY++, nY1++, nY2++ )
                 {
                     Scanline pScanlineRead = pReadAcc->GetScanline( nY );
                     Scanline pScanlineRead1 = pReadAcc->GetScanline( nY1 );
                     Scanline pScanlineRead2 = pReadAcc->GetScanline( nY2 );
-                    for( long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
+                    for( tools::Long nX = 0, nXDst = 1, nXTmp; nX < nWidth2; nX++, nXDst++ )
                     {
                         nXTmp = nX;
 
                         nSum2 = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ );
                         nSum1 = -nSum2;
-                        nSum2 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
+                        nSum2 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead, nXTmp++ )) << 1;
                         lGray = pReadAcc->GetIndexFromData( pScanlineRead, nXTmp );
                         nSum1 += lGray;
                         nSum2 += lGray;
 
-                        nSum1 += static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+                        nSum1 += static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
                         nXTmp -= 2;
-                        nSum1 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
+                        nSum1 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead1, nXTmp )) << 1;
 
-                        lGray = -static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
+                        lGray = -static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ ));
                         nSum1 += lGray;
                         nSum2 += lGray;
-                        nSum2 -= static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
-                        lGray = static_cast<long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
+                        nSum2 -= static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp++ )) << 1;
+                        lGray = static_cast<tools::Long>(pReadAcc->GetIndexFromData( pScanlineRead2, nXTmp ));
                         nSum1 += lGray;
                         nSum2 -= lGray;
 
@@ -1458,22 +1458,22 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 
         BitmapReadAccess* pAcc = aWorkBmp.AcquireReadAccess();
 
-        const long nWidth = pAcc ? pAcc->Width() : 0;
-        const long nHeight = pAcc ? pAcc->Height() : 0;
+        const tools::Long nWidth = pAcc ? pAcc->Width() : 0;
+        const tools::Long nHeight = pAcc ? pAcc->Height() : 0;
 
         if (pAcc && nWidth && nHeight)
         {
             const Size&         rPrefSize = aWorkBmp.GetPrefSize();
             const double        fFactorX = static_cast<double>(rPrefSize.Width()) / nWidth;
             const double        fFactorY = static_cast<double>(rPrefSize.Height()) / nHeight;
-            const long          nStartX1 = aWorkRect.Left() + 1;
-            const long          nEndX1 = aWorkRect.Right();
-            const long          nStartX2 = nEndX1 - 1;
-            const long          nStartY1 = aWorkRect.Top() + 1;
-            const long          nEndY1 = aWorkRect.Bottom();
+            const tools::Long          nStartX1 = aWorkRect.Left() + 1;
+            const tools::Long          nEndX1 = aWorkRect.Right();
+            const tools::Long          nStartX2 = nEndX1 - 1;
+            const tools::Long          nStartY1 = aWorkRect.Top() + 1;
+            const tools::Long          nEndY1 = aWorkRect.Bottom();
             std::unique_ptr<Point[]> pPoints1;
             std::unique_ptr<Point[]> pPoints2;
-            long                nX, nY;
+            tools::Long                nX, nY;
             sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( COL_BLACK );
 
@@ -1541,11 +1541,11 @@ void BitmapEx::setAlphaFrom( sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
     if ( !(pReadAccess.get() && pWriteAccess.get()) )
         return;
 
-    for ( long nY = 0; nY < pReadAccess->Height(); nY++ )
+    for ( tools::Long nY = 0; nY < pReadAccess->Height(); nY++ )
     {
         Scanline pScanline = pWriteAccess->GetScanline( nY );
         Scanline pScanlineRead = pReadAccess->GetScanline( nY );
-        for ( long nX = 0; nX < pReadAccess->Width(); nX++ )
+        for ( tools::Long nX = 0; nX < pReadAccess->Width(); nX++ )
         {
             const sal_uInt8 cIndex = pReadAccess->GetPixelFromData( pScanlineRead, nX ).GetIndex();
             if ( cIndex == cIndexFrom )
@@ -1577,15 +1577,15 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
             return;
 
         sal_uLong       nTrans = cTrans, nNewTrans;
-        const long  nWidth = pA->Width(), nHeight = pA->Height();
+        const tools::Long  nWidth = pA->Width(), nHeight = pA->Height();
 
         if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
         {
-            for( long nY = 0; nY < nHeight; nY++ )
+            for( tools::Long nY = 0; nY < nHeight; nY++ )
             {
                 Scanline pAScan = pA->GetScanline( nY );
 
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
                     nNewTrans = nTrans + *pAScan;
                     *pAScan++ = static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans );
@@ -1596,10 +1596,10 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
         {
             BitmapColor aAlphaValue( 0 );
 
-            for( long nY = 0; nY < nHeight; nY++ )
+            for( tools::Long nY = 0; nY < nHeight; nY++ )
             {
                 Scanline pScanline = pA->GetScanline( nY );
-                for( long nX = 0; nX < nWidth; nX++ )
+                for( tools::Long nX = 0; nX < nWidth; nX++ )
                 {
                     nNewTrans = nTrans + pA->GetIndexFromData( pScanline, nX );
                     aAlphaValue.SetIndex( static_cast<sal_uInt8>( ( nNewTrans & 0xffffff00 ) ? 255 : nNewTrans ) );

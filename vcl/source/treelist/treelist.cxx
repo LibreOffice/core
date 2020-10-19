@@ -1437,9 +1437,9 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
     if (rChildList.empty())
         return;
 
-    long i = 0;
-    long j = rChildList.size()-1;
-    long k;
+    tools::Long i = 0;
+    tools::Long j = rChildList.size()-1;
+    tools::Long k;
     sal_Int32 nCompare = 1;
 
     do
@@ -1462,7 +1462,7 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry const * pEntry, SvTreeListEntr
 
     if( nCompare != 0 )
     {
-        if (i > static_cast<long>(rChildList.size()-1)) // not found, end of list
+        if (i > static_cast<tools::Long>(rChildList.size()-1)) // not found, end of list
             rPos = TREELIST_ENTRY_NOTFOUND;
         else
             rPos = i;              // not found, middle of list

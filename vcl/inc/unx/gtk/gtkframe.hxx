@@ -204,8 +204,8 @@ class GtkSalFrame final : public SalFrame
     tools::Rectangle                m_aFloatRect;
     FloatWinPopupFlags              m_nFloatFlags;
     bool                            m_bFloatPositioned;
-    long                            m_nWidthRequest;
-    long                            m_nHeightRequest;
+    tools::Long                            m_nWidthRequest;
+    tools::Long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
     GtkDropTarget*                  m_pDropTarget;
     GtkDragSource*                  m_pDragSource;
@@ -301,12 +301,12 @@ class GtkSalFrame final : public SalFrame
     }
 
     //call gtk_window_resize
-    void window_resize(long nWidth, long nHeight);
+    void window_resize(tools::Long nWidth, tools::Long nHeight);
     //call gtk_widget_set_size_request
-    void widget_set_size_request(long nWidth, long nHeight);
+    void widget_set_size_request(tools::Long nWidth, tools::Long nHeight);
 
-    void resizeWindow( long nWidth, long nHeight );
-    void moveWindow( long nX, long nY );
+    void resizeWindow( tools::Long nWidth, tools::Long nHeight );
+    void moveWindow( tools::Long nX, tools::Long nY );
 
     Size calcDefaultSize();
 
@@ -417,10 +417,10 @@ public:
     virtual void                Show( bool bVisible, bool bNoActivate = false ) override;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
-    virtual void                SetMinClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetMaxClientSize( long nWidth, long nHeight ) override;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) override;
-    virtual void                GetClientSize( long& rWidth, long& rHeight ) override;
+    virtual void                SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) override;
+    virtual void                SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) override;
+    virtual void                SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) override;
+    virtual void                GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) override;
     virtual void                GetWorkArea( tools::Rectangle& rRect ) override;
     virtual SalFrame*           GetParent() const override;
     virtual void                SetWindowState( const SalFrameState* pState ) override;
@@ -439,7 +439,7 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
     virtual void                GrabFocus() override;
-    virtual void                SetPointerPos( long nX, long nY ) override;
+    virtual void                SetPointerPos( tools::Long nX, tools::Long nY ) override;
 
     // flush output buffer
     using SalFrame::Flush;
@@ -486,7 +486,7 @@ public:
     // start setting the clipregion consisting of nRects rectangles
     virtual void                BeginSetClipRegion( sal_uInt32 nRects ) override;
     // add a rectangle to the clip region
-    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) override;
+    virtual void                UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     // done setting up the clipregion
     virtual void                EndSetClipRegion() override;
 

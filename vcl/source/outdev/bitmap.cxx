@@ -179,7 +179,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
 Bitmap OutputDevice::GetDownsampledBitmap( const Size& rDstSz,
                                            const Point& rSrcPt, const Size& rSrcSz,
-                                           const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY )
+                                           const Bitmap& rBmp, tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY )
 {
     Bitmap aBmp( rBmp );
 
@@ -382,10 +382,10 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 {
     Bitmap  aBmp;
-    long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
-    long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
-    long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
-    long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
+    tools::Long    nX = ImplLogicXToDevicePixel( rSrcPt.X() );
+    tools::Long    nY = ImplLogicYToDevicePixel( rSrcPt.Y() );
+    tools::Long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
+    tools::Long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
 
     if ( mpGraphics || AcquireGraphics() )
     {
@@ -733,15 +733,15 @@ struct LinearScaleContext
     std::unique_ptr<long[]> mpMapYOffset;
 
     LinearScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
-                 Size const & aOutSize, long nOffX, long nOffY)
+                 Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
         , mpMapY(new long[aDstRect.GetHeight()])
         , mpMapXOffset(new long[aDstRect.GetWidth()])
         , mpMapYOffset(new long[aDstRect.GetHeight()])
     {
-        const long nSrcWidth = aBitmapRect.GetWidth();
-        const long nSrcHeight = aBitmapRect.GetHeight();
+        const tools::Long nSrcWidth = aBitmapRect.GetWidth();
+        const tools::Long nSrcHeight = aBitmapRect.GetHeight();
 
         generateSimpleMap(
             nSrcWidth,  aDstRect.GetWidth(), aBitmapRect.Left(),
@@ -754,20 +754,20 @@ struct LinearScaleContext
 
 private:
 
-    static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
-                                  long nOutDimension, long nOffset, long* pMap, long* pMapOffset)
+    static void generateSimpleMap(tools::Long nSrcDimension, tools::Long nDstDimension, tools::Long nDstLocation,
+                                  tools::Long nOutDimension, tools::Long nOffset, tools::Long* pMap, tools::Long* pMapOffset)
     {
 
         const double fReverseScale = (std::abs(nOutDimension) > 1) ? (nSrcDimension - 1) / double(std::abs(nOutDimension) - 1) : 0.0;
 
-        long nSampleRange = std::max(0L, nSrcDimension - 2);
+        tools::Long nSampleRange = std::max(0L, nSrcDimension - 2);
 
-        for (long i = 0; i < nDstDimension; i++)
+        for (tools::Long i = 0; i < nDstDimension; i++)
         {
             double fTemp = std::abs((nOffset + i) * fReverseScale);
 
-            pMap[i] = MinMax(nDstLocation + long(fTemp), 0, nSampleRange);
-            pMapOffset[i] = static_cast<long>((fTemp - pMap[i]) * 128.0);
+            pMap[i] = MinMax(nDstLocation + tools::Long(fTemp), 0, nSampleRange);
+            pMapOffset[i] = static_cast<tools::Long>((fTemp - pMap[i]) * 128.0);
         }
     }
 
@@ -776,8 +776,8 @@ public:
             const BitmapWriteAccess* pDestination,
             const BitmapReadAccess*  pSource,
             const BitmapReadAccess*  pSourceAlpha,
-            const long nDstWidth,
-            const long nDstHeight)
+            const tools::Long nDstWidth,
+            const tools::Long nDstHeight)
     {
         if (pSource && pSourceAlpha && pDestination)
         {
@@ -807,24 +807,24 @@ public:
             const BitmapWriteAccess*  pDestination,
             const BitmapReadAccess*   pSource,
             const BitmapReadAccess*   pSourceAlpha,
-            const long nDstWidth,
-            const long nDstHeight)
+            const tools::Long nDstWidth,
+            const tools::Long nDstHeight)
     {
         Scanline pLine0, pLine1;
         Scanline pLineAlpha0, pLineAlpha1;
         Scanline pColorSample1, pColorSample2;
         Scanline pDestScanline;
 
-        long nColor1Line1, nColor2Line1, nColor3Line1;
-        long nColor1Line2, nColor2Line2, nColor3Line2;
-        long nAlphaLine1, nAlphaLine2;
+        tools::Long nColor1Line1, nColor2Line1, nColor3Line1;
+        tools::Long nColor1Line2, nColor2Line2, nColor3Line2;
+        tools::Long nAlphaLine1, nAlphaLine2;
 
         sal_uInt8 nColor1, nColor2, nColor3, nAlpha;
 
-        for (long nY = 0; nY < nDstHeight; nY++)
+        for (tools::Long nY = 0; nY < nDstHeight; nY++)
         {
-            const long nMapY  = mpMapY[nY];
-            const long nMapFY = mpMapYOffset[nY];
+            const tools::Long nMapY  = mpMapY[nY];
+            const tools::Long nMapFY = mpMapYOffset[nY];
 
             pLine0 = pSource->GetScanline(nMapY);
             // tdf#95481 guard nMapY + 1 to be within bounds
@@ -836,42 +836,42 @@ public:
 
             pDestScanline = pDestination->GetScanline(nY);
 
-            for (long nX = 0; nX < nDstWidth; nX++)
+            for (tools::Long nX = 0; nX < nDstWidth; nX++)
             {
-                const long nMapX = mpMapX[nX];
-                const long nMapFX = mpMapXOffset[nX];
+                const tools::Long nMapX = mpMapX[nX];
+                const tools::Long nMapFX = mpMapXOffset[nX];
 
                 pColorSample1 = pLine0 + 3 * nMapX;
                 pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3 : pColorSample1;
-                nColor1Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor1Line1 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
                 pColorSample2++;
-                nColor2Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor2Line1 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
                 pColorSample2++;
-                nColor3Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor3Line1 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLine1 + 3 * nMapX;
                 pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3 : pColorSample1;
-                nColor1Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor1Line2 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
                 pColorSample2++;
-                nColor2Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor2Line2 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
                 pColorSample2++;
-                nColor3Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nColor3Line2 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha0 + nMapX;
                 pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1 : pColorSample1;
-                nAlphaLine1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nAlphaLine1 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha1 + nMapX;
                 pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1 : pColorSample1;
-                nAlphaLine2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
+                nAlphaLine2 = (static_cast<tools::Long>(*pColorSample1) << 7) + nMapFX * (static_cast<tools::Long>(*pColorSample2) - *pColorSample1);
 
                 nColor1 = (nColor1Line1 + nMapFY * ((nColor1Line2 >> 7) - (nColor1Line1 >> 7))) >> 7;
                 nColor2 = (nColor2Line1 + nMapFY * ((nColor2Line2 >> 7) - (nColor2Line1 >> 7))) >> 7;
@@ -897,13 +897,13 @@ struct TradScaleContext
     std::unique_ptr<long[]> mpMapY;
 
     TradScaleContext(tools::Rectangle const & aDstRect, tools::Rectangle const & aBitmapRect,
-                 Size const & aOutSize, long nOffX, long nOffY)
+                 Size const & aOutSize, tools::Long nOffX, tools::Long nOffY)
 
         : mpMapX(new long[aDstRect.GetWidth()])
         , mpMapY(new long[aDstRect.GetHeight()])
     {
-        const long nSrcWidth = aBitmapRect.GetWidth();
-        const long nSrcHeight = aBitmapRect.GetHeight();
+        const tools::Long nSrcWidth = aBitmapRect.GetWidth();
+        const tools::Long nSrcHeight = aBitmapRect.GetHeight();
 
         const bool bHMirr = aOutSize.Width() < 0;
         const bool bVMirr = aOutSize.Height() < 0;
@@ -919,15 +919,15 @@ struct TradScaleContext
 
 private:
 
-    static void generateSimpleMap(long nSrcDimension, long nDstDimension, long nDstLocation,
-                                  long nOutDimension, long nOffset, bool bMirror, long* pMap)
+    static void generateSimpleMap(tools::Long nSrcDimension, tools::Long nDstDimension, tools::Long nDstLocation,
+                                  tools::Long nOutDimension, tools::Long nOffset, bool bMirror, tools::Long* pMap)
     {
-        long nMirrorOffset = 0;
+        tools::Long nMirrorOffset = 0;
 
         if (bMirror)
             nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1;
 
-        for (long i = 0; i < nDstDimension; ++i, ++nOffset)
+        for (tools::Long i = 0; i < nDstDimension; ++i, ++nOffset)
         {
             pMap[i] = nDstLocation + nOffset * nSrcDimension / nOutDimension;
             if (bMirror)
@@ -970,19 +970,19 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
         aDstRect.SetSize(aBmp.GetSizePixel());
     }
 
-    const long nDstWidth = aDstRect.GetWidth();
-    const long nDstHeight = aDstRect.GetHeight();
+    const tools::Long nDstWidth = aDstRect.GetWidth();
+    const tools::Long nDstHeight = aDstRect.GetHeight();
 
     // calculate offset in original bitmap
     // in RTL case this is a little more complicated since the contents of the
     // bitmap is not mirrored (it never is), however the paint region and bmp region
     // are in mirrored coordinates, so the intersection of (aOutPt,aOutSz) with these
     // is content wise somewhere else and needs to take mirroring into account
-    const long nOffX = IsRTLEnabled()
+    const tools::Long nOffX = IsRTLEnabled()
                             ? aOutSize.Width() - aDstRect.GetWidth() - (aDstRect.Left() - aOutPoint.X())
                             : aDstRect.Left() - aOutPoint.X();
 
-    const long nOffY = aDstRect.Top() - aOutPoint.Y();
+    const tools::Long nOffY = aDstRect.Top() - aOutPoint.Y();
 
     TradScaleContext aTradContext(aDstRect, aBmpRect, aOutSize, nOffX, nOffY);
 
@@ -1434,7 +1434,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         {
             fFullRotate += F_2PI;
         }
-        long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
+        tools::Long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
         aTransformed.Rotate(nAngle10, COL_TRANSPARENT);
     }
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);
@@ -1467,9 +1467,9 @@ void OutputDevice::DrawShadowBitmapEx(
     if(!pReadAccess)
         return;
 
-    for(long y(0); y < pReadAccess->Height(); y++)
+    for(tools::Long y(0); y < pReadAccess->Height(); y++)
     {
-        for(long x(0); x < pReadAccess->Width(); x++)
+        for(tools::Long x(0); x < pReadAccess->Width(); x++)
         {
             const BitmapColor aColor = pReadAccess->GetColor(y, x);
             sal_uInt16 nLuminance(static_cast<sal_uInt16>(aColor.GetLuminance()) + 1);
@@ -1519,8 +1519,8 @@ namespace
     }
 
     BitmapColor AlphaBlend( int nX,               int nY,
-                                   const long            nMapX,
-                                   const long            nMapY,
+                                   const tools::Long            nMapX,
+                                   const tools::Long            nMapY,
                                    BitmapReadAccess const *  pP,
                                    BitmapReadAccess const *  pA,
                                    BitmapReadAccess const *  pB,
@@ -1565,8 +1565,8 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
             const sal_Int32     nDstHeight,
             const sal_Int32     nOffX,
             const sal_Int32     nDstWidth,
-            const long*         pMapX,
-            const long*         pMapY )
+            const tools::Long*         pMapX,
+            const tools::Long*         pMapY )
 
 {
     BitmapColor aDstCol;
@@ -1595,15 +1595,15 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
 
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
-                const long nMapY = pMapY[ nY ];
-                const long nModY = ( nOutY & 0x0FL ) << 4;
+                const tools::Long nMapY = pMapY[ nY ];
+                const tools::Long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
                 Scanline pScanline = pW->GetScanline(nY);
                 Scanline pScanlineAlpha = pAlphaW->GetScanline(nY);
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
-                    const long  nMapX = pMapX[ nX ];
+                    const tools::Long  nMapX = pMapX[ nX ];
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
@@ -1631,13 +1631,13 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
         {
             for( nY = 0; nY < nDstHeight; nY++ )
             {
-                const long  nMapY = pMapY[ nY ];
+                const tools::Long  nMapY = pMapY[ nY ];
                 Scanline pScanlineB = pB->GetScanline(nY);
                 Scanline pScanlineAlpha = pAlphaW->GetScanline(nY);
 
                 for( nX = 0; nX < nDstWidth; nX++ )
                 {
-                    const long nMapX = pMapX[ nX ];
+                    const tools::Long nMapX = pMapX[ nX ];
                     aDstCol = AlphaBlend( nX, nY, nMapX, nMapY, pP, pA, pB.get(), pAlphaW.get(), nResAlpha );
 
                     pB->SetPixelOnData(pScanlineB, nX, pB->GetBestMatchingColor(aDstCol));
@@ -1668,8 +1668,8 @@ Bitmap OutputDevice::BlendBitmap(
             const Size&         aOutSz,
             const bool          bHMirr,
             const bool          bVMirr,
-            const long*         pMapX,
-            const long*         pMapY )
+            const tools::Long*         pMapX,
+            const tools::Long*         pMapY )
 {
     BitmapColor aDstCol;
     Bitmap      res;
@@ -1688,19 +1688,19 @@ Bitmap OutputDevice::BlendBitmap(
 
             for( nY = 0, nOutY = nOffY; nY < nDstHeight; nY++, nOutY++ )
             {
-                long nMapY = pMapY[ nY ];
+                tools::Long nMapY = pMapY[ nY ];
                 if (bVMirr)
                 {
                     nMapY = aBmpRect.Bottom() - nMapY;
                 }
-                const long nModY = ( nOutY & 0x0FL ) << 4;
+                const tools::Long nModY = ( nOutY & 0x0FL ) << 4;
                 int nOutX;
 
                 Scanline pScanline = pW->GetScanline(nY);
                 Scanline pScanlineAlpha = pA->GetScanline(nMapY);
                 for( nX = 0, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
                 {
-                    long  nMapX = pMapX[ nX ];
+                    tools::Long  nMapX = pMapX[ nX ];
                     if (bHMirr)
                     {
                         nMapX = aBmpRect.Right() - nMapX;
@@ -1742,7 +1742,7 @@ Bitmap OutputDevice::BlendBitmap(
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {
-                            long  nMapY = pMapY[ nY ];
+                            tools::Long  nMapY = pMapY[ nY ];
                             if ( bVMirr )
                             {
                                 nMapY = aBmpRect.Bottom() - nMapY;
@@ -1753,7 +1753,7 @@ Bitmap OutputDevice::BlendBitmap(
 
                             for( nX = 0; nX < nDstWidth; nX++ )
                             {
-                                long nMapX = pMapX[ nX ];
+                                tools::Long nMapX = pMapX[ nX ];
 
                                 if ( bHMirr )
                                 {
@@ -1772,7 +1772,7 @@ Bitmap OutputDevice::BlendBitmap(
 
                     for( nY = 0; nY < nDstHeight; nY++ )
                     {
-                        long  nMapY = pMapY[ nY ];
+                        tools::Long  nMapY = pMapY[ nY ];
 
                         if ( bVMirr )
                         {
@@ -1782,7 +1782,7 @@ Bitmap OutputDevice::BlendBitmap(
                         Scanline pBScan = pB->GetScanline(nY);
                         for( nX = 0; nX < nDstWidth; nX++ )
                         {
-                            long nMapX = pMapX[ nX ];
+                            tools::Long nMapX = pMapX[ nX ];
 
                             if ( bHMirr )
                             {

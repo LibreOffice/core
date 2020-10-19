@@ -709,7 +709,7 @@ GtkSalFrame::~GtkSalFrame()
         cairo_surface_destroy(m_pSurface);
 }
 
-void GtkSalFrame::moveWindow( long nX, long nY )
+void GtkSalFrame::moveWindow( tools::Long nX, tools::Long nY )
 {
     if( isChild( false ) )
     {
@@ -727,12 +727,12 @@ void GtkSalFrame::moveWindow( long nX, long nY )
         gtk_window_move( GTK_WINDOW(m_pWindow), nX, nY );
 }
 
-void GtkSalFrame::widget_set_size_request(long nWidth, long nHeight)
+void GtkSalFrame::widget_set_size_request(tools::Long nWidth, tools::Long nHeight)
 {
     gtk_widget_set_size_request(GTK_WIDGET(m_pFixedContainer), nWidth, nHeight );
 }
 
-void GtkSalFrame::window_resize(long nWidth, long nHeight)
+void GtkSalFrame::window_resize(tools::Long nWidth, tools::Long nHeight)
 {
     m_nWidthRequest = nWidth;
     m_nHeightRequest = nHeight;
@@ -741,7 +741,7 @@ void GtkSalFrame::window_resize(long nWidth, long nHeight)
         gtk_window_resize(GTK_WINDOW(m_pWindow), nWidth, nHeight);
 }
 
-void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
+void GtkSalFrame::resizeWindow( tools::Long nWidth, tools::Long nHeight )
 {
     if( isChild( false ) )
     {
@@ -1476,7 +1476,7 @@ void GtkSalFrame::setMinMaxSize()
     }
 }
 
-void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
+void GtkSalFrame::SetMaxClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     if( ! isChild() )
     {
@@ -1484,7 +1484,7 @@ void GtkSalFrame::SetMaxClientSize( long nWidth, long nHeight )
         setMinMaxSize();
     }
 }
-void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
+void GtkSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 {
     if( ! isChild() )
     {
@@ -1525,7 +1525,7 @@ void GtkSalFrame::AllocateFrame()
         m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
 }
 
-void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
+void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
 {
     if( !m_pWindow || isChild( true, false ) )
         return;
@@ -1579,7 +1579,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
     m_bDefaultPos = false;
 }
 
-void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
+void GtkSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
 {
     if( m_pWindow && !(m_nState & GDK_WINDOW_STATE_ICONIFIED) )
     {
@@ -1640,8 +1640,8 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
                                WindowStateMask::Width | WindowStateMask::Height ) )
     {
         sal_uInt16 nPosSizeFlags = 0;
-        long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
-        long nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
+        tools::Long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
+        tools::Long nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
         if( pState->mnMask & WindowStateMask::X )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
         else
@@ -1681,7 +1681,7 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 
 namespace
 {
-    void GetPosAndSize(GtkWindow *pWindow, long& rX, long &rY, long &rWidth, long &rHeight)
+    void GetPosAndSize(GtkWindow *pWindow, tools::Long& rX, tools::Long &rY, tools::Long &rWidth, tools::Long &rHeight)
     {
        gint root_x, root_y;
        gtk_window_get_position(GTK_WINDOW(pWindow), &root_x, &root_y);
@@ -1695,7 +1695,7 @@ namespace
 
     tools::Rectangle GetPosAndSize(GtkWindow *pWindow)
     {
-        long nX, nY, nWidth, nHeight;
+        tools::Long nX, nY, nWidth, nHeight;
         GetPosAndSize(pWindow, nX, nY, nWidth, nHeight);
         return tools::Rectangle(nX, nY, nX + nWidth, nY + nHeight);
     }
@@ -2057,7 +2057,7 @@ void GtkSalFrame::CaptureMouse( bool bCapture )
     getDisplay()->CaptureMouse( bCapture ? this : nullptr );
 }
 
-void GtkSalFrame::SetPointerPos( long nX, long nY )
+void GtkSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
 {
     GtkSalFrame* pFrame = this;
     while( pFrame && pFrame->isChild( false ) )
@@ -2331,7 +2331,7 @@ void GtkSalFrame::BeginSetClipRegion( sal_uInt32 )
     m_pRegion = cairo_region_create();
 }
 
-void GtkSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void GtkSalFrame::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if( m_pRegion )
     {
@@ -2635,8 +2635,8 @@ gboolean GtkSalFrame::signalButton(GtkWidget*, GdkEventButton* pEvent, gpointer 
     if (!aDel.isDeleted())
     {
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
+        aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
+        aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
         if( AllSettings::GetLayoutRTL() )
@@ -2869,8 +2869,8 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     {
         SalMouseEvent aEvent;
         aEvent.mnTime   = pEvent->time;
-        aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
+        aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
+        aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
         aEvent.mnButton = 0;
 
@@ -2898,8 +2898,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     SalMouseEvent aEvent;
     aEvent.mnTime   = pEvent->time;
-    aEvent.mnX      = static_cast<long>(pEvent->x_root) - pThis->maGeometry.nX;
-    aEvent.mnY      = static_cast<long>(pEvent->y_root) - pThis->maGeometry.nY;
+    aEvent.mnX      = static_cast<tools::Long>(pEvent->x_root) - pThis->maGeometry.nX;
+    aEvent.mnY      = static_cast<tools::Long>(pEvent->y_root) - pThis->maGeometry.nY;
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 

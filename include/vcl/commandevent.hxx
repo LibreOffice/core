@@ -137,8 +137,8 @@ enum class CommandWheelMode
 class VCL_DLLPUBLIC CommandWheelData
 {
 private:
-    long              mnDelta;
-    long              mnNotchDelta;
+    tools::Long              mnDelta;
+    tools::Long              mnNotchDelta;
     double            mnLines;
     CommandWheelMode  mnWheelMode;
     sal_uInt16        mnCode;
@@ -147,13 +147,13 @@ private:
 
 public:
                     CommandWheelData();
-                    CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
+                    CommandWheelData( tools::Long nWheelDelta, tools::Long nWheelNotchDelta,
                                       double nScrollLines,
                                       CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                       bool bHorz, bool bDeltaIsPixel = false );
 
-    long            GetDelta() const { return mnDelta; }
-    long            GetNotchDelta() const { return mnNotchDelta; }
+    tools::Long            GetDelta() const { return mnDelta; }
+    tools::Long            GetNotchDelta() const { return mnNotchDelta; }
     double          GetScrollLines() const { return mnLines; }
     bool            IsHorz() const { return mbHorz; }
     bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
@@ -173,14 +173,14 @@ public:
 class CommandScrollData
 {
 private:
-    long            mnDeltaX;
-    long            mnDeltaY;
+    tools::Long            mnDeltaX;
+    tools::Long            mnDeltaY;
 
 public:
-                    CommandScrollData( long nDeltaX, long nDeltaY );
+                    CommandScrollData( tools::Long nDeltaX, tools::Long nDeltaY );
 
-    long            GetDeltaX() const { return mnDeltaX; }
-    long            GetDeltaY() const { return mnDeltaY; }
+    tools::Long            GetDeltaX() const { return mnDeltaX; }
+    tools::Long            GetDeltaY() const { return mnDeltaY; }
 };
 
 class CommandModKeyData

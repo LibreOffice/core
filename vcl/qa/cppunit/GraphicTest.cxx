@@ -153,9 +153,9 @@ bool checkBitmap(Graphic& rGraphic)
     Bitmap aBitmap(rGraphic.GetBitmapEx().GetBitmap());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-        for (long y = 0; y < rGraphic.GetSizePixel().Height(); y++)
+        for (tools::Long y = 0; y < rGraphic.GetSizePixel().Height(); y++)
         {
-            for (long x = 0; x < rGraphic.GetSizePixel().Width(); x++)
+            for (tools::Long x = 0; x < rGraphic.GetSizePixel().Width(); x++)
             {
                 if (pReadAccess->HasPalette())
                 {

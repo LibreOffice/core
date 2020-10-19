@@ -59,12 +59,12 @@ public:
      * this method. The buffer size is assumed to be 4*width*height and the format
      * to be OptimalBufferFormat().
     **/
-    static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
+    static BitmapEx ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, tools::Long nWidth, tools::Long nHeight);
     /**
      * Returns the optimal buffer format for OpenGL (GL_BGRA or GL_RGBA).
     **/
     static GLenum OptimalBufferFormat();
-    static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
+    static void renderToFile(tools::Long nWidth, tools::Long nHeight, const OUString& rFileName);
 
     static const char* GLErrorString(GLenum errorCode);
 
@@ -80,7 +80,7 @@ public:
      * @param nRenderbufferDepthId  RenderBuffer's depth ID
      * @param nRenderbufferColorId  RenderBuffer's color ID
      */
-    static void createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
+    static void createFramebuffer(tools::Long nWidth, tools::Long nHeight, GLuint& nFramebufferId,
             GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId);
 
     /// Get OpenGL version (needs a context)

@@ -366,8 +366,8 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
 
 void SvxIconChoiceCtrl_Impl::AdjustVirtSize( const tools::Rectangle& rRect )
 {
-    long nHeightOffs = 0;
-    long nWidthOffs = 0;
+    tools::Long nHeightOffs = 0;
+    tools::Long nWidthOffs = 0;
 
     if( aVirtOutputSize.Width() < (rRect.Right()+LROFFS_WINBORDER) )
         nWidthOffs = (rRect.Right()+LROFFS_WINBORDER) - aVirtOutputSize.Width();
@@ -434,7 +434,7 @@ void SvxIconChoiceCtrl_Impl::ClearPredecessors()
     }
 }
 
-void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, long nSetMaxVirtWidth, long nSetMaxVirtHeight )
+void SvxIconChoiceCtrl_Impl::Arrange( bool bKeepPredecessors, tools::Long nSetMaxVirtWidth, tools::Long nSetMaxVirtHeight )
 {
     if ( nSetMaxVirtWidth != 0 )
         nMaxVirtWidth = nSetMaxVirtWidth;
@@ -1043,7 +1043,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 }
 
 // recalculate TopLeft of scrollbars (but not their sizes!)
-void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeight )
+void SvxIconChoiceCtrl_Impl::PositionScrollBars( tools::Long nRealWidth, tools::Long nRealHeight )
 {
     // horizontal scrollbar
     Point aPos( 0, nRealHeight );
@@ -1064,25 +1064,25 @@ void SvxIconChoiceCtrl_Impl::PositionScrollBars( long nRealWidth, long nRealHeig
 
 void SvxIconChoiceCtrl_Impl::AdjustScrollBars()
 {
-    long nVirtHeight = aVirtOutputSize.Height();
-    long nVirtWidth = aVirtOutputSize.Width();
+    tools::Long nVirtHeight = aVirtOutputSize.Height();
+    tools::Long nVirtWidth = aVirtOutputSize.Width();
 
     Size aOSize( pView->Control::GetOutputSizePixel() );
-    long nRealHeight = aOSize.Height();
-    long nRealWidth = aOSize.Width();
+    tools::Long nRealHeight = aOSize.Height();
+    tools::Long nRealWidth = aOSize.Width();
 
     PositionScrollBars( nRealWidth, nRealHeight );
 
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
 
-    long nVisibleWidth;
+    tools::Long nVisibleWidth;
     if( nRealWidth > nVirtWidth )
         nVisibleWidth = nVirtWidth + aOrigin.X();
     else
         nVisibleWidth = nRealWidth;
 
-    long nVisibleHeight;
+    tools::Long nVisibleHeight;
     if( nRealHeight > nVirtHeight )
         nVisibleHeight = nVirtHeight + aOrigin.Y();
     else
@@ -1134,7 +1134,7 @@ void SvxIconChoiceCtrl_Impl::AdjustScrollBars()
     }
 
     // size vertical scrollbar
-    long nThumb = aVerSBar->GetThumbPos();
+    tools::Long nThumb = aVerSBar->GetThumbPos();
     Size aSize( nVerSBarWidth, nRealHeight );
     aSize.AdjustHeight(2 );
     if( aSize != aVerSBar->GetSizePixel() )
@@ -1219,13 +1219,13 @@ bool SvxIconChoiceCtrl_Impl::CheckHorScrollBar()
     Point aOrigin( rMapMode.GetOrigin() );
     if(!( nWinBits & WB_HSCROLL) && !aOrigin.X() )
     {
-        long nWidth = aOutputSize.Width();
+        tools::Long nWidth = aOutputSize.Width();
         const size_t nCount = maZOrderList.size();
-        long nMostRight = 0;
+        tools::Long nMostRight = 0;
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
-            long nRight = GetEntryBoundRect(pEntry).Right();
+            tools::Long nRight = GetEntryBoundRect(pEntry).Right();
             if( nRight > nWidth )
                 return false;
             if( nRight > nMostRight )
@@ -1257,13 +1257,13 @@ bool SvxIconChoiceCtrl_Impl::CheckVerScrollBar()
     Point aOrigin( rMapMode.GetOrigin() );
     if(!( nWinBits & WB_VSCROLL) && !aOrigin.Y() )
     {
-        long nDeepest = 0;
-        long nHeight = aOutputSize.Height();
+        tools::Long nDeepest = 0;
+        tools::Long nHeight = aOutputSize.Height();
         const size_t nCount = maZOrderList.size();
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = maZOrderList[ nCur ];
-            long nBottom = GetEntryBoundRect(pEntry).Bottom();
+            tools::Long nBottom = GetEntryBoundRect(pEntry).Bottom();
             if( nBottom > nHeight )
                 return false;
             if( nBottom > nDeepest )
@@ -1620,8 +1620,8 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
     Size aTextSize( aTextRect.GetSize() );
 
     Point aPos( aBound.TopLeft() );
-    long nBoundWidth = aBound.GetWidth();
-    long nBoundHeight = aBound.GetHeight();
+    tools::Long nBoundWidth = aBound.GetWidth();
+    tools::Long nBoundHeight = aBound.GetHeight();
 
     switch( nWinBits & VIEWMODE_MASK )
     {
@@ -1642,10 +1642,10 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* p
 }
 
 
-long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
+tools::Long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
 {
-    long nStringWidth = GetItemSize( IcnViewFieldType::Text ).Width();
-    long nWidth = 0;
+    tools::Long nStringWidth = GetItemSize( IcnViewFieldType::Text ).Width();
+    tools::Long nWidth = 0;
 
     switch( nWinBits & VIEWMODE_MASK )
     {
@@ -1663,10 +1663,10 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingWidth() const
     return nWidth;
 }
 
-long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
+tools::Long SvxIconChoiceCtrl_Impl::CalcBoundingHeight() const
 {
-    long nStringHeight = GetItemSize(IcnViewFieldType::Text).Height();
-    long nHeight = 0;
+    tools::Long nStringHeight = GetItemSize(IcnViewFieldType::Text).Height();
+    tools::Long nHeight = 0;
 
     switch( nWinBits & VIEWMODE_MASK )
     {
@@ -1823,7 +1823,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
     bool bHor = aDocSize.Width() > aVisSize.Width();
     bool bVer = aDocSize.Height() > aVisSize.Height();
 
-    long nScrollDX = 0, nScrollDY = 0;
+    tools::Long nScrollDX = 0, nScrollDY = 0;
 
     switch( rCmd.GetCommand() )
     {
@@ -1857,7 +1857,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
                 }
                 else
                 {
-                    nScrollDY = pData->GetNotchDelta() * static_cast<long>(nScrollLines);
+                    nScrollDY = pData->GetNotchDelta() * static_cast<tools::Long>(nScrollLines);
                     nScrollDY *= GetScrollBarLineSize();
                 }
             }
@@ -1943,7 +1943,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     if( aOutputArea.IsInside( aVirtRect ) )
         return; // is already visible
 
-    long nDy;
+    tools::Long nDy;
     if( aVirtRect.Top() < aOutputArea.Top() )
     {
         // scroll up (nDy < 0)
@@ -1957,7 +1957,7 @@ void SvxIconChoiceCtrl_Impl::MakeVisible( const tools::Rectangle& rRect, bool bS
     else
         nDy = 0;
 
-    long nDx;
+    tools::Long nDx;
     if( aVirtRect.Left() < aOutputArea.Left() )
     {
         // scroll to the left (nDx < 0)
@@ -2133,7 +2133,7 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
         aBoundRect.AdjustRight( -(LROFFS_BOUND) );
         if( aBoundRect.Left() > aBoundRect.Right() )
             aBoundRect.SetLeft( aBoundRect.Right() );
-        long nHeight = aBoundRect.GetSize().Height();
+        tools::Long nHeight = aBoundRect.GetSize().Height();
         nHeight = nHeight - aDefaultTextSize.Height();
         nHeight /= 2;
         aBoundRect.AdjustTop(nHeight );
@@ -2144,20 +2144,20 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
 
 void SvxIconChoiceCtrl_Impl::SetDefaultTextSize()
 {
-    long nDY = nGridDY;
+    tools::Long nDY = nGridDY;
     nDY -= aImageSize.Height();
     nDY -= VER_DIST_BMP_STRING;
     nDY -= 2 * TBOFFS_BOUND;
     if (nDY <= 0)
         nDY = 2;
 
-    long nDX = nGridDX;
+    tools::Long nDX = nGridDX;
     nDX -= 2 * LROFFS_BOUND;
     nDX -= 2;
     if (nDX <= 0)
         nDX = 2;
 
-    long nHeight = pView->GetTextHeight();
+    tools::Long nHeight = pView->GetTextHeight();
     if (nDY < nHeight)
         nDY = nHeight;
     if(pView->GetDPIScaleFactor() > 1)
@@ -2175,7 +2175,7 @@ void SvxIconChoiceCtrl_Impl::Center( SvxIconChoiceCtrlEntry* pEntry ) const
     if( nWinBits & WB_ICON )
     {
         // center horizontally
-        long nBorder = pEntry->aGridRect.GetWidth() - aSize.Width();
+        tools::Long nBorder = pEntry->aGridRect.GetWidth() - aSize.Width();
         pEntry->aRect.AdjustLeft(nBorder / 2 );
         pEntry->aRect.AdjustRight( -(nBorder / 2) );
     }
@@ -2187,7 +2187,7 @@ void SvxIconChoiceCtrl_Impl::Center( SvxIconChoiceCtrlEntry* pEntry ) const
 // The deltas are the offsets by which the view is moved on the document.
 // left, up: offsets < 0
 // right, down: offsets > 0
-void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY )
+void SvxIconChoiceCtrl_Impl::Scroll( tools::Long nDeltaX, tools::Long nDeltaY )
 {
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
@@ -2222,7 +2222,7 @@ static tools::Rectangle GetHotSpot( const tools::Rectangle& rRect )
     tools::Rectangle aResult( rRect );
     aResult.Justify();
     Size aSize( rRect.GetSize() );
-    long nDelta = aSize.Width() / 4;
+    tools::Long nDelta = aSize.Width() / 4;
     aResult.AdjustLeft(nDelta );
     aResult.AdjustRight( -nDelta );
     nDelta = aSize.Height() / 4;
@@ -2621,7 +2621,7 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
 
     pView->SetBackground( rStyleSettings.GetFieldColor());
 
-    long nScrBarSize = rStyleSettings.GetScrollBarSize();
+    tools::Long nScrBarSize = rStyleSettings.GetScrollBarSize();
     if( nScrBarSize == nHorSBarHeight && nScrBarSize == nVerSBarWidth )
         return;
 
@@ -2751,16 +2751,16 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
     Point aPos( rPos );
     aPos.AdjustX( -(LROFFS_WINBORDER) );
     aPos.AdjustY( -(TBOFFS_WINBORDER) );
-    long nMaxCol = aVirtOutputSize.Width() / nGridDX;
+    tools::Long nMaxCol = aVirtOutputSize.Width() / nGridDX;
     if( nMaxCol )
         nMaxCol--;
-    long nGridX = aPos.X() / nGridDX;
+    tools::Long nGridX = aPos.X() / nGridDX;
     if( nGridX > nMaxCol )
         nGridX = nMaxCol;
-    long nGridY = aPos.Y() / nGridDY;
-    long nGridsX = aOutputSize.Width() / nGridDX;
+    tools::Long nGridY = aPos.Y() / nGridDY;
+    tools::Long nGridsX = aOutputSize.Width() / nGridDX;
     sal_uLong nGrid = (nGridY * nGridsX) + nGridX;
-    long nMiddle = (nGridX * nGridDX) + (nGridDX / 2);
+    tools::Long nMiddle = (nGridX * nGridDX) + (nGridDX / 2);
     if( rPos.X() < nMiddle )
     {
         if( !nGrid )
@@ -2845,7 +2845,7 @@ const SvxIconChoiceCtrlColumnInfo* SvxIconChoiceCtrl_Impl::GetColumn( sal_uInt16
 void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rBmpRect)
 {
     tools::Rectangle aBmpRect(rBmpRect);
-    long nBorder = 2;
+    tools::Long nBorder = 2;
     if (aImageSize.Width() < 32)
         nBorder = 1;
     aBmpRect.AdjustRight(nBorder );

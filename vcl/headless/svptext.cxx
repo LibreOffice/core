@@ -73,12 +73,12 @@ bool SvpSalGraphics::CreateFontSubset(
     return m_aTextRenderImpl.CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const void* SvpSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, long* pDataLen)
+const void* SvpSalGraphics::GetEmbedFontData(const PhysicalFontFace* pFont, tools::Long* pDataLen)
 {
     return m_aTextRenderImpl.GetEmbedFontData(pFont, pDataLen);
 }
 
-void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+void SvpSalGraphics::FreeEmbedFontData( const void* pData, tools::Long nLen )
 {
     m_aTextRenderImpl.FreeEmbedFontData(pData, nLen);
 }

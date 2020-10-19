@@ -311,12 +311,12 @@ sal_uInt16 OutputDevice::GetBitCount() const
     return mpGraphics->GetBitCount();
 }
 
-void OutputDevice::SetOutOffXPixel(long nOutOffX)
+void OutputDevice::SetOutOffXPixel(tools::Long nOutOffX)
 {
     mnOutOffX = nOutOffX;
 }
 
-void OutputDevice::SetOutOffYPixel(long nOutOffY)
+void OutputDevice::SetOutOffYPixel(tools::Long nOutOffY)
 {
     mnOutOffY = nOutOffY;
 }
@@ -375,10 +375,10 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
-    long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
-    long nDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-    long nDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+    tools::Long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    tools::Long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    tools::Long nDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
+    tools::Long nDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
     if (nSrcWidth && nSrcHeight && nDestWidth && nDestHeight)
     {
@@ -485,8 +485,8 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     if ( mbOutputClipped )
         return;
 
-    long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
-    long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    tools::Long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    tools::Long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
     if (nSrcWidth && nSrcHeight)
     {
         SalTwoRect aPosAry(ImplLogicXToDevicePixel(rSrcPt.X()), ImplLogicYToDevicePixel(rSrcPt.Y()),
@@ -607,7 +607,7 @@ void    OutputDevice::ReMirror( Point &rPoint ) const
 }
 void    OutputDevice::ReMirror( tools::Rectangle &rRect ) const
 {
-    long nWidth = rRect.Right() - rRect.Left();
+    tools::Long nWidth = rRect.Right() - rRect.Left();
 
     //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
     //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror

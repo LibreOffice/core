@@ -90,7 +90,7 @@ namespace
 
         // Create a new RegionBand object as container of the bands.
         std::shared_ptr<RegionBand> pRegionBand( std::make_shared<RegionBand>() );
-        long nLineId = 0;
+        tools::Long nLineId = 0;
 
         // Iterate over all polygons.
         const sal_uInt16 nPolyCount = rPolyPoly.Count();
@@ -123,8 +123,8 @@ namespace
                 // Sort y-coordinates to simplify the algorithm and store the
                 // direction separately.  The direction is calculated as it is
                 // in other places (but seems to be the wrong way.)
-                const long nTop (::std::min(aStart.Y(), aEnd.Y()));
-                const long nBottom (::std::max(aStart.Y(), aEnd.Y()));
+                const tools::Long nTop (::std::min(aStart.Y(), aEnd.Y()));
+                const tools::Long nBottom (::std::max(aStart.Y(), aEnd.Y()));
                 const LineType eLineType (aStart.Y() > aEnd.Y() ? LineType::Descending : LineType::Ascending);
 
                 // Make sure that the current line is covered by bands.
@@ -184,7 +184,7 @@ namespace
     */
     std::shared_ptr<RegionBand> ImplGeneralPolygonToBands(const tools::PolyPolygon& rPolyPoly, const tools::Rectangle& rPolygonBoundingBox)
     {
-        long nLineID = 0;
+        tools::Long nLineID = 0;
 
         // initialisation and creation of Bands
         std::shared_ptr<RegionBand> pRegionBand( std::make_shared<RegionBand>() );
@@ -411,7 +411,7 @@ void vcl::Region::ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPoly
     }
 }
 
-void vcl::Region::Move( long nHorzMove, long nVertMove )
+void vcl::Region::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     if(IsNull() || IsEmpty())
     {
@@ -561,10 +561,10 @@ void vcl::Region::Union( const tools::Rectangle& rRect )
     std::shared_ptr<RegionBand> pNew = std::make_shared<RegionBand>(*pCurrent);
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
+    const tools::Long nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const tools::Long nRight(std::max(rRect.Left(), rRect.Right()));
+    const tools::Long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -652,10 +652,10 @@ void vcl::Region::Intersect( const tools::Rectangle& rRect )
     std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
+    const tools::Long nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const tools::Long nRight(std::max(rRect.Left(), rRect.Right()));
+    const tools::Long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -731,10 +731,10 @@ void vcl::Region::Exclude( const tools::Rectangle& rRect )
     std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*pCurrent));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
+    const tools::Long nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const tools::Long nRight(std::max(rRect.Left(), rRect.Right()));
+    const tools::Long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -814,10 +814,10 @@ void vcl::Region::XOr( const tools::Rectangle& rRect )
     std::shared_ptr<RegionBand> pNew( std::make_shared<RegionBand>(*getRegionBand()));
 
     // get justified rectangle
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
+    const tools::Long nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const tools::Long nRight(std::max(rRect.Left(), rRect.Right()));
+    const tools::Long nBottom(std::max(rRect.Top(), rRect.Bottom()));
 
     // insert bands if the boundaries are not already in the list
     pNew->InsertBands(nTop, nBottom);
@@ -1678,7 +1678,7 @@ static bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rectangle* 
 
     if( nPoints == 4 || (nPoints == 5 && pPoints[0] == pPoints[4]) )
     {
-        long nX1 = pPoints[0].X(), nX2 = pPoints[2].X(), nY1 = pPoints[0].Y(), nY2 = pPoints[2].Y();
+        tools::Long nX1 = pPoints[0].X(), nX2 = pPoints[2].X(), nY1 = pPoints[0].Y(), nY2 = pPoints[2].Y();
 
         if( ( (pPoints[1].X() == nX1 && pPoints[3].X() == nX2) && (pPoints[1].Y() == nY2 && pPoints[3].Y() == nY1) )
          || ( (pPoints[1].X() == nX2 && pPoints[3].X() == nX1) && (pPoints[1].Y() == nY1 && pPoints[3].Y() == nY2) ) )
@@ -1687,7 +1687,7 @@ static bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rectangle* 
 
             if( pRectOut )
             {
-                long nSwap;
+                tools::Long nSwap;
 
                 if( nX2 < nX1 )
                 {

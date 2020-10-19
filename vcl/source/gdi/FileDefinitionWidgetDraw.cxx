@@ -208,8 +208,8 @@ bool FileDefinitionWidgetDraw::hitTestNativeControl(
 
 namespace
 {
-void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, long nX, long nY,
-                          long nWidth, long nHeight)
+void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, tools::Long nX,
+                          tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     basegfx::B2DRectangle aSVGRect = rDrawRoot.maRectangle;
 
@@ -359,7 +359,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 }
 
 void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDrawActions,
-                       SalGraphics& rGraphics, long nX, long nY, long nWidth, long nHeight)
+                       SalGraphics& rGraphics, tools::Long nX, tools::Long nY, tools::Long nWidth,
+                       tools::Long nHeight)
 {
     for (std::shared_ptr<WidgetDrawAction> const& pDrawAction : rDrawActions)
     {
@@ -440,8 +441,8 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     aBitmap = aIterator->second;
                 }
 
-                long nImageWidth = aBitmap.GetSizePixel().Width();
-                long nImageHeight = aBitmap.GetSizePixel().Height();
+                tools::Long nImageWidth = aBitmap.GetSizePixel().Width();
+                tools::Long nImageHeight = aBitmap.GetSizePixel().Height();
                 SalTwoRect aTR(0, 0, nImageWidth, nImageHeight, nX, nY, nImageWidth / nScaleFactor,
                                nImageHeight / nScaleFactor);
                 if (!!aBitmap)
@@ -514,8 +515,9 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
 
 bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart ePart,
                                                  ControlState eState,
-                                                 const ImplControlValue& rValue, long nX, long nY,
-                                                 long nWidth, long nHeight)
+                                                 const ImplControlValue& rValue, tools::Long nX,
+                                                 tools::Long nY, tools::Long nWidth,
+                                                 tools::Long nHeight)
 {
     bool bOK = false;
     auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ePart);
@@ -546,10 +548,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
     bool bOldAA = m_rGraphics.getAntiAlias();
     m_rGraphics.setAntiAlias(true);
 
-    long nWidth = rControlRegion.GetWidth() - 1;
-    long nHeight = rControlRegion.GetHeight() - 1;
-    long nX = rControlRegion.Left();
-    long nY = rControlRegion.Top();
+    tools::Long nWidth = rControlRegion.GetWidth() - 1;
+    tools::Long nHeight = rControlRegion.GetHeight() - 1;
+    tools::Long nX = rControlRegion.Left();
+    tools::Long nY = rControlRegion.Top();
 
     bool bOK = false;
 
@@ -602,10 +604,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
                     ControlPart eUpButtonPart = pSpinVal->mnUpperPart;
                     ControlState eUpButtonState = pSpinVal->mnUpperState;
 
-                    long nUpperX = pSpinVal->maUpperRect.Left();
-                    long nUpperY = pSpinVal->maUpperRect.Top();
-                    long nUpperWidth = pSpinVal->maUpperRect.GetWidth() - 1;
-                    long nUpperHeight = pSpinVal->maUpperRect.GetHeight() - 1;
+                    tools::Long nUpperX = pSpinVal->maUpperRect.Left();
+                    tools::Long nUpperY = pSpinVal->maUpperRect.Top();
+                    tools::Long nUpperWidth = pSpinVal->maUpperRect.GetWidth() - 1;
+                    tools::Long nUpperHeight = pSpinVal->maUpperRect.GetHeight() - 1;
 
                     bOK = resolveDefinition(eType, eUpButtonPart, eUpButtonState,
                                             ImplControlValue(), nUpperX, nUpperY, nUpperWidth,
@@ -617,10 +619,10 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
                     ControlPart eDownButtonPart = pSpinVal->mnLowerPart;
                     ControlState eDownButtonState = pSpinVal->mnLowerState;
 
-                    long nLowerX = pSpinVal->maLowerRect.Left();
-                    long nLowerY = pSpinVal->maLowerRect.Top();
-                    long nLowerWidth = pSpinVal->maLowerRect.GetWidth() - 1;
-                    long nLowerHeight = pSpinVal->maLowerRect.GetHeight() - 1;
+                    tools::Long nLowerX = pSpinVal->maLowerRect.Left();
+                    tools::Long nLowerY = pSpinVal->maLowerRect.Top();
+                    tools::Long nLowerWidth = pSpinVal->maLowerRect.GetWidth() - 1;
+                    tools::Long nLowerHeight = pSpinVal->maLowerRect.GetHeight() - 1;
 
                     bOK = resolveDefinition(eType, eDownButtonPart, eDownButtonState,
                                             ImplControlValue(), nLowerX, nLowerY, nLowerWidth,
@@ -651,14 +653,14 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         case ControlType::Slider:
         {
             const SliderValue* pSliderValue = static_cast<const SliderValue*>(&rValue);
-            long nThumbX = pSliderValue->maThumbRect.Left();
-            long nThumbY = pSliderValue->maThumbRect.Top();
-            long nThumbWidth = pSliderValue->maThumbRect.GetWidth() - 1;
-            long nThumbHeight = pSliderValue->maThumbRect.GetHeight() - 1;
+            tools::Long nThumbX = pSliderValue->maThumbRect.Left();
+            tools::Long nThumbY = pSliderValue->maThumbRect.Top();
+            tools::Long nThumbWidth = pSliderValue->maThumbRect.GetWidth() - 1;
+            tools::Long nThumbHeight = pSliderValue->maThumbRect.GetHeight() - 1;
 
             if (ePart == ControlPart::TrackHorzArea)
             {
-                long nCenterX = nThumbX + nThumbWidth / 2;
+                tools::Long nCenterX = nThumbX + nThumbWidth / 2;
 
                 bOK = resolveDefinition(eType, ControlPart::TrackHorzLeft, eState, rValue, nX, nY,
                                         nCenterX - nX, nHeight);
@@ -668,7 +670,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
             }
             else if (ePart == ControlPart::TrackVertArea)
             {
-                long nCenterY = nThumbY + nThumbHeight / 2;
+                tools::Long nCenterY = nThumbY + nThumbHeight / 2;
 
                 bOK = resolveDefinition(eType, ControlPart::TrackVertUpper, eState, rValue, nX, nY,
                                         nWidth, nCenterY - nY);
@@ -869,10 +871,11 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
             if (!pPart)
                 return false;
 
-            long nWidth = std::max(rBoundingControlRegion.GetWidth() + pPart->mnMarginWidth,
-                                   long(pPart->mnWidth));
-            long nHeight = std::max(rBoundingControlRegion.GetHeight() + pPart->mnMarginHeight,
-                                    long(pPart->mnHeight));
+            tools::Long nWidth = std::max(rBoundingControlRegion.GetWidth() + pPart->mnMarginWidth,
+                                          tools::Long(pPart->mnWidth));
+            tools::Long nHeight
+                = std::max(rBoundingControlRegion.GetHeight() + pPart->mnMarginHeight,
+                           tools::Long(pPart->mnHeight));
 
             rNativeBoundingRegion = tools::Rectangle(aLocation, Size(nWidth, nHeight));
             rNativeContentRegion = rNativeBoundingRegion;

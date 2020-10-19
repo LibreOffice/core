@@ -91,9 +91,9 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
     mxImpl->copyBits( rPosAry, pSSrcGraphics );
 }
 
-void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
-                                long nSrcX,     long nSrcY,
-                                long nSrcWidth, long nSrcHeight,
+void X11SalGraphics::copyArea ( tools::Long nDestX,    tools::Long nDestY,
+                                tools::Long nSrcX,     tools::Long nSrcY,
+                                tools::Long nSrcWidth, tools::Long nSrcHeight,
                                 bool bWindowInvalidate)
 {
     mxImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate );
@@ -141,8 +141,8 @@ bool X11SalGraphics::drawTransformedBitmap(
     return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
 }
 
-bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
-                                    long nHeight, sal_uInt8 nTransparency )
+bool X11SalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                    tools::Long nHeight, sal_uInt8 nTransparency )
 {
     return mxImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
@@ -154,20 +154,20 @@ void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
     mxImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 
-std::shared_ptr<SalBitmap> X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
+std::shared_ptr<SalBitmap> X11SalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
 {
     return mxImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
-Color X11SalGraphics::getPixel( long nX, long nY )
+Color X11SalGraphics::getPixel( tools::Long nX, tools::Long nY )
 {
     return mxImpl->getPixel( nX, nY );
 }
 
-void X11SalGraphics::invert( long       nX,
-                                long        nY,
-                                long        nDX,
-                                long        nDY,
+void X11SalGraphics::invert( tools::Long       nX,
+                                tools::Long        nY,
+                                tools::Long        nDX,
+                                tools::Long        nDY,
                                 SalInvert   nFlags )
 {
     mxImpl->invert( nX, nY, nDX, nDY, nFlags );

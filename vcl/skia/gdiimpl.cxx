@@ -540,7 +540,7 @@ const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegi
 
 sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 32; }
 
-long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
+tools::Long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
 
 void SkiaSalGraphicsImpl::SetLineColor()
 {
@@ -688,9 +688,12 @@ void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
     }
 }
 
-void SkiaSalGraphicsImpl::drawPixel(long nX, long nY) { drawPixel(nX, nY, mLineColor); }
+void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)
+{
+    drawPixel(nX, nY, mLineColor);
+}
 
-void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
+void SkiaSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 {
     if (nColor == SALCOLOR_NONE)
         return;
@@ -705,7 +708,8 @@ void SkiaSalGraphicsImpl::drawPixel(long nX, long nY, Color nColor)
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
+void SkiaSalGraphicsImpl::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                                   tools::Long nY2)
 {
     if (mLineColor == SALCOLOR_NONE)
         return;
@@ -720,8 +724,9 @@ void SkiaSalGraphicsImpl::drawLine(long nX1, long nY1, long nX2, long nY2)
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, long nHeight,
-                                               double fTransparency, bool blockAA)
+void SkiaSalGraphicsImpl::privateDrawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                               tools::Long nHeight, double fTransparency,
+                                               bool blockAA)
 {
     preDraw();
     SAL_INFO("vcl.skia.trace",
@@ -754,7 +759,8 @@ void SkiaSalGraphicsImpl::privateDrawAlphaRect(long nX, long nY, long nWidth, lo
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::drawRect(long nX, long nY, long nWidth, long nHeight)
+void SkiaSalGraphicsImpl::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                   tools::Long nHeight)
 {
     privateDrawAlphaRect(nX, nY, nWidth, nHeight, 0.0, true);
 }
@@ -1124,8 +1130,9 @@ bool SkiaSalGraphicsImpl::drawPolyPolygonBezier(sal_uInt32, const sal_uInt32*,
     return false;
 }
 
-static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, long nDestY,
-                     long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, bool srcIsRaster,
+static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, tools::Long nDestX,
+                     tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY,
+                     tools::Long nSrcWidth, tools::Long nSrcHeight, bool srcIsRaster,
                      bool destIsRaster)
 {
     // Using SkSurface::draw() should be more efficient than SkSurface::makeImageSnapshot(),
@@ -1153,8 +1160,9 @@ static void copyArea(SkCanvas* canvas, sk_sp<SkSurface> surface, long nDestX, lo
     canvas->restore();
 }
 
-void SkiaSalGraphicsImpl::copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                   long nSrcHeight, bool /*bWindowInvalidate*/)
+void SkiaSalGraphicsImpl::copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                                   tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+                                   bool /*bWindowInvalidate*/)
 {
     if (nDestX == nSrcX && nDestY == nSrcY)
         return;
@@ -1324,8 +1332,8 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
                                 skiaBitmap.GetAlphaSkShader()));
 }
 
-std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long nWidth,
-                                                          long nHeight)
+std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
+                                                          tools::Long nWidth, tools::Long nHeight)
 {
     SkiaZone zone;
     checkSurface();
@@ -1340,7 +1348,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(long nX, long nY, long
     return std::make_shared<SkiaSalBitmap>(image);
 }
 
-Color SkiaSalGraphicsImpl::getPixel(long nX, long nY)
+Color SkiaSalGraphicsImpl::getPixel(tools::Long nX, tools::Long nY)
 {
     SkiaZone zone;
     checkSurface();
@@ -1454,7 +1462,8 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     postDraw();
 }
 
-void SkiaSalGraphicsImpl::invert(long nX, long nY, long nWidth, long nHeight, SalInvert eFlags)
+void SkiaSalGraphicsImpl::invert(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                 tools::Long nHeight, SalInvert eFlags)
 {
     basegfx::B2DRectangle aRectangle(nX, nY, nX + nWidth, nY + nHeight);
     auto aRect = basegfx::utils::createPolygonFromRect(aRectangle);
@@ -1474,7 +1483,11 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const SalPoint* pPointArray
     invert(aPolygon, eFlags);
 }
 
-bool SkiaSalGraphicsImpl::drawEPS(long, long, long, long, void*, sal_uInt32) { return false; }
+bool SkiaSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*,
+                                  sal_uInt32)
+{
+    return false;
+}
 
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
@@ -1764,8 +1777,8 @@ bool SkiaSalGraphicsImpl::drawTransformedBitmap(const basegfx::B2DPoint& rNull,
     return true;
 }
 
-bool SkiaSalGraphicsImpl::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
-                                        sal_uInt8 nTransparency)
+bool SkiaSalGraphicsImpl::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                        tools::Long nHeight, sal_uInt8 nTransparency)
 {
     privateDrawAlphaRect(nX, nY, nWidth, nHeight, nTransparency / 100.0);
     return true;

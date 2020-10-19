@@ -51,8 +51,8 @@ void Window::ImplCalcSymbolRect( tools::Rectangle& rRect )
     rRect.AdjustBottom( 1 );
 
     // we leave 5% room between the symbol and the button border
-    long nExtraWidth = ((rRect.GetWidth()*50)+500)/1000;
-    long nExtraHeight = ((rRect.GetHeight()*50)+500)/1000;
+    tools::Long nExtraWidth = ((rRect.GetWidth()*50)+500)/1000;
+    tools::Long nExtraHeight = ((rRect.GetHeight()*50)+500)/1000;
     rRect.AdjustLeft(nExtraWidth );
     rRect.AdjustRight( -nExtraWidth );
     rRect.AdjustTop(nExtraHeight );
@@ -164,7 +164,7 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
                 pBorderWindow->SetPointFont(*pBorderWindow, rStyleSettings.GetTitleFont());
                 pData->mnTitleHeight = rStyleSettings.GetTitleHeight();
             }
-            long nTextHeight = pBorderWindow->GetTextHeight();
+            tools::Long nTextHeight = pBorderWindow->GetTextHeight();
             if (nTextHeight > pData->mnTitleHeight)
                 pData->mnTitleHeight = nTextHeight;
         }
@@ -196,7 +196,7 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
     if ( (pBorderWindow->GetStyle() & WB_SIZEABLE) &&
          !pBorderWindow->mbRollUp )
     {
-        long nSizeWidth = pData->mnNoTitleTop+pData->mnTitleHeight;
+        tools::Long nSizeWidth = pData->mnNoTitleTop+pData->mnTitleHeight;
         if ( nSizeWidth < 16 )
             nSizeWidth = 16;
 
@@ -345,14 +345,14 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pDat
     return aHelpStr;
 }
 
-long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData )
+tools::Long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData )
 {
     // title is not visible therefore no width
     if ( !pData->mnTitleHeight )
         return 0;
 
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
-    long nTitleWidth = pBorderWindow->GetTextWidth( pBorderWindow->GetText() )+6;
+    tools::Long nTitleWidth = pBorderWindow->GetTextWidth( pBorderWindow->GetText() )+6;
     nTitleWidth += pData->maCloseRect.GetWidth();
     nTitleWidth += pData->maRollRect.GetWidth();
     nTitleWidth += pData->maDockRect.GetWidth();
@@ -368,7 +368,7 @@ ImplNoBorderWindowView::ImplNoBorderWindowView()
 {
 }
 
-void ImplNoBorderWindowView::Init( OutputDevice*, long, long )
+void ImplNoBorderWindowView::Init( OutputDevice*, tools::Long, tools::Long )
 {
 }
 
@@ -381,7 +381,7 @@ void ImplNoBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopB
     rBottomBorder   = 0;
 }
 
-long ImplNoBorderWindowView::CalcTitleWidth() const
+tools::Long ImplNoBorderWindowView::CalcTitleWidth() const
 {
     return 0;
 }
@@ -403,7 +403,7 @@ ImplSmallBorderWindowView::ImplSmallBorderWindowView( ImplBorderWindow* pBorderW
 {
 }
 
-void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
+void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, tools::Long nHeight )
 {
     mpOutDev    = pDev;
     mnWidth     = nWidth;
@@ -417,10 +417,10 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
-    long nOrigLeftBorder = mnLeftBorder;
-    long nOrigTopBorder = mnTopBorder;
-    long nOrigRightBorder = mnRightBorder;
-    long nOrigBottomBorder = mnBottomBorder;
+    tools::Long nOrigLeftBorder = mnLeftBorder;
+    tools::Long nOrigTopBorder = mnTopBorder;
+    tools::Long nOrigRightBorder = mnRightBorder;
+    tools::Long nOrigBottomBorder = mnBottomBorder;
 
     WindowBorderStyle nBorderStyle = mpBorderWindow->GetBorderStyle();
     if ( nBorderStyle & WindowBorderStyle::NOBORDER )
@@ -575,7 +575,7 @@ void ImplSmallBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rT
     rBottomBorder   = mnBottomBorder;
 }
 
-long ImplSmallBorderWindowView::CalcTitleWidth() const
+tools::Long ImplSmallBorderWindowView::CalcTitleWidth() const
 {
     return 0;
 }
@@ -1145,15 +1145,15 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 Point       aOldPos         = pBorderWindow->GetPosPixel();
                 Size        aSize           = pBorderWindow->GetSizePixel();
                 tools::Rectangle   aNewRect( aOldPos, aSize );
-                long        nOldWidth       = aSize.Width();
-                long        nOldHeight      = aSize.Height();
-                long        nBorderWidth    = maFrameData.mnLeftBorder+maFrameData.mnRightBorder;
-                long        nBorderHeight   = maFrameData.mnTopBorder+maFrameData.mnBottomBorder;
-                long        nMinWidth       = pBorderWindow->mnMinWidth+nBorderWidth;
-                long        nMinHeight      = pBorderWindow->mnMinHeight+nBorderHeight;
-                long        nMinWidth2      = nBorderWidth;
-                long        nMaxWidth       = pBorderWindow->mnMaxWidth+nBorderWidth;
-                long        nMaxHeight      = pBorderWindow->mnMaxHeight+nBorderHeight;
+                tools::Long        nOldWidth       = aSize.Width();
+                tools::Long        nOldHeight      = aSize.Height();
+                tools::Long        nBorderWidth    = maFrameData.mnLeftBorder+maFrameData.mnRightBorder;
+                tools::Long        nBorderHeight   = maFrameData.mnTopBorder+maFrameData.mnBottomBorder;
+                tools::Long        nMinWidth       = pBorderWindow->mnMinWidth+nBorderWidth;
+                tools::Long        nMinHeight      = pBorderWindow->mnMinHeight+nBorderHeight;
+                tools::Long        nMinWidth2      = nBorderWidth;
+                tools::Long        nMaxWidth       = pBorderWindow->mnMaxWidth+nBorderWidth;
+                tools::Long        nMaxHeight      = pBorderWindow->mnMaxHeight+nBorderHeight;
 
                 if ( maFrameData.mnTitleHeight )
                 {
@@ -1267,7 +1267,7 @@ tools::Rectangle ImplStdBorderWindowView::GetMenuRect() const
     return maFrameData.maMenuRect;
 }
 
-void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
+void ImplStdBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, tools::Long nHeight )
 {
     ImplBorderFrameData*    pData = &maFrameData;
     ImplBorderWindow*       pBorderWindow = maFrameData.mpBorderWindow;
@@ -1317,12 +1317,12 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
 
         if ( pData->mnTitleType & (BorderWindowTitleType::Normal | BorderWindowTitleType::Small) )
         {
-            long nRight         = pData->maTitleRect.Right() - 3;
-            long const nItemTop = pData->maTitleRect.Top() + 2;
-            long const nItemBottom = pData->maTitleRect.Bottom() - 2;
+            tools::Long nRight         = pData->maTitleRect.Right() - 3;
+            tools::Long const nItemTop = pData->maTitleRect.Top() + 2;
+            tools::Long const nItemBottom = pData->maTitleRect.Bottom() - 2;
 
             auto addSquareOnRight = [&nRight, nItemTop, nItemBottom](
-                tools::Rectangle & rect, long gap)
+                tools::Rectangle & rect, tools::Long gap)
             {
                 rect.SetTop( nItemTop );
                 rect.SetBottom( nItemBottom );
@@ -1389,7 +1389,7 @@ void ImplStdBorderWindowView::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTop
     rBottomBorder   = maFrameData.mnBottomBorder;
 }
 
-long ImplStdBorderWindowView::CalcTitleWidth() const
+tools::Long ImplStdBorderWindowView::CalcTitleWidth() const
 {
     return ImplCalcTitleWidth( &maFrameData );
 }
@@ -1441,7 +1441,7 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, con
 
     // Draw Border
     rRenderContext.SetLineColor();
-    long nBorderSize = pData->mnBorderSize;
+    tools::Long nBorderSize = pData->mnBorderSize;
     if (nBorderSize)
     {
         rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
@@ -1750,7 +1750,7 @@ void ImplBorderWindow::Resize()
 
         if (mpMenuBarWindow)
         {
-            long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
+            tools::Long nMenuHeight = mpMenuBarWindow->GetSizePixel().Height();
             if ( mbMenuHide )
             {
                 if ( nMenuHeight )
@@ -1773,7 +1773,7 @@ void ImplBorderWindow::Resize()
 
         if (mpNotebookBar)
         {
-            long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
+            tools::Long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
 
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
@@ -2042,7 +2042,7 @@ void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
         rTopBorder += mpNotebookBar->GetSizePixel().Height();
 }
 
-long ImplBorderWindow::CalcTitleWidth() const
+tools::Long ImplBorderWindow::CalcTitleWidth() const
 {
     return mpBorderView->CalcTitleWidth();
 }

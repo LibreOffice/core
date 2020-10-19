@@ -35,10 +35,10 @@ class VCL_DLLPUBLIC GraphicAttr
 private:
     double mfGamma;
     BmpMirrorFlags mnMirrFlags;
-    long mnLeftCrop;
-    long mnTopCrop;
-    long mnRightCrop;
-    long mnBottomCrop;
+    tools::Long mnLeftCrop;
+    tools::Long mnTopCrop;
+    tools::Long mnRightCrop;
+    tools::Long mnBottomCrop;
     sal_uInt16 mnRotate10;
     short mnContPercent;
     short mnLumPercent;
@@ -61,18 +61,18 @@ public:
     void SetMirrorFlags(BmpMirrorFlags nMirrFlags) { mnMirrFlags = nMirrFlags; }
     BmpMirrorFlags GetMirrorFlags() const { return mnMirrFlags; }
 
-    void SetCrop(long nLeft_100TH_MM, long nTop_100TH_MM, long nRight_100TH_MM,
-                 long nBottom_100TH_MM)
+    void SetCrop(tools::Long nLeft_100TH_MM, tools::Long nTop_100TH_MM, tools::Long nRight_100TH_MM,
+                 tools::Long nBottom_100TH_MM)
     {
         mnLeftCrop = nLeft_100TH_MM;
         mnTopCrop = nTop_100TH_MM;
         mnRightCrop = nRight_100TH_MM;
         mnBottomCrop = nBottom_100TH_MM;
     }
-    long GetLeftCrop() const { return mnLeftCrop; }
-    long GetTopCrop() const { return mnTopCrop; }
-    long GetRightCrop() const { return mnRightCrop; }
-    long GetBottomCrop() const { return mnBottomCrop; }
+    tools::Long GetLeftCrop() const { return mnLeftCrop; }
+    tools::Long GetTopCrop() const { return mnTopCrop; }
+    tools::Long GetRightCrop() const { return mnRightCrop; }
+    tools::Long GetBottomCrop() const { return mnBottomCrop; }
 
     void SetRotation(sal_uInt16 nRotate10) { mnRotate10 = nRotate10; }
     sal_uInt16 GetRotation() const { return mnRotate10; }

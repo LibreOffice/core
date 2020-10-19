@@ -55,7 +55,7 @@ public:
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const override;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const override;
     virtual void frameIsMapping( X11SalFrame* pFrame ) const override;
-    virtual void setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const override;
+    virtual void setUserTime( X11SalFrame* i_pFrame, tools::Long i_nUserTime ) const override;
 };
 
 class GnomeWMAdaptor : public WMAdaptor
@@ -464,7 +464,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 )
             {
                 m_aWMWorkAreas = ::std::vector< tools::Rectangle > ( m_nDesktops );
-                long* pValues = reinterpret_cast<long*>(pProperty);
+                tools::Long* pValues = reinterpret_cast<long*>(pProperty);
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
                     Point aPoint( pValues[4*i],
@@ -1109,7 +1109,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
      *  for maximizing use NorthWestGravity (including decoration)
      */
     XSizeHints  hints;
-    long        supplied;
+    tools::Long        supplied;
     bool bHint = false;
     if( XGetWMNormalHints( m_pDisplay,
                            pFrame->GetShellWindow(),
@@ -1199,7 +1199,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
      *  for maximizing use NorthWestGravity (including decoration)
      */
     XSizeHints  hints;
-    long        supplied;
+    tools::Long        supplied;
     bool bHint = false;
     if( XGetWMNormalHints( m_pDisplay,
                            pFrame->GetShellWindow(),
@@ -1268,7 +1268,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         // set mwm hints
         struct _mwmhints {
             unsigned long flags, func, deco;
-            long input_mode;
+            tools::Long input_mode;
             unsigned long status;
         } aHint;
 
@@ -1777,7 +1777,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
             int nFormat;
             unsigned long nItems, nBytesLeft;
             unsigned char* pData = nullptr;
-            long nOffset = 0;
+            tools::Long nOffset = 0;
             do
             {
                 XGetWindowProperty( m_pDisplay,
@@ -2204,14 +2204,14 @@ void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 /*
  * WMAdaptor::setUserTime
  */
-void WMAdaptor::setUserTime( X11SalFrame*, long ) const
+void WMAdaptor::setUserTime( X11SalFrame*, tools::Long ) const
 {
 }
 
 /*
  * NetWMAdaptor::setUserTime
  */
-void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
+void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, tools::Long i_nUserTime ) const
 {
     if( m_aWMAtoms[NET_WM_USER_TIME] )
     {
@@ -2235,7 +2235,7 @@ void WMAdaptor::setPID( X11SalFrame const * i_pFrame ) const
     if( !(m_aWMAtoms[NET_WM_PID]) )
         return;
 
-    long nPID = static_cast<long>(getpid());
+    tools::Long nPID = static_cast<tools::Long>(getpid());
     XChangeProperty( m_pDisplay,
                      i_pFrame->GetShellWindow(),
                      m_aWMAtoms[NET_WM_PID],

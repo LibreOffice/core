@@ -141,10 +141,10 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     }
     if (nBitCount == 1)
     {
-        for( long y = 0; y < nHeight; ++y )
+        for( tools::Long y = 0; y < nHeight; ++y )
         {
             Scanline pScanline = pWrite->GetScanline(y);
-            for (long x = 0; x < nWidth; ++x)
+            for (tools::Long x = 0; x < nWidth; ++x)
             {
                 sal_uInt8 const *p = pData + y * nStride / 8;
                 int bitIndex = (y * nStride) % 8;
@@ -154,11 +154,11 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
     }
     else
     {
-        for( long y = 0; y < nHeight; ++y )
+        for( tools::Long y = 0; y < nHeight; ++y )
         {
             sal_uInt8 const *p = pData + (y * nStride);
             Scanline pScanline = pWrite->GetScanline(y);
-            for (long x = 0; x < nWidth; ++x)
+            for (tools::Long x = 0; x < nWidth; ++x)
             {
                 BitmapColor col(p[0], p[1], p[2]);
                 pWrite->SetPixelOnData(pScanline, x, col);
@@ -168,7 +168,7 @@ BitmapEx CreateFromData( sal_uInt8 const *pData, sal_Int32 nWidth, sal_Int32 nHe
             {
                 p = pData + (y * nStride) + 3;
                 Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
-                for (long x = 0; x < nWidth; ++x)
+                for (tools::Long x = 0; x < nWidth; ++x)
                 {
                     xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
                     p += 4;
@@ -206,11 +206,11 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
     auto nHeight = rawBitmap.maSize.getHeight();
     auto nWidth = rawBitmap.maSize.getWidth();
     auto nStride = nWidth * nBitCount / 8;
-    for( long y = 0; y < nHeight; ++y )
+    for( tools::Long y = 0; y < nHeight; ++y )
     {
         sal_uInt8 const *p = rawBitmap.mpData.get() + (y * nStride);
         Scanline pScanline = pWrite->GetScanline(y);
-        for (long x = 0; x < nWidth; ++x)
+        for (tools::Long x = 0; x < nWidth; ++x)
         {
             BitmapColor col(p[0], p[1], p[2]);
             pWrite->SetPixelOnData(pScanline, x, col);
@@ -220,7 +220,7 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
         {
             p = rawBitmap.mpData.get() + (y * nStride) + 3;
             Scanline pMaskScanLine = xMaskAcc->GetScanline(y);
-            for (long x = 0; x < nWidth; ++x)
+            for (tools::Long x = 0; x < nWidth; ++x)
             {
                 xMaskAcc->SetPixelOnData(pMaskScanLine, x, BitmapColor(*p));
                 p += 4;
@@ -273,10 +273,10 @@ BitmapEx* CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)
     unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
     unsigned int nStride = cairo_image_surface_get_stride( pPixels );
     vcl::bitmap::lookup_table unpremultiply_table = vcl::bitmap::get_unpremultiply_table();
-    for( long y = 0; y < aSize.Height(); y++ )
+    for( tools::Long y = 0; y < aSize.Height(); y++ )
     {
         sal_uInt32 *pPix = reinterpret_cast<sal_uInt32 *>(pSrc + nStride * y);
-        for( long x = 0; x < aSize.Width(); x++ )
+        for( tools::Long x = 0; x < aSize.Width(); x++ )
         {
 #if defined OSL_BIGENDIAN
             sal_uInt8 nB = (*pPix >> 24);
@@ -407,7 +407,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
             aTransform.invert();
 
             // for the time being, always read as ARGB
-            for( long y=0; y<aDestBmpSize.Height(); ++y )
+            for( tools::Long y=0; y<aDestBmpSize.Height(); ++y )
             {
                 // differentiate mask and alpha channel (on-off
                 // vs. multi-level transparency)
@@ -416,7 +416,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                     Scanline pScan = pWriteAccess->GetScanline( y );
                     Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
                     // Handling alpha and mask just the same...
-                    for( long x=0; x<aDestBmpSize.Width(); ++x )
+                    for( tools::Long x=0; x<aDestBmpSize.Width(); ++x )
                     {
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
@@ -440,7 +440,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
                 {
                     Scanline pScan = pWriteAccess->GetScanline( y );
                     Scanline pScanAlpha = pAlphaWriteAccess->GetScanline( y );
-                    for( long x=0; x<aDestBmpSize.Width(); ++x )
+                    for( tools::Long x=0; x<aDestBmpSize.Width(); ++x )
                     {
                         ::basegfx::B2DPoint aPoint(x,y);
                         aPoint *= aTransform;
@@ -503,10 +503,10 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
         {
             const double fOpNew(1.0 - fTransparence);
 
-            for(long y(0); y < pOld->Height(); y++)
+            for(tools::Long y(0); y < pOld->Height(); y++)
             {
                 Scanline pScanline = pOld->GetScanline( y );
-                for(long x(0); x < pOld->Width(); x++)
+                for(tools::Long x(0); x < pOld->Width(); x++)
                 {
                     const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
                     const sal_uInt8 aCol(basegfx::fround((1.0 - (fOpOld * fOpNew)) * 255.0));
@@ -524,10 +524,10 @@ void DrawAlphaBitmapAndAlphaGradient(BitmapEx & rBitmapEx, bool bFixedTransparen
             assert(pOld->Width() == pNew->Width() && pOld->Height() == pNew->Height() &&
                     "Alpha masks have different sizes (!)");
 
-            for(long y(0); y < pOld->Height(); y++)
+            for(tools::Long y(0); y < pOld->Height(); y++)
             {
                 Scanline pScanline = pOld->GetScanline( y );
-                for(long x(0); x < pOld->Width(); x++)
+                for(tools::Long x(0); x < pOld->Width(); x++)
                 {
                     const double fOpOld(1.0 - (pOld->GetIndexFromData(pScanline, x) * fFactor));
                     const double fOpNew(1.0 - (pNew->GetIndexFromData(pScanline, x) * fFactor));
@@ -581,14 +581,14 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const BitmapEx& rBi
 
             if(pR && pW)
             {
-                const long nWidth(std::min(pR->Width(), pW->Width()));
-                const long nHeight(std::min(pR->Height(), pW->Height()));
+                const tools::Long nWidth(std::min(pR->Width(), pW->Width()));
+                const tools::Long nHeight(std::min(pR->Height(), pW->Height()));
 
-                for(long nY(0); nY < nHeight; nY++)
+                for(tools::Long nY(0); nY < nHeight; nY++)
                 {
                     Scanline pScanlineR = pR->GetScanline( nY );
                     Scanline pScanlineW = pW->GetScanline( nY );
-                    for(long nX(0); nX < nWidth; nX++)
+                    for(tools::Long nX(0); nX < nWidth; nX++)
                     {
                         const sal_uInt8 nIndR(pR->GetIndexFromData(pScanlineR, nX));
                         const sal_uInt8 nIndW(pW->GetIndexFromData(pScanlineW, nX));
@@ -651,10 +651,10 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
     return css::uno::Sequence< sal_Int8 >();
 }
 
-static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
+static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, const tools::Long nWidth, unsigned char* data, tools::Long nOff )
 {
     bool bIsAlpha = false;
-    long nX;
+    tools::Long nX;
     int nAlpha;
     Scanline pReadScan;
 
@@ -705,15 +705,15 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, long nY, const lo
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
  * @param bHasAlpha will be set to true if resulting surface has alpha
  **/
-void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, long& rnWidth, long& rnHeight )
+void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight )
 {
     AlphaMask aAlpha = aBmpEx.GetAlpha();
 
     ::BitmapReadAccess* pBitmapReadAcc = aBitmap.AcquireReadAccess();
     ::BitmapReadAccess* pAlphaReadAcc = nullptr;
-    const long      nWidth = rnWidth = pBitmapReadAcc->Width();
-    const long      nHeight = rnHeight = pBitmapReadAcc->Height();
-    long nX, nY;
+    const tools::Long      nWidth = rnWidth = pBitmapReadAcc->Width();
+    const tools::Long      nHeight = rnHeight = pBitmapReadAcc->Height();
+    tools::Long nX, nY;
     bool bIsAlpha = false;
 
     if( aBmpEx.IsTransparent() || aBmpEx.IsAlpha() )
@@ -721,7 +721,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
     data = static_cast<unsigned char*>(malloc( nWidth*nHeight*4 ));
 
-    long nOff = 0;
+    tools::Long nOff = 0;
     ::Color aColor;
     unsigned int nAlpha = 255;
 
@@ -946,14 +946,14 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
         sal_Int8* pRes = aRes.getArray();
 
         int nCurrPos(0);
-        for( long y=rect.Y1;
+        for( tools::Long y=rect.Y1;
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
             if( pAlphaReadAccess.get() != nullptr )
             {
                 Scanline pScanlineReadAlpha = pAlphaReadAccess->GetScanline( y );
-                for( long x=rect.X1;
+                for( tools::Long x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
                      ++x )
                 {
@@ -965,7 +965,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
             }
             else
             {
-                for( long x=rect.X1;
+                for( tools::Long x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
                      ++x )
                 {
@@ -1101,14 +1101,14 @@ bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
 
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
 
-        for (long nY = 0; nY < aSize.Height(); ++nY)
+        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
         {
             Scanline aResultScan = pResultBitmapAccess->GetScanline(nY);
             Scanline aResultScanAlpha = pResultAlphaAccess->GetScanline(nY);
 
             Scanline aReadScan = pReadAccess->GetScanline(nY);
 
-            for (long nX = 0; nX < aSize.Width(); ++nX)
+            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
             {
                 const BitmapColor aColor = pReadAccess->GetPixelFromData(aReadScan, nX);
                 BitmapColor aResultColor(aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue());

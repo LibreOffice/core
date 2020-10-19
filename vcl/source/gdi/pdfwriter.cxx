@@ -69,7 +69,7 @@ void PDFWriter::DrawText( const Point& rPos, const OUString& rText )
 
 void PDFWriter::DrawTextLine(
                              const Point& rPos,
-                             long nWidth,
+                             tools::Long nWidth,
                              FontStrikeout eStrikeout,
                              FontLineStyle eUnderline,
                              FontLineStyle eOverline )
@@ -80,7 +80,7 @@ void PDFWriter::DrawTextLine(
 void PDFWriter::DrawTextArray(
                               const Point& rStartPt,
                               const OUString& rStr,
-                              const long* pDXAry,
+                              const tools::Long* pDXAry,
                               sal_Int32 nIndex,
                               sal_Int32 nLen )
 {
@@ -258,7 +258,7 @@ void PDFWriter::SetClipRegion( const basegfx::B2DPolyPolygon& rRegion )
     xImplementation->setClipRegion( rRegion );
 }
 
-void PDFWriter::MoveClipRegion( long nHorzMove, long nVertMove )
+void PDFWriter::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove )
 {
     xImplementation->moveClipRegion( nHorzMove, nVertMove );
 }

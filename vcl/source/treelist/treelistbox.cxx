@@ -276,7 +276,7 @@ SvLBoxTab::SvLBoxTab()
     nFlags = SvLBoxTabFlags::NONE;
 }
 
-SvLBoxTab::SvLBoxTab( long nPosition, SvLBoxTabFlags nTabFlags )
+SvLBoxTab::SvLBoxTab( tools::Long nPosition, SvLBoxTabFlags nTabFlags )
 {
     nPos = nPosition;
     nFlags = nTabFlags;
@@ -293,9 +293,9 @@ SvLBoxTab::~SvLBoxTab()
 }
 
 
-long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
+tools::Long SvLBoxTab::CalcOffset( tools::Long nItemWidth, tools::Long nTabWidth )
 {
-    long nOffset = 0;
+    tools::Long nOffset = 0;
     if ( nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
     {
         nOffset = nTabWidth - nItemWidth;
@@ -1407,18 +1407,18 @@ void SvTreeListBox::SetTabs()
     bool bHasButtons = (nStyle & WB_HASBUTTONS)!=0;
     bool bHasButtonsAtRoot = (nStyle & (WB_HASLINESATROOT |
                                               WB_HASBUTTONSATROOT))!=0;
-    long nStartPos = TAB_STARTPOS;
-    long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
+    tools::Long nStartPos = TAB_STARTPOS;
+    tools::Long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
 
     // pCheckButtonData->Width() knows nothing about the native checkbox width,
     // so we have mnCheckboxItemWidth which becomes valid when something is added.
-    long nCheckWidth = 0;
+    tools::Long nCheckWidth = 0;
     if( nTreeFlags & SvTreeFlags::CHKBTN )
         nCheckWidth = mnCheckboxItemWidth;
-    long nCheckWidthDIV2 = nCheckWidth / 2;
+    tools::Long nCheckWidthDIV2 = nCheckWidth / 2;
 
-    long nContextWidth = nContextBmpWidthMax;
-    long nContextWidthDIV2 = nContextWidth / 2;
+    tools::Long nContextWidth = nContextBmpWidthMax;
+    tools::Long nContextWidthDIV2 = nContextWidth / 2;
 
     ClearTabList();
 
@@ -1960,15 +1960,15 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     if( !nDeltaEntries || !pImpl->m_aVerSBar->IsVisible() )
         return;
 
-    long nThumb = pImpl->m_aVerSBar->GetThumbPos();
-    long nMax = pImpl->m_aVerSBar->GetRange().Max();
+    tools::Long nThumb = pImpl->m_aVerSBar->GetThumbPos();
+    tools::Long nMax = pImpl->m_aVerSBar->GetRange().Max();
 
     if( nDeltaEntries < 0 )
     {
         // move window up
         nDeltaEntries *= -1;
-        long nVis = pImpl->m_aVerSBar->GetVisibleSize();
-        long nTemp = nThumb + nVis;
+        tools::Long nVis = pImpl->m_aVerSBar->GetVisibleSize();
+        tools::Long nTemp = nThumb + nVis;
         if( nDeltaEntries > (nMax - nTemp) )
             nDeltaEntries = static_cast<short>(nMax - nTemp);
         pImpl->PageDown( static_cast<sal_uInt16>(nDeltaEntries) );
@@ -1982,7 +1982,7 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     pImpl->SyncVerThumb();
 }
 
-void SvTreeListBox::ScrollToAbsPos( long nPos )
+void SvTreeListBox::ScrollToAbsPos( tools::Long nPos )
 {
     pImpl->ScrollToAbsPos( nPos );
 }
@@ -2271,7 +2271,7 @@ void SvTreeListBox::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
 
     if (HasFocus())
     {
-        long nHeight = rRenderContext.GetTextHeight();
+        tools::Long nHeight = rRenderContext.GetTextHeight();
         tools::Rectangle aRect(Point(0, 0), Size(GetSizePixel().Width(), nHeight));
         ShowFocus(aRect);
     }
@@ -2398,7 +2398,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     Point aPos = GetEntryPosition( pEntry );
     aPos.AdjustY(( nEntryHeight - nItemHeight ) / 2 );
     aPos.setX( GetTabPos( pEntry, pTab ) );
-    long nOutputWidth = pImpl->GetOutputSize().Width();
+    tools::Long nOutputWidth = pImpl->GetOutputSize().Width();
     Size aSize( nOutputWidth - aPos.X(), nItemHeight );
     sal_uInt16 nPos = std::find_if( aTabs.begin(), aTabs.end(),
                         [pTab](const std::unique_ptr<SvLBoxTab>& p) { return p.get() == pTab; })
@@ -2406,7 +2406,7 @@ void SvTreeListBox::EditItemText(SvTreeListEntry* pEntry, SvLBoxString* pItem, c
     if( nPos+1 < static_cast<sal_uInt16>(aTabs.size()) )
     {
         SvLBoxTab* pRightTab = aTabs[ nPos + 1 ].get();
-        long nRight = GetTabPos( pEntry, pRightTab );
+        tools::Long nRight = GetTabPos( pEntry, pRightTab );
         if( nRight <= nOutputWidth )
             aSize.setWidth( nRight - aPos.X() );
     }
@@ -2432,12 +2432,12 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
     if( !pEntry )
         return;
 
-    long nClickX = pImpl->m_aEditClickPos.X();
+    tools::Long nClickX = pImpl->m_aEditClickPos.X();
     bool bIsMouseTriggered = nClickX >= 0;
 
     SvLBoxString* pItem = nullptr;
     sal_uInt16 nCount = pEntry->ItemCount();
-    long nTabPos, nNextTabPos = 0;
+    tools::Long nTabPos, nNextTabPos = 0;
     for( sal_uInt16 i = 0 ; i < nCount ; i++ )
     {
         SvLBoxItem& rTmpItem = pEntry->GetItem( i );
@@ -2525,7 +2525,7 @@ SvTreeListEntry* SvTreeListBox::GetEntry( const Point& rPos, bool bHit ) const
     SvTreeListEntry* pEntry = pImpl->GetEntry( rPos );
     if( pEntry && bHit )
     {
-        long nLine = pImpl->GetEntryLine( pEntry );
+        tools::Long nLine = pImpl->GetEntryLine( pEntry );
         if( !(pImpl->EntryReallyHit( pEntry, rPos, nLine)) )
             return nullptr;
     }
@@ -2566,7 +2566,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext)
+void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl::RenderContext& rRenderContext)
 {
     tools::Rectangle aRect; // multi purpose
 
@@ -2578,7 +2578,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         SetTabs();
 
     short nTempEntryHeight = GetEntryHeight();
-    long nWidth = pImpl->GetOutputSize().Width();
+    tools::Long nWidth = pImpl->GetOutputSize().Width();
 
     // Did we turn on the scrollbar within PreparePaints? If yes, we have to set
     // the ClipRegion anew.
@@ -2587,7 +2587,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
     Point aEntryPos(rRenderContext.GetMapMode().GetOrigin());
     aEntryPos.setX( aEntryPos.X() * -1 ); // conversion document coordinates
-    long nMaxRight = nWidth + aEntryPos.X() - 1;
+    tools::Long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor(rRenderContext.GetTextColor());
     vcl::Font aBackupFont(rRenderContext.GetFont());
@@ -2622,9 +2622,9 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize(rItem.GetWidth(this, pViewDataEntry, nCurItem),
                    SvLBoxItem::GetHeight(pViewDataEntry, nCurItem));
-        long nTabPos = GetTabPos(&rEntry, pTab);
+        tools::Long nTabPos = GetTabPos(&rEntry, pTab);
 
-        long nNextTabPos;
+        tools::Long nNextTabPos;
         if (pNextTab)
             nNextTabPos = GetTabPos(&rEntry, pNextTab);
         else
@@ -2634,7 +2634,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                 nNextTabPos += 50;
         }
 
-        long nX;
+        tools::Long nX;
         if( pTab->nFlags & SvLBoxTabFlags::ADJUST_RIGHT )
             // avoid cutting the right edge off the tab separation
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos - SV_TAB_BORDER - 1) - nTabPos);
@@ -2707,7 +2707,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
             aRect.SetBottom( nLine + nTempEntryHeight - 1 );
             if (pNextTab)
             {
-                long nRight;
+                tools::Long nRight;
                 nRight = GetTabPos(&rEntry, pNextTab) - 1;
                 if (nRight > nMaxRight)
                     nRight = nMaxRight;
@@ -2770,7 +2770,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
     sal_uInt16 nFirstDynTabPos(0);
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab(nFirstDynTabPos);
-    long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
+    tools::Long nDynTabPos = GetTabPos(&rEntry, pFirstDynamicTab);
     nDynTabPos += pImpl->m_nNodeBmpTabDistance;
     nDynTabPos += pImpl->m_nNodeBmpWidth / 2;
     nDynTabPos += 4; // 4 pixels of buffer, so the node bitmap is not too close
@@ -2868,7 +2868,7 @@ Size SvTreeListBox::MeasureCustomEntry(vcl::RenderContext& rRenderContext, const
     return aCustomMeasureHdl.Call(std::pair<vcl::RenderContext&, const SvTreeListEntry&>(rRenderContext, rEntry));
 }
 
-tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long nLine )
+tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, tools::Long nLine )
 {
     pImpl->UpdateContextBmpWidthMax( pEntry );
 
@@ -2877,15 +2877,15 @@ tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long
     aRect.SetTop( nLine );
     aSize.setHeight( GetEntryHeight() );
 
-    long nRealWidth = pImpl->GetOutputSize().Width();
+    tools::Long nRealWidth = pImpl->GetOutputSize().Width();
     nRealWidth -= GetMapMode().GetOrigin().X();
 
     sal_uInt16 nCurTab;
     SvLBoxTab* pTab = GetFirstTab( SvLBoxTabFlags::SHOW_SELECTION, nCurTab );
-    long nTabPos = 0;
+    tools::Long nTabPos = 0;
     if( pTab )
         nTabPos = GetTabPos( pEntry, pTab );
-    long nNextTabPos;
+    tools::Long nNextTabPos;
     if( pTab && nCurTab < aTabs.size() - 1 )
     {
         SvLBoxTab* pNextTab = aTabs[ nCurTab + 1 ].get();
@@ -2907,7 +2907,7 @@ tools::Rectangle SvTreeListBox::GetFocusRect(const SvTreeListEntry* pEntry, long
             aSize.setWidth(rItem.GetWidth(this, pEntry));
             if( !aSize.Width() )
                 aSize.setWidth( 15 );
-            long nX = nTabPos; //GetTabPos( pEntry, pTab );
+            tools::Long nX = nTabPos; //GetTabPos( pEntry, pTab );
             // alignment
             nX += pTab->CalcOffset( aSize.Width(), nNextTabPos - nTabPos );
             aRect.SetLeft( nX );
@@ -2977,7 +2977,7 @@ sal_IntPtr SvTreeListBox::GetTabPos(const SvTreeListEntry* pEntry, const SvLBoxT
     return nPos + (pEntry->GetExtraIndent() * nIndent);
 }
 
-SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
+SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, tools::Long nX,
     SvLBoxTab** ppTab )
 {
     SvLBoxItem* pItemClicked = nullptr;
@@ -2987,15 +2987,15 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     SvLBoxItem* pItem = &pEntry->GetItem(0);
     sal_uInt16 nNextItem = 1;
     nX -= GetMapMode().GetOrigin().X();
-    long nRealWidth = pImpl->GetOutputSize().Width();
+    tools::Long nRealWidth = pImpl->GetOutputSize().Width();
     nRealWidth -= GetMapMode().GetOrigin().X();
 
     while( true )
     {
         SvLBoxTab* pNextTab=nNextItem<nTabCount ? aTabs[nNextItem].get() : nullptr;
-        long nStart = GetTabPos( pEntry, pTab );
+        tools::Long nStart = GetTabPos( pEntry, pTab );
 
-        long nNextTabPos;
+        tools::Long nNextTabPos;
         if( pNextTab )
             nNextTabPos = GetTabPos( pEntry, pNextTab );
         else
@@ -3010,7 +3010,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
         auto nLen = nItemWidth;
         if( pNextTab )
         {
-            long nTabWidth = GetTabPos( pEntry, pNextTab ) - nStart;
+            tools::Long nTabWidth = GetTabPos( pEntry, pNextTab ) - nStart;
             if( nTabWidth < nLen )
                 nLen = nTabWidth;
         }
@@ -3033,9 +3033,9 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     return pItemClicked;
 }
 
-long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
+tools::Long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
 {
-    long nHeight = 0;
+    tools::Long nHeight = 0;
     rWidths.clear();
     SvTreeListEntry* pEntry = First();
     while (pEntry)
@@ -3066,14 +3066,14 @@ Size SvTreeListBox::GetOptimalSize() const
 {
     std::vector<long> aWidths;
     Size aRet(0, getPreferredDimensions(aWidths));
-    for (long aWidth : aWidths)
+    for (tools::Long aWidth : aWidths)
         aRet.AdjustWidth(aWidth );
     if (GetStyle() & WB_BORDER)
     {
         aRet.AdjustWidth(StyleSettings::GetBorderSize() * 2 );
         aRet.AdjustHeight(StyleSettings::GetBorderSize() * 2 );
     }
-    long nMinWidth = nMinWidthInChars * approximate_char_width();
+    tools::Long nMinWidth = nMinWidthInChars * approximate_char_width();
     aRet.setWidth( std::max(aRet.Width(), nMinWidth) );
 
     if (GetStyle() & WB_VSCROLL)
@@ -3121,18 +3121,18 @@ void SvTreeListBox::SetForceMakeVisible( bool bEnable )
     pImpl->SetForceMakeVisible(bEnable);
 }
 
-SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX,SvLBoxTab** ppTab)
+SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,tools::Long nX,SvLBoxTab** ppTab)
 {
     return GetItem_Impl( pEntry, nX, ppTab );
 }
 
-SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,long nX )
+SvLBoxItem* SvTreeListBox::GetItem(SvTreeListEntry* pEntry,tools::Long nX )
 {
     SvLBoxTab* pDummyTab;
     return GetItem_Impl( pEntry, nX, &pDummyTab );
 }
 
-void SvTreeListBox::AddTab(long nTabPos, SvLBoxTabFlags nFlags )
+void SvTreeListBox::AddTab(tools::Long nTabPos, SvLBoxTabFlags nFlags )
 {
     nFocusWidth = -1;
     SvLBoxTab* pTab = new SvLBoxTab( nTabPos, nFlags );

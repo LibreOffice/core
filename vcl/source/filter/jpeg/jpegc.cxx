@@ -154,7 +154,7 @@ struct JpegStuff
 
 }
 
-static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLines,
               GraphicFilterImportFlags nImportFlags,
               BitmapScopedWriteAccess* ppAccess)
 {
@@ -182,10 +182,10 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
 
     jpeg_calc_output_dimensions(&rContext.cinfo);
 
-    long nWidth = rContext.cinfo.output_width;
-    long nHeight = rContext.cinfo.output_height;
+    tools::Long nWidth = rContext.cinfo.output_width;
+    tools::Long nHeight = rContext.cinfo.output_height;
 
-    long nResult = 0;
+    tools::Long nResult = 0;
     if (utl::ConfigManager::IsFuzzing() && (o3tl::checked_multiply(nWidth, nHeight, nResult) || nResult > 4000000))
         return;
 
@@ -284,7 +284,7 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
                 {
                     // convert CMYK to RGB
                     Scanline pScanline = pAccess->GetScanline(yIndex);
-                    for (long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
+                    for (tools::Long cmyk = 0, x = 0; cmyk < nWidth * 4; cmyk += 4, ++x)
                     {
                         int color_C = 255 - rContext.pCYMKBuffer[cmyk + 0];
                         int color_M = 255 - rContext.pCYMKBuffer[cmyk + 1];
@@ -324,7 +324,7 @@ static void ReadJPEG(JpegStuff& rContext, JPEGReader* pJPEGReader, void* pInputS
     }
 }
 
-void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
+void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLines,
                GraphicFilterImportFlags nImportFlags,
                BitmapScopedWriteAccess* ppAccess )
 {
@@ -333,14 +333,14 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
 }
 
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
-                long nWidth, long nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
-                long nQualityPercent, long aChromaSubsampling,
+                tools::Long nWidth, tools::Long nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
+                tools::Long nQualityPercent, tools::Long aChromaSubsampling,
                 css::uno::Reference<css::task::XStatusIndicator> const & status )
 {
     jpeg_compress_struct        cinfo;
     ErrorManagerStruct          jerr;
     void*                       pScanline;
-    long                        nY;
+    tools::Long                        nY;
 
     JpegCompressOwner aOwner;
 
@@ -425,7 +425,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     return true;
 }
 
-void Transform(void* pInputStream, void* pOutputStream, long nAngle)
+void Transform(void* pInputStream, void* pOutputStream, tools::Long nAngle)
 {
     jpeg_transform_info aTransformOption;
     JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;

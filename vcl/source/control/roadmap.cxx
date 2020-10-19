@@ -26,10 +26,10 @@
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
 
-constexpr long LABELBASEMAPHEIGHT = 8;
-constexpr long ROADMAP_INDENT_X = 4;
-constexpr long ROADMAP_INDENT_Y = 27;
-constexpr long ROADMAP_ITEM_DISTANCE_Y = 6;
+constexpr tools::Long LABELBASEMAPHEIGHT = 8;
+constexpr tools::Long ROADMAP_INDENT_X = 4;
+constexpr tools::Long ROADMAP_INDENT_Y = 27;
+constexpr tools::Long ROADMAP_ITEM_DISTANCE_Y = 6;
 
 namespace vcl
 {
@@ -775,8 +775,8 @@ void RoadmapItem::ToggleBackgroundColor(const Color& _rGBColor)
 void RoadmapItem::ImplUpdatePosSize()
 {
     // calculate widths
-    long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-    long nMaxIDWidth = mpID->GetTextWidth( "100." );
+    tools::Long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
+    tools::Long nMaxIDWidth = mpID->GetTextWidth( "100." );
     nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
     // check how many space the description would need

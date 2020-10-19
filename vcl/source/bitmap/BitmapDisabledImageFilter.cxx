@@ -32,12 +32,12 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap::ScopedReadAccess pRead(aReadBitmap);
     if (pRead && pGrey)
     {
-        for (long nY = 0; nY < aSize.Height(); ++nY)
+        for (tools::Long nY = 0; nY < aSize.Height(); ++nY)
         {
             Scanline pGreyScan = pGrey->GetScanline(nY);
             Scanline pReadScan = pRead->GetScanline(nY);
 
-            for (long nX = 0; nX < aSize.Width(); ++nX)
+            for (tools::Long nX = 0; nX < aSize.Width(); ++nX)
             {
                 // Get the luminance from RGB color and remap the value from 0-255 to 160-224
                 const BitmapColor aColor = pRead->GetPixelFromData(pReadScan, nX);

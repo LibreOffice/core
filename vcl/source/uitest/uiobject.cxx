@@ -748,8 +748,8 @@ void EditUIObject::execute(const OUString& rAction,
         if (rParameters.find("FROM") != rParameters.end() &&
                 rParameters.find("TO") != rParameters.end())
         {
-            long nMin = rParameters.find("FROM")->second.toInt32();
-            long nMax = rParameters.find("TO")->second.toInt32();
+            tools::Long nMin = rParameters.find("FROM")->second.toInt32();
+            tools::Long nMax = rParameters.find("TO")->second.toInt32();
             Selection aSelection(nMin, nMax);
             mxEdit->SetSelection(aSelection);
         }
@@ -784,8 +784,8 @@ OUString EditUIObject::get_action(VclEventId nEvent) const
     if (nEvent == VclEventId::EditSelectionChanged)
     {
         const Selection& rSelection  = mxEdit->GetSelection();
-        long nMin = rSelection.Min();
-        long nMax = rSelection.Max();
+        tools::Long nMin = rSelection.Min();
+        tools::Long nMax = rSelection.Max();
         if(get_top_parent(mxEdit)->get_id().isEmpty()){
             //This part because if we don't have parent
             return  "Select in '" +
@@ -841,8 +841,8 @@ void MultiLineEditUIObject::execute(const OUString& rAction,
         if (rParameters.find("FROM") != rParameters.end() &&
                 rParameters.find("TO") != rParameters.end())
         {
-            long nMin = rParameters.find("FROM")->second.toInt32();
-            long nMax = rParameters.find("TO")->second.toInt32();
+            tools::Long nMin = rParameters.find("FROM")->second.toInt32();
+            tools::Long nMax = rParameters.find("TO")->second.toInt32();
             Selection aSelection(nMin, nMax);
             mxEdit->SetSelection(aSelection);
         }

@@ -67,10 +67,10 @@ RegionBand::RegionBand(const tools::Rectangle& rRect)
 :   mpFirstBand(nullptr),
     mpLastCheckedBand(nullptr)
 {
-    const long nTop(std::min(rRect.Top(), rRect.Bottom()));
-    const long nBottom(std::max(rRect.Top(), rRect.Bottom()));
-    const long nLeft(std::min(rRect.Left(), rRect.Right()));
-    const long nRight(std::max(rRect.Left(), rRect.Right()));
+    const tools::Long nTop(std::min(rRect.Top(), rRect.Bottom()));
+    const tools::Long nBottom(std::max(rRect.Top(), rRect.Bottom()));
+    const tools::Long nLeft(std::min(rRect.Left(), rRect.Right()));
+    const tools::Long nRight(std::max(rRect.Left(), rRect.Right()));
 
     // add band with boundaries of the rectangle
     mpFirstBand = new ImplRegionBand(nTop, nBottom);
@@ -112,32 +112,32 @@ bool RegionBand::operator==( const RegionBand& rRegionBand ) const
     while ( pOwnRectBandSep && pSecondRectBandSep )
     {
         // get boundaries of current rectangle
-        long nOwnXLeft = pOwnRectBandSep->mnXLeft;
-        long nSecondXLeft = pSecondRectBandSep->mnXLeft;
+        tools::Long nOwnXLeft = pOwnRectBandSep->mnXLeft;
+        tools::Long nSecondXLeft = pSecondRectBandSep->mnXLeft;
 
         if ( nOwnXLeft != nSecondXLeft )
         {
             return false;
         }
 
-        long nOwnYTop = pOwnRectBand->mnYTop;
-        long nSecondYTop = pSecondRectBand->mnYTop;
+        tools::Long nOwnYTop = pOwnRectBand->mnYTop;
+        tools::Long nSecondYTop = pSecondRectBand->mnYTop;
 
         if ( nOwnYTop != nSecondYTop )
         {
             return false;
         }
 
-        long nOwnXRight = pOwnRectBandSep->mnXRight;
-        long nSecondXRight = pSecondRectBandSep->mnXRight;
+        tools::Long nOwnXRight = pOwnRectBandSep->mnXRight;
+        tools::Long nSecondXRight = pSecondRectBandSep->mnXRight;
 
         if ( nOwnXRight != nSecondXRight )
         {
             return false;
         }
 
-        long nOwnYBottom = pOwnRectBand->mnYBottom;
-        long nSecondYBottom = pSecondRectBand->mnYBottom;
+        tools::Long nOwnYBottom = pOwnRectBand->mnYBottom;
+        tools::Long nSecondYBottom = pSecondRectBand->mnYBottom;
 
         if ( nOwnYBottom != nSecondYBottom )
         {
@@ -369,13 +369,13 @@ void RegionBand::processPoints()
     It creates a minimal set of missing bands so that the entire vertical
     interval from nTop to nBottom is covered by bands.
 */
-void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
+void RegionBand::ImplAddMissingBands(const tools::Long nTop, const tools::Long nBottom)
 {
     // Iterate over already existing bands and add missing bands atop the
     // first and between two bands.
     ImplRegionBand* pPreviousBand = nullptr;
     ImplRegionBand* pBand = ImplGetFirstRegionBand();
-    long nCurrentTop (nTop);
+    tools::Long nCurrentTop (nTop);
 
     while (pBand != nullptr && nCurrentTop<nBottom)
     {
@@ -413,7 +413,7 @@ void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
 
 }
 
-void RegionBand::CreateBandRange(long nYTop, long nYBottom)
+void RegionBand::CreateBandRange(tools::Long nYTop, tools::Long nYBottom)
 {
     // add top band
     mpFirstBand = new ImplRegionBand( nYTop-1, nYTop-1 );
@@ -422,7 +422,7 @@ void RegionBand::CreateBandRange(long nYTop, long nYBottom)
     mpLastCheckedBand = mpFirstBand;
     ImplRegionBand* pBand = mpFirstBand;
 
-    for ( long i = nYTop; i <= nYBottom+1; i++ )
+    for ( tools::Long i = nYTop; i <= nYBottom+1; i++ )
     {
         // create new band
         ImplRegionBand* pNewBand = new ImplRegionBand( i, i );
@@ -438,9 +438,9 @@ void RegionBand::CreateBandRange(long nYTop, long nYBottom)
 
 }
 
-void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLineId)
+void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, tools::Long nLineId)
 {
-    long nX, nY;
+    tools::Long nX, nY;
 
     // lines consisting of a single point do not interest here
     if ( rStartPt == rEndPt )
@@ -452,7 +452,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
     if ( rStartPt.X() == rEndPt.X() )
     {
         // vertical line
-        const long nEndY = rEndPt.Y();
+        const tools::Long nEndY = rEndPt.Y();
 
         nX = rStartPt.X();
         nY = rStartPt.Y();
@@ -480,20 +480,20 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
     }
     else if ( rStartPt.Y() != rEndPt.Y() )
     {
-        const long  nDX = labs( rEndPt.X() - rStartPt.X() );
-        const long  nDY = labs( rEndPt.Y() - rStartPt.Y() );
-        const long  nStartX = rStartPt.X();
-        const long  nStartY = rStartPt.Y();
-        const long  nEndX = rEndPt.X();
-        const long  nEndY = rEndPt.Y();
-        const long  nXInc = ( nStartX < nEndX ) ? 1 : -1;
-        const long  nYInc = ( nStartY < nEndY ) ? 1 : -1;
+        const tools::Long  nDX = labs( rEndPt.X() - rStartPt.X() );
+        const tools::Long  nDY = labs( rEndPt.Y() - rStartPt.Y() );
+        const tools::Long  nStartX = rStartPt.X();
+        const tools::Long  nStartY = rStartPt.Y();
+        const tools::Long  nEndX = rEndPt.X();
+        const tools::Long  nEndY = rEndPt.Y();
+        const tools::Long  nXInc = ( nStartX < nEndX ) ? 1 : -1;
+        const tools::Long  nYInc = ( nStartY < nEndY ) ? 1 : -1;
 
         if ( nDX >= nDY )
         {
-            const long  nDYX = ( nDY - nDX ) * 2;
-            const long  nDY2 = nDY << 1;
-            long        nD = nDY2 - nDX;
+            const tools::Long  nDYX = ( nDY - nDX ) * 2;
+            const tools::Long  nDY2 = nDY << 1;
+            tools::Long        nD = nDY2 - nDX;
 
             for ( nX = nStartX, nY = nStartY; nX != nEndX; nX += nXInc )
             {
@@ -510,9 +510,9 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
         }
         else
         {
-            const long  nDYX = ( nDX - nDY ) * 2;
-            const long  nDY2 = nDX << 1;
-            long        nD = nDY2 - nDY;
+            const tools::Long  nDYX = ( nDX - nDY ) * 2;
+            const tools::Long  nDY2 = nDX << 1;
+            tools::Long        nD = nDY2 - nDY;
 
             for ( nX = nStartX, nY = nStartY; nY != nEndY; nY += nYInc )
             {
@@ -533,7 +533,7 @@ void RegionBand::InsertLine(const Point& rStartPt, const Point& rEndPt, long nLi
     }
 }
 
-void RegionBand::InsertPoint(const Point &rPoint, long nLineID, bool bEndPoint, LineType eLineType)
+void RegionBand::InsertPoint(const Point &rPoint, tools::Long nLineID, bool bEndPoint, LineType eLineType)
 {
     SAL_WARN_IF( mpFirstBand == nullptr, "vcl", "RegionBand::InsertPoint - no bands available!" );
 
@@ -663,7 +663,7 @@ bool RegionBand::OptimizeBandList()
     return (nullptr != mpFirstBand);
 }
 
-void RegionBand::Move(long nHorzMove, long nVertMove)
+void RegionBand::Move(tools::Long nHorzMove, tools::Long nVertMove)
 {
     ImplRegionBand* pBand = mpFirstBand;
 
@@ -711,7 +711,7 @@ void RegionBand::Scale(double fScaleX, double fScaleY)
 
 }
 
-void RegionBand::InsertBands(long nTop, long nBottom)
+void RegionBand::InsertBands(tools::Long nTop, tools::Long nBottom)
 {
     // region empty? -> set rectangle as first entry!
     if ( !mpFirstBand )
@@ -792,7 +792,7 @@ void RegionBand::InsertBands(long nTop, long nBottom)
 
 }
 
-bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
+bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, tools::Long nYBandPosition)
 {
     // boundary already included in band with height 1? -> nothing to do!
     if ( (pBand->mnYTop == pBand->mnYBottom) && (nYBandPosition == pBand->mnYTop) )
@@ -874,7 +874,7 @@ bool RegionBand::InsertSingleBand(ImplRegionBand* pBand, long nYBandPosition)
     return false;
 }
 
-void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
+void RegionBand::Union(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom)
 {
     SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Union() - nLeft > nRight" );
     SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Union() - nTop > nBottom" );
@@ -890,7 +890,7 @@ void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
             else
             {
 #ifdef DBG_UTIL
-                long nCurY = pBand->mnYBottom;
+                tools::Long nCurY = pBand->mnYBottom;
                 pBand = pBand->mpNextBand;
                 while ( pBand )
                 {
@@ -910,7 +910,7 @@ void RegionBand::Union(long nLeft, long nTop, long nRight, long nBottom)
 
 }
 
-void RegionBand::Intersect(long nLeft, long nTop, long nRight, long nBottom)
+void RegionBand::Intersect(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom)
 {
     // process intersections
     ImplRegionBand* pPrevBand = nullptr;
@@ -970,7 +970,7 @@ void RegionBand::Union(const RegionBand& rSource)
 
 }
 
-void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
+void RegionBand::Exclude(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom)
 {
     SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
     SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Exclude() - nTop > nBottom" );
@@ -989,7 +989,7 @@ void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
             else
             {
 #ifdef DBG_UTIL
-                long nCurY = pBand->mnYBottom;
+                tools::Long nCurY = pBand->mnYBottom;
                 pBand = pBand->mpNextBand;
 
                 while(pBand)
@@ -1011,7 +1011,7 @@ void RegionBand::Exclude(long nLeft, long nTop, long nRight, long nBottom)
 
 }
 
-void RegionBand::XOr(long nLeft, long nTop, long nRight, long nBottom)
+void RegionBand::XOr(tools::Long nLeft, tools::Long nTop, tools::Long nRight, tools::Long nBottom)
 {
     SAL_WARN_IF( nLeft > nRight, "vcl", "RegionBand::Exclude() - nLeft > nRight" );
     SAL_WARN_IF( nTop > nBottom, "vcl", "RegionBand::Exclude() - nTop > nBottom" );
@@ -1030,7 +1030,7 @@ void RegionBand::XOr(long nLeft, long nTop, long nRight, long nBottom)
             else
             {
 #ifdef DBG_UTIL
-                long nCurY = pBand->mnYBottom;
+                tools::Long nCurY = pBand->mnYBottom;
                 pBand = pBand->mpNextBand;
 
                 while(pBand)
@@ -1183,10 +1183,10 @@ tools::Rectangle RegionBand::GetBoundRect() const
 {
 
     // get the boundaries of the first band
-    long nYTop(mpFirstBand->mnYTop);
-    long nYBottom(mpFirstBand->mnYBottom);
-    long nXLeft(mpFirstBand->GetXLeftBoundary());
-    long nXRight(mpFirstBand->GetXRightBoundary());
+    tools::Long nYTop(mpFirstBand->mnYTop);
+    tools::Long nYBottom(mpFirstBand->mnYBottom);
+    tools::Long nXLeft(mpFirstBand->GetXLeftBoundary());
+    tools::Long nXRight(mpFirstBand->GetXRightBoundary());
 
     // look in the band list (don't test first band again!)
     ImplRegionBand* pBand = mpFirstBand->mpNextBand;

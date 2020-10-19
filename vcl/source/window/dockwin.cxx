@@ -821,8 +821,8 @@ WinBits DockingWindow::GetFloatStyle() const
     return mnFloatBits;
 }
 
-void DockingWindow::setPosSizePixel( long nX, long nY,
-                                     long nWidth, long nHeight,
+void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
+                                     tools::Long nWidth, tools::Long nHeight,
                                      PosSizeFlags nFlags )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );

@@ -160,7 +160,7 @@ BitmapChecksum Animation::GetChecksum() const
 }
 
 bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDestSz,
-                      long nExtraData, OutputDevice* pFirstFrameOutDev)
+                      tools::Long nExtraData, OutputDevice* pFirstFrameOutDev)
 {
     bool bRet = false;
 
@@ -215,7 +215,7 @@ bool Animation::Start(OutputDevice* pOut, const Point& rDestPt, const Size& rDes
     return bRet;
 }
 
-void Animation::Stop(const OutputDevice* pOut, long nExtraData)
+void Animation::Stop(const OutputDevice* pOut, tools::Long nExtraData)
 {
     maViewList.erase(std::remove_if(maViewList.begin(), maViewList.end(),
                                     [=](const std::unique_ptr<ImplAnimView>& pAnimView) -> bool {

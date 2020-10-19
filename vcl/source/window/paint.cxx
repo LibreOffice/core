@@ -323,7 +323,7 @@ namespace vcl
 void RenderTools::DrawSelectionBackground(vcl::RenderContext& rRenderContext, vcl::Window const & rWindow,
                                           const tools::Rectangle& rRect, sal_uInt16 nHighlight,
                                           bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly,
-                                          Color* pSelectionTextColor, long nCornerRadius, Color const * pPaintColor)
+                                          Color* pSelectionTextColor, tools::Long nCornerRadius, Color const * pPaintColor)
 {
     if (rRect.IsEmpty())
         return;
@@ -854,7 +854,7 @@ void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags 
 }
 
 void Window::ImplMoveInvalidateRegion( const tools::Rectangle& rRect,
-                                       long nHorzScroll, long nVertScroll,
+                                       tools::Long nHorzScroll, tools::Long nVertScroll,
                                        bool bChildren )
 {
     if ( (mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintAll)) == ImplPaintFlags::Paint )
@@ -877,7 +877,7 @@ void Window::ImplMoveInvalidateRegion( const tools::Rectangle& rRect,
 }
 
 void Window::ImplMoveAllInvalidateRegions( const tools::Rectangle& rRect,
-                                           long nHorzScroll, long nVertScroll,
+                                           tools::Long nHorzScroll, tools::Long nVertScroll,
                                            bool bChildren )
 {
     // also shift Paint-Region when paints need processing
@@ -1425,8 +1425,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
         {
             if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
             {
-                long nDeltaX = pChild->mnOutOffX - mnOutOffX;
-                long nDeltaY = pChild->mnOutOffY - mnOutOffY;
+                tools::Long nDeltaX = pChild->mnOutOffX - mnOutOffX;
+                tools::Long nDeltaY = pChild->mnOutOffY - mnOutOffY;
 
                 Point aPos( i_rPos );
                 aPos += Point(nDeltaX, nDeltaY);
@@ -1444,8 +1444,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     mbDevOutput = true;
 
     const OutputDevice *pOutDev = GetOutDev();
-    long nOldDPIX = pOutDev->GetDPIX();
-    long nOldDPIY = pOutDev->GetDPIY();
+    tools::Long nOldDPIX = pOutDev->GetDPIX();
+    tools::Long nOldDPIY = pOutDev->GetDPIY();
     mnDPIX = i_pTargetOutDev->GetDPIX();
     mnDPIY = i_pTargetOutDev->GetDPIY();
     bool bOutput = IsOutputEnabled();
@@ -1542,11 +1542,11 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     {
         if( pChild->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame && pChild->IsVisible() )
         {
-            long nDeltaX = pChild->mnOutOffX - mnOutOffX;
+            tools::Long nDeltaX = pChild->mnOutOffX - mnOutOffX;
 
             if( pOutDev->HasMirroredGraphics() )
                 nDeltaX = mnOutWidth - nDeltaX - pChild->mnOutWidth;
-            long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
+            tools::Long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
             Point aPos( i_rPos );
             Point aDelta( nDeltaX, nDeltaY );
             aPos += aDelta;
@@ -1636,7 +1636,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
 }
 
 void Window::ImplScroll( const tools::Rectangle& rRect,
-                         long nHorzScroll, long nVertScroll, ScrollFlags nFlags )
+                         tools::Long nHorzScroll, tools::Long nVertScroll, ScrollFlags nFlags )
 {
     if ( !IsDeviceOutputNecessary() )
         return;

@@ -113,7 +113,7 @@ PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize(GetOutputSizePixel());
-    long nTextHeight = GetDrawingArea()->get_text_height();
+    tools::Long nTextHeight = GetDrawingArea()->get_text_height();
     // leave small space for decoration
     aNewSize.AdjustWidth( -(nTextHeight + 2) );
     aNewSize.AdjustHeight( -(nTextHeight + 2) );
@@ -138,8 +138,8 @@ void PrintDialog::PrintPreviewWindow::Resize()
         if( aScaledSize.Width() > aNewSize.Width() )
             fScale = double(aNewSize.Width())/double(aScaledSize.Width());
     }
-    aScaledSize.setWidth( long(aScaledSize.Width()*fScale) );
-    aScaledSize.setHeight( long(aScaledSize.Height()*fScale) );
+    aScaledSize.setWidth( tools::Long(aScaledSize.Width()*fScale) );
+    aScaledSize.setHeight( tools::Long(aScaledSize.Height()*fScale) );
 
     maPreviewSize = aScaledSize;
 
@@ -463,12 +463,12 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
     double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());
     double fY = double(aSubSize.Height()) / double(aSampleTextSize.Height());
     double fScale = (fX < fY) ? fX : fY;
-    long nFontHeight = long(24.0 * fScale) - 3;
+    tools::Long nFontHeight = tools::Long(24.0 * fScale) - 3;
     if (nFontHeight < 5)
         nFontHeight = 5;
     aFont.SetFontSize(Size( 0, nFontHeight));
     rRenderContext.SetFont(aFont);
-    long nTextHeight = rRenderContext.GetTextHeight();
+    tools::Long nTextHeight = rRenderContext.GetTextHeight();
     for (int i = 0; i < nPages; i++)
     {
         OUString aPageText(OUString::number(i + 1));
@@ -1109,8 +1109,8 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
 {
     int nRows         = mxNupRowsEdt->get_value();
     int nCols         = mxNupColEdt->get_value();
-    long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
-    long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
 
     PrinterController::MultiPageSetup aMPS;
     aMPS.nRows         = nRows;
@@ -1166,8 +1166,8 @@ void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
     int nPages = mxNupPagesBox->get_active_id().toInt32();
     int nRows   = mxNupRowsEdt->get_value();
     int nCols   = mxNupColEdt->get_value();
-    long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
-    long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nPageMargin  = mxPageMarginEdt->denormalize(mxPageMarginEdt->get_value( FieldUnit::MM_100TH ));
+    tools::Long nSheetMargin = mxSheetMarginEdt->denormalize(mxSheetMarginEdt->get_value( FieldUnit::MM_100TH ));
     bool bCustom = false;
 
     if( nPages == 1 )
@@ -1224,8 +1224,8 @@ void PrintDialog::updateNupFromPages( bool i_bMayUseCache )
         Size aSize( getJobPageSize() );
 
         // maximum sheet distance: 1/2 sheet
-        long nHorzMax = aSize.Width()/2;
-        long nVertMax = aSize.Height()/2;
+        tools::Long nHorzMax = aSize.Width()/2;
+        tools::Long nVertMax = aSize.Height()/2;
         if( nSheetMargin > nHorzMax )
             nSheetMargin = nHorzMax;
         if( nSheetMargin > nVertMax )

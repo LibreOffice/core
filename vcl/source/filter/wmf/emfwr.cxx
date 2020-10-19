@@ -586,7 +586,7 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
     ImplEndRecord();
 }
 
-void EMFWriter::ImplWriteExtent( long nExtent )
+void EMFWriter::ImplWriteExtent( tools::Long nExtent )
 {
     nExtent = OutputDevice::LogicToLogic( Size( nExtent, 0 ), maVDev->GetMapMode(), maDestMapMode ).Width();
     m_rStm.WriteInt32( nExtent );
@@ -838,7 +838,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
 }
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const long* pDXArray, sal_uInt32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, const tools::Long* pDXArray, sal_uInt32 nWidth )
 {
     sal_Int32 nLen = rText.getLength(), i;
 
@@ -847,7 +847,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, c
 
     sal_uInt32  nNormWidth;
     std::unique_ptr<long[]> pOwnArray;
-    long*  pDX;
+    tools::Long*  pDX;
 
     // get text sizes
     if( pDXArray )
@@ -1184,7 +1184,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const Size      aDestSize( pA->GetSize() );
                 const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
                 const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                tools::Long            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {

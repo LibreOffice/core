@@ -107,12 +107,12 @@ protected:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
 
-    virtual long getPrimaryDimension(const Size &rSize) const = 0;
-    virtual void setPrimaryDimension(Size &rSize, long) const = 0;
-    virtual long getPrimaryCoordinate(const Point &rPos) const = 0;
-    virtual void setPrimaryCoordinate(Point &rPos, long) const = 0;
-    virtual long getSecondaryDimension(const Size &rSize) const = 0;
-    virtual void setSecondaryDimension(Size &rSize, long) const = 0;
+    virtual tools::Long getPrimaryDimension(const Size &rSize) const = 0;
+    virtual void setPrimaryDimension(Size &rSize, tools::Long) const = 0;
+    virtual tools::Long getPrimaryCoordinate(const Point &rPos) const = 0;
+    virtual void setPrimaryCoordinate(Point &rPos, tools::Long) const = 0;
+    virtual tools::Long getSecondaryDimension(const Size &rSize) const = 0;
+    virtual void setSecondaryDimension(Size &rSize, tools::Long) const = 0;
 
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
@@ -126,27 +126,27 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual tools::Long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
+    virtual void setPrimaryDimension(Size &rSize, tools::Long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual tools::Long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, tools::Long nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual tools::Long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
+    virtual void setSecondaryDimension(Size &rSize, tools::Long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
@@ -165,27 +165,27 @@ public:
         m_bVerticalContainer = false;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual tools::Long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
+    virtual void setPrimaryDimension(Size &rSize, tools::Long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual tools::Long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, tools::Long nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual tools::Long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
+    virtual void setSecondaryDimension(Size &rSize, tools::Long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
@@ -240,27 +240,27 @@ public:
         m_bVerticalContainer = true;
     }
 protected:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual tools::Long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nHeight) const override
+    virtual void setPrimaryDimension(Size &rSize, tools::Long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual tools::Long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getY();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, tools::Long nPos) const override
     {
         rPos.setY(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual tools::Long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nWidth) const override
+    virtual void setSecondaryDimension(Size &rSize, tools::Long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
@@ -279,27 +279,27 @@ public:
         m_bVerticalContainer = false;
     }
 private:
-    virtual long getPrimaryDimension(const Size &rSize) const override
+    virtual tools::Long getPrimaryDimension(const Size &rSize) const override
     {
         return rSize.getWidth();
     }
-    virtual void setPrimaryDimension(Size &rSize, long nWidth) const override
+    virtual void setPrimaryDimension(Size &rSize, tools::Long nWidth) const override
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getPrimaryCoordinate(const Point &rPos) const override
+    virtual tools::Long getPrimaryCoordinate(const Point &rPos) const override
     {
         return rPos.getX();
     }
-    virtual void setPrimaryCoordinate(Point &rPos, long nPos) const override
+    virtual void setPrimaryCoordinate(Point &rPos, tools::Long nPos) const override
     {
         rPos.setX(nPos);
     }
-    virtual long getSecondaryDimension(const Size &rSize) const override
+    virtual tools::Long getSecondaryDimension(const Size &rSize) const override
     {
         return rSize.getHeight();
     }
-    virtual void setSecondaryDimension(Size &rSize, long nHeight) const override
+    virtual void setSecondaryDimension(Size &rSize, tools::Long nHeight) const override
     {
         rSize.setHeight(nHeight);
     }
@@ -320,7 +320,7 @@ private:
 public:
     struct Value
     {
-        long m_nValue;
+        tools::Long m_nValue;
         bool m_bExpand;
         Value() : m_nValue(0), m_bExpand(false) {}
     };
@@ -381,42 +381,42 @@ class VclPaned : public VclContainer
 {
 protected:
     VclPtr<Splitter> m_pSplitter;
-    long m_nPosition;
+    tools::Long m_nPosition;
 
     VclPaned(vcl::Window *pParent, bool bVertical);
 public:
     virtual ~VclPaned() override;
     virtual void dispose() override;
-    long get_position() const { return m_nPosition; }
-    virtual void set_position(long nPosition) { m_nPosition = nPosition; }
+    tools::Long get_position() const { return m_nPosition; }
+    virtual void set_position(tools::Long nPosition) { m_nPosition = nPosition; }
 };
 
 class VclVPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
-    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+    void arrange(const Size& rAllocation, tools::Long nFirstHeight, tools::Long nSecondHeight);
 
 public:
     VclVPaned(vcl::Window *pParent);
     virtual ~VclVPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    virtual void set_position(long nPosition) override;
+    virtual void set_position(tools::Long nPosition) override;
 };
 
 class VclHPaned final : public VclPaned
 {
 private:
     DECL_LINK(SplitHdl, Splitter*, void);
-    void arrange(const Size& rAllocation, long nFirstHeight, long nSecondHeight);
+    void arrange(const Size& rAllocation, tools::Long nFirstHeight, tools::Long nSecondHeight);
 
 public:
     VclHPaned(vcl::Window *pParent);
     virtual ~VclHPaned() override;
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
-    virtual void set_position(long nPosition) override;
+    virtual void set_position(tools::Long nPosition) override;
 };
 
 class VclFrame final : public VclBin
