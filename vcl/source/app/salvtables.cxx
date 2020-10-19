@@ -71,6 +71,7 @@
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <calendar.hxx>
+#include <vcl/menubtn.hxx>
 #include <verticaltabctrl.hxx>
 #include <window.h>
 #include <wizdlg.hxx>
@@ -2665,6 +2666,35 @@ IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void)
     if (notify_events_disabled())
         return;
     signal_toggled();
+}
+
+namespace
+{
+
+class SalInstanceMenuToggleButton : public SalInstanceMenuButton, public virtual weld::MenuToggleButton
+{
+private:
+    VclPtr<::MenuToggleButton> m_xMenuToggleButton;
+
+public:
+    SalInstanceMenuToggleButton(::MenuToggleButton* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceMenuButton(pButton, pBuilder, bTakeOwnership)
+        , m_xMenuToggleButton(pButton)
+    {
+        m_xMenuToggleButton->SetDelayMenu(true);
+        m_xMenuToggleButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
+    }
+
+    virtual void set_active(bool active) override
+    {
+        disable_notify_events();
+        m_xMenuToggleButton->SetActive(active);
+        enable_notify_events();
+    }
+
+    virtual bool get_active() const override { return m_xMenuToggleButton->GetActive(); }
+};
+
 }
 
 namespace
@@ -6679,6 +6709,13 @@ std::unique_ptr<weld::MenuButton> SalInstanceBuilder::weld_menu_button(const OSt
 {
     MenuButton* pButton = m_xBuilder->get<MenuButton>(id);
     return pButton ? std::make_unique<SalInstanceMenuButton>(pButton, this, false)
+                   : nullptr;
+}
+
+std::unique_ptr<weld::MenuToggleButton> SalInstanceBuilder::weld_menu_toggle_button(const OString& id)
+{
+    MenuToggleButton* pButton = m_xBuilder->get<MenuToggleButton>(id);
+    return pButton ? std::make_unique<SalInstanceMenuToggleButton>(pButton, this, false)
                    : nullptr;
 }
 

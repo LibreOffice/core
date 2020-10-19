@@ -6755,6 +6755,7 @@ class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Butt
 private:
     GtkButton* m_pButton;
     gulong m_nSignalId;
+    std::unique_ptr<vcl::Font> m_xFont;
 
     static void signalClicked(GtkButton*, gpointer widget)
     {
@@ -6794,6 +6795,7 @@ private:
         return pChild;
     }
 
+protected:
     GtkWidget* get_label_widget()
     {
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pButton));
@@ -6869,8 +6871,16 @@ public:
 
     virtual void set_font(const vcl::Font& rFont) override
     {
+        m_xFont.reset(new vcl::Font(rFont));
         GtkWidget* pChild = get_label_widget();
         ::set_font(GTK_LABEL(pChild), rFont);
+    }
+
+    virtual vcl::Font get_font() override
+    {
+        if (m_xFont)
+            return *m_xFont;
+        return GtkInstanceWidget::get_font();
     }
 
     // allow us to block buttons with click handlers making dialogs return a response
@@ -7039,8 +7049,9 @@ namespace {
 
 class GtkInstanceToggleButton : public GtkInstanceButton, public virtual weld::ToggleButton
 {
-private:
+protected:
     GtkToggleButton* m_pToggleButton;
+private:
     gulong m_nSignalId;
 
     static void signalToggled(GtkToggleButton*, gpointer widget)
@@ -7271,8 +7282,9 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
 
 class GtkInstanceMenuButton : public GtkInstanceToggleButton, public MenuHelper, public virtual weld::MenuButton
 {
-private:
+protected:
     GtkMenuButton* m_pMenuButton;
+private:
     GtkBox* m_pBox;
     GtkImage* m_pImage;
     GtkWidget* m_pLabel;
@@ -7428,24 +7440,7 @@ public:
         , m_nSignalId(0)
     {
         m_pLabel = gtk_bin_get_child(GTK_BIN(m_pMenuButton));
-        //do it "manually" so we can have the dropdown image in GtkMenuButtons shown
-        //on the right at the same time as this image is shown on the left
-        g_object_ref(m_pLabel);
-        gtk_container_remove(GTK_CONTAINER(m_pMenuButton), m_pLabel);
-
-        gint nImageSpacing(2);
-        GtkStyleContext *pContext = gtk_widget_get_style_context(GTK_WIDGET(m_pMenuButton));
-        gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
-        m_pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, nImageSpacing));
-
-        gtk_box_pack_start(m_pBox, m_pLabel, true, true, 0);
-        g_object_unref(m_pLabel);
-
-        if (gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(m_pMenuButton)))
-            gtk_box_pack_end(m_pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
-
-        gtk_container_add(GTK_CONTAINER(m_pMenuButton), GTK_WIDGET(m_pBox));
-        gtk_widget_show_all(GTK_WIDGET(m_pBox));
+        m_pBox = formatMenuButton(m_pLabel);
     }
 
     virtual void set_size_request(int nWidth, int nHeight) override
@@ -7600,6 +7595,31 @@ public:
 
     void set_menu(weld::Menu* pMenu);
 
+    static GtkBox* formatMenuButton(GtkWidget* pLabel)
+    {
+        // format the GtkMenuButton "manually" so we can have the dropdown image in GtkMenuButtons shown
+        // on the right at the same time as an image is shown on the left
+        g_object_ref(pLabel);
+        GtkWidget* pContainer = gtk_widget_get_parent(pLabel);
+        gtk_container_remove(GTK_CONTAINER(pContainer), pLabel);
+
+        gint nImageSpacing(2);
+        GtkStyleContext *pContext = gtk_widget_get_style_context(pContainer);
+        gtk_style_context_get_style(pContext, "image-spacing", &nImageSpacing, nullptr);
+        GtkBox* pBox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, nImageSpacing));
+
+        gtk_box_pack_start(pBox, pLabel, true, true, 0);
+        g_object_unref(pLabel);
+
+        if (gtk_toggle_button_get_mode(GTK_TOGGLE_BUTTON(pContainer)))
+            gtk_box_pack_end(pBox, gtk_image_new_from_icon_name("pan-down-symbolic", GTK_ICON_SIZE_BUTTON), false, false, 0);
+
+        gtk_container_add(GTK_CONTAINER(pContainer), GTK_WIDGET(pBox));
+        gtk_widget_show_all(GTK_WIDGET(pBox));
+
+        return pBox;
+    }
+
     virtual ~GtkInstanceMenuButton() override
     {
         if (m_pMenuHack)
@@ -7608,6 +7628,247 @@ public:
             gtk_menu_button_set_popover(m_pMenuButton, nullptr);
             gtk_widget_destroy(GTK_WIDGET(m_pMenuHack));
         }
+    }
+};
+
+class GtkInstanceMenuToggleButton : public GtkInstanceToggleButton, public MenuHelper
+                                  , public virtual weld::MenuToggleButton
+{
+private:
+    GtkContainer* m_pContainer;
+    GtkButton* m_pToggleMenuButton;
+    GtkBox* m_pBox;
+    gulong m_nMenuBtnClickedId;
+    gulong m_nToggleStateFlagsChangedId;
+    gulong m_nMenuBtnStateFlagsChangedId;
+
+    static void signalToggleStateFlagsChanged(GtkWidget* pWidget, GtkStateFlags /*eFlags*/, gpointer widget)
+    {
+        GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
+        // mirror togglebutton state to menubutton
+        gtk_widget_set_state_flags(GTK_WIDGET(pThis->m_pToggleMenuButton), gtk_widget_get_state_flags(pWidget), true);
+    }
+
+    static void signalMenuBtnStateFlagsChanged(GtkWidget* pWidget, GtkStateFlags /*eFlags*/, gpointer widget)
+    {
+        GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
+        // mirror menubutton to togglebutton, keeping depressed state of menubutton
+        GtkStateFlags eToggleFlags = gtk_widget_get_state_flags(GTK_WIDGET(pThis->m_pToggleButton));
+        GtkStateFlags eFlags = gtk_widget_get_state_flags(pWidget);
+        GtkStateFlags eFinalFlags = static_cast<GtkStateFlags>((eFlags & ~GTK_STATE_FLAG_ACTIVE) |
+                                                               (eToggleFlags & GTK_STATE_FLAG_ACTIVE));
+        gtk_widget_set_state_flags(GTK_WIDGET(pThis->m_pToggleButton), eFinalFlags, true);
+    }
+
+    static void signalMenuBtnClicked(GtkButton*, gpointer widget)
+    {
+        GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
+        pThis->launch_menu();
+    }
+
+    void launch_menu()
+    {
+        gtk_widget_set_state_flags(GTK_WIDGET(m_pToggleMenuButton), gtk_widget_get_state_flags(GTK_WIDGET(m_pToggleButton)), true);
+        GtkWidget* pWidget = GTK_WIDGET(m_pToggleButton);
+
+        //run in a sub main loop because we need to keep vcl PopupMenu alive to use
+        //it during DispatchCommand, returning now to the outer loop causes the
+        //launching PopupMenu to be destroyed, instead run the subloop here
+        //until the gtk menu is destroyed
+        GMainLoop* pLoop = g_main_loop_new(nullptr, true);
+        gulong nSignalId = g_signal_connect_swapped(G_OBJECT(m_pMenu), "deactivate", G_CALLBACK(g_main_loop_quit), pLoop);
+
+#if GTK_CHECK_VERSION(3,22,0)
+        if (gtk_check_version(3, 22, 0) == nullptr)
+        {
+            // Send a keyboard event through gtk_main_do_event to toggle any active tooltip offs
+            // before trying to launch the menu
+            // https://gitlab.gnome.org/GNOME/gtk/issues/1785
+            GdkEvent *pKeyEvent = GtkSalFrame::makeFakeKeyPress(pWidget);
+            gtk_main_do_event(pKeyEvent);
+
+            GdkEvent *pTriggerEvent = gtk_get_current_event();
+            if (!pTriggerEvent)
+                pTriggerEvent = pKeyEvent;
+
+            gtk_menu_popup_at_widget(m_pMenu, pWidget, GDK_GRAVITY_SOUTH_WEST, GDK_GRAVITY_NORTH_WEST, pTriggerEvent);
+
+            gdk_event_free(pKeyEvent);
+        }
+#else
+        else
+        {
+            guint nButton;
+            guint32 nTime;
+
+            //typically there is an event, and we can then distinguish if this was
+            //launched from the keyboard (gets auto-mnemoniced) or the mouse (which
+            //doesn't)
+            GdkEvent *pEvent = gtk_get_current_event();
+            if (pEvent)
+            {
+                gdk_event_get_button(pEvent, &nButton);
+                nTime = gdk_event_get_time(pEvent);
+            }
+            else
+            {
+                nButton = 0;
+                nTime = GtkSalFrame::GetLastInputEventTime();
+            }
+
+            gtk_menu_popup(m_pMenu, nullptr, nullptr, nullptr, nullptr, nButton, nTime);
+        }
+#endif
+
+        if (g_main_loop_is_running(pLoop))
+        {
+            gdk_threads_leave();
+            g_main_loop_run(pLoop);
+            gdk_threads_enter();
+        }
+        g_main_loop_unref(pLoop);
+        g_signal_handler_disconnect(m_pMenu, nSignalId);
+    }
+
+public:
+    GtkInstanceMenuToggleButton(GtkBuilder* pMenuToggleButtonBuilder, GtkMenuButton* pMenuButton,
+        GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : GtkInstanceToggleButton(GTK_TOGGLE_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "togglebutton")),
+                                  pBuilder, bTakeOwnership)
+        , MenuHelper(gtk_menu_button_get_popup(pMenuButton), false)
+        , m_pContainer(GTK_CONTAINER(gtk_builder_get_object(pMenuToggleButtonBuilder, "box")))
+        , m_pToggleMenuButton(GTK_BUTTON(gtk_builder_get_object(pMenuToggleButtonBuilder, "menubutton")))
+        , m_nMenuBtnClickedId(g_signal_connect(m_pToggleMenuButton, "clicked", G_CALLBACK(signalMenuBtnClicked), this))
+        , m_nToggleStateFlagsChangedId(g_signal_connect(m_pToggleButton, "state-flags-changed", G_CALLBACK(signalToggleStateFlagsChanged), this))
+        , m_nMenuBtnStateFlagsChangedId(g_signal_connect(m_pToggleMenuButton, "state-flags-changed", G_CALLBACK(signalMenuBtnStateFlagsChanged), this))
+    {
+        m_pBox = GtkInstanceMenuButton::formatMenuButton(gtk_bin_get_child(GTK_BIN(pMenuButton)));
+
+        insertAsParent(GTK_WIDGET(pMenuButton), GTK_WIDGET(m_pContainer));
+        gtk_widget_hide(GTK_WIDGET(pMenuButton));
+
+        // move the first GtkMenuButton child, as created by GtkInstanceMenuButton ctor, into the GtkToggleButton
+        // instead, leaving just the indicator behind in the GtkMenuButton
+        GtkWidget* pButtonBox = gtk_bin_get_child(GTK_BIN(pMenuButton));
+        GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pButtonBox));
+        int nGroup = 0;
+        for (GList* pChild = g_list_first(pChildren); pChild && nGroup < 2; pChild = g_list_next(pChild), ++nGroup)
+        {
+            GtkWidget* pWidget = static_cast<GtkWidget*>(pChild->data);
+            g_object_ref(pWidget);
+            gtk_container_remove(GTK_CONTAINER(pButtonBox), pWidget);
+            if (nGroup == 0)
+                gtk_container_add(GTK_CONTAINER(m_pToggleButton), pWidget);
+            else
+                gtk_container_add(GTK_CONTAINER(m_pToggleMenuButton), pWidget);
+            gtk_widget_show_all(pWidget);
+            g_object_unref(pWidget);
+        }
+        g_list_free(pChildren);
+
+        // match the GtkToggleButton relief to the GtkMenuButton
+        GtkReliefStyle eStyle = gtk_button_get_relief(GTK_BUTTON(pMenuButton));
+        gtk_button_set_relief(GTK_BUTTON(m_pToggleButton), eStyle);
+        gtk_button_set_relief(GTK_BUTTON(m_pToggleMenuButton), eStyle);
+
+        // move the GtkMenuButton margins up to the new parent
+        gtk_widget_set_margin_top(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_top(GTK_WIDGET(pMenuButton)));
+        gtk_widget_set_margin_bottom(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_bottom(GTK_WIDGET(pMenuButton)));
+        gtk_widget_set_margin_left(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_left(GTK_WIDGET(pMenuButton)));
+        gtk_widget_set_margin_right(GTK_WIDGET(m_pContainer),
+            gtk_widget_get_margin_right(GTK_WIDGET(pMenuButton)));
+
+        gtk_menu_detach(m_pMenu);
+        gtk_menu_attach_to_widget(m_pMenu, GTK_WIDGET(m_pToggleButton), nullptr);
+    }
+
+    virtual void disable_notify_events() override
+    {
+        g_signal_handler_block(m_pToggleMenuButton, m_nMenuBtnClickedId);
+        GtkInstanceToggleButton::disable_notify_events();
+    }
+
+    virtual void enable_notify_events() override
+    {
+        GtkInstanceToggleButton::enable_notify_events();
+        g_signal_handler_unblock(m_pToggleMenuButton, m_nMenuBtnClickedId);
+    }
+
+    virtual ~GtkInstanceMenuToggleButton()
+    {
+        g_signal_handler_disconnect(m_pToggleButton, m_nToggleStateFlagsChangedId);
+        g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnStateFlagsChangedId);
+        g_signal_handler_disconnect(m_pToggleMenuButton, m_nMenuBtnClickedId);
+    }
+
+    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSurface, TriState eCheckRadioFalse) override
+    {
+        MenuHelper::insert_item(pos, rId, rStr, pIconName, pImageSurface, eCheckRadioFalse);
+    }
+
+    virtual void insert_separator(int pos, const OUString& rId) override
+    {
+        MenuHelper::insert_separator(pos, rId);
+    }
+
+    virtual void remove_item(const OString& rId) override
+    {
+        MenuHelper::remove_item(rId);
+    }
+
+    virtual void clear() override
+    {
+        clear_items();
+    }
+
+    virtual void set_item_active(const OString& rIdent, bool bActive) override
+    {
+        MenuHelper::set_item_active(rIdent, bActive);
+    }
+
+    virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override
+    {
+        MenuHelper::set_item_sensitive(rIdent, bSensitive);
+    }
+
+    virtual void set_item_label(const OString& rIdent, const OUString& rLabel) override
+    {
+        MenuHelper::set_item_label(rIdent, rLabel);
+    }
+
+    virtual OUString get_item_label(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_label(rIdent);
+    }
+
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override
+    {
+        MenuHelper::set_item_visible(rIdent, bVisible);
+    }
+
+    virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) override
+    {
+        MenuHelper::set_item_help_id(rIdent, rHelpId);
+    }
+
+    virtual OString get_item_help_id(const OString& rIdent) const override
+    {
+        return MenuHelper::get_item_help_id(rIdent);
+    }
+
+    virtual void signal_activate(GtkMenuItem* pItem) override
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pItem));
+        signal_selected(OString(pStr, pStr ? strlen(pStr) : 0));
+    }
+
+    virtual void set_popover(weld::Widget* /*pPopover*/) override
+    {
+        assert(false && "not implemented");
     }
 };
 
@@ -13645,6 +13906,14 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 
 namespace {
 
+GtkBuilder* makeMenuToggleButtonBuilder()
+{
+    OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/menutogglebutton.ui");
+    OUString aPath;
+    osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
+    return gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
+}
+
 GtkBuilder* makeComboBoxBuilder()
 {
     OUString aUri(AllSettings::GetUIRootDir() + "vcl/ui/combobox.ui");
@@ -16421,6 +16690,17 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
         return std::make_unique<GtkInstanceMenuButton>(pButton, nullptr, this, false);
+    }
+
+    virtual std::unique_ptr<weld::MenuToggleButton> weld_menu_toggle_button(const OString &id) override
+    {
+        GtkMenuButton* pButton = GTK_MENU_BUTTON(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pButton)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pButton));
+        // gtk doesn't come with exactly the the concept
+        GtkBuilder* pMenuToggleButton = makeMenuToggleButtonBuilder();
+        return std::make_unique<GtkInstanceMenuToggleButton>(pMenuToggleButton, pButton, this, false);
     }
 
     virtual std::unique_ptr<weld::LinkButton> weld_link_button(const OString &id) override
