@@ -401,7 +401,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             if (!::rtl::math::approxEqual(nDiff, rInc, 13))
                                 bVal = false;
                             else if ((aCurrCell.mfValue == 0.0 || aCurrCell.mfValue == 1.0)
-                                     && (rDocument.GetFormatTable()->GetType(
+                                     && (pDocument->GetFormatTable()->GetType(
                                              GetNumberFormat(nColCurr, nRowCurr))
                                          == SvNumFormatType::LOGICAL))
                                 bVal = false;
