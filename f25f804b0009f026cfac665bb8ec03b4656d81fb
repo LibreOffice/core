@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "336177bd_3f2816c1",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 830,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-19T13:53:31Z",
+      "side": 1,
+      "message": "( rProp.Value \u003e\u003e\u003d num ) does not truncate doubles, the problem is probably that writeElement converts it to some integer type?\n\nplease use a debugger to see what exactly is going on here, it\u0027s not obvious.",
+      "parentUuid": "3443f3dd_55546d2f",
+      "revId": "f25f804b0009f026cfac665bb8ec03b4656d81fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e8ecfb63_91855ef2",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
         "patchSetId": 4
