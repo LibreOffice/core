@@ -470,6 +470,11 @@
                         <property name="label" translatable="yes" context="printoptionspage|label5">_Fax:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">fax</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="label5-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|label5">If you have installed fax software on your computer and wish to fax directly from the text document, select the desired fax machine.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
