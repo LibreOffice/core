@@ -270,6 +270,7 @@ public:
     void testTdf137000_handle_upright();
     void testTdf126305_DataValidatyErrorAlert();
     void testTdf129969();
+    void testTdf84874();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -434,6 +435,7 @@ public:
     CPPUNIT_TEST(testTdf137000_handle_upright);
     CPPUNIT_TEST(testTdf126305_DataValidatyErrorAlert);
     CPPUNIT_TEST(testTdf129969);
+    CPPUNIT_TEST(testTdf84874);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -5479,6 +5481,37 @@ void ScExportTest::testTdf137000_handle_upright()
 
     assertXPathNoAttribute(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:txBody/a:bodyPr",
                            "rot");
+}
+
+void ScExportTest::testTdf84874()
+{
+    ScDocShellRef xShell = loadDoc("tdf84874.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const ScValidationData* pData = rDoc.GetValidationEntry(1);
+    OUString aTitle, aText;
+    pData->GetInput( aTitle, aText );
+    sal_uInt32 nPromptTitleLen = aTitle.getLength();
+    sal_uInt32 nPromptTextLen = aText.getLength();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nPromptTitleLen);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nPromptTextLen);
+
+    ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
+    pData->GetErrMsg( aTitle, aText, eErrStyle );
+    sal_uInt32 nErrorTitleLen = aTitle.getLength();
+    sal_uInt32 nErrorTextLen = aText.getLength();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nErrorTitleLen);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(255), nErrorTextLen);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
