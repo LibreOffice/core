@@ -157,11 +157,12 @@ int pdfVerify(int nArgc, char** pArgv)
         else
         {
             std::cerr << "found " << aSignatures.size() << " signatures" << std::endl;
+            int nMDPPerm = aDocument.GetMDPPerm();
             for (size_t i = 0; i < aSignatures.size(); ++i)
             {
                 SignatureInformation aInfo(i);
                 if (!xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo,
-                                                           aDocument))
+                                                           aDocument, nMDPPerm))
                 {
                     SAL_WARN("xmlsecurity.pdfio", "failed to determine digest match");
                     return 1;

@@ -58,7 +58,7 @@ std::unique_ptr<PDFiumPage> PDFiumDocument::openPage(int nIndex)
 
 int PDFiumDocument::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
-BitmapChecksum PDFiumPage::getChecksum()
+BitmapChecksum PDFiumPage::getChecksum(int nMDPPerm)
 {
     size_t nPageWidth = FPDF_GetPageWidth(mpPage);
     size_t nPageHeight = FPDF_GetPageHeight(mpPage);
@@ -68,10 +68,14 @@ BitmapChecksum PDFiumPage::getChecksum()
         return 0;
     }
 
-    // Intentionally not using FPDF_ANNOT here, annotations/commenting is OK to not affect the
-    // checksum, signature verification wants this.
+    int nFlags = 0;
+    if (nMDPPerm != 3)
+    {
+        // Annotations/commenting should affect the checksum, signature verification wants this.
+        nFlags = FPDF_ANNOT;
+    }
     FPDF_RenderPageBitmap(pPdfBitmap, mpPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight,
-                          /*rotate=*/0, /*flags=*/0);
+                          /*rotate=*/0, nFlags);
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);
