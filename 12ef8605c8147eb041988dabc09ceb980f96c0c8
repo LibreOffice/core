@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30f59b9_a1a4fd65",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-10-19T13:36:20Z",
+      "side": 1,
+      "message": "The description of this property say that this element specifies the version of the application which produced this document.\n\nhttps://docs.microsoft.com/en-us/dotnet/api/documentformat.openxml.extendedproperties.applicationversion?view\u003dopenxml-2.8.1\n\nSo if we resave document with LibreOffice we should save here is specific version of application. I think it should be set to for example 16.0000.\n\nI think the problem will be if document will be created in Office 2007 (12.000) and resaved by LibreOffice (different standard).\n\n@Michael What do you think?",
+      "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
