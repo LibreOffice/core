@@ -160,8 +160,8 @@ DECLARE_WW8IMPORT_TEST(testTdf121734, "tdf121734.doc")
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_LR_SPACE, false, &pItem));
         auto pLR = static_cast<const SvxLRSpaceItem*>(pItem);
         CPPUNIT_ASSERT(pLR);
-        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetLeft());
-        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetRight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pLR->GetLeft());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pLR->GetRight());
 
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
         auto pUL = static_cast<const SvxULSpaceItem*>(pItem);
@@ -197,7 +197,7 @@ DECLARE_WW8IMPORT_TEST(testTdf125281, "tdf125281.doc")
 
     // Without the accompanying fix in place, this test would have failed, as pref size was 0 till
     // an actual Paint() was performed (and even then, it was wrong).
-    long nExpected = 25664;
+    tools::Long nExpected = 25664;
     CPPUNIT_ASSERT_EQUAL(nExpected, rGraphic.GetPrefSize().getWidth());
 
     // Without the accompanying fix in place, this test would have failed, as setting the pref size
@@ -227,8 +227,8 @@ DECLARE_WW8IMPORT_TEST(testTdf122425_1, "tdf122425_1.doc")
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_LR_SPACE, false, &pItem));
         auto pLR = static_cast<const SvxLRSpaceItem*>(pItem);
         CPPUNIT_ASSERT(pLR);
-        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetLeft());
-        CPPUNIT_ASSERT_EQUAL(long(0), pLR->GetRight());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pLR->GetLeft());
+        CPPUNIT_ASSERT_EQUAL(tools::Long(0), pLR->GetRight());
 
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, rFormat.GetItemState(RES_UL_SPACE, false, &pItem));
         auto pUL = static_cast<const SvxULSpaceItem*>(pItem);

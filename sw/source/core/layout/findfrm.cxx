@@ -1593,7 +1593,7 @@ SwCellFrame* SwCellFrame::GetFollowCell() const
 
     // NEW TABLES
     // Covered cells do not have follow cells!
-    const long nRowSpan = GetLayoutRowSpan();
+    const tools::Long nRowSpan = GetLayoutRowSpan();
     if ( nRowSpan < 1 )
         return nullptr;
 
@@ -1616,7 +1616,7 @@ SwCellFrame* SwCellFrame::GetFollowCell() const
     if ( nRowSpan > 1 )
     {
         // optimization: Will end of row span be in last row or exceed row?
-        long nMax = 0;
+        tools::Long nMax = 0;
         while ( pRow->GetNext() && ++nMax < nRowSpan )
             pRow = pRow->GetNext();
 

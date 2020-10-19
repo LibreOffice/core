@@ -226,7 +226,7 @@ private:
         CompareData &m_rData1, &m_rData2;
         const MovedData &m_rMoved1, &m_rMoved2;
         std::unique_ptr<long[]> m_pMemory;
-        long *m_pFDiag, *m_pBDiag;
+        tools::Long *m_pFDiag, *m_pBDiag;
 
         void Compare( sal_uLong nStt1, sal_uLong nEnd1, sal_uLong nStt2, sal_uLong nEnd2 );
         sal_uLong CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
@@ -847,16 +847,16 @@ void Compare::CompareSequence::Compare( sal_uLong nStt1, sal_uLong nEnd1,
 sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
                                     sal_uLong nStt2, sal_uLong nEnd2, sal_uLong* pCost )
 {
-    const long dmin = nStt1 - nEnd2;    /* Minimum valid diagonal. */
-    const long dmax = nEnd1 - nStt2;    /* Maximum valid diagonal. */
-    const long fmid = nStt1 - nStt2;    /* Center diagonal of top-down search. */
-    const long bmid = nEnd1 - nEnd2;    /* Center diagonal of bottom-up search. */
+    const tools::Long dmin = nStt1 - nEnd2;    /* Minimum valid diagonal. */
+    const tools::Long dmax = nEnd1 - nStt2;    /* Maximum valid diagonal. */
+    const tools::Long fmid = nStt1 - nStt2;    /* Center diagonal of top-down search. */
+    const tools::Long bmid = nEnd1 - nEnd2;    /* Center diagonal of bottom-up search. */
 
-    long fmin = fmid, fmax = fmid;  /* Limits of top-down search. */
-    long bmin = bmid, bmax = bmid;  /* Limits of bottom-up search. */
+    tools::Long fmin = fmid, fmax = fmid;  /* Limits of top-down search. */
+    tools::Long bmin = bmid, bmax = bmid;  /* Limits of bottom-up search. */
 
-    long c;         /* Cost. */
-    long odd = (fmid - bmid) & 1;   /* True if southeast corner is on an odd
+    tools::Long c;         /* Cost. */
+    tools::Long odd = (fmid - bmid) & 1;   /* True if southeast corner is on an odd
                      diagonal with respect to the northwest. */
 
     m_pFDiag[fmid] = nStt1;
@@ -864,7 +864,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
 
     for (c = 1;; ++c)
     {
-        long d;         /* Active diagonal. */
+        tools::Long d;         /* Active diagonal. */
 
         /* Extend the top-down search by an edit step in each diagonal. */
         if (fmin > dmin)
@@ -877,7 +877,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             --fmax;
         for (d = fmax; d >= fmin; d -= 2)
         {
-            long x, y, tlo = m_pFDiag[d - 1], thi = m_pFDiag[d + 1];
+            tools::Long x, y, tlo = m_pFDiag[d - 1], thi = m_pFDiag[d + 1];
 
             if (tlo >= thi)
                 x = tlo + 1;
@@ -909,7 +909,7 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
             --bmax;
         for (d = bmax; d >= bmin; d -= 2)
         {
-            long x, y, tlo = m_pBDiag[d - 1], thi = m_pBDiag[d + 1];
+            tools::Long x, y, tlo = m_pBDiag[d - 1], thi = m_pBDiag[d + 1];
 
             if (tlo < thi)
                 x = tlo;
@@ -1829,12 +1829,12 @@ namespace
 }
 
 // Returns (the difference count?) if something is different
-long SwDoc::CompareDoc( const SwDoc& rDoc )
+tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
         return 0;
 
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     // Get comparison options
     CmpOptions.eCmpMode = SW_MOD()->GetCompareMode();
@@ -2077,12 +2077,12 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 }
 
 /// Merge two documents
-long SwDoc::MergeDoc( const SwDoc& rDoc )
+tools::Long SwDoc::MergeDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
         return 0;
 
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 

@@ -29,7 +29,7 @@ SwShadowCursor::~SwShadowCursor()
         DrawCursor( aOldPt, nOldHeight, nOldMode );
 }
 
-void SwShadowCursor::SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode )
+void SwShadowCursor::SetPos( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode )
 {
     Point aPt( pWin->LogicToPixel( rPt ));
     nHeight = pWin->LogicToPixel( Size( 0, nHeight )).Height();
@@ -45,17 +45,17 @@ void SwShadowCursor::SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode )
     }
 }
 
-void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
+void SwShadowCursor::DrawTri( const Point& rPt, tools::Long nHeight, bool bLeft )
 {
-    long nLineDiff = nHeight / 2;
-    long nLineDiffHalf = nLineDiff / 2;
+    tools::Long nLineDiff = nHeight / 2;
+    tools::Long nLineDiffHalf = nLineDiff / 2;
 
     // Dot above
     Point aPt1( (bLeft ? rPt.X() - 3 : rPt.X() + 3),
                 rPt.Y() + nLineDiffHalf );
     // Dot below
     Point aPt2( aPt1.X(), aPt1.Y() + nHeight - nLineDiff - 1 );
-    long nDiff = bLeft ? -1 : 1;
+    tools::Long nDiff = bLeft ? -1 : 1;
     while( aPt1.Y() <= aPt2.Y() )
     {
         pWin->DrawLine( aPt1, aPt2 );
@@ -65,7 +65,7 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
     }
 }
 
-void SwShadowCursor::DrawCursor( const Point& rPt, long nHeight, sal_uInt16 nMode )
+void SwShadowCursor::DrawCursor( const Point& rPt, tools::Long nHeight, sal_uInt16 nMode )
 {
     nHeight = (((nHeight / 4)+1) * 4) + 1;
 
@@ -97,11 +97,11 @@ void SwShadowCursor::Paint()
 
 tools::Rectangle SwShadowCursor::GetRect() const
 {
-    long nH = nOldHeight;
+    tools::Long nH = nOldHeight;
     Point aPt( aOldPt );
 
     nH = (((nH / 4)+1) * 4) + 1;
-    long nWidth = nH / 4 + 3 + 1;
+    tools::Long nWidth = nH / 4 + 3 + 1;
 
     Size aSz( nWidth, nH );
 

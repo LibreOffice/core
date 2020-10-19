@@ -28,8 +28,8 @@
 
 namespace sw::sidebar{
 
-bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsNone( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_NO_MARGIN) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_NO_MARGIN ) <= SWPAGE_UNIT_THRESHOLD &&
@@ -38,8 +38,8 @@ bool IsNone( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetNone( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetNone( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_NO_MARGIN;
     nPageRightMargin = SWPAGE_NO_MARGIN;
@@ -48,8 +48,8 @@ void SetNone( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsNarrow( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsNarrow( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_NARROW_VALUE) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_NARROW_VALUE) <= SWPAGE_UNIT_THRESHOLD &&
@@ -58,8 +58,8 @@ bool IsNarrow( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetNarrow( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetNarrow( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_NARROW_VALUE;
     nPageRightMargin = SWPAGE_NARROW_VALUE;
@@ -68,8 +68,8 @@ void SetNarrow( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsModerate( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsModerate( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_MODERATE_LR) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_MODERATE_LR) <= SWPAGE_UNIT_THRESHOLD &&
@@ -78,8 +78,8 @@ bool IsModerate( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetModerate( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetModerate( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_MODERATE_LR;
     nPageRightMargin = SWPAGE_MODERATE_LR;
@@ -88,8 +88,8 @@ void SetModerate( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsNormal075( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsNormal075( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_NORMAL_VALUE) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_NORMAL_VALUE) <= SWPAGE_UNIT_THRESHOLD &&
@@ -98,8 +98,8 @@ bool IsNormal075( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetNormal075( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetNormal075( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_NORMAL_VALUE;
     nPageRightMargin = SWPAGE_NORMAL_VALUE;
@@ -108,8 +108,8 @@ void SetNormal075( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsNormal100( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsNormal100( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_WIDE_VALUE1) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_WIDE_VALUE1) <= SWPAGE_UNIT_THRESHOLD &&
@@ -118,8 +118,8 @@ bool IsNormal100( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetNormal100( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetNormal100( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_WIDE_VALUE1;
     nPageRightMargin = SWPAGE_WIDE_VALUE1;
@@ -128,8 +128,8 @@ void SetNormal100( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsNormal125( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsNormal125( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_WIDE_VALUE3) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_WIDE_VALUE3) <= SWPAGE_UNIT_THRESHOLD &&
@@ -138,8 +138,8 @@ bool IsNormal125( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetNormal125( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetNormal125( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_WIDE_VALUE3;
     nPageRightMargin = SWPAGE_WIDE_VALUE3;
@@ -148,8 +148,8 @@ void SetNormal125( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsWide( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsWide( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_WIDE_VALUE2) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_WIDE_VALUE2) <= SWPAGE_UNIT_THRESHOLD &&
@@ -158,8 +158,8 @@ bool IsWide( const long nPageLeftMargin, const long nPageRightMargin,
         !bMirrored );
 }
 
-void SetWide( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetWide( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_WIDE_VALUE2;
     nPageRightMargin = SWPAGE_WIDE_VALUE2;
@@ -168,8 +168,8 @@ void SetWide( long& nPageLeftMargin, long& nPageRightMargin,
     bMirrored = false;
 }
 
-bool IsMirrored( const long nPageLeftMargin, const long nPageRightMargin,
-               const long nPageTopMargin, const long nPageBottomMargin, bool bMirrored)
+bool IsMirrored( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin,
+               const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin, bool bMirrored)
 {
     return( std::abs(nPageLeftMargin - SWPAGE_WIDE_VALUE3) <= SWPAGE_UNIT_THRESHOLD &&
         std::abs(nPageRightMargin - SWPAGE_WIDE_VALUE1) <= SWPAGE_UNIT_THRESHOLD &&
@@ -178,8 +178,8 @@ bool IsMirrored( const long nPageLeftMargin, const long nPageRightMargin,
         bMirrored );
 }
 
-void SetMirrored( long& nPageLeftMargin, long& nPageRightMargin,
-                long& nPageTopMargin, long& nPageBottomMargin, bool& bMirrored)
+void SetMirrored( tools::Long& nPageLeftMargin, tools::Long& nPageRightMargin,
+                tools::Long& nPageTopMargin, tools::Long& nPageBottomMargin, bool& bMirrored)
 {
     nPageLeftMargin = SWPAGE_WIDE_VALUE3;
     nPageRightMargin = SWPAGE_WIDE_VALUE1;

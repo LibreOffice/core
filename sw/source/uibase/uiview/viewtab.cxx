@@ -66,14 +66,14 @@ using namespace ::com::sun::star;
 
 // Pack columns
 static void lcl_FillSvxColumn(const SwFormatCol& rCol,
-                          long nTotalWidth,
+                          tools::Long nTotalWidth,
                           SvxColumnItem& rColItem,
-                          long nDistance)
+                          tools::Long nDistance)
 {
     const SwColumns& rCols = rCol.GetColumns();
 
     bool bOrtho = rCol.IsOrtho() && !rCols.empty();
-    long nInnerWidth = 0;
+    tools::Long nInnerWidth = 0;
     if( bOrtho )
     {
         nInnerWidth = nTotalWidth;
@@ -87,16 +87,16 @@ static void lcl_FillSvxColumn(const SwFormatCol& rCol,
             nInnerWidth /= rCols.size();
     }
 
-    long nWidth = 0;
+    tools::Long nWidth = 0;
     for ( size_t i = 0; i < rCols.size(); ++i )
     {
         const SwColumn* pCol = &rCols[i];
-        const long nStart = pCol->GetLeft() + nWidth + nDistance;
+        const tools::Long nStart = pCol->GetLeft() + nWidth + nDistance;
         if( bOrtho )
             nWidth += nInnerWidth + pCol->GetLeft() + pCol->GetRight();
         else
             nWidth += rCol.CalcColWidth(i, static_cast< sal_uInt16 >(nTotalWidth));
-        const long nEnd = nWidth - pCol->GetRight() + nDistance;
+        const tools::Long nEnd = nWidth - pCol->GetRight() + nDistance;
 
         SvxColumnDescription aColDesc(nStart, nEnd, true);
         rColItem.Append(aColDesc);
@@ -105,7 +105,7 @@ static void lcl_FillSvxColumn(const SwFormatCol& rCol,
 
 // Transfer ColumnItem in ColumnInfo
 static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
-                          long nTotalWidth,
+                          tools::Long nTotalWidth,
                           SwFormatCol& rCols)
 {
     OSL_ENSURE( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
@@ -123,13 +123,13 @@ static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
     for( sal_uInt16 i=0; i < rColItem.Count()-1; ++i )
     {
         OSL_ENSURE(rColItem[i+1].nStart >= rColItem[i].nEnd,"overlapping columns" );
-        const long nStart = std::max(rColItem[i+1].nStart, rColItem[i].nEnd);
+        const tools::Long nStart = std::max(rColItem[i+1].nStart, rColItem[i].nEnd);
         const sal_uInt16 nRight = static_cast<sal_uInt16>((nStart - rColItem[i].nEnd) / 2);
 
-        const long nWidth = rColItem[i].nEnd - rColItem[i].nStart + nLeft + nRight;
+        const tools::Long nWidth = rColItem[i].nEnd - rColItem[i].nStart + nLeft + nRight;
 
         SwColumn* pCol = &rArr[i];
-        pCol->SetWishWidth( sal_uInt16(long(rCols.GetWishWidth()) * nWidth / nTotalWidth ));
+        pCol->SetWishWidth( sal_uInt16(tools::Long(rCols.GetWishWidth()) * nWidth / nTotalWidth ));
         pCol->SetLeft( nLeft );
         pCol->SetRight( nRight );
         nSumAll += pCol->GetWishWidth();
@@ -170,7 +170,7 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 
     if ( rDesc.GetUseOn() == UseOnPage::Mirror && (nPhyPage % 2) == 0 )
     {
-        long nTmp = rLRSpace.GetRight();
+        tools::Long nTmp = rLRSpace.GetRight();
         rLRSpace.SetRight( rLRSpace.GetLeft() );
         rLRSpace.SetLeft( nTmp );
     }
@@ -178,30 +178,30 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
 
 // If the frame border is moved, the column separator
 // should stay in the same absolute position.
-static void lcl_Scale(long& nVal, long nScale)
+static void lcl_Scale(tools::Long& nVal, tools::Long nScale)
 {
     nVal *= nScale;
     nVal >>= 8;
 }
 
 static void ResizeFrameCols(SwFormatCol& rCol,
-                    long nOldWidth,
-                    long nNewWidth,
-                    long nLeftDelta )
+                    tools::Long nOldWidth,
+                    tools::Long nNewWidth,
+                    tools::Long nLeftDelta )
 {
     SwColumns& rArr = rCol.GetColumns();
-    long nWishSum = static_cast<long>(rCol.GetWishWidth());
-    long nWishDiff = (nWishSum * 100/nOldWidth * nNewWidth) / 100 - nWishSum;
-    long nNewWishWidth = nWishSum + nWishDiff;
+    tools::Long nWishSum = static_cast<tools::Long>(rCol.GetWishWidth());
+    tools::Long nWishDiff = (nWishSum * 100/nOldWidth * nNewWidth) / 100 - nWishSum;
+    tools::Long nNewWishWidth = nWishSum + nWishDiff;
     if(nNewWishWidth > 0xffffl)
     {
         // If the desired width is getting too large, then all values
         // must be scaled appropriately.
-        long nScale = (0xffffl << 8)/ nNewWishWidth;
+        tools::Long nScale = (0xffffl << 8)/ nNewWishWidth;
         for(SwColumn & i : rArr)
         {
             SwColumn* pCol = &i;
-            long nVal = pCol->GetWishWidth();
+            tools::Long nVal = pCol->GetWishWidth();
             lcl_Scale(nVal, nScale);
             pCol->SetWishWidth(static_cast<sal_uInt16>(nVal));
             nVal = pCol->GetLeft();
@@ -249,8 +249,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     const SwFormatFrameSize &rFrameSize = rDesc.GetMaster().GetFrameSize();
 
     const SwRect& rPageRect = rSh.GetAnyCurRect(CurRectType::Page);
-    const long nPageWidth  = bBrowse ? rPageRect.Width() : rFrameSize.GetWidth();
-    const long nPageHeight = bBrowse ? rPageRect.Height() : rFrameSize.GetHeight();
+    const tools::Long nPageWidth  = bBrowse ? rPageRect.Width() : rFrameSize.GetWidth();
+    const tools::Long nPageHeight = bBrowse ? rPageRect.Height() : rFrameSize.GetHeight();
 
     bool bUnlockView = false;
     rSh.StartAllAction();
@@ -277,7 +277,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                                        rSh.IsFrameVertical(true, bRTL, bVertL2R) ) ||
                                      ( !bFrameSelection && bVerticalWriting);
                 }
-                long nDeltaX = bVerticalFrame ?
+                tools::Long nDeltaX = bVerticalFrame ?
                     rRect.Right() - rPageRect.Right() + aLongLR.GetRight() :
                     rPageRect.Left() + aLongLR.GetLeft() - rRect.Left();
 
@@ -301,13 +301,13 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
 
                 SwFormatFrameSize aSize( pFormat->GetFrameSize() );
-                long nOldWidth = aSize.GetWidth();
+                tools::Long nOldWidth = aSize.GetWidth();
 
                 if(aSize.GetWidthPercent())
                 {
                     SwRect aRect;
                     rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
-                    long nPrtWidth = aRect.Width();
+                    tools::Long nPrtWidth = aRect.Width();
                     aSize.SetWidthPercent(sal_uInt8((nPageWidth - aLongLR.GetLeft() - aLongLR.GetRight()) * 100 /nPrtWidth));
                 }
                 else
@@ -339,7 +339,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             else if ( nFrameType & ( FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER ))
             {
                 // Subtract out page margins
-                long nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
+                tools::Long nOld = rDesc.GetMaster().GetLRSpace().GetLeft();
                 aLongLR.SetLeft( nOld > aLongLR.GetLeft() ? 0 : aLongLR.GetLeft() - nOld );
 
                 nOld = rDesc.GetMaster().GetLRSpace().GetRight();
@@ -366,8 +366,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
-                long nLeftDiff = aLongLR.GetLeft() - static_cast<long>(aSectRect.Left() - rPageRect.Left() );
-                long nRightDiff = aLongLR.GetRight() - static_cast<long>( rPageRect.Right() - aSectRect.Right());
+                tools::Long nLeftDiff = aLongLR.GetLeft() - static_cast<tools::Long>(aSectRect.Left() - rPageRect.Left() );
+                tools::Long nRightDiff = aLongLR.GetRight() - static_cast<tools::Long>( rPageRect.Right() - aSectRect.Right());
                 //change the LRSpaceItem of the section accordingly
                 const SwSection* pCurrSect = rSh.GetCurrSection();
                 const SwSectionFormat* pSectFormat = pCurrSect->GetFormat();
@@ -380,7 +380,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if(bSect)
                 {
                     SwFormatCol aCols( pSectFormat->GetCol() );
-                    long nDiffWidth = nLeftDiff + nRightDiff;
+                    tools::Long nDiffWidth = nLeftDiff + nRightDiff;
                     ::ResizeFrameCols(aCols, aSectRect.Width(), aSectRect.Width() - nDiffWidth, nLeftDiff );
                     aSet.Put( aCols );
                 }
@@ -427,8 +427,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 SwFrameFormat* pFormat = rSh.GetFlyFrameFormat();
                 const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded);
-                const long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
-                const long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
+                const tools::Long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
+                const tools::Long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
                 SfxItemSet aSet( GetPool(), svl::Items<RES_FRM_SIZE, RES_FRM_SIZE,
                                             RES_VERT_ORIENT, RES_HORI_ORIENT>{} );
@@ -456,7 +456,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 {
                     SwRect aRect;
                     rSh.CalcBoundRect(aRect, RndStdIds::FLY_AS_CHAR);
-                    long nPrtHeight = aRect.Height();
+                    tools::Long nPrtHeight = aRect.Height();
                     aSize.SetHeightPercent(sal_uInt8(nHeight * 100 /nPrtHeight));
                 }
                 else
@@ -479,8 +479,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
                 const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
-                const long nLeftDiff = aLongULSpace.GetUpper() - static_cast<long>(aSectRect.Top() - rPageRect.Top());
-                const long nRightDiff = aLongULSpace.GetLower() - static_cast<long>(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
+                const tools::Long nLeftDiff = aLongULSpace.GetUpper() - static_cast<tools::Long>(aSectRect.Top() - rPageRect.Top());
+                const tools::Long nRightDiff = aLongULSpace.GetLower() - static_cast<tools::Long>(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
                 //change the LRSpaceItem of the section accordingly
                 const SwSection* pCurrSect = rSh.GetCurrSection();
                 const SwSectionFormat* pSectFormat = pCurrSect->GetFormat();
@@ -493,7 +493,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 if(bSect)
                 {
                     SwFormatCol aCols( pSectFormat->GetCol() );
-                    long nDiffWidth = nLeftDiff + nRightDiff;
+                    tools::Long nDiffWidth = nLeftDiff + nRightDiff;
                     ::ResizeFrameCols(aCols, aSectRect.Height(), aSectRect.Height() - nDiffWidth, nLeftDiff );
                     aSet.Put( aCols );
                 }
@@ -583,9 +583,9 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             const sal_uInt16 nGutterWidth = 0;
 
             const SvxLRSpaceItem aLR( rDesc.GetMaster().GetLRSpace() );
-            const long nLeft = aLR.GetLeft();
-            const long nRight = aLR.GetRight();
-            const long nWidth = nPageWidth - nLeft - nRight;
+            const tools::Long nLeft = aLR.GetLeft();
+            const tools::Long nRight = aLR.GetRight();
+            const tools::Long nWidth = nPageWidth - nLeft - nRight;
 
             SwFormatCol aCols( rDesc.GetMaster().GetCol() );
             aCols.Init( nCount, nGutterWidth, nWidth );
@@ -593,18 +593,18 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             aCols.SetGutterWidth( nGutterWidth, nWidth );
             aCols.SetOrtho( false, nGutterWidth, nWidth );
 
-            long nColumnLeft = 0;
-            long nColumnRight = 0;
+            tools::Long nColumnLeft = 0;
+            tools::Long nColumnRight = 0;
             if ( nPageColumnType == 4 )
             {
-                nColumnRight = static_cast<long>(nWidth/3);
+                nColumnRight = static_cast<tools::Long>(nWidth/3);
                 nColumnLeft = nWidth - nColumnRight;
                 aCols.GetColumns()[0].SetWishWidth( nColumnLeft );
                 aCols.GetColumns()[1].SetWishWidth( nColumnRight );
             }
             else if ( nPageColumnType == 5 )
             {
-                nColumnLeft = static_cast<long>(nWidth/3);
+                nColumnLeft = static_cast<tools::Long>(nWidth/3);
                 nColumnRight = nWidth - nColumnLeft;
                 aCols.GetColumns()[0].SetWishWidth( nColumnLeft );
                 aCols.GetColumns()[1].SetWishWidth( nColumnRight );
@@ -911,7 +911,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     rSh.GetTabCols(aTabCols);
 
                 // left table border
-                long nBorder = static_cast<long>(aColItem.GetLeft() - aTabCols.GetLeftMin());
+                tools::Long nBorder = static_cast<tools::Long>(aColItem.GetLeft() - aTabCols.GetLeftMin());
                 aTabCols.SetLeft( nBorder );
 
                 nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() - aColItem.GetRight();
@@ -981,7 +981,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                             pSectFormat->GetCol() :
                                 aSet.Get( RES_COL, false ));
                     SwRect aCurRect = rSh.GetAnyCurRect(bSect ? CurRectType::SectionPrt : CurRectType::FlyEmbeddedPrt);
-                    const long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
+                    const tools::Long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
                     ::lcl_ConvertToCols( aColItem, lWidth, aCols );
                     aSet.Put( aCols );
                     if(bSect)
@@ -1039,7 +1039,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 }
                 else
                 {
-                    long nBorder = nPageHeight - aTabCols.GetLeftMin() - aColItem.GetRight();
+                    tools::Long nBorder = nPageHeight - aTabCols.GetLeftMin() - aColItem.GetRight();
                     aTabCols.SetRight( nBorder );
                 }
 
@@ -1049,7 +1049,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     for ( size_t i = nColItems; i; --i )
                     {
                         const SvxColumnDescription& rCol = aColItem[i - 1];
-                        long nColumnPos = aTabCols.GetRight() - rCol.nEnd ;
+                        tools::Long nColumnPos = aTabCols.GetRight() - rCol.nEnd ;
                         aTabCols[i - 1] = nColumnPos;
                         aTabCols.SetHidden( i - 1, !rCol.bVisible );
                     }
@@ -1088,7 +1088,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             const SfxPoolItem *pBorderType;
             const SfxPoolItem *pIndex;
             const SfxPoolItem *pOffset;
-            constexpr long constDistanceOffset = 40;
+            constexpr tools::Long constDistanceOffset = 40;
 
             if (pReqArgs->GetItemState(SID_TABLE_BORDER_TYPE, true, &pBorderType) == SfxItemState::SET
             && pReqArgs->GetItemState(SID_TABLE_BORDER_INDEX, true, &pIndex) == SfxItemState::SET
@@ -1106,22 +1106,22 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     if (sType == "column-left")
                     {
                         auto & rEntry = aTabCols.GetEntry(0);
-                        long nNewPosition = aTabCols.GetLeft() + long(nOffset);
-                        long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
+                        tools::Long nNewPosition = aTabCols.GetLeft() + tools::Long(nOffset);
+                        tools::Long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
                         aTabCols.SetLeft(nPosition);
                     }
                     else if (sType == "column-right")
                     {
                         auto & rEntry = aTabCols.GetEntry(aTabCols.Count() - 1);
-                        long nNewPosition = aTabCols.GetRight() + long(nOffset);
-                        long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
+                        tools::Long nNewPosition = aTabCols.GetRight() + tools::Long(nOffset);
+                        tools::Long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
                         aTabCols.SetRight(nPosition);
                     }
                     else if (sType == "column-middle" && nIndex < aTabCols.Count())
                     {
                         auto & rEntry = aTabCols.GetEntry(nIndex);
-                        long nNewPosition = rEntry.nPos + long(nOffset);
-                        long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        tools::Long nNewPosition = rEntry.nPos + tools::Long(nOffset);
+                        tools::Long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
                         rEntry.nPos = nPosition;
                     }
 
@@ -1135,22 +1135,22 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     if (sType == "row-left")
                     {
                         auto & rEntry = aTabRows.GetEntry(0);
-                        long nNewPosition = aTabRows.GetLeft() + long(nOffset);
-                        long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
+                        tools::Long nNewPosition = aTabRows.GetLeft() + tools::Long(nOffset);
+                        tools::Long nPosition = std::min(nNewPosition, rEntry.nPos - constDistanceOffset);
                         aTabRows.SetLeft(nPosition);
                     }
                     else if (sType == "row-right")
                     {
                         auto & rEntry = aTabRows.GetEntry(aTabRows.Count() - 1);
-                        long nNewPosition = aTabRows.GetRight() + long(nOffset);
-                        long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
+                        tools::Long nNewPosition = aTabRows.GetRight() + tools::Long(nOffset);
+                        tools::Long nPosition = std::max(nNewPosition, rEntry.nPos + constDistanceOffset);
                         aTabRows.SetRight(nPosition);
                     }
                     else if (sType == "row-middle" && nIndex < aTabRows.Count())
                     {
                         auto & rEntry = aTabRows.GetEntry(nIndex);
-                        long nNewPosition = rEntry.nPos + long(nOffset);
-                        long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
+                        tools::Long nNewPosition = rEntry.nPos + tools::Long(nOffset);
+                        tools::Long nPosition = std::clamp(nNewPosition, rEntry.nMin, rEntry.nMax - constDistanceOffset);
                         rEntry.nPos = nPosition;
                     }
 
@@ -1358,8 +1358,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     // PageOffset/limiter
     const SwRect& rPageRect = rSh.GetAnyCurRect( CurRectType::Page, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( CurRectType::PagePrt, pPt );
-    const long nPageWidth  = rPageRect.Width();
-    const long nPageHeight = rPageRect.Height();
+    const tools::Long nPageWidth  = rPageRect.Width();
+    const tools::Long nPageHeight = rPageRect.Height();
 
     const SwPageDesc& rDesc = rSh.GetPageDesc(
                 IsTabColFromDoc() || m_bTabRowFromDoc ?
@@ -1503,8 +1503,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             // Page margin top bottom
             SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
-            SvxLongULSpaceItem aLongUL( static_cast<long>(aUL.GetUpper()),
-                                        static_cast<long>(aUL.GetLower()),
+            SvxLongULSpaceItem aLongUL( static_cast<tools::Long>(aUL.GetUpper()),
+                                        static_cast<tools::Long>(aUL.GetLower()),
                                         SID_ATTR_LONG_ULSPACE);
 
             if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
@@ -1541,8 +1541,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         {
             const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
             SvxLongULSpaceItem aLongUL(
-                static_cast<long>(aUL.GetUpper()),
-                static_cast<long>(aUL.GetLower()),
+                static_cast<tools::Long>(aUL.GetUpper()),
+                static_cast<tools::Long>(aUL.GetLower()),
                 SID_ATTR_PAGE_ULSPACE );
 
             rSet.Put( aLongUL );
@@ -1570,7 +1570,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 const SvxTabStopItem& rDefTabs = rSh.GetDefault(RES_PARATR_TABSTOP);
 
                 OSL_ENSURE(m_pHRuler, "why is there no ruler?");
-                const long nDefTabDist = ::GetTabDist(rDefTabs);
+                const tools::Long nDefTabDist = ::GetTabDist(rDefTabs);
                 m_pHRuler->SetDefTabDist( nDefTabDist );
                 m_pVRuler->SetDefTabDist( nDefTabDist );
                 ::lcl_EraseDefTabs(aTabStops);
@@ -1864,8 +1864,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 SvxColumnItem aColItem(nNum, nL, nR);
 
-                long nStart = 0;
-                long nEnd = 0;
+                tools::Long nStart = 0;
+                tools::Long nEnd = 0;
 
                 //columns in right-to-left tables need to be mirrored
                 bool bIsTableRTL =
@@ -1980,9 +1980,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         const SwRect &rSizeRect = rSh.GetAnyCurRect(CurRectType::FlyEmbeddedPrt, pPt);
 
                         bool bUseVertical = bFrameHasVerticalColumns || (!bFrameSelection && bVerticalWriting);
-                        const long lWidth = bUseVertical ? rSizeRect.Height() : rSizeRect.Width();
+                        const tools::Long lWidth = bUseVertical ? rSizeRect.Height() : rSizeRect.Width();
                         const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt);
-                        long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;
+                        tools::Long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;
                         ::lcl_FillSvxColumn(rCol, lWidth, aColItem, nDist2);
 
                         if(bUseVertical)
@@ -2016,7 +2016,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SvxColumnItem aColItem(nNum);
                     const SwRect aPrtRect = rSh.GetAnyCurRect(CurRectType::PagePrt, pPt);
                     const SvxBoxItem& rBox = rMaster.GetFormatAttr(RES_BOX);
-                    long nDist = rBox.GetSmallestDistance();
+                    tools::Long nDist = rBox.GetSmallestDistance();
 
                     lcl_FillSvxColumn(
                         aCol,
@@ -2101,8 +2101,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                 SvxColumnItem aColItem(0, nL, nR);
 
-                long nStart = 0;
-                long nEnd = 0;
+                tools::Long nStart = 0;
+                tools::Long nEnd = 0;
 
                 for ( size_t i = 0; i < aTabCols.Count(); ++i )
                 {
@@ -2355,7 +2355,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     else
                     {
-                        long nLeft = rPagePrtRect.Left();
+                        tools::Long nLeft = rPagePrtRect.Left();
                         aRectangle.SetLeft( nStart + nLeft );
                         aRectangle.SetRight( nPageWidth - nEnd - nLeft );
                     }

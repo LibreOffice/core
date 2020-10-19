@@ -280,7 +280,7 @@ public:
     sal_uLong GetMin() const { return m_nMin; }
     sal_uLong GetMax() const { return m_nMax; }
 
-    inline long GetBrowseWidthMin() const;
+    inline tools::Long GetBrowseWidthMin() const;
 
     bool HasColsOption() const { return m_bColsOption; }
     bool HasColTags() const { return m_bColTags; }
@@ -423,9 +423,9 @@ inline void SwHTMLTableLayout::SetCell( std::unique_ptr<SwHTMLTableLayoutCell> p
     m_aCells[static_cast<size_t>(nRow)*m_nCols+nCol] = std::move(pCell);
 }
 
-inline long SwHTMLTableLayout::GetBrowseWidthMin() const
+inline tools::Long SwHTMLTableLayout::GetBrowseWidthMin() const
 {
-    return static_cast<long>( (!m_nWidthOption || m_bPercentWidthOption) ? m_nMin : m_nRelTabWidth );
+    return static_cast<tools::Long>( (!m_nWidthOption || m_bPercentWidthOption) ? m_nMin : m_nRelTabWidth );
 }
 
 void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight )

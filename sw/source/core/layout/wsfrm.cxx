@@ -736,8 +736,8 @@ Size SwFrame::ChgSize( const Size& aNewSize )
             (aFrm.*fnRect->fnSetWidth)( (aNew.*fnRect->fnGetWidth)() );
         }
 
-        long nNew = (aNew.*fnRect->fnGetHeight)();
-        long nDiff = nNew - (getFrameArea().*fnRect->fnGetHeight)();
+        tools::Long nNew = (aNew.*fnRect->fnGetHeight)();
+        tools::Long nDiff = nNew - (getFrameArea().*fnRect->fnGetHeight)();
 
         if( nDiff )
         {
@@ -1294,7 +1294,7 @@ void SwContentFrame::Cut()
     else
     {
         SwRectFnSet aRectFnSet(this);
-        long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
         if( nFrameHeight )
             pUp->Shrink( nFrameHeight );
     }
@@ -1590,13 +1590,13 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         return 0;
 
     //In BrowseView mode the PageFrame can handle some of the requests.
-    long nBrowseAdd = 0;
+    tools::Long nBrowseAdd = 0;
     if ( bBrowse && GetUpper()->IsPageFrame() ) // only (Page-)BodyFrames
     {
         SwViewShell *pViewShell = getRootFrame()->GetCurrShell();
         SwLayoutFrame *pUp = GetUpper();
-        long nChg;
-        const long nUpPrtBottom = pUp->getFrameArea().Height() -
+        tools::Long nChg;
+        const tools::Long nUpPrtBottom = pUp->getFrameArea().Height() -
                                   pUp->getFramePrintArea().Height() - pUp->getFramePrintArea().Top();
         SwRect aInva( pUp->getFrameArea() );
         if ( pViewShell )
@@ -1616,7 +1616,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 {
                     //First minimize Body, it will grow again later.
                     SwFrame *pBody = static_cast<SwFootnoteBossFrame*>(pUp)->FindBodyCont();
-                    const long nTmp = nChg - pBody->getFramePrintArea().Height();
+                    const tools::Long nTmp = nChg - pBody->getFramePrintArea().Height();
                     if ( !bTst )
                     {
                         {
@@ -1635,7 +1635,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 }
             }
 
-            const long nTmp = nUpPrtBottom + 20;
+            const tools::Long nTmp = nUpPrtBottom + 20;
             aInva.Top( aInva.Bottom() - nTmp );
             aInva.Height( nChg + nTmp );
         }
@@ -1644,7 +1644,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             //The page can shrink to 0. The first page keeps the same size like
             //VisArea.
             nChg = nDiff;
-            long nInvaAdd = 0;
+            tools::Long nInvaAdd = 0;
             if ( pViewShell && !pUp->GetPrev() &&
                  pUp->getFrameArea().Height() + nDiff < pViewShell->VisArea().Height() )
             {
@@ -1654,7 +1654,7 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             }
 
             //Invalidate including bottom border.
-            long nBorder = nUpPrtBottom + 20;
+            tools::Long nBorder = nUpPrtBottom + 20;
             nBorder -= nChg;
             aInva.Top( aInva.Bottom() - (nBorder+nInvaAdd) );
             if ( !IsBodyFrame() )
@@ -1707,8 +1707,8 @@ SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 //its Lower may be called. The values should not be changed
                 //because the caller takes care of the adjustment of Frame and
                 //Prt.
-                const long nOldFrameHeight = getFrameArea().Height();
-                const long nOldPrtHeight = getFramePrintArea().Height();
+                const tools::Long nOldFrameHeight = getFrameArea().Height();
+                const tools::Long nOldPrtHeight = getFramePrintArea().Height();
                 const bool bOldComplete = IsCompletePaint();
 
                 if ( IsBodyFrame() )
@@ -2118,7 +2118,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
     if ( !bTst )
     {
         //Contents are always resized to the wished value.
-        long nOld = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nOld = aRectFnSet.GetHeight(getFrameArea());
 
         {
             SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
@@ -2785,7 +2785,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
     {
         if( !Lower()->IsNeighbourFrame() )
         {   const SwFrame *pFrame = Lower();
-            const long nTmp = aRectFnSet.GetHeight(getFramePrintArea());
+            const tools::Long nTmp = aRectFnSet.GetHeight(getFramePrintArea());
             while( pFrame && nMin < nTmp )
             {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());
                 pFrame = pFrame->GetNext();
@@ -3421,8 +3421,8 @@ void SwLayoutFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBord
             nRemaining += nBorder;
             nRemaining = std::max( nRemaining, nMinHeight );
             const SwTwips nDiff = nRemaining-(getFrameArea().*fnRect->fnGetHeight)();
-            const long nOldLeft = (getFrameArea().*fnRect->fnGetLeft)();
-            const long nOldTop = (getFrameArea().*fnRect->fnGetTop)();
+            const tools::Long nOldLeft = (getFrameArea().*fnRect->fnGetLeft)();
+            const tools::Long nOldTop = (getFrameArea().*fnRect->fnGetTop)();
             if ( nDiff )
             {
                 if ( nDiff > 0 )
@@ -3537,21 +3537,21 @@ void SwLayoutFrame::InvaPercentLowers( SwTwips nDiff )
     } while ( pFrame && IsAnLower( pFrame ) ) ;
 }
 
-long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
+tools::Long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
 {
-    long nRet     = rSz.GetWidth(),
+    tools::Long nRet     = rSz.GetWidth(),
          nPercent = rSz.GetWidthPercent();
 
     if ( nPercent )
     {
         const SwFrame *pRel = GetUpper();
-        long nRel = LONG_MAX;
+        tools::Long nRel = LONG_MAX;
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if( pRel->IsPageBodyFrame() && pSh && bBrowseMode && pSh->VisArea().Width() )
         {
             nRel = pSh->GetBrowseWidth();
-            long nDiff = nRel - pRel->getFramePrintArea().Width();
+            tools::Long nDiff = nRel - pRel->getFramePrintArea().Width();
             if ( nDiff > 0 )
                 nRel -= nDiff;
         }
@@ -3563,9 +3563,9 @@ long SwLayoutFrame::CalcRel( const SwFormatFrameSize &rSz ) const
 
 // Local helpers for SwLayoutFrame::FormatWidthCols()
 
-static long lcl_CalcMinColDiff( SwLayoutFrame *pLayFrame )
+static tools::Long lcl_CalcMinColDiff( SwLayoutFrame *pLayFrame )
 {
-    long nDiff = 0, nFirstDiff = 0;
+    tools::Long nDiff = 0, nFirstDiff = 0;
     SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(pLayFrame->Lower());
     OSL_ENSURE( pCol, "Where's the columnframe?" );
     SwFrame *pFrame = pCol->Lower();
@@ -3575,7 +3575,7 @@ static long lcl_CalcMinColDiff( SwLayoutFrame *pLayFrame )
             pFrame = static_cast<SwBodyFrame*>(pFrame)->Lower();
         if ( pFrame && pFrame->IsTextFrame() )
         {
-            const long nTmp = static_cast<SwTextFrame*>(pFrame)->FirstLineHeight();
+            const tools::Long nTmp = static_cast<SwTextFrame*>(pFrame)->FirstLineHeight();
             if ( nTmp != USHRT_MAX )
             {
                 if ( pCol == pLayFrame->Lower() )
@@ -3672,8 +3672,8 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // is more or less the smallest first line height and doesn't seem ideal
         // as minimum value.
 
-        long nMinimum = nMinHeight;
-        long nMaximum;
+        tools::Long nMinimum = nMinHeight;
+        tools::Long nMaximum;
         bool bNoBalance = false;
         SwRectFnSet aRectFnSet(this);
         if( IsSctFrame() )
@@ -3697,7 +3697,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if( bNoBalance ||
                 ( !aRectFnSet.GetHeight(getFrameArea()) && pAny ) )
             {
-                long nTop = aRectFnSet.GetTopMargin(*this);
+                tools::Long nTop = aRectFnSet.GetTopMargin(*this);
                 // #i23129# - correction
                 // to the calculated maximum height.
                 {
@@ -3834,7 +3834,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if ( nDiff || ::lcl_IsFlyHeightClipped( this ) ||
                      ( IsSctFrame() && static_cast<SwSectionFrame*>(this)->CalcMinDiff( nMinDiff ) ) )
                 {
-                    long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+                    tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                     // The minimum must not be smaller than our PrtHeight as
                     // long as something juts over.
                     if( nMinimum < nPrtHeight )
@@ -3847,7 +3847,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         nDiff = nMinDiff;
                     // If we should grow more than by nMinDiff we split it over
                     // the columns
-                    if ( std::abs(nDiff - nMinDiff) > nNumCols && nDiff > static_cast<long>(nNumCols) )
+                    if ( std::abs(nDiff - nMinDiff) > nNumCols && nDiff > static_cast<tools::Long>(nNumCols) )
                         nDiff /= nNumCols;
 
                     if ( bMinDiff )
@@ -3856,7 +3856,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // minimal FrameHeight and PrtHeight is smaller than
                         // nMindiff we grow in a way that PrtHeight is exactly
                         // nMinDiff afterwards.
-                        long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+                        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
                         if ( nFrameHeight > nMinHeight || nPrtHeight >= nMinDiff )
                             nDiff = std::max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
@@ -3870,7 +3870,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 }
                 else if( nMaximum > nMinimum ) // We fit, do we still have some margin?
                 {
-                    long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+                    tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                     if ( nMaximum < nPrtHeight )
                         nDiff = nMaximum - nPrtHeight; // We grew over a working
                         // height and shrink back to it, but will this ever
@@ -3906,7 +3906,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if( nDiff ) // now we shrink or grow...
                 {
                     Size aOldSz( getFramePrintArea().SSize() );
-                    long nTop = aRectFnSet.GetTopMargin(*this);
+                    tools::Long nTop = aRectFnSet.GetTopMargin(*this);
                     nDiff = aRectFnSet.GetHeight(getFramePrintArea()) + nDiff + nBorder - aRectFnSet.GetHeight(getFrameArea());
 
                     {

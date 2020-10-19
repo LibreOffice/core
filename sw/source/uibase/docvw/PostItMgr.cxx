@@ -618,7 +618,7 @@ bool SwPostItMgr::CalcRects()
 
         if (!bChange && mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
         {
-            long nLayoutHeight = SwPostItHelper::getLayoutHeight( mpWrtShell->GetLayout() );
+            tools::Long nLayoutHeight = SwPostItHelper::getLayoutHeight( mpWrtShell->GetLayout() );
             if( nLayoutHeight > mbLayoutHeight )
             {
                 if (mPages[0]->bScrollbar || HasScrollbars())
@@ -653,13 +653,13 @@ bool SwPostItMgr::HasScrollbars() const
 void SwPostItMgr::PreparePageContainer()
 {
     // we do not just delete the SwPostItPageItem, so offset/scrollbar is not lost
-    long lPageSize = mpWrtShell->GetNumPages();
-    long lContainerSize = mPages.size();
+    tools::Long lPageSize = mpWrtShell->GetNumPages();
+    tools::Long lContainerSize = mPages.size();
 
     if (lContainerSize < lPageSize)
     {
         mPages.reserve(lPageSize);
-        for (long i=0; i<lPageSize - lContainerSize;i++)
+        for (tools::Long i=0; i<lPageSize - lContainerSize;i++)
             mPages.emplace_back( new SwPostItPageItem());
     }
     else if (lContainerSize > lPageSize)
@@ -700,8 +700,8 @@ void SwPostItMgr::LayoutPostIts()
             {
                 std::vector<SwAnnotationWin*> aVisiblePostItList;
                 unsigned long           lNeededHeight = 0;
-                long                    mlPageBorder = 0;
-                long                    mlPageEnd = 0;
+                tools::Long                    mlPageBorder = 0;
+                tools::Long                    mlPageEnd = 0;
 
                 for (auto const& pItem : pPage->mvSidebarItems)
                 {
@@ -730,8 +730,8 @@ void SwPostItMgr::LayoutPostIts()
 
                     if (pItem->mbShow)
                     {
-                        long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
-                        long aPostItHeight = 0;
+                        tools::Long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
+                        tools::Long aPostItHeight = 0;
                         if (!pPostIt)
                         {
                             pPostIt = pItem->GetSidebarWindow( mpView->GetEditWin(),
@@ -796,13 +796,13 @@ void SwPostItMgr::LayoutPostIts()
                     else if (sal_Int32 nScrollSize = GetScrollSize())
                     {
                         //when we changed our zoom level, the offset value can be too big, so lets check for the largest possible zoom value
-                        long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,pPage->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
-                        long lOffset = -1 * nScrollSize * (aVisiblePostItList.size() - aAvailableHeight / nScrollSize);
+                        tools::Long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,pPage->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
+                        tools::Long lOffset = -1 * nScrollSize * (aVisiblePostItList.size() - aAvailableHeight / nScrollSize);
                         if (pPage->lOffset < lOffset)
                             pPage->lOffset = lOffset;
                     }
                     bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
-                    const long aSidebarheight = pPage->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+                    const tools::Long aSidebarheight = pPage->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
                     /*
                                        TODO
                                        - enlarge all notes till GetNextBorder(), as we resized to average value before
@@ -946,8 +946,8 @@ bool SwPostItMgr::BorderOverPageBorder(unsigned long aPage) const
     OSL_ENSURE ((*aItem)->mpPostIt,"BorderOverPageBorder: NULL postIt, should never happen");
     if ((*aItem)->mpPostIt)
     {
-        const long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
-        const long aEndValue = mpEditWin->PixelToLogic(Point(0,(*aItem)->mpPostIt->GetPosPixel().Y()+(*aItem)->mpPostIt->GetSizePixel().Height())).Y();
+        const tools::Long aSidebarheight = mPages[aPage-1]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+        const tools::Long aEndValue = mpEditWin->PixelToLogic(Point(0,(*aItem)->mpPostIt->GetPosPixel().Y()+(*aItem)->mpPostIt->GetSizePixel().Height())).Y();
         return aEndValue <= mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight;
     }
     else
@@ -995,7 +995,7 @@ void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
     }
 }
 
-void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
+void SwPostItMgr::Scroll(const tools::Long lScroll,const unsigned long aPage)
 {
     OSL_ENSURE((lScroll % GetScrollSize() )==0,"SwPostItMgr::Scroll: scrolling by wrong value");
     // do not scroll more than necessary up or down
@@ -1004,7 +1004,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
 
     const bool bOldUp = ArrowEnabled(KEY_PAGEUP,aPage);
     const bool bOldDown = ArrowEnabled(KEY_PAGEDOWN,aPage);
-    const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
+    const tools::Long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
     for (auto const& item : mPages[aPage-1]->mvSidebarItems)
     {
         SwAnnotationWin* pPostIt = item->mpPostIt;
@@ -1053,25 +1053,25 @@ void SwPostItMgr::AutoScroll(const SwAnnotationWin* pPostIt,const unsigned long 
     if (!mPages[aPage-1]->bScrollbar)
         return;
 
-    const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
+    const tools::Long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
     const bool bBottom  = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height())).Y() <= (mPages[aPage-1]->mPageRect.Bottom()-aSidebarheight);
     const bool bTop = mpEditWin->PixelToLogic(Point(0,pPostIt->GetPosPixel().Y())).Y() >= (mPages[aPage-1]->mPageRect.Top()+aSidebarheight);
     if ( !(bBottom && bTop))
     {
-        const long aDiff = bBottom ? mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Top() + aSidebarheight)).Y() - pPostIt->GetPosPixel().Y() :
+        const tools::Long aDiff = bBottom ? mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Top() + aSidebarheight)).Y() - pPostIt->GetPosPixel().Y() :
                                         mpEditWin->LogicToPixel(Point(0,mPages[aPage-1]->mPageRect.Bottom() - aSidebarheight)).Y() - (pPostIt->GetPosPixel().Y()+pPostIt->GetSizePixel().Height());
         // this just adds the missing value to get the next a* GetScrollSize() after aDiff
         // e.g aDiff= 61 POSTIT_SCROLL=50 --> lScroll = 100
         const auto nScrollSize = GetScrollSize();
         assert(nScrollSize);
-        const long lScroll = bBottom ? (aDiff + ( nScrollSize - (aDiff % nScrollSize))) : (aDiff - (nScrollSize + (aDiff % nScrollSize)));
+        const tools::Long lScroll = bBottom ? (aDiff + ( nScrollSize - (aDiff % nScrollSize))) : (aDiff - (nScrollSize + (aDiff % nScrollSize)));
         Scroll(lScroll, aPage);
     }
 }
 
 void SwPostItMgr::MakeVisible(const SwAnnotationWin* pPostIt )
 {
-    long aPage = -1;
+    tools::Long aPage = -1;
     // we don't know the page yet, lets find it ourselves
     std::vector<SwPostItPageItem*>::size_type n=0;
     for (auto const& page : mPages)
@@ -1124,7 +1124,7 @@ Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) cons
     }
 }
 
-bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList, const tools::Rectangle& rBorder, long lNeededHeight)
+bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList, const tools::Rectangle& rBorder, tools::Long lNeededHeight)
 {
     /*** General layout idea:***/
     //  - if we have space left, we always move the current one up,
@@ -1134,18 +1134,18 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
 
     //rBorder is the page rect
     const tools::Rectangle aBorder         = mpEditWin->LogicToPixel(rBorder);
-    long            lTopBorder      = aBorder.Top() + 5;
-    long            lBottomBorder   = aBorder.Bottom() - 5;
-    const long      lVisibleHeight  = lBottomBorder - lTopBorder; //aBorder.GetHeight() ;
+    tools::Long            lTopBorder      = aBorder.Top() + 5;
+    tools::Long            lBottomBorder   = aBorder.Bottom() - 5;
+    const tools::Long      lVisibleHeight  = lBottomBorder - lTopBorder; //aBorder.GetHeight() ;
     const size_t    nPostItListSize = aVisiblePostItList.size();
-    long            lTranslatePos   = 0;
+    tools::Long            lTranslatePos   = 0;
     bool            bScrollbars     = false;
 
     // do all necessary resizings
     if (nPostItListSize > 0 && lVisibleHeight < lNeededHeight)
     {
         // ok, now we have to really resize and adding scrollbars
-        const long lAverageHeight = (lVisibleHeight - nPostItListSize*GetSpaceBetween()) / nPostItListSize;
+        const tools::Long lAverageHeight = (lVisibleHeight - nPostItListSize*GetSpaceBetween()) / nPostItListSize;
         if (lAverageHeight<GetMinimumSizeWithMeta())
         {
             bScrollbars = true;
@@ -1174,7 +1174,7 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
         {
             loop++;
             bDone = true;
-            long lSpaceUsed = lTopBorder + GetSpaceBetween();
+            tools::Long lSpaceUsed = lTopBorder + GetSpaceBetween();
             for(auto i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
             {
                 auto aNextPostIt = i;
@@ -1202,7 +1202,7 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
                             }
                             else
                             {
-                                long lMoveUp = (*i)->VirtualPos().Y() - lTopBorder;
+                                tools::Long lMoveUp = (*i)->VirtualPos().Y() - lTopBorder;
                                 (*i)->TranslateTopPosition(-1* lMoveUp);
                                 if ((*aNextPostIt)->IsFollow())
                                     (*aNextPostIt)->TranslateTopPosition( (lTranslatePos+ANCHORLINE_WIDTH) - lMoveUp);
@@ -1224,7 +1224,7 @@ bool SwPostItMgr::LayoutByPage(std::vector<SwAnnotationWin*> &aVisiblePostItList
                         // the first one could overlap the topborder instead of a second note
                         if (i==aVisiblePostItList.begin())
                         {
-                            long lMoveDown = lTopBorder - (*i)->VirtualPos().Y();
+                            tools::Long lMoveDown = lTopBorder - (*i)->VirtualPos().Y();
                             if (lMoveDown>0)
                             {
                                 bDone = false;
@@ -1824,7 +1824,7 @@ SwAnnotationWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
         return nullptr;
 }
 
-long SwPostItMgr::GetNextBorder()
+tools::Long SwPostItMgr::GetNextBorder()
 {
     for (auto const& pPage : mPages)
     {
@@ -2025,7 +2025,7 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
 
     if (aRectBottom.IsInside(aPoint))
     {
-        if (aPoint.X() < long((aPointBottom.X() + GetSidebarWidth()/3)))
+        if (aPoint.X() < tools::Long((aPointBottom.X() + GetSidebarWidth()/3)))
             Scroll( GetScrollSize(),aPage);
         else
             Scroll( -1*GetScrollSize(), aPage);
@@ -2033,7 +2033,7 @@ bool SwPostItMgr::ScrollbarHit(const unsigned long aPage,const Point &aPoint)
     }
     else if (aRectTop.IsInside(aPoint))
     {
-        if (aPoint.X() < long((aPointTop.X() + GetSidebarWidth()/3*2)))
+        if (aPoint.X() < tools::Long((aPointTop.X() + GetSidebarWidth()/3*2)))
             Scroll(GetScrollSize(), aPage);
         else
             Scroll(-1*GetScrollSize(), aPage);
@@ -2062,17 +2062,17 @@ void SwPostItMgr::CorrectPositions()
 
     // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
     // check, if anchor overlay object exists.
-    const long aAnchorX = pFirstPostIt->Anchor()
-                          ? mpEditWin->LogicToPixel( Point(static_cast<long>(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
+    const tools::Long aAnchorX = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point(static_cast<tools::Long>(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
                           : 0;
-    const long aAnchorY = pFirstPostIt->Anchor()
-                          ? mpEditWin->LogicToPixel( Point(0,static_cast<long>(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
+    const tools::Long aAnchorY = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point(0,static_cast<tools::Long>(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
                           : 0;
     if (Point(aAnchorX,aAnchorY) == pFirstPostIt->GetPosPixel())
         return;
 
-    long aAnchorPosX = 0;
-    long aAnchorPosY = 0;
+    tools::Long aAnchorPosX = 0;
+    tools::Long aAnchorPosY = 0;
     for (const std::unique_ptr<SwPostItPageItem>& pPage : mPages)
     {
         for (auto const& item : pPage->mvSidebarItems)
@@ -2081,9 +2081,9 @@ void SwPostItMgr::CorrectPositions()
             if ( item->mbShow && item->mpPostIt && item->mpPostIt->Anchor() )
             {
                 aAnchorPosX = pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
-                    ? mpEditWin->LogicToPixel( Point(static_cast<long>(item->mpPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
-                    : mpEditWin->LogicToPixel( Point(static_cast<long>(item->mpPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-                aAnchorPosY = mpEditWin->LogicToPixel( Point(0,static_cast<long>(item->mpPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+                    ? mpEditWin->LogicToPixel( Point(static_cast<tools::Long>(item->mpPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
+                    : mpEditWin->LogicToPixel( Point(static_cast<tools::Long>(item->mpPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
+                aAnchorPosY = mpEditWin->LogicToPixel( Point(0,static_cast<tools::Long>(item->mpPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
                 item->mpPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
             }
         }
@@ -2120,7 +2120,7 @@ unsigned long SwPostItMgr::GetSidebarWidth(bool bPx) const
         if (bEnableMapMode)
             // The output device is the window.
             mpWrtShell->GetOut()->EnableMapMode();
-        long nRet = mpWrtShell->GetOut()->PixelToLogic(Size(aWidth, 0)).Width();
+        tools::Long nRet = mpWrtShell->GetOut()->PixelToLogic(Size(aWidth, 0)).Width();
         if (bEnableMapMode)
             mpWrtShell->GetOut()->EnableMapMode(false);
         return nRet;

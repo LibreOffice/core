@@ -63,8 +63,8 @@
 // MapMode. This is done so that on ShowCursor the same size does not have to be
 // expensively determined again and again.
 
-long SwSelPaintRects::s_nPixPtX = 0;
-long SwSelPaintRects::s_nPixPtY = 0;
+tools::Long SwSelPaintRects::s_nPixPtX = 0;
+tools::Long SwSelPaintRects::s_nPixPtY = 0;
 MapMode* SwSelPaintRects::s_pMapMode = nullptr;
 
 // Starting from here: classes / methods for the non-text-cursor
@@ -129,7 +129,7 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
 void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
 {
     SwRect aRect;
-    long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
+    tools::Long nTmpY = m_pCursorShell->m_aCursorHeight.getY();
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
@@ -175,7 +175,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     const OutputDevice *pOut = m_pCursorShell->GetOut();
                     if ( pOut )
                     {
-                        long nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
+                        tools::Long nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
                         Size aSize( nSize, nSize );
                         aSize = pOut->PixelToLogic( aSize );
                         aRect.Left( aRect.Left() - aSize.Width() );
@@ -589,7 +589,7 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
 void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
-                                        long* pX, long* pY )
+                                        tools::Long* pX, tools::Long* pY )
 {
     const OutputDevice* pOut = rSh.GetWin();
     if ( ! pOut )

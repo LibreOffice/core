@@ -1074,7 +1074,7 @@ void RtfExport::resetStream() { m_pStream.reset(); }
 
 SvStream& RtfExport::OutULong(sal_uLong nVal) { return Writer::OutULong(Strm(), nVal); }
 
-SvStream& RtfExport::OutLong(long nVal) { return Writer::OutLong(Strm(), nVal); }
+SvStream& RtfExport::OutLong(tools::Long nVal) { return Writer::OutLong(Strm(), nVal); }
 
 void RtfExport::OutUnicode(const char* pToken, const OUString& rContent, bool bUpr)
 {

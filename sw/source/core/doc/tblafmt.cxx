@@ -1080,7 +1080,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
                 sal_uInt8 nChrSet, nCnt;
-                long nPos = rStream.Tell();
+                tools::Long nPos = rStream.Tell();
                 rStream.ReadUChar( nCnt ).ReadUChar( nChrSet );
                 if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {

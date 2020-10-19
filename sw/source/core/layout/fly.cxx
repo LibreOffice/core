@@ -409,7 +409,7 @@ void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
         // To get a text flow we need to invalidate
         SwFrame *pInva = pMaster->FindLastLower();
         SwRectFnSet aRectFnSet(pMaster);
-        const long nBottom = aRectFnSet.GetPrtBottom(*pMaster);
+        const tools::Long nBottom = aRectFnSet.GetPrtBottom(*pMaster);
         while ( pInva )
         {
             if( aRectFnSet.BottomDist( pInva->getFrameArea(), nBottom ) <= 0 )
@@ -777,7 +777,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 SwRect aNew( GetObjRectWithSpaces() );
                 SwRect aOld( getFrameArea() );
                 const SvxULSpaceItem &rUL = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetULSpace();
-                aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
+                aOld.Top( std::max( aOld.Top() - tools::Long(rUL.GetUpper()), 0L ) );
                 aOld.AddHeight(rUL.GetLower() );
                 const SvxLRSpaceItem &rLR = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetLRSpace();
                 aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
@@ -879,7 +879,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( RES_UL_SPACE == nWhich )
                 {
                     const SvxULSpaceItem &rUL = *static_cast<const SvxULSpaceItem*>(pNew);
-                    aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
+                    aOld.Top( std::max( aOld.Top() - tools::Long(rUL.GetUpper()), 0L ) );
                     aOld.AddHeight(rUL.GetLower() );
                 }
                 else
@@ -1216,7 +1216,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         SwRectFnSet aRectFnSet(this);
         if( !HasFixSize() )
         {
-            long nMinHeight = 0;
+            tools::Long nMinHeight = 0;
             if( IsMinHeight() )
                 nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
 
@@ -1713,7 +1713,7 @@ void SwFlyFrame::MakeContentPos( const SwBorderAttrs &rAttrs )
     Size aRelSize( CalcRel( GetFormat()->GetFrameSize() ) );
 
     SwRectFnSet aRectFnSet(this);
-    long nMinHeight = 0;
+    tools::Long nMinHeight = 0;
     if( IsMinHeight() )
         nMinHeight = aRectFnSet.IsVert() ? aRelSize.Width() : aRelSize.Height();
 
@@ -1836,9 +1836,9 @@ bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
     if (pBody == nullptr)
         return false;
 
-    long nBodyHeight = pBody->getFrameArea().Height();
-    long nTableHeight = pTable->getFrameArea().Height();
-    long nFrameOffset = std::abs(GetAnchorFrame()->getFrameArea().Top() - pBody->getFrameArea().Top());
+    tools::Long nBodyHeight = pBody->getFrameArea().Height();
+    tools::Long nTableHeight = pTable->getFrameArea().Height();
+    tools::Long nFrameOffset = std::abs(GetAnchorFrame()->getFrameArea().Top() - pBody->getFrameArea().Top());
 
     return nBodyHeight < nTableHeight + nFrameOffset;
 }
@@ -2441,7 +2441,7 @@ Size SwFlyFrame::CalcRel( const SwFormatFrameSize &rSz ) const
     const SwFrame *pRel = IsFlyLayFrame() ? GetAnchorFrame() : GetAnchorFrame()->GetUpper();
     if( pRel ) // LAYER_IMPL
     {
-        long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
+        tools::Long nRelWidth = LONG_MAX, nRelHeight = LONG_MAX;
         const SwViewShell *pSh = getRootFrame()->GetCurrShell();
         if ( ( pRel->IsBodyFrame() || pRel->IsPageFrame() ) &&
              pSh && pSh->GetViewOptions()->getBrowseMode() &&

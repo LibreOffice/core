@@ -228,7 +228,7 @@ public:
     SwFormat*      m_pFormat;
     std::shared_ptr<WW8FlyPara> m_xWWFly;
     SwNumRule*  m_pOutlineNumrule;
-    long        m_nFilePos;
+    tools::Long        m_nFilePos;
     sal_uInt16      m_nBase;
     sal_uInt16      m_nFollow;
     sal_uInt16      m_nLFOIndex;
@@ -389,7 +389,7 @@ public:
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, long nHand=LONG_MAX, bool consumedByField=false) override;
+    virtual SwFltStackEntry* SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId, bool bTstEnd=true, tools::Long nHand=LONG_MAX, bool consumedByField=false) override;
 
     void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
@@ -889,7 +889,7 @@ public:
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
     sal_uInt16 CurrentSectionColCount() const;
     bool WillHavePageDescHere(const SwNodeIndex& rIdx) const;
-    void CreateSep(const long nTextPos);
+    void CreateSep(const tools::Long nTextPos);
     void InsertSegments();
     void JoinNode(const SwPosition &rPos, const SwNode &rNode);
     sal_uInt32 GetPageLeft() const;
@@ -1420,9 +1420,9 @@ private:
     void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const OUString& rAddString);
     bool HandlePageBreakChar();
-    bool ReadChar(long nPosCp, long nCpOfs);
+    bool ReadChar(tools::Long nPosCp, tools::Long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCpOfs);
-    bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
+    bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, tools::Long nTextEnd, tools::Long nCpOfs);
     static bool LangUsesHindiNumbers(LanguageType nLang);
     static sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
@@ -1430,8 +1430,8 @@ private:
 
     void ProcessCurrentCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
         bool bCallProcessSpecial);
-    long ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine, int nDepthGuard = 0);
-    void ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine);
+    tools::Long ReadTextAttr(WW8_CP& rTextPos, tools::Long nTextEnd, bool& rbStartLine, int nDepthGuard = 0);
+    void ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, tools::Long nTextEnd, bool& rbStartLine);
     void CloseAttrEnds();
     bool ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType);
 
@@ -1593,28 +1593,28 @@ private:
 
     bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, sal_uInt16 nTxBxS,
         sal_uInt16 nSequence);
-    sal_Int32 GetRangeAsDrawingString(OUString& rString, long StartCp, long nEndCp, ManTypes eType);
+    sal_Int32 GetRangeAsDrawingString(OUString& rString, tools::Long StartCp, tools::Long nEndCp, ManTypes eType);
     std::unique_ptr<OutlinerParaObject> ImportAsOutliner(OUString &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
     void InsertTxbxText(SdrTextObj* pTextObj, Size const * pObjSiz,
-        sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrameFormat const * pFlyFormat,
+        sal_uInt16 nTxBxS, sal_uInt16 nSequence, tools::Long nPosCp, SwFrameFormat const * pFlyFormat,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
-        bool* pbTestTxbxContainsText = nullptr, long* pnStartCp = nullptr,
-        long* pnEndCp = nullptr, bool* pbContainsGraphics = nullptr,
+        bool* pbTestTxbxContainsText = nullptr, tools::Long* pnStartCp = nullptr,
+        tools::Long* pnEndCp = nullptr, bool* pbContainsGraphics = nullptr,
         SvxMSDffImportRec const * pRecord = nullptr);
     bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
-                                    long&  rStartCp,
-                                    long&  rEndCp );
+                                    tools::Long&  rStartCp,
+                                    tools::Long&  rEndCp );
     SdrObject *ReadTextBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadCaptionBox(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadGroup(WW8_DPHEAD const * pHd, SfxAllItemSet &rSet);
     SdrObject *ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet);
-    void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
+    void ReadGrafLayer1( WW8PLCFspecial* pPF, tools::Long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrameFormat* pFlyFormat);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet);
     bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
         sal_Int16 eHoriOri, sal_Int16 eHoriRel);
-    SwFrameFormat* Read_GrafLayer( long nGrafAnchorCp );
+    SwFrameFormat* Read_GrafLayer( tools::Long nGrafAnchorCp );
     SwFlyFrameFormat* ImportReplaceableDrawables( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
         SfxItemSet &rFlySet );
@@ -1622,7 +1622,7 @@ private:
         SdrObject* &rpOurNewObject, SvxMSDffImportRec const * pRecord,
         RndStdIds eAnchor, WW8_FSPA const *pF, SfxItemSet &rFlySet );
     SwFrameFormat* MungeTextIntoDrawBox(SvxMSDffImportRec *pRecord,
-        long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
+        tools::Long nGrafAnchorCp, SwFrameFormat *pRetFrameFormat);
 
     void GrafikCtor();
     void GrafikDtor();
@@ -1634,7 +1634,7 @@ private:
     OUString ConvertFFileName(const OUString& rRaw);
     WW8_CP Read_F_Tag(WW8FieldDesc* pF);
     void InsertTagField( const sal_uInt16 nId, const OUString& rTagText );
-    long ImportExtSprm(WW8PLCFManResult* pRes);
+    tools::Long ImportExtSprm(WW8PLCFManResult* pRes);
     void EndExtSprm(sal_uInt16 nSprmId);
     void ReadDocInfo();
 
@@ -1708,14 +1708,14 @@ public:     // really private, but can only be done public
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
     void ClearParaEndPosition();
 
-    long Read_Footnote(WW8PLCFManResult* pRes);
+    tools::Long Read_Footnote(WW8PLCFManResult* pRes);
     sal_uInt16 End_Footnote();
-    long Read_Field(WW8PLCFManResult* pRes);
+    tools::Long Read_Field(WW8PLCFManResult* pRes);
     sal_uInt16 End_Field();
-    long Read_Book(WW8PLCFManResult*);
-    long Read_And(WW8PLCFManResult* pRes);
-    long Read_AtnBook(WW8PLCFManResult*);
-    long Read_FactoidBook(WW8PLCFManResult*);
+    tools::Long Read_Book(WW8PLCFManResult*);
+    tools::Long Read_And(WW8PLCFManResult* pRes);
+    tools::Long Read_AtnBook(WW8PLCFManResult*);
+    tools::Long Read_FactoidBook(WW8PLCFManResult*);
 
     // attributes
 
@@ -1832,7 +1832,7 @@ public:     // really private, but can only be done public
 
     void Read_TextVerticalAdjustment(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
-    long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
+    tools::Long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
         const OUString &rData);
     OUString GetMappedBookmark(const OUString &rOrigName);
 
@@ -1899,8 +1899,8 @@ public:     // really private, but can only be done public
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
-    static bool ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF, long& rX,
-                             long& rY);
+    static bool ImportOleWMF(const tools::SvRef<SotStorage>& xSrc1, GDIMetaFile& rWMF, tools::Long& rX,
+                             tools::Long& rY);
     static Color GetCol(sal_uInt8 nIco);
 
     SwWW8ImplReader( sal_uInt8 nVersionPara, SotStorage* pStorage, SvStream* pSt,
@@ -1928,7 +1928,7 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
                          const SwNumFormat &rFormat,
                          const bool bFirstLineOfStSet,
                          const bool bLeftIndentSet );
-long GetListFirstLineIndent(const SwNumFormat &rFormat);
+tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat);
 OUString BookmarkToWriter(const OUString &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,

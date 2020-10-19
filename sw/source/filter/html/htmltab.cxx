@@ -936,10 +936,10 @@ void HTMLTable::InitCtor(const HTMLTableOptions& rOptions)
 
     const Color& rBorderColor = rOptions.aBorderColor;
 
-    long nBorderOpt = static_cast<long>(rOptions.nBorder);
-    long nPWidth = nBorderOpt==USHRT_MAX ? NETSCAPE_DFLT_BORDER
+    tools::Long nBorderOpt = static_cast<tools::Long>(rOptions.nBorder);
+    tools::Long nPWidth = nBorderOpt==USHRT_MAX ? NETSCAPE_DFLT_BORDER
                                          : nBorderOpt;
-    long nPHeight = nBorderOpt==USHRT_MAX ? 0 : nBorderOpt;
+    tools::Long nPHeight = nBorderOpt==USHRT_MAX ? 0 : nBorderOpt;
     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
 
     // nBorder tells the width of the border as it's used in the width calculation of NetScape
@@ -1341,7 +1341,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             bool bSet = (m_nCellPadding > 0);
 
             SvxBoxItem aBoxItem( RES_BOX );
-            long nInnerFrameWidth = nFrameWidth;
+            tools::Long nInnerFrameWidth = nFrameWidth;
 
             if( bTopLine )
             {
@@ -1604,7 +1604,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                     // The HTML tables represent a box. So we need to split behind that box
                     nSplitCol = nCol + 1;
 
-                    long nBoxRowSpan = rCell2.GetRowSpan();
+                    tools::Long nBoxRowSpan = rCell2.GetRowSpan();
                     if (!rCell2.GetContents() || rCell2.IsCovered())
                     {
                         if (rCell2.IsCovered())
@@ -2462,7 +2462,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         sal_uInt16 nWidth2, nDummy;
         m_xLayoutInfo->GetAvail( nCol, nColSpan, nWidth2, nDummy );
-        nWidth2 = static_cast< sal_uInt16 >((static_cast<long>(m_nWidth) * nPercentWidth) / 100);
+        nWidth2 = static_cast< sal_uInt16 >((static_cast<tools::Long>(m_nWidth) * nPercentWidth) / 100);
 
         SwHTMLParser::ResizeDrawObject( pObj, nWidth2 );
     }

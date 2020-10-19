@@ -1141,8 +1141,8 @@ public:
 
     /** Move selected paragraphs (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    bool MoveParagraph(SwPaM&, long nOffset, bool bIsOutlMv = false);
-    bool MoveParagraphImpl(SwPaM&, long nOffset, bool bIsOutlMv, SwRootFrame const*);
+    bool MoveParagraph(SwPaM&, tools::Long nOffset, bool bIsOutlMv = false);
+    bool MoveParagraphImpl(SwPaM&, tools::Long nOffset, bool bIsOutlMv, SwRootFrame const*);
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
@@ -1434,10 +1434,10 @@ public:
     bool GenerateHTMLDoc( const OUString& rPath, int nOutlineLevel );
 
     //  Compare two documents.
-    long CompareDoc( const SwDoc& rDoc );
+    tools::Long CompareDoc( const SwDoc& rDoc );
 
     // Merge two documents.
-    long MergeDoc( const SwDoc& rDoc );
+    tools::Long MergeDoc( const SwDoc& rDoc );
 
     bool IsAutoFormatRedline() const           { return mbIsAutoFormatRedline; }
     void SetAutoFormatRedline( bool bFlag )    { mbIsAutoFormatRedline = bFlag; }

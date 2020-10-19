@@ -34,13 +34,13 @@ public:
     sal_uLong m_nNode;
     sal_Int32 m_nContent;
     SwNodeType m_nNodeType;
-    long m_nLeftFramePos;
+    tools::Long m_nLeftFramePos;
     bool m_bHasSelection;
 
     explicit SwCallLink( SwCursorShell & rSh );
     ~SwCallLink() COVERITY_NOEXCEPT_FALSE;
 
-    static long getLayoutFrame( const SwRootFrame*, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame );
+    static tools::Long getLayoutFrame( const SwRootFrame*, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX

@@ -623,7 +623,7 @@ public:
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;
-    bool GetPageNumber( long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
+    bool GetPageNumber( tools::Long nYPos, bool bAtCursorPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, OUString &rDisplay ) const;
 
     SwFlyFrameFormat* InsertObject( const svt::EmbeddedObjectRef&,
                 SfxItemSet* pFlyAttrSet );
@@ -770,7 +770,7 @@ public:
     bool IsLastCellInRow() const;
 
     /// Width of current range for column-dialog.
-    long GetSectionWidth( SwFormat const & rFormat ) const;
+    tools::Long GetSectionWidth( SwFormat const & rFormat ) const;
 
     void GetConnectableFrameFormats
     (SwFrameFormat & rFormat, const OUString & rReference, bool bSuccessors,

@@ -56,7 +56,7 @@ public:
     sw::LineAlign GetAlign() const { return m_eAlign; }
     void SetAlign(sw::LineAlign eAlign) { m_eAlign = eAlign; }
     void SetMax(bool bMax) { m_bMax = bMax; }
-    void SetBase(const SwTextFrame& rFrame, const Point& rBase, long nLnAscent, long nLnDescent, long nFlyAscent, long nFlyDescent, AsCharFlags nFlags);
+    void SetBase(const SwTextFrame& rFrame, const Point& rBase, tools::Long nLnAscent, tools::Long nLnDescent, tools::Long nFlyAscent, tools::Long nFlyDescent, AsCharFlags nFlags);
     virtual bool Format(SwTextFormatInfo& rInf) override;
 };
 
@@ -68,7 +68,7 @@ namespace sw
             virtual SdrObject* GetSdrObj(const SwTextFrame&) override;
         public:
             FlyContentPortion(SwFlyInContentFrame* pFly);
-            static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, long nAscent, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
+            static FlyContentPortion* Create(const SwTextFrame& rFrame, SwFlyInContentFrame* pFly, const Point& rBase, tools::Long nAscent, tools::Long nDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags);
             SwFlyInContentFrame* GetFlyFrame() { return m_pFly; }
             void GetFlyCursorOfst(Point& rPoint, SwPosition& rPos, SwCursorMoveState* pCMS) const { m_pFly->GetModelPositionForViewPoint(&rPos, rPoint, pCMS); };
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
@@ -80,7 +80,7 @@ namespace sw
             virtual SdrObject* GetSdrObj(const SwTextFrame&) override;
         public:
             DrawFlyCntPortion(SwFrameFormat const & rFormat);
-            static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, long nAsc, long nDescent, long nFlyAsc, long nFlyDesc, AsCharFlags nFlags);
+            static DrawFlyCntPortion* Create(const SwTextFrame& rFrame, SwFrameFormat const & rFormat, const Point& rBase, tools::Long nAsc, tools::Long nDescent, tools::Long nFlyAsc, tools::Long nFlyDesc, AsCharFlags nFlags);
             virtual void Paint(const SwTextPaintInfo& rInf) const override;
             virtual ~DrawFlyCntPortion() override;
     };

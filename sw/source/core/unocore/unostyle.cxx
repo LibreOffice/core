@@ -1227,7 +1227,7 @@ sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
 
 uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
 {
-    long nCount = 1;
+    tools::Long nCount = 1;
     if(SfxStyleFamily::Para == m_rEntry.m_eFamily)
     {
         nCount = 5;

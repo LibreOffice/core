@@ -263,7 +263,7 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
                 if( aPropInfo.m_bLeftMargin )
                 {
                     // Default indent has already been added
-                    long nAbsLSpace =
+                    tools::Long nAbsLSpace =
                         aNumFormat.GetAbsLSpace() - HTML_NUMBER_BULLET_MARGINLEFT;
                     if( aPropInfo.m_nLeftMargin < 0 &&
                         nAbsLSpace < -aPropInfo.m_nLeftMargin )

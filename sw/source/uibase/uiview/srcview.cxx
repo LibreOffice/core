@@ -123,19 +123,19 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
     aFont.SetAlignment( ALIGN_BOTTOM );
     rOutDev.SetFont( aFont );
 
-    long nFontHeight = rOutDev.GetTextHeight();
+    tools::Long nFontHeight = rOutDev.GetTextHeight();
 
     // 1.Border => Line, 2+3 Border = Space.
-    long nYTop = TMARGPRN-3*nBorder-nFontHeight;
+    tools::Long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
-    long nXLeft = nLeftMargin-nBorder;
-    long nXRight = aSz.Width()-RMARGPRN+nBorder;
+    tools::Long nXLeft = nLeftMargin-nBorder;
+    tools::Long nXRight = aSz.Width()-RMARGPRN+nBorder;
 
     rOutDev.DrawRect( tools::Rectangle(
         Point( nXLeft, nYTop ),
         Size( nXRight-nXLeft, aSz.Height() - nYTop - BMARGPRN + nBorder ) ) );
 
-    long nY = TMARGPRN-2*nBorder;
+    tools::Long nY = TMARGPRN-2*nBorder;
     Point aPos( nLeftMargin, nY );
     rOutDev.DrawText( aPos, rTitle );
     if ( nPages != 1 )
@@ -684,16 +684,16 @@ sal_Int32 SwSrcView::PrintSource(
 
     OUString aTitle( GetViewFrame()->GetWindow().GetText() );
 
-    const long nLineHeight = pOutDev->GetTextHeight(); // slightly more
-    const long nParaSpace = 10;
+    const tools::Long nLineHeight = pOutDev->GetTextHeight(); // slightly more
+    const tools::Long nParaSpace = 10;
 
     Size aPaperSz = pOutDev->GetOutputSize();
     aPaperSz.AdjustWidth( -(LMARGPRN + RMARGPRN) );
     aPaperSz.AdjustHeight( -(TMARGPRN + BMARGPRN) );
 
     // nLinepPage is not true, if lines have to be wrapped...
-    const long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
-    const long nCharWidth = pOutDev->GetTextWidth("X");
+    const tools::Long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
+    const tools::Long nCharWidth = pOutDev->GetTextWidth("X");
     const sal_Int32 nCharspLine = nCharWidth ? static_cast<sal_Int32>(aPaperSz.Width() / nCharWidth) : 1;
     const sal_uInt32 nParas = pTextEngine->GetParagraphCount();
 

@@ -390,7 +390,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
     EndAllAction();
 }
 
-bool SwEditShell::MoveParagraph( long nOffset )
+bool SwEditShell::MoveParagraph( tools::Long nOffset )
 {
     StartAllAction();
 
@@ -444,7 +444,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
         if( bUpperLower )
         {
             // on top of the next numbering
-            long nOffset = 0;
+            tools::Long nOffset = 0;
             const SwNode* pNd;
 
             if( bUpperLeft ) // move up

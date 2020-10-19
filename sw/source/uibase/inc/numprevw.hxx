@@ -29,7 +29,7 @@ class NumberingPreview : public weld::CustomWidgetController
 {
     const SwNumRule*    pActNum;
     vcl::Font           aStdFont;
-    long                nPageWidth;
+    tools::Long                nPageWidth;
     const OUString*     pOutlineNames;
     bool                bPosition;
     sal_uInt16          nActLevel;
@@ -53,7 +53,7 @@ public:
         Invalidate();
     }
 
-    void    SetPageWidth(long nPgWidth)
+    void    SetPageWidth(tools::Long nPgWidth)
                             {nPageWidth = nPgWidth;}
     void    SetOutlineNames(const OUString* pNames)
                     {pOutlineNames = pNames;}

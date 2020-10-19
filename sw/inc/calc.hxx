@@ -26,6 +26,7 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/solar.h>
+#include <tools/long.hxx>
 #include "swdllapi.h"
 
 class CharClass;
@@ -112,7 +113,7 @@ class SwSbxValue final : public SbxValue
     bool m_bDBvalue;
 public:
     // always default to a number. otherwise it will become a SbxEMPTY
-    SwSbxValue( long n = 0 ) : m_bVoid(false), m_bDBvalue(false)  { PutLong( n ); }
+    SwSbxValue( tools::Long n = 0 ) : m_bVoid(false), m_bDBvalue(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : m_bVoid(false), m_bDBvalue(false) { PutDouble( rD ); }
 
     bool GetBool() const;
