@@ -23,6 +23,7 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/long.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
@@ -95,17 +96,17 @@ sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_U
     return nPos;
 }
 
-static long GetPrecExp( double fAbsVal )
+static tools::Long GetPrecExp( double fAbsVal )
 {
     DBG_ASSERT( fAbsVal > 0.0, "GetPrecExp: fAbsVal <= 0.0" );
     if ( fAbsVal < 1e-7 || fAbsVal > 1e7 )
     {
         // Shear: whether it's faster or not, falls in between 1e6 and 1e7
-        return static_cast<long>(floor( log10( fAbsVal ) )) + 1;
+        return static_cast<tools::Long>(floor( log10( fAbsVal ) )) + 1;
     }
     else
     {
-        long nPrecExp = 1;
+        tools::Long nPrecExp = 1;
         while( fAbsVal < 1 )
         {
             fAbsVal *= 10;
@@ -4273,7 +4274,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     {
         // Special formatting only if no GENERAL keyword in format code
         const sal_uInt16 nThousand = rInfo.nThousand;
-        long nPrecExp;
+        tools::Long nPrecExp;
         for (i = 0; i < nThousand; i++)
         {
            if (fNumber > D_MIN_M_BY_1000)
@@ -4298,7 +4299,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
             {
                 sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 15-nPrecExp, '.');
-                for (long l = 15-nPrecExp; l < static_cast<long>(rInfo.nCntPost); l++)
+                for (tools::Long l = 15-nPrecExp; l < static_cast<tools::Long>(rInfo.nCntPost); l++)
                 {
                     sStr.append('0');
                 }
