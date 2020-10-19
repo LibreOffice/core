@@ -227,7 +227,8 @@ bool IsCompleteSignature(SvStream& rStream, vcl::filter::PDFDocument& rDocument,
 
 #if HAVE_FEATURE_PDFIUM
 /// Collects the checksum of each page of one version of the PDF.
-void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum>& rPageChecksums)
+void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum>& rPageChecksums,
+                             int nMDPPerm)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     vcl::pdf::PDFiumDocument aPdfDocument(
@@ -242,7 +243,7 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
             return;
         }
 
-        BitmapChecksum nPageChecksum = pPdfPage->getChecksum();
+        BitmapChecksum nPageChecksum = pPdfPage->getChecksum(nMDPPerm);
         rPageChecksums.push_back(nPageChecksum);
     }
 }
@@ -250,9 +251,9 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
 
 /**
  * Checks if incremental updates after singing performed valid modifications only.
- * Annotations/commenting is OK, other changes are not.
+ * nMDPPerm decides if annotations/commenting is OK, other changes are always not.
  */
-bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature)
+bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature, int nMDPPerm)
 {
     size_t nSignatureEOF = 0;
     if (!GetEOFOfSignature(pSignature, nSignatureEOF))
@@ -268,7 +269,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     rStream.Seek(nPos);
     aSignatureStream.Seek(0);
     std::vector<BitmapChecksum> aSignedPages;
-    AnalyizeSignatureStream(aSignatureStream, aSignedPages);
+    AnalyizeSignatureStream(aSignatureStream, aSignedPages, nMDPPerm);
 
     SvMemoryStream aFullStream;
     nPos = rStream.Tell();
@@ -277,7 +278,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     rStream.Seek(nPos);
     aFullStream.Seek(0);
     std::vector<BitmapChecksum> aAllPages;
-    AnalyizeSignatureStream(aFullStream, aAllPages);
+    AnalyizeSignatureStream(aFullStream, aAllPages, nMDPPerm);
 
     // Fail if any page looks different after signing and at the end. Annotations/commenting doesn't
     // count, though.
@@ -294,7 +295,8 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
  * @return If we can determinate a result.
  */
 bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignature,
-                       SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument)
+                       SignatureInformation& rInformation, vcl::filter::PDFDocument& rDocument,
+                       int nMDPPerm)
 {
     vcl::filter::PDFObjectElement* pValue = pSignature->LookupObject("V");
     if (!pValue)
@@ -401,7 +403,7 @@ bool ValidateSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignat
         return false;
     }
     rInformation.bPartialDocumentSignature = !IsCompleteSignature(rStream, rDocument, pSignature);
-    if (!IsValidSignature(rStream, pSignature))
+    if (!IsValidSignature(rStream, pSignature, nMDPPerm))
     {
         SAL_WARN("xmlsecurity.helper", "ValidateSignature: invalid incremental update detected");
         return false;
@@ -451,11 +453,13 @@ bool PDFSignatureHelper::ReadAndVerifySignatureSvStream(SvStream& rStream)
 
     m_aSignatureInfos.clear();
 
+    int nMDPPerm = aDocument.GetMDPPerm();
+
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
         SignatureInformation aInfo(i);
 
-        if (!ValidateSignature(rStream, aSignatures[i], aInfo, aDocument))
+        if (!ValidateSignature(rStream, aSignatures[i], aInfo, aDocument, nMDPPerm))
             SAL_WARN("xmlsecurity.helper", "failed to determine digest match");
 
         m_aSignatureInfos.push_back(aInfo);
