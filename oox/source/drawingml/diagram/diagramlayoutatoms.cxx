@@ -1376,6 +1376,12 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                 aChildrenToShrink.insert(rRule.msForName);
             }
 
+            if (nDir == XML_fromT || nDir == XML_fromB)
+            {
+                // TODO consider rules for vertical linear layout as well.
+                aChildrenToShrink.clear();
+            }
+
             if (!aChildrenToShrink.empty())
             {
                 // Have scaling info from rules: then only count scaled children.
