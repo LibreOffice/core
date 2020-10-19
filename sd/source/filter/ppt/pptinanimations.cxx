@@ -3014,7 +3014,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
                 if (pMode)
                     fprintf(mpFile, " class=\"%s\"", pMode);
                 else
-                    fprintpf(mpFile, " class =\"%" SAL_PRIdINT32 "\"", nPresetClass);
+                    fprintf(mpFile, " class =\"%" SAL_PRIdINT32 "\"", nPresetClass);
                 bKnown = true;
             }
         }
