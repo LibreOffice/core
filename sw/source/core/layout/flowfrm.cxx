@@ -65,7 +65,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 
-bool SwFlowFrame::m_bMoveBwdJump = false;
+bool SwFlowFrame::s_bMoveBwdJump = false;
 
 SwFlowFrame::SwFlowFrame( SwFrame &rFrame ) :
     m_rThis( rFrame ),
