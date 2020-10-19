@@ -43,7 +43,7 @@ public:
 class ColorVariable
 {
 public:
-    long mnIndex;
+    tools::Long mnIndex;
     sal_Int16 mnTintShade;
 
     ColorVariable()
@@ -51,7 +51,7 @@ public:
         , mnTintShade()
     {}
 
-    ColorVariable(long nIndex, sal_Int16 nTintShade)
+    ColorVariable(tools::Long nIndex, sal_Int16 nTintShade)
         : mnIndex(nIndex)
         , mnTintShade(nTintShade)
     {}
@@ -367,15 +367,15 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     float fScaleFactor = pVirtualDev->GetDPIScaleFactor();
-    long BORDER = 2 * fScaleFactor;
-    long SIZE = 12 * fScaleFactor;
+    tools::Long BORDER = 2 * fScaleFactor;
+    tools::Long SIZE = 12 * fScaleFactor;
 
     Size aSize(BORDER * 7 + SIZE * 6, BORDER * 3 + SIZE * 2);
     pVirtualDev->SetOutputSizePixel(aSize);
 
-    long x = BORDER;
-    long y1 = BORDER;
-    long y2 = y1 + SIZE + BORDER;
+    tools::Long x = BORDER;
+    tools::Long y1 = BORDER;
+    tools::Long y2 = y1 + SIZE + BORDER;
 
     pVirtualDev->SetLineColor(COL_LIGHTGRAY);
 

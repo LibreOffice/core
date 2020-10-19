@@ -72,7 +72,7 @@ class SwLineInfo
     SvxParaVertAlignItem::Align nVertAlign;
     sal_uInt16 nDefTabStop;
     bool bListTabStopIncluded;
-    long nListTabStopPosition;
+    tools::Long nListTabStopPosition;
 
     void CtorInitLineInfo( const SwAttrSet& rAttrSet,
                            const SwTextNode& rTextNode );
@@ -102,7 +102,7 @@ public:
     {
         return bListTabStopIncluded;
     }
-    long GetListTabStopPosition() const
+    tools::Long GetListTabStopPosition() const
     {
         return nListTabStopPosition;
     }
@@ -263,11 +263,11 @@ public:
                                  TextFrameIndex nLen) const;
     inline SwPosSize GetTextSize( const OUString &rText ) const;
 
-    TextFrameIndex GetTextBreak( const long nLineWidth,
+    TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
                             vcl::TextLayoutCache const*) const;
-    TextFrameIndex GetTextBreak( const long nLineWidth,
+    TextFrameIndex GetTextBreak( const tools::Long nLineWidth,
                             const TextFrameIndex nMaxLen,
                             const sal_uInt16 nComp,
                             TextFrameIndex& rExtraCharPos,
@@ -383,7 +383,7 @@ public:
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 
     SwTwips X() const { return aPos.X(); }
-    void X( const long nNew ) { aPos.setX(nNew); }
+    void X( const tools::Long nNew ) { aPos.setX(nNew); }
     SwTwips Y() const { return aPos.Y(); }
     void Y( const SwTwips nNew ) { aPos.setY(nNew); }
 
@@ -444,7 +444,7 @@ public:
     void SetSpaceIdx( sal_uInt16 nNew ) { nSpaceIdx = nNew; }
     void IncSpaceIdx() { ++nSpaceIdx; }
     void RemoveFirstSpaceAdd() { pSpaceAdd->erase( pSpaceAdd->begin() ); }
-    long GetSpaceAdd() const
+    tools::Long GetSpaceAdd() const
         { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->size() )
                    ? (*pSpaceAdd)[nSpaceIdx] : 0; }
 

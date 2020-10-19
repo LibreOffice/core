@@ -383,7 +383,7 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                     sal_Int32 nStart, sal_Int32 nLen,
                     uno::Sequence <sal_Int32> const & rOffsets )
 {
-    long nOffsLen = rOffsets.getLength();
+    tools::Long nOffsLen = rOffsets.getLength();
     UndoTransliterate_Data* pNew = new UndoTransliterate_Data(
                         rTNd.GetIndex(), nStart, static_cast<sal_Int32>(nOffsLen),
                         rTNd.GetText().copy(nStart, nLen));
@@ -393,14 +393,14 @@ void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // where did we need less memory ?
     const sal_Int32* p = pOffsets;
-    for( long n = 0; n < nOffsLen; ++n, ++p )
+    for( tools::Long n = 0; n < nOffsLen; ++n, ++p )
     if( *p != ( nStart + n ))
     {
         // create the Offset array
         pNew->pOffsets.reset( new Sequence <sal_Int32> ( nLen ) );
         sal_Int32* pIdx = pNew->pOffsets->getArray();
         p = pOffsets;
-        long nMyOff, nNewVal = nStart;
+        tools::Long nMyOff, nNewVal = nStart;
         for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
         {
             if( *p < nMyOff )

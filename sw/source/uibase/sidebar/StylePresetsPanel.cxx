@@ -75,7 +75,7 @@ BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString const & aName)
     pVirtualDev->SetLineColor(COL_LIGHTGRAY);
     pVirtualDev->SetFillColor();
 
-    long y = 0;
+    tools::Long y = 0;
     {
         pVirtualDev->SetFillColor(COL_LIGHTGRAY);
         tools::Rectangle aNameRect(0, y, nPreviewWidth, nNameHeight);

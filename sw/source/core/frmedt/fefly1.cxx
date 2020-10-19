@@ -1399,8 +1399,8 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             const SwFrameFormat *pFormat = pFly->GetFormat();
             const SwFormatVertOrient &rVert = pFormat->GetVertOrient();
             const SwFormatHoriOrient &rHori = pFormat->GetHoriOrient();
-            const long lXDiff = aPt.getX() - pFly->getFrameArea().Left();
-            const long lYDiff = aPt.getY() - pFly->getFrameArea().Top();
+            const tools::Long lXDiff = aPt.getX() - pFly->getFrameArea().Left();
+            const tools::Long lYDiff = aPt.getY() - pFly->getFrameArea().Top();
             const Point aTmp( rHori.GetPos() + lXDiff,
                               rVert.GetPos() + lYDiff );
             pFly->ChgRelPos( aTmp );
@@ -1796,11 +1796,11 @@ void SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
         const tools::Rectangle &rBound = pObj->GetSnapRect();
         Point aRelPos( pObj->GetRelativePos() );
 
-        const long nWidth = rBound.Right()  - rBound.Left();
-        const long nHeight= rBound.Bottom() - rBound.Top();
+        const tools::Long nWidth = rBound.Right()  - rBound.Left();
+        const tools::Long nHeight= rBound.Bottom() - rBound.Top();
         aFrameSet.Put( SwFormatFrameSize( SwFrameSize::Minimum,
-                            std::max( nWidth,  long(MINFLY) ),
-                            std::max( nHeight, long(MINFLY) )));
+                            std::max( nWidth,  tools::Long(MINFLY) ),
+                            std::max( nHeight, tools::Long(MINFLY) )));
 
         if( SfxItemState::SET != aFrameSet.GetItemState( RES_HORI_ORIENT ))
             aFrameSet.Put( SwFormatHoriOrient( aRelPos.getX(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));

@@ -2252,7 +2252,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     ( pCell->GetStartNode() || pCell->GetSubTable() ) )
                 {
                     // insert new empty cell for covered cells:
-                    long nBoxRowSpan = 1;
+                    tools::Long nBoxRowSpan = 1;
                     if ( !m_bHasSubTables )
                     {
                         nBoxRowSpan = pCell->GetRowSpan();

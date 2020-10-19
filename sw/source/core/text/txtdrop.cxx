@@ -69,8 +69,8 @@ class SwDropSave
     SwTextPaintInfo* pInf;
     sal_Int32 nIdx;
     sal_Int32 nLen;
-    long nX;
-    long nY;
+    tools::Long nX;
+    tools::Long nY;
 
 public:
     explicit SwDropSave( const SwTextPaintInfo &rInf );
@@ -669,7 +669,7 @@ void SwTextPainter::PaintDropPortion()
 
     // MarginPortion and Adjustment!
     const SwLinePortion *pPor = m_pCurr->GetFirstPortion();
-    long nX = 0;
+    tools::Long nX = 0;
     while( pPor && !pPor->IsDropPortion() )
     {
         nX = nX + pPor->Width();
@@ -724,8 +724,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
     TextFrameIndex nIdx = rInf.GetIdx();
     OUString aStr(rInf.GetText().copy(sal_Int32(nIdx), sal_Int32(pCurrPart->GetLen())));
 
-    long nDescent = 0;
-    long nFactor = -1;
+    tools::Long nDescent = 0;
+    tools::Long nFactor = -1;
 
     if ( bUseCache )
     {
@@ -751,15 +751,15 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         nIndex %= DROP_CACHE_SIZE;
         nTmpIdx = nIndex;
 
-        long nWishedHeight = pDrop->GetDropHeight();
-        long nAscent = 0;
+        tools::Long nWishedHeight = pDrop->GetDropHeight();
+        tools::Long nAscent = 0;
 
         // find out biggest font size for initial scaling factor
-        long nMaxFontHeight = 1;
+        tools::Long nMaxFontHeight = 1;
         while ( pCurrPart )
         {
             const SwFont& rFnt = pCurrPart->GetFont();
-            const long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
+            const tools::Long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
             if ( nCurrHeight > nMaxFontHeight )
                 nMaxFontHeight = nCurrHeight;
 
@@ -781,8 +781,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
         bool bGrow = (pDrop->GetLen() != TextFrameIndex(0));
 
         // for growing control
-        long nMax = USHRT_MAX;
-        long nMin = 0;
+        tools::Long nMax = USHRT_MAX;
+        tools::Long nMin = 0;
 #if OSL_DEBUG_LEVEL > 1
         long nGrow = 0;
 #endif
@@ -810,7 +810,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
                 SwFont& rFnt = pCurrPart->GetFont();
 
                 // Get height including proportion
-                const long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
+                const tools::Long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
 
                 // Get without proportion
                 const sal_uInt8 nOldProp = rFnt.GetPropr();
@@ -917,7 +917,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf 
             if ( nAscent < 0 )
                 nAscent = -nAscent;
 
-            const long nHght = nAscent + nDescent;
+            const tools::Long nHght = nAscent + nDescent;
             if ( nHght )
             {
                 if ( nHght > nWishedHeight )
@@ -995,7 +995,7 @@ bool SwDropPortion::Format( SwTextFormatInfo &rInf )
         // adjust font sizes to fit into the rectangle
         pDropCapCache->CalcFontSize( this, rInf );
 
-        const long nOldX = rInf.X();
+        const tools::Long nOldX = rInf.X();
         {
             SwDropSave aSave( rInf );
             SwDropPortionPart* pCurrPart = pPart.get();

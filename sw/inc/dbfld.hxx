@@ -31,7 +31,7 @@ class SW_DLLPUBLIC SwDBFieldType final : public SwValueFieldType
     SwDBData    m_aDBData;
     OUString m_sName;          ///< only used in ::GetName() !
     OUString m_sColumn;
-    long        m_nRefCnt;
+    tools::Long        m_nRefCnt;
 
 public:
 
@@ -265,7 +265,7 @@ public:
 // Database field.
 class SW_DLLPUBLIC SwDBSetNumberField final : public SwDBNameInfField
 {
-    long    m_nNumber;
+    tools::Long    m_nNumber;
 public:
     SwDBSetNumberField(SwDBSetNumberFieldType*, const SwDBData& rDBData, sal_uInt32 nFormat = 0);
 
@@ -273,16 +273,16 @@ public:
     virtual std::unique_ptr<SwField> Copy() const override;
     void            Evaluate(const SwDoc&);
 
-    inline long     GetSetNumber() const;
-    inline void     SetSetNumber(long nNum);
+    inline tools::Long     GetSetNumber() const;
+    inline void     SetSetNumber(tools::Long nNum);
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
 
-inline long SwDBSetNumberField::GetSetNumber() const
+inline tools::Long SwDBSetNumberField::GetSetNumber() const
     { return m_nNumber; }
 
-inline void SwDBSetNumberField::SetSetNumber(long nNum)
+inline void SwDBSetNumberField::SetSetNumber(tools::Long nNum)
     { m_nNumber = nNum; }
 
 #endif // INCLUDED_SW_INC_DBFLD_HXX

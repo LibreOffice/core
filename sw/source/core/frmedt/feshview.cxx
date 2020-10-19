@@ -117,8 +117,8 @@ namespace {
     if( pLineEndList.is() )
     {
         OUString aArrowName( SvxResId(pResId) );
-        long nCount = pLineEndList->Count();
-        long nIndex;
+        tools::Long nCount = pLineEndList->Count();
+        tools::Long nIndex;
         for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
@@ -957,12 +957,12 @@ void SwFEShell::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj, sal_uInt1
     }
 
     SfxItemSet aSet( rModel.GetItemPool() );
-    long nWidth = 100; // (1/100th mm)
+    tools::Long nWidth = 100; // (1/100th mm)
 
     // determine line width and calculate with it the line end width
     if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
-        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
         if( nValue > 0 )
             nWidth = nValue * 3;
     }
@@ -1472,7 +1472,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
     const SdrObject *pBest  = nullptr,
                     *pTop   = nullptr;
 
-    const long nTmp = bNext ? LONG_MAX : 0;
+    const tools::Long nTmp = bNext ? LONG_MAX : 0;
     Point aBestPos( nTmp, nTmp );
     Point aTopPos(  nTmp, nTmp );
     Point aCurPos;
@@ -1970,10 +1970,10 @@ bool SwFEShell::ImpEndCreate()
     if( OBJ_NONE == nIdent )
     {
         // For OBJ_NONE a fly is inserted.
-        const long nWidth = rBound.Right()  - rBound.Left();
-        const long nHeight= rBound.Bottom() - rBound.Top();
-        aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, std::max( nWidth,  long(MINFLY) ),
-                                              std::max( nHeight, long(MINFLY) )));
+        const tools::Long nWidth = rBound.Right()  - rBound.Left();
+        const tools::Long nHeight= rBound.Bottom() - rBound.Top();
+        aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, std::max( nWidth,  tools::Long(MINFLY) ),
+                                              std::max( nHeight, tools::Long(MINFLY) )));
 
         SwFormatHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         SwFormatVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
@@ -2910,7 +2910,7 @@ void SwFEShell::SetChainMarker()
     }
 }
 
-long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
+tools::Long SwFEShell::GetSectionWidth( SwFormat const & rFormat ) const
 {
     SwFrame *pFrame = GetCurrFrame();
     // Is the cursor at this moment in a SectionFrame?

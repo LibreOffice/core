@@ -99,7 +99,7 @@ ErrCode SwASCWriter::WriteStream()
         case LINEEND_CRLF:  m_sLineEnd = "\015\012"; break;
         }
 
-    long nMaxNode = m_pDoc->GetNodes().Count();
+    tools::Long nMaxNode = m_pDoc->GetNodes().Count();
 
     if( m_bShowProgress )
         ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );

@@ -37,14 +37,14 @@ public:
 
     OUString        m_aMake;
     OUString        m_aType;
-    long            m_nHDist;
-    long            m_nVDist;
-    long            m_nWidth;
-    long            m_nHeight;
-    long            m_nLeft;
-    long            m_nUpper;
-    long            m_nPWidth;
-    long            m_nPHeight;
+    tools::Long            m_nHDist;
+    tools::Long            m_nVDist;
+    tools::Long            m_nWidth;
+    tools::Long            m_nHeight;
+    tools::Long            m_nLeft;
+    tools::Long            m_nUpper;
+    tools::Long            m_nPWidth;
+    tools::Long            m_nPHeight;
     sal_Int32       m_nCols;
     sal_Int32       m_nRows;
     bool        m_bCont;

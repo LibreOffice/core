@@ -1013,7 +1013,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
     SwSectionFormats aOrigArray(rDocFormats);
 
     SwSectionFormat* pFormat = aOrigArray[pSectRepr->GetArrPos()];
-    long nWidth = rSh.GetSectionWidth(*pFormat);
+    tools::Long nWidth = rSh.GetSectionWidth(*pFormat);
     aOrigArray.clear();
     if (!nWidth)
         nWidth = USHRT_MAX;
@@ -1360,7 +1360,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    long nHtmlMode = rHtmlOpt.GetExportMode();
+    tools::Long nHtmlMode = rHtmlOpt.GetExportMode();
 
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
@@ -1996,7 +1996,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     AddTabPage("indents", SwSectionIndentTabPage::Create, nullptr);
 
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-    long nHtmlMode = rHtmlOpt.GetExportMode();
+    tools::Long nHtmlMode = rHtmlOpt.GetExportMode();
     bool bWeb = dynamic_cast<SwWebDocShell*>( rSh.GetView().GetDocShell()  ) != nullptr ;
     if(bWeb)
     {

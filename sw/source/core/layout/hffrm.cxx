@@ -426,7 +426,7 @@ void SwHeadFootFrame::Format(vcl::RenderContext* pRenderContext, const SwBorderA
     {
         lcl_LayoutFrameEnsureMinHeight(*this);
 
-        long nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
+        tools::Long nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
 
         if ( !isFramePrintAreaValid() )
             FormatPrt(nUL, pAttrs);

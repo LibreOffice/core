@@ -45,7 +45,7 @@ public:
 class SW_DLLPUBLIC SwDateTimeField final : public SwValueField
 {
         sal_uInt16              m_nSubType;
-        long                m_nOffset;    // Offset in minutes.
+        tools::Long                m_nOffset;    // Offset in minutes.
 
         virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
         virtual std::unique_ptr<SwField> Copy() const override;
@@ -62,8 +62,8 @@ public:
         virtual void            SetPar2(const OUString& rStr) override;
         virtual OUString        GetPar2() const override;
 
-        void             SetOffset(long nMinutes)    { m_nOffset = nMinutes; }
-        long             GetOffset() const           { return m_nOffset; }
+        void             SetOffset(tools::Long nMinutes)    { m_nOffset = nMinutes; }
+        tools::Long             GetOffset() const           { return m_nOffset; }
 
         Date                    GetDate() const;
         tools::Time             GetTime() const;

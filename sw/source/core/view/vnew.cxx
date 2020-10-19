@@ -142,7 +142,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 /// CTor for the first Shell.
 SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
-                        long nFlags )
+                        tools::Long nFlags )
     :
     maBrowseBorder(),
     mpSfxViewShell( nullptr ),
@@ -212,7 +212,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
 /// CTor for further Shells on a document.
 SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
-                        OutputDevice * pOutput, long const nFlags)
+                        OutputDevice * pOutput, tools::Long const nFlags)
     : Ring( &rShell ) ,
     maBrowseBorder( rShell.maBrowseBorder ),
     mpSfxViewShell( nullptr ),

@@ -130,12 +130,12 @@ public:
 
     bool operator < (const CellInfo & aCellInfo) const;
 
-    long top() const { return m_aRect.Top(); }
-    long bottom() const { return m_aRect.Bottom(); }
-    long left() const { return m_aRect.Left(); }
-    long right() const { return m_aRect.Right(); }
-    long width() const { return m_aRect.Width(); }
-    long height() const { return m_aRect.Height(); }
+    tools::Long top() const { return m_aRect.Top(); }
+    tools::Long bottom() const { return m_aRect.Bottom(); }
+    tools::Long left() const { return m_aRect.Left(); }
+    tools::Long right() const { return m_aRect.Right(); }
+    tools::Long width() const { return m_aRect.Width(); }
+    tools::Long height() const { return m_aRect.Height(); }
     const SwRect& getRect() const { return m_aRect; }
     WW8TableNodeInfo * getTableNodeInfo() const
     { return m_pNodeInfo; }
@@ -261,11 +261,11 @@ class WW8TableCellGrid
     RowTops_t m_aRowTops;
     Rows_t m_aRows;
 
-    WW8TableCellGridRow::Pointer_t getRow(long nTop, bool bCreate = true);
+    WW8TableCellGridRow::Pointer_t getRow(tools::Long nTop, bool bCreate = true);
     RowTops_t::const_iterator getRowTopsBegin() const;
     RowTops_t::const_iterator getRowTopsEnd() const;
-    CellInfoMultiSet::const_iterator getCellsBegin(long nTop);
-    CellInfoMultiSet::const_iterator getCellsEnd(long nTop);
+    CellInfoMultiSet::const_iterator getCellsBegin(tools::Long nTop);
+    CellInfoMultiSet::const_iterator getCellsEnd(tools::Long nTop);
 
 public:
     typedef std::shared_ptr<WW8TableCellGrid> Pointer_t;

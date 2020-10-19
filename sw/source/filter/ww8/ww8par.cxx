@@ -751,7 +751,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             {
                 if (nTextRotationAngle == 9000)
                 {
-                    long nWidth = rTextRect.GetWidth();
+                    tools::Long nWidth = rTextRect.GetWidth();
                     rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
                     rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
@@ -767,7 +767,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
                 else if (nTextRotationAngle == 27000)
                 {
-                    long nWidth = rTextRect.GetWidth();
+                    tools::Long nWidth = rTextRect.GetWidth();
                     rTextRect.SetRight( rTextRect.Left() + rTextRect.GetHeight() );
                     rTextRect.SetBottom( rTextRect.Top() + nWidth );
 
@@ -924,7 +924,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     if ( nTextRotationAngle )
                     {
-                        long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                        tools::Long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
                             rTextRect.GetWidth() : rTextRect.GetHeight();
                         nMinWH /= 2;
                         Point aPivot(rTextRect.TopLeft());
@@ -1192,7 +1192,7 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
 }
 
 SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId,
-    bool bTstEnd, long nHand, bool )
+    bool bTstEnd, tools::Long nHand, bool )
 {
     SwFltStackEntry *pRet = nullptr;
     // Doing a textbox, and using the control stack only as a temporary
@@ -1216,13 +1216,13 @@ SwFltStackEntry* SwWW8FltControlStack::SetAttr(const SwPosition& rPos, sal_uInt1
     return pRet;
 }
 
-long GetListFirstLineIndent(const SwNumFormat &rFormat)
+tools::Long GetListFirstLineIndent(const SwNumFormat &rFormat)
 {
     OSL_ENSURE( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<GetListFirstLineIndent> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     SvxAdjust eAdj = rFormat.GetNumAdjust();
-    long nReverseListIndented;
+    tools::Long nReverseListIndented;
     if (eAdj == SvxAdjust::Right)
         nReverseListIndented = -rFormat.GetCharTextDistance();
     else if (eAdj == SvxAdjust::Center)
@@ -1232,19 +1232,19 @@ long GetListFirstLineIndent(const SwNumFormat &rFormat)
     return nReverseListIndented;
 }
 
-static long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFormat &rFormat,
-    long &rFirstLinePos)
+static tools::Long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFormat &rFormat,
+    tools::Long &rFirstLinePos)
 {
     OSL_ENSURE( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
-    const long nBodyIndent = rLR.GetTextLeft();
-    const long nFirstLineDiff = rLR.GetTextFirstLineOffset();
+    const tools::Long nBodyIndent = rLR.GetTextLeft();
+    const tools::Long nFirstLineDiff = rLR.GetTextFirstLineOffset();
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
     const auto nPseudoListBodyIndent = rFormat.GetAbsLSpace();
-    const long nReverseListIndented = GetListFirstLineIndent(rFormat);
-    long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
+    const tools::Long nReverseListIndented = GetListFirstLineIndent(rFormat);
+    tools::Long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
 
     return std::max<long>(nExtraListIndent, 0);
 }
@@ -1258,8 +1258,8 @@ void SyncIndentWithList( SvxLRSpaceItem &rLR,
 {
     if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
-        long nWantedFirstLinePos;
-        long nExtraListIndent = lcl_GetTrueMargin(rLR, rFormat, nWantedFirstLinePos);
+        tools::Long nWantedFirstLinePos;
+        tools::Long nExtraListIndent = lcl_GetTrueMargin(rLR, rFormat, nWantedFirstLinePos);
         rLR.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
         rLR.SetTextFirstLineOffset(0);
     }
@@ -1852,7 +1852,7 @@ void SwWW8ImplReader::ImportDop()
         DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA, true);
 
     // Import Default Tabs
-    long nDefTabSiz = m_xWDop->dxaTab;
+    tools::Long nDefTabSiz = m_xWDop->dxaTab;
     if( nDefTabSiz < 56 )
         nDefTabSiz = 709;
 
@@ -2126,7 +2126,7 @@ void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
 /**
  * Use authornames, if not available fall back to initials.
  */
-long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
+tools::Long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 {
     WW8PLCFx_SubDoc* pSD = m_xPlcxMan->GetAtn();
     if (!pSD)
@@ -3498,10 +3498,10 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const OUString& rAddString)
 /**
  * Return value: true for para end
  */
-bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
-    long nCpOfs)
+bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, tools::Long nTextEnd,
+    tools::Long nCpOfs)
 {
-    long nEnd = ( nNextAttr < nTextEnd ) ? nNextAttr : nTextEnd;
+    tools::Long nEnd = ( nNextAttr < nTextEnd ) ? nNextAttr : nTextEnd;
 
     if (m_bSymbol || m_bIgnoreText)
     {
@@ -3586,7 +3586,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
     return bParaEndAdded;
 }
 
-bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
+bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
 {
     bool bNewParaEnd = false;
     // Reset Unicode flag and correct FilePos if needed.
@@ -3708,7 +3708,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 bool bReadObj = IsInlineEscherHack();
                 if( bReadObj )
                 {
-                    long nCurPos = m_pStrm->Tell();
+                    tools::Long nCurPos = m_pStrm->Tell();
                     sal_uInt16 nWordCode(0);
 
                     if( m_bIsUnicode )
@@ -3853,9 +3853,9 @@ void SwWW8ImplReader::ProcessCurrentCollChange(WW8PLCFManResult& rRes,
     }
 }
 
-long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine, int nDepthGuard)
+tools::Long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, tools::Long nTextEnd, bool& rbStartLine, int nDepthGuard)
 {
-    long nSkipChars = 0;
+    tools::Long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
     OSL_ENSURE(m_pPaM->GetNode().GetTextNode(), "Missing txtnode");
@@ -3884,7 +3884,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     }
 
     // position of last CP that's to be ignored
-    long nSkipPos = -1;
+    tools::Long nSkipPos = -1;
 
     if( 0 < aRes.nSprmId ) // Ignore empty Attrs
     {
@@ -3930,7 +3930,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     m_bIgnoreText = true;
     sal_uInt16 nOldColl = m_nCurrentColl;
     bool bDoPlcxManPlusPLus = true;
-    long nNext;
+    tools::Long nNext;
     do
     {
         if( bDoPlcxManPlusPLus )
@@ -3999,7 +3999,7 @@ void SwWW8ImplReader::ClearParaEndPosition()
         m_aEndParaPos.clear();
 }
 
-void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, long nTextEnd, bool& rbStartLine)
+void SwWW8ImplReader::ReadAttrs(WW8_CP& rTextPos, WW8_CP& rNext, tools::Long nTextEnd, bool& rbStartLine)
 {
     // Do we have attributes?
     if( rTextPos >= rNext )
@@ -4067,7 +4067,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
     m_bPgSecBreak = false;
 
     m_xPlcxMan = std::make_shared<WW8PLCFMan>(m_xSBase.get(), nType, nStartCp);
-    long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
+    tools::Long nCpOfs = m_xPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = m_xPlcxMan->Where();
     m_pPreviousNode = nullptr;
@@ -4912,7 +4912,7 @@ void WW8Customizations::Import( SwDocShell* pShell )
     try
     {
         Tcg aTCG;
-        long nCur = mpTableStream->Tell();
+        tools::Long nCur = mpTableStream->Tell();
         if (!checkSeek(*mpTableStream, mWw8Fib.m_fcCmds)) // point at tgc record
         {
             SAL_WARN("sw.ww8", "** Seek to Customization data failed!!!! ");
@@ -6092,10 +6092,10 @@ const OUString* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
         m_pAtnNames.reset(new std::vector<OUString>);
         SvStream& rStrm = *m_pTableStream;
 
-        long nOldPos = rStrm.Tell();
+        tools::Long nOldPos = rStrm.Tell();
         rStrm.Seek( m_xWwFib->m_fcGrpStAtnOwners );
 
-        long nRead = 0, nCount = m_xWwFib->m_lcbGrpStAtnOwners;
+        tools::Long nRead = 0, nCount = m_xWwFib->m_lcbGrpStAtnOwners;
         while (nRead < nCount && rStrm.good())
         {
             if( m_bVer67 )
@@ -6545,7 +6545,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
         // We should then find the EmbeddedField and the corresponding Sprms
         // in that Area.
         // We only need the Sprm for the Picture Id.
-        long nOldPos = rReader.m_pStrm->Tell();
+        tools::Long nOldPos = rReader.m_pStrm->Tell();
         {
             // #i32596# - consider return value of method
             // <rReader.GetTxbxTextSttEndCp(..)>. If it returns false, method

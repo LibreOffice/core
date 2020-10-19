@@ -347,14 +347,14 @@ FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolIte
     return eUnit;
 }
 
-void PageFormatPanel::ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin )
+void PageFormatPanel::ExecuteMarginLRChange( const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin )
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
     mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
 }
 
-void PageFormatPanel::ExecuteMarginULChange(const long nPageTopMargin, const long nPageBottomMargin)
+void PageFormatPanel::ExecuteMarginULChange(const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin)
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );

@@ -160,7 +160,7 @@ public:
     virtual sal_uInt16 GetViewWidth( const SwTextSizeInfo &rInf ) const;
 
     // for text- and multi-portions
-    virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const;
+    virtual tools::Long CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo &rInf ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;

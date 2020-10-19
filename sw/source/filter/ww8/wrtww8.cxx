@@ -227,9 +227,9 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
     if (aResult.second)
     {
         BKMK aBK(false,rNm);
-        BKMKCP* pBKCP = new BKMKCP(static_cast<long>(nStartCp),aBK);
+        BKMKCP* pBKCP = new BKMKCP(static_cast<tools::Long>(nStartCp),aBK);
         aSttCps.insert(std::pair<long,BKMKCP*>(nStartCp,pBKCP));
-        aResult.first->second = static_cast<long>(nStartCp);
+        aResult.first->second = static_cast<tools::Long>(nStartCp);
     }
     else
     {
@@ -240,7 +240,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
             {
                 if (aItr->second->second.first)
                     nStartCp--;
-                aItr->second->first = static_cast<long>(nStartCp);
+                aItr->second->first = static_cast<tools::Long>(nStartCp);
                 break;
             }
         }
@@ -251,7 +251,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
 {
     if (aSttCps.empty())
         return;
-    long n;
+    tools::Long n;
     std::vector<OUString> aNames;
     SvMemoryStream aTempStrm1(65535,65535);
     SvMemoryStream aTempStrm2(65535,65535);
@@ -307,7 +307,7 @@ void WW8_WrtBookmarks::MoveFieldMarks(WW8_CP nFrom, WW8_CP nTo)
     {
         if (aItr->second)
         {
-            if (aItr->second->first == static_cast<long>(nFrom))
+            if (aItr->second->first == static_cast<tools::Long>(nFrom))
             {
                 aItr->second->second.first = true;
                 aItr->second->first = nTo;
@@ -985,7 +985,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         *p++ = *pSprms++;
         nVarLen -= 2;
 
-        long nDataPos = rWrt.pDataStrm->Tell();
+        tools::Long nDataPos = rWrt.pDataStrm->Tell();
         SwWW8Writer::WriteShort( *rWrt.pDataStrm, nVarLen );
         rWrt.pDataStrm->WriteBytes(pSprms, nVarLen);
 
@@ -2175,7 +2175,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     const SwFrameFormat * pLineFormat = pTabLine->GetFrameFormat();
 
     // output line height   sprmTDyaRowHeight
-    long nHeight = 0;
+    tools::Long nHeight = 0;
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
     if ( SwFrameSize::Variable != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
     {
@@ -2430,9 +2430,9 @@ ww8::WidthsPtr AttributeOutputBase::GetColumnWidths( ww8::WW8TableNodeInfoInner:
     return pTableTextNodeInfoInner->getGridColsOfRow(*this, true);
 }
 
-void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner, long& rPageSize, bool& rRelBoxSize )
+void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * pTableTextNodeInfoInner, tools::Long& rPageSize, bool& rRelBoxSize )
 {
-    long nPageSize = 0;
+    tools::Long nPageSize = 0;
 
     const SwNode *pTextNd = pTableTextNodeInfoInner->getNode( );
     const SwTable *pTable = pTableTextNodeInfoInner->getTable( );
@@ -3779,7 +3779,7 @@ ErrCode SwWW8Writer::WriteStorageImpl()
     if( pViewShell != nullptr )
         pViewShell->CalcLayout();
 
-    long nMaxNode = m_pDoc->GetNodes().Count();
+    tools::Long nMaxNode = m_pDoc->GetNodes().Count();
     ::StartProgress( STR_STATSTR_W4WWRITE, 0, nMaxNode, m_pDoc->GetDocShell() );
 
     // Respect table at the beginning of the document

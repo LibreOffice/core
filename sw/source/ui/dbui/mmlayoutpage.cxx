@@ -192,8 +192,8 @@ void SwMailMergeLayoutPage::Activate()
         }
         else
         {
-            long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
-            long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+            tools::Long nLeft = static_cast< tools::Long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
+            tools::Long nTop  = static_cast< tools::Long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
             m_pAddressBlockFormat = InsertAddressFrame(
                     *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
                     Point(nLeft, nTop),
@@ -209,8 +209,8 @@ bool SwMailMergeLayoutPage::commitPage(::vcl::WizardTypes::CommitPageReason eRea
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if (eReason == ::vcl::WizardTypes::eTravelForward || eReason == ::vcl::WizardTypes::eFinish)
     {
-        long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
-        long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+        tools::Long nLeft = static_cast< tools::Long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
+        tools::Long nTop  = static_cast< tools::Long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
         InsertAddressAndGreeting(
                     m_pWizard->GetSwView(),
                     rConfigItem,
@@ -402,7 +402,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         //go to start of the doc, directly!
         rShell.SttEndDoc(true);
         //and go by paragraph until the position is reached
-        long nYPos = rShell.GetCharRect().Top();
+        tools::Long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
         {
             if(!rShell.FwdPara())
@@ -655,8 +655,8 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, weld::MetricSpinBu
     if(!(m_pExampleWrtShell && m_pAddressBlockFormat))
         return;
 
-    long nLeft = static_cast< long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
-    long nTop  = static_cast< long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
+    tools::Long nLeft = static_cast< tools::Long >(m_xLeftMF->denormalize(m_xLeftMF->get_value(FieldUnit::TWIP)));
+    tools::Long nTop  = static_cast< tools::Long >(m_xTopMF->denormalize(m_xTopMF->get_value(FieldUnit::TWIP)));
 
     SfxItemSet aSet(
         m_pExampleWrtShell->GetAttrPool(),

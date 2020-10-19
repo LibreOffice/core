@@ -871,12 +871,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 ::GetTableSel( rSh, aBoxes );
                 if ( !aBoxes.empty() )
                 {
-                    long maxX = 0;
-                    long maxY = 0;
-                    long minX = std::numeric_limits<long>::max();
-                    long minY = std::numeric_limits<long>::max();
-                    long nbBoxes = aBoxes.size();
-                    for ( long i = 0; i < nbBoxes; i++ )
+                    tools::Long maxX = 0;
+                    tools::Long maxY = 0;
+                    tools::Long minX = std::numeric_limits<long>::max();
+                    tools::Long minY = std::numeric_limits<long>::max();
+                    tools::Long nbBoxes = aBoxes.size();
+                    for ( tools::Long i = 0; i < nbBoxes; i++ )
                     {
                         Point aCoord ( aBoxes[i]->GetCoordinates() );
                         if ( aCoord.X() < minX ) minX = aCoord.X();
@@ -965,7 +965,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         }
         case FN_TABLE_SPLIT_CELLS:
         {
-            long nCount=0;
+            tools::Long nCount=0;
             bool bHorizontal=true;
             bool bProportional = false;
             const SfxInt32Item* pSplit = rReq.GetArg<SfxInt32Item>(FN_TABLE_SPLIT_CELLS);
@@ -982,7 +982,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                const long nMaxVert = rSh.GetAnyCurRect( CurRectType::Frame ).Width() / MINLAY;
+                const tools::Long nMaxVert = rSh.GetAnyCurRect( CurRectType::Frame ).Width() / MINLAY;
                 ScopedVclPtr<SvxAbstractSplitTableDialog> pDlg(pFact->CreateSvxSplitTableDialog(GetView().GetFrameWeld(), rSh.IsTableVertical(), nMaxVert));
                 if(rSh.IsSplitVerticalByDefault())
                     pDlg->SetSplitVerticalByDefault();
@@ -1117,7 +1117,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_ROW_HEIGHT);
             if (pItem2)
             {
-                long nNewHeight = pItem2->GetValue();
+                tools::Long nNewHeight = pItem2->GetValue();
                 std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
                 if ( pHeight )
                 {
@@ -1134,7 +1134,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SfxUInt32Item* pItem2 = rReq.GetArg<SfxUInt32Item>(SID_ATTR_TABLE_COLUMN_WIDTH);
             if (pItem2)
             {
-                long nNewWidth = pItem2->GetValue();
+                tools::Long nNewWidth = pItem2->GetValue();
                 SwTableFUNC aFunc( &rSh );
                 aFunc.InitTabCols();
                 aFunc.SetColWidth(aFunc.GetCurColNum(), nNewWidth);
@@ -1422,7 +1422,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 std::unique_ptr<SwFormatFrameSize> pHeight = rSh.GetRowHeight();
                 if (pHeight)
                 {
-                    long nHeight = pHeight->GetHeight();
+                    tools::Long nHeight = pHeight->GetHeight();
                     aRowHeight.SetValue(nHeight);
                     rSet.Put(aRowHeight);
 

@@ -611,7 +611,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
 // The current selected OLE object will be loaded with the
 // verb into the server.
 
-void SwWrtShell::LaunchOLEObj( long nVerb )
+void SwWrtShell::LaunchOLEObj( tools::Long nVerb )
 {
     if ( GetCntType() != CNT_OLE ||
          GetView().GetViewFrame()->GetFrame().IsInPlace() )
@@ -810,7 +810,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             aObjArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() ).SSize();
 
         // differ the aObjArea and _aVisArea by 1 Pixel then set new VisArea
-        long nX, nY;
+        tools::Long nX, nY;
         SwSelPaintRects::Get1PixelInLogic( *this, &nX, &nY );
         if( !( _aVisArea.Width() - nX <= aObjArea.Width() &&
                _aVisArea.Width() + nX >= aObjArea.Width() &&
@@ -863,8 +863,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     else
     {
-        aArea.Width ( long( aArea.Width()  / pCli->GetScaleWidth() ) );
-        aArea.Height( long( aArea.Height() / pCli->GetScaleHeight() ) );
+        aArea.Width ( tools::Long( aArea.Width()  / pCli->GetScaleWidth() ) );
+        aArea.Height( tools::Long( aArea.Height() / pCli->GetScaleHeight() ) );
     }
 
     pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );

@@ -570,7 +570,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 if( *pPageCnt < *pPageSt )
                                     *pPageCnt = *pPageSt;
                             }
-                            long nStat;
+                            tools::Long nStat;
                             if( nPageNr >= *pPageSt )
                                 nStat = nPageNr - *pPageSt + 1;
                             else
@@ -797,7 +797,7 @@ static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
                     if( *pPageCnt < *pPageSt )
                         *pPageCnt = *pPageSt;
                 }
-                long nStat = nPageNr >= *pPageSt ? nPageNr - *pPageSt + 1
+                tools::Long nStat = nPageNr >= *pPageSt ? nPageNr - *pPageSt + 1
                                          : nPageNr + *pPageCnt - *pPageSt + 1;
                 ::SetProgressState( nStat, pNode->GetDoc().GetDocShell() );
             }

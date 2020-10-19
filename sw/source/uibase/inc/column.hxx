@@ -43,9 +43,9 @@ class SwColumnDlg : public SfxDialogController
     std::unique_ptr<SfxItemSet> m_pSelectionSet;
     SfxItemSet*         m_pFrameSet;
 
-    long                m_nOldSelection;
-    long                m_nSelectionWidth;
-    long                m_nPageWidth;
+    tools::Long                m_nOldSelection;
+    tools::Long                m_nSelectionWidth;
+    tools::Long                m_nPageWidth;
 
     bool                m_bPageChanged : 1;
     bool                m_bSectionChanged : 1;
@@ -88,8 +88,8 @@ class SwColumnPage : public SfxTabPage
 
     sal_uInt16      m_nFirstVis;
     sal_uInt16      m_nCols;
-    long            m_nColWidth[nMaxCols];
-    long            m_nColDist[nMaxCols];
+    tools::Long            m_nColWidth[nMaxCols];
+    tools::Long            m_nColDist[nMaxCols];
     SwPercentField* m_pModifiedField;
 
     std::map<weld::MetricSpinButton*, SwPercentField*> m_aPercentFieldsMap;
@@ -178,7 +178,7 @@ public:
     virtual void    Reset(const SfxItemSet *rSet) override;
 
     void SetFrameMode(bool bMod);
-    void SetPageWidth(long nPageWidth);
+    void SetPageWidth(tools::Long nPageWidth);
 
     void SetFormatUsed(bool bFormatUsed)
     {

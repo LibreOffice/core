@@ -56,7 +56,7 @@ protected:
     virtual SwTwips ShrinkFrame( SwTwips, bool bTst = false, bool bInfo = false ) override;
     virtual SwTwips GrowFrame  ( SwTwips, bool bTst = false, bool bInfo = false ) override;
 
-    long CalcRel( const SwFormatFrameSize &rSz ) const;
+    tools::Long CalcRel( const SwFormatFrameSize &rSz ) const;
 
 public:
     // --> #i28701#

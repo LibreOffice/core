@@ -60,7 +60,7 @@ public:
 
     // used for rowspan stuff:
     const SwCellFrame& FindStartEndOfRowSpanCell( bool bStart ) const;
-    long GetLayoutRowSpan() const;
+    tools::Long GetLayoutRowSpan() const;
 
     void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };

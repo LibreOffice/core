@@ -103,7 +103,7 @@ class SwLayAction
     sal_uInt32 m_nCallCount; // calling FormatLayoutTab on the same page
 
     void PaintContent( const SwContentFrame *, const SwPageFrame *,
-                     const SwRect &rOldRect, long nOldBottom );
+                     const SwRect &rOldRect, tools::Long nOldBottom );
     bool PaintWithoutFlys( const SwRect &, const SwContentFrame *,
                            const SwPageFrame * );
     inline bool PaintContent_( const SwContentFrame *, const SwPageFrame *,

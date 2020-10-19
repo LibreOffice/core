@@ -203,9 +203,9 @@ struct WW8PLCFxSave1
 {
     sal_uInt32 nPLCFxPos;
     sal_uInt32 nPLCFxPos2;       ///< for PLCF_Cp_Fkp: PieceIter-Pos
-    long nPLCFxMemOfs;
+    tools::Long nPLCFxMemOfs;
     WW8_CP nStartCp;        ///< for cp based iterator like PAP and CHP
-    long nCpOfs;
+    tools::Long nCpOfs;
     WW8_FC nStartFC;
     WW8_CP nAttrStart;
     WW8_CP nAttrEnd;
@@ -221,8 +221,8 @@ class WW8PLCFspecial        // iterator for PLCFs
 private:
     std::unique_ptr<sal_Int32[]> pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
     sal_uInt8*  pPLCF_Contents;  ///< pointer to content-array-part of Pos-array
-    long nIMax;             ///< number of elements
-    long nIdx;              ///< marker where we currently are
+    tools::Long nIMax;             ///< number of elements
+    tools::Long nIdx;              ///< marker where we currently are
     sal_uInt32 nStru;
 
     WW8PLCFspecial(const WW8PLCFspecial&) = delete;
@@ -231,23 +231,23 @@ private:
 public:
     WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
-    long GetIdx() const { return nIdx; }
-    void SetIdx( long nI ) { nIdx = nI; }
-    long GetIMax() const { return nIMax; }
-    bool SeekPos(long nPos);            // walks over FC- or CP-value
+    tools::Long GetIdx() const { return nIdx; }
+    void SetIdx( tools::Long nI ) { nIdx = nI; }
+    tools::Long GetIMax() const { return nIMax; }
+    bool SeekPos(tools::Long nPos);            // walks over FC- or CP-value
                                         // resp. next biggest value
-    bool SeekPosExact(long nPos);
+    bool SeekPosExact(tools::Long nPos);
     sal_Int32 Where() const
         { return ( nIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nIdx]; }
     bool Get(WW8_CP& rStart, void*& rpValue) const;
-    bool GetData(long nIdx, WW8_CP& rPos, void*& rpValue) const;
+    bool GetData(tools::Long nIdx, WW8_CP& rPos, void*& rpValue) const;
 
-    const void* GetData( long nInIdx ) const
+    const void* GetData( tools::Long nInIdx ) const
     {
         return ( nInIdx >= nIMax ) ? nullptr
             : static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
     }
-    sal_Int32 GetPos( long nInIdx ) const
+    sal_Int32 GetPos( tools::Long nInIdx ) const
         { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
 
     void advance()
@@ -360,17 +360,17 @@ class WW8PLCFpcd_Iter
 {
 private:
     WW8PLCFpcd& rPLCF;
-    long nIdx;
+    tools::Long nIdx;
 
     WW8PLCFpcd_Iter(const WW8PLCFpcd_Iter&) = delete;
     WW8PLCFpcd_Iter& operator=(const WW8PLCFpcd_Iter&) = delete;
 
 public:
-    WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, long nStartPos = -1 );
-    long GetIdx() const { return nIdx; }
-    void SetIdx( long nI ) { nIdx = nI; }
-    long GetIMax() const { return rPLCF.nIMax; }
-    bool SeekPos(long nPos);
+    WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, tools::Long nStartPos = -1 );
+    tools::Long GetIdx() const { return nIdx; }
+    void SetIdx( tools::Long nI ) { nIdx = nI; }
+    tools::Long GetIMax() const { return rPLCF.nIMax; }
+    bool SeekPos(tools::Long nPos);
     sal_Int32 Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     void advance()
@@ -417,7 +417,7 @@ public:
     virtual bool SeekPos(WW8_CP nCpPos) = 0;
     virtual WW8_FC Where() = 0;
     virtual void GetSprms( WW8PLCFxDesc* p );
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
+    virtual tools::Long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen );
     virtual void advance() = 0;
     virtual sal_uInt16 GetIstd() const { return 0xffff; }
     virtual void Save( WW8PLCFxSave1& rSave ) const;
@@ -474,7 +474,7 @@ public:
     virtual void SetIdx(sal_uInt32 nI) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
     virtual WW8_CP Where() override;
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen ) override;
+    virtual tools::Long GetNoSprms( WW8_CP& rStart, WW8_CP&, sal_Int32& rLen ) override;
     virtual void advance() override;
     WW8_CP CurrentPieceStartFc2Cp( WW8_FC nStartPos );
     WW8_FC CurrentPieceStartCp2Fc( WW8_CP nCp );
@@ -484,7 +484,7 @@ public:
     void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
     WW8_CP GetClipStart() const { return nClipStart; }
 
-    static sal_Int32 TransformPieceAddress(long nfc, bool& bIsUnicodeAddress)
+    static sal_Int32 TransformPieceAddress(tools::Long nfc, bool& bIsUnicodeAddress)
     {
         bIsUnicodeAddress = 0 == (0x40000000 & nfc);
         return bIsUnicodeAddress ?  nfc : (nfc & 0x3fffFFFF) / 2;
@@ -522,10 +522,10 @@ public:
         sal_uInt8 maRawData[512];
         std::vector<Entry> maEntries;
 
-        long nItemSize;     // either 1 Byte or a complete BX
+        tools::Long nItemSize;     // either 1 Byte or a complete BX
 
         // Offset in Stream where last read of 512 bytes took place
-        long nFilePos;
+        tools::Long nFilePos;
         sal_uInt8 mnIdx;         // Pos marker
         ePLCFT ePLCF;
         sal_uInt8 mnIMax;         // number of entries
@@ -538,10 +538,10 @@ public:
 
     public:
         WW8Fkp (const WW8Fib& rFib, SvStream* pFKPStrm,
-            SvStream* pDataStrm, long _nFilePos, long nItemSiz, ePLCFT ePl,
+            SvStream* pDataStrm, tools::Long _nFilePos, tools::Long nItemSiz, ePLCFT ePl,
             WW8_FC nStartFc);
         void Reset(WW8_FC nPos);
-        long GetFilePos() const { return nFilePos; }
+        tools::Long GetFilePos() const { return nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
         void SetIdx(sal_uInt8 nI);
         bool SeekPos(WW8_FC nFc);
@@ -685,7 +685,7 @@ public:
     SprmResult HasSprm( sal_uInt16 nId ) const;
     SprmResult HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
     SprmResult HasSprm( sal_uInt16 nId, const sal_uInt8* pOtherSprms,
-        long nOtherSprmSiz ) const;
+        tools::Long nOtherSprmSiz ) const;
     bool Find4Sprms(sal_uInt16 nId1, sal_uInt16 nId2, sal_uInt16 nId3, sal_uInt16 nId4,
                     SprmResult& r1, SprmResult& r2, SprmResult& r3, SprmResult& r4) const;
 };
@@ -702,7 +702,7 @@ private:
 
 public:
     WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib, WW8_CP nStartCp,
-                    long nFcRef, long nLenRef, long nFcText, long nLenText, long nStruc);
+                    tools::Long nFcRef, tools::Long nLenRef, tools::Long nFcText, tools::Long nLenText, tools::Long nStruc);
     virtual ~WW8PLCFx_SubDoc() override;
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nIdx) override;
@@ -717,7 +717,7 @@ public:
 
     virtual void GetSprms(WW8PLCFxDesc* p) override;
     virtual void advance() override;
-    long Count() const { return pRef ? pRef->GetIMax() : 0; }
+    tools::Long Count() const { return pRef ? pRef->GetIMax() : 0; }
 };
 
 /// Iterator for fields
@@ -740,7 +740,7 @@ public:
     virtual void advance() override;
     bool StartPosIsFieldStart();
     bool EndPosIsFieldEnd(WW8_CP&);
-    bool GetPara(long nIdx, WW8FieldDesc& rF);
+    bool GetPara(tools::Long nIdx, WW8FieldDesc& rF);
 };
 
 enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_FIELD = 0x2 };
@@ -752,7 +752,7 @@ private:
     std::unique_ptr<WW8PLCFspecial> pBook[2];           // Start and End Position
     std::vector<OUString> aBookNames;   // Name
     std::vector<eBookStatus> aStatus;
-    long nIMax;                         // Number of Booknotes
+    tools::Long nIMax;                         // Number of Booknotes
     sal_uInt16 nIsEnd;
     sal_Int32 nBookmarkId; // counter incremented by GetUniqueBookmarkName.
 
@@ -762,24 +762,24 @@ private:
 public:
     WW8PLCFx_Book(SvStream* pTableSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book() override;
-    long GetIMax() const { return nIMax; }
+    tools::Long GetIMax() const { return nIMax; }
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nI) override;
     virtual sal_uInt32 GetIdx2() const override;
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
     virtual WW8_CP Where() override;
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
+    virtual tools::Long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
     virtual void advance() override;
     const OUString* GetName() const;
     WW8_CP GetStartPos() const
         { return nIsEnd ? WW8_CP_MAX : pBook[0]->Where(); }
-    long GetLen() const;
+    tools::Long GetLen() const;
     bool GetIsEnd() const { return nIsEnd != 0; }
-    long GetHandle() const;
+    tools::Long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
     void MapName(OUString& rName);
-    OUString GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex);
+    OUString GetBookmark(tools::Long nStart,tools::Long nEnd, sal_uInt16 &nIndex);
     eBookStatus GetStatus() const;
     OUString GetUniqueBookmarkName(const OUString &rSuggestedName);
 };
@@ -806,11 +806,11 @@ public:
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
     virtual WW8_CP Where() override;
-    virtual long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
+    virtual tools::Long GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen ) override;
     virtual void advance() override;
 
     /// Handle is the unique ID of an annotation mark.
-    long getHandle() const;
+    tools::Long getHandle() const;
     bool getIsEnd() const;
 };
 
@@ -836,11 +836,11 @@ public:
     virtual void SetIdx2(sal_uInt32 nIdx) override;
     virtual bool SeekPos(WW8_CP nCpPos) override;
     virtual WW8_CP Where() override;
-    virtual long GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen) override;
+    virtual tools::Long GetNoSprms(WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen) override;
     virtual void advance() override;
 
     /// Handle is the unique ID of a factoid mark.
-    long getHandle() const;
+    tools::Long getHandle() const;
     bool getIsEnd() const;
 };
 
@@ -850,8 +850,8 @@ public:
 struct WW8PLCFManResult
 {
     WW8_CP nCpPos;      // attribute starting position
-    long nMemLen;       // length for previous
-    long nCp2OrIdx;     // footnote-textpos or index in PLCF
+    tools::Long nMemLen;       // length for previous
+    tools::Long nCp2OrIdx;     // footnote-textpos or index in PLCF
     WW8_CP nCurrentCp;  // only used by caller
     const sal_uInt8* pMemPos;// Mem-Pos for Sprms
     sal_uInt16 nSprmId;     // Sprm-Id ( 0 = invalid Id -> skip! )
@@ -880,7 +880,7 @@ struct WW8PLCFxDesc
     WW8PLCFx* pPLCFx;
     std::stack<sal_uInt16>* pIdStack;    // memory for Attr-Id for Attr-end(s)
     const sal_uInt8* pMemPos;// where are the Sprm(s)
-    long nOrigSprmsLen;
+    tools::Long nOrigSprmsLen;
 
     WW8_CP nStartPos;
     WW8_CP nEndPos;
@@ -899,7 +899,7 @@ struct WW8PLCFxDesc
 
     WW8_CP nCp2OrIdx;     // where are the NoSprm(s)
     sal_Int32 nSprmsLen;  // how many bytes for further Sprms / length of footnote
-    long nCpOfs;          // for Offset Header .. Footnote
+    tools::Long nCpOfs;          // for Offset Header .. Footnote
     bool bFirstSprm;      // for recognizing the first Sprm of a group
     bool bRealLineEnd;    // false for Pap-Piece-end
     sal_Int16 nRelativeJustify;
@@ -969,7 +969,7 @@ private:
     bool IsSprmLegalForCategory(sal_uInt16 nSprmId, short nIdx) const;
 
 public:
-    WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, long nStartCp,
+    WW8PLCFMan(const WW8ScannerBase* pBase, ManTypes nType, tools::Long nStartCp,
         bool bDoingDrawTextBox = false);
     ~WW8PLCFMan();
 
@@ -988,7 +988,7 @@ public:
     WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(m_pBkm->pPLCFx); }
     WW8PLCFx_AtnBook* GetAtnBook() const { return static_cast<WW8PLCFx_AtnBook*>(m_pAtnBkm->pPLCFx); }
     WW8PLCFx_FactoidBook* GetFactoidBook() const { return static_cast<WW8PLCFx_FactoidBook*>(m_pFactoidBkm->pPLCFx); }
-    long GetCpOfs() const { return m_pChp->nCpOfs; }  // for Header/Footer...
+    tools::Long GetCpOfs() const { return m_pChp->nCpOfs; }  // for Header/Footer...
 
     /* asks, if *current paragraph* has an Sprm of this type */
     SprmResult HasParaSprm(sal_uInt16 nId) const;
@@ -1005,7 +1005,7 @@ public:
         { return static_cast<WW8PLCFx_SEPX*>(m_pSep->pPLCFx); }
     WW8PLCFxDesc* GetPap() const { return m_pPap; }
     void TransferOpenSprms(std::stack<sal_uInt16> &rStack);
-    void SeekPos( long nNewCp );
+    void SeekPos( tools::Long nNewCp );
     void SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const;
     void RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave );
     WW8PLCFspecial* GetFdoa() const { return m_pFdoa; }
@@ -1031,7 +1031,7 @@ friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
 
-friend WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase*, ManTypes, long, bool);
+friend WW8PLCFMan::WW8PLCFMan(const WW8ScannerBase*, ManTypes, tools::Long, bool);
 friend class SwWW8FltControlStack;
 
 private:
@@ -1091,7 +1091,7 @@ public:
         WW8_CP* pNextPieceCp = nullptr, bool* pTestFlag = nullptr) const;
 
     sal_Int32 WW8ReadString(SvStream& rStrm, OUString& rStr, WW8_CP nCurrentStartCp,
-        long nTotalLen, rtl_TextEncoding eEnc ) const;
+        tools::Long nTotalLen, rtl_TextEncoding eEnc ) const;
 
 };
 

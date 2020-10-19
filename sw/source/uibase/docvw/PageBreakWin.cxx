@@ -348,7 +348,7 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     ::tools::Rectangle aBoundRect = GetEditWin()->LogicToPixel( pPageFrame->GetBoundRect(GetEditWin()).SVRect() );
     ::tools::Rectangle aFrameRect = GetEditWin()->LogicToPixel( pPageFrame->getFrameArea().SVRect() );
 
-    long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;
+    tools::Long nYLineOffset = ( aBoundRect.Top() + aFrameRect.Top() ) / 2;
     if ( pPrevPage )
     {
         ::tools::Rectangle aPrevFrameRect = GetEditWin()->LogicToPixel( pPrevPage->getFrameArea().SVRect() );
@@ -356,8 +356,8 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     }
 
     // Get the page + sidebar coords
-    long nPgLeft = aFrameRect.Left();
-    long nPgRight = aFrameRect.Right();
+    tools::Long nPgLeft = aFrameRect.Left();
+    tools::Long nPgRight = aFrameRect.Right();
 
     unsigned long nSidebarWidth = 0;
     const SwPostItMgr* pPostItMngr = GetEditWin()->GetView().GetWrtShell().GetPostItMgr();
@@ -374,9 +374,9 @@ void SwPageBreakWin::UpdatePosition(const std::optional<Point>& xEvtPt)
     // Place the button on the left or right?
     ::tools::Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
 
-    long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
-    long nLineRight = std::min( nPgRight, aVisArea.Right() );
-    long nBtnLeft = nLineLeft;
+    tools::Long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
+    tools::Long nLineRight = std::min( nPgRight, aVisArea.Right() );
+    tools::Long nBtnLeft = nLineLeft;
 
     if ( m_xMousePt )
     {

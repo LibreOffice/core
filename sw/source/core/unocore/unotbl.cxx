@@ -659,7 +659,7 @@ static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTabl
         return;
     SwTabCols aCols(aOldCols);
     const text::TableColumnSeparator* pArray = pSepSeq->getConstArray();
-    long nLastValue = 0;
+    tools::Long nLastValue = 0;
     //sal_Int32 nTableWidth = aCols.GetRight() - aCols.GetLeft();
     for(size_t i = 0; i < nOldCount; ++i)
     {

@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
 
         SwGetCurColNumPara aPara;
         const sal_uInt16 nNum = rSh.GetCurColNum( &aPara );
-        long nWidth;
+        tools::Long nWidth;
 
         if( nNum )
         {
@@ -651,14 +651,14 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
             const SwColumns& rCols = rCol.GetColumns();
 
             // initialise nStart and nEnd for nNum == 0
-            long nWidth1 = 0,
+            tools::Long nWidth1 = 0,
                 nStart1 = 0,
                 nEnd1 = nWidth;
             for( sal_uInt16 i = 0; i < nNum; ++i )
             {
                 const SwColumn* pCol = &rCols[i];
                 nStart1 = pCol->GetLeft() + nWidth1;
-                nWidth1 += static_cast<long>(rCol.CalcColWidth( i, static_cast<sal_uInt16>(nWidth) ));
+                nWidth1 += static_cast<tools::Long>(rCol.CalcColWidth( i, static_cast<sal_uInt16>(nWidth) ));
                 nEnd1 = nWidth1 - pCol->GetRight();
             }
             if(nStart1 || nEnd1 != nWidth)
@@ -688,7 +688,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
     if (nCols != pRep->GetAllColCount() && nCols > 0)
     {
         // Number of columns has changed: then the TabCols have to be adjusted
-        long nWidth = pRep->GetWidth();
+        tools::Long nWidth = pRep->GetWidth();
         --nCols;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );

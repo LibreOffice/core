@@ -162,7 +162,7 @@ public:
 
     const SwFrameFormat& GetOldFormat() const { return *m_pOldFormat; }
 
-    SwFrameFormat* GetFormat( long nWidth ) const;
+    SwFrameFormat* GetFormat( tools::Long nWidth ) const;
     SwFrameFormat* GetFormat( const SfxPoolItem& rItem ) const;
     void AddFormat( SwFrameFormat& rFormat );
     /// @returns true, if we can delete
@@ -181,7 +181,7 @@ public:
     SwShareBoxFormats() {}
     ~SwShareBoxFormats();
 
-    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, long nWidth ) const;
+    SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, tools::Long nWidth ) const;
     SwFrameFormat* GetFormat( const SwFrameFormat& rFormat, const SfxPoolItem& ) const;
 
     void AddFormat( const SwFrameFormat& rOld, SwFrameFormat& rNew );

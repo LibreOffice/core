@@ -93,7 +93,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     { // start of SwActContext scope
     SwActContext aActContext(m_pWrtShell.get());
 
-    long nFac = nFactor;
+    tools::Long nFac = nFactor;
 
     const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
     SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
@@ -101,7 +101,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
     const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
     const SwViewOption *pOpt = m_pWrtShell->GetViewOptions();
-    long lLeftMargin = 0;
+    tools::Long lLeftMargin = 0;
 
     if( eZoomType != SvxZoomType::PERCENT )
     {
@@ -135,26 +135,26 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         }
         else if(SvxZoomType::WHOLEPAGE == eZoomType || SvxZoomType::PAGEWIDTH == eZoomType )
         {
-            const long nOf = DOCUMENTBORDER * 2;
-            long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+            const tools::Long nOf = DOCUMENTBORDER * 2;
+            tools::Long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nTmpWidth += nOf;
             aPageSize.AdjustHeight(nOf );
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
 
             if ( SvxZoomType::WHOLEPAGE == eZoomType )
             {
-                long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
+                tools::Long nVisPercent = aWindowSize.Height() * 100 / aPageSize.Height();
                 nFac = std::min( nFac, nVisPercent );
             }
         }
         else
         {
-            const long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
+            const tools::Long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
             nFac = aWindowSize.Width() * 100 / nTmpWidth;
         }
     }
 
-    nFac = std::max( long( MINZOOM ), nFac );
+    nFac = std::max( tools::Long( MINZOOM ), nFac );
     const sal_uInt16 nZoomFac = static_cast<sal_uInt16>(nFac);
 
     SwViewOption aOpt( *pOpt );

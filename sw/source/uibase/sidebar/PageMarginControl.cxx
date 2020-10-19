@@ -238,16 +238,16 @@ PageMarginControl::~PageMarginControl()
 
 void PageMarginControl::SetMetricFieldMaxValues( const Size& rPageSize )
 {
-    const long nML = m_xLeftMarginEdit->denormalize( m_xLeftMarginEdit->get_value( FieldUnit::TWIP ) );
-    const long nMR = m_xRightMarginEdit->denormalize( m_xRightMarginEdit->get_value( FieldUnit::TWIP ) );
-    const long nMT = m_xTopMarginEdit->denormalize( m_xTopMarginEdit->get_value( FieldUnit::TWIP ) );
-    const long nMB = m_xBottomMarginEdit->denormalize( m_xBottomMarginEdit->get_value( FieldUnit::TWIP ) );
+    const tools::Long nML = m_xLeftMarginEdit->denormalize( m_xLeftMarginEdit->get_value( FieldUnit::TWIP ) );
+    const tools::Long nMR = m_xRightMarginEdit->denormalize( m_xRightMarginEdit->get_value( FieldUnit::TWIP ) );
+    const tools::Long nMT = m_xTopMarginEdit->denormalize( m_xTopMarginEdit->get_value( FieldUnit::TWIP ) );
+    const tools::Long nMB = m_xBottomMarginEdit->denormalize( m_xBottomMarginEdit->get_value( FieldUnit::TWIP ) );
 
-    const long nPH  = OutputDevice::LogicToLogic( rPageSize.Height(), m_eUnit, MapUnit::MapTwip );
-    const long nPW  = OutputDevice::LogicToLogic( rPageSize.Width(),  m_eUnit, MapUnit::MapTwip );
+    const tools::Long nPH  = OutputDevice::LogicToLogic( rPageSize.Height(), m_eUnit, MapUnit::MapTwip );
+    const tools::Long nPW  = OutputDevice::LogicToLogic( rPageSize.Width(),  m_eUnit, MapUnit::MapTwip );
 
     // Left
-    long nMax = nPW - nMR - MINBODY;
+    tools::Long nMax = nPW - nMR - MINBODY;
     m_xLeftMarginEdit->set_max( m_xLeftMarginEdit->normalize( nMax ), FieldUnit::TWIP );
 
     // Right
@@ -420,8 +420,8 @@ IMPL_LINK( PageMarginControl, SelectMarginHdl, weld::Button&, rControl, void )
 }
 
 void PageMarginControl::ExecuteMarginLRChange(
-    const long nPageLeftMargin,
-    const long nPageRightMargin )
+    const tools::Long nPageLeftMargin,
+    const tools::Long nPageRightMargin )
 {
     if ( SfxViewFrame::Current() )
     {
@@ -435,8 +435,8 @@ void PageMarginControl::ExecuteMarginLRChange(
 }
 
 void PageMarginControl::ExecuteMarginULChange(
-    const long nPageTopMargin,
-    const long nPageBottomMargin )
+    const tools::Long nPageTopMargin,
+    const tools::Long nPageBottomMargin )
 {
     if ( SfxViewFrame::Current() )
     {

@@ -142,14 +142,14 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     ::svt::CellControllerRef    m_xController;
     ::svt::CellControllerRef    m_xCheckController;
 
-    long    m_nCurrentRow;
+    tools::Long    m_nCurrentRow;
     bool    m_bModified;
 
 protected:
-    virtual bool                    SeekRow( long nRow ) override;
+    virtual bool                    SeekRow( tools::Long nRow ) override;
     virtual void                    PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
-    virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) override;
-    virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol) override;
+    virtual void                    InitController(::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol) override;
+    virtual ::svt::CellController*  GetController(tools::Long nRow, sal_uInt16 nCol) override;
     virtual bool                    SaveModified() override;
 
     std::vector<long>               GetOptimalColWidths() const;
@@ -163,7 +163,7 @@ public:
 
     bool                            IsModified()const override;
 
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColumn ) const override;
+    virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColumn ) const override;
     virtual void                    Resize() override;
     virtual Size                    GetOptimalSize() const override;
 };
@@ -820,7 +820,7 @@ bool SwTOXSelectTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-static long lcl_TOXTypesToUserData(CurTOXType eType)
+static tools::Long lcl_TOXTypesToUserData(CurTOXType eType)
 {
     sal_uInt16 nRet = TOX_INDEX;
     switch(eType.eType)
@@ -3010,7 +3010,7 @@ void SwTokenWindow::AdjustPositions()
     AdjustScrolling();
 }
 
-void SwTokenWindow::MoveControls(long nOffset)
+void SwTokenWindow::MoveControls(tools::Long nOffset)
 {
     m_xScrollWin->hadjustment_set_value(nOffset);
 }
@@ -3065,7 +3065,7 @@ IMPL_LINK(SwTokenWindow, ScrollBtnHdl, weld::Button&, rBtn, void)
     const auto nWidth = m_xScrollWin->hadjustment_get_upper();
     const auto nLeft = m_xScrollWin->hadjustment_get_value();
 
-    long nMove = nLeft;
+    tools::Long nMove = nLeft;
     if (&rBtn == m_xLeftScrollWin.get())
     {
         //find the first completely visible control (left edge visible)
@@ -3598,7 +3598,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> 
         &sWordOnly
     };
 
-    long nWidth = GetSizePixel().Width();
+    tools::Long nWidth = GetSizePixel().Width();
     nWidth /=7;
     --nWidth;
     for(sal_uInt16 i = 1; i < 8; i++)
@@ -3621,10 +3621,10 @@ void SwEntryBrowseBox::Resize()
 {
     SwEntryBrowseBox_Base::Resize();
 
-    long nWidth = GetSizePixel().Width();
+    tools::Long nWidth = GetSizePixel().Width();
     std::vector<long> aWidths = GetOptimalColWidths();
-    long nNaturalWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
-    long nExcess = ((nWidth - nNaturalWidth) / aWidths.size()) - 1;
+    tools::Long nNaturalWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
+    tools::Long nExcess = ((nWidth - nNaturalWidth) / aWidths.size()) - 1;
 
     for (size_t i = 0; i < aWidths.size(); ++i)
         SetColumnWidth(i+1, aWidths[i] + nExcess);
@@ -3634,13 +3634,13 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 {
     std::vector<long> aWidths;
 
-    long nStandardColMinWidth = approximate_digit_width() * 15;
-    long nYesNoWidth = approximate_digit_width() * 5;
+    tools::Long nStandardColMinWidth = approximate_digit_width() * 15;
+    tools::Long nYesNoWidth = approximate_digit_width() * 5;
     nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sYes));
     nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(m_sNo));
     for (sal_uInt16 i = 1; i < 6; i++)
     {
-        long nColWidth = std::max(nStandardColMinWidth,
+        tools::Long nColWidth = std::max(nStandardColMinWidth,
                                   GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
@@ -3648,7 +3648,7 @@ std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
 
     for (sal_uInt16 i = 6; i < 8; i++)
     {
-        long nColWidth = std::max(nYesNoWidth,
+        tools::Long nColWidth = std::max(nYesNoWidth,
                                   GetTextWidth(GetColumnTitle(i)));
         nColWidth += 12;
         aWidths.push_back(nColWidth);
@@ -3663,20 +3663,20 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 
     std::vector<long> aWidths = GetOptimalColWidths();
 
-    long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
+    tools::Long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 
     aSize.setWidth( std::max(aSize.Width(), nWidth) );
 
     return aSize;
 }
 
-bool SwEntryBrowseBox::SeekRow( long nRow )
+bool SwEntryBrowseBox::SeekRow( tools::Long nRow )
 {
     m_nCurrentRow = nRow;
     return true;
 }
 
-OUString SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
+OUString SwEntryBrowseBox::GetCellText(tools::Long nRow, sal_uInt16 nColumn) const
 {
     OUString pRet;
     if (o3tl::make_unsigned(nRow) < m_Entries.size())
@@ -3703,7 +3703,7 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
     rDev.DrawText( rRect, GetCellText( m_nCurrentRow, nColumnId ), nStyle );
 }
 
-::svt::CellController* SwEntryBrowseBox::GetController(long /*nRow*/, sal_uInt16 nCol)
+::svt::CellController* SwEntryBrowseBox::GetController(tools::Long /*nRow*/, sal_uInt16 nCol)
 {
     return nCol < ITEM_CASE ? m_xController.get() : m_xCheckController.get();
 }
@@ -3754,7 +3754,7 @@ bool SwEntryBrowseBox::SaveModified()
 }
 
 void SwEntryBrowseBox::InitController(
-                ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol)
+                ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol)
 {
     const OUString rText = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)

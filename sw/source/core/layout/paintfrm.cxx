@@ -285,12 +285,12 @@ struct SwPaintProperties {
 
     // Sizes of a pixel and the corresponding halves. Will be reset when
     // entering SwRootFrame::PaintSwFrame
-    long                nSPixelSzW;
-    long                nSPixelSzH;
-    long                nSHalfPixelSzW;
-    long                nSHalfPixelSzH;
-    long                nSMinDistPixelW;
-    long                nSMinDistPixelH;
+    tools::Long                nSPixelSzW;
+    tools::Long                nSPixelSzH;
+    tools::Long                nSHalfPixelSzW;
+    tools::Long                nSHalfPixelSzH;
+    tools::Long                nSMinDistPixelW;
+    tools::Long                nSMinDistPixelH;
 
     Color               aSGlobalRetoucheColor;
 
@@ -534,7 +534,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties const & prope
         if ( Left()  == rRect.Left() && Width() == rRect.Width() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
+            const tools::Long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
             if ( Bottom() + nAdd >= rRect.Top() &&
                  Top()    - nAdd <= rRect.Bottom()  )
             {
@@ -549,7 +549,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties const & prope
         if ( Top()  == rRect.Top() && Height() == rRect.Height() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
+            const tools::Long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
             if ( Right() + nAdd >= rRect.Left() &&
                  Left()  - nAdd <= rRect.Right() )
             {
@@ -593,7 +593,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
             return;
     }
 
-    static const long nAdd = 20;
+    static const tools::Long nAdd = 20;
 
     std::vector<SwLineRect*> aCheck;
 
@@ -606,7 +606,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
         aCheck.clear();
 
         const bool bVert = rL1.Height() > rL1.Width();
-        long nL1a, nL1b, nL1c, nL1d;
+        tools::Long nL1a, nL1b, nL1c, nL1d;
 
         if ( bVert )
         {
@@ -629,7 +629,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                  (bVert == (rL2.Height() > rL2.Width())) )
                 continue;
 
-            long nL2a, nL2b, nL2c, nL2d;
+            tools::Long nL2a, nL2b, nL2c, nL2d;
             if ( bVert )
             {
                 nL2a = rL2.Top();   nL2b = rL2.Left();
@@ -799,7 +799,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                     if ( aSubsRect.Left()  <= rLine.Right() &&
                          aSubsRect.Right() >= rLine.Left() )
                     {
-                        long nTmp = rLine.Top()-(properties.nSPixelSzH+1);
+                        tools::Long nTmp = rLine.Top()-(properties.nSPixelSzH+1);
                         if ( aSubsLineRect.Top() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -825,7 +825,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, S
                     if ( aSubsRect.Top() <= rLine.Bottom() &&
                          aSubsRect.Bottom() >= rLine.Top() )
                     {
-                        long nTmp = rLine.Left()-(properties.nSPixelSzW+1);
+                        tools::Long nTmp = rLine.Left()-(properties.nSPixelSzW+1);
                         if ( aSubsLineRect.Left() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -859,12 +859,12 @@ void SwLineRects::LockLines( bool bLock )
 
 static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect const & rLRect )
 {
-    long startX = rLRect.Left(  ), endX;
-    long startY = rLRect.Top(  ),  endY;
+    tools::Long startX = rLRect.Left(  ), endX;
+    tools::Long startY = rLRect.Top(  ),  endY;
 
     // Discriminate vertically stretched rect from horizontally stretched
     // and restrict minimum nHalfLWidth to 1
-    long nHalfLWidth = std::max( static_cast<long>(std::min( rLRect.Width(  ), rLRect.Height(  ) ) / 2), 1L );
+    tools::Long nHalfLWidth = std::max( static_cast<tools::Long>(std::min( rLRect.Width(  ), rLRect.Height(  ) ) / 2), 1L );
 
     if ( rLRect.Height(  ) > rLRect.Width(  ) )
     {
@@ -1028,8 +1028,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 {
                     if ( bVerticalSubs )
                     {
-                        long nLi = rLi.Right();
-                        long nLk = rLk.Right();
+                        tools::Long nLi = rLi.Right();
+                        tools::Long nLk = rLk.Right();
                         if ( rLi.Top() == rLk.Top() &&
                              ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                               (nLk < rLi.Left() && nLk+21 > rLi.Left())))
@@ -1043,8 +1043,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                     }
                     else
                     {
-                        long nLi = rLi.Bottom();
-                        long nLk = rLk.Bottom();
+                        tools::Long nLi = rLi.Bottom();
+                        tools::Long nLk = rLk.Bottom();
                         if ( rLi.Left() == rLk.Left() &&
                              ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                               (nLk < rLi.Top() && nLk+21 > rLi.Top())))
@@ -1230,11 +1230,11 @@ void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut )
     pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
 }
 
-static long lcl_AlignWidth( const long nWidth, SwPaintProperties const & properties )
+static tools::Long lcl_AlignWidth( const tools::Long nWidth, SwPaintProperties const & properties )
 {
     if ( nWidth )
     {
-        const long nW = nWidth % properties.nSPixelSzW;
+        const tools::Long nW = nWidth % properties.nSPixelSzW;
 
         if ( !nW || nW > properties.nSHalfPixelSzW )
             return std::max(1L, nWidth - properties.nSHalfPixelSzW);
@@ -1242,11 +1242,11 @@ static long lcl_AlignWidth( const long nWidth, SwPaintProperties const & propert
     return nWidth;
 }
 
-static long lcl_AlignHeight( const long nHeight, SwPaintProperties const & properties )
+static tools::Long lcl_AlignHeight( const tools::Long nHeight, SwPaintProperties const & properties )
 {
     if ( nHeight )
     {
-        const long nH = nHeight % properties.nSPixelSzH;
+        const tools::Long nH = nHeight % properties.nSPixelSzH;
 
         if ( !nH || nH > properties.nSHalfPixelSzH )
             return std::max(1L, nHeight - properties.nSHalfPixelSzH);
@@ -2365,7 +2365,7 @@ void SwTabFramePainter::HandleFrame(const SwLayoutFrame& rLayoutFrame, const SwR
     {
         const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(&rLayoutFrame);
         const SwRowFrame* pRowFrame = static_cast<const SwRowFrame*>(pThisCell->GetUpper());
-        const long nRowSpan = pThisCell->GetTabBox()->getRowSpan();
+        const tools::Long nRowSpan = pThisCell->GetTabBox()->getRowSpan();
         if ( !pRowFrame->IsRowSpanLine() || nRowSpan > 1 || nRowSpan < -1 )
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), &rLayoutFrame );
@@ -3314,7 +3314,7 @@ namespace {
 class SwShortCut
 {
     SwRectDist fnCheck;
-    long nLimit;
+    tools::Long nLimit;
 public:
     SwShortCut( const SwFrame& rFrame, const SwRect& rRect );
     bool Stop( const SwRect& rRect ) const
@@ -3638,7 +3638,7 @@ void SwColumnFrame::PaintBreak( ) const
 
     tools::Rectangle aTextRect;
     pOut->GetTextBoundRect( aTextRect, aBreakText );
-    long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
+    tools::Long nTextOff = ( nWidth - aTextRect.GetWidth() ) / 2;
 
     basegfx::B2DHomMatrix aTextMatrix( basegfx::utils::createScaleTranslateB2DHomMatrix(
                 aFontSize.getX(), aFontSize.getY(),
@@ -3699,7 +3699,7 @@ void SwPageFrame::PaintDecorators( ) const
 
     bool bRtl = AllSettings::GetLayoutRTL();
     const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
-    long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
+    tools::Long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
     if ( bRtl )
         nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
 
@@ -3710,7 +3710,7 @@ void SwPageFrame::PaintDecorators( ) const
         if ( !pHeaderFrame->IsHeaderFrame() )
             pHeaderFrame = nullptr;
 
-        long nHeaderYOff = aBodyRect.Top();
+        tools::Long nHeaderYOff = aBodyRect.Top();
         Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nHeaderYOff ) );
         rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Header, nOutputOff );
     }
@@ -3727,7 +3727,7 @@ void SwPageFrame::PaintDecorators( ) const
         pFootnoteContFrame = pFootnoteContFrame->GetNext();
     }
 
-    long nFooterYOff = aBodyRect.Bottom();
+    tools::Long nFooterYOff = aBodyRect.Bottom();
     Point nOutputOff = rEditWin.LogicToPixel( Point( nXOff, nFooterYOff ) );
     rEditWin.GetFrameControlsManager().SetHeaderFooterControl( this, FrameControlType::Footer, nOutputOff );
 }
@@ -4229,8 +4229,8 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     const bool bLeft, const bool bRight,
     SwPaintProperties const & properties)
 {
-    const long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth(), properties );
-    const long nHeight = ::lcl_AlignHeight( rShadow.GetWidth(), properties );
+    const tools::Long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth(), properties );
+    const tools::Long nHeight = ::lcl_AlignHeight( rShadow.GetWidth(), properties );
 
     SwRects aRegion;
     SwRect aOut( rOutRect );
@@ -5263,7 +5263,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwTwips nPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
     Fraction aFract( nPrtWidth, 1 );
     aFract *= rInf.GetWidth();
-    const SwTwips nWidth = static_cast<long>(aFract);
+    const SwTwips nWidth = static_cast<tools::Long>(aFract);
 
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
@@ -5366,11 +5366,11 @@ void SwPageFrame::PaintGrid( OutputDevice const * pOut, SwRect const &rRect ) co
 
     bool bGrid = pGrid->GetRubyTextBelow();
     bool bCell = GRID_LINES_CHARS == pGrid->GetGridType();
-    long nGrid = pGrid->GetBaseHeight();
+    tools::Long nGrid = pGrid->GetBaseHeight();
     const SwDoc* pDoc = GetFormat()->GetDoc();
-    long nGridWidth = GetGridWidth(*pGrid, *pDoc);
-    long nRuby = pGrid->GetRubyHeight();
-    long nSum = nGrid + nRuby;
+    tools::Long nGridWidth = GetGridWidth(*pGrid, *pDoc);
+    tools::Long nRuby = pGrid->GetRubyHeight();
+    tools::Long nSum = nGrid + nRuby;
     const Color *pCol = &pGrid->GetColor();
 
     SwTwips nRight = aInter.Left() + aInter.Width();
@@ -5720,7 +5720,7 @@ bool SwPageFrame::IsLeftShadowNeeded() const
     ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
     SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
 
-    long lShadowAdjustment = mnShadowPxWidth - 1; // TODO: extract this
+    tools::Long lShadowAdjustment = mnShadowPxWidth - 1; // TODO: extract this
 
     _orHorizontalShadowRect.Chg(
                     Point( aPagePxRect.Left() + (bPaintLeftShadow ? lShadowAdjustment : 0), 0 ),
@@ -5773,8 +5773,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     tools::Rectangle aComplete(aPoint, aSize);
     Size aTileSize(BORDER_TILE_SIZE, BORDER_TILE_SIZE);
 
-    long iterX = eArea != RIGHT && eArea != LEFT ? BORDER_TILE_SIZE : 0;
-    long iterY = eArea == RIGHT || eArea == LEFT ? BORDER_TILE_SIZE : 0;
+    tools::Long iterX = eArea != RIGHT && eArea != LEFT ? BORDER_TILE_SIZE : 0;
+    tools::Long iterY = eArea == RIGHT || eArea == LEFT ? BORDER_TILE_SIZE : 0;
 
     for (tools::Rectangle aTile(aPoint, aTileSize); true; aTile.Move(iterX, iterY))
     {
@@ -5896,8 +5896,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
         if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
         {
-            const long nWidth = aPageRightShadow.GetSizePixel().Width();
-            const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            const tools::Long nWidth = aPageRightShadow.GetSizePixel().Width();
+            const tools::Long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageRightShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
                 aPageRightShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
 
@@ -5911,14 +5911,14 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // Left shadows and corners
     if(bPaintLeftShadow)
     {
-        const long lLeft = aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width();
+        const tools::Long lLeft = aPaintRect.Left() - aPageBottomLeftShadow.GetSizePixel().Width();
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft,
             aPagePxRect.Bottom() + 1 + mnShadowPxWidth - aPageBottomLeftShadow.GetSizePixel().Height() ) ), aPageBottomLeftShadow );
         pOut->DrawBitmapEx( pOut->PixelToLogic( Point( lLeft, aPagePxRect.Top() - mnShadowPxWidth ) ), aPageTopLeftShadow );
         if (aPagePxRect.Height() > 2 * mnShadowPxWidth)
         {
-            const long nWidth = aPageLeftShadow.GetSizePixel().Width();
-            const long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
+            const tools::Long nWidth = aPageLeftShadow.GetSizePixel().Width();
+            const tools::Long nHeight = aPagePxRect.Height() - 2 * (mnShadowPxWidth - 1);
             if (aPageLeftShadow.GetSizePixel().Height() < BORDER_TILE_SIZE)
                 aPageLeftShadow.Scale(Size(nWidth, BORDER_TILE_SIZE), BmpScaleFlag::Fast);
 
@@ -5930,7 +5930,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     }
 
     // Bottom shadow
-    const long nBottomHeight = aPageBottomShadow.GetSizePixel().Height();
+    const tools::Long nBottomHeight = aPageBottomShadow.GetSizePixel().Height();
     if (aPageBottomShadow.GetSizePixel().Width() < BORDER_TILE_SIZE)
         aPageBottomShadow.Scale(Size(BORDER_TILE_SIZE, nBottomHeight), BmpScaleFlag::Fast);
 
@@ -5940,7 +5940,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
             aPageBottomShadow, BOTTOM);
 
     // Top shadow
-    const long nTopHeight = aPageTopShadow.GetSizePixel().Height();
+    const tools::Long nTopHeight = aPageTopShadow.GetSizePixel().Height();
     if (aPageTopShadow.GetSizePixel().Width() < BORDER_TILE_SIZE)
         aPageTopShadow.Scale(Size(BORDER_TILE_SIZE, nTopHeight), BmpScaleFlag::Fast);
 
@@ -6508,7 +6508,7 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
 
     // use pointers to member function in order to unify flow
     typedef long (Point::*pmfPtGet)() const;
-    typedef void (Point::*pmfPtSet)(long);
+    typedef void (Point::*pmfPtSet)(tools::Long);
     const pmfPtGet pDirPtX = &Point::X;
     const pmfPtGet pDirPtY = &Point::Y;
     const pmfPtGet pDirPt = bHori ? pDirPtX : pDirPtY;
@@ -6568,17 +6568,17 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
             }
 
             //Is the Obj placed on the line
-            const long nP1OthPt = !bHori ? rP1.X() : rP1.Y();
+            const tools::Long nP1OthPt = !bHori ? rP1.X() : rP1.Y();
             const tools::Rectangle &rBound = pObj->GetCurrentBoundRect();
             const Point aDrPt( rBound.TopLeft() );
-            const long nDrOthPt = !bHori ? aDrPt.X() : aDrPt.Y();
+            const tools::Long nDrOthPt = !bHori ? aDrPt.X() : aDrPt.Y();
             const Size  aDrSz( rBound.GetSize() );
-            const long nDrOthSz = !bHori ? aDrSz.Width() : aDrSz.Height();
+            const tools::Long nDrOthSz = !bHori ? aDrSz.Width() : aDrSz.Height();
 
             if ( nP1OthPt >= nDrOthPt && nP1OthPt <= nDrOthPt + nDrOthSz )
             {
-                const long nDrDirPt = bHori ? aDrPt.X() : aDrPt.Y();
-                const long nDrDirSz = bHori ? aDrSz.Width() : aDrSz.Height();
+                const tools::Long nDrDirPt = bHori ? aDrPt.X() : aDrPt.Y();
+                const tools::Long nDrDirSz = bHori ? aDrSz.Width() : aDrSz.Height();
 
                 if ( (aP1.*pDirPt)() >= nDrDirPt && (aP1.*pDirPt)() <= nDrDirPt + nDrDirSz )
                     (aP1.*pDirPtSet)( nDrDirPt + nDrDirSz );
