@@ -45,6 +45,30 @@
       "revId": "96757024b3bdc8ae14d0a647a07136da31942f4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac6b6e12_59cdf37e",
+        "filename": "sd/source/filter/ppt/pptinanimations.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3039,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-19T06:50:45Z",
+      "side": 1,
+      "message": "thanks, fix here\nhttps://gerrit.libreoffice.org/c/core/+/104511",
+      "parentUuid": "20fbf8ee_01b82268",
+      "range": {
+        "startLine": 3039,
+        "startChar": 24,
+        "endLine": 3039,
+        "endChar": 48
+      },
+      "revId": "96757024b3bdc8ae14d0a647a07136da31942f4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
