@@ -266,7 +266,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        WORD glyphWStr[] = { pGlyph->glyphId() };
+        wchar_t glyphWStr = pGlyph->glyphId();
         if (hAltFont && pGlyph->IsVertical() == bUseAltFont)
         {
             bUseAltFont = !bUseAltFont;
@@ -275,7 +275,7 @@ bool ExTextOutRenderer::operator ()(GenericSalLayout const &rLayout,
         if (bShift && pGlyph->IsVertical())
             SetTextAlign(hDC, TA_TOP|TA_LEFT);
 
-        ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
+        ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1, nullptr);
 
         if (bShift && pGlyph->IsVertical())
             SetTextAlign(hDC, nTextAlign);
