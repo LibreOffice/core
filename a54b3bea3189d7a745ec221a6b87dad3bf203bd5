@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6538a86c_af21f7eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "1. Please remove the quotes around the first line.\n2. Please don\u0027t use bug title as the title of the commit. Your commit is not to cause Writer to lock up, it\u0027s to change something - so please use the first line to describe shortly what it does.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 79
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a27f37ae_141b2dd0",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "Why is this blank line needed in your change? (Formatting changes, if wanted at all, should be an independent cleanup commit, not making false impression that strings.hrc was modified as part of this functional change)",
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a065438_72f1e7e9",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "This extra empty line, again, seems useless as part of this functional change. Please remove.",
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4259ac75_d699cf03",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "This include is already there, line 26",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 29
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79fcb8af_d5a4629c",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "Please no pure formatting changes to the lines that have no functional changes!",
+      "range": {
+        "startLine": 93,
+        "startChar": 61,
+        "endLine": 93,
+        "endChar": 64
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81063da1_d956d147",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "Please no pure formatting changes to the lines that have no functional changes!",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 105,
+        "endChar": 91
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00fdec86_060aa089",
+        "filename": "sw/source/ui/table/instable.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:24:59Z",
+      "side": 1,
+      "message": "Please no pure formatting changes to the lines that have no functional changes!",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 37
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
