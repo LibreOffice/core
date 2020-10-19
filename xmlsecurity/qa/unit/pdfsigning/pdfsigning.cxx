@@ -72,6 +72,7 @@ public:
     /// Test a valid signature that does not cover the whole file.
     void testPartial();
     void testPartialInBetween();
+    void testBadCertP1();
     /// Test writing a PAdES signature.
     void testSigningCertificateAttribute();
     /// Test that we accept files which are supposed to be good.
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(testPDFPAdESGood);
     CPPUNIT_TEST(testPartial);
     CPPUNIT_TEST(testPartialInBetween);
+    CPPUNIT_TEST(testBadCertP1);
     CPPUNIT_TEST(testSigningCertificateAttribute);
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
@@ -139,7 +141,9 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     for (size_t i = 0; i < aSignatures.size(); ++i)
     {
         SignatureInformation aInfo(i);
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, aVerifyDocument));
+        int nMDPPerm = aVerifyDocument.GetMDPPerm();
+        xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[i], aInfo, aVerifyDocument,
+                                              nMDPPerm);
         aRet.push_back(aInfo);
 
         if (!rExpectedSubFilter.isEmpty())
@@ -268,7 +272,9 @@ void PDFSigningTest::testPDFRemove()
         std::vector<vcl::filter::PDFObjectElement*> aSignatures = aDocument.GetSignatureWidgets();
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aSignatures.size());
         SignatureInformation aInfo(0);
-        CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[0], aInfo, aDocument));
+        int nMDPPerm = aDocument.GetMDPPerm();
+        CPPUNIT_ASSERT(xmlsecurity::pdfio::ValidateSignature(aStream, aSignatures[0], aInfo,
+                                                             aDocument, nMDPPerm));
     }
 
     // Remove the signature and write out the result as remove.pdf.
@@ -396,6 +402,21 @@ void PDFSigningTest::testPartial()
     CPPUNIT_ASSERT(!aInfos.empty());
     SignatureInformation& rInformation = aInfos[0];
     CPPUNIT_ASSERT(rInformation.bPartialDocumentSignature);
+}
+
+void PDFSigningTest::testBadCertP1()
+{
+    std::vector<SignatureInformation> aInfos
+        = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p1.pdf", 1,
+                 /*rExpectedSubFilter=*/OString());
+    CPPUNIT_ASSERT(!aInfos.empty());
+    SignatureInformation& rInformation = aInfos[0];
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
+    // - Actual  : 1 (SecurityOperationStatus_OPERATION_SUCCEEDED)
+    // i.e. annotation after a P1 signature was not considered as a bad modification.
+    CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
+                         rInformation.nStatus);
 }
 
 void PDFSigningTest::testSigningCertificateAttribute()
