@@ -24,8 +24,9 @@
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -42,6 +43,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/pathoptions.hxx>
+#include <xmloff/xmlimp.hxx>
 
 using namespace comphelper;
 using namespace com::sun::star::uno;
@@ -107,12 +109,13 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     aAnys[0] <<= xInfoSet;
 
 
-    Reference < XDocumentHandler > xHandler( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext ), UNO_QUERY );
-    if (!xHandler.is()) {
-        SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << sXMLImportService);
-        return false;
-    }
+    // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
+    Reference < XInterface > xFilter = mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext );
+    assert(xFilter);
+    Reference < XFastDocumentHandler > xHandler( xFilter, UNO_QUERY );
+    assert(xHandler);
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
+    assert(xImporter);
     xImporter->setTargetDocument ( mxDoc );
 
     if (xStatusIndicator.is()){
@@ -122,7 +125,8 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     // Creating a ConverterBridge instance
 
-    Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
+    Reference< XInterface > xConvBridge(
+        mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
     if (!xConvBridge.is()) {
         SAL_WARN("filter.xmlfa", "XmlFilterAdaptor: unable to create service " << udConvertClass);
         return false;
@@ -130,7 +134,8 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     if (xStatusIndicator.is())
         xStatusIndicator->setValue(nSteps++);
 
-    Reference< XImportFilter > xConverter( xConvBridge, UNO_QUERY );
+    Reference< XImportFilter > xConverter1( xConvBridge, UNO_QUERY );
+    Reference< XImportFilter2 > xConverter2( xConvBridge, UNO_QUERY );
 
     // prevent unnecessary broadcasting when loading
     Reference< XModel > xModel( mxDoc, UNO_QUERY );
@@ -170,10 +175,24 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
     // Calling Filtering Component
 
     try {
-        if (!xConverter->importer(aDescriptor,xHandler,msUserData)) {
-            if (xStatusIndicator.is())
-                   xStatusIndicator->end();
-            return false;
+        auto pImport = dynamic_cast<SvXMLImport*>(xHandler.get());
+        assert(pImport);
+        if (xConverter2)
+        {
+            if (!xConverter2->importer(aDescriptor,pImport,msUserData)) {
+                if (xStatusIndicator.is())
+                    xStatusIndicator->end();
+                return false;
+            }
+        }
+        else
+        {
+            Reference<XDocumentHandler> xDocHandler = new SvXMLLegacyToFastDocHandler(pImport);
+            if (!xConverter1->importer(aDescriptor,xDocHandler,msUserData)) {
+                if (xStatusIndicator.is())
+                    xStatusIndicator->end();
+                return false;
+            }
         }
     }
     catch( const Exception& )
