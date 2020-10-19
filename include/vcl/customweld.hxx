@@ -99,6 +99,10 @@ public:
     }
     virtual int GetSurroundingText(OUString& /*rSurrounding*/) { return -1; }
     virtual bool DeleteSurroundingText(const Selection& /*rRange*/) { return false; }
+    css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
+    {
+        return m_pDrawingArea->get_drop_target();
+    }
     void SetDragDataTransferrable(rtl::Reference<TransferDataContainer>& rTransferrable,
                                   sal_uInt8 eDNDConstants)
     {
