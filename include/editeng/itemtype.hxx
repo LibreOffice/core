@@ -31,12 +31,12 @@ class IntlWrapper;
 
 const sal_Unicode cpDelim[] = { ',' , ' ', '\0' };
 
-EDITENG_DLLPUBLIC OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
+EDITENG_DLLPUBLIC OUString GetMetricText( tools::Long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );
 EDITENG_DLLPUBLIC const char* GetMetricId(MapUnit eUnit);
 
 
-inline long Scale( long nVal, long nMult, long nDiv )
+inline tools::Long Scale( tools::Long nVal, tools::Long nMult, tools::Long nDiv )
 {
     BigInt aVal( nVal );
     aVal *= nMult;

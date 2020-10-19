@@ -415,15 +415,15 @@ void EditUndoMoveParagraphs::Undo()
 {
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     Range aTmpRange( nParagraphs );
-    long nTmpDest = aTmpRange.Min();
+    tools::Long nTmpDest = aTmpRange.Min();
 
-    long nDiff = nDest - aTmpRange.Min();
+    tools::Long nDiff = nDest - aTmpRange.Min();
     aTmpRange.Min() += nDiff;
     aTmpRange.Max() += nDiff;
 
-    if ( nParagraphs.Min() < static_cast<long>(nDest) )
+    if ( nParagraphs.Min() < static_cast<tools::Long>(nDest) )
     {
-        long nLen = aTmpRange.Len();
+        tools::Long nLen = aTmpRange.Len();
         aTmpRange.Min() -= nLen;
         aTmpRange.Max() -= nLen;
     }
