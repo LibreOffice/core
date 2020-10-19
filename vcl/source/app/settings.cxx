@@ -1547,6 +1547,12 @@ StyleSettings::GetInactiveTabColor() const
     return mxData->maInactiveTabColor;
 }
 
+void StyleSettings::SetAlternatingRowColor(const Color& rColor)
+{
+    CopyData();
+    mxData->maAlternatingRowColor = rColor;
+}
+
 const Color&
 StyleSettings::GetAlternatingRowColor() const
 {
