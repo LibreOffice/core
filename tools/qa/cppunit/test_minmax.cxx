@@ -31,8 +31,8 @@ public:
     void testSignedMinMax()
     {
         sal_Int32 nSignedVal = -10;
-        long nMin = 1;
-        long nMax = 10;
+        tools::Long nMin = 1;
+        tools::Long nMax = 10;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nMin),
                              static_cast<sal_Int32>(MinMax(nSignedVal, nMin, nMax)));
 
@@ -50,8 +50,8 @@ public:
     void testUnsignedMinMax()
     {
         sal_uInt32 nUnsignedVal = 5;
-        long nMin = 1;
-        long nMax = 10;
+        tools::Long nMin = 1;
+        tools::Long nMax = 10;
         CPPUNIT_ASSERT_EQUAL(nUnsignedVal,
                              static_cast<sal_uInt32>(MinMax(nUnsignedVal, nMin, nMax)));
 
