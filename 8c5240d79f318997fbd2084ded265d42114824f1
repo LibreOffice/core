@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae603bf2_e699aa31",
+        "filename": "sw/source/core/layout/atrfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-19T09:34:36Z",
+      "side": 1,
+      "message": "unnecessary formatting changes",
+      "range": {
+        "startLine": 1299,
+        "startChar": 0,
+        "endLine": 1304,
+        "endChar": 21
+      },
+      "revId": "8c5240d79f318997fbd2084ded265d42114824f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b9e041d_f592a380",
+        "filename": "sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-19T09:34:36Z",
+      "side": 1,
+      "message": "SwTips",
+      "range": {
+        "startLine": 256,
+        "startChar": 18,
+        "endLine": 256,
+        "endChar": 22
+      },
+      "revId": "8c5240d79f318997fbd2084ded265d42114824f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba54d67_a0c67d4a",
+        "filename": "sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-19T09:34:36Z",
+      "side": 1,
+      "message": "SwTips",
+      "range": {
+        "startLine": 257,
+        "startChar": 18,
+        "endLine": 257,
+        "endChar": 22
+      },
+      "revId": "8c5240d79f318997fbd2084ded265d42114824f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}

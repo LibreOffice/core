@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4d6d857_ec2a68a4",
+        "filename": "sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-19T09:34:36Z",
+      "side": 0,
+      "message": "unnecessary formatting change",
+      "revId": "659c56b06a658950c82af9789376ff0c1858a787",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
