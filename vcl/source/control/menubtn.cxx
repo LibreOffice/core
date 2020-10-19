@@ -280,5 +280,9 @@ void MenuToggleButton::SetActive( bool bSel )
     mbIsActive = bSel;
 }
 
+bool MenuToggleButton::GetActive() const
+{
+    return mbIsActive;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
