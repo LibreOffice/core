@@ -16,6 +16,24 @@
       "revId": "8f54136caa786523fd224f6c98fc8e7c45cd805d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a851bace_f98e878b",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1407,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-19T07:22:56Z",
+      "side": 1,
+      "message": "probably not a problem in practice because LayoutText won\u0027t return false.\n\nBut just in case, fix at\nhttps://gerrit.libreoffice.org/c/core/+/104513",
+      "parentUuid": "f887e0be_42abde7b",
+      "revId": "8f54136caa786523fd224f6c98fc8e7c45cd805d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
