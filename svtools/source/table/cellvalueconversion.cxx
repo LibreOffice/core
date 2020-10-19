@@ -32,6 +32,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/long.hxx>
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
@@ -63,14 +64,14 @@ namespace svt
 
         double lcl_convertDateToDays( sal_uInt16 const i_day, sal_uInt16 const i_month, sal_Int16 const i_year )
         {
-            long const nNullDateDays = ::Date::DateToDays( 1, 1, 1900 );
-            long const nValueDateDays = ::Date::DateToDays( i_day, i_month, i_year );
+            tools::Long const nNullDateDays = ::Date::DateToDays( 1, 1, 1900 );
+            tools::Long const nValueDateDays = ::Date::DateToDays( i_day, i_month, i_year );
 
             return nValueDateDays - nNullDateDays;
         }
 
 
-        double lcl_convertTimeToDays( long const i_hours, long const i_minutes, long const i_seconds, long const i_100thSeconds )
+        double lcl_convertTimeToDays( tools::Long const i_hours, tools::Long const i_minutes, tools::Long const i_seconds, tools::Long const i_100thSeconds )
         {
             return tools::Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
         }

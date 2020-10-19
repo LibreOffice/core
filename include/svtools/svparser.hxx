@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
+#include <tools/long.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -53,8 +54,8 @@ protected:
     sal_uLong           nlLinePos;          // current column number
 
     std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
-    long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
-    long                nTokenValue;        // additional value (RTF)
+    tools::Long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
+    tools::Long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // status also in derived classes
 
@@ -70,7 +71,7 @@ protected:
     struct TokenStackType
     {
         OUString    sToken;
-        long        nTokenValue;
+        tools::Long        nTokenValue;
         bool        bTokenHasValue;
         T           nTokenId;
 

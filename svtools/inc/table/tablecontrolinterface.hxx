@@ -107,7 +107,7 @@ namespace svt::table
         /** the start of the column, in pixels. Might be negative, in case the column is scrolled out of the visible
             area. Note: see below.
         */
-        long    nStartPixel;
+        tools::Long    nStartPixel;
 
         /** the end of the column, in pixels, plus 1. Effectively, this is the accumulated width of all columns
             up to the current one.
@@ -120,7 +120,7 @@ namespace svt::table
             gap. So these doc comments are inconsistent. How
             surprising.
         */
-        long    nEndPixel;
+        tools::Long    nEndPixel;
 
         ColumnMetrics()
             :nStartPixel(0)
@@ -128,7 +128,7 @@ namespace svt::table
         {
         }
 
-        ColumnMetrics( long const i_start, long const i_end )
+        ColumnMetrics( tools::Long const i_start, tools::Long const i_end )
             :nStartPixel( i_start )
             ,nEndPixel( i_end )
         {
@@ -215,7 +215,7 @@ namespace svt::table
         virtual void    invalidate( TableArea const i_what ) = 0;
 
         /// calculates a width, given in pixels, into an AppFont-based width
-        virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;
+        virtual tools::Long    pixelWidthToAppFont( tools::Long const i_pixels ) const = 0;
 
         /// shows a tracking rectangle
         virtual void    showTracking( tools::Rectangle const & i_location, ShowTrackFlags const i_flags ) = 0;

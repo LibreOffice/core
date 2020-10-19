@@ -837,8 +837,8 @@ namespace svt
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchronous event the focus has changed, we won't grab it for ourself.
 
-        long    nPaintRow;  // row being painted
-        long    nEditRow;
+        tools::Long    nPaintRow;  // row being painted
+        tools::Long    nEditRow;
         sal_uInt16  nEditCol;
 
         bool            bHasFocus : 1;
@@ -867,7 +867,7 @@ namespace svt
         virtual void ColumnResized(sal_uInt16 nColId) override;
         virtual void Resize() override;
         virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
-        virtual bool SeekRow(long nRow) override;
+        virtual bool SeekRow(tools::Long nRow) override;
 
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
@@ -886,14 +886,14 @@ namespace svt
         virtual void EndScroll() override;
 
         // should be used instead of GetFieldRectPixel, 'cause this method here takes into account the borders
-        tools::Rectangle GetCellRect(long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
+        tools::Rectangle GetCellRect(tools::Long nRow, sal_uInt16 nColId, bool bRelToBrowser = true) const;
+        virtual sal_uInt32 GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId);
         sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
 
         virtual void PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const;
         virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const = 0;
 
-        virtual RowStatus GetRowStatus(long nRow) const;
+        virtual RowStatus GetRowStatus(tools::Long nRow) const;
 
         virtual void    RowHeightChanged() override;
 
@@ -903,7 +903,7 @@ namespace svt
 
         // when changing a row:
         // CursorMoving:    cursor is being moved, but GetCurRow() still provides the old row
-        virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol);
+        virtual bool CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol);
 
         // cursor has been moved
         virtual void CursorMoved() override;
@@ -915,8 +915,8 @@ namespace svt
 
         virtual bool IsModified() const {return aController.is() && aController->IsValueChangedFromSaved();}
 
-        virtual CellController* GetController(long nRow, sal_uInt16 nCol);
-        virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
+        virtual CellController* GetController(tools::Long nRow, sal_uInt16 nCol);
+        virtual void InitController(CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol);
         static void ResizeController(CellControllerRef const & rController, const tools::Rectangle&);
         virtual void DoubleClick(const BrowserMouseEvent&) override;
 
@@ -934,7 +934,7 @@ namespace svt
         // result in traveling to the next or to th previous cell
         virtual bool IsTabAllowed(bool bForward) const;
 
-        virtual bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const override;
+        virtual bool IsCursorMoveAllowed(tools::Long nNewRow, sal_uInt16 nNewColId) const override;
 
         void    PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
 
@@ -947,7 +947,7 @@ namespace svt
         virtual void dispose() override;
 
         bool IsEditing() const {return aController.is();}
-        void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
+        void InvalidateStatusCell(tools::Long nRow) {RowModified(nRow, 0);}
         void InvalidateHandleColumn();
 
         // late construction
@@ -959,7 +959,7 @@ namespace svt
         EditBrowseBoxFlags  GetBrowserFlags() const { return m_nBrowserFlags; }
         void                SetBrowserFlags(EditBrowseBoxFlags nFlags);
 
-        virtual void ActivateCell(long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
+        virtual void ActivateCell(tools::Long nRow, sal_uInt16 nCol, bool bSetCellFocus = true);
         virtual void DeactivateCell(bool bUpdate = true);
         // Children ---------------------------------------------------------------
 
@@ -982,7 +982,7 @@ namespace svt
 
         virtual bool ProcessKey(const KeyEvent& rEvt) override;
 
-        css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
+        css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCheckBoxCell(tools::Long _nRow, sal_uInt16 _nColumnPos,const TriState& eState);
         bool ControlHasFocus() const;
     protected:
         // creates the accessible which wraps the active cell

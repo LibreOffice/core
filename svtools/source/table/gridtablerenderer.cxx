@@ -62,11 +62,11 @@ namespace svt::table
         {
         }
 
-        BitmapEx const & getBitmapFor(vcl::RenderContext const & i_device, long const i_headerHeight,
+        BitmapEx const & getBitmapFor(vcl::RenderContext const & i_device, tools::Long const i_headerHeight,
                                       StyleSettings const & i_style, bool const i_sortAscending);
 
     private:
-        long m_lastHeaderHeight;
+        tools::Long m_lastHeaderHeight;
         Color m_lastArrowColor;
         BitmapEx m_sortAscending;
         BitmapEx m_sortDescending;
@@ -74,14 +74,14 @@ namespace svt::table
 
     }
 
-    BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, long const i_headerHeight,
+    BitmapEx const & CachedSortIndicator::getBitmapFor(vcl::RenderContext const& i_device, tools::Long const i_headerHeight,
         StyleSettings const & i_style, bool const i_sortAscending )
     {
         BitmapEx& rBitmap(i_sortAscending ? m_sortAscending : m_sortDescending);
         if (!rBitmap || (i_headerHeight != m_lastHeaderHeight) || (i_style.GetActiveColor() != m_lastArrowColor))
         {
-            long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
-            long const nSortIndicatorHeight = 2 * nSortIndicatorWidth / 3;
+            tools::Long const nSortIndicatorWidth = 2 * i_headerHeight / 3;
+            tools::Long const nSortIndicatorHeight = 2 * nSortIndicatorWidth / 3;
 
             Point const aBitmapPos( 0, 0 );
             Size const aBitmapSize( nSortIndicatorWidth, nSortIndicatorHeight );
@@ -274,12 +274,12 @@ namespace svt::table
             aCurrentSortOrder = pSortAdapter->getCurrentSortOrder();
         if ( aCurrentSortOrder.nColumnPos == _nCol )
         {
-            long const nHeaderHeight( _rArea.GetHeight() );
+            tools::Long const nHeaderHeight( _rArea.GetHeight() );
             BitmapEx const aIndicatorBitmap = m_pImpl->aSortIndicator.getBitmapFor(rRenderContext, nHeaderHeight, _rStyle,
                                                                                    aCurrentSortOrder.eSortDirection == ColumnSortAscending);
             Size const aBitmapSize( aIndicatorBitmap.GetSizePixel() );
-            long const nSortIndicatorPaddingX = 2;
-            long const nSortIndicatorPaddingY = ( nHeaderHeight - aBitmapSize.Height() ) / 2;
+            tools::Long const nSortIndicatorPaddingX = 2;
+            tools::Long const nSortIndicatorPaddingY = ( nHeaderHeight - aBitmapSize.Height() ) / 2;
 
             if ( nDrawTextFlags & DrawTextFlags::Right )
             {
@@ -580,11 +580,11 @@ namespace svt::table
 
         tools::Rectangle const aTargetArea( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, i_targetArea ) ) );
 
-        long const nTextHeight = i_targetDevice.GetTextHeight();
+        tools::Long const nTextHeight = i_targetDevice.GetTextHeight();
         if ( nTextHeight > aTargetArea.GetHeight() )
             return false;
 
-        long const nTextWidth = i_targetDevice.GetTextWidth( sText );
+        tools::Long const nTextWidth = i_targetDevice.GetTextWidth( sText );
         return nTextWidth <= aTargetArea.GetWidth();
     }
 
