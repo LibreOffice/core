@@ -177,7 +177,7 @@ bool
 AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, sal_Int64 pWnd)
 {
     if( pWinManager )
-        return pWinManager->InsertChildrenAccObj( pXAcc, HWND(reinterpret_cast<void*>(pWnd)) );
+        return pWinManager->InsertChildrenAccObj( pXAcc, reinterpret_cast<HWND>(pWnd) );
 
     return false;
 }

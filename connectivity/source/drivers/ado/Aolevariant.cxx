@@ -80,7 +80,7 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
 }
 OUString OLEString::asOUString() const
 {
-    return (m_sStr != nullptr) ? OUString(o3tl::toU(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
+    return (m_sStr != nullptr) ? OUString(o3tl::toU(m_sStr),::SysStringLen(m_sStr)) : OUString();
 }
 BSTR OLEString::asBSTR() const
 {
@@ -378,7 +378,7 @@ void OLEVariant::set(double n)
 OUString OLEVariant::getString() const
 {
     if (V_VT(this) == VT_BSTR)
-        return OUString(o3tl::toU(LPCOLESTR(V_BSTR(this))));
+        return OUString(o3tl::toU(V_BSTR(this)));
 
     if(isNull())
         return OUString();
@@ -387,7 +387,7 @@ OUString OLEVariant::getString() const
 
     varDest.ChangeType(VT_BSTR, this);
 
-    return OUString(o3tl::toU(LPCOLESTR(V_BSTR(&varDest))));
+    return OUString(o3tl::toU(V_BSTR(&varDest)));
 }
 
 

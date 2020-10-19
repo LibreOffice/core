@@ -98,7 +98,7 @@ namespace dxcanvas
                     mpBitmap->getBitmap()->GetHBITMAP(Gdiplus::Color(), &aHBmp );
 
                     uno::Sequence< uno::Any > args(1);
-                    args[0] <<= sal_Int64(aHBmp);
+                    args[0] <<= reinterpret_cast<sal_Int64>(aHBmp);
 
                     aRes <<= args;
                 }
@@ -154,7 +154,7 @@ namespace dxcanvas
                     pGDIPlusBitmap->UnlockBits( &aBmpData );
 
                     uno::Sequence< uno::Any > args(1);
-                    args[0] <<= sal_Int64(hBmpBitmap);
+                    args[0] <<= reinterpret_cast<sal_Int64>(hBmpBitmap);
 
                     aRes <<= args;
                 }
@@ -231,7 +231,7 @@ namespace dxcanvas
                                reinterpret_cast<PBITMAPINFO>(&aDIB), DIB_RGB_COLORS );
 
                     uno::Sequence< uno::Any > args(1);
-                    args[0] <<= sal_Int64(hBmpBitmap);
+                    args[0] <<= reinterpret_cast<sal_Int64>(hBmpBitmap);
 
                     aRes <<= args;
                 }
