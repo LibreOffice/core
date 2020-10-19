@@ -17,19 +17,19 @@ namespace
 
 void drawPixelOffset(OutputDevice& rDevice, tools::Rectangle const & rRect, int nOffset)
 {
-    for (long x = 0 + nOffset; x < (rRect.GetWidth() - nOffset); ++x)
+    for (tools::Long x = 0 + nOffset; x < (rRect.GetWidth() - nOffset); ++x)
     {
-        long y1 = nOffset;
-        long y2 = rRect.GetHeight() - nOffset - 1;
+        tools::Long y1 = nOffset;
+        tools::Long y2 = rRect.GetHeight() - nOffset - 1;
 
         rDevice.DrawPixel(Point(x, y1));
         rDevice.DrawPixel(Point(x, y2));
     }
 
-    for (long y = 0 + nOffset; y < (rRect.GetHeight() - nOffset); ++y)
+    for (tools::Long y = 0 + nOffset; y < (rRect.GetHeight() - nOffset); ++y)
     {
-        long x1 = nOffset;
-        long x2 = rRect.GetWidth() - nOffset - 1;
+        tools::Long x1 = nOffset;
+        tools::Long x2 = rRect.GetWidth() - nOffset - 1;
 
         rDevice.DrawPixel(Point(x1, y));
         rDevice.DrawPixel(Point(x2, y));

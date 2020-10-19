@@ -108,7 +108,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
     VCL_GL_INFO( "~OpenGLSalBitmap" );
 }
 
-void OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
+void OpenGLSalBitmap::Create( const OpenGLTexture& rTex, tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     DBG_TESTSOLARMUTEX();
     static const BitmapPalette aEmptyPalette;

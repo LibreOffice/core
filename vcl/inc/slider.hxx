@@ -30,20 +30,20 @@ private:
     tools::Rectangle       maChannel1Rect;
     tools::Rectangle       maChannel2Rect;
     tools::Rectangle       maThumbRect;
-    long            mnStartPos;
-    long            mnMouseOff;
-    long            mnThumbPixOffset;
-    long            mnThumbPixRange;
-    long            mnThumbPixPos;
-    long            mnThumbSize;
-    long            mnChannelPixRange;
-    long            mnChannelPixTop;
-    long            mnChannelPixBottom;
-    long            mnMinRange;
-    long            mnMaxRange;
-    long            mnThumbPos;
-    long            mnLineSize;
-    long            mnPageSize;
+    tools::Long            mnStartPos;
+    tools::Long            mnMouseOff;
+    tools::Long            mnThumbPixOffset;
+    tools::Long            mnThumbPixRange;
+    tools::Long            mnThumbPixPos;
+    tools::Long            mnThumbSize;
+    tools::Long            mnChannelPixRange;
+    tools::Long            mnChannelPixTop;
+    tools::Long            mnChannelPixBottom;
+    tools::Long            mnMinRange;
+    tools::Long            mnMaxRange;
+    tools::Long            mnThumbPos;
+    tools::Long            mnLineSize;
+    tools::Long            mnPageSize;
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
@@ -55,16 +55,16 @@ private:
     void ImplInit( vcl::Window* pParent, WinBits nStyle );
     void ImplInitSettings();
     void ImplUpdateRects( bool bUpdate = true );
-    long ImplCalcThumbPos( long nPixPos );
-    long ImplCalcThumbPosPix( long nPos );
+    tools::Long ImplCalcThumbPos( tools::Long nPixPos );
+    tools::Long ImplCalcThumbPosPix( tools::Long nPos );
     void ImplCalc( bool bUpdate = true );
     void ImplDraw(vcl::RenderContext& rRenderContext);
     bool ImplIsPageUp( const Point& rPos );
     bool ImplIsPageDown( const Point& rPos );
-    long ImplSlide( long nNewPos );
-    long ImplDoAction( );
+    tools::Long ImplSlide( tools::Long nNewPos );
+    tools::Long ImplDoAction( );
     void ImplDoMouseAction( const Point& rPos, bool bCallAction );
-    void ImplDoSlide( long nNewPos );
+    void ImplDoSlide( tools::Long nNewPos );
     void ImplDoSlideAction( ScrollType eScrollType );
 
 public:
@@ -81,17 +81,17 @@ public:
 
     void            Slide();
 
-    void            SetRangeMin(long nNewRange);
-    long            GetRangeMin() const { return mnMinRange; }
-    void            SetRangeMax(long nNewRange);
-    long            GetRangeMax() const { return mnMaxRange; }
+    void            SetRangeMin(tools::Long nNewRange);
+    tools::Long            GetRangeMin() const { return mnMinRange; }
+    void            SetRangeMax(tools::Long nNewRange);
+    tools::Long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    void            SetThumbPos( long nThumbPos );
-    long            GetThumbPos() const { return mnThumbPos; }
-    void            SetLineSize( long nNewSize ) { mnLineSize = nNewSize; }
-    long            GetLineSize() const { return mnLineSize; }
-    void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
-    long            GetPageSize() const { return mnPageSize; }
+    void            SetThumbPos( tools::Long nThumbPos );
+    tools::Long            GetThumbPos() const { return mnThumbPos; }
+    void            SetLineSize( tools::Long nNewSize ) { mnLineSize = nNewSize; }
+    tools::Long            GetLineSize() const { return mnLineSize; }
+    void            SetPageSize( tools::Long nNewSize ) { mnPageSize = nNewSize; }
+    tools::Long            GetPageSize() const { return mnPageSize; }
 
     Size            CalcWindowSizePixel();
 

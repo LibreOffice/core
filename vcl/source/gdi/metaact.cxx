@@ -174,7 +174,7 @@ rtl::Reference<MetaAction> MetaAction::Clone()
     return new MetaAction;
 }
 
-void MetaAction::Move( long, long )
+void MetaAction::Move( tools::Long, tools::Long )
 {
 }
 
@@ -294,7 +294,7 @@ rtl::Reference<MetaAction> MetaPixelAction::Clone()
     return new MetaPixelAction( *this );
 }
 
-void MetaPixelAction::Move( long nHorzMove, long nVertMove )
+void MetaPixelAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -343,7 +343,7 @@ rtl::Reference<MetaAction> MetaPointAction::Clone()
     return new MetaPointAction( *this );
 }
 
-void MetaPointAction::Move( long nHorzMove, long nVertMove )
+void MetaPointAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -402,7 +402,7 @@ rtl::Reference<MetaAction> MetaLineAction::Clone()
     return new MetaLineAction( *this );
 }
 
-void MetaLineAction::Move( long nHorzMove, long nVertMove )
+void MetaLineAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maStartPt.Move( nHorzMove, nVertMove );
     maEndPt.Move( nHorzMove, nVertMove );
@@ -466,7 +466,7 @@ rtl::Reference<MetaAction> MetaRectAction::Clone()
     return new MetaRectAction( *this );
 }
 
-void MetaRectAction::Move( long nHorzMove, long nVertMove )
+void MetaRectAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -518,7 +518,7 @@ rtl::Reference<MetaAction> MetaRoundRectAction::Clone()
     return new MetaRoundRectAction( *this );
 }
 
-void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
+void MetaRoundRectAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -569,7 +569,7 @@ rtl::Reference<MetaAction> MetaEllipseAction::Clone()
     return new MetaEllipseAction( *this );
 }
 
-void MetaEllipseAction::Move( long nHorzMove, long nVertMove )
+void MetaEllipseAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -619,7 +619,7 @@ rtl::Reference<MetaAction> MetaArcAction::Clone()
     return new MetaArcAction( *this );
 }
 
-void MetaArcAction::Move( long nHorzMove, long nVertMove )
+void MetaArcAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -677,7 +677,7 @@ rtl::Reference<MetaAction> MetaPieAction::Clone()
     return new MetaPieAction( *this );
 }
 
-void MetaPieAction::Move( long nHorzMove, long nVertMove )
+void MetaPieAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -735,7 +735,7 @@ rtl::Reference<MetaAction> MetaChordAction::Clone()
     return new MetaChordAction( *this );
 }
 
-void MetaChordAction::Move( long nHorzMove, long nVertMove )
+void MetaChordAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move(  nHorzMove, nVertMove );
     maStartPt.Move(  nHorzMove, nVertMove );
@@ -799,7 +799,7 @@ rtl::Reference<MetaAction> MetaPolyLineAction::Clone()
     return new MetaPolyLineAction( *this );
 }
 
-void MetaPolyLineAction::Move( long nHorzMove, long nVertMove )
+void MetaPolyLineAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
@@ -868,7 +868,7 @@ rtl::Reference<MetaAction> MetaPolygonAction::Clone()
     return new MetaPolygonAction( *this );
 }
 
-void MetaPolygonAction::Move( long nHorzMove, long nVertMove )
+void MetaPolygonAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
@@ -930,7 +930,7 @@ rtl::Reference<MetaAction> MetaPolyPolygonAction::Clone()
     return new MetaPolyPolygonAction( *this );
 }
 
-void MetaPolyPolygonAction::Move( long nHorzMove, long nVertMove )
+void MetaPolyPolygonAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -1036,7 +1036,7 @@ rtl::Reference<MetaAction> MetaTextAction::Clone()
     return new MetaTextAction( *this );
 }
 
-void MetaTextAction::Move( long nHorzMove, long nVertMove )
+void MetaTextAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1098,7 +1098,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
-                                          const long* pDXAry,
+                                          const tools::Long* pDXAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),
@@ -1130,7 +1130,7 @@ rtl::Reference<MetaAction> MetaTextArrayAction::Clone()
     return new MetaTextArrayAction( *this );
 }
 
-void MetaTextArrayAction::Move( long nHorzMove, long nVertMove )
+void MetaTextArrayAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maStartPt.Move( nHorzMove, nVertMove );
 }
@@ -1261,7 +1261,7 @@ rtl::Reference<MetaAction> MetaStretchTextAction::Clone()
     return new MetaStretchTextAction( *this );
 }
 
-void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
+void MetaStretchTextAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1330,7 +1330,7 @@ rtl::Reference<MetaAction> MetaTextRectAction::Clone()
     return new MetaTextRectAction( *this );
 }
 
-void MetaTextRectAction::Move( long nHorzMove, long nVertMove )
+void MetaTextRectAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -1377,7 +1377,7 @@ MetaTextLineAction::MetaTextLineAction() :
 MetaTextLineAction::~MetaTextLineAction()
 {}
 
-MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
+MetaTextLineAction::MetaTextLineAction( const Point& rPos, tools::Long nWidth,
                                         FontStrikeout eStrikeout,
                                         FontLineStyle eUnderline,
                                         FontLineStyle eOverline ) :
@@ -1399,7 +1399,7 @@ rtl::Reference<MetaAction> MetaTextLineAction::Clone()
     return new MetaTextLineAction( *this );
 }
 
-void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
+void MetaTextLineAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPos.Move( nHorzMove, nVertMove );
 }
@@ -1474,7 +1474,7 @@ rtl::Reference<MetaAction> MetaBmpAction::Clone()
     return new MetaBmpAction( *this );
 }
 
-void MetaBmpAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1529,7 +1529,7 @@ rtl::Reference<MetaAction> MetaBmpScaleAction::Clone()
     return new MetaBmpScaleAction( *this );
 }
 
-void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpScaleAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1593,7 +1593,7 @@ rtl::Reference<MetaAction> MetaBmpScalePartAction::Clone()
     return new MetaBmpScalePartAction( *this );
 }
 
-void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpScalePartAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -1656,7 +1656,7 @@ rtl::Reference<MetaAction> MetaBmpExAction::Clone()
     return new MetaBmpExAction( *this );
 }
 
-void MetaBmpExAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1711,7 +1711,7 @@ rtl::Reference<MetaAction> MetaBmpExScaleAction::Clone()
     return new MetaBmpExScaleAction( *this );
 }
 
-void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExScaleAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1774,7 +1774,7 @@ rtl::Reference<MetaAction> MetaBmpExScalePartAction::Clone()
     return new MetaBmpExScalePartAction( *this );
 }
 
-void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaBmpExScalePartAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -1839,7 +1839,7 @@ rtl::Reference<MetaAction> MetaMaskAction::Clone()
     return new MetaMaskAction( *this );
 }
 
-void MetaMaskAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1896,7 +1896,7 @@ rtl::Reference<MetaAction> MetaMaskScaleAction::Clone()
     return new MetaMaskScaleAction( *this );
 }
 
-void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskScaleAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
@@ -1961,7 +1961,7 @@ rtl::Reference<MetaAction> MetaMaskScalePartAction::Clone()
     return new MetaMaskScalePartAction( *this );
 }
 
-void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
+void MetaMaskScalePartAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
@@ -2025,7 +2025,7 @@ rtl::Reference<MetaAction> MetaGradientAction::Clone()
     return new MetaGradientAction( *this );
 }
 
-void MetaGradientAction::Move( long nHorzMove, long nVertMove )
+void MetaGradientAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2078,7 +2078,7 @@ rtl::Reference<MetaAction> MetaGradientExAction::Clone()
     return new MetaGradientExAction( *this );
 }
 
-void MetaGradientExAction::Move( long nHorzMove, long nVertMove )
+void MetaGradientExAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -2134,7 +2134,7 @@ rtl::Reference<MetaAction> MetaHatchAction::Clone()
     return new MetaHatchAction( *this );
 }
 
-void MetaHatchAction::Move( long nHorzMove, long nVertMove )
+void MetaHatchAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -2189,7 +2189,7 @@ rtl::Reference<MetaAction> MetaWallpaperAction::Clone()
     return new MetaWallpaperAction( *this );
 }
 
-void MetaWallpaperAction::Move( long nHorzMove, long nVertMove )
+void MetaWallpaperAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2240,7 +2240,7 @@ rtl::Reference<MetaAction> MetaClipRegionAction::Clone()
     return new MetaClipRegionAction( *this );
 }
 
-void MetaClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaClipRegionAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
@@ -2288,7 +2288,7 @@ rtl::Reference<MetaAction> MetaISectRectClipRegionAction::Clone()
     return new MetaISectRectClipRegionAction( *this );
 }
 
-void MetaISectRectClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaISectRectClipRegionAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
@@ -2336,7 +2336,7 @@ rtl::Reference<MetaAction> MetaISectRegionClipRegionAction::Clone()
     return new MetaISectRegionClipRegionAction( *this );
 }
 
-void MetaISectRegionClipRegionAction::Move( long nHorzMove, long nVertMove )
+void MetaISectRegionClipRegionAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
@@ -2368,7 +2368,7 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction() :
 MetaMoveClipRegionAction::~MetaMoveClipRegionAction()
 {}
 
-MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
+MetaMoveClipRegionAction::MetaMoveClipRegionAction( tools::Long nHorzMove, tools::Long nVertMove ) :
     MetaAction  ( MetaActionType::MOVECLIPREGION ),
     mnHorzMove  ( nHorzMove ),
     mnVertMove  ( nVertMove )
@@ -2920,7 +2920,7 @@ rtl::Reference<MetaAction> MetaTransparentAction::Clone()
     return new MetaTransparentAction( *this );
 }
 
-void MetaTransparentAction::Move( long nHorzMove, long nVertMove )
+void MetaTransparentAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
@@ -2985,7 +2985,7 @@ rtl::Reference<MetaAction> MetaFloatTransparentAction::Clone()
     return new MetaFloatTransparentAction( *this );
 }
 
-void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
+void MetaFloatTransparentAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
@@ -3046,7 +3046,7 @@ rtl::Reference<MetaAction> MetaEPSAction::Clone()
     return new MetaEPSAction( *this );
 }
 
-void MetaEPSAction::Move( long nHorzMove, long nVertMove )
+void MetaEPSAction::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
@@ -3181,7 +3181,7 @@ rtl::Reference<MetaAction> MetaCommentAction::Clone()
     return new MetaCommentAction( *this );
 }
 
-void MetaCommentAction::Move( long nXMove, long nYMove )
+void MetaCommentAction::Move( tools::Long nXMove, tools::Long nYMove )
 {
     if ( !(nXMove || nYMove) )
         return;

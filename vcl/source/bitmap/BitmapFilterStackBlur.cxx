@@ -52,13 +52,13 @@ struct BlurSharedData
 {
     BitmapReadAccess* mpReadAccess;
     BitmapWriteAccess* mpWriteAccess;
-    long mnRadius;
-    long mnComponentWidth;
-    long mnDiv;
-    long mnColorChannels;
+    tools::Long mnRadius;
+    tools::Long mnComponentWidth;
+    tools::Long mnDiv;
+    tools::Long mnColorChannels;
 
-    BlurSharedData(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess, long aRadius,
-                   long nComponentWidth, long nColorChannels)
+    BlurSharedData(BitmapReadAccess* pReadAccess, BitmapWriteAccess* pWriteAccess,
+                   tools::Long aRadius, tools::Long nComponentWidth, tools::Long nColorChannels)
         : mpReadAccess(pReadAccess)
         , mpWriteAccess(pWriteAccess)
         , mnRadius(aRadius)
@@ -92,35 +92,39 @@ struct BlurArrays
     {
     }
 
-    void initializeWeightAndPositions(long nLastIndex)
+    void initializeWeightAndPositions(tools::Long nLastIndex)
     {
-        for (long i = 0; i < maShared.mnDiv; i++)
+        for (tools::Long i = 0; i < maShared.mnDiv; i++)
         {
             maPositionTable[i] = std::clamp(i - maShared.mnRadius, 0L, nLastIndex);
             maWeightTable[i] = maShared.mnRadius + 1 - std::abs(i - maShared.mnRadius);
         }
     }
 
-    long getMultiplyValue() const
+    tools::Long getMultiplyValue() const
     {
-        return static_cast<long>(constMultiplyTable[maShared.mnRadius]);
+        return static_cast<tools::Long>(constMultiplyTable[maShared.mnRadius]);
     }
 
-    long getShiftValue() const { return static_cast<long>(constShiftTable[maShared.mnRadius]); }
+    tools::Long getShiftValue() const
+    {
+        return static_cast<tools::Long>(constShiftTable[maShared.mnRadius]);
+    }
 };
 
-typedef void (*BlurRangeFn)(BlurSharedData const& rShared, long nStartY, long nEndY);
+typedef void (*BlurRangeFn)(BlurSharedData const& rShared, tools::Long nStartY, tools::Long nEndY);
 
 class BlurTask : public comphelper::ThreadTask
 {
     BlurRangeFn mpBlurFunction;
     BlurSharedData& mrShared;
-    long mnStartY;
-    long mnEndY;
+    tools::Long mnStartY;
+    tools::Long mnEndY;
 
 public:
     explicit BlurTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
-                      BlurRangeFn pBlurFunction, BlurSharedData& rShared, long nStartY, long nEndY)
+                      BlurRangeFn pBlurFunction, BlurSharedData& rShared, tools::Long nStartY,
+                      tools::Long nEndY)
         : comphelper::ThreadTask(pTag)
         , mpBlurFunction(pBlurFunction)
         , mrShared(rShared)
@@ -134,42 +138,42 @@ public:
 
 struct SumFunction24
 {
-    static inline void add(long*& pValue1, long nConstant)
+    static inline void add(tools::Long*& pValue1, tools::Long nConstant)
     {
         pValue1[0] += nConstant;
         pValue1[1] += nConstant;
         pValue1[2] += nConstant;
     }
 
-    static inline void set(long*& pValue1, long nConstant)
+    static inline void set(tools::Long*& pValue1, tools::Long nConstant)
     {
         pValue1[0] = nConstant;
         pValue1[1] = nConstant;
         pValue1[2] = nConstant;
     }
 
-    static inline void add(long*& pValue1, const sal_uInt8* pValue2)
+    static inline void add(tools::Long*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] += pValue2[0];
         pValue1[1] += pValue2[1];
         pValue1[2] += pValue2[2];
     }
 
-    static inline void add(long*& pValue1, const long* pValue2)
+    static inline void add(tools::Long*& pValue1, const tools::Long* pValue2)
     {
         pValue1[0] += pValue2[0];
         pValue1[1] += pValue2[1];
         pValue1[2] += pValue2[2];
     }
 
-    static inline void sub(long*& pValue1, const sal_uInt8* pValue2)
+    static inline void sub(tools::Long*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] -= pValue2[0];
         pValue1[1] -= pValue2[1];
         pValue1[2] -= pValue2[2];
     }
 
-    static inline void sub(long*& pValue1, const long* pValue2)
+    static inline void sub(tools::Long*& pValue1, const tools::Long* pValue2)
     {
         pValue1[0] -= pValue2[0];
         pValue1[1] -= pValue2[1];
@@ -183,8 +187,8 @@ struct SumFunction24
         pValue1[2] = pValue2[2];
     }
 
-    static inline void assignMulAndShr(sal_uInt8*& result, const long* sum, long multiply,
-                                       long shift)
+    static inline void assignMulAndShr(sal_uInt8*& result, const tools::Long* sum,
+                                       tools::Long multiply, tools::Long shift)
     {
         result[0] = (multiply * sum[0]) >> shift;
         result[1] = (multiply * sum[1]) >> shift;
@@ -194,32 +198,47 @@ struct SumFunction24
 
 struct SumFunction8
 {
-    static inline void add(long*& pValue1, long nConstant) { pValue1[0] += nConstant; }
+    static inline void add(tools::Long*& pValue1, tools::Long nConstant)
+    {
+        pValue1[0] += nConstant;
+    }
 
-    static inline void set(long*& pValue1, long nConstant) { pValue1[0] = nConstant; }
+    static inline void set(tools::Long*& pValue1, tools::Long nConstant) { pValue1[0] = nConstant; }
 
-    static inline void add(long*& pValue1, const sal_uInt8* pValue2) { pValue1[0] += pValue2[0]; }
+    static inline void add(tools::Long*& pValue1, const sal_uInt8* pValue2)
+    {
+        pValue1[0] += pValue2[0];
+    }
 
-    static inline void add(long*& pValue1, const long* pValue2) { pValue1[0] += pValue2[0]; }
+    static inline void add(tools::Long*& pValue1, const tools::Long* pValue2)
+    {
+        pValue1[0] += pValue2[0];
+    }
 
-    static inline void sub(long*& pValue1, const sal_uInt8* pValue2) { pValue1[0] -= pValue2[0]; }
+    static inline void sub(tools::Long*& pValue1, const sal_uInt8* pValue2)
+    {
+        pValue1[0] -= pValue2[0];
+    }
 
-    static inline void sub(long*& pValue1, const long* pValue2) { pValue1[0] -= pValue2[0]; }
+    static inline void sub(tools::Long*& pValue1, const tools::Long* pValue2)
+    {
+        pValue1[0] -= pValue2[0];
+    }
 
     static inline void assignPtr(sal_uInt8*& pValue1, const sal_uInt8* pValue2)
     {
         pValue1[0] = pValue2[0];
     }
 
-    static inline void assignMulAndShr(sal_uInt8*& result, const long* sum, long multiply,
-                                       long shift)
+    static inline void assignMulAndShr(sal_uInt8*& result, const tools::Long* sum,
+                                       tools::Long multiply, tools::Long shift)
     {
         result[0] = (multiply * sum[0]) >> shift;
     }
 };
 
 template <typename SumFunction>
-void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
+void stackBlurHorizontal(BlurSharedData const& rShared, tools::Long nStart, tools::Long nEnd)
 {
     BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
     BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
@@ -229,34 +248,34 @@ void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
     sal_uInt8* pStack = aArrays.maStackBuffer.data();
     sal_uInt8* pStackPtr;
 
-    long nWidth = pReadAccess->Width();
-    long nLastIndexX = nWidth - 1;
+    tools::Long nWidth = pReadAccess->Width();
+    tools::Long nLastIndexX = nWidth - 1;
 
-    long nMultiplyValue = aArrays.getMultiplyValue();
-    long nShiftValue = aArrays.getShiftValue();
+    tools::Long nMultiplyValue = aArrays.getMultiplyValue();
+    tools::Long nShiftValue = aArrays.getShiftValue();
 
-    long nRadius = rShared.mnRadius;
-    long nComponentWidth = rShared.mnComponentWidth;
-    long nDiv = rShared.mnDiv;
+    tools::Long nRadius = rShared.mnRadius;
+    tools::Long nComponentWidth = rShared.mnComponentWidth;
+    tools::Long nDiv = rShared.mnDiv;
 
     Scanline pSourcePointer;
     Scanline pDestinationPointer;
 
-    long nXPosition;
-    long nStackIndex;
-    long nStackIndexStart;
-    long nWeight;
+    tools::Long nXPosition;
+    tools::Long nStackIndex;
+    tools::Long nStackIndexStart;
+    tools::Long nWeight;
 
     aArrays.initializeWeightAndPositions(nLastIndexX);
 
-    long* nSum = aArrays.mnSumVector.data();
-    long* nInSum = aArrays.mnInSumVector.data();
-    long* nOutSum = aArrays.mnOutSumVector.data();
+    tools::Long* nSum = aArrays.mnSumVector.data();
+    tools::Long* nInSum = aArrays.mnInSumVector.data();
+    tools::Long* nOutSum = aArrays.mnOutSumVector.data();
 
-    long* pPositionPointer = aArrays.maPositionTable.data();
-    long* pWeightPointer = aArrays.maWeightTable.data();
+    tools::Long* pPositionPointer = aArrays.maPositionTable.data();
+    tools::Long* pWeightPointer = aArrays.maWeightTable.data();
 
-    for (long y = nStart; y <= nEnd; y++)
+    for (tools::Long y = nStart; y <= nEnd; y++)
     {
         SumFunction::set(nSum, 0L);
         SumFunction::set(nInSum, 0L);
@@ -268,7 +287,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
         // for the first pixel; aArrays.maWeightTable has [1,2,3,4,5,6,5,4,3,2,1]. Before looking at
         // the first row pixel, we pretend to have processed fake previous pixels, as if the row was
         // extended to the left with the same color as that of the first pixel.
-        for (long i = 0; i < nDiv; i++)
+        for (tools::Long i = 0; i < nDiv; i++)
         {
             pSourcePointer = pReadAccess->GetScanline(y) + nComponentWidth * pPositionPointer[i];
 
@@ -295,7 +314,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
 
         pSourcePointer = pReadAccess->GetScanline(y) + nComponentWidth * nXPosition;
 
-        for (long x = 0; x < nWidth; x++)
+        for (tools::Long x = 0; x < nWidth; x++)
         {
             pDestinationPointer = pWriteAccess->GetScanline(y) + nComponentWidth * x;
 
@@ -339,7 +358,7 @@ void stackBlurHorizontal(BlurSharedData const& rShared, long nStart, long nEnd)
 }
 
 template <typename SumFunction>
-void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
+void stackBlurVertical(BlurSharedData const& rShared, tools::Long nStart, tools::Long nEnd)
 {
     BitmapReadAccess* pReadAccess = rShared.mpReadAccess;
     BitmapWriteAccess* pWriteAccess = rShared.mpWriteAccess;
@@ -349,33 +368,33 @@ void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
     sal_uInt8* pStack = aArrays.maStackBuffer.data();
     sal_uInt8* pStackPtr;
 
-    long nHeight = pReadAccess->Height();
-    long nLastIndexY = nHeight - 1;
+    tools::Long nHeight = pReadAccess->Height();
+    tools::Long nLastIndexY = nHeight - 1;
 
-    long nMultiplyValue = aArrays.getMultiplyValue();
-    long nShiftValue = aArrays.getShiftValue();
+    tools::Long nMultiplyValue = aArrays.getMultiplyValue();
+    tools::Long nShiftValue = aArrays.getShiftValue();
 
-    long nRadius = rShared.mnRadius;
-    long nComponentWidth = rShared.mnComponentWidth;
-    long nDiv = rShared.mnDiv;
+    tools::Long nRadius = rShared.mnRadius;
+    tools::Long nComponentWidth = rShared.mnComponentWidth;
+    tools::Long nDiv = rShared.mnDiv;
 
     Scanline pSourcePointer;
     Scanline pDestinationPointer;
 
-    long nYPosition;
-    long nStackIndex;
-    long nStackIndexStart;
-    long nWeight;
+    tools::Long nYPosition;
+    tools::Long nStackIndex;
+    tools::Long nStackIndexStart;
+    tools::Long nWeight;
 
     aArrays.initializeWeightAndPositions(nLastIndexY);
 
-    long* nSum = aArrays.mnSumVector.data();
-    long* nInSum = aArrays.mnInSumVector.data();
-    long* nOutSum = aArrays.mnOutSumVector.data();
-    long* pPositionPointer = aArrays.maPositionTable.data();
-    long* pWeightPointer = aArrays.maWeightTable.data();
+    tools::Long* nSum = aArrays.mnSumVector.data();
+    tools::Long* nInSum = aArrays.mnInSumVector.data();
+    tools::Long* nOutSum = aArrays.mnOutSumVector.data();
+    tools::Long* pPositionPointer = aArrays.maPositionTable.data();
+    tools::Long* pWeightPointer = aArrays.maWeightTable.data();
 
-    for (long x = nStart; x <= nEnd; x++)
+    for (tools::Long x = nStart; x <= nEnd; x++)
     {
         SumFunction::set(nSum, 0L);
         SumFunction::set(nInSum, 0L);
@@ -387,7 +406,7 @@ void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
         // for the first pixel; aArrays.maWeightTable has [1,2,3,4,5,6,5,4,3,2,1]. Before looking at
         // the first column pixels, we pretend to have processed fake previous pixels, as if the
         // column was extended to the top with the same color as that of the first pixel.
-        for (long i = 0; i < nDiv; i++)
+        for (tools::Long i = 0; i < nDiv; i++)
         {
             pSourcePointer = pReadAccess->GetScanline(pPositionPointer[i]) + nComponentWidth * x;
 
@@ -414,7 +433,7 @@ void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
 
         pSourcePointer = pReadAccess->GetScanline(nYPosition) + nComponentWidth * x;
 
-        for (long y = 0; y < nHeight; y++)
+        for (tools::Long y = 0; y < nHeight; y++)
         {
             pDestinationPointer = pWriteAccess->GetScanline(y) + nComponentWidth * x;
 
@@ -455,10 +474,10 @@ void stackBlurVertical(BlurSharedData const& rShared, long nStart, long nEnd)
     }
 }
 
-constexpr long nThreadStrip = 16;
+constexpr tools::Long nThreadStrip = 16;
 
-void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidth,
-                  const long nColorChannels, BlurRangeFn pBlurHorizontalFn,
+void runStackBlur(Bitmap& rBitmap, const tools::Long nRadius, const tools::Long nComponentWidth,
+                  const tools::Long nColorChannels, BlurRangeFn pBlurHorizontalFn,
                   BlurRangeFn pBlurVerticalFn, const bool bParallel)
 {
     if (bParallel)
@@ -474,12 +493,12 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
 
-                const long nFirstIndex = 0;
-                const long nLastIndex = pReadAccess->Height() - 1;
+                const tools::Long nFirstIndex = 0;
+                const tools::Long nLastIndex = pReadAccess->Height() - 1;
 
                 vcl::bitmap::generateStripRanges<nThreadStrip>(
                     nFirstIndex, nLastIndex,
-                    [&](long const nStart, long const nEnd, bool const bLast) {
+                    [&](tools::Long const nStart, tools::Long const nEnd, bool const bLast) {
                         if (!bLast)
                         {
                             auto pTask(std::make_unique<BlurTask>(pTag, pBlurHorizontalFn,
@@ -497,12 +516,12 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
                 BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                            nComponentWidth, nColorChannels);
 
-                const long nFirstIndex = 0;
-                const long nLastIndex = pReadAccess->Width() - 1;
+                const tools::Long nFirstIndex = 0;
+                const tools::Long nLastIndex = pReadAccess->Width() - 1;
 
                 vcl::bitmap::generateStripRanges<nThreadStrip>(
                     nFirstIndex, nLastIndex,
-                    [&](long const nStart, long const nEnd, bool const bLast) {
+                    [&](tools::Long const nStart, tools::Long const nEnd, bool const bLast) {
                         if (!bLast)
                         {
                             auto pTask(std::make_unique<BlurTask>(pTag, pBlurVerticalFn,
@@ -528,8 +547,8 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                        nComponentWidth, nColorChannels);
-            long nFirstIndex = 0;
-            long nLastIndex = pReadAccess->Height() - 1;
+            tools::Long nFirstIndex = 0;
+            tools::Long nLastIndex = pReadAccess->Height() - 1;
             pBlurHorizontalFn(aSharedData, nFirstIndex, nLastIndex);
         }
         {
@@ -537,8 +556,8 @@ void runStackBlur(Bitmap& rBitmap, const long nRadius, const long nComponentWidt
             BitmapScopedWriteAccess pWriteAccess(rBitmap);
             BlurSharedData aSharedData(pReadAccess.get(), pWriteAccess.get(), nRadius,
                                        nComponentWidth, nColorChannels);
-            long nFirstIndex = 0;
-            long nLastIndex = pReadAccess->Width() - 1;
+            tools::Long nFirstIndex = 0;
+            tools::Long nLastIndex = pReadAccess->Width() - 1;
             pBlurVerticalFn(aSharedData, nFirstIndex, nLastIndex);
         }
     }
@@ -549,7 +568,7 @@ void stackBlur24(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
     const bool bParallel = true;
     // Limit radius
     nRadius = std::clamp<sal_Int32>(nRadius, 2, 254);
-    const long nColorChannels = 3; // 3 color channel
+    const tools::Long nColorChannels = 3; // 3 color channel
 
     BlurRangeFn pBlurHorizontalFn = stackBlurHorizontal<SumFunction24>;
     BlurRangeFn pBlurVerticalFn = stackBlurVertical<SumFunction24>;
@@ -563,7 +582,7 @@ void stackBlur8(Bitmap& rBitmap, sal_Int32 nRadius, sal_Int32 nComponentWidth)
     const bool bParallel = true;
     // Limit radius
     nRadius = std::clamp<sal_Int32>(nRadius, 2, 254);
-    const long nColorChannels = 1; // 1 color channel
+    const tools::Long nColorChannels = 1; // 1 color channel
 
     BlurRangeFn pBlurHorizontalFn = stackBlurHorizontal<SumFunction8>;
     BlurRangeFn pBlurVerticalFn = stackBlurVertical<SumFunction8>;

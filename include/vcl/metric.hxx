@@ -36,21 +36,21 @@ public:
                         FontMetric( const FontMetric& );  // TODO make this explicit
                         ~FontMetric() override;
 
-    long                GetAscent() const                           { return mnAscent; }
-    long                GetDescent() const                          { return mnDescent; }
-    long                GetInternalLeading() const                  { return mnIntLeading; }
-    long                GetExternalLeading() const                  { return mnExtLeading; }
-    long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
-    long                GetSlant() const                            { return mnSlant; }
-    long                GetBulletOffset() const                     { return mnBulletOffset; }
+    tools::Long                GetAscent() const                           { return mnAscent; }
+    tools::Long                GetDescent() const                          { return mnDescent; }
+    tools::Long                GetInternalLeading() const                  { return mnIntLeading; }
+    tools::Long                GetExternalLeading() const                  { return mnExtLeading; }
+    tools::Long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
+    tools::Long                GetSlant() const                            { return mnSlant; }
+    tools::Long                GetBulletOffset() const                     { return mnBulletOffset; }
 
-    void                SetAscent( long nAscent )                   { mnAscent = nAscent; }
-    void                SetDescent( long nDescent )                 { mnDescent = nDescent; }
-    void                SetExternalLeading( long nExtLeading )      { mnExtLeading = nExtLeading; }
-    void                SetInternalLeading( long nIntLeading )      { mnIntLeading = nIntLeading; }
-    void                SetLineHeight( long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
-    void                SetSlant( long nSlant )                     { mnSlant = nSlant; }
-    void                SetBulletOffset( long nOffset )             { mnBulletOffset = nOffset; }
+    void                SetAscent( tools::Long nAscent )                   { mnAscent = nAscent; }
+    void                SetDescent( tools::Long nDescent )                 { mnDescent = nDescent; }
+    void                SetExternalLeading( tools::Long nExtLeading )      { mnExtLeading = nExtLeading; }
+    void                SetInternalLeading( tools::Long nIntLeading )      { mnIntLeading = nIntLeading; }
+    void                SetLineHeight( tools::Long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
+    void                SetSlant( tools::Long nSlant )                     { mnSlant = nSlant; }
+    void                SetBulletOffset( tools::Long nOffset )             { mnBulletOffset = nOffset; }
 
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
@@ -63,13 +63,13 @@ public:
     bool                operator!=( const FontMetric& rMetric ) const
                             { return !operator==( rMetric ); }
 private:
-    long                mnAscent;                      // Ascent
-    long                mnDescent;                     // Descent
-    long                mnIntLeading;                  // Internal Leading
-    long                mnExtLeading;                  // External Leading
-    long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
-    long                mnSlant;                       // Slant
-    long                mnBulletOffset;                // Offset for non-printing character
+    tools::Long                mnAscent;                      // Ascent
+    tools::Long                mnDescent;                     // Descent
+    tools::Long                mnIntLeading;                  // Internal Leading
+    tools::Long                mnExtLeading;                  // External Leading
+    tools::Long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
+    tools::Long                mnSlant;                       // Slant
+    tools::Long                mnBulletOffset;                // Offset for non-printing character
 
     bool                mbFullstopCentered;
 };

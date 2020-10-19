@@ -126,7 +126,7 @@ class Calendar final : public Control
     tools::Rectangle       maPrevRect;
     tools::Rectangle       maNextRect;
     OUString        maDayOfWeekText;
-    long            mnDayOfWeekAry[7];
+    tools::Long            mnDayOfWeekAry[7];
     Date            maOldFormatFirstDate;
     Date            maOldFormatLastDate;
     Date            maFirstDate;
@@ -136,15 +136,15 @@ class Calendar final : public Control
     Color           maSelColor;
     Color           maOtherColor;
     sal_Int32       mnDayCount;
-    long            mnDaysOffX;
-    long            mnWeekDayOffY;
-    long            mnDaysOffY;
-    long            mnMonthHeight;
-    long            mnMonthWidth;
-    long            mnMonthPerLine;
-    long            mnLines;
-    long            mnDayWidth;
-    long            mnDayHeight;
+    tools::Long            mnDaysOffX;
+    tools::Long            mnWeekDayOffY;
+    tools::Long            mnDaysOffY;
+    tools::Long            mnMonthHeight;
+    tools::Long            mnMonthWidth;
+    tools::Long            mnMonthPerLine;
+    tools::Long            mnLines;
+    tools::Long            mnDayWidth;
+    tools::Long            mnDayHeight;
     WinBits         mnWinStyle;
     sal_Int16       mnFirstYear;
     sal_Int16       mnLastYear;
@@ -169,7 +169,7 @@ class Calendar final : public Control
     using Window::ImplHitTest;
     sal_uInt16   ImplHitTest( const Point& rPos, Date& rDate ) const;
     void         ImplDrawSpin(vcl::RenderContext& rRenderContext);
-    void         ImplDrawDate(vcl::RenderContext& rRenderContext, long nX, long nY,
+    void         ImplDrawDate(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY,
                                              sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear,
                                              bool bOther, sal_Int32 nToday);
     void         ImplDraw(vcl::RenderContext& rRenderContext);

@@ -199,7 +199,7 @@ SalClipRegion::BeginSetClipRegion( sal_uInt32 nRects )
 }
 
 void
-SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+SalClipRegion::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if ( nWidth && nHeight && (numClipRectangles < maxClipRectangles) )
     {
@@ -293,7 +293,7 @@ X11SalObject::BeginSetClipRegion( sal_uInt32 nRectCount )
 }
 
 void
-X11SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+X11SalObject::UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     maClipRegion.UnionClipRegion ( nX, nY, nWidth, nHeight );
 }
@@ -316,7 +316,7 @@ X11SalObject::EndSetClipRegion()
 }
 
 void
-X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+X11SalObject::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
 {
     if ( maPrimary && maSecondary && nWidth && nHeight )
     {
@@ -479,7 +479,7 @@ void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::A
     if (rEnterArgs.getLength() == 3)
     {
         rEnterArgs[0] >>= bFreePixmap;
-        long pixmapHandle = None;
+        tools::Long pixmapHandle = None;
         rEnterArgs[1] >>= pixmapHandle;
         aPixmap = pixmapHandle;
     }
@@ -493,7 +493,7 @@ void X11SalObject::SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::A
     if (rLeaveArgs.getLength() == 3)
     {
         rLeaveArgs[0] >>= bFreePixmap;
-        long pixmapHandle = None;
+        tools::Long pixmapHandle = None;
         rLeaveArgs[1] >>= pixmapHandle;
         aPixmap = pixmapHandle;
     }

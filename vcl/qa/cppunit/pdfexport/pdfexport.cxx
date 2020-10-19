@@ -1424,7 +1424,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     Size aMeta = pPageObject->getImageSize(*pPdfPage);
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
-    CPPUNIT_ASSERT_LESS(static_cast<long>(250), aMeta.getWidth());
+    CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(250), aMeta.getWidth());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)

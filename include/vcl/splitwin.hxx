@@ -48,18 +48,18 @@ private:
     std::unique_ptr<ImplSplitSet> mpMainSet;
     ImplSplitSet*       mpBaseSet;
     ImplSplitSet*       mpSplitSet;
-    long*               mpLastSizes;
+    tools::Long*               mpLastSizes;
     tools::Rectangle           maDragRect;
-    long                mnDX;
-    long                mnDY;
-    long                mnLeftBorder;
-    long                mnTopBorder;
-    long                mnRightBorder;
-    long                mnBottomBorder;
-    long                mnMaxSize;
-    long                mnMouseOff;
-    long                mnMStartPos;
-    long                mnMSplitPos;
+    tools::Long                mnDX;
+    tools::Long                mnDY;
+    tools::Long                mnLeftBorder;
+    tools::Long                mnTopBorder;
+    tools::Long                mnRightBorder;
+    tools::Long                mnBottomBorder;
+    tools::Long                mnMaxSize;
+    tools::Long                mnMouseOff;
+    tools::Long                mnMStartPos;
+    tools::Long                mnMSplitPos;
     WinBits             mnWinStyle;
     WindowAlign         meAlign;
     sal_uInt16          mnSplitTest;
@@ -85,7 +85,7 @@ private:
     SAL_DLLPRIVATE void ImplInitSettings();
     SAL_DLLPRIVATE void ImplCalcLayout();
     SAL_DLLPRIVATE void ImplUpdate();
-    SAL_DLLPRIVATE void ImplSetWindowSize( long nDelta );
+    SAL_DLLPRIVATE void ImplSetWindowSize( tools::Long nDelta );
     SAL_DLLPRIVATE void ImplSplitMousePos( Point& rMousePos );
     SAL_DLLPRIVATE void ImplGetButtonRect( tools::Rectangle& rRect, bool bTest ) const;
     SAL_DLLPRIVATE void ImplGetFadeInRect( tools::Rectangle& rRect, bool bTest = false ) const;
@@ -101,10 +101,10 @@ private:
     static SAL_DLLPRIVATE void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool bHide,
                                              bool bRows );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
-                                                long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
+                                                tools::Long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos,
                                                 bool bRows );
     static SAL_DLLPRIVATE sal_uInt16 ImplTestSplit( const SplitWindow* pWindow, const Point& rPos,
-                                                long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
+                                                tools::Long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     SAL_DLLPRIVATE void ImplDrawSplitTracking(const Point& rPos);
 
                         SplitWindow (const SplitWindow &) = delete;
@@ -130,19 +130,19 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
-    void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, long nSize,
+    void                InsertItem( sal_uInt16 nId, vcl::Window* pWindow, tools::Long nSize,
                                     sal_uInt16 nPos, sal_uInt16 nIntoSetId,
                                     SplitWindowItemFlags nBits );
-    void                InsertItem( sal_uInt16 nId, long nSize,
+    void                InsertItem( sal_uInt16 nId, tools::Long nSize,
                                     sal_uInt16 nPos, sal_uInt16 nIntoSetId,
                                     SplitWindowItemFlags nBits );
     void                RemoveItem( sal_uInt16 nId );
 
-    void                SplitItem( sal_uInt16 nId, long nNewSize,
+    void                SplitItem( sal_uInt16 nId, tools::Long nNewSize,
                                    bool bPropSmall,
                                    bool bPropGreat );
-    void                SetItemSize( sal_uInt16 nId, long nNewSize );
-    long                GetItemSize( sal_uInt16 nId ) const;
+    void                SetItemSize( sal_uInt16 nId, tools::Long nNewSize );
+    tools::Long                GetItemSize( sal_uInt16 nId ) const;
     /** Set a range that limits the (variable part of the) size with an
         upper and a lower bound (both are valid values themselves.)
         @param nId
@@ -154,7 +154,7 @@ public:
     void                SetItemSizeRange (sal_uInt16 nId, const Range& rRange);
     /** Return the current size limits for the specified item.
     */
-    long                GetItemSize( sal_uInt16 nId, SplitWindowItemFlags nBits ) const;
+    tools::Long                GetItemSize( sal_uInt16 nId, SplitWindowItemFlags nBits ) const;
     sal_uInt16          GetSet( sal_uInt16 nId ) const;
     sal_uInt16          GetItemId( vcl::Window* pWindow ) const;
     sal_uInt16          GetItemId( const Point& rPos ) const;
@@ -167,13 +167,13 @@ public:
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 
-    void                SetMaxSizePixel( long nNewMaxSize ) { mnMaxSize = nNewMaxSize; }
+    void                SetMaxSizePixel( tools::Long nNewMaxSize ) { mnMaxSize = nNewMaxSize; }
 
     Size                CalcLayoutSizePixel( const Size& aNewSize );
 
     void                ShowFadeInHideButton();
     void                ShowFadeOutButton();
-    long                GetFadeInSize() const;
+    tools::Long                GetFadeInSize() const;
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 
     void                SetSplitHdl( const Link<SplitWindow*,void>& rLink ) { maSplitHdl = rLink; }

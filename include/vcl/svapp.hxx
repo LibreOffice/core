@@ -845,7 +845,7 @@ public:
           GetActiveTopWindow
 
     */
-    static long                 GetTopWindowCount();
+    static tools::Long                 GetTopWindowCount();
 
     /** Get the nth top window.
 
@@ -859,7 +859,7 @@ public:
      @see GetFirstTopLevelWindow, GetNextTopLevelWindow, GetTopWindowCount,
           GetActiveTopWindow
     */
-    static vcl::Window*              GetTopWindow( long nIndex );
+    static vcl::Window*              GetTopWindow( tools::Long nIndex );
 
     /** Get the "active" top window.
 

@@ -430,7 +430,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
     pSalInst->RunInMainThread([this, bVisible]() { asChild()->setVisible(bVisible); });
 }
 
-void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
+void Qt5Frame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
 {
     if (!isChild())
     {
@@ -439,7 +439,7 @@ void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)
     }
 }
 
-void Qt5Frame::SetMaxClientSize(long nWidth, long nHeight)
+void Qt5Frame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
 {
     if (!isChild())
     {
@@ -513,7 +513,8 @@ void Qt5Frame::SetDefaultSize()
     assert(!m_bDefaultSize);
 }
 
-void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+void Qt5Frame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                          sal_uInt16 nFlags)
 {
     if (!isWindow() || isChild(true, false))
         return;
@@ -578,7 +579,7 @@ void Qt5Frame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt1
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
 }
 
-void Qt5Frame::GetClientSize(long& rWidth, long& rHeight)
+void Qt5Frame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
 {
     rWidth = round(m_pQWidget->width() * devicePixelRatioF());
     rHeight = round(m_pQWidget->height() * devicePixelRatioF());
@@ -795,7 +796,7 @@ void Qt5Frame::CaptureMouse(bool bMouse)
         m_pQWidget->releaseMouse();
 }
 
-void Qt5Frame::SetPointerPos(long nX, long nY)
+void Qt5Frame::SetPointerPos(tools::Long nX, tools::Long nY)
 {
     // some cursor already exists (and it has m_ePointerStyle shape)
     // so here we just reposition it
@@ -1179,7 +1180,8 @@ void Qt5Frame::BeginSetClipRegion(sal_uInt32)
     m_aRegion = QRegion(QRect(QPoint(0, 0), m_pQWidget->size()));
 }
 
-void Qt5Frame::UnionClipRegion(long nX, long nY, long nWidth, long nHeight)
+void Qt5Frame::UnionClipRegion(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                               tools::Long nHeight)
 {
     m_aRegion
         = m_aRegion.united(scaledQRect(QRect(nX, nY, nWidth, nHeight), 1 / devicePixelRatioF()));

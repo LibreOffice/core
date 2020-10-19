@@ -386,10 +386,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             const MetaLineAction& rMetaLineAction = static_cast<const MetaLineAction&>(rAct);
             aActionBounds = tools::Rectangle( rMetaLineAction.GetStartPoint(),  rMetaLineAction.GetEndPoint() );
             aActionBounds.Justify();
-            const long nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
+            const tools::Long nLineWidth(rMetaLineAction.GetLineInfo().GetWidth());
             if(nLineWidth)
             {
-                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                const tools::Long nHalfLineWidth((nLineWidth + 1) / 2);
                 aActionBounds.AdjustLeft( -nHalfLineWidth );
                 aActionBounds.AdjustTop( -nHalfLineWidth );
                 aActionBounds.AdjustRight(nHalfLineWidth );
@@ -439,10 +439,10 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
         {
             const MetaPolyLineAction& rMetaPolyLineAction = static_cast<const MetaPolyLineAction&>(rAct);
             aActionBounds = rMetaPolyLineAction.GetPolygon().GetBoundRect();
-            const long nLineWidth(rMetaPolyLineAction.GetLineInfo().GetWidth());
+            const tools::Long nLineWidth(rMetaPolyLineAction.GetLineInfo().GetWidth());
             if(nLineWidth)
             {
-                const long nHalfLineWidth((nLineWidth + 1) / 2);
+                const tools::Long nHalfLineWidth((nLineWidth + 1) / 2);
                 aActionBounds.AdjustLeft( -nHalfLineWidth );
                 aActionBounds.AdjustTop( -nHalfLineWidth );
                 aActionBounds.AdjustRight(nHalfLineWidth );
@@ -625,7 +625,7 @@ tools::Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
 } // end anon namespace
 
 bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
-                                                     long nMaxBmpDPIX, long nMaxBmpDPIY,
+                                                     tools::Long nMaxBmpDPIX, tools::Long nMaxBmpDPIY,
                                                      bool bReduceTransparency, bool bTransparencyAutoMode,
                                                      bool bDownsampleBitmaps,
                                                      const Color& rBackground
@@ -1292,12 +1292,12 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const tools::Rectangle& rRect,
         {
             const Color&    rStartColor = rGradient.GetStartColor();
             const Color&    rEndColor = rGradient.GetEndColor();
-            const long      nR = ( ( static_cast<long>(rStartColor.GetRed()) * rGradient.GetStartIntensity() ) / 100 +
-                                   ( static_cast<long>(rEndColor.GetRed()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nG = ( ( static_cast<long>(rStartColor.GetGreen()) * rGradient.GetStartIntensity() ) / 100 +
-                                   ( static_cast<long>(rEndColor.GetGreen()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
-            const long      nB = ( ( static_cast<long>(rStartColor.GetBlue()) * rGradient.GetStartIntensity() ) / 100 +
-                                   ( static_cast<long>(rEndColor.GetBlue()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const tools::Long      nR = ( ( static_cast<tools::Long>(rStartColor.GetRed()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<tools::Long>(rEndColor.GetRed()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const tools::Long      nG = ( ( static_cast<tools::Long>(rStartColor.GetGreen()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<tools::Long>(rEndColor.GetGreen()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
+            const tools::Long      nB = ( ( static_cast<tools::Long>(rStartColor.GetBlue()) * rGradient.GetStartIntensity() ) / 100 +
+                                   ( static_cast<tools::Long>(rEndColor.GetBlue()) * rGradient.GetEndIntensity() ) / 100 ) >> 1;
             const Color     aColor( static_cast<sal_uInt8>(nR), static_cast<sal_uInt8>(nG), static_cast<sal_uInt8>(nB) );
 
             pOut->Push( PushFlags::LINECOLOR | PushFlags::FILLCOLOR );

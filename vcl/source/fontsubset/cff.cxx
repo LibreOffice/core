@@ -1646,7 +1646,7 @@ void Type1Emitter::updateLen( int nTellPos, size_t nLength)
     cData[1] = static_cast<U8>(nLength >>  8);
     cData[2] = static_cast<U8>(nLength >> 16);
     cData[3] = static_cast<U8>(nLength >> 24);
-    const long nCurrPos = ftell(mpFileOut);
+    const tools::Long nCurrPos = ftell(mpFileOut);
     if (nCurrPos < 0)
         return;
     if (fseek( mpFileOut, nTellPos, SEEK_SET) != 0)

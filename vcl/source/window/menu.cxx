@@ -127,17 +127,17 @@ void lclDrawMoreIndicator(vcl::RenderContext& rRenderContext, const tools::Recta
     int linewidth = 1 * fScaleFactor;
     int space = 4 * fScaleFactor;
 
-    long width = 8 * fScaleFactor;
-    long height = 5 * fScaleFactor;
+    tools::Long width = 8 * fScaleFactor;
+    tools::Long height = 5 * fScaleFactor;
 
     //Keep odd b/c drawing code works better
     if ( height % 2 == 0 )
         height--;
 
-    long heightOrig = height;
+    tools::Long heightOrig = height;
 
-    long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
-    long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
+    tools::Long x = rRect.Left() + (rRect.getWidth() - width)/2 + 1;
+    tools::Long y = rRect.Top() + (rRect.getHeight() - height)/2 + 1;
     while( height >= 1)
     {
         rRenderContext.DrawRect( tools::Rectangle( x, y, x + linewidth, y ) );
@@ -916,7 +916,7 @@ void Menu::EnableItem( sal_uInt16 nItemId, bool bEnable )
     if ( pWin && pWin->IsVisible() )
     {
         SAL_WARN_IF(!IsMenuBar(), "vcl", "Menu::EnableItem - Popup visible!" );
-        long nX = 0;
+        tools::Long nX = 0;
         size_t nCount = pItemList->size();
         for ( size_t n = 0; n < nCount; n++ )
         {
@@ -1320,9 +1320,9 @@ void Menu::SetAccessible(const css::uno::Reference<css::accessibility::XAccessib
     mxAccessible = rxAccessible;
 }
 
-Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, long& rCheckHeight, long& rRadioHeight ) const
+Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderContext, tools::Long& rCheckHeight, tools::Long& rRadioHeight ) const
 {
-    long nCheckWidth = 0, nRadioWidth = 0;
+    tools::Long nCheckWidth = 0, nRadioWidth = 0;
     rCheckHeight = rRadioHeight = 0;
 
     if (!IsMenuBar())
@@ -1356,7 +1356,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext const & rRenderCont
     return Size(std::max(nCheckWidth, nRadioWidth), std::max(rCheckHeight, rRadioHeight));
 }
 
-bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, long& rArrowSpacing)
+bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext const & rRenderContext, Size& rArrowSize, tools::Long& rArrowSpacing)
 {
     ImplControlValue aVal;
     tools::Rectangle aCtrlRegion(tools::Rectangle(Point(), Size(100, 15)));
@@ -1412,11 +1412,11 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     // | Check/Radio/Image| Text| Accel/Popup|
 
     // for symbols: nFontHeight x nFontHeight
-    long nFontHeight = pWin->GetTextHeight();
-    long nExtra = nFontHeight/4;
+    tools::Long nFontHeight = pWin->GetTextHeight();
+    tools::Long nExtra = nFontHeight/4;
 
-    long nMinMenuItemHeight = nFontHeight;
-    long nCheckHeight = 0, nRadioHeight = 0;
+    tools::Long nMinMenuItemHeight = nFontHeight;
+    tools::Long nCheckHeight = 0, nRadioHeight = 0;
     Size aMaxSize = ImplGetNativeCheckAndRadioSize(*pWin, nCheckHeight, nRadioHeight); // FIXME
     if( aMaxSize.Height() > nMinMenuItemHeight )
         nMinMenuItemHeight = aMaxSize.Height();
@@ -1448,8 +1448,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
     }
 
     Size aSz;
-    long nCheckWidth = 0;
-    long nMaxWidth = 0;
+    tools::Long nCheckWidth = 0;
+    tools::Long nMaxWidth = 0;
 
     for ( size_t n = pItemList->size(); n; )
     {
@@ -1460,7 +1460,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
         if ( ImplIsVisible( n ) )
         {
-            long nWidth = 0;
+            tools::Long nWidth = 0;
 
             // Separator
             if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
@@ -1496,8 +1496,8 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             if ( (pData->eType == MenuItemType::STRING) || (pData->eType == MenuItemType::STRINGIMAGE) )
             {
                 const SalLayoutGlyphs* pGlyphs = pData->GetTextGlyphs(pWin);
-                long nTextWidth = pWin->GetCtrlTextWidth(pData->aText, pGlyphs);
-                long nTextHeight = pWin->GetTextHeight();
+                tools::Long nTextWidth = pWin->GetCtrlTextWidth(pData->aText, pGlyphs);
+                tools::Long nTextHeight = pWin->GetTextHeight();
 
                 if (IsMenuBar())
                 {
@@ -1517,7 +1517,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             if (!IsMenuBar()&& pData->aAccelKey.GetCode() && !ImplAccelDisabled())
             {
                 OUString aName = pData->aAccelKey.GetName();
-                long nAccWidth = pWin->GetTextWidth( aName );
+                tools::Long nAccWidth = pWin->GetTextWidth( aName );
                 nAccWidth += nExtra;
                 nWidth += nAccWidth;
             }
@@ -1559,7 +1559,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         nTitleHeight =  aTextBoundRect.GetSize().Height() + 4 * SPACE_AROUND_TITLE ;
         aSz.AdjustHeight(nTitleHeight );
 
-        long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
+        tools::Long nWidth = aTextBoundRect.GetSize().Width() + 4 * SPACE_AROUND_TITLE;
         pWin->Pop();
         if ( nWidth > nMaxWidth )
             nMaxWidth = nWidth;
@@ -1573,13 +1573,13 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         // currently we rely on internal privileges
         unsigned int nDisplayScreen = pWin->ImplGetWindowImpl()->mpFrame->maGeometry.nDisplayScreenNumber;
         tools::Rectangle aDispRect( Application::GetScreenPosSizePixel( nDisplayScreen ) );
-        long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
+        tools::Long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
         if( nMaxWidth > nScreenWidth/2 )
             nMaxWidth = nScreenWidth/2;
 
         sal_uInt16 gfxExtra = static_cast<sal_uInt16>(std::max( nExtra, 7L )); // #107710# increase space between checkmarks/images/text
         nImgOrChkPos = static_cast<sal_uInt16>(nExtra);
-        long nImgOrChkWidth = 0;
+        tools::Long nImgOrChkWidth = 0;
         if( aMaxSize.Height() > 0 ) // NWF case
             nImgOrChkWidth = aMaxSize.Height() + nExtra;
         else // non NWF case
@@ -1624,7 +1624,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 
         // account for the size of the close button, which actually is a toolbox
         // due to NWF this is variable
-        long nCloseButtonHeight = static_cast<MenuBarWindow*>(pWindow.get())->MinCloseButtonSize().Height();
+        tools::Long nCloseButtonHeight = static_cast<MenuBarWindow*>(pWindow.get())->MinCloseButtonSize().Height();
         if (aSz.Height() < nCloseButtonHeight)
             aSz.setHeight( nCloseButtonHeight );
     }
@@ -1655,7 +1655,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
     }
 }
 
-static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext const & rRenderContext, long i_nMaxWidth )
+static OUString getShortenedString( const OUString& i_rLong, vcl::RenderContext const & rRenderContext, tools::Long i_nMaxWidth )
 {
     sal_Int32 nPos = -1;
     OUString aNonMnem(OutputDevice::GetNonMnemonicString(i_rLong, nPos));
@@ -1712,14 +1712,14 @@ void Menu::ImplPaintMenuTitle(vcl::RenderContext& rRenderContext, const tools::R
 }
 
 void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
-                     sal_uInt16 nBorder, long nStartY, MenuItemData const * pThisItemOnly,
+                     sal_uInt16 nBorder, tools::Long nStartY, MenuItemData const * pThisItemOnly,
                      bool bHighlighted, bool bLayout, bool bRollover) const
 {
     // for symbols: nFontHeight x nFontHeight
-    long nFontHeight = rRenderContext.GetTextHeight();
-    long nExtra = nFontHeight / 4;
+    tools::Long nFontHeight = rRenderContext.GetTextHeight();
+    tools::Long nExtra = nFontHeight / 4;
 
-    long nCheckHeight = 0, nRadioHeight = 0;
+    tools::Long nCheckHeight = 0, nRadioHeight = 0;
     ImplGetNativeCheckAndRadioSize(rRenderContext, nCheckHeight, nRadioHeight);
 
     DecorationView aDecoView(&rRenderContext);
@@ -1784,7 +1784,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
 
             if (aPos.Y() >= 0)
             {
-                long nTextOffsetY = (pData->aSz.Height() - nFontHeight) / 2;
+                tools::Long nTextOffsetY = (pData->aSz.Height() - nFontHeight) / 2;
                 if (IsMenuBar())
                     nTextOffsetY += (aOutSz.Height()-pData->aSz.Height()) / 2;
                 DrawTextFlags   nTextStyle   = DrawTextFlags::NONE;
@@ -1871,7 +1871,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                             if (bHighlighted)
                                 nState |= ControlState::SELECTED;
 
-                            long nCtrlHeight = (pData->nBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                            tools::Long nCtrlHeight = (pData->nBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.setX( aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight) / 2 );
                             aTmpPos.setY( aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2 );
 
@@ -1959,7 +1959,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                         rRenderContext.SetBackground(Wallpaper(aBg));
                     }
                     // how much space is there for the text?
-                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
+                    tools::Long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpaceX;
                     if (!IsMenuBar() && pData->aAccelKey.GetCode() && !ImplAccelDisabled())
                     {
                         OUString aAccText = pData->aAccelKey.GetName();
@@ -2020,7 +2020,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext, Size const & rSize,
                     {
                         ControlState nState = ControlState::NONE;
                         Size aTmpSz(0, 0);
-                        long aSpacing = 0;
+                        tools::Long aSpacing = 0;
 
                         if (!ImplGetNativeSubmenuArrowSize(rRenderContext, aTmpSz, aSpacing))
                         {
@@ -2231,9 +2231,9 @@ void Menu::ImplFillLayoutData() const
     }
 }
 
-tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
+tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nIndex ) const
 {
-    long nItemIndex = -1;
+    tools::Long nItemIndex = -1;
     if( ! mpLayoutData )
         ImplFillLayoutData();
     if( mpLayoutData )
@@ -2250,9 +2250,9 @@ tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) con
     return (mpLayoutData && nItemIndex != -1) ? mpLayoutData->GetCharacterBounds( nItemIndex+nIndex ) : tools::Rectangle();
 }
 
-long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
+tools::Long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
 {
-    long nIndex = -1;
+    tools::Long nIndex = -1;
     rItemID = 0;
     if( ! mpLayoutData )
         ImplFillLayoutData();
@@ -2475,7 +2475,7 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     pMenu->pStartedFrom = nullptr;
     pMenu->pWindow = pWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    long nHeight = pWindow ? pMenu->ImplCalcSize(pWindow).Height() : 0;
+    tools::Long nHeight = pWindow ? pMenu->ImplCalcSize(pWindow).Height() : 0;
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
@@ -2943,7 +2943,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
             Application::GetBestScreen( tools::Rectangle( aDesktopTL, aRect.GetSize() ) ));
     }
 
-    long nMaxHeight = aDesktopRect.GetHeight();
+    tools::Long nMaxHeight = aDesktopRect.GetHeight();
 
     //rhbz#1021915. If a menu won't fit in the desired location the default
     //mode is to place it somewhere it will fit.  e.g. above, left, right. For
@@ -2958,8 +2958,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         tools::Rectangle devRect(  pRef->OutputToAbsoluteScreenPixel( aRect.TopLeft() ),
                             pRef->OutputToAbsoluteScreenPixel( aRect.BottomRight() ) );
 
-        long nHeightAbove = devRect.Top() - aDesktopRect.Top();
-        long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
+        tools::Long nHeightAbove = devRect.Top() - aDesktopRect.Top();
+        tools::Long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
         nMaxHeight = std::min(nMaxHeight, std::max(nHeightAbove, nHeightBelow));
     }
 
@@ -3065,11 +3065,11 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
     return bRealExecute ? nSelectedId : 0;
 }
 
-sal_uInt16 PopupMenu::ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible ) const
+sal_uInt16 PopupMenu::ImplCalcVisEntries( tools::Long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible ) const
 {
     nMaxHeight -= 2 * ImplGetFloatingWindow()->GetScrollerHeight();
 
-    long nHeight = 0;
+    tools::Long nHeight = 0;
     size_t nEntries = pItemList->size();
     sal_uInt16 nVisEntries = 0;
 
@@ -3093,9 +3093,9 @@ sal_uInt16 PopupMenu::ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntr
     return nVisEntries;
 }
 
-long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
+tools::Long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
 {
-    long nHeight = 0;
+    tools::Long nHeight = 0;
 
     sal_uInt16 nFound = 0;
     for ( size_t n = 0; ( nFound < nEntries ) && ( n < pItemList->size() ); n++ )

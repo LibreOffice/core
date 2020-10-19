@@ -3098,8 +3098,8 @@ void SalInstanceEntry::set_max_length(int nChars)
 void SalInstanceEntry::select_region(int nStartPos, int nEndPos)
 {
     disable_notify_events();
-    long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
-    long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
+    tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
+    tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
     m_xEntry->SetSelection(Selection(nStart, nEnd));
     enable_notify_events();
 }
@@ -3609,7 +3609,7 @@ public:
         m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
         m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
         m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
-        const long aTabPositions[] = { 0 };
+        const tools::Long aTabPositions[] = { 0 };
         m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
         LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
 
@@ -5609,8 +5609,8 @@ bool SalInstanceTextView::get_selection_bounds(int& rStartPos, int& rEndPos)
 void SalInstanceTextView::select_region(int nStartPos, int nEndPos)
 {
     disable_notify_events();
-    long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
-    long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
+    tools::Long nStart = nStartPos < 0 ? SELECTION_MAX : nStartPos;
+    tools::Long nEnd = nEndPos < 0 ? SELECTION_MAX : nEndPos;
     m_xTextView->SetSelection(Selection(nStart, nEnd));
     enable_notify_events();
 }

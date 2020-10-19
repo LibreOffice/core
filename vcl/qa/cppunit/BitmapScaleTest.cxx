@@ -40,12 +40,12 @@ bool checkBitmapColor(Bitmap const& rBitmap, Color const& rExpectedColor)
     bool bResult = true;
     Bitmap aBitmap(rBitmap);
     Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-    long nHeight = pReadAccess->Height();
-    long nWidth = pReadAccess->Width();
-    for (long y = 0; y < nHeight; ++y)
+    tools::Long nHeight = pReadAccess->Height();
+    tools::Long nWidth = pReadAccess->Width();
+    for (tools::Long y = 0; y < nHeight; ++y)
     {
         Scanline pScanlineRead = pReadAccess->GetScanline(y);
-        for (long x = 0; x < nWidth; ++x)
+        for (tools::Long x = 0; x < nWidth; ++x)
         {
             Color aColor = pReadAccess->GetPixelFromData(pScanlineRead, x);
             if (aColor != rExpectedColor)
@@ -219,8 +219,8 @@ void BitmapScaleTest::testScale2()
     }
 
     // Scale - 65x65
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Height());
     Bitmap aScaledBitmap = aBitmap24Bit;
     aScaledBitmap.Scale(Size(65, 65));
 
@@ -231,13 +231,13 @@ void BitmapScaleTest::testScale2()
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(65), aScaledBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(65), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(65), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(65), aScaledBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, aBitmapColor));
 
     // Scale - 64x64
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Height());
     aScaledBitmap = aBitmap24Bit;
     aScaledBitmap.Scale(Size(64, 64));
 
@@ -248,13 +248,13 @@ void BitmapScaleTest::testScale2()
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(64), aScaledBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(64), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(64), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(64), aScaledBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, aBitmapColor));
 
     // Scale - 63x63
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(4096), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(4096), aBitmap24Bit.GetSizePixel().Height());
     aScaledBitmap = aBitmap24Bit;
     aScaledBitmap.Scale(Size(63, 63));
 
@@ -265,8 +265,8 @@ void BitmapScaleTest::testScale2()
         rFilter.compressAsPNG(BitmapEx(aScaledBitmap), aStream);
     }
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(63), aScaledBitmap.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(63), aScaledBitmap.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(63), aScaledBitmap.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(63), aScaledBitmap.GetSizePixel().Height());
     CPPUNIT_ASSERT(checkBitmapColor(aScaledBitmap, aBitmapColor));
 }
 
@@ -287,8 +287,8 @@ void BitmapScaleTest::testScaleSymmetry()
 
     BitmapSymmetryCheck aBitmapSymmetryCheck;
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(10), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10), aBitmap24Bit.GetSizePixel().Height());
 
     // Check symmetry of the bitmap
     CPPUNIT_ASSERT(BitmapSymmetryCheck::check(aBitmap24Bit));
@@ -302,8 +302,8 @@ void BitmapScaleTest::testScaleSymmetry()
 
     aBitmap24Bit.Scale(2, 2, BmpScaleFlag::Fast);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(20), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(20), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(20), aBitmap24Bit.GetSizePixel().Height());
 
     // After scaling the bitmap should still be symmetrical. This check guarantees that
     // scaling doesn't misalign the bitmap.

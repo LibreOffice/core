@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_SYSDATA_HXX
 
 #include <sal/types.h>
+#include <tools/long.hxx>
 
 #ifdef MACOSX
 // predeclare the native classes to avoid header/include problems
@@ -108,7 +109,7 @@ struct SystemParentData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    long            aWindow;          // the window of the object
+    tools::Long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
                                       // should support the XEmbed protocol
 #endif
@@ -137,7 +138,7 @@ struct SystemGraphicsData
     CGContextRef    rCGContext;     // CoreGraphics graphic context
 #elif defined( UNX )
     void*           pDisplay;       // the relevant display connection
-    long            hDrawable;      // a drawable
+    tools::Long            hDrawable;      // a drawable
     void*           pVisual;        // the visual in use
     int             nScreen;        // the current screen of the drawable
     void*           pXRenderFormat; // render format for drawable

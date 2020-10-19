@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/long.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/fntstyle.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -106,10 +107,10 @@ public:
 
     void                SetFontSize( const Size& );
     const Size&         GetFontSize() const;
-    void                SetFontHeight( long nHeight );
-    long                GetFontHeight() const;
-    void                SetAverageFontWidth( long nWidth );
-    long                GetAverageFontWidth() const;
+    void                SetFontHeight( tools::Long nHeight );
+    tools::Long                GetFontHeight() const;
+    void                SetAverageFontWidth( tools::Long nWidth );
+    tools::Long                GetAverageFontWidth() const;
 
     // Prefer LanguageTag over LanguageType
     void                SetLanguageTag( const LanguageTag & );

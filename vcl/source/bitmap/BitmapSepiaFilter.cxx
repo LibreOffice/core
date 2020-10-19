@@ -27,7 +27,7 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
 
     if (pReadAcc)
     {
-        const long nSepia
+        const tools::Long nSepia
             = 10000 - 100 * std::clamp(mnSepiaPercent, sal_uInt16(0), sal_uInt16(100));
         BitmapPalette aSepiaPal(256);
 
@@ -47,8 +47,8 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
         if (pWriteAcc)
         {
             BitmapColor aCol(sal_uInt8(0));
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
+            const tools::Long nWidth = pWriteAcc->Width();
+            const tools::Long nHeight = pWriteAcc->Height();
 
             if (pReadAcc->HasPalette())
             {
@@ -59,11 +59,11 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
                     pIndexMap[i] = pReadAcc->GetPaletteColor(i).GetLuminance();
                 }
 
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
                     Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         aCol.SetIndex(pIndexMap[pReadAcc->GetIndexFromData(pScanlineRead, nX)]);
                         pWriteAcc->SetPixelOnData(pScanline, nX, aCol);
@@ -72,11 +72,11 @@ BitmapEx BitmapSepiaFilter::execute(BitmapEx const& rBitmapEx) const
             }
             else
             {
-                for (long nY = 0; nY < nHeight; nY++)
+                for (tools::Long nY = 0; nY < nHeight; nY++)
                 {
                     Scanline pScanline = pWriteAcc->GetScanline(nY);
                     Scanline pScanlineRead = pReadAcc->GetScanline(nY);
-                    for (long nX = 0; nX < nWidth; nX++)
+                    for (tools::Long nX = 0; nX < nWidth; nX++)
                     {
                         aCol.SetIndex(pReadAcc->GetPixelFromData(pScanlineRead, nX).GetLuminance());
                         pWriteAcc->SetPixelOnData(pScanline, nX, aCol);

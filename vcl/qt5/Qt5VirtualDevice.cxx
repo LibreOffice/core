@@ -46,12 +46,13 @@ void Qt5VirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
     delete pGraphics;
 }
 
-bool Qt5VirtualDevice::SetSize(long nNewDX, long nNewDY)
+bool Qt5VirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
 {
     return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
 }
 
-bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* pBuffer)
+bool Qt5VirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
+                                          sal_uInt8* pBuffer)
 {
     if (nNewDX == 0)
         nNewDX = 1;
@@ -88,8 +89,8 @@ bool Qt5VirtualDevice::SetSizeUsingBuffer(long nNewDX, long nNewDY, sal_uInt8* p
     return true;
 }
 
-long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
+tools::Long Qt5VirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
 
-long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
+tools::Long Qt5VirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

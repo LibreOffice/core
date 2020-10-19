@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_HATCH_HXX
 
 #include <tools/color.hxx>
+#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 
 #include <vcl/vclenum.hxx>
@@ -33,7 +34,7 @@ struct ImplHatch
 {
     Color               maColor;
     HatchStyle          meStyle;
-    long                mnDistance;
+    tools::Long                mnDistance;
     sal_uInt16          mnAngle;
 
     ImplHatch();
@@ -47,7 +48,7 @@ public:
 
                     Hatch();
                     Hatch( const Hatch& rHatch );
-                    Hatch( HatchStyle eStyle, const Color& rHatchColor, long nDistance, sal_uInt16 nAngle10 );
+                    Hatch( HatchStyle eStyle, const Color& rHatchColor, tools::Long nDistance, sal_uInt16 nAngle10 );
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
@@ -59,8 +60,8 @@ public:
     void            SetColor( const Color& rColor  );
     const Color&    GetColor() const { return mpImplHatch->maColor; }
 
-    void            SetDistance( long nDistance  );
-    long            GetDistance() const { return mpImplHatch->mnDistance; }
+    void            SetDistance( tools::Long nDistance  );
+    tools::Long            GetDistance() const { return mpImplHatch->mnDistance; }
 
     void            SetAngle( sal_uInt16 nAngle10 );
     sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }

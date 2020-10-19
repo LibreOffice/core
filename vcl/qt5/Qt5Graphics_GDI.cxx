@@ -166,14 +166,14 @@ void Qt5Graphics::ResetClipRegion()
     }
 }
 
-void Qt5Graphics::drawPixel(long nX, long nY)
+void Qt5Graphics::drawPixel(tools::Long nX, tools::Long nY)
 {
     Qt5Painter aPainter(*this);
     aPainter.drawPoint(nX, nY);
     aPainter.update(nX, nY, 1, 1);
 }
 
-void Qt5Graphics::drawPixel(long nX, long nY, Color nColor)
+void Qt5Graphics::drawPixel(tools::Long nX, tools::Long nY, Color nColor)
 {
     Qt5Painter aPainter(*this);
     aPainter.setPen(toQColor(nColor));
@@ -182,12 +182,12 @@ void Qt5Graphics::drawPixel(long nX, long nY, Color nColor)
     aPainter.update(nX, nY, 1, 1);
 }
 
-void Qt5Graphics::drawLine(long nX1, long nY1, long nX2, long nY2)
+void Qt5Graphics::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
     Qt5Painter aPainter(*this);
     aPainter.drawLine(nX1, nY1, nX2, nY2);
 
-    long tmp;
+    tools::Long tmp;
     if (nX1 > nX2)
     {
         tmp = nX1;
@@ -203,7 +203,7 @@ void Qt5Graphics::drawLine(long nX1, long nY1, long nX2, long nY2)
     aPainter.update(nX1, nY1, nX2 - nX1 + 1, nY2 - nY1 + 1);
 }
 
-void Qt5Graphics::drawRect(long nX, long nY, long nWidth, long nHeight)
+void Qt5Graphics::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
         return;
@@ -437,8 +437,9 @@ void Qt5Graphics::drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImag
     aPainter.update(aDestRect);
 }
 
-void Qt5Graphics::copyArea(long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                           long nSrcHeight, bool /*bWindowInvalidate*/)
+void Qt5Graphics::copyArea(tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
+                           tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
+                           bool /*bWindowInvalidate*/)
 {
     if (nDestX == nSrcX && nDestY == nSrcY)
         return;
@@ -509,14 +510,16 @@ void Qt5Graphics::drawMask(const SalTwoRect& rPosAry, const SalBitmap& /*rSalBit
     assert(rPosAry.mnSrcHeight == rPosAry.mnDestHeight);
 }
 
-std::shared_ptr<SalBitmap> Qt5Graphics::getBitmap(long nX, long nY, long nWidth, long nHeight)
+std::shared_ptr<SalBitmap> Qt5Graphics::getBitmap(tools::Long nX, tools::Long nY,
+                                                  tools::Long nWidth, tools::Long nHeight)
 {
     return std::make_shared<Qt5Bitmap>(m_pQImage->copy(nX, nY, nWidth, nHeight));
 }
 
-Color Qt5Graphics::getPixel(long nX, long nY) { return m_pQImage->pixel(nX, nY); }
+Color Qt5Graphics::getPixel(tools::Long nX, tools::Long nY) { return m_pQImage->pixel(nX, nY); }
 
-void Qt5Graphics::invert(long nX, long nY, long nWidth, long nHeight, SalInvert nFlags)
+void Qt5Graphics::invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                         SalInvert nFlags)
 {
     Qt5Painter aPainter(*this);
     if (SalInvert::N50 & nFlags)
@@ -548,8 +551,8 @@ void Qt5Graphics::invert(sal_uInt32 /*nPoints*/, const SalPoint* /*pPtAry*/, Sal
 {
 }
 
-bool Qt5Graphics::drawEPS(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/,
-                          void* /*pPtr*/, sal_uInt32 /*nSize*/)
+bool Qt5Graphics::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
+                          tools::Long /*nHeight*/, void* /*pPtr*/, sal_uInt32 /*nSize*/)
 {
     return false;
 }
@@ -649,8 +652,8 @@ bool Qt5Graphics::drawTransformedBitmap(const basegfx::B2DPoint& rNull, const ba
     return true;
 }
 
-bool Qt5Graphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight,
-                                sal_uInt8 nTransparency)
+bool Qt5Graphics::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                tools::Long nHeight, sal_uInt8 nTransparency)
 {
     if (SALCOLOR_NONE == m_aFillColor && SALCOLOR_NONE == m_aLineColor)
         return true;
@@ -686,7 +689,7 @@ void Qt5Graphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
 
 sal_uInt16 Qt5Graphics::GetBitCount() const { return getFormatBits(m_pQImage->format()); }
 
-long Qt5Graphics::GetGraphicsWidth() const { return m_pQImage->width(); }
+tools::Long Qt5Graphics::GetGraphicsWidth() const { return m_pQImage->width(); }
 
 void Qt5Graphics::SetLineColor() { m_aLineColor = SALCOLOR_NONE; }
 

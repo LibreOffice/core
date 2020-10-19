@@ -34,7 +34,7 @@ struct AnimationBitmap
     BitmapEx maBitmapEx;
     Point maPositionPixel;
     Size maSizePixel;
-    long mnWait;
+    tools::Long mnWait;
     Disposal meDisposal;
     bool mbUserInput;
 
@@ -46,7 +46,7 @@ struct AnimationBitmap
     }
 
     AnimationBitmap(const BitmapEx& rBitmapEx, const Point& rPositionPixel, const Size& rSizePixel,
-                    long nWait = 0, Disposal eDisposal = Disposal::Not)
+                    tools::Long nWait = 0, Disposal eDisposal = Disposal::Not)
         : maBitmapEx(rBitmapEx)
         , maPositionPixel(rPositionPixel)
         , maSizePixel(rSizePixel)
