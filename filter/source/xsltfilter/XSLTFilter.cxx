@@ -47,6 +47,7 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 
 #include <com/sun/star/util/theMacroExpander.hpp>
@@ -97,7 +98,7 @@ namespace XSLT
      * supporting service from an extension for a specific filter; the
      * service must support com.sun.star.xml.xslt.XSLT2Transformer.
      */
-    class XSLTFilter : public WeakImplHelper<XImportFilter, XExportFilter,
+    class XSLTFilter : public WeakImplHelper<XImportFilter, XImportFilter2, XExportFilter,
             XStreamListener, ExtendedDocumentHandlerAdapter, XServiceInfo>
     {
     private:
@@ -149,6 +150,12 @@ namespace XSLT
         virtual sal_Bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
+                const Sequence<OUString>& msUserData) override;
+
+        // XImportFilter2
+        virtual sal_Bool SAL_CALL
+        importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
+                XFastParser>& xFastParser,
                 const Sequence<OUString>& msUserData) override;
 
         // XExportFilter
@@ -314,10 +321,6 @@ namespace XSLT
         if (!xInputStream.is())
             return false;
 
-        // create SAX parser that will read the document file
-        // and provide events to xHandler passed to this call
-        css::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
-
         // create transformer
         Sequence<Any> args(3);
         NamedValue nv;
@@ -366,8 +369,6 @@ namespace XSLT
                         aInput.sPublicId = aURL;
                         aInput.aInputStream = pipein;
 
-                        // set doc handler
-                        xSaxParser->setDocumentHandler(xHandler);
                         css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
                             css::xml::sax::XFastParser* >( xHandler.get() );
 
@@ -404,8 +405,143 @@ namespace XSLT
                                 if( xFastParser.is() )
                                     xFastParser->parseStream( aInput );
                                 else
+                                {
+                                    // create SAX parser that will read the document file
+                                    // and provide events to xHandler passed to this call
+                                    css::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
+                                    // set doc handler
+                                    xSaxParser->setDocumentHandler(xHandler);
                                     xSaxParser->parseStream( aInput );
+                                }
                         }
+                        m_tcontrol->terminate();
+                        return !m_bError;
+                    }
+                catch( const Exception& )
+                    {
+                        // something went wrong
+                        TOOLS_WARN_EXCEPTION("filter.xslt", "");
+                        return false;
+                    }
+            }
+        else
+            {
+                return false;
+            }
+    }
+
+    sal_Bool
+    XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
+            const css::uno::Reference<XFastParser>& xFastParser, const Sequence<
+                    OUString>& msUserData)
+    {
+        if (msUserData.getLength() < 5)
+            return false;
+
+        OUString udStyleSheet = rel2abs(msUserData[4]);
+
+        // get information from media descriptor
+        // the input stream that represents the imported file
+        // is most important here since we need to supply it to
+        // the sax parser that drives the supplied document handler
+        sal_Int32 nLength = aSourceData.getLength();
+        OUString aName, aURL;
+        css::uno::Reference<XInputStream> xInputStream;
+        css::uno::Reference<XInteractionHandler> xInterActionHandler;
+        for (sal_Int32 i = 0; i < nLength; i++)
+            {
+                aName = aSourceData[i].Name;
+                Any value = aSourceData[i].Value;
+                if ( aName == "InputStream" )
+                    value >>= xInputStream;
+                else if ( aName == "URL" )
+                    value >>= aURL;
+                else if ( aName == "InteractionHandler" )
+                    value >>= xInterActionHandler;
+            }
+        OSL_ASSERT(xInputStream.is());
+        if (!xInputStream.is())
+            return false;
+
+        // create transformer
+        Sequence<Any> args(3);
+        NamedValue nv;
+
+        nv.Name = "StylesheetURL";
+        nv.Value <<= expandUrl(udStyleSheet);
+        args[0] <<= nv;
+        nv.Name = "SourceURL";
+        nv.Value <<= aURL;
+        args[1] <<= nv;
+        nv.Name = "SourceBaseURL";
+        nv.Value <<= INetURLObject(aURL).getBase();
+        args[2] <<= nv;
+
+        m_tcontrol = impl_createTransformer(msUserData[1], args);
+
+        assert(xFastParser.is());
+        OSL_ASSERT(xInputStream.is());
+        OSL_ASSERT(m_tcontrol.is());
+        if (xFastParser.is() && xInputStream.is() && m_tcontrol.is())
+            {
+                try
+                    {
+                        css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
+                        if (xSeek.is())
+                            xSeek->seek(0);
+
+                        // we want to be notified when the processing is done...
+                        m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
+                                this));
+
+                        // connect input to transformer
+                        m_tcontrol->setInputStream(xInputStream);
+
+                        // create pipe
+                        css::uno::Reference<XOutputStream> pipeout =
+                                        Pipe::create(m_xContext);
+                        css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
+
+                        //connect transformer to pipe
+                        m_tcontrol->setOutputStream(pipeout);
+
+                        // connect pipe to sax parser
+                        InputSource aInput;
+                        aInput.sSystemId = aURL;
+                        aInput.sPublicId = aURL;
+                        aInput.aInputStream = pipein;
+
+                        // transform
+                        m_tcontrol->start();
+                        TimeValue timeout = { TRANSFORMATION_TIMEOUT_SEC, 0};
+                        osl::Condition::Result result(m_cTransformed.wait(&timeout));
+                        while (osl::Condition::result_timeout == result) {
+                                if (xInterActionHandler.is()) {
+                                        Sequence<Any> excArgs(0);
+                                        css::ucb::InteractiveAugmentedIOException exc(
+                                                "Timeout!",
+                                                static_cast< OWeakObject * >( this ),
+                                                InteractionClassification_ERROR,
+                                                css::ucb::IOErrorCode_GENERAL,
+                                                 excArgs);
+                                        Any r;
+                                        r <<= exc;
+                                        ::comphelper::OInteractionRequest* pRequest = new ::comphelper::OInteractionRequest(r);
+                                        css::uno::Reference< XInteractionRequest > xRequest(pRequest);
+                                        ::comphelper::OInteractionRetry* pRetry = new ::comphelper::OInteractionRetry;
+                                        ::comphelper::OInteractionAbort* pAbort = new ::comphelper::OInteractionAbort;
+                                        pRequest->addContinuation(pRetry);
+                                        pRequest->addContinuation(pAbort);
+                                        xInterActionHandler->handle(xRequest);
+                                        if (pAbort->wasSelected()) {
+                                                m_bError = true;
+                                                m_cTransformed.set();
+                                        }
+                                }
+                                result = m_cTransformed.wait(&timeout);
+                        };
+                        if (!m_bError)
+                            xFastParser->parseStream( aInput );
                         m_tcontrol->terminate();
                         return !m_bError;
                     }

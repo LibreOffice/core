@@ -4245,6 +4245,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml,\
 	FastAttribute \
 	XExportFilter \
 	XImportFilter \
+	XImportFilter2 \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/xml/crypto,\
 	CipherID \

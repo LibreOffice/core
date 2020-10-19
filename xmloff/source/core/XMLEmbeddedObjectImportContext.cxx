@@ -260,7 +260,7 @@ void XMLEmbeddedObjectImportContext::StartElement(
     sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
     while( USHRT_MAX != nPos )
     {
-        OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
+        OUString aAttrName = "xmlns:" + rNamespaceMap.GetPrefixByKey( nPos );
         if( xAttrList->getValueByName( aAttrName ).isEmpty() )
         {
             pAttrList->AddAttribute( aAttrName,
