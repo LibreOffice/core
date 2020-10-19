@@ -1647,6 +1647,20 @@ const char* lcl_GetErrorType( sal_uInt32 nFlags )
     return nullptr;
 }
 
+OUString SetMaxTextLength( OUString aText)
+{
+    OUStringBuffer sTextBuf;
+    sTextBuf.append(aText);
+    sal_uInt32 nTitleLen = sTextBuf.getLength();
+    if (nTitleLen > 255)
+    {
+        nTitleLen = 255;
+        sTextBuf.truncate(nTitleLen);
+        aText = sTextBuf.makeStringAndClear();
+    }
+    return aText;
+}
+
 } // namespace
 
 XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
@@ -1661,11 +1675,17 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         OUString aTitle, aText;
         bool bShowPrompt = pValData->GetInput( aTitle, aText );
         if( !aTitle.isEmpty() )
+        {
+            aTitle = SetMaxTextLength(aTitle);
             maPromptTitle.Assign( aTitle );
+        }
         else
             maPromptTitle.Assign( '\0' );
         if( !aText.isEmpty() )
+        {
+            aText = SetMaxTextLength(aText);
             maPromptText.Assign( aText );
+        }
         else
             maPromptText.Assign( '\0' );
 
@@ -1673,11 +1693,17 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         ScValidErrorStyle eScErrorStyle;
         bool bShowError = pValData->GetErrMsg( aTitle, aText, eScErrorStyle );
         if( !aTitle.isEmpty() )
+        {
+            aTitle = SetMaxTextLength(aTitle);
             maErrorTitle.Assign( aTitle );
+        }
         else
             maErrorTitle.Assign( '\0' );
         if( !aText.isEmpty() )
+        {
+            aText = SetMaxTextLength(aText);
             maErrorText.Assign( aText );
+        }
         else
             maErrorText.Assign( '\0' );
 
