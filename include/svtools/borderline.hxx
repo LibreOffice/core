@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/long.hxx>
 
 /**
     Class computing border widths shared between Line style listbox and the
@@ -65,11 +66,11 @@ public:
 
     bool operator== ( const BorderWidthImpl& r ) const;
 
-    long GetLine1 ( long nWidth ) const;
-    long GetLine2( long nWidth ) const;
-    long GetGap( long nWidth ) const;
+    tools::Long GetLine1 ( tools::Long nWidth ) const;
+    tools::Long GetLine2( tools::Long nWidth ) const;
+    tools::Long GetGap( tools::Long nWidth ) const;
 
-    long GuessWidth( long nLine1, long nLine2, long nGap );
+    tools::Long GuessWidth( tools::Long nLine1, tools::Long nLine2, tools::Long nGap );
 
     bool IsEmpty( ) const { return (0 == m_nRate1) && (0 == m_nRate2); }
     bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }

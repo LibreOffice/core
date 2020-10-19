@@ -27,7 +27,7 @@ BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
  :HeaderBar( pParent, nWinBits )
  ,_pBrowseBox( pParent )
 {
-    long nHeight = pParent->IsZoom() ? pParent->CalcZoom(pParent->GetTitleHeight()) : pParent->GetTitleHeight();
+    tools::Long nHeight = pParent->IsZoom() ? pParent->CalcZoom(pParent->GetTitleHeight()) : pParent->GetTitleHeight();
 
     SetPosSizePixel( Point( 0, 0),
                      Size( pParent->GetOutputSizePixel().Width(),
