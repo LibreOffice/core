@@ -141,17 +141,17 @@ private:
 
     std::deque<std::unique_ptr<UnoActionContext, o3tl::default_delete<UnoActionContext>>> maActionArr;
 
-    const SfxItemPropertySet* pPropSet;
+    const SfxItemPropertySet* m_pPropSet;
 
-    SwDocShell*             pDocShell;
-    bool                    bObjectValid;
+    SwDocShell*             m_pDocShell;
+    bool                    m_bObjectValid;
 
-    SwXDrawPage*            pDrawPage;
+    SwXDrawPage*            m_pDrawPage;
     css::uno::Reference< css::drawing::XDrawPage >              mxXDrawPage;
 
-    css::uno::Reference< css::text::XText >                     xBodyText;
-    SwXBodyText*                                                pBodyText;
-    css::uno::Reference< css::uno::XAggregation >               xNumFormatAgg;
+    css::uno::Reference< css::text::XText >                     m_xBodyText;
+    SwXBodyText*                                                m_pBodyText;
+    css::uno::Reference< css::uno::XAggregation >               m_xNumFormatAgg;
 
     css::uno::Reference< css::container::XIndexAccess >         mxXNumberingRules;
     css::uno::Reference< css::container::XIndexAccess >         mxXFootnotes;
@@ -200,7 +200,7 @@ private:
     // set in XPagePrintable::printPages(..) to indicate that the PagePrintSettings
     // has to be applied in XRenderable::getRenderer(..) through which the printing
     // is implemented.
-    bool bApplyPagePrintSettingsFromXPagePrintable;
+    bool m_bApplyPagePrintSettingsFromXPagePrintable;
 
     using SfxBaseModel::addEventListener;
     using SfxBaseModel::removeEventListener;
@@ -453,7 +453,7 @@ public:
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
     SwXDocumentPropertyHelper * GetPropertyHelper ();
-    bool                    IsValid() const {return bObjectValid;}
+    bool                    IsValid() const {return m_bObjectValid;}
 
     void                        InitNewDoc();
 
@@ -463,7 +463,7 @@ public:
                                             sal_Int32& nResult,
                                             css::uno::Reference< css::uno::XInterface > const & xLastResult);
 
-    SwDocShell*                 GetDocShell() {return pDocShell;}
+    SwDocShell*                 GetDocShell() {return m_pDocShell;}
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
@@ -472,14 +472,14 @@ class SwXLinkTargetSupplier final : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    SwXTextDocument* pxDoc;
-    OUString sTables;
-    OUString sFrames;
-    OUString sGraphics;
-    OUString sOLEs;
-    OUString sSections;
-    OUString sOutlines;
-    OUString sBookmarks;
+    SwXTextDocument* m_pxDoc;
+    OUString m_sTables;
+    OUString m_sFrames;
+    OUString m_sGraphics;
+    OUString m_sOLEs;
+    OUString m_sSections;
+    OUString m_sOutlines;
+    OUString m_sBookmarks;
 
 public:
     SwXLinkTargetSupplier(SwXTextDocument& rxDoc);
@@ -499,7 +499,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    void    Invalidate() {pxDoc = nullptr;}
+    void    Invalidate() {m_pxDoc = nullptr;}
 };
 
 class SwXLinkNameAccessWrapper final : public cppu::WeakImplHelper
@@ -557,8 +557,8 @@ class SwXOutlineTarget final : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    const SfxItemPropertySet*   pPropSet;
-    OUString                    sOutlineText;
+    const SfxItemPropertySet*   m_pPropSet;
+    OUString                    m_sOutlineText;
 
 public:
     SwXOutlineTarget(const OUString& rOutlineText);

@@ -85,7 +85,7 @@ class SwFlowFrame
         pages can be skipped at the same time. In addition, it is evaluated by
         the MoveBwd() method in TabFrame.
     */
-    static bool m_bMoveBwdJump;
+    static bool s_bMoveBwdJump;
 
     /** helper method to determine previous frame for calculation of the
         upper space
@@ -151,8 +151,8 @@ public:
     const SwFrame& GetFrame() const { return m_rThis; }
           SwFrame& GetFrame()       { return m_rThis; }
 
-    static bool IsMoveBwdJump() { return m_bMoveBwdJump; }
-    static void SetMoveBwdJump( bool bNew ){ m_bMoveBwdJump = bNew; }
+    static bool IsMoveBwdJump() { return s_bMoveBwdJump; }
+    static void SetMoveBwdJump( bool bNew ){ s_bMoveBwdJump = bNew; }
 
     void SetUndersized( const bool bNew ) { m_bUndersized = bNew; }
     bool IsUndersized()  const { return m_bUndersized; }
