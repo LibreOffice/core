@@ -151,6 +151,7 @@ class XMLOFF_DLLPUBLIC SvXMLLegacyToFastDocHandler final : public ::cppu::WeakIm
 private:
     rtl::Reference< SvXMLImport > mrImport;
     rtl::Reference< sax_fastparser::FastAttributeList > mxFastAttributes;
+    std::stack<sal_uInt16> maDefaultNamespaces;
 
 public:
     SvXMLLegacyToFastDocHandler( const rtl::Reference< SvXMLImport > & rImport );

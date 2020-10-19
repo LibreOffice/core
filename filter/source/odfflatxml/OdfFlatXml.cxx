@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <com/sun/star/xml/XImportFilter.hpp>
+#include <com/sun/star/xml/XImportFilter2.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -55,7 +56,7 @@ namespace filter::odfflatxml {
          * OdfFlatXml export and imports ODF flat XML documents by plugging a pass-through
          * filter implementation into XmlFilterAdaptor.
          */
-        class OdfFlatXml : public WeakImplHelper<XImportFilter,
+        class OdfFlatXml : public WeakImplHelper<XImportFilter, XImportFilter2,
                                                   XExportFilter, DocumentHandlerAdapter, css::lang::XServiceInfo>
         {
         private:
@@ -72,6 +73,12 @@ namespace filter::odfflatxml {
             virtual sal_Bool SAL_CALL
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
+                     const Sequence< OUString >& userData) override;
+
+            // XImportFilter2
+            virtual sal_Bool SAL_CALL
+            importer(const Sequence< PropertyValue >& sourceData,
+                     const Reference< XFastParser >& fastParser,
                      const Sequence< OUString >& userData) override;
 
             // XExportFilter
@@ -126,25 +133,76 @@ OdfFlatXml::importer(
     if (!inputStream.is())
         return false;
 
-    Reference<XParser> saxParser = Parser::create(m_xContext);
-
     InputSource inputSource;
     inputSource.sSystemId = url;
     inputSource.sPublicId = url;
     inputSource.aInputStream = inputStream;
-    css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            css::xml::sax::XFastParser* >( docHandler.get() );
-    saxParser->setDocumentHandler(docHandler);
     try
     {
         css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 
+        css::uno::Reference< css::xml::sax::XFastParser > xFastParser (docHandler, UNO_QUERY );
         if( xFastParser.is() )
             xFastParser->parseStream( inputSource );
         else
+        {
+            Reference<XParser> saxParser = Parser::create(m_xContext);
+            saxParser->setDocumentHandler(docHandler);
             saxParser->parseStream(inputSource);
+        }
+    }
+    catch (const Exception &)
+    {
+        TOOLS_WARN_EXCEPTION("filter.odfflatxml", "");
+        return false;
+    }
+    catch (const std::exception &exc)
+    {
+        SAL_WARN("filter.odfflatxml", exc.what());
+        return false;
+    }
+    return true;
+}
+
+sal_Bool
+OdfFlatXml::importer(
+                     const Sequence< PropertyValue >& sourceData,
+                     const Reference< XFastParser >& xFastParser,
+                     const Sequence< OUString >& /* userData */)
+{
+    // Read InputStream to read from and a URL used for the system id
+    // of the InputSource we create from the given sourceData sequence
+    Reference<XInputStream> inputStream;
+    OUString paramName;
+    OUString url;
+
+    sal_Int32 paramCount = sourceData.getLength();
+    for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
+        {
+            paramName = sourceData[paramIdx].Name;
+            if ( paramName == "InputStream" )
+                sourceData[paramIdx].Value >>= inputStream;
+            else if ( paramName == "URL" )
+                sourceData[paramIdx].Value >>= url;
+        }
+
+    OSL_ASSERT(inputStream.is());
+    if (!inputStream.is())
+        return false;
+
+    InputSource inputSource;
+    inputSource.sSystemId = url;
+    inputSource.sPublicId = url;
+    inputSource.aInputStream = inputStream;
+    try
+    {
+        css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
+        if ( xSeekable.is() )
+            xSeekable->seek( 0 );
+
+        xFastParser->parseStream( inputSource );
     }
     catch (const Exception &)
     {

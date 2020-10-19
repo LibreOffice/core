@@ -2248,6 +2248,9 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::endDocument()
 void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
+    sal_uInt16 nDefaultNamespace = XML_NAMESPACE_UNKNOWN;
+    if (!maDefaultNamespaces.empty())
+        nDefaultNamespace = maDefaultNamespaces.top();
     mrImport->processNSAttributes(xAttrList);
     OUString aLocalName;
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
@@ -2257,30 +2260,57 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        OUString aLocalAttrName;
-        OUString aNamespace;
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        // don't add unknown namespaces to the map
-        sal_uInt16 const nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByQName(
-                rAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
-        if( XML_NAMESPACE_XMLNS != nAttrPrefix )
+        if (rAttrName == "xmlns")
         {
-            auto const nToken = SvXMLImport::getTokenFromName(aLocalAttrName);
-            if (XML_NAMESPACE_UNKNOWN == nAttrPrefix || nToken == xmloff::XML_TOKEN_INVALID)
+            sal_uInt16 nNamespaceKey = mrImport->mpNamespaceMap->GetKeyByName(rAttrValue);
+            if (nNamespaceKey != XML_NAMESPACE_UNKNOWN)
             {
-                mxFastAttributes->addUnknown(aNamespace,
+                nDefaultNamespace = nNamespaceKey;
+                continue;
+            }
+            assert(false && "unknown namespace");
+        }
+        else if (rAttrName.indexOf(":") == -1 && nDefaultNamespace != XML_NAMESPACE_UNKNOWN)
+        {
+            auto const nToken = SvXMLImport::getTokenFromName(rAttrName);
+            if (nToken == xmloff::XML_TOKEN_INVALID)
+            {
+                mxFastAttributes->addUnknown(mrImport->mpNamespaceMap->GetNameByKey(nDefaultNamespace),
                     OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
                     OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
             }
             else
             {
-                sal_Int32 const nAttr = NAMESPACE_TOKEN(nAttrPrefix) | nToken;
+                sal_Int32 const nAttr = NAMESPACE_TOKEN(nDefaultNamespace) | nToken;
                 mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
             }
+            continue;
+        }
+
+        OUString aLocalAttrName;
+        OUString aNamespace;
+        // don't add unknown namespaces to the map
+        sal_uInt16 const nAttrPrefix = mrImport->mpNamespaceMap->GetKeyByQName(
+                rAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
+        if( XML_NAMESPACE_XMLNS == nAttrPrefix )
+            continue; // ignore
+        auto const nToken = SvXMLImport::getTokenFromName(aLocalAttrName);
+        if (XML_NAMESPACE_UNKNOWN == nAttrPrefix || nToken == xmloff::XML_TOKEN_INVALID)
+        {
+            mxFastAttributes->addUnknown(aNamespace,
+                OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
+                OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+        }
+        else
+        {
+            sal_Int32 const nAttr = NAMESPACE_TOKEN(nAttrPrefix) | nToken;
+            mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
     mrImport->startFastElement( mnElement, mxFastAttributes.get() );
+    maDefaultNamespaces.push(nDefaultNamespace);
 }
 
 void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
@@ -2289,6 +2319,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::endElement( const OUString& rName )
     sal_uInt16 nPrefix = mrImport->mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
     sal_Int32 mnElement = NAMESPACE_TOKEN( nPrefix ) | SvXMLImport::getTokenFromName(aLocalName);
     mrImport->endFastElement( mnElement );
+    maDefaultNamespaces.pop();
 }
 
 void SAL_CALL SvXMLLegacyToFastDocHandler::characters( const OUString& aChars )
