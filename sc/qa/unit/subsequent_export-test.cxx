@@ -5513,11 +5513,11 @@ void ScExportTest::testTdf76047_externalLink()
     CPPUNIT_ASSERT(pShell.is());
 
     // load data from external links. (tdf76047_externalLinkSource.ods)
-    // that file have to be the same directory as tdf76047_externalLink.xlsx
+    // that file has to be in the same directory as tdf76047_externalLink.xlsx
     pShell->ReloadAllLinks();
     ScDocument& rDoc = pShell->GetDocument();
 
-    // compare the loaded data (from external links) to the data copied manually to the testfile
+    // compare the data loaded from external links with the expected result stored in the test file
     for (int nCol = 1; nCol <= 5; nCol++)
     {
         for (int nRow = 3; nRow <= 5; nRow++)
