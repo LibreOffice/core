@@ -26,6 +26,7 @@
 #include <zlib.h>
 
 #include <tools/zcodec.hxx>
+#include <tools/long.hxx>
 
 /* gzip flag byte */
 //      GZ_ASCII_FLAG   0x01 /* bit 0 set: file probably ascii text */
@@ -77,9 +78,9 @@ void ZCodec::BeginCompression( int nCompressLevel, bool gzLib )
     pStream->avail_out = pStream->avail_in = 0;
 }
 
-long ZCodec::EndCompression()
+tools::Long ZCodec::EndCompression()
 {
-    long retvalue = 0;
+    tools::Long retvalue = 0;
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
 
     if (meState != STATE_INIT)
@@ -135,12 +136,12 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     };
 }
 
-long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
+tools::Long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 {
     int err;
     size_t nInToRead;
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
-    long    nOldTotal_Out = pStream->total_out;
+    tools::Long    nOldTotal_Out = pStream->total_out;
 
     assert(meState == STATE_INIT);
     mpOStm = &rOStm;
@@ -168,7 +169,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     while ( ( err != Z_STREAM_END)  && ( pStream->avail_in || mnInToRead ) );
     ImplWriteBack();
 
-    return mbStatus ? static_cast<long>(pStream->total_out - nOldTotal_Out) : -1;
+    return mbStatus ? static_cast<tools::Long>(pStream->total_out - nOldTotal_Out) : -1;
 }
 
 void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize )
@@ -197,7 +198,7 @@ void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize )
     }
 }
 
-long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
+tools::Long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
 {
     int err;
     size_t nInToRead;
@@ -235,10 +236,10 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
     if ( err == Z_STREAM_END )
         mbFinish = true;
 
-    return (mbStatus ? static_cast<long>(nSize - pStream->avail_out) : -1);
+    return (mbStatus ? static_cast<tools::Long>(nSize - pStream->avail_out) : -1);
 }
 
-long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
+tools::Long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
 {
     int err = 0;
     size_t nInToRead;
@@ -285,7 +286,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize 
     if ( err == Z_STREAM_END )
         mbFinish = true;
 
-    return (mbStatus ? static_cast<long>(nSize - pStream->avail_out) : -1);
+    return (mbStatus ? static_cast<tools::Long>(nSize - pStream->avail_out) : -1);
 }
 
 void ZCodec::ImplWriteBack()

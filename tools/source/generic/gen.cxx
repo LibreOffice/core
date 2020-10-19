@@ -39,10 +39,10 @@ OString Pair::toString() const
 
 tools::Rectangle tools::Rectangle::Justify( const Point& rLT, const Point& rRB )
 {
-    long nLeft   = std::min(rLT.X(), rRB.X());
-    long nTop    = std::min(rLT.Y(), rRB.Y());
-    long nRight  = std::max(rLT.X(), rRB.X());
-    long nBottom = std::max(rLT.Y(), rRB.Y());
+    tools::Long nLeft   = std::min(rLT.X(), rRB.X());
+    tools::Long nTop    = std::min(rLT.Y(), rRB.Y());
+    tools::Long nRight  = std::max(rLT.X(), rRB.X());
+    tools::Long nBottom = std::max(rLT.Y(), rRB.Y());
     return Rectangle( nLeft, nTop, nRight, nBottom );
 }
 
@@ -80,14 +80,14 @@ void tools::Rectangle::SaturatingSetSize(const Size& rSize)
         nBottom = RECT_EMPTY;
 }
 
-void tools::Rectangle::SaturatingSetX(long x)
+void tools::Rectangle::SaturatingSetX(tools::Long x)
 {
     if (nRight != RECT_EMPTY)
         nRight = o3tl::saturating_add(nRight, x - nLeft);
     nLeft = x;
 }
 
-void tools::Rectangle::SaturatingSetY(long y)
+void tools::Rectangle::SaturatingSetY(tools::Long y)
 {
     if (nBottom != RECT_EMPTY)
         nBottom = o3tl::saturating_add(nBottom, y - nTop);
@@ -202,7 +202,7 @@ OString tools::Rectangle::toString() const
     return ss.str().c_str();
 }
 
-void tools::Rectangle::expand(long nExpandBy)
+void tools::Rectangle::expand(tools::Long nExpandBy)
 {
     nLeft   -= nExpandBy;
     nTop    -= nExpandBy;
@@ -216,7 +216,7 @@ void tools::Rectangle::expand(long nExpandBy)
         nBottom += nExpandBy;
 }
 
-void tools::Rectangle::shrink(long nShrinkBy)
+void tools::Rectangle::shrink(tools::Long nShrinkBy)
 {
     nLeft   += nShrinkBy;
     nTop    += nShrinkBy;
@@ -226,7 +226,7 @@ void tools::Rectangle::shrink(long nShrinkBy)
         nBottom -= nShrinkBy;
 }
 
-long tools::Rectangle::AdjustRight(long nHorzMoveDelta)
+tools::Long tools::Rectangle::AdjustRight(tools::Long nHorzMoveDelta)
 {
     if (nRight == RECT_EMPTY)
         nRight = nLeft + nHorzMoveDelta - 1;
@@ -235,7 +235,7 @@ long tools::Rectangle::AdjustRight(long nHorzMoveDelta)
     return nRight;
 }
 
-long tools::Rectangle::AdjustBottom( long nVertMoveDelta )
+tools::Long tools::Rectangle::AdjustBottom( tools::Long nVertMoveDelta )
 {
     if (nBottom == RECT_EMPTY)
         nBottom = nTop + nVertMoveDelta - 1;
@@ -244,38 +244,38 @@ long tools::Rectangle::AdjustBottom( long nVertMoveDelta )
     return nBottom;
 }
 
-void tools::Rectangle::setX( long x )
+void tools::Rectangle::setX( tools::Long x )
 {
     if (nRight != RECT_EMPTY)
         nRight += x - nLeft;
     nLeft = x;
 }
 
-void tools::Rectangle::setY( long y )
+void tools::Rectangle::setY( tools::Long y )
 {
     if (nBottom != RECT_EMPTY)
         nBottom += y - nTop;
     nTop  = y;
 }
 
-long tools::Rectangle::Right() const
+tools::Long tools::Rectangle::Right() const
 {
     return nRight == RECT_EMPTY ? nLeft : nRight;
 }
 
-long tools::Rectangle::Bottom() const
+tools::Long tools::Rectangle::Bottom() const
 {
     return nBottom == RECT_EMPTY ? nTop : nBottom;
 }
 
 /// Returns the difference between right and left, assuming the range includes one end, but not the other.
-long tools::Rectangle::getWidth() const
+tools::Long tools::Rectangle::getWidth() const
 {
     return nRight == RECT_EMPTY ? 0 : nRight - nLeft;
 }
 
 /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
-long tools::Rectangle::getHeight() const
+tools::Long tools::Rectangle::getHeight() const
 {
     return nBottom == RECT_EMPTY ? 0 : nBottom - nTop;
 }

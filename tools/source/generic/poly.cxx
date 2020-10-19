@@ -55,7 +55,7 @@
 
 static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
-    const long nDX = rPt.X() - rCenter.X();
+    const tools::Long nDX = rPt.X() - rCenter.X();
     double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
 
     return atan2(fWR*sin(fAngle), fHR*cos(fAngle));
@@ -167,13 +167,13 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, 
         mnPoints = 0;
 }
 
-ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
+ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
 {
     if( nRadX && nRadY )
     {
         sal_uInt16 nPoints;
         // Compute default (depends on size)
-        long nRadXY;
+        tools::Long nRadXY;
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
@@ -202,8 +202,8 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
 
         for( i=0, nAngle = 0.0; i < nPoints4; i++, nAngle += nAngleStep )
         {
-            long nX = FRound( nRadX * cos( nAngle ) );
-            long nY = FRound( -nRadY * sin( nAngle ) );
+            tools::Long nX = FRound( nRadX * cos( nAngle ) );
+            tools::Long nY = FRound( -nRadY * sin( nAngle ) );
 
             Point* pPt = &(mxPointAry[i]);
             pPt->setX(  nX + rCenter.X() );
@@ -226,17 +226,17 @@ ImplPolygon::ImplPolygon( const Point& rCenter, long nRadX, long nRadY )
 ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
     PolyStyle eStyle )
 {
-    const long  nWidth = rBound.GetWidth();
-    const long  nHeight = rBound.GetHeight();
+    const tools::Long  nWidth = rBound.GetWidth();
+    const tools::Long  nHeight = rBound.GetHeight();
 
     if( ( nWidth > 1 ) && ( nHeight > 1 ) )
     {
         const Point aCenter( rBound.Center() );
-        const long  nRadX = aCenter.X() - rBound.Left();
-        const long  nRadY = aCenter.Y() - rBound.Top();
+        const tools::Long  nRadX = aCenter.X() - rBound.Left();
+        const tools::Long  nRadY = aCenter.Y() - rBound.Top();
         sal_uInt16  nPoints;
 
-        long nRadXY;
+        tools::Long nRadXY;
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
@@ -697,14 +697,14 @@ class ImplEdgePointFilter : public ImplPointFilter
     Point               maFirstPoint;
     Point               maLastPoint;
     ImplPointFilter&    mrNextFilter;
-    const long          mnLow;
-    const long          mnHigh;
+    const tools::Long          mnLow;
+    const tools::Long          mnHigh;
     const int           mnEdge;
     int                 mnLastOutside;
     bool                mbFirst;
 
 public:
-                        ImplEdgePointFilter( int nEdge, long nLow, long nHigh,
+                        ImplEdgePointFilter( int nEdge, tools::Long nLow, tools::Long nHigh,
                                              ImplPointFilter& rNextFilter ) :
                             mrNextFilter( rNextFilter ),
                             mnLow( nLow ),
@@ -744,17 +744,17 @@ inline int ImplEdgePointFilter::VisibleSide( const Point& rPoint ) const
 
 Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
 {
-    long lx = maLastPoint.X();
-    long ly = maLastPoint.Y();
-    long md = rPoint.X() - lx;
-    long mn = rPoint.Y() - ly;
-    long nNewX;
-    long nNewY;
+    tools::Long lx = maLastPoint.X();
+    tools::Long ly = maLastPoint.Y();
+    tools::Long md = rPoint.X() - lx;
+    tools::Long mn = rPoint.Y() - ly;
+    tools::Long nNewX;
+    tools::Long nNewY;
 
     if ( nEdge & EDGE_VERT )
     {
         nNewY = (nEdge == EDGE_TOP) ? mnLow : mnHigh;
-        long dy = nNewY - ly;
+        tools::Long dy = nNewY - ly;
         if ( !md )
             nNewX = lx;
         else if ( (LONG_MAX / std::abs(md)) >= std::abs(dy) )
@@ -774,13 +774,13 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     ady += mn/2;
             ady /= mn;
-            nNewX = static_cast<long>(ady) + lx;
+            nNewX = static_cast<tools::Long>(ady) + lx;
         }
     }
     else
     {
         nNewX = (nEdge == EDGE_LEFT) ? mnLow : mnHigh;
-        long dx = nNewX - lx;
+        tools::Long dx = nNewX - lx;
         if ( !mn )
             nNewY = ly;
         else if ( (LONG_MAX / std::abs(mn)) >= std::abs(dx) )
@@ -800,7 +800,7 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
                 else
                     adx += md/2;
             adx /= md;
-            nNewY = static_cast<long>(adx) + ly;
+            nNewY = static_cast<tools::Long>(adx) + ly;
         }
     }
 
@@ -893,7 +893,7 @@ Polygon::Polygon( const tools::Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt
 {
 }
 
-Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY )
+Polygon::Polygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
     : mpImplPolygon(ImplPolygon(rCenter, nRadX, nRadY))
 {
 }
@@ -1363,7 +1363,7 @@ void Polygon::ImplReduceEdges( tools::Polygon& rPoly, const double& rArea, sal_u
     }
 }
 
-void Polygon::Move( long nHorzMove, long nVertMove )
+void Polygon::Move( tools::Long nHorzMove, tools::Long nVertMove )
 {
     // This check is required for DrawEngine
     if ( !nHorzMove && !nVertMove )
@@ -1390,8 +1390,8 @@ void Polygon::Scale( double fScaleX, double fScaleY )
     for ( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
         Point& rPnt = mpImplPolygon->mxPointAry[i];
-        rPnt.setX( static_cast<long>( fScaleX * rPnt.X() ) );
-        rPnt.setY( static_cast<long>( fScaleY * rPnt.Y() ) );
+        rPnt.setX( static_cast<tools::Long>( fScaleX * rPnt.X() ) );
+        rPnt.setY( static_cast<tools::Long>( fScaleY * rPnt.Y() ) );
     }
 }
 
@@ -1408,15 +1408,15 @@ void Polygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
 
 void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
 {
-    long nCenterX = rCenter.X();
-    long nCenterY = rCenter.Y();
+    tools::Long nCenterX = rCenter.X();
+    tools::Long nCenterY = rCenter.Y();
 
     for( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
     {
         Point& rPt = mpImplPolygon->mxPointAry[ i ];
 
-        const long nX = rPt.X() - nCenterX;
-        const long nY = rPt.Y() - nCenterY;
+        const tools::Long nX = rPt.X() - nCenterX;
+        const tools::Long nY = rPt.Y() - nCenterY;
         rPt.setX( FRound( fCos * nX + fSin * nY ) + nCenterX );
         rPt.setY( - FRound( fSin * nX - fCos * nY ) + nCenterY );
     }
@@ -1462,7 +1462,7 @@ tools::Rectangle Polygon::GetBoundRect() const
     if( ! nCount )
         return tools::Rectangle();
 
-    long    nXMin, nXMax, nYMin, nYMax;
+    tools::Long    nXMin, nXMax, nYMin, nYMax;
 
     const Point& pFirstPt = mpImplPolygon->mxPointAry[0];
     nXMin = nXMax = pFirstPt.X();
