@@ -1295,6 +1295,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         return nullptr;
     }
 
+    // keep a pointer to the layout because we might move ownership of the unique_ptr
+    const SalLayout* pSalLayoutTmp = pSalLayout.get();
+
     // prepare multi level glyph fallback
     std::unique_ptr<MultiSalLayout> pMultiSalLayout;
     ImplLayoutRuns aLayoutRuns = rLayoutArgs.maRuns;
@@ -1356,7 +1359,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         pSalLayout = std::move(pMultiSalLayout);
 
     // restore orig font settings
-    pSalLayout->InitFont();
+    pSalLayoutTmp->InitFont();
     rLayoutArgs.maRuns = aLayoutRuns;
 
     return pSalLayout;
