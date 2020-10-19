@@ -71,11 +71,11 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
         const SvxLRSpaceItem* pLRItem = &rSet.Get( ATTR_LRSPACE );
-        long nLeftMargin   = pLRItem->GetLeft();
-        long nRightMargin  = pLRItem->GetRight();
+        tools::Long nLeftMargin   = pLRItem->GetLeft();
+        tools::Long nRightMargin  = pLRItem->GetRight();
         const SvxULSpaceItem* pULItem = &rSet.Get( ATTR_ULSPACE );
-        long nTopMargin    = pULItem->GetUpper();
-        long nBottomMargin = pULItem->GetLower();
+        tools::Long nTopMargin    = pULItem->GetUpper();
+        tools::Long nBottomMargin = pULItem->GetLower();
         aPageSize = rSet.Get(ATTR_PAGE_SIZE).GetSize();
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {

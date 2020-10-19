@@ -31,18 +31,18 @@
 #include <svx/fmview.hxx>
 
 // #i72502#
-Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
+Point ScOutputData::PrePrintDrawingLayer(tools::Long nLogStX, tools::Long nLogStY )
 {
     tools::Rectangle aRect;
     SCCOL nCol;
     Point aOffset;
-    long nLayoutSign(bLayoutRTL ? -1 : 1);
+    tools::Long nLayoutSign(bLayoutRTL ? -1 : 1);
 
     for (nCol=0; nCol<nX1; nCol++)
         aOffset.AdjustX( -(mpDoc->GetColWidth( nCol, nTab ) * nLayoutSign) );
     aOffset.AdjustY( -sal_Int32(mpDoc->GetRowHeight( 0, nY1-1, nTab )) );
 
-    long nDataWidth = 0;
+    tools::Long nDataWidth = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += mpDoc->GetColWidth( nCol, nTab );
 
@@ -55,8 +55,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aRect.SetBottom( -aOffset.Y() );
 
     Point aMMOffset( aOffset );
-    aMMOffset.setX( static_cast<long>(aMMOffset.X() * HMM_PER_TWIPS) );
-    aMMOffset.setY( static_cast<long>(aMMOffset.Y() * HMM_PER_TWIPS) );
+    aMMOffset.setX( static_cast<tools::Long>(aMMOffset.X() * HMM_PER_TWIPS) );
+    aMMOffset.setY( static_cast<tools::Long>(aMMOffset.Y() * HMM_PER_TWIPS) );
 
     if (!bMetaFile)
         aMMOffset += Point( nLogStX, nLogStY );
@@ -65,10 +65,10 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
         aRect.AdjustRight(mpDoc->GetColWidth( nCol, nTab ) );
     aRect.AdjustBottom(mpDoc->GetRowHeight( nY1, nY2, nTab ) );
 
-    aRect.SetLeft( static_cast<long>(aRect.Left()   * HMM_PER_TWIPS) );
-    aRect.SetTop( static_cast<long>(aRect.Top()    * HMM_PER_TWIPS) );
-    aRect.SetRight( static_cast<long>(aRect.Right()  * HMM_PER_TWIPS) );
-    aRect.SetBottom( static_cast<long>(aRect.Bottom() * HMM_PER_TWIPS) );
+    aRect.SetLeft( static_cast<tools::Long>(aRect.Left()   * HMM_PER_TWIPS) );
+    aRect.SetTop( static_cast<tools::Long>(aRect.Top()    * HMM_PER_TWIPS) );
+    aRect.SetRight( static_cast<tools::Long>(aRect.Right()  * HMM_PER_TWIPS) );
+    aRect.SetBottom( static_cast<tools::Long>(aRect.Bottom() * HMM_PER_TWIPS) );
 
     if(pViewShell || pDrawView)
     {

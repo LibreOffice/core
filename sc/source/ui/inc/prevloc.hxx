@@ -45,10 +45,10 @@ struct ScPreviewColRowInfo
 {
     bool    bIsHeader;
     SCCOLROW    nDocIndex;
-    long    nPixelStart;
-    long    nPixelEnd;
+    tools::Long    nPixelStart;
+    tools::Long    nPixelEnd;
 
-    void Set( bool bHeader, SCCOLROW nIndex, long nStart, long nEnd )
+    void Set( bool bHeader, SCCOLROW nIndex, tools::Long nStart, tools::Long nEnd )
     {
         bIsHeader   = bHeader;
         nDocIndex   = nIndex;
@@ -128,8 +128,8 @@ public:
     bool    IsHeaderLeft() const;
     bool    IsFooterLeft() const;
 
-    long    GetNoteCountInRange( const tools::Rectangle& rVisiblePixel, bool bNoteMarks ) const;
-    bool    GetNoteInRange( const tools::Rectangle& rVisiblePixel, long nIndex, bool bNoteMarks,
+    tools::Long    GetNoteCountInRange( const tools::Rectangle& rVisiblePixel, bool bNoteMarks ) const;
+    bool    GetNoteInRange( const tools::Rectangle& rVisiblePixel, tools::Long nIndex, bool bNoteMarks,
                             ScAddress& rCellPos, tools::Rectangle& rNoteRect ) const;
     tools::Rectangle GetNoteInRangeOutputRect(const tools::Rectangle& rVisiblePixel, bool bNoteMarks,
                             const ScAddress& aCellPos) const;

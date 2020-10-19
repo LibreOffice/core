@@ -342,7 +342,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     }
 }
 
-void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL )
+void ScTabView::SetScrollBar( ScrollBar& rScroll, tools::Long nRangeMax, tools::Long nVisible, tools::Long nPos, bool bLayoutRTL )
 {
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
@@ -354,20 +354,20 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     rScroll.EnableRTL( bLayoutRTL );
 }
 
-long ScTabView::GetScrollBarPos( const ScrollBar& rScroll )
+tools::Long ScTabView::GetScrollBarPos( const ScrollBar& rScroll )
 {
     return rScroll.GetThumbPos();
 }
 
 //  UpdateScrollBars - set visible area and scroll width of scroll bars
 
-static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (complete) cells
+static tools::Long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (complete) cells
 {
-    long nOldPos;
-    long nNewPos;
+    tools::Long nOldPos;
+    tools::Long nNewPos;
 
     nOldPos = rScroll.GetThumbPos();
-    rScroll.SetPageSize( static_cast<long>(nSize) );
+    rScroll.SetPageSize( static_cast<tools::Long>(nSize) );
     nNewPos = rScroll.GetThumbPos();
 #ifndef UNX
     rScroll.SetPageSize( 1 );               // always possible !
@@ -376,7 +376,7 @@ static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size =
     return nNewPos - nOldPos;
 }
 
-static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLROW nMax, SCCOLROW nStart )
+static tools::Long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLROW nMax, SCCOLROW nStart )
 {
     // get the end (positive) of a scroll bar range that always starts at 0
 
@@ -393,7 +393,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 {
     ScTabViewShell::notifyAllViewsHeaderInvalidation(GetViewData().GetViewShell(), eHeaderType, GetViewData().GetTabNo());
 
-    long        nDiff;
+    tools::Long        nDiff;
     bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
     bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument& rDoc = aViewData.GetDocument();
@@ -416,24 +416,24 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
         nStartY = aViewData.GetFixPosY();
 
     nVisXL = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
-    long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, rDoc.MaxCol(), 0 );
+    tools::Long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, rDoc.MaxCol(), 0 );
     SetScrollBar( *aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
-    long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, rDoc.MaxRow(), nStartY );
+    tools::Long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, rDoc.MaxRow(), nStartY );
     SetScrollBar( *aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, bLayoutRTL );
 
     if (bRight)
     {
         nVisXR = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
-        long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, rDoc.MaxCol(), nStartX );
+        tools::Long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, rDoc.MaxCol(), nStartX );
         SetScrollBar( *aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
     }
 
     if (bTop)
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
-        long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, rDoc.MaxRow(), 0 );
+        tools::Long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, rDoc.MaxRow(), 0 );
         SetScrollBar( *aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
     }
 
@@ -468,7 +468,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
 #define HDR_SLIDERSIZE      2
 #endif
 
-void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
+void ScTabView::InvertHorizontal( ScVSplitPos eWhich, tools::Long nDragPos )
 {
     for (sal_uInt16 i=0; i<4; i++)
         if (WhichV(static_cast<ScSplitPos>(i))==eWhich)
@@ -483,7 +483,7 @@ void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
         }
 }
 
-void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
+void ScTabView::InvertVertical( ScHSplitPos eWhich, tools::Long nDragPos )
 {
     for (sal_uInt16 i=0; i<4; i++)
         if (WhichH(static_cast<ScSplitPos>(i))==eWhich)

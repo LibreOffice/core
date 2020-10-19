@@ -80,9 +80,9 @@ ScPivotField::ScPivotField(SCCOL nNewCol) :
     mnDupCount(0)
 {}
 
-long ScPivotField::getOriginalDim() const
+tools::Long ScPivotField::getOriginalDim() const
 {
-    return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<long>(nCol);
+    return mnOriginalDim >= 0 ? mnOriginalDim : static_cast<tools::Long>(nCol);
 }
 
 // ScPivotParam

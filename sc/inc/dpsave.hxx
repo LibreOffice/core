@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/long.hxx>
 
 #include "scdllapi.h"
 #include "calcmacros.hxx"
@@ -100,7 +101,7 @@ private:
     bool bDupFlag;
     css::sheet::DataPilotFieldOrientation nOrientation;
     ScGeneralFunction nFunction; // for data dimensions
-    long nUsedHierarchy;
+    tools::Long nUsedHierarchy;
     sal_uInt16 nShowEmptyMode; //! at level
     bool bRepeatItemLabels; //! at level
     bool bSubTotalDefault; //! at level
@@ -146,10 +147,10 @@ public:
 
     void SetOrientation(css::sheet::DataPilotFieldOrientation nNew);
     void SetSubTotals(std::vector<ScGeneralFunction> const & rFuncs);
-    long GetSubTotalsCount() const
+    tools::Long GetSubTotalsCount() const
         { return maSubTotalFuncs.size(); }
 
-    ScGeneralFunction GetSubTotalFunc(long nIndex) const
+    ScGeneralFunction GetSubTotalFunc(tools::Long nIndex) const
         { return maSubTotalFuncs[nIndex]; }
 
     bool HasShowEmpty() const;
@@ -165,8 +166,8 @@ public:
     ScGeneralFunction GetFunction() const
         { return nFunction; }
 
-    void SetUsedHierarchy(long nNew);
-    long GetUsedHierarchy() const
+    void SetUsedHierarchy(tools::Long nNew);
+    tools::Long GetUsedHierarchy() const
         { return nUsedHierarchy; }
 
     void SetLayoutName(const OUString& rName);
@@ -315,9 +316,9 @@ public:
 
     ScDPSaveDimension* GetInnermostDimension(css::sheet::DataPilotFieldOrientation nOrientation);
     ScDPSaveDimension* GetFirstDimension(css::sheet::DataPilotFieldOrientation eOrientation);
-    SC_DLLPUBLIC long GetDataDimensionCount() const;
+    SC_DLLPUBLIC tools::Long GetDataDimensionCount() const;
 
-    void SetPosition( ScDPSaveDimension* pDim, long nNew );
+    void SetPosition( ScDPSaveDimension* pDim, tools::Long nNew );
     SC_DLLPUBLIC void SetColumnGrand( bool bSet );
     bool GetColumnGrand() const
         { return bool(nColumnGrandMode); }

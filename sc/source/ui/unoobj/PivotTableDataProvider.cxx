@@ -369,7 +369,7 @@ void PivotTableDataProvider::collectPivotTableData()
 
         uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xLevelsSupplier->getLevels());
 
-        for (long nLevel = 0; nLevel < xLevels->getCount(); nLevel++)
+        for (tools::Long nLevel = 0; nLevel < xLevels->getCount(); nLevel++)
         {
             uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLevel), uno::UNO_QUERY);
             uno::Reference<container::XNamed> xLevelName(xLevel, uno::UNO_QUERY);

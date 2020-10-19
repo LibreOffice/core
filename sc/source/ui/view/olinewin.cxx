@@ -30,8 +30,8 @@
 #include <dbfunc.hxx>
 #include <bitmaps.hlst>
 
-const long SC_OL_BITMAPSIZE                 = 12;
-const long SC_OL_POSOFFSET                  = 2;
+const tools::Long SC_OL_BITMAPSIZE                 = 12;
+const tools::Long SC_OL_POSOFFSET                  = 2;
 
 const size_t SC_OL_NOLEVEL                  = static_cast< size_t >( -1 );
 const size_t SC_OL_HEADERENTRY              = static_cast< size_t >( -1 );
@@ -80,7 +80,7 @@ void ScOutlineWindow::dispose()
     vcl::Window::dispose();
 }
 
-void ScOutlineWindow::SetHeaderSize( long nNewSize )
+void ScOutlineWindow::SetHeaderSize( tools::Long nNewSize )
 {
     bool bLayoutRTL = GetDoc().IsLayoutRTL( GetTab() );
     mbMirrorEntries = bLayoutRTL && mbHoriz;
@@ -95,23 +95,23 @@ void ScOutlineWindow::SetHeaderSize( long nNewSize )
         Invalidate();
 }
 
-long ScOutlineWindow::GetDepthSize() const
+tools::Long ScOutlineWindow::GetDepthSize() const
 {
-    long nSize = GetLevelCount() * SC_OL_BITMAPSIZE;
+    tools::Long nSize = GetLevelCount() * SC_OL_BITMAPSIZE;
     if ( nSize > 0 )
         nSize += 2 * SC_OL_POSOFFSET + 1;
     return nSize;
 }
 
-void ScOutlineWindow::ScrollPixel( long nDiff )
+void ScOutlineWindow::ScrollPixel( tools::Long nDiff )
 {
     HideFocus();
     mbDontDrawFocus = true;
 
-    long nStart = mnMainFirstPos;
-    long nEnd = mnMainLastPos;
+    tools::Long nStart = mnMainFirstPos;
+    tools::Long nEnd = mnMainLastPos;
 
-    long nInvStart, nInvEnd;
+    tools::Long nInvStart, nInvEnd;
     if (nDiff < 0)
     {
         nStart -= nDiff;
@@ -135,7 +135,7 @@ void ScOutlineWindow::ScrollPixel( long nDiff )
     ShowFocus();
 }
 
-void ScOutlineWindow::ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd )
+void ScOutlineWindow::ScrollRel( tools::Long nEntryDiff, tools::Long nEntryStart, tools::Long nEntryEnd )
 {
     tools::Rectangle aRect( GetRectangle( 0, nEntryStart, GetOutputSizeLevel() - 1, nEntryEnd ) );
     if ( mbHoriz )
@@ -206,24 +206,24 @@ void ScOutlineWindow::GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColR
         --rnColRowStart;
 }
 
-Point ScOutlineWindow::GetPoint( long nLevelPos, long nEntryPos ) const
+Point ScOutlineWindow::GetPoint( tools::Long nLevelPos, tools::Long nEntryPos ) const
 {
     return mbHoriz ? Point( nEntryPos, nLevelPos ) : Point( nLevelPos, nEntryPos );
 }
 
 tools::Rectangle ScOutlineWindow::GetRectangle(
-        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd ) const
+        tools::Long nLevelStart, tools::Long nEntryStart, tools::Long nLevelEnd, tools::Long nEntryEnd ) const
 {
     return tools::Rectangle( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
-long ScOutlineWindow::GetOutputSizeLevel() const
+tools::Long ScOutlineWindow::GetOutputSizeLevel() const
 {
     Size aSize( GetOutputSizePixel() );
     return mbHoriz ? aSize.Height() : aSize.Width();
 }
 
-long ScOutlineWindow::GetOutputSizeEntry() const
+tools::Long ScOutlineWindow::GetOutputSizeEntry() const
 {
     Size aSize( GetOutputSizePixel() );
     return mbHoriz ? aSize.Width() : aSize.Height();
@@ -236,38 +236,38 @@ size_t ScOutlineWindow::GetLevelCount() const
     return nLevelCount ? (nLevelCount + 1) : 0;
 }
 
-long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
+tools::Long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
 {
     // #i51970# must always return the *left* edge of the area used by a level
-    long nPos = static_cast< long >( SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE );
+    tools::Long nPos = static_cast< tools::Long >( SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE );
     return mbMirrorLevels ? (GetOutputSizeLevel() - nPos - SC_OL_BITMAPSIZE) : nPos;
 }
 
-size_t ScOutlineWindow::GetLevelFromPos( long nLevelPos ) const
+size_t ScOutlineWindow::GetLevelFromPos( tools::Long nLevelPos ) const
 {
     if( mbMirrorLevels ) nLevelPos = GetOutputSizeLevel() - nLevelPos - 1;
-    long nStart = SC_OL_POSOFFSET;
+    tools::Long nStart = SC_OL_POSOFFSET;
     if ( nLevelPos < nStart ) return SC_OL_NOLEVEL;
     size_t nLevel = static_cast< size_t >( (nLevelPos - nStart) / SC_OL_BITMAPSIZE );
     return (nLevel < GetLevelCount()) ? nLevel : SC_OL_NOLEVEL;
 }
 
-long ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
+tools::Long ScOutlineWindow::GetColRowPos( SCCOLROW nColRowIndex ) const
 {
-    long nDocPos = mbHoriz ?
+    tools::Long nDocPos = mbHoriz ?
         mrViewData.GetScrPos( static_cast<SCCOL>(nColRowIndex), 0, meWhich, true ).X() :
         mrViewData.GetScrPos( 0, static_cast<SCROW>(nColRowIndex), meWhich, true ).Y();
     return mnMainFirstPos + nDocPos;
 }
 
-long ScOutlineWindow::GetHeaderEntryPos() const
+tools::Long ScOutlineWindow::GetHeaderEntryPos() const
 {
     return mnHeaderPos + (mnHeaderSize - SC_OL_BITMAPSIZE) / 2;
 }
 
 bool ScOutlineWindow::GetEntryPos(
         size_t nLevel, size_t nEntry,
-        long& rnStartPos, long& rnEndPos, long& rnImagePos ) const
+        tools::Long& rnStartPos, tools::Long& rnEndPos, tools::Long& rnImagePos ) const
 {
     const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
     if ( !pEntry || !pEntry->IsVisible() )
@@ -276,7 +276,7 @@ bool ScOutlineWindow::GetEntryPos(
     SCCOLROW nStart = pEntry->GetStart();
     SCCOLROW nEnd = pEntry->GetEnd();
 
-    long nEntriesSign = mbMirrorEntries ? -1 : 1;
+    tools::Long nEntriesSign = mbMirrorEntries ? -1 : 1;
 
     // --- common calculation ---
 
@@ -287,7 +287,7 @@ bool ScOutlineWindow::GetEntryPos(
     rnImagePos = bHidden ?
                 (rnStartPos - ( SC_OL_BITMAPSIZE / 2 ) * nEntriesSign) :
                 rnStartPos + nEntriesSign;
-    long nCenter = (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE * nEntriesSign +
+    tools::Long nCenter = (rnStartPos + rnEndPos - SC_OL_BITMAPSIZE * nEntriesSign +
                         ( mbMirrorEntries ? 1 : 0 )) / 2;
     rnImagePos = mbMirrorEntries ? std::max( rnImagePos, nCenter ) : std::min( rnImagePos, nCenter );
 
@@ -337,12 +337,12 @@ bool ScOutlineWindow::GetImagePos( size_t nLevel, size_t nEntry, Point& rPos ) c
     bool bRet = nLevel < GetLevelCount();
     if ( bRet )
     {
-        long nLevelPos = GetLevelPos( nLevel );
+        tools::Long nLevelPos = GetLevelPos( nLevel );
         if ( nEntry == SC_OL_HEADERENTRY )
             rPos = GetPoint( nLevelPos, GetHeaderEntryPos() );
         else
         {
-            long nStartPos, nEndPos, nImagePos;
+            tools::Long nStartPos, nEndPos, nImagePos;
             bRet = GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos );
             rPos = GetPoint( nLevelPos, nImagePos );
         }
@@ -380,13 +380,13 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
     if ( nLevel == SC_OL_NOLEVEL )
         return false;
 
-    long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
+    tools::Long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
 
     // --- level buttons ---
 
     if ( mnHeaderSize > 0 )
     {
-        long nImagePos = GetHeaderEntryPos();
+        tools::Long nImagePos = GetHeaderEntryPos();
         if ( (nImagePos <= nEntryMousePos) && (nEntryMousePos < nImagePos + SC_OL_BITMAPSIZE) )
         {
             rnLevel = nLevel;
@@ -411,7 +411,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
 
         if ( (nEnd >= nStartIndex) && (nStart <= nEndIndex) )
         {
-            long nStartPos, nEndPos, nImagePos;
+            tools::Long nStartPos, nEndPos, nImagePos;
             if ( GetEntryPos( nLevel, nEntry, nStartPos, nEndPos, nImagePos ) )
             {
                 rnLevel = nLevel;
@@ -517,13 +517,13 @@ void ScOutlineWindow::SetEntryAreaClipRegion()
 }
 
 void ScOutlineWindow::DrawLineRel(
-        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd )
+        tools::Long nLevelStart, tools::Long nEntryStart, tools::Long nLevelEnd, tools::Long nEntryEnd )
 {
     DrawLine( GetPoint( nLevelStart, nEntryStart ), GetPoint( nLevelEnd, nEntryEnd ) );
 }
 
 void ScOutlineWindow::DrawRectRel(
-        long nLevelStart, long nEntryStart, long nLevelEnd, long nEntryEnd )
+        tools::Long nLevelStart, tools::Long nEntryStart, tools::Long nLevelEnd, tools::Long nEntryEnd )
 {
     DrawRect( GetRectangle( nLevelStart, nEntryStart, nLevelEnd, nEntryEnd ) );
 }
@@ -536,7 +536,7 @@ namespace
     }
 }
 
-void ScOutlineWindow::DrawImageRel(long nLevelPos, long nEntryPos, const OUString& rId)
+void ScOutlineWindow::DrawImageRel(tools::Long nLevelPos, tools::Long nEntryPos, const OUString& rId)
 {
     const Image& rImage = GetImage(rId);
     SetLineColor();
@@ -615,15 +615,15 @@ const std::u16string_view aLevelBmps[]=
 
 void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& /* rRect */ )
 {
-    long nEntriesSign = mbMirrorEntries ? -1 : 1;
-    long nLevelsSign  = mbMirrorLevels  ? -1 : 1;
+    tools::Long nEntriesSign = mbMirrorEntries ? -1 : 1;
+    tools::Long nLevelsSign  = mbMirrorLevels  ? -1 : 1;
 
     Size aSize = GetOutputSizePixel();
-    long nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
-    long nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
+    tools::Long nLevelEnd = (mbHoriz ? aSize.Height() : aSize.Width()) - 1;
+    tools::Long nEntryEnd = (mbHoriz ? aSize.Width() : aSize.Height()) - 1;
 
     SetLineColor( maLineColor );
-    long nBorderPos = mbMirrorLevels ? 0 : nLevelEnd;
+    tools::Long nBorderPos = mbMirrorLevels ? 0 : nLevelEnd;
     DrawLineRel( nBorderPos, 0, nBorderPos, nEntryEnd );
 
     const ScOutlineArray* pArray = GetOutlineArray();
@@ -635,12 +635,12 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     if ( mnHeaderSize > 0 )
     {
-        long nEntryPos = GetHeaderEntryPos();
+        tools::Long nEntryPos = GetHeaderEntryPos();
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
             DrawImageRel(GetLevelPos(nLevel), nEntryPos, aLevelBmps[nLevel]);
 
         SetLineColor( maLineColor );
-        long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
+        tools::Long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));
         DrawLineRel( 0, nLinePos, nLevelEnd, nLinePos );
     }
 
@@ -653,8 +653,8 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     for ( size_t nLevel = 0; nLevel + 1 < nLevelCount; ++nLevel )
     {
-        long nLevelPos = GetLevelPos( nLevel );
-        long nEntryPos1 = 0, nEntryPos2 = 0, nImagePos = 0;
+        tools::Long nLevelPos = GetLevelPos( nLevel );
+        tools::Long nEntryPos1 = 0, nEntryPos2 = 0, nImagePos = 0;
 
         size_t nEntryCount = pArray->GetCount( sal::static_int_cast<sal_uInt16>(nLevel) );
         size_t nEntry;
@@ -680,7 +680,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
                 if ( nStart >= nStartIndex )
                     nEntryPos1 += nEntriesSign;
                 nEntryPos2 -= 2 * nEntriesSign;
-                long nLinePos = nLevelPos;
+                tools::Long nLinePos = nLevelPos;
                 if ( mbMirrorLevels )
                     nLinePos += SC_OL_BITMAPSIZE - 1;   // align with right edge of bitmap
                 DrawRectRel( nLinePos, nEntryPos1, nLinePos + nLevelsSign, nEntryPos2 );

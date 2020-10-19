@@ -286,8 +286,8 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
     try
     {
-        long i;
-        long nColCount = 0;
+        tools::Long i;
+        tools::Long nColCount = 0;
         OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
@@ -364,8 +364,8 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
                     break;
                 case sdbc::DataType::DECIMAL:
                     {
-                        long nPrec = xMeta->getPrecision( i+1 );
-                        long nScale = xMeta->getScale( i+1 );
+                        tools::Long nPrec = xMeta->getPrecision( i+1 );
+                        tools::Long nScale = xMeta->getScale( i+1 );
                         aHeader += ",N," +
                                     OUString::number(
                                         SvDbaseConverter::ConvertPrecisionToDbase(
@@ -457,7 +457,7 @@ void lcl_GetColumnTypes(
     typedef std::unordered_set<OUString> StrSetType;
     StrSetType aFieldNames;
 
-    long nField = 0;
+    tools::Long nField = 0;
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
     for ( SCCOL nCol = nFirstCol; nCol <= nLastCol; nCol++ )
     {
@@ -762,7 +762,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
             bHasFieldNames = false;
     }
 
-    long nColCount = nLastCol - nFirstCol + 1;
+    tools::Long nColCount = nLastCol - nFirstCol + 1;
     uno::Sequence<OUString> aColNames( nColCount );
     uno::Sequence<sal_Int32> aColTypes( nColCount );
     uno::Sequence<sal_Int32> aColLengths( nColCount );
@@ -838,7 +838,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
         const sal_Int32* pColTypes     = aColTypes.getConstArray();
         const sal_Int32* pColLengths   = aColLengths.getConstArray();
         const sal_Int32* pColScales    = aColScales.getConstArray();
-        long nCol;
+        tools::Long nCol;
 
         for (nCol=0; nCol<nColCount; nCol++)
         {

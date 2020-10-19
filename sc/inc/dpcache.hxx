@@ -27,6 +27,7 @@
 #include "types.hxx"
 
 #include <mdds/flat_segment_tree.hpp>
+#include <tools/long.hxx>
 
 #include <memory>
 #include <set>
@@ -97,12 +98,12 @@ public:
     class DBConnector
     {
     public:
-        virtual long getColumnCount() const = 0;
-        virtual OUString getColumnLabel(long nCol) const = 0;
+        virtual tools::Long getColumnCount() const = 0;
+        virtual OUString getColumnLabel(tools::Long nCol) const = 0;
         virtual bool first() = 0;
         virtual bool next() = 0;
         virtual void finish() = 0;
-        virtual void getValue(long nCol, ScDPItemData& rData, SvNumFormatType& rNumType) const = 0;
+        virtual void getValue(tools::Long nCol, ScDPItemData& rData, SvNumFormatType& rNumType) const = 0;
         virtual ~DBConnector() {}
     };
 
@@ -136,21 +137,21 @@ public:
     void RemoveReference(ScDPObject* pObj) const;
     const ScDPObjectSet& GetAllReferences() const;
 
-    SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
+    SCROW GetIdByItemData(tools::Long nDim, const ScDPItemData& rItem) const;
 
     static sal_uInt32 GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
     static OUString GetLocaleIndependentFormattedNumberString( double fValue );
     static OUString GetLocaleIndependentFormattedString( double fValue, SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
-    OUString GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
     SvNumberFormatter* GetNumberFormatter() const;
 
-    long AppendGroupField();
-    void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
-    SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
-    void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
+    tools::Long AppendGroupField();
+    void ResetGroupItems(tools::Long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
+    SCROW SetGroupItem(tools::Long nDim, const ScDPItemData& rData);
+    void GetGroupDimMemberIds(tools::Long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
     void ClearAllFields();
-    const ScDPNumGroupInfo* GetNumGroupInfo(long nDim) const;
+    const ScDPNumGroupInfo* GetNumGroupInfo(tools::Long nDim) const;
 
     /**
      * Return a group type identifier.  The values correspond with
@@ -160,12 +161,12 @@ public:
      *
      * @return group type identifier, or 0 on failure.
      */
-    sal_Int32 GetGroupType(long nDim) const;
+    sal_Int32 GetGroupType(tools::Long nDim) const;
 
     SCCOL GetDimensionIndex(const OUString& sName) const;
-    sal_uInt32 GetNumberFormat( long nDim ) const;
-    bool  IsDateDimension( long nDim ) const ;
-    long GetDimMemberCount(long nDim) const;
+    sal_uInt32 GetNumberFormat( tools::Long nDim ) const;
+    bool  IsDateDimension( tools::Long nDim ) const ;
+    tools::Long GetDimMemberCount(tools::Long nDim) const;
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;
@@ -190,9 +191,9 @@ public:
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
     ScDocument& GetDoc() const;
-    long GetColumnCount() const;
+    tools::Long GetColumnCount() const;
 
-    const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
+    const ScDPItemData* GetItemDataById( tools::Long nDim, SCROW nId ) const;
 
     size_t GetFieldCount() const;
     size_t GetGroupFieldCount() const;
@@ -209,7 +210,7 @@ public:
 private:
     void PostInit();
     void Clear();
-    const GroupItems* GetGroupItems(long nDim) const;
+    const GroupItems* GetGroupItems(tools::Long nDim) const;
 };
 
 #endif

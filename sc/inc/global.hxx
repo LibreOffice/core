@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
+#include <tools/long.hxx>
 
 #include <atomic>
 // HACK: <atomic> includes <stdbool.h>, which in some Clang versions does '#define bool bool',
@@ -105,9 +106,9 @@ const SCSIZE MAXSUBTOTAL        = 3;
 
 namespace sc
 {
-    inline long TwipsToHMM( long nTwips )     { return (nTwips * 127 + 36) / 72; }
-    inline long HMMToTwips( long nHMM )       { return (nHMM * 72 + 63) / 127; }
-    inline long TwipsToEvenHMM( long nTwips ) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
+    inline ::tools::Long TwipsToHMM( ::tools::Long nTwips )     { return (nTwips * 127 + 36) / 72; }
+    inline ::tools::Long HMMToTwips( ::tools::Long nHMM )       { return (nHMM * 72 + 63) / 127; }
+    inline ::tools::Long TwipsToEvenHMM( ::tools::Long nTwips ) { return ( (nTwips * 127 + 72) / 144 ) * 2; }
 }
 
                                     // standard size as OLE server (cells)
@@ -582,8 +583,8 @@ public:
     static sal_uInt16           nDefFontHeight;
     SC_DLLPUBLIC static sal_uInt16           nStdRowHeight;
 
-    SC_DLLPUBLIC static long                nLastRowHeightExtra;
-    static long             nLastColWidthExtra;
+    SC_DLLPUBLIC static ::tools::Long                nLastRowHeightExtra;
+    static ::tools::Long             nLastColWidthExtra;
 
     SC_DLLPUBLIC static void Init();                     // during start up
     static void             InitAddIns();

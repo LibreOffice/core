@@ -80,9 +80,9 @@ void XclImpDocViewSettings::Finalize()
 
 namespace {
 
-long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
+tools::Long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
 {
-    return static_cast< long >( nXclZoom ? nXclZoom : nDefZoom );
+    return static_cast< tools::Long >( nXclZoom ? nXclZoom : nDefZoom );
 }
 
 } // namespace
@@ -259,8 +259,8 @@ void XclImpTabViewSettings::Finalize()
     else
     {
         // split window: position is in twips
-        rTabSett.maSplitPos.setX( static_cast< long >( maData.mnSplitX ) );
-        rTabSett.maSplitPos.setY( static_cast< long >( maData.mnSplitY ) );
+        rTabSett.maSplitPos.setX( static_cast< tools::Long >( maData.mnSplitX ) );
+        rTabSett.maSplitPos.setY( static_cast< tools::Long >( maData.mnSplitY ) );
     }
 
     // grid color

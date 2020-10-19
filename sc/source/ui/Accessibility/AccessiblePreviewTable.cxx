@@ -290,7 +290,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
     if ( mpTableInfo && nColumn >= 0 && nRow >= 0 && nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
     {
         //  index iterates horizontally
-        long nNewIndex = nRow * mpTableInfo->GetCols() + nColumn;
+        tools::Long nNewIndex = nRow * mpTableInfo->GetCols() + nColumn;
 
         const ScPreviewColRowInfo& rColInfo = mpTableInfo->GetColInfo()[nColumn];
         const ScPreviewColRowInfo& rRowInfo = mpTableInfo->GetRowInfo()[nRow];
@@ -460,7 +460,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount()
 
     FillTableInfo();
 
-    long nRet = 0;
+    tools::Long nRet = 0;
     if ( mpTableInfo )
         nRet = static_cast<sal_Int32>(mpTableInfo->GetCols()) * mpTableInfo->GetRows();
     return nRet;
@@ -476,12 +476,12 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
     uno::Reference<XAccessible> xRet;
     if ( mpTableInfo )
     {
-        long nColumns = mpTableInfo->GetCols();
+        tools::Long nColumns = mpTableInfo->GetCols();
         if ( nColumns > 0 )
         {
             // nCol, nRow are within the visible table, not the document
-            long nCol = nIndex % nColumns;
-            long nRow = nIndex / nColumns;
+            tools::Long nCol = nIndex % nColumns;
+            tools::Long nRow = nIndex / nColumns;
 
             xRet = getAccessibleCellAt( nRow, nCol );
         }

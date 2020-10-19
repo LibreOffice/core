@@ -108,7 +108,7 @@ protected:
     SvStream&           aIn;
     sal_Int32           nBytesLeft;
 
-    inline void         Ignore( const long nSeekRel );
+    inline void         Ignore( const tools::Long nSeekRel );
     inline void         Read( sal_uInt8& nByte );
     inline void         Read( sal_uInt16& nUINT16 );
     inline void         Read( sal_Int16& nINT16 );
@@ -129,7 +129,7 @@ protected:
     using               ConverterBase::Reset;
 };
 
-inline void LotusConverterBase::Ignore( const long nSeekRel )
+inline void LotusConverterBase::Ignore( const tools::Long nSeekRel )
 {
     aIn.SeekRel( nSeekRel );
     nBytesLeft -= nSeekRel;

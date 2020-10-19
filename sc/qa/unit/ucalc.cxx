@@ -2797,7 +2797,7 @@ void Test::testGraphicsInGroup()
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
 
-        const long TOLERANCE = 30; //30 hmm
+        const tools::Long TOLERANCE = 30; //30 hmm
 
         CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
             testEqualsWithTolerance(aOrigRect.Left(), rNewRect.Left(), TOLERANCE) &&
@@ -5706,7 +5706,7 @@ void Test::testAnchoredRotatedShape()
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != nullptr);
     m_pDoc->SetRowHeightRange( 0, MAXROW, 0, sc::HMMToTwips( 1000 ) );
-    constexpr long TOLERANCE = 30; //30 hmm
+    constexpr tools::Long TOLERANCE = 30; //30 hmm
     for ( SCCOL nCol = 0; nCol < MAXCOL; ++nCol )
         m_pDoc->SetColWidth( nCol, 0, sc::HMMToTwips( 1000 ) );
     {

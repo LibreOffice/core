@@ -41,7 +41,7 @@ private:
     rtl_TextEncoding eCharSet;
     LanguageType eLang;
     bool        bCharSetSystem;
-    long        nStartRow;
+    tools::Long        nStartRow;
     std::vector<sal_Int32> mvColStart;
     std::vector<sal_uInt8> mvColFormat;
 
@@ -65,7 +65,7 @@ public:
     sal_uInt16          GetInfoCount() const    { return mvColStart.size(); }
     const sal_Int32*    GetColStart() const     { return mvColStart.data(); }
     const sal_uInt8*    GetColFormat() const    { return mvColFormat.data(); }
-    long                GetStartRow() const     { return nStartRow; }
+    tools::Long                GetStartRow() const     { return nStartRow; }
     LanguageType        GetLanguage() const     { return eLang; }
 
     void    SetCharSet( rtl_TextEncoding eNew ) { eCharSet = eNew; }
@@ -78,7 +78,7 @@ public:
     void    SetDetectSpecialNumber(bool bSet)   { bDetectSpecialNumber = bSet; }
     void    SetSkipEmptyCells(bool bSet)        { bSkipEmptyCells = bSet; }
     void    SetTextSep( sal_Unicode c )         { cTextSep = c; }
-    void    SetStartRow( long nRow)             { nStartRow= nRow; }
+    void    SetStartRow( tools::Long nRow)             { nStartRow= nRow; }
     void    SetLanguage(LanguageType e)         { eLang = e; }
 
     void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );

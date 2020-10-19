@@ -79,7 +79,7 @@ static bool IsAmbiguousScript( SvtScriptType nScript )
 
 //  Data operations
 
-long ScColumn::GetNeededSize(
+tools::Long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
     const Fraction& rZoomX, const Fraction& rZoomY,
     bool bWidth, const ScNeededSizeOptions& rOptions,
@@ -98,12 +98,12 @@ long ScColumn::GetNeededSize(
         // Empty cell, or invalid row.
         return 0;
 
-    long nValue = 0;
+    tools::Long nValue = 0;
     ScRefCellValue aCell = GetCellValue(it, aPos.second);
     double nPPT = bWidth ? nPPTX : nPPTY;
 
-    auto conditionalScaleFunc = [bInPrintTwips](long nMeasure, double fScale) {
-        return bInPrintTwips ? nMeasure : static_cast<long>(nMeasure * fScale);
+    auto conditionalScaleFunc = [bInPrintTwips](tools::Long nMeasure, double fScale) {
+        return bInPrintTwips ? nMeasure : static_cast<tools::Long>(nMeasure * fScale);
     };
 
     const ScPatternAttr* pPattern = rOptions.pPattern;
@@ -212,7 +212,7 @@ long ScColumn::GetNeededSize(
     if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
         return 0;
 
-    long nRotate = 0;
+    tools::Long nRotate = 0;
     SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
     if ( eOrient == SvxCellOrientation::Standard )
     {
@@ -294,7 +294,7 @@ long ScColumn::GetNeededSize(
             Size aSize( pDev->GetTextWidth( aValStr ), pDev->GetTextHeight() );
             if ( eOrient != SvxCellOrientation::Standard )
             {
-                long nTemp = aSize.Width();
+                tools::Long nTemp = aSize.Width();
                 aSize.setWidth( aSize.Height() );
                 aSize.setHeight( nTemp );
             }
@@ -305,10 +305,10 @@ long ScColumn::GetNeededSize(
                 double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
                 double nCosAbs = fabs( cos( nRealOrient ) );
                 double nSinAbs = fabs( sin( nRealOrient ) );
-                long nHeight = static_cast<long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
-                long nWidth;
+                tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
+                tools::Long nWidth;
                 if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                    nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
+                    nWidth  = static_cast<tools::Long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
                 else if ( rOptions.bTotalSize )
                 {
                     nWidth = conditionalScaleFunc(rDocument.GetColWidth( nCol,nTab ), nPPT);
@@ -316,16 +316,16 @@ long ScColumn::GetNeededSize(
                     //  only to the right:
                     //TODO: differ on direction up/down (only Text/whole height)
                     if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
-                        nWidth += static_cast<long>( rDocument.GetRowHeight( nRow,nTab ) *
+                        nWidth += static_cast<tools::Long>( rDocument.GetRowHeight( nRow,nTab ) *
                                             (bInPrintTwips ? 1.0 : nPPT) * nCosAbs / nSinAbs );
                 }
                 else
-                    nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
+                    nWidth  = static_cast<tools::Long>( aSize.Height() / nSinAbs );   //TODO: limit?
 
                 if ( bBreak && !rOptions.bTotalSize )
                 {
                     //  limit size for line break
-                    long nCmp = pDev->GetFont().GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
+                    tools::Long nCmp = pDev->GetFont().GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
                     if ( nHeight > nCmp )
                         nHeight = nCmp;
                 }
@@ -355,7 +355,7 @@ long ScColumn::GetNeededSize(
                 //  test with EditEngine the safety at 90%
                 //  (due to rounding errors and because EditEngine formats partially differently)
 
-                long nDocSize = conditionalScaleFunc((rDocument.GetColWidth( nCol,nTab ) -
+                tools::Long nDocSize = conditionalScaleFunc((rDocument.GetColWidth( nCol,nTab ) -
                                     pMargin->GetLeftMargin() - pMargin->GetRightMargin() -
                                     nIndent), nPPTX);
                 nDocSize = (nDocSize * 9) / 10;           // for safety
@@ -425,22 +425,22 @@ long ScColumn::GetNeededSize(
             }
 
             // use original width for hidden columns:
-            long nDocWidth = static_cast<long>( rDocument.GetOriginalWidth(nCol,nTab) * fWidthFactor );
+            tools::Long nDocWidth = static_cast<tools::Long>( rDocument.GetOriginalWidth(nCol,nTab) * fWidthFactor );
             SCCOL nColMerge = pMerge->GetColMerge();
             if (nColMerge > 1)
                 for (SCCOL nColAdd=1; nColAdd<nColMerge; nColAdd++)
-                    nDocWidth += static_cast<long>( rDocument.GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
-            nDocWidth -= static_cast<long>( pMargin->GetLeftMargin() * fWidthFactor )
-                       + static_cast<long>( pMargin->GetRightMargin() * fWidthFactor )
+                    nDocWidth += static_cast<tools::Long>( rDocument.GetColWidth(nCol+nColAdd,nTab) * fWidthFactor );
+            nDocWidth -= static_cast<tools::Long>( pMargin->GetLeftMargin() * fWidthFactor )
+                       + static_cast<tools::Long>( pMargin->GetRightMargin() * fWidthFactor )
                        + 1;     // output size is width-1 pixel (due to gridline)
             if ( nIndent )
-                nDocWidth -= static_cast<long>( nIndent * fWidthFactor );
+                nDocWidth -= static_cast<tools::Long>( nIndent * fWidthFactor );
 
             // space for AutoFilter button:  20 * nZoom/100
-            constexpr long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
+            constexpr tools::Long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
                 nDocWidth -= bInPrintTwips ?
-                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : long(rZoomX * nFilterButtonWidthPix);
+                        (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
 
             aPaper.setWidth( nDocWidth );
 
@@ -486,20 +486,20 @@ long ScColumn::GetNeededSize(
             double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
             double nCosAbs = fabs( cos( nRealOrient ) );
             double nSinAbs = fabs( sin( nRealOrient ) );
-            long nHeight = static_cast<long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
-            long nWidth;
+            tools::Long nHeight = static_cast<tools::Long>( aSize.Height() * nCosAbs + aSize.Width() * nSinAbs );
+            tools::Long nWidth;
             if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
-                nWidth  = static_cast<long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
+                nWidth  = static_cast<tools::Long>( aSize.Width() * nCosAbs + aSize.Height() * nSinAbs );
             else if ( rOptions.bTotalSize )
             {
                 nWidth = conditionalScaleFunc(rDocument.GetColWidth( nCol,nTab ), nPPT);
                 bAddMargin = false;
                 if ( pPattern->GetRotateDir( pCondSet ) == ScRotateDir::Right )
-                    nWidth += static_cast<long>( rDocument.GetRowHeight( nRow,nTab ) *
+                    nWidth += static_cast<tools::Long>( rDocument.GetRowHeight( nRow,nTab ) *
                                         (bInPrintTwips ? 1.0 : nPPT) * nCosAbs / nSinAbs );
             }
             else
-                nWidth  = static_cast<long>( aSize.Height() / nSinAbs );   //TODO: limit?
+                nWidth  = static_cast<tools::Long>( aSize.Height() / nSinAbs );   //TODO: limit?
             aSize = Size( nWidth, nHeight );
 
             Size aTextSize = bInPrintTwips ?
@@ -515,7 +515,7 @@ long ScColumn::GetNeededSize(
                 if ( bBreak && !rOptions.bTotalSize )
                 {
                     //  limit size for line break
-                    long nCmp = aOldFont.GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
+                    tools::Long nCmp = aOldFont.GetFontSize().Height() * SC_ROT_BREAK_FACTOR;
                     if ( nValue > nCmp )
                         nValue = nCmp;
                 }
@@ -547,7 +547,7 @@ long ScColumn::GetNeededSize(
                 pEngine->SetControlWord( nCtrl | EEControlBits::FORMAT100 );
                 pEngine->QuickFormatDoc( true );
                 aTextSize = Size(0, pEngine->GetTextHeight());
-                long nSecondValue = bInPrintTwips ?
+                tools::Long nSecondValue = bInPrintTwips ?
                         OutputDevice::LogicToLogic(aTextSize, aHMMMode, aTwipMode).Height() :
                         pDev->LogicToPixel(aTextSize, aHMMMode).Height();
                 if ( nSecondValue > nValue )
@@ -572,7 +572,7 @@ long ScColumn::GetNeededSize(
                 if ( bAsianVertical && pDev->GetOutDevType() != OUTDEV_PRINTER )
                 {
                     //  add 1pt extra (default margin value) for line breaks with SetVertical
-                    constexpr long nDefaultMarginInPoints = 1;
+                    constexpr tools::Long nDefaultMarginInPoints = 1;
                     nValue += conditionalScaleFunc(nDefaultMarginInPoints * TWIPS_PER_POINT, nPPT);
                 }
             }
@@ -592,11 +592,11 @@ long ScColumn::GetNeededSize(
         //      place for Autofilter Button
         //      20 * nZoom/100
         //      Conditional formatting is not interesting here
-        constexpr long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
+        constexpr tools::Long nFilterButtonWidthPix = 20; // Autofilter pixel width at 100% zoom.
         ScMF nFlags = pPattern->GetItem(ATTR_MERGE_FLAG).GetValue();
         if (nFlags & ScMF::Auto)
             nValue += bInPrintTwips ?
-                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : long(rZoomX * nFilterButtonWidthPix);
+                (nFilterButtonWidthPix * TWIPS_PER_PIXEL) : tools::Long(rZoomX * nFilterButtonWidthPix);
     }
 
     return nValue;
@@ -692,8 +692,8 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX );
         pDev->SetFont( aFont );
         const SvxMarginItem* pMargin = &pPattern->GetItem(ATTR_MARGIN);
-        long nMargin = static_cast<long>( pMargin->GetLeftMargin() * nPPTX ) +
-                        static_cast<long>( pMargin->GetRightMargin() * nPPTX );
+        tools::Long nMargin = static_cast<tools::Long>( pMargin->GetLeftMargin() * nPPTX ) +
+                        static_cast<tools::Long>( pMargin->GetRightMargin() * nPPTX );
 
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = rDocument.GetFormatTable();

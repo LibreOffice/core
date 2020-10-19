@@ -95,7 +95,7 @@ const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "xltx", "Calc Office Open XML Template", "Office Open XML Spreadsheet Template", XLTX_FORMAT_TYPE }
 };
 
-bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
+bool testEqualsWithTolerance( tools::Long nVal1, tools::Long nVal2, tools::Long nTol )
 {
     return ( labs( nVal1 - nVal2 ) <= nTol );
 }

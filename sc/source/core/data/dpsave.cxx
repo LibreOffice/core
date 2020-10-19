@@ -345,7 +345,7 @@ void ScDPSaveDimension::SetFunction(ScGeneralFunction nNew)
     nFunction = nNew;
 }
 
-void ScDPSaveDimension::SetUsedHierarchy(long nNew)
+void ScDPSaveDimension::SetUsedHierarchy(tools::Long nNew)
 {
     nUsedHierarchy = nNew;
 }
@@ -511,9 +511,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     // Level loop outside of maMemberList loop
     // because SubTotals have to be set independently of known members
 
-    long nCount = maMemberHash.size();
+    tools::Long nCount = maMemberHash.size();
 
-    long nHierCount = 0;
+    tools::Long nHierCount = 0;
     uno::Reference<container::XIndexAccess> xHiers;
     uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
     if ( xHierSupp.is() )
@@ -525,9 +525,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
     bool bHasHiddenMember = false;
 
-    for (long nHier=0; nHier<nHierCount; nHier++)
+    for (tools::Long nHier=0; nHier<nHierCount; nHier++)
     {
-        long nLevCount = 0;
+        tools::Long nLevCount = 0;
         uno::Reference<container::XIndexAccess> xLevels;
         uno::Reference<sheet::XLevelsSupplier> xLevSupp(xHiers->getByIndex(nHier), uno::UNO_QUERY);
         if ( xLevSupp.is() )
@@ -537,7 +537,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             nLevCount = xLevels->getCount();
         }
 
-        for (long nLev=0; nLev<nLevCount; nLev++)
+        for (tools::Long nLev=0; nLev<nLevCount; nLev++)
         {
             uno::Reference<uno::XInterface> xLevel(xLevels->getByIndex(nLev), uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xLevProp( xLevel, uno::UNO_QUERY );
@@ -939,9 +939,9 @@ ScDPSaveDimension* ScDPSaveData::GetFirstDimension(sheet::DataPilotFieldOrientat
     return nullptr;
 }
 
-long ScDPSaveData::GetDataDimensionCount() const
+tools::Long ScDPSaveData::GetDataDimensionCount() const
 {
-    long nDataCount = 0;
+    tools::Long nDataCount = 0;
 
     for (auto const& iter : m_DimList)
     {
@@ -952,7 +952,7 @@ long ScDPSaveData::GetDataDimensionCount() const
     return nDataCount;
 }
 
-void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
+void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, tools::Long nNew )
 {
     // position (nNew) is counted within dimensions of the same orientation
 
@@ -1014,8 +1014,8 @@ static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& x
 {
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-    long nIntCount = xIntDims->getCount();
-    for (long nIntDim=0; nIntDim<nIntCount; nIntDim++)
+    tools::Long nIntCount = xIntDims->getCount();
+    for (tools::Long nIntDim=0; nIntDim<nIntCount; nIntDim++)
     {
         uno::Reference<beans::XPropertySet> xDimProp(xIntDims->getByIndex(nIntDim), uno::UNO_QUERY);
         if (xDimProp.is())
@@ -1070,7 +1070,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
         uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-        long nIntCount = xIntDims->getCount();
+        tools::Long nIntCount = xIntDims->getCount();
 
         for (const auto& rxDim : m_DimList)
         {
@@ -1084,7 +1084,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             //TODO: getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
             bool bFound = false;
-            for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
+            for (tools::Long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {
                 uno::Reference<uno::XInterface> xIntDim(xIntDims->getByIndex(nIntDim),
                                                         uno::UNO_QUERY);
@@ -1215,8 +1215,8 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     // First, build a dimension name-to-index map.
     typedef std::unordered_map<OUString, long> NameIndexMap;
     NameIndexMap aMap;
-    long nColCount = pData->GetColumnCount();
-    for (long i = 0; i < nColCount; ++i)
+    tools::Long nColCount = pData->GetColumnCount();
+    for (tools::Long i = 0; i < nColCount; ++i)
         aMap.emplace(pData->getDimensionName(i), i);
 
     NameIndexMap::const_iterator itrEnd = aMap.end();
@@ -1233,7 +1233,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
             // dimension name not in the data. This should never happen!
             continue;
 
-        long nDimIndex = itr->second;
+        tools::Long nDimIndex = itr->second;
         const std::vector<SCROW>& rMembers = pData->GetColumnEntries(nDimIndex);
         size_t nMemberCount = rMembers.size();
         for (size_t j = 0; j < nMemberCount; ++j)
@@ -1259,8 +1259,8 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
 
     // First, build a dimension name-to-index map.
     NameIndexMap aMap;
-    long nColCount = pData->GetColumnCount();
-    for (long i = 0; i < nColCount; ++i)
+    tools::Long nColCount = pData->GetColumnCount();
+    for (tools::Long i = 0; i < nColCount; ++i)
         aMap.emplace(pData->getDimensionName(i), i);
 
     NameIndexMap::const_iterator itMapEnd = aMap.end();
@@ -1278,7 +1278,7 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
             continue;
 
         ScDPSaveDimension::MemberSetType aMemNames;
-        long nDimIndex = itMap->second;
+        tools::Long nDimIndex = itMap->second;
         const std::vector<SCROW>& rMembers = pData->GetColumnEntries(nDimIndex);
         size_t nMemberCount = rMembers.size();
         for (size_t j = 0; j < nMemberCount; ++j)

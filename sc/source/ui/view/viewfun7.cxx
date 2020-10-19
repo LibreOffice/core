@@ -58,8 +58,8 @@ static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSi
     Size aPgSize( pPage->GetSize() );
     if (aPgSize.Width() < 0)
         aPgSize.setWidth( -aPgSize.Width() );
-    long x = aPgSize.Width() - rPos.X() - rSize.Width();
-    long y = aPgSize.Height() - rPos.Y() - rSize.Height();
+    tools::Long x = aPgSize.Width() - rPos.X() - rSize.Width();
+    tools::Long y = aPgSize.Height() - rPos.Y() - rSize.Height();
     // if necessary: adjustments (80/200) for pixel approx. errors
     if( x < 0 )
         rPos.AdjustX(x + 80 );
@@ -119,8 +119,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             // copy locally - incl. charts
 
         Point aSourceStart = pDragEditView->GetAllMarkedRect().TopLeft();
-        long nDiffX = aPos.X() - aSourceStart.X();
-        long nDiffY = aPos.Y() - aSourceStart.Y();
+        tools::Long nDiffX = aPos.X() - aSourceStart.X();
+        tools::Long nDiffY = aPos.Y() - aSourceStart.Y();
 
             // move within a page?
 

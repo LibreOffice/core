@@ -653,7 +653,7 @@ public:
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
-        const long _nIndex,
+        const tools::Long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) override;
 
@@ -802,7 +802,7 @@ void ScShapeChildren::VisAreaChanged() const
 
 bool ScShapeChildren::ReplaceChild (::accessibility::AccessibleShape* /* pCurrentChild */,
     const css::uno::Reference< css::drawing::XShape >& /* _rxShape */,
-        const long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
+        const tools::Long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
 {
     OSL_FAIL("should not be called in the page preview");
     return false;
@@ -1079,18 +1079,18 @@ struct ScPagePreviewCountData
     //  order is background shapes, header, table or notes, footer, foreground shapes, controls
 
     tools::Rectangle aVisRect;
-    long nBackShapes;
-    long nHeaders;
-    long nTables;
-    long nNoteParagraphs;
-    long nFooters;
-    long nForeShapes;
-    long nControls;
+    tools::Long nBackShapes;
+    tools::Long nHeaders;
+    tools::Long nTables;
+    tools::Long nNoteParagraphs;
+    tools::Long nFooters;
+    tools::Long nForeShapes;
+    tools::Long nControls;
 
     ScPagePreviewCountData( const ScPreviewLocationData& rData, const vcl::Window* pSizeWindow,
         const ScNotesChildren* pNotesChildren, const ScShapeChildren* pShapeChildren );
 
-    long GetTotal() const
+    tools::Long GetTotal() const
     {
         return nBackShapes + nHeaders + nTables + nNoteParagraphs + nFooters + nForeShapes + nControls;
     }
@@ -1347,7 +1347,7 @@ sal_Int32 SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount()
     SolarMutexGuard aGuard;
     IsObjectValid();
 
-    long nRet = 0;
+    tools::Long nRet = 0;
     if ( mpViewShell )
     {
         ScPagePreviewCountData aCount( mpViewShell->GetLocationData(), mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );

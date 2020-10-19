@@ -169,7 +169,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     enum class ScNestedButtonState { NONE, Down, Up };
     ScNestedButtonState     nNestedButtonState;     // track nested button up/down calls
 
-    long                    nDPField;
+    tools::Long                    nDPField;
     ScDPObject*             pDragDPObj; //! name?
 
     sal_uInt16              nRFIndex;
@@ -349,7 +349,7 @@ public:
     void            PaintTile( VirtualDevice& rDevice,
                                int nOutputWidth, int nOutputHeight,
                                int nTilePosX, int nTilePosY,
-                               long nTileWidth, long nTileHeight );
+                               tools::Long nTileWidth, tools::Long nTileHeight );
 
     /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
@@ -374,7 +374,7 @@ public:
 
     void            MoveMouseStatus( ScGridWindow &rDestWin );
 
-    void            ScrollPixel( long nDifX, long nDifY );
+    void            ScrollPixel( tools::Long nDifX, tools::Long nDifY );
     void            UpdateEditViewPos();
 
     void            UpdateFormulas(SCCOL nX1 = -1, SCROW nY1 = -1, SCCOL nX2 = -1, SCROW nY2 = -1);
@@ -394,7 +394,7 @@ public:
     css::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
-                                long nDimIndex, ScDPObject* pDPObj);
+                                tools::Long nDimIndex, ScDPObject* pDPObj);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev);
 
