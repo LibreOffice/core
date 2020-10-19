@@ -148,6 +148,29 @@
       "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dc5cde4_f88592b1",
+        "filename": "sw/source/uibase/inc/instable.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-19T06:34:18Z",
+      "side": 1,
+      "message": "Does this whole file, in addition to some unwanted formatting-only changes (removed empty lines and spaces), uses a different newlines?",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 6
+      },
+      "revId": "a54b3bea3189d7a745ec221a6b87dad3bf203bd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
