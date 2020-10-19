@@ -1046,6 +1046,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetFieldColor(aBase);
     style.SetWindowColor(aBase);
     style.SetActiveTabColor(aBase);
+    style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
 
     // Buttons
     style.SetDefaultButtonTextColor(aButn);
