@@ -111,6 +111,7 @@ public:
     void testFillColorList();
     void testTdf134221();
     void testLinearRule();
+    void testLinearRuleVert();
     void testAutofitSync();
     void testSnakeRows();
 
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testFillColorList);
     CPPUNIT_TEST(testTdf134221);
     CPPUNIT_TEST(testLinearRule);
+    CPPUNIT_TEST(testLinearRuleVert);
     CPPUNIT_TEST(testAutofitSync);
     CPPUNIT_TEST(testSnakeRows);
 
@@ -1564,6 +1566,26 @@ void SdImportTestSmartArt::testLinearRule()
     // - Actual  : 20183
     // i.e. the arrow height was larger than the canvas given to the smartart on slide 1.
     CPPUNIT_ASSERT_LESSEQUAL(static_cast<sal_Int32>(10092), xShape->getSize().Height);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testLinearRuleVert()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-linear-rule-vert.pptx"), PPTX);
+
+    uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0, xDocShRef), uno::UNO_QUERY);
+    // Get the P1 shape.
+    uno::Reference<drawing::XShape> xShape = getChildShape(getChildShape(xGroup, 1), 1);
+    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("P1"), xShapeText->getString());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2020
+    // - Actual  : 10308
+    // i.e. the first item on the vertical linear layout used ~all space, the other items were not
+    // visible.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2020), xShape->getSize().Height);
 
     xDocShRef->DoClose();
 }
