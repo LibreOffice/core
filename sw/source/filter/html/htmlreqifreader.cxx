@@ -20,6 +20,7 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <ndole.hxx>
+#include <sal/log.hxx>
 
 namespace
 {
@@ -155,7 +156,21 @@ OString InsertOLE1HeaderFromOle10NativeStream(const tools::SvRef<SotStorage>& xS
     sal_uInt32 nOle1Size = 0;
     xOle1Stream->ReadUInt32(nOle1Size);
 
-    OString aClassName("Package");
+    OString aClassName;
+    if (xStorage->GetClassName() == SvGlobalName(0x0003000A, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46))
+    {
+        aClassName = "PBrush";
+    }
+    else
+    {
+        if (xStorage->GetClassName()
+            != SvGlobalName(0x0003000C, 0, 0, 0xc0, 0, 0, 0, 0, 0, 0, 0x46))
+        {
+            SAL_WARN("sw.html", "InsertOLE1HeaderFromOle10NativeStream: unexpected class id: "
+                                    << xStorage->GetClassName().GetHexName());
+        }
+        aClassName = "Package";
+    }
 
     // Write ObjectHeader, see [MS-OLEDS] 2.2.4.
     rOle1.Seek(0);
