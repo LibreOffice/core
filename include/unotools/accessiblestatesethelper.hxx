@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <memory>
 
 //= XAccessibleStateSet helper classes
 
