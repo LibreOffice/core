@@ -886,6 +886,18 @@ namespace
         return sRet;
     }
 
+    OUString extractWidgetName(VclBuilder::stringmap& rMap)
+    {
+        OUString sRet;
+        VclBuilder::stringmap::iterator aFind = rMap.find("name");
+        if (aFind != rMap.end())
+        {
+            sRet = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sRet;
+    }
+
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
         OUString sRet("top");
@@ -1324,13 +1336,13 @@ namespace
         return xWindow;
     }
 
-    VclPtr<Button> extractStockAndBuildMenuToggleButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
+    VclPtr<MenuButton> extractStockAndBuildMenuToggleButton(vcl::Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         nBits |= extractRelief(rMap);
 
-        VclPtr<Button> xWindow = VclPtr<MenuToggleButton>::Create(pParent, nBits);
+        VclPtr<MenuButton> xWindow = VclPtr<MenuToggleButton>::Create(pParent, nBits);
 
         if (extractStock(rMap))
         {
@@ -1826,12 +1838,25 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkMenuButton")
     {
-        VclPtr<MenuButton> xButton = extractStockAndBuildMenuButton(pParent, rMap);
+        VclPtr<MenuButton> xButton;
+
         OUString sMenu = extractPopupMenu(rMap);
         if (!sMenu.isEmpty())
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
+
+        OUString sType = extractWidgetName(rMap);
+        fprintf(stderr, "special name is %s\n", sType.toUtf8().getStr());
+        if (sType.isEmpty())
+        {
+            xButton = extractStockAndBuildMenuButton(pParent, rMap);
+            xButton->SetAccessibleRole(css::accessibility::AccessibleRole::BUTTON_MENU);
+        }
+        else
+        {
+            xButton = extractStockAndBuildMenuToggleButton(pParent, rMap);
+        }
+
         xButton->SetImageAlign(ImageAlign::Left); //default to left
-        xButton->SetAccessibleRole(css::accessibility::AccessibleRole::BUTTON_MENU);
 
         if (!extractDrawIndicator(rMap))
             xButton->SetDropDown(PushButtonDropdownStyle::NONE);

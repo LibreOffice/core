@@ -99,6 +99,7 @@ public:
     virtual         ~MenuToggleButton() override;
 
     void            SetActive( bool bSel );
+    bool            GetActive() const;
 };
 
 #endif // INCLUDED_VCL_MENUBTN_HXX

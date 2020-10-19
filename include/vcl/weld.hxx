@@ -1396,6 +1396,12 @@ public:
     virtual void set_popover(weld::Widget* pPopover) = 0;
 };
 
+// Similar to a MenuButton except it is split into two parts, a toggle
+// button at the start and a menubutton at the end
+class VCL_DLLPUBLIC MenuToggleButton : virtual public MenuButton
+{
+};
+
 class VCL_DLLPUBLIC CheckButton : virtual public ToggleButton
 {
 };
@@ -2248,6 +2254,7 @@ public:
     virtual std::unique_ptr<Paned> weld_paned(const OString& id) = 0;
     virtual std::unique_ptr<Button> weld_button(const OString& id) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OString& id) = 0;
+    virtual std::unique_ptr<MenuToggleButton> weld_menu_toggle_button(const OString& id) = 0;
     virtual std::unique_ptr<Frame> weld_frame(const OString& id) = 0;
     /* bUserManagedScrolling of true means that the automatic scrolling of the window is disabled
        and the owner must specifically listen to adjustment changes and react appropriately to them.
