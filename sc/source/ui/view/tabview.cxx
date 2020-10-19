@@ -89,13 +89,13 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     SetBackground(rStyleSettings.GetFaceColor());
 
     Size aSize(GetOutputSizePixel());
-    long nPosX = aSize.Width() - 1;
-    long nPosY = aSize.Height() - 1;
+    tools::Long nPosX = aSize.Width() - 1;
+    tools::Long nPosY = aSize.Height() - 1;
 
     Window::Paint(rRenderContext, rRect);
 
     bool bLayoutRTL = pViewData->GetDocument().IsLayoutRTL( pViewData->GetTabNo() );
-    long nDarkX = bLayoutRTL ? 0 : nPosX;
+    tools::Long nDarkX = bLayoutRTL ? 0 : nPosX;
 
     //  both buttons have the same look now - only dark right/bottom lines
     rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
@@ -219,7 +219,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     Init();
 }
 
-void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
+void ScTabView::InitScrollBar( ScrollBar& rScrollBar, tools::Long nMaxVal )
 {
     rScrollBar.SetRange( Range( 0, nMaxVal ) );
     rScrollBar.SetLineSize( 1 );
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(ScTabView, TimerHdl, Timer *, void)
 // --- Resize ---------------------------------------------------------------------
 
 static void lcl_SetPosSize( vcl::Window& rWindow, const Point& rPos, const Size& rSize,
-                            long nTotalWidth, bool bLayoutRTL )
+                            tools::Long nTotalWidth, bool bLayoutRTL )
 {
     Point aNewPos = rPos;
     if ( bLayoutRTL )
@@ -281,7 +281,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         RemoveHintWindow();
 
     bool bLayoutRTL = aViewData.GetDocument().IsLayoutRTL( aViewData.GetTabNo() );
-    long nTotalWidth = rSize.Width();
+    tools::Long nTotalWidth = rSize.Width();
     if ( bLayoutRTL )
         nTotalWidth += 2*rOffset.X();
 
@@ -296,17 +296,17 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if ( aViewData.GetDocShell()->IsPreview() )
         bHScroll = bVScroll = bTabControl = bHeaders = bHOutline = bVOutline = false;
 
-    long nBarX = 0;
-    long nBarY = 0;
-    long nOutlineX = 0;
-    long nOutlineY = 0;
-    long nOutPosX;
-    long nOutPosY;
+    tools::Long nBarX = 0;
+    tools::Long nBarY = 0;
+    tools::Long nOutlineX = 0;
+    tools::Long nOutlineY = 0;
+    tools::Long nOutPosX;
+    tools::Long nOutPosY;
 
-    long nPosX = rOffset.X();
-    long nPosY = rOffset.Y();
-    long nSizeX = rSize.Width();
-    long nSizeY = rSize.Height();
+    tools::Long nPosX = rOffset.X();
+    tools::Long nPosY = rOffset.Y();
+    tools::Long nSizeX = rSize.Width();
+    tools::Long nSizeY = rSize.Height();
 
     bMinimized = ( nSizeX<=SC_ICONSIZE || nSizeY<=SC_ICONSIZE );
     if ( bMinimized )
@@ -314,10 +314,10 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     float fScaleFactor = pFrameWin->GetDPIScaleFactor();
 
-    long nSplitSizeX = SPLIT_HANDLE_SIZE * fScaleFactor;
+    tools::Long nSplitSizeX = SPLIT_HANDLE_SIZE * fScaleFactor;
     if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
         nSplitSizeX = 1;
-    long nSplitSizeY = SPLIT_HANDLE_SIZE * fScaleFactor;
+    tools::Long nSplitSizeY = SPLIT_HANDLE_SIZE * fScaleFactor;
     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
         nSplitSizeY = 1;
 
@@ -357,7 +357,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     if (bHScroll || bVScroll)       // Scrollbars horizontal or vertical
     {
-        long nScrollBarSize = rStyleSettings.GetScrollBarSize();
+        tools::Long nScrollBarSize = rStyleSettings.GetScrollBarSize();
         if (bVScroll)
         {
             nBarX = nScrollBarSize;
@@ -379,9 +379,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
         if (bHScroll) // Scrollbars horizontal
         {
-            long nSizeLt = 0;       // left scroll bar
-            long nSizeRt = 0;       // right scroll bar
-            long nSizeSp = 0;       // splitter
+            tools::Long nSizeLt = 0;       // left scroll bar
+            tools::Long nSizeRt = 0;       // right scroll bar
+            tools::Long nSizeSp = 0;       // splitter
 
             switch (aViewData.GetHSplitMode())
             {
@@ -400,7 +400,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeRt = nSizeX - nSizeLt - nSizeSp;
 
-            long nTabSize = 0;
+            tools::Long nTabSize = 0;
 
             if (bTabControl)
             {
@@ -477,9 +477,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
         if (bVScroll)
         {
-            long nSizeUp = 0;       // upper scroll bar
-            long nSizeSp = 0;       // splitter
-            long nSizeDn;           // lower scroll bar
+            tools::Long nSizeUp = 0;       // upper scroll bar
+            tools::Long nSizeSp = 0;       // splitter
+            tools::Long nSizeDn;           // lower scroll bar
 
             switch (aViewData.GetVSplitMode())
             {
@@ -523,9 +523,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         nBarY = aHScrollLeft->GetSizePixel().Height();
         nBarX = aVScrollBottom->GetSizePixel().Width();
 
-        long nSize1 = nSizeX;
+        tools::Long nSize1 = nSizeX;
 
-        long nTabSize = nSize1;
+        tools::Long nTabSize = nSize1;
         if (nTabSize < 0) nTabSize = 0;
 
         lcl_SetPosSize( *pTabControl, Point(nPosX, nPosY+nSizeY-nBarY),
@@ -573,16 +573,16 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
         // evaluate splitter
 
-    long nLeftSize   = nSizeX;
-    long nRightSize  = 0;
-    long nTopSize    = 0;
-    long nBottomSize = nSizeY;
-    long nSplitPosX  = nPosX;
-    long nSplitPosY  = nPosY;
+    tools::Long nLeftSize   = nSizeX;
+    tools::Long nRightSize  = 0;
+    tools::Long nTopSize    = 0;
+    tools::Long nBottomSize = nSizeY;
+    tools::Long nSplitPosX  = nPosX;
+    tools::Long nSplitPosY  = nPosY;
 
     if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
     {
-        long nSplitHeight = rSize.Height();
+        tools::Long nSplitHeight = rSize.Height();
         if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
         {
             // Do not allow freeze splitter to overlap scroll bar/tab bar
@@ -601,7 +601,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     }
     if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
     {
-        long nSplitWidth = rSize.Width();
+        tools::Long nSplitWidth = rSize.Width();
         if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX && bVScroll )
             nSplitWidth -= aVScrollBottom->GetSizePixel().Width();
         nSplitPosY = aViewData.GetVSplitPos();
@@ -688,7 +688,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     if (bInner)
     {
-        long nInnerPosX = bLayoutRTL ? ( nTotalWidth - nPosX - nLeftSize ) : nPosX;
+        tools::Long nInnerPosX = bLayoutRTL ? ( nTotalWidth - nPosX - nLeftSize ) : nPosX;
         pGridWin[SC_SPLIT_BOTTOMLEFT]->SetPosPixel( Point(nInnerPosX,nSplitPosY) );
     }
     else
@@ -736,7 +736,7 @@ void ScTabView::UpdateVarZoom()
     bInZoomUpdate = true;
     const Fraction& rOldX = GetViewData().GetZoomX();
     const Fraction& rOldY = GetViewData().GetZoomY();
-    long nOldPercent = long(rOldY * 100);
+    tools::Long nOldPercent = tools::Long(rOldY * 100);
     sal_uInt16 nNewZoom = CalcZoom( eZoomType, static_cast<sal_uInt16>(nOldPercent) );
     Fraction aNew( nNewZoom, 100 );
 
@@ -827,11 +827,11 @@ IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
     if (!aViewData.IsHScrollMode())
         return;
 
-    long nSize = pTabControl->GetSplitSize();
+    tools::Long nSize = pTabControl->GetSplitSize();
 
     if (aViewData.GetHSplitMode() != SC_SPLIT_FIX)
     {
-        long nMax = pHSplitter->GetPosPixel().X();
+        tools::Long nMax = pHSplitter->GetPosPixel().X();
         if( pTabControl->IsEffectiveRTL() )
             nMax = pFrameWin->GetSizePixel().Width() - nMax;
         --nMax;
@@ -846,7 +846,7 @@ IMPL_LINK_NOARG(ScTabView, TabBarResize, TabBar*, void)
     }
 }
 
-void ScTabView::SetTabBarWidth( long nNewWidth )
+void ScTabView::SetTabBarWidth( tools::Long nNewWidth )
 {
     Size aSize = pTabControl->GetSizePixel();
 
@@ -860,8 +860,8 @@ void ScTabView::SetTabBarWidth( long nNewWidth )
 void ScTabView::SetRelTabBarWidth( double fRelTabBarWidth )
 {
     if( (0.0 <= fRelTabBarWidth) && (fRelTabBarWidth <= 1.0) )
-        if( long nFrameWidth = pFrameWin->GetSizePixel().Width() )
-            SetTabBarWidth( static_cast< long >( fRelTabBarWidth * nFrameWidth + 0.5 ) );
+        if( tools::Long nFrameWidth = pFrameWin->GetSizePixel().Width() )
+            SetTabBarWidth( static_cast< tools::Long >( fRelTabBarWidth * nFrameWidth + 0.5 ) );
 }
 
 void ScTabView::SetPendingRelTabBarWidth( double fRelTabBarWidth )
@@ -870,7 +870,7 @@ void ScTabView::SetPendingRelTabBarWidth( double fRelTabBarWidth )
     SetRelTabBarWidth( fRelTabBarWidth );
 }
 
-long ScTabView::GetTabBarWidth() const
+tools::Long ScTabView::GetTabBarWidth() const
 {
     return pTabControl->GetSizePixel().Width();
 }
@@ -955,12 +955,12 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             //  and can't be changed directly
 
             const Fraction& rOldY = aViewData.GetZoomY();
-            long nOld = static_cast<long>( rOldY * 100 );
-            long nNew;
+            tools::Long nOld = static_cast<tools::Long>( rOldY * 100 );
+            tools::Long nNew;
             if ( pData->GetDelta() < 0 )
-                nNew = std::max( long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
+                nNew = std::max( tools::Long(MINZOOM), basegfx::zoomtools::zoomOut( nOld ));
             else
-                nNew = std::min( long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
+                nNew = std::min( tools::Long(MAXZOOM), basegfx::zoomtools::zoomIn( nOld ));
             if ( nNew != nOld )
             {
                 // scroll wheel doesn't set the AppOptions default
@@ -1003,7 +1003,7 @@ IMPL_LINK_NOARG(ScTabView, EndScrollHdl, ScrollBar*, void)
 IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 {
     bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
-    long nViewPos;
+    tools::Long nViewPos;
     if ( bHoriz )
         nViewPos = aViewData.GetPosX( (pScroll == aHScrollLeft.get()) ?
                                         SC_SPLIT_LEFT : SC_SPLIT_RIGHT );
@@ -1044,12 +1044,12 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             Point aPos = pScroll->OutputToNormalizedScreenPixel( Point() );
 
             // get scrollbar scroll position for help text (row number/column name)
-            long nScrollMin = 0;        // simulate RangeMin
+            tools::Long nScrollMin = 0;        // simulate RangeMin
             if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == aHScrollRight.get() )
                 nScrollMin = aViewData.GetFixPosX();
             if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                 nScrollMin = aViewData.GetFixPosY();
-            long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
+            tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
 
             OUString aHelpStr;
             tools::Rectangle aRect;
@@ -1080,7 +1080,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
         }
     }
 
-    long nDelta = pScroll->GetDelta();
+    tools::Long nDelta = pScroll->GetDelta();
     switch ( eType )
     {
         case ScrollType::LineUp:
@@ -1090,10 +1090,10 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
             nDelta = 1;
             break;
         case ScrollType::PageUp:
-            if ( pScroll == aHScrollLeft.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsX( SC_SPLIT_LEFT ));
-            if ( pScroll == aHScrollRight.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsX( SC_SPLIT_RIGHT ));
-            if ( pScroll == aVScrollTop.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsY( SC_SPLIT_TOP ));
-            if ( pScroll == aVScrollBottom.get() ) nDelta = -static_cast<long>(aViewData.PrevCellsY( SC_SPLIT_BOTTOM ));
+            if ( pScroll == aHScrollLeft.get() ) nDelta = -static_cast<tools::Long>(aViewData.PrevCellsX( SC_SPLIT_LEFT ));
+            if ( pScroll == aHScrollRight.get() ) nDelta = -static_cast<tools::Long>(aViewData.PrevCellsX( SC_SPLIT_RIGHT ));
+            if ( pScroll == aVScrollTop.get() ) nDelta = -static_cast<tools::Long>(aViewData.PrevCellsY( SC_SPLIT_TOP ));
+            if ( pScroll == aVScrollBottom.get() ) nDelta = -static_cast<tools::Long>(aViewData.PrevCellsY( SC_SPLIT_BOTTOM ));
             if (nDelta==0) nDelta=-1;
             break;
         case ScrollType::PageDown:
@@ -1106,13 +1106,13 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
         case ScrollType::Drag:
             {
                 // only scroll in the correct direction, do not jitter around hidden ranges
-                long nScrollMin = 0;        // simulate RangeMin
+                tools::Long nScrollMin = 0;        // simulate RangeMin
                 if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == aHScrollRight.get() )
                     nScrollMin = aViewData.GetFixPosX();
                 if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == aVScrollBottom.get() )
                     nScrollMin = aViewData.GetFixPosY();
 
-                long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
+                tools::Long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
                 nDelta = nScrollPos - nViewPos;
                 if ( nScrollPos > nPrevDragPos )
                 {
@@ -1143,7 +1143,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
     }
 }
 
-void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
+void ScTabView::ScrollX( tools::Long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 {
     ScDocument& rDoc = aViewData.GetDocument();
     SCCOL nOldX = aViewData.GetPosX(eWhich);
@@ -1194,9 +1194,9 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
         if (pColBar[eWhich])
             pColBar[eWhich]->PaintImmediately();
 
-        long nOldPos = aViewData.GetScrPos( nTrackX, 0, eWhich ).X();
+        tools::Long nOldPos = aViewData.GetScrPos( nTrackX, 0, eWhich ).X();
         aViewData.SetPosX( eWhich, nNewX );
-        long nDiff = aViewData.GetScrPos( nTrackX, 0, eWhich ).X() - nOldPos;
+        tools::Long nDiff = aViewData.GetScrPos( nTrackX, 0, eWhich ).X() - nOldPos;
 
         if ( eWhich==SC_SPLIT_LEFT )
         {
@@ -1226,7 +1226,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
     TestHintWindow();
 }
 
-void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
+void ScTabView::ScrollY( tools::Long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 {
     ScDocument& rDoc = aViewData.GetDocument();
     SCROW nOldY = aViewData.GetPosY(eWhich);
@@ -1278,9 +1278,9 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
         if (pRowBar[eWhich])
             pRowBar[eWhich]->PaintImmediately();
 
-        long nOldPos = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y();
+        tools::Long nOldPos = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y();
         aViewData.SetPosY( eWhich, nNewY );
-        long nDiff = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y() - nOldPos;
+        tools::Long nDiff = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y() - nOldPos;
 
         if ( eWhich==SC_SPLIT_TOP )
         {
@@ -1310,7 +1310,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
     TestHintWindow();
 }
 
-void ScTabView::ScrollLines( long nDeltaX, long nDeltaY )
+void ScTabView::ScrollLines( tools::Long nDeltaX, tools::Long nDeltaY )
 {
     ScSplitPos eWhich = aViewData.GetActivePart();
     if (nDeltaX)
@@ -1373,15 +1373,15 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         }
     }
 
-    long nSmall = pRowBar[SC_SPLIT_BOTTOM]->GetSmallWidth();
-    long nBig   = pRowBar[SC_SPLIT_BOTTOM]->GetBigWidth();
-    long nDiff  = nBig - nSmall;
+    tools::Long nSmall = pRowBar[SC_SPLIT_BOTTOM]->GetSmallWidth();
+    tools::Long nBig   = pRowBar[SC_SPLIT_BOTTOM]->GetBigWidth();
+    tools::Long nDiff  = nBig - nSmall;
 
     if (nEndPos>10000)
         nEndPos = 10000;
     else if (nEndPos<1)     // avoid extra step at 0 (when only one row is visible)
         nEndPos = 1;
-    long nWidth = nBig - ( 10000 - nEndPos ) * nDiff / 10000;
+    tools::Long nWidth = nBig - ( 10000 - nEndPos ) * nDiff / 10000;
 
     if (nWidth == pRowBar[SC_SPLIT_BOTTOM]->GetWidth() || bInUpdateHeader)
         return;
@@ -1518,7 +1518,7 @@ IMPL_LINK( ScTabView, SplitHdl, Splitter*, pSplitter, void )
     DoResize( aBorderPos, aFrameSize );
 }
 
-void ScTabView::DoHSplit(long nSplitPos)
+void ScTabView::DoHSplit(tools::Long nSplitPos)
 {
     //  nSplitPos is the real pixel position on the frame window,
     //  mirroring for RTL has to be done here.
@@ -1527,8 +1527,8 @@ void ScTabView::DoHSplit(long nSplitPos)
     if ( bLayoutRTL )
         nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
-    long nMinPos;
-    long nMaxPos;
+    tools::Long nMinPos;
+    tools::Long nMaxPos;
 
     nMinPos = SPLIT_MARGIN;
     if ( pRowBar[SC_SPLIT_BOTTOM] && pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width() >= nMinPos )
@@ -1559,7 +1559,7 @@ void ScTabView::DoHSplit(long nSplitPos)
     else
     {
         SCCOL nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
-        long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
+        tools::Long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
         if ( nLeftWidth < 0 ) nLeftWidth = 0;
         SCCOL nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
                         static_cast<sal_uInt16>(nLeftWidth) );
@@ -1588,10 +1588,10 @@ void ScTabView::DoHSplit(long nSplitPos)
     InvalidateSplit();
 }
 
-void ScTabView::DoVSplit(long nSplitPos)
+void ScTabView::DoVSplit(tools::Long nSplitPos)
 {
-    long nMinPos;
-    long nMaxPos;
+    tools::Long nMinPos;
+    tools::Long nMaxPos;
     SCROW nOldDelta;
 
     nMinPos = SPLIT_MARGIN;
@@ -1631,7 +1631,7 @@ void ScTabView::DoVSplit(long nSplitPos)
             nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
 
         aViewData.SetPosY( SC_SPLIT_TOP, nOldDelta );
-        long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
+        tools::Long nTopHeight = nSplitPos - pColBar[SC_SPLIT_LEFT]->GetSizePixel().Height();
         if ( nTopHeight < 0 ) nTopHeight = 0;
         SCROW nNewDelta = nOldDelta + aViewData.CellsAtY( nOldDelta, 1, SC_SPLIT_TOP,
                         static_cast<sal_uInt16>(nTopHeight) );
@@ -1666,23 +1666,23 @@ Point ScTabView::GetInsertPos() const
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     SCTAB nTab = aViewData.GetTabNo();
-    long nPosX = 0;
+    tools::Long nPosX = 0;
     for (SCCOL i=0; i<nCol; i++)
         nPosX += rDoc.GetColWidth(i,nTab);
-    nPosX = static_cast<long>(nPosX * HMM_PER_TWIPS);
+    nPosX = static_cast<tools::Long>(nPosX * HMM_PER_TWIPS);
     if ( rDoc.IsNegativePage( nTab ) )
         nPosX = -nPosX;
-    long nPosY = static_cast<long>(rDoc.GetRowHeight( 0, nRow-1, nTab));
-    nPosY = static_cast<long>(nPosY * HMM_PER_TWIPS);
+    tools::Long nPosY = static_cast<tools::Long>(rDoc.GetRowHeight( 0, nRow-1, nTab));
+    nPosY = static_cast<tools::Long>(nPosY * HMM_PER_TWIPS);
     return Point(nPosX,nPosY);
 }
 
 Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange )
 {
     Point aInsertPos;
-    const long nBorder = 100;   // leave 1mm for border
-    long nNeededWidth = rSize.Width() + 2 * nBorder;
-    long nNeededHeight = rSize.Height() + 2 * nBorder;
+    const tools::Long nBorder = 100;   // leave 1mm for border
+    tools::Long nNeededWidth = rSize.Width() + 2 * nBorder;
+    tools::Long nNeededHeight = rSize.Height() + 2 * nBorder;
 
     // use the active window, or lower/right if frozen (as in CalcZoom)
     ScSplitPos eUsedPart = aViewData.GetActivePart();
@@ -1705,10 +1705,10 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         ScDocument& rDoc = aViewData.GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
         bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
-        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        long nDocX = static_cast<long>( static_cast<double>(rDoc.GetColOffset( rDoc.MaxCol() + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
-        long nDocY = static_cast<long>( static_cast<double>(rDoc.GetRowOffset( rDoc.MaxRow() + 1, nTab )) * HMM_PER_TWIPS );
+        tools::Long nDocX = static_cast<tools::Long>( static_cast<double>(rDoc.GetColOffset( rDoc.MaxCol() + 1, nTab )) * HMM_PER_TWIPS ) * nLayoutSign;
+        tools::Long nDocY = static_cast<tools::Long>( static_cast<double>(rDoc.GetRowOffset( rDoc.MaxRow() + 1, nTab )) * HMM_PER_TWIPS );
 
         if ( aVisible.Left() * nLayoutSign > nDocX * nLayoutSign )
             aVisible.SetLeft( nDocX );
@@ -1724,10 +1724,10 @@ Point ScTabView::GetChartInsertPos( const Size& rSize, const ScRange& rCellRange
         tools::Rectangle aSelection = rDoc.GetMMRect( rCellRange.aStart.Col(), rCellRange.aStart.Row(),
                                                 rCellRange.aEnd.Col(), rCellRange.aEnd.Row(), nTab );
 
-        long nLeftSpace = aSelection.Left() - aVisible.Left();
-        long nRightSpace = aVisible.Right() - aSelection.Right();
-        long nTopSpace = aSelection.Top() - aVisible.Top();
-        long nBottomSpace = aVisible.Bottom() - aSelection.Bottom();
+        tools::Long nLeftSpace = aSelection.Left() - aVisible.Left();
+        tools::Long nRightSpace = aVisible.Right() - aSelection.Right();
+        tools::Long nTopSpace = aSelection.Top() - aVisible.Top();
+        tools::Long nBottomSpace = aVisible.Bottom() - aSelection.Bottom();
 
         bool bFitLeft = ( nLeftSpace >= nNeededWidth );
         bool bFitRight = ( nRightSpace >= nNeededWidth );
@@ -1933,7 +1933,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
 
             if ( eOldH != SC_SPLIT_NONE && (eSplitMethod == SC_SPLIT_METHOD_COL || eSplitMethod == SC_SPLIT_METHOD_CURSOR))
             {
-                long nSplitPos = aViewData.GetHSplitPos();
+                tools::Long nSplitPos = aViewData.GetHSplitPos();
                 if ( bLayoutRTL )
                     nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
                 aSplit.setX( nSplitPos - aWinStart.X() );
@@ -2014,7 +2014,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
             aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, true );
             if (nPosX > aViewData.GetPosX(SC_SPLIT_LEFT))       // (aSplit.X() > 0) doesn't work for RTL
             {
-                long nSplitPos = aSplit.X() + aWinStart.X();
+                tools::Long nSplitPos = aSplit.X() + aWinStart.X();
                 if ( bLayoutRTL )
                     nSplitPos = pFrameWin->GetOutputSizePixel().Width() - nSplitPos - 1;
 
@@ -2283,13 +2283,13 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
 namespace
 {
 
-long lcl_GetRowHeightPx(const ScViewData &rViewData, SCROW nRow, SCTAB nTab)
+tools::Long lcl_GetRowHeightPx(const ScViewData &rViewData, SCROW nRow, SCTAB nTab)
 {
     const sal_uInt16 nSize = rViewData.GetDocument().GetRowHeight(nRow, nTab);
     return ScViewData::ToPixel(nSize, rViewData.GetPPTY());
 }
 
-long lcl_GetColWidthPx(const ScViewData &rViewData, SCCOL nCol, SCTAB nTab)
+tools::Long lcl_GetColWidthPx(const ScViewData &rViewData, SCCOL nCol, SCTAB nTab)
 {
     const sal_uInt16 nSize = rViewData.GetDocument().GetColWidth(nCol, nTab);
     return ScViewData::ToPixel(nSize, rViewData.GetPPTX());
@@ -2359,7 +2359,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
 }
 
 void lcl_createGroupsData(
-        SCCOLROW nHeaderIndex, SCCOLROW nEnd, long nSizePx, long nTotalPx,
+        SCCOLROW nHeaderIndex, SCCOLROW nEnd, tools::Long nSizePx, tools::Long nTotalPx,
         const ScOutlineArray& rArray, std::vector<size_t>& rGroupIndexes,
         std::vector<long>& rGroupStartPositions, OStringBuffer& rGroupsBuffer)
 {
@@ -2452,13 +2452,13 @@ public:
         return maRange;
     }
 
-    void getColPositions(long& rStartColPos, long& rEndColPos) const
+    void getColPositions(tools::Long& rStartColPos, tools::Long& rEndColPos) const
     {
         rStartColPos = maBoundPositions.Left();
         rEndColPos = maBoundPositions.Right();
     }
 
-    void getRowPositions(long& rStartRowPos, long& rEndRowPos) const
+    void getRowPositions(tools::Long& rStartRowPos, tools::Long& rEndRowPos) const
     {
         rStartRowPos = maBoundPositions.Top();
         rEndRowPos = maBoundPositions.Bottom();
@@ -2467,12 +2467,12 @@ public:
 private:
     void calculateBounds(const tools::Rectangle& rAreaPx)
     {
-        long nLeftPx = 0, nRightPx = 0;
+        tools::Long nLeftPx = 0, nRightPx = 0;
         SCCOLROW nStartCol = -1, nEndCol = -1;
         calculateDimensionBounds(rAreaPx.Left(), rAreaPx.Right(), true,
                                  nStartCol, nEndCol, nLeftPx, nRightPx,
                                  mnEnlargeX, mrViewData);
-        long nTopPx = 0, nBottomPx = 0;
+        tools::Long nTopPx = 0, nBottomPx = 0;
         SCCOLROW nStartRow = -1, nEndRow = -1;
         calculateDimensionBounds(rAreaPx.Top(), rAreaPx.Bottom(), false,
                                  nStartRow, nEndRow, nTopPx, nBottomPx,
@@ -2488,10 +2488,10 @@ private:
     }
 
     // All positions are in pixels.
-    static void calculateDimensionBounds(const long nStartPos, const long nEndPos,
+    static void calculateDimensionBounds(const tools::Long nStartPos, const tools::Long nEndPos,
                                          bool bColumns, SCCOLROW& rStartIndex,
-                                         SCCOLROW& rEndIndex, long& rBoundStart,
-                                         long& rBoundEnd, SCCOLROW nEnlarge,
+                                         SCCOLROW& rEndIndex, tools::Long& rBoundStart,
+                                         tools::Long& rBoundEnd, SCCOLROW nEnlarge,
                                          ScViewData& rViewData)
     {
         ScPositionHelper& rPosHelper = bColumns ? rViewData.GetLOKWidthHelper() :
@@ -2606,10 +2606,10 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     SCTAB nTab = aViewData.GetTabNo();
     SCROW nStartRow = -1;
     SCROW nEndRow = -1;
-    long nStartHeightPx = 0;
+    tools::Long nStartHeightPx = 0;
     SCCOL nStartCol = -1;
     SCCOL nEndCol = -1;
-    long nStartWidthPx = 0;
+    tools::Long nStartWidthPx = 0;
 
     tools::Rectangle aOldVisArea(
             mnLOKStartHeaderCol + 1, mnLOKStartHeaderRow + 1,
@@ -2625,7 +2625,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (rRectangle.Top() < rRectangle.Bottom())
     {
         SAL_INFO("sc.lok.header", "Row Header: compute start/end rows.");
-        long nEndHeightPx = 0;
+        tools::Long nEndHeightPx = 0;
         nStartRow = rCellRange.aStart.Row();
         nEndRow = rCellRange.aEnd.Row();
         aRangeProvider.getRowPositions(nStartHeightPx, nEndHeightPx);
@@ -2639,7 +2639,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         mnLOKEndHeaderRow = nEndRow;
     }
 
-    long nVisibleRows = nEndRow - nStartRow;
+    tools::Long nVisibleRows = nEndRow - nStartRow;
     if (nVisibleRows < 25)
         nVisibleRows = 25;
 
@@ -2666,8 +2666,8 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
 
     /// 3) create string data for rows
 
-    long nTotalPixels = nStartHeightPx;
-    long nPrevSizePx = -1;
+    tools::Long nTotalPixels = nStartHeightPx;
+    tools::Long nPrevSizePx = -1;
     OStringBuffer aRowGroupsBuffer = "\"rowGroups\": [\n";
     {
         auto rowsNode = rJsonWriter.startArray("rows");
@@ -2687,7 +2687,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
         {
             // nSize will be 0 for hidden rows.
-            const long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
+            const tools::Long nSizePx = lcl_GetRowHeightPx(aViewData, nRow, nTab);
             nTotalPixels += nSizePx;
 
             if (bRangeHeaderSupport && nRowGroupDepth > 0)
@@ -2723,7 +2723,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
     if (rRectangle.Left() < rRectangle.Right())
     {
         SAL_INFO("sc.lok.header", "Column Header: compute start/end columns.");
-        long nEndWidthPx = 0;
+        tools::Long nEndWidthPx = 0;
         nStartCol = rCellRange.aStart.Col();
         nEndCol = rCellRange.aEnd.Col();
         aRangeProvider.getColPositions(nStartWidthPx, nEndWidthPx);
@@ -2737,7 +2737,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         mnLOKEndHeaderCol = nEndCol;
     }
 
-    long nVisibleCols = nEndCol - nStartCol;
+    tools::Long nVisibleCols = nEndCol - nStartCol;
     if (nVisibleCols < 10)
         nVisibleCols = 10;
 
@@ -2781,7 +2781,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
         {
             // nSize will be 0 for hidden columns.
-            const long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
+            const tools::Long nSizePx = lcl_GetColWidthPx(aViewData, nCol, nTab);
             nTotalPixels += nSizePx;
 
             if (bRangeHeaderSupport && nColGroupDepth > 0)
@@ -2923,7 +2923,7 @@ void ScTabView::extendTiledAreaIfNeeded()
     const SCROW nEndRow = rCellRange.aEnd.Row();
 
     // Column/Row positions.
-    long nStartColPos, nEndColPos, nStartRowPos, nEndRowPos;
+    tools::Long nStartColPos, nEndColPos, nStartRowPos, nEndRowPos;
     aRangeProvider.getColPositions(nStartColPos, nEndColPos);
     aRangeProvider.getRowPositions(nStartRowPos, nEndRowPos);
 

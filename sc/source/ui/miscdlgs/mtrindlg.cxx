@@ -23,12 +23,12 @@
 
 ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
                                     const OString&  sDialogName,
-                                    long            nCurrent,
-                                    long            nDefault,
+                                    tools::Long            nCurrent,
+                                    tools::Long            nDefault,
                                     FieldUnit       eFUnit,
                                     sal_uInt16      nDecimals,
-                                    long            nMaximum,
-                                    long            nMinimum)
+                                    tools::Long            nMaximum,
+                                    tools::Long            nMinimum)
 
     : GenericDialogController(pParent, OStringToOUString("modules/scalc/ui/" +
         sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8), sDialogName)

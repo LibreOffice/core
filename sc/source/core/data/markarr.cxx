@@ -332,7 +332,7 @@ SCROW ScMarkArray::GetMarkEnd( SCROW nRow, bool bUp ) const
     return nRet;
 }
 
-void ScMarkArray::Shift(SCROW nStartRow, long nOffset)
+void ScMarkArray::Shift(SCROW nStartRow, tools::Long nOffset)
 {
     if (nOffset == 0 || nStartRow > mrSheetLimits.mnMaxRow)
         return;

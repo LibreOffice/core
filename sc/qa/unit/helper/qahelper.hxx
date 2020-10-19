@@ -60,7 +60,7 @@ namespace utl { class TempFile; }
 
 enum class StringType { PureString, StringValue };
 
-SCQAHELPER_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
+SCQAHELPER_DLLPUBLIC bool testEqualsWithTolerance( tools::Long nVal1, tools::Long nVal2, tools::Long nTol );
 
 #define CHECK_OPTIMAL 0x1
 

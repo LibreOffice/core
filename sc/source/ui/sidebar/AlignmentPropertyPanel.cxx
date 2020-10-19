@@ -350,7 +350,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_ATTR_ALIGN_DEGREES:
         if (eState >= SfxItemState::DEFAULT)
         {
-            long nTmp = static_cast<const ScRotateValueItem*>(pState)->GetValue();
+            tools::Long nTmp = static_cast<const ScRotateValueItem*>(pState)->GetValue();
             mxMtrAngle->set_value(nTmp / 100, FieldUnit::DEGREE);
         }
         else

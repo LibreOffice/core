@@ -775,7 +775,7 @@ void Test::testPivotTableCache()
 
     ScDPCache aCache(*m_pDoc);
     aCache.InitFromDoc(*m_pDoc, aDataRange);
-    long nDimCount = aCache.GetColumnCount();
+    tools::Long nDimCount = aCache.GetColumnCount();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension count.", 3L, nDimCount);
     OUString aDimName = aCache.GetDimensionName(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension name", OUString("F1"), aDimName);
@@ -790,7 +790,7 @@ void Test::testPivotTableCache()
     // exist.
 
     // Dimension 0 - a mix of strings and values.
-    long nMemCount = aCache.GetDimMemberCount(0);
+    tools::Long nMemCount = aCache.GetDimMemberCount(0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong dimension member count", 6L, nMemCount);
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
@@ -870,7 +870,7 @@ void Test::testPivotTableCache()
     {
         // Check the integrity of the source data.
         ScDPItemData aTest;
-        long nDim;
+        tools::Long nDim;
 
         {
             // Dimension 0: Z, R, A, F, Y, 12

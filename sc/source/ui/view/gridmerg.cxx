@@ -28,7 +28,7 @@
 #define PAGEBREAK_LINE_DASH_LEN_PIXEL 5
 #define PAGEBREAK_LINE_DASH_COUNT 1
 
-ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY )
+ScGridMerger::ScGridMerger( OutputDevice* pOutDev, tools::Long nOnePixelX, tools::Long nOnePixelY )
     : pDev(pOutDev)
     , nOneX(nOnePixelX)
     , nOneY(nOnePixelY)
@@ -50,7 +50,7 @@ ScGridMerger::~ScGridMerger()
     Flush();
 }
 
-void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
+void ScGridMerger::AddLine( tools::Long nStart, tools::Long nEnd, tools::Long nPos )
 {
     if ( nCount )
     {
@@ -93,7 +93,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
     }
 }
 
-void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY, bool bDashed)
+void ScGridMerger::AddHorLine(bool bWorksInPixels, tools::Long nX1, tools::Long nX2, tools::Long nY, bool bDashed)
 {
     if ( bWorksInPixels )
     {
@@ -137,7 +137,7 @@ void ScGridMerger::AddHorLine(bool bWorksInPixels, long nX1, long nX2, long nY, 
         pDev->DrawLine( Point( nX1, nY ), Point( nX2, nY ) );
 }
 
-void ScGridMerger::AddVerLine(bool bWorksInPixels, long nX, long nY1, long nY2, bool bDashed)
+void ScGridMerger::AddVerLine(bool bWorksInPixels, tools::Long nX, tools::Long nY1, tools::Long nY2, bool bDashed)
 {
     if (bWorksInPixels)
     {
@@ -192,7 +192,7 @@ void ScGridMerger::Flush()
             pDev->DrawLine( Point( nVarStart, nFixStart ), Point( nVarStart, nFixEnd ) );
         else
         {
-            long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
+            tools::Long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
             if ( nVarDiff < 0 )
             {
                 //  nVarDiff is negative in RTL layout mode
@@ -200,7 +200,7 @@ void ScGridMerger::Flush()
                 //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
 
                 nVarDiff = -nVarDiff;
-                long nTemp = nVarStart;
+                tools::Long nTemp = nVarStart;
                 nVarStart = nVarEnd;
                 nVarEnd = nTemp;
             }
@@ -215,7 +215,7 @@ void ScGridMerger::Flush()
             pDev->DrawLine( Point( nFixStart, nVarStart ), Point( nFixEnd, nVarStart ) );
         else
         {
-            long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
+            tools::Long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
             pDev->DrawGrid( tools::Rectangle( nFixStart, nVarStart, nFixEnd, nVarEnd ),
                             Size( nFixEnd - nFixStart, nVarDiff ),
                             DrawGridFlags::HorzLines );

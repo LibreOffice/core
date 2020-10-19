@@ -23,6 +23,7 @@
 #include <ooo/vba/excel/XHyperlink.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
+#include <tools/long.hxx>
 
 namespace ooo::vba::excel { class XRange; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -80,7 +81,7 @@ private:
     css::uno::Reference< css::table::XCell > mxCell;
     css::uno::Reference< css::beans::XPropertySet > mxTextField;
     OUString maScreenTip;
-    long mnType;
+    tools::Long mnType;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAHYPERLINK_HXX

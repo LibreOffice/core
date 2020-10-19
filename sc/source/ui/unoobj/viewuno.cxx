@@ -199,7 +199,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleColumn(sal_Int32 nFirstVisibleColum
                                 static_cast<ScSplitPos>(nPane);
         ScHSplitPos eWhichH = WhichH( eWhich );
 
-        long nDeltaX = static_cast<long>(nFirstVisibleColumn) - rViewData.GetPosX( eWhichH );
+        tools::Long nDeltaX = static_cast<tools::Long>(nFirstVisibleColumn) - rViewData.GetPosX( eWhichH );
         pViewShell->ScrollX( nDeltaX, eWhichH );
     }
 }
@@ -232,7 +232,7 @@ void SAL_CALL ScViewPaneBase::setFirstVisibleRow( sal_Int32 nFirstVisibleRow )
                                 static_cast<ScSplitPos>(nPane);
         ScVSplitPos eWhichV = WhichV( eWhich );
 
-        long nDeltaY = static_cast<long>(nFirstVisibleRow) - rViewData.GetPosY( eWhichV );
+        tools::Long nDeltaY = static_cast<tools::Long>(nFirstVisibleRow) - rViewData.GetPosY( eWhichV );
         pViewShell->ScrollY( nDeltaY, eWhichV );
     }
 }
@@ -766,12 +766,12 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 //  and select all objects on that sheet
                 //!?throw exception when objects are on different sheets?
 
-                long nCount = xShapeColl->getCount();
+                tools::Long nCount = xShapeColl->getCount();
                 if (nCount)
                 {
                     SdrPageView* pPV = nullptr;
                     bool bAllMarked(true);
-                    for ( long i = 0; i < nCount; i++ )
+                    for ( tools::Long i = 0; i < nCount; i++ )
                     {
                         uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getByIndex(i), uno::UNO_QUERY);
                         if (xShapeInt.is())
@@ -1368,7 +1368,7 @@ sal_Int16 ScTabViewObj::GetZoom() const
     if (pViewSh)
     {
         const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
-        return static_cast<sal_Int16>(long( rZoomY * 100 ));
+        return static_cast<sal_Int16>(tools::Long( rZoomY * 100 ));
     }
     return 0;
 }
@@ -1549,7 +1549,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitColumn()
         ScViewData& rViewData = pViewSh->GetViewData();
         if ( rViewData.GetHSplitMode() != SC_SPLIT_NONE )
         {
-            long nSplit = rViewData.GetHSplitPos();
+            tools::Long nSplit = rViewData.GetHSplitPos();
 
             ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
             if ( rViewData.GetVSplitMode() != SC_SPLIT_NONE )
@@ -1574,7 +1574,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow()
         ScViewData& rViewData = pViewSh->GetViewData();
         if ( rViewData.GetVSplitMode() != SC_SPLIT_NONE )
         {
-            long nSplit = rViewData.GetVSplitPos();
+            tools::Long nSplit = rViewData.GetVSplitPos();
 
             // split vertically
             SCCOL nCol;

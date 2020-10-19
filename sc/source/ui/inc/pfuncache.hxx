@@ -68,14 +68,14 @@ public:
 
 struct ScPrintPageLocation
 {
-    long        nPage;
+    tools::Long        nPage;
     ScRange     aCellRange;
     tools::Rectangle   aRectangle;     // pixels
 
     ScPrintPageLocation() :
         nPage(-1) {}            // default: invalid
 
-    ScPrintPageLocation( long nP, const ScRange& rRange, const tools::Rectangle& rRect ) :
+    ScPrintPageLocation( tools::Long nP, const ScRange& rRange, const tools::Rectangle& rRect ) :
         nPage(nP), aCellRange(rRange), aRectangle(rRect) {}
 };
 
@@ -86,7 +86,7 @@ class ScPrintFuncCache
 {
     ScPrintSelectionStatus  aSelection;
     ScDocShell*             pDocSh;
-    long                    nTotalPages;
+    tools::Long                    nTotalPages;
     std::vector<long>       nPages;
     std::vector<long>       nFirstAttr;
     std::vector<ScPrintPageLocation> aLocations;
@@ -102,11 +102,11 @@ public:
     void    InitLocations( const ScMarkData& rMark, OutputDevice* pDev );
     bool    FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const;
 
-    long    GetPageCount() const                { return nTotalPages; }
-    long    GetFirstAttr( SCTAB nTab ) const    { return nFirstAttr[nTab]; }
-    SCTAB   GetTabForPage( long nPage ) const;
-    long    GetTabStart( SCTAB nTab ) const;
-    long    GetDisplayStart( SCTAB nTab ) const;
+    tools::Long    GetPageCount() const                { return nTotalPages; }
+    tools::Long    GetFirstAttr( SCTAB nTab ) const    { return nFirstAttr[nTab]; }
+    SCTAB   GetTabForPage( tools::Long nPage ) const;
+    tools::Long    GetTabStart( SCTAB nTab ) const;
+    tools::Long    GetDisplayStart( SCTAB nTab ) const;
 };
 
 #endif

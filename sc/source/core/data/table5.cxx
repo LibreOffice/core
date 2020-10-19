@@ -138,8 +138,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
          }
     }
 
-    long nPageSizeX = aPageSizeTwips.Width();
-    long nPageSizeY = aPageSizeTwips.Height();
+    tools::Long nPageSizeX = aPageSizeTwips.Width();
+    tools::Long nPageSizeY = aPageSizeTwips.Height();
 
         //  Beginning: Remove breaks
 
@@ -156,11 +156,11 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     bool bColFound = false;
-    long nSizeX = 0;
+    tools::Long nSizeX = 0;
     for (SCCOL nX=nStartCol; nX<=nEndCol; nX++)
     {
         bool bStartOfPage = false;
-        long nThisX = ColHidden(nX) ? 0 : mpColWidth->GetValue(nX);
+        tools::Long nThisX = ColHidden(nX) ? 0 : mpColWidth->GetValue(nX);
         bool bManualBreak = HasColManualBreak(nX);
         if ( (nSizeX+nThisX > nPageSizeX) || (bManualBreak && !bSkipColBreaks) )
         {
@@ -192,7 +192,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     // And set new page breaks.
     bool bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
     bool bRowFound = false;
-    long nSizeY = 0;
+    tools::Long nSizeY = 0;
     ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
     ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
     SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
@@ -202,14 +202,14 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         bool bThisRowHidden = false;
         const bool bHasValue = aIterHidden.getValue(nY, bThisRowHidden);
         assert(bHasValue); (void)bHasValue;
-        long nThisY = 0;
+        tools::Long nThisY = 0;
         if (!bThisRowHidden)
         {
             sal_uInt16 nTmp;
             const bool bHasHeight = aIterHeights.getValue(nY, nTmp);
             assert(bHasHeight);
             if (bHasHeight)
-                nThisY = static_cast<long>(nTmp);
+                nThisY = static_cast<tools::Long>(nTmp);
         }
 
         bool bManualBreak = false;
@@ -266,8 +266,8 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
             if (nLastCommon > nY)
             {
-                long nMaxMultiple = static_cast<long>(nLastCommon - nY);
-                long nMultiple = (nPageSizeY - nSizeY) / nThisY;
+                tools::Long nMaxMultiple = static_cast<tools::Long>(nLastCommon - nY);
+                tools::Long nMultiple = (nPageSizeY - nSizeY) / nThisY;
                 if (nMultiple > nMaxMultiple)
                     nMultiple = nMaxMultiple;
                 if (nMultiple > 1)

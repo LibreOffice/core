@@ -43,7 +43,7 @@ public:
     virtual void tearDown() override;
 
     virtual uno::Reference< uno::XInterface > init() override;
-    virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(long nIndex) override;
+    virtual uno::Reference< sheet::XSheetAnnotations > getAnnotations(tools::Long nIndex) override;
 
     CPPUNIT_TEST_SUITE(ScAnnontationsObj);
 
@@ -79,7 +79,7 @@ ScAnnontationsObj::ScAnnontationsObj()
 {
 }
 
-uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long nIndex)
+uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(tools::Long nIndex)
 {
     // get the sheet
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);

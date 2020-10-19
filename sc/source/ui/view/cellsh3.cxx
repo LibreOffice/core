@@ -704,7 +704,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        long nVal = pDlg->GetInputValue();
+                        tools::Long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
@@ -740,7 +740,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        long nVal = pDlg->GetInputValue();
+                        tools::Long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                         ScGlobal::nLastRowHeightExtra = nVal;
 
@@ -801,7 +801,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        long nVal = pDlg->GetInputValue();
+                        tools::Long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
                         // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
@@ -837,7 +837,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        long nVal = pDlg->GetInputValue();
+                        tools::Long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
                         ScGlobal::nLastColWidthExtra = nVal;
 

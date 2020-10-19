@@ -344,11 +344,11 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    long nDifX = static_cast<long>(nCol1) - static_cast<long>(nStartCol);
-    long nDifY = static_cast<long>(nRow1) - static_cast<long>(nStartRow);
+    tools::Long nDifX = static_cast<tools::Long>(nCol1) - static_cast<tools::Long>(nStartCol);
+    tools::Long nDifY = static_cast<tools::Long>(nRow1) - static_cast<tools::Long>(nStartRow);
 
-    long nSortDif = bByRow ? nDifX : nDifY;
-    long nSortEnd = bByRow ? static_cast<long>(nCol2) : static_cast<long>(nRow2);
+    tools::Long nSortDif = bByRow ? nDifX : nDifY;
+    tools::Long nSortEnd = bByRow ? static_cast<tools::Long>(nCol2) : static_cast<tools::Long>(nRow2);
 
     for (sal_uInt16 i=0; i<mpSortParam->GetSortKeyCount(); i++)
     {

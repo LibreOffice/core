@@ -2363,7 +2363,7 @@ void ScInterpreter::ScCell()
             // font color doesn't matter here
             mrDoc.GetDefPattern()->GetFont( aDefFont, SC_AUTOCOL_BLACK, pPrinter );
             pPrinter->SetFont( aDefFont );
-            long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
+            tools::Long nZeroWidth = pPrinter->GetTextWidth( OUString( '0' ) );
             pPrinter->SetFont( aOldFont );
             pPrinter->SetMapMode( aOldMode );
             int nZeroCount = static_cast<int>(mrDoc.GetColWidth( aCellPos.Col(), aCellPos.Tab() ) / nZeroWidth);
@@ -8387,8 +8387,8 @@ void ScInterpreter::ScOffset()
         PopSingleRef(nCol1, nRow1, nTab1);
         if (!bNewWidth && !bNewHeight)
         {
-            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
-            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
+            nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1) + nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1) + nRowPlus);
             if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1))
                 PushIllegalArgument();
             else
@@ -8396,10 +8396,10 @@ void ScInterpreter::ScOffset()
         }
         else
         {
-            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
-            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
-            nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
-            nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
+            nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowPlus);
+            nCol2 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColNew-1);
+            nRow2 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowNew-1);
             if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1) ||
                 !mrDoc.ValidCol(nCol2) || !mrDoc.ValidRow(nRow2))
                 PushIllegalArgument();
@@ -8421,8 +8421,8 @@ void ScInterpreter::ScOffset()
 
         if (!bNewWidth && !bNewHeight)
         {
-            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1) + nColPlus);
-            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1) + nRowPlus);
+            nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1) + nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1) + nRowPlus);
             if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1))
                 PushIllegalArgument();
             else
@@ -8430,10 +8430,10 @@ void ScInterpreter::ScOffset()
         }
         else
         {
-            nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
-            nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
-            nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
-            nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
+            nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColPlus);
+            nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowPlus);
+            nCol2 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColNew-1);
+            nRow2 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowNew-1);
             nTab2 = nTab1;
             if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1) ||
                 !mrDoc.ValidCol(nCol2) || !mrDoc.ValidRow(nRow2))
@@ -8450,10 +8450,10 @@ void ScInterpreter::ScOffset()
             nColNew = nCol2 - nCol1 + 1;
         if (!bNewHeight)
             nRowNew = nRow2 - nRow1 + 1;
-        nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
-        nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
-        nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
-        nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
+        nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColPlus);
+        nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowPlus);
+        nCol2 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColNew-1);
+        nRow2 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowNew-1);
         if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1) ||
             !mrDoc.ValidCol(nCol2) || !mrDoc.ValidRow(nRow2) || nTab1 != nTab2)
             PushIllegalArgument();
@@ -8478,10 +8478,10 @@ void ScInterpreter::ScOffset()
             nColNew = nCol2 - nCol1 + 1;
         if (!bNewHeight)
             nRowNew = nRow2 - nRow1 + 1;
-        nCol1 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColPlus);
-        nRow1 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowPlus);
-        nCol2 = static_cast<SCCOL>(static_cast<long>(nCol1)+nColNew-1);
-        nRow2 = static_cast<SCROW>(static_cast<long>(nRow1)+nRowNew-1);
+        nCol1 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColPlus);
+        nRow1 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowPlus);
+        nCol2 = static_cast<SCCOL>(static_cast<tools::Long>(nCol1)+nColNew-1);
+        nRow2 = static_cast<SCROW>(static_cast<tools::Long>(nRow1)+nRowNew-1);
         if (!mrDoc.ValidCol(nCol1) || !mrDoc.ValidRow(nRow1) ||
             !mrDoc.ValidCol(nCol2) || !mrDoc.ValidRow(nRow2) || nTab1 != nTab2)
             PushIllegalArgument();

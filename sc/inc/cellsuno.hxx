@@ -198,7 +198,7 @@ private:
 
 private:
     void            PaintGridRanges_Impl();
-    ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
+    ScRangeListRef  GetLimitedChartRanges_Impl( tools::Long nDataColumns, tools::Long nDataRows ) const;
     void            ForceChartListener_Impl();
     std::unique_ptr<ScMemChart> CreateMemChart_Impl() const;
 
@@ -1096,7 +1096,7 @@ private:
     ScRange                 aTotalRange;
 
 private:
-    ScCellRangeObj*         GetObjectByIndex_Impl(long nIndex) const;
+    ScCellRangeObj*         GetObjectByIndex_Impl(tools::Long nIndex) const;
 
 public:
                             ScCellFormatsObj(ScDocShell* pDocSh, const ScRange& rR);

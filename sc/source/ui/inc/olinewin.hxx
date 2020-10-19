@@ -40,10 +40,10 @@ private:
     bool                        mbMirrorLevels;     /// true = mirror the order of levels, including the border
 
     Color                       maLineColor;        /// Line color for expanded groups.
-    long                        mnHeaderSize;       /// Size of the header area in entry direction.
-    long                        mnHeaderPos;        /// Position of the header area in entry direction.
-    long                        mnMainFirstPos;     /// First position of main area in entry direction.
-    long                        mnMainLastPos;      /// Last position of main area in entry direction.
+    tools::Long                        mnHeaderSize;       /// Size of the header area in entry direction.
+    tools::Long                        mnHeaderPos;        /// Position of the header area in entry direction.
+    tools::Long                        mnMainFirstPos;     /// First position of main area in entry direction.
+    tools::Long                        mnMainLastPos;      /// Last position of main area in entry direction.
 
     size_t                      mnMTLevel;          /// Mouse tracking: Level of active button.
     size_t                      mnMTEntry;          /// Mouse tracking: Entry index of active button.
@@ -65,12 +65,12 @@ public:
     virtual void                dispose() override;
 
     /** Sets the size of the header area (width/height dep. on window type). */
-    void                        SetHeaderSize( long nNewSize );
+    void                        SetHeaderSize( tools::Long nNewSize );
     /** Returns the width/height the window needs to show all levels. */
-    long                        GetDepthSize() const;
+    tools::Long                        GetDepthSize() const;
 
     /** Scrolls the window content by the specified amount of pixels. */
-    void                        ScrollPixel( long nDiff );
+    void                        ScrollPixel( tools::Long nDiff );
 
     using Window::ShowFocus;
 
@@ -97,33 +97,33 @@ private:
     void                        GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColRowEnd ) const;
 
     /** Returns the point in the window of the specified position. */
-    Point                       GetPoint( long nLevelPos, long nEntryPos ) const;
+    Point                       GetPoint( tools::Long nLevelPos, tools::Long nEntryPos ) const;
     /** Returns the rectangle in the window of the specified position. */
     tools::Rectangle                   GetRectangle(
-                                    long nLevelStart, long nEntryStart,
-                                    long nLevelEnd, long nEntryEnd ) const;
+                                    tools::Long nLevelStart, tools::Long nEntryStart,
+                                    tools::Long nLevelEnd, tools::Long nEntryEnd ) const;
 
     /** Returns the window size for the level coordinate. */
-    long                        GetOutputSizeLevel() const;
+    tools::Long                        GetOutputSizeLevel() const;
     /** Returns the window size for the entry coordinate. */
-    long                        GetOutputSizeEntry() const;
+    tools::Long                        GetOutputSizeEntry() const;
 
     /** Returns the count of levels of the outline array. 0 means no outlines. */
     size_t                      GetLevelCount() const;
     /** Returns the pixel position of the specified level. */
-    long                        GetLevelPos( size_t nLevel ) const;
+    tools::Long                        GetLevelPos( size_t nLevel ) const;
     /** Returns the level of the passed pixel position. */
-    size_t                      GetLevelFromPos( long nLevelPos ) const;
+    size_t                      GetLevelFromPos( tools::Long nLevelPos ) const;
 
     /** Returns the start coordinate of the specified column/row in the window. */
-    long                        GetColRowPos( SCCOLROW nColRowIndex ) const;
+    tools::Long                        GetColRowPos( SCCOLROW nColRowIndex ) const;
     /** Returns the entry position of header images. */
-    long                        GetHeaderEntryPos() const;
+    tools::Long                        GetHeaderEntryPos() const;
     /** Calculates the coordinates the outline entry takes in the window.
         @return  false = no part of the group is visible (outside window or collapsed by parent group). */
     bool                        GetEntryPos(
                                     size_t nLevel, size_t nEntry,
-                                    long& rnStartPos, long& rnEndPos, long& rnImagePos ) const;
+                                    tools::Long& rnStartPos, tools::Long& rnEndPos, tools::Long& rnImagePos ) const;
     /** Calculates the absolute position of the image of the specified outline entry.
         @param nLevel  The level of the entry.
         @param nEntry  The entry index or SC_OL_HEADERENTRY for the header image.
@@ -187,14 +187,14 @@ private:
     void                        SetEntryAreaClipRegion();
     /** Converts coordinates to real window points and draws the line. */
     void                        DrawLineRel(
-                                    long nLevelStart, long nEntryStart,
-                                    long nLevelEnd, long nEntryEnd );
+                                    tools::Long nLevelStart, tools::Long nEntryStart,
+                                    tools::Long nLevelEnd, tools::Long nEntryEnd );
     /** Converts coordinates to real window points and draws the rectangle. */
     void                        DrawRectRel(
-                                    long nLevelStart, long nEntryStart,
-                                    long nLevelEnd, long nEntryEnd );
+                                    tools::Long nLevelStart, tools::Long nEntryStart,
+                                    tools::Long nLevelEnd, tools::Long nEntryEnd );
     /** Draws the specified image unpressed. */
-    void                        DrawImageRel(long nLevelPos, long nEntryPos, const OUString& rId);
+    void                        DrawImageRel(tools::Long nLevelPos, tools::Long nEntryPos, const OUString& rId);
     /** Draws a pressed or unpressed border. */
     void                        DrawBorderRel(size_t nLevel, size_t nEntry, bool bPressed);
 
@@ -204,7 +204,7 @@ private:
     void                        HideFocus();
 
     /** Scrolls the specified range of the window in entry-relative direction. */
-    void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
+    void                        ScrollRel( tools::Long nEntryDiff, tools::Long nEntryStart, tools::Long nEntryEnd );
 
 protected:
     virtual void                Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;

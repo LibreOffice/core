@@ -206,9 +206,9 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
         return true;
     }
 
-    long nHi = static_cast<long>(mvData.size()) - 1;
-    long i = 0;
-    long nLo = 0;
+    tools::Long nHi = static_cast<tools::Long>(mvData.size()) - 1;
+    tools::Long i = 0;
+    tools::Long nLo = 0;
 
     while ( nLo <= nHi )
     {
@@ -1726,7 +1726,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
-        long nColWidth = static_cast<long>(rDocument.GetColWidth(nCol,nTab));
+        tools::Long nColWidth = static_cast<tools::Long>(rDocument.GetColWidth(nCol,nTab));
         if ( bIncrement )
         {
             if ( nNewValue < nColWidth-SC_INDENT_STEP )
@@ -1770,7 +1770,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
 
 SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
 {
-    long nRet = nRow;
+    tools::Long nRet = nRow;
     if (rDocument.ValidRow(nRow))
     {
         if ( mvData.empty() )
@@ -2389,13 +2389,13 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
  * Copy between documents (Clipboard)
  */
 void ScAttrArray::CopyArea(
-    SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags) const
+    SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags) const
 {
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;
 
-    SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
-    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(rDocument.MaxRow()));
+    SCROW nDestStart = std::max(static_cast<tools::Long>(static_cast<tools::Long>(nStartRow) + nDy), tools::Long(0));
+    SCROW nDestEnd = std::min(static_cast<tools::Long>(static_cast<tools::Long>(nEndRow) + nDy), tools::Long(rDocument.MaxRow()));
 
     ScDocumentPool* pSourceDocPool = rDocument.GetPool();
     ScDocumentPool* pDestDocPool = rAttrArray.rDocument.GetPool();
@@ -2452,7 +2452,7 @@ void ScAttrArray::CopyArea(
 
         // when pasting from clipboard and skipping filtered rows, the adjusted
         // end position can be negative
-        nDestStart = std::max(static_cast<long>(nDestStart), static_cast<long>(mvData[i].nEndRow + nDy + 1));
+        nDestStart = std::max(static_cast<tools::Long>(nDestStart), static_cast<tools::Long>(mvData[i].nEndRow + nDy + 1));
     }
 }
 
@@ -2460,13 +2460,13 @@ void ScAttrArray::CopyArea(
  * Leave flags
  * summarized with CopyArea
  */
-void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray )
+void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy, ScAttrArray& rAttrArray )
 {
     nStartRow -= nDy;  // Source
     nEndRow -= nDy;
 
-    SCROW nDestStart = std::max(static_cast<long>(static_cast<long>(nStartRow) + nDy), long(0));
-    SCROW nDestEnd = std::min(static_cast<long>(static_cast<long>(nEndRow) + nDy), long(rDocument.MaxRow()));
+    SCROW nDestStart = std::max(static_cast<tools::Long>(static_cast<tools::Long>(nStartRow) + nDy), tools::Long(0));
+    SCROW nDestEnd = std::min(static_cast<tools::Long>(static_cast<tools::Long>(nEndRow) + nDy), tools::Long(rDocument.MaxRow()));
 
     if ( !rAttrArray.HasAttrib( nDestStart, nDestEnd, HasAttrFlags::Overlapped ) )
     {
@@ -2509,7 +2509,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
 
         // when pasting from clipboard and skipping filtered rows, the adjusted
         // end position can be negative
-        nDestStart = std::max(static_cast<long>(nDestStart), static_cast<long>(mvData[i].nEndRow + nDy + 1));
+        nDestStart = std::max(static_cast<tools::Long>(nDestStart), static_cast<tools::Long>(mvData[i].nEndRow + nDy + 1));
     }
 }
 

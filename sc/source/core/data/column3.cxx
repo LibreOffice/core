@@ -1061,9 +1061,9 @@ class CopyAttrArrayByRange
 {
     ScAttrArray& mrDestAttrArray;
     ScAttrArray& mrSrcAttrArray;
-    long mnRowOffset;
+    tools::Long mnRowOffset;
 public:
-    CopyAttrArrayByRange(ScAttrArray& rDestAttrArray, ScAttrArray& rSrcAttrArray, long nRowOffset) :
+    CopyAttrArrayByRange(ScAttrArray& rDestAttrArray, ScAttrArray& rSrcAttrArray, tools::Long nRowOffset) :
         mrDestAttrArray(rDestAttrArray), mrSrcAttrArray(rSrcAttrArray), mnRowOffset(nRowOffset) {}
 
     void operator() (const sc::RowSpan& rSpan)
@@ -1082,7 +1082,7 @@ class CopyCellsFromClipHandler
     SCCOL mnCol;
     SCTAB mnSrcTab;
     SCCOL mnSrcCol;
-    long mnRowOffset;
+    tools::Long mnRowOffset;
     sc::ColumnBlockPosition maDestBlockPos;
     sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
     svl::SharedStringPool* mpSharedStringPool;
@@ -1108,7 +1108,7 @@ class CopyCellsFromClipHandler
     }
 
 public:
-    CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, long nRowOffset, svl::SharedStringPool* pSharedStringPool) :
+    CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, tools::Long nRowOffset, svl::SharedStringPool* pSharedStringPool) :
         mrCxt(rCxt),
         mrSrcCol(rSrcCol),
         mrDestCol(rDestCol),
@@ -1388,7 +1388,7 @@ public:
 //  nRow1, nRow2 = target position
 
 void ScColumn::CopyFromClip(
-    sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn )
+    sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, tools::Long nDy, ScColumn& rColumn )
 {
     if ((rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB) != InsertDeleteFlags::NONE)
     {

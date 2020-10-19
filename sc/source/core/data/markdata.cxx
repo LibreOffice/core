@@ -648,7 +648,7 @@ void ScMarkData::DeleteTab( SCTAB nTab )
     maTabMarked.swap(tabMarked);
 }
 
-void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, long nColOffset)
+void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, tools::Long nColOffset)
 {
     if (bMarked)
     {
@@ -661,7 +661,7 @@ void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, long nColOff
     }
 }
 
-void ScMarkData::ShiftRows(const ScDocument& rDoc, SCROW nStartRow, long nRowOffset)
+void ScMarkData::ShiftRows(const ScDocument& rDoc, SCROW nStartRow, tools::Long nRowOffset)
 {
     if (bMarked)
     {

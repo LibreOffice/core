@@ -302,13 +302,13 @@ sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
     return GetHmmFromInch( GetInchFromTwips( nTwips ) );
 }
 
-sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, tools::Long nScCharWidth )
 {
     double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth - 0.5;
     return limit_cast< sal_uInt16 >( fScWidth );
 }
 
-sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, tools::Long nScCharWidth )
 {
     double fXclWidth = ( static_cast< double >( nScWidth ) + 0.5 ) * 256.0 / nScCharWidth;
     return limit_cast< sal_uInt16 >( fXclWidth );
@@ -316,7 +316,7 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
 
 // takes font height in twips (1/20 pt = 1/1440 in)
 // returns correction value in 1/256th of *digit width* of default font
-double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
+double XclTools::GetXclDefColWidthCorrection( tools::Long nXclDefFontHeight )
 {
     // Excel uses *max digit width of default font* (W) as cell width unit. Also it has 5-pixel
     // "correction" to cell widths (ECMA-376-1:2016 18.3.1.81): each cell has 1-pixel padding, then

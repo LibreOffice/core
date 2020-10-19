@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_MARKARR_HXX
 
 #include "address.hxx"
+#include <tools/long.hxx>
 #include <vector>
 
 class ScRangeList;
@@ -72,7 +73,7 @@ public:
     SCROW   GetNextMarked( SCROW nRow, bool bUp ) const;
     SCROW   GetMarkEnd( SCROW nRow, bool bUp ) const;
 
-    void    Shift( SCROW nStartRow, long nOffset );
+    void    Shift( SCROW nStartRow, tools::Long nOffset );
     void    Intersect( const ScMarkArray& rOther );
 };
 

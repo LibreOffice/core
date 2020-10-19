@@ -1913,7 +1913,7 @@ public:
 
     void                        UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkData* pTabMark );
 
-    long                        GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    tools::Long                        GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                                OutputDevice* pDev,
                                                double nPPTX, double nPPTY,
                                                const Fraction& rZoomX, const Fraction& rZoomY,

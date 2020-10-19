@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PAGEDATA_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PAGEDATA_HXX
 
+#include <tools/long.hxx>
 #include <address.hxx>
 #include <memory>
 #include <vector>
@@ -32,7 +33,7 @@ private:
                 mvPageEndX;
     std::vector<SCROW>
                 mvPageEndY;
-    long        nFirstPage;
+    tools::Long        nFirstPage;
     bool        bTopDown;
     bool        bAutomatic;
 
@@ -51,8 +52,8 @@ public:
     size_t          GetPagesY() const       { return mvPageEndY.size();   }
     const SCROW*    GetPageEndY() const     { return mvPageEndY.data(); }
 
-    void            SetFirstPage( long nNew )   { nFirstPage = nNew; }
-    long            GetFirstPage() const        { return nFirstPage; }
+    void            SetFirstPage( tools::Long nNew )   { nFirstPage = nNew; }
+    tools::Long            GetFirstPage() const        { return nFirstPage; }
     void            SetTopDown( bool bSet )     { bTopDown = bSet; }
     bool            IsTopDown() const           { return bTopDown; }
     void            SetAutomatic( bool bSet )   { bAutomatic = bSet; }

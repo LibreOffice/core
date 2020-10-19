@@ -275,7 +275,7 @@ void XclExpTabBgColor::WriteBody( XclExpStream& rStrm )
 namespace {
 
 /** Converts a Calc zoom factor into an Excel zoom factor. Returns 0 for a default zoom value. */
-sal_uInt16 lclGetXclZoom( long nScZoom, sal_uInt16 nDefXclZoom )
+sal_uInt16 lclGetXclZoom( tools::Long nScZoom, sal_uInt16 nDefXclZoom )
 {
     sal_uInt16 nXclZoom = limit_cast< sal_uInt16 >( nScZoom, EXC_ZOOM_MIN, EXC_ZOOM_MAX );
     return (nXclZoom == nDefXclZoom) ? 0 : nXclZoom;

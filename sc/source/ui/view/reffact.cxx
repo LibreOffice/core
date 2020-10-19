@@ -118,10 +118,10 @@ IMPL_CONTROLLER_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 // ScSimpleRefDlgWrapper
 
 static bool         bScSimpleRefFlag;
-static long         nScSimpleRefHeight;
-static long         nScSimpleRefWidth;
-static long         nScSimpleRefX;
-static long         nScSimpleRefY;
+static tools::Long         nScSimpleRefHeight;
+static tools::Long         nScSimpleRefWidth;
+static tools::Long         nScSimpleRefX;
+static tools::Long         nScSimpleRefY;
 static bool         bAutoReOpen = true;
 
 ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,

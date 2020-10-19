@@ -739,16 +739,16 @@ void ScDBFunc::RecalcPivotTable()
         ErrorMessage(STR_PIVOT_NOTFOUND);
 }
 
-void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, long& rDimension)
+void ScDBFunc::GetSelectedMemberList(ScDPUniqueStringSet& rEntries, tools::Long& rDimension)
 {
     ScDPObject* pDPObj = GetViewData().GetDocument().GetDPAtCursor( GetViewData().GetCurX(),
                                         GetViewData().GetCurY(), GetViewData().GetTabNo() );
     if ( !pDPObj )
         return;
 
-    long nStartDimension = -1;
-    long nStartHierarchy = -1;
-    long nStartLevel     = -1;
+    tools::Long nStartDimension = -1;
+    tools::Long nStartHierarchy = -1;
+    tools::Long nStartLevel     = -1;
 
     ScRangeListRef xRanges;
     GetViewData().GetMultiArea( xRanges );         // incl. cursor if nothing is selected
@@ -816,7 +816,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
+        tools::Long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
         if (!aEntries.empty())
@@ -929,7 +929,7 @@ bool ScDBFunc::HasSelectionForNumGroup( ScDPNumGroupInfo& rOldInfo )
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
+        tools::Long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
         if (!aEntries.empty())
@@ -990,7 +990,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
         return;
 
     ScDPUniqueStringSet aEntries;
-    long nSelectDimension = -1;
+    tools::Long nSelectDimension = -1;
     GetSelectedMemberList( aEntries, nSelectDimension );
 
     if (aEntries.empty())
@@ -1088,7 +1088,7 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
         return;
 
     ScDPUniqueStringSet aEntries;
-    long nSelectDimension = -1;
+    tools::Long nSelectDimension = -1;
     GetSelectedMemberList( aEntries, nSelectDimension );
 
     if (aEntries.empty())
@@ -1130,7 +1130,7 @@ void ScDBFunc::GroupDataPilot()
         return;
 
     ScDPUniqueStringSet aEntries;
-    long nSelectDimension = -1;
+    tools::Long nSelectDimension = -1;
     GetSelectedMemberList( aEntries, nSelectDimension );
 
     if (aEntries.empty())
@@ -1195,8 +1195,8 @@ void ScDBFunc::GroupDataPilot()
             //! Also do this when removing groups?
             //! Handle this case dynamically with automatic groups?
 
-            long nGroupCount = pBaseGroupDim->GetGroupCount();
-            for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
+            tools::Long nGroupCount = pBaseGroupDim->GetGroupCount();
+            for ( tools::Long nGroup = 0; nGroup < nGroupCount; nGroup++ )
             {
                 const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
@@ -1265,7 +1265,7 @@ void ScDBFunc::UngroupDataPilot()
         return;
 
     ScDPUniqueStringSet aEntries;
-    long nSelectDimension = -1;
+    tools::Long nSelectDimension = -1;
     GetSelectedMemberList( aEntries, nSelectDimension );
 
     if (aEntries.empty())
@@ -1402,7 +1402,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
     bool bNeedReloadGroups = false;
 
     DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
-    long nField = pDPObj->GetHeaderDim( rPos, nOrient );
+    tools::Long nField = pDPObj->GetHeaderDim( rPos, nOrient );
     if ( nField >= 0 )
     {
         // changing a field title
@@ -1534,7 +1534,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
             else if (aPosData.Dimension >= 0 && !aPosData.MemberName.isEmpty())
             {
                 bool bDataLayout = false;
-                OUString aDimName = pDPObj->GetDimName(static_cast<long>(aPosData.Dimension), bDataLayout);
+                OUString aDimName = pDPObj->GetDimName(static_cast<tools::Long>(aPosData.Dimension), bDataLayout);
                 if (bDataLayout)
                 {
                     // data dimension
@@ -1688,7 +1688,7 @@ struct ScOUStringCollate
 
 }
 
-void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending, const sal_uInt16* pUserListId)
+void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, tools::Long nDimIndex, bool bAscending, const sal_uInt16* pUserListId)
 {
     if (!pDPObj)
         return;
@@ -1913,7 +1913,7 @@ bool ScDBFunc::HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& 
     if ( pDPObj )
     {
         ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
+        tools::Long nSelectDimension = -1;
         GetSelectedMemberList( aEntries, nSelectDimension );
 
         if (!aEntries.empty())
@@ -1949,7 +1949,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
         return;
 
     ScDPUniqueStringSet aEntries;
-    long nSelectDimension = -1;
+    tools::Long nSelectDimension = -1;
     GetSelectedMemberList( aEntries, nSelectDimension );
 
     if (aEntries.empty())
@@ -1979,7 +1979,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
         css::sheet::DataPilotFieldOrientation nOrientation = pDim->GetOrientation();
         pNewDim->SetOrientation( nOrientation );
 
-        long nPosition = LONG_MAX;
+        tools::Long nPosition = LONG_MAX;
         aData.SetPosition( pNewDim, nPosition );
 
         ScDPSaveDimension* pDataLayout = aData.GetDataLayoutDimension();
