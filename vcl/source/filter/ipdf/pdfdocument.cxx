@@ -38,7 +38,6 @@ namespace filter
 {
 const int MAX_SIGNATURE_CONTENT_LENGTH = 50000;
 
-
 XRefEntry::XRefEntry() = default;
 
 PDFDocument::PDFDocument() = default;
@@ -1943,10 +1942,8 @@ static void visitPages(PDFObjectElement* pPages, std::vector<PDFObjectElement*>&
     pPages->setVisiting(false);
 }
 
-std::vector<PDFObjectElement*> PDFDocument::GetPages()
+PDFObjectElement* PDFDocument::GetCatalog()
 {
-    std::vector<PDFObjectElement*> aRet;
-
     PDFReferenceElement* pRoot = nullptr;
 
     PDFTrailerElement* pTrailer = nullptr;
@@ -1966,11 +1963,18 @@ std::vector<PDFObjectElement*> PDFDocument::GetPages()
 
     if (!pRoot)
     {
-        SAL_WARN("vcl.filter", "PDFDocument::GetPages: trailer has no Root key");
-        return aRet;
+        SAL_WARN("vcl.filter", "PDFDocument::GetCatalog: trailer has no Root key");
+        return nullptr;
     }
 
-    PDFObjectElement* pCatalog = pRoot->LookupObject();
+    return pRoot->LookupObject();
+}
+
+std::vector<PDFObjectElement*> PDFDocument::GetPages()
+{
+    std::vector<PDFObjectElement*> aRet;
+
+    PDFObjectElement* pCatalog = GetCatalog();
     if (!pCatalog)
     {
         SAL_WARN("vcl.filter", "PDFDocument::GetPages: trailer has no catalog");
@@ -2041,6 +2045,71 @@ std::vector<PDFObjectElement*> PDFDocument::GetSignatureWidgets()
     }
 
     return aRet;
+}
+
+int PDFDocument::GetMDPPerm()
+{
+    int nRet = 3;
+
+    std::vector<PDFObjectElement*> aSignatures = GetSignatureWidgets();
+    if (aSignatures.empty())
+    {
+        return nRet;
+    }
+
+    for (const auto& pSignature : aSignatures)
+    {
+        vcl::filter::PDFObjectElement* pSig = pSignature->LookupObject("V");
+        if (!pSig)
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::GetMDPPerm: can't find signature object");
+            continue;
+        }
+
+        auto pReference = dynamic_cast<PDFArrayElement*>(pSig->Lookup("Reference"));
+        if (!pReference || pReference->GetElements().empty())
+        {
+            continue;
+        }
+
+        auto pFirstReference = dynamic_cast<PDFDictionaryElement*>(pReference->GetElements()[0]);
+        if (!pFirstReference)
+        {
+            SAL_WARN("vcl.filter",
+                     "PDFDocument::GetMDPPerm: reference array doesn't contain a dictionary");
+            continue;
+        }
+
+        PDFElement* pTransformParams = pFirstReference->LookupElement("TransformParams");
+        auto pTransformParamsDict = dynamic_cast<PDFDictionaryElement*>(pTransformParams);
+        if (!pTransformParamsDict)
+        {
+            auto pTransformParamsRef = dynamic_cast<PDFReferenceElement*>(pTransformParams);
+            if (pTransformParamsRef)
+            {
+                PDFObjectElement* pTransformParamsObj = pTransformParamsRef->LookupObject();
+                if (pTransformParamsObj)
+                {
+                    pTransformParamsDict = pTransformParamsObj->GetDictionary();
+                }
+            }
+        }
+
+        if (!pTransformParamsDict)
+        {
+            continue;
+        }
+
+        auto pP = dynamic_cast<PDFNumberElement*>(pTransformParamsDict->LookupElement("P"));
+        if (!pP)
+        {
+            return 2;
+        }
+
+        return pP->GetValue();
+    }
+
+    return nRet;
 }
 
 std::vector<unsigned char> PDFDocument::DecodeHexString(PDFHexStringElement const* pElement)
