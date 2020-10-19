@@ -422,7 +422,7 @@ void SwTextFrame::SwapWidthAndHeight()
 
         if ( ! mbIsSwapped )
         {
-            const long nPrtOfstX = aPrt.Pos().X();
+            const tools::Long nPrtOfstX = aPrt.Pos().X();
             aPrt.Pos().setX( aPrt.Pos().Y() );
 
             if( IsVertLR() )
@@ -436,7 +436,7 @@ void SwTextFrame::SwapWidthAndHeight()
         }
         else
         {
-            const long nPrtOfstY = aPrt.Pos().Y();
+            const tools::Long nPrtOfstY = aPrt.Pos().Y();
             aPrt.Pos().setY( aPrt.Pos().X() );
 
             if( IsVertLR() )
@@ -449,13 +449,13 @@ void SwTextFrame::SwapWidthAndHeight()
             }
         }
 
-        const long nPrtWidth = aPrt.Width();
+        const tools::Long nPrtWidth = aPrt.Width();
         aPrt.Width( aPrt.Height() );
         aPrt.Height( nPrtWidth );
     }
 
     {
-        const long nFrameWidth = getFrameArea().Width();
+        const tools::Long nFrameWidth = getFrameArea().Width();
         SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
         aFrm.Width( aFrm.Height() );
         aFrm.Height( nFrameWidth );
@@ -471,7 +471,7 @@ void SwTextFrame::SwapWidthAndHeight()
 void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    long nOfstX, nOfstY;
+    tools::Long nOfstX, nOfstY;
     if ( IsVertLR() )
     {
         if (IsVertLRBT())
@@ -493,8 +493,8 @@ void SwTextFrame::SwitchHorizontalToVertical( SwRect& rRect ) const
         nOfstY = rRect.Top() + rRect.Height() - getFrameArea().Top();
     }
 
-    const long nWidth = rRect.Width();
-    const long nHeight = rRect.Height();
+    const tools::Long nWidth = rRect.Width();
+    const tools::Long nHeight = rRect.Height();
 
     if ( IsVertLR() )
     {
@@ -544,8 +544,8 @@ void SwTextFrame::SwitchHorizontalToVertical( Point& rPoint ) const
     }
 
     // calc offset inside frame
-    const long nOfstX = rPoint.X() - getFrameArea().Left();
-    const long nOfstY = rPoint.Y() - getFrameArea().Top();
+    const tools::Long nOfstX = rPoint.X() - getFrameArea().Left();
+    const tools::Long nOfstY = rPoint.Y() - getFrameArea().Top();
     if ( IsVertLR() )
         rPoint.setX( getFrameArea().Left() + nOfstY );
     else
@@ -564,7 +564,7 @@ void SwTextFrame::SwitchHorizontalToVertical( Point& rPoint ) const
  * Calculates the a limit value when switching from
  * horizontal to vertical layout.
  */
-long SwTextFrame::SwitchHorizontalToVertical( long nLimit ) const
+tools::Long SwTextFrame::SwitchHorizontalToVertical( tools::Long nLimit ) const
 {
     Point aTmp( 0, nLimit );
     SwitchHorizontalToVertical( aTmp );
@@ -577,7 +577,7 @@ long SwTextFrame::SwitchHorizontalToVertical( long nLimit ) const
  */
 void SwTextFrame::SwitchVerticalToHorizontal( SwRect& rRect ) const
 {
-    long nOfstX;
+    tools::Long nOfstX;
 
     // calc offset inside frame
     if ( IsVertLR() )
@@ -590,7 +590,7 @@ void SwTextFrame::SwitchVerticalToHorizontal( SwRect& rRect ) const
             nOfstX = getFrameArea().Left() + getFrameArea().Width() - ( rRect.Left() + rRect.Width() );
     }
 
-    long nOfstY;
+    tools::Long nOfstY;
     if (IsVertLRBT())
     {
         // Note that mbIsSwapped only affects the frame area, not rRect, so rRect.Height() is used
@@ -602,8 +602,8 @@ void SwTextFrame::SwitchVerticalToHorizontal( SwRect& rRect ) const
     }
     else
         nOfstY = rRect.Top() - getFrameArea().Top();
-    const long nWidth = rRect.Height();
-    const long nHeight = rRect.Width();
+    const tools::Long nWidth = rRect.Height();
+    const tools::Long nHeight = rRect.Width();
 
     // calc rotated coords
     rRect.Left( getFrameArea().Left() + nOfstY );
@@ -618,7 +618,7 @@ void SwTextFrame::SwitchVerticalToHorizontal( SwRect& rRect ) const
  */
 void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
 {
-    long nOfstX;
+    tools::Long nOfstX;
 
     // calc offset inside frame
     if ( IsVertLR() )
@@ -633,7 +633,7 @@ void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
             nOfstX = getFrameArea().Left() + getFrameArea().Width() - rPoint.X();
     }
 
-    long nOfstY;
+    tools::Long nOfstY;
     if (IsVertLRBT())
     {
         // Y offset is bottom - Y.
@@ -655,7 +655,7 @@ void SwTextFrame::SwitchVerticalToHorizontal( Point& rPoint ) const
  * Calculates the a limit value when switching from
  * vertical to horizontal layout.
  */
-long SwTextFrame::SwitchVerticalToHorizontal( long nLimit ) const
+tools::Long SwTextFrame::SwitchVerticalToHorizontal( tools::Long nLimit ) const
 {
     Point aTmp( nLimit, 0 );
     SwitchVerticalToHorizontal( aTmp );
@@ -682,7 +682,7 @@ void SwTextFrame::SwitchLTRtoRTL( SwRect& rRect ) const
 {
     SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
-    long nWidth = rRect.Width();
+    tools::Long nWidth = rRect.Width();
     rRect.Left( 2 * ( getFrameArea().Left() + getFramePrintArea().Left() ) +
                 getFramePrintArea().Width() - rRect.Right() - 1 );
 
@@ -1674,13 +1674,13 @@ bool SwTextFrame::IsIdxInside(TextFrameIndex const nPos, TextFrameIndex const nL
     return pPara && ( nPos <= nMax + pPara->GetLen() );
 }
 
-inline void SwTextFrame::InvalidateRange(const SwCharRange &aRange, const long nD)
+inline void SwTextFrame::InvalidateRange(const SwCharRange &aRange, const tools::Long nD)
 {
     if ( IsIdxInside( aRange.Start(), aRange.Len() ) )
         InvalidateRange_( aRange, nD );
 }
 
-void SwTextFrame::InvalidateRange_( const SwCharRange &aRange, const long nD)
+void SwTextFrame::InvalidateRange_( const SwCharRange &aRange, const tools::Long nD)
 {
     if ( !HasPara() )
     {   InvalidateSize();
@@ -2104,7 +2104,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             && m_pMergedPara->pFirstNode->GetIndex() <= pMoveText->pDestNode->GetIndex()
             && pMoveText->pDestNode->GetIndex() <= m_pMergedPara->pLastNode->GetIndex())
         {   // if it's not 2 nodes in merged frame, assume the target node doesn't have frames at all
-            assert(std::abs(static_cast<long>(rNode.GetIndex()) - static_cast<long>(pMoveText->pDestNode->GetIndex())) == 1);
+            assert(std::abs(static_cast<tools::Long>(rNode.GetIndex()) - static_cast<tools::Long>(pMoveText->pDestNode->GetIndex())) == 1);
             UpdateMergedParaForMove(*m_pMergedPara,
                     *this,
                     bRecalcFootnoteFlag,
@@ -3674,9 +3674,9 @@ void SwTextFrame::CalcHeightOfLastLine( const bool _bUseFont )
  *                            value of a proportional line spacing is
  *                            returned or not
  */
-long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
+tools::Long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
 
     const SvxLineSpacingItem &rSpace = GetTextNodeForParaProps()->GetSwAttrSet().GetLineSpacing();
 
@@ -3693,7 +3693,7 @@ long SwTextFrame::GetLineSpace( const bool _bNoPropLineSpace ) const
             // - compatibility to MS Word
             nRet = GetHeightOfLastLine();
 
-            long nTmp = nRet;
+            tools::Long nTmp = nRet;
             nTmp *= rSpace.GetPropLineSpace();
             nTmp /= 100;
             nTmp -= nRet;

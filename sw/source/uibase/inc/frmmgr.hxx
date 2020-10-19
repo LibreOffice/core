@@ -96,10 +96,10 @@ public:
     void                SetRotation(sal_uInt16 nOld, sal_uInt16 nNew, const Size& rUnrotatedSize);
 
     // space to content
-    void                SetLRSpace( long nLeft,
-                                    long nRight );
-    void                SetULSpace( long nTop,
-                                    long nBottom );
+    void                SetLRSpace( tools::Long nLeft,
+                                    tools::Long nRight );
+    void                SetULSpace( tools::Long nTop,
+                                    tools::Long nBottom );
 
     void                SetCol( const SwFormatCol &rCol);
 
@@ -131,8 +131,8 @@ public:
     inline const SvxBoxItem      &GetBox() const;
     inline const SwFormatFrameSize    &GetFrameSize() const;
 
-    long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
-    long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
+    tools::Long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
+    tools::Long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
 };
 
 inline const Size& SwFlyFrameAttrMgr::GetSize() const

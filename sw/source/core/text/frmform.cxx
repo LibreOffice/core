@@ -320,7 +320,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
         OSL_ENSURE( pOldUp == GetUpper(), "SwTextFrame::CalcFollow: heavy follow" );
 #endif
 
-        const long nRemaining =
+        const tools::Long nRemaining =
                  - aRectFnSet.BottomDist( GetUpper()->getFrameArea(), nOldBottom );
         if (  nRemaining > 0 && !GetUpper()->IsSctFrame() &&
               nRemaining != ( aRectFnSet.IsVert() ?
@@ -469,7 +469,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
              ( GetUpper()->Lower() == this ||
                GetUpper()->Lower()->isFrameAreaDefinitionValid() ) )
         {
-            long nAdd = aRectFnSet.YDiff( aRectFnSet.GetTop(GetUpper()->Lower()->getFrameArea()),
+            tools::Long nAdd = aRectFnSet.YDiff( aRectFnSet.GetTop(GetUpper()->Lower()->getFrameArea()),
                                             aRectFnSet.GetPrtTop(*GetUpper()) );
             OSL_ENSURE( nAdd >= 0, "Ey" );
             nRstHeight += nAdd;
@@ -1043,7 +1043,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
 
     const SwFrame *pBodyFrame = FindBodyFrame();
 
-    const long nBodyHeight = pBodyFrame ? ( IsVertical() ?
+    const tools::Long nBodyHeight = pBodyFrame ? ( IsVertical() ?
                                           pBodyFrame->getFrameArea().Width() :
                                           pBodyFrame->getFrameArea().Height() ) : 0;
 
@@ -1199,7 +1199,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
                   bOldHyph == pNew->IsEndHyph();
     if ( bUnChg && !bPrev )
     {
-        const long nWidthDiff = nOldWidth > pNew->Width()
+        const tools::Long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
 
@@ -1758,7 +1758,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         // If MustFit is set, we shrink to the Upper's bottom edge if needed.
         // Else we just take a standard size of 12 Pt. (240 twip).
         SwTextLineAccess aAccess( this );
-        long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
+        tools::Long nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
 
         if( aAccess.GetPara()->IsPrepMustFit() )
         {
@@ -1777,7 +1777,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         }
 
         nFrameHeight = aRectFnSet.GetHeight(getFrameArea());
-        const long nTop = aRectFnSet.GetTopMargin(*this);
+        const tools::Long nTop = aRectFnSet.GetTopMargin(*this);
 
         if( nTop > nFrameHeight )
         {
@@ -1809,7 +1809,7 @@ void SwTextFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderAttr
         // Attention: Format() could be triggered by GetFormatted()
         if( IsHiddenNow() )
         {
-            long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
+            tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
             if( nPrtHeight )
             {
                 HideHidden();

@@ -1038,7 +1038,7 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
              nLevel <= pTextNd->GetActualListLevel();
              nLevel++ )
         {
-            long nVal = aNumVector[nLevel];
+            tools::Long nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
             sEntry.append(OUString::number( nVal ));
@@ -3132,7 +3132,7 @@ void SwXTextDocument::removePasteEventListener(
 void SwXTextDocument::paintTile( VirtualDevice &rDevice,
                                  int nOutputWidth, int nOutputHeight,
                                  int nTilePosX, int nTilePosY,
-                                 long nTileWidth, long nTileHeight )
+                                 tools::Long nTileWidth, tools::Long nTileHeight )
 {
     SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
     pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,

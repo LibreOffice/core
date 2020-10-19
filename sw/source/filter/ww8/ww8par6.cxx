@@ -523,7 +523,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
 
 namespace {
 // Returns corrected (ODF) margin size
-long SetBorderDistance(bool bFromEdge, SvxBoxItem& aBox, SvxBoxItemLine eLine, long nMSMargin)
+tools::Long SetBorderDistance(bool bFromEdge, SvxBoxItem& aBox, SvxBoxItemLine eLine, tools::Long nMSMargin)
 {
     const editeng::SvxBorderLine* pLine = aBox.GetLine(eLine);
     if (!pLine)
@@ -740,10 +740,10 @@ SwSectionFormat *wwSectionManager::InsertSection(
 
     SwFrameFormat& rFormat = pPage->GetMaster();
     const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
-    long nPageLeft  = rLR.GetLeft();
-    long nPageRight = rLR.GetRight();
-    long nSectionLeft = rSection.GetPageLeft() - nPageLeft;
-    long nSectionRight = rSection.GetPageRight() - nPageRight;
+    tools::Long nPageLeft  = rLR.GetLeft();
+    tools::Long nPageRight = rLR.GetRight();
+    tools::Long nSectionLeft = rSection.GetPageLeft() - nPageLeft;
+    tools::Long nSectionRight = rSection.GetPageRight() - nPageRight;
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
         SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, 0, RES_LR_SPACE);
@@ -836,7 +836,7 @@ void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
 // fills it/them with attributes and KF texts.
 // This has become necessary because the translation of the various
 // page attributes is interconnected too much.
-void wwSectionManager::CreateSep(const long nTextPos)
+void wwSectionManager::CreateSep(const tools::Long nTextPos)
 {
     /*
     #i1909# section/page breaks should not occur in tables or subpage
@@ -2112,7 +2112,7 @@ bTogglePos(false)
 // by modifying the Fly width (fixed in SW) afterwards.
 // This can increase or decrease the Fly width, because the default value
 // is set without knowledge of the contents.
-void WW8SwFlyPara::BoxUpWidth( long nInWidth )
+void WW8SwFlyPara::BoxUpWidth( tools::Long nInWidth )
 {
     if( bAutoWidth && nInWidth > nNewNetWidth )
         nNewNetWidth = nInWidth;
@@ -2177,7 +2177,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
 // WW8FlySet-ctor for character bound graphics
 WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
-    const WW8_PIC& rPic, long nWidth, long nHeight )
+    const WW8_PIC& rPic, tools::Long nWidth, tools::Long nHeight )
     : SfxItemSet(rReader.m_rDoc.GetAttrPool(),svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>{})
 {
     Init(rReader, pPaM);
@@ -2675,7 +2675,7 @@ void SwWW8ImplReader::StopApo()
         // frame´s size.
         if (m_xSFlyPara->nNewNetWidth > MINFLY && m_xSFlyPara->pFlyFormat)    // BoxUpWidth ?
         {
-            long nW = m_xSFlyPara->nNewNetWidth;
+            tools::Long nW = m_xSFlyPara->nNewNetWidth;
             nW += m_xSFlyPara->nWidth - m_xSFlyPara->nNetWidth;   // border for it
             m_xSFlyPara->pFlyFormat->SetFormatAttr(
                 SwFormatFrameSize(m_xSFlyPara->eHeightFix, nW, m_xSFlyPara->nHeight));
@@ -4347,7 +4347,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 
     if( 1 == nMulti )               // MultilineSpace ( proportional )
     {
-        long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
+        tools::Long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
 
         // here n is in [0..13653]
         aLSpc.SetPropLineSpace( static_cast<sal_uInt16>(n) );
@@ -5253,7 +5253,7 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 
 // page attribute won't be used as attribute anymore
 // ( except OLST )
-long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
+tools::Long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
     // array for reading of the extended ( self-defined ) SPRMs
     typedef long (SwWW8ImplReader::*FNReadRecordExt)(WW8PLCFManResult*);

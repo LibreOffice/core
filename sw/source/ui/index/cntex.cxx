@@ -265,8 +265,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 {
                     OUString sTokenType;
                     uno::Sequence< beans::PropertyValues> aSequPropVals(10);
-                    long nTokenIndex = 0;
-                    long nParamCount = 2;
+                    tools::Long nTokenIndex = 0;
+                    tools::Long nParamCount = 2;
 
                     // #i24377#
                     SwFormTokens aPattern = pForm->GetPattern(nCurrLevel);

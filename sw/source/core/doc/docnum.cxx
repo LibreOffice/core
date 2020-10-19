@@ -578,7 +578,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     // Sections or Tables at the document start will be pushed backwards.
     nNewPos = std::max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
-    long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
+    tools::Long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );
     return MoveParagraph( aPam, nOffs, true );
 }
@@ -1823,7 +1823,7 @@ bool SwDoc::NumUpDown(const SwPaM& rPam, bool bDown, SwRootFrame const*const pLa
 // this function doesn't contain any numbering-related code, but it is
 // primarily called to move numbering-relevant paragraphs around, hence
 // it will expand its selection to include full SwTextFrames.
-bool SwDoc::MoveParagraph(SwPaM& rPam, long nOffset, bool const bIsOutlMv)
+bool SwDoc::MoveParagraph(SwPaM& rPam, tools::Long nOffset, bool const bIsOutlMv)
 {
     // sw_redlinehide: as long as a layout with Hide mode exists, only
     // move nodes that have merged frames *completely*
@@ -1932,7 +1932,7 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, long nOffset, bool const bIsOutlMv)
     return MoveParagraphImpl(rPam, nOffset, bIsOutlMv, pLayout);
 }
 
-bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
+bool SwDoc::MoveParagraphImpl(SwPaM& rPam, tools::Long const nOffset,
         bool const bIsOutlMv, SwRootFrame const*const pLayout)
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
@@ -1976,7 +1976,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, long const nOffset,
     }
 
     sal_uLong nInStIdx, nInEndIdx;
-    long nOffs = nOffset;
+    tools::Long nOffs = nOffset;
     if( nOffset > 0 )
     {
         nInEndIdx = nEndIdx;

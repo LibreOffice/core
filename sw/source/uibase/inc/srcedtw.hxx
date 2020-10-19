@@ -75,7 +75,7 @@ private:
     css::uno::Reference< css::beans::XMultiPropertySet >
         m_xNotifier;
 
-    long            m_nCurTextWidth;
+    tools::Long            m_nCurTextWidth;
     sal_uInt16          m_nStartLine;
     rtl_TextEncoding m_eSourceEncoding;
     bool            m_bReadonly;

@@ -2509,7 +2509,7 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
         const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
         sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
               nMk = pTmp->GetMark()->nNode.GetIndex();
-        if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
         if( ( RedlineType::Any == nType || nType == pTmp->GetType()) &&
             nMk <= nNdIdx && nNdIdx <= nPt )
@@ -2726,7 +2726,7 @@ void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam
         const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
         sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
               nMk = pTmp->GetMark()->nNode.GetIndex();
-        if( nPt < nMk ) { long nTmp = nMk; nMk = nPt; nPt = nTmp; }
+        if( nPt < nMk ) { tools::Long nTmp = nMk; nMk = nPt; nPt = nTmp; }
 
         if( RedlineType::ParagraphFormat == pTmp->GetType() &&
             ( (nSttIdx <= nMk && nMk <= nEndIdx) || (nSttIdx <= nPt && nPt <= nEndIdx) ) )

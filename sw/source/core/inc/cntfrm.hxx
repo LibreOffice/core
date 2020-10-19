@@ -92,7 +92,7 @@ public:
     inline  SwContentFrame* GetNextContentFrame() const;
     inline  SwContentFrame* GetPrevContentFrame() const;
     static bool CalcLowers(SwLayoutFrame & rLay, SwLayoutFrame const& rDontLeave,
-            long nBottom, bool bSkipRowSpanCells);
+            tools::Long nBottom, bool bSkipRowSpanCells);
 };
 
 inline SwContentFrame* SwContentFrame::GetNextContentFrame() const

@@ -335,7 +335,7 @@ static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<sdbc::XDat
     }
 }
 
-static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
+static bool lcl_MoveAbsolute(SwDSParam* pParam, tools::Long nAbsPos)
 {
     bool bRet = false;
     try
@@ -600,8 +600,8 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     OUStringBuffer sStr;
     uno::Sequence<OUString> aColNames = xCols->getElementNames();
     const OUString* pColNames = aColNames.getConstArray();
-    long nLength = aColNames.getLength();
-    for(long i = 0; i < nLength; i++)
+    tools::Long nLength = aColNames.getLength();
+    for(tools::Long i = 0; i < nLength; i++)
     {
         uno::Any aCol = xCols->getByName(pColNames[i]);
         uno::Reference< beans::XPropertySet > xColumnProp;
@@ -1259,7 +1259,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             static_cast<CreateMonitor*>(xProgressDlg.get())->SetTotalCount(nMaxDocs);
         }
 
-        long nStartRow, nEndRow;
+        tools::Long nStartRow, nEndRow;
         bool bFreezedLayouts = false;
         // to collect temporary email files
         std::vector< OUString> aFilesToRemove;

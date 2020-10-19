@@ -396,23 +396,23 @@ bool SwHTMLParser::InsertEmbed()
             if( USHRT_MAX==aSize.Width() )
             {
                 bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-                aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+                aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
         case HtmlOptionId::HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
                 bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-                aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+                aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             }
             break;
         case HtmlOptionId::HSPACE:
             if( USHRT_MAX==aSpace.Width() )
-                aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
+                aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
             if( USHRT_MAX==aSpace.Height() )
-                aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
+                aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::DATA:
             if (m_bXHTML && aURL.isEmpty())
@@ -742,11 +742,11 @@ void SwHTMLParser::NewObject()
             break;
         case HtmlOptionId::WIDTH:
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::ALIGN:
             eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
@@ -757,10 +757,10 @@ void SwHTMLParser::NewObject()
         case HtmlOptionId::NAME:
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::BORDER:
             break;
@@ -902,17 +902,17 @@ void SwHTMLParser::InsertApplet()
             break;
         case HtmlOptionId::WIDTH:
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::MAYSCRIPT:
             bMayScript = true;
@@ -1051,17 +1051,17 @@ void SwHTMLParser::InsertFloatingFrame()
             break;
         case HtmlOptionId::WIDTH:
             bPercentWidth = (rOption.GetString().indexOf('%') != -1);
-            aSize.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSize.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HEIGHT:
             bPercentHeight = (rOption.GetString().indexOf('%') != -1);
-            aSize.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSize.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::HSPACE:
-            aSpace.setWidth( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setWidth( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         case HtmlOptionId::VSPACE:
-            aSpace.setHeight( static_cast<long>(rOption.GetNumber()) );
+            aSpace.setHeight( static_cast<tools::Long>(rOption.GetNumber()) );
             break;
         default: break;
         }

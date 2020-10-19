@@ -213,14 +213,14 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
             // We had a relative value -> recalculate
             if( 100 != aNew.GetPropLeft() )
             {
-                long nTmp = aNew.GetLeft();     // keep so that we can compare
+                tools::Long nTmp = aNew.GetLeft();     // keep so that we can compare
                 aNew.SetLeft( pNewLRSpace->GetLeft(), aNew.GetPropLeft() );
                 bChg |= nTmp != aNew.GetLeft();
             }
             // We had a relative value -> recalculate
             if( 100 != aNew.GetPropRight() )
             {
-                long nTmp = aNew.GetRight();    // keep so that we can compare
+                tools::Long nTmp = aNew.GetRight();    // keep so that we can compare
                 aNew.SetRight( pNewLRSpace->GetRight(), aNew.GetPropRight() );
                 bChg |= nTmp != aNew.GetRight();
             }

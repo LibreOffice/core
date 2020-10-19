@@ -46,8 +46,8 @@ private:
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
-    void ExecuteMarginULChange(const long nPageTopMargin, const long nPageBottomMargin);
-    void ExecuteMarginLRChange(const long nPageLeftMargin, const long nPageRightMargin);
+    void ExecuteMarginULChange(const tools::Long nPageTopMargin, const tools::Long nPageBottomMargin);
+    void ExecuteMarginLRChange(const tools::Long nPageLeftMargin, const tools::Long nPageRightMargin);
     void ExecuteOrientationChange(const bool bLandscape);
 
     DECL_LINK(ImplOrientationHdl, weld::Button&, void);

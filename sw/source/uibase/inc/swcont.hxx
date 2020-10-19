@@ -71,13 +71,13 @@ class SwContent : public SwTypeNumber
 {
     const SwContentType*    pParent;
     OUString                sContentName;
-    long                    nYPosition;
+    tools::Long                    nYPosition;
         // some subclasses appear to use this for a tools/gen.hxx-style
         // geometric Y position, while e.g. SwOutlineContent wants to store
         // the index in its subtree
     bool                    bInvisible;
 public:
-        SwContent(const SwContentType* pCnt, const OUString& rName, long nYPos );
+        SwContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos );
 
     virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}

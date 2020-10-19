@@ -3124,9 +3124,9 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
     return OUString();
 }
 
-long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
+tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
 {
-    long nRet = 0;
+    tools::Long nRet = 0;
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
     if( pRule )
     {
@@ -3271,9 +3271,9 @@ void SwTextNode::ClearLRSpaceItemDueToListLevelIndents( std::shared_ptr<SvxLRSpa
 }
 
 // #i91133#
-long SwTextNode::GetLeftMarginForTabCalculation() const
+tools::Long SwTextNode::GetLeftMarginForTabCalculation() const
 {
-    long nLeftMarginForTabCalc = 0;
+    tools::Long nLeftMarginForTabCalc = 0;
 
     bool bLeftMarginForTabCalcSetToListLevelIndent( false );
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
@@ -4452,7 +4452,7 @@ bool SwTextNode::AreListLevelIndentsApplicable() const
 
     @return boolean - indicating, if a list tab stop position is provided
 */
-bool SwTextNode::GetListTabStopPosition( long& nListTabStopPosition ) const
+bool SwTextNode::GetListTabStopPosition( tools::Long& nListTabStopPosition ) const
 {
     bool bListTabStopPositionProvided(false);
 

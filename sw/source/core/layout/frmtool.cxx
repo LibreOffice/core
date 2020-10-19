@@ -154,8 +154,8 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             }
             else if ( !pFlow->HasFollow() )
             {
-                long nOldHeight = aRectFnSet.GetHeight(maFrame);
-                long nNewHeight = aRectFnSet.GetHeight(mpFrame->getFrameArea());
+                tools::Long nOldHeight = aRectFnSet.GetHeight(maFrame);
+                tools::Long nNewHeight = aRectFnSet.GetHeight(mpFrame->getFrameArea());
                 if( (nOldHeight > nNewHeight) || (!nOldHeight && nNewHeight) )
                     pFlow->CheckKeep();
             }
@@ -461,7 +461,7 @@ SwLayNotify::~SwLayNotify()
             if ( pLay->IsRowFrame() )
             {
                 bInvaPercent = true;
-                long nNew = aRectFnSet.GetHeight(pLay->getFramePrintArea());
+                tools::Long nNew = aRectFnSet.GetHeight(pLay->getFramePrintArea());
                 if( nNew != aRectFnSet.GetHeight(maPrt) )
                      static_cast<SwRowFrame*>(pLay)->AdjustCells( nNew, true);
                 if( aRectFnSet.GetWidth(pLay->getFramePrintArea())
@@ -2214,9 +2214,9 @@ void SwBorderAttrs::CalcBottom_()
     m_bBottom = false;
 }
 
-long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
+tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
 {
-    long nRight=0;
+    tools::Long nRight=0;
 
     if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING)) {
     // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
@@ -2261,9 +2261,9 @@ static bool lcl_hasTabFrame(const SwTextFrame* pTextFrame)
     return false;
 }
 
-long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
+tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 {
-    long nLeft=0;
+    tools::Long nLeft=0;
 
     if (!pCaller->IsTextFrame() || !static_cast<const SwTextFrame*>(pCaller)->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::INVERT_BORDER_SPACING))
     {
@@ -3553,10 +3553,10 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
     SwFrame *pLow = pCell->Lower();
     if ( pLow && (pLow->IsContentFrame() || pLow->IsSctFrame()) )
     {
-        long nHeight = 0, nFlyAdd = 0;
+        tools::Long nHeight = 0, nFlyAdd = 0;
         do
         {
-            long nLow = pLow->getFrameArea().Height();
+            tools::Long nLow = pLow->getFrameArea().Height();
             if( pLow->IsTextFrame() && static_cast<SwTextFrame*>(pLow)->IsUndersized() )
                 nLow += static_cast<SwTextFrame*>(pLow)->GetParHeight()-pLow->getFramePrintArea().Height();
             else if( pLow->IsSctFrame() && static_cast<SwSectionFrame*>(pLow)->IsUndersized() )
@@ -3578,7 +3578,7 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrame *pCell )
     }
     else
     {
-        long nRstHeight = 0;
+        tools::Long nRstHeight = 0;
         while (pLow && pLow->IsLayoutFrame())
         {
             nRstHeight += ::CalcRowRstHeight(static_cast<SwLayoutFrame*>(pLow));

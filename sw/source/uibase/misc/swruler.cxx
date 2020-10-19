@@ -41,8 +41,8 @@ namespace
  * \param Color arrow color
  * \param bCollapsed if the arrow should display the collapsed state
  */
-void ImplDrawArrow(vcl::RenderContext& rRenderContext, long nX, long nY, long nSize,
-                   const Color& rColor, bool bCollapsed)
+void ImplDrawArrow(vcl::RenderContext& rRenderContext, tools::Long nX, tools::Long nY,
+                   tools::Long nSize, const Color& rColor, bool bCollapsed)
 {
     tools::Polygon aTrianglePolygon(4);
 
@@ -152,8 +152,8 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
 
     // calculate label and arrow positions
     const OUString aLabel = SwResId(STR_COMMENTS_LABEL);
-    const long nTriangleSize = maVirDev->GetTextHeight() / 2 + 1;
-    const long nTrianglePad = maVirDev->GetTextHeight() / 4;
+    const tools::Long nTriangleSize = maVirDev->GetTextHeight() / 2 + 1;
+    const tools::Long nTrianglePad = maVirDev->GetTextHeight() / 4;
 
     Point aLabelPos(0, (aControlRect.GetHeight() - maVirDev->GetTextHeight()) / 2);
     Point aArrowPos(0, (aControlRect.GetHeight() - nTriangleSize) / 2);
@@ -165,7 +165,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     }
     else // RTL => | Comments < |
     {
-        const long nLabelWidth = maVirDev->GetTextWidth(aLabel);
+        const tools::Long nLabelWidth = maVirDev->GetTextWidth(aLabel);
         if (!bIsCollapsed)
         {
             aArrowPos.setX(aControlRect.GetWidth() - 1 - nTrianglePad - CONTROL_BORDER_WIDTH
@@ -322,17 +322,17 @@ tools::Rectangle SwCommentRuler::GetCommentControlRegion()
     const unsigned long nSidebarWidth = pPostItMgr->GetSidebarWidth(true);
 
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
-    long nLeft = GetPageOffset();
+    tools::Long nLeft = GetPageOffset();
     if (GetTextRTL())
         nLeft += GetBorderOffset() - nSidebarWidth;
     else
         nLeft += GetWinOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();
 
     // Ruler::ImplDraw uses RULER_OFF (value: 3px) as offset, and Ruler::ImplFormat adds one extra pixel
-    long nTop = 4;
+    tools::Long nTop = 4;
     // Somehow pPostItMgr->GetSidebarBorderWidth() returns border width already doubled
-    long nRight = nLeft + nSidebarWidth + pPostItMgr->GetSidebarBorderWidth(true);
-    long nBottom = nTop + GetRulerVirHeight() - 3;
+    tools::Long nRight = nLeft + nSidebarWidth + pPostItMgr->GetSidebarBorderWidth(true);
+    tools::Long nBottom = nTop + GetRulerVirHeight() - 3;
 
     tools::Rectangle aRect(nLeft, nTop, nRight, nBottom);
     return aRect;

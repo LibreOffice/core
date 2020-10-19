@@ -54,7 +54,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pState);
                 if (pItem)
                 {
-                    long nNewHeight = pItem->GetValue();
+                    tools::Long nNewHeight = pItem->GetValue();
                     nNewHeight = m_xRowHeightEdit->normalize(nNewHeight);
                     m_xRowHeightEdit->set_value(nNewHeight, FieldUnit::TWIP);
                 }
@@ -74,7 +74,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
                 const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(pState);
                 if (pItem)
                 {
-                    long nNewWidth = pItem->GetValue();
+                    tools::Long nNewWidth = pItem->GetValue();
                     nNewWidth = m_xColumnWidthEdit->normalize(nNewWidth);
                     m_xColumnWidthEdit->set_value(nNewWidth, FieldUnit::TWIP);
                 }

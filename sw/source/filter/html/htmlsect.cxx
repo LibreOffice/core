@@ -553,7 +553,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 {
     OUString aId;
     OUString aStyle, aClass, aLang, aDir;
-    long nWidth = 100;
+    tools::Long nWidth = 100;
     sal_uInt16 nCols = columnsFromCss, nGutter = 10;
     bool bPercentWidth = true;
 

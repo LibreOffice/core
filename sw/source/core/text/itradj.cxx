@@ -189,7 +189,7 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 }
 
 static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr, sal_Int32& rKashidas,
-                             TextFrameIndex& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
+                             TextFrameIndex& nGluePortion, const tools::Long nGluePortionWidth, tools::Long& nSpaceAdd )
 {
     // check kashida width
     // if width is smaller than minimal kashida width allowed by fonts in the current line
@@ -214,7 +214,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
                 nNext = nEnd;
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify ( nullptr, nullptr, nIdx, nNext - nIdx );
 
-            long nFontMinKashida = rInf.GetOut()->GetMinKashida();
+            tools::Long nFontMinKashida = rInf.GetOut()->GetMinKashida();
             if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
             {
                 sal_Int32 nKashidasDropped = 0;
@@ -345,7 +345,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 if ( nSpaceIdx == pCurrent->GetLLSpaceAddCount() )
                     pCurrent->SetLLSpaceAdd( 0, nSpaceIdx );
 
-                const long nGluePortionWidth = static_cast<SwGluePortion*>(pPos)->GetPrtGlue() *
+                const tools::Long nGluePortionWidth = static_cast<SwGluePortion*>(pPos)->GetPrtGlue() *
                                                SPACING_PRECISION_FACTOR;
 
                 sal_Int32 nKashidas = 0;
@@ -366,7 +366,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
                 if( nGluePortion )
                 {
-                    long nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
+                    tools::Long nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
 
                     // i60594
                     if( rSI.CountKashida() && !bSkipKashida )
@@ -387,7 +387,7 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 }
                 else if (IsOneBlock() && nCharCnt > TextFrameIndex(1))
                 {
-                    const long nSpaceAdd = - nGluePortionWidth / (sal_Int32(nCharCnt) - 1);
+                    const tools::Long nSpaceAdd = - nGluePortionWidth / (sal_Int32(nCharCnt) - 1);
                     pCurrent->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
                     pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
                 }
@@ -418,7 +418,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
     const sal_uInt16 nNull = 0;
     size_t nKanaIdx = 0;
-    long nKanaDiffSum = 0;
+    tools::Long nKanaDiffSum = 0;
     SwTwips nRepaintOfst = 0;
     SwTwips nX = 0;
     bool bNoCompression = false;
@@ -453,7 +453,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             if ( nKanaIdx == pCurrent->GetKanaComp().size() )
                 pCurrent->GetKanaComp().push_back( nNull );
 
-            long nRest;
+            tools::Long nRest;
 
             if ( pPos->InTabGrp() )
             {
@@ -503,7 +503,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     nKanaIdx = 0;
     sal_uInt16 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
     pPos = pCurrent->GetNextPortion();
-    long nDecompress = 0;
+    tools::Long nDecompress = 0;
 
     while( pPos )
     {
@@ -544,7 +544,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
-    long nRealWidth;
+    tools::Long nRealWidth;
     const sal_uInt16 nRealHeight = GetLineHeight();
     const sal_uInt16 nLineHeight = pCurrent->Height();
 
@@ -557,12 +557,12 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     {
         nRealWidth = GetLineWidth();
         // For each FlyFrame extending into the right margin, we create a FlyPortion.
-        const long nLeftMar = GetLeftMargin();
+        const tools::Long nLeftMar = GetLeftMargin();
         SwRect aCurrRect( nLeftMar + nPrtWidth, Y() + nRealHeight - nLineHeight,
                           nRealWidth - nPrtWidth, nLineHeight );
 
         SwFlyPortion *pFly = CalcFlyPortion( nRealWidth, aCurrRect );
-        while( pFly && long( nPrtWidth )< nRealWidth )
+        while( pFly && tools::Long( nPrtWidth )< nRealWidth )
         {
             pLast->Append( pFly );
             pLast = pFly;
@@ -578,7 +578,7 @@ SwMarginPortion *SwTextAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwMarginPortion *pRight = new SwMarginPortion;
     pLast->Append( pRight );
 
-    if( long( nPrtWidth )< nRealWidth )
+    if( tools::Long( nPrtWidth )< nRealWidth )
         pRight->PrtWidth( sal_uInt16( nRealWidth - nPrtWidth ) );
 
     // pCurrent->Width() is set to the real size, because we attach the
@@ -697,7 +697,7 @@ void SwTextAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 // adding the word, that still fits onto the line! For this reason the FlyPortion's
 // width is still correct if we get a deadlock-situation of:
 // bFirstWord && !WORDFITS
-SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
+SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const tools::Long nRealWidth,
                                              const SwRect &rCurrRect )
 {
     SwTextFly aTextFly( GetTextFrame() );
@@ -729,7 +729,7 @@ SwFlyPortion *SwTextAdjuster::CalcFlyPortion( const long nRealWidth,
             aLocal.Left( nCurrWidth );
 
         // If the rect is wider than the line, we adjust it to the right size
-        const long nLocalWidth = aLocal.Left() + aLocal.Width();
+        const tools::Long nLocalWidth = aLocal.Left() + aLocal.Width();
         if( nRealWidth < nLocalWidth )
             aLocal.Width( nRealWidth - aLocal.Left() );
         GetInfo().GetParaPortion()->SetFly();

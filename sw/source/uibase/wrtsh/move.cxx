@@ -37,7 +37,7 @@
     -   EndSelect()
  */
 
-const long nReadOnlyScrollOfst = 10;
+const tools::Long nReadOnlyScrollOfst = 10;
 
 namespace {
 

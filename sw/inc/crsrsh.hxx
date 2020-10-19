@@ -184,9 +184,9 @@ private:
     SwNodeIndex* m_pBoxIdx;       ///< for recognizing of the changed
     SwTableBox* m_pBoxPtr;        ///< table row
 
-    long m_nUpDownX;              /**< try to move the cursor on up/down always
+    tools::Long m_nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
-    long m_nLeftFramePos;
+    tools::Long m_nLeftFramePos;
     sal_uLong m_nCurrentNode;     // save CursorPos at Start-Action
     sal_Int32 m_nCurrentContent;
     SwNodeType m_nCurrentNdTyp;
@@ -344,7 +344,7 @@ public:
     void EndAction( const bool bIdleEnd = false, const bool DoSetPosX = false );
 
     // basic cursor travelling
-    long GetUpDownX() const             { return m_nUpDownX; }
+    tools::Long GetUpDownX() const             { return m_nUpDownX; }
 
     bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, bool bAllowVisual = false )
         { return LeftRight( true, nCnt, nMode, bAllowVisual ); }
@@ -680,7 +680,7 @@ public:
                             sal_uInt16 nSeqNo );
 
     // get the nth character from the start or end of the  current selection
-    sal_Unicode GetChar( bool bEnd = true, long nOffset = 0 );
+    sal_Unicode GetChar( bool bEnd = true, tools::Long nOffset = 0 );
     bool ExtendSelection( bool bEnd = true, sal_Int32 nCount = 1 );
 
     // Place only the visible cursor at the given position in the document.

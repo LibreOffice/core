@@ -117,7 +117,7 @@ struct Por_Info
 
 struct lt_TableColumn
 {
-    bool operator()( long nVal1, long nVal2 ) const
+    bool operator()( tools::Long nVal1, tools::Long nVal2 ) const
     {
         return nVal1 + ( MINLAY - 1 ) < nVal2;
     }

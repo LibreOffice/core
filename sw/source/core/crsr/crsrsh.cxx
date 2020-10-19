@@ -2578,7 +2578,7 @@ OUString SwCursorShell::GetSelText() const
     @param bEnd    Start counting from the end? From start otherwise.
     @param nOffset position of the character
 */
-sal_Unicode SwCursorShell::GetChar( bool bEnd, long nOffset )
+sal_Unicode SwCursorShell::GetChar( bool bEnd, tools::Long nOffset )
 {
     if( IsTableMode() ) // not possible in table mode
         return 0;
@@ -3063,7 +3063,7 @@ void SwCursorShell::MakeSelVisible()
     if( m_aCursorHeight.Y() < m_aCharRect.Height() && m_aCharRect.Height() > VisArea().Height() )
     {
         SwRect aTmp( m_aCharRect );
-        long nDiff = m_aCharRect.Height() - VisArea().Height();
+        tools::Long nDiff = m_aCharRect.Height() - VisArea().Height();
         if( nDiff < m_aCursorHeight.getX() )
             aTmp.Top( nDiff + m_aCharRect.Top() );
         else

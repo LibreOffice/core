@@ -85,7 +85,7 @@ css::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( cons
 
 bool IndexEntrySupplierWrapper::LoadAlgorithm(
         const css::lang::Locale& rLcl,
-        const OUString& sSortAlgorithm, long nOptions ) const
+        const OUString& sSortAlgorithm, tools::Long nOptions ) const
 {
     bool bRet = false;
     try {

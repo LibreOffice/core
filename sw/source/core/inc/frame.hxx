@@ -870,20 +870,20 @@ public:
     bool IsInDtor() const { return mbInDtor; }
 
     // No inline cause we need the function pointers
-    long GetTopMargin() const;
-    long GetBottomMargin() const;
-    long GetLeftMargin() const;
-    long GetRightMargin() const;
-    void SetTopBottomMargins( long, long );
-    void SetLeftRightMargins( long, long );
-    void SetRightLeftMargins( long, long );
-    long GetPrtLeft() const;
-    long GetPrtBottom() const;
-    long GetPrtRight() const;
-    long GetPrtTop() const;
-    bool SetMinLeft( long );
-    bool SetMaxBottom( long );
-    bool SetMaxRight( long );
+    tools::Long GetTopMargin() const;
+    tools::Long GetBottomMargin() const;
+    tools::Long GetLeftMargin() const;
+    tools::Long GetRightMargin() const;
+    void SetTopBottomMargins( tools::Long, tools::Long );
+    void SetLeftRightMargins( tools::Long, tools::Long );
+    void SetRightLeftMargins( tools::Long, tools::Long );
+    tools::Long GetPrtLeft() const;
+    tools::Long GetPrtBottom() const;
+    tools::Long GetPrtRight() const;
+    tools::Long GetPrtTop() const;
+    bool SetMinLeft( tools::Long );
+    bool SetMaxBottom( tools::Long );
+    bool SetMaxRight( tools::Long );
     void MakeBelowPos( const SwFrame*, const SwFrame*, bool );
     void MakeLeftPos( const SwFrame*, const SwFrame*, bool );
     void MakeRightPos( const SwFrame*, const SwFrame*, bool );
@@ -1259,10 +1259,10 @@ public:
 };
 
 typedef long (SwFrame::*SwFrameGet)() const;
-typedef bool (SwFrame::*SwFrameMax)( long );
+typedef bool (SwFrame::*SwFrameMax)( tools::Long );
 typedef void (SwFrame::*SwFrameMakePos)( const SwFrame*, const SwFrame*, bool );
-typedef long (*SwOperator)( long, long );
-typedef void (SwFrame::*SwFrameSet)( long, long );
+typedef long (*SwOperator)( tools::Long, tools::Long );
+typedef void (SwFrame::*SwFrameSet)( tools::Long, tools::Long );
 
 struct SwRectFnCollection
 {
@@ -1352,58 +1352,58 @@ public:
             || (rRect1.*m_fnRect->fnGetLeft)() != (rRect2.*m_fnRect->fnGetLeft)());
     }
 
-    long  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
-    long  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
-    long  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
-    long  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
-    long  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
-    long  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
+    tools::Long  GetTop   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetTop)   (); }
+    tools::Long  GetBottom(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetBottom)(); }
+    tools::Long  GetLeft  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetLeft)  (); }
+    tools::Long  GetRight (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetRight) (); }
+    tools::Long  GetWidth (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetWidth) (); }
+    tools::Long  GetHeight(const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetHeight)(); }
     Point GetPos   (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetPos)   (); }
     Size  GetSize  (const SwRect& rRect) const { return (rRect.*m_fnRect->fnGetSize)  (); }
 
-    void SetTop   (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
-    void SetBottom(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
-    void SetLeft  (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
-    void SetRight (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
-    void SetWidth (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
-    void SetHeight(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
+    void SetTop   (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetTop)   (nNew); }
+    void SetBottom(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetBottom)(nNew); }
+    void SetLeft  (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetLeft)  (nNew); }
+    void SetRight (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetRight) (nNew); }
+    void SetWidth (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetWidth) (nNew); }
+    void SetHeight(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetHeight)(nNew); }
 
-    void SubTop   (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
-    void AddBottom(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
-    void SubLeft  (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
-    void AddRight (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
-    void AddWidth (SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
-    void AddHeight(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
+    void SubTop   (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSubTop)   (nNew); }
+    void AddBottom(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddBottom)(nNew); }
+    void SubLeft  (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSubLeft)  (nNew); }
+    void AddRight (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddRight) (nNew); }
+    void AddWidth (SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddWidth) (nNew); }
+    void AddHeight(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnAddHeight)(nNew); }
 
-    void SetPosX(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
-    void SetPosY(SwRect& rRect, long nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
+    void SetPosX(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetPosX)(nNew); }
+    void SetPosY(SwRect& rRect, tools::Long nNew) const { (rRect.*m_fnRect->fnSetPosY)(nNew); }
 
-    long  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
-    long  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
-    long  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
-    long  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
-    void  SetXMargins(SwFrame& rFrame, long nLeft, long nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
-    void  SetYMargins(SwFrame& rFrame, long nTop, long nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
-    long  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
-    long  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
-    long  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
-    long  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
-    long  TopDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
-    long  BottomDist(const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
-    long  LeftDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
-    long  RightDist   (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
-    void  SetLimit (SwFrame& rFrame, long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
-    bool  OverStep  (const SwRect& rRect, long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
+    tools::Long  GetTopMargin   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetTopMargin)   (); }
+    tools::Long  GetBottomMargin(const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetBottomMargin)(); }
+    tools::Long  GetLeftMargin  (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetLeftMargin)  (); }
+    tools::Long  GetRightMargin (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetRightMargin) (); }
+    void  SetXMargins(SwFrame& rFrame, tools::Long nLeft, tools::Long nRight) const { (rFrame.*m_fnRect->fnSetXMargins)(nLeft, nRight); }
+    void  SetYMargins(SwFrame& rFrame, tools::Long nTop, tools::Long nBottom) const { (rFrame.*m_fnRect->fnSetYMargins)(nTop, nBottom); }
+    tools::Long  GetPrtTop      (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtTop)      (); }
+    tools::Long  GetPrtBottom   (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtBottom)   (); }
+    tools::Long  GetPrtLeft     (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtLeft)     (); }
+    tools::Long  GetPrtRight    (const SwFrame& rFrame) const { return (rFrame.*m_fnRect->fnGetPrtRight)    (); }
+    tools::Long  TopDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnTopDist)    (nPos); }
+    tools::Long  BottomDist(const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnBottomDist) (nPos); }
+    tools::Long  LeftDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnLeftDist)    (nPos); }
+    tools::Long  RightDist   (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnRightDist)    (nPos); }
+    void  SetLimit (SwFrame& rFrame, tools::Long nNew) const { (rFrame.*m_fnRect->fnSetLimit) (nNew); }
+    bool  OverStep  (const SwRect& rRect, tools::Long nPos) const { return (rRect.*m_fnRect->fnOverStep)   (nPos); }
 
     void SetPos(SwRect& rRect, const Point& rNew) const { (rRect.*m_fnRect->fnSetPos)(rNew); }
     void MakePos(SwFrame& rFrame, const SwFrame* pUp, const SwFrame* pPrv, bool bNotify) const { (rFrame.*m_fnRect->fnMakePos)(pUp, pPrv, bNotify); }
-    long XDiff(long n1, long n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
-    long YDiff(long n1, long n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
-    long XInc (long n1, long n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
-    long YInc (long n1, long n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
+    tools::Long XDiff(tools::Long n1, tools::Long n2) const { return (m_fnRect->fnXDiff) (n1, n2); }
+    tools::Long YDiff(tools::Long n1, tools::Long n2) const { return (m_fnRect->fnYDiff) (n1, n2); }
+    tools::Long XInc (tools::Long n1, tools::Long n2) const { return (m_fnRect->fnXInc)  (n1, n2); }
+    tools::Long YInc (tools::Long n1, tools::Long n2) const { return (m_fnRect->fnYInc)  (n1, n2); }
 
-    void SetLeftAndWidth(SwRect& rRect, long nLeft, long nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
-    void SetTopAndHeight(SwRect& rRect, long nTop, long nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
+    void SetLeftAndWidth(SwRect& rRect, tools::Long nLeft, tools::Long nWidth) const { (rRect.*m_fnRect->fnSetLeftAndWidth)(nLeft, nWidth); }
+    void SetTopAndHeight(SwRect& rRect, tools::Long nTop, tools::Long nHeight) const { (rRect.*m_fnRect->fnSetTopAndHeight)(nTop, nHeight); }
 
 private:
     bool m_bVert;

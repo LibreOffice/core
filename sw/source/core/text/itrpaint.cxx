@@ -88,7 +88,7 @@ SwLinePortion *SwTextPainter::CalcPaintOfst( const SwRect &rPaint )
         {
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
-                long nTmp = GetInfo().X() +pPor->Width() +
+                tools::Long nTmp = GetInfo().X() +pPor->Width() +
                     pPor->CalcSpacing( GetInfo().GetSpaceAdd(), GetInfo() );
                 if( nTmp + (pPor->Height()/2) >= nPaintOfst )
                     break;
@@ -478,7 +478,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 }
 
 void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
-                                          long nAdjustBaseLine )
+                                          tools::Long nAdjustBaseLine )
 {
     // Check if common underline should not be continued
     if ( IsUnderlineBreak( *pPor, *m_pFont ) )

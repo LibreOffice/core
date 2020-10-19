@@ -541,9 +541,9 @@ bool SwViewShell::PrintOrPDFExport(
             //Now scale the recorded page down so the notes
             //will fit in the final page
             double fScale = 0.75;
-            long nOrigHeight = pStPage->getFrameArea().Height();
-            long nNewHeight = nOrigHeight*fScale;
-            long nShiftY = (nOrigHeight-nNewHeight)/2;
+            tools::Long nOrigHeight = pStPage->getFrameArea().Height();
+            tools::Long nNewHeight = nOrigHeight*fScale;
+            tools::Long nShiftY = (nOrigHeight-nNewHeight)/2;
             pMetaFile->Scale( fScale, fScale );
             pMetaFile->WindStart();
             //Move the scaled page down to center it

@@ -1397,7 +1397,7 @@ void SwHTMLParser::InsertInput()
     bool bDisabled = false, bValue = false;
     bool bSetGrfWidth = false, bSetGrfHeight = false;
     bool bHidden = false;
-    long nWidth=0, nHeight=0;
+    tools::Long nWidth=0, nHeight=0;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvKeyValueIterator *pHeaderAttrs = m_pFormImpl->GetHeaderAttrs();

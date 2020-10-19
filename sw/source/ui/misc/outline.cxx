@@ -817,7 +817,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         StartModified(*m_xStartEdit);
 }
 
-static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat, long nXStart, long nYStart, const Size& rSize)
+static tools::Long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat, tools::Long nXStart, tools::Long nYStart, const Size& rSize)
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
@@ -842,19 +842,19 @@ static long lcl_DrawBullet(vcl::RenderContext* pVDev, const SwNumFormat& rFormat
     pVDev->SetFont( aFont );
     sal_UCS4 cBullet = rFormat.GetBulletChar();
     OUString aText(&cBullet, 1);
-    long nY = nYStart;
+    tools::Long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );
-    long nRet = pVDev->GetTextWidth(aText);
+    tools::Long nRet = pVDev->GetTextWidth(aText);
 
     pVDev->SetFont(aTmpFont);
     return nRet;
 }
 
-static long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rFormat, long nXStart, long nYStart, long nDivision)
+static tools::Long lcl_DrawGraphic(vcl::RenderContext* pVDev, const SwNumFormat &rFormat, tools::Long nXStart, tools::Long nYStart, tools::Long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFormat.GetBrush();
-    long nRet = 0;
+    tools::Long nRet = 0;
     if (pBrushItem)
     {
         const Graphic* pGraphic = pBrushItem->GetGraphic();
@@ -885,7 +885,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
     if (pActNum)
     {
-        long nWidthRelation = 30; // chapter dialog
+        tools::Long nWidthRelation = 30; // chapter dialog
         if(nPageWidth)
         {
             nWidthRelation = nPageWidth / aSize.Width();
@@ -896,22 +896,22 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         }
 
         // height per level
-        const long nXStep = aSize.Width() / (3 * MAXLEVEL * ((MAXLEVEL < 10) ? 2 : 1));
-        const long nYStep = (aSize.Height() - 6)/ MAXLEVEL;
-        long nYStart = 4;
+        const tools::Long nXStep = aSize.Width() / (3 * MAXLEVEL * ((MAXLEVEL < 10) ? 2 : 1));
+        const tools::Long nYStep = (aSize.Height() - 6)/ MAXLEVEL;
+        tools::Long nYStart = 4;
         aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, GetAppLanguage(),
                                                 GetDefaultFontFlags::OnlyOne, &rRenderContext);
         // #101524# OJ
         aStdFont.SetColor(SwViewOption::GetFontColor());
 
-        const long nFontHeight = nYStep * ( bPosition ? 15 : 6 ) / 10;
+        const tools::Long nFontHeight = nYStep * ( bPosition ? 15 : 6 ) / 10;
         aStdFont.SetFontSize(Size( 0, nFontHeight ));
 
-        long nPreNum = pActNum->Get(0).GetStart();
+        tools::Long nPreNum = pActNum->Get(0).GetStart();
 
         if (bPosition)
         {
-            const long nLineHeight = nFontHeight * 8 / 7;
+            const tools::Long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
             while (!(nActLevel & (1 << nStart)))
             {
@@ -927,15 +927,15 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                 const SwNumFormat &rFormat = pActNum->Get(nLevel);
                 aNumVector.push_back(rFormat.GetStart());
 
-                long nXStart( 0 );
-                long nTextOffset( 0 );
-                long nNumberXPos( 0 );
+                tools::Long nXStart( 0 );
+                tools::Long nTextOffset( 0 );
+                tools::Long nNumberXPos( 0 );
                 if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nXStart = rFormat.GetAbsLSpace() / nWidthRelation;
                     nTextOffset = rFormat.GetCharTextDistance() / nWidthRelation;
                     nNumberXPos = nXStart;
-                    const long nFirstLineOffset = (-rFormat.GetFirstLineOffset()) / nWidthRelation;
+                    const tools::Long nFirstLineOffset = (-rFormat.GetFirstLineOffset()) / nWidthRelation;
 
                     if(nFirstLineOffset <= nNumberXPos)
                         nNumberXPos -= nFirstLineOffset;
@@ -944,11 +944,11 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                 }
                 else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpNumberXPos((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent()) / nWidthRelation);
+                    const tools::Long nTmpNumberXPos((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent()) / nWidthRelation);
                     nNumberXPos = (nTmpNumberXPos < 0) ? 0 : nTmpNumberXPos;
                 }
 
-                long nBulletWidth = 0;
+                tools::Long nBulletWidth = 0;
                 if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
                     nBulletWidth = lcl_DrawGraphic(pVDev.get(), rFormat, nNumberXPos,
@@ -978,7 +978,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                     nBulletWidth += pVDev->GetTextWidth(aText);
                 }
 
-                long nTextXPos(0);
+                tools::Long nTextXPos(0);
                 if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nTextXPos = nXStart;
@@ -1024,24 +1024,24 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         else
         {
             SwNumberTree::tNumberVector aNumVector;
-            const long nLineHeight = nFontHeight * 3 / 2;
+            const tools::Long nLineHeight = nFontHeight * 3 / 2;
             for (sal_uInt8 nLevel = 0; nLevel < MAXLEVEL; ++nLevel, nYStart = nYStart + nYStep)
             {
                 const SwNumFormat &rFormat = pActNum->Get(nLevel);
                 aNumVector.push_back(rFormat.GetStart());
-                long nXStart(0);
+                tools::Long nXStart(0);
                 if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nXStart = rFormat.GetAbsLSpace() / nWidthRelation;
                 }
                 else if (rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpXStart((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent() ) / nWidthRelation);
+                    const tools::Long nTmpXStart((rFormat.GetIndentAt() + rFormat.GetFirstLineIndent() ) / nWidthRelation);
                     nXStart = (nTmpXStart < 0) ? 0 : nTmpXStart;
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                long nTextOffset;
+                tools::Long nTextOffset;
                 if (SVX_NUM_BITMAP == rFormat.GetNumberingType())
                 {
                     lcl_DrawGraphic(pVDev.get(), rFormat, nXStart, nYStart, nWidthRelation);

@@ -99,8 +99,8 @@ private:
     Merge m_eMerge;
 
 #ifdef DBG_UTIL
-    static long s_nSerial;
-    long m_nSerial;
+    static tools::Long s_nSerial;
+    tools::Long m_nSerial;
 #endif
 
     /// all SwFrameFormat that are anchored at the node
@@ -122,7 +122,7 @@ public:
     virtual ~SwNode() override = 0;
 
 #ifdef DBG_UTIL
-    long GetSerial() const { return m_nSerial; }
+    tools::Long GetSerial() const { return m_nSerial; }
 #endif
 
     sal_uInt16 GetSectionLevel() const;

@@ -113,7 +113,7 @@ namespace
     }
 }
 
-long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
+tools::Long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 {
     // should also work via pRes.nCo2OrIdx
     WW8PLCFx_Book* pB = m_xPlcxMan->GetBook();
@@ -150,11 +150,11 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     if( SwFltGetFlag( m_nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF ) )
     {
         // set variable for translation bookmark
-        long nLen = pB->GetLen();
+        tools::Long nLen = pB->GetLen();
         if( nLen > MAX_FIELDLEN )
             nLen = MAX_FIELDLEN;
 
-        long nOldPos = m_pStrm->Tell();
+        tools::Long nOldPos = m_pStrm->Tell();
         m_xSBase->WW8ReadString( *m_pStrm, aVal, pB->GetStartPos(), nLen,
                                         m_eStructCharSet );
         m_pStrm->Seek( nOldPos );
@@ -229,7 +229,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     return 0;
 }
 
-long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
+tools::Long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
 {
     if (WW8PLCFx_AtnBook* pAtnBook = m_xPlcxMan->GetAtnBook())
     {
@@ -241,7 +241,7 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
     return 0;
 }
 
-long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
+tools::Long SwWW8ImplReader::Read_FactoidBook(WW8PLCFManResult*)
 {
     if (WW8PLCFx_FactoidBook* pFactoidBook = m_xPlcxMan->GetFactoidBook())
     {
@@ -753,7 +753,7 @@ void WW8FieldEntry::SetBookmarkCode(const OUString& bookmarkCode)
 // Read_Field reads a field or returns 0 if the field cannot be read,
 // so that the calling function reads the field in text format.
 // Returnvalue: Total length of field
-long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
+tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 {
     typedef eF_ResT (SwWW8ImplReader::*FNReadField)( WW8FieldDesc*, OUString& );
     enum Limits {eMax = 96};
@@ -950,7 +950,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if (aF.bResNest && !AcceptableNestedField(aF.nId))
             return aF.nLen;                 // Result nested -> unusable
 
-        long nOldPos = m_pStrm->Tell();
+        tools::Long nOldPos = m_pStrm->Tell();
         OUString aStr;
         aF.nLCode = m_xSBase->WW8ReadString( *m_pStrm, aStr, m_xPlcxMan->GetCpOfs()+
             aF.nSCode, aF.nLCode, m_eTextCharSet );
@@ -1129,7 +1129,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
 
 WW8_CP SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
 {
-    long nOldPos = m_pStrm->Tell();
+    tools::Long nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSCode - 1;         // starting with 0x19
     WW8_CP nL = pF->nLen;                     // Total length with result and nest
@@ -1189,7 +1189,7 @@ eF_ResT SwWW8ImplReader::Read_F_Input( WW8FieldDesc* pF, OUString& rStr )
 // GetFieldResult allocates a string and reads the resulted field
 OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc const * pF )
 {
-    long nOldPos = m_pStrm->Tell();
+    tools::Long nOldPos = m_pStrm->Tell();
 
     WW8_CP nStart = pF->nSRes;              // result start
     WW8_CP nL = pF->nLRes;                    // result length
@@ -1277,11 +1277,11 @@ the set/ask field, and end them directly afterwards. MapBookmarkVariables
 returns an identifier of the bookmark attribute to close after inserting
 the appropriate set/ask field.
 */
-long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
+tools::Long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     OUString &rOrigName, const OUString &rData)
 {
     OSL_ENSURE(m_xPlcxMan, "No pPlcxMan");
-    long nNo;
+    tools::Long nNo;
     /*
     If there was no bookmark associated with this set field, then we create a
     pseudo one and insert it in the document.
@@ -1396,7 +1396,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
         aQ += aDef;
     }
 
-    const long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
+    const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
         SwSetExpFieldType(&m_rDoc, sOrigName, nsSwGetSetExpType::GSE_STRING)));
@@ -2012,7 +2012,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
         }
     }
 
-    const long nNo = MapBookmarkVariables(pF, sOrigName, sVal);
+    const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, sVal);
 
     SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( SwSetExpFieldType( &m_rDoc, sOrigName,
         nsSwGetSetExpType::GSE_STRING ) );
@@ -3669,7 +3669,7 @@ void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen
         return;
 
     m_bIgnoreText = true;
-    long nOldPos = m_pStrm->Tell();
+    tools::Long nOldPos = m_pStrm->Tell();
 
     WW8_CP nStartCp = m_xPlcxMan->Where() + m_xPlcxMan->GetCpOfs();
 

@@ -106,15 +106,15 @@ namespace
         PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
     };
 
-    long lcl_GetRightMargin( SwDoc& rDoc )
+    tools::Long lcl_GetRightMargin( SwDoc& rDoc )
     {
         // Make sure that the printer settings are taken over to the standard
         // page style
         const SwFrameFormat& rPgDscFormat = rDoc.GetPageDesc( 0 ).GetMaster();
         const SvxLRSpaceItem& rLR = rPgDscFormat.GetLRSpace();
-        const long nLeft = rLR.GetLeft();
-        const long nRight = rLR.GetRight();
-        const long nWidth = rPgDscFormat.GetFrameSize().GetWidth();
+        const tools::Long nLeft = rLR.GetLeft();
+        const tools::Long nRight = rLR.GetRight();
+        const tools::Long nWidth = rPgDscFormat.GetFrameSize().GetWidth();
         return nWidth - nLeft - nRight;
     }
 
@@ -238,7 +238,7 @@ namespace
         }
         if( bTab )
         {
-            long nRightMargin = lcl_GetRightMargin( rDoc );
+            tools::Long nRightMargin = lcl_GetRightMargin( rDoc );
             SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( nRightMargin - nLeft,
                                         SvxTabAdjust::Right,
@@ -908,7 +908,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aLN.SetCountLines( false );
                 aSet.Put( aLN );
 
-                long nRightMargin = lcl_GetRightMargin( m_rDoc );
+                tools::Long nRightMargin = lcl_GetRightMargin( m_rDoc );
 
                 SvxTabStopItem aTStops( 0, 0, SvxTabAdjust::Default, RES_PARATR_TABSTOP );
                 aTStops.Insert( SvxTabStop( nRightMargin / 2, SvxTabAdjust::Center ) );
@@ -1573,7 +1573,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
 
     case RES_POOLCHR_RUBYTEXT:
         {
-            long nH = GetDfltAttr( RES_CHRATR_CJK_FONTSIZE )->GetHeight() / 2;
+            tools::Long nH = GetDfltAttr( RES_CHRATR_CJK_FONTSIZE )->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
             aSet.Put(SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE ));
             aSet.Put(SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK) );
@@ -2032,7 +2032,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
             aFormat.SetIncludeUpperLevels( 1 );
             aFormat.SetSuffix( "." );
 
-            long const nOffs = 397; // 0.70 cm
+            tools::Long const nOffs = 397; // 0.70 cm
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2052,7 +2052,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    long nPos = (n+1) * nOffs;
+                    tools::Long nPos = (n+1) * nOffs;
                     aFormat.SetListtabPos(nPos + 357);
                     aFormat.SetIndentAt(nPos + 357);
                 }
@@ -2210,7 +2210,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    long nPos = nOffs2 + ((n-3) * static_cast<long>(nOffs));
+                    tools::Long nPos = nOffs2 + ((n-3) * static_cast<tools::Long>(nOffs));
                     aFormat.SetListtabPos(nPos);
                     aFormat.SetIndentAt(nPos);
                 }
@@ -2344,7 +2344,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
                 }
                 else if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
                 {
-                    long nPos = ((n & 1) +1) * static_cast<long>(nOffs);
+                    tools::Long nPos = ((n & 1) +1) * static_cast<tools::Long>(nOffs);
                     aFormat.SetListtabPos(nPos);
                     aFormat.SetIndentAt(nPos);
                 }
