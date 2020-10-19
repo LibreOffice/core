@@ -1655,29 +1655,70 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     mnFlags( 0 ),
     mnScHandle( nScHandle )
 {
-    if( const ScValidationData* pValData = GetDoc().GetValidationEntry( mnScHandle ) )
+    if (const ScValidationData* pValData = GetDoc().GetValidationEntry(mnScHandle))
     {
         // prompt box - empty string represented by single NUL character
         OUString aTitle, aText;
-        bool bShowPrompt = pValData->GetInput( aTitle, aText );
-        if( !aTitle.isEmpty() )
-            maPromptTitle.Assign( aTitle );
+        OUStringBuffer sTitleBuf, sTextBuf;
+        bool bShowPrompt = pValData->GetInput(aTitle, aText);
+        if (!aTitle.isEmpty())
+        {
+            sTitleBuf.append(aTitle);
+            sal_uInt32 nTitleLen = sTitleBuf.getLength();
+            if (nTitleLen > 255)
+            {
+                nTitleLen = 255;
+                sTitleBuf.truncate(nTitleLen);
+                aTitle = sTitleBuf.makeStringAndClear();
+            }
+            maPromptTitle.Assign(aTitle);
+        }
         else
             maPromptTitle.Assign( '\0' );
-        if( !aText.isEmpty() )
-            maPromptText.Assign( aText );
+        if (!aText.isEmpty())
+        {
+            sTextBuf.append(aText);
+            sal_uInt32 nTextLen = sTextBuf.getLength();
+            if (nTextLen > 255)
+            {
+                nTextLen = 255;
+                sTextBuf.truncate(nTextLen);
+                aText= sTextBuf.makeStringAndClear();
+            }
+            maPromptText.Assign(aText);
+        }
         else
             maPromptText.Assign( '\0' );
 
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
         bool bShowError = pValData->GetErrMsg( aTitle, aText, eScErrorStyle );
-        if( !aTitle.isEmpty() )
-            maErrorTitle.Assign( aTitle );
+        if (!aTitle.isEmpty())
+        {
+            sTitleBuf.append(aTitle);
+            sal_uInt32 nTitleLen = sTitleBuf.getLength();
+            if (nTitleLen > 255)
+            {
+                nTitleLen = 255;
+                sTitleBuf.truncate(nTitleLen);
+                aTitle = sTitleBuf.makeStringAndClear();
+            }
+            maErrorTitle.Assign(aTitle);
+        }
         else
             maErrorTitle.Assign( '\0' );
-        if( !aText.isEmpty() )
-            maErrorText.Assign( aText );
+        if (!aText.isEmpty())
+        {
+            sTextBuf.append(aText);
+            sal_uInt32 nTextLen = sTextBuf.getLength();
+            if (nTextLen > 255)
+            {
+                nTextLen = 255;
+                sTextBuf.truncate(nTextLen);
+                aText = sTextBuf.makeStringAndClear();
+            }
+            maErrorText.Assign(aText);
+        }
         else
             maErrorText.Assign( '\0' );
 
