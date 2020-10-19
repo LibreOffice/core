@@ -550,8 +550,8 @@ void AssignmentPersistentData::ImplCommit()
         m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER3));
         m_pImpl->aFieldLabels.push_back( SvtResId( STR_FIELD_USER4));
 
-        long nLabelWidth = 0;
-        long nListBoxWidth = m_pImpl->pFields[0]->get_approximate_digit_width() * 18;
+        tools::Long nLabelWidth = 0;
+        tools::Long nListBoxWidth = m_pImpl->pFields[0]->get_approximate_digit_width() * 18;
         for (auto const& fieldLabel : m_pImpl->aFieldLabels)
         {
             m_pImpl->pFieldLabels[0]->set_label(fieldLabel);

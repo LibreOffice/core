@@ -540,13 +540,13 @@ namespace svt::table
     }
 
 
-    long TableControl::GetRowCount() const
+    tools::Long TableControl::GetRowCount() const
     {
         return GetModel()->getRowCount();
     }
 
 
-    long TableControl::GetColumnCount() const
+    tools::Long TableControl::GetColumnCount() const
     {
         return GetModel()->getColumnCount();
     }
