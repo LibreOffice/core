@@ -88,6 +88,24 @@
       "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b03e0353_5dd21a4d",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-10-19T06:53:19Z",
+      "side": 1,
+      "message": "Sure sure, but the point is that RGB colour spaces are not all the same. Compare https://en.wikipedia.org/wiki/SRGB (which is \"the standard\" RGB colour space that device-independent traditional image formats like PNG assume) with https://en.wikipedia.org/wiki/DCI-P3 ((which is close to what Apple displays use, I think). The latter one has a much wider gamut (can represent colours that sRGB can\u0027t). If LibreOffice creates bitmaps in sRGB (kCGColorSpaceSRGB) they will have to be mapped to the colour space of the display. But I have no idea whether that is a trivial thing that the GPU does without any effect on CPU load or frame rate, or whether it happens in software. (Given the amount of legacy in our code, I wouldn\u0027t be surprised if it happens in software.)",
+      "parentUuid": "de75d462_e8d2f0ef",
+      "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
