@@ -53,6 +53,9 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
+		$(if $(filter MACOSX-X86_64-arm64,$(OS)-$(CPUNAME)-$(shell uname -m)), \
+			CPU_ARCH=x86_64 \
+			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
 		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
