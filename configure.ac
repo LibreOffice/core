@@ -11002,8 +11002,8 @@ if test -z "$PATCH"; then
     AC_MSG_ERROR(["patch" not found in \$PATH, install it])
 fi
 
-dnl On Solaris, FreeBSD or macOS, check if --with-gnu-patch was used
-if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
+dnl On Solaris or macOS, check if --with-gnu-patch was used
+if test "$_os" = "SunOS" -o "$_os" = "Darwin"; then
     if test -z "$with_gnu_patch"; then
         GNUPATCH=$PATCH
     else
