@@ -301,7 +301,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 if ( xDriver.is() )
                 {
                     aDriverDescriptor.xDriver = xDriver;
-                    // and obtain it's implementation name
+                    // and obtain its implementation name
                     xSI.set(xDriver, css::uno::UNO_QUERY);
                     OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
                     if ( xSI.is() )
