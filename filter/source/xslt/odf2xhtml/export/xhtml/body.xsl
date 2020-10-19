@@ -2042,7 +2042,7 @@
                                                 <xsl:with-param name="paraStyleName" select="descendant-or-self::*/@text:style-name"/>
                                             </xsl:call-template>
                                             <xsl:text>;min-width:</xsl:text>
-                                            <xsl:value-of select="$listLabelWidth"/>
+                                            <xsl:value-of select="translate($listLabelWidth,',','.')"/>
                                             <xsl:text>cm;</xsl:text>
                                         </xsl:attribute>
                                         <xsl:variable name="labelContent">
@@ -2104,7 +2104,7 @@
                                         <xsl:with-param name="paraStyleName" select="descendant-or-self::*/@text:style-name"/>
                                     </xsl:call-template>
                                     <xsl:text>;min-width:</xsl:text>
-                                    <xsl:value-of select="$listLabelWidth"/>
+                                    <xsl:value-of select="translate($listLabelWidth,',','.')"/>
                                     <xsl:text>cm</xsl:text>
                                 </xsl:attribute>
                                 <xsl:comment>&#160;</xsl:comment>
