@@ -70,6 +70,24 @@
       "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de75d462_e8d2f0ef",
+        "filename": "vcl/osx/saldata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-19T06:42:40Z",
+      "side": 1,
+      "message": "The equivalent iOS code is currently doing:\n\n   ios/iosinst.cxx:162:    mxRGBSpace( CGColorSpaceCreateDeviceRGB() ),\n\nbut since I do not believe any apple display technology is using a non-RGB colorspace, I\u0027m pretty sure this patch and the current iOS code is equivalent.",
+      "parentUuid": "d5cfcc23_0a4de1ab",
+      "revId": "7e3499de774a3e824671aa7bfef1c12663760826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
