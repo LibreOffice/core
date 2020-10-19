@@ -84,7 +84,7 @@ public:
 
     virtual SvxBoxItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    virtual void             ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void             ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
     const   editeng::SvxBorderLine* GetTop()    const { return pTop.get(); }
@@ -198,7 +198,7 @@ public:
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual SvxBoxInfoItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void            ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void            ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool            HasMetrics() const override;
 
     const editeng::SvxBorderLine*   GetHori() const { return pHori.get(); }

@@ -29,7 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 
 
-OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper* pIntl )
+OUString GetMetricText( tools::Long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper* pIntl )
 {
     bool bNeg = false;
     bool bShowAtLeastOneDecimalDigit = true;
@@ -108,7 +108,7 @@ OUString GetMetricText( long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const In
     if ( bNeg )
         sRet.append('-');
 
-    long nDiff = 1000;
+    tools::Long nDiff = 1000;
     for( int nDigits = 4; nDigits; --nDigits, nDiff /= 10 )
     {
         if ( nRet < nDiff )

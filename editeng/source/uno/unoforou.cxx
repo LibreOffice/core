@@ -277,7 +277,7 @@ tools::Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
     // swap width and height
-    long tmp = aSize.Width();
+    tools::Long tmp = aSize.Width();
     aSize.setWidth(aSize.Height());
     aSize.setHeight(tmp);
     bool bIsVertical( rOutliner.IsVertical() );
@@ -340,7 +340,7 @@ bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara,
 {
     Size aSize( rOutliner.CalcTextSize() );
     // swap width and height
-    long tmp = aSize.Width();
+    tools::Long tmp = aSize.Width();
     aSize.setWidth(aSize.Height());
     aSize.setHeight(tmp);
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,

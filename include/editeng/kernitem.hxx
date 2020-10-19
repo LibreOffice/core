@@ -41,7 +41,7 @@ public:
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SvxKerningItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void            ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void            ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool            HasMetrics() const override;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,

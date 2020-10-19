@@ -1385,7 +1385,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     bool bContinue = true;
     int nBorderTyp = 0;
 
-    long nWidth = 1;
+    tools::Long nWidth = 1;
     bool bDoubleWidth = false;
 
     do {

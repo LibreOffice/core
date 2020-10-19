@@ -94,7 +94,7 @@ Color SvxBorderLine::threeDMediumColor( Color aMain )
     return lcl_compute3DColor( aMain, -42, -0, 42 );
 }
 
-SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
+SvxBorderLine::SvxBorderLine( const Color *pCol, tools::Long nWidth,
        SvxBorderLineStyle nStyle,
        Color (*pColorOutFn)( Color ), Color (*pColorInFn)( Color ) )
 : m_nWidth( nWidth )
@@ -407,7 +407,7 @@ BorderWidthImpl SvxBorderLine::getWidthImpl( SvxBorderLineStyle nStyle )
     return aImpl;
 }
 
-void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
+void SvxBorderLine::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
     m_nMult = nMult;
     m_nDiv = nDiv;
@@ -437,7 +437,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
         };
 
         static size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
-        long nWidth = 0;
+        tools::Long nWidth = 0;
         SvxBorderLineStyle nTestStyle(SvxBorderLineStyle::NONE);
         for (size_t i = 0; i < len && nWidth == 0; ++i)
         {
@@ -611,7 +611,7 @@ Color SvxBorderLine::GetColorGap( ) const
     return aResult;
 }
 
-void SvxBorderLine::SetWidth( long nWidth )
+void SvxBorderLine::SetWidth( tools::Long nWidth )
 {
     m_nWidth = nWidth;
 }
@@ -652,15 +652,15 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
     else
     {
         OUString sMetric = EditResId(GetMetricId( eDestUnit ));
-        aStr += GetMetricText( static_cast<long>(GetInWidth()), eSrcUnit, eDestUnit, pIntl );
+        aStr += GetMetricText( static_cast<tools::Long>(GetInWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim +
-            GetMetricText( static_cast<long>(GetOutWidth()), eSrcUnit, eDestUnit, pIntl );
+            GetMetricText( static_cast<tools::Long>(GetOutWidth()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
         aStr += cpDelim +
-            GetMetricText( static_cast<long>(GetDistance()), eSrcUnit, eDestUnit, pIntl );
+            GetMetricText( static_cast<tools::Long>(GetDistance()), eSrcUnit, eDestUnit, pIntl );
         if ( bMetricStr )
             aStr += sMetric;
     }

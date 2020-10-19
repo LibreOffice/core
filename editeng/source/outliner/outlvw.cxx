@@ -566,7 +566,7 @@ void OutlinerView::Indent( short nDiff )
         pOwner->UndoActionEnd();
 }
 
-void OutlinerView::AdjustHeight( long nDY )
+void OutlinerView::AdjustHeight( tools::Long nDY )
 {
     pEditView->MoveParagraphs( nDY );
 }
@@ -1270,7 +1270,7 @@ ESelection OutlinerView::GetSelection() const
 }
 
 
-void OutlinerView::Scroll( long nHorzScroll, long nVertScroll )
+void OutlinerView::Scroll( tools::Long nHorzScroll, tools::Long nVertScroll )
 {
     pEditView->Scroll( nHorzScroll, nVertScroll );
 }
@@ -1361,7 +1361,7 @@ void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueItera
 
     pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
 
-    long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
+    tools::Long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;
     sal_Int32 nChangesEnd = nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara);
 

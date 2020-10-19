@@ -137,11 +137,11 @@ private:
     // of the list item starts
     LabelFollowedBy     meLabelFollowedBy;
     // specifies an additional list tab stop position for meLabelFollowedBy = LISTTAB
-    long                mnListtabPos;
+    tools::Long                mnListtabPos;
     // specifies the first line indent
-    long                mnFirstLineIndent;
+    tools::Long                mnFirstLineIndent;
     // specifies the indent before the text, e.g. in L2R-layout the left margin
-    long                mnIndentAt;
+    tools::Long                mnIndentAt;
 
     std::unique_ptr<SvxBrushItem>
                         pGraphicBrush;
@@ -212,12 +212,12 @@ public:
 
     void SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy );
     LabelFollowedBy GetLabelFollowedBy() const { return meLabelFollowedBy;}
-    void SetListtabPos( const long nListtabPos );
-    long GetListtabPos() const { return mnListtabPos;}
-    void SetFirstLineIndent( const long nFirstLineIndent );
-    long GetFirstLineIndent() const { return mnFirstLineIndent;}
-    void SetIndentAt( const long nIndentAt );
-    long GetIndentAt() const { return mnIndentAt;}
+    void SetListtabPos( const tools::Long nListtabPos );
+    tools::Long GetListtabPos() const { return mnListtabPos;}
+    void SetFirstLineIndent( const tools::Long nFirstLineIndent );
+    tools::Long GetFirstLineIndent() const { return mnFirstLineIndent;}
+    void SetIndentAt( const tools::Long nIndentAt );
+    tools::Long GetIndentAt() const { return mnIndentAt;}
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static OUString CreateRomanString( sal_uLong nNo, bool bUpper );

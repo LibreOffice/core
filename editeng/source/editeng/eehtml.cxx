@@ -602,7 +602,7 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
     if ( ( eUnit != MapUnit::MapPixel ) && ( eUnit != MapUnit::MapSysFont ) &&
          ( eUnit != MapUnit::MapAppFont ) && ( eUnit != MapUnit::MapRelative ) )
     {
-        long nPoints = 10;
+        tools::Long nPoints = 10;
         if ( nHLevel == 1 )
             nPoints = 22;
         else if ( nHLevel == 2 )

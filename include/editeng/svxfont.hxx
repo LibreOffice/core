@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_SVXFONT_HXX
 
 #include <editeng/svxenum.hxx>
+#include <tools/long.hxx>
 #include <vcl/font.hxx>
 #include <editeng/editengdllapi.h>
 
@@ -55,7 +56,7 @@ public:
     sal_uInt8 GetPropr() const { return nPropr; }
     void SetPropr( const sal_uInt8 nNewPropr ) { nPropr = nNewPropr; }
     void SetProprRel( const sal_uInt8 nNewPropr )
-        { SetPropr( static_cast<sal_uInt8>( static_cast<long>(nNewPropr) * static_cast<long>(nPropr) / 100 ) ); }
+        { SetPropr( static_cast<sal_uInt8>( static_cast<tools::Long>(nNewPropr) * static_cast<tools::Long>(nPropr) / 100 ) ); }
 
     // Kerning
     short GetFixKerning() const { return nKern; }
@@ -93,10 +94,10 @@ public:
                       const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const long* pDXArray = nullptr ) const;
+                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, const tools::Long* pDXArray = nullptr ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, long* pDXArray = nullptr ) const;
+                         const sal_Int32 nIdx, const sal_Int32 nLen, tools::Long* pDXArray = nullptr ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,

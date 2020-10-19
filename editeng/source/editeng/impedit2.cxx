@@ -1115,7 +1115,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
             bool bRTLPortion = rTextPortion.IsRightToLeft();
 
             // -1: We are 'behind' the character
-            long nVisPos = static_cast<long>(ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError ));
+            tools::Long nVisPos = static_cast<tools::Long>(ubidi_getVisualIndex( pBidi, bWasBehind ? nPosInLine-1 : nPosInLine, &nError ));
             if ( bVisualToLeft )
             {
                 if ( !bWasBehind || bRTLPortion )
@@ -1230,7 +1230,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView const * pView )
     sal_Int32 nLine = pPPortion->GetLineNumber( rPaM.GetIndex() );
     const EditLine& rLine = pPPortion->GetLines()[nLine];
 
-    long nX;
+    tools::Long nX;
     if ( pView->pImpEditView->nTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = GetXPos( pPPortion, &rLine, rPaM.GetIndex() );
@@ -1273,7 +1273,7 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView const * pView )
     OSL_ENSURE( pPPortion, "No matching portion found: CursorDown" );
     sal_Int32 nLine = pPPortion->GetLineNumber( rPaM.GetIndex() );
 
-    long nX;
+    tools::Long nX;
     if ( pView->pImpEditView->nTravelXPos == TRAVEL_X_DONTKNOW )
     {
         const EditLine& rLine = pPPortion->GetLines()[nLine];
@@ -1410,7 +1410,7 @@ EditPaM ImpEditEngine::PageDown( const EditPaM& rPaM, EditView const * pView )
     Point aBottomRight = aRect.BottomRight();
     aBottomRight.AdjustY(pView->GetVisArea().GetHeight() *9/10 );
     aBottomRight.AdjustX(nOnePixelInRef );
-    long nHeight = GetTextHeight();
+    tools::Long nHeight = GetTextHeight();
     if ( aBottomRight.Y() > nHeight )
     {
         aBottomRight.setY( nHeight-2 );
@@ -1674,7 +1674,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         rTypes.back().nEndPos = nPos;
 
         nScriptType = _xBI->getScriptType( aText, nPos );
-        long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
+        tools::Long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
 
         if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
         {
@@ -2096,9 +2096,9 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 nNewPos )
 {
     aOldPositions.Justify();
-    bool bValidAction = ( static_cast<long>(nNewPos) < aOldPositions.Min() ) || ( static_cast<long>(nNewPos) > aOldPositions.Max() );
+    bool bValidAction = ( static_cast<tools::Long>(nNewPos) < aOldPositions.Min() ) || ( static_cast<tools::Long>(nNewPos) > aOldPositions.Max() );
     OSL_ENSURE( bValidAction, "Move in itself?" );
-    OSL_ENSURE( aOldPositions.Max() <= static_cast<long>(GetParaPortions().Count()), "totally over it: MoveParagraphs" );
+    OSL_ENSURE( aOldPositions.Max() <= static_cast<tools::Long>(GetParaPortions().Count()), "totally over it: MoveParagraphs" );
 
     EditSelection aSelection;
 
@@ -2152,7 +2152,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     ParaPortion* pDestPortion = GetParaPortions().SafeGetObject( nNewPos );
 
     ParaPortionList aTmpPortionList;
-    for (long i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
+    for (tools::Long i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
     {
         // always aOldPositions.Min(), since Remove().
         std::unique_ptr<ParaPortion> pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
@@ -3032,7 +3032,7 @@ tools::Rectangle ImpEditEngine::PaMtoEditCursor( EditPaM aPaM, GetCursorFlags nF
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: PaMtoEditCursor" );
 
     tools::Rectangle aEditCursor;
-    long nY = 0;
+    tools::Long nY = 0;
     for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
     {
         ParaPortion* pPortion = GetParaPortions()[nPortion];
@@ -3058,13 +3058,13 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 {
     OSL_ENSURE( GetUpdateMode(), "Must not be reached when Update=FALSE: GetPaM" );
 
-    long nY = 0;
+    tools::Long nY = 0;
     EditPaM aPaM;
     sal_Int32 nPortion;
     for ( nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
     {
         ParaPortion* pPortion = GetParaPortions()[nPortion];
-        const long nTmpHeight = pPortion->GetHeight();     // should also be correct for !bVisible!
+        const tools::Long nTmpHeight = pPortion->GetHeight();     // should also be correct for !bVisible!
         nY += nTmpHeight;
         if ( nY > aDocPos.Y() )
         {
@@ -3128,7 +3128,7 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
     if ( !IsFormatted() && !IsFormatting() )
         FormatDoc();
 
-    long nMaxWidth = 0;
+    tools::Long nMaxWidth = 0;
 
     // Over all the paragraphs ...
 
@@ -3151,10 +3151,10 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
             // width, here not preferred. I general, it is best not leave it
             // to StartPosX, also the right indents have to be taken into
             // account!
-            long nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
+            tools::Long nCurWidth = GetXValue( rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth );
             if ( nLine == 0 )
             {
-                long nFI = GetXValue( rLRItem.GetTextFirstLineOffset() );
+                tools::Long nFI = GetXValue( rLRItem.GetTextFirstLineOffset() );
                 nCurWidth -= nFI;
                 if ( pPortion->GetBulletX() > nCurWidth )
                 {
@@ -3696,7 +3696,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, bool bSmart
     sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
                         ? GetYValue( rLSItem.GetInterLineSpace() ) : 0;
 
-    long nY = pPortion->GetFirstLineOffset();
+    tools::Long nY = pPortion->GetFirstLineOffset();
 
     OSL_ENSURE( pPortion->GetLines().Count(), "Empty ParaPortion in GetPaM!" );
 
@@ -3740,7 +3740,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, bool bSmart
 }
 
 sal_Int32 ImpEditEngine::GetChar(
-    const ParaPortion* pParaPortion, const EditLine* pLine, long nXPos, bool bSmart)
+    const ParaPortion* pParaPortion, const EditLine* pLine, tools::Long nXPos, bool bSmart)
 {
     OSL_ENSURE( pLine, "No line received: GetChar" );
 
@@ -3752,8 +3752,8 @@ sal_Int32 ImpEditEngine::GetChar(
     for ( sal_Int32 i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
     {
         const TextPortion& rPortion = pParaPortion->GetTextPortions()[i];
-        long nXLeft = GetPortionXOffset( pParaPortion, pLine, i );
-        long nXRight = nXLeft + rPortion.GetSize().Width();
+        tools::Long nXLeft = GetPortionXOffset( pParaPortion, pLine, i );
+        tools::Long nXRight = nXLeft + rPortion.GetSize().Width();
         if ( ( nXLeft <= nXPos ) && ( nXRight >= nXPos ) )
         {
             nChar = nCurIndex;
@@ -3766,8 +3766,8 @@ sal_Int32 ImpEditEngine::GetChar(
                 // ...but check on which side
                 if ( bSmart )
                 {
-                    long nLeftDiff = nXPos-nXLeft;
-                    long nRightDiff = nXRight-nXPos;
+                    tools::Long nLeftDiff = nXPos-nXLeft;
+                    tools::Long nRightDiff = nXRight-nXPos;
                     if ( nRightDiff < nLeftDiff )
                         nChar++;
                 }
@@ -3778,20 +3778,20 @@ sal_Int32 ImpEditEngine::GetChar(
                 sal_Int32 nOffset = -1;
                 sal_Int32 nTmpCurIndex = nChar - pLine->GetStart();
 
-                long nXInPortion = nXPos - nXLeft;
+                tools::Long nXInPortion = nXPos - nXLeft;
                 if ( rPortion.IsRightToLeft() )
                     nXInPortion = nXRight - nXPos;
 
                 // Search in Array...
                 for ( sal_Int32 x = 0; x < nMax; x++ )
                 {
-                    long nTmpPosMax = pLine->GetCharPosArray()[nTmpCurIndex+x];
+                    tools::Long nTmpPosMax = pLine->GetCharPosArray()[nTmpCurIndex+x];
                     if ( nTmpPosMax > nXInPortion )
                     {
                         // Check whether this or the previous...
-                        long nTmpPosMin = x ? pLine->GetCharPosArray()[nTmpCurIndex+x-1] : 0;
-                        long nDiffLeft = nXInPortion - nTmpPosMin;
-                        long nDiffRight = nTmpPosMax - nXInPortion;
+                        tools::Long nTmpPosMin = x ? pLine->GetCharPosArray()[nTmpCurIndex+x-1] : 0;
+                        tools::Long nDiffLeft = nXInPortion - nTmpPosMin;
+                        tools::Long nDiffRight = nTmpPosMax - nXInPortion;
                         OSL_ENSURE( nDiffLeft >= 0, "DiffLeft negative" );
                         OSL_ENSURE( nDiffRight >= 0, "DiffRight negative" );
                         nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
@@ -3800,7 +3800,7 @@ sal_Int32 ImpEditEngine::GetChar(
                         // Skip all 0-positions, cheaper than using XBreakIterator:
                         if ( nOffset < nMax )
                         {
-                            const long nX = pLine->GetCharPosArray()[nOffset];
+                            const tools::Long nX = pLine->GetCharPosArray()[nOffset];
                             while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray()[nOffset+1] == nX ) )
                                 nOffset++;
                         }
@@ -3879,10 +3879,10 @@ Range ImpEditEngine::GetLineXPosStartEnd( const ParaPortion* pParaPortion, const
     return aLineXPosStartEnd;
 }
 
-long ImpEditEngine::GetPortionXOffset(
+tools::Long ImpEditEngine::GetPortionXOffset(
     const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const
 {
-    long nX = pLine->GetStartPosX();
+    tools::Long nX = pLine->GetStartPosX();
 
     for ( sal_Int32 i = pLine->GetStartPortion(); i < nTextPortion; i++ )
     {
@@ -3970,7 +3970,7 @@ long ImpEditEngine::GetPortionXOffset(
     return nX;
 }
 
-long ImpEditEngine::GetXPos(
+tools::Long ImpEditEngine::GetXPos(
     const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart) const
 {
     OSL_ENSURE( pLine, "No line received: GetXPos" );
@@ -3990,11 +3990,11 @@ long ImpEditEngine::GetXPos(
 
     const TextPortion& rPortion = pParaPortion->GetTextPortions()[nTextPortion];
 
-    long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
+    tools::Long nX = GetPortionXOffset( pParaPortion, pLine, nTextPortion );
 
     // calc text width, portion size may include CJK/CTL spacing...
     // But the array might not be init yet, if using text ranger this method is called within CreateLines()...
-    long nPortionTextWidth = rPortion.GetSize().Width();
+    tools::Long nPortionTextWidth = rPortion.GetSize().Width();
     if ( ( rPortion.GetKind() == PortionKind::TEXT ) && rPortion.GetLen() && !GetTextRanger() )
         nPortionTextWidth = pLine->GetCharPosArray()[nTextPortionStart + rPortion.GetLen() - 1 - pLine->GetStart()];
 
@@ -4042,7 +4042,7 @@ long ImpEditEngine::GetXPos(
                 }
 
                 // old code restored see #i112788 (which leaves #i74188 unfixed again)
-                long nPosInPortion = pLine->GetCharPosArray()[nPos];
+                tools::Long nPosInPortion = pLine->GetCharPosArray()[nPos];
 
                 if ( !rPortion.IsRightToLeft() )
                 {
@@ -4062,7 +4062,7 @@ long ImpEditEngine::GetXPos(
                         if ( nType == AsianCompressionFlags::PunctuationRight && !pLine->GetCharPosArray().empty() )
                         {
                             sal_Int32 n = nIndex - nTextPortionStart;
-                            const long* pDXArray = pLine->GetCharPosArray().data()+( nTextPortionStart-pLine->GetStart() );
+                            const tools::Long* pDXArray = pLine->GetCharPosArray().data()+( nTextPortionStart-pLine->GetStart() );
                             sal_Int32 nCharWidth = ( ( (n+1) < rPortion.GetLen() ) ? pDXArray[n] : rPortion.GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < rPortion.GetLen() )
@@ -4214,7 +4214,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
                 - Selection...
     */
 
-    long nY = pPortion->GetFirstLineOffset();
+    tools::Long nY = pPortion->GetFirstLineOffset();
 
     const SvxLineSpacingItem& rLSItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
     sal_uInt16 nSBL = ( rLSItem.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix )
@@ -4259,7 +4259,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 
     aEditCursor.SetBottom( nY-1 );
 
     // Search within the line...
-    long nX;
+    tools::Long nX;
 
     if ( ( nIndex == pLine->GetStart() ) && ( nFlags & GetCursorFlags::StartOfLine ) )
     {
@@ -4291,10 +4291,10 @@ void ImpEditEngine::SetValidPaperSize( const Size& rNewSz )
 {
     aPaperSize = rNewSz;
 
-    long nMinWidth = aStatus.AutoPageWidth() ? aMinAutoPaperSize.Width() : 0;
-    long nMaxWidth = aStatus.AutoPageWidth() ? aMaxAutoPaperSize.Width() : 0x7FFFFFFF;
-    long nMinHeight = aStatus.AutoPageHeight() ? aMinAutoPaperSize.Height() : 0;
-    long nMaxHeight = aStatus.AutoPageHeight() ? aMaxAutoPaperSize.Height() : 0x7FFFFFFF;
+    tools::Long nMinWidth = aStatus.AutoPageWidth() ? aMinAutoPaperSize.Width() : 0;
+    tools::Long nMaxWidth = aStatus.AutoPageWidth() ? aMaxAutoPaperSize.Width() : 0x7FFFFFFF;
+    tools::Long nMinHeight = aStatus.AutoPageHeight() ? aMinAutoPaperSize.Height() : 0;
+    tools::Long nMaxHeight = aStatus.AutoPageHeight() ? aMaxAutoPaperSize.Height() : 0x7FFFFFFF;
 
     // Minimum/Maximum width:
     if ( aPaperSize.Width() < nMinWidth )

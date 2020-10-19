@@ -95,16 +95,16 @@ class SvxBoundArgs
     std::vector<bool> aBoolArr;
     std::deque<long>* pLongArr;
     TextRanger *pTextRanger;
-    long nMin;
-    long nMax;
-    long nTop;
-    long nBottom;
-    long nUpDiff;
-    long nLowDiff;
-    long nUpper;
-    long nLower;
-    long nStart;
-    long nEnd;
+    tools::Long nMin;
+    tools::Long nMax;
+    tools::Long nTop;
+    tools::Long nBottom;
+    tools::Long nUpDiff;
+    tools::Long nLowDiff;
+    tools::Long nUpper;
+    tools::Long nLower;
+    tools::Long nStart;
+    tools::Long nEnd;
     sal_uInt16 nCut;
     sal_uInt16 nLast;
     sal_uInt16 nNext;
@@ -116,22 +116,22 @@ class SvxBoundArgs
     bool bConcat : 1;
     bool bRotate : 1;
     void NoteRange( bool bToggle );
-    long Cut( long nY, const Point& rPt1, const Point& rPt2 );
+    tools::Long Cut( tools::Long nY, const Point& rPt1, const Point& rPt2 );
     void Add();
-    void NoteFarPoint_( long nPx, long nPyDiff, long nDiff );
-    void NoteFarPoint( long nPx, long nPyDiff, long nDiff )
+    void NoteFarPoint_( tools::Long nPx, tools::Long nPyDiff, tools::Long nDiff );
+    void NoteFarPoint( tools::Long nPx, tools::Long nPyDiff, tools::Long nDiff )
         { if( nDiff ) NoteFarPoint_( nPx, nPyDiff, nDiff ); }
-    long CalcMax( const Point& rPt1, const Point& rPt2, long nRange, long nFar );
+    tools::Long CalcMax( const Point& rPt1, const Point& rPt2, tools::Long nRange, tools::Long nFar );
     void CheckCut( const Point& rLst, const Point& rNxt );
-    long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
-    long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
+    tools::Long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
+    tools::Long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
     SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong, const Range& rRange );
-    void NotePoint( const long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
-    void NoteMargin( const long nL, const long nR )
+    void NotePoint( const tools::Long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
+    void NoteMargin( const tools::Long nL, const tools::Long nR )
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
     sal_uInt16 Area( const Point& rPt );
-    void NoteUpLow( long nA, const sal_uInt8 nArea );
+    void NoteUpLow( tools::Long nA, const sal_uInt8 nArea );
     void Calc( const tools::PolyPolygon& rPoly );
     void Concat( const tools::PolyPolygon* pPoly );
     // inlines
@@ -180,8 +180,8 @@ SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong,
     pLongArr->clear();
 }
 
-long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
-    long nRange, long nFarRange )
+tools::Long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
+    tools::Long nRange, tools::Long nFarRange )
 {
     double nDa = Cut( nRange, rPt1, rPt2 ) - Cut( nFarRange, rPt1, rPt2 );
     double nB;
@@ -202,7 +202,7 @@ long SvxBoundArgs::CalcMax( const Point& rPt1, const Point& rPt2,
     else
         bNote = nB < B(rPt1);
     if( bNote )
-        return( long( nB ) );
+        return( tools::Long( nB ) );
     return 0;
 }
 
@@ -215,7 +215,7 @@ void SvxBoundArgs::CheckCut( const Point& rLst, const Point& rNxt )
     if( rLst.X() == rNxt.X() || rLst.Y() == rNxt.Y() )
         return;
 
-    long nYps;
+    tools::Long nYps;
     if( nLowDiff && ( ( nCut & 1 ) || nLast == 1 || nNext == 1 ) )
     {
         nYps = CalcMax( rLst, rNxt, nBottom, nLower );
@@ -230,15 +230,15 @@ void SvxBoundArgs::CheckCut( const Point& rLst, const Point& rNxt )
     }
 }
 
-void SvxBoundArgs::NoteFarPoint_( long nPa, long nPbDiff, long nDiff )
+void SvxBoundArgs::NoteFarPoint_( tools::Long nPa, tools::Long nPbDiff, tools::Long nDiff )
 {
-    long nTmpA;
+    tools::Long nTmpA;
     double nQuot = 2 * nDiff - nPbDiff;
     nQuot *= nPbDiff;
     nQuot = sqrt( nQuot );
     nQuot /= nDiff;
-    nTmpA = nPa - long( nStart * nQuot );
-    nPbDiff = nPa + long( nEnd * nQuot );
+    nTmpA = nPa - tools::Long( nStart * nQuot );
+    nPbDiff = nPa + tools::Long( nEnd * nQuot );
     NoteMargin( nTmpA, nPbDiff );
 }
 
@@ -412,8 +412,8 @@ void SvxBoundArgs::Calc( const tools::PolyPolygon& rPoly )
         {
             if( bInner )
             {
-                long nTmpMin = nMin + 2 * nStart;
-                long nTmpMax = nMax - 2 * nEnd;
+                tools::Long nTmpMin = nMin + 2 * nStart;
+                tools::Long nTmpMax = nMax - 2 * nEnd;
                 if( nTmpMin <= nTmpMax )
                 {
                     pLongArr->push_front(nTmpMax);
@@ -506,8 +506,8 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
                 pOld->insert( pOld->begin() + nIdx, pLongArr->begin() + i, pLongArr->end() );
             break;
         }
-        long nLeft = (*pLongArr)[ i++ ];
-        long nRight = (*pLongArr)[ i++ ];
+        tools::Long nLeft = (*pLongArr)[ i++ ];
+        tools::Long nRight = (*pLongArr)[ i++ ];
         std::deque<long>::size_type nLeftPos = nIdx + 1;
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
@@ -527,7 +527,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
         }
         else if( bSubtract ) // Subtract, if necessary separate
         {
-            const long nOld = (*pOld)[nLeftPos - 1];
+            const tools::Long nOld = (*pOld)[nLeftPos - 1];
             if (nLeft > nOld)
             {   // Now we split the left part...
                 if( nLeft - 1 > nOld )
@@ -571,7 +571,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
 
 sal_uInt16 SvxBoundArgs::Area( const Point& rPt )
 {
-    long nB = B( rPt );
+    tools::Long nB = B( rPt );
     if( nB >= nBottom )
     {
         if( nB >= nLower )
@@ -594,22 +594,22 @@ sal_uInt16 SvxBoundArgs::Area( const Point& rPt )
  * one below the Y-Coordinate.
  *************************************************************************/
 
-long SvxBoundArgs::Cut( long nB, const Point& rPt1, const Point& rPt2 )
+tools::Long SvxBoundArgs::Cut( tools::Long nB, const Point& rPt1, const Point& rPt2 )
 {
     if( pTextRanger->IsVertical() )
     {
         double nQuot = nB - rPt1.X();
         nQuot /= ( rPt2.X() - rPt1.X() );
         nQuot *= ( rPt2.Y() - rPt1.Y() );
-        return long( rPt1.Y() + nQuot );
+        return tools::Long( rPt1.Y() + nQuot );
     }
     double nQuot = nB - rPt1.Y();
     nQuot /= ( rPt2.Y() - rPt1.Y() );
     nQuot *= ( rPt2.X() - rPt1.X() );
-    return long( rPt1.X() + nQuot );
+    return tools::Long( rPt1.X() + nQuot );
 }
 
-void SvxBoundArgs::NoteUpLow( long nA, const sal_uInt8 nArea )
+void SvxBoundArgs::NoteUpLow( tools::Long nA, const sal_uInt8 nArea )
 {
     if( nAct )
     {

@@ -170,7 +170,7 @@ public:
     void            InvalidateWindow(const tools::Rectangle& rClipRect);
     void            InvalidateOtherViewWindows( const tools::Rectangle& rInvRect );
     void            Invalidate();
-    Pair            Scroll( long nHorzScroll, long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
+    Pair            Scroll( tools::Long nHorzScroll, tools::Long nVertScroll, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void            SetBroadcastLOKViewCursor(bool bSet);
     tools::Rectangle       GetEditCursor() const;
@@ -234,7 +234,7 @@ public:
     // especially for Oliver Specht
     Point           GetWindowPosTopLeft( sal_Int32 nParagraph );
     void            MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos );
-    void            MoveParagraphs( long nDiff );
+    void            MoveParagraphs( tools::Long nDiff );
 
     const SfxItemSet& GetEmptyItemSet() const;
     SfxItemSet          GetAttribs();

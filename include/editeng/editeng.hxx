@@ -177,7 +177,7 @@ private:
         const EditSelection& rCurSelection,
         sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
 
-    EDITENG_DLLPRIVATE long GetXPos(
+    EDITENG_DLLPRIVATE tools::Long GetXPos(
         const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
 
     EDITENG_DLLPRIVATE Range GetLineXPosStartEnd(
@@ -289,7 +289,7 @@ public:
     sal_uInt32      GetLineHeight( sal_Int32 nParagraph );
     tools::Rectangle GetParaBounds( sal_Int32 nPara );
     ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
-    sal_Int32       FindParagraph( long nDocPosY );
+    sal_Int32       FindParagraph( tools::Long nDocPosY );
     EPosition       FindDocPosition( const Point& rDocPos ) const;
     tools::Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
 
@@ -364,7 +364,7 @@ public:
     void            StripPortions();
     void            GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList );
 
-    long            GetFirstLineStartX( sal_Int32 nParagraph );
+    tools::Long            GetFirstLineStartX( sal_Int32 nParagraph );
     Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
@@ -480,7 +480,7 @@ public:
     void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
     void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink );
 
-    virtual void    PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
+    virtual void    PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev );
     virtual void    ParagraphInserted( sal_Int32 nNewParagraph );
     virtual void    ParagraphDeleted( sal_Int32 nDeletedParagraph );
     virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
@@ -490,7 +490,7 @@ public:
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              const long* pDXArray, const SvxFont& rFont,
+                              const tools::Long* pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,
@@ -500,7 +500,7 @@ public:
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
-    virtual void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
+    virtual void DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
                              const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
                              bool bEndOfLine,
                              bool bEndOfParagraph,

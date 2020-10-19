@@ -37,14 +37,14 @@ public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         virtual ~OutlinerEditEng() override;
 
-    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev ) override;
+    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev ) override;
 
     virtual void        ParagraphInserted( sal_Int32 nNewParagraph ) override;
     virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) override;
     virtual void        ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph ) override;
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                              sal_Int32 nTextLen, const long* pDXArray, const SvxFont& rFont,
+                              sal_Int32 nTextLen, const tools::Long* pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,
@@ -55,7 +55,7 @@ public:
                               const Color& rTextLineColor) override;
 
     virtual void DrawingTab(
-        const Point& rStartPos, long nWidth, const OUString& rChar,
+        const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
         const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
         bool bEndOfLine,
         bool bEndOfParagraph,

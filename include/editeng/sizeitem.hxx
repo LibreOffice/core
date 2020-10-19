@@ -52,16 +52,16 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxSizeItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void             ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void             ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool             HasMetrics() const override;
 
     const Size& GetSize() const { return m_aSize; }
     void        SetSize(const Size& rSize) { m_aSize = rSize; }
 
-    long GetWidth() const { return m_aSize.getWidth();  }
-    long GetHeight() const { return m_aSize.getHeight(); }
-    void SetWidth(long n) { m_aSize.setWidth(n); }
-    void SetHeight(long n) { m_aSize.setHeight(n); }
+    tools::Long GetWidth() const { return m_aSize.getWidth();  }
+    tools::Long GetHeight() const { return m_aSize.getHeight(); }
+    void SetWidth(tools::Long n) { m_aSize.setWidth(n); }
+    void SetHeight(tools::Long n) { m_aSize.setHeight(n); }
 };
 
 #endif

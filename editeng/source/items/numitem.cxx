@@ -483,15 +483,15 @@ void SvxNumberFormat::SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy
 {
     meLabelFollowedBy = eLabelFollowedBy;
 }
-void SvxNumberFormat::SetListtabPos( const long nListtabPos )
+void SvxNumberFormat::SetListtabPos( const tools::Long nListtabPos )
 {
     mnListtabPos = nListtabPos;
 }
-void SvxNumberFormat::SetFirstLineIndent( const long nFirstLineIndent )
+void SvxNumberFormat::SetFirstLineIndent( const tools::Long nFirstLineIndent )
 {
     mnFirstLineIndent = nFirstLineIndent;
 }
-void SvxNumberFormat::SetIndentAt( const long nIndentAt )
+void SvxNumberFormat::SetIndentAt( const tools::Long nIndentAt )
 {
     mnIndentAt = nIndentAt;
 }
@@ -598,11 +598,11 @@ SvxNumRule::SvxNumRule( SvxNumRuleFlags nFeatures,
                                             SvxNumberFormat::LABEL_ALIGNMENT )
                 {
                     // first line indent of general numbering in inch: -0,25 inch
-                    const long cFirstLineIndent = -1440/4;
+                    const tools::Long cFirstLineIndent = -1440/4;
                     // indent values of general numbering in inch:
                     //  0,5         0,75        1,0         1,25        1,5
                     //  1,75        2,0         2,25        2,5         2,75
-                    const long cIndentAt = 1440/4;
+                    const tools::Long cIndentAt = 1440/4;
                     aFmts[i]->SetPositionAndSpaceMode( SvxNumberFormat::LABEL_ALIGNMENT );
                     aFmts[i]->SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
                     aFmts[i]->SetListtabPos( cIndentAt * (i+2) );

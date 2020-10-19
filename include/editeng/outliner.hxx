@@ -207,7 +207,7 @@ public:
 
     EditView&   GetEditView() const { return *pEditView; }
 
-    void        Scroll( long nHorzScroll, long nVertScroll );
+    void        Scroll( tools::Long nHorzScroll, tools::Long nVertScroll );
 
     void        Paint( const tools::Rectangle& rRect, OutputDevice* pTargetDevice = nullptr );
     bool        PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFrameWin = nullptr );
@@ -242,7 +242,7 @@ public:
     void        Indent( short nDiff );
     void        AdjustDepth( short nDX );   // Later replace with Indent!
 
-    void        AdjustHeight( long nDY );
+    void        AdjustHeight( tools::Long nDY );
 
     void        Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
@@ -391,7 +391,7 @@ public:
     sal_Int32           mnTextLen;
     sal_Int32           mnPara;
     const SvxFont&      mrFont;
-    const long*         mpDXArray;
+    const tools::Long*         mpDXArray;
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
@@ -402,7 +402,7 @@ public:
     sal_uInt8           mnBiDiLevel;
 
     bool                mbFilled;
-    long                mnWidthToFill;
+    tools::Long                mnWidthToFill;
 
     bool                mbEndOfLine : 1;
     bool                mbEndOfParagraph : 1;
@@ -417,7 +417,7 @@ public:
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        const long* pDXArr,
+        const tools::Long* pDXArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         const css::lang::Locale* pLocale,
@@ -425,7 +425,7 @@ public:
         const Color& rTextLineColor,
         sal_uInt8 nBiDiLevel,
         bool bFilled,
-        long nWidthToFill,
+        tools::Long nWidthToFill,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet)
@@ -806,7 +806,7 @@ public:
 
     void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              const long* pDXArray, const SvxFont& rFont,
+                              const tools::Long* pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,
                               const SvxFieldData* pFieldData,
@@ -817,7 +817,7 @@ public:
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
-    void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
+    void DrawingTab( const Point& rStartPos, tools::Long nWidth, const OUString& rChar,
                              const SvxFont& rFont, sal_Int32 nPara, sal_uInt8 nRightToLeft,
                              bool bEndOfLine,
                              bool bEndOfParagraph,

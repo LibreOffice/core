@@ -222,10 +222,10 @@ public:
     bool IsVertical() const;
     bool IsTopToBottom() const;
 
-    long GetVisDocLeft() const { return maVisDocStartPos.X(); }
-    long GetVisDocTop() const  { return maVisDocStartPos.Y(); }
-    long GetVisDocRight() const  { return maVisDocStartPos.X() + (!IsVertical() ? maOutArea.GetWidth() : maOutArea.GetHeight()); }
-    long GetVisDocBottom() const { return maVisDocStartPos.Y() + (!IsVertical() ? maOutArea.GetHeight() : maOutArea.GetWidth()); }
+    tools::Long GetVisDocLeft() const { return maVisDocStartPos.X(); }
+    tools::Long GetVisDocTop() const  { return maVisDocStartPos.Y(); }
+    tools::Long GetVisDocRight() const  { return maVisDocStartPos.X() + (!IsVertical() ? maOutArea.GetWidth() : maOutArea.GetHeight()); }
+    tools::Long GetVisDocBottom() const { return maVisDocStartPos.Y() + (!IsVertical() ? maOutArea.GetHeight() : maOutArea.GetWidth()); }
     tools::Rectangle GetVisDocArea() const;
 
     Point            GetWindowPos(const Point& rDocPos, MapUnit eDocPosUnit) const;
@@ -271,7 +271,7 @@ private:
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
 
-    long                nInvMore;
+    tools::Long                nInvMore;
     EVControlBits       nControl;
     sal_uInt32          nTravelXPos;
     GetCursorFlags      nExtraCursorFlags;
@@ -375,10 +375,10 @@ public:
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
 
-    long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
-    long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
-    long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
-    long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
+    tools::Long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
+    tools::Long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
+    tools::Long            GetVisDocRight() const { return aVisDocStartPos.X() + ( !IsVertical() ? aOutArea.GetWidth() : aOutArea.GetHeight() ); }
+    tools::Long            GetVisDocBottom() const { return aVisDocStartPos.Y() + ( !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth() ); }
     tools::Rectangle       GetVisDocArea() const;
 
     const EditSelection&  GetEditSelection() const { return aEditSelection; }
@@ -422,7 +422,7 @@ public:
     tools::Rectangle GetEditCursor() const;
 
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor );
-    Pair            Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
+    Pair            Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck = ScrollRangeCheck::NoNegative );
 
     void        SetInsertMode( bool bInsert );
     bool        IsInsertMode() const            { return !( nControl & EVControlBits::OVERWRITE ); }
@@ -616,9 +616,9 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, bool bSmart );
-    long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
-    long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const;
-    sal_Int32 GetChar(const ParaPortion* pParaPortion, const EditLine* pLine, long nX, bool bSmart = true);
+    tools::Long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
+    tools::Long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nTextPortion) const;
+    sal_Int32 GetChar(const ParaPortion* pParaPortion, const EditLine* pLine, tools::Long nX, bool bSmart = true);
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
     Range GetLineXPosStartEnd( const ParaPortion* pParaPortion, const EditLine* pLine ) const;
 
@@ -644,8 +644,8 @@ private:
     void                RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics, SvxFont& rFont );
     void                CheckAutoPageSize();
 
-    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion const * pPortion, sal_Int32 nPortionStart, long nRemainingWidth, bool bCanHyphenate );
-    void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
+    void                ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, TextPortion const * pPortion, sal_Int32 nPortionStart, tools::Long nRemainingWidth, bool bCanHyphenate );
+    void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, tools::Long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward = false );
     EditPaM             ImpDeleteSelection(const EditSelection& rCurSel);
     EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
@@ -700,8 +700,8 @@ private:
     bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
 
     bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_Int32 nStartPos,
-                                                  long* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
-    void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
+                                                  tools::Long* pDXArray, sal_uInt16 n100thPercentFromMax, bool bManipulateDXArray );
+    void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, tools::Long nRemainingWidth );
 
     void                ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, sal_Int32 nIndex );
     LanguageType        ImplCalcDigitLang(LanguageType eCurLang) const;
@@ -723,7 +723,7 @@ private:
     sal_Int32           LogicToTwips( sal_Int32 n );
 
     inline short        GetXValue( short nXValue ) const;
-    inline long         GetXValue( long nXValue ) const;
+    inline tools::Long         GetXValue( tools::Long nXValue ) const;
 
     inline short        GetYValue( short nYValue ) const;
     inline sal_uInt16   GetYValue( sal_uInt16 nYValue ) const;
@@ -737,7 +737,7 @@ private:
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
     const Color&        GetBackgroundColor() const { return maBackgroundColor; }
 
-    long                CalcVertLineSpacing(Point& rStartPos) const;
+    tools::Long                CalcVertLineSpacing(Point& rStartPos) const;
 
     Color               GetAutoColor() const;
     void                EnableAutoColor( bool b ) { bUseAutoColor = b; }
@@ -1234,11 +1234,11 @@ inline short ImpEditEngine::GetXValue( short nXValue ) const
     if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
         return nXValue;
 
-    return static_cast<short>(static_cast<long>(nXValue)*nStretchX/100);
+    return static_cast<short>(static_cast<tools::Long>(nXValue)*nStretchX/100);
 }
 
 
-inline long ImpEditEngine::GetXValue( long nXValue ) const
+inline tools::Long ImpEditEngine::GetXValue( tools::Long nXValue ) const
 {
     if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
         return nXValue;
@@ -1251,7 +1251,7 @@ inline short ImpEditEngine::GetYValue( short nYValue ) const
     if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
         return nYValue;
 
-    return static_cast<short>(static_cast<long>(nYValue)*nStretchY/100);
+    return static_cast<short>(static_cast<tools::Long>(nYValue)*nStretchY/100);
 }
 
 inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
@@ -1259,7 +1259,7 @@ inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
     if ( !aStatus.DoStretch() || ( nStretchY == 100 ) )
         return nYValue;
 
-    return static_cast<sal_uInt16>(static_cast<long>(nYValue)*nStretchY/100);
+    return static_cast<sal_uInt16>(static_cast<tools::Long>(nYValue)*nStretchY/100);
 }
 
 inline PointerStyle ImpEditView::GetPointer()

@@ -82,7 +82,7 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 
 struct XParaPortion
 {
-    long                nHeight;
+    tools::Long                nHeight;
     sal_uInt16          nFirstLineOffset;
 
     EditLineList        aLines;

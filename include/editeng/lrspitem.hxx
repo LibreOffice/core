@@ -48,9 +48,9 @@
 
 class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
 {
-    long    nTxtLeft;           // We spend a sal_uInt16
-    long    nLeftMargin;        // nLeft or the negative first-line indent
-    long    nRightMargin;       // The unproblematic right edge
+    tools::Long    nTxtLeft;           // We spend a sal_uInt16
+    tools::Long    nLeftMargin;        // nLeft or the negative first-line indent
+    tools::Long    nRightMargin;       // The unproblematic right edge
 
     sal_uInt16  nPropFirstLineOffset, nPropLeftMargin, nPropRightMargin;
     short   nFirstLineOffset;     // First-line indent _always_ relative to nTxtLeft
@@ -65,8 +65,8 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxLRSpaceItem( const sal_uInt16 nId  );
-    SvxLRSpaceItem( const long nLeft, const long nRight,
-                    const long nTLeft /*= 0*/, const short nOfset /*= 0*/,
+    SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
+                    const tools::Long nTLeft /*= 0*/, const short nOfset /*= 0*/,
                     const sal_uInt16 nId  );
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -82,18 +82,18 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     virtual SvxLRSpaceItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
+    virtual void                 ScaleMetrics( tools::Long nMult, tools::Long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
     // The "layout interface":
-    inline void   SetLeft ( const long nL, const sal_uInt16 nProp = 100 );
-    inline void   SetRight( const long nR, const sal_uInt16 nProp = 100 );
+    inline void   SetLeft ( const tools::Long nL, const sal_uInt16 nProp = 100 );
+    inline void   SetRight( const tools::Long nR, const sal_uInt16 nProp = 100 );
 
     // Query/direct setting of the absolute values
-    long GetLeft()  const { return nLeftMargin; }
-    long GetRight() const { return nRightMargin;}
-    void SetLeftValue( const long nL ) { nTxtLeft = nLeftMargin = nL; }
-    void SetRightValue( const long nR ) { nRightMargin = nR; }
+    tools::Long GetLeft()  const { return nLeftMargin; }
+    tools::Long GetRight() const { return nRightMargin;}
+    void SetLeftValue( const tools::Long nL ) { nTxtLeft = nLeftMargin = nL; }
+    void SetRightValue( const tools::Long nR ) { nRightMargin = nR; }
     bool IsAutoFirst()  const { return bAutoFirst; }
     void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
 
@@ -105,8 +105,8 @@ public:
     sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
     // The UI/text interface:
-    inline void SetTextLeft( const long nL, const sal_uInt16 nProp = 100 );
-    long GetTextLeft() const { return nTxtLeft; }
+    inline void SetTextLeft( const tools::Long nL, const sal_uInt16 nProp = 100 );
+    tools::Long GetTextLeft() const { return nTxtLeft; }
 
     inline void   SetTextFirstLineOffset( const short nF, const sal_uInt16 nProp = 100 );
     short  GetTextFirstLineOffset() const { return nFirstLineOffset; }
@@ -121,13 +121,13 @@ public:
     virtual boost::property_tree::ptree dumpAsJSON() const override;
 };
 
-inline void SvxLRSpaceItem::SetLeft( const long nL, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetLeft( const tools::Long nL, const sal_uInt16 nProp )
 {
     nLeftMargin = (nL * nProp) / 100;
     nTxtLeft = nLeftMargin;
     nPropLeftMargin = nProp;
 }
-inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetRight( const tools::Long nR, const sal_uInt16 nProp )
 {
     if (0 == nR)
     {
@@ -139,12 +139,12 @@ inline void SvxLRSpaceItem::SetRight( const long nR, const sal_uInt16 nProp )
 inline void SvxLRSpaceItem::SetTextFirstLineOffset( const short nF,
                                                  const sal_uInt16 nProp )
 {
-    nFirstLineOffset = short((long(nF) * nProp ) / 100);
+    nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
     nPropFirstLineOffset = nProp;
     AdjustLeft();
 }
 
-inline void SvxLRSpaceItem::SetTextLeft( const long nL, const sal_uInt16 nProp )
+inline void SvxLRSpaceItem::SetTextLeft( const tools::Long nL, const sal_uInt16 nProp )
 {
     if (0 == nL)
     {

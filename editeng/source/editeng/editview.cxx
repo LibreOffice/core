@@ -196,7 +196,7 @@ tools::Rectangle EditView::GetInvalidateRect() const
     else
     {
         tools::Rectangle aRect( pImpEditView->aOutArea );
-        long nMore = pImpEditView->GetWindow()->PixelToLogic( Size( pImpEditView->GetInvalidateMore(), 0 ) ).Width();
+        tools::Long nMore = pImpEditView->GetWindow()->PixelToLogic( Size( pImpEditView->GetInvalidateMore(), 0 ) ).Width();
         aRect.AdjustLeft( -nMore );
         aRect.AdjustRight(nMore );
         aRect.AdjustTop( -nMore );
@@ -527,7 +527,7 @@ void EditView::HideCursor(bool bDeactivate)
     }
 }
 
-Pair EditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
+Pair EditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRangeCheck )
 {
     return pImpEditView->Scroll( ndX, ndY, nRangeCheck );
 }
@@ -670,12 +670,12 @@ void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd();
 }
 
-void EditView::MoveParagraphs( long nDiff )
+void EditView::MoveParagraphs( tools::Long nDiff )
 {
     ESelection aSel = GetSelection();
     Range aRange( aSel.nStartPara, aSel.nEndPara );
     aRange.Justify();
-    long nDest = ( nDiff > 0  ? aRange.Max() : aRange.Min() ) + nDiff;
+    tools::Long nDest = ( nDiff > 0  ? aRange.Max() : aRange.Min() ) + nDiff;
     if ( nDiff > 0 )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
@@ -1429,7 +1429,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
     while( *pWhich )
     {
         SvxFontHeightItem aFontHeightItem( static_cast<const SvxFontHeightItem&>(rSet.Get( *pWhich )) );
-        long nHeight = aFontHeightItem.GetHeight();
+        tools::Long nHeight = aFontHeightItem.GetHeight();
         const MapUnit eUnit = rSet.GetPool()->GetMetric( *pWhich );
         nHeight = OutputDevice::LogicToLogic(nHeight * 10, eUnit, MapUnit::MapPoint);
 
@@ -1486,7 +1486,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         {
             nHeight = OutputDevice::LogicToLogic( nHeight, MapUnit::MapPoint, eUnit  ) / 10;
 
-            if( nHeight != static_cast<long>(aFontHeightItem.GetHeight()) )
+            if( nHeight != static_cast<tools::Long>(aFontHeightItem.GetHeight()) )
             {
                 aFontHeightItem.SetHeight( nHeight );
                 rSet.Put( aFontHeightItem.CloneSetWhich(*pWhich) );

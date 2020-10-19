@@ -291,7 +291,7 @@ tools::Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int
     // don't rotate for vertical text.
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     // swap width and height
-    long tmp = aSize.Width();
+    tools::Long tmp = aSize.Width();
     aSize.setWidth(aSize.Height());
     aSize.setHeight(tmp);
     bool bIsVertical( rEditEngine.IsVertical() );
@@ -375,7 +375,7 @@ bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPar
 {
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     // swap width and height
-    long tmp = aSize.Width();
+    tools::Long tmp = aSize.Width();
     aSize.setWidth(aSize.Height());
     aSize.setHeight(tmp);
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
