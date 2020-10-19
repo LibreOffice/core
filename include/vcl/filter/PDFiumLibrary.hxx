@@ -58,7 +58,7 @@ public:
     FPDF_PAGE getPointer() { return mpPage; }
 
     /// Get bitmap checksum of the page, without annotations/commenting.
-    BitmapChecksum getChecksum();
+    BitmapChecksum getChecksum(int nMDPPerm);
 };
 
 struct PDFiumLibrary : public rtl::StaticWithInit<std::shared_ptr<PDFium>, PDFiumLibrary>
