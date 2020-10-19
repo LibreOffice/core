@@ -52,6 +52,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::oox;
 
@@ -1647,6 +1648,24 @@ const char* lcl_GetErrorType( sal_uInt32 nFlags )
     return nullptr;
 }
 
+static void lcl_SetValidationText(const OUString& rText, XclExpString& rValidationText)
+{
+    if ( !rText.isEmpty() )
+    {
+        // maximum length allowed in Excel is 255 characters
+        if ( rText.getLength() > 255 )
+        {
+            OUStringBuffer aBuf( rText );
+            rValidationText.Assign(
+                comphelper::string::truncateToLength(aBuf, 255).makeStringAndClear() );
+        }
+        else
+            rValidationText.Assign( rText );
+    }
+    else
+        rValidationText.Assign( '\0' );
+}
+
 } // namespace
 
 XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
@@ -1660,26 +1679,14 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         // prompt box - empty string represented by single NUL character
         OUString aTitle, aText;
         bool bShowPrompt = pValData->GetInput( aTitle, aText );
-        if( !aTitle.isEmpty() )
-            maPromptTitle.Assign( aTitle );
-        else
-            maPromptTitle.Assign( '\0' );
-        if( !aText.isEmpty() )
-            maPromptText.Assign( aText );
-        else
-            maPromptText.Assign( '\0' );
+        lcl_SetValidationText(aTitle, maPromptTitle);
+        lcl_SetValidationText(aText, maPromptText);
 
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
         bool bShowError = pValData->GetErrMsg( aTitle, aText, eScErrorStyle );
-        if( !aTitle.isEmpty() )
-            maErrorTitle.Assign( aTitle );
-        else
-            maErrorTitle.Assign( '\0' );
-        if( !aText.isEmpty() )
-            maErrorText.Assign( aText );
-        else
-            maErrorText.Assign( '\0' );
+        lcl_SetValidationText(aTitle, maErrorTitle);
+        lcl_SetValidationText(aText, maErrorText);
 
         // flags
         switch( pValData->GetDataMode() )
