@@ -91,7 +91,7 @@ private:
                     m_xElement;     // object not owned by the action
     css::uno::Reference< css::uno::XInterface >
                     m_xOwnElement;  // object owned by the action
-    sal_Int32       m_nIndex;       // index of the object within it's container
+    sal_Int32       m_nIndex;       // index of the object within its container
     css::uno::Sequence< css::script::ScriptEventDescriptor >
                     m_aEvents;      // events of the object
     Action          m_eAction;

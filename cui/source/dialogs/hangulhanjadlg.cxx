@@ -172,7 +172,7 @@ namespace svx
 
         // now draw the texts
         // as we already calculated the precise rectangles for the texts, we don't want to
-        // use the alignment flags given - within it's rect, every text is centered
+        // use the alignment flags given - within its rect, every text is centered
         DrawTextFlags nDrawTextStyle( nTextStyle );
         nDrawTextStyle &= ~DrawTextFlags( DrawTextFlags::Right | DrawTextFlags::Left | DrawTextFlags::Bottom | DrawTextFlags::Top );
         nDrawTextStyle |= DrawTextFlags::Center | DrawTextFlags::VCenter;

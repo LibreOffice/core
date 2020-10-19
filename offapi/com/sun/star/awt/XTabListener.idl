@@ -46,7 +46,7 @@ interface XTabListener : com::sun::star::lang::XEventListener
      */
     void removed( [in] long ID );
 
-    /** a tab was changed within it's properties.
+    /** a tab was changed within its properties.
 
         @param  ID
                 the unique ID of the changed tab.
