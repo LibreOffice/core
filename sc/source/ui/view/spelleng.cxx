@@ -153,7 +153,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 bLoop = false;
                 mbFinished = true;
             }
-            else if( nNewCol > mrDoc.MaxCol() )
+            else if( nNewCol >= mrDoc.GetAllocatedColumnsCount(mnStartTab) )
             {
                 // no more cells in the sheet - try to restart at top of sheet
 
@@ -178,6 +178,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
             }
             else
             {
+                // GetPattern may implicitly allocates the column if not exists,
                 pPattern = mrDoc.GetPattern( nNewCol, nNewRow, mnStartTab );
                 if( pPattern && (pPattern != pLastPattern) )
                 {
