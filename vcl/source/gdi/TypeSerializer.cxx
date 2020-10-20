@@ -58,7 +58,7 @@ void TypeSerializer::readGradient(Gradient& rGradient)
     rGradient.SetStyle(static_cast<GradientStyle>(nStyle));
     rGradient.SetStartColor(aStartColor);
     rGradient.SetEndColor(aEndColor);
-    rGradient.SetAngle(nAngle);
+    rGradient.SetAngle(Degree10(nAngle));
     rGradient.SetBorder(nBorder);
     rGradient.SetOfsX(nOffsetX);
     rGradient.SetOfsY(nOffsetY);
@@ -74,7 +74,7 @@ void TypeSerializer::writeGradient(const Gradient& rGradient)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(rGradient.GetStyle()));
     writeColor(rGradient.GetStartColor());
     writeColor(rGradient.GetEndColor());
-    mrStream.WriteUInt16(rGradient.GetAngle());
+    mrStream.WriteUInt16(rGradient.GetAngle().get());
     mrStream.WriteUInt16(rGradient.GetBorder());
     mrStream.WriteUInt16(rGradient.GetOfsX());
     mrStream.WriteUInt16(rGradient.GetOfsY());

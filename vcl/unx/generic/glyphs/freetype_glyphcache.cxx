@@ -418,9 +418,9 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
 
     const FontSelectPattern& rFSD = rFontInstance.GetFontSelectPattern();
 
-    if( rFSD.mnOrientation != 0 )
+    if( rFSD.mnOrientation )
     {
-        const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
+        const double dRad = rFSD.mnOrientation.get() * ( F_2PI / 3600.0 );
         mnCos = static_cast<tools::Long>( 0x10000 * cos( dRad ) + 0.5 );
         mnSin = static_cast<tools::Long>( 0x10000 * sin( dRad ) + 0.5 );
     }

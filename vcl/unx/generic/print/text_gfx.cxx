@@ -33,7 +33,7 @@ void PrinterGfx::SetFont(
                     sal_Int32 nFontID,
                     sal_Int32 nHeight,
                     sal_Int32 nWidth,
-                    sal_Int32 nAngle,
+                    Degree10 nAngle,
                     bool bVertical,
                     bool bArtItalic,
                     bool bArtBold
@@ -82,15 +82,15 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
     // move and rotate the user coordinate system
     // avoid the gsave/grestore for the simple cases since it allows
     // reuse of the current font if it hasn't changed
-    sal_Int32 nCurrentTextAngle = mnTextAngle;
+    Degree10 nCurrentTextAngle = mnTextAngle;
     Point aPoint( rPoint );
 
-    if (nCurrentTextAngle != 0)
+    if (nCurrentTextAngle)
     {
         PSGSave ();
         PSTranslate (rPoint);
         PSRotate (nCurrentTextAngle);
-        mnTextAngle = 0;
+        mnTextAngle = Degree10(0);
         aPoint = Point( 0, 0 );
     }
 
@@ -114,7 +114,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         maVirtualStatus.mnTextHeight = nTextWidth;
         if( aPoint.X() || aPoint.Y() )
             PSTranslate( aPoint );
-        PSRotate (900);
+        PSRotate (Degree10(900));
         // draw the rotated glyph
         drawGlyph(aRotPoint, rGlyph.glyphId());
 
@@ -126,7 +126,7 @@ void PrinterGfx::DrawGlyph(const Point& rPoint,
         drawGlyph(aPoint, rGlyph.glyphId());
 
     // restore the user coordinate system
-    if (nCurrentTextAngle != 0)
+    if (nCurrentTextAngle)
     {
         PSGRestore ();
         mnTextAngle = nCurrentTextAngle;

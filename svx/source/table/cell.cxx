@@ -1115,7 +1115,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             if (nRotVal != 27000 && nRotVal != 9000 && nRotVal != 0)
                 throw IllegalArgumentException();
 
-            mpProperties->SetObjectItem(SvxTextRotateItem(nRotVal/10, SDRATTR_TABLE_TEXT_ROTATION));
+            mpProperties->SetObjectItem(SvxTextRotateItem(Degree10(nRotVal/10), SDRATTR_TABLE_TEXT_ROTATION));
             return;
         }
         default:
@@ -1236,7 +1236,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
         case SDRATTR_TABLE_TEXT_ROTATION:
         {
             const SvxTextRotateItem& rTextRotate = mpProperties->GetItem(SDRATTR_TABLE_TEXT_ROTATION);
-            return Any(sal_Int32(rTextRotate.GetValue() * 10));
+            return Any(sal_Int32(rTextRotate.GetValue().get() * 10));
         }
         default:
         {

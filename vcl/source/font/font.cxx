@@ -189,7 +189,7 @@ void Font::SetPitch( FontPitch ePitch )
         mpImplFont->SetPitch( ePitch );
 }
 
-void Font::SetOrientation( short nOrientation )
+void Font::SetOrientation( Degree10 nOrientation )
 {
     if (const_cast<const ImplType&>(mpImplFont)->mnOrientation != nOrientation)
         mpImplFont->mnOrientation = nOrientation;
@@ -361,6 +361,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
 {
     VersionCompat   aCompat( rIStm, StreamMode::READ );
     sal_uInt16      nTmp16(0);
+    sal_Int16       nTmps16(0);
     bool            bTmp(false);
     sal_uInt8       nTmp8(0);
 
@@ -379,7 +380,7 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont )
     rIStm.ReadUInt16( nTmp16 ); rImplFont.maLanguageTag.reset( LanguageType(nTmp16) );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.meWidthType = static_cast<FontWidth>(nTmp16);
 
-    rIStm.ReadInt16( rImplFont.mnOrientation );
+    rIStm.ReadInt16( nTmps16 ); rImplFont.mnOrientation = Degree10(nTmps16);
 
     rIStm.ReadCharAsBool( bTmp ); rImplFont.mbWordLine = bTmp;
     rIStm.ReadCharAsBool( bTmp ); rImplFont.mbOutline = bTmp;
@@ -423,7 +424,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplFont.maLanguageTag.getLanguageType( false)) );
     rOStm.WriteUInt16( rImplFont.GetWidthTypeNoAsk() );
 
-    rOStm.WriteInt16( rImplFont.mnOrientation );
+    rOStm.WriteInt16( rImplFont.mnOrientation.get() );
 
     rOStm.WriteBool( rImplFont.mbWordLine );
     rOStm.WriteBool( rImplFont.mbOutline );
@@ -683,7 +684,7 @@ const LanguageTag& Font::GetCJKContextLanguageTag() const { return mpImplFont->m
 LanguageType Font::GetLanguage() const { return mpImplFont->maLanguageTag.getLanguageType( false); }
 LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->maCJKLanguageTag.getLanguageType( false); }
 
-short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
+Degree10 Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 bool Font::IsVertical() const { return mpImplFont->mbVertical; }
 FontKerning Font::GetKerning() const { return mpImplFont->meKerning; }
 

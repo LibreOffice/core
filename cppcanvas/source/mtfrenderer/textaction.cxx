@@ -2005,7 +2005,7 @@ namespace cppcanvas::internal
                 // will be rotated twice)
                 const vcl::Font aOrigFont( rVDev.GetFont() );
                 vcl::Font       aUnrotatedFont( aOrigFont );
-                aUnrotatedFont.SetOrientation(0);
+                aUnrotatedFont.SetOrientation(Degree10(0));
                 rVDev.SetFont( aUnrotatedFont );
 
                 // TODO(F3): Don't understand parameter semantics of

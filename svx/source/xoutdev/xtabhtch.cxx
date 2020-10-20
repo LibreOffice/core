@@ -67,11 +67,11 @@ bool XHatchList::Create()
     aStr.append(" 1");
 
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(std::make_unique<XHatchEntry>(XHatch(COL_BLACK,css::drawing::HatchStyle_SINGLE,100,  0),aStr.toString()));
+    Insert(std::make_unique<XHatchEntry>(XHatch(COL_BLACK,css::drawing::HatchStyle_SINGLE,100,  Degree10(0)),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(std::make_unique<XHatchEntry>(XHatch(COL_RED  ,css::drawing::HatchStyle_DOUBLE, 80,450),aStr.toString()));
+    Insert(std::make_unique<XHatchEntry>(XHatch(COL_RED  ,css::drawing::HatchStyle_DOUBLE, 80,Degree10(450)),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(std::make_unique<XHatchEntry>(XHatch(COL_BLUE ,css::drawing::HatchStyle_TRIPLE,120,  0),aStr.toString()));
+    Insert(std::make_unique<XHatchEntry>(XHatch(COL_BLUE ,css::drawing::HatchStyle_TRIPLE,120,  Degree10(0)),aStr.toString()));
 
     return true;
 }
@@ -119,7 +119,7 @@ BitmapEx XHatchList::CreateBitmap( long nIndex, const Size& rSize) const
         const drawinglayer::attribute::FillHatchAttribute aFillHatch(
             aHatchStyle,
             static_cast<double>(rHatch.GetDistance()) * fScaleValue,
-            static_cast<double>(rHatch.GetAngle()) * F_PI1800,
+            static_cast<double>(rHatch.GetAngle().get()) * F_PI1800,
             rHatch.GetColor().getBColor(),
             3, // same default as VCL, a minimum of three discrete units (pixels) offset
             false);

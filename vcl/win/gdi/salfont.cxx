@@ -603,7 +603,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
         rFont.SetFontSize( Size( 0, nFontHeight ) );
-        rFont.SetOrientation( static_cast<short>(rLogFont.lfEscapement) );
+        rFont.SetOrientation( Degree10(static_cast<sal_Int16>(rLogFont.lfEscapement)) );
         if ( rLogFont.lfItalic )
             rFont.SetItalic( ITALIC_NORMAL );
         else
@@ -805,7 +805,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfUnderline       = 0;
     rLogFont.lfStrikeOut       = 0;
     rLogFont.lfItalic          = BYTE(rFont.GetItalic() != ITALIC_NONE);
-    rLogFont.lfEscapement      = rFont.mnOrientation;
+    rLogFont.lfEscapement      = rFont.mnOrientation.get();
     rLogFont.lfOrientation     = rLogFont.lfEscapement;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
     rLogFont.lfQuality         = nDefaultQuality;

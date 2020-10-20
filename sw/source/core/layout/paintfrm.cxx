@@ -4775,7 +4775,7 @@ void PaintCharacterBorder(
     bool bLeft = true;
     bool bRight = true;
 
-    switch (rFont.GetOrientation(bVerticalLayout, bVerticalLayoutLRBT))
+    switch (rFont.GetOrientation(bVerticalLayout, bVerticalLayoutLRBT).get())
     {
         case 0 :
             bLeft = !bJoinWithPrev;

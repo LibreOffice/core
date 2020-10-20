@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/stream.hxx>
+#include <tools/degree.hxx>
 
 namespace exif {
 
@@ -71,7 +72,7 @@ public:
     bool hasExif() const { return mbExifPresent;}
 
     exif::Orientation getOrientation() const { return maOrientation;}
-    sal_Int32 getRotation() const;
+    Degree10 getRotation() const;
 
     void setOrientation(exif::Orientation orientation);
 

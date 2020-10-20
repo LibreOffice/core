@@ -1434,7 +1434,7 @@ void OutputDevice::DrawTransformedBitmapEx(
         {
             fFullRotate += F_2PI;
         }
-        tools::Long nAngle10 = basegfx::fround(basegfx::rad2deg(fFullRotate) * 10);
+        Degree10 nAngle10(basegfx::fround(basegfx::rad2deg(fFullRotate) * 10));
         aTransformed.Rotate(nAngle10, COL_TRANSPARENT);
     }
     basegfx::B2DRange aTargetRange(0.0, 0.0, 1.0, 1.0);

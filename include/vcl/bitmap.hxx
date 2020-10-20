@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_BITMAP_HXX
 
 #include <tools/solar.h>
+#include <tools/degree.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -349,7 +350,7 @@ public:
 
         @return true, if the operation was completed successfully.
      */
-    bool                    Rotate( tools::Long nAngle10, const Color& rFillColor );
+    bool                    Rotate( Degree10 nAngle10, const Color& rFillColor );
 
     /** Create on-off mask from bitmap
 

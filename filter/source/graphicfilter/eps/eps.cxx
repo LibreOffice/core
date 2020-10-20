@@ -2002,14 +2002,14 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
     if ( mnTextMode == 0 )  // using glyph outlines
     {
         vcl::Font    aNotRotatedFont( maFont );
-        aNotRotatedFont.SetOrientation( 0 );
+        aNotRotatedFont.SetOrientation( Degree10(0) );
 
         ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::BITMASK);
         pVirDev->SetMapMode( rVDev.GetMapMode() );
         pVirDev->SetFont( aNotRotatedFont );
         pVirDev->SetTextAlign( eTextAlign );
 
-        sal_Int16 nRotation = maFont.GetOrientation();
+        Degree10 nRotation = maFont.GetOrientation();
         tools::Polygon aPolyDummy( 1 );
 
         Point aPos( rPos );
@@ -2031,7 +2031,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
             ImplWriteLine( "t" );
             if ( nRotation )
             {
-                ImplWriteF( nRotation, 1 );
+                ImplWriteF( nRotation.get(), 1 );
                 mpPS->WriteCharPtr( "r " );
             }
             for (auto const& elem : aPolyPolyVec)
@@ -2057,7 +2057,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
 {
     Point aPoint( rPoint );
 
-    long nRotation = maFont.GetOrientation();
+    Degree10 nRotation = maFont.GetOrientation();
     ImplWriteTextColor(PS_RET);
 
     Size aSize = maFont.GetFontSize();
@@ -2089,7 +2089,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
     if ( nRotation )
     {
         mpPS->WriteCharPtr( "gs " );
-        ImplWriteF( nRotation, 1 );
+        ImplWriteF( nRotation.get(), 1 );
         mpPS->WriteCharPtr( "r " );
     }
 }

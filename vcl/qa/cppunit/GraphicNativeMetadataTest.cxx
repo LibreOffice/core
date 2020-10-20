@@ -46,7 +46,7 @@ void GraphicNativeMetadataTest::testReadFromGraphic()
     {
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1800), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), aMetadata.getRotation().get());
         // just the metadata shouldn't make the graphic available
         CPPUNIT_ASSERT_EQUAL(false, aGraphic.isAvailable());
     }
@@ -58,7 +58,7 @@ void GraphicNativeMetadataTest::testReadFromGraphic()
 
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1800), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), aMetadata.getRotation().get());
     }
 }
 
@@ -69,28 +69,28 @@ void GraphicNativeMetadataTest::testExifRotationJpeg()
         SvFileStream aFileStream(getFullUrl("Exif1.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aMetadata.getRotation().get());
     }
     {
         // Rotation 90 degree clock-wise = 270 degree counter-clock-wise
         SvFileStream aFileStream(getFullUrl("Exif1_090CW.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(2700), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2700), aMetadata.getRotation().get());
     }
     {
         // Rotation 180 degree
         SvFileStream aFileStream(getFullUrl("Exif1_180.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1800), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1800), aMetadata.getRotation().get());
     }
     {
         // Rotation 270 degree clock-wise = 90 degree counter-clock-wise
         SvFileStream aFileStream(getFullUrl("Exif1_270CW.jpg"), StreamMode::READ);
         GraphicNativeMetadata aMetadata;
         aMetadata.read(aFileStream);
-        CPPUNIT_ASSERT_EQUAL(sal_uInt16(900), aMetadata.getRotation());
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(900), aMetadata.getRotation().get());
     }
 }
 

@@ -48,7 +48,7 @@ const sal_Unicode CH_FULL_BLANK = 0x3000;
 const sal_Unicode CH_NB_SPACE = 0xA0;
 const sal_Unicode CH_SIX_PER_EM = 0x2006; // six-per-em space
 
-sal_uInt16 UnMapDirection( sal_uInt16 nDir, const bool bVertFormat, const bool bVertFormatLRBT );
+Degree10 UnMapDirection( Degree10 nDir, const bool bVertFormat, const bool bVertFormatLRBT );
 
 class SwSubFont : public SvxFont
 {
@@ -92,7 +92,7 @@ class SwSubFont : public SvxFont
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const bool bOutline );
-    inline void SetVertical( const sal_uInt16 nDir, const bool bVertFormat );
+    inline void SetVertical( const Degree10 nDir, const bool bVertFormat );
     inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( FontKerning nAutoKern );
     inline void SetWordLineMode( const bool bWordLineMode );
@@ -216,7 +216,7 @@ public:
     void SetOverColor( const Color &rColor ) { m_aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const bool bOutline );
-    void SetVertical(sal_uInt16 nDir, const bool bVertLayout = false,
+    void SetVertical(Degree10 nDir, const bool bVertLayout = false,
                      const bool bVertLayoutLRBT = false);
     inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( FontKerning nAutoKern );
@@ -281,7 +281,7 @@ public:
     FontWeight GetWeight() const { return m_aSub[m_nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return m_aSub[m_nActual].GetEmphasisMark(); }
-    sal_uInt16 GetOrientation(const bool bVertLayout = false,
+    Degree10 GetOrientation(const bool bVertLayout = false,
                               const bool bVertFormatLRBT = false) const;
 
     const OUString& GetName( const SwFontScript nWhich ) const
@@ -817,7 +817,7 @@ inline void SwFont::SetGreyWave( const bool bNew )
     m_bGreyWave = bNew;
 }
 
-inline void SwSubFont::SetVertical( const sal_uInt16 nDir, const bool bVertFormat )
+inline void SwSubFont::SetVertical( const Degree10 nDir, const bool bVertFormat )
 {
     m_nFontCacheId = nullptr;
     Font::SetVertical( bVertFormat );

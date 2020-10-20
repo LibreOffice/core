@@ -96,15 +96,15 @@ void SwLinePortion::PrePaint( const SwTextPaintInfo& rInf,
     const bool bBidiPor = rInf.GetTextFrame()->IsRightToLeft() !=
                           bool( ComplexTextLayoutFlags::BiDiRtl & rInf.GetOut()->GetLayoutMode() );
 
-    sal_uInt16 nDir = bBidiPor ?
-                  1800 :
+    Degree10 nDir = bBidiPor ?
+                  Degree10(1800) :
                   rInf.GetFont()->GetOrientation( rInf.GetTextFrame()->IsVertical() );
 
     // pLast == this *only* for the 1st portion in the line so nLastWidth is 0;
     // allow this too, will paint outside the frame but might look better...
     if (nLastWidth > nHalfView || pLast == this)
     {
-        switch (nDir)
+        switch (nDir.get())
         {
         case 0:
             nPos = sal_uInt16( rInf.X() );

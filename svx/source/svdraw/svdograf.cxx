@@ -382,7 +382,7 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
         }
 
         if( bRotate )
-            aActAttr.SetRotation( sal_uInt16(aGeo.nRotationAngle / 10) );
+            aActAttr.SetRotation( Degree10(aGeo.nRotationAngle / 10) );
     }
 
     return aActAttr;

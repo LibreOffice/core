@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <tools/degree.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 
@@ -39,7 +40,7 @@ private:
     tools::Long mnTopCrop;
     tools::Long mnRightCrop;
     tools::Long mnBottomCrop;
-    sal_uInt16 mnRotate10;
+    Degree10 mnRotate10;
     short mnContPercent;
     short mnLumPercent;
     short mnRPercent;
@@ -74,8 +75,8 @@ public:
     tools::Long GetRightCrop() const { return mnRightCrop; }
     tools::Long GetBottomCrop() const { return mnBottomCrop; }
 
-    void SetRotation(sal_uInt16 nRotate10) { mnRotate10 = nRotate10; }
-    sal_uInt16 GetRotation() const { return mnRotate10; }
+    void SetRotation(Degree10 nRotate10) { mnRotate10 = nRotate10; }
+    Degree10 GetRotation() const { return mnRotate10; }
 
     void SetLuminance(short nLuminancePercent) { mnLumPercent = nLuminancePercent; }
     short GetLuminance() const { return mnLumPercent; }
@@ -107,7 +108,7 @@ public:
     {
         return (mnLeftCrop != 0 || mnTopCrop != 0 || mnRightCrop != 0 || mnBottomCrop != 0);
     }
-    bool IsRotated() const { return ((mnRotate10 % 3600) != 0); }
+    bool IsRotated() const { return ((mnRotate10 % Degree10(3600)) != Degree10(0)); }
     bool IsTransparent() const { return (mcTransparency > 0); }
     bool IsAdjusted() const
     {

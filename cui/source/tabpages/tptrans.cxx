@@ -130,7 +130,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBox* pControl
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
                 static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
-                static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10,
+                Degree10(static_cast<sal_Int16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),
                 static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),
                 static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FieldUnit::PERCENT)),
                 static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FieldUnit::PERCENT)),
@@ -301,7 +301,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
                         static_cast<css::awt::GradientStyle>(m_xLbTrgrGradientType->get_active()),
-                        static_cast<sal_uInt16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10,
+                        Degree10(static_cast<sal_Int16>(m_xMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),
                         static_cast<sal_uInt16>(m_xMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),
                         static_cast<sal_uInt16>(m_xMtrTrgrCenterY->get_value(FieldUnit::PERCENT)),
                         static_cast<sal_uInt16>(m_xMtrTrgrBorder->get_value(FieldUnit::PERCENT)),
@@ -368,7 +368,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
     css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
     m_xLbTrgrGradientType->set_active(sal::static_int_cast< sal_Int32 >(eXGS));
-    m_xMtrTrgrAngle->set_value(rGradient.GetAngle() / 10, FieldUnit::DEGREE);
+    m_xMtrTrgrAngle->set_value(rGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
     m_xMtrTrgrBorder->set_value(rGradient.GetBorder(), FieldUnit::PERCENT);
     m_xMtrTrgrCenterX->set_value(rGradient.GetXOffset(), FieldUnit::PERCENT);
     m_xMtrTrgrCenterY->set_value(rGradient.GetYOffset(), FieldUnit::PERCENT);

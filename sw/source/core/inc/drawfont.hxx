@@ -584,7 +584,7 @@ public:
         m_bPosMatchesBounds = bNew;
     }
 
-    void Shift( sal_uInt16 nDir );
+    void Shift( Degree10 nDir );
 
     // sets a new color at the output device if necessary if a font is passed
     // as argument, the change if made to the font otherwise the font at the

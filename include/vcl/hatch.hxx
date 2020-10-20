@@ -22,6 +22,7 @@
 
 #include <tools/color.hxx>
 #include <tools/long.hxx>
+#include <tools/degree.hxx>
 #include <vcl/dllapi.h>
 
 #include <vcl/vclenum.hxx>
@@ -35,7 +36,7 @@ struct ImplHatch
     Color               maColor;
     HatchStyle          meStyle;
     tools::Long                mnDistance;
-    sal_uInt16          mnAngle;
+    Degree10            mnAngle;
 
     ImplHatch();
 
@@ -48,7 +49,7 @@ public:
 
                     Hatch();
                     Hatch( const Hatch& rHatch );
-                    Hatch( HatchStyle eStyle, const Color& rHatchColor, tools::Long nDistance, sal_uInt16 nAngle10 );
+                    Hatch( HatchStyle eStyle, const Color& rHatchColor, tools::Long nDistance, Degree10 nAngle10 );
                     ~Hatch();
 
     Hatch&          operator=( const Hatch& rHatch );
@@ -63,8 +64,8 @@ public:
     void            SetDistance( tools::Long nDistance  );
     tools::Long            GetDistance() const { return mpImplHatch->mnDistance; }
 
-    void            SetAngle( sal_uInt16 nAngle10 );
-    sal_uInt16          GetAngle() const { return mpImplHatch->mnAngle; }
+    void            SetAngle( Degree10 nAngle10 );
+    Degree10        GetAngle() const { return mpImplHatch->mnAngle; }
 
     friend SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch );
     friend SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch );

@@ -108,8 +108,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     GraphicNativeMetadata aMetadata;
     if ( aMetadata.read(rGraphic1) )
     {
-        const sal_uInt16 aRotation = aMetadata.getRotation();
-        if (aRotation != 0)
+        const Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
         {
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Question,VclButtonsType::YesNo,ScResId(STR_QUERYROTATION)));
             if (xQueryBox->run() == RET_YES)

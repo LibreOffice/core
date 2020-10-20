@@ -6060,12 +6060,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / double(m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
-    int nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
+    Degree10 nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
     // normalize angles
-    while( nAngle < 0 )
-        nAngle += 3600;
-    nAngle = nAngle % 3600;
-    double fAngle = static_cast<double>(nAngle) * M_PI / 1800.0;
+    while( nAngle < Degree10(0) )
+        nAngle += Degree10(3600);
+    nAngle = nAngle % Degree10(3600);
+    double fAngle = static_cast<double>(nAngle.get()) * M_PI / 1800.0;
 
     Matrix3 aRotScale;
     aRotScale.scale( fXScale, 1.0 );
@@ -7155,7 +7155,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, tools::Long nWidth, FontStr
     aLine.append( "q " );
 
     // rotate and translate matrix
-    double fAngle = static_cast<double>(m_aCurrentPDFState.m_aFont.GetOrientation()) * M_PI / 1800.0;
+    double fAngle = static_cast<double>(m_aCurrentPDFState.m_aFont.GetOrientation().get()) * M_PI / 1800.0;
     Matrix3 aMat;
     aMat.rotate( fAngle );
     aMat.translate( aPos.X(), aPos.Y() );
@@ -8300,7 +8300,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
 
     tools::Rectangle aBoundRect;
     Point     aCenter;
-    sal_uInt16    nAngle = rObject.m_aGradient.GetAngle() % 3600;
+    Degree10 nAngle = rObject.m_aGradient.GetAngle() % Degree10(3600);
     rObject.m_aGradient.GetBoundRect( aRect, aBoundRect, aCenter );
 
     const bool bLinear = (rObject.m_aGradient.GetStyle() == GradientStyle::Linear);
@@ -8326,7 +8326,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
             tools::Polygon aPoly( 2 );
             aPoly[0] = aBoundRect.BottomCenter();
             aPoly[1] = aBoundRect.TopCenter();
-            aPoly.Rotate( aCenter, 3600 - nAngle );
+            aPoly.Rotate( aCenter, Degree10(3600) - nAngle );
 
             aLine.append( static_cast<sal_Int32>(aPoly[0].X()) );
             aLine.append( " " );

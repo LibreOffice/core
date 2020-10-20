@@ -635,7 +635,7 @@ protected:
 
     void            InvalidateBullet(sal_Int32 nPara);
     void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
-                    const Point& rOrigin, short nOrientation,
+                    const Point& rOrigin, Degree10 nOrientation,
                     OutputDevice* pOutDev );
 
     // used by OutlinerEditEng. Allows Outliner objects to provide

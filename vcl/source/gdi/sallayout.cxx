@@ -562,17 +562,17 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
     Point aPos = maDrawBase;
     Point aOfs = rRelative + maDrawOffset;
 
-    if( mnOrientation == 0 )
+    if( mnOrientation == Degree10(0) )
         aPos += aOfs;
     else
     {
         // cache trigonometric results
-        static int nOldOrientation = 0;
+        static Degree10 nOldOrientation(0);
         static double fCos = 1.0, fSin = 0.0;
         if( nOldOrientation != mnOrientation )
         {
             nOldOrientation = mnOrientation;
-            double fRad = mnOrientation * (M_PI / 1800.0);
+            double fRad = mnOrientation.get() * (M_PI / 1800.0);
             fCos = cos( fRad );
             fSin = sin( fRad );
         }

@@ -467,9 +467,9 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, tools::Long nMin, 
     {
         vcl::Font aFont = rRenderContext.GetFont();
         if (mnWinStyle & WB_RIGHT_ALIGNED)
-            aFont.SetOrientation(2700);
+            aFont.SetOrientation(Degree10(2700));
         else
-            aFont.SetOrientation(900);
+            aFont.SetOrientation(Degree10(900));
         rRenderContext.SetFont(aFont);
         nTickWidth = aPixSize.Height();
     }
@@ -1033,7 +1033,7 @@ void Ruler::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
     vcl::Font aFont = GetFont();
 
     if (mnWinStyle & WB_VERT)
-        aFont.SetOrientation(900);
+        aFont.SetOrientation(Degree10(900));
 
     maVirDev->SetFont(aFont);
     maVirDev->SetTextColor(GetTextColor());

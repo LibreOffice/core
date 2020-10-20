@@ -38,7 +38,7 @@ OutlinerEditEng::~OutlinerEditEng()
 {
 }
 
-void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long /*nBaseLineY*/, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
+void OutlinerEditEng::PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long /*nBaseLineY*/, const Point& rOrigin, Degree10 nOrientation, OutputDevice* pOutDev )
 {
     if( GetControlWord() & EEControlBits::OUTLINER )
     {

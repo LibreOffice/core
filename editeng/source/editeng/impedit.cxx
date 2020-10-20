@@ -1282,7 +1282,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aCursorSz.setWidth( aOldSz.Height() );
             aCursorSz.setHeight( aOldSz.Width() );
             GetCursor()->SetPos( aCursorRect.TopRight() );
-            GetCursor()->SetOrientation( IsTopToBottom() ? 2700 : 900 );
+            GetCursor()->SetOrientation( Degree10(IsTopToBottom() ? 2700 : 900) );
         }
         else
             // #i32593# Reset correct orientation in horizontal layout

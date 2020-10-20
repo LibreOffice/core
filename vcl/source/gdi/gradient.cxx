@@ -26,7 +26,7 @@ public:
     GradientStyle       meStyle;
     Color               maStartColor;
     Color               maEndColor;
-    sal_uInt16          mnAngle;
+    Degree10            mnAngle;
     sal_uInt16          mnBorder;
     sal_uInt16          mnOfsX;
     sal_uInt16          mnOfsY;
@@ -125,12 +125,12 @@ void Gradient::SetEndColor( const Color& rColor )
     mpImplGradient->maEndColor = rColor;
 }
 
-sal_uInt16 Gradient::GetAngle() const
+Degree10 Gradient::GetAngle() const
 {
     return mpImplGradient->mnAngle;
 }
 
-void Gradient::SetAngle( sal_uInt16 nAngle )
+void Gradient::SetAngle( Degree10 nAngle )
 {
     mpImplGradient->mnAngle = nAngle;
 }
@@ -198,11 +198,11 @@ void Gradient::SetSteps( sal_uInt16 nSteps )
 void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rBoundRect, Point& rCenter ) const
 {
     tools::Rectangle aRect( rRect );
-    sal_uInt16 nAngle = GetAngle() % 3600;
+    Degree10 nAngle = GetAngle() % Degree10(3600);
 
     if( GetStyle() == GradientStyle::Linear || GetStyle() == GradientStyle::Axial )
     {
-        const double    fAngle = nAngle * F_PI1800;
+        const double    fAngle = nAngle.get() * F_PI1800;
         const double    fWidth = aRect.GetWidth();
         const double    fHeight = aRect.GetHeight();
         double  fDX     = fWidth  * fabs( cos( fAngle ) ) +
@@ -223,7 +223,7 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
     {
         if( GetStyle() == GradientStyle::Square || GetStyle() == GradientStyle::Rect )
         {
-            const double    fAngle = nAngle * F_PI1800;
+            const double    fAngle = nAngle.get() * F_PI1800;
             const double    fWidth = aRect.GetWidth();
             const double    fHeight = aRect.GetHeight();
             double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
