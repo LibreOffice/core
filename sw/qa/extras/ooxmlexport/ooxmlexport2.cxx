@@ -94,14 +94,14 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomProperties, "custom-properties.doc
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Characters", "22");
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:CharactersWithSpaces", "24");
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "hhhhkompany");
-    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Manager", "ffffmenadzer");
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Manager", "ffffmenadzer;iiiiisecondmanager");
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:HyperlinkBase", "gggghiperlink");
     //assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:DocSecurity", "2");
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:AppVersion", "15.0000");
 
     // Custom file properties - defined by user
     xmlDocUniquePtr pCustomXml = parseExport("docProps/custom.xml");
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property", 8);
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property", 9);
     assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]",
                 "name", "testDateProperty");
     assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[1]/vt:filetime",
@@ -119,22 +119,26 @@ DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testCustomProperties, "custom-properties.doc
     assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[5]/vt:r8",
                        "-128.1");
     assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]",
-                "name", "testTextProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]/vt:lpwstr",
-                       "testPropertyValue");
+                "name", "testScientificNumber");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[6]/vt:r8",
+                       "1.23456789E+023");
     assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]",
+                "name", "testTextProperty");
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]/vt:lpwstr",
+                       "testPropertyValue");
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]",
                 "name", "testYesNoProperty");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[7]/vt:bool",
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]/vt:bool",
                        "1");
     // Hidden Custom File Property. With Final set, MS Office notifies recipients that the document is final, and sets the document to read-only.
-    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]",
+    assertXPath(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]",
                 "name", "_MarkAsFinal");
-    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[8]/vt:bool",
+    assertXPathContent(pCustomXml, "/custom-properties:Properties/custom-properties:property[9]/vt:bool",
                        "1");
 
     // Core file properties - common for all packages (eg. creation date, modify date)
     pXmlDoc = parseExport("docProps/core.xml");
-    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:creator", "Bartosz Kosiorek");
+    assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:creator", "Bartosz Kosiorek;secondauthor");
     assertXPathContent(pXmlDoc, "/cp:coreProperties/dc:description", "cccckomentarzglowny");
     assertXPathContent(pXmlDoc, "/cp:coreProperties/cp:lastPrinted", "2020-10-15T07:42:00Z");
     assertXPathContent(pXmlDoc, "/cp:coreProperties/dcterms:created", "2020-10-14T16:23:00Z");
