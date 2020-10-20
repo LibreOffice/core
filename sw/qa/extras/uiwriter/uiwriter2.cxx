@@ -1865,6 +1865,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132160)
     dispatchCommand(mxComponent, ".uno:Undo", {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // select and delete a word
+    dispatchCommand(mxComponent, ".uno:WordRightSel", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("support"));
+
+    // this would crash due to bad redline range
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Encryption"));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 {
     load(DATA_DIRECTORY, "tdf52391.fodt");

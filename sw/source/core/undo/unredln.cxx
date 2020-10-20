@@ -90,6 +90,19 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc& rDoc = rContext.GetDoc();
     SwPaM& rPam(AddUndoRedoPaM(rContext));
 
+    // fix PaM for deletions shown in margin
+    SwRedlineTable::size_type nCurRedlinePos;
+    const SwRangeRedline * pRedline =
+            rDoc.getIDocumentRedlineAccess().GetRedline( *rPam.End(), &nCurRedlinePos );
+    if ( pRedline && !pRedline->IsVisible() )
+    {
+        const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+        SwRangeRedline * pHiddenRedline( rTable[nCurRedlinePos] );
+        pHiddenRedline->Show(0, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
+        pHiddenRedline->Show(1, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
+        rPam = *pHiddenRedline;
+    }
+
     UndoRedlineImpl(rDoc, rPam);
 
     if( mpRedlSaveData )
