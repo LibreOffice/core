@@ -30,6 +30,7 @@
 #include <editeng/langitem.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <editeng/eeitem.hxx>
@@ -411,7 +412,8 @@ IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, voi
 }
 
 
-SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Reference< XFrame >& i_rFrame )
+SfxFrame* SdModule::CreateFromTemplate(const OUString& rTemplatePath, const Reference<XFrame>& i_rFrame,
+                                       const bool bReplaceable)
 {
     SfxFrame* pFrame = nullptr;
 
@@ -430,6 +432,8 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
     }
     else if( pDocShell )
     {
+        if (pDocShell->GetMedium() && pDocShell->GetMedium()->GetItemSet())
+            pDocShell->GetMedium()->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bReplaceable));
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pDocShell, i_rFrame );
         OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
         pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
@@ -465,7 +469,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
             if( !aStandardTemplate.isEmpty() )
             {
                 //load a template document
-                pFrame = CreateFromTemplate( aStandardTemplate, xTargetFrame );
+                pFrame = CreateFromTemplate(aStandardTemplate, xTargetFrame, true);
             }
             else
             {
@@ -486,7 +490,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
 
             //pFrame is loaded with the desired template
             if (!aTemplDlg.getTemplatePath().isEmpty())
-                pFrame = CreateFromTemplate(aTemplDlg.getTemplatePath(), xTargetFrame);
+                pFrame = CreateFromTemplate(aTemplDlg.getTemplatePath(), xTargetFrame, false);
         }
     }
 
@@ -507,6 +511,8 @@ SfxFrame* SdModule::CreateEmptyDocument( const Reference< XFrame >& i_rFrame )
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
     }
+    if (pNewDocSh->GetMedium() && pNewDocSh->GetMedium()->GetItemSet())
+        pNewDocSh->GetMedium()->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, true));
 
     SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
     OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );
