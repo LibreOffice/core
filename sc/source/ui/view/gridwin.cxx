@@ -634,8 +634,14 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
     mpAutoFilterPopup.disposeAndClear();
+
+    // Estimate the width (in pixels) of the longest text in the list
+    ScFilterEntries aFilterEntries;
+    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
+
     int nColWidth = ScViewData::ToPixel(pDoc->GetColWidth(nCol, nTab), pViewData->GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false, nColWidth));
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc, false,
+                                                                  aFilterEntries.mbHasDates, nColWidth));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
 
     if (bLOKActive)
@@ -684,11 +690,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         }
     }
 
-    // Populate the check box list.
-    ScFilterEntries aFilterEntries;
-    pDoc->GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
-
-    rControl.setHasDates(aFilterEntries.mbHasDates);
     rControl.setMemberSize(aFilterEntries.size());
     for (const auto& rEntry : aFilterEntries)
     {

@@ -88,10 +88,7 @@ public:
 
     struct MenuItemData
     {
-        OUString maText;
         bool     mbEnabled:1;
-        bool     mbSeparator:1;
-
         std::shared_ptr<Action> mxAction;
         VclPtr<ScCheckListMenuWindow> mxSubMenuWin;
 
@@ -118,8 +115,8 @@ public:
         Config();
     };
 
-    explicit ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc,
-                                    bool bCanHaveSubMenu, int nWidth);
+    ScCheckListMenuControl(ScCheckListMenuWindow* pParent, vcl::Window* pContainer, ScDocument* pDoc,
+                           bool bCanHaveSubMenu, bool bTreeMode, int nWidth);
     ~ScCheckListMenuControl();
 
     void addMenuItem(const OUString& rText, Action* pAction);
@@ -133,7 +130,7 @@ public:
     void setMemberSize(size_t n);
     void addDateMember(const OUString& rName, double nVal, bool bVisible);
     void addMember(const OUString& rName, bool bVisible);
-    size_t initMembers();
+    size_t initMembers(int nMaxMemberWidth = -1);
     void setConfig(const Config& rConfig);
 
     bool isAllSelected() const;
@@ -141,7 +138,7 @@ public:
     void launch(const tools::Rectangle& rRect);
     void close(bool bOK);
 
-    void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags);
+    void StartPopupMode(const tools::Rectangle& rRect, FloatWinPopupFlags eFlags);
     void EndPopupMode();
 
     size_t getSubMenuPos(const ScCheckListMenuControl* pSubMenu);
@@ -166,45 +163,31 @@ public:
     void setOKAction(Action* p);
     void setPopupEndAction(Action* p);
 
-    void setHasDates(bool bHasDates);
+    int GetTextWidth(const OUString& rsName) const;
+    int IncreaseWindowWidthToFitText(int nMaxTextWidth);
 
 private:
 
     std::vector<MenuItemData>         maMenuItems;
 
-    enum SectionType {
-        WHOLE,                // entire window
-        LISTBOX_AREA_OUTER,   // box enclosing the check box items.
-        LISTBOX_AREA_INNER,   // box enclosing the check box items.
-        SINGLE_BTN_AREA,      // box enclosing the single-action buttons.
-        CHECK_TOGGLE_ALL,     // check box for toggling all items.
-        BTN_SINGLE_SELECT,
-        BTN_SINGLE_UNSELECT,
-        BTN_OK,               // OK button
-        BTN_CANCEL,           // Cancel button
-        EDIT_SEARCH,          // Search box
-    };
-    void getSectionPosSize(Point& rPos, Size& rSize, SectionType eType) const;
-
     /**
-     * Calculate the appropriate window size, the position and size of each
-     * control based on the menu items.
+     * Calculate the appropriate window size based on the menu items.
      */
-    void packWindow();
+    void prepWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
     void updateMemberParents(const weld::TreeIter* pLeaf, size_t nIdx);
 
     std::unique_ptr<weld::TreeIter> ShowCheckEntry(const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true);
     void CheckEntry(const OUString& sName, const weld::TreeIter* pParent, bool bCheck);
-    void CheckEntry(const weld::TreeIter* pEntry, bool bCheck);
+    void CheckEntry(const weld::TreeIter& rEntry, bool bCheck);
     void GetRecursiveChecked(const weld::TreeIter* pEntry, std::unordered_set<OUString>& vOut, OUString& rLabel);
     std::unordered_set<OUString> GetAllChecked();
     bool IsChecked(const OUString& sName, const weld::TreeIter* pParent);
     int GetCheckedEntryCount() const;
-    void CheckAllChildren(const weld::TreeIter* pEntry, bool bCheck);
+    void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck);
 
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu);
+    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer);
 
     std::unique_ptr<weld::TreeIter> FindEntry(const weld::TreeIter* pParent, const OUString& sNode);
 
@@ -215,12 +198,6 @@ private:
      * window.  This method is called e.g. when a menu action is fired.
      */
     void terminateAllPopupMenus();
-
-    /**
-     * Dismiss any visible child submenus when a menu item of a parent menu is
-     * selected.
-     */
-    void ensureSubMenuNotVisible();
 
     void endSubMenu(ScCheckListMenuControl& rSubMenu);
 
@@ -237,7 +214,7 @@ private:
 
     void Check(const weld::TreeIter* pIter);
 
-    //DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
+    DECL_LINK(CheckHdl, const weld::TreeView::iter_col&, void);
 
     DECL_LINK(PopupModeEndHdl, FloatingWindow*, void);
 
@@ -261,7 +238,9 @@ private:
     std::unique_ptr<weld::TreeIter> mxScratchIter;
     std::unique_ptr<weld::Entry> mxEdSearch;
     std::unique_ptr<weld::Widget> mxBox;
-    std::unique_ptr<weld::TreeView> mxChecks;
+    std::unique_ptr<weld::TreeView> mxListChecks;
+    std::unique_ptr<weld::TreeView> mxTreeChecks;
+    weld::TreeView* mpChecks;
 
     std::unique_ptr<weld::CheckButton> mxChkToggleAll;
     std::unique_ptr<weld::Button> mxBtnSelectSingle;
@@ -282,9 +261,8 @@ private:
     std::unique_ptr<Action>       mxPopupEndAction;
 
     Config maConfig;
-    int mnWidthHint; /// min width hint
-    Size maWndSize;  /// whole window size.
-    Size maMenuSize; /// size of all menu items combined.
+    int mnCheckWidthReq; /// matching width request for mxChecks
+    int mnWndWidth;  /// whole window width.
     TriState mePrevToggleAllState;
 
     size_t  mnSelectedMenu;
@@ -322,8 +300,9 @@ private:
 class ScCheckListMenuWindow : public DockingWindow
 {
 public:
-    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc, bool bCanHaveSubMenu, int nWidth = -1,
-                                   sal_uInt16 nMenuStackLevel = 0, ScCheckListMenuWindow* pParentMenu = nullptr);
+    explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc,
+                                   bool bCanHaveSubMenu, bool bTreeMode, int nWidth = -1,
+                                   ScCheckListMenuWindow* pParentMenu = nullptr);
     virtual void dispose() override;
     virtual ~ScCheckListMenuWindow() override;
 
@@ -333,13 +312,10 @@ public:
     ScCheckListMenuWindow* GetParentMenu() { return mxParentMenu; }
     ScCheckListMenuControl& get_widget() { return *mxControl; }
 
-    sal_uInt16 GetMenuStackLevel() const { return mnMenuStackLevel; }
-
 private:
     VclPtr<ScCheckListMenuWindow> mxParentMenu;
     VclPtr<vcl::Window> mxBox;
-    std::unique_ptr<ScCheckListMenuControl> mxControl;
-    sal_uInt16 mnMenuStackLevel;
+    std::unique_ptr<ScCheckListMenuControl, o3tl::default_delete<ScCheckListMenuControl>> mxControl;
 };
 
 #endif
