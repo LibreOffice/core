@@ -612,7 +612,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     const bool bIsFactoryURL = sURL.startsWith( "private:factory/" );
     bool bInitNewModel = bIsFactoryURL;
     const bool bIsDefault = bIsFactoryURL && !bExternalModel;
-    aDescriptor.put("Replaceable", bIsDefault);
+    if (!aDescriptor.has("Replaceable"))
+        aDescriptor.put("Replaceable", bIsDefault);
     if (bIsDefault)
     {
         const OUString sFactory = sURL.copy( sizeof( "private:factory/" ) -1 );
