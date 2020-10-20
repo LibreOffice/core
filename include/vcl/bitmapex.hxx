@@ -24,6 +24,7 @@
 #include <vcl/alpha.hxx>
 #include <vcl/Scanline.hxx>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 
 #include <sal/types.h>
 
@@ -233,7 +234,7 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                Rotate(
-                            tools::Long nAngle10,
+                            Degree10 nAngle10,
                             const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color

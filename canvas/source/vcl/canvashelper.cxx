@@ -773,7 +773,7 @@ namespace vclcanvas
                     // (3600,0].  Note that the original angle may have
                     // values outside the [0,2Pi) interval.
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
-                    aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
+                    aGrfAttr.SetRotation( Degree10(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
                     pGrfObj = std::make_shared<GraphicObject>( aBmpEx );
                 }

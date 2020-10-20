@@ -186,7 +186,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
         {
             // Double hatch
-            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 900, aPt1, aPt2, aInc, aEndPt1 );
+            CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + Degree10(900), aPt1, aPt2, aInc, aEndPt1 );
             do
             {
                 DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -198,7 +198,7 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
             if( rHatch.GetStyle() == HatchStyle::Triple )
             {
                 // Triple hatch
-                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + 450, aPt1, aPt2, aInc, aEndPt1 );
+                CalcHatchValues( aRect, nWidth, rHatch.GetAngle() + Degree10(450), aPt1, aPt2, aInc, aEndPt1 );
                 do
                 {
                     DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
@@ -211,19 +211,19 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
     }
 }
 
-void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, sal_uInt16 nAngle10,
+void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long nDist, Degree10 nAngle10,
                                     Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 )
 {
     Point   aRef;
-    tools::Long    nAngle = nAngle10 % 1800;
+    Degree10    nAngle = nAngle10 % Degree10(1800);
     tools::Long    nOffset = 0;
 
-    if( nAngle > 900 )
-        nAngle -= 1800;
+    if( nAngle > Degree10(900) )
+        nAngle -= Degree10(1800);
 
     aRef = ( !IsRefPoint() ? rRect.TopLeft() : GetRefPoint() );
 
-    if( 0 == nAngle )
+    if( Degree10(0) == nAngle )
     {
         rInc = Size( 0, nDist );
         rPt1 = rRect.TopLeft();
@@ -238,7 +238,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
         rPt1.AdjustY( -nOffset );
         rPt2.AdjustY( -nOffset );
     }
-    else if( 900 == nAngle )
+    else if( Degree10(900) == nAngle )
     {
         rInc = Size( nDist, 0 );
         rPt1 = rRect.TopLeft();
@@ -253,9 +253,9 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
         rPt1.AdjustX( -nOffset );
         rPt2.AdjustX( -nOffset );
     }
-    else if( nAngle >= -450 && nAngle <= 450 )
+    else if( nAngle >= Degree10(-450) && nAngle <= Degree10(450) )
     {
-        const double    fAngle = F_PI1800 * labs( nAngle );
+        const double    fAngle = F_PI1800 * labs( nAngle.get() );
         const double    fTan = tan( fAngle );
         const tools::Long      nYOff = FRound( ( rRect.Right() - rRect.Left() ) * fTan );
         tools::Long            nPY;
@@ -263,7 +263,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
         nDist = FRound( nDist / cos( fAngle ) );
         rInc = Size( 0, nDist );
 
-        if( nAngle > 0 )
+        if( nAngle > Degree10(0) )
         {
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Right(), rRect.Top() - nYOff );
@@ -288,7 +288,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
     }
     else
     {
-        const double fAngle = F_PI1800 * labs( nAngle );
+        const double fAngle = F_PI1800 * labs( nAngle.get() );
         const double fTan = tan( fAngle );
         const tools::Long   nXOff = FRound( ( rRect.Bottom() - rRect.Top() ) / fTan );
         tools::Long         nPX;
@@ -296,7 +296,7 @@ void OutputDevice::CalcHatchValues( const tools::Rectangle& rRect, tools::Long n
         nDist = FRound( nDist / sin( fAngle ) );
         rInc = Size( nDist, 0 );
 
-        if( nAngle > 0 )
+        if( nAngle > Degree10(0) )
         {
             rPt1 = rRect.TopLeft();
             rPt2 = Point( rRect.Left() - nXOff, rRect.Bottom() );

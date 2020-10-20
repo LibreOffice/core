@@ -1495,16 +1495,16 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 const SwAttrSet& rSet = pInfo->GetAnchorCharFormat(const_cast<SwDoc&>(*pDoc))->GetAttrSet();
 
                 const SfxPoolItem* pItem;
-                sal_uInt16 nDir = 0;
+                Degree10 nDir(0);
                 if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
                     true, &pItem ))
                     nDir = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
 
-                if ( 0 != nDir )
+                if ( nDir )
                 {
                     delete pPor;
                     pPor = new SwRotatedPortion(rInf.GetIdx() + TextFrameIndex(1),
-                                                900 == nDir
+                                                Degree10(900) == nDir
                                                     ? DIR_BOTTOM2TOP
                                                     : DIR_TOP2BOTTOM );
                 }
@@ -1516,11 +1516,11 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
             if ( pNumFnt )
             {
-                sal_uInt16 nDir = pNumFnt->GetOrientation( rInf.GetTextFrame()->IsVertical() );
-                if ( 0 != nDir )
+                Degree10 nDir = pNumFnt->GetOrientation( rInf.GetTextFrame()->IsVertical() );
+                if ( nDir )
                 {
                     delete pPor;
-                    pPor = new SwRotatedPortion(TextFrameIndex(0), 900 == nDir
+                    pPor = new SwRotatedPortion(TextFrameIndex(0), Degree10(900) == nDir
                                                     ? DIR_BOTTOM2TOP
                                                     : DIR_TOP2BOTTOM );
 

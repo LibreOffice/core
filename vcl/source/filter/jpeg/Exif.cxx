@@ -49,21 +49,21 @@ exif::Orientation Exif::convertToOrientation(sal_Int32 value)
     return exif::TOP_LEFT;
 }
 
-sal_Int32 Exif::getRotation() const
+Degree10 Exif::getRotation() const
 {
     switch(maOrientation) {
         case exif::TOP_LEFT:
-            return 0;
+            return Degree10(0);
         case exif::BOTTOM_RIGHT:
-            return 1800;
+            return Degree10(1800);
         case exif::RIGHT_TOP:
-            return 2700;
+            return Degree10(2700);
         case exif::LEFT_BOTTOM:
-            return 900;
+            return Degree10(900);
         default:
             break;
     }
-    return 0;
+    return Degree10(0);
 }
 
 bool Exif::read(SvStream& rStream)

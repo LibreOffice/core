@@ -31,6 +31,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/gen.hxx>
+#include <tools/degree.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
 #include <vcl/devicecoordinate.hxx>
@@ -88,7 +89,7 @@ public:
     // positioning related inputs
     const DeviceCoordinate* mpDXArray;     // in pixel units
     DeviceCoordinate    mnLayoutWidth;      // in pixel units
-    int                 mnOrientation;      // in 0-3600 system
+    Degree10            mnOrientation;      // in 0-3600 system
 
     // data for bidi and glyph+script fallback
     ImplLayoutRuns      maRuns;
@@ -101,7 +102,7 @@ public:
 
     void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
     void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
-    void        SetOrientation( int nOrientation )  { mnOrientation = nOrientation; }
+    void        SetOrientation( Degree10 nOrientation )  { mnOrientation = nOrientation; }
 
     void        ResetPos()
                     { maRuns.ResetPos(); }

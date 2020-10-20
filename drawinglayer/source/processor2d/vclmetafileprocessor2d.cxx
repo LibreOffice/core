@@ -276,7 +276,8 @@ void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
             Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getEndColor())));
     }
 
-    o_rVCLGradient.SetAngle(static_cast<sal_uInt16>(rFiGrAtt.getAngle() * (1.0 / F_PI1800)));
+    o_rVCLGradient.SetAngle(
+        Degree10(static_cast<sal_uInt16>(rFiGrAtt.getAngle() * (1.0 / F_PI1800))));
     o_rVCLGradient.SetBorder(static_cast<sal_uInt16>(rFiGrAtt.getBorder() * 100.0));
     o_rVCLGradient.SetOfsX(static_cast<sal_uInt16>(rFiGrAtt.getOffsetX() * 100.0));
     o_rVCLGradient.SetOfsY(static_cast<sal_uInt16>(rFiGrAtt.getOffsetY() * 100.0));
@@ -1860,7 +1861,7 @@ void VclMetafileProcessor2D::processPolyPolygonHatchPrimitive2D(
         Hatch(aHatchStyle,
               Color(maBColorModifierStack.getModifiedColor(rFillHatchAttribute.getColor())),
               basegfx::fround(rFillHatchAttribute.getDistance()),
-              basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
+              Degree10(basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800))));
 
     impEndSvtGraphicFill(pSvtGraphicFill.get());
 }
@@ -2131,7 +2132,7 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
                 aVCLGradient.SetStyle(GradientStyle::Linear);
                 aVCLGradient.SetStartColor(aTransColor);
                 aVCLGradient.SetEndColor(aTransColor);
-                aVCLGradient.SetAngle(0);
+                aVCLGradient.SetAngle(Degree10(0));
                 aVCLGradient.SetBorder(0);
                 aVCLGradient.SetOfsX(0);
                 aVCLGradient.SetOfsY(0);

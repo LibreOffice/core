@@ -47,6 +47,7 @@ published struct Hatch
     long Distance;
 
     /** You can rotate the lines of the hatch with this angle.
+     * Specificied in tenths of a degree.
      */
     long Angle;
 

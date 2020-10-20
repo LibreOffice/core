@@ -50,7 +50,7 @@ void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, tools::Long* pLin
                   GraphicFilterImportFlags nImportFlags,
                   BitmapScopedWriteAccess* ppAccess );
 
-void    Transform(void* pInputStream, void* pOutputStream, tools::Long nAngle);
+void    Transform(void* pInputStream, void* pOutputStream, Degree10 nAngle);
 
 /* Expanded data source object for stdio input */
 

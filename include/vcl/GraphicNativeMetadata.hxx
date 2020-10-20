@@ -21,10 +21,11 @@
 
 #include <vcl/graph.hxx>
 #include <tools/stream.hxx>
+#include <tools/degree.hxx>
 
 class VCL_DLLPUBLIC GraphicNativeMetadata final
 {
-    sal_uInt16 mRotation;
+    Degree10 mRotation;
 
 public:
     GraphicNativeMetadata();
@@ -33,8 +34,8 @@ public:
     bool read(Graphic const& rGraphic);
     bool read(SvStream& rStream);
 
-    // counter-clock-wise rotation in permille
-    sal_uInt16 getRotation() const { return mRotation; }
+    // counter-clock-wise rotation 10ths of a degree
+    Degree10 getRotation() const { return mRotation; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -545,7 +545,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             XGradient aGradient(pEntry->GetGradient());
 
                             aGradient.SetGradientStyle (static_cast<css::awt::GradientStyle>(pStyle->GetValue ()));
-                            aGradient.SetAngle (pAngle->GetValue () * 10);
+                            aGradient.SetAngle (Degree10(pAngle->GetValue () * 10));
                             aGradient.SetBorder (static_cast<short>(pBorder->GetValue ()));
                             aGradient.SetXOffset (static_cast<short>(pCenterX->GetValue ()));
                             aGradient.SetYOffset (static_cast<short>(pCenterY->GetValue ()));
@@ -566,7 +566,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         Color aBlack (0, 0, 0);
                         XGradient aGradient (aBlack, aBlack, static_cast<css::awt::GradientStyle>(pStyle->GetValue ()),
-                                             pAngle->GetValue () * 10, static_cast<short>(pCenterX->GetValue ()),
+                                             Degree10(pAngle->GetValue () * 10), static_cast<short>(pCenterX->GetValue ()),
                                              static_cast<short>(pCenterY->GetValue ()), static_cast<short>(pBorder->GetValue ()),
                                              static_cast<short>(pStart->GetValue ()), static_cast<short>(pEnd->GetValue ()));
 
@@ -623,7 +623,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                             aHatch.SetHatchStyle (static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()));
                             aHatch.SetDistance (pDistance->GetValue ());
-                            aHatch.SetAngle (pAngle->GetValue () * 10);
+                            aHatch.SetAngle (Degree10(pAngle->GetValue () * 10));
 
                             XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);
                             aStyleItem.SetWhich(XATTR_FILLSTYLE);
@@ -638,7 +638,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     if (i >= nCounts)
                     {
                         XHatch aHatch (Color(0), static_cast<css::drawing::HatchStyle>(pStyle->GetValue ()), pDistance->GetValue (),
-                                       pAngle->GetValue () * 10);
+                                       Degree10(pAngle->GetValue () * 10));
 
                         pHatchList->Insert(std::make_unique<XHatchEntry>(aHatch, pName->GetValue()));
                         XFillStyleItem aStyleItem(drawing::FillStyle_HATCH);

@@ -48,7 +48,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl:
     rFont.SetFamily( static_cast<FontFamily>(rDesc.Family) );
     rFont.SetCharSet( static_cast<rtl_TextEncoding>(rDesc.CharSet) );
     rFont.SetPitch( static_cast<FontPitch>(rDesc.Pitch) );
-    rFont.SetOrientation( static_cast<short>(rDesc.Orientation*10) );
+    rFont.SetOrientation( Degree10(static_cast<sal_Int16>(rDesc.Orientation*10)) );
     rFont.SetKerning( rDesc.Kerning ? FontKerning::FontSpecific : FontKerning::NONE );
     rFont.SetWeight( vcl::unohelper::ConvertFontWeight(rDesc.Weight) );
     rFont.SetItalic( static_cast<FontItalic>(rDesc.Slant) );
@@ -66,7 +66,7 @@ void SvxUnoFontDescriptor::ConvertFromFont( const vcl::Font& rFont, awt::FontDes
     rDesc.Family = sal::static_int_cast< sal_Int16 >(rFont.GetFamilyType());
     rDesc.CharSet = rFont.GetCharSet();
     rDesc.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
-    rDesc.Orientation = static_cast< float >(rFont.GetOrientation() / 10);
+    rDesc.Orientation = static_cast< float >(rFont.GetOrientation().get() / 10);
     rDesc.Kerning = rFont.IsKerning();
     rDesc.Weight = vcl::unohelper::ConvertFontWeight( rFont.GetWeight() );
     rDesc.Slant = vcl::unohelper::ConvertFontSlant( rFont.GetItalic() );

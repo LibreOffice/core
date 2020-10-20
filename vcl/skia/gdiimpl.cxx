@@ -1823,7 +1823,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     Gradient aGradient(rGradient);
     tools::Rectangle aBoundRect;
     Point aCenter;
-    aGradient.SetAngle(aGradient.GetAngle() + 2700);
+    aGradient.SetAngle(aGradient.GetAngle() + Degree10(2700));
     aGradient.GetBoundRect(boundRect, aBoundRect, aCenter);
 
     SkColor startColor
@@ -1834,7 +1834,7 @@ bool SkiaSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPolygon,
     if (rGradient.GetStyle() == GradientStyle::Linear)
     {
         tools::Polygon aPoly(aBoundRect);
-        aPoly.Rotate(aCenter, aGradient.GetAngle() % 3600);
+        aPoly.Rotate(aCenter, aGradient.GetAngle() % Degree10(3600));
         SkPoint points[2] = { SkPoint::Make(toSkX(aPoly[0].X()), toSkY(aPoly[0].Y())),
                               SkPoint::Make(toSkX(aPoly[1].X()), toSkY(aPoly[1].Y())) };
         SkColor colors[2] = { startColor, endColor };
@@ -1893,9 +1893,9 @@ bool SkiaSalGraphicsImpl::implDrawGradient(const basegfx::B2DPolyPolygon& rPolyP
     return true;
 }
 
-static double toRadian(int degree10th) { return (3600 - degree10th) * M_PI / 1800.0; }
-static double toCos(int degree10th) { return SkScalarCos(toRadian(degree10th)); }
-static double toSin(int degree10th) { return SkScalarSin(toRadian(degree10th)); }
+static double toRadian(Degree10 degree10th) { return (3600 - degree10th.get()) * M_PI / 1800.0; }
+static double toCos(Degree10 degree10th) { return SkScalarCos(toRadian(degree10th)); }
+static double toSin(Degree10 degree10th) { return SkScalarSin(toRadian(degree10th)); }
 
 void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Color textColor,
                                             const SkFont& font, GlyphOrientation glyphOrientation)
@@ -1911,12 +1911,12 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     while (layout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         glyphIds.push_back(pGlyph->glyphId());
-        int angle = 0; // 10th of degree
+        Degree10 angle(0); // 10th of degree
         if (glyphOrientation == GlyphOrientation::Apply)
         {
             angle = layout.GetOrientation();
             if (pGlyph->IsVertical())
-                angle += 900; // 90 degree
+                angle += Degree10(900); // 90 degree
         }
         SkRSXform form = SkRSXform::Make(toCos(angle), toSin(angle), aPos.X(), aPos.Y());
         glyphForms.emplace_back(std::move(form));

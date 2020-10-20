@@ -840,7 +840,8 @@ void VclPixelProcessor2D::processFillHatchPrimitive2D(
         const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
         const sal_uInt16 nAngle10(
             static_cast<sal_uInt16>(basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800)));
-        ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
+        ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance,
+                          Degree10(nAngle10));
 
         // draw hatch using VCL
         mpOutputDevice->DrawHatch(::tools::PolyPolygon(::tools::Polygon(aHatchPolygon)), aVCLHatch);
@@ -1206,7 +1207,7 @@ void VclPixelProcessor2D::processFillGradientPrimitive2D(
     Gradient aGradient(eGradientStyle, Color(rFillGradient.getStartColor()),
                        Color(rFillGradient.getEndColor()));
 
-    aGradient.SetAngle(rFillGradient.getAngle() / F_PI1800);
+    aGradient.SetAngle(Degree10(static_cast<int>(rFillGradient.getAngle() / F_PI1800)));
     aGradient.SetBorder(rFillGradient.getBorder() * 100);
     aGradient.SetOfsX(rFillGradient.getOffsetX() * 100.0);
     aGradient.SetOfsY(rFillGradient.getOffsetY() * 100.0);

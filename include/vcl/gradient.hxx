@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 
 #include <vcl/vclenum.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -56,8 +57,8 @@ public:
     void            SetEndColor( const Color& rColor );
     const Color&    GetEndColor() const;
 
-    void            SetAngle( sal_uInt16 nAngle );
-    sal_uInt16          GetAngle() const;
+    void            SetAngle( Degree10 nAngle );
+    Degree10        GetAngle() const;
 
     void            SetBorder( sal_uInt16 nBorder );
     sal_uInt16          GetBorder() const;

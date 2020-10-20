@@ -364,7 +364,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 tools::Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 if( rObj.GetAngle() )
                 {
-                    aPolygon.Rotate( rRect.TopLeft(), static_cast<sal_uInt16>( rObj.GetAngle() / 10 ) );
+                    aPolygon.Rotate( rRect.TopLeft(), Degree10(static_cast<sal_Int16>( rObj.GetAngle() / 10 )) );
                     rObj.SetAngle( 0 );
                 }
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );

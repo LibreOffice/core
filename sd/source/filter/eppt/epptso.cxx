@@ -1872,7 +1872,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     bool bNeedText = true;
                     if ( mnAngle )
                     {
-                        aPolygon.Rotate( aRect.TopLeft(), static_cast<sal_uInt16>( mnAngle / 10 ) );
+                        aPolygon.Rotate( aRect.TopLeft(), Degree10(static_cast<sal_Int16>( mnAngle / 10 )) );
                         if ( ImplGetText() )
                         {
                             // #i119551# PPT does not support groups of polygons and text (MS patch KB2289187)

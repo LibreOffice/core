@@ -110,7 +110,7 @@ bool lclDrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
         if( aGraphic.IsSupportedGraphic() )
         {
-            const sal_uInt16 nRot10 = rAttr.GetRotation() % 3600;
+            const Degree10 nRot10 = rAttr.GetRotation() % Degree10(3600);
 
             if( nRot10 )
             {
@@ -353,7 +353,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice const * pOut, Point& rPt, Si
     if( GetType() != GraphicType::NONE )
     {
         tools::Polygon aClipPoly( tools::Rectangle( rPt, rSz ) );
-        const sal_uInt16 nRot10 = pAttr->GetRotation() % 3600;
+        const Degree10  nRot10 = pAttr->GetRotation() % Degree10(3600);
         const Point     aOldOrigin( rPt );
         const MapMode   aMap100( MapUnit::Map100thMM );
         Size            aSize100;

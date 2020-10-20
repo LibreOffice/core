@@ -864,7 +864,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     aBulletFont.SetFontSize( Size( 0, nScaledLineHeight ) );
     bool bVertical = IsVertical();
     aBulletFont.SetVertical( bVertical );
-    aBulletFont.SetOrientation( bVertical ? (IsTopToBottom() ? 2700 : 900) : 0 );
+    aBulletFont.SetOrientation( Degree10(bVertical ? (IsTopToBottom() ? 2700 : 900) : 0) );
 
     Color aColor( COL_AUTO );
     if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EEControlBits::NOCOLORS ) )
@@ -880,7 +880,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
 }
 
 void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
-    const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
+    const Point& rOrigin, Degree10 nOrientation, OutputDevice* pOutDev )
 {
 
     bool bDrawBullet = false;
@@ -949,7 +949,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
             {
                 // Both TopLeft and bottom left is not quite correct,
                 // since in EditEngine baseline ...
-                double nRealOrientation = nOrientation*F_PI1800;
+                double nRealOrientation = nOrientation.get() * F_PI1800;
                 double nCos = cos( nRealOrientation );
                 double nSin = sin( nRealOrientation );
                 Point aRotatedPos;

@@ -356,7 +356,7 @@ void ScDrawStringsVars::SetPattern(
             eAttrHorJust = SvxCellHorJustify::Standard;
     }
 
-    short nRot;
+    sal_Int16 nRot;
     switch (eAttrOrient)
     {
         case SvxCellOrientation::Standard:
@@ -382,7 +382,7 @@ void ScDrawStringsVars::SetPattern(
             bRotated = false;
             break;
     }
-    aFont.SetOrientation( nRot );
+    aFont.SetOrientation( Degree10(nRot) );
 
     // syntax mode
 
@@ -3453,7 +3453,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             }
         }
 
-        rParam.mpEngine->Draw(mpDev, aLogicStart, 900);
+        rParam.mpEngine->Draw(mpDev, aLogicStart, Degree10(900));
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -3690,7 +3690,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         // bMoveClipped handling has been replaced by complete alignment
         // handling (also extending to the left).
 
-        rParam.mpEngine->Draw(mpDev, aLogicStart, 2700);
+        rParam.mpEngine->Draw(mpDev, aLogicStart, Degree10(2700));
     }
 
     rParam.adjustForHyperlinkInPDF(aURLStart, mpDev);
@@ -4999,10 +4999,10 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 OSL_ENSURE( eOrient == SvxCellOrientation::Standard && nAttrRotate,
                                             "DrawRotated: no rotation" );
 
-                                tools::Long nOriVal = 0;
+                                sal_Int16 nOriVal = 0;
                                 if ( nAttrRotate )
                                 {
-                                    // attribute is 1/100, Font 1/10 Grad
+                                    // attribute is 1/100, Font 1/10 degrees
                                     nOriVal = nAttrRotate / 10;
 
                                     double nAddX = 0.0;
@@ -5055,7 +5055,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 //  bSimClip is not used here (because nOriVal is set)
 
-                                pEngine->Draw( mpDev, aLogicStart, static_cast<short>(nOriVal) );
+                                pEngine->Draw( mpDev, aLogicStart, Degree10(nOriVal) );
 
                                 if (bMetaFile)
                                     mpDev->Pop();

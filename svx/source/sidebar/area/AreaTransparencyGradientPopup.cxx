@@ -64,7 +64,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
 
     if (rGradient.GetXOffset() == AreaPropertyPanelBase::DEFAULT_CENTERX
         && rGradient.GetYOffset() == AreaPropertyPanelBase::DEFAULT_CENTERY
-        && (rGradient.GetAngle() / 10) == AreaPropertyPanelBase::DEFAULT_ANGLE
+        && (rGradient.GetAngle().get() / 10) == AreaPropertyPanelBase::DEFAULT_ANGLE
         && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetStartColor().GetRed()) + 1) * 100) / 255)
             == AreaPropertyPanelBase::DEFAULT_STARTVALUE
         && static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255)
@@ -79,7 +79,7 @@ void AreaTransparencyGradientPopup::InitStatus(XFillFloatTransparenceItem const 
     }
     mxMtrTrgrCenterX->set_value(aGradient.GetXOffset(), FieldUnit::PERCENT);
     mxMtrTrgrCenterY->set_value(aGradient.GetYOffset(), FieldUnit::PERCENT);
-    mxMtrTrgrAngle->set_value(aGradient.GetAngle() / 10, FieldUnit::DEGREE);
+    mxMtrTrgrAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
     mxMtrTrgrStartValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetStartColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(aGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
     mxMtrTrgrBorder->set_value(aGradient.GetBorder(), FieldUnit::PERCENT);
@@ -127,7 +127,7 @@ void AreaTransparencyGradientPopup::ExecuteValueModify(sal_uInt8 nStartCol, sal_
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
         static_cast<css::awt::GradientStyle>(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
-        static_cast<sal_uInt16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10,
+        Degree10(static_cast<sal_Int16>(mxMtrTrgrAngle->get_value(FieldUnit::DEGREE)) * 10),
         static_cast<sal_uInt16>(mxMtrTrgrCenterX->get_value(FieldUnit::PERCENT)),
         static_cast<sal_uInt16>(mxMtrTrgrCenterY->get_value(FieldUnit::PERCENT)),
         static_cast<sal_uInt16>(mxMtrTrgrBorder->get_value(FieldUnit::PERCENT)),

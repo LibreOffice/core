@@ -483,7 +483,7 @@ namespace drawinglayer::primitive2d
                                 static_cast<double>(aXGradient.GetBorder()) * 0.01,
                                 static_cast<double>(aXGradient.GetXOffset()) * 0.01,
                                 static_cast<double>(aXGradient.GetYOffset()) * 0.01,
-                                static_cast<double>(aXGradient.GetAngle()) * F_PI1800,
+                                static_cast<double>(aXGradient.GetAngle().get()) * F_PI1800,
                                 aStart,
                                 aEnd,
                                 rSet.Get(XATTR_GRADIENTSTEPCOUNT).GetValue());
@@ -498,7 +498,7 @@ namespace drawinglayer::primitive2d
                             aHatch = attribute::FillHatchAttribute(
                                 XHatchStyleToHatchStyle(rHatch.GetHatchStyle()),
                                 static_cast<double>(rHatch.GetDistance()),
-                                static_cast<double>(rHatch.GetAngle()) * F_PI1800,
+                                static_cast<double>(rHatch.GetAngle().get()) * F_PI1800,
                                 aColorB.getBColor(),
                                 3, // same default as VCL, a minimum of three discrete units (pixels) offset
                                 rSet.Get(XATTR_FILLBACKGROUND).GetValue());
@@ -644,7 +644,7 @@ namespace drawinglayer::primitive2d
                         static_cast<double>(rGradient.GetBorder()) * 0.01,
                         static_cast<double>(rGradient.GetXOffset()) * 0.01,
                         static_cast<double>(rGradient.GetYOffset()) * 0.01,
-                        static_cast<double>(rGradient.GetAngle()) * F_PI1800,
+                        static_cast<double>(rGradient.GetAngle().get()) * F_PI1800,
                         basegfx::BColor(fStartLum, fStartLum, fStartLum),
                         basegfx::BColor(fEndLum, fEndLum, fEndLum),
                         0);

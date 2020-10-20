@@ -221,7 +221,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
     {
         SvXMLElementExport aDesc( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, true, true );
         Color aStartColor( rGradient.GetStartColor() ), aEndColor( rGradient.GetEndColor() );
-        sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+        Degree10 nAngle = rGradient.GetAngle() % Degree10(3600);
         Point aObjRectCenter( rObjRect.Center() );
         tools::Polygon aPoly( rObjRect );
         static sal_Int32 nCurGradientId = 1;
@@ -1252,7 +1252,7 @@ void SVGTextWriter::startTextShape()
             {
                 Point   aRot( maTextPos );
                 OUString aTransform = "rotate(" +
-                    OUString::number( rFont.GetOrientation() * -0.1 ) + " " +
+                    OUString::number( rFont.GetOrientation().get() * -0.1 ) + " " +
                     OUString::number( aRot.X() ) + " " +
                     OUString::number( aRot.Y() ) + ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
@@ -2249,7 +2249,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const tools::PolyPolygon& rPolyPo
             rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
             ImplMap( aTmpRect, aRect );
             ImplMap( aTmpCenter, aCenter );
-            const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+            const Degree10 nAngle = rGradient.GetAngle() % Degree10(3600);
 
             tools::Polygon aPoly( 2 );
             // Setting x value of a gradient vector to rotation center to
@@ -2601,7 +2601,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     {
         Point   aRot( aPos );
         OUString  aTransform = "rotate(" +
-                    OUString::number( rFont.GetOrientation() * -0.1 ) + " " +
+                    OUString::number( rFont.GetOrientation().get() * -0.1 ) + " " +
                     OUString::number( aRot.X() ) + " " +
                     OUString::number( aRot.Y() ) + ")";
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );

@@ -1588,7 +1588,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE ) );
     aNewFont.SetFontSize( aFontSz );
     aNewFont.SetVertical( bVertical );
-    aNewFont.SetOrientation( bVertical ? 2700 : 0 );
+    aNewFont.SetOrientation( Degree10(bVertical ? 2700 : 0) );
     aNewFont.SetColor( COL_AUTO );
     pInfo->mpOutDev->SetFont( aNewFont );
     OUString aPageText = OUString::number( nPage );

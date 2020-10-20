@@ -254,7 +254,7 @@ namespace emfio
         if( rFont.lfStrikeOut )
             aFont.SetStrikeout( STRIKEOUT_SINGLE );
 
-        aFont.SetOrientation( static_cast<short>(rFont.lfEscapement) );
+        aFont.SetOrientation( Degree10(static_cast<sal_Int16>(rFont.lfEscapement)) );
 
         Size aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
         if ( rFont.lfHeight > 0 )
@@ -504,7 +504,7 @@ namespace emfio
         sal_Int32 nResult;
         const bool bFail = o3tl::checked_multiply(mnWinExtX, mnWinExtY, nResult);
         if (!bFail && nResult < 0)
-            rFont.SetOrientation( 3600 - rFont.GetOrientation() );
+            rFont.SetOrientation( Degree10(3600) - rFont.GetOrientation() );
     }
 
     tools::Polygon& MtfTools::ImplMap( tools::Polygon& rPolygon )
@@ -1514,8 +1514,7 @@ namespace emfio
                     fOrientation = 360 - fOrientation;
                 fOrientation += 90;
                 fOrientation *= 10;
-                fOrientation += aTmp.GetOrientation();
-                aTmp.SetOrientation( sal_Int16( fOrientation ) );
+                aTmp.SetOrientation( aTmp.GetOrientation() + Degree10( static_cast<sal_Int16>(fOrientation) ) );
             }
         }
 

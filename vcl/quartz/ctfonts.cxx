@@ -56,7 +56,7 @@ CoreTextStyle::CoreTextStyle(const PhysicalFontFace& rPFF, const FontSelectPatte
     double fScaledFontHeight = rFSP.mfExactHeight;
 
     // convert font rotation to radian
-    mfFontRotation = toRadian(rFSP.mnOrientation);
+    mfFontRotation = toRadian(rFSP.mnOrientation.get());
 
     // dummy matrix so we can use CGAffineTransformConcat() below
     CGAffineTransform aMatrix = CGAffineTransformMakeTranslation(0, 0);

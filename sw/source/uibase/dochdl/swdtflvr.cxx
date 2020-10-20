@@ -406,8 +406,8 @@ namespace
         if ( !aMetadata.read(aGraphic) )
             return;
 
-        sal_uInt16 aRotation = aMetadata.getRotation();
-        if (aRotation != 0)
+        Degree10 aRotation = aMetadata.getRotation();
+        if (aRotation)
         {
             std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "modules/swriter/ui/queryrotateintostandarddialog.ui"));
             std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog("QueryRotateIntoStandardOrientationDialog"));
