@@ -11,6 +11,17 @@
  #define pixman_fixed_frac(f)		((f) & pixman_fixed_1_minus_e)
 --- misc/pixman/pixman/pixman-fast-path.c
 +++ misc/build/pixman/pixman/pixman-fast-path.c
+@@ -2758,8 +2758,8 @@
+ 	 * positioned relative to a particular phase (and not relative to whatever
+ 	 * exact fraction we happen to get here).
+ 	 */
+-	x = ((vx >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
+-	y = ((vy >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
++	x = ((uint32_t)(vx >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
++	y = ((uint32_t)(vy >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
+ 
+ 	px = (x & 0xffff) >> x_phase_shift;
+ 	py = (y & 0xffff) >> y_phase_shift;
 @@ -2836,7 +2836,7 @@
  	sgtot = CLIP (sgtot, 0, 0xff);
  	sbtot = CLIP (sbtot, 0, 0xff);
@@ -20,8 +31,39 @@
  
      next:
  	vx += ux;
+@@ -3086,7 +3086,7 @@
+ static force_inline uint32_t
+ convert_a8 (const uint8_t *row, int x)
+ {
+-    return *(row + x) << 24;
++    return (uint32_t)*(row + x) << 24;
+ }
+ 
+ static force_inline uint32_t
+--- misc/pixman/pixman/pixman-access.c
++++ misc/build/pixman/pixman/pixman-access.c
+@@ -100,7 +100,7 @@
+ 	uint32_t  *__d = ((uint32_t *)(l)) + ((o) >> 5);		\
+ 	uint32_t __m, __v;						\
+ 									\
+-	__m = 1 << ((o) & 0x1f);					\
++	__m = (uint32_t)1 << ((o) & 0x1f);					\
+ 	__v = (v)? __m : 0;						\
+ 									\
+ 	WRITE((img), __d, (READ((img), __d) & ~__m) | __v);		\
 --- misc/pixman/pixman/pixman-bits-image.c
 +++ misc/build/pixman/pixman/pixman-bits-image.c
+@@ -243,8 +243,8 @@
+      * positioned relative to a particular phase (and not relative to whatever
+      * exact fraction we happen to get here).
+      */
+-    x = ((x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
+-    y = ((y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
++    x = ((uint32_t)(x >> x_phase_shift) << x_phase_shift) + ((1 << x_phase_shift) >> 1);
++    y = ((uint32_t)(y >> y_phase_shift) << y_phase_shift) + ((1 << y_phase_shift) >> 1);
+ 
+     px = (x & 0xffff) >> x_phase_shift;
+     py = (y & 0xffff) >> y_phase_shift;
 @@ -306,7 +306,7 @@
      sgtot = CLIP (sgtot, 0, 0xff);
      sbtot = CLIP (sbtot, 0, 0xff);
@@ -31,3 +73,113 @@
  }
  
  static force_inline uint32_t
+--- misc/pixman/pixman/pixman-combine32.c
++++ misc/build/pixman/pixman/pixman-combine32.c
+@@ -589,7 +589,7 @@
+ 	    rg = DIV_ONE_UN8 (rg);					\
+ 	    rb = DIV_ONE_UN8 (rb);					\
+ 									\
+-	    *(dest + i) = ra << 24 | rr << 16 | rg << 8 | rb;		\
++	    *(dest + i) = (uint32_t)ra << 24 | rr << 16 | rg << 8 | rb;		\
+ 	}								\
+     }									\
+     									\
+--- misc/pixman/pixman/pixman-gradient-walker.c
++++ misc/build/pixman/pixman/pixman-gradient-walker.c
+@@ -193,7 +193,7 @@
+     g8 = g + 0.5f;
+     b8 = b + 0.5f;
+ 
+-    v = ((a8 << 24) & 0xff000000) |
++    v = (((uint32_t)a8 << 24) & 0xff000000) |
+         ((r8 << 16) & 0x00ff0000) |
+         ((g8 <<  8) & 0x0000ff00) |
+         ((b8 >>  0) & 0x000000ff);
+--- misc/pixman/pixman/pixman-sse2.c
++++ misc/build/pixman/pixman/pixman-sse2.c
+@@ -516,9 +516,13 @@
+ }
+ 
+ static force_inline uint32_t
+-combine1 (const uint32_t *ps, const uint32_t *pm)
++combine1 (const void *ps, const uint32_t *pm)
+ {
+-    uint32_t s = *ps;
++#ifdef WORDS_BIGENDIAN
++    uint32_t s = (uint32_t)((const uint8_t *)ps)[3] | ((uint32_t)((const uint8_t *)ps)[2] << 8) | ((uint32_t)((const uint8_t *)ps)[1] << 16) | ((uint32_t)((const uint8_t *)ps)[0] << 24);
++#else
++    uint32_t s = (uint32_t)((const uint8_t *)ps)[0] | ((uint32_t)((const uint8_t *)ps)[1] << 8) | ((uint32_t)((const uint8_t *)ps)[2] << 16) | ((uint32_t)((const uint8_t *)ps)[3] << 24);
++#endif
+ 
+     if (pm)
+     {
+@@ -3256,7 +3260,11 @@
+ 
+ 	while (w >= 4)
+ 	{
+-	    m = *((uint32_t*)mask);
++#ifdef WORDS_BIGENDIAN
++	    m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
++#else
++	    m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
++#endif
+ 
+ 	    if (srca == 0xff && m == 0xffffffff)
+ 	    {
+@@ -3343,7 +3351,7 @@
+ 
+ 	b = filler & 0xff;
+ 	w = (b << 8) | b;
+-	filler = (w << 16) | w;
++	filler = ((uint32_t)w << 16) | w;
+     }
+     else if (bpp == 16)
+     {
+@@ -3528,7 +3536,11 @@
+ 
+ 	while (w >= 4)
+ 	{
+-	    m = *((uint32_t*)mask);
++#ifdef WORDS_BIGENDIAN
++	    m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
++#else
++	    m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
++#endif
+ 
+ 	    if (srca == 0xff && m == 0xffffffff)
+ 	    {
+@@ -5016,7 +5028,11 @@
+ 
+         while (w >= 4)
+         {
+-            m = *(uint32_t *) mask;
++#ifdef WORDS_BIGENDIAN
++            m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
++#else
++            m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
++#endif
+ 
+ 	    if (m)
+ 	    {
+@@ -5970,7 +5986,11 @@
+ 	__m128i xmm_dst, xmm_dst_lo, xmm_dst_hi;
+ 	__m128i xmm_mask, xmm_mask_lo, xmm_mask_hi;
+ 
+-	m = *(uint32_t*)mask;
++#ifdef WORDS_BIGENDIAN
++	m = (uint32_t)mask[3] | ((uint32_t)mask[2] << 8) | ((uint32_t)mask[1] << 16) | ((uint32_t)mask[0] << 24);
++#else // TODO:big endian
++	m = (uint32_t)mask[0] | ((uint32_t)mask[1] << 8) | ((uint32_t)mask[2] << 16) | ((uint32_t)mask[3] << 24);
++#endif
+ 
+ 	if (m)
+ 	{
+@@ -6437,7 +6457,7 @@
+ 
+     while (w)
+     {
+-	*dst++ = *(src++) << 24;
++	*dst++ = (uint32_t)*(src++) << 24;
+ 	w--;
+     }
+ 
