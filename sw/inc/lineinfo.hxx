@@ -49,7 +49,7 @@ class SW_DLLPUBLIC SwLineNumberInfo final : public SwClient /**< purpose of deri
     bool                m_bCountInFlys;           ///< Count also within FlyFrames?
     bool                m_bRestartEachPage;       /**< Restart counting at the first paragraph of each page
                                                        (even on follows when paragraphs are split) */
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:
     SwLineNumberInfo();

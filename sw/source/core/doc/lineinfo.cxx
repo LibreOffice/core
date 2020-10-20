@@ -112,9 +112,12 @@ void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
     pChFormat->Add( this );
 }
 
-void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* /*pNew*/ )
+void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    CheckRegistration( pOld );
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    CheckRegistration( pLegacy->m_pOld );
     SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
     SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
