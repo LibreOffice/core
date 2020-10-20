@@ -863,7 +863,9 @@ void PieChart::createShapes()
 
 PieChart::PieLabelInfo::PieLabelInfo()
     : aFirstPosition(), aOrigin(), fValue(0.0)
-    , bMovementAllowed(false), bMoved(false), pPrevious(nullptr),pNext(nullptr)
+    , bMovementAllowed(false), bMoved(false)
+    , bShowLeaderLine(false), pPrevious(nullptr)
+    , pNext(nullptr)
 {
 }
 
