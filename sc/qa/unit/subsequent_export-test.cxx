@@ -90,7 +90,7 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    ScDocShellRef saveAndReloadPassword( ScDocShell*, const OUString&, const OUString&, const OUString&, SfxFilterFlags );
+    ScDocShellRef saveAndReloadPassword( ScDocShell*, sal_Int32 );
 
     void test();
     void testTdf90104();
@@ -488,19 +488,22 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
     }
 }
 
-ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType)
+ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, sal_Int32 nFormat)
 {
+    OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(getFileFormats()[nFormat].pTypeName, strlen(getFileFormats()[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    SfxFilterFlags aFormatType(getFileFormats()[nFormat].nFormatType);
+
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
-    if (nFormatType == ODS_FORMAT_TYPE)
+    if (aFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
     auto pExportFilter = std::make_shared<SfxFilter>(
-        rFilter,
-        OUString(), nFormatType, nExportFormat, rTypeName, OUString(),
-        rUserData, "private:factory/scalc*" );
+        aFilterName,
+        OUString(), aFormatType, nExportFormat, aFilterType, OUString(),
+        OUString(), "private:factory/scalc*" );
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
@@ -515,12 +518,12 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const OUSt
 
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
-    SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
-    if (nFormatType == ODS_FORMAT_TYPE)
-        nFormat = SotClipboardFormatId::STARCALC_8;
+    SotClipboardFormatId nClipboardFormat = SotClipboardFormatId::NONE;
+    if (aFormatType == ODS_FORMAT_TYPE)
+        nClipboardFormat = SotClipboardFormatId::STARCALC_8;
 
     OUString aPass("test");
-    return load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, &aPass);
+    return load(aTempFile.GetURL(), aFilterName, OUString(), aFilterType, aFormatType, nClipboardFormat, SOFFICE_FILEFORMAT_CURRENT, &aPass);
 }
 
 void ScExportTest::test()
@@ -597,10 +600,7 @@ void ScExportTest::testPasswordExportODS()
 
     rDoc.SetValue(0, 0, 0, 1.0);
 
-    sal_Int32 nFormat = FORMAT_ODS;
-    OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(getFileFormats()[nFormat].pTypeName, strlen(getFileFormats()[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReloadPassword(pShell, aFilterName, OUString(), aFilterType, getFileFormats()[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReloadPassword(pShell, FORMAT_ODS);
 
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
@@ -621,11 +621,7 @@ void ScExportTest::testTdf134332()
 
     ASSERT_DOUBLES_EQUAL(238.0, rDoc.GetValue(ScAddress(0,10144,0)));
 
-    sal_Int32 nFormat = FORMAT_ODS;
-    OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFilterType(getFileFormats()[nFormat].pTypeName, strlen(getFileFormats()[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReloadPassword(static_cast<ScDocShell*>(rDoc.GetDocumentShell()), aFilterName, OUString(),
-            aFilterType, getFileFormats()[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReloadPassword(static_cast<ScDocShell*>(rDoc.GetDocumentShell()), FORMAT_ODS);
 
     // Without the fixes in place, it would have failed here
     CPPUNIT_ASSERT(xDocSh.is());
