@@ -793,11 +793,12 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrame* _pNewAnchorFram
         nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
     }
 
-    GetFrameFormat().SetFormatAttr( SwFormatHoriOrient( nHoriRelPos, text::HoriOrientation::NONE,
-        GetFrameFormat().GetAnchor().GetAnchorId() == RndStdIds::FLY_AT_PAGE
-            ? text::RelOrientation::PAGE_FRAME
-            : text::RelOrientation::FRAME ) );
-    GetFrameFormat().SetFormatAttr( SwFormatVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
+    SwFormatHoriOrient hori(nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME);
+    SwFormatVertOrient vert(nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME);
+    SfxItemSet items(GetFrameFormat().GetDoc()->GetAttrPool(), svl::Items<RES_VERT_ORIENT, RES_HORI_ORIENT>());
+    items.Put(hori);
+    items.Put(vert);
+    GetFrameFormat().GetDoc()->SetAttr(items, GetFrameFormat());
 }
 
 // --> #i34748# - change return type.

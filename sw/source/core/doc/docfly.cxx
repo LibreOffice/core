@@ -932,18 +932,6 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 // #i26791# - Direct object positioning no longer needed. Apply
                 // of attributes (method call <SetAttr(..)>) takes care of the
                 // invalidation of the object position.
-                SetAttr( aNewAnch, *pContact->GetFormat() );
-                if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
-                {
-                    SwFormatHoriOrient item(pContact->GetFormat()->GetHoriOrient());
-                    sal_Int16 nRelOrient(item.GetRelationOrient());
-                    if (sw::GetAtPageRelOrientation(nRelOrient, false))
-                    {
-                        SAL_INFO("sw.ui", "fixing horizontal RelOrientation for at-page anchor");
-                        item.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
-                        SetAttr(item, *pContact->GetFormat());
-                    }
-                }
                 if ( _bPosCorr )
                 {
                     // #i33313# - consider not connected 'virtual' drawing
@@ -962,6 +950,20 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                                     ->AdjustPositioningAttr( pNewAnchorFrame );
                     }
                 }
+                if (aNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+                {
+                    SwFormatHoriOrient item(pContact->GetFormat()->GetHoriOrient());
+                    sal_Int16 nRelOrient(item.GetRelationOrient());
+                    if (sw::GetAtPageRelOrientation(nRelOrient, false))
+                    {
+                        SAL_INFO("sw.ui", "fixing horizontal RelOrientation for at-page anchor");
+                        item.SetRelationOrient(nRelOrient);
+                        SetAttr(item, *pContact->GetFormat());
+                    }
+                }
+                // tdf#136385 set the anchor last - otherwise it messes up the
+                // position in SwDrawContact::Changed_() callback
+                SetAttr(aNewAnch, *pContact->GetFormat());
             }
 
             // we have changed the anchoring attributes, and those are used to
