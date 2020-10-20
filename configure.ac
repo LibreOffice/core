@@ -11188,9 +11188,6 @@ AC_SUBST(ENABLE_KF5)
 GTK3_CFLAGS=""
 GTK3_LIBS=""
 if test "x$enable_gtk3" = "xyes" -o "x$enable_gtk3_kde5" = "xyes"; then
-    if test "$with_system_cairo" = no; then
-        AC_MSG_ERROR([System cairo required for gtk3 support, do not combine --enable-gtk3 with --without-system-cairo])
-    fi
     : ${with_system_cairo:=yes}
     PKG_CHECK_MODULES(GTK3, gtk+-3.0 >= 3.20 gtk+-unix-print-3.0 gmodule-no-export-2.0 glib-2.0 >= 2.38 cairo)
     GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
