@@ -1021,7 +1021,9 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         Size aInRectSize(rRenderContext.LogicToPixel(Size(aInRect.GetWidth(), aInRect.GetHeight())));
         aControlValue.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height());
 
-        if ((nState & ControlState::ROLLOVER) || !(GetStyle() & WB_FLATBUTTON))
+        if ((nState & ControlState::ROLLOVER) || !(GetStyle() & WB_FLATBUTTON)
+            || (HasFocus() && mpWindowImpl->mbUseNativeFocus
+                && !IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus)))
         {
             bNativeOK = rRenderContext.DrawNativeControl(ControlType::Pushbutton, ControlPart::Entire, aCtrlRegion, nState,
                                                          aControlValue, OUString() /*PushButton::GetText()*/);
