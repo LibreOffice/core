@@ -70,6 +70,24 @@
       "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "161e9633_7f2f8ef2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-20T20:37:45Z",
+      "side": 1,
+      "message": "\u003e From how I understand it: The user\u0027s changes to Java settings in the option dialog (like adding or selecting another JRE, changing classpath,...) are written to the user-specific \u0027javasettings_${_OS}_${_ARCH}.xml\u0027 (like \u0027instdir/user/config/javasettings_Linux_X86_64.xml\u0027 for a development build on Linux).\n\u003e \n\u003e Direct mode completely ignores the \u0027javasettings_${_OS}_${_ARCH}.xml\u0027 files (both the system-wide as well as the user-specific one, s. the \"By setting UNO_JAVA_JFW_JREHOME the framework is switched into direct mode and the office settings are disregarded.\" quote in the commit message), which is why this change avoids creating and evaluating the \u0027jfw::MergedSettings\u0027 when direct mode is used.\n\nYeah, now I get it.  So this change indeed makes sense.  Maybe it would be worth it to add a comment in jfw_findAllJREs explaining why the settings.getJRELocations part is omitted in direct mode.",
+      "parentUuid": "521aaf5d_64c535f3",
+      "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
