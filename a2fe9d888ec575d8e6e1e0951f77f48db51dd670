@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71eacfb8_952ec72f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-20T06:34:20Z",
+      "side": 1,
+      "message": "And with this change, if UNO_JAVA_JFW_JREHOME is set, the \"Advanced\" options page would show (and allow the user to select) all Java installations that are found automatically, just not any that had manually been added with the \"Add...\" button, right?",
+      "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
