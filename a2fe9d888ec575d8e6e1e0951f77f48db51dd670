@@ -16,6 +16,24 @@
       "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717a5a4d_836edb50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-10-20T06:42:08Z",
+      "side": 1,
+      "message": "Exactly, though https://gerrit.libreoffice.org/c/core/+/104002/1 will also keep the user from selecting any other one as long as UNO_JAVA_JFW_JREHOME is set (since user selection is disregarded anayway).",
+      "parentUuid": "71eacfb8_952ec72f",
+      "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
