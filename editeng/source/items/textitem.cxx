@@ -99,7 +99,7 @@ SfxPoolItem* SvxEscapementItem::CreateDefault() {return new SvxEscapementItem(0)
 SfxPoolItem* SvxLanguageItem::CreateDefault() {return new SvxLanguageItem(LANGUAGE_GERMAN, 0);}
 SfxPoolItem* SvxBlinkItem::CreateDefault() {return new SvxBlinkItem(false, 0);}
 SfxPoolItem* SvxEmphasisMarkItem::CreateDefault() {return new SvxEmphasisMarkItem(FontEmphasisMark::NONE, 0);}
-SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0, false, 0);}
+SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(Degree10(0), false, 0);}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}
 SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
 
@@ -2153,8 +2153,8 @@ bool SvxTwoLinesItem::GetPresentation( SfxItemPresentation /*ePres*/,
 |*    class SvxTextRotateItem
 *************************************************************************/
 
-SvxTextRotateItem::SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nW)
-    : SfxUInt16Item(nW, nValue)
+SvxTextRotateItem::SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nW)
+    : SfxUInt16Item(nW, nValue.get())
 {
 }
 
@@ -2174,7 +2174,7 @@ bool SvxTextRotateItem::GetPresentation(
     {
         rText = EditResId(RID_SVXITEMS_TEXTROTATE);
         rText = rText.replaceFirst("$(ARG1)",
-            OUString::number(GetValue() / 10));
+            OUString::number(GetValue().get() / 10));
     }
     return true;
 }
@@ -2206,7 +2206,7 @@ bool SvxTextRotateItem::PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId)
     {
         sal_Int16 nVal = 0;
         if ((rVal >>= nVal) && (0 == nVal || 900 == nVal || 2700 == nVal))
-            SetValue(static_cast<sal_uInt16>(nVal));
+            SetValue(Degree10(nVal));
         else
             bRet = false;
         break;
@@ -2221,7 +2221,7 @@ void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxTextRotateItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue().get()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
@@ -2230,7 +2230,7 @@ void SvxTextRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 |*    class SvxCharRotateItem
 *************************************************************************/
 
-SvxCharRotateItem::SvxCharRotateItem( sal_uInt16 nValue,
+SvxCharRotateItem::SvxCharRotateItem( Degree10 nValue,
                                        bool bFitIntoLine,
                                        const sal_uInt16 nW )
     : SvxTextRotateItem(nValue, nW), bFitToLine( bFitIntoLine )
@@ -2253,7 +2253,7 @@ bool SvxCharRotateItem::GetPresentation(
     {
         rText = EditResId( RID_SVXITEMS_CHARROTATE );
         rText = rText.replaceFirst( "$(ARG1)",
-                    OUString::number( GetValue() / 10 ));
+                    OUString::number( GetValue().get() / 10 ));
         if( IsFitToLine() )
             rText += EditResId( RID_SVXITEMS_CHARROTATE_FITLINE );
     }
@@ -2311,7 +2311,7 @@ void SvxCharRotateItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SvxCharRotateItem"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue().get()).getStr()));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fitToLine"), BAD_CAST(OString::boolean(IsFitToLine()).getStr()));
     xmlTextWriterEndElement(pWriter);
 }

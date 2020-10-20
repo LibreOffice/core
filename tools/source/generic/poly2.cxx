@@ -254,13 +254,13 @@ void PolyPolygon::Scale( double fScaleX, double fScaleY )
         mpImplPolyPolygon->mvPolyAry[ i ].Scale( fScaleX, fScaleY );
 }
 
-void PolyPolygon::Rotate( const Point& rCenter, sal_uInt16 nAngle10 )
+void PolyPolygon::Rotate( const Point& rCenter, Degree10 nAngle10 )
 {
-    nAngle10 %= 3600;
+    nAngle10 %= Degree10(3600);
 
     if( nAngle10 )
     {
-        const double fAngle = F_PI1800 * nAngle10;
+        const double fAngle = F_PI1800 * nAngle10.get();
         Rotate( rCenter, sin( fAngle ), cos( fAngle ) );
     }
 }

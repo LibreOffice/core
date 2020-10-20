@@ -76,7 +76,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
         // rotated text
         vcl::Font aFont( GetFont() );
         aFont.SetColor( GetTextColor() );
-        aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  // Font uses 1/10 degrees
+        aFont.SetOrientation( Degree10(static_cast< sal_Int16 >( (nAngle + 5) / 10 )) );  // Font uses 1/10 degrees
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 

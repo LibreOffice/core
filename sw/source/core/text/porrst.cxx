@@ -236,7 +236,7 @@ SwTwips SwTextFrame::EmptyHeight() const
     }
 
     if ( IsVertical() )
-        pFnt->SetVertical( 2700 );
+        pFnt->SetVertical( Degree10(2700) );
 
     OutputDevice* pOut = pSh ? pSh->GetOut() : nullptr;
     if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
@@ -586,7 +586,7 @@ void SwControlCharPortion::Paint( const SwTextPaintInfo &rInf ) const
     Point aOldPos = rInf.GetPos();
     Point aNewPos( aOldPos );
     auto const deltaX((Width() / 2) - mnHalfCharWidth);
-    switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()))
+    switch (rInf.GetFont()->GetOrientation(rInf.GetTextFrame()->IsVertical()).get())
     {
         case 0:
             aNewPos.AdjustX(deltaX);

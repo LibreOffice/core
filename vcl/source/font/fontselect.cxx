@@ -46,12 +46,12 @@ FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     rFont.GetFontAttributes( *this );
 
     // normalize orientation between 0 and 3600
-    if( 3600 <= static_cast<unsigned>(mnOrientation) )
+    if( mnOrientation < Degree10(0) || mnOrientation >= Degree10(3600) )
     {
-        if( mnOrientation >= 0 )
-            mnOrientation %= 3600;
+        if( mnOrientation >= Degree10(0) )
+            mnOrientation %= Degree10(3600);
         else
-            mnOrientation = 3600 - (-mnOrientation % 3600);
+            mnOrientation = Degree10(3600) - (-mnOrientation % Degree10(3600));
     }
 
     // normalize width and height
@@ -99,7 +99,7 @@ size_t FontSelectPattern::hashCode() const
     nHash += 11U * mnHeight;
     nHash += 19 * GetWeight();
     nHash += 29 * GetItalic();
-    nHash += 37 * mnOrientation;
+    nHash += 37 * mnOrientation.get();
     nHash += 41 * static_cast<sal_uInt16>(meLanguage);
     if( mbVertical )
         nHash += 53;

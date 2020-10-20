@@ -1271,7 +1271,7 @@ void SvmTest::testGradient()
     aGradient2.SetStyle(GradientStyle::Radial);
     aGradient2.SetStartColor(COL_LIGHTRED);
     aGradient2.SetEndColor(COL_LIGHTGREEN);
-    aGradient2.SetAngle(55);
+    aGradient2.SetAngle(Degree10(55));
     aGradient2.SetBorder(10);
     aGradient2.SetOfsX(22);
     aGradient2.SetOfsY(24);
@@ -1323,7 +1323,7 @@ void SvmTest::testHatch()
     tools::PolyPolygon aPolyPolygon(1);
     aPolyPolygon.Insert(aPolygon);
 
-    Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, 900);
+    Hatch aHatch(HatchStyle::Single, COL_YELLOW, 15, Degree10(900));
 
     pVirtualDev->DrawHatch(aPolyPolygon, aHatch);
 

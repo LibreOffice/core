@@ -89,9 +89,9 @@ namespace
       return nRotation != 0;
     }
 
-    double toRadian(int nDegree10th)
+    double toRadian(Degree10 nDegree10th)
     {
-        return (3600 - nDegree10th) * M_PI / 1800.0;
+        return (Degree10(3600) - nDegree10th).get() * M_PI / 1800.0;
     }
 
     cairo_t* syncCairoContext(cairo_t* cr)
@@ -234,7 +234,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
 
         if (nGlyphRotation)
         {
-            cairo_matrix_rotate(&m, toRadian(nGlyphRotation*900));
+            cairo_matrix_rotate(&m, toRadian(Degree10(nGlyphRotation * 900)));
 
             cairo_matrix_t em_square;
             cairo_matrix_init_identity(&em_square);

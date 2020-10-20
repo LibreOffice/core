@@ -2024,7 +2024,7 @@ namespace
         aGradient.SetStartColor(rMap["startcolor"].toInt32(16));
         aGradient.SetEndColor(rMap["endcolor"].toInt32(16));
         aGradient.SetGradientStyle(lcl_getStyleFromString(rMap["style"]));
-        aGradient.SetAngle(rMap["angle"].toInt32());
+        aGradient.SetAngle(Degree10(rMap["angle"].toInt32()));
 
         return aGradient;
     }
@@ -2051,7 +2051,7 @@ XGradient::XGradient() :
 }
 
 XGradient::XGradient(const Color& rStart, const Color& rEnd,
-                     css::awt::GradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
+                     css::awt::GradientStyle eTheStyle, Degree10 nTheAngle, sal_uInt16 nXOfs,
                      sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
                      sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
                      sal_uInt16 nSteps) :
@@ -2089,7 +2089,7 @@ boost::property_tree::ptree XGradient::dumpAsJSON() const
     aTree.put("style", XGradient::GradientStyleToString(eStyle));
     aTree.put("startcolor",aStartColor.AsRGBHexString());
     aTree.put("endcolor", aEndColor.AsRGBHexString());
-    aTree.put("angle", std::to_string(nAngle));
+    aTree.put("angle", std::to_string(nAngle.get()));
     aTree.put("border", std::to_string(nBorder));
     aTree.put("x", std::to_string(nOfsX));
     aTree.put("y", std::to_string(nOfsY));
@@ -2268,7 +2268,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                     aXGradient.SetGradientStyle( aGradient2.Style );
                     aXGradient.SetStartColor( Color(aGradient2.StartColor) );
                     aXGradient.SetEndColor( Color(aGradient2.EndColor) );
-                    aXGradient.SetAngle( aGradient2.Angle );
+                    aXGradient.SetAngle( Degree10(aGradient2.Angle) );
                     aXGradient.SetBorder( aGradient2.Border );
                     aXGradient.SetXOffset( aGradient2.XOffset );
                     aXGradient.SetYOffset( aGradient2.YOffset );
@@ -2305,7 +2305,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             aXGradient.SetGradientStyle( aGradient2.Style );
             aXGradient.SetStartColor( Color(aGradient2.StartColor) );
             aXGradient.SetEndColor( Color(aGradient2.EndColor) );
-            aXGradient.SetAngle( aGradient2.Angle );
+            aXGradient.SetAngle( Degree10(aGradient2.Angle) );
             aXGradient.SetBorder( aGradient2.Border );
             aXGradient.SetXOffset( aGradient2.XOffset );
             aXGradient.SetYOffset( aGradient2.YOffset );
@@ -2354,7 +2354,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 case MID_GRADIENT_STYLE:
                     aXGradient.SetGradientStyle( static_cast<css::awt::GradientStyle>(nVal) ); break;
                 case MID_GRADIENT_ANGLE:
-                    aXGradient.SetAngle( nVal ); break;
+                    aXGradient.SetAngle( Degree10(nVal) ); break;
                 case MID_GRADIENT_BORDER:
                     aXGradient.SetBorder( nVal ); break;
                 case MID_GRADIENT_STARTINTENSITY:
@@ -2532,7 +2532,7 @@ boost::property_tree::ptree XFillFloatTransparenceItem::dumpAsJSON() const
 }
 
 XHatch::XHatch(const Color& rCol, css::drawing::HatchStyle eTheStyle, long nTheDistance,
-               long nTheAngle) :
+               Degree10 nTheAngle) :
     eStyle(eTheStyle),
     aColor(rCol),
     nDistance(nTheDistance),
@@ -2618,7 +2618,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             aUnoHatch.Style = aHatch.GetHatchStyle();
             aUnoHatch.Color = sal_Int32(aHatch.GetColor());
             aUnoHatch.Distance = aHatch.GetDistance();
-            aUnoHatch.Angle = aHatch.GetAngle();
+            aUnoHatch.Angle = aHatch.GetAngle().get();
 
             aPropSeq[0].Name    = "Name";
             aPropSeq[0].Value   <<= SvxUnogetApiNameForItem(Which(), GetName());
@@ -2635,7 +2635,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             aUnoHatch.Style = aHatch.GetHatchStyle();
             aUnoHatch.Color = sal_Int32(aHatch.GetColor());
             aUnoHatch.Distance = aHatch.GetDistance();
-            aUnoHatch.Angle = aHatch.GetAngle();
+            aUnoHatch.Angle = aHatch.GetAngle().get();
             rVal <<= aUnoHatch;
             break;
         }
@@ -2653,7 +2653,7 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_HATCH_DISTANCE:
             rVal <<= aHatch.GetDistance(); break;
         case MID_HATCH_ANGLE:
-            rVal <<= aHatch.GetAngle(); break;
+            rVal <<= aHatch.GetAngle().get(); break;
 
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
@@ -2692,7 +2692,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                     aHatch.SetHatchStyle( aUnoHatch.Style );
                     aHatch.SetColor( Color(aUnoHatch.Color) );
                     aHatch.SetDistance( aUnoHatch.Distance );
-                    aHatch.SetAngle( aUnoHatch.Angle );
+                    aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
                 }
 
                 return true;
@@ -2710,7 +2710,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             aHatch.SetHatchStyle( aUnoHatch.Style );
             aHatch.SetColor( Color(aUnoHatch.Color) );
             aHatch.SetDistance( aUnoHatch.Distance );
-            aHatch.SetAngle( aUnoHatch.Angle );
+            aHatch.SetAngle( Degree10(aUnoHatch.Angle) );
             break;
         }
 
@@ -2745,7 +2745,7 @@ bool XFillHatchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             else if ( nMemberId == MID_HATCH_DISTANCE )
                 aHatch.SetDistance( nVal );
             else
-                aHatch.SetAngle( nVal );
+                aHatch.SetAngle( Degree10(nVal) );
             break;
         }
 

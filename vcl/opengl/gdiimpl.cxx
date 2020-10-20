@@ -1430,7 +1430,7 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     Point aCenter;
     rGradient.GetBoundRect( rRect, aBoundRect, aCenter );
     tools::Polygon aPoly( aBoundRect );
-    aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
+    aPoly.Rotate( aCenter, rGradient.GetAngle() % Degree10(3600) );
 
     GLfloat aTexCoord[8] = { 0, 1, 1, 1, 1, 0, 0, 0 };
     GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());
@@ -1482,7 +1482,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
     aPoly.SetPoint( aRect.BottomRight(), 4 );
     aPoly.SetPoint( aRect.BottomLeft(),  5 );
     aPoly.SetPoint( aPt0,                6 );
-    aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
+    aPoly.Rotate( aCenter, rGradient.GetAngle() % Degree10(3600) );
 
     GLfloat aTexCoord[12] = { 0, 1, 1, 0, 2, 0, 3, 1, 4, 0, 5, 0 };
     GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());

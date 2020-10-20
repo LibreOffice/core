@@ -50,7 +50,7 @@ private:
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
     Size            maSize;
     Point           maPos;
-    short           mnOrientation;
+    Degree10        mnOrientation;
     sal_uInt16      mnStyle;
     bool            mbVisible;
     CursorDirection mnDirection;
@@ -87,7 +87,7 @@ public:
     tools::Long            GetWidth() const { return maSize.Width(); }
     tools::Long            GetHeight() const { return maSize.Height(); }
 
-    void            SetOrientation( short nOrientation = 0 );
+    void            SetOrientation( Degree10 nOrientation = Degree10(0) );
 
     void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
 

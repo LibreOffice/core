@@ -183,7 +183,7 @@ private:
     std::vector< GlyphSet > maPS3Font;
 
     sal_Int32       mnFontID;
-    sal_Int32       mnTextAngle;
+    Degree10        mnTextAngle;
     bool            mbTextVertical;
     PrintFontManager& mrFontMgr;
 
@@ -243,7 +243,7 @@ public:
     void            PSBinPath (const Point& rCurrent, Point& rOld,
                                pspath_t eType, sal_Int32& nColumn);
 
-    void            PSRotate (sal_Int32 nAngle);
+    void            PSRotate (Degree10 nAngle);
     void            PSTranslate (const Point& rPoint);
     void            PSMoveTo (const Point& rPoint);
     void            PSScale (double fScaleX, double fScaleY);
@@ -315,7 +315,7 @@ public:
                              sal_Int32 nFontID,
                              sal_Int32 nPointHeight,
                              sal_Int32 nPointWidth,
-                             sal_Int32 nAngle,
+                             Degree10 nAngle,
                              bool bVertical,
                              bool bArtItalic,
                              bool bArtBold

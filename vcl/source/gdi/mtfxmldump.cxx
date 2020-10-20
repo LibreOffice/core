@@ -485,7 +485,7 @@ void writeGradient(tools::XmlWriter& rWriter, Gradient const& rGradient)
     rWriter.attribute("style", convertGradientStyle(rGradient.GetStyle()));
     rWriter.attribute("startcolor", convertColorToString(rGradient.GetStartColor()));
     rWriter.attribute("endcolor", convertColorToString(rGradient.GetEndColor()));
-    rWriter.attribute("angle", rGradient.GetAngle());
+    rWriter.attribute("angle", rGradient.GetAngle().get());
     rWriter.attribute("border", rGradient.GetBorder());
     rWriter.attribute("offsetx", rGradient.GetOfsX());
     rWriter.attribute("offsety", rGradient.GetOfsY());
@@ -963,7 +963,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("style", convertHatchStyle(rHatch.GetStyle()));
                 rWriter.attribute("color", convertColorToString(rHatch.GetColor()));
                 rWriter.attribute("distance", sal_Int32(rHatch.GetDistance()));
-                rWriter.attribute("angle", sal_Int32(rHatch.GetAngle()));
+                rWriter.attribute("angle", sal_Int32(rHatch.GetAngle().get()));
                 rWriter.endElement();
 
                 rWriter.endElement();
@@ -1144,7 +1144,7 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("stylename", aFont.GetStyleName());
                 rWriter.attribute("width", aFont.GetFontSize().Width());
                 rWriter.attribute("height", aFont.GetFontSize().Height());
-                rWriter.attribute("orientation", aFont.GetOrientation());
+                rWriter.attribute("orientation", aFont.GetOrientation().get());
                 rWriter.attribute("weight", convertFontWeightToString(aFont.GetWeight()));
                 rWriter.attribute("vertical", aFont.IsVertical() ? "true" : "false");
 

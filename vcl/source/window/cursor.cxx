@@ -36,7 +36,7 @@ struct ImplCursorData
     Point           maPixPos;           // Pixel-Position
     Point           maPixRotOff;        // Pixel-Offset-Position
     Size            maPixSize;          // Pixel-Size
-    short           mnOrientation;      // Pixel-Orientation
+    Degree10        mnOrientation;      // Pixel-Orientation
     CursorDirection mnDirection;        // indicates writing direction
     sal_uInt16      mnStyle;            // Cursor-Style
     bool            mbCurVisible;       // Is cursor currently visible
@@ -332,7 +332,7 @@ vcl::Cursor::Cursor()
 {
     mpData          = nullptr;
     mpWindow        = nullptr;
-    mnOrientation   = 0;
+    mnOrientation   = Degree10(0);
     mnDirection     = CursorDirection::NONE;
     mnStyle         = 0;
     mbVisible       = false;
@@ -419,7 +419,7 @@ void vcl::Cursor::SetWidth( tools::Long nNewWidth )
     }
 }
 
-void vcl::Cursor::SetOrientation( short nNewOrientation )
+void vcl::Cursor::SetOrientation( Degree10 nNewOrientation )
 {
     if ( mnOrientation != nNewOrientation )
     {

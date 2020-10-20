@@ -314,7 +314,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext)
         startCol = endCol;
 
     Gradient g;
-    g.SetAngle(mbHorz ? 0 : 900);
+    g.SetAngle(Degree10(mbHorz ? 0 : 900));
     g.SetStyle(GradientStyle::Linear);
 
     g.SetStartColor(startCol);
@@ -1147,7 +1147,7 @@ void ToolBox::ImplInitToolBoxData()
     meTextPosition        = ToolBoxTextPosition::Right;
     mnLastFocusItemId     = 0;
     mnActivateCount       = 0;
-    mnImagesRotationAngle = 0;
+    mnImagesRotationAngle = Degree10(0);
 
     mpStatusListener = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
     mpStatusListener->startListening();
@@ -2716,7 +2716,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplToolItems::si
             bRotate = true;
 
             vcl::Font aRotateFont = aOldFont;
-            aRotateFont.SetOrientation( 2700 );
+            aRotateFont.SetOrientation( Degree10(2700) );
 
             // center horizontally
             nTextOffX += aTxtSize.Height();

@@ -475,7 +475,7 @@ public:
                     aFontRect.AdjustTop(nHeight/2 );
                     aFontRect.AdjustBottom(nHeight );
 
-                    aFont.SetOrientation(45 * 10); // 45 degrees
+                    aFont.SetOrientation(Degree10(450)); // 45 degrees
 
                     rDev.SetFont(aFont);
                     rDev.DrawText(aFontRect, aText);
@@ -691,7 +691,7 @@ public:
                     case 2:
                     {
                         tools::Polygon aPoly(aSub);
-                        aPoly.Rotate(aSub.Center(), 450);
+                        aPoly.Rotate(aSub.Center(), Degree10(450));
                         aPoly.Clip(aSmaller);
                         aRegion = vcl::Region(aPoly);
                         break;
@@ -834,7 +834,7 @@ public:
                     aGradient.SetStartColor(nStartCols[i]);
                     aGradient.SetEndColor(nEndCols[i]);
                     aGradient.SetStyle(eStyles[i]);
-                    aGradient.SetAngle(nAngles[i]);
+                    aGradient.SetAngle(Degree10(nAngles[i]));
                     aGradient.SetBorder(nBorders[i]);
                     rDev.DrawGradient(aSub, aGradient);
                 }
@@ -1047,7 +1047,7 @@ public:
                         case 3:
                         case 0: // 45degree rectangle.
                             aPoly = tools::Polygon(aPieces[i]);
-                            aPoly.Rotate(aPieces[i].Center(), 450);
+                            aPoly.Rotate(aPieces[i].Center(), Degree10(450));
                             break;
                         case 1: // arc
                             aPoly = tools::Polygon(aPieces[i],
@@ -1058,7 +1058,7 @@ public:
                             aPoly = tools::Polygon(aPieces[i],
                                                    aPieces[i].GetWidth()/5,
                                                    aPieces[i].GetHeight()/5);
-                            aPoly.Rotate(aPieces[i].Center(), 450);
+                            aPoly.Rotate(aPieces[i].Center(), Degree10(450));
                             break;
                         }
                         aClipRegion = vcl::Region(aPoly);

@@ -286,7 +286,7 @@ struct OSAttr
     RasterOp eImgMix;
     RasterOp eImgBgMix;
     sal_Int32 nArcP, nArcQ, nArcR, nArcS;
-    short    nChrAng;
+    Degree10  nChrAng;
     Size     aChrCellSize;
     sal_uInt32 nChrSet;
     Point    aCurPos;
@@ -1013,7 +1013,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
         aFont = pF->aFont;
     aFont.SetColor(aAttr.aChrCol);
     aFont.SetFontSize(Size(0,aAttr.aChrCellSize.Height()));
-    if ( aAttr.nChrAng != 0 )
+    if ( aAttr.nChrAng )
         aFont.SetOrientation(aAttr.nChrAng);
 
     if (bGivenPos)
@@ -1049,7 +1049,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     pVirDev->DrawText(aP0,aStr);
 
     aSize = Size( pVirDev->GetTextWidth(aStr), pVirDev->GetTextHeight() );
-    if ( aAttr.nChrAng == 0 )
+    if ( !aAttr.nChrAng )
     {
         aCalcBndRect.Union(tools::Rectangle( Point(aP0.X(),aP0.Y()-aSize.Height()),
                                       Size(aSize.Width(),aSize.Height()*2)));
@@ -2037,11 +2037,11 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
         case GOrdSChAng: {
             sal_Int32 nX = ReadCoord(bCoord32);
             sal_Int32 nY = ReadCoord(bCoord32);
-            if (nX>=0 && nY==0) aAttr.nChrAng=0;
+            if (nX>=0 && nY==0) aAttr.nChrAng=Degree10(0);
             else {
-                aAttr.nChrAng=static_cast<short>(atan2(static_cast<double>(nY),static_cast<double>(nX))/3.1415926539*1800.0);
-                while (aAttr.nChrAng<0) aAttr.nChrAng+=3600;
-                aAttr.nChrAng%=3600;
+                aAttr.nChrAng = Degree10(static_cast<short>(atan2(static_cast<double>(nY),static_cast<double>(nX))/3.1415926539*1800.0));
+                while (aAttr.nChrAng < Degree10(0)) aAttr.nChrAng += Degree10(3600);
+                aAttr.nChrAng %= Degree10(3600);
             }
             break;
         }
@@ -2689,7 +2689,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     aDefAttr.nArcQ       =1;
     aDefAttr.nArcR       =0;
     aDefAttr.nArcS       =0;
-    aDefAttr.nChrAng     =0;
+    aDefAttr.nChrAng     =Degree10(0);
     aDefAttr.aChrCellSize=Size(12,12);
     aDefAttr.nChrSet     =0;
     aDefAttr.aCurPos     =Point(0,0);

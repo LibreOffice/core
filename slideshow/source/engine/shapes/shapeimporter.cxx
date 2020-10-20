@@ -296,7 +296,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         aGraphAttrs.SetChannelB( nBlue );
         aGraphAttrs.SetGamma( nGamma );
         aGraphAttrs.SetTransparency( static_cast<sal_uInt8>(nTransparency) );
-        aGraphAttrs.SetRotation( static_cast<sal_uInt16>(nRotation*10) );
+        aGraphAttrs.SetRotation( Degree10(static_cast<sal_Int16>(nRotation*10)) );
 
         text::GraphicCrop aGraphCrop;
         if( getPropertyValue( aGraphCrop, xPropSet, "GraphicCrop" ))

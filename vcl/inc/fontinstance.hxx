@@ -28,6 +28,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/degree.hxx>
 #include <vcl/glyphitem.hxx>
 
 #include <optional>
@@ -56,8 +57,8 @@ public: // TODO: make data members private
     const ConvertChar* mpConversion;        // used e.g. for StarBats->StarSymbol
 
     tools::Long            mnLineHeight;
-    short           mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
-    short           mnOrientation;          // text angle in 3600 system
+    Degree10        mnOwnOrientation;       // text angle if lower layers don't rotate text themselves
+    Degree10        mnOrientation;          // text angle in 3600 system
     bool            mbInit;                 // true if maFontMetric member is valid
 
     void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );

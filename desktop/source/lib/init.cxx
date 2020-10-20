@@ -5284,7 +5284,7 @@ unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER LibreOfficeKitDocu
             ::tools::Rectangle aRect;
             vcl::Font aFont(rFontMetric);
             aFont.SetFontSize(Size(0, nDefaultFontSize));
-            aFont.SetOrientation(pOrientation);
+            aFont.SetOrientation(Degree10(pOrientation));
             aDevice->SetFont(aFont);
             aDevice->GetTextBoundRect(aRect, aText);
             if (aRect.IsEmpty())

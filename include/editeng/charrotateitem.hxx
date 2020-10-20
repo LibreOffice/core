@@ -20,6 +20,7 @@
 #define INCLUDED_EDITENG_CHARROTATEITEM_HXX
 
 #include <svl/intitem.hxx>
+#include <tools/degree.hxx>
 #include <editeng/editengdllapi.h>
 
  // class SvxTextRotateItem ----------------------------------------------
@@ -34,7 +35,7 @@
 class EDITENG_DLLPUBLIC SvxTextRotateItem : public SfxUInt16Item
 {
 public:
-    SvxTextRotateItem(sal_uInt16 nValue, const sal_uInt16 nId);
+    SvxTextRotateItem(Degree10 nValue, const sal_uInt16 nId);
 
     virtual SvxTextRotateItem* Clone(SfxItemPool *pPool = nullptr) const override;
 
@@ -47,11 +48,14 @@ public:
     virtual bool            QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const override;
     virtual bool            PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) override;
 
+    Degree10 GetValue() const { return Degree10(SfxUInt16Item::GetValue()); }
+    void SetValue(Degree10 val) { SfxUInt16Item::SetValue(val.get()); }
+
     // our currently only degree values
-    void SetTopToBottom() { SetValue(2700); }
-    void SetBottomToTop() { SetValue(900); }
-    bool IsTopToBottom() const { return 2700 == GetValue(); }
-    bool IsBottomToTop() const { return  900 == GetValue(); }
+    void SetTopToBottom() { SetValue(Degree10(2700)); }
+    void SetBottomToTop() { SetValue(Degree10(900)); }
+    bool IsTopToBottom() const { return Degree10(2700) == GetValue(); }
+    bool IsBottomToTop() const { return  Degree10(900) == GetValue(); }
     bool IsVertical() const     { return IsTopToBottom() || IsBottomToTop(); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
@@ -75,7 +79,7 @@ class EDITENG_DLLPUBLIC SvxCharRotateItem final : public SvxTextRotateItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxCharRotateItem( sal_uInt16 nValue /*= 0*/,
+    SvxCharRotateItem( Degree10 nValue /*= 0*/,
                        bool bFitIntoLine /*= false*/,
                        const sal_uInt16 nId );
 
