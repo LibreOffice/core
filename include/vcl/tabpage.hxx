@@ -37,7 +37,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplInitSettings();
-    void    lcl_Scroll( long nX, long nY );
+    void    lcl_Scroll( long nX, long nY, bool bNotify=true );
     DECL_LINK( ScrollBarHdl, ScrollBar*, void );
 
     VclPtr<ScrollBar>    m_pVScroll;

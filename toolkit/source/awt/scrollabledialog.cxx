@@ -88,7 +88,7 @@ void ScrollableDialog::dispose()
     Dialog::dispose();
 }
 
-void ScrollableDialog::lcl_Scroll( long nX, long nY )
+void ScrollableDialog::lcl_Scroll( long nX, long nY, bool bNotify )
 {
     long nXScroll = mnScrollPos.X() - nX;
     long nYScroll = mnScrollPos.Y() - nY;
@@ -107,6 +107,11 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
             pChild->SetPosPixel( aPos );
         }
     }
+    if (bNotify)
+    {
+        CallEventListeners(VclEventId::ScrollbarLeft, reinterpret_cast<void*>(nXScroll));
+        CallEventListeners(VclEventId::ScrollbarTop, reinterpret_cast<void*>(nYScroll));
+    }
 }
 
 IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
@@ -121,16 +126,16 @@ IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )
 void ScrollableDialog::SetScrollTop( long nTop )
 {
     Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
-    maHScrollBar->SetThumbPos( 0 );
+    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop, false );
+    //maHScrollBar->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
 }
 void ScrollableDialog::SetScrollLeft( long nLeft )
 {
     Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
-    maVScrollBar->SetThumbPos( 0 );
+    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y(), false );
+    //maVScrollBar->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
 }

@@ -158,7 +158,7 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
             }
             default:
                 aGuard.clear();
-                VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
+                VCLXContainer::ProcessWindowEvent( _rVclWindowEvent );
                 break;
         }
     }

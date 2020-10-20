@@ -41,7 +41,7 @@ namespace toolkit
         long               mnScrWidth;
         ScrollBarVisibility maScrollVis;
 
-        void    lcl_Scroll( long nX, long nY );
+        void    lcl_Scroll( long nX, long nY, bool bNotify=true );
         DECL_LINK( ScrollBarHdl, ScrollBar*, void );
 
     public:
