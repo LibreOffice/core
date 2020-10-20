@@ -1408,15 +1408,16 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     if ( sValue.isEmpty() )
         return true;
 
-    sal_uInt32 nIndex = 0xFFFFFFFF;
+    sal_uInt32 nIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
     if ( CUSTOM_TYPE_NUMBER == nType )
+        // tdf#116214 Scientific format allows to use also standard numbers
         nIndex = const_cast< SvNumberFormatter& >(
-            m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
+            m_aNumberFormatter ).GetFormatIndex( NF_SCIENTIFIC_000E00 );
     else if ( CUSTOM_TYPE_DATE == nType )
         nIndex = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter).GetFormatIndex( NF_DATE_SYS_DDMMYYYY );
 
-    if ( nIndex != 0xFFFFFFFF )
+    if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         sal_uInt32 nTemp = nIndex;
         double fDummy = 0.0;
