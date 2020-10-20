@@ -97,7 +97,7 @@ static css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont
     aFD.Slant = vcl::unohelper::ConvertFontSlant( rFont.GetItalic() );
     aFD.Underline = static_cast<sal_Int16>(rFont.GetUnderline());
     aFD.Strikeout = static_cast<sal_Int16>(rFont.GetStrikeout());
-    aFD.Orientation = rFont.GetOrientation();
+    aFD.Orientation = rFont.GetOrientation() / 10.0;
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
     aFD.Type = 0;   // ??? => only to metric...
@@ -119,7 +119,7 @@ static vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
     aFont.SetItalic( static_cast<FontItalic>(rDescr.Slant) );
     aFont.SetUnderline( static_cast<::FontLineStyle>(rDescr.Underline) );
     aFont.SetStrikeout( static_cast<::FontStrikeout>(rDescr.Strikeout) );
-    aFont.SetOrientation( static_cast<sal_Int16>(rDescr.Orientation) );
+    aFont.SetOrientation( static_cast<sal_Int16>(rDescr.Orientation * 10) );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
     return aFont;
