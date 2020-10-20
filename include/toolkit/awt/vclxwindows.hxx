@@ -386,7 +386,6 @@ public:
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-
 };
 
 

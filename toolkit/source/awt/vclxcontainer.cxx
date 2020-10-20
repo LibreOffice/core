@@ -31,6 +31,7 @@
 #include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
 
+using namespace css;
 
 //  class VCLXContainer
 
@@ -297,4 +298,37 @@ void SAL_CALL VCLXContainer::setProperty(
         }
     }
 }
+
+void VCLXContainer::ProcessWindowEvent(const VclWindowEvent& _rVclWindowEvent)
+{
+    SolarMutexClearableGuard aGuard;
+    switch (_rVclWindowEvent.GetId())
+    {
+        case VclEventId::ScrollbarLeft:
+        case VclEventId::ScrollbarTop:
+        {
+            long nVal = reinterpret_cast<long>(_rVclWindowEvent.GetData());
+            OutputDevice* pDev = GetOutputDevice();
+            if (!pDev)
+                break;
+
+            Size aSize(0, 0);
+            aSize.setHeight(nVal);
+            MapMode aMode(MapUnit::MapAppFont);
+            aSize = pDev->PixelToLogic(aSize, aMode);
+            OUString aProp = (_rVclWindowEvent.GetId() == VclEventId::ScrollbarLeft)
+                                 ? OUString("ScrollLeft")
+                                 : OUString("ScrollTop");
+            // FIXME: This setProperty call must somehow go through the model, so that the stored property is updated.
+            // Currently only the last value set via UNO API will be stored.
+            setProperty(aProp, uno::Any(aSize.Height()));
+            break;
+        }
+        default:
+            aGuard.clear();
+            VCLXWindow::ProcessWindowEvent(_rVclWindowEvent);
+            break;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

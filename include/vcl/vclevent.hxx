@@ -94,6 +94,8 @@ enum class VclEventId
     RoadmapItemSelected,
     ScrollbarEndScroll,
     ScrollbarScroll,
+    ScrollbarTop, // pData = top distance
+    ScrollbarLeft, // pData = left distance
     SpinbuttonDown,
     SpinbuttonUp,
     SpinfieldDown,

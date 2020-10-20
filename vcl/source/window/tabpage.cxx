@@ -252,7 +252,7 @@ void TabPage::setScrollVisibility( ScrollBarVisibility rVisState )
         SetStyle( GetStyle() | WB_CLIPCHILDREN );
 }
 
-void TabPage::lcl_Scroll( long nX, long nY )
+void TabPage::lcl_Scroll( long nX, long nY, bool bNotify )
 {
     long nXScroll = mnScrollPos.X() - nX;
     long nYScroll = mnScrollPos.Y() - nY;
@@ -271,6 +271,11 @@ void TabPage::lcl_Scroll( long nX, long nY )
             pChild->SetPosPixel( aPos );
         }
     }
+    if (bNotify)
+    {
+        GetParent()->CallEventListeners(VclEventId::ScrollbarLeft, reinterpret_cast<void*>(nXScroll));
+        GetParent()->CallEventListeners(VclEventId::ScrollbarTop, reinterpret_cast<void*>(nYScroll));
+    }
 }
 
 IMPL_LINK( TabPage, ScrollBarHdl, ScrollBar*, pSB, void )
@@ -285,7 +290,7 @@ IMPL_LINK( TabPage, ScrollBarHdl, ScrollBar*, pSB, void )
 void TabPage::SetScrollTop( long nTop )
 {
     Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop );
+    lcl_Scroll( mnScrollPos.X() , mnScrollPos.Y() - nTop, false );
     m_pHScroll->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
@@ -293,7 +298,7 @@ void TabPage::SetScrollTop( long nTop )
 void TabPage::SetScrollLeft( long nLeft )
 {
     Point aOld = mnScrollPos;
-    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y() );
+    lcl_Scroll( mnScrollPos.X() - nLeft , mnScrollPos.Y(), false );
     m_pVScroll->SetThumbPos( 0 );
     // new pos is 0,0
     mnScrollPos = aOld;
