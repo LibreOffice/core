@@ -21,10 +21,18 @@
 #include <tipofthedaydlg.hxx>
 #include <tipoftheday.hrc>
 
+#include <sfx2/viewfrm.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
+
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -105,10 +113,42 @@ void TipOfTheDayDialog::UpdateTip()
     }
     else if (sLink.startsWith(".uno:"))
     {
-        m_pLink->set_uri(sLink);
-        m_pLink->set_label(CuiResId(STR_UNO_LINK));
-        m_pLink->set_visible(true);
-        m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
+        m_pLink->set_visible(false);
+        //show the link only if the UNO command is available in the current module
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if (pViewFrame)
+        {
+            const auto xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            const css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(
+                xFrame, css::uno::UNO_QUERY);
+            if (xDispatchProvider.is())
+            {
+                css::util::URL aCommandURL;
+                aCommandURL.Complete = sLink;
+                const css::uno::Reference<css::uno::XComponentContext> xContext
+                    = comphelper::getProcessComponentContext();
+                const css::uno::Reference<css::util::XURLTransformer> xParser
+                    = css::util::URLTransformer::create(xContext);
+                xParser->parseStrict(aCommandURL);
+                const css::uno::Reference<css::frame::XDispatch> xDisp
+                    = xDispatchProvider->queryDispatch(aCommandURL, OUString(), 0);
+                if (xDisp.is())
+                {
+                    m_pLink->set_label(CuiResId(STR_UNO_LINK));
+                    m_pLink->set_uri(sLink);
+
+                    const OUString aModuleName(
+                        vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+                    const auto aProperties
+                        = vcl::CommandInfoProvider::GetCommandProperties(sLink, aModuleName);
+                    m_pLink->set_tooltip_text(
+                        vcl::CommandInfoProvider::GetTooltipForCommand(sLink, aProperties, xFrame));
+
+                    m_pLink->set_visible(true);
+                    m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
+                }
+            }
+        }
     }
     else if (sLink.startsWith("http"))
     {
