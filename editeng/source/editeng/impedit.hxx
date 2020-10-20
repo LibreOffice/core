@@ -510,6 +510,8 @@ private:
 
     std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 
+    std::vector<EENotify> aNotifyCache;
+
     OUString            aWordDelimiters;
 
     EditSelFunctionSet  aSelFuncSet;
@@ -517,6 +519,7 @@ private:
 
     Color               maBackgroundColor;
 
+    sal_uInt32          nBlockNotifications;
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
@@ -847,7 +850,14 @@ public:
 
     void                EnableUndo( bool bEnable );
     bool                IsUndoEnabled() const   { return bUndoEnabled; }
-    void                SetUndoMode( bool b )   { bIsInUndo = b; }
+    void                SetUndoMode( bool b )
+    {
+        bIsInUndo = b;
+        if (bIsInUndo)
+            EnterBlockNotifications();
+        else
+            LeaveBlockNotifications();
+    }
     bool                IsInUndo() const        { return bIsInUndo; }
 
     void                SetCallParaInsertedOrDeleted( bool b ) { bCallParaInsertedOrDeleted = b; }
@@ -969,6 +979,10 @@ public:
     InternalEditStatus& GetStatus() { return aStatus; }
     void                CallStatusHdl();
     void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
+
+    void                CallNotify( EENotify& rNotify );
+    void                EnterBlockNotifications();
+    void                LeaveBlockNotifications();
 
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );

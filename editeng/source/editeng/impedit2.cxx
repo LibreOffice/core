@@ -95,6 +95,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pUndoManager(nullptr),
     aWordDelimiters(" .,;:-`'?!_=\"{}()[]"),
     maBackgroundColor(COL_AUTO),
+    nBlockNotifications(0),
     nStretchX(100),
     nStretchY(100),
     nAsianCompressionMode(CharCompressType::NONE),
@@ -620,7 +621,9 @@ bool ImpEditEngine::MouseMove( const MouseEvent& rMEvt, EditView* pView )
 
 EditPaM ImpEditEngine::InsertText(const EditSelection& aSel, const OUString& rStr)
 {
+    EnterBlockNotifications();
     EditPaM aPaM = ImpInsertText( aSel, rStr );
+    LeaveBlockNotifications();
     return aPaM;
 }
 
@@ -725,7 +728,7 @@ void ImpEditEngine::TextModified()
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TEXTMODIFIED );
-        GetNotifyHdl().Call( aNotify );
+        CallNotify( aNotify );
     }
 }
 
@@ -2187,7 +2190,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         aNotify.nParagraph = nNewPos;
         aNotify.nParam1 = aOldPositions.Min();
         aNotify.nParam2 = aOldPositions.Max();
-        GetNotifyHdl().Call( aNotify );
+        CallNotify( aNotify );
     }
 
     aEditDoc.SetModified( true );
@@ -4338,6 +4341,50 @@ bool ImpEditEngine::DoVisualCursorTraveling()
 {
     // Don't check if it's necessary, because we also need it when leaving the paragraph
     return IsVisualCursorTravelingEnabled();
+}
+
+
+void ImpEditEngine::CallNotify( EENotify& rNotify )
+{
+    if ( !nBlockNotifications )
+        GetNotifyHdl().Call( rNotify );
+    else
+        aNotifyCache.push_back(rNotify);
+}
+
+void ImpEditEngine::EnterBlockNotifications()
+{
+    if( !nBlockNotifications )
+    {
+        // #109864# Send out START notification immediately, to allow
+        // external, non-queued events to be captured as well from
+        // client side
+        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
+        GetNotifyHdl().Call( aNotify );
+    }
+
+    nBlockNotifications++;
+}
+
+void ImpEditEngine::LeaveBlockNotifications()
+{
+    OSL_ENSURE( nBlockNotifications, "LeaveBlockNotifications - Why?" );
+
+    nBlockNotifications--;
+    if ( !nBlockNotifications )
+    {
+        // Call blocked notify events...
+        while(!aNotifyCache.empty())
+        {
+            EENotify aNotify(aNotifyCache[0]);
+            // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
+            aNotifyCache.erase(aNotifyCache.begin());
+            GetNotifyHdl().Call( aNotify );
+        }
+
+        EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
+        GetNotifyHdl().Call( aNotify );
+    }
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, DocModified, LinkParamNone*, void)
