@@ -52,6 +52,24 @@
       "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "521aaf5d_64c535f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-10-20T07:55:02Z",
+      "side": 1,
+      "message": "\u003e Ah, I hadn\u0027t been aware of \u003chttps://gerrit.libreoffice.org/c/core/+/104002\u003e \"Gray out Java options when framework\u0027s direct mode is used\".\n\nI should have been more explicit here, not just mentioning \"the patch series\"... FWIW, the third change in the series is https://gerrit.libreoffice.org/c/core/+/104064 (\"Properly (un)tick Java checkbox in Java options in direct mode\")\n\n\u003e What is the logic to show the automatically found but not the manually added Java installations (even in a grayed-out list) when UNO_JAVA_JFW_JREHOME is set?\n\u003e \n\u003e To me, this change here sounds like something that happens to avoid a SAL_WARN and an empty list, but not by addressing whatever root cause, but by introducing dubious logic (i.e., \"exclude some elements from jfw_findAllJREs because otherwise we would hit a SAL_WARN\")?  But I guess I need to look deeper into this to come up with an informed opinion here.\n\nFrom how I understand it: The user\u0027s changes to Java settings in the option dialog (like adding or selecting another JRE, changing classpath,...) are written to the user-specific \u0027javasettings_${_OS}_${_ARCH}.xml\u0027 (like \u0027instdir/user/config/javasettings_Linux_X86_64.xml\u0027 for a development build on Linux).\n\nDirect mode completely ignores the \u0027javasettings_${_OS}_${_ARCH}.xml\u0027 files (both the system-wide as well as the user-specific one, s. the \"By setting UNO_JAVA_JFW_JREHOME the framework is switched into direct mode and the office settings are disregarded.\" quote in the commit message), which is why this change avoids creating and evaluating the \u0027jfw::MergedSettings\u0027 when direct mode is used.",
+      "parentUuid": "e127af8b_f1ae88f1",
+      "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
