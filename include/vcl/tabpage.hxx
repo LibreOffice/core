@@ -74,6 +74,11 @@ public:
     // for scrollable tabpage
     virtual void Resize() override;
 
+    long GetScrollWidth(){ return maScrollArea.Width(); };
+    long GetScrollHeight(){ return maScrollArea.Height(); };
+    long GetScrollLeft(){ return mnScrollPos.X(); };
+    long GetScrollTop(){ return mnScrollPos.Y(); };
+
     void    SetScrollWidth( long nWidth );
     void    SetScrollHeight( long nHeight );
     void    SetScrollLeft( long nLeft );

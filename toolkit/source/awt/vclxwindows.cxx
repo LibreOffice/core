@@ -2445,6 +2445,11 @@ void SAL_CALL VCLXDialog::setProperty(
     }
 }
 
+css::uno::Any VCLXDialog::getProperty( const OUString& PropertyName )
+{
+    return VCLXContainer::getProperty( PropertyName );
+}
+
 
 //  class VCLXTabPage
 
@@ -2732,6 +2737,8 @@ void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_FOCUSONCLICK,
+                     BASEPROPERTY_SCROLLLEFT,
+                     BASEPROPERTY_SCROLLTOP,
                      0);
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
@@ -2759,6 +2766,11 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 
         pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
+}
+
+css::uno::Any SAL_CALL VCLXTabPage::getProperty(const OUString& PropertyName)
+{
+    return VCLXContainer::getProperty(PropertyName);
 }
 
 void SAL_CALL VCLXTabPage::setProperty(

@@ -386,6 +386,7 @@ public:
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
 };
 
@@ -409,6 +410,7 @@ public:
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) override;
 
     // css::awt::XVclWindowPeer
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
     /// @throws css::uno::RuntimeException

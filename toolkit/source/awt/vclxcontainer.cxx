@@ -31,6 +31,10 @@
 #include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
 
+#include <com/sun/star/util/InvalidStateException.hpp>
+
+using namespace css;
+using namespace css::uno;
 
 //  class VCLXContainer
 
@@ -231,6 +235,61 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
                 pPrevWin = pWin;
         }
     }
+}
+
+Any SAL_CALL VCLXContainer::getProperty(const OUString& PropertyName)
+{
+    SolarMutexGuard aGuard;
+
+    sal_uInt16 nPropType = GetPropertyId(PropertyName);
+    Any aProp;
+    // An int would be enough, but we need to convert px to logic, thus we use Size
+    Size aSize(0, 0);
+    switch (nPropType)
+    {
+        case BASEPROPERTY_SCROLLHEIGHT:
+        case BASEPROPERTY_SCROLLWIDTH:
+        case BASEPROPERTY_SCROLLTOP:
+        case BASEPROPERTY_SCROLLLEFT:
+        {
+            VclPtr<vcl::Window> pWindow = GetWindow();
+            toolkit::ScrollableDialog* pScrollDialog
+                = dynamic_cast<toolkit::ScrollableDialog*>(pWindow.get());
+            TabPage* pScrollTabPage = dynamic_cast<TabPage*>(pWindow.get());
+            if (!pScrollDialog && !pScrollTabPage)
+                throw util::InvalidStateException("No Scrollable Widget found!");
+
+            switch (nPropType)
+            {
+                case BASEPROPERTY_SCROLLHEIGHT:
+                    aSize.setHeight(pScrollDialog ? pScrollDialog->GetScrollHeight()
+                                                  : pScrollTabPage->GetScrollHeight());
+                    break;
+                case BASEPROPERTY_SCROLLWIDTH:
+                    aSize.setHeight(pScrollDialog ? pScrollDialog->GetScrollWidth()
+                                                  : pScrollTabPage->GetScrollWidth());
+                    break;
+                case BASEPROPERTY_SCROLLTOP:
+                    aSize.setHeight(pScrollDialog ? pScrollDialog->GetScrollTop()
+                                                  : pScrollTabPage->GetScrollTop());
+                    break;
+                case BASEPROPERTY_SCROLLLEFT:
+                    aSize.setHeight(pScrollDialog ? pScrollDialog->GetScrollLeft()
+                                                  : pScrollTabPage->GetScrollLeft());
+                    break;
+            }
+            break;
+        }
+        default:
+            return VCLXWindow::getProperty(PropertyName);
+    }
+    MapMode aMode(MapUnit::MapAppFont);
+    OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+    if (!pDev)
+        throw util::InvalidStateException("No OutputDevice found!");
+    aSize = pDev->PixelToLogic(aSize, aMode);
+    aProp <<= aSize.Height();
+    return aProp;
 }
 
 void SAL_CALL VCLXContainer::setProperty(
