@@ -61,6 +61,8 @@
 #include <vcl/weld.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/link.hxx>
 
 #include <asyncfunc.hxx>
@@ -106,6 +108,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <autoredactdialog.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -436,6 +440,24 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
     }
 
     return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
+}
+
+static void sendErrorToLOK(ErrCode error)
+{
+    boost::property_tree::ptree aTree;
+    aTree.put("code", error);
+    aTree.put("kind", "");
+    aTree.put("cmd", "");
+
+    std::unique_ptr<ErrorInfo> pInfo = ErrorInfo::GetErrorInfo(error);
+    OUString aErr;
+    if (ErrorStringFactory::CreateString(pInfo.get(), aErr))
+        aTree.put("message", aErr.toUtf8());
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_ERROR, aStream.str().c_str());
 }
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
@@ -983,8 +1005,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // may be nErrorCode should be shown in future
             if ( lErr != ERRCODE_IO_ABORT )
             {
-                SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
-                ErrorHandler::HandleError(lErr, pDialogParent);
+                if (comphelper::LibreOfficeKit::isActive())
+                    sendErrorToLOK(lErr);
+                else
+                {
+                    SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
+                    ErrorHandler::HandleError(lErr, pDialogParent);
+                }
             }
 
             if (nId == SID_DIRECTEXPORTDOCASPDF &&
@@ -1150,7 +1177,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             SetModified( false );
             ErrCode lErr = GetErrorCode();
-            ErrorHandler::HandleError(lErr, pDialogParent);
+
+            if (comphelper::LibreOfficeKit::isActive())
+                sendErrorToLOK(lErr);
+            else
+                ErrorHandler::HandleError(lErr, pDialogParent);
 
             rReq.SetReturnValue( SfxBoolItem(0, true) );
             rReq.Done();
