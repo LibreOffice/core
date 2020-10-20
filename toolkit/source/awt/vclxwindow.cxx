@@ -1293,6 +1293,8 @@ void VCLXWindow::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds, bool bWith
                          BASEPROPERTY_PRINTABLE,
                          BASEPROPERTY_ENABLEVISIBLE, // for visibility
                          BASEPROPERTY_TABSTOP,
+                         BASEPROPERTY_SCROLLTOP, // ?
+                         BASEPROPERTY_SCROLLLEFT, // ?
                          0);
 
     // lovely hack from:

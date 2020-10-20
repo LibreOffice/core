@@ -271,6 +271,8 @@ void TabPage::lcl_Scroll( long nX, long nY )
             pChild->SetPosPixel( aPos );
         }
     }
+    GetParent()->CallEventListeners(VclEventId::ScrollbarLeft, reinterpret_cast<void*>(nXScroll));
+    GetParent()->CallEventListeners(VclEventId::ScrollbarTop, reinterpret_cast<void*>(nYScroll));
 }
 
 IMPL_LINK( TabPage, ScrollBarHdl, ScrollBar*, pSB, void )

@@ -730,14 +730,14 @@ private:
 
 public:
     virtual vcl::Region                 GetActiveClipRegion() const override;
-
+    void                                CallEventListeners( VclEventId nEvent, void* pData = nullptr );
 protected:
     // Single argument ctors shall be explicit.
     explicit                            Window( WindowType nType );
 
             void                        SetCompoundControl( bool bCompound );
 
-            void                        CallEventListeners( VclEventId nEvent, void* pData = nullptr );
+
     static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
     virtual bool                        AcquireGraphics() const override;

@@ -31,7 +31,6 @@
 #include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
 
-
 //  class VCLXContainer
 
 

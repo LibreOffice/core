@@ -2445,6 +2445,47 @@ void SAL_CALL VCLXDialog::setProperty(
     }
 }
 
+css::uno::Any VCLXDialog::getProperty( const OUString& PropertyName )
+{
+    return VCLXContainer::getProperty( PropertyName );
+}
+
+void VCLXDialog::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
+{
+    SolarMutexClearableGuard aGuard;
+    VclPtr< Dialog > pDialog = GetAs< Dialog >();
+    if ( pDialog )
+    {
+        switch ( _rVclWindowEvent.GetId() )
+        {
+            case VclEventId::ScrollbarLeft:
+            case VclEventId::ScrollbarTop:
+            {
+                long nVal = reinterpret_cast<long>(_rVclWindowEvent.GetData());
+                VclPtr<vcl::Window> pWindow = GetWindow();
+                OutputDevice* pDev = VCLUnoHelper::GetOutputDevice(getGraphics());
+                if (!pDev)
+                    pDev = pWindow->GetParent();
+
+                Size aSize(0, 0);
+                aSize.setHeight(nVal);
+                MapMode aMode(MapUnit::MapAppFont);
+                aSize = pDev->PixelToLogic(aSize, aMode);
+                OUString aProp = (_rVclWindowEvent.GetId() == VclEventId::ScrollbarLeft)
+                                     ? OUString("ScrollLeft")
+                                     : OUString("ScrollTop");
+                setProperty(aProp, uno::Any(aSize.Height()));
+                break;
+            }
+            default:
+                aGuard.clear();
+                VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
+                break;
+        }
+    }
+}
+
+
 
 //  class VCLXTabPage
 
@@ -2732,6 +2773,8 @@ void VCLXTabPage::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_FOCUSONCLICK,
+                     BASEPROPERTY_SCROLLLEFT,
+                     BASEPROPERTY_SCROLLTOP,
                      0);
     VCLXContainer::ImplGetPropertyIds( rIds );
 }
@@ -2759,6 +2802,11 @@ void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 
         pWindow->Draw( pDev, aPos, aSize, DrawFlags::NoControls );
     }
+}
+
+css::uno::Any SAL_CALL VCLXTabPage::getProperty(const OUString& PropertyName)
+{
+    return VCLXContainer::getProperty(PropertyName);
 }
 
 void SAL_CALL VCLXTabPage::setProperty(
