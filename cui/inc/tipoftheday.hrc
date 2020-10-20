@@ -32,6 +32,7 @@
  * uri:
    * if uri is empty, do not show any link
    * if uri starts with "http", show the link directly in the browser
+   * if uri starts with ".uno:", run the command if available in the current module
    * all other strings are converted to a link for the offline help
    * to find the right uri, look in instdir/help/hid2file.js after building --with-help=html
    * structure of hid2file.js  'uri' : 'rest of URL' (that starts: https://help.libreoffice.org/latest/en-US/)
