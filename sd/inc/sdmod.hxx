@@ -142,7 +142,9 @@ private:
     SfxFrame* ExecuteNewDocument( SfxRequest const & rReq );
 
     static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
-    static SfxFrame* CreateFromTemplate( const OUString& rTemplatePath, const css::uno::Reference< css::frame::XFrame >& i_rFrame );
+    static SfxFrame* CreateFromTemplate(const OUString& rTemplatePath,
+                                        const css::uno::Reference<css::frame::XFrame>& i_rFrame,
+                                        const bool bReplaceable);
 
     bool mbEventListenerAdded;
 
