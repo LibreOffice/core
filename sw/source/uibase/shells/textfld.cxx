@@ -803,6 +803,9 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     rSet.InvalidateItem( FN_DELETE_COMMENT );
                     rSet.InvalidateItem( FN_HIDE_NOTE );
                 }
+                // tdf#137568 do not offer comment formating, if no comments are present
+                if ( !pPostItMgr->HasNotes() )
+                    rSet.DisableItem( FN_FORMAT_ALL_NOTES );
             }
             break;
 
