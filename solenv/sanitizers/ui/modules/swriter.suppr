@@ -113,7 +113,6 @@ sw/uiconfig/swriter/ui/mmsendmails.ui://GtkLabel[@id='errorstatus'] orphan-label
 sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='documentindex'] orphan-label
 sw/uiconfig/swriter/ui/mmsalutationpage.ui://GtkLabel[@id='femalefi'] orphan-label
 sw/uiconfig/swriter/ui/navigatorcontextmenu.ui://GtkMenuItem[@id='800'] button-no-label
-sw/uiconfig/swriter/ui/navigatorpanel.ui://GtkSpinButton[@id='spinbutton'] no-labelled-by
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='filegrouplabel'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='clipboardgrouplabel'] orphan-label
 sw/uiconfig/swriter/ui/notebookbar_groups.ui://GtkLabel[@id='formatgrouplabel'] orphan-label
