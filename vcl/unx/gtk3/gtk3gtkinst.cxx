@@ -7730,6 +7730,12 @@ private:
         g_signal_handler_disconnect(m_pMenu, nSignalId);
     }
 
+    static gboolean signalMenuToggleButton(GtkWidget*, gboolean bGroupCycling, gpointer widget)
+    {
+        GtkInstanceMenuToggleButton* pThis = static_cast<GtkInstanceMenuToggleButton*>(widget);
+        return gtk_widget_mnemonic_activate(GTK_WIDGET(pThis->m_pToggleButton), bGroupCycling);
+    }
+
 public:
     GtkInstanceMenuToggleButton(GtkBuilder* pMenuToggleButtonBuilder, GtkMenuButton* pMenuButton,
         GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
@@ -7783,6 +7789,8 @@ public:
 
         gtk_menu_detach(m_pMenu);
         gtk_menu_attach_to_widget(m_pMenu, GTK_WIDGET(m_pToggleButton), nullptr);
+
+        g_signal_connect(m_pContainer, "mnemonic-activate", G_CALLBACK(signalMenuToggleButton), this);
     }
 
     virtual void disable_notify_events() override
