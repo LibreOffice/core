@@ -39,6 +39,12 @@ class DynamicErrorInfo;
 class ImplDynamicErrorInfo;
 enum class DialogMask;
 
+class VCL_DLLPUBLIC ErrorStringFactory
+{
+public:
+    static bool CreateString(const ErrorInfo*, OUString&);
+};
+
 typedef void (* DisplayFnPtr)();
 
 typedef DialogMask WindowDisplayErrorFunc(

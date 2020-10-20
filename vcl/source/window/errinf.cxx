@@ -30,12 +30,6 @@
 class ErrorHandler;
 class TheErrorRegistry: public rtl::Static<ErrorRegistry, TheErrorRegistry> {};
 
-class ErrorStringFactory
-{
-public:
-    static bool CreateString(const ErrorInfo*, OUString&);
-};
-
 bool ErrorStringFactory::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 {
     for(const ErrorHandler *pHdlr : TheErrorRegistry::get().errorHandlers)
