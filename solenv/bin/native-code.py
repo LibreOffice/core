@@ -514,6 +514,8 @@ custom_widgets = [
     'IndexBox',
     'IndexBox',
     'ManagedMenuButton',
+    'NotebookbarTabControl',
+    'NotebookbarToolBox',
     'OptionalBox',
     'PageNumberListBox',
     'PaperSizeListBox',
