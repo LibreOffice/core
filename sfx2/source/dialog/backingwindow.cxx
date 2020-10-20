@@ -258,12 +258,6 @@ void BackingWindow::initControls()
     aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
     mpCreateLabel->SetControlFont(aFont);
 
-    // motif image under the buttons
-    Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
-    aWallpaper.SetStyle(WallpaperStyle::BottomRight);
-
-    mpButtonsBox->SetBackground(aWallpaper);
-
     Resize();
 
     // compute the menubar height

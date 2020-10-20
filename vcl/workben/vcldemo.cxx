@@ -1930,7 +1930,7 @@ public:
     {
         SetText("VCL widget demo");
 
-        Wallpaper aWallpaper(BitmapEx("sfx2/res/startcenter-logo.png"));
+        Wallpaper aWallpaper(BitmapEx("sfx2/res/128x128_writer_doc-p.png"));
         aWallpaper.SetStyle(WallpaperStyle::BottomRight);
         aWallpaper.SetColor(COL_RED);
 
