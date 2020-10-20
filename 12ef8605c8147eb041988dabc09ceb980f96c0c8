@@ -16,6 +16,24 @@
       "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ccd002a_8b92cd15",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-20T18:12:28Z",
+      "side": 1,
+      "message": "so apparently this requires a very specific format of the string?\n\nnot sure if it makes any sense for LO to write this element; the version should be visible in the generator string taht is written to \"Application\" anyway, so maybe just omit this?\n\nunless anything complains that it is missing.",
+      "parentUuid": "e30f59b9_a1a4fd65",
+      "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
