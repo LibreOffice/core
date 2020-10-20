@@ -205,6 +205,9 @@ namespace accessibility
         // the object handling our children (guarded by solar mutex)
         ::accessibility::AccessibleParaManager maParaManager;
 
+        // number of not-yet-closed event frames (BEGIN/END sequences) (guarded by solar mutex)
+        sal_Int32 maEventOpenFrames;
+
         // Queued events from Notify() (guarded by solar mutex)
         AccessibleTextEventQueue maEventQueue;
 
@@ -231,6 +234,7 @@ namespace accessibility
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
+        maEventOpenFrames( 0 ),
         mbInNotify( false ),
         mbGroupHasFocus( false ),
         mbThisHasFocus( false ),
@@ -1314,32 +1318,77 @@ namespace accessibility
             if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
             {
                 const SdrHint* pSdrHint = static_cast< const SdrHint* >( &rHint );
+                maEventQueue.Append( *pSdrHint );
+
                 // process drawing layer events right away, if not
                 // within an open EE notification frame. Otherwise,
                 // event processing would be delayed until next EE
                 // notification sequence.
-                maEventQueue.Append( *pSdrHint );
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
             }
             else if( const SvxViewChangedHint* pViewHint = dynamic_cast<const SvxViewChangedHint*>( &rHint ) )
             {
+                maEventQueue.Append( *pViewHint );
+
                 // process visibility right away, if not within an
                 // open EE notification frame. Otherwise, event
                 // processing would be delayed until next EE
                 // notification sequence.
-                maEventQueue.Append( *pViewHint );
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
             }
             else if( const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint ) )
             {
-                // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
                 maEventQueue.Append( *pEditSourceHint );
+                // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
+                if( maEventOpenFrames == 0 )
+                    ProcessQueue();
             }
             else if( const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint ) )
             {
-                // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
-                if(pTextHint->GetId() == SfxHintId::TextProcessNotifications)
-                    ProcessQueue();
-                else
-                    maEventQueue.Append( *pTextHint );
+                switch( pTextHint->GetId() )
+                {
+                    case SfxHintId::TextBlockNotificationEnd:
+                    case SfxHintId::TextInputEnd:
+                        --maEventOpenFrames;
+
+                        if( maEventOpenFrames == 0 )
+                        {
+                            /* All information should have arrived
+                             * now, process queue. As stated in the
+                             * above bug, we can often avoid throwing
+                             * away all paragraphs by looking forward
+                             * in the event queue (searching for
+                             * PARAINSERT/REMOVE events). Furthermore,
+                             * processing the event queue only at the
+                             * end of an interaction cycle, ensures
+                             * that the EditEngine state and the
+                             * AccessibleText state are the same
+                             * (well, mostly. If there are _multiple_
+                             * interaction cycles in the EE queues, it
+                             * can still happen that EE state is
+                             * different. That's so to say broken by
+                             * design with that delayed EE event
+                             * concept).
+                             */
+                            ProcessQueue();
+                        }
+                        break;
+
+                    case SfxHintId::TextBlockNotificationStart:
+                    case SfxHintId::TextInputStart:
+                        ++maEventOpenFrames;
+                        // no FALLTHROUGH reason: event will not be processed,
+                        // thus appending the event isn't necessary. (#i27299#)
+                        break;
+                    default:
+                        maEventQueue.Append( *pTextHint );
+                        // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
+                        if( maEventOpenFrames == 0 )
+                            ProcessQueue();
+                        break;
+                }
             }
             // it's VITAL to keep the SfxHint last! It's the base of the classes above!
             else if( rHint.GetId() == SfxHintId::Dying )

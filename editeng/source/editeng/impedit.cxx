@@ -259,12 +259,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
             eNotifyType = EE_NOTIFY_TEXTVIEWSELECTIONCHANGED;
         }
         EENotify aNotify( eNotifyType );
-        pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
-    }
-    if(pEditEngine->pImpEditEngine->IsFormatted())
-    {
-        EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
-        pEditEngine->pImpEditEngine->GetNotifyHdl().Call(aNotify);
+        pEditEngine->pImpEditEngine->CallNotify( aNotify );
     }
 }
 
@@ -1574,7 +1569,7 @@ Pair ImpEditView::Scroll( tools::Long ndX, tools::Long ndY, ScrollRangeCheck nRa
         if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
         {
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
-            pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
+            pEditEngine->pImpEditEngine->CallNotify( aNotify );
         }
 
         if (EditViewCallbacks* pCallbacks = getEditViewCallbacks())
@@ -1881,9 +1876,11 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
 
     if (bCut)
     {
+        pEditEngine->pImpEditEngine->EnterBlockNotifications();
         pEditEngine->pImpEditEngine->UndoActionStart(EDITUNDO_CUT);
         DeleteSelected();
         pEditEngine->pImpEditEngine->UndoActionEnd();
+        pEditEngine->pImpEditEngine->LeaveBlockNotifications();
     }
 }
 
@@ -1945,9 +1942,11 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
         // Prevent notifications of paragraph inserts et al that would trigger
         // a11y to format content in a half-ready state when obtaining
         // paragraphs. Collect and broadcast when done instead.
+        pEditEngine->pImpEditEngine->EnterBlockNotifications();
         aSel = pEditEngine->InsertText(
             xDataObj, OUString(), aSel.Min(),
             bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+        pEditEngine->pImpEditEngine->LeaveBlockNotifications();
     }
 
     aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
