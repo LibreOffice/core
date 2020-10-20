@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c535b3e8_81178c57",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-20T06:50:39Z",
+      "side": 1,
+      "message": "Instead of splitting the assignment, better would be to put comment on the separate (previous) line, or even just drop it completely. Split operations just for the sake of having comment on the same line is ... odd :-)",
+      "range": {
+        "startLine": 54,
+        "startChar": 73,
+        "endLine": 54,
+        "endChar": 96
+      },
+      "revId": "01003ffc5684e09122d9c1beaf52161d2449038d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
