@@ -37,7 +37,7 @@ void JpegTransform::perform()
     Transform( &mrInputStream, &mrOutputStream, maRotate );
 }
 
-void JpegTransform::setRotate(sal_uInt16 aRotate)
+void JpegTransform::setRotate(DeciDegrees aRotate)
 {
     maRotate = aRotate;
 }

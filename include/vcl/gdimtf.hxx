@@ -116,7 +116,7 @@ public:
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
-    void            Rotate( long nAngle10 );
+    void            Rotate( DeciDegrees nAngle10 );
     void            Clip( const tools::Rectangle& );
     bool            HasTransparentActions() const;
 

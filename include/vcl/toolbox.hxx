@@ -26,6 +26,7 @@
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/degrees.hxx>
 
 #include <limits>
 #include <memory>
@@ -114,7 +115,7 @@ private:
     long                mnBottomBorder;
     long                mnLastResizeDY;
     long                mnActivateCount;
-    long                mnImagesRotationAngle;
+    DeciDegrees         mnImagesRotationAngle;
     sal_uInt16          mnLastFocusItemId;
     sal_uInt16          mnOutStyle;
     sal_uInt16          mnHighItemId;
@@ -369,7 +370,7 @@ public:
     void*               GetItemData( sal_uInt16 nItemId ) const;
     void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image               GetItemImage( sal_uInt16 nItemId ) const;
-    void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
+    void                SetItemImageAngle( sal_uInt16 nItemId, DeciDegrees nAngle10 );
     void                SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;

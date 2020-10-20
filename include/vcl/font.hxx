@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
+#include <tools/degrees.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/fntstyle.hxx>
 #include <o3tl/cow_wrapper.hxx>
@@ -121,8 +122,8 @@ public:
     void                SetCJKContextLanguage( LanguageType );
     LanguageType        GetCJKContextLanguage() const;
 
-    void                SetOrientation( short nLineOrientation );
-    short               GetOrientation() const;
+    void                SetOrientation( DeciDegrees nLineOrientation );
+    DeciDegrees         GetOrientation() const;
     void                SetVertical( bool bVertical );
     bool                IsVertical() const;
     void                SetKerning( FontKerning nKerning );

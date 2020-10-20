@@ -312,7 +312,7 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
     WriteHeightWidth(Size(rFont.GetFontSize().Width(),-rFont.GetFontSize().Height()));
-    pWMF->WriteInt16( rFont.GetOrientation() ).WriteInt16( rFont.GetOrientation() );
+    pWMF->WriteInt16( rFont.GetOrientation().get() ).WriteInt16( rFont.GetOrientation().get() );
 
     switch (rFont.GetWeight()) {
         case WEIGHT_THIN:       nWeight=W_FW_THIN;       break;

@@ -23,11 +23,11 @@
 #include <svl/svldllapi.h>
 #include <svl/intitem.hxx>
 #include <memory>
+#include <tools/degrees.hxx>
 
 struct SfxImageItem_Impl;
 class SVL_DLLPUBLIC SfxImageItem final : public SfxInt16Item
 {
-    std::unique_ptr<SfxImageItem_Impl>      pImpl;
 public:
                             static SfxPoolItem* CreateDefault();
                             SfxImageItem( sal_uInt16 nWhich = 0 );
@@ -39,10 +39,15 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void                    SetRotation( tools::Long nValue );
-    tools::Long                    GetRotation() const;
-    void                    SetMirrored( bool bSet );
-    bool                    IsMirrored() const;
+    void                    SetRotation( DeciDegrees nValue ) { mnAngle = nValue; }
+    DeciDegrees             GetRotation() const { return mnAngle; }
+    void                    SetMirrored( bool bSet ) { mbMirrored = bSet; }
+    bool                    IsMirrored() const { return mbMirrored; }
+
+private:
+    OUString    maURL;
+    DeciDegrees mnAngle;
+    bool        mbMirrored;
 };
 
 #endif // _SFX_IMAGEITM_HXX

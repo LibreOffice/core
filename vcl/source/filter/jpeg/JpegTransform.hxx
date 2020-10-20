@@ -24,7 +24,7 @@
 
 class JpegTransform final
 {
-    sal_uInt16 maRotate;
+    DeciDegrees maRotate;
     SvStream&  mrInputStream;
     SvStream&  mrOutputStream;
 
@@ -33,7 +33,7 @@ public:
     JpegTransform(SvStream& rInputStream, SvStream& rOutputStream);
     ~JpegTransform();
 
-    void setRotate(sal_uInt16 aRotate);
+    void setRotate(DeciDegrees aRotate);
     void perform();
 };
 

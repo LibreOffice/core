@@ -94,7 +94,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     mbBreak         = false;
     mnSepSize       = TB_SEP_SIZE;
     mnDropDownArrowWidth = TB_DROPDOWNARROWWIDTH;
-    mnImageAngle    = 0;
+    mnImageAngle    = DeciDegrees(0);
     mbMirrorMode    = false;
     mbVisibleText   = false;
     mbExpand        = false;
@@ -959,7 +959,7 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     }
 }
 
-static Image ImplRotImage( const Image& rImage, long nAngle10 )
+static Image ImplRotImage( const Image& rImage, DeciDegrees nAngle10 )
 {
     BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
 
@@ -968,7 +968,7 @@ static Image ImplRotImage( const Image& rImage, long nAngle10 )
     return Image( aRotBitmapEx );
 }
 
-void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
+void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, DeciDegrees nAngle10 )
 {
     ImplToolItems::size_type nPos = GetItemPos( nItemId );
 
@@ -978,14 +978,14 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
     Size aOldSize = pItem->maImage.GetSizePixel();
 
-    long nDeltaAngle = (nAngle10 - pItem->mnImageAngle) % 3600;
-    while( nDeltaAngle < 0 )
-        nDeltaAngle += 3600;
+    DeciDegrees nDeltaAngle10 = (nAngle10 - pItem->mnImageAngle) % DeciDegrees(3600);
+    while( nDeltaAngle10 < DeciDegrees(0) )
+        nDeltaAngle10 += DeciDegrees(3600);
 
     pItem->mnImageAngle = nAngle10;
-    if( nDeltaAngle && !!pItem->maImage )
+    if( nDeltaAngle10 != DeciDegrees(0) && !!pItem->maImage )
     {
-        pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle );
+        pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle10 );
     }
 
     if (!mbCalc)

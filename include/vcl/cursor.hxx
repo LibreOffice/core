@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_CURSOR_HXX
 #define INCLUDED_VCL_CURSOR_HXX
 
+#include <tools/degrees.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/dllapi.h>
@@ -50,7 +51,7 @@ private:
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
     Size            maSize;
     Point           maPos;
-    short           mnOrientation;
+    DeciDegrees     mnOrientation;
     sal_uInt16      mnStyle;
     bool            mbVisible;
     CursorDirection mnDirection;
@@ -87,7 +88,7 @@ public:
     long            GetWidth() const { return maSize.Width(); }
     long            GetHeight() const { return maSize.Height(); }
 
-    void            SetOrientation( short nOrientation = 0 );
+    void            SetOrientation( DeciDegrees nOrientation = DeciDegrees(0) );
 
     void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
 

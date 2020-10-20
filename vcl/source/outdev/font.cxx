@@ -1033,7 +1033,7 @@ bool OutputDevice::ImplNewFont() const
         // get metric data from device layers
         pFontInstance->mbInit = true;
 
-        pFontInstance->mxFontMetric->SetOrientation( sal::static_int_cast<short>(mpFontInstance->GetFontSelectPattern().mnOrientation) );
+        pFontInstance->mxFontMetric->SetOrientation( mpFontInstance->GetFontSelectPattern().mnOrientation );
         mpGraphics->GetFontMetric( pFontInstance->mxFontMetric, 0 );
 
         pFontInstance->mxFontMetric->ImplInitTextLineSize( this );
@@ -1123,7 +1123,7 @@ void OutputDevice::SetFontOrientation( LogicalFontInstance* const pFontInstance 
 {
     if( pFontInstance->GetFontSelectPattern().mnOrientation && !pFontInstance->mxFontMetric->GetOrientation() )
     {
-        pFontInstance->mnOwnOrientation = sal::static_int_cast<short>(pFontInstance->GetFontSelectPattern().mnOrientation);
+        pFontInstance->mnOwnOrientation = pFontInstance->GetFontSelectPattern().mnOrientation;
         pFontInstance->mnOrientation = pFontInstance->mnOwnOrientation;
     }
     else

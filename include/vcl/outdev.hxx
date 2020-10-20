@@ -959,7 +959,7 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, long nDist, sal_uInt16 nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
+    SAL_DLLPRIVATE void         CalcHatchValues( const tools::Rectangle& rRect, long nDist, DeciDegrees nAngle10, Point& rPt1, Point& rPt2, Size& rInc, Point& rEndPt1 );
     SAL_DLLPRIVATE void         DrawHatchLine( const tools::Line& rLine, const tools::PolyPolygon& rPolyPoly, Point* pPtBuffer, bool bMtf );
     ///@}
 
@@ -1207,9 +1207,9 @@ private:
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
     SAL_DLLPRIVATE void         ImplDrawTextRect( long nBaseX, long nBaseY, long nX, long nY, long nWidth, long nHeight );
 
-    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, short nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
+    SAL_DLLPRIVATE static void  ImplDrawWavePixel( long nOriginX, long nOriginY, long nCurX, long nCurY, DeciDegrees nOrientation, SalGraphics* pGraphics, OutputDevice const * pOutDev,
                                                    bool bDrawPixAsRect, long nPixWidth, long nPixHeight );
-    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, short nOrientation, const Color& rColor );
+    SAL_DLLPRIVATE void         ImplDrawWaveLine( long nBaseX, long nBaseY, long nStartX, long nStartY, long nWidth, long nHeight, long nLineWidth, DeciDegrees nOrientation, const Color& rColor );
     SAL_DLLPRIVATE void         ImplDrawWaveTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStraightTextLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove );
     SAL_DLLPRIVATE void         ImplDrawStrikeoutLine( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );

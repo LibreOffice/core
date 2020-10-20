@@ -41,10 +41,10 @@ public:
 
     // font instance attributes from the font request
     long            GetWidth() const                                                { return mnWidth; }
-    short           GetOrientation() const                                          { return mnOrientation; }
+    DeciDegrees     GetOrientation() const                                          { return mnOrientation; }
 
     void            SetWidth(long nWidth)                                           { mnWidth=nWidth; }
-    void            SetOrientation(short nOrientation)                              { mnOrientation=nOrientation; }
+    void            SetOrientation(DeciDegrees nOrientation)                        { mnOrientation=nOrientation; }
 
     // font metrics measured for the font instance
     long            GetAscent() const                                               { return mnAscent; }
@@ -101,7 +101,7 @@ private:
     // font instance attributes from the font request
     long            mnHeight;                   // Font size
     long            mnWidth;                    // Reference Width
-    short           mnOrientation;              // Rotation in 1/10 degrees
+    DeciDegrees     mnOrientation;              // Rotation in 1/10 degrees
 
     // font metrics measured for the font instance
     long            mnAscent;                   // Ascent

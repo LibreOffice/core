@@ -38,7 +38,7 @@ struct ImplToolItem
     bool                mbNonInteractiveWindow;
     void*               mpUserData;
     Image               maImage;
-    long                mnImageAngle;
+    DeciDegrees         mnImageAngle;
     bool                mbMirrorMode;
     OUString            maText;
     OUString            maQuickHelpText;

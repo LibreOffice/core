@@ -35,16 +35,17 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic)
 
 GraphicNativeTransform::~GraphicNativeTransform() {}
 
-void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
+void GraphicNativeTransform::rotate(DeciDegrees aInputRotation)
 {
     // Rotation can be between 0 and 3600
-    sal_uInt16 aRotation = aInputRotation % 3600;
+    DeciDegrees aRotation = aInputRotation % DeciDegrees(3600);
 
-    if (aRotation == 0)
+    if (aRotation == DeciDegrees(0))
     {
         return; // No rotation is needed
     }
-    else if (aRotation != 900 && aRotation != 1800 && aRotation != 2700)
+    else if (aRotation != DeciDegrees(900) && aRotation != DeciDegrees(1800)
+             && aRotation != DeciDegrees(2700))
     {
         return;
     }
@@ -68,7 +69,7 @@ void GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     }
 }
 
-bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)
+bool GraphicNativeTransform::rotateBitmapOnly(DeciDegrees aRotation)
 {
     if (mrGraphic.IsAnimated())
     {
@@ -82,7 +83,7 @@ bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)
     return true;
 }
 
-bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString& aType)
+bool GraphicNativeTransform::rotateGeneric(DeciDegrees aRotation, const OUString& aType)
 {
     // Can't rotate animations yet
     if (mrGraphic.IsAnimated())
@@ -117,7 +118,7 @@ bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, const OUString&
     return true;
 }
 
-void GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
+void GraphicNativeTransform::rotateJPEG(DeciDegrees aRotation)
 {
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
 

@@ -383,7 +383,7 @@ bool BitmapEx::Scale( const Size& rNewSize, BmpScaleFlag nScaleFlag )
     return bRet;
 }
 
-bool BitmapEx::Rotate( long nAngle10, const Color& rFillColor )
+bool BitmapEx::Rotate( DeciDegrees nAngle10, const Color& rFillColor )
 {
     bool bRet = false;
 

@@ -49,7 +49,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
 
 void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
                                       long nCurX, long nCurY,
-                                      short nOrientation,
+                                      DeciDegrees nOrientation,
                                       SalGraphics* pGraphics,
                                       OutputDevice const * pOutDev,
                                       bool bDrawPixAsRect,
@@ -75,7 +75,7 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
 void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
                                      long nDistX, long nDistY,
                                      long nWidth, long nHeight,
-                                     long nLineWidth, short nOrientation,
+                                     long nLineWidth, DeciDegrees nOrientation,
                                      const Color& rColor )
 {
     if ( !nHeight )
@@ -678,7 +678,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     {
         long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
-            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
+            nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation.get() * F_PI1800 ) );
 
         nX += nXAdd - 1;
     }
@@ -750,7 +750,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                     if( mpFontInstance->mnOrientation )
                     {
                         const long nDY = aPos.Y() - aStartPt.Y();
-                        const double fRad = mpFontInstance->mnOrientation * F_PI1800;
+                        const double fRad = mpFontInstance->mnOrientation.get() * F_PI1800;
                         nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
                     }
                 }
@@ -972,7 +972,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, lo
         fOrientation = std::atan2(nStartY - nEndY, (nLengthX == 0 ? 0.000000001 : nLengthX));
         fOrientation /= F_PI180;
         // un-rotate the end point
-        aStartPt.RotateAround(nEndX, nEndY, -fOrientation * 10.0);
+        aStartPt.RotateAround(nEndX, nEndY, DeciDegrees(static_cast<sal_Int16>(-fOrientation * 10.0)));
     }
 
     long nWaveHeight = 3;

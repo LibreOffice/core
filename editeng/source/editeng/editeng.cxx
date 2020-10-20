@@ -200,7 +200,7 @@ void EditEngine::Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect )
     Draw( pOutDev, rOutRect, Point( 0, 0 ) );
 }
 
-void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation )
+void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, DeciDegrees nOrientation )
 {
     // Create with 2 points, as with positive points it will end up with
     // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
@@ -2462,7 +2462,7 @@ void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
 {
 }
 
-void EditEngine::PaintingFirstLine( sal_Int32, const Point&, long, const Point&, short, OutputDevice* )
+void EditEngine::PaintingFirstLine( sal_Int32, const Point&, long, const Point&, DeciDegrees, OutputDevice* )
 {
 }
 

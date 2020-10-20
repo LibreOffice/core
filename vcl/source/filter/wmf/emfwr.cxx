@@ -463,7 +463,7 @@ void EMFWriter::ImplCheckTextAttr()
     m_rStm.WriteUInt32( mnTextHandle );
     ImplWriteExtent( -rFont.GetFontSize().Height() );
     ImplWriteExtent( rFont.GetFontSize().Width() );
-    m_rStm.WriteInt32( rFont.GetOrientation() ).WriteInt32( rFont.GetOrientation() );
+    m_rStm.WriteInt32( rFont.GetOrientation().get() ).WriteInt32( rFont.GetOrientation().get() );
 
     switch( rFont.GetWeight() )
     {
