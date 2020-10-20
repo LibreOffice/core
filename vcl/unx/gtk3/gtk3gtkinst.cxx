@@ -13415,6 +13415,12 @@ private:
     }
     virtual void signal_size_allocate(guint nWidth, guint nHeight) override
     {
+        Size aNewSize(nWidth, nHeight);
+        if (m_pSurface && aNewSize == m_xDevice->GetOutputSizePixel())
+        {
+            // unchanged
+            return;
+        }
         m_xDevice->SetOutputSizePixel(Size(nWidth, nHeight));
         m_pSurface = get_underlying_cairo_surface(*m_xDevice);
         GtkInstanceWidget::signal_size_allocate(nWidth, nHeight);
