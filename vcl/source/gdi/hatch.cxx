@@ -43,7 +43,7 @@ Hatch::Hatch() = default;
 Hatch::Hatch( const Hatch& ) = default;
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
-              tools::Long nDistance, sal_uInt16 nAngle10 ) : mpImplHatch()
+              tools::Long nDistance, Degree10 nAngle10 ) : mpImplHatch()
 {
     mpImplHatch->maColor = rColor;
     mpImplHatch->meStyle = eStyle;
@@ -71,7 +71,7 @@ void Hatch::SetDistance( tools::Long nDistance )
     mpImplHatch->mnDistance = nDistance;
 }
 
-void Hatch::SetAngle( sal_uInt16 nAngle10 )
+void Hatch::SetAngle( Degree10 nAngle10 )
 {
     mpImplHatch->mnAngle = nAngle10;
 }
@@ -88,8 +88,9 @@ SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
     tools::GenericTypeSerializer aSerializer(rIStm);
     aSerializer.readColor(rHatch.mpImplHatch->maColor);
     rIStm.ReadInt32(nTmp32);
-    rIStm.ReadUInt16(rHatch.mpImplHatch->mnAngle);
     rHatch.mpImplHatch->mnDistance = nTmp32;
+    rIStm.ReadUInt16(nTmp16);
+    rHatch.mpImplHatch->mnAngle = Degree10(nTmp16);
 
     return rIStm;
 }
@@ -102,7 +103,7 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 
     tools::GenericTypeSerializer aSerializer(rOStm);
     aSerializer.writeColor(rHatch.mpImplHatch->maColor);
-    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle );
+    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle.get() );
 
     return rOStm;
 }

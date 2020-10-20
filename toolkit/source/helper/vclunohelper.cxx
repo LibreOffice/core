@@ -211,7 +211,7 @@ css::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rF
     aFD.Slant = vcl::unohelper::ConvertFontSlant(rFont.GetItalic());
     aFD.Underline = sal::static_int_cast< sal_Int16 >(rFont.GetUnderline());
     aFD.Strikeout = sal::static_int_cast< sal_Int16 >(rFont.GetStrikeout());
-    aFD.Orientation = rFont.GetOrientation() / 10.0;
+    aFD.Orientation = rFont.GetOrientation().get() / 10.0;
     aFD.Kerning = rFont.IsKerning();
     aFD.WordLineMode = rFont.IsWordLineMode();
     aFD.Type = 0;   // ??? => Only in Metric...
@@ -245,7 +245,7 @@ vcl::Font VCLUnoHelper::CreateFont( const css::awt::FontDescriptor& rDescr, cons
         aFont.SetStrikeout( static_cast<FontStrikeout>(rDescr.Strikeout) );
 
     // Not DONTKNOW
-    aFont.SetOrientation( static_cast<short>(rDescr.Orientation * 10) );
+    aFont.SetOrientation( Degree10(static_cast<sal_Int16>(rDescr.Orientation * 10)) );
     aFont.SetKerning( static_cast<FontKerning>(rDescr.Kerning) );
     aFont.SetWordLineMode( rDescr.WordLineMode );
 

@@ -21,7 +21,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 void Point::RotateAround( Point& rPoint,
-                          short nOrientation ) const
+                          Degree10 nOrientation ) const
 {
     tools::Long nX = rPoint.X();
     tools::Long nY = rPoint.Y();
@@ -31,28 +31,28 @@ void Point::RotateAround( Point& rPoint,
 }
 
 void Point::RotateAround( tools::Long& rX, tools::Long& rY,
-                          short nOrientation ) const
+                          Degree10 nOrientation ) const
 {
     const tools::Long nOriginX = X();
     const tools::Long nOriginY = Y();
 
-    if ( (nOrientation >= 0) && !(nOrientation % 900) )
+    if ( (nOrientation >= Degree10(0)) && !(nOrientation % Degree10(900)) )
     {
-        if ( nOrientation >= 3600 )
-            nOrientation %= 3600;
+        if ( nOrientation >= Degree10(3600) )
+            nOrientation %= Degree10(3600);
 
         if ( nOrientation )
         {
             rX -= nOriginX;
             rY -= nOriginY;
 
-            if ( nOrientation == 900 )
+            if ( nOrientation == Degree10(900) )
             {
                 tools::Long nTemp = rX;
                 rX = rY;
                 rY = -nTemp;
             }
-            else if ( nOrientation == 1800 )
+            else if ( nOrientation == Degree10(1800) )
             {
                 rX = -rX;
                 rY = -rY;
@@ -70,7 +70,7 @@ void Point::RotateAround( tools::Long& rX, tools::Long& rY,
     }
     else
     {
-        double nRealOrientation = nOrientation*F_PI1800;
+        double nRealOrientation = nOrientation.get() * F_PI1800;
         double nCos = cos( nRealOrientation );
         double nSin = sin( nRealOrientation );
 

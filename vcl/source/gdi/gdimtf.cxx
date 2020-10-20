@@ -819,17 +819,17 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
     }
 }
 
-void GDIMetaFile::Rotate( tools::Long nAngle10 )
+void GDIMetaFile::Rotate( Degree10 nAngle10 )
 {
-    nAngle10 %= 3600;
-    nAngle10 = ( nAngle10 < 0 ) ? ( 3599 + nAngle10 ) : nAngle10;
+    nAngle10 %= Degree10(3600);
+    nAngle10 = ( nAngle10 < Degree10(0) ) ? ( Degree10(3599) + nAngle10 ) : nAngle10;
 
     if( !nAngle10 )
         return;
 
     GDIMetaFile     aMtf;
     ScopedVclPtrInstance< VirtualDevice > aMapVDev;
-    const double    fAngle = F_PI1800 * nAngle10;
+    const double    fAngle = F_PI1800 * nAngle10.get();
     const double    fSin = sin( fAngle );
     const double    fCos = cos( fAngle );
     tools::Rectangle aRect( Point(), GetPrefSize() );
@@ -1148,7 +1148,7 @@ void GDIMetaFile::Rotate( tools::Long nAngle10 )
                 MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
                 Hatch               aHatch( pAct->GetHatch() );
 
-                aHatch.SetAngle( aHatch.GetAngle() + static_cast<sal_uInt16>(nAngle10) );
+                aHatch.SetAngle( aHatch.GetAngle() + nAngle10 );
                 aMtf.AddAction( new MetaHatchAction( ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
                                                                                 aHatch ) );
             }
@@ -1236,7 +1236,7 @@ void GDIMetaFile::Rotate( tools::Long nAngle10 )
                 MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                 vcl::Font       aFont( pAct->GetFont() );
 
-                aFont.SetOrientation( aFont.GetOrientation() + static_cast<sal_uInt16>(nAngle10) );
+                aFont.SetOrientation( aFont.GetOrientation() + nAngle10 );
                 aMtf.AddAction( new MetaFontAction( aFont ) );
             }
             break;

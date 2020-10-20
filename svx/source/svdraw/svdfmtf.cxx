@@ -1053,7 +1053,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    sal_uInt32 nAngle = aFnt.GetOrientation();
+    sal_Int32 nAngle = aFnt.GetOrientation().get();
     if ( nAngle )
     {
         nAngle*=10;

@@ -842,7 +842,7 @@ void ImpSdrPdfImport::InsertTextObject(const Point& rPos, const Size& rSize, con
         aAttr.Put(XFillColorItem(OUString(), aFont.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    sal_uInt32 nAngle = aFont.GetOrientation();
+    sal_uInt32 nAngle = aFont.GetOrientation().get();
     if (nAngle)
     {
         nAngle *= 10;

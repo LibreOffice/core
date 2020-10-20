@@ -234,7 +234,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
 
         FontMetric aFont = rRenderContext.GetDevFont((i * nFontCount) / nFontSamples);
         aFont.SetFontHeight(400 + (i % 7) * 100);
-        aFont.SetOrientation(i * (3600 / nFontSamples));
+        aFont.SetOrientation(Degree10(i * (3600 / nFontSamples)));
         rRenderContext.SetFont(aFont);
 
         sal_uInt8 nRed   = (i << 6) & 0xC0;
@@ -265,7 +265,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rR
     Color const aDarkGreen(0, 0x40, 0);
 
     Gradient aGradient(GradientStyle::Linear, aBlack, aWhite);
-    aGradient.SetAngle(900);
+    aGradient.SetAngle(Degree10(900));
     rRenderContext.DrawGradient(tools::Rectangle(Point(1000, 4500),
                                 Size(aPaperSize.Width() - 2000, 500)),
                                 aGradient);
