@@ -231,13 +231,17 @@ void AnalyizeSignatureStream(SvMemoryStream& rStream, std::vector<BitmapChecksum
                              int nMDPPerm)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
-    vcl::pdf::PDFiumDocument aPdfDocument(
-        FPDF_LoadMemDocument(rStream.GetData(), rStream.GetSize(), /*password=*/nullptr));
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPdfium->openDocument(rStream.GetData(), rStream.GetSize());
+    if (!pPdfDocument)
+    {
+        return;
+    }
 
-    int nPageCount = aPdfDocument.getPageCount();
+    int nPageCount = pPdfDocument->getPageCount();
     for (int nPage = 0; nPage < nPageCount; ++nPage)
     {
-        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage(aPdfDocument.openPage(nPage));
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(nPage);
         if (!pPdfPage)
         {
             return;
