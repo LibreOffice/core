@@ -12,6 +12,7 @@
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <compiler.hxx>
 #include <conditio.hxx>
 #include <stlsheet.hxx>
@@ -31,6 +32,7 @@
 #include <svl/gridprinter.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/frame.hxx>
 #include <unotools/tempfile.hxx>
 #include <scitems.hxx>
 #include <tokenarray.hxx>
@@ -660,7 +662,7 @@ void ScBootstrapFixture::createCSVPath(const OUString& aFileBase, OUString& rCSV
 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType)
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword)
 {
 
     utl::TempFile aTempFile;
@@ -674,6 +676,16 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         rUserData, "private:factory/scalc*" );
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
+
+    if (pPassword)
+    {
+        SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
+        uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( *pPassword );
+        pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
+
+        uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
+        ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
+    }
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
 
@@ -683,7 +695,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SotClipboardFormatId::STARCALC_8;
 
-    ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat );
+    ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
     if(nFormatType == XLSX_FORMAT_TYPE)
         validate(aTempFile.GetFileName(), test::OOXML);
     else if (nFormatType == ODS_FORMAT_TYPE)
@@ -697,6 +709,18 @@ ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 n
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+
+    CPPUNIT_ASSERT(xDocSh.is());
+    return xDocSh;
+}
+
+ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat )
+{
+    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    OUString aPass("test");
+
+    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;

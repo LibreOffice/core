@@ -190,9 +190,10 @@ public:
     void createCSVPath(const OUString& aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType);
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr );
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat );
 
     std::shared_ptr<utl::TempFile> saveAs(ScDocShell* pShell, sal_Int32 nFormat);
     std::shared_ptr<utl::TempFile> exportTo(ScDocShell* pShell, sal_Int32 nFormat);
