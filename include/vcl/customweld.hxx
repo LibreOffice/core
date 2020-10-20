@@ -63,7 +63,12 @@ public:
     }
     virtual void Show() { m_pDrawingArea->show(); }
     virtual void Hide() { m_pDrawingArea->hide(); }
-    void GrabFocus() { m_pDrawingArea->grab_focus(); }
+    void GrabFocus()
+    {
+        m_pDrawingArea->grab_focus();
+        if (m_pDrawingArea->has_focus())
+            GetFocus();
+    }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
     bool IsReallyVisible() const { return m_pDrawingArea->is_visible(); }
