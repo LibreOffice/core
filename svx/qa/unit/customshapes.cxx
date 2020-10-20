@@ -514,25 +514,30 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf126060_3D_Z_Rotation)
     OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf126060_3D_Z_Rotation.pptx";
     mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
     CPPUNIT_ASSERT_MESSAGE("Could not load document", mxComponent.is());
-    OUString sErrors; // sErrors collects the errors and should be empty in case all is OK.
 
     uno::Reference<drawing::XShape> xShape(getShape(0));
     SdrObjCustomShape& rSdrObjCustomShape(
         static_cast<SdrObjCustomShape&>(*GetSdrObjectFromXShape(xShape)));
 
-    if (rSdrObjCustomShape.GetCameraZRotation() != 90)
-        sErrors += "Wrong text camera Z rotation";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong text camera Z rotation", 90.0,
+                                 rSdrObjCustomShape.GetCameraZRotation());
 
     basegfx::B2DHomMatrix aObjectTransform;
     basegfx::B2DPolyPolygon aObjectPolyPolygon;
     rSdrObjCustomShape.TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon);
 
-    if (aObjectTransform.get(0, 0) != 1492 || aObjectTransform.get(0, 1) != 0
-        || aObjectTransform.get(0, 2) != 1129 || aObjectTransform.get(1, 0) != 0
-        || aObjectTransform.get(1, 1) != 2500 || aObjectTransform.get(1, 2) != 5846)
-        sErrors += " Wrong transformation matrix";
-
-    CPPUNIT_ASSERT_EQUAL(OUString(), sErrors);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 0,0 position", 1492.0,
+                                 aObjectTransform.get(0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 0,1 position", 0.0,
+                                 aObjectTransform.get(0, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 0,2 position", 1129.0,
+                                 aObjectTransform.get(0, 2));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 1,0 position", 0.0,
+                                 aObjectTransform.get(1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 1,1 position", 2500.0,
+                                 aObjectTransform.get(1, 1));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong transformation at 1,2 position", 5846.0,
+                                 aObjectTransform.get(1, 2));
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf127785_Asymmetric)
@@ -621,13 +626,11 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf128413_tbrlOnOff)
 
     awt::Rectangle aObservedRect;
     xShapeProps->getPropertyValue(UNO_NAME_MISC_OBJ_FRAMERECT) >>= aObservedRect;
-    OUString sError;
-    if (aOrigRect.Width != aObservedRect.Width || aOrigRect.Height != aObservedRect.Height
-        || aOrigRect.X != aObservedRect.X || aOrigRect.Y != aObservedRect.Y)
-    {
-        sError = "Shape has wrong size or wrong position.";
-    }
-    CPPUNIT_ASSERT_EQUAL(OUString(), sError);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong width", aOrigRect.Width, aObservedRect.Width);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong height", aOrigRect.Height, aObservedRect.Height);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong X position", aOrigRect.X, aObservedRect.X);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape has wrong Y position", aOrigRect.Y, aObservedRect.Y);
 }
 
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf129532_MatrixFlipV)
