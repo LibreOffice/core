@@ -296,11 +296,11 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
     sal_Int32 nKernStart = nStart ? rData.pKernArray[sal_Int32(nStart) - 1] : 0;
     sal_Int32 nKernEnd = rData.pKernArray[sal_Int32(nEnd) - 1];
 
-    const sal_uInt16 nDir = rData.bBidiPor ? 1800
+    const Degree10 nDir = rData.bBidiPor ? Degree10(1800)
                                            : UnMapDirection(rData.rFont.GetOrientation(),
                                                             rData.bSwitchH2V, rData.bSwitchH2VLRBT);
 
-    switch ( nDir )
+    switch ( nDir.get() )
     {
     case 0 :
         rStart.AdjustX(nKernStart );
@@ -1735,12 +1735,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         Point aEnd;
                         tools::Long nKernVal = pKernArray[sal_Int32(rInf.GetLen()) - 1];
 
-                        const sal_uInt16 nDir = bBidiPor
-                                                    ? 1800
+                        const Degree10 nDir = bBidiPor
+                                                    ? Degree10(1800)
                                                     : UnMapDirection(GetFont().GetOrientation(),
                                                                      bSwitchH2V, bSwitchH2VLRBT);
 
-                        switch ( nDir )
+                        switch ( nDir.get() )
                         {
                         case 0 :
                             aEnd.setX( rInf.GetPos().X() + nKernVal );

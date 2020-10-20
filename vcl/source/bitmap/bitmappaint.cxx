@@ -209,16 +209,16 @@ bool Bitmap::Mirror(BmpMirrorFlags nMirrorFlags)
     return bRet;
 }
 
-bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
+bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 {
     bool bRet = false;
 
-    nAngle10 %= 3600;
-    nAngle10 = (nAngle10 < 0) ? (3599L + nAngle10) : nAngle10;
+    nAngle10 %= Degree10(3600);
+    nAngle10 = (nAngle10 < Degree10(0)) ? (Degree10(3599) + nAngle10) : nAngle10;
 
     if (!nAngle10)
         bRet = true;
-    else if (nAngle10 == 1800)
+    else if (nAngle10 == Degree10(1800))
         bRet = Mirror(BmpMirrorFlags::Horizontal | BmpMirrorFlags::Vertical);
     else
     {
@@ -229,7 +229,7 @@ bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
         {
             const Size aSizePix(GetSizePixel());
 
-            if (nAngle10 == 900 || nAngle10 == 2700)
+            if (nAngle10 == Degree10(900) || nAngle10 == Degree10(2700))
             {
                 const Size aNewSizePix(aSizePix.Height(), aSizePix.Width());
                 Bitmap aNewBmp(aNewSizePix, GetBitCount(), &pReadAcc->GetPalette());
@@ -244,7 +244,7 @@ bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
                     const tools::Long nNewWidth = aNewSizePix.Width();
                     const tools::Long nNewHeight = aNewSizePix.Height();
 
-                    if (nAngle10 == 900)
+                    if (nAngle10 == Degree10(900))
                     {
                         for (tools::Long nY = 0, nOtherX = nWidth1; nY < nNewHeight;
                              nY++, nOtherX--)
@@ -257,7 +257,7 @@ bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
                             }
                         }
                     }
-                    else if (nAngle10 == 2700)
+                    else if (nAngle10 == Degree10(2700))
                     {
                         for (tools::Long nY = 0, nOtherX = 0; nY < nNewHeight; nY++, nOtherX++)
                         {
@@ -280,7 +280,7 @@ bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
                 Point aTmpPoint;
                 tools::Rectangle aTmpRectangle(aTmpPoint, aSizePix);
                 tools::Polygon aPoly(aTmpRectangle);
-                aPoly.Rotate(aTmpPoint, static_cast<sal_uInt16>(nAngle10));
+                aPoly.Rotate(aTmpPoint, nAngle10);
 
                 tools::Rectangle aNewBound(aPoly.GetBoundRect());
                 const Size aNewSizePix(aNewBound.GetSize());
@@ -290,8 +290,8 @@ bool Bitmap::Rotate(tools::Long nAngle10, const Color& rFillColor)
                 if (pWriteAcc)
                 {
                     const BitmapColor aFillColor(pWriteAcc->GetBestMatchingColor(rFillColor));
-                    const double fCosAngle = cos(nAngle10 * F_PI1800);
-                    const double fSinAngle = sin(nAngle10 * F_PI1800);
+                    const double fCosAngle = cos(nAngle10.get() * F_PI1800);
+                    const double fSinAngle = sin(nAngle10.get() * F_PI1800);
                     const double fXMin = aNewBound.Left();
                     const double fYMin = aNewBound.Top();
                     const tools::Long nWidth = aSizePix.Width();

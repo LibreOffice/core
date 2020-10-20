@@ -24,27 +24,14 @@
 
 SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
 
-struct SfxImageItem_Impl
-{
-    OUString aURL;
-    tools::Long    nAngle;
-    bool    bMirrored;
-    bool    operator == ( const SfxImageItem_Impl& rOther ) const
-            { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
-};
-
-
 SfxImageItem::SfxImageItem( sal_uInt16 which )
-    : SfxInt16Item( which, 0 ),
-          pImpl( new SfxImageItem_Impl)
+    : SfxInt16Item( which, 0 ), mnAngle(0), mbMirrored(false)
 {
-    pImpl->nAngle = 0;
-    pImpl->bMirrored = false;
 }
 
 SfxImageItem::SfxImageItem( const SfxImageItem& rItem )
     : SfxInt16Item( rItem ),
-      pImpl( new SfxImageItem_Impl( *rItem.pImpl ) )
+      mnAngle(rItem.mnAngle), mbMirrored(rItem.mbMirrored)
 {
 }
 
@@ -59,17 +46,19 @@ SfxImageItem* SfxImageItem::Clone( SfxItemPool* ) const
 
 bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return SfxInt16Item::operator==(rItem) &&
-           *pImpl == *static_cast<const SfxImageItem&>(rItem).pImpl;
+    if (!SfxInt16Item::operator==(rItem))
+        return false;
+    const SfxImageItem& rOther = static_cast<const SfxImageItem&>(rItem);
+    return mnAngle == rOther.mnAngle && mbMirrored == rOther.mbMirrored;
 }
 
 bool SfxImageItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
     css::uno::Sequence< css::uno::Any > aSeq( 4 );
     aSeq[0] <<= GetValue();
-    aSeq[1] <<= pImpl->nAngle;
-    aSeq[2] <<= pImpl->bMirrored;
-    aSeq[3] <<= pImpl->aURL;
+    aSeq[1] <<= sal_Int16(mnAngle);
+    aSeq[2] <<= mbMirrored;
+    aSeq[3] <<= maURL;
 
     rVal <<= aSeq;
     return true;
@@ -81,37 +70,17 @@ bool SfxImageItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();
-        OUString aURL;
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
-        aSeq[1] >>= pImpl->nAngle;
-        aSeq[2] >>= pImpl->bMirrored;
-        if ( aSeq[3] >>= aURL )
-            pImpl->aURL = aURL;
+        sal_Int16 nTmp;
+        aSeq[1] >>= nTmp;
+        mnAngle = Degree10(nTmp);
+        aSeq[2] >>= mbMirrored;
+        aSeq[3] >>= maURL;
         return true;
     }
 
     return false;
-}
-
-void SfxImageItem::SetRotation( tools::Long nValue )
-{
-    pImpl->nAngle = nValue;
-}
-
-tools::Long SfxImageItem::GetRotation() const
-{
-    return pImpl->nAngle;
-}
-
-void SfxImageItem::SetMirrored( bool bSet )
-{
-    pImpl->bMirrored = bSet;
-}
-
-bool SfxImageItem::IsMirrored() const
-{
-    return pImpl->bMirrored;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/gen.hxx>
+#include <tools/degree.hxx>
 #include <vcl/devicecoordinate.hxx>
 #include <vcl/dllapi.h>
 
@@ -78,7 +79,7 @@ public:
     virtual void    DrawText( SalGraphics& ) const = 0;
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
-    int             GetOrientation() const                  { return mnOrientation; }
+    Degree10        GetOrientation() const                  { return mnOrientation; }
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const = 0;
@@ -108,7 +109,7 @@ protected:
     int             mnEndCharPos;
 
     int             mnUnitsPerPixel;
-    int             mnOrientation;
+    Degree10        mnOrientation;
 
     mutable Point   maDrawOffset;
     Point           maDrawBase;

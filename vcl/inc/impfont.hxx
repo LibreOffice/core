@@ -126,7 +126,7 @@ private:
     bool                mbWordLine:1;
 
     // TODO: metric data, should be migrated to ImplFontMetric
-    short               mnOrientation;
+    Degree10            mnOrientation;
 
     int                 mnQuality;
 

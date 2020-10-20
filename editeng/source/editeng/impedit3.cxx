@@ -105,9 +105,9 @@ struct TabInfo
 
 }
 
-Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
+Point Rotate( const Point& rPoint, Degree10 nOrientation, const Point& rOrigin )
 {
-    double nRealOrientation = nOrientation*F_PI1800;
+    double nRealOrientation = nOrientation.get() * F_PI1800;
     double nCos = cos( nRealOrientation );
     double nSin = sin( nRealOrientation );
 
@@ -158,7 +158,7 @@ static void lcl_DrawRedLines( OutputDevice* pOutDev,
                               size_t nMaxEnd,
                               const tools::Long* pDXArray,
                               WrongList const * pWrongs,
-                              short nOrientation,
+                              Degree10 nOrientation,
                               const Point& rOrigin,
                               bool bVertical,
                               bool bIsRightToLeft )
@@ -2952,7 +2952,7 @@ void ImpEditEngine::RecalcFormatterFontMetrics( FormatterFontMetric& rCurMetrics
     }
 }
 
-void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, short nOrientation )
+void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly, Degree10 nOrientation )
 {
     if ( !GetUpdateMode() && !bStripOnly )
         return;
@@ -2978,7 +2978,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
     double nCos = 0.0, nSin = 0.0;
     if ( nOrientation )
     {
-        double nRealOrientation = nOrientation*F_PI1800;
+        double nRealOrientation = nOrientation.get()*F_PI1800;
         nCos = cos( nRealOrientation );
         nSin = sin( nRealOrientation );
     }

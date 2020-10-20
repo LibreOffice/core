@@ -184,7 +184,7 @@ namespace
         // apply font rotate
         if(rInfo.mrFont.GetOrientation())
         {
-            aNewTransform.rotate(-rInfo.mrFont.GetOrientation() * F_PI1800);
+            aNewTransform.rotate(-rInfo.mrFont.GetOrientation().get() * F_PI1800);
         }
 
         // look for escapement, if necessary, translate accordingly

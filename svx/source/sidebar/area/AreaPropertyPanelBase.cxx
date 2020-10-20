@@ -145,7 +145,7 @@ void AreaPropertyPanelBase::Initialize()
 
     maGradientLinear.SetXOffset(DEFAULT_CENTERX);
     maGradientLinear.SetYOffset(DEFAULT_CENTERY);
-    maGradientLinear.SetAngle(DEFAULT_ANGLE);
+    maGradientLinear.SetAngle(Degree10(DEFAULT_ANGLE));
     maGradientLinear.SetStartColor(Color(DEFAULT_STARTVALUE));
     maGradientLinear.SetEndColor(Color(DEFAULT_ENDVALUE));
     maGradientLinear.SetBorder(DEFAULT_BORDER);
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, SelectFillTypeHdl, weld::ComboBox&, void)
                 mxLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
                 mxLbFillGradTo->SelectEntry(aGradient.GetEndColor());
 
-                mxMTRAngle->set_value(aGradient.GetAngle() / 10, FieldUnit::DEGREE);
+                mxMTRAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
                 css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
                 mxGradientStyle->set_active(sal::static_int_cast< sal_Int32 >( eXGS ));
             }
@@ -507,7 +507,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             if(pSh && pSh->GetItem(SID_COLOR_TABLE))
             {
                 XGradient aGradient;
-                aGradient.SetAngle(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10);
+                aGradient.SetAngle(Degree10(mxMTRAngle->get_value(FieldUnit::DEGREE) * 10));
                 aGradient.SetGradientStyle(static_cast<css::awt::GradientStyle>(mxGradientStyle->get_active()));
                 aGradient.SetStartColor(mxLbFillGradFrom->GetSelectEntryColor());
                 aGradient.SetEndColor(mxLbFillGradTo->GetSelectEntryColor());
@@ -1174,7 +1174,7 @@ void AreaPropertyPanelBase::Update()
                         if(mxGradientStyle->get_active() == sal_Int32(GradientStyle::Radial))
                             mxMTRAngle->set_sensitive(false);
                         else
-                            mxMTRAngle->set_value(aGradient.GetAngle() / 10, FieldUnit::DEGREE);
+                            mxMTRAngle->set_value(aGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
                     }
                     else
                     {

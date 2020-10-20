@@ -844,7 +844,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         // Remove rotation
         bool bInvertRotation = bFlipH != bFlipV;
         if (nRotation != 0)
-            aPolyPolygon.Rotate(Point(0,0), static_cast<sal_uInt16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10));
+            aPolyPolygon.Rotate(Point(0,0), Degree10(static_cast<sal_Int16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10)));
         WritePolyPolygon(xShape, aPolyPolygon, false);
     }
     else if (bCustGeom)

@@ -21,6 +21,7 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
+#include <tools/degree.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
@@ -145,7 +146,7 @@ public:
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
-    void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
+    void                Rotate( const Point& rCenter, Degree10 nAngle10 );
 
     void                Insert( sal_uInt16 nPos, const Point& rPt );
     void                Insert( sal_uInt16 nPos, const tools::Polygon& rPoly );
@@ -236,7 +237,7 @@ public:
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
-    void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
+    void                Rotate( const Point& rCenter, Degree10 nAngle10 );
 
     const tools::Polygon& operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
     tools::Polygon& operator[]( sal_uInt16 nPos );

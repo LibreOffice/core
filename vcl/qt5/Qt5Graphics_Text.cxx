@@ -279,7 +279,7 @@ public:
     {
     }
 
-    void SetOrientation(int nOrientation) { mnOrientation = nOrientation; }
+    void SetOrientation(Degree10 nOrientation) { mnOrientation = nOrientation; }
 };
 }
 
@@ -304,9 +304,9 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     // probably better to add a parameter to GetNextGlyphs?
     Qt5CommonSalLayout* pQt5Layout
         = static_cast<Qt5CommonSalLayout*>(const_cast<GenericSalLayout*>(&rLayout));
-    int nOrientation = rLayout.GetOrientation();
+    Degree10 nOrientation = rLayout.GetOrientation();
     if (nOrientation)
-        pQt5Layout->SetOrientation(0);
+        pQt5Layout->SetOrientation(Degree10(0));
 
     Point aPos;
     const GlyphItem* pGlyph;
@@ -338,7 +338,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
         aPainter.setWindow(window);
 
         QTransform p;
-        p.rotate(-static_cast<qreal>(nOrientation) / 10.0);
+        p.rotate(-static_cast<qreal>(nOrientation.get()) / 10.0);
         p.translate(-positions[0].x(), -positions[0].y());
         aPainter.setTransform(p);
     }

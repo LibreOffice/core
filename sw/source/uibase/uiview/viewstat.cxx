@@ -456,7 +456,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 SfxImageItem aImageItem(nWhich);
                 if(m_pWrtShell->IsInVerticalText())
-                    aImageItem.SetRotation( 2700 );
+                    aImageItem.SetRotation( Degree10(2700) );
                 if(m_pWrtShell->IsInRightToLeftText())
                     aImageItem.SetMirrored( true );
                 rSet.Put(aImageItem);

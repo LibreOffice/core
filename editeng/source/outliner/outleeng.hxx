@@ -37,7 +37,7 @@ public:
                         OutlinerEditEng( Outliner* pOwner, SfxItemPool* pPool );
                         virtual ~OutlinerEditEng() override;
 
-    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev ) override;
+    virtual void        PaintingFirstLine( sal_Int32 nPara, const Point& rStartPos, tools::Long nBaseLineY, const Point& rOrigin, Degree10 nOrientation, OutputDevice* pOutDev ) override;
 
     virtual void        ParagraphInserted( sal_Int32 nNewParagraph ) override;
     virtual void        ParagraphDeleted( sal_Int32 nDeletedParagraph ) override;

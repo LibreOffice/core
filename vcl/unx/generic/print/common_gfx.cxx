@@ -125,7 +125,7 @@ PrinterGfx::Clear()
     mnDepth                         = 24;
     mnPSLevel                       = 2;
     mbColor                         = true;
-    mnTextAngle                     = 0;
+    mnTextAngle                     = Degree10(0);
 
     maClipRegion.clear();
     maGraphicsStack.clear();
@@ -794,9 +794,9 @@ PrinterGfx::PSSetFont ()
 }
 
 void
-PrinterGfx::PSRotate (sal_Int32 nAngle)
+PrinterGfx::PSRotate (Degree10 nAngle)
 {
-    sal_Int32 nPostScriptAngle = -nAngle;
+    sal_Int32 nPostScriptAngle = -nAngle.get();
     while( nPostScriptAngle < 0 )
         nPostScriptAngle += 3600;
 
@@ -1007,7 +1007,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
     PSSetColor ();
     PSSetFont  ();
     // rotate the user coordinate system
-    if (mnTextAngle != 0)
+    if (mnTextAngle)
     {
         PSGSave ();
         PSRotate (mnTextAngle);
@@ -1036,7 +1036,7 @@ PrinterGfx::PSShowGlyph (const unsigned char nGlyphId)
         WritePS (mpPageBody, "show\n");
 
     // restore the user coordinate system
-    if (mnTextAngle != 0)
+    if (mnTextAngle)
         PSGRestore ();
 }
 

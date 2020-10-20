@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <tools/degree.hxx>
 #include <sal/types.h>
 #include <vcl/dllapi.h>
 
@@ -29,15 +30,15 @@ class VCL_DLLPUBLIC GraphicNativeTransform final
 {
     Graphic& mrGraphic;
 
-    bool rotateBitmapOnly(sal_uInt16 aRotation);
-    void rotateJPEG(sal_uInt16 aRotation);
-    bool rotateGeneric(sal_uInt16 aRotation, const OUString& aType);
+    bool rotateBitmapOnly(Degree10 aRotation);
+    void rotateJPEG(Degree10 aRotation);
+    bool rotateGeneric(Degree10 aRotation, const OUString& aType);
 
 public:
     GraphicNativeTransform(Graphic& rGraphic);
     ~GraphicNativeTransform();
 
-    void rotate(sal_uInt16 aRotation);
+    void rotate(Degree10 aRotation);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

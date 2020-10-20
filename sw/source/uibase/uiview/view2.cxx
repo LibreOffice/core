@@ -241,8 +241,8 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
         GraphicNativeMetadata aMetadata;
         if ( aMetadata.read(aGraphic) )
         {
-            const sal_uInt16 aRotation = aMetadata.getRotation();
-            if (aRotation != 0)
+            const Degree10 aRotation = aMetadata.getRotation();
+            if (aRotation)
             {
                 GraphicNativeTransform aTransform( aGraphic );
                 aTransform.rotate( aRotation );

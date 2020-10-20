@@ -607,7 +607,7 @@ SwTransparentTextGuard::~SwTransparentTextGuard()
     aVCLGradient.SetStyle(GradientStyle::Linear);
     aVCLGradient.SetStartColor(aTransColor);
     aVCLGradient.SetEndColor(aTransColor);
-    aVCLGradient.SetAngle(0);
+    aVCLGradient.SetAngle(Degree10(0));
     aVCLGradient.SetBorder(0);
     aVCLGradient.SetOfsX(0);
     aVCLGradient.SetOfsY(0);
@@ -690,7 +690,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
         }
         else
         {
-            switch( m_pFnt->GetOrientation(GetTextFrame()->IsVertical()) )
+            switch( m_pFnt->GetOrientation(GetTextFrame()->IsVertical()).get() )
             {
                 case 0 :
                     aFontPos.AdjustX(nLeftBorderSpace );
@@ -880,7 +880,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
 
     // Some of the current values are set at the font:
     if ( ! bRotate )
-        s_aFnt.SetVertical( 0, rTextPaintInfo.GetTextFrame()->IsVertical() );
+        s_aFnt.SetVertical( Degree10(0), rTextPaintInfo.GetTextFrame()->IsVertical() );
     else
         s_aFnt.SetVertical( pOldFnt->GetOrientation() );
 
@@ -894,13 +894,13 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
     rNonConstTextPaintInfo.SetFont( &s_aFnt );
 
     // The maximum width depends on the current orientation
-    const sal_uInt16 nDir = s_aFnt.GetOrientation( rTextPaintInfo.GetTextFrame()->IsVertical() );
+    const Degree10 nDir = s_aFnt.GetOrientation( rTextPaintInfo.GetTextFrame()->IsVertical() );
     SwTwips nMaxWidth;
-    if (nDir == 900 || nDir == 2700)
+    if (nDir == Degree10(900) || nDir == Degree10(2700))
         nMaxWidth = rRect.Height();
     else
     {
-        assert(nDir == 0); //Unknown direction set at font
+        assert(nDir == Degree10(0)); //Unknown direction set at font
         nMaxWidth = rRect.Width();
     }
 
@@ -933,7 +933,7 @@ static void lcl_DrawSpecial( const SwTextPaintInfo& rTextPaintInfo, const SwLine
     // adjust values so that tab is vertically and horizontally centered
     SwTwips nX = rRect.Left();
     SwTwips nY = rRect.Top();
-    switch ( nDir )
+    switch ( nDir.get() )
     {
     case 0 :
         if ( bCenter )
@@ -1058,7 +1058,7 @@ void SwTextPaintInfo::DrawPostIts( bool bScript ) const
     const sal_uInt16 nFontHeight = m_pFnt->GetHeight( m_pVsh, *GetOut() );
     const sal_uInt16 nFontAscent = m_pFnt->GetAscent( m_pVsh, *GetOut() );
 
-    switch ( m_pFnt->GetOrientation( GetTextFrame()->IsVertical() ) )
+    switch ( m_pFnt->GetOrientation( GetTextFrame()->IsVertical() ).get() )
     {
     case 0 :
         aSize.setWidth( nPostItsWidth );

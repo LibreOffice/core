@@ -834,7 +834,7 @@ public:
     void                    FormatFullDoc();
     void                    UpdateViews( EditView* pCurView = nullptr );
     void                    Paint( ImpEditView* pView, const tools::Rectangle& rRect, OutputDevice* pTargetDevice );
-    void                    Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, short nOrientation = 0 );
+    void                    Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Point aStartPos, bool bStripOnly = false, Degree10 nOrientation = Degree10(0) );
 
     bool                MouseButtonUp( const MouseEvent& rMouseEvent, EditView* pView );
     bool                MouseButtonDown( const MouseEvent& rMouseEvent, EditView* pView );
@@ -1292,7 +1292,7 @@ inline vcl::Cursor* ImpEditView::GetCursor()
 void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = nullptr, const MapUnit* pDestUnit = nullptr );
 AsianCompressionFlags GetCharTypeForCompression( sal_Unicode cChar );
-Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
+Point Rotate( const Point& rPoint, Degree10 nOrientation, const Point& rOrigin );
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

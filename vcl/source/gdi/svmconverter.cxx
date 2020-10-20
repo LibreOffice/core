@@ -657,7 +657,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aFont.SetItalic( bItalic ? ITALIC_NORMAL : ITALIC_NONE );
                 aFont.SetOutline( bOutline );
                 aFont.SetShadow( bShadow );
-                aFont.SetOrientation( nLineOrient );
+                aFont.SetOrientation( Degree10(nLineOrient) );
                 aFont.SetTransparent( bTransparent );
 
                 eActualCharSet = aFont.GetCharSet();
@@ -1055,7 +1055,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 Gradient aGrad( static_cast<GradientStyle>(nStyle), aStartCol, aEndCol );
 
-                aGrad.SetAngle( nAngle );
+                aGrad.SetAngle( Degree10(nAngle) );
                 aGrad.SetBorder( nBorder );
                 aGrad.SetOfsX( nOfsX );
                 aGrad.SetOfsY( nOfsY );

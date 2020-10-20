@@ -145,8 +145,8 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         GraphicNativeMetadata aMetadata;
         if ( aMetadata.read(aGraphic) )
         {
-            const sal_uInt16 aRotation = aMetadata.getRotation();
-            if (aRotation != 0)
+            const Degree10 aRotation = aMetadata.getRotation();
+            if (aRotation)
             {
                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Question,VclButtonsType::YesNo,SdResId(STR_QUERYROTATION)));
                 if (xQueryBox->run() == RET_YES)

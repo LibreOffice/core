@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 
 #include <tools/long.hxx>
+#include <tools/degree.hxx>
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
@@ -83,8 +84,8 @@ public:
     tools::Long                AdjustX( tools::Long nHorzMove ) { nA += nHorzMove; return nA; }
     tools::Long                AdjustY( tools::Long nVertMove ) { nB += nVertMove; return nB; }
 
-    void                RotateAround( tools::Long& rX, tools::Long& rY, short nOrientation ) const;
-    void                RotateAround( Point&, short nOrientation ) const;
+    void                RotateAround( tools::Long& rX, tools::Long& rY, Degree10 nOrientation ) const;
+    void                RotateAround( Point&, Degree10 nOrientation ) const;
 
     Point&              operator += ( const Point& rPoint );
     Point&              operator -= ( const Point& rPoint );

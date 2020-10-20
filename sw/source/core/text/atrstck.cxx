@@ -773,7 +773,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             // 2. attribute is active
             if ( !bRuby && static_cast<const SvxTwoLinesItem&>(rItem).GetValue() )
             {
-                rFnt.SetVertical( 0, m_bVertLayout );
+                rFnt.SetVertical( Degree10(0), m_bVertLayout );
                 break;
             }
 
@@ -799,7 +799,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         }
         case RES_TXTATR_CJK_RUBY :
-            rFnt.SetVertical( 0, m_bVertLayout );
+            rFnt.SetVertical( Degree10(0), m_bVertLayout );
             break;
         case RES_TXTATR_REFMARK :
             if ( bPush )

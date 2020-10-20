@@ -193,7 +193,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         pXGradient.reset(new XGradient( m_xLbColorFrom->GetSelectEntryColor(),
                     m_xLbColorTo->GetSelectEntryColor(),
                     static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                    static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                    Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                     static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                     static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -291,7 +291,7 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                           m_xLbColorTo->GetSelectEntryColor(),
                           eXGS,
-                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -358,7 +358,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                               m_xLbColorTo->GetSelectEntryColor(),
                               static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                              static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                              Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                               static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                               static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -398,7 +398,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     XGradient aXGradient( m_xLbColorFrom->GetSelectEntryColor(),
                           m_xLbColorTo->GetSelectEntryColor(),
                           static_cast<css::awt::GradientStyle>(m_xLbGradientType->get_active()),
-                          static_cast<long>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10), // should be changed in resource
+                          Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)), // should be changed in resource
                           static_cast<sal_uInt16>(m_xMtrCenterX->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrCenterY->get_value(FieldUnit::NONE)),
                           static_cast<sal_uInt16>(m_xMtrBorder->get_value(FieldUnit::NONE)),
@@ -543,8 +543,8 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
     m_xLbColorTo->SetNoSelection();
     m_xLbColorTo->SelectEntry( pGradient->GetEndColor() );
 
-    m_xMtrAngle->set_value(pGradient->GetAngle() / 10, FieldUnit::NONE); // should be changed in resource
-    m_xSliderAngle->set_value(pGradient->GetAngle() / 10);
+    m_xMtrAngle->set_value(pGradient->GetAngle().get() / 10, FieldUnit::NONE); // should be changed in resource
+    m_xSliderAngle->set_value(pGradient->GetAngle().get() / 10);
     m_xMtrBorder->set_value(pGradient->GetBorder(), FieldUnit::NONE);
     m_xSliderBorder->set_value(pGradient->GetBorder());
     m_xMtrCenterX->set_value(pGradient->GetXOffset(), FieldUnit::NONE);

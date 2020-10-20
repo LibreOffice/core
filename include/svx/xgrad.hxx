@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_XGRAD_HXX
 
 #include <tools/color.hxx>
+#include <tools/degree.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -32,7 +33,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC XGradient final
     css::awt::GradientStyle  eStyle;
     Color               aStartColor;
     Color               aEndColor;
-    long                nAngle;
+    Degree10            nAngle;
     sal_uInt16          nBorder;
     sal_uInt16          nOfsX;
     sal_uInt16          nOfsY;
@@ -45,7 +46,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC XGradient final
 public:
     XGradient();
     XGradient( const Color& rStart, const Color& rEnd,
-               css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, long nAngle = 0,
+               css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, Degree10 nAngle = Degree10(0),
                sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50, sal_uInt16 nBorder = 0,
                sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
                sal_uInt16 nSteps = 0 );
@@ -55,7 +56,7 @@ public:
     void SetGradientStyle(css::awt::GradientStyle eNewStyle) { eStyle = eNewStyle; }
     void SetStartColor(const Color& rColor)         { aStartColor = rColor; }
     void SetEndColor(const Color& rColor)           { aEndColor = rColor; }
-    void SetAngle(long nNewAngle)                   { nAngle = nNewAngle; }
+    void SetAngle(Degree10 nNewAngle)                { nAngle = nNewAngle; }
     void SetBorder(sal_uInt16 nNewBorder)               { nBorder = nNewBorder; }
     void SetXOffset(sal_uInt16 nNewOffset)              { nOfsX = nNewOffset; }
     void SetYOffset(sal_uInt16 nNewOffset)              { nOfsY = nNewOffset; }
@@ -66,7 +67,7 @@ public:
     css::awt::GradientStyle GetGradientStyle() const         { return eStyle; }
     const Color&       GetStartColor() const            { return aStartColor; }
     const Color&       GetEndColor() const              { return aEndColor; }
-    long               GetAngle() const                 { return nAngle; }
+    Degree10           GetAngle() const                 { return nAngle; }
     sal_uInt16         GetBorder() const                { return nBorder; }
     sal_uInt16         GetXOffset() const               { return nOfsX; }
     sal_uInt16         GetYOffset() const               { return nOfsY; }

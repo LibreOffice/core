@@ -2830,7 +2830,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                 m_x270degRB->set_active(true);
             else
             {
-                DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
+                DBG_ASSERT( Degree10(0) == rItem.GetValue(), "incorrect value" );
                 m_x0degRB->set_active(true);
             }
             m_xFitToLineCB->set_active(rItem.IsFitToLine());
@@ -2977,7 +2977,7 @@ bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
          m_x270degRB->get_state_changed_from_saved()  ||
          m_xFitToLineCB->get_state_changed_from_saved() )
     {
-        SvxCharRotateItem aItem( 0, m_xFitToLineCB->get_active(), nWhich );
+        SvxCharRotateItem aItem( Degree10(0), m_xFitToLineCB->get_active(), nWhich );
         if (m_x90degRB->get_active())
             aItem.SetBottomToTop();
         else if (m_x270degRB->get_active())

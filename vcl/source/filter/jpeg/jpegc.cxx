@@ -425,7 +425,7 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     return true;
 }
 
-void Transform(void* pInputStream, void* pOutputStream, tools::Long nAngle)
+void Transform(void* pInputStream, void* pOutputStream, Degree10 nAngle)
 {
     jpeg_transform_info aTransformOption;
     JCOPY_OPTION        aCopyOption = JCOPYOPT_ALL;
@@ -445,7 +445,7 @@ void Transform(void* pInputStream, void* pOutputStream, tools::Long nAngle)
 
     // Angle to transform option
     // 90 Clockwise = 270 Counterclockwise
-    switch (nAngle)
+    switch (nAngle.get())
     {
         case 2700:
             aTransformOption.transform  = JXFORM_ROT_90;

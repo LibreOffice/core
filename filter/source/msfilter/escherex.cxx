@@ -1452,7 +1452,8 @@ Graphic lclDrawHatch( const drawing::Hatch& rHatch, const Color& rBackColor, boo
     pVDev->SetLineColor();
     pVDev->SetFillColor(bFillBackground ? rBackColor : COL_TRANSPARENT);
     pVDev->DrawRect(rRect);
-    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(rHatch.Color), rHatch.Distance, static_cast<sal_uInt16>(rHatch.Angle)));
+    pVDev->DrawHatch(tools::PolyPolygon(rRect), Hatch(static_cast<HatchStyle>(rHatch.Style), Color(rHatch.Color), rHatch.Distance,
+            Degree10(rHatch.Angle)));
     aMtf.Stop();
     aMtf.WindStart();
     aMtf.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -3926,7 +3927,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
                .WriteInt32( pGraphicAttr->GetTopCrop() )
                .WriteInt32( pGraphicAttr->GetRightCrop() )
                .WriteInt32( pGraphicAttr->GetBottomCrop() )
-               .WriteUInt16( pGraphicAttr->GetRotation() )
+               .WriteUInt16( pGraphicAttr->GetRotation().get() )
                .WriteInt16( pGraphicAttr->GetLuminance() )
                .WriteInt16( pGraphicAttr->GetContrast() )
                .WriteInt16( pGraphicAttr->GetChannelR() )
@@ -4622,7 +4623,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, "RotateAngle", true ) )
                     ? *o3tl::doAccess<sal_Int32>(aAny) : 0;
             if ( nAngle )
-                aPoly.Rotate( aRect.TopLeft(), static_cast<sal_uInt16>( ( nAngle + 5 ) / 10 ) );
+                aPoly.Rotate( aRect.TopLeft(), Degree10(static_cast<sal_Int16>( ( nAngle + 5 ) / 10 )) );
             nRule = GetClosestPoint( aPoly, aRefPoint );
 
             if (aType == OString( "drawing.Ellipse" ))
