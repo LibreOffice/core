@@ -374,17 +374,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkImage" id="motif">
-                            <property name="can_focus">False</property>
-                            <property name="pixbuf">sfx2/res/startcenter-logo.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">13</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkLabel" id="althelplabel">
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
@@ -394,7 +383,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">14</property>
+                            <property name="position">13</property>
                           </packing>
                         </child>
                       </object>
