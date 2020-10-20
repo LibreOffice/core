@@ -4643,6 +4643,16 @@ freebsd*)
         RTL_ARCH=X86_64
         PLATFORMID=freebsd_x86_64
         ;;
+    powerpc64)
+        CPUNAME=POWERPC64
+        RTL_ARCH=PowerPC_64
+        PLATFORMID=freebsd_powerpc64
+        ;;
+    powerpc|powerpcspe)
+        CPUNAME=POWERPC
+        RTL_ARCH=PowerPC
+        PLATFORMID=freebsd_powerpc
+        ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
