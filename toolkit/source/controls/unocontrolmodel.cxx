@@ -292,6 +292,13 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             case BASEPROPERTY_TITLE:
             case BASEPROPERTY_TEXT:                 aDefault <<= OUString(); break;
 
+            case BASEPROPERTY_SCROLLWIDTH:
+            case BASEPROPERTY_SCROLLHEIGHT:
+            case BASEPROPERTY_SCROLLTOP:
+            case BASEPROPERTY_SCROLLLEFT:
+                aDefault <<= sal_Int32(0);
+                break;
+
             case BASEPROPERTY_WRITING_MODE:
             case BASEPROPERTY_CONTEXT_WRITING_MODE:
                 aDefault <<= text::WritingMode2::CONTEXT;

@@ -107,6 +107,8 @@ void ScrollableDialog::lcl_Scroll( long nX, long nY )
             pChild->SetPosPixel( aPos );
         }
     }
+    CallEventListeners(VclEventId::ScrollbarLeft, reinterpret_cast<void*>(nXScroll));
+    CallEventListeners(VclEventId::ScrollbarTop, reinterpret_cast<void*>(nYScroll));
 }
 
 IMPL_LINK( ScrollableDialog, ScrollBarHdl, ScrollBar*, pSB, void )

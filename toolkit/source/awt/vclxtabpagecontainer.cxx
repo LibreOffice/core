@@ -156,6 +156,27 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
                 m_aTabPageListeners.tabPageActivated(aEvent);
                 break;
             }
+            case VclEventId::ScrollbarLeft:
+            case VclEventId::ScrollbarTop:
+            {
+                long nVal = reinterpret_cast<long>(_rVclWindowEvent.GetData());
+                VclPtr<vcl::Window> pWindow = GetWindow();
+                OutputDevice* pDev = VCLUnoHelper::GetOutputDevice(getGraphics());
+                if (!pDev)
+                {
+                    break;
+                }
+
+                Size aSize(0, 0);
+                aSize.setHeight(nVal);
+                MapMode aMode(MapUnit::MapAppFont);
+                aSize = pDev->PixelToLogic(aSize, aMode);
+                OUString aProp = (_rVclWindowEvent.GetId() == VclEventId::ScrollbarLeft)
+                                     ? OUString("ScrollLeft")
+                                     : OUString("ScrollTop");
+                setProperty(aProp, uno::Any(aSize.Height()));
+                break;
+            }
             default:
                 aGuard.clear();
                 VCLXWindow::ProcessWindowEvent( _rVclWindowEvent );
