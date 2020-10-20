@@ -1,0 +1,111 @@
+--- src/cairo-fixed-private.h
++++ src/cairo-fixed-private.h
+@@ -61,7 +61,7 @@
+ static inline cairo_fixed_t
+ _cairo_fixed_from_int (int i)
+ {
+-    return i << CAIRO_FIXED_FRAC_BITS;
++    return (unsigned)i << CAIRO_FIXED_FRAC_BITS;
+ }
+ 
+ /* This is the "magic number" approach to converting a double into fixed
+--- src/cairo-gstate.c
++++ src/cairo-gstate.c
+@@ -2297,7 +2297,7 @@
+ 		if (!drop || KEEP_GLYPH (transformed_glyphs[j]))
+ 		    j++;
+ 	    }
+-	    memcpy (transformed_clusters, clusters,
++	    if (num_clusters != 0) memcpy (transformed_clusters, clusters,
+ 		    num_clusters * sizeof (cairo_text_cluster_t));
+ 	} else {
+ 	    const cairo_glyph_t *cur_glyph;
+@@ -2352,7 +2352,7 @@
+ 		if (! drop || KEEP_GLYPH (transformed_glyphs[j]))
+ 		    j++;
+ 	    }
+-	    memcpy (transformed_clusters, clusters,
++	    if (num_clusters != 0) memcpy (transformed_clusters, clusters,
+ 		    num_clusters * sizeof (cairo_text_cluster_t));
+ 	} else {
+ 	    const cairo_glyph_t *cur_glyph;
+--- src/cairo-image-compositor.c
++++ src/cairo-image-compositor.c
+@@ -130,10 +130,10 @@
+ color_to_uint32 (const cairo_color_t *color)
+ {
+     return
+-        (color->alpha_short >> 8 << 24) |
+-        (color->red_short >> 8 << 16)   |
+-        (color->green_short & 0xff00)   |
+-        (color->blue_short >> 8);
++        ((uint32_t)color->alpha_short >> 8 << 24) |
++        ((uint32_t)color->red_short >> 8 << 16)   |
++        ((uint32_t)color->green_short & 0xff00)   |
++        ((uint32_t)color->blue_short >> 8);
+ }
+ 
+ static inline cairo_bool_t
+--- src/cairo-image-source.c
++++ src/cairo-image-source.c
+@@ -509,7 +509,11 @@
+ 	return pixman_image_create_solid_fill (&color);
+ 
+     case CAIRO_FORMAT_RGB24_888:
+-	pixel = *(uint32_t *) (image->data + y * image->stride + 3 * x);
++#ifdef WORDS_BIGENDIAN
++	pixel = (uint32_t)(image->data + y * image->stride + 3 * x)[3] | ((uint32_t)(image->data + y * image->stride + 3 * x)[2] << 8) | ((uint32_t)(image->data + y * image->stride + 3 * x)[1] << 16) | ((uint32_t)(image->data + y * image->stride + 3 * x)[0] << 24);
++#else
++	pixel = (uint32_t)(image->data + y * image->stride + 3 * x)[0] | ((uint32_t)(image->data + y * image->stride + 3 * x)[1] << 8) | ((uint32_t)(image->data + y * image->stride + 3 * x)[2] << 16) | ((uint32_t)(image->data + y * image->stride + 3 * x)[3] << 24);
++#endif
+ 	pixel &= 0x00ffffff; /* ignore next pixel bits */
+ 	if (pixel == 0)
+ 	    return _pixman_black_image ();
+--- src/cairo-spans-compositor.c
++++ src/cairo-spans-compositor.c
+@@ -1041,14 +1041,14 @@
+     if (status == CAIRO_INT_STATUS_UNSUPPORTED) {
+ 	cairo_polygon_t polygon;
+ 	cairo_fill_rule_t fill_rule = CAIRO_FILL_RULE_WINDING;
++	cairo_box_t limits;
+ 
+ 	if (! _cairo_rectangle_contains_rectangle (&extents->unbounded,
+ 						   &extents->mask))
+ 	{
+ 	    if (extents->clip->num_boxes == 1) {
+ 		_cairo_polygon_init (&polygon, extents->clip->boxes, 1);
+ 	    } else {
+-		cairo_box_t limits;
+ 		_cairo_box_from_rectangle (&limits, &extents->unbounded);
+ 		_cairo_polygon_init (&polygon, &limits, 1);
+ 	    }
+@@ -1128,17 +1128,17 @@
+     }
+     if (status == CAIRO_INT_STATUS_UNSUPPORTED) {
+ 	cairo_polygon_t polygon;
++	cairo_box_t limits;
+ 
+ 	TRACE((stderr, "%s - polygon\n", __FUNCTION__));
+ 
+ 	if (! _cairo_rectangle_contains_rectangle (&extents->unbounded,
+ 						   &extents->mask))
+ 	{
+ 	    TRACE((stderr, "%s - clipping to bounds\n", __FUNCTION__));
+ 	    if (extents->clip->num_boxes == 1) {
+ 		_cairo_polygon_init (&polygon, extents->clip->boxes, 1);
+ 	    } else {
+-		cairo_box_t limits;
+ 		_cairo_box_from_rectangle (&limits, &extents->unbounded);
+ 		_cairo_polygon_init (&polygon, &limits, 1);
+ 	    }
+--- src/cairo-tor-scan-converter.c
++++ src/cairo-tor-scan-converter.c
+@@ -253,7 +253,7 @@
+ #elif GRID_XY == 15
+ #  define  GRID_AREA_TO_ALPHA(c)  (((c) << 4) + (c))
+ #elif GRID_XY == 2*256*15
+-#  define  GRID_AREA_TO_ALPHA(c)  (((c) + ((c)<<4) + 256) >> 9)
++#  define  GRID_AREA_TO_ALPHA(c)  (((c) + ((uint32_t)(c)<<4) + 256) >> 9)
+ #else
+ #  define  GRID_AREA_TO_ALPHA(c)  (((c)*255 + GRID_XY/2) / GRID_XY)
+ #endif
