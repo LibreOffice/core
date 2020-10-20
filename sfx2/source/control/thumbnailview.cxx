@@ -1409,8 +1409,11 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     // calculate window scroll ratio
     float nScrollRatio;
     if (bScrollBarUsed)
+    {
         nScrollRatio = static_cast<float>(mxScrolledWindow->vadjustment_get_value()) /
-                        static_cast<float>(mxScrolledWindow->vadjustment_get_upper()-2);
+                       static_cast<float>(mxScrolledWindow->vadjustment_get_upper() -
+                                          mxScrolledWindow->vadjustment_get_page_size());
+    }
     else
         nScrollRatio = 0;
 
@@ -1448,11 +1451,10 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 
     mbHasVisibleItems = true;
 
+    long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
+
     long nItemHeightOffset = mnItemHeight + nVItemSpace;
-    long nHiddenLines = (static_cast<long>(
-        ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio ) -
-        nVItemSpace ) /
-        nItemHeightOffset;
+    long nHiddenLines = static_cast<long>((nFullSteps - 1) * nScrollRatio);
 
     // calculate offsets
     long nStartX = nHItemSpace;
@@ -1460,8 +1462,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 
     // calculate and draw items
     long x = nStartX;
-    long y = nStartY - ( mnLines - 1 ) * nItemHeightOffset * nScrollRatio +
-        nHiddenLines * nItemHeightOffset;
+    long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
 
     // draw items
     // Unless we are scrolling (via scrollbar) we just use the precalculated
@@ -1536,8 +1537,8 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     // check if scroll is needed
     mbScroll = mnLines > mnVisLines;
 
-    mxScrolledWindow->vadjustment_set_upper((nCurCount+mnCols-1)*gnFineness/mnCols);
-    mxScrolledWindow->vadjustment_set_page_size(mnVisLines*gnFineness);
+    mxScrolledWindow->vadjustment_set_upper(mnLines * gnFineness);
+    mxScrolledWindow->vadjustment_set_page_size(mnVisLines * gnFineness);
     if (!bScrollBarUsed)
         mxScrolledWindow->vadjustment_set_value(static_cast<long>(mnFirstLine)*gnFineness);
     long nPageSize = mnVisLines;
