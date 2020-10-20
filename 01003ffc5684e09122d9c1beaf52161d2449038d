@@ -22,6 +22,30 @@
       "revId": "01003ffc5684e09122d9c1beaf52161d2449038d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "171bb4c8_4cd6c5f6",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2020-10-20T07:04:37Z",
+      "side": 1,
+      "message": "Didn\u0027t expect the comment to count in line length.",
+      "parentUuid": "c535b3e8_81178c57",
+      "range": {
+        "startLine": 54,
+        "startChar": 73,
+        "endLine": 54,
+        "endChar": 96
+      },
+      "revId": "01003ffc5684e09122d9c1beaf52161d2449038d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
