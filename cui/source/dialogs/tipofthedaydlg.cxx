@@ -21,6 +21,8 @@
 #include <tipofthedaydlg.hxx>
 #include <tipoftheday.hrc>
 
+#include <sfx2/viewfrm.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
@@ -107,6 +109,14 @@ void TipOfTheDayDialog::UpdateTip()
     {
         m_pLink->set_uri(sLink);
         m_pLink->set_label(CuiResId(STR_UNO_LINK));
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if (pViewFrame)
+        {
+            const auto xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
+            const auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sLink, aModuleName);
+            m_pLink->set_tooltip_text( vcl::CommandInfoProvider::GetTooltipForCommand(sLink, aProperties, xFrame) );
+        }
         m_pLink->set_visible(true);
         m_pLink->connect_activate_link(LINK(this, TipOfTheDayDialog, OnLinkClick));
     }
