@@ -101,8 +101,8 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
         rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
     // tick marks
-    long nTicks=0;
-    long nMinorTicks=0;
+    tools::Long nTicks=0;
+    tools::Long nMinorTicks=0;
 
     if(m_xCB_MinorInner->get_active())
         nMinorTicks|=CHAXIS_MARK_INNER;
@@ -211,7 +211,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     PlaceLabelsSelectHdl( *m_xLB_PlaceLabels );
 
     // Tick marks
-    long nTicks = 0, nMinorTicks = 0;
+    tools::Long nTicks = 0, nMinorTicks = 0;
     if (rInAttrs->GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SfxItemState::SET)
         nTicks = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
     if (rInAttrs->GetItemState(SCHATTR_AXIS_HELPTICKS,true, &pPoolItem)== SfxItemState::SET)

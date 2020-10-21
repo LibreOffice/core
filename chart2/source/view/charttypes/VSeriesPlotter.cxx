@@ -1620,16 +1620,16 @@ void VSeriesPlotter::setMappedProperties(
     PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
-void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )
+void VSeriesPlotter::setTimeResolutionOnXAxis( tools::Long TimeResolution, const Date& rNullDate )
 {
     m_nTimeResolution = TimeResolution;
     m_aNullDate = rNullDate;
 }
 
 // MinimumAndMaximumSupplier
-long VSeriesPlotter::calculateTimeResolutionOnXAxis()
+tools::Long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 {
-    long nRet = css::chart::TimeUnit::YEAR;
+    tools::Long nRet = css::chart::TimeUnit::YEAR;
     if (!m_pExplicitCategoriesProvider)
         return nRet;
 

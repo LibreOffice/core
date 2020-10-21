@@ -826,7 +826,7 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
 std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        uno::Reference<drawing::XShapes> const & xLegendContainer,
                        uno::Reference<lang::XMultiServiceFactory> const & xShapeFactory,
-                       ChartModel& rModel, bool bPlaceButtonsVertically, long & nUsedHeight)
+                       ChartModel& rModel, bool bPlaceButtonsVertically, tools::Long & nUsedHeight)
 {
     std::vector<std::shared_ptr<VButton>> aButtons;
 
@@ -1014,7 +1014,7 @@ void VLegend::createShapes(
             if ( !aViewEntries.empty() || bIsPivotChart )
             {
                 // create buttons
-                long nUsedButtonHeight = 0;
+                tools::Long nUsedButtonHeight = 0;
                 bool bPlaceButtonsVertically = (eLegendPosition != LegendPosition_PAGE_START &&
                                                 eLegendPosition != LegendPosition_PAGE_END &&
                                                 eExpansion != css::chart::ChartLegendExpansion_WIDE);

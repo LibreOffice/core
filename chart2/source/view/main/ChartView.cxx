@@ -2279,7 +2279,7 @@ void lcl_createButtons(const uno::Reference<drawing::XShapes>& xPageShapes,
 
     awt::Size aSize(4000, 700); // size of the button
 
-    long x = 0;
+    tools::Long x = 0;
 
     if (xPivotTableDataProvider->getPageFields().hasElements())
     {

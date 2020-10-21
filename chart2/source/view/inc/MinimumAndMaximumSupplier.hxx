@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <tools/date.hxx>
+#include <tools/long.hxx>
 #include <set>
 
 namespace chart
@@ -47,8 +48,8 @@ public:
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) = 0;
 
     //return a constant out of css::chart::TimeUnit that allows to display the smallest distance between occurring dates
-    virtual long calculateTimeResolutionOnXAxis() = 0;
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) = 0;
+    virtual tools::Long calculateTimeResolutionOnXAxis() = 0;
+    virtual void setTimeResolutionOnXAxis( tools::Long nTimeResolution, const Date& rNullDate ) = 0;
 
 protected:
     ~MinimumAndMaximumSupplier() {}
@@ -78,8 +79,8 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
-    virtual long calculateTimeResolutionOnXAxis() override;
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) override;
+    virtual tools::Long calculateTimeResolutionOnXAxis() override;
+    virtual void setTimeResolutionOnXAxis( tools::Long nTimeResolution, const Date& rNullDate ) override;
 
 private:
     typedef std::set< MinimumAndMaximumSupplier* > MinimumAndMaximumSupplierSet;

@@ -190,8 +190,8 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
     {
         try
         {
-            long nSource = SotStorage::GetVersion( mxStorage );
-            long nTarget = SotStorage::GetVersion( xStorage );
+            tools::Long nSource = SotStorage::GetVersion( mxStorage );
+            tools::Long nTarget = SotStorage::GetVersion( xStorage );
 
             if ( nSource == SOFFICE_FILEFORMAT_CURRENT &&
                 nTarget != SOFFICE_FILEFORMAT_CURRENT )

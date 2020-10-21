@@ -10,14 +10,15 @@
 #pragma once
 
 #include <basegfx/basegfxdllapi.h>
+#include <tools/long.hxx>
 
 namespace basegfx::zoomtools
 {
 
 /** This namespace provides functions for optimized geometric zooming
 */
-BASEGFX_DLLPUBLIC long zoomOut(long nCurrent);
-BASEGFX_DLLPUBLIC long zoomIn(long nCurrent);
+BASEGFX_DLLPUBLIC tools::Long zoomOut(tools::Long nCurrent);
+BASEGFX_DLLPUBLIC tools::Long zoomIn(tools::Long nCurrent);
 
 }
 

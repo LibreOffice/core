@@ -19,6 +19,7 @@
 #pragma once
 
 #include <tools/date.hxx>
+#include <tools/long.hxx>
 
 namespace chart
 {
@@ -34,7 +35,7 @@ public:
     static bool IsLessThanOneMonthAway( const Date& rD1, const Date& rD2 );
     static bool IsLessThanOneYearAway( const Date& rD1, const Date& rD2 );
 
-    static double RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution );
+    static double RasterizeDateValue( double fValue, const Date& rNullDate, tools::Long TimeResolution );
 };
 
 } //namespace chart

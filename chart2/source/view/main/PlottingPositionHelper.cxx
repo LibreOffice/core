@@ -652,7 +652,7 @@ double PlottingPositionHelper::getBaseValueY() const
     return m_aScales[1].Origin;
 }
 
-void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date& rNullDate )
+void PlottingPositionHelper::setTimeResolution( tools::Long nTimeResolution, const Date& rNullDate )
 {
     m_nTimeResolution = nTimeResolution;
     m_aNullDate = rNullDate;

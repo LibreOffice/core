@@ -85,7 +85,7 @@ namespace vclcanvas
                    const css::rendering::RenderState&              renderState ) const;
 
     private:
-        void setupTextOffsets( long* outputOffsets,
+        void setupTextOffsets( ::tools::Long* outputOffsets,
                                const css::uno::Sequence< double >& inputOffsets,
                                const css::rendering::ViewState&    viewState,
                                const css::rendering::RenderState&  renderState     ) const;
