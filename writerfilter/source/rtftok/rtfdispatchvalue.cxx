@@ -624,6 +624,11 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
+            putNestedAttribute(m_aStates.top().getTableRowSprms(),
+                               NS_ooxml::LN_CT_TblPrBase_tblCellMar, nSprm,
+                               new RTFValue(aAttributes));
+            // tdf#74795 also set on current cell, and as default for table cells
+            // (why isn't this done by domainmapper?)
             putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
                                nSprm, new RTFValue(aAttributes));
             putNestedAttribute(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
@@ -655,6 +660,10 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 default:
                     break;
             }
+            putNestedSprm(m_aStates.top().getTableRowSprms(), NS_ooxml::LN_CT_TblPrBase_tblCellMar,
+                          nSprm, new RTFValue(aAttributes));
+            // tdf#74795 also set on current cell, and as default for table cells
+            // (why isn't this done by domainmapper?)
             putNestedSprm(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
                           nSprm, new RTFValue(aAttributes));
             putNestedSprm(m_aDefaultState.getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_tcMar,
@@ -670,6 +679,7 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_type,
                                 new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa));
                 aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
+                // FIXME: this is wrong, it is half-gap, needs to be distinguished from margin! depending on TRPADDFL/TRPADDFR
                 putNestedSprm(m_aStates.top().getTableRowSprms(),
                               NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left,
                               new RTFValue(aAttributes));
