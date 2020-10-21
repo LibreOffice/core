@@ -31,8 +31,8 @@ class ScrollableWindow : public vcl::Window
 private:
     Point           aPixOffset;         // offset to virtual window (pixel)
     Size            aTotPixSz;          // total size of virtual window (pixel)
-    long            nLinePixH;          // size of a line/column (pixel)
-    long            nColumnPixW;
+    tools::Long            nLinePixH;          // size of a line/column (pixel)
+    tools::Long            nColumnPixW;
 
     VclPtr<ScrollBar>    aVScroll;      // the scrollbars
     VclPtr<ScrollBar>    aHScroll;
@@ -59,7 +59,7 @@ public:
     Size            GetTotalSize() const { return PixelToLogic( aTotPixSz ); }
 
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;
+    virtual void    Scroll( tools::Long nDeltaX, tools::Long nDeltaY, ScrollFlags nFlags = ScrollFlags::NONE ) override;
 
 private:
     Size         GetOutputSizePixel() const;

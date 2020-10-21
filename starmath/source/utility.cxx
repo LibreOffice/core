@@ -208,7 +208,7 @@ void SmFace::SetSize(const Size& rSize)
 }
 
 
-long SmFace::GetBorderWidth() const
+tools::Long SmFace::GetBorderWidth() const
 {
     if (nBorderWidth < 0)
         return GetDefaultBorderWidth();
@@ -230,8 +230,8 @@ SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
     // It's main use is to make scaling fonts look easier.
 {   const Size &rFaceSize = rFace.GetFontSize();
 
-    rFace.SetSize(Size(long(rFaceSize.Width() * rFrac),
-                       long(rFaceSize.Height() * rFrac)));
+    rFace.SetSize(Size(tools::Long(rFaceSize.Width() * rFrac),
+                       tools::Long(rFaceSize.Height() * rFrac)));
     return rFace;
 }
 

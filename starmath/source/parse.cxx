@@ -2010,8 +2010,8 @@ std::unique_ptr<SmStructureNode> SmParser::DoFontSize()
             //!! or ftmp = 1.11111111111111111... (11/9) on every platform.)
             if (aValue.GetDenominator() > 1000)
             {
-                long nNum   = aValue.GetNumerator();
-                long nDenom = aValue.GetDenominator();
+                tools::Long nNum   = aValue.GetNumerator();
+                tools::Long nDenom = aValue.GetDenominator();
                 while (nDenom > 1000)
                 {
                     nNum    /= 10;
