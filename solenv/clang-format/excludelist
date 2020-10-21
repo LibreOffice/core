@@ -3334,7 +3334,6 @@ drawinglayer/source/animation/animationtiming.cxx
 drawinglayer/source/attribute/fillgradientattribute.cxx
 drawinglayer/source/attribute/fillgraphicattribute.cxx
 drawinglayer/source/attribute/fillhatchattribute.cxx
-drawinglayer/source/attribute/fontattribute.cxx
 drawinglayer/source/attribute/lineattribute.cxx
 drawinglayer/source/attribute/linestartendattribute.cxx
 drawinglayer/source/attribute/materialattribute3d.cxx
