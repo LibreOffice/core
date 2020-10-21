@@ -133,6 +133,8 @@ namespace
             ret = checkOSandCPU("FreeBSD", "X86_64");
         else if (token == "freebsd_powerpc")
             ret = checkOSandCPU("FreeBSD", "PowerPC");
+        else if (token == "freebsd_powerpc64")
+            ret = checkOSandCPU("FreeBSD", "PowerPC64");
         else if (token == "kfreebsd_x86")
             ret = checkOSandCPU("kFreeBSD", "x86");
         else if (token == "kfreebsd_x86_64")
