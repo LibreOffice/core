@@ -328,8 +328,8 @@ void FuMorph::ImpInsertPolygons(
     Color               aEndFillCol;
     Color               aStartLineCol;
     Color               aEndLineCol;
-    long                nStartLineWidth = 0;
-    long                nEndLineWidth = 0;
+    ::tools::Long                nStartLineWidth = 0;
+    ::tools::Long                nEndLineWidth = 0;
     SdrPageView*        pPageView = mpView->GetSdrPageView();
     SfxItemPool &       rPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( rPool,svl::Items<SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END>{} );
@@ -415,7 +415,7 @@ void FuMorph::ImpInsertPolygons(
 
         // line width
         if ( bLineWidth )
-            aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<long>( fFactor * fDelta + 0.5 ) ) );
+            aSet.Put( XLineWidthItem( nStartLineWidth + static_cast<::tools::Long>( fFactor * fDelta + 0.5 ) ) );
 
         pNewObj->SetMergedItemSetAndBroadcast(aSet);
 

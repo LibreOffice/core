@@ -984,8 +984,8 @@ void PPTWriter::ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt )
         // Maddeningly, in those two areas of PPT is the BoundingBox already
         // vertical. Therefore, we need to put down it BEFORE THE ROTATION.
         css::awt::Point aTopLeft( static_cast<sal_Int32>( maRect.Left() + fWidthHalf - fHeightHalf ), static_cast<sal_Int32>( maRect.Top() + fHeightHalf - fWidthHalf ) );
-        const long nRotatedWidth(maRect.GetHeight());
-        const long nRotatedHeight(maRect.GetWidth());
+        const tools::Long nRotatedWidth(maRect.GetHeight());
+        const tools::Long nRotatedHeight(maRect.GetWidth());
         const Size aNewSize(nRotatedWidth, nRotatedHeight);
         maRect = ::tools::Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
     }

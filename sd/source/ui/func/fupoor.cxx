@@ -561,8 +561,8 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                long nX = 0;
-                long nY = 0;
+                ::tools::Long nX = 0;
+                ::tools::Long nY = 0;
 
                 if (nCode == KEY_UP)
                 {

@@ -229,8 +229,8 @@ public:
                             int nOutputHeight,
                             int nTilePosX,
                             int nTilePosY,
-                            long nTileWidth,
-                            long nTileHeight ) override;
+                            tools::Long nTileWidth,
+                            tools::Long nTileHeight ) override;
     virtual Size getDocumentSize() override;
     virtual void setPart(   int nPart ) override;
     virtual int  getPart() override;

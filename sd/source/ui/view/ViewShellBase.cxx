@@ -473,8 +473,8 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize, b
         aSize.AdjustHeight( -(aBorder.Top() + aBorder.Bottom()) );
         Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel(aObjSize, MapMode(MapUnit::Map100thMM));
         SfxViewShell::SetZoomFactor(
-            Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), static_cast<long int>(1) ) ),
-            Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), static_cast<long int>(1)) ) );
+            Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), static_cast<::tools::Long>(1) ) ),
+            Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), static_cast<::tools::Long>(1)) ) );
     }
 
     mpImpl->ResizePixel(rOrigin, rSize, false);
@@ -506,7 +506,7 @@ void ViewShellBase::Rearrange()
     GetViewFrame()->Resize(true);
 }
 
-ErrCode ViewShellBase::DoVerb (long nVerb)
+ErrCode ViewShellBase::DoVerb (::tools::Long nVerb)
 {
     ErrCode aResult = ERRCODE_NONE;
 
