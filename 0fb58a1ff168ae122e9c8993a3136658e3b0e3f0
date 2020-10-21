@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25ecba12_237561a8",
+        "filename": "canvas/source/cairo/cairo_canvashelper_text.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-21T06:21:56Z",
+      "side": 1,
+      "message": "The cast seems redundant for a result of fmod (no greater than 2*pi) multiplied by (1800/pi)... and generally it seems that the ctor could itself do the rounding.",
+      "range": {
+        "startLine": 103,
+        "startChar": 45,
+        "endLine": 103,
+        "endChar": 69
+      },
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
