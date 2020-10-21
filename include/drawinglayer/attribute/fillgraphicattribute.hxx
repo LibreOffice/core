@@ -32,10 +32,7 @@ class B2DRange;
 namespace drawinglayer::attribute
 {
 class ImpFillGraphicAttribute;
-}
 
-namespace drawinglayer::attribute
-{
 class DRAWINGLAYER_DLLPUBLIC FillGraphicAttribute
 {
 public:

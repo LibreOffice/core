@@ -30,10 +30,7 @@ class BColor;
 namespace drawinglayer::attribute
 {
 class ImpFillHatchAttribute;
-}
 
-namespace drawinglayer::attribute
-{
 enum class HatchStyle
 {
     Single,
@@ -41,10 +38,6 @@ enum class HatchStyle
     Triple
 };
 
-} // end of namespace drawinglayer::attribute
-
-namespace drawinglayer::attribute
-{
 class DRAWINGLAYER_DLLPUBLIC FillHatchAttribute
 {
 public:
