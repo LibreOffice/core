@@ -824,7 +824,7 @@ OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
     return mvCols[ nItemPos ]->Title();
 }
 
-tools::Long BrowseBox::GetRowCount() const
+sal_Int32 BrowseBox::GetRowCount() const
 {
     return nRowCount;
 }
@@ -1700,7 +1700,7 @@ void BrowseBox::SelectAll()
 }
 
 
-void BrowseBox::SelectRow( tools::Long nRow, bool _bSelect, bool bExpand )
+void BrowseBox::SelectRow( sal_Int32 nRow, bool _bSelect, bool bExpand )
 {
 
     if ( !bMultiSelection )
@@ -1880,7 +1880,7 @@ tools::Long BrowseBox::LastSelectedRow()
 }
 
 
-bool BrowseBox::IsRowSelected( tools::Long nRow ) const
+bool BrowseBox::IsRowSelected( sal_Int32 nRow ) const
 {
 
     return bMultiSelection ? uRow.pSel->IsSelected(nRow) : nRow == uRow.nSel;

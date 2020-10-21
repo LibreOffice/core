@@ -459,7 +459,7 @@ void BrowseBox::SelectColumn( sal_uInt16 _nColumn, bool _bSelect )
     SelectColumnPos( _nColumn, _bSelect );
 }
 
-bool BrowseBox::IsColumnSelected( tools::Long _nColumn ) const
+bool BrowseBox::IsColumnSelected( sal_Int32 _nColumn ) const
 {
     return ( pColSel && (0 <= _nColumn) && (_nColumn <= 0xFFF) ) &&
         pColSel->IsSelected( static_cast< sal_uInt16 >( _nColumn ) );
@@ -520,7 +520,7 @@ bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
 
-OUString BrowseBox::GetAccessibleCellText(tools::Long _nRow, sal_uInt16 _nColPos) const
+OUString BrowseBox::GetAccessibleCellText(sal_Int32 _nRow, sal_uInt16 _nColPos) const
 {
     return GetCellText( _nRow, GetColumnId( _nColPos ) );
 }
