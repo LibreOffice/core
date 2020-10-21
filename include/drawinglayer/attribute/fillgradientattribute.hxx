@@ -23,80 +23,70 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-
-// predefines
-
-namespace basegfx {
-    class BColor;
+namespace basegfx
+{
+class BColor;
 }
-
-namespace drawinglayer::attribute {
-    class ImpFillGradientAttribute;
-}
-
 
 namespace drawinglayer::attribute
-    {
-        enum class GradientStyle
-        {
-            Linear,
-            Axial,
-            Radial,
-            Elliptical,
-            Square,
-            Rect
-        };
+{
+class ImpFillGradientAttribute;
+}
+
+namespace drawinglayer::attribute
+{
+enum class GradientStyle
+{
+    Linear,
+    Axial,
+    Radial,
+    Elliptical,
+    Square,
+    Rect
+};
 
 } // end of namespace drawinglayer::attribute
 
-
 namespace drawinglayer::attribute
-    {
-        class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
-        {
-        public:
-            typedef o3tl::cow_wrapper< ImpFillGradientAttribute > ImplType;
+{
+class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
+{
+public:
+    typedef o3tl::cow_wrapper<ImpFillGradientAttribute> ImplType;
 
-        private:
-            ImplType mpFillGradientAttribute;
+private:
+    ImplType mpFillGradientAttribute;
 
-        public:
-            /// constructors/assignmentoperator/destructor
-            FillGradientAttribute(
-                GradientStyle eStyle,
-                double fBorder,
-                double fOffsetX,
-                double fOffsetY,
-                double fAngle,
-                const basegfx::BColor& rStartColor,
-                const basegfx::BColor& rEndColor,
-                sal_uInt16 nSteps);
-            FillGradientAttribute();
-            FillGradientAttribute(const FillGradientAttribute&);
-            FillGradientAttribute(FillGradientAttribute&&);
-            FillGradientAttribute& operator=(const FillGradientAttribute&);
-            FillGradientAttribute& operator=(FillGradientAttribute&&);
-            ~FillGradientAttribute();
+public:
+    /// constructors/assignmentoperator/destructor
+    FillGradientAttribute(GradientStyle eStyle, double fBorder, double fOffsetX, double fOffsetY,
+                          double fAngle, const basegfx::BColor& rStartColor,
+                          const basegfx::BColor& rEndColor, sal_uInt16 nSteps);
+    FillGradientAttribute();
+    FillGradientAttribute(const FillGradientAttribute&);
+    FillGradientAttribute(FillGradientAttribute&&);
+    FillGradientAttribute& operator=(const FillGradientAttribute&);
+    FillGradientAttribute& operator=(FillGradientAttribute&&);
+    ~FillGradientAttribute();
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
+    // checks if the incarnation is default constructed
+    bool isDefault() const;
 
-            // compare operator
-            bool operator==(const FillGradientAttribute& rCandidate) const;
+    // compare operator
+    bool operator==(const FillGradientAttribute& rCandidate) const;
 
-            // data read access
-            GradientStyle getStyle() const;
-            double getBorder() const;
-            double getOffsetX() const;
-            double getOffsetY() const;
-            double getAngle() const;
-            const basegfx::BColor& getStartColor() const;
-            const basegfx::BColor& getEndColor() const;
-            sal_uInt16 getSteps() const;
-        };
+    // data read access
+    GradientStyle getStyle() const;
+    double getBorder() const;
+    double getOffsetX() const;
+    double getOffsetY() const;
+    double getAngle() const;
+    const basegfx::BColor& getStartColor() const;
+    const basegfx::BColor& getEndColor() const;
+    sal_uInt16 getSteps() const;
+};
 
 } // end of namespace drawinglayer::attribute
-
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRADIENTATTRIBUTE_HXX
 
