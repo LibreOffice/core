@@ -190,7 +190,7 @@ MzString &MzString::operator << (int i)
 }
 
 
-MzString &MzString::operator << (long l)
+MzString &MzString::operator << (tools::Long l)
 {
     char str[80];
 

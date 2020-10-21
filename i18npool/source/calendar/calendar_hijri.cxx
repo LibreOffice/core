@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include <calendar_hijri.hxx>
+#include <tools/long.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -257,14 +258,14 @@ void
 Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear)
 {
     /* working variables */
-    long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
+    tools::Long lFactorA, lFactorB, lFactorC, lFactorD, lFactorE;
 
     /* test whether to adjust for the Gregorian calendar crossover */
     if (lJulianDay >= GREGORIAN_CROSSOVER) {
     /* calculate a small adjustment */
-    long lAdjust = static_cast<long>((static_cast<float>(lJulianDay - 1867216) - 0.25) / 36524.25);
+    tools::Long lAdjust = static_cast<tools::Long>((static_cast<float>(lJulianDay - 1867216) - 0.25) / 36524.25);
 
-    lFactorA = lJulianDay + 1 + lAdjust - static_cast<long>(0.25 * lAdjust);
+    lFactorA = lJulianDay + 1 + lAdjust - static_cast<tools::Long>(0.25 * lAdjust);
 
     } else {
     /* no adjustment needed */
@@ -272,12 +273,12 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
     }
 
     lFactorB = lFactorA + 1524;
-    lFactorC = static_cast<long>(6680.0 + (static_cast<float>(lFactorB - 2439870) - 122.1) / 365.25);
-    lFactorD = static_cast<long>(365 * lFactorC + (0.25 * lFactorC));
-    lFactorE = static_cast<long>((lFactorB - lFactorD) / 30.6001);
+    lFactorC = static_cast<tools::Long>(6680.0 + (static_cast<float>(lFactorB - 2439870) - 122.1) / 365.25);
+    lFactorD = static_cast<tools::Long>(365 * lFactorC + (0.25 * lFactorC));
+    lFactorE = static_cast<tools::Long>((lFactorB - lFactorD) / 30.6001);
 
     /* now, pull out the day number */
-    *pnDay = lFactorB - lFactorD - static_cast<long>(30.6001 * lFactorE);
+    *pnDay = lFactorB - lFactorD - static_cast<tools::Long>(30.6001 * lFactorE);
 
     /* ...and the month, adjusting it if necessary */
     *pnMonth = lFactorE - 1;

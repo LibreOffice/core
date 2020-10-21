@@ -47,6 +47,7 @@ using ::com::sun::star::text::WritingMode;
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
+#include <tools/long.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
 using ::com::sun::star::uno::Any;

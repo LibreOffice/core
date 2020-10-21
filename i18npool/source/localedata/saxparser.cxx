@@ -35,7 +35,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
-
+#include <tools/long.hxx>
 
 #include "LocaleNode.hxx"
 
@@ -113,7 +113,7 @@ static Reference< XInputStream > createStreamFromFile(
         return r;
     }
 
-    long nLength = ftell( f );
+    tools::Long nLength = ftell( f );
     if (nLength == -1)
     {
         fprintf(stderr, "failure ftelling %s\n", pcFile);
