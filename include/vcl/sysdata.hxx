@@ -62,7 +62,7 @@ struct SystemEnvData
     enum class Platform { Wayland, Xcb };
 
     void*               pDisplay;       // the relevant display connection
-    unsigned long       aWindow;        // the window of the object
+    sal_uIntPtr         aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
     void*               pWidget;        // the corresponding widget
     void*               pVisual;        // the visual in use
