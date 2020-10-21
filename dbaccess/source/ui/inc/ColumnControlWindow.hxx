@@ -50,7 +50,7 @@ namespace dbaui
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) override;
         virtual bool                isAutoIncrementValueEnabled() const override;
         virtual OUString            getAutoIncrementValue() const override;
-        virtual void                CellModified(tools::Long nRow, sal_uInt16 nColId ) override;
+        virtual void                CellModified(sal_Int32 nRow, sal_uInt16 nColId ) override;
 
     public:
         OColumnControlWindow(weld::Container* pParent,

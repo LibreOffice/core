@@ -330,7 +330,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     pDoc->ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
 }
 
-void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, tools::Long& rCount,
+void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, sal_Int32& rCount,
                             const uno::Reference<sheet::XDataPilotMemberResults>& xLevRes,
                             const uno::Reference<container::XIndexAccess>& xDims )
 {
@@ -1054,9 +1054,9 @@ void ScDPOutput::Output()
         SCCOL nColPos = nMemberStartCol + static_cast<SCCOL>(nField);                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
-        tools::Long nThisRowCount = rSequence.getLength();
+        sal_Int32 nThisRowCount = rSequence.getLength();
         OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //TODO: ???
-        for (tools::Long nRow=0; nRow<nThisRowCount; nRow++)
+        for (sal_Int32 nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + static_cast<SCROW>(nRow);                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
@@ -1104,13 +1104,13 @@ void ScDPOutput::Output()
 
     //  output data results:
 
-    for (tools::Long nRow=0; nRow<nRowCount; nRow++)
+    for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
     {
         SCROW nRowPos = nDataStartRow + static_cast<SCROW>(nRow);                    //TODO: check for overflow
         const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
-        tools::Long nThisColCount = pRowAry[nRow].getLength();
+        sal_Int32 nThisColCount = pRowAry[nRow].getLength();
         OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
-        for (tools::Long nCol=0; nCol<nThisColCount; nCol++)
+        for (sal_Int32 nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + static_cast<SCCOL>(nCol);                //TODO: check for overflow
             DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
@@ -1147,7 +1147,7 @@ bool ScDPOutput::HasError()
     return bSizeOverflow || bResultsError;
 }
 
-tools::Long ScDPOutput::GetHeaderRows() const
+sal_Int32 ScDPOutput::GetHeaderRows() const
 {
     return pPageFields.size() + ( bDoFilter ? 1 : 0 );
 }

@@ -65,7 +65,7 @@ void OTableDesignUndoAct::Redo()
     }
 }
 
-OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, tools::Long nRowID, sal_uInt16 nColumn ) :
+OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn ) :
      OTableDesignUndoAct( pOwner ,STR_TABED_UNDO_CELLMODIFIED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -116,7 +116,7 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 {
 }
 
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, tools::Long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
     :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -240,7 +240,7 @@ void OTableEditorInsUndoAct::Undo()
 void OTableEditorInsUndoAct::Redo()
 {
     // insert lines again
-    tools::Long nInsertRow = m_nInsPos;
+    sal_Int32 nInsertRow = m_nInsPos;
     std::shared_ptr<OTableRow>  pRow;
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     for (auto const& insertedRow : m_vInsertedRows)
@@ -256,7 +256,7 @@ void OTableEditorInsUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, tools::Long nInsertPosition, tools::Long nInsertedRows ) :
+OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nInsertPosition, sal_Int32 nInsertedRows ) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_NEWROWINSERTED)
     ,m_nInsPos( nInsertPosition )
     ,m_nInsRows( nInsertedRows )

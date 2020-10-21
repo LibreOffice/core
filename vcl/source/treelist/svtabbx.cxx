@@ -533,7 +533,7 @@ void SvHeaderTabListBox::RecalculateAccessibleChildren()
     }
 }
 
-bool SvHeaderTabListBox::IsCellCheckBox( tools::Long _nRow, sal_uInt16 _nColumn, TriState& _rState )
+bool SvHeaderTabListBox::IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState )
 {
     bool bRet = false;
     SvTreeListEntry* pEntry = GetEntry( _nRow );
@@ -557,7 +557,7 @@ bool SvHeaderTabListBox::IsCellCheckBox( tools::Long _nRow, sal_uInt16 _nColumn,
     }
     return bRet;
 }
-tools::Long SvHeaderTabListBox::GetRowCount() const
+sal_Int32 SvHeaderTabListBox::GetRowCount() const
 {
     return GetEntryCount();
 }
@@ -622,7 +622,7 @@ void SvHeaderTabListBox::SelectAll()
     SvTreeListBox::SelectAll(true);
 }
 
-void SvHeaderTabListBox::SelectRow( tools::Long _nRow, bool _bSelect, bool )
+void SvHeaderTabListBox::SelectRow( sal_Int32 _nRow, bool _bSelect, bool )
 {
     Select( GetEntry( _nRow ), _bSelect );
 }
@@ -641,13 +641,13 @@ sal_Int32 SvHeaderTabListBox::GetSelectedColumnCount() const
     return 0;
 }
 
-bool SvHeaderTabListBox::IsRowSelected( tools::Long _nRow ) const
+bool SvHeaderTabListBox::IsRowSelected( sal_Int32 _nRow ) const
 {
     SvTreeListEntry* pEntry = GetEntry( _nRow );
     return ( pEntry && IsSelected( pEntry ) );
 }
 
-bool SvHeaderTabListBox::IsColumnSelected( tools::Long ) const
+bool SvHeaderTabListBox::IsColumnSelected( sal_Int32 ) const
 {
     return false;
 }
@@ -665,7 +665,7 @@ bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
     return true;
 }
 
-OUString SvHeaderTabListBox::GetAccessibleCellText( tools::Long _nRow, sal_uInt16 _nColumnPos ) const
+OUString SvHeaderTabListBox::GetAccessibleCellText( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
 {
     return GetTabEntryText(_nRow, _nColumnPos);
 }

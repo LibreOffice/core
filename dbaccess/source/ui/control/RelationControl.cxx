@@ -108,12 +108,12 @@ namespace dbaui
 
         void Init(const TTableConnectionData::value_type& _pConnData);
         using ORelationControl_Base::Init;
-        virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
-        virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
+        virtual void InitController( ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol ) override;
+        virtual ::svt::CellController* GetController( sal_Int32 nRow, sal_uInt16 nCol ) override;
         virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-        virtual bool SeekRow( tools::Long nRow ) override;
+        virtual bool SeekRow( sal_Int32 nRow ) override;
         virtual bool SaveModified() override;
-        virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColId ) const override;
+        virtual OUString GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const override;
 
         virtual void CellModified() override;
 
@@ -204,7 +204,7 @@ namespace dbaui
 
     bool ORelationControl::IsTabAllowed(bool bForward) const
     {
-        tools::Long nRow = GetCurRow();
+        sal_Int32 nRow = GetCurRow();
         sal_uInt16 nCol = GetCurColumnId();
 
         bool bRet = !(      ( bForward && (nCol == DEST_COLUMN)     && (nRow == GetRowCount() - 1))
@@ -215,7 +215,7 @@ namespace dbaui
 
     bool ORelationControl::SaveModified()
     {
-        tools::Long nRow = GetCurRow();
+        sal_Int32 nRow = GetCurRow();
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
             weld::ComboBox& rListBox = m_pListCell->get_widget();
@@ -263,7 +263,7 @@ namespace dbaui
         return nId;
     }
 
-    OUString ORelationControl::GetCellText( tools::Long nRow, sal_uInt16 nColId ) const
+    OUString ORelationControl::GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const
     {
         OUString sText;
         if ( m_pConnData->GetConnLineDataList().size() > o3tl::make_unsigned(nRow) )
@@ -282,7 +282,7 @@ namespace dbaui
         return sText;
     }
 
-    void ORelationControl::InitController( CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColumnId )
+    void ORelationControl::InitController( CellControllerRef& /*rController*/, sal_Int32 nRow, sal_uInt16 nColumnId )
     {
 
         OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
@@ -319,12 +319,12 @@ namespace dbaui
         rList.set_help_id(sHelpId);
     }
 
-    CellController* ORelationControl::GetController( tools::Long /*nRow*/, sal_uInt16 /*nColumnId*/ )
+    CellController* ORelationControl::GetController( sal_Int32 /*nRow*/, sal_uInt16 /*nColumnId*/ )
     {
         return new ListBoxCellController( m_pListCell.get() );
     }
 
-    bool ORelationControl::SeekRow( tools::Long nRow )
+    bool ORelationControl::SeekRow( sal_Int32 nRow )
     {
         m_nDataPos = nRow;
         return true;

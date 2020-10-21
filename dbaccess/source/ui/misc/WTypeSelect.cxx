@@ -77,7 +77,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
     }
 }
 
-void OWizTypeSelectControl::CellModified(tools::Long nRow, sal_uInt16 nColId )
+void OWizTypeSelectControl::CellModified(sal_Int32 nRow, sal_uInt16 nColId )
 {
     OSL_ENSURE(nRow == -1,"nRow must be -1!");
 
