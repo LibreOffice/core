@@ -390,8 +390,8 @@ namespace frm
 
         const StyleSettings& rStyleSettings = m_pAntiImpl->GetSettings().GetStyleSettings();
 
-        long nScrollBarWidth = m_pVScroll ? rStyleSettings.GetScrollBarSize() : 0;
-        long nScrollBarHeight = m_pHScroll ? rStyleSettings.GetScrollBarSize() : 0;
+        tools::Long nScrollBarWidth = m_pVScroll ? rStyleSettings.GetScrollBarSize() : 0;
+        tools::Long nScrollBarHeight = m_pHScroll ? rStyleSettings.GetScrollBarSize() : 0;
 
         if ( m_pAntiImpl->IsZoom() )
         {
@@ -405,11 +405,11 @@ namespace frm
         // the size of the viewport - note that the viewport does *not* occupy all the place
         // which is left when subtracting the scrollbar width/height
         Size aViewportPlaygroundPixel( aPlaygroundSizePixel );
-        aViewportPlaygroundPixel.setWidth( ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) ) );
-        aViewportPlaygroundPixel.setHeight( ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) ) );
+        aViewportPlaygroundPixel.setWidth( ::std::max( tools::Long( 10 ), tools::Long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) ) );
+        aViewportPlaygroundPixel.setHeight( ::std::max( tools::Long( 10 ), tools::Long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) ) );
         Size aViewportPlaygroundLogic( m_pViewport->PixelToLogic( aViewportPlaygroundPixel ) );
 
-        const long nOffset = 2;
+        const tools::Long nOffset = 2;
         Size aViewportSizePixel( aViewportPlaygroundPixel.Width() - 2 * nOffset, aViewportPlaygroundPixel.Height() - 2 * nOffset );
         Size aViewportSizeLogic( m_pViewport->PixelToLogic( aViewportSizePixel ) );
 
@@ -436,7 +436,7 @@ namespace frm
             m_pVScroll->SetVisibleSize( aViewportPlaygroundLogic.Height() );
 
             // the default height of a text line...
-            long nFontHeight = m_pEngine->GetStandardFont(0).GetFontSize().Height();
+            tools::Long nFontHeight = m_pEngine->GetStandardFont(0).GetFontSize().Height();
             // ... is the scroll size for the vertical scrollbar
             m_pVScroll->SetLineSize( nFontHeight );
             // the viewport width, minus one line, is the page scroll size
@@ -448,7 +448,7 @@ namespace frm
         {
             m_pHScroll->SetVisibleSize( aViewportPlaygroundLogic.Width() );
 
-            long nFontWidth = m_pEngine->GetStandardFont(0).GetFontSize().Width();
+            tools::Long nFontWidth = m_pEngine->GetStandardFont(0).GetFontSize().Width();
             if ( !nFontWidth )
             {
                 m_pViewport->Push( PushFlags::FONT );
@@ -471,7 +471,7 @@ namespace frm
     {
         if ( m_pVScroll )
         {
-            long nOverallTextHeight = m_pEngine->GetTextHeight();
+            tools::Long nOverallTextHeight = m_pEngine->GetTextHeight();
             m_pVScroll->SetRange( Range( 0, nOverallTextHeight ) );
             m_pVScroll->SetThumbPos( m_pView->GetVisArea().Top() );
         }
@@ -479,7 +479,7 @@ namespace frm
         if ( m_pHScroll )
         {
             Size aPaperSize( m_pEngine->GetPaperSize() );
-            long nOverallTextWidth = ( aPaperSize.Width() == EMPTY_PAPER_SIZE ) ? m_pEngine->CalcTextWidth() : aPaperSize.Width();
+            tools::Long nOverallTextWidth = ( aPaperSize.Width() == EMPTY_PAPER_SIZE ) ? m_pEngine->CalcTextWidth() : aPaperSize.Width();
             m_pHScroll->SetRange( Range( 0, nOverallTextWidth ) );
             m_pHScroll->SetThumbPos( m_pView->GetVisArea().Left() );
         }
@@ -539,7 +539,7 @@ namespace frm
 
     namespace
     {
-        void lcl_inflate( tools::Rectangle& _rRect, long _nInflateX, long _nInflateY )
+        void lcl_inflate( tools::Rectangle& _rRect, tools::Long _nInflateX, tools::Long _nInflateY )
         {
             _rRect.AdjustLeft( -_nInflateX );
             _rRect.AdjustRight(_nInflateX );

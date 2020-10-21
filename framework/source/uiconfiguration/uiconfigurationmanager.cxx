@@ -626,7 +626,7 @@ void UIConfigurationManager::impl_Initialize()
     // Initialize the top-level structures with the storage data
     if ( m_xDocConfigStorage.is() )
     {
-        long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
+        tools::Long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
         // Try to access our module sub folder
         for ( sal_Int16 i = 1; i < css::ui::UIElementType::COUNT;
@@ -1192,7 +1192,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
         {
             try
             {
-                long nOpenMode = 0;
+                tools::Long nOpenMode = 0;
                 Any a = xPropSet->getPropertyValue("OpenMode");
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );

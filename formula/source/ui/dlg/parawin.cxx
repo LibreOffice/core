@@ -236,9 +236,9 @@ void ParaWin::SetActiveLine(sal_uInt16 no)
     if (no >= nMaxArgs)
         return;
 
-    long nOffset = GetSliderPos();
+    tools::Long nOffset = GetSliderPos();
     nActiveLine=no;
-    long nNewEdPos=static_cast<long>(nActiveLine)-nOffset;
+    tools::Long nNewEdPos=static_cast<tools::Long>(nActiveLine)-nOffset;
     if(nNewEdPos<0 || nNewEdPos>3)
     {
         nOffset+=nNewEdPos;

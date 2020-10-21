@@ -153,7 +153,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
     awt::DeviceInfo aInfo                = xDevice->getInfo();
     awt::Size       aContainerClientSize( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset  ,
                                           aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
-    long aStatusBarHeight                = aDockOffsets.GetHeight();
+    tools::Long aStatusBarHeight                = aDockOffsets.GetHeight();
 
     sal_Int32 nLeftRightDockingAreaHeight( aContainerClientSize.Height );
     if ( rBorderSpace.Y >= 0 )
