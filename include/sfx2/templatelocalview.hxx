@@ -63,16 +63,16 @@ private:
     FILTER_APPLICATION mApp;
 };
 
-class SfxTemplateLocalView : public ThumbnailView
+class TemplateLocalView : public ThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
 public:
 
-    SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
+    TemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                          std::unique_ptr<weld::Menu> xMenu);
 
-    virtual ~SfxTemplateLocalView () override;
+    virtual ~TemplateLocalView () override;
 
     // Fill view with new item list
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);

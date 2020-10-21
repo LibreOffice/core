@@ -134,7 +134,7 @@ protected:
     std::unique_ptr<weld::CheckButton> mxCBXHideDlg;
     std::unique_ptr<weld::MenuButton> mxActionBar;
     std::unique_ptr<TemplateSearchView> mxSearchView;
-    std::unique_ptr<SfxTemplateLocalView> mxLocalView;
+    std::unique_ptr<TemplateLocalView> mxLocalView;
     std::unique_ptr<weld::Menu> mxTemplateDefaultMenu;
     std::unique_ptr<weld::CustomWeld> mxSearchViewWeld;
     std::unique_ptr<weld::CustomWeld> mxLocalViewWeld;
