@@ -23,7 +23,7 @@ constexpr tools::Long gnTextHeight = 30;
 
 TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                          std::unique_ptr<weld::Menu> xMenu)
-    : SfxTemplateLocalView(std::move(xWindow), std::move(xMenu))
+    : TemplateLocalView(std::move(xWindow), std::move(xMenu))
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
@@ -64,7 +64,7 @@ bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
         return true;
     }
 
-    return SfxTemplateLocalView::MouseButtonDown(rMEvt);
+    return TemplateLocalView::MouseButtonDown(rMEvt);
 }
 
 void TemplateDefaultView::createContextMenu()
