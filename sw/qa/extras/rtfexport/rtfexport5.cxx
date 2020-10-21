@@ -1002,6 +1002,22 @@ DECLARE_RTFEXPORT_TEST(testTdf74795, "tdf74795.rtf")
                          getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf137085, "tdf137085.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    // \trpaddl0 overrides \trgaph600 (-1058 mm100) and built-in default of 190
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xTable, "LeftMargin"));
+
+    // the \trpaddl0 is applied to all cells
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+
+    xCell.set(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf77349, "tdf77349.rtf")
 {
     uno::Reference<container::XNamed> xImage(getShape(1), uno::UNO_QUERY);
