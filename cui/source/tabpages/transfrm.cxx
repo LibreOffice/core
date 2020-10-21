@@ -451,7 +451,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
     if (m_xMtrRadius->get_value_changed_from_saved())
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
-        long nTmp = long(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
+        tools::Long nTmp = tools::Long(GetCoreValue(*m_xMtrRadius, ePoolUnit) * aUIScale);
 
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;
@@ -953,15 +953,15 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
         // get Width
         double nWidth = static_cast<double>(m_xMtrWidth->get_value(FieldUnit::MM_100TH));
-        long lWidth = long(nWidth * static_cast<double>(aUIScale));
+        tools::Long lWidth = tools::Long(nWidth * static_cast<double>(aUIScale));
         lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
-        lWidth = static_cast<long>(m_xMtrWidth->denormalize( lWidth ));
+        lWidth = static_cast<tools::Long>(m_xMtrWidth->denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_xMtrHeight->get_value(FieldUnit::MM_100TH));
-        long lHeight = long(nHeight * static_cast<double>(aUIScale));
+        tools::Long lHeight = tools::Long(nHeight * static_cast<double>(aUIScale));
         lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
-        lHeight = static_cast<long>(m_xMtrHeight->denormalize( lHeight ));
+        lHeight = static_cast<tools::Long>(m_xMtrHeight->denormalize( lHeight ));
 
         // put Width & Height to itemset
         rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), static_cast<sal_uInt32>(lWidth) ) );

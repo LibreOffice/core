@@ -39,7 +39,7 @@ const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
     0
 };
 
-static void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
+static void FillUpWithDefTabs_Impl( tools::Long nDefDist, SvxTabStopItem& rTabs )
 {
     if( rTabs.Count() )
         return;
@@ -250,7 +250,7 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
     pItem = GetItem(*rSet, SID_ATTR_TABSTOP_DEFAULTS);
 
     if (pItem)
-        nDefDist = OutputDevice::LogicToLogic(long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MapUnit::Map100thMM);
+        nDefDist = OutputDevice::LogicToLogic(tools::Long(static_cast<const SfxUInt16Item*>(pItem)->GetValue()), eUnit, MapUnit::Map100thMM);
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
@@ -316,7 +316,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 {
     m_xTabBox->clear();
 
-    long nOffset = 0;
+    tools::Long nOffset = 0;
     const SfxPoolItem* pItem = nullptr;
     if (GetItemSet().GetItemState(SID_ATTR_TABSTOP_OFFSET, true, &pItem) == SfxItemState::SET)
     {
@@ -430,7 +430,7 @@ void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
     if (nVal == 0 && pBtn == nullptr)
         return;
 
-    long nOffset = 0;
+    tools::Long nOffset = 0;
     const SfxPoolItem* pItem = nullptr;
 
     if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem ) ==
@@ -440,7 +440,7 @@ void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
         MapUnit eUnit = GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MapUnit::Map100thMM  );
     }
-    const long nReal = nVal - nOffset;
+    const tools::Long nReal = nVal - nOffset;
     sal_Int32 nSize = m_xTabBox->get_count();
 
     sal_Int32 i;

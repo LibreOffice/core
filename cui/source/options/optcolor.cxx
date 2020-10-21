@@ -207,7 +207,7 @@ private:
     {
     public:
         Entry(weld::Window* pTopLevel, weld::Builder& rBuilder, const char* pTextWidget, const char* pColorWidget,
-              const Color& rColor, long nCheckBoxLabelOffset, bool bCheckBox, bool bShow);
+              const Color& rColor, tools::Long nCheckBoxLabelOffset, bool bCheckBox, bool bShow);
     public:
         void SetText(const OUString& rLabel) { dynamic_cast<weld::Label&>(*m_xText).set_label(rLabel); }
         void set_width_request(int nTextWidth) { m_xText->set_size_request(nTextWidth, -1); }
@@ -280,7 +280,7 @@ ColorConfigWindow_Impl::Chapter::Chapter(weld::Builder& rBuilder, const char* pL
 ColorConfigWindow_Impl::Entry::Entry(weld::Window* pTopLevel, weld::Builder& rBuilder,
                                      const char* pTextWidget, const char* pColorWidget,
                                      const Color& rColor,
-                                     long nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
+                                     tools::Long nCheckBoxLabelOffset, bool bCheckBox, bool bShow)
     : m_xColorList(new ColorListBox(rBuilder.weld_menu_button(pColorWidget), pTopLevel))
     , m_aDefaultColor(rColor)
 {
@@ -384,7 +384,7 @@ void ColorConfigWindow_Impl::CreateEntries()
 
     // Here we want to get the amount to add to the position of a FixedText to
     // get it to align its contents with that of a CheckBox
-    long nCheckBoxLabelOffset = 0;
+    tools::Long nCheckBoxLabelOffset = 0;
     {
         OUString sSampleText("X");
         std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button("docboundaries"));
@@ -602,11 +602,11 @@ public:
     void SetConfig (EditableColorConfig& rConfig) { pColorConfig = &rConfig; }
     void SetExtendedConfig (EditableExtendedColorConfig& rConfig) { pExtColorConfig = &rConfig; }
     void Update();
-    long GetScrollPosition() const
+    tools::Long GetScrollPosition() const
     {
         return m_xVScroll->vadjustment_get_value();
     }
-    void SetScrollPosition(long nSet)
+    void SetScrollPosition(tools::Long nSet)
     {
         m_xVScroll->vadjustment_set_value(nSet);
     }

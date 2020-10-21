@@ -147,7 +147,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     vcl::Font aDrawFont = rRenderContext.GetFont();
     Size aSzWnd(GetOutputSizePixel());
     OUString aTmpStr( aPrevStr );
-    long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
+    tools::Long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 
     aDrawFont.SetTransparent(true);
     aDrawFont.SetColor(aPrevCol);
@@ -155,7 +155,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
 
     if (mnPos != -1)
     {
-        long nCharWidth = rRenderContext.GetTextWidth(OUString(mnChar));
+        tools::Long nCharWidth = rRenderContext.GetTextWidth(OUString(mnChar));
 
         int nNumCharsToInsert = 0;
         if (nCharWidth > 0)
@@ -168,7 +168,7 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
         }
     }
 
-    long nX = 0;
+    tools::Long nX = 0;
     if (mnPos == -1 && nLeadSpace > 0) //tdf#122120 if it won't fit anyway, then left align it
     {
         nX = nLeadSpace;

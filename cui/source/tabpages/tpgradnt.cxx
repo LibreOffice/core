@@ -320,8 +320,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
     OUString aName;
 
-    long nCount = m_pGradientList->Count();
-    long j = 1;
+    tools::Long nCount = m_pGradientList->Count();
+    tools::Long j = 1;
     bool bValidGradientName = false;
 
     while( !bValidGradientName )
@@ -611,11 +611,11 @@ void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
 
 sal_Int32 SvxGradientTabPage::SearchGradientList(const OUString& rGradientName)
 {
-    long nCount = m_pGradientList->Count();
+    tools::Long nCount = m_pGradientList->Count();
     bool bValidGradientName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidGradientName;i++)
+    for(tools::Long i = 0;i < nCount && bValidGradientName;i++)
     {
         if(rGradientName == m_pGradientList->GetGradient( i )->GetName())
         {

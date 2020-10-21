@@ -603,7 +603,7 @@ void SvxPathTabPage::GetPathList(
         Sequence< OUString > aPathSeq;
         if ( aAny >>= aPathSeq )
         {
-            long i, nCount = aPathSeq.getLength();
+            tools::Long i, nCount = aPathSeq.getLength();
             const OUString* pPaths = aPathSeq.getConstArray();
 
             for ( i = 0; i < nCount; ++i )
@@ -618,7 +618,7 @@ void SvxPathTabPage::GetPathList(
             sCfgName + POSTFIX_USER);
         if ( aAny >>= aPathSeq )
         {
-            long i, nCount = aPathSeq.getLength();
+            tools::Long i, nCount = aPathSeq.getLength();
             const OUString* pPaths = aPathSeq.getConstArray();
 
             for ( i = 0; i < nCount; ++i )

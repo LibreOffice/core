@@ -509,15 +509,15 @@ short SfxInsertFloatingFrameDialog::run()
 
                 bool bHasBorder = m_xRBFrameBorderOn->get_active();
 
-                long lMarginWidth;
+                tools::Long lMarginWidth;
                 if (!m_xCBMarginWidthDefault->get_active())
-                    lMarginWidth = static_cast<long>(m_xNMMarginWidth->get_text().toInt32());
+                    lMarginWidth = static_cast<tools::Long>(m_xNMMarginWidth->get_text().toInt32());
                 else
                     lMarginWidth = SIZE_NOT_SET;
 
-                long lMarginHeight;
+                tools::Long lMarginHeight;
                 if (!m_xCBMarginHeightDefault->get_active())
-                    lMarginHeight = static_cast<long>(m_xNMMarginHeight->get_text().toInt32());
+                    lMarginHeight = static_cast<tools::Long>(m_xNMMarginHeight->get_text().toInt32());
                 else
                     lMarginHeight = SIZE_NOT_SET;
 

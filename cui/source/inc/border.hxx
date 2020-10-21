@@ -98,7 +98,7 @@ private:
     std::vector<Image> m_aShadowImgVec;
     std::vector<Image> m_aBorderImgVec;
 
-    long                nMinValue;  ///< minimum distance
+    tools::Long                nMinValue;  ///< minimum distance
     SwBorderModes       nSWMode;    ///< table, textframe, paragraph
     sal_uInt16          mnBoxSlot;
     sal_uInt16          mnShadowSlot;

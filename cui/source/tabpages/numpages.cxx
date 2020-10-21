@@ -956,18 +956,18 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     GraphicConverter::Import( *pIn, aGraphic );
 
     BitmapEx aBitmap = aGraphic.GetBitmapEx();
-    long nPixelX = aBitmap.GetSizePixel().Width();
-    long nPixelY = aBitmap.GetSizePixel().Height();
+    tools::Long nPixelX = aBitmap.GetSizePixel().Width();
+    tools::Long nPixelY = aBitmap.GetSizePixel().Height();
     double ratio = nPixelY/static_cast<double>(nPixelX);
     if(nPixelX > 30)
     {
         nPixelX = 30;
-        nPixelY = static_cast<long>(nPixelX*ratio);
+        nPixelY = static_cast<tools::Long>(nPixelX*ratio);
     }
     if(nPixelY > 30)
     {
         nPixelY = 30;
-        nPixelX = static_cast<long>(nPixelY/ratio);
+        nPixelX = static_cast<tools::Long>(nPixelY/ratio);
     }
 
     aBitmap.Scale( Size( nPixelX, nPixelY ), BmpScaleFlag::Fast );
@@ -1986,8 +1986,8 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, 
     bool bWidth = &rField == m_xWidthMF.get();
     bLastWidthModified = bWidth;
     bool bRatio = m_xRatioCB->get_active();
-    long nWidthVal = static_cast<long>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::MM_100TH)));
-    long nHeightVal = static_cast<long>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nWidthVal = static_cast<tools::Long>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nHeightVal = static_cast<tools::Long>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FieldUnit::MM_100TH)));
     nWidthVal = OutputDevice::LogicToLogic( nWidthVal ,
                                                 MapUnit::Map100thMM, eCoreUnit );
     nHeightVal = OutputDevice::LogicToLogic( nHeightVal,
@@ -2013,11 +2013,11 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, 
 
                 if(bWidth)
                 {
-                    long nDelta = nWidthVal - aInitSize[i].Width();
+                    tools::Long nDelta = nWidthVal - aInitSize[i].Width();
                     aSize.setWidth( nWidthVal );
                     if (bRatio)
                     {
-                        aSize.setHeight( aInitSize[i].Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
+                        aSize.setHeight( aInitSize[i].Height() + static_cast<tools::Long>(static_cast<double>(nDelta) / fSizeRatio) );
                         m_xHeightMF->set_value(m_xHeightMF->normalize(
                             OutputDevice::LogicToLogic( aSize.Height(), eCoreUnit, MapUnit::Map100thMM )),
                                 FieldUnit::MM_100TH);
@@ -2025,11 +2025,11 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, 
                 }
                 else
                 {
-                    long nDelta = nHeightVal - aInitSize[i].Height();
+                    tools::Long nDelta = nHeightVal - aInitSize[i].Height();
                     aSize.setHeight( nHeightVal );
                     if (bRatio)
                     {
-                        aSize.setWidth( aInitSize[i].Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
+                        aSize.setWidth( aInitSize[i].Width() + static_cast<tools::Long>(static_cast<double>(nDelta) * fSizeRatio) );
                         m_xWidthMF->set_value(m_xWidthMF->normalize(
                             OutputDevice::LogicToLogic( aSize.Width(), eCoreUnit, MapUnit::Map100thMM )),
                                 FieldUnit::MM_100TH);
@@ -2118,11 +2118,11 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl(const weld::Entry* pEdit)
     SetModified();
 }
 
-static long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, long nXStart,
-                        long nYMiddle, long nDivision)
+static tools::Long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, tools::Long nXStart,
+                        tools::Long nYMiddle, tools::Long nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();
-    long nRet = 0;
+    tools::Long nRet = 0;
     if(pBrushItem)
     {
         const Graphic* pGrf = pBrushItem->GetGraphic();
@@ -2140,9 +2140,9 @@ static long lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, l
 
 }
 
-static long lcl_DrawBullet(VirtualDevice* pVDev,
-            const SvxNumberFormat& rFmt, long nXStart,
-            long nYStart, const Size& rSize)
+static tools::Long lcl_DrawBullet(VirtualDevice* pVDev,
+            const SvxNumberFormat& rFmt, tools::Long nXStart,
+            tools::Long nYStart, const Size& rSize)
 {
     vcl::Font aTmpFont(pVDev->GetFont());
 
@@ -2167,10 +2167,10 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     pVDev->SetFont( aFont );
     sal_UCS4 cChar = rFmt.GetBulletChar();
     OUString aText(&cChar, 1);
-    long nY = nYStart;
+    tools::Long nY = nYStart;
     nY -= ((aTmpSize.Height() - rSize.Height())/ 2);
     pVDev->DrawText( Point(nXStart, nY), aText );
-    long nRet = pVDev->GetTextWidth(aText);
+    tools::Long nRet = pVDev->GetTextWidth(aText);
 
     pVDev->SetFont(aTmpFont);
     return nRet;
@@ -2205,21 +2205,21 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
     if (pActNum)
     {
-        long nWidthRelation = 30; // chapter dialog
+        tools::Long nWidthRelation = 30; // chapter dialog
 
         // height per level
-        long nXStep = aSize.Width() / (3 * pActNum->GetLevelCount());
+        tools::Long nXStep = aSize.Width() / (3 * pActNum->GetLevelCount());
         if (pActNum->GetLevelCount() < 10)
             nXStep /= 2;
-        long nYStart = 4;
+        tools::Long nYStart = 4;
         // the whole height mustn't be used for a single level
-        long nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
+        tools::Long nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
 
         aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne);
         aStdFont.SetColor(aTextColor);
         aStdFont.SetFillColor(aBackColor);
 
-        long nFontHeight = nYStep * 6 / 10;
+        tools::Long nFontHeight = nYStep * 6 / 10;
         if (bPosition)
             nFontHeight = nYStep * 15 / 10;
         aStdFont.SetFontSize(Size( 0, nFontHeight ));
@@ -2229,7 +2229,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
 
         if (bPosition)
         {
-            long nLineHeight = nFontHeight * 8 / 7;
+            tools::Long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
             while (!(nActLevel & (1<<nStart)))
             {
@@ -2243,15 +2243,15 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[nLevel] = rFmt.GetStart();
 
-                long nXStart( 0 );
+                tools::Long nXStart( 0 );
                 short nTextOffset( 0 );
-                long nNumberXPos( 0 );
+                tools::Long nNumberXPos( 0 );
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
                     nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
                     nNumberXPos = nXStart;
-                    long nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
+                    tools::Long nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
                     if (nFirstLineOffset <= nNumberXPos)
                         nNumberXPos = nNumberXPos - nFirstLineOffset;
@@ -2263,7 +2263,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 }
                 else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpNumberXPos((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
+                    const tools::Long nTmpNumberXPos((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
                     if (nTmpNumberXPos < 0)
                     {
                         nNumberXPos = 0;
@@ -2274,10 +2274,10 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     }
                 }
 
-                long nBulletWidth = 0;
+                tools::Long nBulletWidth = 0;
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType() &(~LINK_TOKEN)))
                 {
-                    long nYMiddle = nYStart + ( nFontHeight / 2 );
+                    tools::Long nYMiddle = nYStart + ( nFontHeight / 2 );
                     nBulletWidth = rFmt.IsShowSymbol() ? lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos, nYMiddle, nWidthRelation) : 0;
                 }
                 else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
@@ -2314,7 +2314,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     nBulletWidth = nBulletWidth + pVDev->GetTextWidth(aText);
                 }
 
-                long nTextXPos( 0 );
+                tools::Long nTextXPos( 0 );
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
                 {
                     nTextXPos = nXStart;
@@ -2360,10 +2360,10 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
         else
         {
             //#i5153# painting gray or black rectangles as 'normal' numbering text
-            long nWidth = pVDev->GetTextWidth("Preview");
-            long nTextHeight = pVDev->GetTextHeight();
-            long nRectHeight = nTextHeight * 2 / 3;
-            long nTopOffset = nTextHeight - nRectHeight;
+            tools::Long nWidth = pVDev->GetTextWidth("Preview");
+            tools::Long nTextHeight = pVDev->GetTextHeight();
+            tools::Long nRectHeight = nTextHeight * 2 / 3;
+            tools::Long nTopOffset = nTextHeight - nRectHeight;
             Color aBlackColor(COL_BLACK);
             if (aBlackColor == aBackColor)
                 aBlackColor.Invert();
@@ -2372,7 +2372,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
             {
                 const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
-                long nXStart( 0 );
+                tools::Long nXStart( 0 );
                 pVDev->SetFillColor( aBackColor );
 
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
@@ -2381,7 +2381,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 }
                 else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
                 {
-                    const long nTmpXStart((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
+                    const tools::Long nTmpXStart((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
                     if (nTmpXStart < 0)
                     {
                         nXStart = 0;
@@ -2393,12 +2393,12 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                long nTextOffset = 2 * nXStep;
+                tools::Long nTextOffset = 2 * nXStep;
                 if (SVX_NUM_BITMAP == (rFmt.GetNumberingType()&(~LINK_TOKEN)))
                 {
                     if (rFmt.IsShowSymbol())
                     {
-                        long nYMiddle = nYStart + ( nFontHeight / 2 );
+                        tools::Long nYMiddle = nYStart + ( nFontHeight / 2 );
                         nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
                         nTextOffset = nTextOffset + nXStep;
                     }
@@ -2436,7 +2436,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tool
                     if (pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
                     OUString aText(pActNum->MakeNumString(aNum));
-                    long nY = nYStart;
+                    tools::Long nY = nYStart;
                     nY -= (pVDev->GetTextHeight() - nTextHeight - pVDev->GetFontMetric().GetDescent());
                     pVDev->DrawText(Point(nXStart, nY), aText);
                     nTextOffset = pVDev->GetTextWidth(aText);
@@ -2575,7 +2575,7 @@ void SvxNumPositionTabPage::InitControls()
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     sal_uInt16 nMask = 1;
     sal_uInt16 nLvl = SAL_MAX_UINT16;
-    long nFirstBorderTextRelative = -1;
+    tools::Long nFirstBorderTextRelative = -1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
         aNumFmtArr[i] = &pActNum->GetLevel(i);
@@ -2633,16 +2633,16 @@ void SvxNumPositionTabPage::InitControls()
 
     if(bSameDistBorderNum)
     {
-        long nDistBorderNum;
+        tools::Long nDistBorderNum;
         if(bRelative)
         {
-            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<tools::Long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
             if(nLvl)
-                nDistBorderNum -= static_cast<long>(aNumFmtArr[nLvl - 1]->GetAbsLSpace())+ aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
+                nDistBorderNum -= static_cast<tools::Long>(aNumFmtArr[nLvl - 1]->GetAbsLSpace())+ aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
+            nDistBorderNum = static_cast<tools::Long>(aNumFmtArr[nLvl]->GetAbsLSpace())+ aNumFmtArr[nLvl]->GetFirstLineOffset();
         }
         SetMetricValue(*m_xDistBorderMF, nDistBorderNum, eCoreUnit);
     }
@@ -3042,7 +3042,7 @@ IMPL_LINK(SvxNumPositionTabPage, DistanceHdl_Impl, weld::MetricSpinButton&, rFld
 {
     if(bInInintControl)
         return;
-    long nValue = GetCoreValue(rFld, eCoreUnit);
+    tools::Long nValue = GetCoreValue(rFld, eCoreUnit);
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -3061,7 +3061,7 @@ IMPL_LINK(SvxNumPositionTabPage, DistanceHdl_Impl, weld::MetricSpinButton&, rFld
                     }
                     else
                     {
-                        long nTmp = pActNum->GetLevel( i - 1 ).GetAbsLSpace() +
+                        tools::Long nTmp = pActNum->GetLevel( i - 1 ).GetAbsLSpace() +
                                     pActNum->GetLevel( i - 1 ).GetFirstLineOffset() -
                                     pActNum->GetLevel( i ).GetFirstLineOffset();
 
@@ -3080,7 +3080,7 @@ IMPL_LINK(SvxNumPositionTabPage, DistanceHdl_Impl, weld::MetricSpinButton&, rFld
             else if (&rFld == m_xIndentMF.get())
             {
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
-                long nDiff = nValue + aNumFmt.GetFirstLineOffset();
+                tools::Long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 auto const nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(nAbsLSpace + nDiff);
                 aNumFmt.SetFirstLineOffset( -nValue );
@@ -3103,7 +3103,7 @@ IMPL_LINK(SvxNumPositionTabPage, RelativeHdl_Impl, weld::ToggleButton&, rBox, vo
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->count_selected_rows() == 1 && SAL_MAX_UINT16 != nActNumLvl;
     bool bSetValue = false;
-    long nValue = 0;
+    tools::Long nValue = 0;
     if(bOn || bSingleSelection)
     {
         sal_uInt16 nMask = 1;
@@ -3203,7 +3203,7 @@ IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl, weld::ComboBox&,
 IMPL_LINK(SvxNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rFld, void)
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue(rFld, eCoreUnit);
+    const tools::Long nValue = GetCoreValue(rFld, eCoreUnit);
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3224,7 +3224,7 @@ IMPL_LINK(SvxNumPositionTabPage, ListtabPosHdl_Impl, weld::MetricSpinButton&, rF
 IMPL_LINK(SvxNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFld, void)
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue(rFld, eCoreUnit);
+    const tools::Long nValue = GetCoreValue(rFld, eCoreUnit);
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3233,7 +3233,7 @@ IMPL_LINK(SvxNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFld,
         if ( nActNumLvl & nMask )
         {
             SvxNumberFormat aNumFmt( pActNum->GetLevel(i) );
-            const long nFirstLineIndent = nValue - aNumFmt.GetIndentAt();
+            const tools::Long nFirstLineIndent = nValue - aNumFmt.GetIndentAt();
             aNumFmt.SetFirstLineIndent( nFirstLineIndent );
             pActNum->SetLevel( i, aNumFmt );
         }
@@ -3246,7 +3246,7 @@ IMPL_LINK(SvxNumPositionTabPage, AlignAtHdl_Impl, weld::MetricSpinButton&, rFld,
 IMPL_LINK(SvxNumPositionTabPage, IndentAtHdl_Impl, weld::MetricSpinButton&, rFld, void)
 {
     // determine value to be set at the chosen list levels
-    const long nValue = GetCoreValue(rFld, eCoreUnit);
+    const tools::Long nValue = GetCoreValue(rFld, eCoreUnit);
 
     // set value at the chosen list levels
     sal_uInt16 nMask = 1;
@@ -3255,10 +3255,10 @@ IMPL_LINK(SvxNumPositionTabPage, IndentAtHdl_Impl, weld::MetricSpinButton&, rFld
         if ( nActNumLvl & nMask )
         {
             SvxNumberFormat aNumFmt( pActNum->GetLevel(i) );
-            const long nAlignedAt = aNumFmt.GetIndentAt() +
+            const tools::Long nAlignedAt = aNumFmt.GetIndentAt() +
                                     aNumFmt.GetFirstLineIndent();
             aNumFmt.SetIndentAt( nValue );
-            const long nNewFirstLineIndent = nAlignedAt - nValue;
+            const tools::Long nNewFirstLineIndent = nAlignedAt - nValue;
             aNumFmt.SetFirstLineIndent( nNewFirstLineIndent );
             pActNum->SetLevel( i, aNumFmt );
         }

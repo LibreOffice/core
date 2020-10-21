@@ -403,8 +403,8 @@ public:
     {
     }
     virtual short Execute() override;
-    virtual void SetValue(long nNew) override ;
-    virtual long GetValue() const override ;
+    virtual void SetValue(tools::Long nNew) override ;
+    virtual tools::Long GetValue() const override ;
 };
 
 class SvxNewDictionaryDialog;
@@ -909,7 +909,7 @@ public:
 
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel) override;
 
-    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, long nMaxVertical) override;
+    virtual VclPtr<SvxAbstractSplitTableDialog> CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical) override;
 
     virtual std::shared_ptr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog(weld::Window* pParent) override ;
 

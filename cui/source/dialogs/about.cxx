@@ -72,7 +72,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
 
   OUString sbuildId = GetBuildString();
   if (IsStringValidGitHash(sbuildId)) {
-    const long nMaxChar = 25;
+    const tools::Long nMaxChar = 25;
     m_pBuildLabel->set_uri("https://gerrit.libreoffice.org/gitweb?p=core.git;a=log;h="
                            + sbuildId);
     m_pBuildLabel->set_label(sbuildId.getLength() > nMaxChar ? sbuildId.replaceAt(
@@ -90,7 +90,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pCopyrightLabel->set_label(GetCopyrightString());
 
   // Images
-  const long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
+  const tools::Long nWidth(m_pCopyrightLabel->get_preferred_size().getWidth());
   BitmapEx aBackgroundBitmap;
 
   if (SfxApplication::loadBrandSvg(Application::GetSettings()

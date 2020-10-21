@@ -66,14 +66,14 @@ class SvxPageDescPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 private:
     OUString            sStandardRegister;
-    long                nFirstLeftMargin;
-    long                nFirstRightMargin;
-    long                nFirstTopMargin;
-    long                nFirstBottomMargin;
-    long                nLastLeftMargin;
-    long                nLastRightMargin;
-    long                nLastTopMargin;
-    long                nLastBottomMargin;
+    tools::Long                nFirstLeftMargin;
+    tools::Long                nFirstRightMargin;
+    tools::Long                nFirstTopMargin;
+    tools::Long                nFirstBottomMargin;
+    tools::Long                nLastLeftMargin;
+    tools::Long                nLastRightMargin;
+    tools::Long                nLastTopMargin;
+    tools::Long                nLastBottomMargin;
 
     bool                bLandscape;
     bool                bBorderModified;
@@ -151,8 +151,8 @@ private:
     /** Disables vertical page direction entries in the text flow listbox. */
     void                DisableVerticalPageDir();
 
-    bool                IsPrinterRangeOverflow(weld::MetricSpinButton& rField, long nFirstMargin,
-                                               long nLastMargin, MarginPosition nPos);
+    bool                IsPrinterRangeOverflow(weld::MetricSpinButton& rField, tools::Long nFirstMargin,
+                                               tools::Long nLastMargin, MarginPosition nPos);
     void                CheckMarginEdits( bool _bClear );
     bool                IsMarginOutOfRange() const;
 

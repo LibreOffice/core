@@ -377,7 +377,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 double fCellVal = xCell->getValue();
                 double fDays = ::rtl::math::approxFloor( fCellVal );
                 double fTime = fCellVal - fDays;
-                long nIntDays = static_cast<long>(fDays);
+                tools::Long nIntDays = static_cast<tools::Long>(fDays);
                 sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) );
                 if ( nIntTime == ::tools::Time::nanoSecPerDay )
                 {

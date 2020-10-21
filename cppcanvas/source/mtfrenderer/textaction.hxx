@@ -67,7 +67,7 @@ namespace cppcanvas::internal
                                                      const OUString&                rText,
                                                      sal_Int32                      nStartPos,
                                                      sal_Int32                      nLen,
-                                                     const long*                    pDXArray,
+                                                     const ::tools::Long*                    pDXArray,
                                                      VirtualDevice&                 rVDev,
                                                      const CanvasSharedPtr&         rCanvas,
                                                      const OutDevState&             rState,

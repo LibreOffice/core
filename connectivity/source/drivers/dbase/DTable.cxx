@@ -945,7 +945,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                 case DataType::BINARY:
                 case DataType::LONGVARCHAR:
                 {
-                    const long nBlockNo = aStr.toInt32();   // read blocknumber
+                    const tools::Long nBlockNo = aStr.toInt32();   // read blocknumber
                     if (nBlockNo > 0 && m_pMemoStream) // Read data from memo-file, only if
                     {
                         if ( !ReadMemo(nBlockNo, (*_rRow)[i]->get()) )
@@ -1512,7 +1512,7 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
         return false;
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nPos = m_aHeader.headerLength + static_cast<tools::Long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
     m_pFileStream->ReadBytes(m_pBuffer.get(), m_aHeader.recordLength);
 
@@ -1539,7 +1539,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
-    std::size_t nFilePos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nFilePos = m_aHeader.headerLength + static_cast<tools::Long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nFilePos);
 
     OValueRefRow aRow = new OValueRefVector(_rCols.size());
@@ -2718,7 +2718,7 @@ bool ODbaseTable::WriteBuffer()
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: invalid record position");
 
     // position on desired record:
-    std::size_t nPos = m_aHeader.headerLength + static_cast<long>(m_nFilePos-1) * m_aHeader.recordLength;
+    std::size_t nPos = m_aHeader.headerLength + static_cast<tools::Long>(m_nFilePos-1) * m_aHeader.recordLength;
     m_pFileStream->Seek(nPos);
     return m_pFileStream->WriteBytes(m_pBuffer.get(), m_aHeader.recordLength) > 0;
 }

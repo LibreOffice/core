@@ -177,7 +177,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
     if( bEscRel )
     {
-        long    nVal = 0;
+        tools::Long    nVal = 0;
 
         switch (m_xLB_POSITION->get_active())
         {
@@ -246,7 +246,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
     nEscAbs = m_xMF_BY->get_value(FieldUnit::NONE);
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
-    nEscRel = static_cast<long>(static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue());
+    nEscRel = static_cast<tools::Long>(static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue());
 
     //------- line length ----------
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );

@@ -322,8 +322,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
     OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_PATTERN ) );
     OUString aName;
 
-    long nCount = m_pPatternList->Count();
-    long j = 1;
+    tools::Long nCount = m_pPatternList->Count();
+    tools::Long j = 1;
     bool bValidPatternName = false;
 
     while( !bValidPatternName )
@@ -536,11 +536,11 @@ void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
 
 sal_Int32 SvxPatternTabPage::SearchPatternList(const OUString& rPatternName)
 {
-    long nCount = m_pPatternList->Count();
+    tools::Long nCount = m_pPatternList->Count();
     bool bValidPatternName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidPatternName;i++)
+    for(tools::Long i = 0;i < nCount && bValidPatternName;i++)
     {
         if(rPatternName == m_pPatternList->GetBitmap( i )->GetName())
         {

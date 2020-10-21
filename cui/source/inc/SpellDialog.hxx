@@ -110,7 +110,7 @@ public:
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();
 
-    void            MoveErrorEnd(long nOffset);
+    void            MoveErrorEnd(tools::Long nOffset);
 
     void            ResetIgnoreErrorsAt()   { m_aIgnoreErrorsAt.clear(); }
 };
