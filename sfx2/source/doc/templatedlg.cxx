@@ -168,7 +168,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     , mxActionBar(m_xBuilder->weld_menu_button("action_menu"))
     , mxSearchView(new TemplateSearchView(m_xBuilder->weld_scrolled_window("scrollsearch", true),
                                           m_xBuilder->weld_menu("contextmenu1")))
-    , mxLocalView(new SfxTemplateLocalView(m_xBuilder->weld_scrolled_window("scrolllocal", true),
+    , mxLocalView(new TemplateLocalView(m_xBuilder->weld_scrolled_window("scrolllocal", true),
                                            m_xBuilder->weld_menu("contextmenu2")))
     , mxTemplateDefaultMenu(m_xBuilder->weld_menu("submenu"))
     , mxSearchViewWeld(new weld::CustomWeld(*m_xBuilder, "search_view", *mxSearchView))

@@ -214,7 +214,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->setHelpText(rSubtitle);
     pItem->setPath(rPath);
 
-    if (SfxTemplateLocalView::IsDefaultTemplate(rPath))
+    if (TemplateLocalView::IsDefaultTemplate(rPath))
         pItem->showDefaultIcon(true);
 
     ThumbnailView::AppendItem(std::move(pItem));
