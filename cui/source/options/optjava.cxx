@@ -564,7 +564,12 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 #if HAVE_FEATURE_JAVA
     bool bEnabled = false;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
-    if ( eErr != JFW_E_NONE )
+    if (eErr == JFW_E_DIRECT_MODE)
+    {
+        // direct mode disregards Java settings made here, so gray them out
+        m_xJavaFrame->set_sensitive(false);
+    }
+    else if ( eErr != JFW_E_NONE )
         bEnabled = false;
     m_xJavaEnableCB->set_active(bEnabled);
     EnableHdl_Impl(*m_xJavaEnableCB);
