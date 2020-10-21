@@ -1845,7 +1845,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             m_pParserState->m_aButtonMenuMaps.emplace_back(id, sMenu);
 
         OUString sType = extractWidgetName(rMap);
-        fprintf(stderr, "special name is %s\n", sType.toUtf8().getStr());
         if (sType.isEmpty())
         {
             xButton = extractStockAndBuildMenuButton(pParent, rMap);
