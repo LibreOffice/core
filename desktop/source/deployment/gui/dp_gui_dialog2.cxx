@@ -100,7 +100,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     ExtMgrDialog*   m_pParent;
 
     void            SetButtonStatus( const TEntry_Impl& rEntry );
-    OString         ShowPopupMenu( const Point &rPos, const long nPos );
+    OString         ShowPopupMenu( const Point &rPos, const tools::Long nPos );
 
 public:
     explicit ExtBoxWithBtns_Impl(std::unique_ptr<weld::ScrolledWindow> xScroll);
@@ -111,7 +111,7 @@ public:
     virtual bool    Command( const CommandEvent& rCEvt ) override;
 
     virtual void    RecalcAll() override;
-    virtual void    selectEntry( const long nPos ) override;
+    virtual void    selectEntry( const tools::Long nPos ) override;
 
     void            enableButtons( bool bEnable );
 };
@@ -150,7 +150,7 @@ void ExtBoxWithBtns_Impl::RecalcAll()
 
 
 //This function may be called with nPos < 0
-void ExtBoxWithBtns_Impl::selectEntry( const long nPos )
+void ExtBoxWithBtns_Impl::selectEntry( const tools::Long nPos )
 {
     if ( HasActive() && ( nPos == getSelIndex() ) )
         return;
@@ -233,9 +233,9 @@ bool ExtBoxWithBtns_Impl::Command(const CommandEvent& rCEvt)
     return true;
 }
 
-OString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long nPos )
+OString ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const tools::Long nPos )
 {
-    if ( nPos >= static_cast<long>(getItemCount()) )
+    if ( nPos >= static_cast<tools::Long>(getItemCount()) )
         return "CMD_NONE";
 
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "desktop/ui/extensionmenu.ui"));
@@ -827,7 +827,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
 }
 
 
-void ExtMgrDialog::updateProgress( const long nProgress )
+void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 {
     if ( m_nProgress != nProgress )
     {
@@ -1115,7 +1115,7 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
 }
 
 
-void UpdateRequiredDialog::updateProgress( const long nProgress )
+void UpdateRequiredDialog::updateProgress( const tools::Long nProgress )
 {
     if ( m_nProgress != nProgress )
     {
@@ -1292,8 +1292,8 @@ bool UpdateRequiredDialog::hasActiveEntries()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     bool bRet = false;
-    long nCount = m_xExtensionBox->GetEntryCount();
-    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+    tools::Long nCount = m_xExtensionBox->GetEntryCount();
+    for ( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nIndex );
 
@@ -1314,8 +1314,8 @@ void UpdateRequiredDialog::disableAllEntries()
 
     incBusy();
 
-    long nCount = m_xExtensionBox->GetEntryCount();
-    for ( long nIndex = 0; nIndex < nCount; nIndex++ )
+    tools::Long nCount = m_xExtensionBox->GetEntryCount();
+    for ( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
     {
         TEntry_Impl pEntry = m_xExtensionBox->GetEntryData( nIndex );
         m_pManager->getCmdQueue()->enableExtension( pEntry->m_xPackage, false );

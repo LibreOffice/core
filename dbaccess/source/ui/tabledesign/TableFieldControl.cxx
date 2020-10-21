@@ -49,7 +49,7 @@ OTableFieldControl::~OTableFieldControl()
     dispose();
 }
 
-void OTableFieldControl::CellModified(long nRow, sal_uInt16 nColId )
+void OTableFieldControl::CellModified(tools::Long nRow, sal_uInt16 nColId )
 {
     GetCtrl()->CellModified(nRow,nColId);
 }

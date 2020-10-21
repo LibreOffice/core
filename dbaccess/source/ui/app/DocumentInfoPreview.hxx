@@ -46,9 +46,9 @@ public:
 private:
     void insertEntry(OUString const & title, OUString const & value);
 
-    void insertNonempty(long id, OUString const & value);
+    void insertNonempty(tools::Long id, OUString const & value);
 
-    void insertDateTime(long id, css::util::DateTime const & value);
+    void insertDateTime(tools::Long id, css::util::DateTime const & value);
 };
 
 }

@@ -123,8 +123,8 @@ void OScrollWindowHelper::Resize()
     Window::Resize();
 
     Size aTotalOutputSize = GetOutputSizePixel();
-    long nHScrollHeight = GetHScrollBar().GetSizePixel().Height();
-    long nVScrollWidth = GetVScrollBar().GetSizePixel().Width();
+    tools::Long nHScrollHeight = GetHScrollBar().GetSizePixel().Height();
+    tools::Long nVScrollWidth = GetVScrollBar().GetSizePixel().Width();
 
     GetHScrollBar().SetPosSizePixel(
         Point( 0, aTotalOutputSize.Height()-nHScrollHeight ),
@@ -148,7 +148,7 @@ void OScrollWindowHelper::Resize()
     GetVScrollBar().SetVisibleSize( aTotalOutputSize.Height() );
 
     // adjust the ranges of the scrollbars if necessary
-    long lRange = GetHScrollBar().GetRange().Max() - GetHScrollBar().GetRange().Min();
+    tools::Long lRange = GetHScrollBar().GetRange().Max() - GetHScrollBar().GetRange().Min();
     if (m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() > lRange)
         GetHScrollBar().SetRangeMax(m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() + GetHScrollBar().GetRange().Min());
 
@@ -403,13 +403,13 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
 namespace
 {
-    bool isScrollAllowed( OJoinTableView* _pView,long nDelta, bool bHoriz)
+    bool isScrollAllowed( OJoinTableView* _pView,tools::Long nDelta, bool bHoriz)
     {
         // adjust ScrollBar-Positions
         ScrollBar& rBar = bHoriz ? _pView->GetHScrollBar() : _pView->GetVScrollBar() ;
 
-        long nOldThumbPos = rBar.GetThumbPos();
-        long nNewThumbPos = nOldThumbPos + nDelta;
+        tools::Long nOldThumbPos = rBar.GetThumbPos();
+        tools::Long nNewThumbPos = nOldThumbPos + nDelta;
         if( nNewThumbPos < 0 )
             nNewThumbPos = 0;
         else if( nNewThumbPos > rBar.GetRangeMax() )
@@ -425,7 +425,7 @@ namespace
 
         return true;
     }
-    bool getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,long& _nScrollX,long& _nScrollY)
+    bool getMovementImpl(OJoinTableView* _pView,const Point& _rPoint,const Size& _rSize,tools::Long& _nScrollX,tools::Long& _nScrollY)
     {
         _nScrollY = _nScrollX = 0;
         // data about the tab win
@@ -487,7 +487,7 @@ namespace
 
 bool OJoinTableView::isMovementAllowed(const Point& _rPoint,const Size& _rSize)
 {
-    long nX,nY;
+    tools::Long nX,nY;
     return getMovementImpl(this,_rPoint,_rSize,nX,nY);
 }
 
@@ -501,7 +501,7 @@ void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 
 void OJoinTableView::EnsureVisible(const Point& _rPoint,const Size& _rSize)
 {
-    long nScrollX,nScrollY;
+    tools::Long nScrollX,nScrollY;
 
     if ( getMovementImpl(this,_rPoint,_rSize,nScrollX,nScrollY) )
     {
@@ -639,7 +639,7 @@ void OJoinTableView::BeginChildSizing( OTableWindow* pTabWin, PointerStyle nPoin
     StartTracking();
 }
 
-bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars )
+bool OJoinTableView::ScrollPane( tools::Long nDelta, bool bHoriz, bool bPaintScrollBars )
 {
     bool bRet = true;
 
@@ -648,8 +648,8 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
     {
         if( bHoriz )
         {
-            long nOldThumbPos = GetHScrollBar().GetThumbPos();
-            long nNewThumbPos = nOldThumbPos + nDelta;
+            tools::Long nOldThumbPos = GetHScrollBar().GetThumbPos();
+            tools::Long nNewThumbPos = nOldThumbPos + nDelta;
             if( nNewThumbPos < 0 )
             {
                 nNewThumbPos = 0;
@@ -665,8 +665,8 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
         }
         else
         {
-            long nOldThumbPos = GetVScrollBar().GetThumbPos();
-            long nNewThumbPos = nOldThumbPos+nDelta;
+            tools::Long nOldThumbPos = GetVScrollBar().GetThumbPos();
+            tools::Long nNewThumbPos = nOldThumbPos+nDelta;
             if( nNewThumbPos < 0 )
             {
                 nNewThumbPos = 0;

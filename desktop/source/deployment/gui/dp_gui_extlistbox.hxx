@@ -113,10 +113,10 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
     bool m_bInDelete : 1;
     //Must be guarded together with m_vEntries to ensure a valid index at all times.
     //Use m_entriesMutex as guard.
-    long m_nActive;
-    long m_nTopIndex;
-    long m_nStdHeight;
-    long m_nActiveHeight;
+    tools::Long m_nActive;
+    tools::Long m_nTopIndex;
+    tools::Long m_nStdHeight;
+    tools::Long m_nActiveHeight;
     Image m_aSharedImage;
     Image m_aLockedImage;
     Image m_aWarningImage;
@@ -149,12 +149,12 @@ class ExtensionBox_Impl : public weld::CustomWidgetController
     void cleanVecListenerAdded();
     void addEventListenerOnce(css::uno::Reference<css::deployment::XPackage> const & extension);
 
-    void CalcActiveHeight( const long nPos );
-    long GetTotalHeight() const;
+    void CalcActiveHeight( const tools::Long nPos );
+    tools::Long GetTotalHeight() const;
     void SetupScrollBar();
     void DrawRow(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect, const TEntry_Impl& rEntry);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
-    bool FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
+    bool FindEntryPos( const TEntry_Impl& rEntry, tools::Long nStart, tools::Long nEnd, tools::Long &nFound );
     void DeleteRemoved();
 
     DECL_LINK( ScrollHdl, weld::ScrolledWindow&, void );
@@ -173,16 +173,16 @@ public:
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    TEntry_Impl const & GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
-    long            GetEntryCount() const { return static_cast<long>(m_vEntries.size()); }
-    tools::Rectangle       GetEntryRect( const long nPos ) const;
+    TEntry_Impl const & GetEntryData( tools::Long nPos ) { return m_vEntries[ nPos ]; }
+    tools::Long            GetEntryCount() const { return static_cast<tools::Long>(m_vEntries.size()); }
+    tools::Rectangle       GetEntryRect( const tools::Long nPos ) const;
     bool            HasActive() const { return m_bHasActive; }
-    long            PointToPos( const Point& rPos );
+    tools::Long            PointToPos( const Point& rPos );
     virtual void    RecalcAll();
     void            RemoveUnlocked();
 
 
-    virtual void selectEntry( const long nPos );
+    virtual void selectEntry( const tools::Long nPos );
     void addEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage,
                               bool bLicenseMissing = false );
     void updateEntry(const css::uno::Reference<css::deployment::XPackage> &xPackage );

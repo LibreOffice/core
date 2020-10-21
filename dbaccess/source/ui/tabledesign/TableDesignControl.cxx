@@ -105,13 +105,13 @@ void OTableRowView::Command(const CommandEvent& rEvt)
             }
 
             sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X()));
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            tools::Long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if ( nColId == HANDLE_ID )
             {
                 VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "dbaccess/ui/querycolmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
-                long nSelectRowCount = GetSelectRowCount();
+                tools::Long nSelectRowCount = GetSelectRowCount();
                 aContextMenu->EnableItem(aContextMenu->GetItemId("cut"), nSelectRowCount != 0);
                 aContextMenu->EnableItem(aContextMenu->GetItemId("copy"), nSelectRowCount  != 0);
                 aContextMenu->EnableItem(aContextMenu->GetItemId("paste"), false);
@@ -166,12 +166,12 @@ void OTableRowView::paste()
     OSL_FAIL("OTableRowView::Paste : (pseudo-) abstract method called !");
 }
 
-void OTableRowView::Paste( long nRow )
+void OTableRowView::Paste( tools::Long nRow )
 {
     InsertRows( nRow );
 }
 
-EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
+EditBrowseBox::RowStatus OTableRowView::GetRowStatus(tools::Long nRow) const
 {
     if (nRow >= 0 && m_nDataPos == nRow)
         return CURRENT;
