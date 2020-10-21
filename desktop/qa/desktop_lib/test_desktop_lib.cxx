@@ -703,11 +703,11 @@ void DesktopLOKTest::testRowColumnHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
-    long nWidth = 0;
-    long nHeight = 0;
+    tools::Long nWidth = 0;
+    tools::Long nHeight = 0;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
-    long nX = rtl::math::round(nWidth / 4.0);
-    long nY = rtl::math::round(nHeight / 4.0);
+    tools::Long nX = rtl::math::round(nWidth / 4.0);
+    tools::Long nY = rtl::math::round(nHeight / 4.0);
     nWidth = rtl::math::round(nWidth / 2.0);
     nHeight = rtl::math::round(nHeight / 2.0);
 
@@ -786,10 +786,10 @@ void DesktopLOKTest::testHiddenRowHeaders()
 
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
 
-    long const nX = 0;
-    long const nY = 0;
-    long nWidth = 0;
-    long nHeight = 0;
+    tools::Long const nX = 0;
+    tools::Long const nY = 0;
+    tools::Long nWidth = 0;
+    tools::Long nHeight = 0;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
 
     std::stringstream aPayload;
@@ -2032,7 +2032,7 @@ void DesktopLOKTest::testCommentsWriter()
 
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
-    long nWidth, nHeight;
+    tools::Long nWidth, nHeight;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
 
     // Document width alongwith without sidebar comes to be < 13000

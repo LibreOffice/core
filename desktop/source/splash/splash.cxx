@@ -34,7 +34,7 @@
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 
-#define NOT_LOADED  (long(-1))
+#define NOT_LOADED  (tools::Long(-1))
 #define NOT_LOADED_COLOR  (Color(0xffffffff))
 
 using namespace ::com::sun::star::lang;
@@ -90,11 +90,11 @@ private:
     bool        _bShowLogo;
     bool        _bFullScreenSplash;
     bool        _bProgressEnd;
-    long        _height, _width, _tlx, _tly, _barwidth;
-    long        _barheight, _barspace, _textBaseline;
+    tools::Long        _height, _width, _tlx, _tly, _barwidth;
+    tools::Long        _barheight, _barspace, _textBaseline;
     double      _fXPos, _fYPos;
     double      _fWidth, _fHeight;
-    static constexpr long  _xoffset = 12, _yoffset = 18;
+    static constexpr tools::Long  _xoffset = 12, _yoffset = 18;
 
 public:
     SplashScreen();
@@ -579,7 +579,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
                                                   ControlState::ENABLED, aValue,
                                                   aNativeControlRegion, aNativeContentRegion))
         {
-              long nProgressHeight = aNativeControlRegion.GetHeight();
+              tools::Long nProgressHeight = aNativeControlRegion.GetHeight();
               aDrawRect.AdjustTop( -((nProgressHeight - pSpl->_barheight)/2) );
               aDrawRect.AdjustBottom((nProgressHeight - pSpl->_barheight)/2 );
         }
@@ -597,7 +597,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     if (pSpl->_bPaintProgress) {
         // draw progress...
-        long length = (pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax) - (2 * pSpl->_barspace);
+        tools::Long length = (pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax) - (2 * pSpl->_barspace);
         if (length < 0) length = 0;
 
         // border

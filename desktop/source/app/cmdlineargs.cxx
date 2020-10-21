@@ -125,7 +125,7 @@ CommandLineEvent CheckOfficeURI(/* in,out */ OUString& arg, CommandLineEvent cur
         return curEvt;
 
     OUString rest2;
-    long nURIlen = -1;
+    tools::Long nURIlen = -1;
 
     // URL might be encoded
     OUString decoded_rest = rest1.replaceAll("%7C", "|").replaceAll("%7c", "|");

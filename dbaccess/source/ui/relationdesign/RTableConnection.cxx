@@ -56,8 +56,8 @@ void ORelationTableConnection::Draw(vcl::RenderContext& rRenderContext, const to
 
     // search lines for top line
     tools::Rectangle aBoundingRect;
-    long nTop = GetBoundingRect().Bottom();
-    long nTemp;
+    tools::Long nTop = GetBoundingRect().Bottom();
+    tools::Long nTemp;
 
     const OConnectionLine* pTopLine = nullptr;
     const std::vector<std::unique_ptr<OConnectionLine>>& rConnLineList = GetConnLineList();

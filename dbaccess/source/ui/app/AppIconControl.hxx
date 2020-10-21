@@ -38,8 +38,8 @@ namespace dbaui
         std::unique_ptr<OApplicationIconControlDropTarget> m_xDropTarget;
         IControlActionListener* m_pActionListener;
 
-        long m_nMaxWidth;
-        long m_nMaxHeight;
+        tools::Long m_nMaxWidth;
+        tools::Long m_nMaxHeight;
 
         bool IsMnemonicChar(sal_Unicode cChar, ElementType& rType) const;
 

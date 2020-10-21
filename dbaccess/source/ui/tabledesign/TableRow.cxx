@@ -44,7 +44,7 @@ OTableRow::OTableRow(const Reference< XPropertySet >& xAffectedCol)
     m_pActFieldDescr = new OFieldDescription(xAffectedCol);
 }
 
-OTableRow::OTableRow( const OTableRow& rRow, long nPosition )
+OTableRow::OTableRow( const OTableRow& rRow, tools::Long nPosition )
     :m_pActFieldDescr(nullptr)
     ,m_nPos( nPosition )
     ,m_bReadOnly(rRow.IsReadOnly())

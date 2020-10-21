@@ -65,7 +65,7 @@ void OTableDesignUndoAct::Redo()
     }
 }
 
-OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, long nRowID, sal_uInt16 nColumn ) :
+OTableDesignCellUndoAct::OTableDesignCellUndoAct( OTableRowView* pOwner, tools::Long nRowID, sal_uInt16 nColumn ) :
      OTableDesignUndoAct( pOwner ,STR_TABED_UNDO_CELLMODIFIED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -116,7 +116,7 @@ OTableEditorUndoAct::~OTableEditorUndoAct()
 {
 }
 
-OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
+OTableEditorTypeSelUndoAct::OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, tools::Long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType )
     :OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_TYPE_CHANGED)
     ,m_nCol( nColumn )
     ,m_nRow( nRowID )
@@ -212,7 +212,7 @@ void OTableEditorDelUndoAct::Redo()
 }
 
 OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
-                                               long nInsertPosition ,
+                                               tools::Long nInsertPosition ,
                                                const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
     ,m_vInsertedRows(_vInsertedRows)
@@ -240,7 +240,7 @@ void OTableEditorInsUndoAct::Undo()
 void OTableEditorInsUndoAct::Redo()
 {
     // insert lines again
-    long nInsertRow = m_nInsPos;
+    tools::Long nInsertRow = m_nInsPos;
     std::shared_ptr<OTableRow>  pRow;
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     for (auto const& insertedRow : m_vInsertedRows)
@@ -256,7 +256,7 @@ void OTableEditorInsUndoAct::Redo()
     OTableEditorUndoAct::Redo();
 }
 
-OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition, long nInsertedRows ) :
+OTableEditorInsNewUndoAct::OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, tools::Long nInsertPosition, tools::Long nInsertedRows ) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_NEWROWINSERTED)
     ,m_nInsPos( nInsertPosition )
     ,m_nInsRows( nInsertedRows )
@@ -285,7 +285,7 @@ void OTableEditorInsNewUndoAct::Redo()
     // insert lines again
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
 
-    for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
+    for( tools::Long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
         pRowList->insert( pRowList->begin()+i,std::make_shared<OTableRow>() );
 
     pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows );
@@ -310,20 +310,20 @@ void OPrimKeyUndoAct::Undo()
 {
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     std::shared_ptr<OTableRow>  pRow;
-    long nIndex;
+    tools::Long nIndex;
 
     // delete inserted keys
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != tools::Long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
     {
-        OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
+        OSL_ENSURE(nIndex <= static_cast<tools::Long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( false );
     }
 
     // restore deleted keys
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != tools::Long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
     {
-        OSL_ENSURE(nIndex <= static_cast<long>(pRowList->size()),"Index for undo isn't valid!");
+        OSL_ENSURE(nIndex <= static_cast<tools::Long>(pRowList->size()),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( true );
     }
@@ -335,14 +335,14 @@ void OPrimKeyUndoAct::Undo()
 void OPrimKeyUndoAct::Redo()
 {
     std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
-    long nIndex;
+    tools::Long nIndex;
 
     // delete the deleted keys
-    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
+    for( nIndex = m_aDelKeys.FirstSelected(); nIndex != tools::Long(SFX_ENDOFSELECTION); nIndex=m_aDelKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( false );
 
     // restore the inserted keys
-    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
+    for( nIndex = m_aInsKeys.FirstSelected(); nIndex != tools::Long(SFX_ENDOFSELECTION); nIndex=m_aInsKeys.NextSelected() )
         (*pRowList)[nIndex]->SetPrimaryKey( true );
 
     m_pEditorCtrl->InvalidateHandleColumn();

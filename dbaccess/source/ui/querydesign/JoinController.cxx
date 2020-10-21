@@ -157,7 +157,7 @@ void OJoinController::impl_onModifyChanged()
     InvalidateFeature( SID_RELATION_ADD_RELATION );
 }
 
-void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, long nOffsetX, long nOffsetY)
+void OJoinController::SaveTabWinPosSize(OTableWindow const * pTabWin, tools::Long nOffsetX, tools::Long nOffsetY)
 {
     // the data for the window
     const TTableWindowData::value_type& pData = pTabWin->GetData();
@@ -262,7 +262,7 @@ void OJoinController::runDialogAsync()
     });
 }
 
-void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
+void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, tools::Long nOffsetX, tools::Long nOffsetY )
 {
     // Deletion and recreation of the old implementation with the current model is not correct anymore:
     // The TabWins have a pointer to their data, but they are managed by me. When I delete the old ones, the TabWins suddenly have a pointer to objects, which no longer exist.
