@@ -118,8 +118,8 @@ static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
     { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
 };
 
-constexpr long gnTextHeight = 30;
-constexpr long gnItemPadding = 5;
+constexpr tools::Long gnTextHeight = 30;
+constexpr tools::Long gnItemPadding = 5;
 
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
@@ -355,7 +355,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     {
         if (maWelcomeImage.IsEmpty())
         {
-            const long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
+            const tools::Long aWidth(aRect.GetWidth() > aRect.getHeight() ? aRect.GetHeight()/2 : aRect.GetWidth()/2);
             maWelcomeImage = SfxApplication::GetApplicationLogo(aWidth);
         }
 
@@ -364,7 +364,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
         SetMessageFont(rRenderContext);
         SetTextColor(maTextColor);
 
-        long nTextHeight = rRenderContext.GetTextHeight();
+        tools::Long nTextHeight = rRenderContext.GetTextHeight();
 
         const Size& rImgSize = maWelcomeImage.GetSizePixel();
         const Size& rSize = GetSizePixel();

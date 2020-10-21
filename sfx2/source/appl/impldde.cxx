@@ -296,7 +296,7 @@ IMPL_LINK( SvDDEObject, ImplGetDDEData, const DdeData*, pData, void )
     default:
         {
             const char* p = static_cast<char const *>(pData->getData());
-            long nLen = SotClipboardFormatId::STRING == nFmt ? (p ? strlen( p ) : 0) : pData->getSize();
+            tools::Long nLen = SotClipboardFormatId::STRING == nFmt ? (p ? strlen( p ) : 0) : pData->getSize();
 
             Sequence< sal_Int8 > aSeq( reinterpret_cast<const sal_Int8*>(p), nLen );
             if( pGetData )

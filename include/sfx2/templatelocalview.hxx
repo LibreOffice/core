@@ -105,13 +105,13 @@ public:
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void updateThumbnailDimensions(long itemMaxSize);
+    void updateThumbnailDimensions(tools::Long itemMaxSize);
 
-    static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
+    static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
-    static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
+    static BitmapEx fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
 
     static bool IsDefaultTemplate(const OUString& rPath);
 
@@ -123,8 +123,8 @@ protected:
 
     TemplateViewItem *maSelectedItem;
 
-    long mnThumbnailWidth;
-    long mnThumbnailHeight;
+    tools::Long mnThumbnailWidth;
+    tools::Long mnThumbnailHeight;
 
     Point maPosition; //store the point of click event
 
@@ -222,11 +222,11 @@ public:
 
     void RemoveDefaultTemplateIcon( const OUString& rPath);
 
-    static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
+    static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
-    static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
+    static BitmapEx fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
 
     static bool IsDefaultTemplate(const OUString& rPath);
 

@@ -235,7 +235,7 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     size_t      nItemCount = mFilteredItemList.size();
     WinBits     nStyle = GetStyle();
     VclPtr<ScrollBar>  pDelScrBar;
-    long        nScrBarWidth = 0;
+    tools::Long        nScrBarWidth = 0;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
@@ -277,14 +277,14 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
     mnVisLines = static_cast<sal_uInt16>(aWinSize.Height() / mnItemHeight);
 
     // calculate empty space
-    long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
-    long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
-    long nHItemSpace = nHSpace / (mnCols+1);
-    long nVItemSpace = nVSpace / (mnVisLines+1);
+    tools::Long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
+    tools::Long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
+    tools::Long nHItemSpace = nHSpace / (mnCols+1);
+    tools::Long nVItemSpace = nVSpace / (mnVisLines+1);
 
     // calculate maximum number of rows
     // Floor( (M+N-1)/N )==Ceiling( M/N )
-    mnLines = (static_cast<long>(nItemCount)+mnCols-1) / mnCols;
+    mnLines = (static_cast<tools::Long>(nItemCount)+mnCols-1) / mnCols;
 
     if ( !mnLines )
         mnLines = 1;
@@ -296,18 +296,18 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
 
     mbHasVisibleItems = true;
 
-    long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
+    tools::Long nFullSteps = (mnLines > mnVisLines) ? mnLines - mnVisLines + 1 : 1;
 
-    long nItemHeightOffset = mnItemHeight + nVItemSpace;
-    long nHiddenLines = static_cast<long>((nFullSteps - 1) * nScrollRatio);
+    tools::Long nItemHeightOffset = mnItemHeight + nVItemSpace;
+    tools::Long nHiddenLines = static_cast<tools::Long>((nFullSteps - 1) * nScrollRatio);
 
     // calculate offsets
-    long nStartX = nHItemSpace;
-    long nStartY = nVItemSpace;
+    tools::Long nStartX = nHItemSpace;
+    tools::Long nStartY = nVItemSpace;
 
     // calculate and draw items
-    long x = nStartX;
-    long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
+    tools::Long x = nStartX;
+    tools::Long y = nStartY - ((nFullSteps - 1) * nScrollRatio - nHiddenLines) * nItemHeightOffset;
 
     // draw items
     // Unless we are scrolling (via scrollbar) we just use the precalculated
@@ -388,8 +388,8 @@ void ThumbnailView::CalculateItemPositions (bool bScrollBarUsed)
         mpScrBar->SetRangeMax(mnLines * gnFineness);
         mpScrBar->SetVisibleSize(mnVisLines * gnFineness);
         if (!bScrollBarUsed)
-            mpScrBar->SetThumbPos( static_cast<long>(mnFirstLine)*gnFineness );
-        long nPageSize = mnVisLines;
+            mpScrBar->SetThumbPos( static_cast<tools::Long>(mnFirstLine)*gnFineness );
+        tools::Long nPageSize = mnVisLines;
         if ( nPageSize < 1 )
             nPageSize = 1;
         mpScrBar->SetPageSize( nPageSize );
@@ -481,7 +481,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     // Get the last selected item in the list
     size_t nLastPos = 0;
     bool bFoundLast = false;
-    for ( long i = mFilteredItemList.size() - 1; !bFoundLast && i >= 0; --i )
+    for ( tools::Long i = mFilteredItemList.size() - 1; !bFoundLast && i >= 0; --i )
     {
         ThumbnailViewItem* pItem = mFilteredItemList[i];
         if ( pItem->isSelected() )
@@ -968,7 +968,7 @@ void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
     mpItemAttrs->nMaxTextLength = nLength;
 }
 
-void ThumbnailView::setItemDimensions(long itemWidth, long thumbnailHeight, long displayHeight, int itemPadding)
+void ThumbnailView::setItemDimensions(tools::Long itemWidth, tools::Long thumbnailHeight, tools::Long displayHeight, int itemPadding)
 {
     mnItemWidth = itemWidth + 2*itemPadding;
     mnThumbnailHeight = thumbnailHeight;
@@ -1418,7 +1418,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         nScrollRatio = 0;
 
     // calculate ScrollBar width
-    long nScrBarWidth = mbAllowVScrollBar ? mxScrolledWindow->get_vscroll_width() : 0;
+    tools::Long nScrBarWidth = mbAllowVScrollBar ? mxScrolledWindow->get_vscroll_width() : 0;
 
     // calculate maximum number of visible columns
     mnCols = static_cast<sal_uInt16>((aWinSize.Width()-nScrBarWidth) / mnItemWidth);
@@ -1430,16 +1430,16 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     mnVisLines = static_cast<sal_uInt16>(aWinSize.Height() / mnItemHeight);
 
     // calculate empty space
-    long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
-    long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
-    long nHItemSpace = nHSpace / (mnCols+1);
-    long nVItemSpace = mnVItemSpace;
+    tools::Long nHSpace = aWinSize.Width()-nScrBarWidth - mnCols*mnItemWidth;
+    tools::Long nVSpace = aWinSize.Height() - mnVisLines*mnItemHeight;
+    tools::Long nHItemSpace = nHSpace / (mnCols+1);
+    tools::Long nVItemSpace = mnVItemSpace;
     if (nVItemSpace == -1) // auto, split up extra space to use as vertical spacing
         nVItemSpace = nVSpace / (mnVisLines+1);
 
     // calculate maximum number of rows
     // Floor( (M+N-1)/N )==Ceiling( M/N )
-    mnLines = (static_cast<long>(nItemCount)+mnCols-1) / mnCols;
+    mnLines = (static_cast<tools::Long>(nItemCount)+mnCols-1) / mnCols;
 
     if ( !mnLines )
         mnLines = 1;
@@ -1627,7 +1627,7 @@ bool SfxThumbnailView::KeyInput( const KeyEvent& rKEvt )
     // Get the last selected item in the list
     size_t nLastPos = 0;
     bool bFoundLast = false;
-    for ( long i = mFilteredItemList.size() - 1; !bFoundLast && i >= 0; --i )
+    for ( tools::Long i = mFilteredItemList.size() - 1; !bFoundLast && i >= 0; --i )
     {
         ThumbnailViewItem* pItem = mFilteredItemList[i];
         if ( pItem->isSelected() )
@@ -2141,7 +2141,7 @@ void SfxThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
     mpItemAttrs->nMaxTextLength = nLength;
 }
 
-void SfxThumbnailView::setItemDimensions(long itemWidth, long thumbnailHeight, long displayHeight, int itemPadding)
+void SfxThumbnailView::setItemDimensions(tools::Long itemWidth, tools::Long thumbnailHeight, tools::Long displayHeight, int itemPadding)
 {
     mnItemWidth = itemWidth + 2*itemPadding;
     mnThumbnailHeight = thumbnailHeight;

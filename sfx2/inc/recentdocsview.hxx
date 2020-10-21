@@ -85,7 +85,7 @@ private:
 
     bool isAcceptedFile(const OUString &rURL) const;
 
-    long mnItemMaxSize;
+    tools::Long mnItemMaxSize;
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.

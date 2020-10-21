@@ -31,7 +31,7 @@ using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, long nThumbnailSize)
+    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, tools::Long nThumbnailSize)
     : ThumbnailViewItem(rView, nId),
       mrParentView(rView),
       maURL(rURL),
@@ -63,8 +63,8 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
-        long nPaperHeight;
-        long nPaperWidth;
+        tools::Long nPaperHeight;
+        tools::Long nPaperWidth;
         if (sfx2::RecentDocsView::typeMatchesExtension(
                 sfx2::ApplicationType::TYPE_IMPRESS, aURLObj.getExtension()))
         {

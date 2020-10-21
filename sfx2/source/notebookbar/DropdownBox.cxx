@@ -112,8 +112,8 @@ IMPL_LINK(DropdownBox, PBClickHdl, Button*, /*pButton*/, void)
 
     m_pPopup->getBox()->set_height_request(GetSizePixel().Height());
 
-    long x = GetPosPixel().getX();
-    long y = GetPosPixel().getY() + NOTEBOOK_HEADER_HEIGHT + GetSizePixel().Height();
+    tools::Long x = GetPosPixel().getX();
+    tools::Long y = GetPosPixel().getY() + NOTEBOOK_HEADER_HEIGHT + GetSizePixel().Height();
     tools::Rectangle aRect(x, y, x, y);
 
     m_pPopup->StartPopupMode(aRect, FloatWinPopupFlags::Down

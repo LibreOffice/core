@@ -117,7 +117,7 @@ public:
 
     /// A special value to signify 'infinity'.
     /// This value is chosen such that sal_Int32 will not overflow when manipulated.
-    static const long MaxTwips = 1e9;
+    static const tools::Long MaxTwips = 1e9;
 };
 
 template<typename ViewShellType, typename FunctionType>
