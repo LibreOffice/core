@@ -88,6 +88,24 @@
       "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "861cd89f_7d4721ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2020-10-21T08:25:27Z",
+      "side": 1,
+      "message": "\u003e Yeah, now I get it.  So this change indeed makes sense.  Maybe it would be worth it to add a comment in jfw_findAllJREs explaining why the settings.getJRELocations part is omitted in direct mode.\n\nI\u0027ve added a respective comment in patch set 2.",
+      "parentUuid": "161e9633_7f2f8ef2",
+      "revId": "a2fe9d888ec575d8e6e1e0951f77f48db51dd670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
