@@ -171,8 +171,8 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
-    virtual long calculateTimeResolutionOnXAxis() override;
-    virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) override;
+    virtual tools::Long calculateTimeResolutionOnXAxis() override;
+    virtual void setTimeResolutionOnXAxis( tools::Long nTimeResolution, const Date& rNullDate ) override;
 
     void getMinimumAndMaximumX( double& rfMinimum, double& rfMaximum ) const;
     void getMinimumAndMaximumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
@@ -412,7 +412,7 @@ protected:
     std::vector< std::vector< VDataSeriesGroup > >  m_aZSlots;
 
     bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
-    long m_nTimeResolution;
+    tools::Long m_nTimeResolution;
     Date m_aNullDate;
 
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;

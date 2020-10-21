@@ -35,7 +35,7 @@ class SvRTLInputBox : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xPromptText;
     OUString m_aText;
 
-    void PositionDialog( long nXTwips, long nYTwips );
+    void PositionDialog( tools::Long nXTwips, tools::Long nYTwips );
     void InitButtons();
     void SetPrompt(const OUString& rPrompt);
     DECL_LINK( OkHdl, weld::Button&, void );
@@ -43,7 +43,7 @@ class SvRTLInputBox : public weld::GenericDialogController
 
 public:
     SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt, const OUString& rTitle,
-        const OUString& rDefault, long nXTwips, long nYTwips );
+        const OUString& rDefault, tools::Long nXTwips, tools::Long nYTwips );
     OUString const & GetText() const { return m_aText; }
 };
 
@@ -51,7 +51,7 @@ public:
 
 SvRTLInputBox::SvRTLInputBox(weld::Window* pParent, const OUString& rPrompt,
         const OUString& rTitle, const OUString& rDefault,
-        long nXTwips, long nYTwips)
+        tools::Long nXTwips, tools::Long nYTwips)
     : GenericDialogController(pParent, "svt/ui/inputbox.ui", "InputBox")
     , m_xEdit(m_xBuilder->weld_entry("entry"))
     , m_xOk(m_xBuilder->weld_button("ok"))
@@ -72,7 +72,7 @@ void SvRTLInputBox::InitButtons()
     m_xCancel->connect_clicked(LINK(this,SvRTLInputBox,CancelHdl));
 }
 
-void SvRTLInputBox::PositionDialog(long nXTwips, long nYTwips)
+void SvRTLInputBox::PositionDialog(tools::Long nXTwips, tools::Long nYTwips)
 {
     if( nXTwips != -1 && nYTwips != -1 )
     {

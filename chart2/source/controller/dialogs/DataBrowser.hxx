@@ -55,10 +55,10 @@ class DataBrowser : public ::svt::EditBrowseBox
 protected:
     // EditBrowseBox overridables
     virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId ) const override;
-    virtual bool SeekRow( long nRow ) override;
+    virtual bool SeekRow( tools::Long nRow ) override;
     virtual bool IsTabAllowed( bool bForward ) const override;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
+    virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
     virtual bool SaveModified() override;
     virtual void CursorMoved() override;
     // called whenever the control of the current cell has been modified
@@ -82,12 +82,12 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long nRow, sal_uInt16 nColId) const override;
+    virtual OUString  GetCellText(tools::Long nRow, sal_uInt16 nColId) const override;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
     */
-    double GetCellNumber( long nRow, sal_uInt16 nColumnId ) const;
+    double GetCellNumber( tools::Long nRow, sal_uInt16 nColumnId ) const;
 
     bool isDateTimeString( const OUString& aInputString, double& fOutDateTimeValue );
 
@@ -154,7 +154,7 @@ private:
     std::shared_ptr< NumberFormatterWrapper >  m_spNumberFormatterWrapper;
 
     /// the row that is currently painted
-    long                m_nSeekRow;
+    tools::Long                m_nSeekRow;
     bool                m_bIsReadOnly;
     bool                m_bDataValid;
 

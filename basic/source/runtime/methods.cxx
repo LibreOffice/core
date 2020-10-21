@@ -124,7 +124,7 @@ static void FilterWhiteSpace( OUString& rStr )
     rStr = aRet.makeStringAndClear();
 }
 
-static long GetDayDiff( const Date& rDate );
+static tools::Long GetDayDiff( const Date& rDate );
 
 static const CharClass& GetCharClass()
 {
@@ -782,7 +782,7 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
             (void)aItem.getFileStatus( aFileStatus );
             nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
         }
-        rPar.Get32(0)->PutLong( static_cast<long>(nLen) );
+        rPar.Get32(0)->PutLong( static_cast<tools::Long>(nLen) );
     }
 }
 
@@ -2218,7 +2218,7 @@ double Now_Impl()
 {
     DateTime aDateTime( DateTime::SYSTEM );
     double aSerial = static_cast<double>(GetDayDiff( aDateTime ));
-    long nSeconds = aDateTime.GetHour();
+    tools::Long nSeconds = aDateTime.GetHour();
     nSeconds *= 3600;
     nSeconds += aDateTime.GetMin() * 60;
     nSeconds += aDateTime.GetSec();
@@ -2254,7 +2254,7 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
         else
         {
             // Time: system dependent
-            long nSeconds=aTime.GetHour();
+            tools::Long nSeconds=aTime.GetHour();
             nSeconds *= 3600;
             nSeconds += aTime.GetMin() * 60;
             nSeconds += aTime.GetSec();
@@ -2287,7 +2287,7 @@ void SbRtl_Time(StarBASIC *, SbxArray & rPar, bool bWrite)
 void SbRtl_Timer(StarBASIC *, SbxArray & rPar, bool)
 {
     tools::Time aTime( tools::Time::SYSTEM );
-    long nSeconds = aTime.GetHour();
+    tools::Long nSeconds = aTime.GetHour();
     nSeconds *= 3600;
     nSeconds += aTime.GetMin() * 60;
     nSeconds += aTime.GetSec();
@@ -3067,7 +3067,7 @@ void SbRtl_FileDateTime(StarBASIC *, SbxArray & rPar, bool)
         else
         {
             double fSerial = static_cast<double>(GetDayDiff( aDate ));
-            long nSeconds = aTime.GetHour();
+            tools::Long nSeconds = aTime.GetHour();
             nSeconds *= 3600;
             nSeconds += aTime.GetMin() * 60;
             nSeconds += aTime.GetSec();
@@ -4657,10 +4657,10 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
 
 #endif
 
-static long GetDayDiff( const Date& rDate )
+static tools::Long GetDayDiff( const Date& rDate )
 {
     Date aRefDate( 1,1,1900 );
-    long nDiffDays;
+    tools::Long nDiffDays;
     if ( aRefDate > rDate )
     {
         nDiffDays = aRefDate - rDate;
@@ -4677,7 +4677,7 @@ static long GetDayDiff( const Date& rDate )
 sal_Int16 implGetDateYear( double aDate )
 {
     Date aRefDate( 1,1,1900 );
-    long nDays = static_cast<long>(aDate);
+    tools::Long nDays = static_cast<tools::Long>(aDate);
     nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate.AddDays( nDays );
     sal_Int16 nRet = aRefDate.GetYear();
@@ -4788,7 +4788,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         }
     }
 
-    long nDiffDays = GetDayDiff( aCurDate );
+    tools::Long nDiffDays = GetDayDiff( aCurDate );
     rdRet = static_cast<double>(nDiffDays);
     return true;
 }

@@ -305,7 +305,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             break;
         case SCHATTR_AXIS_TIME_RESOLUTION:
             {
-                long nTimeResolution=0;
+                tools::Long nTimeResolution=0;
                 if( rTimeIncrement.TimeResolution >>= nTimeResolution )
                     rOutItemSet.Put( SfxInt32Item( nWhichId, nTimeResolution ) );
                 else if( m_pExplicitScale )

@@ -81,8 +81,8 @@ static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& 
     if ( pLineEndList.is() )
     {
         OUString aName(SvxResId(pResId));
-        long nCount = pLineEndList->Count();
-        for ( long nIndex = 0; nIndex < nCount; ++nIndex )
+        tools::Long nCount = pLineEndList->Count();
+        for ( tools::Long nIndex = 0; nIndex < nCount; ++nIndex )
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
             if ( pEntry->GetName() == aName )
@@ -191,10 +191,10 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
     SfxItemSet aSet( pDrawViewWrapper->GetModel()->GetItemPool() );
     pDrawViewWrapper->GetAttributes( aSet );
 
-    long nWidth = 300; // (1/100th mm)
+    tools::Long nWidth = 300; // (1/100th mm)
     if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
-        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
         if ( nValue > 0 )
         {
             nWidth = nValue * 3;
