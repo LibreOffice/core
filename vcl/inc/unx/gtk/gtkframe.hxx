@@ -530,6 +530,8 @@ public:
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
 
     void DisallowCycleFocusOut();
+    bool IsCycleFocusOutDisallowed() const;
+    void AllowCycleFocusOut();
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
