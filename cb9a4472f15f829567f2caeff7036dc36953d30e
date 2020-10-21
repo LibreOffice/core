@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "40c2267b_dbd5b159",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-21T09:45:23Z",
+      "side": 1,
+      "message": "In fact, this all needs to go into that \"if\". It isn\u0027t needed if the command is not available here.",
+      "range": {
+        "startLine": 121,
+        "startChar": 12,
+        "endLine": 123,
+        "endChar": 104
+      },
+      "revId": "cb9a4472f15f829567f2caeff7036dc36953d30e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "41b0b911_a4be88e4",
         "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
         "patchSetId": 2
