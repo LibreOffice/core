@@ -100,7 +100,7 @@ public:
     void FuPermanent(SfxRequest &rReq);
     void FuSupport(SfxRequest &rReq);
 
-    virtual void SetZoom(long nZoom) override;
+    virtual void SetZoom(::tools::Long nZoom) override;
     virtual void SetZoomRect(const ::tools::Rectangle& rZoomRect) override;
 
     void Execute(SfxRequest& rReq);

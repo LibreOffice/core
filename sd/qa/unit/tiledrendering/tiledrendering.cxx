@@ -2283,14 +2283,14 @@ void SdTiledRenderingTest::testPasteTextOnSlide()
     if (aPos.getX() < 10000)
     {
         // We get this with 'make CppunitTest_sd_tiledrendering'
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6739), aPos.getX(), 100);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(6822), aPos.getY(), 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<tools::Long>(6739), aPos.getX(), 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<tools::Long>(6822), aPos.getY(), 100);
     }
     else
     {
         // We get this with 'make check'
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(12990), aPos.getX(), 100);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<long>(7393), aPos.getY(), 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<tools::Long>(12990), aPos.getX(), 100);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(static_cast<tools::Long>(7393), aPos.getY(), 100);
     }
 }
 

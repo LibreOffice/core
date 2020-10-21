@@ -169,7 +169,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         mpWindow->CaptureMouse();
         pHdl = mpView->PickHandle(aMDPos);
 
-        long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
+        ::tools::Long nAngle0  = GetAngle(aMDPos - mpView->GetRef1());
         nAngle0 -= 27000;
         nAngle0 = NormAngle36000(nAngle0);
         bMirrorSide0 = nAngle0 < 18000;
@@ -742,7 +742,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     * If 3D-rotation bodies are about to be created,
                     * end creation now
                     **********************************************************/
-                     long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
+                     ::tools::Long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
                      nAngle1 -= 27000;
                      nAngle1 = NormAngle36000(nAngle1);
                      bool bMirrorSide1 = nAngle1 < 18000;
@@ -940,8 +940,8 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
         case KEY_RIGHT:
         {
             if(rKEvt.GetKeyCode().IsShift()&&(nEditMode == SID_BEZIER_INSERT)){
-                long nX = 0;
-                long nY = 0;
+                ::tools::Long nX = 0;
+                ::tools::Long nY = 0;
                 sal_uInt16  nCode = rKEvt.GetKeyCode().GetCode();
                 if (nCode == KEY_UP)
                 {
@@ -1217,7 +1217,7 @@ bool FuSelection::HandleImageMapClick(const SdrObject* pObj, const Point& rPos)
 
     const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
     sal_uInt16 nHitLog = sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width());
-    const long n2HitLog = nHitLog * 2;
+    const ::tools::Long n2HitLog = nHitLog * 2;
     Point aHitPosR(rPos);
     Point aHitPosL(rPos);
     Point aHitPosT(rPos);

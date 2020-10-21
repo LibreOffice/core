@@ -1764,8 +1764,8 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
         pDrawViewShell->ResetActualPage();
 
     Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
-    const long nWidth = aPageSize.Width();
-    const long nHeight = aPageSize.Height();
+    const tools::Long nWidth = aPageSize.Width();
+    const tools::Long nHeight = aPageSize.Height();
 
     Point aPageOrg(nWidth, nHeight / 2);
     Size aViewSize(nWidth * 3, nHeight * 2);
