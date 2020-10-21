@@ -30,7 +30,7 @@
 #include "stgio.hxx"
 #include "stgole.hxx"
 
-static long nTmpCount = 0;
+static tools::Long nTmpCount = 0;
 
 // The internal open mode is StreamMode::READ | StreamMode::TRUNC, which is silly
 // by itself. It inhibits the checking of sharing modes and is used

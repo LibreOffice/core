@@ -630,7 +630,7 @@ class SmPolyLineNode final : public SmGraphicNode
 {
     tools::Polygon maPoly;
     Size maToSize;
-    long mnWidth;
+    tools::Long mnWidth;
 
 public:
     explicit SmPolyLineNode(const SmToken &rNodeToken);
@@ -639,7 +639,7 @@ public:
      * Gets the width of the rect.
      * @return width
      */
-    long GetWidth() const { return mnWidth; }
+    tools::Long GetWidth() const { return mnWidth; }
 
     /**
      * Gets the polygon to draw the node.
@@ -1070,7 +1070,7 @@ public:
  */
 class SmTableNode final : public SmStructureNode
 {
-    long mnFormulaBaseline;
+    tools::Long mnFormulaBaseline;
 public:
     explicit SmTableNode(const SmToken &rNodeToken)
         : SmStructureNode(SmNodeType::Table, rNodeToken)
@@ -1090,7 +1090,7 @@ public:
      * Gets the formula baseline.
      * @return formula baseline
      */
-    long GetFormulaBaseline() const;
+    tools::Long GetFormulaBaseline() const;
 
     /**
      * Accept a visitor.
@@ -1641,7 +1641,7 @@ public:
  */
 class SmBracebodyNode final : public SmStructureNode
 {
-    long mnBodyHeight;
+    tools::Long mnBodyHeight;
 
 public:
     explicit SmBracebodyNode(const SmToken &rNodeToken)
@@ -1655,7 +1655,7 @@ public:
      * @return
      */
     virtual void    Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    long GetBodyHeight() const { return mnBodyHeight; }
+    tools::Long GetBodyHeight() const { return mnBodyHeight; }
 
     /**
      * Accept a visitor.
@@ -1761,7 +1761,7 @@ public:
      * @param rFormat
      * @return node's height
      */
-    long CalcSymbolHeight(const SmNode &rSymbol, const SmFormat &rFormat) const;
+    tools::Long CalcSymbolHeight(const SmNode &rSymbol, const SmFormat &rFormat) const;
 
     /**
      * Prepares the SmRect to render.

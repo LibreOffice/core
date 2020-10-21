@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <tools/long.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -316,13 +317,13 @@ public:
         mpLayerManager->removeShape(pShape4);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 1 must have refcount of 1",
-                                      long(1), mpTestShape.use_count() );
+                                      tools::Long(1), mpTestShape.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 2 must have refcount of ",
-                                      long(1), pShape2.use_count() );
+                                      tools::Long(1), pShape2.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 3 must have refcount of 1",
-                                      long(1), pShape3.use_count() );
+                                      tools::Long(1), pShape3.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 4 must have refcount of",
-                                      long(1), pShape4.use_count() );
+                                      tools::Long(1), pShape4.use_count() );
 
 
         mpLayerManager->addShape(mpTestShape);
@@ -339,13 +340,13 @@ public:
         mpLayerManager->removeShape(pShape4);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 1 must have refcount of 1",
-                                      long(1), mpTestShape.use_count() );
+                                      tools::Long(1), mpTestShape.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 2 must have refcount of ",
-                                      long(1), pShape2.use_count() );
+                                      tools::Long(1), pShape2.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 3 must have refcount of 1",
-                                      long(1), pShape3.use_count() );
+                                      tools::Long(1), pShape3.use_count() );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Shape 4 must have refcount of 1",
-                                      long(1), pShape4.use_count() );
+                                      tools::Long(1), pShape4.use_count() );
     }
 
     // hook up the test

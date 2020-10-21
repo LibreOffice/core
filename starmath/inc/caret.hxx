@@ -61,22 +61,22 @@ struct SmCaretPos{
 /** A line that represents a caret */
 class SmCaretLine{
 public:
-    SmCaretLine(long left = 0, long top = 0, long height = 0) {
+    SmCaretLine(tools::Long left = 0, tools::Long top = 0, tools::Long height = 0) {
         _top = top;
         _left = left;
         _height = height;
     }
-    long GetTop() const {return _top;}
-    long GetLeft() const {return _left;}
-    long GetHeight() const {return _height;}
-    long SquaredDistanceX(const SmCaretLine& line) const{
+    tools::Long GetTop() const {return _top;}
+    tools::Long GetLeft() const {return _left;}
+    tools::Long GetHeight() const {return _height;}
+    tools::Long SquaredDistanceX(const SmCaretLine& line) const{
         return (GetLeft() - line.GetLeft()) * (GetLeft() - line.GetLeft());
     }
-    long SquaredDistanceX(const Point &pos) const{
+    tools::Long SquaredDistanceX(const Point &pos) const{
         return (GetLeft() - pos.X()) * (GetLeft() - pos.X());
     }
-    long SquaredDistanceY(const SmCaretLine& line) const{
-        long d = GetTop() - line.GetTop();
+    tools::Long SquaredDistanceY(const SmCaretLine& line) const{
+        tools::Long d = GetTop() - line.GetTop();
         if(d < 0)
             d = (d * -1) - GetHeight();
         else
@@ -85,8 +85,8 @@ public:
             return 0;
         return d * d;
     }
-    long SquaredDistanceY(const Point &pos) const{
-        long d = GetTop() - pos.Y();
+    tools::Long SquaredDistanceY(const Point &pos) const{
+        tools::Long d = GetTop() - pos.Y();
         if(d < 0)
             d = (d * -1) - GetHeight();
         if(d < 0)
@@ -94,9 +94,9 @@ public:
         return d * d;
     }
 private:
-    long _top;
-    long _left;
-    long _height;
+    tools::Long _top;
+    tools::Long _left;
+    tools::Long _height;
 };
 
 // SmCaretPosGraph
