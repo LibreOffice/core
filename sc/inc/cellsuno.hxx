@@ -198,7 +198,7 @@ private:
 
 private:
     void            PaintGridRanges_Impl();
-    ScRangeListRef  GetLimitedChartRanges_Impl( tools::Long nDataColumns, tools::Long nDataRows ) const;
+    ScRangeListRef  GetLimitedChartRanges_Impl( sal_Int32 nDataColumns, sal_Int32 nDataRows ) const;
     void            ForceChartListener_Impl();
     std::unique_ptr<ScMemChart> CreateMemChart_Impl() const;
 

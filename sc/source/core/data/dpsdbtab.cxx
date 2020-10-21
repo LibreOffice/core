@@ -77,13 +77,13 @@ void ScDatabaseDPData::DisposeData()
     aCacheTable.clear();
 }
 
-tools::Long ScDatabaseDPData::GetColumnCount()
+sal_Int32 ScDatabaseDPData::GetColumnCount()
 {
     CreateCacheTable();
     return GetCacheTable().getColSize();
 }
 
-OUString ScDatabaseDPData::getDimensionName(tools::Long nColumn)
+OUString ScDatabaseDPData::getDimensionName(sal_Int32 nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
     {
@@ -96,12 +96,12 @@ OUString ScDatabaseDPData::getDimensionName(tools::Long nColumn)
     return aCacheTable.getFieldName(static_cast<SCCOL>(nColumn));
 }
 
-bool ScDatabaseDPData::getIsDataLayoutDimension(tools::Long nColumn)
+bool ScDatabaseDPData::getIsDataLayoutDimension(sal_Int32 nColumn)
 {
     return ( nColumn == GetCacheTable().getColSize());
 }
 
-bool ScDatabaseDPData::IsDateDimension(tools::Long /* nDim */)
+bool ScDatabaseDPData::IsDateDimension(sal_Int32 /* nDim */)
 {
     //TODO: later...
     return false;

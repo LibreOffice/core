@@ -85,10 +85,10 @@ private:
     rtl::Reference<ScDPDimensions> pDimensions; // api objects
                                                 // settings:
 
-    std::vector<tools::Long> maColDims;
-    std::vector<tools::Long> maRowDims;
-    std::vector<tools::Long> maDataDims;
-    std::vector<tools::Long> maPageDims;
+    std::vector<sal_Int32> maColDims;
+    std::vector<sal_Int32> maRowDims;
+    std::vector<sal_Int32> maDataDims;
+    std::vector<sal_Int32> maPageDims;
     ScDPResultTree maResFilterSet;
 
     bool                    bColumnGrand;
@@ -96,7 +96,7 @@ private:
     bool                    bIgnoreEmptyRows;
     bool                    bRepeatIfEmpty;
 
-    tools::Long                    nDupCount;
+    sal_Int32               nDupCount;
 
                                                 // results:
     std::unique_ptr<ScDPResultData>   pResData;           // keep the rest in this!
@@ -148,27 +148,27 @@ public:
                             GetGrandTotalName() const;
 
     css::sheet::DataPilotFieldOrientation
-                            GetOrientation(tools::Long nColumn);
-    void                    SetOrientation(tools::Long nColumn, css::sheet::DataPilotFieldOrientation nNew);
-    tools::Long                    GetPosition(tools::Long nColumn);
+                            GetOrientation(sal_Int32 nColumn);
+    void                    SetOrientation(sal_Int32 nColumn, css::sheet::DataPilotFieldOrientation nNew);
+    sal_Int32               GetPosition(sal_Int32 nColumn);
 
-    tools::Long                    GetDataDimensionCount() const;
-    ScDPDimension*          GetDataDimension(tools::Long nIndex);
-    OUString GetDataDimName(tools::Long nIndex);
+    sal_Int32               GetDataDimensionCount() const;
+    ScDPDimension*          GetDataDimension(sal_Int32 nIndex);
+    OUString                GetDataDimName(sal_Int32 nIndex);
     const ScDPCache* GetCache();
-    const ScDPItemData*         GetItemDataById( tools::Long nDim, tools::Long nId );
-    bool                        IsDataLayoutDimension(tools::Long nDim);
+    const ScDPItemData*         GetItemDataById( sal_Int32 nDim, sal_Int32 nId );
+    bool                        IsDataLayoutDimension(sal_Int32 nDim);
     css::sheet::DataPilotFieldOrientation
                                 GetDataLayoutOrientation();
 
-    bool                        IsDateDimension(tools::Long nDim);
+    bool                        IsDateDimension(sal_Int32 nDim);
 
-    bool                        SubTotalAllowed(tools::Long nColumn);      //! move to ScDPResultData
+    bool                        SubTotalAllowed(sal_Int32 nColumn);      //! move to ScDPResultData
 
     ScDPDimension* AddDuplicated(const OUString& rNewName);
-    tools::Long                    GetDupCount() const { return nDupCount; }
+    sal_Int32                    GetDupCount() const { return nDupCount; }
 
-    tools::Long                    GetSourceDim(tools::Long nDim);
+    sal_Int32                    GetSourceDim(sal_Int32 nDim);
 
     const css::uno::Sequence<css::sheet::MemberResult>*
                             GetMemberResults( const ScDPLevel* pLevel );
@@ -228,7 +228,7 @@ class ScDPDimensions : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*         pSource;
-    tools::Long                nDimCount;
+    sal_Int32           nDimCount;
     std::unique_ptr<rtl::Reference<ScDPDimension>[]>
                         ppDims;
 
@@ -264,13 +264,13 @@ class ScDPDimension : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
     ScDPSource*         pSource;
-    tools::Long                nDim;               // dimension index (== column ID)
+    sal_Int32           nDim;               // dimension index (== column ID)
     rtl::Reference<ScDPHierarchies> mxHierarchies;
     ScGeneralFunction   nFunction;
     OUString            aName;              // if empty, take from source
     std::optional<OUString> mpLayoutName;
     std::optional<OUString> mpSubtotalName;
-    tools::Long                nSourceDim;         // >=0 if dup'ed
+    sal_Int32           nSourceDim;         // >=0 if dup'ed
     css::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
     bool                bHasSelectedPage;
@@ -285,8 +285,8 @@ public:
                             ScDPDimension(const ScDPDimension&) = delete;
     ScDPDimension&          operator=(const ScDPDimension&) = delete;
 
-    tools::Long                    GetDimension() const    { return nDim; }        // dimension index in source
-    tools::Long                    GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
+    sal_Int32               GetDimension() const    { return nDim; }        // dimension index in source
+    sal_Int32               GetSourceDim() const    { return nSourceDim; }  // >=0 if dup'ed
 
     ScDPDimension*          CreateCloneObject();
     ScDPHierarchies*        GetHierarchiesObject();
@@ -346,7 +346,7 @@ class ScDPHierarchies : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*         pSource;
-    tools::Long                nDim;
+    sal_Int32           nDim;
     //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
     // #i52547# don't offer the incomplete date hierarchy implementation
     static const tools::Long   nHierCount = 1;
@@ -371,7 +371,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static tools::Long     getCount();
+    static sal_Int32     getCount();
     ScDPHierarchy*  getByIndex(tools::Long nIndex) const;
 };
 
@@ -382,12 +382,12 @@ class ScDPHierarchy : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*     pSource;
-    tools::Long            nDim;
-    tools::Long            nHier;
+    sal_Int32            nDim;
+    sal_Int32            nHier;
     rtl::Reference<ScDPLevels> mxLevels;
 
 public:
-                            ScDPHierarchy( ScDPSource* pSrc, tools::Long nD, tools::Long nH );
+                            ScDPHierarchy( ScDPSource* pSrc, sal_Int32 nDim, sal_Int32 nHier );
     virtual                 ~ScDPHierarchy() override;
 
     ScDPLevels*             GetLevelsObject();
@@ -412,14 +412,14 @@ class ScDPLevels : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*     pSource;
-    tools::Long            nDim;
-    tools::Long            nHier;
-    tools::Long            nLevCount;
+    sal_Int32            nDim;
+    sal_Int32            nHier;
+    sal_Int32            nLevCount;
     std::unique_ptr<rtl::Reference<ScDPLevel>[]>
                     ppLevs;
 
 public:
-                            ScDPLevels( ScDPSource* pSrc, tools::Long nD, tools::Long nH );
+                            ScDPLevels( ScDPSource* pSrc, sal_Int32 nDim, sal_Int32 nHier );
     virtual                 ~ScDPLevels() override;
 
                             // XNameAccess
@@ -436,8 +436,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    tools::Long            getCount() const;
-    ScDPLevel*      getByIndex(tools::Long nIndex) const;
+    sal_Int32            getCount() const;
+    ScDPLevel*      getByIndex(sal_Int32 nIndex) const;
 };
 
 class ScDPLevel : public cppu::WeakImplHelper<
@@ -449,9 +449,9 @@ class ScDPLevel : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*                 pSource;
-    tools::Long                        nDim;
-    tools::Long                        nHier;
-    tools::Long                        nLev;
+    sal_Int32                        nDim;
+    sal_Int32                        nHier;
+    sal_Int32                        nLev;
     rtl::Reference<ScDPMembers> mxMembers;
     css::uno::Sequence<sal_Int16> aSubTotals;
     css::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
@@ -459,14 +459,14 @@ private:
     css::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
                                                     // valid only from result calculation:
     ::std::vector<sal_Int32>    aGlobalOrder;       // result of sorting by name or position
-    tools::Long                        nSortMeasure;       // measure (index of data dimension) to sort by
-    tools::Long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
+    sal_Int32                   nSortMeasure;       // measure (index of data dimension) to sort by
+    sal_Int32                   nAutoMeasure;       // measure (index of data dimension) for AutoShow
     bool                        bShowEmpty:1;
     bool                        bEnableLayout:1;      // enabled only for row fields, not for the innermost one
     bool                        bRepeatItemLabels:1;
 
 public:
-                            ScDPLevel( ScDPSource* pSrc, tools::Long nD, tools::Long nH, tools::Long nL );
+                            ScDPLevel( ScDPSource* pSrc, sal_Int32 nDim, sal_Int32 nHier, sal_Int32 nLevel );
     virtual                 ~ScDPLevel() override;
 
     ScDPMembers*            GetMembersObject();
@@ -516,8 +516,8 @@ public:
 
     const ::std::vector<sal_Int32>& GetGlobalOrder() const      { return aGlobalOrder; }
     ::std::vector<sal_Int32>&  GetGlobalOrder()                 { return aGlobalOrder; }
-    tools::Long                    GetSortMeasure() const              { return nSortMeasure; }
-    tools::Long                    GetAutoMeasure() const              { return nAutoMeasure; }
+    sal_Int32                  GetSortMeasure() const              { return nSortMeasure; }
+    sal_Int32                  GetAutoMeasure() const              { return nAutoMeasure; }
 
     bool IsOutlineLayout() const
     {
@@ -551,15 +551,15 @@ class ScDPMembers : public cppu::WeakImplHelper<
 private:
     typedef std::vector<rtl::Reference<ScDPMember> > MembersType;
     ScDPSource*     pSource;
-    tools::Long            nDim;
-    tools::Long            nHier;
-    tools::Long            nLev;
-    tools::Long            nMbrCount;
+    sal_Int32            nDim;
+    sal_Int32            nHier;
+    sal_Int32            nLev;
+    sal_Int32            nMbrCount;
     mutable MembersType maMembers;
     mutable ScDPMembersHashMap aHashMap;
 
 public:
-                            ScDPMembers( ScDPSource* pSrc, tools::Long nD, tools::Long nH, tools::Long nL );
+                            ScDPMembers( ScDPSource* pSrc, sal_Int32 nDim, sal_Int32 nHier, sal_Int32 nLev );
     virtual                 ~ScDPMembers() override;
 
                             // XMembersAccess
@@ -579,10 +579,10 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    tools::Long                    getCount() const { return nMbrCount;}
-    ScDPMember*             getByIndex(tools::Long nIndex) const;
+    sal_Int32               getCount() const { return nMbrCount;}
+    ScDPMember*             getByIndex(sal_Int32 nIndex) const;
 
-    tools::Long                    getMinMembers() const;
+    sal_Int32               getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const OUString& rName ) const;     // <0 if not found
     const ScDPItemData*     GetSrcItemDataByIndex(  SCROW nIndex);
@@ -599,9 +599,9 @@ class ScDPMember : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*     pSource;
-    tools::Long            nDim;
-    tools::Long            nHier;
-    tools::Long            nLev;
+    sal_Int32       nDim;
+    sal_Int32       nHier;
+    sal_Int32       nLev;
 
     SCROW           mnDataId;
     std::optional<OUString> mpLayoutName;
@@ -611,7 +611,7 @@ private:
     bool            bShowDet;
 
 public:
-    ScDPMember(ScDPSource* pSrc, tools::Long nD, tools::Long nH, tools::Long nL, SCROW nIndex);
+    ScDPMember(ScDPSource* pSrc, sal_Int32 nDim, sal_Int32 nHier, sal_Int32 nLev, SCROW nIndex);
     virtual                 ~ScDPMember() override;
     ScDPMember(const ScDPMember&) = delete;
     ScDPMember& operator=(const ScDPMember&) = delete;

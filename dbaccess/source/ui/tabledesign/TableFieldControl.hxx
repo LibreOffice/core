@@ -39,7 +39,7 @@ namespace dbaui
         virtual void        ActivateAggregate( EControlType eType ) override;
         virtual void        DeactivateAggregate( EControlType eType ) override;
         // are to be implemented by the derived classes
-        virtual void        CellModified(tools::Long nRow, sal_uInt16 nColId ) override;
+        virtual void        CellModified(sal_Int32 nRow, sal_uInt16 nColId ) override;
         virtual bool        IsReadOnly() override;
         virtual void        SetModified(bool bModified) override;
         virtual css::uno::Reference< css::util::XNumberFormatter >    GetFormatter() const override;

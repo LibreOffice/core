@@ -2829,7 +2829,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly,
                             if ( pContent && pContent->IsTextFrame() )
                             {
                                 const SwTableBox* pBox = static_cast<const SwCellFrame*>(pFrame)->GetTabBox();
-                                const tools::Long nRowSpan = pBox->getRowSpan();
+                                const sal_Int32 nRowSpan = pBox->getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
                                     pTextFrame = static_cast<const SwTextFrame*>(pContent);
                                 if( nRowSpan < 2 ) // Not overlapping for row height

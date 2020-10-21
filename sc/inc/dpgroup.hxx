@@ -115,15 +115,15 @@ public:
 class ScDPGroupTableData final : public ScDPTableData
 {
     std::shared_ptr<ScDPTableData> pSourceData;
-    tools::Long                    nSourceCount;
+    sal_Int32                    nSourceCount;
     std::vector<ScDPGroupDimension>
                             aGroups;
     std::unique_ptr<ScDPNumGroupDimension[]>
                             pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;
 
-    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<tools::Long>& rDims);
-    virtual tools::Long                GetSourceDim( tools::Long nDim ) override;
+    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<sal_Int32>& rDims);
+    virtual sal_Int32                GetSourceDim( sal_Int32 nDim ) override;
 
     bool        IsNumGroupDimension( tools::Long nDimension ) const;
     void GetNumGroupInfo(tools::Long nDimension, ScDPNumGroupInfo& rInfo);
@@ -138,19 +138,19 @@ public:
     const std::shared_ptr<ScDPTableData>& GetSourceTableData() const { return pSourceData;}
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
-    void        SetNumGroupDimension( tools::Long nIndex, const ScDPNumGroupDimension& rGroup );
-    tools::Long        GetDimensionIndex( const OUString& rName );
+    void        SetNumGroupDimension( sal_Int32 nIndex, const ScDPNumGroupDimension& rGroup );
+    sal_Int32        GetDimensionIndex( const OUString& rName );
 
-    virtual tools::Long                    GetColumnCount() override;
-    virtual tools::Long                    GetMembersCount( tools::Long nDim ) override;
-    virtual const std::vector< SCROW >& GetColumnEntries( tools::Long nColumn ) override ;
-    virtual const ScDPItemData* GetMemberById( tools::Long nDim, tools::Long nId) override;
-    virtual tools::Long Compare( tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2) override;
+    virtual sal_Int32                    GetColumnCount() override;
+    virtual sal_Int32                    GetMembersCount( sal_Int32 nDim ) override;
+    virtual const std::vector< SCROW >& GetColumnEntries( sal_Int32 nColumn ) override ;
+    virtual const ScDPItemData* GetMemberById( sal_Int32 nDim, sal_Int32 nId) override;
+    virtual sal_Int32 Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 nDataId2) override;
 
-    virtual OUString                getDimensionName(tools::Long nColumn) override;
-    virtual bool                    getIsDataLayoutDimension(tools::Long nColumn) override;
-    virtual bool                    IsDateDimension(tools::Long nDim) override;
-    virtual sal_uInt32              GetNumberFormat(tools::Long nDim) override;
+    virtual OUString                getDimensionName(sal_Int32 nColumn) override;
+    virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) override;
+    virtual bool                    IsDateDimension(sal_Int32 nDim) override;
+    virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 
@@ -165,13 +165,13 @@ public:
     virtual const ScDPFilteredCache&   GetCacheTable() const override;
     virtual void ReloadCacheTable() override;
 
-    virtual bool                    IsBaseForGroup(tools::Long nDim) const override;
-    virtual tools::Long                    GetGroupBase(tools::Long nGroupDim) const override;
-    virtual bool                    IsNumOrDateGroup(tools::Long nDim) const override;
-    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, tools::Long nGroupIndex,
-                                               const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const override;
-    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, tools::Long nFirstIndex,
-                                                      const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const override;
+    virtual bool                    IsBaseForGroup(sal_Int32 nDim) const override;
+    virtual sal_Int32               GetGroupBase(sal_Int32 nGroupDim) const override;
+    virtual bool                    IsNumOrDateGroup(sal_Int32 nDim) const override;
+    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, sal_Int32 nGroupIndex,
+                                               const ScDPItemData& rBaseData, sal_Int32 nBaseIndex ) const override;
+    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, sal_Int32 nFirstIndex,
+                                                      const ScDPItemData& rSecondData, sal_Int32 nSecondIndex ) const override;
 
 #if DUMP_PIVOT_TABLE
     virtual void Dump() const override;

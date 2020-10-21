@@ -63,10 +63,10 @@ public:
     ScDatabaseDPData(const ScDocument* pDoc, const ScDPCache& rCache);
     virtual ~ScDatabaseDPData() override;
 
-    virtual tools::Long                    GetColumnCount() override;
-    virtual OUString                getDimensionName(tools::Long nColumn) override;
-    virtual bool                    getIsDataLayoutDimension(tools::Long nColumn) override;
-    virtual bool                    IsDateDimension(tools::Long nDim) override;
+    virtual sal_Int32               GetColumnCount() override;
+    virtual OUString                getDimensionName(sal_Int32 nColumn) override;
+    virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) override;
+    virtual bool                    IsDateDimension(sal_Int32 nDim) override;
     virtual void                    DisposeData() override;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) override;
 

@@ -916,7 +916,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const SwTableBox *pBox = rBoxes[nBox];
 
             // NEW TABLES
-            const tools::Long nRowSpan = pBox->getRowSpan();
+            const sal_Int32 nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
                 SvXMLElementExport aElem2( *this, rTableInfo.GetPrefix(),
