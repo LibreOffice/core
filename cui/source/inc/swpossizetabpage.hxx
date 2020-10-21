@@ -94,7 +94,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     void            InitPos(RndStdIds nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,
-                            long   nX,  long   nY);
+                            tools::Long   nX,  tools::Long   nY);
     static sal_uInt16   GetMapPos(FrmMap const *pMap, const weld::ComboBox& rAlignLB);
     static short        GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, const weld::ComboBox& rRelationLB);
     static short        GetRelation(const weld::ComboBox& rRelationLB);

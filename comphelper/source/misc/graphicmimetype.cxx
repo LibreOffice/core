@@ -52,8 +52,8 @@ OUString GraphicMimeTypeHelper::GetMimeTypeForExtension(const OString& rExt)
 
     OUString aMimeType;
 
-    long const nCount = SAL_N_ELEMENTS(aMapper);
-    for (long i = 0; (i < nCount) && aMimeType.isEmpty(); ++i)
+    tools::Long const nCount = SAL_N_ELEMENTS(aMapper);
+    for (tools::Long i = 0; (i < nCount) && aMimeType.isEmpty(); ++i)
     {
         if (rExt == aMapper[i].pExt)
             aMimeType = OUString(aMapper[i].pMimeType, strlen(aMapper[i].pMimeType),

@@ -157,7 +157,7 @@ namespace cppcanvas::internal
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
-            uno::Sequence< double > setupDXArray( const long*   pCharWidths,
+            uno::Sequence< double > setupDXArray( const ::tools::Long*   pCharWidths,
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
@@ -1988,7 +1988,7 @@ namespace cppcanvas::internal
                                            const OUString&                  rText,
                                            sal_Int32                        nStartPos,
                                            sal_Int32                        nLen,
-                                           const long*                      pDXArray,
+                                           const ::tools::Long*                      pDXArray,
                                            VirtualDevice&                   rVDev,
                                            const CanvasSharedPtr&           rCanvas,
                                            const OutDevState&               rState,
@@ -2118,7 +2118,7 @@ namespace cppcanvas::internal
                                                              const OUString&                rText,
                                                              sal_Int32                      nStartPos,
                                                              sal_Int32                      nLen,
-                                                             const long*                    pDXArray,
+                                                             const ::tools::Long*                    pDXArray,
                                                              VirtualDevice&                 rVDev,
                                                              const CanvasSharedPtr&         rCanvas,
                                                              const OutDevState&             rState,

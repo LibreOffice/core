@@ -264,7 +264,7 @@ void QrCodeGenDialog::Apply()
 #endif
 }
 
-OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRBorder)
+OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, tools::Long aQRECC, int aQRBorder)
 {
 #if ENABLE_QRCODEGEN
     //Select ECC:: value from aQrECC
@@ -311,7 +311,7 @@ OUString QrCodeGenDialog::GenerateQRCode(OUString aQRText, long aQRECC, int aQRB
 #endif
 }
 
-void QrCodeGenDialog::GetErrorCorrection(long ErrorCorrection)
+void QrCodeGenDialog::GetErrorCorrection(tools::Long ErrorCorrection)
 {
     switch (ErrorCorrection)
     {

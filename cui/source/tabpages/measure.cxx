@@ -232,7 +232,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::DONTCARE )
     {
-        long nFieldUnit = static_cast<long>(rAttrs->Get( SDRATTR_MEASUREUNIT ).GetValue());
+        tools::Long nFieldUnit = static_cast<tools::Long>(rAttrs->Get( SDRATTR_MEASUREUNIT ).GetValue());
 
         for (sal_Int32 i = 0; i < m_xLbUnit->get_count(); ++i)
         {
