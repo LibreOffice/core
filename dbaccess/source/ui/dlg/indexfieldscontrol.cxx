@@ -89,7 +89,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         ::svt::EditBrowseBox::dispose();
     }
 
-    bool IndexFieldsControl::SeekRow(tools::Long nRow)
+    bool IndexFieldsControl::SeekRow(sal_Int32 nRow)
     {
         if (!EditBrowseBox::SeekRow(nRow))
             return false;
@@ -165,7 +165,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         _rFields.resize(aDest - _rFields.begin());
     }
 
-    sal_uInt32 IndexFieldsControl::GetTotalCellWidth(tools::Long _nRow, sal_uInt16 _nColId)
+    sal_uInt32 IndexFieldsControl::GetTotalCellWidth(sal_Int32 _nRow, sal_uInt16 _nColId)
     {
         if (COLUMN_ID_ORDER == _nColId)
         {
@@ -233,7 +233,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
             rNameListBox.append_text(*pFields);
     }
 
-    CellController* IndexFieldsControl::GetController(tools::Long _nRow, sal_uInt16 _nColumnId)
+    CellController* IndexFieldsControl::GetController(sal_Int32 _nRow, sal_uInt16 _nColumnId)
     {
         if (!IsEnabled())
             return nullptr;
@@ -263,7 +263,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         return pReturn;
     }
 
-    bool IndexFieldsControl::implGetFieldDesc(tools::Long _nRow, IndexFields::const_iterator& _rPos)
+    bool IndexFieldsControl::implGetFieldDesc(sal_Int32 _nRow, IndexFields::const_iterator& _rPos)
     {
         _rPos = m_aFields.end();
         if ((_nRow < 0) || (_nRow >= static_cast<sal_Int32>(m_aFields.size())))
@@ -343,7 +343,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
         return true;
     }
 
-    void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, tools::Long _nRow, sal_uInt16 _nColumnId)
+    void IndexFieldsControl::InitController(CellControllerRef& /*_rController*/, sal_Int32 _nRow, sal_uInt16 _nColumnId)
     {
         IndexFields::const_iterator aFieldDescription;
         bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
@@ -407,7 +407,7 @@ constexpr auto BROWSER_STANDARD_FLAGS = BrowserMode::COLUMNSELECTION | BrowserMo
 
         SaveModified();
     }
-    OUString IndexFieldsControl::GetCellText(tools::Long _nRow,sal_uInt16 nColId) const
+    OUString IndexFieldsControl::GetCellText(sal_Int32 _nRow,sal_uInt16 nColId) const
     {
         IndexFields::const_iterator aRow = m_aFields.end();
         if ( _nRow >= 0 )

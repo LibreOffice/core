@@ -1648,7 +1648,7 @@ static void lcl_CheckRowSpan( SwTable &rTable )
         SwTableLine* pLine = rTable.GetTabLines()[ nLineCount - nMaxSpan ];
         for( auto pBox : pLine->GetTabBoxes() )
         {
-            tools::Long nRowSpan = pBox->getRowSpan();
+            sal_Int32 nRowSpan = pBox->getRowSpan();
             if( nRowSpan > nMaxSpan )
                 pBox->setRowSpan( nMaxSpan );
             else if( nRowSpan < nMinSpan )

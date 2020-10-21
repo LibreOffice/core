@@ -196,7 +196,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::SeekRow(tools::Long nRow)
+    bool EditBrowseBox::SeekRow(sal_Int32 nRow)
     {
         nPaintRow = nRow;
         return true;
@@ -364,7 +364,7 @@ namespace svt
     }
 
 
-    EditBrowseBox::RowStatus EditBrowseBox::GetRowStatus(tools::Long) const
+    EditBrowseBox::RowStatus EditBrowseBox::GetRowStatus(sal_Int32) const
     {
         return CLEAN;
     }
@@ -770,7 +770,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::IsCursorMoveAllowed(tools::Long nNewRow, sal_uInt16 nNewColId) const
+    bool EditBrowseBox::IsCursorMoveAllowed(sal_Int32 nNewRow, sal_uInt16 nNewColId) const
     {
         sal_uInt16 nInfo = 0;
 
@@ -874,7 +874,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::CursorMoving(tools::Long, sal_uInt16)
+    bool EditBrowseBox::CursorMoving(sal_Int32, sal_uInt16)
     {
         DeactivateCell(false);
         return true;
@@ -883,7 +883,7 @@ namespace svt
 
     void EditBrowseBox::CursorMoved()
     {
-        tools::Long nNewRow = GetCurRow();
+        sal_Int32 nNewRow = GetCurRow();
         if (nEditRow != nNewRow)
         {
             if (!(GetBrowserFlags() & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT))
@@ -909,7 +909,7 @@ namespace svt
     }
 
 
-    void EditBrowseBox::ActivateCell(tools::Long nRow, sal_uInt16 nCol, bool bCellFocus)
+    void EditBrowseBox::ActivateCell(sal_Int32 nRow, sal_uInt16 nCol, bool bCellFocus)
     {
         if (IsEditing())
             return;
@@ -992,7 +992,7 @@ namespace svt
     }
 
 
-    tools::Rectangle EditBrowseBox::GetCellRect(tools::Long nRow, sal_uInt16 nColId, bool bRel) const
+    tools::Rectangle EditBrowseBox::GetCellRect(sal_Int32 nRow, sal_uInt16 nColId, bool bRel) const
     {
         tools::Rectangle aRect( GetFieldRectPixel(nRow, nColId, bRel));
         if ((GetMode()  & BrowserMode::CURSOR_WO_FOCUS) == BrowserMode::CURSOR_WO_FOCUS)
@@ -1102,7 +1102,7 @@ namespace svt
     {
     }
 
-    CellController* EditBrowseBox::GetController(tools::Long, sal_uInt16)
+    CellController* EditBrowseBox::GetController(sal_Int32, sal_uInt16)
     {
         return nullptr;
     }
@@ -1122,7 +1122,7 @@ namespace svt
         rControl.SetPosSizePixel(aPoint, aSize);
     }
 
-    void EditBrowseBox::InitController(CellControllerRef&, tools::Long, sal_uInt16)
+    void EditBrowseBox::InitController(CellControllerRef&, sal_Int32, sal_uInt16)
     {
     }
 
@@ -1152,8 +1152,8 @@ namespace svt
         sal_uInt32 nCurColWidth  = GetColumnWidth(nColId);
         sal_uInt32 nMinColWidth = CalcZoom(20); // minimum
         sal_uInt32 nNewColWidth = nMinColWidth;
-        tools::Long nMaxRows      = std::min(tools::Long(GetVisibleRows()), GetRowCount());
-        tools::Long nLastVisRow   = GetTopRow() + nMaxRows - 1;
+        sal_Int32 nMaxRows      = std::min(sal_Int32(GetVisibleRows()), GetRowCount());
+        sal_Int32 nLastVisRow   = GetTopRow() + nMaxRows - 1;
 
         if (GetTopRow() <= nLastVisRow) // calc the column with using the cell contents
         {
@@ -1168,7 +1168,7 @@ namespace svt
         return nNewColWidth;
     }
 
-    sal_uInt32 EditBrowseBox::GetTotalCellWidth(tools::Long, sal_uInt16)
+    sal_uInt32 EditBrowseBox::GetTotalCellWidth(sal_Int32, sal_uInt16)
     {
         return 0;
     }

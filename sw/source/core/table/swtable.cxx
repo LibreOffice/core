@@ -97,12 +97,12 @@ inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
         mpNumFormatColor.reset();
 }
 
-tools::Long SwTableBox::getRowSpan() const
+sal_Int32 SwTableBox::getRowSpan() const
 {
     return mnRowSpan;
 }
 
-void SwTableBox::setRowSpan( tools::Long nNewRowSpan )
+void SwTableBox::setRowSpan( sal_Int32 nNewRowSpan )
 {
     mnRowSpan = nNewRowSpan;
 }
@@ -188,7 +188,7 @@ void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
                 rDoc.GetDfltTextFormatColl(), nullptr,
                 nInsPos, nCnt );
 
-    tools::Long nRowSpan = pBox->getRowSpan();
+    sal_Int32 nRowSpan = pBox->getRowSpan();
     if( nRowSpan != 1 )
     {
         SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
@@ -1074,7 +1074,7 @@ static void lcl_CalcNewWidths( std::vector<sal_uInt16> &rSpanPos, ChangeList& rC
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
         SwTwips nCurrWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
-        const tools::Long nRowSpan = pBox->getRowSpan();
+        const sal_Int32 nRowSpan = pBox->getRowSpan();
         const bool bCurrRowSpan = bTop ? nRowSpan < 0 :
             ( nRowSpan > 1 || nRowSpan < -1 );
         if( bRowSpan || bCurrRowSpan )

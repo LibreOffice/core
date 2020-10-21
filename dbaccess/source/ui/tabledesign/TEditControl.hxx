@@ -85,29 +85,29 @@ namespace dbaui
 
     protected:
         virtual void Command( const CommandEvent& rEvt ) override;
-        virtual bool SeekRow(tools::Long nRow) override;
+        virtual bool SeekRow(sal_Int32 nRow) override;
         virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
                                sal_uInt16 nColumnId ) const override;
 
         virtual void CursorMoved() override;
-        virtual RowStatus GetRowStatus(tools::Long nRow) const override;
+        virtual RowStatus GetRowStatus(sal_Int32 nRow) const override;
 
-        virtual ::svt::CellController* GetController(tools::Long nRow, sal_uInt16 nCol) override;
-        virtual void InitController(::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol) override;
+        virtual ::svt::CellController* GetController(sal_Int32 nRow, sal_uInt16 nCol) override;
+        virtual void InitController(::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol) override;
 
         virtual void CellModified() override;
         virtual bool SaveModified() override; // is called before changing a cell (false prevents change)
 
-        virtual OUString GetCellText(tools::Long nRow, sal_uInt16 nColId) const override;
-        virtual sal_uInt32 GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId) override;
+        virtual OUString GetCellText(sal_Int32 nRow, sal_uInt16 nColId) const override;
+        virtual sal_uInt32 GetTotalCellWidth(sal_Int32 nRow, sal_uInt16 nColId) override;
 
         virtual void CopyRows() override;
-        virtual void InsertRows( tools::Long nRow ) override;
+        virtual void InsertRows( sal_Int32 nRow ) override;
         virtual void DeleteRows() override;
-        virtual void InsertNewRows( tools::Long nRow ) override;
+        virtual void InsertNewRows( sal_Int32 nRow ) override;
 
         virtual bool IsPrimaryKeyAllowed() override;
-        virtual bool IsInsertNewAllowed( tools::Long nRow ) override;
+        virtual bool IsInsertNewAllowed( sal_Int32 nRow ) override;
         virtual bool IsDeleteAllowed() override;
 
         void ClearModified();
@@ -119,7 +119,7 @@ namespace dbaui
         explicit OTableEditorCtrl(vcl::Window* pParentWin, OTableDesignView* pView);
         virtual ~OTableEditorCtrl() override;
         virtual void dispose() override;
-        virtual bool CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol) override;
+        virtual bool CursorMoving(sal_Int32 nNewRow, sal_uInt16 nNewCol) override;
         SfxUndoManager& GetUndoManager() const;
 
         void SetDescrWin( OTableFieldDescWin* pWin )
@@ -132,19 +132,19 @@ namespace dbaui
         void SwitchType( const TOTypeInfoSP& _pType );
 
         /// force displaying of the given row
-        void DisplayData( tools::Long nRow );
+        void DisplayData( sal_Int32 nRow );
 
-        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) override;
-        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const css::uno::Any& _rSaveData ) override;
-        virtual css::uno::Any  GetCellData( tools::Long nRow, sal_uInt16 nColId ) override;
-        virtual void SetControlText( tools::Long nRow, sal_uInt16 nColId, const OUString& rText ) override;
+        virtual void SetCellData( sal_Int32 nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) override;
+        virtual void SetCellData( sal_Int32 nRow, sal_uInt16 nColId, const css::uno::Any& _rSaveData ) override;
+        virtual css::uno::Any  GetCellData( sal_Int32 nRow, sal_uInt16 nColId ) override;
+        virtual void SetControlText( sal_Int32 nRow, sal_uInt16 nColId, const OUString& rText ) override;
 
         virtual OTableDesignView* GetView() const override;
 
         std::vector< std::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
         const std::shared_ptr<OTableRow>& GetActRow() const { return pActRow; }
-        void CellModified( tools::Long nRow, sal_uInt16 nColId );
+        void CellModified( sal_Int32 nRow, sal_uInt16 nColId );
         void SetReadOnly( bool bRead );
 
         virtual void Init() override;
@@ -154,7 +154,7 @@ namespace dbaui
         bool IsCopyAllowed();
         bool IsPasteAllowed() const;
         bool IsReadOnly() const { return bReadOnly;}
-        OFieldDescription* GetFieldDescr( tools::Long nRow );
+        OFieldDescription* GetFieldDescr( sal_Int32 nRow );
 
         // Window overrides
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -178,9 +178,9 @@ namespace dbaui
         void InitCellController();
         sal_Int32 HasFieldName( const OUString& rFieldName );
         OUString GenerateName( const OUString& rName );
-        bool SetDataPtr( tools::Long nRow );
+        bool SetDataPtr( sal_Int32 nRow );
 
-        void SaveData(tools::Long nRow, sal_uInt16 nColumnId);
+        void SaveData(sal_Int32 nRow, sal_uInt16 nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
             @param  _rMultiSel      contains the positions which changed for undo/redo

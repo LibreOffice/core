@@ -657,7 +657,7 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
                 sal_uInt16 nRowSpan = nRow - nOldRow + 1;
 
                 // The new table model may have true row span attributes
-                const tools::Long nAttrRowSpan = pBox->getRowSpan();
+                const sal_Int32 nAttrRowSpan = pBox->getRowSpan();
                 if ( 1 < nAttrRowSpan )
                     nRowSpan = static_cast<sal_uInt16>(nAttrRowSpan);
                 else if ( nAttrRowSpan < 1 )

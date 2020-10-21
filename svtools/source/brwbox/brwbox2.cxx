@@ -242,18 +242,18 @@ void BrowseBox::ToggleSelection()
 
     // accumulate areas of rows to highlight
     std::vector<tools::Rectangle> aHighlightList;
-    tools::Long nLastRowInRect = 0; // for the CFront
+    sal_Int32 nLastRowInRect = 0; // for the CFront
 
     // don't highlight handle column
     BrowserColumn *pFirstCol = mvCols.empty() ? nullptr : mvCols[ 0 ].get();
     tools::Long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
 
     // accumulate old row selection
-    tools::Long nBottomRow = nTopRow +
+    sal_Int32 nBottomRow = nTopRow +
         pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight();
     if ( nBottomRow > GetRowCount() && GetRowCount() )
         nBottomRow = GetRowCount();
-    for ( tools::Long nRow = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
+    for ( sal_Int32 nRow = bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
           nRow != BROWSER_ENDOFSELECTION && nRow <= nBottomRow;
           nRow = bMultiSelection ? uRow.pSel->NextSelected() : BROWSER_ENDOFSELECTION )
     {
@@ -1049,7 +1049,7 @@ void BrowseBox::UpdateScrollbars()
         nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
-    tools::Long nMaxRows = 0;
+    sal_Int32 nMaxRows = 0;
     if (GetDataRowHeight())
     {
         // needs VScroll?
@@ -1134,7 +1134,7 @@ void BrowseBox::UpdateScrollbars()
 
     if ( pVScroll->GetThumbPos() != nTopRow )
         pVScroll->SetThumbPos( nTopRow );
-    tools::Long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), tools::Long(nRowCount-nTopRow) );
+    tools::Long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), (nRowCount-nTopRow) );
     pVScroll->SetVisibleSize( nVisibleSize ? nVisibleSize : 1 );
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
@@ -1712,7 +1712,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( GetRowCount() )
             {
                 DoHideCursor( "BROWSER_SELECTHOME" );
-                for ( tools::Long nRow = GetCurRow(); nRow >= 0; --nRow )
+                for ( sal_Int32 nRow = GetCurRow(); nRow >= 0; --nRow )
                     SelectRow( nRow );
                 GoToRow( 0, true );
                 DoShowCursor( "BROWSER_SELECTHOME" );
@@ -1722,8 +1722,8 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             if ( GetRowCount() )
             {
                 DoHideCursor( "BROWSER_SELECTEND" );
-                tools::Long nRows = GetRowCount();
-                for ( tools::Long nRow = GetCurRow(); nRow < nRows; ++nRow )
+                sal_Int32 nRows = GetRowCount();
+                for ( sal_Int32 nRow = GetCurRow(); nRow < nRows; ++nRow )
                     SelectRow( nRow );
                 GoToRow( GetRowCount() - 1, true );
                 DoShowCursor( "BROWSER_SELECTEND" );
@@ -1735,7 +1735,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row above
-                tools::Long nRow = GetCurRow();
+                sal_Int32 nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
                 SelectRow( nRow, bLocalSelect );
@@ -1752,7 +1752,7 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row under
-                tools::Long nRow = GetCurRow();
+                sal_Int32 nRow = GetCurRow();
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect );

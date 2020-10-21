@@ -43,7 +43,7 @@ public:
     };
     static void PutData( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const css::uno::Reference< css::sdbc::XRow>& xRow,
-                        tools::Long nRowPos,
+                        sal_Int32 nRowPos,
                         tools::Long nType, bool bCurrency, StrData* pStrData = nullptr );
 };
 

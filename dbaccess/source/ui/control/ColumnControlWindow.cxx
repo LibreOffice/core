@@ -89,7 +89,7 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     }
 }
 
-void OColumnControlWindow::CellModified(tools::Long /*nRow*/, sal_uInt16 /*nColId*/ )
+void OColumnControlWindow::CellModified(sal_Int32 /*nRow*/, sal_uInt16 /*nColId*/ )
 {
     saveCurrentFieldDescData();
 }

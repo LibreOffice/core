@@ -41,10 +41,10 @@ namespace dbaui
     public:
         OTableRowView(vcl::Window* pParent);
 
-        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
-        virtual void SetCellData( tools::Long nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData ) = 0;
-        virtual css::uno::Any          GetCellData( tools::Long nRow, sal_uInt16 nColId ) = 0;
-        virtual void SetControlText( tools::Long nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
+        virtual void SetCellData( sal_Int32 nRow, sal_uInt16 nColId, const TOTypeInfoSP& _pTypeInfo ) = 0;
+        virtual void SetCellData( sal_Int32 nRow, sal_uInt16 nColId, const css::uno::Any& _rNewData ) = 0;
+        virtual css::uno::Any          GetCellData( sal_Int32 nRow, sal_uInt16 nColId ) = 0;
+        virtual void SetControlText( sal_Int32 nRow, sal_uInt16 nColId, const OUString& rText ) = 0;
 
         virtual OTableDesignView* GetView() const = 0;
 
@@ -56,18 +56,18 @@ namespace dbaui
         virtual void paste() override;
 
     protected:
-        void Paste( tools::Long nRow );
+        void Paste( sal_Int32 nRow );
 
         virtual void CopyRows()                             = 0;
         virtual void DeleteRows()                           = 0;
-        virtual void InsertRows( tools::Long nRow )                = 0;
-        virtual void InsertNewRows( tools::Long nRow )             = 0;
+        virtual void InsertRows( sal_Int32 nRow )                = 0;
+        virtual void InsertNewRows( sal_Int32 nRow )             = 0;
 
         virtual bool IsPrimaryKeyAllowed()              = 0;
-        virtual bool IsInsertNewAllowed( tools::Long nRow )    = 0;
+        virtual bool IsInsertNewAllowed( sal_Int32 nRow )    = 0;
         virtual bool IsDeleteAllowed()                  = 0;
 
-        virtual RowStatus GetRowStatus(tools::Long nRow) const override;
+        virtual RowStatus GetRowStatus(sal_Int32 nRow) const override;
         virtual void KeyInput(const KeyEvent& rEvt) override;
         virtual void Command( const CommandEvent& rEvt ) override;
 

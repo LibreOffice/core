@@ -2783,7 +2783,7 @@ void WW8TabDesc::FinishSwTable()
                 auto& rRow = groupIt->row(n);
                 for (size_t i = 0; i<rRow.size(); ++i)
                 {
-                    const tools::Long nRowSpanSet = (n == 0) && (i == 0) ?
+                    const sal_Int32 nRowSpanSet = (n == 0) && (i == 0) ?
                         nRowSpan :
                         (-1 * (nRowSpan - n));
                     SwTableBox* pCurrentBox = rRow[i];

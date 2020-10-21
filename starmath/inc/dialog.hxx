@@ -248,7 +248,7 @@ class SmShowSymbolSet final : public weld::CustomWidgetController
     Link<SmShowSymbolSet&,void> aSelectHdlLink;
     Link<SmShowSymbolSet&,void> aDblClickHdlLink;
     tools::Long        nLen;
-    tools::Long        nRows, nColumns;
+    sal_Int32      nRows, nColumns;
     tools::Long        nXOffset, nYOffset;
     sal_uInt16  nSelectSymbol;
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;

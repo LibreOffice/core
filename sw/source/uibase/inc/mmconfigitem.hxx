@@ -47,7 +47,7 @@ namespace sw::mark { class IMark; }
 struct SwDocMergeInfo
 {
     sw::mark::IMark* startPageInTarget;
-    tools::Long    nDBRow;
+    sal_Int32    nDBRow;
 };
 
 class SW_DLLPUBLIC SwMailMergeConfigItem

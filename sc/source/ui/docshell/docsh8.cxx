@@ -287,7 +287,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
     try
     {
         tools::Long i;
-        tools::Long nColCount = 0;
+        sal_Int32 nColCount = 0;
         OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
@@ -762,7 +762,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
             bHasFieldNames = false;
     }
 
-    tools::Long nColCount = nLastCol - nFirstCol + 1;
+    sal_Int32 nColCount = nLastCol - nFirstCol + 1;
     uno::Sequence<OUString> aColNames( nColCount );
     uno::Sequence<sal_Int32> aColTypes( nColCount );
     uno::Sequence<sal_Int32> aColLengths( nColCount );
@@ -838,7 +838,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
         const sal_Int32* pColTypes     = aColTypes.getConstArray();
         const sal_Int32* pColLengths   = aColLengths.getConstArray();
         const sal_Int32* pColScales    = aColScales.getConstArray();
-        tools::Long nCol;
+        sal_Int32 nCol;
 
         for (nCol=0; nCol<nColCount; nCol++)
         {

@@ -73,13 +73,13 @@ void ScSheetDPData::DisposeData()
     aCacheTable.clear();
 }
 
-tools::Long ScSheetDPData::GetColumnCount()
+sal_Int32 ScSheetDPData::GetColumnCount()
 {
     CreateCacheTable();
     return aCacheTable.getColSize();
 }
 
-OUString ScSheetDPData::getDimensionName(tools::Long nColumn)
+OUString ScSheetDPData::getDimensionName(sal_Int32 nColumn)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
@@ -99,7 +99,7 @@ OUString ScSheetDPData::getDimensionName(tools::Long nColumn)
     }
 }
 
-bool ScSheetDPData::IsDateDimension(tools::Long nDim)
+bool ScSheetDPData::IsDateDimension(sal_Int32 nDim)
 {
     CreateCacheTable();
     tools::Long nColCount = aCacheTable.getColSize();
@@ -118,7 +118,7 @@ bool ScSheetDPData::IsDateDimension(tools::Long nDim)
     }
 }
 
-sal_uInt32 ScSheetDPData::GetNumberFormat(tools::Long nDim)
+sal_uInt32 ScSheetDPData::GetNumberFormat(sal_Int32 nDim)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nDim))
@@ -146,7 +146,7 @@ sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
     return 0;
 }
 
-bool ScSheetDPData::getIsDataLayoutDimension(tools::Long nColumn)
+bool ScSheetDPData::getIsDataLayoutDimension(sal_Int32 nColumn)
 {
     CreateCacheTable();
     return (nColumn ==static_cast<tools::Long>( aCacheTable.getColSize()));

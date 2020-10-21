@@ -159,7 +159,7 @@ class SaveBox
 
     SaveBox* pNext;
     sal_uLong nSttNode;
-    tools::Long nRowSpan;
+    sal_Int32 nRowSpan;
     sal_uInt16 nItemSet;
     union
     {

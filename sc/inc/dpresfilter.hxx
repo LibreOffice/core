@@ -134,8 +134,8 @@ struct ScDPResultFilterContext
 {
     ScDPResultTree maFilterSet;
     std::vector<ScDPResultFilter> maFilters;
-    tools::Long mnCol;
-    tools::Long mnRow;
+    sal_Int32 mnCol;
+    sal_Int32 mnRow;
 
     ScDPResultFilterContext();
 };

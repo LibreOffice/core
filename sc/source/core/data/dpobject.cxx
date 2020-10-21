@@ -528,19 +528,19 @@ void ScDPObject::CreateOutput()
     pOutput.reset( new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton ) );
     pOutput->SetHeaderLayout ( mbHeaderLayout );
 
-    tools::Long nOldRows = nHeaderRows;
+    sal_Int32 nOldRows = nHeaderRows;
     nHeaderRows = pOutput->GetHeaderRows();
 
     if ( !(bAllowMove && nHeaderRows != nOldRows) )
         return;
 
-    tools::Long nDiff = nOldRows - nHeaderRows;
+    sal_Int32 nDiff = nOldRows - nHeaderRows;
     if ( nOldRows == 0 )
         --nDiff;
     if ( nHeaderRows == 0 )
         ++nDiff;
 
-    tools::Long nNewRow = aOutRange.aStart.Row() + nDiff;
+    sal_Int32 nNewRow = aOutRange.aStart.Row() + nDiff;
     if ( nNewRow < 0 )
         nNewRow = 0;
 
