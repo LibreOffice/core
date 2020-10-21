@@ -163,13 +163,13 @@ public:
         Pair aEntryCharacterRange = m_aComboListBox.GetLineStartEnd( _nEntryPos );
         if ( aEntryCharacterRange.A() + _nCharacterIndex <= aEntryCharacterRange.B() )
         {
-            long nIndex = aEntryCharacterRange.A() + _nCharacterIndex;
+            tools::Long nIndex = aEntryCharacterRange.A() + _nCharacterIndex;
             aRect = m_aComboListBox.GetCharacterBounds( nIndex );
         }
         return aRect;
     }
 
-    long GetIndexForPoint( const Point& rPoint, sal_Int32& nPos ) const override
+    tools::Long GetIndexForPoint( const Point& rPoint, sal_Int32& nPos ) const override
     {
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }

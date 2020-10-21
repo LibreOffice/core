@@ -134,7 +134,7 @@ public:
     virtual void UpdateDebug (bool) override {};
 protected:
     // Layout:
-    virtual void OnFirstSize (long nWidth, long nHeight) override;
+    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) override;
 
 private:
     // dockable windows:

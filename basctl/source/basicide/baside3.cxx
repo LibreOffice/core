@@ -1366,7 +1366,7 @@ void DialogWindowLayout::GetState (SfxItemSet& rSet, unsigned nWhich)
     }
 }
 
-void DialogWindowLayout::OnFirstSize (long const nWidth, long const nHeight)
+void DialogWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const nHeight)
 {
     AddToLeft(&rObjectCatalog, Size(nWidth * 0.25, nHeight * 0.35));
     if (pPropertyBrowser)

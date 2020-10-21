@@ -75,10 +75,10 @@ namespace
 {
 
 sal_uInt16 const NoMarker = 0xFFFF;
-long const nBasePad = 2;
-long const nCursorPad = 5;
+tools::Long const nBasePad = 2;
+tools::Long const nCursorPad = 5;
 
-long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
+tools::Long nVirtToolBoxHeight;    // inited in WatchWindow, used in Stackwindow
 
 // Returns pBase converted to SbxVariable if valid and is not an SbxMethod.
 SbxVariable* IsSbxVariable (SbxBase* pBase)
@@ -420,11 +420,11 @@ void EditorWindow::Resize()
     if ( !pEditView )
         return;
 
-    long nVisY = pEditView->GetStartDocPos().Y();
+    tools::Long nVisY = pEditView->GetStartDocPos().Y();
 
     pEditView->ShowCursor();
     Size aOutSz( GetOutputSizePixel() );
-    long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
+    tools::Long nMaxVisAreaStart = pEditView->GetTextEngine()->GetTextHeight() - aOutSz.Height();
     if ( nMaxVisAreaStart < 0 )
         nMaxVisAreaStart = 0;
     if ( pEditView->GetStartDocPos().Y() > nMaxVisAreaStart )
@@ -1089,8 +1089,8 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if ( pEditView->GetStartDocPos().Y() )
         {
-            long nOutHeight = GetOutputSizePixel().Height();
-            long nTextHeight = pEditEngine->GetTextHeight();
+            tools::Long nOutHeight = GetOutputSizePixel().Height();
+            tools::Long nTextHeight = pEditEngine->GetTextHeight();
             if ( nTextHeight < nOutHeight )
                 pEditView->Scroll( 0, pEditView->GetStartDocPos().Y() );
 
@@ -1103,7 +1103,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if ( rModulWindow.GetHScrollBar() )
         {
-            const long nWidth = pEditEngine->CalcTextWidth();
+            const tools::Long nWidth = pEditEngine->CalcTextWidth();
             if ( nWidth != nCurTextWidth )
             {
                 nCurTextWidth = nWidth;
@@ -1111,7 +1111,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rModulWindow.GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
             }
         }
-        long nPrevTextWidth = nCurTextWidth;
+        tools::Long nPrevTextWidth = nCurTextWidth;
         nCurTextWidth = pEditEngine->CalcTextWidth();
         if ( nCurTextWidth != nPrevTextWidth )
             SetScrollBarRanges();
@@ -1327,10 +1327,10 @@ void EditorWindow::ParagraphInsertedDeleted( sal_uLong nPara, bool bInserted )
     {
         rModulWindow.GetBreakPoints().AdjustBreakPoints( static_cast<sal_uInt16>(nPara)+1, bInserted );
 
-        long nLineHeight = GetTextHeight();
+        tools::Long nLineHeight = GetTextHeight();
         Size aSz = rModulWindow.GetBreakPointWindow().GetOutputSize();
         tools::Rectangle aInvRect( Point( 0, 0 ), aSz );
-        long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
+        tools::Long nY = nPara*nLineHeight - rModulWindow.GetBreakPointWindow().GetCurYOffset();
         aInvRect.SetTop( nY );
         rModulWindow.GetBreakPointWindow().Invalidate( aInvRect );
 
@@ -1387,7 +1387,7 @@ void BreakPointWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         return;
 
     Size const aOutSz = rRenderContext.GetOutputSize();
-    long const nLineHeight = rRenderContext.GetTextHeight();
+    tools::Long const nLineHeight = rRenderContext.GetTextHeight();
 
     Image const aBrk[2] =
     {
@@ -1416,7 +1416,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
         return;
 
     Size const aOutSz = GetOutputSize();
-    long const nLineHeight = GetTextHeight();
+    tools::Long const nLineHeight = GetTextHeight();
 
     Image aMarker = GetImage(bErrorMarker ? std::u16string_view(u"" RID_BMP_ERRORMARKER) : std::u16string_view(u"" RID_BMP_STEPMARKER));
 
@@ -1433,7 +1433,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     rRenderContext.DrawImage(aPos, aMarker);
 }
 
-void BreakPointWindow::DoScroll( long nVertScroll )
+void BreakPointWindow::DoScroll( tools::Long nVertScroll )
 {
     nCurYOffset -= nVertScroll;
     Window::Scroll( 0, nVertScroll );
@@ -1476,11 +1476,11 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() == 2 )
     {
         Point aMousePos( PixelToLogic( rMEvt.GetPosPixel() ) );
-        long nLineHeight = GetTextHeight();
+        tools::Long nLineHeight = GetTextHeight();
         if(nLineHeight)
         {
-            long nYPos = aMousePos.Y() + nCurYOffset;
-            long nLine = nYPos / nLineHeight + 1;
+            tools::Long nYPos = aMousePos.Y() + nCurYOffset;
+            tools::Long nLine = nYPos / nLineHeight + 1;
             rModulWindow.ToggleBreakPoint( static_cast<sal_uLong>(nLine) );
             Invalidate();
         }
@@ -1536,7 +1536,7 @@ bool BreakPointWindow::SyncYOffset()
     TextView* pView = rModulWindow.GetEditView();
     if ( pView )
     {
-        long nViewYOffset = pView->GetStartDocPos().Y();
+        tools::Long nViewYOffset = pView->GetStartDocPos().Y();
         if ( nCurYOffset != nViewYOffset )
         {
             nCurYOffset = nViewYOffset;
@@ -1982,8 +1982,8 @@ void ComplexEditorWindow::Resize()
     Size aSz(aOutSz);
     aSz.AdjustWidth( -(2*DWBORDER) );
     aSz.AdjustHeight( -(2*DWBORDER) );
-    long nBrkWidth = 20;
-    long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
+    tools::Long nBrkWidth = 20;
+    tools::Long nSBWidth = aEWVScrollBar->GetSizePixel().Width();
 
     Size aBrkSz(nBrkWidth, aSz.Height());
 
@@ -2011,7 +2011,7 @@ IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
     if (aEdtWindow->GetEditView())
     {
         DBG_ASSERT( pCurScrollBar == aEWVScrollBar.get(), "Who is scrolling?" );
-        long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
+        tools::Long nDiff = aEdtWindow->GetEditView()->GetStartDocPos().Y() - pCurScrollBar->GetThumbPos();
         aEdtWindow->GetEditView()->Scroll( 0, nDiff );
         aBrkWindow->DoScroll( nDiff );
         aLineNumberWindow->DoScroll( nDiff );
@@ -2790,7 +2790,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
     // if there is at least one element inside
     // calculate basic position: under the current line
     tools::Rectangle aRect = static_cast<TextEngine*>(pParent->GetEditEngine())->PaMtoEditCursor( pParent->GetEditView()->GetSelection().GetEnd() );
-    long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
+    tools::Long nViewYOffset = pParent->GetEditView()->GetStartDocPos().Y();
     Point aPos = aRect.BottomRight();// this variable will be used later (if needed)
     aPos.setY( (aPos.Y() - nViewYOffset) + nBasePad );
 
@@ -2809,7 +2809,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
 
     if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
     {//clipped at the bottom: move it up
-        const long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
+        const tools::Long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
         aPos.AdjustY( -(aSize.getHeight() + nParentFontHeight + nCursorPad) );
     }
 

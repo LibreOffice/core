@@ -88,7 +88,7 @@ private:
     bool                    mbInitialized;
 
     void*                   mpDisplay;
-    long                    mnWindowID;
+    tools::Long                    mnWindowID;
     GstVideoOverlay*        mpXOverlay;
     gint64                  mnDuration;
     int                     mnWidth;
