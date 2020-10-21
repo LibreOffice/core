@@ -574,13 +574,13 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
 
     Point aPos ( rBorder.Left(), rBorder.Top() );
     Size aSize( GetWindow().GetOutputSizePixel() );
-    long nDeltaX = rBorder.Left() + rBorder.Right();
+    tools::Long nDeltaX = rBorder.Left() + rBorder.Right();
     if ( aSize.Width() > nDeltaX )
         aSize.AdjustWidth( -nDeltaX );
     else
         aSize.setWidth( 0 );
 
-    long nDeltaY = rBorder.Top() + rBorder.Bottom();
+    tools::Long nDeltaY = rBorder.Top() + rBorder.Bottom();
     if ( aSize.Height() > nDeltaY )
         aSize.AdjustHeight( -nDeltaY );
     else

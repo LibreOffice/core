@@ -27,7 +27,7 @@ public:
     void createContextMenu();
 
 private:
-    long    mnItemMaxSize;
+    tools::Long    mnItemMaxSize;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

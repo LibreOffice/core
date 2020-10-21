@@ -170,7 +170,7 @@ class SfxStatusIndicator : public ::cppu::WeakImplHelper< task::XStatusIndicator
     Reference < XController > xOwner;
     Reference < task::XStatusIndicator > xProgress;
     SfxWorkWindow*          pWorkWindow;
-    long                    _nStartTime;
+    tools::Long                    _nStartTime;
 public:
                             SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
                                 : xOwner( pController )

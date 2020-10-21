@@ -81,7 +81,7 @@ public:
     static SfxInPlaceClient* GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
     sal_Int64           GetObjectMiscStatus() const;
-    ErrCode             DoVerb( long nVerb );
+    ErrCode             DoVerb( tools::Long nVerb );
     void                VisAreaChanged();
     void                ResetObject();
     bool                IsUIActive() const;

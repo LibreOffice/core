@@ -401,7 +401,7 @@ void SidebarController::NotifyResize()
     {
         SfxSplitWindow* pSplitWindow = GetSplitWindow();
         WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WindowAlign::Right;
-        long nDeckX, nTabX;
+        tools::Long nDeckX, nTabX;
         if (eAlign == WindowAlign::Left)     // attach the Sidebar towards the left-side of screen
         {
             nDeckX = nTabBarDefaultWidth;
@@ -841,7 +841,7 @@ void SidebarController::SwitchToDeck (
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
     WindowAlign eAlign = pSplitWindow ? pSplitWindow->GetAlign() : WindowAlign::Right;
-    long nDeckX;
+    tools::Long nDeckX;
     if (eAlign == WindowAlign::Left)     // attach the Sidebar towards the left-side of screen
     {
         nDeckX = nTabBarDefaultWidth;
@@ -1396,7 +1396,7 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
     sal_uInt16 nRow (0xffff);
     sal_uInt16 nColumn (0xffff);
     pSplitWindow->GetWindowPos(mpParentWindow, nColumn, nRow);
-    const long nColumnWidth (pSplitWindow->GetLineSize(nColumn));
+    const tools::Long nColumnWidth (pSplitWindow->GetLineSize(nColumn));
 
     vcl::Window* pWindow = mpParentWindow;
     const Size aWindowSize (pWindow->GetSizePixel());

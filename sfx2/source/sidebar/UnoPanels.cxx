@@ -73,7 +73,7 @@ uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
 
         panelList.realloc(aPanels.size());
 
-        long n = 0;
+        tools::Long n = 0;
 
         for (const auto& rPanel : aPanels)
         {

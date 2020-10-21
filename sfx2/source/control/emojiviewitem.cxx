@@ -32,8 +32,8 @@ EmojiViewItem::~EmojiViewItem ()
 }
 
 
-void EmojiViewItem::calculateItemsPosition (const long /*nThumbnailHeight*/,
-                                                const long /*nPadding*/, sal_uInt32 nMaxTextLength,
+void EmojiViewItem::calculateItemsPosition (const tools::Long /*nThumbnailHeight*/,
+                                                const tools::Long /*nPadding*/, sal_uInt32 nMaxTextLength,
                                                 const ThumbnailItemAttributes *pAttrs)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;

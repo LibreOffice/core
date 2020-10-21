@@ -62,8 +62,8 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, GDIMetaFil
 
 #define FRAME 4
 
-    long nWidth = rRenderContext.GetOutputSize().Width() - 2 * FRAME;
-    long nHeight = rRenderContext.GetOutputSize().Height() - 2 * FRAME;
+    tools::Long nWidth = rRenderContext.GetOutputSize().Width() - 2 * FRAME;
+    tools::Long nHeight = rRenderContext.GetOutputSize().Height() - 2 * FRAME;
     if (nWidth <= 0 || nHeight <= 0)
         return;
 
