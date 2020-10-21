@@ -25,6 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>
+#include <tools/long.hxx>
 
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -1093,7 +1094,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
                 {
                     // grow to the right size
                     Reference< XPersistObject > xEmpty;
-                    m_aPersistVector.insert( m_aPersistVector.end(), static_cast<long>(nId - nSize + 1), xEmpty );
+                    m_aPersistVector.insert( m_aPersistVector.end(), static_cast<tools::Long>(nId - nSize + 1), xEmpty );
                 }
 
                 m_aPersistVector[nId] = xLoadedObj;

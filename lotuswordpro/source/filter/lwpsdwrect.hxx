@@ -107,15 +107,16 @@ public:
 
     Point GetRectCenter() const;
 
-    long GetWidth() const;
+    tools::Long GetWidth() const;
 
-    long GetHeight() const;
+    tools::Long GetHeight() const;
 
     tools::Rectangle GetOriginalRect() const;
 
     double GetRotationAngle() const;
 
-    static double CalcDistBetween2Points(long nX1, long nY1, long nX2, long nY2);
+    static double CalcDistBetween2Points(tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                                         tools::Long nY2);
 };
 
 #endif

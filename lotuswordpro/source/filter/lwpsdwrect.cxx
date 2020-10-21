@@ -87,8 +87,8 @@ SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
 **************************************************************************/
 Point SdwRectangle::GetRectCenter() const
 {
-    long nX = static_cast<long>(static_cast<double>(m_nRectCorner[0].X() + m_nRectCorner[2].X())/2 + 0.5);
-    long nY = static_cast<long>(static_cast<double>(m_nRectCorner[0].Y() + m_nRectCorner[2].Y())/2 + 0.5);
+    tools::Long nX = static_cast<tools::Long>(static_cast<double>(m_nRectCorner[0].X() + m_nRectCorner[2].X())/2 + 0.5);
+    tools::Long nY = static_cast<tools::Long>(static_cast<double>(m_nRectCorner[0].Y() + m_nRectCorner[2].Y())/2 + 0.5);
 
     return Point(nX, nY);
 }
@@ -96,27 +96,27 @@ Point SdwRectangle::GetRectCenter() const
  * @short:  Calculate width of the rectangle.
  * @return: rectangle width.
 **************************************************************************/
-long SdwRectangle::GetWidth() const
+tools::Long SdwRectangle::GetWidth() const
 {
-    long nX0 = m_nRectCorner[0].X();
-    long nY0 = m_nRectCorner[0].Y();
-    long nX1 = m_nRectCorner[1].X();
-    long nY1 = m_nRectCorner[1].Y();
+    tools::Long nX0 = m_nRectCorner[0].X();
+    tools::Long nY0 = m_nRectCorner[0].Y();
+    tools::Long nX1 = m_nRectCorner[1].X();
+    tools::Long nY1 = m_nRectCorner[1].Y();
 
-    return static_cast<long>(CalcDistBetween2Points(nX0, nY0, nX1, nY1));
+    return static_cast<tools::Long>(CalcDistBetween2Points(nX0, nY0, nX1, nY1));
 }
 /**************************************************************************
  * @short:  Calculate height of the rectangle.
  * @return: rectangle height.
 **************************************************************************/
-long SdwRectangle::GetHeight() const
+tools::Long SdwRectangle::GetHeight() const
 {
-    long nX1 = m_nRectCorner[1].X();
-    long nY1 = m_nRectCorner[1].Y();
-    long nX2 = m_nRectCorner[2].X();
-    long nY2 = m_nRectCorner[2].Y();
+    tools::Long nX1 = m_nRectCorner[1].X();
+    tools::Long nY1 = m_nRectCorner[1].Y();
+    tools::Long nX2 = m_nRectCorner[2].X();
+    tools::Long nY2 = m_nRectCorner[2].Y();
 
-    return static_cast<long>(CalcDistBetween2Points(nX1, nY1, nX2, nY2));
+    return static_cast<tools::Long>(CalcDistBetween2Points(nX1, nY1, nX2, nY2));
 }
 /**************************************************************************
  * @short:  Calculate coordinate of the original rectangle.
@@ -126,12 +126,12 @@ tools::Rectangle SdwRectangle::GetOriginalRect() const
 {
     if (m_bRotated)
     {
-        long nHeight = GetHeight();
-        long nWidth = GetWidth();
+        tools::Long nHeight = GetHeight();
+        tools::Long nWidth = GetWidth();
         Point aCenter = GetRectCenter();
 
-        Point aLT(aCenter.X()-static_cast<long>(static_cast<double>(nWidth)/2+0.5),
-            aCenter.Y()-static_cast<long>(static_cast<double>(nHeight)/2+0.5));
+        Point aLT(aCenter.X()-static_cast<tools::Long>(static_cast<double>(nWidth)/2+0.5),
+            aCenter.Y()-static_cast<tools::Long>(static_cast<double>(nHeight)/2+0.5));
         Point aRB(aLT.X()+nWidth, aLT.Y()+nHeight);
 
         return tools::Rectangle(aLT, aRB);
@@ -168,7 +168,7 @@ double SdwRectangle::GetRotationAngle() const
     return -fAngle;
 }
 
-double SdwRectangle::CalcDistBetween2Points(long nX1, long nY1, long nX2, long nY2)
+double SdwRectangle::CalcDistBetween2Points(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
     return sqrt(static_cast<double>((nX1-nX2)*(nX1-nX2) + (nY1-nY2)*(nY1-nY2)));
 }

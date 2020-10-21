@@ -127,7 +127,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
         if (pMyScale && pFrameGeo)
         {
             // original drawing size
-            long nWidth = 0, nHeight = 0;
+            tools::Long nWidth = 0, nHeight = 0;
             m_pGraphicObj->GetGrafOrgSize(nWidth, nHeight);
             double fGrafOrgWidth = static_cast<double>(nWidth)/TWIPS_PER_CM;
             double fGrafOrgHeight = static_cast<double>(nHeight)/TWIPS_PER_CM;
@@ -187,10 +187,10 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             // placement: centered
             if (xMyFrameLayout->GetScaleCenter())
             {
-                tools::Rectangle aBoundRect(static_cast<long>(left*m_aTransformData.fScaleX + fLeftMargin),
-                    static_cast<long>(top    * m_aTransformData.fScaleY + fTopMargin),
-                    static_cast<long>(right  * m_aTransformData.fScaleX),
-                    static_cast<long>(bottom * m_aTransformData.fScaleY));
+                tools::Rectangle aBoundRect(static_cast<tools::Long>(left*m_aTransformData.fScaleX + fLeftMargin),
+                    static_cast<tools::Long>(top    * m_aTransformData.fScaleY + fTopMargin),
+                    static_cast<tools::Long>(right  * m_aTransformData.fScaleX),
+                    static_cast<tools::Long>(bottom * m_aTransformData.fScaleY));
                 Point aCenter = aBoundRect.Center();
 
                 double fNewCenterX = (double(left)/TWIPS_PER_CM + fFrameWidth/*-fOffsetX*/) / 2;

@@ -70,8 +70,8 @@ typedef struct tagAFID_CACHE
 {
     unsigned long LinkedFileSize;               /* 0 if not linked */
     unsigned long LinkedFileTime;               /* 0 if not linked */
-    long Width;                             /* -1 if not present */
-    long Height;                                /* -1 if not present */
+    tools::Long Width;                             /* -1 if not present */
+    tools::Long Height;                                /* -1 if not present */
     tagAFID_CACHE()
         : LinkedFileSize(0)
         , LinkedFileTime(0)

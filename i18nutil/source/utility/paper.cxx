@@ -24,6 +24,7 @@
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
+#include <tools/long.hxx>
 
 #include <i18nutil/paper.hxx>
 
@@ -43,8 +44,8 @@ namespace {
 
 struct PageDesc
 {
-    long m_nWidth;
-    long m_nHeight;
+    tools::Long m_nWidth;
+    tools::Long m_nHeight;
     const char *m_pPSName;
     const char *m_pAltPSName;
 };
@@ -52,13 +53,13 @@ struct PageDesc
 }
 
 #define PT2MM100( v ) \
-    long(((v) * 35.27777778) + 0.5)
+    tools::Long(((v) * 35.27777778) + 0.5)
 
 #define IN2MM100( v ) \
-    (long(((v) * 2540) + 0.5))
+    (tools::Long(((v) * 2540) + 0.5))
 
 #define MM2MM100( v ) \
-    (long((v) * 100))
+    (tools::Long((v) * 100))
 
 //PostScript Printer Description File Format Specification
 //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
@@ -171,10 +172,10 @@ void PaperInfo::doSloppyFit()
     {
         if (i == PAPER_USER) continue;
 
-        long lDiffW = labs(aDinTab[i].m_nWidth - m_nPaperWidth);
-        long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
-        long lFlipDiffW = labs(aDinTab[i].m_nHeight - m_nPaperWidth);
-        long lFlipDiffH = labs(aDinTab[i].m_nWidth - m_nPaperHeight);
+        tools::Long lDiffW = labs(aDinTab[i].m_nWidth - m_nPaperWidth);
+        tools::Long lDiffH = labs(aDinTab[i].m_nHeight - m_nPaperHeight);
+        tools::Long lFlipDiffW = labs(aDinTab[i].m_nHeight - m_nPaperWidth);
+        tools::Long lFlipDiffH = labs(aDinTab[i].m_nWidth - m_nPaperHeight);
 
         if ( (lDiffW < MAXSLOPPY && lDiffH < MAXSLOPPY) ||
             (lFlipDiffW < MAXSLOPPY && lFlipDiffH < MAXSLOPPY) )
@@ -196,12 +197,12 @@ bool PaperInfo::sloppyEqual(const PaperInfo &rOther) const
     );
 }
 
-long PaperInfo::sloppyFitPageDimension(long nDimension)
+tools::Long PaperInfo::sloppyFitPageDimension(tools::Long nDimension)
 {
     for ( size_t i = 0; i < nTabSize; ++i )
     {
         if (i == PAPER_USER) continue;
-        long lDiff;
+        tools::Long lDiff;
 
         lDiff = labs(aDinTab[i].m_nWidth - nDimension);
         if ( lDiff < MAXSLOPPY )
@@ -320,8 +321,8 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
                 //glibc stores sizes as integer mm units, and so is inaccurate.
                 //To find a standard paper size we calculate the standard paper
                 //sizes into equally inaccurate mm and compare
-                long width = (aDinTab[i].m_nWidth + 50) / 100;
-                long height = (aDinTab[i].m_nHeight + 50) / 100;
+                tools::Long width = (aDinTab[i].m_nWidth + 50) / 100;
+                tools::Long height = (aDinTab[i].m_nHeight + 50) / 100;
 
                 if (width == w.word/100 && height == h.word/100)
                 {
@@ -366,7 +367,7 @@ PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
     m_nPaperHeight = aDinTab[m_eType].m_nHeight;
 }
 
-PaperInfo::PaperInfo(long nPaperWidth, long nPaperHeight)
+PaperInfo::PaperInfo(tools::Long nPaperWidth, tools::Long nPaperHeight)
     : m_eType(PAPER_USER),
       m_nPaperWidth(nPaperWidth),
       m_nPaperHeight(nPaperHeight)
