@@ -100,7 +100,7 @@ private:
     bool                mbLevelWarning;     // if there any embedded eps file which was not exported
     sal_uInt32          mnLatestPush;       // offset to streamposition, where last push was done
 
-    long                mnLevel;            // dialog options
+    tools::Long                mnLevel;            // dialog options
     bool                mbGrayScale;
     bool                mbCompression;
     sal_Int32           mnPreview;
@@ -200,10 +200,10 @@ private:
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
     void                ImplBmp( Bitmap const *, Bitmap const *, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, const tools::Long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
-    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch );
+    void                ImplWriteString( const OString&, VirtualDevice const & rVDev, const tools::Long* pDXArry, bool bStretch );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw();
@@ -496,12 +496,12 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
             ImplWriteLong( nLines );
             sal_Int32 nCount2, nCount = 4;
             const BitmapColor aBlack( pAcc->GetBestMatchingColor( COL_BLACK ) );
-            for ( long nY = 0; nY < aSizeBitmap.Height(); nY++ )
+            for ( tools::Long nY = 0; nY < aSizeBitmap.Height(); nY++ )
             {
                 nCount2 = 0;
                 char nVal = 0;
                 Scanline pScanline = pAcc->GetScanline( nY );
-                for ( long nX = 0; nX < aSizeBitmap.Width(); nX++ )
+                for ( tools::Long nX = 0; nX < aSizeBitmap.Width(); nX++ )
                 {
                     if ( !nCount2 )
                     {
@@ -1179,7 +1179,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 const Size      aDestSize( pA->GetSize() );
                 const double    fScaleX = aSrcSize.Width() ? static_cast<double>(aDestSize.Width()) / aSrcSize.Width() : 1.0;
                 const double    fScaleY = aSrcSize.Height() ? static_cast<double>(aDestSize.Height()) / aSrcSize.Height() : 1.0;
-                long            nMoveX, nMoveY;
+                tools::Long            nMoveX, nMoveY;
 
                 if( fScaleX != 1.0 || fScaleY != 1.0 )
                 {
@@ -1655,13 +1655,13 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
 
     sal_Int32   nHeightOrg = pBitmap->GetSizePixel().Height();
     sal_Int32   nHeightLeft = nHeightOrg;
-    long    nWidth = pBitmap->GetSizePixel().Width();
+    tools::Long    nWidth = pBitmap->GetSizePixel().Width();
     Point   aSourcePos( rPoint );
 
     while ( nHeightLeft )
     {
         Bitmap  aTileBitmap( *pBitmap );
-        long    nHeight = nHeightLeft;
+        tools::Long    nHeight = nHeightLeft;
         double  nYHeight = nYHeightOrg;
 
         bool    bDoTrans = false;
@@ -1708,7 +1708,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
 
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
-            const long nMoveVertical(nHeightLeft - nHeightOrg);
+            const tools::Long nMoveVertical(nHeightLeft - nHeightOrg);
 
             for (auto & rectangle : aRectangles)
             {
@@ -1754,10 +1754,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
             ImplWriteLong( nWidth );
             ImplWriteLine( "string readhexstring pop}" );
             ImplWriteLine( "image" );
-            for ( long y = 0; y < nHeight; y++ )
+            for ( tools::Long y = 0; y < nHeight; y++ )
             {
                 Scanline pScanlineRead = pAcc->GetScanline( y );
-                for ( long x = 0; x < nWidth; x++ )
+                for ( tools::Long x = 0; x < nWidth; x++ )
                 {
                     ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                 }
@@ -1793,10 +1793,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                 if ( mbCompression )
                 {
                     StartCompression();
-                    for ( long y = 0; y < nHeight; y++ )
+                    for ( tools::Long y = 0; y < nHeight; y++ )
                     {
                         Scanline pScanlineRead = pAcc->GetScanline( y );
-                        for ( long x = 0; x < nWidth; x++ )
+                        for ( tools::Long x = 0; x < nWidth; x++ )
                         {
                             Compress( pAcc->GetIndexFromData( pScanlineRead, x ) );
                         }
@@ -1805,10 +1805,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                 }
                 else
                 {
-                    for ( long y = 0; y < nHeight; y++ )
+                    for ( tools::Long y = 0; y < nHeight; y++ )
                     {
                         Scanline pScanlineRead = pAcc->GetScanline( y );
-                        for ( long x = 0; x < nWidth; x++ )
+                        for ( tools::Long x = 0; x < nWidth; x++ )
                         {
                             ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                         }
@@ -1858,10 +1858,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     if ( mbCompression )
                     {
                         StartCompression();
-                        for ( long y = 0; y < nHeight; y++ )
+                        for ( tools::Long y = 0; y < nHeight; y++ )
                         {
                             Scanline pScanlineRead = pAcc->GetScanline( y );
-                            for ( long x = 0; x < nWidth; x++ )
+                            for ( tools::Long x = 0; x < nWidth; x++ )
                             {
                                 Compress( pAcc->GetIndexFromData( pScanlineRead, x ) );
                             }
@@ -1870,10 +1870,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     }
                     else
                     {
-                        for ( long y = 0; y < nHeight; y++ )
+                        for ( tools::Long y = 0; y < nHeight; y++ )
                         {
                             Scanline pScanlineRead = pAcc->GetScanline( y );
-                            for ( long x = 0; x < nWidth; x++ )
+                            for ( tools::Long x = 0; x < nWidth; x++ )
                             {
                                 ImplWriteHexByte( pAcc->GetIndexFromData( pScanlineRead, x ) );
                             }
@@ -1907,10 +1907,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     if ( mbCompression )
                     {
                         StartCompression();
-                        for ( long y = 0; y < nHeight; y++ )
+                        for ( tools::Long y = 0; y < nHeight; y++ )
                         {
                             Scanline pScanlineRead = pAcc->GetScanline( y );
-                            for ( long x = 0; x < nWidth; x++ )
+                            for ( tools::Long x = 0; x < nWidth; x++ )
                             {
                                 const BitmapColor aBitmapColor( pAcc->GetPixelFromData( pScanlineRead, x ) );
                                 Compress( aBitmapColor.GetRed() );
@@ -1922,10 +1922,10 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
                     }
                     else
                     {
-                        for ( long y = 0; y < nHeight; y++ )
+                        for ( tools::Long y = 0; y < nHeight; y++ )
                         {
                             Scanline pScanline = pAcc->GetScanline( y );
-                            for ( long x = 0; x < nWidth; x++ )
+                            for ( tools::Long x = 0; x < nWidth; x++ )
                             {
                                 const BitmapColor aBitmapColor( pAcc->GetPixelFromData( pScanline, x ) );
                                 ImplWriteHexByte( aBitmapColor.GetRed() );
@@ -1948,7 +1948,7 @@ void PSWriter::ImplBmp( Bitmap const * pBitmap, Bitmap const * pMaskBitmap, cons
         if ( nHeightLeft )
         {
             nHeightLeft++;
-            aSourcePos.setY( static_cast<long>( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg ) );
+            aSourcePos.setY( static_cast<tools::Long>( rPoint.Y() + ( nYHeightOrg * ( nHeightOrg - nHeightLeft ) ) / nHeightOrg ) );
         }
     }
 }
@@ -1965,7 +1965,7 @@ void PSWriter::ImplWriteCharacter( char nChar )
     ImplWriteByte( static_cast<sal_uInt8>(nChar), PS_NONE );
 }
 
-void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const long* pDXArry, bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rVDev, const tools::Long* pDXArry, bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( !nLen )
@@ -1995,7 +1995,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rV
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const tools::Long* pDXArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;

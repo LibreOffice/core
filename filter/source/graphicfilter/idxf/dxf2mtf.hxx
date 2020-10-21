@@ -40,9 +40,9 @@ private:
     sal_uInt16 nLastPercent;
     sal_uInt16 nMainEntitiesCount;
 
-    long        nBlockColor;
+    tools::Long        nBlockColor;
     DXFLineInfo aBlockDXFLineInfo;
-    long        nParentLayerColor;
+    tools::Long        nParentLayerColor;
     DXFLineInfo aParentLayerDXFLineInfo;
     Color       aActLineColor;
     Color       aActFillColor;
@@ -53,7 +53,7 @@ private:
 
     Color ConvertColor(sal_uInt8 nColor);
 
-    long GetEntityColor(const DXFBasicEntity & rE);
+    tools::Long GetEntityColor(const DXFBasicEntity & rE);
 
     DXFLineInfo LTypeToDXFLineInfo(OString const& rLineType);
 

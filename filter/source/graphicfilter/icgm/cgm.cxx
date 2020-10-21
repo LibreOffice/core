@@ -212,7 +212,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     }
     else // ->RP_FIXED
     {
-        long    nVal;
+        tools::Long    nVal;
         const int nSwitch = bCompatible ? 0 : 1 ;
         if ( nRealSize == 4 )
         {

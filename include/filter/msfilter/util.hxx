@@ -17,6 +17,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/datetime.hxx>
+#include <tools/long.hxx>
 
 class Color;
 
@@ -37,7 +38,7 @@ MSFILTER_DLLPUBLIC sal_uInt32 BGRToRGB(sal_uInt32 nColour);
 
 /** Convert from DTTM to Writer's DateTime
   */
-MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( long lDTTM );
+MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( tools::Long lDTTM );
 
 /** Convert DateTime to xsd::dateTime string.
 

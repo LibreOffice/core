@@ -152,8 +152,8 @@ void DXFTransform::Transform(const DXFVector & rSrc, DXFVector & rTgt) const
 
 void DXFTransform::Transform(const DXFVector & rSrc, Point & rTgt) const
 {
-    rTgt.setX(static_cast<long>( rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx + aMP.fx + 0.5 ) );
-    rTgt.setY(static_cast<long>( rSrc.fx * aMX.fy + rSrc.fy * aMY.fy + rSrc.fz * aMZ.fy + aMP.fy + 0.5 ) );
+    rTgt.setX(static_cast<tools::Long>( rSrc.fx * aMX.fx + rSrc.fy * aMY.fx + rSrc.fz * aMZ.fx + aMP.fx + 0.5 ) );
+    rTgt.setY(static_cast<tools::Long>( rSrc.fx * aMX.fy + rSrc.fy * aMY.fy + rSrc.fz * aMZ.fy + aMP.fy + 0.5 ) );
 }
 
 

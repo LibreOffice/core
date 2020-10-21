@@ -446,14 +446,14 @@ protected:
     SvStream*       pStData2;
     SdrModel*       pSdrModel;
 
-    long            nMapMul;
-    long            nMapDiv;
-    long            nMapXOfs;
-    long            nMapYOfs;
-    long            nEmuMul;
-    long            nEmuDiv;
-    long            nPntMul;
-    long            nPntDiv;
+    tools::Long            nMapMul;
+    tools::Long            nMapDiv;
+    tools::Long            nMapXOfs;
+    tools::Long            nMapYOfs;
+    tools::Long            nEmuMul;
+    tools::Long            nEmuDiv;
+    tools::Long            nPntMul;
+    tools::Long            nPntDiv;
     bool            bNeedMap;
     sal_uInt32      nSvxMSDffSettings;
     sal_uInt32      nSvxMSDffOLEConvFlags;
@@ -605,7 +605,7 @@ public:
                      sal_uInt32 nOffsDgg,
                      SvStream* pStData,
                      SdrModel* pSdrModel_,
-                     long      nApplicationScale,
+                     tools::Long      nApplicationScale,
                      Color     mnDefaultColor_,
                      SvStream* pStData2_            =  nullptr,
                      bool bSkipImages               =  false );
@@ -630,7 +630,7 @@ public:
                                        const GDIMetaFile*,
                                        const tools::SvRef<SotStorage> & rDest );
 
-    void SetModel(SdrModel* pModel, long nApplicationScale);
+    void SetModel(SdrModel* pModel, tools::Long nApplicationScale);
     SdrModel*  GetModel() const { return pSdrModel; }
     void Scale(sal_Int32& rVal) const;
     void Scale(Point& rPos) const;
