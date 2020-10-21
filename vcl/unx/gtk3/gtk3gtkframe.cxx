@@ -3105,7 +3105,16 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
         pThis->m_nKeyModifiers = ModKeyFlags::NONE;
 
     if( pThis->m_pIMHandler )
-        pThis->m_pIMHandler->focusChanged( pEvent->in != 0 );
+    {
+        bool bFocusInAnotherGtkWidget = false;
+        if (GTK_IS_WINDOW(pThis->m_pWindow))
+        {
+            GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
+            bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
+        }
+        if (!bFocusInAnotherGtkWidget)
+            pThis->m_pIMHandler->focusChanged( pEvent->in != 0 );
+    }
 
     // ask for changed printers like generic implementation
     if( pEvent->in && pSalInstance->isPrinterInit() )
@@ -3115,7 +3124,6 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     // while we have the pointer grabbed, this should not come from
     // the window manager. Is this an event that was still queued ?
     // The focus does not seem to get set inside our process
-
     // in the meantime do not propagate focus get/lose if floats are open
     if( m_nFloats == 0 )
     {
