@@ -36,14 +36,14 @@
 
 using namespace ::com::sun::star;
 
-SfxThumbnailViewAcc::SfxThumbnailViewAcc( SfxThumbnailView* pParent ) :
+ThumbnailViewAcc::ThumbnailViewAcc( ThumbnailView* pParent ) :
     ValueSetAccComponentBase (m_aMutex),
     mpParent( pParent ),
     mbIsFocused(false)
 {
 }
 
-SfxThumbnailViewAcc::~SfxThumbnailViewAcc()
+ThumbnailViewAcc::~ThumbnailViewAcc()
 {
 }
 
@@ -52,17 +52,17 @@ namespace
     class theSfxValueSetAccUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSfxValueSetAccUnoTunnelId > {};
 }
 
-const uno::Sequence< sal_Int8 >& SfxThumbnailViewAcc::getUnoTunnelId()
+const uno::Sequence< sal_Int8 >& ThumbnailViewAcc::getUnoTunnelId()
 {
     return theSfxValueSetAccUnoTunnelId::get().getSeq();
 }
 
-SfxThumbnailViewAcc* SfxThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
+ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
     throw()
 {
     try
     {
-        return comphelper::getUnoTunnelImplementation<SfxThumbnailViewAcc>(rxData);
+        return comphelper::getUnoTunnelImplementation<ThumbnailViewAcc>(rxData);
     }
     catch(const css::uno::Exception&)
     {
@@ -70,13 +70,13 @@ SfxThumbnailViewAcc* SfxThumbnailViewAcc::getImplementation( const uno::Referenc
     }
 }
 
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL SfxThumbnailViewAcc::getAccessibleContext()
+uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewAcc::getAccessibleContext()
 {
     ThrowIfDisposed();
     return this;
 }
 
-sal_Int32 SAL_CALL SfxThumbnailViewAcc::getAccessibleChildCount()
+sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleChildCount()
 {
     const SolarMutexGuard aSolarGuard;
     ThrowIfDisposed();
@@ -85,7 +85,7 @@ sal_Int32 SAL_CALL SfxThumbnailViewAcc::getAccessibleChildCount()
     return nCount;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleChild( sal_Int32 i )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -98,14 +98,14 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getAc
     return xRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     return mpParent->GetDrawingArea()->get_accessible_parent();
 }
 
-sal_Int32 SAL_CALL SfxThumbnailViewAcc::getAccessibleIndexInParent()
+sal_Int32 SAL_CALL ThumbnailViewAcc::getAccessibleIndexInParent()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -141,7 +141,7 @@ sal_Int32 SAL_CALL SfxThumbnailViewAcc::getAccessibleIndexInParent()
     return nRet;
 }
 
-sal_Int16 SAL_CALL SfxThumbnailViewAcc::getAccessibleRole()
+sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
 {
     ThrowIfDisposed();
     // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
@@ -149,13 +149,13 @@ sal_Int16 SAL_CALL SfxThumbnailViewAcc::getAccessibleRole()
     return accessibility::AccessibleRole::LIST;
 }
 
-OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleDescription()
+OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
 {
     ThrowIfDisposed();
     return "ThumbnailView";
 }
 
-OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleName()
+OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -169,13 +169,13 @@ OUString SAL_CALL SfxThumbnailViewAcc::getAccessibleName()
     return aRet;
 }
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL SfxThumbnailViewAcc::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ThumbnailViewAcc::getAccessibleRelationSet()
 {
     ThrowIfDisposed();
     return uno::Reference< accessibility::XAccessibleRelationSet >();
 }
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SfxThumbnailViewAcc::getAccessibleStateSet()
+uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewAcc::getAccessibleStateSet()
 {
     ThrowIfDisposed();
     ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
@@ -191,7 +191,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SfxThumbnailViewAc
     return pStateSet;
 }
 
-lang::Locale SAL_CALL SfxThumbnailViewAcc::getLocale()
+lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -209,7 +209,7 @@ lang::Locale SAL_CALL SfxThumbnailViewAcc::getLocale()
     return aRet;
 }
 
-void SAL_CALL SfxThumbnailViewAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -232,7 +232,7 @@ void SAL_CALL SfxThumbnailViewAcc::addAccessibleEventListener( const uno::Refere
         mxEventListeners.push_back( rxListener );
 }
 
-void SAL_CALL SfxThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ThumbnailViewAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -247,7 +247,7 @@ void SAL_CALL SfxThumbnailViewAcc::removeAccessibleEventListener( const uno::Ref
     }
 }
 
-sal_Bool SAL_CALL SfxThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
+sal_Bool SAL_CALL ThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
     const awt::Rectangle    aRect( getBounds() );
@@ -257,7 +257,7 @@ sal_Bool SAL_CALL SfxThumbnailViewAcc::containsPoint( const awt::Point& aPoint )
     return tools::Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getAccessibleAtPoint( const awt::Point& aPoint )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -278,7 +278,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getAc
     return xRet;
 }
 
-awt::Rectangle SAL_CALL SfxThumbnailViewAcc::getBounds()
+awt::Rectangle SAL_CALL ThumbnailViewAcc::getBounds()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -294,7 +294,7 @@ awt::Rectangle SAL_CALL SfxThumbnailViewAcc::getBounds()
     return aRet;
 }
 
-awt::Point SAL_CALL SfxThumbnailViewAcc::getLocation()
+awt::Point SAL_CALL ThumbnailViewAcc::getLocation()
 {
     ThrowIfDisposed();
     const awt::Rectangle    aRect( getBounds() );
@@ -306,7 +306,7 @@ awt::Point SAL_CALL SfxThumbnailViewAcc::getLocation()
     return aRet;
 }
 
-awt::Point SAL_CALL SfxThumbnailViewAcc::getLocationOnScreen()
+awt::Point SAL_CALL ThumbnailViewAcc::getLocationOnScreen()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -317,7 +317,7 @@ awt::Point SAL_CALL SfxThumbnailViewAcc::getLocationOnScreen()
     {
         uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
         uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParentContext, css::uno::UNO_QUERY);
-        OSL_ENSURE( xParentComponent.is(), "SfxThumbnailViewAcc::getLocationOnScreen: no parent component!" );
+        OSL_ENSURE( xParentComponent.is(), "ThumbnailViewAcc::getLocationOnScreen: no parent component!" );
         if ( xParentComponent.is() )
         {
             awt::Point aParentScreenLoc( xParentComponent->getLocationOnScreen() );
@@ -330,7 +330,7 @@ awt::Point SAL_CALL SfxThumbnailViewAcc::getLocationOnScreen()
     return aScreenLoc;
 }
 
-awt::Size SAL_CALL SfxThumbnailViewAcc::getSize()
+awt::Size SAL_CALL ThumbnailViewAcc::getSize()
 {
     ThrowIfDisposed();
     const awt::Rectangle    aRect( getBounds() );
@@ -342,28 +342,28 @@ awt::Size SAL_CALL SfxThumbnailViewAcc::getSize()
     return aRet;
 }
 
-void SAL_CALL SfxThumbnailViewAcc::grabFocus()
+void SAL_CALL ThumbnailViewAcc::grabFocus()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     mpParent->GrabFocus();
 }
 
-sal_Int32 SAL_CALL SfxThumbnailViewAcc::getForeground(  )
+sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-sal_Int32 SAL_CALL SfxThumbnailViewAcc::getBackground(  )
+sal_Int32 SAL_CALL ThumbnailViewAcc::getBackground(  )
 {
     ThrowIfDisposed();
     Color nColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
     return static_cast<sal_Int32>(nColor);
 }
 
-void SAL_CALL SfxThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -375,7 +375,7 @@ void SAL_CALL SfxThumbnailViewAcc::selectAccessibleChild( sal_Int32 nChildIndex 
     mpParent->SelectItem( pItem->mnId );
 }
 
-sal_Bool SAL_CALL SfxThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL ThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -387,18 +387,18 @@ sal_Bool SAL_CALL SfxThumbnailViewAcc::isAccessibleChildSelected( sal_Int32 nChi
     return mpParent->IsItemSelected( pItem->mnId );
 }
 
-void SAL_CALL SfxThumbnailViewAcc::clearAccessibleSelection()
+void SAL_CALL ThumbnailViewAcc::clearAccessibleSelection()
 {
     ThrowIfDisposed();
 }
 
-void SAL_CALL SfxThumbnailViewAcc::selectAllAccessibleChildren()
+void SAL_CALL ThumbnailViewAcc::selectAllAccessibleChildren()
 {
     ThrowIfDisposed();
     // unsupported due to single selection only
 }
 
-sal_Int32 SAL_CALL SfxThumbnailViewAcc::getSelectedAccessibleChildCount()
+sal_Int32 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -415,7 +415,7 @@ sal_Int32 SAL_CALL SfxThumbnailViewAcc::getSelectedAccessibleChildCount()
     return nRet;
 }
 
-uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+uno::Reference< accessibility::XAccessible > SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -432,7 +432,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SfxThumbnailViewAcc::getSe
     return xRet;
 }
 
-void SAL_CALL SfxThumbnailViewAcc::deselectAccessibleChild( sal_Int32 )
+void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
@@ -442,11 +442,11 @@ void SAL_CALL SfxThumbnailViewAcc::deselectAccessibleChild( sal_Int32 )
 //FIXME TODO        ;
 }
 
-sal_Int64 SAL_CALL SfxThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL ThumbnailViewAcc::getSomething( const uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
 
-    if( isUnoTunnelId<SfxThumbnailViewAcc>(rId) )
+    if( isUnoTunnelId<ThumbnailViewAcc>(rId) )
         nRet = reinterpret_cast< sal_Int64 >( this );
     else
         nRet = 0;
@@ -454,7 +454,7 @@ sal_Int64 SAL_CALL SfxThumbnailViewAcc::getSomething( const uno::Sequence< sal_I
     return nRet;
 }
 
-void SAL_CALL SfxThumbnailViewAcc::disposing()
+void SAL_CALL ThumbnailViewAcc::disposing()
 {
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
@@ -485,17 +485,17 @@ void SAL_CALL SfxThumbnailViewAcc::disposing()
     }
 }
 
-sal_uInt16 SfxThumbnailViewAcc::getItemCount() const
+sal_uInt16 ThumbnailViewAcc::getItemCount() const
 {
     return mpParent->ImplGetVisibleItemCount();
 }
 
-ThumbnailViewItem* SfxThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
+ThumbnailViewItem* ThumbnailViewAcc::getItem (sal_uInt16 nIndex) const
 {
     return mpParent->ImplGetVisibleItem (nIndex);
 }
 
-void SfxThumbnailViewAcc::ThrowIfDisposed()
+void ThumbnailViewAcc::ThrowIfDisposed()
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -526,7 +526,7 @@ void ThumbnailViewItemAcc::ParentDestroyed()
     mpParent = nullptr;
 }
 
-void SfxThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
     if( !nEventId )
         return;
@@ -574,7 +574,7 @@ ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Refere
     }
 }
 
-void SfxThumbnailViewAcc::GetFocus()
+void ThumbnailViewAcc::GetFocus()
 {
     mbIsFocused = true;
 
@@ -586,7 +586,7 @@ void SfxThumbnailViewAcc::GetFocus()
         aOldState, aNewState);
 }
 
-void SfxThumbnailViewAcc::LoseFocus()
+void ThumbnailViewAcc::LoseFocus()
 {
     mbIsFocused = false;
 

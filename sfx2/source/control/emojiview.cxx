@@ -61,7 +61,7 @@ bool ViewFilter_Category::operator () (const ThumbnailViewItem *pItem)
 }
 
 EmojiView::EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow)
-    : SfxThumbnailView(std::move(xWindow), nullptr)
+    : ThumbnailView(std::move(xWindow), nullptr)
 {
     // locate json data file
     OUString sPath("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/emojiconfig/emoji.json");
@@ -79,7 +79,7 @@ EmojiView::EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow)
 
 void EmojiView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SfxThumbnailView::SetDrawingArea(pDrawingArea);
+    ThumbnailView::SetDrawingArea(pDrawingArea);
 
     if (vcl::Window* pDefaultDevice = dynamic_cast<vcl::Window*>(Application::GetDefaultDevice()))
     {
@@ -199,7 +199,7 @@ bool EmojiView::KeyInput( const KeyEvent& rKEvt )
         return true;
     }
 
-    return SfxThumbnailView::KeyInput(rKEvt);
+    return ThumbnailView::KeyInput(rKEvt);
 }
 
 void EmojiView::setInsertEmojiHdl(const Link<ThumbnailViewItem*, void> &rLink)
@@ -215,7 +215,7 @@ void EmojiView::AppendItem(const OUString &rTitle, const OUString &rCategory, co
     pItem->setCategory(rCategory);
     pItem->setHelpText(rName);
 
-    SfxThumbnailView::AppendItem(std::move(pItem));
+    ThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
 }

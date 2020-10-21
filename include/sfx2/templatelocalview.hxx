@@ -63,7 +63,7 @@ private:
     FILTER_APPLICATION mApp;
 };
 
-class SfxTemplateLocalView : public SfxThumbnailView
+class SfxTemplateLocalView : public ThumbnailView
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 

@@ -16,7 +16,7 @@ class TemplateViewItem;
 class PopupMenu;
 class Menu;
 
-class TemplateSearchView final : public SfxThumbnailView
+class TemplateSearchView final : public ThumbnailView
 {
 public:
 

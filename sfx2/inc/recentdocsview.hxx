@@ -55,7 +55,7 @@ template<> struct typed_flags<sfx2::ApplicationType> : is_typed_flags<sfx2::Appl
 namespace sfx2
 {
 
-class RecentDocsView final : public SfxThumbnailView
+class RecentDocsView final : public ThumbnailView
 {
 public:
     RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);

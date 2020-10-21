@@ -181,12 +181,12 @@ public:
     virtual ~ThumbnailViewBase();
 };
 
-class SFX2_DLLPUBLIC SfxThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
+class SFX2_DLLPUBLIC ThumbnailView : public weld::CustomWidgetController, public ThumbnailViewBase
 {
 public:
-    SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
+    ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
 
-    virtual ~SfxThumbnailView() override;
+    virtual ~ThumbnailView() override;
 
     virtual bool MouseMove(const MouseEvent& rMEvt) override;
 
@@ -280,12 +280,12 @@ protected:
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 
-    // Set Item colors from the SfxThumbnailView colors
+    // Set Item colors from the ThumbnailView colors
     void UpdateColors();
 
 protected:
 
-    friend class SfxThumbnailViewAcc;
+    friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
 
     void CalculateItemPositions (bool bScrollBarUsed = false);
