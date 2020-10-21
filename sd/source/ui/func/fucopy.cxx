@@ -183,14 +183,14 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
     if( lWidth < 0 )
     {
-        long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
-        nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<long>(nNumber) ));
+        ::tools::Long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
+        nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<::tools::Long>(nNumber) ));
     }
 
     if( lHeight < 0 )
     {
-        long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
-        nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<long>(nNumber) ));
+        ::tools::Long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
+        nNumber = static_cast<sal_uInt16>(std::min( nTmp, static_cast<::tools::Long>(nNumber) ));
     }
 
     for( sal_uInt16 i = 1; i <= nNumber; i++ )
@@ -260,9 +260,9 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( bColor )
         {
             // probably room for optimizations, but may can lead to rounding errors
-            sal_uInt8 nRed = aStartColor.GetRed() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetRed()) - static_cast<long>(aStartColor.GetRed()) ) * static_cast<long>(i) / static_cast<long>(nNumber)  );
-            sal_uInt8 nGreen = aStartColor.GetGreen() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetGreen()) - static_cast<long>(aStartColor.GetGreen()) ) *  static_cast<long>(i) / static_cast<long>(nNumber) );
-            sal_uInt8 nBlue = aStartColor.GetBlue() + static_cast<sal_uInt8>( ( static_cast<long>(aEndColor.GetBlue()) - static_cast<long>(aStartColor.GetBlue()) ) * static_cast<long>(i) / static_cast<long>(nNumber) );
+            sal_uInt8 nRed = aStartColor.GetRed() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetRed()) - static_cast<::tools::Long>(aStartColor.GetRed()) ) * static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber)  );
+            sal_uInt8 nGreen = aStartColor.GetGreen() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetGreen()) - static_cast<::tools::Long>(aStartColor.GetGreen()) ) *  static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
+            sal_uInt8 nBlue = aStartColor.GetBlue() + static_cast<sal_uInt8>( ( static_cast<::tools::Long>(aEndColor.GetBlue()) - static_cast<::tools::Long>(aStartColor.GetBlue()) ) * static_cast<::tools::Long>(i) / static_cast<::tools::Long>(nNumber) );
             Color aNewColor( nRed, nGreen, nBlue );
             SfxItemSet aNewSet( mpViewShell->GetPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLCOLOR>{} );
             aNewSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );

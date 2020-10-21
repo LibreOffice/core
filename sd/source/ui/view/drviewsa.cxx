@@ -414,10 +414,10 @@ void DrawViewShell::CheckLineTo(SfxRequest& rReq)
  * Change page parameter if SID_PAGESIZE or SID_PAGEMARGIN
  */
 void DrawViewShell::SetupPage (Size const &rSize,
-                                 long nLeft,
-                                 long nRight,
-                                 long nUpper,
-                                 long nLower,
+                                 ::tools::Long nLeft,
+                                 ::tools::Long nRight,
+                                 ::tools::Long nUpper,
+                                 ::tools::Long nLower,
                                  bool bSize,
                                  bool bMargin,
                                  bool bScaleAll)
@@ -495,8 +495,8 @@ void DrawViewShell::SetupPage (Size const &rSize,
         pHandoutPage->CreateTitleAndLayout(true);
     }
 
-    long nWidth = mpActualPage->GetSize().Width();
-    long nHeight = mpActualPage->GetSize().Height();
+    ::tools::Long nWidth = mpActualPage->GetSize().Width();
+    ::tools::Long nHeight = mpActualPage->GetSize().Height();
 
     Point aPageOrg(nWidth, nHeight / 2);
     Size aSize( nWidth * 3, nHeight * 2);
@@ -578,10 +578,10 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 Size aPageSize = pPageView->GetPage()->GetSize();
 
                 aPagePos.AdjustX(aPageSize.Width()  / 2 );
-                aPageSize.setWidth( static_cast<long>(aPageSize.Width() * 1.03) );
+                aPageSize.setWidth( static_cast<::tools::Long>(aPageSize.Width() * 1.03) );
 
                 aPagePos.AdjustY(aPageSize.Height() / 2 );
-                aPageSize.setHeight( static_cast<long>(aPageSize.Height() * 1.03) );
+                aPageSize.setHeight( static_cast<::tools::Long>(aPageSize.Height() * 1.03) );
                 aPagePos.AdjustY( -(aPageSize.Height() / 2) );
 
                 aPagePos.AdjustX( -(aPageSize.Width()  / 2) );
@@ -600,8 +600,8 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
         Fraction aUIScale(GetDoc()->GetUIScale());
-        aPos.setX( long(aPos.X() / aUIScale) );
-        aPos.setY( long(aPos.Y() / aUIScale) );
+        aPos.setX( ::tools::Long(aPos.X() / aUIScale) );
+        aPos.setY( ::tools::Long(aPos.Y() / aUIScale) );
 
         // position- and size items
         if ( mpDrawView->IsAction() )
@@ -615,12 +615,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             {
                 pPageView->LogicToPagePos(aRect);
                 aPos = aRect.TopLeft();
-                aPos.setX( long(aPos.X() / aUIScale) );
-                aPos.setY( long(aPos.Y() / aUIScale) );
+                aPos.setX( ::tools::Long(aPos.X() / aUIScale) );
+                aPos.setY( ::tools::Long(aPos.Y() / aUIScale) );
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.setHeight( long(aSize.Height() / aUIScale) );
-                aSize.setWidth( long(aSize.Width()  / aUIScale) );
+                aSize.setHeight( ::tools::Long(aSize.Height() / aUIScale) );
+                aSize.setWidth( ::tools::Long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
         }
@@ -633,13 +633,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 // Show the position of the selected shape(s)
                 Point aShapePosition (aRect.TopLeft());
-                aShapePosition.setX( long(aShapePosition.X() / aUIScale) );
-                aShapePosition.setY( long(aShapePosition.Y() / aUIScale) );
+                aShapePosition.setX( ::tools::Long(aShapePosition.X() / aUIScale) );
+                aShapePosition.setY( ::tools::Long(aShapePosition.Y() / aUIScale) );
                 rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
 
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.setHeight( long(aSize.Height() / aUIScale) );
-                aSize.setWidth( long(aSize.Width()  / aUIScale) );
+                aSize.setHeight( ::tools::Long(aSize.Height() / aUIScale) );
+                aSize.setWidth( ::tools::Long(aSize.Width()  / aUIScale) );
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
             else

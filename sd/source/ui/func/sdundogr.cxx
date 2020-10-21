@@ -18,7 +18,7 @@
  */
 
 #include <sdundogr.hxx>
-
+#include <tools/long.hxx>
 
 SdUndoGroup::~SdUndoGroup() = default;
 
@@ -45,8 +45,8 @@ bool SdUndoGroup::Merge( SfxUndoAction* pNextAction )
  */
 void SdUndoGroup::Undo()
 {
-    long nLast = aCtn.size();
-    for (long nAction = nLast - 1; nAction >= 0; nAction--)
+    ::tools::Long nLast = aCtn.size();
+    for (::tools::Long nAction = nLast - 1; nAction >= 0; nAction--)
     {
         aCtn[nAction]->Undo();
     }

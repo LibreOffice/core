@@ -60,7 +60,7 @@
 
 using namespace ::sd;
 
-const long PRINT_OFFSET = 30;       // see /svx/source/dialog/page.cxx
+const ::tools::Long PRINT_OFFSET = 30;       // see /svx/source/dialog/page.cxx
 
 using namespace com::sun::star;
 
@@ -565,12 +565,12 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
                 Size aOutSize(pPrinter->GetOutputSize());
                 Point aPageOffset(pPrinter->GetPageOffset());
                 aPageOffset -= pPrinter->PixelToLogic( Point() );
-                long nOffset = !aPageOffset.X() && !aPageOffset.Y() ? 0 : PRINT_OFFSET;
+                ::tools::Long nOffset = !aPageOffset.X() && !aPageOffset.Y() ? 0 : PRINT_OFFSET;
 
                 sal_uLong nTop    = aPageOffset.Y();
                 sal_uLong nLeft   = aPageOffset.X();
-                sal_uLong nBottom = std::max(static_cast<long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
-                sal_uLong nRight  = std::max(static_cast<long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
+                sal_uLong nBottom = std::max(static_cast<::tools::Long>(aDefSize.Height() - aOutSize.Height() - nTop + nOffset), 0L);
+                sal_uLong nRight  = std::max(static_cast<::tools::Long>(aDefSize.Width() - aOutSize.Width() - nLeft + nOffset), 0L);
 
                 pPage->SetBorder(nLeft, nTop, nRight, nBottom);
             }

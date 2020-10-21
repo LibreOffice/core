@@ -198,10 +198,10 @@ public:
     // including PresObj's in higher derivations
     virtual void adaptSizeAndBorderForAllPages(
         const Size& rNewSize,
-        long nLeft = 0,
-        long nRight = 0,
-        long nUpper = 0,
-        long nLower = 0) override;
+        tools::Long nLeft = 0,
+        tools::Long nRight = 0,
+        tools::Long nUpper = 0,
+        tools::Long nLower = 0) override;
 
     // Adapt PageSize for all Pages of PageKind ePageKind. Also
     // set Borders to left/right/upper/lower, ScaleAll, Orientation,
@@ -211,10 +211,10 @@ public:
         const Size& rNewSize,
         PageKind ePageKind,
         SdUndoGroup* pUndoGroup = nullptr,
-        long nLeft = 0,
-        long nRight = 0,
-        long nUpper = 0,
-        long nLower = 0,
+        tools::Long nLeft = 0,
+        tools::Long nRight = 0,
+        tools::Long nUpper = 0,
+        tools::Long nLower = 0,
         bool bScaleAll = false,
         Orientation eOrientation = Orientation::Landscape,
         sal_uInt16 nPaperBin = 0,

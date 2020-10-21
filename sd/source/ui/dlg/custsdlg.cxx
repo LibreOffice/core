@@ -64,7 +64,7 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
-        long nPosToSelect = pCustomShowList->GetCurPos();
+        tools::Long nPosToSelect = pCustomShowList->GetCurPos();
         // fill ListBox with CustomShows
         for( SdCustomShow* pCustomShow = pCustomShowList->First();
              pCustomShow != nullptr;
@@ -287,7 +287,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
     m_xLbCustomPages->set_size_request(m_xLbPages->get_approximate_digit_width() * 24, m_xLbCustomPages->get_height_rows(10));
 
     // fill Listbox with page names of Docs
-    for( long nPage = 0;
+    for( tools::Long nPage = 0;
          nPage < rDoc.GetSdPageCount( PageKind::Standard );
          nPage++ )
     {
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl, weld::Button&, void)
         OUString aName( m_xEdtName->get_text() );
         SdCustomShow* pCustomShow;
 
-        long nPosToSelect = pCustomShowList->GetCurPos();
+        tools::Long nPosToSelect = pCustomShowList->GetCurPos();
         for( pCustomShow = pCustomShowList->First();
              pCustomShow != nullptr;
              pCustomShow = pCustomShowList->Next() )
