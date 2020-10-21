@@ -999,6 +999,8 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
             nButtonStyle &= ~DrawButtonFlags::Pressed;
         }
 
+        if (GetStyle() & WB_FLATBUTTON)
+            aControlValue.m_bFlatButton = true;
         if (GetStyle() & WB_BEVELBUTTON)
             aControlValue.mbBevelButton = true;
 

@@ -519,6 +519,7 @@ public:
         , mbBevelButton(false)
         , mbSingleLine(true)
         , mbIsAction(false)
+        , m_bFlatButton(false)
     {}
 
     virtual ~PushButtonValue() override;
@@ -532,6 +533,7 @@ public:
     bool mbBevelButton:1; // only used on OSX
     bool mbSingleLine:1;  // only used on OSX
     bool mbIsAction:1;
+    bool m_bFlatButton:1;
 };
 
 
