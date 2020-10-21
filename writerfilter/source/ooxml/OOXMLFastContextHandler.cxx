@@ -1120,6 +1120,12 @@ void OOXMLFastContextHandlerProperties::handleHyperlinkURL() {
     getPropertySet()->resolve(aHyperlinkURLHandler);
 }
 
+void OOXMLFastContextHandlerProperties::handleAltChunk()
+{
+    OOXMLAltChunkHandler aHandler(this);
+    getPropertySet()->resolve(aHandler);
+}
+
 void OOXMLFastContextHandlerProperties::setPropertySet
 (const OOXMLPropertySet::Pointer_t& pPropertySet)
 {

@@ -398,6 +398,31 @@ void OOXMLHyperlinkURLHandler::sprm(Sprm & /*rSprm*/)
 {
 }
 
+OOXMLAltChunkHandler::OOXMLAltChunkHandler(OOXMLFastContextHandler* pContext)
+    : mpFastContext(pContext)
+{
+}
+
+OOXMLAltChunkHandler::~OOXMLAltChunkHandler()
+{
+    mpFastContext->clearProps();
+    mpFastContext->newProperty(NS_ooxml::LN_CT_AltChunk,
+                               OOXMLValue::Pointer_t(new OOXMLStringValue(m_aStreamName)));
+}
+
+void OOXMLAltChunkHandler::attribute(Id nName, Value& rValue)
+{
+    switch (nName)
+    {
+        case NS_ooxml::LN_CT_AltChunk:
+            m_aStreamName = mpFastContext->getTargetForId(rValue.getString());
+            break;
+        default:
+            break;
+    }
+}
+
+void OOXMLAltChunkHandler::sprm(Sprm& /*rSprm*/) {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18116,6 +18116,10 @@
       <action name="start" action="sendPropertiesWithId" sendtokenid="ooxml:paratrackchange"/>
       <action name="start" action="clearProps"/>
     </resource>
+    <resource name="CT_AltChunk" resource="Properties">
+      <attribute name="r:id" tokenid="ooxml:CT_AltChunk"/>
+      <action name="start" action="handleAltChunk"/>
+    </resource>
     <resource name="ST_RubyAlign" resource="List">
       <value tokenid="ooxml:Value_ST_RubyAlign_center">center</value>
       <value tokenid="ooxml:Value_ST_RubyAlign_distributeLetter">distributeLetter</value>
@@ -19035,6 +19039,9 @@
       <attribute name="name" tokenid="ooxml:CT_Font_name"/>
     </resource>
     <resource name="CT_FontsList" resource="Table" tokenid="ooxml:FONTTABLE"/>
+    <resource name="EG_BlockLevelElts" resource="Properties">
+      <attribute name="name" tokenid="ooxml:EG_BlockLevelElts_altChunk"/>
+    </resource>
     <resource name="EG_RunLevelElts" resource="Stream">
       <element name="proofErr" tokenid="ooxml:EG_RunLevelElts_proofErr"/>
       <element name="permStart" tokenid="ooxml:EG_RunLevelElts_permStart"/>
