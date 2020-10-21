@@ -285,6 +285,7 @@ bool IsValidSignature(SvStream& rStream, vcl::filter::PDFObjectElement* pSignatu
     return aSignedPages == aAllPages;
 #else
     (void)rStream;
+    (void)nMDPPerm;
     return true;
 #endif
 }
