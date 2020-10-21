@@ -27,6 +27,8 @@
 
 using namespace com::sun::star;
 
+namespace drawinglayer::primitive2d
+{
 namespace
 {
 // adapts fontScale for usage with TextLayouter. Input is rScale which is the extracted
@@ -78,8 +80,6 @@ basegfx::B2DVector getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale)
 }
 } // end of anonymous namespace
 
-namespace drawinglayer::primitive2d
-{
 void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(
     basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const
 {
