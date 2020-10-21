@@ -18,11 +18,34 @@
 #include <fpdf_annot.h>
 #include <fpdf_edit.h>
 #include <fpdf_text.h>
+#include <fpdf_save.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
+#include <tools/stream.hxx>
 
 #include <bitmapwriteaccess.hxx>
+
+namespace
+{
+/// Callback class to be used with FPDF_SaveWithVersion().
+struct CompatibleWriter : public FPDF_FILEWRITE
+{
+    CompatibleWriter(SvMemoryStream& rStream)
+        : m_rStream(rStream)
+    {
+    }
+
+    SvMemoryStream& m_rStream;
+};
+
+int CompatibleWriterCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize)
+{
+    auto pImpl = static_cast<CompatibleWriter*>(pFileWrite);
+    pImpl->m_rStream.WriteBytes(pData, nSize);
+    return 1;
+}
+}
 
 namespace vcl::pdf
 {
@@ -194,6 +217,19 @@ int PDFiumDocument::getFileVersion()
     int nFileVersion = 0;
     FPDF_GetFileVersion(mpPdfDocument, &nFileVersion);
     return nFileVersion;
+}
+
+bool PDFiumDocument::saveWithVersion(SvMemoryStream& rStream, int nFileVersion)
+{
+    CompatibleWriter aWriter(rStream);
+    aWriter.version = 1;
+    aWriter.WriteBlock = &CompatibleWriterCallback;
+    if (!FPDF_SaveWithVersion(mpPdfDocument, &aWriter, 0, nFileVersion))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 int PDFiumPage::getObjectCount() { return FPDFPage_CountObjects(mpPage); }
