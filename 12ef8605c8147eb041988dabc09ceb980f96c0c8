@@ -52,6 +52,24 @@
       "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acdb386c_d402b7f4",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2020-10-21T09:20:04Z",
+      "side": 1,
+      "message": "oh, i wasn\u0027t aware of this - so we should definitely not write a version of \"12.\" to not trigger that code.\n\ni also wonder if MSO has a similar version check somewhere, but i guess that is a difficult question to answer.\n\nthere is also a compatibilityMode for DOCX files, see e.g. commit f25985c55541cbbc9a4fc79e660592d3d0485196 \n\ni dont know if XLSX or PPTX have the same.",
+      "parentUuid": "9c3e9028_2d94bf58",
+      "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
