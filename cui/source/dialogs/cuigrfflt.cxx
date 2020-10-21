@@ -93,13 +93,13 @@ void CuiGraphicPreviewWindow::ScaleImageToFit()
 
         if( fGrfWH < fPreWH )
         {
-            aGrfSize.setWidth( static_cast<long>( aPreviewSize.Height() * fGrfWH ) );
+            aGrfSize.setWidth( static_cast<tools::Long>( aPreviewSize.Height() * fGrfWH ) );
             aGrfSize.setHeight( aPreviewSize.Height() );
         }
         else
         {
             aGrfSize.setWidth( aPreviewSize.Width() );
-            aGrfSize.setHeight( static_cast<long>( aPreviewSize.Width() / fGrfWH ) );
+            aGrfSize.setHeight( static_cast<tools::Long>( aPreviewSize.Width() / fGrfWH ) );
         }
 
         mfScaleX = static_cast<double>(aGrfSize.Width()) / maOrigGraphicSizePixel.Width();
@@ -189,8 +189,8 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
     Graphic         aRet;
-    long            nTileWidth = static_cast<long>(mxMtrWidth->get_value(FieldUnit::PIXEL));
-    long            nTileHeight = static_cast<long>(mxMtrHeight->get_value(FieldUnit::PIXEL));
+    tools::Long            nTileWidth = static_cast<tools::Long>(mxMtrWidth->get_value(FieldUnit::PIXEL));
+    tools::Long            nTileHeight = static_cast<tools::Long>(mxMtrHeight->get_value(FieldUnit::PIXEL));
     const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
                            std::max( FRound( nTileHeight * fScaleY ), 1L ) );
 

@@ -857,7 +857,7 @@ namespace cppcanvas::internal
                                              const OUString&                rString,
                                              int                            nIndex,
                                              int                            nLength,
-                                             const long*                    pCharWidths,
+                                             const ::tools::Long*                    pCharWidths,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {
@@ -964,7 +964,7 @@ namespace cppcanvas::internal
 
             if ( rState.textStrikeoutStyle == STRIKEOUT_X || rState.textStrikeoutStyle == STRIKEOUT_SLASH )
             {
-                long nWidth = rParms.mrVDev.GetTextWidth( rString,nIndex,nLength );
+                ::tools::Long nWidth = rParms.mrVDev.GetTextWidth( rString,nIndex,nLength );
 
                 sal_Unicode pChars[4];
                 if ( rState.textStrikeoutStyle == STRIKEOUT_X )
@@ -973,18 +973,18 @@ namespace cppcanvas::internal
                     pChars[0] = '/';
                 pChars[3]=pChars[2]=pChars[1]=pChars[0];
 
-                long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
+                ::tools::Long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
                     OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
 
                 if( nStrikeoutWidth <= 0 )
                     nStrikeoutWidth = 1;
 
-                long nMaxWidth = nStrikeoutWidth/2;
+                ::tools::Long nMaxWidth = nStrikeoutWidth/2;
                 if ( nMaxWidth < 2 )
                     nMaxWidth = 2;
                 nMaxWidth += nWidth + 1;
 
-                long nFullStrikeoutWidth = 0;
+                ::tools::Long nFullStrikeoutWidth = 0;
                 OUStringBuffer aStrikeoutText;
                 while( (nFullStrikeoutWidth+=nStrikeoutWidth ) < nMaxWidth+1 )
                     aStrikeoutText.append(pChars[0]);
@@ -993,9 +993,9 @@ namespace cppcanvas::internal
 
                 if( nLen )
                 {
-                    long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
+                    ::tools::Long nInterval = ( nWidth - nStrikeoutWidth * nLen ) / nLen;
                     nStrikeoutWidth += nInterval;
-                    long* pStrikeoutCharWidths = new long[nLen];
+                    ::tools::Long* pStrikeoutCharWidths = new long[nLen];
 
                     for ( int i = 0;i<nLen; i++)
                     {
@@ -2575,7 +2575,7 @@ namespace cppcanvas::internal
                         const sal_Int32 nWidthDifference( pAct->GetWidth() - pDXArray[ nLen-1 ] );
 
                         // Last entry of pDXArray contains total width of the text
-                        long* p = pDXArray.get();
+                        ::tools::Long* p = pDXArray.get();
                         for (sal_Int32 i = 1; i <= nLen; ++i)
                         {
                             // calc ratio for every array entry, to
@@ -2584,7 +2584,7 @@ namespace cppcanvas::internal
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            *p++ += static_cast<long>(i)*nWidthDifference/nLen;
+                            *p++ += static_cast<::tools::Long>(i)*nWidthDifference/nLen;
                         }
 
                         createTextAction(

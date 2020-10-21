@@ -186,7 +186,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
 
-    long nValue = static_cast<long>(static_cast<const SdrTextAniCountItem*>(pItem)->GetValue());
+    tools::Long nValue = static_cast<tools::Long>(static_cast<const SdrTextAniCountItem*>(pItem)->GetValue());
     m_xNumFldCount->set_value(nValue);
     if (nValue == 0)
     {
@@ -211,7 +211,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
 
-    nValue = static_cast<long>(static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue());
+    nValue = static_cast<tools::Long>(static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue());
     m_xMtrFldDelay->set_value(nValue, FieldUnit::NONE);
     if (nValue == 0)
     {
@@ -228,7 +228,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
 
-    nValue = static_cast<long>(static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue());
+    nValue = static_cast<tools::Long>(static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue());
     if (nValue <= 0)
     {
         m_xTsbPixel->set_state(TRISTATE_TRUE);

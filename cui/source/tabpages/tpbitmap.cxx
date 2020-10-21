@@ -308,8 +308,8 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     else
         m_xBitmapStyleLB->set_active(static_cast<sal_Int32>(CUSTOM));
 
-    long nWidth = 0;
-    long nHeight = 0;
+    tools::Long nWidth = 0;
+    tools::Long nHeight = 0;
 
     if(rAttrs->GetItemState(XATTR_FILLBMP_SIZELOG) != SfxItemState::DONTCARE)
     {
@@ -432,8 +432,8 @@ void SvxBitmapTabPage::CalculateBitmapPresetSize()
     if(rBitmapSize.IsEmpty())
         return;
 
-    long nObjectWidth = static_cast<long>(m_fObjectWidth);
-    long nObjectHeight = static_cast<long>(m_fObjectHeight);
+    tools::Long nObjectWidth = static_cast<tools::Long>(m_fObjectWidth);
+    tools::Long nObjectHeight = static_cast<tools::Long>(m_fObjectHeight);
 
     if(std::abs(rBitmapSize.Width() - nObjectWidth) < std::abs(rBitmapSize.Height() - nObjectHeight))
     {
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
     SvxOpenGraphicDialog aDlg(CuiResId(RID_SVXSTR_ADD_IMAGE), pDialogFrameWeld);
     aDlg.EnableLink(false);
-    long nCount = m_pBitmapList->Count();
+    tools::Long nCount = m_pBitmapList->Count();
 
     if( aDlg.Execute() )
         return;
@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
             bool bDifferent = true;
 
-            for( long i = 0; i < nCount && bDifferent; i++ )
+            for( tools::Long i = 0; i < nCount && bDifferent; i++ )
                 if( aName == m_pBitmapList->GetBitmap( i )->GetName() )
                     bDifferent = false;
 
@@ -788,10 +788,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
 sal_Int32 SvxBitmapTabPage::SearchBitmapList(const GraphicObject& rGraphicObject)
 {
-    long nCount = m_pBitmapList->Count();
+    tools::Long nCount = m_pBitmapList->Count();
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount;i++)
+    for(tools::Long i = 0;i < nCount;i++)
     {
         if(rGraphicObject.GetUniqueID() == m_pBitmapList->GetBitmap( i )->GetGraphicObject().GetUniqueID())
         {
@@ -804,11 +804,11 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(const GraphicObject& rGraphicObject
 
 sal_Int32 SvxBitmapTabPage::SearchBitmapList(const OUString& rBitmapName)
 {
-    long nCount = m_pBitmapList->Count();
+    tools::Long nCount = m_pBitmapList->Count();
     bool bValidBitmapName = true;
     sal_Int32 nPos = -1;
 
-    for(long i = 0;i < nCount && bValidBitmapName;i++)
+    for(tools::Long i = 0;i < nCount && bValidBitmapName;i++)
     {
         if(rBitmapName == m_pBitmapList->GetBitmap( i )->GetName())
         {

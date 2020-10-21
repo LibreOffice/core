@@ -90,14 +90,14 @@ class SpellUndoAction_Impl : public SfxUndoAction
     bool            m_bEnableChangePB;
     bool            m_bEnableChangeAllPB;
     //undo of MarkNextError - used in change and change all, ignore and ignore all
-    long            m_nOldErrorStart;
-    long            m_nOldErrorEnd;
+    tools::Long            m_nOldErrorStart;
+    tools::Long            m_nOldErrorEnd;
     bool            m_bIsErrorLanguageSelected;
     //undo of AddToDictionary
     Reference<XDictionary>  m_xDictionary;
     OUString                m_sAddedWord;
     //move end of error - ::ChangeMarkedWord()
-    long            m_nOffset;
+    tools::Long            m_nOffset;
 
 public:
     SpellUndoAction_Impl(sal_uInt16 nId, const Link<SpellUndoAction_Impl&,void>& rActionLink) :
@@ -120,13 +120,13 @@ public:
     void                    SetEnableChangeAllPB(){m_bEnableChangeAllPB = true;}
     bool                    IsEnableChangeAllPB() const {return m_bEnableChangeAllPB;}
 
-    void                    SetErrorMove(long nOldStart, long nOldEnd)
+    void                    SetErrorMove(tools::Long nOldStart, tools::Long nOldEnd)
                                 {
                                         m_nOldErrorStart = nOldStart;
                                         m_nOldErrorEnd = nOldEnd;
                                 }
-    long                    GetOldErrorStart() const { return m_nOldErrorStart;}
-    long                    GetOldErrorEnd() const { return m_nOldErrorEnd;}
+    tools::Long                    GetOldErrorStart() const { return m_nOldErrorStart;}
+    tools::Long                    GetOldErrorEnd() const { return m_nOldErrorEnd;}
 
     void                    SetErrorLanguageSelected(bool bSet){ m_bIsErrorLanguageSelected = bSet;}
     bool                    IsErrorLanguageSelected() const {return m_bIsErrorLanguageSelected;}
@@ -136,8 +136,8 @@ public:
     void                    SetAddedWord(const OUString& rWord) {m_sAddedWord = rWord;}
     const OUString&         GetAddedWord() const { return m_sAddedWord;}
 
-    void                    SetOffset(long nSet) {m_nOffset = nSet;}
-    long                    GetOffset() const {return m_nOffset;}
+    void                    SetOffset(tools::Long nSet) {m_nOffset = nSet;}
+    tools::Long                    GetOffset() const {return m_nOffset;}
 };
 }//namespace svx
 using namespace ::svx;
@@ -1744,7 +1744,7 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     m_xEditEngine->SetModified();
 
     //adjust end position
-    long nEndTemp = m_nErrorEnd;
+    tools::Long nEndTemp = m_nErrorEnd;
     nEndTemp += nDiffLen;
     m_nErrorEnd = static_cast<sal_Int32>(nEndTemp);
 
@@ -2029,7 +2029,7 @@ void SentenceEditWindow_Impl::UndoActionEnd()
     m_xEditEngine->UndoActionEnd();
 }
 
-void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
+void SentenceEditWindow_Impl::MoveErrorEnd(tools::Long nOffset)
 {
     // Shouldn't we always add the real signed value instead???
     if(nOffset > 0)

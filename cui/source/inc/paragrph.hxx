@@ -43,8 +43,8 @@ class SvxStdParagraphTabPage: public SfxTabPage
     static const sal_uInt16 pStdRanges[];
 
 private:
-    long                    nWidth;
-    long                    nMinFixDist;
+    tools::Long                    nWidth;
+    tools::Long                    nMinFixDist;
     bool                    bRelativeMode;
     OUString                sAbsDist;
 
@@ -113,7 +113,7 @@ public:
     void                    EnableRegisterMode();
     void                    EnableContextualMode();
     void                    EnableAutoFirstLine();
-    void                    EnableAbsLineDist(long nMinTwip);
+    void                    EnableAbsLineDist(tools::Long nMinTwip);
     void                    EnableNegativeMode();
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };

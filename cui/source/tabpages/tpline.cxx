@@ -402,7 +402,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_DASH ));
 
                 // For added security
-                if( m_pDashList->Count() > static_cast<long>( nPos - 2 ) )
+                if( m_pDashList->Count() > static_cast<tools::Long>( nPos - 2 ) )
                 {
                     XLineDashItem aDashItem( m_xLbLineStyle->get_active_text(),
                                         m_pDashList->GetDash( nPos - 2 )->GetDash() );
@@ -479,7 +479,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             std::unique_ptr<XLineStartItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineStartItem());
-            else if( m_pLineEndList->Count() > static_cast<long>( nPos - 1 ) )
+            else if( m_pLineEndList->Count() > static_cast<tools::Long>( nPos - 1 ) )
                 pItem.reset(new XLineStartItem( m_xLbStartStyle->get_active_text(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || *pOld != *pItem ) )
@@ -495,7 +495,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             std::unique_ptr<XLineEndItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineEndItem());
-            else if( m_pLineEndList->Count() > static_cast<long>( nPos - 1 ) )
+            else if( m_pLineEndList->Count() > static_cast<tools::Long>( nPos - 1 ) )
                 pItem.reset(new XLineEndItem( m_xLbEndStyle->get_active_text(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINEEND );
             if( pItem &&
@@ -790,7 +790,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     // Line style
     const SfxPoolItem *pPoolItem;
-    long nSymType=SVX_SYMBOLTYPE_UNKNOWN;
+    tools::Long nSymType=SVX_SYMBOLTYPE_UNKNOWN;
     bool bPrevSym=false;
     bool bEnable=true;
     bool bIgnoreGraphic=false;
@@ -971,7 +971,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = rAttrs->Get(XATTR_LINESTART).GetLineStartValue();
 
-        for(long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
+        for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
             const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
@@ -1003,7 +1003,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = rAttrs->Get(XATTR_LINEEND).GetLineEndValue();
 
-        for(long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
+        for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
             const XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
@@ -1516,7 +1516,7 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
     Graphic aGraphic;
     bool bResetSize = false;
     bool bEnable = true;
-    long nPreviousSymbolType = m_nSymbolType;
+    tools::Long nPreviousSymbolType = m_nSymbolType;
 
     OString sNumber;
     if (rIdent.startsWith("gallery", &sNumber))
@@ -1575,8 +1575,8 @@ IMPL_LINK(SvxLineTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
         {   //#i31097# Data Point Symbol size changes when a different symbol is chosen(maoyg)
             if( m_aSymbolSize.Width() != m_aSymbolSize.Height() )
             {
-                aSize.setWidth( static_cast<long>( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
-                aSize.setHeight( static_cast<long>( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
+                aSize.setWidth( static_cast<tools::Long>( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
+                aSize.setHeight( static_cast<tools::Long>( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
                 m_aSymbolSize = aSize;
             }
         }
@@ -1602,8 +1602,8 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
     bool bWidth = &rField == m_xSymbolWidthMF.get();
     m_bLastWidthModified = bWidth;
     bool bRatio = m_xSymbolRatioCB->get_active();
-    long nWidthVal = static_cast<long>(m_xSymbolWidthMF->denormalize(m_xSymbolWidthMF->get_value(FieldUnit::MM_100TH)));
-    long nHeightVal= static_cast<long>(m_xSymbolHeightMF->denormalize(m_xSymbolHeightMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nWidthVal = static_cast<tools::Long>(m_xSymbolWidthMF->denormalize(m_xSymbolWidthMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nHeightVal= static_cast<tools::Long>(m_xSymbolHeightMF->denormalize(m_xSymbolHeightMF->get_value(FieldUnit::MM_100TH)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MapUnit::Map100thMM, m_ePoolUnit );
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MapUnit::Map100thMM, m_ePoolUnit);
     m_aSymbolSize = Size(nWidthVal,nHeightVal);
@@ -1617,11 +1617,11 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 
     if (bWidth)
     {
-        long nDelta = nWidthVal - m_aSymbolLastSize.Width();
+        tools::Long nDelta = nWidthVal - m_aSymbolLastSize.Width();
         m_aSymbolSize.setWidth( nWidthVal );
         if (bRatio)
         {
-            m_aSymbolSize.setHeight( m_aSymbolLastSize.Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
+            m_aSymbolSize.setHeight( m_aSymbolLastSize.Height() + static_cast<tools::Long>(static_cast<double>(nDelta) / fSizeRatio) );
             m_aSymbolSize.setHeight( OutputDevice::LogicToLogic( m_aSymbolSize.Height(), m_ePoolUnit, MapUnit::Map100thMM ) );
 //TODO            m_xSymbolHeightMF->SetUserValue(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FieldUnit::MM_100TH);
             m_xSymbolHeightMF->set_value(m_xSymbolHeightMF->normalize(m_aSymbolSize.Height()), FieldUnit::MM_100TH);
@@ -1629,11 +1629,11 @@ IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
     }
     else
     {
-        long nDelta = nHeightVal - m_aSymbolLastSize.Height();
+        tools::Long nDelta = nHeightVal - m_aSymbolLastSize.Height();
         m_aSymbolSize.setHeight( nHeightVal );
         if (bRatio)
         {
-            m_aSymbolSize.setWidth( m_aSymbolLastSize.Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
+            m_aSymbolSize.setWidth( m_aSymbolLastSize.Width() + static_cast<tools::Long>(static_cast<double>(nDelta) * fSizeRatio) );
             m_aSymbolSize.setWidth( OutputDevice::LogicToLogic( m_aSymbolSize.Width(), m_ePoolUnit, MapUnit::Map100thMM ) );
 //TODO            m_xSymbolWidthMF->SetUserValue(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FieldUnit::MM_100TH);
             m_xSymbolWidthMF->set_value(m_xSymbolWidthMF->normalize(m_aSymbolSize.Width()), FieldUnit::MM_100TH);

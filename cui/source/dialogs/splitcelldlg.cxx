@@ -19,7 +19,7 @@
 
 #include <splitcelldlg.hxx>
 
-SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal)
+SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal)
     : GenericDialogController(pParent, "cui/ui/splitcellsdialog.ui", "SplitCellsDialog")
     , m_xCountEdit(m_xBuilder->weld_spin_button("countnf"))
     , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button("hori") : m_xBuilder->weld_radio_button("vert"))
@@ -54,7 +54,7 @@ SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical,
 IMPL_LINK(SvxSplitTableDlg, ClickHdl, weld::Button&, rButton, void)
 {
     const bool bIsVert = &rButton == m_xVertBox.get();
-    long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
+    tools::Long nMax = bIsVert ? mnMaxVertical : mnMaxHorizontal;
     m_xPropCB->set_sensitive(!bIsVert);
     m_xCountEdit->set_max(nMax);
 }
@@ -69,7 +69,7 @@ bool SvxSplitTableDlg::IsProportional() const
     return m_xPropCB->get_active() && m_xHorzBox->get_active();
 }
 
-long SvxSplitTableDlg::GetCount() const
+tools::Long SvxSplitTableDlg::GetCount() const
 {
     return m_xCountEdit->get_value();
 }
