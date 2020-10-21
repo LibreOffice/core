@@ -736,6 +736,28 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTableStyleConfNested)
     assertXPath(pXmlDoc, "//w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders/w:top", "val", "nil");
 }
 
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testTdf133771)
+{
+    // Create the doc model.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf133771.odt";
+    loadURL(aURL, nullptr, /*pPassword*/ "test");
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Password Protected"), getParagraph(1)->getString());
+
+    // Without the fix in place, this test would have failed with
+    // "An uncaught exception of type com.sun.star.io.IOException"
+    // exporting to docx
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Office Open XML Text");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    validate(maTempFile.GetFileName(), test::OOXML);
+    mbExported = true;
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPathContent(pXmlDoc, "//w:body/w:p/w:r/w:t", "Password Protected");
+}
+
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
 {
     // Create the doc model.
