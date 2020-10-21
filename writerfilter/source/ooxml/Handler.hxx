@@ -155,6 +155,19 @@ public:
     virtual void sprm(Sprm & sprm) override;
 };
 
+/// Looks up the stream name for a '<w:altChunk r:id="..."/>' reference.
+class OOXMLAltChunkHandler : public Properties
+{
+    OOXMLFastContextHandler * mpFastContext;
+    OUString m_aStreamName;
+
+public:
+    explicit OOXMLAltChunkHandler(OOXMLFastContextHandler * pContext);
+    virtual ~OOXMLAltChunkHandler() override;
+
+    virtual void attribute(Id name, Value & val) override;
+    virtual void sprm(Sprm & sprm) override;
+};
 
 }
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_HANDLER_HXX
