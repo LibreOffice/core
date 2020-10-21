@@ -132,7 +132,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
     const sal_Int32 nCount(aModeNodeNames.getLength());
     SvtMiscOptions aMiscOptions;
-    long nCountToolbar = 0;
+    tools::Long nCountToolbar = 0;
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
     {
@@ -142,7 +142,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
         OUString aLabel = comphelper::getString( aModeNode.getNodeValue( "Label" ) );
         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
-        long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
+        tools::Long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
         bool isExperimental = comphelper::getBOOL( aModeNode.getNodeValue( "IsExperimental" ) );
         bool hasNotebookbar = comphelper::getBOOL( aModeNode.getNodeValue( "HasNotebookbar" ) );
 

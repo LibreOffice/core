@@ -379,8 +379,8 @@ namespace
         double fSize( static_cast<double>(nSize) );
         int nDec;
 
-        long nMega = 1024 * 1024;
-        long nGiga = nMega * 1024;
+        tools::Long nMega = 1024 * 1024;
+        tools::Long nGiga = nMega * 1024;
 
         OUString aUnitStr(' ');
 

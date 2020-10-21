@@ -103,7 +103,7 @@ OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::
 }
 
 // private function
-void FontSizeMenuController::setCurHeight( long nHeight, Reference< css::awt::XPopupMenu > const & rPopupMenu )
+void FontSizeMenuController::setCurHeight( tools::Long nHeight, Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     // check menu item
     sal_uInt16          nChecked    = 0;
@@ -237,7 +237,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > co
         pTempAry++;
     }
 
-    setCurHeight( long( m_aFontHeight.Height * 10), rPopupMenu );
+    setCurHeight( tools::Long( m_aFontHeight.Height * 10), rPopupMenu );
 }
 
 // XEventListener
@@ -277,7 +277,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
         if ( m_xPopupMenu.is() )
         {
             SolarMutexGuard aSolarMutexGuard;
-            setCurHeight( long( m_aFontHeight.Height * 10), m_xPopupMenu );
+            setCurHeight( tools::Long( m_aFontHeight.Height * 10), m_xPopupMenu );
         }
     }
 }

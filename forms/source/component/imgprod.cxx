@@ -365,14 +365,14 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 
     Bitmap              aMask( aBmpEx.GetMask() );
     BitmapReadAccess*   pMskAcc = !!aMask ? aMask.AcquireReadAccess() : nullptr;
-    const long          nWidth = pBmpAcc->Width();
-    const long          nHeight = pBmpAcc->Height();
-    const long          nStartX = 0;
-    const long          nEndX = nWidth - 1;
-    const long          nStartY = 0;
-    const long          nEndY = nHeight - 1;
-    const long          nPartWidth = nEndX - nStartX + 1;
-    const long          nPartHeight = nEndY - nStartY + 1;
+    const tools::Long          nWidth = pBmpAcc->Width();
+    const tools::Long          nHeight = pBmpAcc->Height();
+    const tools::Long          nStartX = 0;
+    const tools::Long          nEndX = nWidth - 1;
+    const tools::Long          nStartY = 0;
+    const tools::Long          nEndY = nHeight - 1;
+    const tools::Long          nPartWidth = nEndX - nStartX + 1;
+    const tools::Long          nPartHeight = nEndY - nStartY + 1;
 
     if( !pMskAcc )
     {
@@ -393,11 +393,11 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             css::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
             sal_Int8*                                   pTmp = aData.getArray();
 
-            for( long nY = nStartY; nY <= nEndY; nY++ )
+            for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
             {
                 Scanline pScanlineMask = pMskAcc->GetScanline( nY );
                 Scanline pScanline = pBmpAcc->GetScanline( nY );
-                for( long nX = nStartX; nX <= nEndX; nX++ )
+                for( tools::Long nX = nStartX; nX <= nEndX; nX++ )
                 {
                     if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
                         *pTmp++ = sal::static_int_cast< sal_Int8 >(
@@ -416,11 +416,11 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
             css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
             sal_Int32*                                  pTmp = aData.getArray();
 
-            for( long nY = nStartY; nY <= nEndY; nY++ )
+            for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
             {
                 Scanline pScanlineMask = pMskAcc->GetScanline( nY );
                 Scanline pScanline = pBmpAcc->GetScanline( nY );
-                for( long nX = nStartX; nX <= nEndX; nX++ )
+                for( tools::Long nX = nStartX; nX <= nEndX; nX++ )
                 {
                     if( pMskAcc->GetPixelFromData( pScanlineMask, nX ) == aWhite )
                         *pTmp++ = mnTransIndex;
@@ -440,11 +440,11 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         const BitmapColor                           aWhite( pMskAcc->GetBestMatchingColor( COL_WHITE ) );
         sal_Int32*                                  pTmp = aData.getArray();
 
-        for( long nY = nStartY; nY <= nEndY; nY++ )
+        for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
         {
             Scanline pScanlineMask = pMskAcc->GetScanline( nY );
             Scanline pScanline = pBmpAcc->GetScanline( nY );
-            for( long nX = nStartX; nX <= nEndX; nX++, pTmp++ )
+            for( tools::Long nX = nStartX; nX <= nEndX; nX++, pTmp++ )
             {
                 const BitmapColor aCol( pBmpAcc->GetPixelFromData( pScanline, nX ) );
 
