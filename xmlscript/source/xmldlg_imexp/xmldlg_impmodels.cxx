@@ -1275,8 +1275,8 @@ Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     else if ( rLocalName == "menuitem" )
     {
         OUString aValue( xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID,"value" ) );
-        SAL_WARN_IF( aValue.isEmpty(), "xmlscript.xmldlg", "### menuitem has no value?" );
-        if (!aValue.isEmpty())
+        SAL_WARN_IF( aValue.isEmpty() && !_allowEmptyItems, "xmlscript.xmldlg", "### menuitem has no value?" );
+        if ((!aValue.isEmpty()) || _allowEmptyItems)
         {
             _itemValues.push_back( aValue );
 
@@ -1331,7 +1331,7 @@ Reference< xml::input::XElement > MenuListElement::startChildElement(
     // menupopup
     else if ( rLocalName == "menupopup" )
     {
-        _popup = new MenuPopupElement( rLocalName, xAttributes, this, m_xImport.get() );
+        _popup = new MenuPopupElement( rLocalName, xAttributes, this, m_xImport.get(), false );
         return _popup;
     }
     else
@@ -1399,7 +1399,7 @@ Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     // menupopup
     else if ( rLocalName == "menupopup" )
     {
-        _popup = new MenuPopupElement( rLocalName, xAttributes, this, m_xImport.get() );
+        _popup = new MenuPopupElement( rLocalName, xAttributes, this, m_xImport.get(), true );
         return _popup;
     }
     else
