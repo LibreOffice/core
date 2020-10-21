@@ -365,8 +365,8 @@ Point PictReader::ReadPoint()
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-    Point aPoint( static_cast<long>(nx) - aBoundingRect.Left(),
-                 static_cast<long>(ny) - aBoundingRect.Top() );
+    Point aPoint( static_cast<tools::Long>(nx) - aBoundingRect.Left(),
+                 static_cast<tools::Long>(ny) - aBoundingRect.Top() );
 
     SAL_INFO("filter.pict", "ReadPoint: " << aPoint);
     return aPoint;
@@ -378,7 +378,7 @@ Point PictReader::ReadDeltaH(Point aBase)
 
     pPict->ReadChar( reinterpret_cast<char&>(ndh) );
 
-    return Point( aBase.X() + static_cast<long>(ndh), aBase.Y() );
+    return Point( aBase.X() + static_cast<tools::Long>(ndh), aBase.Y() );
 }
 
 Point PictReader::ReadDeltaV(Point aBase)
@@ -387,7 +387,7 @@ Point PictReader::ReadDeltaV(Point aBase)
 
     pPict->ReadChar( reinterpret_cast<char&>(ndv) );
 
-    return Point( aBase.X(), aBase.Y() + static_cast<long>(ndv) );
+    return Point( aBase.X(), aBase.Y() + static_cast<tools::Long>(ndv) );
 }
 
 Point PictReader::ReadUnsignedDeltaH(Point aBase)
@@ -396,7 +396,7 @@ Point PictReader::ReadUnsignedDeltaH(Point aBase)
 
     pPict->ReadUChar( ndh );
 
-    return Point( aBase.X() + static_cast<long>(ndh), aBase.Y() );
+    return Point( aBase.X() + static_cast<tools::Long>(ndh), aBase.Y() );
 }
 
 Point PictReader::ReadUnsignedDeltaV(Point aBase)
@@ -405,7 +405,7 @@ Point PictReader::ReadUnsignedDeltaV(Point aBase)
 
     pPict->ReadUChar( ndv );
 
-    return Point( aBase.X(), aBase.Y() + static_cast<long>(ndv) );
+    return Point( aBase.X(), aBase.Y() + static_cast<tools::Long>(ndv) );
 }
 
 Size PictReader::ReadSize()
@@ -414,7 +414,7 @@ Size PictReader::ReadSize()
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-    return Size( static_cast<long>(nx), static_cast<long>(ny) );
+    return Size( static_cast<tools::Long>(nx), static_cast<tools::Long>(ny) );
 }
 
 Color PictReader::ReadColor()
@@ -1444,7 +1444,7 @@ sal_uInt64 PictReader::ReadData(sal_uInt16 nOpcode)
     case 0x000d:   // TxSize
     {
         pPict->ReadUInt16( nUSHORT );
-        aActFont.SetFontSize( Size( 0, static_cast<long>(nUSHORT) ) );
+        aActFont.SetFontSize( Size( 0, static_cast<tools::Long>(nUSHORT) ) );
         eActMethod = PictDrawingMethod::UNDEFINED;
         nDataSize=2;
     }

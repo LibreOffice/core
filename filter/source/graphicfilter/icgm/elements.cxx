@@ -278,7 +278,7 @@ void CGMElements::Init()
 }
 
 
-void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, long nAngle )
+void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, tools::Long nDistance, tools::Long nAngle )
 {
     HatchEntry& rEntry = maHatchMap[nKey];
     rEntry.HatchStyle = nStyle;
@@ -298,7 +298,7 @@ void CGMElements::CopyAllBundles( const BundleList& rSource, BundleList& rDest )
 };
 
 
-Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBundle )
+Bundle* CGMElements::GetBundleIndex( tools::Long nIndex, BundleList& rList, Bundle& rBundle )
 {
     rBundle.SetIndex( nIndex );
     Bundle* pBundle = GetBundle( rList, nIndex );
@@ -308,7 +308,7 @@ Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBu
 }
 
 
-Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
+Bundle* CGMElements::GetBundle( BundleList& rList, tools::Long nIndex )
 {
     for (auto const & i : rList) {
         if ( i->GetIndex() == nIndex ) {

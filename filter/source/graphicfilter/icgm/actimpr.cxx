@@ -453,9 +453,9 @@ void CGMImpressOutAct::DrawRectangle( FloatRect const & rFloatRect )
     {
         if ( ImplCreateShape( "com.sun.star.drawing.RectangleShape" ) )
         {
-            awt::Size aSize( static_cast<long>(rFloatRect.Right - rFloatRect.Left ), static_cast<long>(rFloatRect.Bottom-rFloatRect.Top ) );
+            awt::Size aSize( static_cast<tools::Long>(rFloatRect.Right - rFloatRect.Left ), static_cast<tools::Long>(rFloatRect.Bottom-rFloatRect.Top ) );
             maXShape->setSize( aSize );
-            maXShape->setPosition( awt::Point( static_cast<long>(rFloatRect.Left), static_cast<long>(rFloatRect.Top) ) );
+            maXShape->setPosition( awt::Point( static_cast<tools::Long>(rFloatRect.Left), static_cast<tools::Long>(rFloatRect.Top) ) );
             ImplSetFillBundle();
         }
     }
@@ -470,14 +470,14 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint const & rCenter, FloatPoint const
     uno::Any aAny( &eCircleKind, ::cppu::UnoType<drawing::CircleKind>::get() );
     maXPropSet->setPropertyValue( "CircleKind", aAny );
 
-    long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
-    long nYSize = static_cast<long>( rSize.Y * 2.0 );
+    tools::Long nXSize = static_cast<tools::Long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
+    tools::Long nYSize = static_cast<tools::Long>( rSize.Y * 2.0 );
     if ( nXSize < 1 )
         nXSize = 1;
     if ( nYSize < 1 )
         nYSize = 1;
     maXShape->setSize( awt::Size( nXSize, nYSize ) );
-    maXShape->setPosition( awt::Point( static_cast<long>( rCenter.X - rSize.X ), static_cast<long>( rCenter.Y - rSize.Y ) ) );
+    maXShape->setPosition( awt::Point( static_cast<tools::Long>( rCenter.X - rSize.X ), static_cast<tools::Long>( rCenter.Y - rSize.Y ) ) );
 
     if ( rOrientation != 0 )
     {
@@ -496,8 +496,8 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
     drawing::CircleKind eCircleKind;
 
 
-    long nXSize = static_cast<long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
-    long nYSize = static_cast<long>( rSize.Y * 2.0 );
+    tools::Long nXSize = static_cast<tools::Long>( rSize.X * 2.0 );      // strange behaviour with an awt::Size of 0
+    tools::Long nYSize = static_cast<tools::Long>( rSize.Y * 2.0 );
     if ( nXSize < 1 )
         nXSize = 1;
     if ( nYSize < 1 )
@@ -517,7 +517,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
         case 2 : eCircleKind = drawing::CircleKind_ARC; break;
         default : eCircleKind = drawing::CircleKind_FULL; break;
     }
-    if ( static_cast<long>(fStartAngle) == static_cast<long>(fEndAngle) )
+    if ( static_cast<tools::Long>(fStartAngle) == static_cast<tools::Long>(fEndAngle) )
     {
         eCircleKind = drawing::CircleKind_FULL;
         maXPropSet->setPropertyValue( "CircleKind", uno::Any(eCircleKind) );
@@ -528,7 +528,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint const & rCenter, FloatPoint
         maXPropSet->setPropertyValue( "CircleStartAngle", uno::Any(static_cast<sal_Int32>( fStartAngle * 100 )) );
         maXPropSet->setPropertyValue( "CircleEndAngle", uno::Any(static_cast<sal_Int32>( fEndAngle * 100 )) );
     }
-    maXShape->setPosition( awt::Point( static_cast<long>( rCenter.X - rSize.X ), static_cast<long>( rCenter.Y - rSize.Y ) ) );
+    maXShape->setPosition( awt::Point( static_cast<tools::Long>( rCenter.X - rSize.X ), static_cast<tools::Long>( rCenter.Y - rSize.Y ) ) );
     if ( rOrientation != 0 )
     {
         ImplSetOrientation( rCenter, rOrientation );
@@ -571,8 +571,8 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
     if ( !ImplCreateShape( "com.sun.star.drawing.GraphicObjectShape" ) )
         return;
 
-    maXShape->setSize( awt::Size( static_cast<long>(fdx), static_cast<long>(fdy) ) );
-    maXShape->setPosition( awt::Point( static_cast<long>(aOrigin.X), static_cast<long>(aOrigin.Y) ) );
+    maXShape->setSize( awt::Size( static_cast<tools::Long>(fdx), static_cast<tools::Long>(fdy) ) );
+    maXShape->setPosition( awt::Point( static_cast<tools::Long>(aOrigin.X), static_cast<tools::Long>(aOrigin.Y) ) );
 
     if ( pBmpDesc->mnOrientation != 0 )
     {
@@ -725,8 +725,8 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
         return;
 
     uno::Any    aAny;
-    long    nWidth = rTextSize.Width;
-    long    nHeight = rTextSize.Height;
+    tools::Long    nWidth = rTextSize.Width;
+    tools::Long    nHeight = rTextSize.Height;
 
     awt::Point aTextPos( rTextPos );
     switch ( mpCGM->pElement->eTextAlignmentV )
@@ -960,7 +960,7 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon const & rPolygon, bool bRever
     }
 }
 
-void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs )
+void CGMImpressOutAct::SetGradientOffset( tools::Long nHorzOfs, tools::Long nVertOfs )
 {
     if ( !mpGradient )
         mpGradient.reset( new awt::Gradient );
@@ -968,7 +968,7 @@ void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs )
     mpGradient->YOffset = ( static_cast<sal_uInt16>(nVertOfs) & 0x7f );
 }
 
-void CGMImpressOutAct::SetGradientAngle( long nAngle )
+void CGMImpressOutAct::SetGradientAngle( tools::Long nAngle )
 {
     if ( !mpGradient )
         mpGradient.reset( new awt::Gradient );

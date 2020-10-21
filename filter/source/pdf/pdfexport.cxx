@@ -1113,7 +1113,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     aFont.SetWidthType( WIDTH_NORMAL );
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlignment( ALIGN_BOTTOM );
-    long nTextWidth = rPageSize.Width();
+    tools::Long nTextWidth = rPageSize.Width();
     if( rPageSize.Width() < rPageSize.Height() )
     {
         nTextWidth = rPageSize.Height();
@@ -1130,7 +1130,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     {
         if (w == 0)
             break;
-        long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
+        tools::Long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
         if( nNewHeight == aFont.GetFontHeight() )
         {
             nNewHeight--;
@@ -1140,7 +1140,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
         aFont.SetFontHeight( nNewHeight );
         pDev->SetFont( aFont );
     }
-    long nTextHeight = pDev->GetTextHeight();
+    tools::Long nTextHeight = pDev->GetTextHeight();
     // leave some maneuvering room for rounding issues, also
     // some fonts go a little outside ascent/descent
     nTextHeight += nTextHeight/20;
@@ -1194,7 +1194,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     pDev->SetMapMode( MapMode( MapUnit::MapPoint ) );
     int w = 0;
     int watermarkcount = ((rPageSize.Width()) / 200)+1;
-    long nTextWidth = rPageSize.Width() / (watermarkcount*1.5);
+    tools::Long nTextWidth = rPageSize.Width() / (watermarkcount*1.5);
     OUString oneLineText = watermark;
 
     if(watermark.getLength() > lineLength)
@@ -1205,7 +1205,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
         if(w==0)
             break;
 
-        long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
+        tools::Long nNewHeight = aFont.GetFontHeight() * nTextWidth / w;
         aFont.SetFontHeight(nNewHeight);
         pDev->SetFont( aFont );
     }

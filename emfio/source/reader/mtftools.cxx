@@ -266,7 +266,7 @@ namespace emfio
             aFont.SetFontSize( aFontSize );
             pVDev->SetFont( aFont );
             FontMetric aMetric( pVDev->GetFontMetric() );
-            long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
+            tools::Long nHeight = aMetric.GetAscent() + aMetric.GetDescent();
             if (nHeight)
             {
                 double fHeight = (static_cast<double>(aFontSize.Height()) * rFont.lfHeight ) / nHeight;
@@ -743,7 +743,7 @@ namespace emfio
                 if ( pLineStyle->aLineInfo.GetStyle() == LineStyle::Dash )
                 {
                     aSize.AdjustWidth(1 );
-                    long nDotLen = ImplMap( aSize ).Width();
+                    tools::Long nDotLen = ImplMap( aSize ).Width();
                     pLineStyle->aLineInfo.SetDistance( nDotLen );
                     pLineStyle->aLineInfo.SetDotLen( nDotLen );
                     pLineStyle->aLineInfo.SetDashLen( nDotLen * 3 );
@@ -1413,7 +1413,7 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, long* pDXArry, long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, tools::Long* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
@@ -1589,7 +1589,7 @@ namespace emfio
             {
                 /* because text without dx array is badly scaled, we
                    will create such an array if necessary */
-                long* pDX = pDXArry;
+                tools::Long* pDX = pDXArry;
                 if (!pDXArry)
                 {
                     // #i117968# VirtualDevice is not thread safe, but filter is used in multithreading

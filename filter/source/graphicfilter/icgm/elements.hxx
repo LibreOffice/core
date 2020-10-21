@@ -30,9 +30,9 @@ typedef ::std::vector< std::unique_ptr<Bundle> > BundleList;
 
 class CGMElements
 {
-        void                ImplInsertHatch( sal_Int32 Key, int Style, long Distance, long Angle );
+        void                ImplInsertHatch( sal_Int32 Key, int Style, tools::Long Distance, tools::Long Angle );
     public:
-        long                nMetaFileVersion;
+        tools::Long                nMetaFileVersion;
 
         sal_uInt32          nIntegerPrecision;  // maybe 1, 2, 4 Bytes
         sal_uInt32          nIndexPrecision;    //   "      "       "
@@ -105,8 +105,8 @@ class CGMElements
         TextAlignmentV      eTextAlignmentV;
         double              nTextAlignmentHCont;
         double              nTextAlignmentVCont;
-        long                nCharacterSetIndex;
-        long                nAlternateCharacterSetIndex;
+        tools::Long                nCharacterSetIndex;
+        tools::Long                nAlternateCharacterSetIndex;
         CharacterCodingA    eCharacterCodingA;
         CGMFList            aFontList;
 
@@ -128,8 +128,8 @@ class CGMElements
         ~CGMElements();
         CGMElements&        operator=( const CGMElements& );
         void                Init();
-        static Bundle*      GetBundleIndex( long nIndex, BundleList&, Bundle& );
-        static Bundle*      GetBundle( BundleList& rList, long nIndex );
+        static Bundle*      GetBundleIndex( tools::Long nIndex, BundleList&, Bundle& );
+        static Bundle*      GetBundle( BundleList& rList, tools::Long nIndex );
         static Bundle*      InsertBundle( BundleList&, Bundle& );
         static void         CopyAllBundles( const BundleList& Source, BundleList& Dest );
 };

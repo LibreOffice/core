@@ -36,7 +36,7 @@ public:
     // properties of blocks; commented with group codes:
     OString m_sName;                      //  2
     OString m_sAlsoName;                  //  3
-    long nFlags;                          // 70
+    tools::Long nFlags;                          // 70
     DXFVector aBasePoint;                 // 10,20,30
     OString m_sXRef;                      //  1
 

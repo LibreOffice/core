@@ -53,7 +53,7 @@ sal_uInt32 BGRToRGB(sal_uInt32 nColor)
     return nColor;
 }
 
-DateTime DTTM2DateTime( long lDTTM )
+DateTime DTTM2DateTime( tools::Long lDTTM )
 {
     /*
     mint    short   :6  0000003F    minutes (0-59)

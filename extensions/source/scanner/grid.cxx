@@ -301,10 +301,10 @@ Point GridWindow::transform( double x, double y )
 {
     Point aRet;
 
-    aRet.setX( static_cast<long>( ( x - m_fMinX ) *
+    aRet.setX( static_cast<tools::Long>( ( x - m_fMinX ) *
         static_cast<double>(m_aGridArea.GetWidth()) / ( m_fMaxX - m_fMinX )
         + m_aGridArea.Left() ) );
-    aRet.setY( static_cast<long>(
+    aRet.setY( static_cast<tools::Long>(
         m_aGridArea.Bottom() -
         ( y - m_fMinY ) *
         static_cast<double>(m_aGridArea.GetHeight()) / ( m_fMaxY - m_fMinY ) ) );
@@ -313,8 +313,8 @@ Point GridWindow::transform( double x, double y )
 
 void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
-    const long nWidth = m_aGridArea.GetWidth();
-    const long nHeight = m_aGridArea.GetHeight();
+    const tools::Long nWidth = m_aGridArea.GetWidth();
+    const tools::Long nHeight = m_aGridArea.GetHeight();
     if (!nWidth || !nHeight)
         return;
     x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / static_cast<double>(nWidth) + m_fMinX;

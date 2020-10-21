@@ -258,7 +258,7 @@ namespace bib
 
     IMPL_LINK_NOARG( BibBeamer, RecalcLayout_Impl, void*, void )
     {
-        long nHeight = pToolBar->get_preferred_size().Height();
+        tools::Long nHeight = pToolBar->get_preferred_size().Height();
         SetItemSize( ID_TOOLBAR, nHeight );
     }
 
