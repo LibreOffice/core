@@ -46,6 +46,8 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 
 using namespace com::sun::star;
 
@@ -147,6 +149,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
         syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)));
+
+    // TODO: Text dialog attr setting to frame
 
     const SwFormatAnchor& rAnch = pShape->GetAnchor();
     if (!((rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && rAnch.GetPageNum() != 0)
@@ -395,6 +399,45 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SwFrameFormat* pShape, bool b
 void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, const OUString& rPropertyName,
                                    const css::uno::Any& rValue)
 {
+    // Textframes does not have valid horizontal adjust property, so map it to paragraph adjust property
+    if (rPropertyName == UNO_NAME_TEXT_HORZADJUST)
+    {
+        SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
+        if (!pFormat)
+            return;
+
+        auto xTextFrame = SwXTextFrame::CreateXTextFrame(*pFormat->GetDoc(), pFormat);
+        uno::Reference<text::XTextCursor> xCursor = xTextFrame->getText()->createTextCursor();
+
+        // Select all paragraps in the textframe
+        xCursor->gotoStart(false);
+        xCursor->gotoEnd(true);
+        uno::Reference<beans::XPropertySet> xFrameParaProps(xCursor, uno::UNO_QUERY);
+
+        // And simply map the property
+        switch (rValue.get<drawing::TextHorizontalAdjust>())
+        {
+            case drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER:
+                xFrameParaProps->setPropertyValue(
+                    UNO_NAME_PARA_ADJUST,
+                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_CENTER)); //3
+                break;
+            case drawing::TextHorizontalAdjust::TextHorizontalAdjust_LEFT:
+                xFrameParaProps->setPropertyValue(
+                    UNO_NAME_PARA_ADJUST,
+                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_LEFT)); //0
+                break;
+            case drawing::TextHorizontalAdjust::TextHorizontalAdjust_RIGHT:
+                xFrameParaProps->setPropertyValue(
+                    UNO_NAME_PARA_ADJUST,
+                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_RIGHT)); //1
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+
     if (rPropertyName == "CustomShapeGeometry")
     {
         // CustomShapeGeometry changes the textbox position offset and size, so adjust both.
@@ -838,6 +881,7 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
     if (!pParentFormat)
         return;
 
+    // Sync the padding
     syncProperty(pParentFormat, UNO_NAME_TEXT_LEFTDIST,
                  xPropertySet->getPropertyValue(UNO_NAME_TEXT_LEFTDIST));
     syncProperty(pParentFormat, UNO_NAME_TEXT_RIGHTDIST,
@@ -846,6 +890,16 @@ void SwTextBoxHelper::updateTextBoxMargin(SdrObject* pObj)
                  xPropertySet->getPropertyValue(UNO_NAME_TEXT_UPPERDIST));
     syncProperty(pParentFormat, UNO_NAME_TEXT_LOWERDIST,
                  xPropertySet->getPropertyValue(UNO_NAME_TEXT_LOWERDIST));
+
+    // Sync the text aligning
+    syncProperty(pParentFormat, UNO_NAME_TEXT_VERTADJUST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_VERTADJUST));
+    syncProperty(pParentFormat, UNO_NAME_TEXT_HORZADJUST,
+                 xPropertySet->getPropertyValue(UNO_NAME_TEXT_HORZADJUST));
+
+    //FIXME: Sync autogrow: needs repositioning after sync
+    //syncProperty(pParentFormat, RES_FRM_SIZE, MID_FRMSIZE_IS_AUTO_HEIGHT,
+    //             xPropertySet->getPropertyValue(UNO_NAME_TEXT_AUTOGROWHEIGHT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
