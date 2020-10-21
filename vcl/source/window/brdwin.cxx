@@ -500,7 +500,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, tools::Long nWidth, to
 
                         mpBorderWindow->SetPaintTransparent( true );
                         mpBorderWindow->SetBackground();
-                        pCtrl->SetPaintTransparent( true );
+                        if (!pCtrl->IsControlBackground())
+                            pCtrl->SetPaintTransparent(true);
 
                         vcl::Window* pCompoundParent = nullptr;
                         if( pWin->GetParent() && pWin->GetParent()->IsCompoundControl() )
