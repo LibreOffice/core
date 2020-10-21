@@ -243,7 +243,7 @@ void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
 
     ensureIsAlive();
     Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
-    for(long i=0; i<m_aTable.GetRowCount(); i++)
+    for(tools::Long i=0; i<m_aTable.GetRowCount(); i++)
         selectedRows[i]=i;
 }
 sal_Int32 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
@@ -307,10 +307,10 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBox()
     DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( pParent ));
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
-    long nX = aGridRect.Left() + aTableRect.Left();
-    long nY = aGridRect.Top() + aTableRect.Top();
-    long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
-    long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
+    tools::Long nX = aGridRect.Left() + aTableRect.Left();
+    tools::Long nY = aGridRect.Top() + aTableRect.Top();
+    tools::Long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
+    tools::Long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
     tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
     return aTable;
 }
@@ -319,10 +319,10 @@ tools::Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
 {
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( nullptr ));
     tools::Rectangle aTableRect( m_aTable.calcTableRect() );
-    long nX = aGridRect.Left() + aTableRect.Left();
-    long nY = aGridRect.Top() + aTableRect.Top();
-    long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
-    long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
+    tools::Long nX = aGridRect.Left() + aTableRect.Left();
+    tools::Long nY = aGridRect.Top() + aTableRect.Top();
+    tools::Long nWidth = aGridRect.GetSize().Width()-aTableRect.Left();
+    tools::Long nHeight = aGridRect.GetSize().Height()-aTableRect.Top();
     tools::Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
     return aTable;
 }

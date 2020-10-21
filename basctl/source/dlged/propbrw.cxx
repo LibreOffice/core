@@ -72,13 +72,13 @@ void PropBrw::Update( const SfxViewShell* pShell )
 namespace
 {
 
-const long STD_WIN_SIZE_X = 300;
-const long STD_WIN_SIZE_Y = 350;
+const tools::Long STD_WIN_SIZE_X = 300;
+const tools::Long STD_WIN_SIZE_Y = 350;
 
-const long STD_MIN_SIZE_X = 250;
-const long STD_MIN_SIZE_Y = 250;
+const tools::Long STD_MIN_SIZE_X = 250;
+const tools::Long STD_MIN_SIZE_Y = 250;
 
-const long WIN_BORDER = 2;
+const tools::Long WIN_BORDER = 2;
 
 } // namespace
 

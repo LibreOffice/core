@@ -102,7 +102,7 @@ void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
     }
 }
 
-void LineNumberWindow::DoScroll(long nVertScroll)
+void LineNumberWindow::DoScroll(tools::Long nVertScroll)
 {
     m_nCurYOffset -= nVertScroll;
     Window::Scroll(0, nVertScroll);
@@ -115,7 +115,7 @@ bool LineNumberWindow::SyncYOffset()
     if (!pView)
         return false;
 
-    long nViewYOffset = pView->GetStartDocPos().Y();
+    tools::Long nViewYOffset = pView->GetStartDocPos().Y();
     if (m_nCurYOffset == nViewYOffset)
         return false;
 

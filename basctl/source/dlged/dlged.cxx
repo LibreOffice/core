@@ -302,8 +302,8 @@ void DlgEditor::DoScroll()
     aScrollPos = rWindow.LogicToPixel( aScrollPos );
     aScrollPos = rWindow.PixelToLogic( aScrollPos );
 
-    long  nX   = aScrollPos.Width() + aOrg.X();
-    long  nY   = aScrollPos.Height() + aOrg.Y();
+    tools::Long  nX   = aScrollPos.Width() + aOrg.X();
+    tools::Long  nY   = aScrollPos.Height() + aOrg.Y();
 
     if( !nX && !nY )
         return;
@@ -493,7 +493,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
                 Size   aSize = rRenderContext.PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
+                Size aGridSize_(tools::Long(pDlgEdView->GetSnapGridWidthX()), tools::Long(pDlgEdView->GetSnapGridWidthY()));
                 aSize.AdjustWidth( -(aSize.Width()  % aGridSize_.Width()) );
                 aSize.AdjustHeight( -(aSize.Height() % aGridSize_.Height()) );
 
@@ -1086,11 +1086,11 @@ void DlgEditor::ClearModifyFlag()
 
 namespace Print
 {
-    long const nLeftMargin = 1700;
-    long const nRightMargin = 900;
-    long const nTopMargin = 2000;
-    long const nBottomMargin = 1000;
-    long const nBorder = 300;
+    tools::Long const nLeftMargin = 1700;
+    tools::Long const nRightMargin = 900;
+    tools::Long const nTopMargin = 2000;
+    tools::Long const nBottomMargin = 1000;
+    tools::Long const nBorder = 300;
 }
 
 static void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
@@ -1108,20 +1108,20 @@ static void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not 
     aFont.SetAlignment( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
 
-    long const nFontHeight = pPrinter->GetTextHeight();
+    tools::Long const nFontHeight = pPrinter->GetTextHeight();
 
     // 1st border => line, 2+3 border = free space
-    long const nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
+    tools::Long const nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
 
-    long const nXLeft = Print::nLeftMargin - Print::nBorder;
-    long const nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
+    tools::Long const nXLeft = Print::nLeftMargin - Print::nBorder;
+    tools::Long const nXRight = aSz.Width() - Print::nRightMargin + Print::nBorder;
 
     pPrinter->DrawRect(tools::Rectangle(
         Point(nXLeft, nYTop),
         Size(nXRight - nXLeft, aSz.Height() - nYTop - Print::nBottomMargin + Print::nBorder)
     ));
 
-    long nY = Print::nTopMargin - 2*Print::nBorder;
+    tools::Long nY = Print::nTopMargin - 2*Print::nBorder;
     Point aPos(Print::nLeftMargin, nY);
     pPrinter->DrawText( aPos, rTitle );
 
@@ -1169,13 +1169,13 @@ void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not wor
     Size aOutputSz;
     if( nBmpSzHeight * nScaleX <= nPaperSzHeight )
     {
-        aOutputSz.setWidth( static_cast<long>(nBmpSzWidth * nScaleX) );
-        aOutputSz.setHeight( static_cast<long>(nBmpSzHeight * nScaleX) );
+        aOutputSz.setWidth( static_cast<tools::Long>(nBmpSzWidth * nScaleX) );
+        aOutputSz.setHeight( static_cast<tools::Long>(nBmpSzHeight * nScaleX) );
     }
     else
     {
-        aOutputSz.setWidth( static_cast<long>(nBmpSzWidth * nScaleY) );
-        aOutputSz.setHeight( static_cast<long>(nBmpSzHeight * nScaleY) );
+        aOutputSz.setWidth( static_cast<tools::Long>(nBmpSzWidth * nScaleY) );
+        aOutputSz.setHeight( static_cast<tools::Long>(nBmpSzHeight * nScaleY) );
     }
 
     Point aPosOffs(

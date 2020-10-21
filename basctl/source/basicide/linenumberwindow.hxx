@@ -21,7 +21,7 @@ class LineNumberWindow : public vcl::Window
 private:
     VclPtr<ModulWindow> m_pModulWindow;
     int m_nWidth;
-    long m_nCurYOffset;
+    tools::Long m_nCurYOffset;
     int m_nBaseWidth;
     virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
 
@@ -33,10 +33,10 @@ public:
     virtual ~LineNumberWindow() override;
     virtual void dispose() override;
 
-    void DoScroll( long nVertScroll );
+    void DoScroll( tools::Long nVertScroll );
 
     bool SyncYOffset();
-    long& GetCurYOffset() { return m_nCurYOffset;}
+    tools::Long& GetCurYOffset() { return m_nCurYOffset;}
 
     int GetWidth() const { return m_nWidth;}
 };

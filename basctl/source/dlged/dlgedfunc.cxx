@@ -47,8 +47,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 
     ScrollBar* pHScroll = rParent.GetHScroll();
     ScrollBar* pVScroll = rParent.GetVScroll();
-    long nDeltaX = pHScroll->GetLineSize();
-    long nDeltaY = pVScroll->GetLineSize();
+    tools::Long nDeltaX = pHScroll->GetLineSize();
+    tools::Long nDeltaY = pVScroll->GetLineSize();
 
     if( !aOutRect.IsInside( rPos ) )
     {
@@ -173,8 +173,8 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
         case KEY_LEFT:
         case KEY_RIGHT:
         {
-            long nX = 0;
-            long nY = 0;
+            tools::Long nX = 0;
+            tools::Long nY = 0;
 
             if ( nCode == KEY_UP )
             {
@@ -297,9 +297,9 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 ScrollBar* pScrollBar = ( nX != 0 ) ? rParent.GetHScroll() : rParent.GetVScroll();
                 if ( pScrollBar )
                 {
-                    long nRangeMin = pScrollBar->GetRangeMin();
-                    long nRangeMax = pScrollBar->GetRangeMax();
-                    long nThumbPos = pScrollBar->GetThumbPos() + ( ( nX != 0 ) ? nX : nY ) * pScrollBar->GetLineSize();
+                    tools::Long nRangeMin = pScrollBar->GetRangeMin();
+                    tools::Long nRangeMax = pScrollBar->GetRangeMax();
+                    tools::Long nThumbPos = pScrollBar->GetThumbPos() + ( ( nX != 0 ) ? nX : nY ) * pScrollBar->GetLineSize();
                     if ( nThumbPos < nRangeMin )
                         nThumbPos = nRangeMin;
                     if ( nThumbPos > nRangeMax )
