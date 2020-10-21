@@ -10,6 +10,7 @@
 #include "plugin.hxx"
 #include "check.hxx"
 #include "compat.hxx"
+#include "functionaddress.hxx"
 
 #include <algorithm>
 #include <cassert>
@@ -51,113 +52,41 @@ CXXMethodDecl const* getTemplateInstantiationPattern(CXXMethodDecl const* decl)
     return p == nullptr ? decl : cast<CXXMethodDecl>(p);
 }
 
-class SalCall final : public loplugin::FilteringRewritePlugin<SalCall>
+class SalCall final : public loplugin::FunctionAddress<loplugin::FilteringRewritePlugin<SalCall>>
 {
 public:
     explicit SalCall(loplugin::InstantiationData const& data)
-        : FilteringRewritePlugin(data)
+        : FunctionAddress(data)
     {
     }
 
     virtual void run() override
     {
-        m_phase = PluginPhase::FindAddressOf;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
-        m_phase = PluginPhase::Warning;
-        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        if (TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
+        {
+            auto const& addressOfSet = getFunctionsWithAddressTaken();
+            for (auto const decl : m_decls)
+            {
+                if (addressOfSet.find(decl->getCanonicalDecl()) == addressOfSet.end())
+                {
+                    handleFunctionDecl(decl);
+                }
+            }
+        }
     }
 
     bool VisitFunctionDecl(FunctionDecl const*);
-    bool VisitUnaryOperator(UnaryOperator const*);
-    bool VisitInitListExpr(InitListExpr const*);
-    bool VisitCallExpr(CallExpr const*);
-    bool VisitBinaryOperator(BinaryOperator const*);
-    bool VisitCXXConstructExpr(CXXConstructExpr const*);
 
 private:
-    void checkForFunctionDecl(Expr const*, bool bCheckOnly = false);
+    void handleFunctionDecl(FunctionDecl const* decl);
     bool rewrite(SourceLocation);
     bool isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation* pLoc = nullptr);
 
-    std::set<FunctionDecl const*> m_addressOfSet;
-    enum class PluginPhase
-    {
-        FindAddressOf,
-        Warning
-    };
-    PluginPhase m_phase;
+    std::set<FunctionDecl const*> m_decls;
 };
-
-bool SalCall::VisitUnaryOperator(UnaryOperator const* op)
-{
-    if (op->getOpcode() != UO_AddrOf)
-    {
-        return true;
-    }
-    if (m_phase != PluginPhase::FindAddressOf)
-        return true;
-    checkForFunctionDecl(op->getSubExpr());
-    return true;
-}
-
-bool SalCall::VisitBinaryOperator(BinaryOperator const* binaryOperator)
-{
-    if (binaryOperator->getOpcode() != BO_Assign)
-    {
-        return true;
-    }
-    if (m_phase != PluginPhase::FindAddressOf)
-        return true;
-    checkForFunctionDecl(binaryOperator->getRHS());
-    return true;
-}
-
-bool SalCall::VisitCallExpr(CallExpr const* callExpr)
-{
-    if (m_phase != PluginPhase::FindAddressOf)
-        return true;
-    for (auto arg : callExpr->arguments())
-        checkForFunctionDecl(arg);
-    return true;
-}
-
-bool SalCall::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
-{
-    if (m_phase != PluginPhase::FindAddressOf)
-        return true;
-    for (auto arg : constructExpr->arguments())
-        checkForFunctionDecl(arg);
-    return true;
-}
-
-bool SalCall::VisitInitListExpr(InitListExpr const* initListExpr)
-{
-    if (m_phase != PluginPhase::FindAddressOf)
-        return true;
-    for (auto subStmt : *initListExpr)
-        checkForFunctionDecl(dyn_cast<Expr>(subStmt));
-    return true;
-}
-
-void SalCall::checkForFunctionDecl(Expr const* expr, bool bCheckOnly)
-{
-    auto e1 = expr->IgnoreParenCasts();
-    auto declRef = dyn_cast<DeclRefExpr>(e1);
-    if (!declRef)
-        return;
-    auto functionDecl = dyn_cast<FunctionDecl>(declRef->getDecl());
-    if (!functionDecl)
-        return;
-    if (bCheckOnly)
-        getParentStmt(expr)->dump();
-    else
-        m_addressOfSet.insert(functionDecl->getCanonicalDecl());
-}
 
 bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
 {
-    if (m_phase != PluginPhase::Warning)
-        return true;
     if (ignoreLocation(decl))
         return true;
 
@@ -225,16 +154,15 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
 
     if (!decl->isThisDeclarationADefinition() && !(methodDecl && methodDecl->isPure()))
         return true;
-    // can only check when we have a definition since this is the most likely time
-    // when the address of the method will be taken
-    if (methodDecl)
-    {
-        if (m_addressOfSet.find(decl->getCanonicalDecl()) != m_addressOfSet.end())
-            return true;
-    }
 
+    m_decls.insert(decl);
+    return true;
+}
+
+void SalCall::handleFunctionDecl(FunctionDecl const* decl)
+{
     // some base classes are overridden by sub-classes which override both the base-class and a UNO class
-    if (recordDecl)
+    if (auto recordDecl = dyn_cast<CXXRecordDecl>(decl->getDeclContext()))
     {
         auto dc = loplugin::DeclCheck(recordDecl);
         if (dc.Class("OProxyAggregation").Namespace("comphelper").GlobalNamespace()
@@ -266,11 +194,13 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             || dc.Class("ScVbaControl").GlobalNamespace()
 
         )
-            return true;
+            return;
     }
 
+    auto canonicalDecl = decl->getCanonicalDecl();
+
     // if any of the overridden methods are SAL_CALL, we should be too
-    if (methodDecl)
+    if (auto methodDecl = dyn_cast<CXXMethodDecl>(canonicalDecl))
     {
         for (auto iter = methodDecl->begin_overridden_methods();
              iter != methodDecl->end_overridden_methods(); ++iter)
@@ -278,9 +208,14 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
             const CXXMethodDecl* overriddenMethod
                 = getTemplateInstantiationPattern(*iter)->getCanonicalDecl();
             if (isSalCallFunction(overriddenMethod))
-                return true;
+                return;
         }
     }
+
+    SourceLocation rewriteLoc;
+    SourceLocation rewriteCanonicalLoc;
+    bool bDeclIsSalCall = isSalCallFunction(decl, &rewriteLoc);
+    isSalCallFunction(canonicalDecl, &rewriteCanonicalLoc);
 
     bool bOK = rewrite(rewriteLoc);
     if (bOK && canonicalDecl != decl)
@@ -288,7 +223,7 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
         bOK = rewrite(rewriteCanonicalLoc);
     }
     if (bOK)
-        return true;
+        return;
 
     if (bDeclIsSalCall)
     {
@@ -307,8 +242,6 @@ bool SalCall::VisitFunctionDecl(FunctionDecl const* decl)
                 << decl->getSourceRange();
         }
     }
-
-    return true;
 }
 
 //TODO: This doesn't handle all possible cases of macro usage (and possibly never will be able to),

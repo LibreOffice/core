@@ -134,6 +134,31 @@ void SAL_CALL Class9::method1() // expected-error {{SAL_CALL inconsistency [lopl
 #define M2(T) T SAL_CALL
 M2(void) Class9::method2() {} // expected-error {{SAL_CALL inconsistency [loplugin:salcall]}}
 
+void SAL_CALL f0() {} // expected-error {{SAL_CALL unnecessary here [loplugin:salcall]}}
+
+void SAL_CALL f1() {}
+
+void SAL_CALL f2() {}
+
+void SAL_CALL f3() {}
+
+void SAL_CALL f4() {}
+
+typedef void SAL_CALL (*Ptr)();
+
+void takePtr(Ptr);
+
+void usePtr()
+{
+    f0();
+    takePtr(f1);
+    takePtr(&f2);
+    Ptr p = f3;
+    takePtr(p);
+    p = f4;
+    takePtr(p);
+}
+
 #if 0 // see TODO in SalCall::isSalCallFunction
 class Class10
 {
