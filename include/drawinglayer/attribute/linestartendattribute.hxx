@@ -22,48 +22,47 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-namespace basegfx {
-    class B2DPolyPolygon;
+namespace basegfx
+{
+class B2DPolyPolygon;
 }
-
-namespace drawinglayer::attribute {
-    class ImpLineStartEndAttribute;
-}
-
 
 namespace drawinglayer::attribute
-    {
-        class DRAWINGLAYER_DLLPUBLIC LineStartEndAttribute
-        {
-        public:
-            typedef o3tl::cow_wrapper< ImpLineStartEndAttribute > ImplType;
+{
+class ImpLineStartEndAttribute;
+}
 
-        private:
-            ImplType mpLineStartEndAttribute;
+namespace drawinglayer::attribute
+{
+class DRAWINGLAYER_DLLPUBLIC LineStartEndAttribute
+{
+public:
+    typedef o3tl::cow_wrapper<ImpLineStartEndAttribute> ImplType;
 
-        public:
-            /// constructors/assignmentoperator/destructor
-            LineStartEndAttribute(
-                double fWidth,
-                const basegfx::B2DPolyPolygon& rPolyPolygon,
-                bool bCentered);
-            LineStartEndAttribute();
-            LineStartEndAttribute(const LineStartEndAttribute&);
-            LineStartEndAttribute& operator=(const LineStartEndAttribute&);
-            ~LineStartEndAttribute();
+private:
+    ImplType mpLineStartEndAttribute;
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
+public:
+    /// constructors/assignmentoperator/destructor
+    LineStartEndAttribute(double fWidth, const basegfx::B2DPolyPolygon& rPolyPolygon,
+                          bool bCentered);
+    LineStartEndAttribute();
+    LineStartEndAttribute(const LineStartEndAttribute&);
+    LineStartEndAttribute& operator=(const LineStartEndAttribute&);
+    ~LineStartEndAttribute();
 
-            // compare operator
-            bool operator==(const LineStartEndAttribute& rCandidate) const;
+    // checks if the incarnation is default constructed
+    bool isDefault() const;
 
-            // data read access
-            double getWidth() const;
-            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const;
-            bool isCentered() const;
-            bool isActive() const;
-        };
+    // compare operator
+    bool operator==(const LineStartEndAttribute& rCandidate) const;
+
+    // data read access
+    double getWidth() const;
+    const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const;
+    bool isCentered() const;
+    bool isActive() const;
+};
 
 } // end of namespace drawinglayer::attribute
 
