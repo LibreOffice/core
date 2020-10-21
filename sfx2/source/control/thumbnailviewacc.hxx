@@ -35,7 +35,7 @@
 #include <vcl/vclptr.hxx>
 #include <vector>
 
-class SfxThumbnailView;
+class ThumbnailView;
 class ThumbnailViewItem;
 
 typedef ::cppu::WeakComponentImplHelper<
@@ -47,14 +47,14 @@ typedef ::cppu::WeakComponentImplHelper<
     css::lang::XUnoTunnel >
     ValueSetAccComponentBase;
 
-class SfxThumbnailViewAcc :
+class ThumbnailViewAcc :
     public ::cppu::BaseMutex,
     public ValueSetAccComponentBase
 {
 public:
 
-    SfxThumbnailViewAcc( SfxThumbnailView* pParent );
-    virtual ~SfxThumbnailViewAcc() override;
+    ThumbnailViewAcc( ThumbnailView* pParent );
+    virtual ~ThumbnailViewAcc() override;
 
     void FireAccessibleEvent( short nEventId,
                               const css::uno::Any& rOldValue,
@@ -62,7 +62,7 @@ public:
 
     bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static SfxThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
+    static ThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();
 
 public:
     /** Called by the corresponding ValueSet when it gets the focus.
@@ -121,7 +121,7 @@ public:
 private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
-    SfxThumbnailView*                                               mpParent;
+    ThumbnailView*                                               mpParent;
     /// The current FOCUSED state.
     bool mbIsFocused;
 

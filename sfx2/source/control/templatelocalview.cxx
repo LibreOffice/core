@@ -79,7 +79,7 @@ void SfxTemplateLocalView::updateThumbnailDimensions(long itemMaxSize)
 
 SfxTemplateLocalView::SfxTemplateLocalView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                            std::unique_ptr<weld::Menu> xMenu)
-    : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    : ThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnCurRegionId(0)
     , maSelectedItem(nullptr)
     , mnThumbnailWidth(TEMPLATE_THUMBNAIL_MAX_WIDTH)
@@ -760,7 +760,7 @@ void SfxTemplateLocalView::insertItems(const std::vector<TemplateItemProperties>
 bool SfxTemplateLocalView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
-    return SfxThumbnailView::MouseButtonDown(rMEvt);
+    return ThumbnailView::MouseButtonDown(rMEvt);
 }
 
 bool SfxTemplateLocalView::Command(const CommandEvent& rCEvt)
@@ -843,7 +843,7 @@ bool SfxTemplateLocalView::KeyInput( const KeyEvent& rKEvt )
         reload();
     }
 
-    return SfxThumbnailView::KeyInput(rKEvt);
+    return ThumbnailView::KeyInput(rKEvt);
 }
 
 void SfxTemplateLocalView::setOpenRegionHdl(const Link<void*,void> &rLink)
@@ -942,7 +942,7 @@ BitmapEx SfxTemplateLocalView::getDefaultThumbnail( const OUString& rPath )
 
 BitmapEx SfxTemplateLocalView::fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height)
 {
-    return SfxTemplateLocalView::scaleImg(SfxThumbnailView::readThumbnail(msURL), width, height);
+    return SfxTemplateLocalView::scaleImg(ThumbnailView::readThumbnail(msURL), width, height);
 }
 
 void SfxTemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
