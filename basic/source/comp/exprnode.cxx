@@ -24,6 +24,7 @@
 #include <rtl/math.hxx>
 #include <parser.hxx>
 #include <expr.hxx>
+#include <tools/long.hxx>
 
 #include <basic/sberrors.hxx>
 
@@ -294,8 +295,8 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
     {
         double nl = pLeft->nVal;
         double nr = pRight->nVal;
-        long ll = 0, lr = 0;
-        long llMod = 0, lrMod = 0;
+        tools::Long ll = 0, lr = 0;
+        tools::Long llMod = 0, lrMod = 0;
         if( ( eTok >= AND && eTok <= IMP )
            || eTok == IDIV || eTok == MOD )
         {
@@ -321,9 +322,9 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
                 bErr = true;
                 nr = SbxMINLNG;
             }
-            ll = static_cast<long>(nl); lr = static_cast<long>(nr);
-            llMod = static_cast<long>(nl);
-            lrMod = static_cast<long>(nr);
+            ll = static_cast<tools::Long>(nl); lr = static_cast<tools::Long>(nr);
+            llMod = static_cast<tools::Long>(nl);
+            lrMod = static_cast<tools::Long>(nr);
             if( bErr )
             {
                 pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
@@ -411,7 +412,7 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
          && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
         {
             // Decimal place away
-            long n = static_cast<long>(nVal);
+            tools::Long n = static_cast<tools::Long>(nVal);
             nVal = n;
             eType = ( n >= SbxMININT && n <= SbxMAXINT )
                   ? SbxINTEGER : SbxLONG;
@@ -450,7 +451,7 @@ void SbiExprNode::FoldConstantsUnaryNode(SbiParser* pParser)
                     pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                     bError = true;
                 }
-                nVal = static_cast<double>(~static_cast<long>(nVal));
+                nVal = static_cast<double>(~static_cast<tools::Long>(nVal));
                 eType = SbxLONG;
                 } break;
             default: break;

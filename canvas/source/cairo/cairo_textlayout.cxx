@@ -324,7 +324,7 @@ namespace cairocanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( long*                       outputOffsets,
+    void TextLayout::setupTextOffsets( tools::Long*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
