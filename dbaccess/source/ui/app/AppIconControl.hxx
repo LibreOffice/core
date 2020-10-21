@@ -33,7 +33,7 @@ namespace dbaui
     class IconControl;
     class OApplicationIconControlDropTarget;
 
-    class OApplicationIconControl final : public SfxThumbnailView
+    class OApplicationIconControl final : public ThumbnailView
     {
         std::unique_ptr<OApplicationIconControlDropTarget> m_xDropTarget;
         IControlActionListener* m_pActionListener;

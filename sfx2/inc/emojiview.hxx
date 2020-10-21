@@ -49,7 +49,7 @@ private:
 };
 
 
-class EmojiView final : public SfxThumbnailView
+class EmojiView final : public ThumbnailView
 {
 public:
     EmojiView(std::unique_ptr<weld::ScrolledWindow> xWindow);

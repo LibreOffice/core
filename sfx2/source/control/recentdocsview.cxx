@@ -123,7 +123,7 @@ constexpr tools::Long gnTextHeight = 30;
 constexpr tools::Long gnItemPadding = 5;
 
 RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
-    : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    : ThumbnailView(std::move(xWindow), std::move(xMenu))
     , mnFileTypes(ApplicationType::TYPE_NONE)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeImage()
@@ -304,11 +304,11 @@ bool RecentDocsView::MouseButtonDown( const MouseEvent& rMEvt )
     {
         mnLastMouseDownItem = ImplGetItem(rMEvt.GetPosPixel());
 
-        // ignore to avoid stuff done in SfxThumbnailView; we don't do selections etc.
+        // ignore to avoid stuff done in ThumbnailView; we don't do selections etc.
         return true;
     }
 
-    return SfxThumbnailView::MouseButtonDown(rMEvt);
+    return ThumbnailView::MouseButtonDown(rMEvt);
 }
 
 bool RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
@@ -335,7 +335,7 @@ bool RecentDocsView::MouseButtonUp(const MouseEvent& rMEvt)
         if (pItem)
             return true;
     }
-    return SfxThumbnailView::MouseButtonUp(rMEvt);
+    return ThumbnailView::MouseButtonUp(rMEvt);
 }
 
 void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
@@ -347,7 +347,7 @@ void RecentDocsView::OnItemDblClicked(ThumbnailViewItem *pItem)
 
 void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle &aRect)
 {
-    SfxThumbnailView::Paint(rRenderContext, aRect);
+    ThumbnailView::Paint(rRenderContext, aRect);
 
     if (mItemList.empty())
     {
@@ -388,13 +388,13 @@ void RecentDocsView::LoseFocus()
 {
     deselectItems();
 
-    SfxThumbnailView::LoseFocus();
+    ThumbnailView::LoseFocus();
 }
 
 void RecentDocsView::Clear()
 {
     Invalidate();
-    SfxThumbnailView::Clear();
+    ThumbnailView::Clear();
 }
 
 void RecentDocsView::PostLoadRecentUsedFile(LoadRecentFile* pLoadRecentFile)

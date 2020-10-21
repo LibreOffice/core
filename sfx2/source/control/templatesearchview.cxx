@@ -27,7 +27,7 @@
 
 TemplateSearchView::TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWindow,
                                        std::unique_ptr<weld::Menu> xMenu)
-    : SfxThumbnailView(std::move(xWindow), std::move(xMenu))
+    : ThumbnailView(std::move(xWindow), std::move(xMenu))
     , maSelectedItem(nullptr)
     , maPosition(0,0)
 {
@@ -36,7 +36,7 @@ TemplateSearchView::TemplateSearchView(std::unique_ptr<weld::ScrolledWindow> xWi
 bool TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
-    return SfxThumbnailView::MouseButtonDown(rMEvt);
+    return ThumbnailView::MouseButtonDown(rMEvt);
 }
 
 bool TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
@@ -80,7 +80,7 @@ bool TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    return SfxThumbnailView::KeyInput(rKEvt);
+    return ThumbnailView::KeyInput(rKEvt);
 }
 
 bool TemplateSearchView::Command(const CommandEvent& rCEvt)
@@ -217,7 +217,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     if (SfxTemplateLocalView::IsDefaultTemplate(rPath))
         pItem->showDefaultIcon(true);
 
-    SfxThumbnailView::AppendItem(std::move(pItem));
+    ThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
 }
