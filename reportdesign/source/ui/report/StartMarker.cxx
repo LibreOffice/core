@@ -99,15 +99,15 @@ void OStartMarker::dispose()
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    Fraction aExtraWidth(long(2 * REPORT_EXTRA_SPACE));
+    Fraction aExtraWidth(tools::Long(2 * REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + long(aExtraWidth);
+    return LogicToPixel(Size(0, m_aText->GetTextHeight())).Height() + tools::Long(aExtraWidth);
 }
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
     Size aSize(GetOutputSizePixel());
-    const long nCornerWidth = long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
+    const tools::Long nCornerWidth = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 
     if (isCollapsed())
     {
@@ -115,8 +115,8 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     }
     else
     {
-        const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
-        long nSize = aSize.Width() - nVRulerWidth;
+        const tools::Long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
+        tools::Long nSize = aSize.Width() - nVRulerWidth;
         aSize.AdjustWidth(nCornerWidth );
         rRenderContext.SetClipRegion(vcl::Region(rRenderContext.PixelToLogic(tools::Rectangle(Point(),
                                                                              Size(nSize, aSize.Height())))));
@@ -143,7 +143,7 @@ void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const tools::Rectan
     }
     if (m_bMarked)
     {
-        const long nCornerHeight = long(CORNER_SPACE * double(GetMapMode().GetScaleY()));
+        const tools::Long nCornerHeight = tools::Long(CORNER_SPACE * double(GetMapMode().GetScaleY()));
         tools::Rectangle aRect(Point(nCornerWidth, nCornerHeight),
                         Size(aSize.Width() - nCornerWidth - nCornerWidth,
                              aSize.Height() - nCornerHeight - nCornerHeight));
@@ -224,22 +224,22 @@ void OStartMarker::ImplInitSettings()
 void OStartMarker::Resize()
 {
     const Size aOutputSize( GetOutputSizePixel() );
-    const long nOutputWidth  = aOutputSize.Width();
-    const long nOutputHeight = aOutputSize.Height();
+    const tools::Long nOutputWidth  = aOutputSize.Width();
+    const tools::Long nOutputHeight = aOutputSize.Height();
 
-    const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
+    const tools::Long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
     const Point aRulerPos(nOutputWidth - nVRulerWidth,0);
     m_aVRuler->SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
 
     Size aImageSize = m_aImage->GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
-    aImageSize.setWidth( long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX())) );
-    aImageSize.setHeight( long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY())) );
+    aImageSize.setWidth( tools::Long(aImageSize.Width() * static_cast<double>(rMapMode.GetScaleX())) );
+    aImageSize.setHeight( tools::Long(aImageSize.Height() * static_cast<double>(rMapMode.GetScaleY())) );
 
-    long nExtraWidth = long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
+    tools::Long nExtraWidth = tools::Long(REPORT_EXTRA_SPACE * rMapMode.GetScaleX());
 
     Point aPos(aImageSize.Width() + (nExtraWidth * 2), nExtraWidth);
-    const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
+    const tools::Long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
     m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
     aPos.setX( nExtraWidth );

@@ -174,13 +174,13 @@ bool SdGRFFilter::Import()
             // adjust graphic to page size (scales)
             if( fGrfWH < fWinWH )
             {
-                aGrfSize.setWidth( static_cast<long>( aPagSize.Height() * fGrfWH ) );
+                aGrfSize.setWidth( static_cast<tools::Long>( aPagSize.Height() * fGrfWH ) );
                 aGrfSize.setHeight( aPagSize.Height() );
             }
             else if( fGrfWH > 0.F )
             {
                 aGrfSize.setWidth( aPagSize.Width() );
-                aGrfSize.setHeight( static_cast<long>( aPagSize.Width() / fGrfWH ) );
+                aGrfSize.setHeight( static_cast<tools::Long>( aPagSize.Width() / fGrfWH ) );
             }
         }
 
