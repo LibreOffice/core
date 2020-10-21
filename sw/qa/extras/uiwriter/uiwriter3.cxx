@@ -1542,6 +1542,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
     CPPUNIT_ASSERT(xCellB1->getString().endsWith("test1"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136385)
+{
+    load(DATA_DIRECTORY, "tdf136385.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    awt::Point aPos = xShape->getPosition();
+
+    //select shape and change the anchor
+    dispatchCommand(mxComponent, ".uno:JumpToNextFrame", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:SetAnchorToPage", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //position has changed
+    CPPUNIT_ASSERT(aPos.X < xShape->getPosition().X);
+    CPPUNIT_ASSERT(aPos.Y < xShape->getPosition().Y);
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //Without the fix in place, this test would have failed with
+    //- Expected: 2447
+    //- Actual  : 446
+    CPPUNIT_ASSERT_EQUAL(aPos.X, xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(aPos.Y, xShape->getPosition().Y);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128782)
 {
     load(DATA_DIRECTORY, "tdf128782.odt");
