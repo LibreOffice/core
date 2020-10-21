@@ -21,182 +21,131 @@
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
-
 namespace drawinglayer::attribute
 {
-        class ImpFontAttribute
-        {
-        public:
-            /// core data
-            OUString                                    maFamilyName;       // Font Family Name
-            OUString                                    maStyleName;        // Font Style Name
-            sal_uInt16                                  mnWeight;           // Font weight
+class ImpFontAttribute
+{
+public:
+    /// core data
+    OUString maFamilyName; // Font Family Name
+    OUString maStyleName; // Font Style Name
+    sal_uInt16 mnWeight; // Font weight
 
-            bool                                        mbSymbol : 1;       // Symbol Font Flag
-            bool                                        mbVertical : 1;     // Vertical Text Flag
-            bool                                        mbItalic : 1;       // Italic Flag
-            bool                                        mbOutline : 1;      // Outline Flag
-            bool                                        mbRTL : 1;          // RTL Flag
-            bool                                        mbBiDiStrong : 1;   // BiDi Flag
-            bool                                        mbMonospaced : 1;
+    bool mbSymbol : 1; // Symbol Font Flag
+    bool mbVertical : 1; // Vertical Text Flag
+    bool mbItalic : 1; // Italic Flag
+    bool mbOutline : 1; // Outline Flag
+    bool mbRTL : 1; // RTL Flag
+    bool mbBiDiStrong : 1; // BiDi Flag
+    bool mbMonospaced : 1;
 
-            ImpFontAttribute(
-                const OUString& rFamilyName,
-                const OUString& rStyleName,
-                sal_uInt16 nWeight,
-                bool bSymbol,
-                bool bVertical,
-                bool bItalic,
-                bool bMonospaced,
-                bool bOutline,
-                bool bRTL,
-                bool bBiDiStrong)
-            :   maFamilyName(rFamilyName),
-                maStyleName(rStyleName),
-                mnWeight(nWeight),
-                mbSymbol(bSymbol),
-                mbVertical(bVertical),
-                mbItalic(bItalic),
-                mbOutline(bOutline),
-                mbRTL(bRTL),
-                mbBiDiStrong(bBiDiStrong),
-                mbMonospaced(bMonospaced)
-            {
-            }
+    ImpFontAttribute(const OUString& rFamilyName, const OUString& rStyleName, sal_uInt16 nWeight,
+                     bool bSymbol, bool bVertical, bool bItalic, bool bMonospaced, bool bOutline,
+                     bool bRTL, bool bBiDiStrong)
+        : maFamilyName(rFamilyName)
+        , maStyleName(rStyleName)
+        , mnWeight(nWeight)
+        , mbSymbol(bSymbol)
+        , mbVertical(bVertical)
+        , mbItalic(bItalic)
+        , mbOutline(bOutline)
+        , mbRTL(bRTL)
+        , mbBiDiStrong(bBiDiStrong)
+        , mbMonospaced(bMonospaced)
+    {
+    }
 
-            ImpFontAttribute()
-            :   maFamilyName(),
-                maStyleName(),
-                mnWeight(0),
-                mbSymbol(false),
-                mbVertical(false),
-                mbItalic(false),
-                mbOutline(false),
-                mbRTL(false),
-                mbBiDiStrong(false),
-                mbMonospaced(false)
-            {
-            }
+    ImpFontAttribute()
+        : maFamilyName()
+        , maStyleName()
+        , mnWeight(0)
+        , mbSymbol(false)
+        , mbVertical(false)
+        , mbItalic(false)
+        , mbOutline(false)
+        , mbRTL(false)
+        , mbBiDiStrong(false)
+        , mbMonospaced(false)
+    {
+    }
 
-            // data read access
-            const OUString& getFamilyName() const { return maFamilyName; }
-            const OUString& getStyleName() const { return maStyleName; }
-            sal_uInt16 getWeight() const { return mnWeight; }
-            bool getSymbol() const { return mbSymbol; }
-            bool getVertical() const { return mbVertical; }
-            bool getItalic() const { return mbItalic; }
-            bool getOutline() const { return mbOutline; }
-            bool getRTL() const { return mbRTL; }
-            bool getBiDiStrong() const { return mbBiDiStrong; }
-            bool getMonospaced() const { return mbMonospaced; }
+    // data read access
+    const OUString& getFamilyName() const { return maFamilyName; }
+    const OUString& getStyleName() const { return maStyleName; }
+    sal_uInt16 getWeight() const { return mnWeight; }
+    bool getSymbol() const { return mbSymbol; }
+    bool getVertical() const { return mbVertical; }
+    bool getItalic() const { return mbItalic; }
+    bool getOutline() const { return mbOutline; }
+    bool getRTL() const { return mbRTL; }
+    bool getBiDiStrong() const { return mbBiDiStrong; }
+    bool getMonospaced() const { return mbMonospaced; }
 
-            bool operator==(const ImpFontAttribute& rCompare) const
-            {
-                return (getFamilyName() == rCompare.getFamilyName()
-                    && getStyleName() == rCompare.getStyleName()
-                    && getWeight() == rCompare.getWeight()
-                    && getSymbol() == rCompare.getSymbol()
-                    && getVertical() == rCompare.getVertical()
-                    && getItalic() == rCompare.getItalic()
-                    && getOutline() == rCompare.getOutline()
-                    && getRTL() == rCompare.getRTL()
-                    && getBiDiStrong() == rCompare.getBiDiStrong()
-                    && getMonospaced() == rCompare.getMonospaced());
-            }
-        };
+    bool operator==(const ImpFontAttribute& rCompare) const
+    {
+        return (getFamilyName() == rCompare.getFamilyName()
+                && getStyleName() == rCompare.getStyleName() && getWeight() == rCompare.getWeight()
+                && getSymbol() == rCompare.getSymbol() && getVertical() == rCompare.getVertical()
+                && getItalic() == rCompare.getItalic() && getOutline() == rCompare.getOutline()
+                && getRTL() == rCompare.getRTL() && getBiDiStrong() == rCompare.getBiDiStrong()
+                && getMonospaced() == rCompare.getMonospaced());
+    }
+};
 
-        namespace
-        {
-            struct theGlobalDefault :
-                public rtl::Static< FontAttribute::ImplType, theGlobalDefault > {};
-        }
+namespace
+{
+struct theGlobalDefault : public rtl::Static<FontAttribute::ImplType, theGlobalDefault>
+{
+};
+}
 
-        FontAttribute::FontAttribute(
-            const OUString& rFamilyName,
-            const OUString& rStyleName,
-            sal_uInt16 nWeight,
-            bool bSymbol,
-            bool bVertical,
-            bool bItalic,
-            bool bMonospaced,
-            bool bOutline,
-            bool bRTL,
-            bool bBiDiStrong)
-        :   mpFontAttribute(ImpFontAttribute(
-                rFamilyName, rStyleName, nWeight, bSymbol, bVertical, bItalic, bMonospaced, bOutline, bRTL, bBiDiStrong))
-        {
-        }
+FontAttribute::FontAttribute(const OUString& rFamilyName, const OUString& rStyleName,
+                             sal_uInt16 nWeight, bool bSymbol, bool bVertical, bool bItalic,
+                             bool bMonospaced, bool bOutline, bool bRTL, bool bBiDiStrong)
+    : mpFontAttribute(ImpFontAttribute(rFamilyName, rStyleName, nWeight, bSymbol, bVertical,
+                                       bItalic, bMonospaced, bOutline, bRTL, bBiDiStrong))
+{
+}
 
-        FontAttribute::FontAttribute()
-        :   mpFontAttribute(theGlobalDefault::get())
-        {
-        }
+FontAttribute::FontAttribute()
+    : mpFontAttribute(theGlobalDefault::get())
+{
+}
 
-        FontAttribute::FontAttribute(const FontAttribute&) = default;
+FontAttribute::FontAttribute(const FontAttribute&) = default;
 
-        FontAttribute::FontAttribute(FontAttribute&&) = default;
+FontAttribute::FontAttribute(FontAttribute&&) = default;
 
-        FontAttribute::~FontAttribute() = default;
+FontAttribute::~FontAttribute() = default;
 
-        FontAttribute& FontAttribute::operator=(const FontAttribute&) = default;
+FontAttribute& FontAttribute::operator=(const FontAttribute&) = default;
 
-        FontAttribute& FontAttribute::operator=(FontAttribute&&) = default;
+FontAttribute& FontAttribute::operator=(FontAttribute&&) = default;
 
-        bool FontAttribute::operator==(const FontAttribute& rCandidate) const
-        {
-            return rCandidate.mpFontAttribute == mpFontAttribute;
-        }
+bool FontAttribute::operator==(const FontAttribute& rCandidate) const
+{
+    return rCandidate.mpFontAttribute == mpFontAttribute;
+}
 
-        const OUString& FontAttribute::getFamilyName() const
-        {
-            return mpFontAttribute->getFamilyName();
-        }
+const OUString& FontAttribute::getFamilyName() const { return mpFontAttribute->getFamilyName(); }
 
-        const OUString& FontAttribute::getStyleName() const
-        {
-            return mpFontAttribute->getStyleName();
-        }
+const OUString& FontAttribute::getStyleName() const { return mpFontAttribute->getStyleName(); }
 
-        sal_uInt16 FontAttribute::getWeight() const
-        {
-            return mpFontAttribute->getWeight();
-        }
+sal_uInt16 FontAttribute::getWeight() const { return mpFontAttribute->getWeight(); }
 
-        bool FontAttribute::getSymbol() const
-        {
-            return mpFontAttribute->getSymbol();
-        }
+bool FontAttribute::getSymbol() const { return mpFontAttribute->getSymbol(); }
 
-        bool FontAttribute::getVertical() const
-        {
-            return mpFontAttribute->getVertical();
-        }
+bool FontAttribute::getVertical() const { return mpFontAttribute->getVertical(); }
 
-        bool FontAttribute::getItalic() const
-        {
-            return mpFontAttribute->getItalic();
-        }
+bool FontAttribute::getItalic() const { return mpFontAttribute->getItalic(); }
 
-        bool FontAttribute::getOutline() const
-        {
-            return mpFontAttribute->getOutline();
-        }
+bool FontAttribute::getOutline() const { return mpFontAttribute->getOutline(); }
 
-        bool FontAttribute::getRTL() const
-        {
-            return mpFontAttribute->getRTL();
-        }
+bool FontAttribute::getRTL() const { return mpFontAttribute->getRTL(); }
 
-        bool FontAttribute::getBiDiStrong() const
-        {
-            return mpFontAttribute->getBiDiStrong();
-        }
+bool FontAttribute::getBiDiStrong() const { return mpFontAttribute->getBiDiStrong(); }
 
-        bool FontAttribute::getMonospaced() const
-        {
-            return mpFontAttribute->getMonospaced();
-        }
-
+bool FontAttribute::getMonospaced() const { return mpFontAttribute->getMonospaced(); }
 
 } // end of namespace
 
