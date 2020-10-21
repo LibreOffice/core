@@ -574,7 +574,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 
 
 BrowseEvent::BrowseEvent( vcl::Window* pWindow,
-                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     pWin(pWindow),
     nRow(nAbsRow),
@@ -594,7 +594,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 
 
 BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
-                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     MouseEvent(rEvt),
     BrowseEvent( pWindow, nAbsRow, nColumn, nColumnId, rRect )

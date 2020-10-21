@@ -867,7 +867,7 @@ namespace svt
         virtual void ColumnResized(sal_uInt16 nColId) override;
         virtual void Resize() override;
         virtual void ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
-        virtual bool SeekRow(tools::Long nRow) override;
+        virtual bool SeekRow(sal_Int32 nRow) override;
 
         virtual void GetFocus() override;
         virtual void LoseFocus() override;
@@ -934,7 +934,7 @@ namespace svt
         // result in traveling to the next or to th previous cell
         virtual bool IsTabAllowed(bool bForward) const;
 
-        virtual bool IsCursorMoveAllowed(tools::Long nNewRow, sal_uInt16 nNewColId) const override;
+        virtual bool IsCursorMoveAllowed(sal_Int32 nNewRow, sal_uInt16 nNewColId) const override;
 
         void    PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
 

@@ -312,8 +312,8 @@ protected:
     bool                m_bUpdating : 1;            // are any updates being executed right now?
 
 protected:
-    virtual bool SeekRow(long nRow) override;
-    virtual void VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows) override;
+    virtual bool SeekRow(sal_Int32 nRow) override;
+    virtual void VisibleRowsChanged( sal_Int32 nNewTopRow, sal_uInt16 nNumRows) override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
     virtual RowStatus GetRowStatus(long nRow) const override;
     virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
@@ -397,7 +397,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(long _nRow, sal_uInt16 _nColId) const override;
+    virtual OUString  GetCellText(sal_Int32 _nRow, sal_uInt16 _nColId) const override;
 
     void RemoveRows(bool bNewCursor);
 
@@ -560,12 +560,12 @@ public:
     CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId ) override;
 
 protected:
-    void RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
-    bool SeekCursor(long nRow, bool bAbsolute = false);
+    void RecalcRows(sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor);
+    bool SeekCursor(sal_Int32 nRow, bool bAbsolute = false);
     void RemoveColumns();       // cleaning of own structures
     void AdjustRows();
     sal_Int32 AlignSeekCursor();
-    bool SetCurrent(long nNewRow);
+    bool SetCurrent(sal_Int32 nNewRow);
 
     OUString GetCurrentRowCellText(DbGridColumn const * pCol,const DbGridRowRef& _rRow) const;
     virtual void DeleteSelectedRows();

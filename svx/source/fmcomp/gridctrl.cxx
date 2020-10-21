@@ -1590,7 +1590,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     m_aColumns.insert( m_aColumns.begin() + nNewModelPos, std::move(temp) );
 }
 
-bool DbGridControl::SeekRow(long nRow)
+bool DbGridControl::SeekRow(sal_Int32 nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
     if ( !SeekCursor( nRow ) )
@@ -1623,12 +1623,12 @@ bool DbGridControl::SeekRow(long nRow)
 }
 
 // Is called whenever the visible amount of data changes
-void DbGridControl::VisibleRowsChanged( long nNewTopRow, sal_uInt16 nLinesOnScreen )
+void DbGridControl::VisibleRowsChanged( sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen )
 {
     RecalcRows(nNewTopRow, nLinesOnScreen, false);
 }
 
-void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
+void DbGridControl::RecalcRows(sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
 {
     // If no cursor -> no rows in the browser.
     if (!m_pSeekCursor)
@@ -1846,7 +1846,7 @@ bool DbGridControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return EditBrowseBox::CursorMoving( nNewRow, nNewCol );
 }
 
-bool DbGridControl::SetCurrent(long nNewRow)
+bool DbGridControl::SetCurrent(sal_Int32 nNewRow)
 {
     // Each movement of the datacursor must start with BeginCursorAction and end with
     // EndCursorAction to block all notifications during the movement
@@ -2101,7 +2101,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     return m_nSeekPos;
 }
 
-bool DbGridControl::SeekCursor(long nRow, bool bAbsolute)
+bool DbGridControl::SeekCursor(sal_Int32 nRow, bool bAbsolute)
 {
     // position SeekCursor onto the data cursor, no data transmission
 
@@ -2267,7 +2267,7 @@ void DbGridControl::MoveToLast()
 
 void DbGridControl::MoveToPrev()
 {
-    long nNewRow = std::max(GetCurRow() - 1, 0L);
+    sal_Int32 nNewRow = std::max(GetCurRow() - 1, 0);
     if (GetCurRow() != nNewRow)
         MoveToPosition(nNewRow);
 }
@@ -2432,7 +2432,7 @@ void DbGridControl::SetFilterMode(bool bMode)
         setDataSource(Reference< XRowSet > ());
 }
 
-OUString DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
+OUString DbGridControl::GetCellText(sal_Int32 _nRow, sal_uInt16 _nColId) const
 {
     size_t Location = GetModelColumnPos( _nColId );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ].get() : nullptr;

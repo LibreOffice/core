@@ -1049,7 +1049,7 @@ void BrowseBox::UpdateScrollbars()
         nCornerSize = static_cast<sal_uLong>(nCornerSize * static_cast<double>(GetZoom()));
 
     bool bNeedsVScroll = false;
-    tools::Long nMaxRows = 0;
+    sal_Int32 nMaxRows = 0;
     if (GetDataRowHeight())
     {
         // needs VScroll?
@@ -1134,7 +1134,7 @@ void BrowseBox::UpdateScrollbars()
 
     if ( pVScroll->GetThumbPos() != nTopRow )
         pVScroll->SetThumbPos( nTopRow );
-    tools::Long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), tools::Long(nRowCount-nTopRow) );
+    tools::Long nVisibleSize = std::min( std::min( nRowCount, nMaxRows ), (nRowCount-nTopRow) );
     pVScroll->SetVisibleSize( nVisibleSize ? nVisibleSize : 1 );
     pVScroll->SetRange( Range( 0, nRowCount ) );
     pVScroll->SetPosSizePixel(
