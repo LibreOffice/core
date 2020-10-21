@@ -84,7 +84,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                 switch( eZT )
                 {
                     case SvxZoomType::PERCENT:
-                        SetZoom( static_cast<long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
+                        SetZoom( static_cast<::tools::Long>( pArgs->Get( SID_ATTR_ZOOM ).GetValue()) );
                         Invalidate( SID_ATTR_ZOOM );
                         Invalidate( SID_ATTR_ZOOMSLIDER );
                         break;

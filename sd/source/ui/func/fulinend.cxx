@@ -96,15 +96,15 @@ void FuLineEnd::DoExecute( SfxRequest& )
     OUString aDesc( SdResId( STR_DESC_LINEEND ) );
     OUString aName;
 
-    long nCount = pLineEndList->Count();
-    long j = 1;
+    ::tools::Long nCount = pLineEndList->Count();
+    ::tools::Long j = 1;
     bool bDifferent = false;
 
     while( !bDifferent )
     {
         aName = aNewName + " " + OUString::number(j++);
         bDifferent = true;
-        for( long i = 0; i < nCount && bDifferent; i++ )
+        for( ::tools::Long i = 0; i < nCount && bDifferent; i++ )
         {
             if( aName == pLineEndList->GetLineEnd( i )->GetName() )
                 bDifferent = false;
@@ -122,7 +122,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
     pDlg->GetName( aName );
     bDifferent = true;
 
-    for( long i = 0; i < nCount && bDifferent; i++ )
+    for( ::tools::Long i = 0; i < nCount && bDifferent; i++ )
     {
         if( aName == pLineEndList->GetLineEnd( i )->GetName() )
             bDifferent = false;

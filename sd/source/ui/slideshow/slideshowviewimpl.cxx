@@ -340,8 +340,8 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 
     if( meAnimationMode != ANIMATIONMODE_SHOW )
     {
-        aOutputSize.setWidth( static_cast<long>( aOutputSize.Width() / 1.03 ) );
-        aOutputSize.setHeight( static_cast<long>( aOutputSize.Height() / 1.03 ) );
+        aOutputSize.setWidth( static_cast<::tools::Long>( aOutputSize.Width() / 1.03 ) );
+        aOutputSize.setHeight( static_cast<::tools::Long>( aOutputSize.Height() / 1.03 ) );
     }
 
     SdPage* pP = mpDoc->GetSdPage( 0, PageKind::Standard );

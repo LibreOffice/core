@@ -1682,11 +1682,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                 aRect.Move(-pPage->GetLeftBorder(), -pPage->GetUpperBorder());
 
                 double fLogicToPixel = static_cast<double>(mnWidthPixel) / nPageWidth;
-                aRect.SetLeft( static_cast<long>(aRect.Left() * fLogicToPixel) );
-                aRect.SetTop( static_cast<long>(aRect.Top() * fLogicToPixel) );
-                aRect.SetRight( static_cast<long>(aRect.Right() * fLogicToPixel) );
-                aRect.SetBottom( static_cast<long>(aRect.Bottom() * fLogicToPixel) );
-                long nRadius = aRect.GetWidth() / 2;
+                aRect.SetLeft( static_cast<tools::Long>(aRect.Left() * fLogicToPixel) );
+                aRect.SetTop( static_cast<tools::Long>(aRect.Top() * fLogicToPixel) );
+                aRect.SetRight( static_cast<tools::Long>(aRect.Right() * fLogicToPixel) );
+                aRect.SetBottom( static_cast<tools::Long>(aRect.Bottom() * fLogicToPixel) );
+                tools::Long nRadius = aRect.GetWidth() / 2;
 
                 /**
                     insert areas into Imagemap of the object, if the object has
@@ -1730,10 +1730,10 @@ bool HtmlExport::CreateHtmlForPresPages()
                                 // conversion into pixel coordinates
                                 aArea.Move(aLogPos.X() - pPage->GetLeftBorder(),
                                            aLogPos.Y() - pPage->GetUpperBorder());
-                                aArea.SetLeft( static_cast<long>(aArea.Left() * fLogicToPixel) );
-                                aArea.SetTop( static_cast<long>(aArea.Top() * fLogicToPixel) );
-                                aArea.SetRight( static_cast<long>(aArea.Right() * fLogicToPixel) );
-                                aArea.SetBottom( static_cast<long>(aArea.Bottom() * fLogicToPixel) );
+                                aArea.SetLeft( static_cast<tools::Long>(aArea.Left() * fLogicToPixel) );
+                                aArea.SetTop( static_cast<tools::Long>(aArea.Top() * fLogicToPixel) );
+                                aArea.SetRight( static_cast<tools::Long>(aArea.Right() * fLogicToPixel) );
+                                aArea.SetBottom( static_cast<tools::Long>(aArea.Bottom() * fLogicToPixel) );
 
                                 aStr.append(CreateHTMLRectArea(aArea, aURL));
                             }
@@ -1745,8 +1745,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetCenter(false));
                                 aCenter += Point(aLogPos.X() - pPage->GetLeftBorder(),
                                                  aLogPos.Y() - pPage->GetUpperBorder());
-                                aCenter.setX( static_cast<long>(aCenter.X() * fLogicToPixel) );
-                                aCenter.setY( static_cast<long>(aCenter.Y() * fLogicToPixel) );
+                                aCenter.setX( static_cast<tools::Long>(aCenter.X() * fLogicToPixel) );
+                                aCenter.setY( static_cast<tools::Long>(aCenter.Y() * fLogicToPixel) );
 
                                 sal_uLong nCircleRadius = static_cast<IMapCircleObject*>(pArea)->
                                                  GetRadius(false);
@@ -2786,8 +2786,8 @@ OUString HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPo
             // origin of ordinates
             aPnt.Move(aShift.Width(), aShift.Height());
 
-            aPnt.setX( static_cast<long>(aPnt.X() * fFactor) );
-            aPnt.setY( static_cast<long>(aPnt.Y() * fFactor) );
+            aPnt.setX( static_cast<tools::Long>(aPnt.X() * fFactor) );
+            aPnt.setY( static_cast<tools::Long>(aPnt.Y() * fFactor) );
             aStr.append(OUString::number(aPnt.X())).append(",").append(OUString::number(aPnt.Y()));
 
             if (nPoint < nNoOfPoints - 1)

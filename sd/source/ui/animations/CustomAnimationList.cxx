@@ -231,8 +231,8 @@ private:
     CustomAnimationEffectPtr mpEffect;
 
 public:
-    static const long nIconWidth = 19;
-    static const long nItemMinHeight = 38;
+    static const ::tools::Long nIconWidth = 19;
+    static const ::tools::Long nItemMinHeight = 38;
 };
 
 CustomAnimationListEntryItem::CustomAnimationListEntryItem(const OUString& aDescription, const CustomAnimationEffectPtr& pEffect)
@@ -663,10 +663,10 @@ void CustomAnimationList::update()
 
     CustomAnimationEffectPtr pFirstSelEffect;
     CustomAnimationEffectPtr pLastSelEffect;
-    long nFirstVis = -1;
-    long nLastVis = -1;
-    long nFirstSelOld = -1;
-    long nLastSelOld = -1;
+    ::tools::Long nFirstVis = -1;
+    ::tools::Long nLastVis = -1;
+    ::tools::Long nFirstSelOld = -1;
+    ::tools::Long nLastSelOld = -1;
 
     std::unique_ptr<weld::TreeIter> xEntry = mxTreeView->make_iterator();
 
@@ -770,8 +770,8 @@ void CustomAnimationList::update()
 
     if (mpMainSequence)
     {
-        long nFirstSelNew = -1;
-        long nLastSelNew = -1;
+        ::tools::Long nFirstSelNew = -1;
+        ::tools::Long nLastSelNew = -1;
 
         std::vector<std::unique_ptr<weld::TreeIter>> aNewSelection;
 

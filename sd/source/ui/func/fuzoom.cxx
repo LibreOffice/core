@@ -156,7 +156,7 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
         Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
         sal_uLong nTol = DRGPIX + DRGPIX;
 
-        if ( ( aZoomSizePixel.Width() < static_cast<long>(nTol) && aZoomSizePixel.Height() < static_cast<long>(nTol) ) || rMEvt.IsMod1() )
+        if ( ( aZoomSizePixel.Width() < static_cast<::tools::Long>(nTol) && aZoomSizePixel.Height() < static_cast<::tools::Long>(nTol) ) || rMEvt.IsMod1() )
         {
             // click at place: double zoom factor
             Point aPos = mpWindow->PixelToLogic(aPosPix);
