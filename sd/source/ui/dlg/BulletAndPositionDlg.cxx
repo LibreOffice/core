@@ -566,18 +566,18 @@ void SvxBulletAndPositionDlg::InitControls()
 
     if (bSameDistBorderNum)
     {
-        long nDistBorderNum;
+        tools::Long nDistBorderNum;
         if (bRelative)
         {
-            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())
+            nDistBorderNum = static_cast<tools::Long>(aNumFmtArr[nLvl]->GetAbsLSpace())
                              + aNumFmtArr[nLvl]->GetFirstLineOffset();
             if (nLvl)
-                nDistBorderNum -= static_cast<long>(aNumFmtArr[nLvl - 1]->GetAbsLSpace())
+                nDistBorderNum -= static_cast<tools::Long>(aNumFmtArr[nLvl - 1]->GetAbsLSpace())
                                   + aNumFmtArr[nLvl - 1]->GetFirstLineOffset();
         }
         else
         {
-            nDistBorderNum = static_cast<long>(aNumFmtArr[nLvl]->GetAbsLSpace())
+            nDistBorderNum = static_cast<tools::Long>(aNumFmtArr[nLvl]->GetAbsLSpace())
                              + aNumFmtArr[nLvl]->GetFirstLineOffset();
         }
         SetMetricValue(*m_xDistBorderMF, nDistBorderNum, eCoreUnit);
@@ -976,10 +976,10 @@ IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField
     bool bWidth = &rField == m_xWidthMF.get();
     bLastWidthModified = bWidth;
     bool bRatio = m_xRatioCB->get_active();
-    long nWidthVal
-        = static_cast<long>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::MM_100TH)));
-    long nHeightVal
-        = static_cast<long>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nWidthVal = static_cast<tools::Long>(
+        m_xWidthMF->denormalize(m_xWidthMF->get_value(FieldUnit::MM_100TH)));
+    tools::Long nHeightVal = static_cast<tools::Long>(
+        m_xHeightMF->denormalize(m_xHeightMF->get_value(FieldUnit::MM_100TH)));
     nWidthVal = OutputDevice::LogicToLogic(nWidthVal, MapUnit::Map100thMM, eCoreUnit);
     nHeightVal = OutputDevice::LogicToLogic(nHeightVal, MapUnit::Map100thMM, eCoreUnit);
     double fSizeRatio;
@@ -1004,13 +1004,13 @@ IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField
 
                 if (bWidth)
                 {
-                    long nDelta = nWidthVal - aInitSize[i].Width();
+                    tools::Long nDelta = nWidthVal - aInitSize[i].Width();
                     aSize.setWidth(nWidthVal);
                     if (bRatio)
                     {
                         aSize.setHeight(
                             aInitSize[i].Height()
-                            + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio));
+                            + static_cast<tools::Long>(static_cast<double>(nDelta) / fSizeRatio));
                         m_xHeightMF->set_value(m_xHeightMF->normalize(OutputDevice::LogicToLogic(
                                                    aSize.Height(), eCoreUnit, MapUnit::Map100thMM)),
                                                FieldUnit::MM_100TH);
@@ -1018,13 +1018,13 @@ IMPL_LINK(SvxBulletAndPositionDlg, SizeHdl_Impl, weld::MetricSpinButton&, rField
                 }
                 else
                 {
-                    long nDelta = nHeightVal - aInitSize[i].Height();
+                    tools::Long nDelta = nHeightVal - aInitSize[i].Height();
                     aSize.setHeight(nHeightVal);
                     if (bRatio)
                     {
                         aSize.setWidth(
                             aInitSize[i].Width()
-                            + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio));
+                            + static_cast<tools::Long>(static_cast<double>(nDelta) * fSizeRatio));
                         m_xWidthMF->set_value(m_xWidthMF->normalize(OutputDevice::LogicToLogic(
                                                   aSize.Width(), eCoreUnit, MapUnit::Map100thMM)),
                                               FieldUnit::MM_100TH);
@@ -1128,7 +1128,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
 {
     if (bInInitControl)
         return;
-    long nValue = GetCoreValue(rFld, eCoreUnit);
+    tools::Long nValue = GetCoreValue(rFld, eCoreUnit);
     sal_uInt16 nMask = 1;
     for (sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -1146,9 +1146,9 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
                     }
                     else
                     {
-                        long nTmp = pActNum->GetLevel(i - 1).GetAbsLSpace()
-                                    + pActNum->GetLevel(i - 1).GetFirstLineOffset()
-                                    - pActNum->GetLevel(i).GetFirstLineOffset();
+                        tools::Long nTmp = pActNum->GetLevel(i - 1).GetAbsLSpace()
+                                           + pActNum->GetLevel(i - 1).GetFirstLineOffset()
+                                           - pActNum->GetLevel(i).GetFirstLineOffset();
 
                         aNumFmt.SetAbsLSpace(nValue + nTmp);
                     }
@@ -1161,7 +1161,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, DistanceHdl_Impl, weld::MetricSpinButton&, rF
             else if (&rFld == m_xIndentMF.get())
             {
                 // together with the FirstLineOffset the AbsLSpace must be changed, too
-                long nDiff = nValue + aNumFmt.GetFirstLineOffset();
+                tools::Long nDiff = nValue + aNumFmt.GetFirstLineOffset();
                 auto const nAbsLSpace = aNumFmt.GetAbsLSpace();
                 aNumFmt.SetAbsLSpace(nAbsLSpace + nDiff);
                 aNumFmt.SetFirstLineOffset(-nValue);
@@ -1188,7 +1188,7 @@ IMPL_LINK(SvxBulletAndPositionDlg, RelativeHdl_Impl, weld::ToggleButton&, rBox, 
     bool bOn = rBox.get_active();
     bool bSingleSelection = m_xLevelLB->count_selected_rows() == 1 && SAL_MAX_UINT16 != nActNumLvl;
     bool bSetValue = false;
-    long nValue = 0;
+    tools::Long nValue = 0;
     if (bOn || bSingleSelection)
     {
         sal_uInt16 nMask = 1;

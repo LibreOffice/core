@@ -135,9 +135,9 @@ void OReportWindow::showRuler(bool _bShow)
 
 sal_Int32 OReportWindow::getMaxMarkerWidth() const
 {
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_aViewsWindow->GetMapMode().GetScaleX();
-    return sal_Int32(static_cast<long>(aStartWidth));
+    return sal_Int32(static_cast<tools::Long>(aStartWidth));
 }
 
 sal_Int32 OReportWindow::GetTotalWidth() const
@@ -145,13 +145,13 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     sal_Int32 nWidth = 0;
     if ( !m_aViewsWindow->empty() )
     {
-        Fraction aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
+        Fraction aStartWidth(tools::Long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
         const Fraction aZoom(m_pView->getController().getZoomValue(),100);
         aStartWidth *= aZoom;
         sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
-        nPaperWidth = long(nPaperWidth * aZoom);
+        nPaperWidth = tools::Long(nPaperWidth * aZoom);
         const Size aPageSize = LogicToPixel(Size(nPaperWidth,0));
-        nWidth = aPageSize.Width() + long(aStartWidth);
+        nWidth = aPageSize.Width() + tools::Long(aStartWidth);
     }
     return nWidth;
 }
@@ -163,10 +163,10 @@ void OReportWindow::Resize()
         return;
 
     const Size aTotalOutputSize = GetOutputSizePixel();
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
+    Fraction aStartWidth(tools::Long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
     const Point aOffset = LogicToPixel(Point(SECTION_OFFSET, 0), MapMode(MapUnit::MapAppFont));
-    Point aStartPoint(static_cast<long>(aStartWidth) + aOffset.X(),0);
+    Point aStartPoint(static_cast<tools::Long>(aStartWidth) + aOffset.X(),0);
     uno::Reference<report::XReportDefinition> xReportDefinition = getReportView()->getController().getReportDefinition();
     const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
     sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
@@ -177,8 +177,8 @@ void OReportWindow::Resize()
 
     aPageSize.setHeight( m_aHRuler->GetSizePixel().Height() );
 
-    const long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
-    long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
+    const tools::Long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
+    tools::Long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
 
     m_aHRuler->SetPosSizePixel(aStartPoint,aPageSize);
     m_aHRuler->SetNullOffset(nLeftMargin);
@@ -404,14 +404,14 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
             break;
         case SvxZoomType::WHOLEPAGE:
             {
-                nZoom = static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
+                nZoom = static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
                 MapMode aMap( MapUnit::Map100thMM );
                 const Size aHeight = m_aViewsWindow->LogicToPixel(m_aViewsWindow->PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler->GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom,static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Height()*100,aHeight.Height()))));
+                nZoom = ::std::min(nZoom,static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction(aSize.Height()*100,aHeight.Height()))));
             }
             break;
         case SvxZoomType::PAGEWIDTH:
-            nZoom = static_cast<sal_uInt16>(static_cast<long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
+            nZoom = static_cast<sal_uInt16>(static_cast<tools::Long>(Fraction(aSize.Width()*100,impl_getRealPixelWidth())));
             break;
         default:
             break;

@@ -24,7 +24,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/scrbar.hxx>
-
+#include <tools/long.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 namespace com::sun::star::office { class XAnnotation; }
@@ -104,11 +104,11 @@ class AnnotationWindow : public FloatingWindow
         ::Outliner*             Engine()        { return mpOutliner.get(); }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
-        long            GetPostItTextHeight();
+        ::tools::Long            GetPostItTextHeight();
 
         void            InitControls();
         void            DoResize();
-        void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
+        void            ResizeIfNecessary(::tools::Long aOldHeight, ::tools::Long aNewHeight);
         void            SetScrollbar();
 
         void            Rescale();

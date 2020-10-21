@@ -277,7 +277,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
     const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
-    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<long>(pItem->GetValue()));
+    FieldUnit eFUnit = static_cast<FieldUnit>(static_cast<tools::Long>(pItem->GetValue()));
 
     if( eFUnit == m_xMtrFldOriginalWidth->get_unit() )
         return;
@@ -546,7 +546,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rX = static_cast<long>(aTmp.toInt32());
+    rX = static_cast<tools::Long>(aTmp.toInt32());
     if( rX == 0 )
         return false;
 
@@ -557,7 +557,7 @@ bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rY = static_cast<long>(aTmp.toInt32());
+    rY = static_cast<tools::Long>(aTmp.toInt32());
     return rY != 0;
 }
 
