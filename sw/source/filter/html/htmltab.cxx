@@ -1604,7 +1604,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                     // The HTML tables represent a box. So we need to split behind that box
                     nSplitCol = nCol + 1;
 
-                    tools::Long nBoxRowSpan = rCell2.GetRowSpan();
+                    sal_Int32 nBoxRowSpan = rCell2.GetRowSpan();
                     if (!rCell2.GetContents() || rCell2.IsCovered())
                     {
                         if (rCell2.IsCovered())

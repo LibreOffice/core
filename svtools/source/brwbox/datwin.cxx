@@ -298,10 +298,10 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     BrowseBox *pBox = GetParent();
 
     // seek to row under mouse
-    tools::Long nRelRow = rPosPixel.Y() < 0
+    sal_Int32 nRelRow = rPosPixel.Y() < 0
             ? -1
             : rPosPixel.Y() / pBox->GetDataRowHeight();
-    tools::Long nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
+    sal_Int32 nRow = nRelRow < 0 ? -1 : nRelRow + pBox->nTopRow;
 
     // find column under mouse
     tools::Long nMouseX = rPosPixel.X();
@@ -376,7 +376,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
       return;
 
     Point aEventPos( rEvt.GetMousePosPixel() );
-    tools::Long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
+    sal_Int32 nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
     MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
     if ( CommandEventId::ContextMenu == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
@@ -574,7 +574,7 @@ void BrowserDataWin::RequestHelp( const HelpEvent& rHEvt )
 
 
 BrowseEvent::BrowseEvent( vcl::Window* pWindow,
-                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     pWin(pWindow),
     nRow(nAbsRow),
@@ -594,7 +594,7 @@ BrowserMouseEvent::BrowserMouseEvent( BrowserDataWin *pWindow,
 
 
 BrowserMouseEvent::BrowserMouseEvent( vcl::Window *pWindow, const MouseEvent& rEvt,
-                          tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                          sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                           const tools::Rectangle& rRect ):
     MouseEvent(rEvt),
     BrowseEvent( pWindow, nAbsRow, nColumn, nColumnId, rRect )

@@ -81,8 +81,8 @@ public:
     virtual vcl::Window* GetWindowInstance()= 0;
     virtual sal_Int32 GetAccessibleControlCount() const = 0;
     virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )= 0;
-    virtual tools::Long GetRowCount() const= 0;
-    virtual tools::Long GetColumnCount() const= 0;
+    virtual sal_Int32 GetRowCount() const= 0;
+    virtual sal_Int32 GetColumnCount() const= 0;
     virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
     virtual tools::Rectangle calcHeaderRect( bool _bIsColumnBar ) = 0;
     virtual tools::Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;

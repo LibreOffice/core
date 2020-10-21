@@ -59,14 +59,14 @@ private:
                             pColNumFmt;
     std::unique_ptr<sal_uInt32[]>
                             pRowNumFmt;
-    tools::Long                    nColFmtCount;
-    tools::Long                    nRowFmtCount;
+    sal_Int32               nColFmtCount;
+    sal_Int32               nRowFmtCount;
     sal_uInt32              nSingleNumFmt;
 
     // Output geometry related parameters
-    tools::Long                    nColCount;
-    tools::Long                    nRowCount;
-    tools::Long                    nHeaderSize;
+    sal_Int32               nColCount;
+    sal_Int32               nRowCount;
+    sal_Int32               nHeaderSize;
     SCCOL                   nTabStartCol;
     SCROW                   nTabStartRow;
     SCCOL                   nMemberStartCol;
@@ -106,7 +106,7 @@ public:
 
     void            Output();           //! Refresh?
     ScRange GetOutputRange( sal_Int32 nRegionType = css::sheet::DataPilotOutputRangeType::WHOLE );
-    tools::Long            GetHeaderRows() const;
+    sal_Int32       GetHeaderRows() const;
     bool            HasError();         // range overflow or exception from source
 
     void            GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);

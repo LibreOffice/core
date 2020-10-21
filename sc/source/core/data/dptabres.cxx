@@ -1551,7 +1551,7 @@ void ScDPResultMember::FillDataResults(
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
     //  (not on data layout dimension)
     const ScDPLevel*     pParentLevel = GetParentLevel();
-    tools::Long nStartRow = rFilterCxt.mnRow;
+    sal_Int32 nStartRow = rFilterCxt.mnRow;
 
     tools::Long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
@@ -1569,7 +1569,7 @@ void ScDPResultMember::FillDataResults(
         if ( bTitleLine )           // in tabular layout the title is on a separate row
             ++rFilterCxt.mnRow;                 // -> fill child dimension one row below
 
-        tools::Long nOldRow = rFilterCxt.mnRow;
+        sal_Int32 nOldRow = rFilterCxt.mnRow;
         pChildDimension->FillDataResults(pRefMember, rFilterCxt, rSequence, nMeasure);
         rFilterCxt.mnRow = nOldRow; // Revert to the original row before the call.
 
@@ -2348,8 +2348,8 @@ void ScDPDataMember::UpdateRunningTotals(
                         bool bRefDimInRow = ( nRefOrient == sheet::DataPilotFieldOrientation_ROW );
 
                         ScDPResultDimension* pSelectDim = nullptr;
-                        tools::Long nRowPos = 0;
-                        tools::Long nColPos = 0;
+                        sal_Int32 nRowPos = 0;
+                        sal_Int32 nColPos = 0;
 
                         //  find the reference field in column or row dimensions
 
@@ -3341,15 +3341,15 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 {
     OSL_ENSURE( pRelativePos == nullptr || pName == nullptr, "can't use position and name" );
 
-    const tools::Long* pColIndexes = rRunning.GetColSorted().data();
-    const tools::Long* pRowIndexes = rRunning.GetRowSorted().data();
+    const sal_Int32* pColIndexes = rRunning.GetColSorted().data();
+    const sal_Int32* pRowIndexes = rRunning.GetRowSorted().data();
 
     // get own row member using all indexes
 
     const ScDPResultMember* pRowMember = rRunning.GetRowResRoot();
     ScDPDataMember* pColMember = nullptr;
 
-    const tools::Long* pNextRowIndex = pRowIndexes;
+    const sal_Int32* pNextRowIndex = pRowIndexes;
     while ( *pNextRowIndex >= 0 && pRowMember )
     {
         const ScDPResultDimension* pRowChild = pRowMember->GetChildDimension();
@@ -3367,8 +3367,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
     {
         pColMember = pRowMember->GetDataRoot();
 
-        const tools::Long* pNextColIndex = pColIndexes;
-        tools::Long nColSkipped = 0;
+        const sal_Int32* pNextColIndex = pColIndexes;
+        sal_Int32 nColSkipped = 0;
         while ( *pNextColIndex >= 0 && pColMember && nColSkipped < nRefDimPos )
         {
             ScDPDataDimension* pColChild = pColMember->GetChildDimension();
@@ -3909,8 +3909,8 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criter
     typedef std::unordered_map<OUString, long> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
-    tools::Long nColumnCount = pData->GetColumnCount();
-    for (tools::Long i = 0; i < nColumnCount; ++i)
+    sal_Int32 nColumnCount = pData->GetColumnCount();
+    for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
         aFieldNames.emplace(pData->getDimensionName(i), i);
     }

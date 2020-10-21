@@ -279,8 +279,8 @@ static void lcl_ChangeRowSpan( const SwTable& rTable, const tools::Long nDiff,
         const size_t nBoxCount = pLine->GetTabBoxes().size();
         for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
         {
-            tools::Long nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
-            tools::Long nAbsSpan = nRowSpan > 0 ? nRowSpan : -nRowSpan;
+            sal_Int32 nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
+            sal_Int32 nAbsSpan = nRowSpan > 0 ? nRowSpan : -nRowSpan;
             // Check if the last overlapped cell is above or below
             // the critical area
             if( nAbsSpan > nDistance )
@@ -397,7 +397,7 @@ std::unique_ptr<SwBoxSelection> SwTable::CollectBoxSelection( const SwPaM& rPam 
             OSL_ENSURE( pBox, "Missing table box" );
             tools::Long nLeft = nRight;
             nRight += pBox->GetFrameFormat()->GetFrameSize().GetWidth();
-            tools::Long nRowSpan = pBox->getRowSpan();
+            sal_Int32 nRowSpan = pBox->getRowSpan();
             if( nRight <= nMin )
             {
                 if( nRight == nMin && nLeftSpanCnt )
@@ -695,7 +695,7 @@ bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
     SwTableNode* pTableNd = GetTableNode();
     std::vector<SwTableBoxFormat*> aInsFormat( nCnt, nullptr );
     size_t nLastLine = SAL_MAX_SIZE;
-    tools::Long nLastRowSpan = 1;
+    sal_Int32 nLastRowSpan = 1;
 
     for( size_t i = 0; i < m_aLines.size(); ++i )
     {
@@ -707,7 +707,7 @@ bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
             ++nInsPos;
         SwTableBoxFormat* pBoxFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
         ::InsTableBox( rDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
-        tools::Long nRowSpan = pBox->getRowSpan();
+        sal_Int32 nRowSpan = pBox->getRowSpan();
         tools::Long nDiff = i - nLastLine;
         bool bNewSpan = false;
         if( nLastLine != SAL_MAX_SIZE && nDiff <= nLastRowSpan &&
@@ -846,7 +846,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // The number of lines in the selection rectangle: nLineCount
     const size_t nLineCount = pSel->maBoxes.size();
     // BTW: nLineCount is the rowspan of the new master cell
-    tools::Long nRowSpan = static_cast<tools::Long>(nLineCount);
+    sal_Int32 nRowSpan = static_cast<tools::Long>(nLineCount);
     // We will need the first and last line of the selection
     // to check if there any superfluous row after merging
     SwTableLine* pFirstLn = nullptr;
@@ -1194,7 +1194,7 @@ void SwTable::InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         SwTableLine *pNewLine = GetTabLines()[ nRowIdx + nCnt - n ];
         for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
         {
-            tools::Long nRowSpan = rLine.GetTabBoxes()[nCurrBox]->getRowSpan();
+            sal_Int32 nRowSpan = rLine.GetTabBoxes()[nCurrBox]->getRowSpan();
             if( nRowSpan > 0 )
                 nRowSpan = - nRowSpan;
             pNewLine->GetTabBoxes()[ nCurrBox ]->setRowSpan( nRowSpan - n );
@@ -1386,7 +1386,7 @@ static sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes
             {
                 if( nPos > nDirect || nDirect == USHRT_MAX )
                     nDirect = nPos;
-                tools::Long nRowSpan = pBox->getRowSpan();
+                sal_Int32 nRowSpan = pBox->getRowSpan();
                 if( nRowSpan < 2 )
                     nSpan = 0;
                 else if( nSpan )
@@ -1517,7 +1517,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 SwTableLine *pNewLine = GetTabLines()[ nRowIdx+nCnt-n-nOfs];
                 for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
                 {
-                    tools::Long nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
+                    sal_Int32 nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
                     if( bBehind )
                     {
                         if( nRowSpan == 1 || nRowSpan == -1 )
@@ -1576,7 +1576,7 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
         SwTableBox* pBox = rBoxes[i];
-        tools::Long nRowSpan = pBox->getRowSpan();
+        sal_Int32 nRowSpan = pBox->getRowSpan();
         if( nRowSpan != 1 && pBox->GetFrameFormat()->GetFrameSize().GetWidth() )
         {
             tools::Long nLeft = lcl_Box2LeftBorder( *pBox );
@@ -1647,7 +1647,7 @@ static void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, tools::
                        nRight - nMin > nMin - nLeft;
             else
                 bAdd = nLeft <= nMid || nRight - nMax < nMax - nLeft;
-            tools::Long nRowSpan = pBox->getRowSpan();
+            sal_Int32 nRowSpan = pBox->getRowSpan();
             if( bAdd &&
                 ( !bChkProtected ||
                 !pBox->GetFrameFormat()->GetProtect().IsContentProtected() ) )
@@ -1920,7 +1920,7 @@ void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
         SwTableBox *pBox = rBoxes[i];
-        tools::Long nRowSpan = pBox->getRowSpan();
+        sal_Int32 nRowSpan = pBox->getRowSpan();
         if( nRowSpan != 1 )
         {
             SwTableBox *pMasterBox = nRowSpan > 0 ? pBox
@@ -2007,7 +2007,7 @@ SwSaveRowSpan::SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn )
     {
         SwTableBox* pBox = rBoxes[nCurrCol];
         OSL_ENSURE( pBox, "Missing Table Box" );
-        tools::Long nRowSp = pBox->getRowSpan();
+        sal_Int32 nRowSp = pBox->getRowSpan();
         mnRowSpans[ nCurrCol ] = nRowSp;
         if( nRowSp < 0 )
         {
@@ -2042,7 +2042,7 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
         OSL_ENSURE( pBox, "Missing Table Box" );
-        tools::Long nRowSp = pBox->getRowSpan();
+        sal_Int32 nRowSp = pBox->getRowSpan();
         if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
         {
             OSL_ENSURE( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" );
@@ -2098,7 +2098,7 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
         OSL_ENSURE( pBox, "Missing Table Box" );
-        tools::Long nRowSp = pBox->getRowSpan();
+        sal_Int32 nRowSp = pBox->getRowSpan();
         if( nRowSp < 0 )
             nRowSp = -nRowSp;
         if( nRowSp > 1 )
@@ -2246,8 +2246,8 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                 // -2 -> -(N+1) ; -N .. -2
                 //  1 -> N ; -(N-1) .. -1
                 //  2 -> N+1 ; -N .. -2
-                tools::Long newSourceRowSpan(pSourceBox->getRowSpan());
-                tools::Long newBoxRowSpan;
+                sal_Int32 newSourceRowSpan(pSourceBox->getRowSpan());
+                sal_Int32 newBoxRowSpan;
                 if (newSourceRowSpan < 0)
                 {
                     newSourceRowSpan -= pSubTableBox->GetTabLines().size() - 1;
@@ -2397,7 +2397,7 @@ namespace {
 
 struct RowSpanCheck
 {
-    tools::Long nRowSpan;
+    sal_Int32 nRowSpan;
     SwTwips nLeft;
     SwTwips nRight;
 };
@@ -2431,7 +2431,7 @@ void SwTable::CheckConsistency() const
             index = *index.GetNode().EndOfSectionNode();
             ++index;
             SwTwips nNewWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth() + nWidth;
-            tools::Long nRowSp = pBox->getRowSpan();
+            sal_Int32 nRowSp = pBox->getRowSpan();
             if( nRowSp < 0 )
             {
                 SAL_WARN_IF( aIter == aRowSpanCells.end(),

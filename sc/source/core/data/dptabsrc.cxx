@@ -123,7 +123,7 @@ const std::optional<OUString> & ScDPSource::GetGrandTotalName() const
     return mpGrandTotalName;
 }
 
-sheet::DataPilotFieldOrientation ScDPSource::GetOrientation(tools::Long nColumn)
+sheet::DataPilotFieldOrientation ScDPSource::GetOrientation(sal_Int32 nColumn)
 {
     if (std::find(maColDims.begin(), maColDims.end(), nColumn) != maColDims.end())
         return sheet::DataPilotFieldOrientation_COLUMN;
@@ -163,7 +163,7 @@ OUString ScDPSource::GetDataDimName(tools::Long nIndex)
     return aRet;
 }
 
-tools::Long ScDPSource::GetPosition(tools::Long nColumn)
+tools::Long ScDPSource::GetPosition(sal_Int32 nColumn)
 {
     std::vector<long>::const_iterator it, itBeg = maColDims.begin(), itEnd = maColDims.end();
     it = std::find(itBeg, itEnd, nColumn);
@@ -193,7 +193,7 @@ tools::Long ScDPSource::GetPosition(tools::Long nColumn)
 
 namespace {
 
-bool testSubTotal( bool& rAllowed, tools::Long nColumn, const std::vector<long>& rDims, ScDPSource* pSource )
+bool testSubTotal( bool& rAllowed, sal_Int32 nColumn, const std::vector<long>& rDims, ScDPSource* pSource )
 {
     rAllowed = true;
     std::vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
@@ -231,7 +231,7 @@ void removeDim( tools::Long nRemove, std::vector<long>& rDims )
 
 }
 
-bool ScDPSource::SubTotalAllowed(tools::Long nColumn)
+bool ScDPSource::SubTotalAllowed(sal_Int32 nColumn)
 {
     //TODO: cache this at ScDPResultData
     bool bAllowed = true;
@@ -242,7 +242,7 @@ bool ScDPSource::SubTotalAllowed(tools::Long nColumn)
     return bAllowed;
 }
 
-void ScDPSource::SetOrientation(tools::Long nColumn, sheet::DataPilotFieldOrientation nNew)
+void ScDPSource::SetOrientation(sal_Int32 nColumn, sheet::DataPilotFieldOrientation nNew)
 {
     //TODO: change to no-op if new orientation is equal to old?
 
@@ -364,15 +364,15 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
         throw uno::RuntimeException();
     }
 
-    tools::Long nColCount = pColResRoot->GetSize(pResData->GetColStartMeasure());
-    tools::Long nRowCount = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
+    sal_Int32 nColCount = pColResRoot->GetSize(pResData->GetColStartMeasure());
+    sal_Int32 nRowCount = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
 
     //  allocate full sequence
     //TODO: leave out empty rows???
 
     uno::Sequence< uno::Sequence<sheet::DataResult> > aSeq( nRowCount );
     uno::Sequence<sheet::DataResult>* pRowAry = aSeq.getArray();
-    for (tools::Long nRow = 0; nRow < nRowCount; nRow++)
+    for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
     {
         uno::Sequence<sheet::DataResult> aColSeq( nColCount );
         //  use default values of DataResult
@@ -438,13 +438,13 @@ void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRef
 
 Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
 {
-    tools::Long nColumnCount = GetData()->GetColumnCount();
+    sal_Int32 nColumnCount = GetData()->GetColumnCount();
 
     vector<ScDPFilteredCache::Criterion> aFilterCriteria;
     for (const sheet::DataPilotFieldFilter& rFilter : aFilters)
     {
         const OUString& aFieldName = rFilter.FieldName;
-        for (tools::Long nCol = 0; nCol < nColumnCount; ++nCol)
+        for (sal_Int32 nCol = 0; nCol < nColumnCount; ++nCol)
         {
             if (aFieldName == pData->getDimensionName(nCol))
             {
@@ -792,7 +792,7 @@ void ScDPSource::CreateRes_Impl()
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
         {
-            tools::Long nColumn = comphelper::findValue(
+            sal_Int32 nColumn = comphelper::findValue(
                 GetDimensionsObject()->getElementNames(), aDataRefValues.back().ReferenceField);
             if ( nColumn >= 0 )
             {
@@ -1050,15 +1050,15 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const Sc
 {
     FillMemberResults();
 
-    tools::Long i = 0;
-    tools::Long nColCount = aColLevelList.size();
+    sal_Int32 i = 0;
+    sal_Int32 nColCount = aColLevelList.size();
     for (i=0; i<nColCount; i++)
     {
         ScDPLevel* pColLevel = aColLevelList[i];
         if ( pColLevel == pLevel )
             return &pColResults[i];
     }
-    tools::Long nRowCount = aRowLevelList.size();
+    sal_Int32 nRowCount = aRowLevelList.size();
     for (i=0; i<nRowCount; i++)
     {
         ScDPLevel* pRowLevel = aRowLevelList[i];
