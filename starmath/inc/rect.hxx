@@ -28,9 +28,9 @@
 class SmFormat;
 
 
-inline long SmFromTo(long nFrom, long nTo, double fRelDist)
+inline tools::Long SmFromTo(tools::Long nFrom, tools::Long nTo, double fRelDist)
 {
-    return nFrom + static_cast<long>(fRelDist * (nTo - nFrom));
+    return nFrom + static_cast<tools::Long>(fRelDist * (nTo - nFrom));
 }
 
 
@@ -85,7 +85,7 @@ class SmRect
 {
     Point   aTopLeft;
     Size    aSize;
-    long    nBaseline,
+    tools::Long    nBaseline,
             nAlignT,
             nAlignM,
             nAlignB,
@@ -108,48 +108,48 @@ public:
             SmRect();
             SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
                    const OUString &rText, sal_uInt16 nBorderWidth);
-            SmRect(long nWidth, long nHeight);
+            SmRect(tools::Long nWidth, tools::Long nHeight);
 
 
             sal_uInt16  GetBorderWidth() const  { return nBorderWidth; }
 
-            void SetItalicSpaces(long nLeftSpace, long nRightSpace);
+            void SetItalicSpaces(tools::Long nLeftSpace, tools::Long nRightSpace);
 
             void SetWidth(sal_uLong nWidth)     { aSize.setWidth(nWidth); }
 
-            void SetLeft(long nLeft);
-            void SetRight(long nRight);
-            void SetBottom(long nBottom);
-            void SetTop(long nTop);
+            void SetLeft(tools::Long nLeft);
+            void SetRight(tools::Long nRight);
+            void SetBottom(tools::Long nBottom);
+            void SetTop(tools::Long nTop);
 
             const Point & GetTopLeft() const { return aTopLeft; }
 
-            long GetTop()     const { return GetTopLeft().Y(); }
-            long GetLeft()    const { return GetTopLeft().X(); }
-            long GetBottom()  const { return GetTop() + GetHeight() - 1; }
-            long GetRight()   const { return GetLeft() + GetWidth() - 1; }
-            long GetCenterY() const { return (GetTop() + GetBottom()) / 2; }
-            long GetWidth()   const { return GetSize().Width(); }
-            long GetHeight()  const { return GetSize().Height(); }
+            tools::Long GetTop()     const { return GetTopLeft().Y(); }
+            tools::Long GetLeft()    const { return GetTopLeft().X(); }
+            tools::Long GetBottom()  const { return GetTop() + GetHeight() - 1; }
+            tools::Long GetRight()   const { return GetLeft() + GetWidth() - 1; }
+            tools::Long GetCenterY() const { return (GetTop() + GetBottom()) / 2; }
+            tools::Long GetWidth()   const { return GetSize().Width(); }
+            tools::Long GetHeight()  const { return GetSize().Height(); }
 
-            long GetItalicLeftSpace()  const { return nItalicLeftSpace; }
-            long GetItalicRightSpace() const { return nItalicRightSpace; }
+            tools::Long GetItalicLeftSpace()  const { return nItalicLeftSpace; }
+            tools::Long GetItalicRightSpace() const { return nItalicRightSpace; }
 
-            long GetHiAttrFence() const     { return nHiAttrFence; }
-            long GetLoAttrFence() const     { return nLoAttrFence; }
+            tools::Long GetHiAttrFence() const     { return nHiAttrFence; }
+            tools::Long GetLoAttrFence() const     { return nLoAttrFence; }
 
-            long GetItalicLeft() const      { return GetLeft() - GetItalicLeftSpace(); }
-            long GetItalicCenterX() const   { return (GetItalicLeft() + GetItalicRight()) / 2; }
-            long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
-            long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
+            tools::Long GetItalicLeft() const      { return GetLeft() - GetItalicLeftSpace(); }
+            tools::Long GetItalicCenterX() const   { return (GetItalicLeft() + GetItalicRight()) / 2; }
+            tools::Long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
+            tools::Long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
 
             bool HasBaseline() const        { return bHasBaseline; }
-    inline  long GetBaseline() const;
-            long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
+    inline  tools::Long GetBaseline() const;
+            tools::Long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
 
-            long GetAlignT() const  { return nAlignT; }
-            long GetAlignM() const  { return nAlignM; }
-            long GetAlignB() const  { return nAlignB; }
+            tools::Long GetAlignT() const  { return nAlignT; }
+            tools::Long GetAlignM() const  { return nAlignM; }
+            tools::Long GetAlignB() const  { return nAlignB; }
 
             const Size & GetSize() const    { return aSize; }
 
@@ -171,11 +171,11 @@ public:
 
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode);
             void     ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                              long nNewAlignM);
+                              tools::Long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                       bool bKeepVerAlignParams);
 
-            long    OrientedDist(const Point &rPoint) const;
+            tools::Long    OrientedDist(const Point &rPoint) const;
             bool    IsInsideRect(const Point &rPoint) const;
             bool    IsInsideItalicRect(const Point &rPoint) const;
 
@@ -184,7 +184,7 @@ public:
 };
 
 
-inline void SmRect::SetItalicSpaces(long nLeftSpace, long nRightSpace)
+inline void SmRect::SetItalicSpaces(tools::Long nLeftSpace, tools::Long nRightSpace)
     // set extra spacing to the left and right for (italic)
     // letters/text
 {
@@ -202,7 +202,7 @@ inline void SmRect::CopyMBL(const SmRect &rRect)
 }
 
 
-inline long SmRect::GetBaseline() const
+inline tools::Long SmRect::GetBaseline() const
 {
     SAL_WARN_IF( !HasBaseline(), "starmath", "Baseline does not exist" );
     return nBaseline;

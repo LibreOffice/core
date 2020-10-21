@@ -96,7 +96,7 @@ Size ScrollableWindow::GetOutputSizePixel() const
 {
     Size aSz( Window::GetOutputSizePixel() );
 
-    long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
+    tools::Long nTmp = GetSettings().GetStyleSettings().GetScrollBarSize();
     if ( aHScroll->IsVisible() )
         aSz.AdjustHeight( -nTmp );
     if ( aVScroll->IsVisible() )
@@ -134,7 +134,7 @@ void ScrollableWindow::Resize()
     Size aOutPixSz = Window::GetOutputSizePixel();
 
     // determine the size of the output-area and if we need scrollbars
-    const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    const tools::Long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     bool bVVisible = false; // by default no vertical-ScrollBar
     bool bHVisible = false; // by default no horizontal-ScrollBar
     bool bChanged;          // determines if a visiblility was changed
@@ -270,7 +270,7 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 }
 
 
-void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, ScrollFlags )
+void ScrollableWindow::Scroll( tools::Long nDeltaX, tools::Long nDeltaY, ScrollFlags )
 {
     // get the delta in pixel
     Size aDeltaPix( LogicToPixel( Size(nDeltaX, nDeltaY) ) );

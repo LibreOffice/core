@@ -179,7 +179,7 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
 
 void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
 {
-    long i = maPos.nIndex;
+    tools::Long i = maPos.nIndex;
 
     mrDev.SetFont( pNode->GetFont( ) );
 
@@ -187,11 +187,11 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, i ) + maOffset.X( );
-    long top = pLine->GetTop( ) + maOffset.Y( );
-    long height = pLine->GetHeight( );
-    long left_line = pLine->GetLeft( ) + maOffset.X( );
-    long right_line = pLine->GetRight( ) + maOffset.X( );
+    tools::Long left = pNode->GetLeft( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, i ) + maOffset.X( );
+    tools::Long top = pLine->GetTop( ) + maOffset.Y( );
+    tools::Long height = pLine->GetHeight( );
+    tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
+    tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
     mrDev.SetLineColor( COL_BLACK );
@@ -215,11 +215,11 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.nIndex == 1 ? pNode->GetWidth( ) : 0 );
-    long top = pLine->GetTop( ) + maOffset.Y( );
-    long height = pLine->GetHeight( );
-    long left_line = pLine->GetLeft( ) + maOffset.X( );
-    long right_line = pLine->GetRight( ) + maOffset.X( );
+    tools::Long left = pNode->GetLeft( ) + maOffset.X( ) + ( maPos.nIndex == 1 ? pNode->GetWidth( ) : 0 );
+    tools::Long top = pLine->GetTop( ) + maOffset.Y( );
+    tools::Long height = pLine->GetHeight( );
+    tools::Long left_line = pLine->GetLeft( ) + maOffset.X( );
+    tools::Long right_line = pLine->GetRight( ) + maOffset.X( );
 
     //Set color
     mrDev.SetLineColor( COL_BLACK );
@@ -244,14 +244,14 @@ void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
     //Save device state
     mpDev->Push( PushFlags::FONT | PushFlags::TEXTCOLOR );
 
-    long i = maPos.nIndex;
+    tools::Long i = maPos.nIndex;
 
     mpDev->SetFont( pNode->GetFont( ) );
 
     //Find coordinates
-    long left = pNode->GetLeft( ) + mpDev->GetTextWidth( pNode->GetText( ), 0, i );
-    long top = pNode->GetTop( );
-    long height = pNode->GetHeight( );
+    tools::Long left = pNode->GetLeft( ) + mpDev->GetTextWidth( pNode->GetText( ), 0, i );
+    tools::Long top = pNode->GetTop( );
+    tools::Long height = pNode->GetHeight( );
 
     maLine = SmCaretLine( left, top, height );
 
@@ -408,8 +408,8 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // _unscaled_ font height to be used, we use that to calculate the
     // bar height. Thus it is independent of the arguments height.
     // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
-    long nBarHeight = pNode->GetWidth( ) * 7 / 100;
-    long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
+    tools::Long nBarHeight = pNode->GetWidth( ) * 7 / 100;
+    tools::Long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
     Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
     Point aBarPos( maPosition + aBarOffset );
 
@@ -429,7 +429,7 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    long nBorderwidth = pNode->GetFont( ).GetBorderWidth( );
+    tools::Long nBorderwidth = pNode->GetFont( ).GetBorderWidth( );
 
     LineInfo  aInfo;
     aInfo.SetWidth( pNode->GetWidth( ) - 2 * nBorderwidth );
@@ -666,14 +666,14 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmStructureNode* pNode )
 }
 
 void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
-    long    i1 = -1,
+    tools::Long    i1 = -1,
             i2 = -1;
     if( maStartPos.pSelectedNode == pNode )
         i1 = maStartPos.nIndex;
     if( maEndPos.pSelectedNode == pNode )
         i2 = maEndPos.nIndex;
 
-    long start, end;
+    tools::Long start, end;
     pNode->SetSelected(true);
     if( i1 != -1 && i2 != -1 ) {
         start = std::min(i1, i2);
@@ -1901,10 +1901,10 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 
     mrDev.SetFont( pNode->GetFont( ) );
     Point Position = pNode->GetTopLeft( );
-    long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
-    long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
-    long top    = Position.getY( );
-    long bottom = top + pNode->GetHeight( );
+    tools::Long left   = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionStart( ) );
+    tools::Long right  = Position.getX( ) + mrDev.GetTextWidth( pNode->GetText( ), 0, pNode->GetSelectionEnd( ) );
+    tools::Long top    = Position.getY( );
+    tools::Long bottom = top + pNode->GetHeight( );
     tools::Rectangle rect( left, top, right, bottom );
 
     ExtendSelectionArea( rect );

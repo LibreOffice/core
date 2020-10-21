@@ -1471,12 +1471,12 @@ bool lcl_CountBlanks(const MathMLAttributeLengthValue &rLV,
         return false;
     const Fraction aTwo(2, 1);
     auto aWide = rLV.aNumber / aTwo;
-    auto nWide = static_cast<sal_Int32>(static_cast<long>(aWide));
+    auto nWide = static_cast<sal_Int32>(static_cast<tools::Long>(aWide));
     if (nWide < 0)
         return false;
     const Fraction aPointFive(1, 2);
     auto aNarrow = (rLV.aNumber - Fraction(nWide, 1) * aTwo) / aPointFive;
-    auto nNarrow = static_cast<sal_Int32>(static_cast<long>(aNarrow));
+    auto nNarrow = static_cast<sal_Int32>(static_cast<tools::Long>(aNarrow));
     if (nNarrow < 0)
         return false;
     *pWide = nWide;
@@ -2638,7 +2638,7 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 
     tools::Rectangle aRect( pDocShell->GetVisArea() );
 
-    long nTmp = 0;
+    tools::Long nTmp = 0;
 
     for (const PropertyValue& rValue : aViewProps)
     {

@@ -1272,7 +1272,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             }
             m_pStrm = s.release();
             // Shrink the memory to 16 bytes, which seems to be the minimum
-            ReAllocateMemory( - ( static_cast<long>(nEndOfData) - 16 ) );
+            ReAllocateMemory( - ( static_cast<tools::Long>(nEndOfData) - 16 ) );
         }
         else
         {

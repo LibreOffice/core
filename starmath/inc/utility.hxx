@@ -27,7 +27,7 @@
 #include <tools/fract.hxx>
 #include <deque>
 
-inline long SmPtsTo100th_mm(long nNumPts)
+inline tools::Long SmPtsTo100th_mm(tools::Long nNumPts)
     // returns the length (in 100th of mm) that corresponds to the length
     // 'nNumPts' (in units points).
     // 72.27 [pt] = 1 [inch] = 2,54 [cm] = 2540 [100th of mm].
@@ -41,7 +41,7 @@ inline long SmPtsTo100th_mm(long nNumPts)
 }
 
 
-inline Fraction Sm100th_mmToPts(long nNum100th_mm)
+inline Fraction Sm100th_mmToPts(tools::Long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).
 {
@@ -50,7 +50,7 @@ inline Fraction Sm100th_mmToPts(long nNum100th_mm)
 }
 
 
-inline long SmRoundFraction(const Fraction &rFrac)
+inline tools::Long SmRoundFraction(const Fraction &rFrac)
 {
     SAL_WARN_IF( rFrac <= Fraction(), "starmath", "Ooops..." );
     return (rFrac.GetNumerator() + rFrac.GetDenominator() / 2) / rFrac.GetDenominator();
@@ -69,7 +69,7 @@ bool    IsBold( const vcl::Font &rFont );
 
 class SmFace final : public vcl::Font
 {
-    long    nBorderWidth;
+    tools::Long    nBorderWidth;
 
     void    Impl_Init();
 
@@ -88,9 +88,9 @@ public:
     // for font size (height). (Also used in ctor's to do so.)
     void    SetSize(const Size& rSize);
 
-    void    SetBorderWidth(long nWidth)     { nBorderWidth = nWidth; }
-    long    GetBorderWidth() const;
-    long    GetDefaultBorderWidth() const   { return GetFontSize().Height() / 20 ; }
+    void    SetBorderWidth(tools::Long nWidth)     { nBorderWidth = nWidth; }
+    tools::Long    GetBorderWidth() const;
+    tools::Long    GetDefaultBorderWidth() const   { return GetFontSize().Height() / 20 ; }
     void    FreezeBorderWidth()     { nBorderWidth = GetDefaultBorderWidth(); }
 
     SmFace & operator = (const SmFace &rFace);
