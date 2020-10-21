@@ -1607,8 +1607,7 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
     assert(pNode);
-    sal_Int32 nc;
-    Color col_perso_rgb_color = COL_AUTO;
+    sal_uInt32 nc;
 
     switch (GetToken().eType)
     {   case TSIZE :
@@ -1646,13 +1645,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TAQUA :    SetColor(COL_LIGHTCYAN);     break;
         case TFUCHSIA : SetColor(COL_LIGHTMAGENTA);  break;
         case TRGB :
-            nc = GetToken().aText.toInt32();
-            col_perso_rgb_color.SetBlue(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetGreen(nc % 256);
-            nc /= 256;
-            col_perso_rgb_color.SetRed(nc % 256);
-            SetColor(col_perso_rgb_color);
+        case TRGBA :
+        case THEX :
+            nc = GetToken().aText.toUInt32();
+            SetColor(Color(nc));
             break;
 
         default:
