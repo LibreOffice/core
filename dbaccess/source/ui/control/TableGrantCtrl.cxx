@@ -181,7 +181,7 @@ IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate, void*, void)
 
 bool OTableGrantControl::IsTabAllowed(bool bForward) const
 {
-    tools::Long nRow = GetCurRow();
+    sal_Int32 nRow = GetCurRow();
     sal_uInt16 nCol = GetCurColumnId();
 
     if (bForward && (nCol == 2) && (nRow == GetRowCount() - 1))
@@ -257,7 +257,7 @@ bool OTableGrantControl::SaveModified()
     return bErg;
 }
 
-OUString OTableGrantControl::GetCellText( tools::Long nRow, sal_uInt16 nColId ) const
+OUString OTableGrantControl::GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const
 {
     if(COL_TABLE_NAME == nColId)
         return m_aTableNames[nRow];
@@ -270,7 +270,7 @@ OUString OTableGrantControl::GetCellText( tools::Long nRow, sal_uInt16 nColId ) 
     return OUString::number(isAllowed(nColId,nPriv) ? 1 :0);
 }
 
-void OTableGrantControl::InitController( CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColumnId )
+void OTableGrantControl::InitController( CellControllerRef& /*rController*/, sal_Int32 nRow, sal_uInt16 nColumnId )
 {
     OUString sTablename = m_aTableNames[nRow];
     // special case for tablename
@@ -357,7 +357,7 @@ void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUs
     m_xGrantUser = _xGrantUser;
 }
 
-CellController* OTableGrantControl::GetController( tools::Long nRow, sal_uInt16 nColumnId )
+CellController* OTableGrantControl::GetController( sal_Int32 nRow, sal_uInt16 nColumnId )
 {
 
     CellController* pController = nullptr;
@@ -384,7 +384,7 @@ CellController* OTableGrantControl::GetController( tools::Long nRow, sal_uInt16 
     return pController;
 }
 
-bool OTableGrantControl::SeekRow( tools::Long nRow )
+bool OTableGrantControl::SeekRow( sal_Int32 nRow )
 {
     m_nDataPos = nRow;
 

@@ -341,7 +341,7 @@ bool ScMultiSel::HasAnyMarks() const
     return false;
 }
 
-void ScMultiSel::ShiftCols(SCCOL nStartCol, tools::Long nColOffset)
+void ScMultiSel::ShiftCols(SCCOL nStartCol, sal_Int32 nColOffset)
 {
     if (nStartCol > mrSheetLimits.mnMaxCol)
         return;
@@ -392,7 +392,7 @@ void ScMultiSel::ShiftCols(SCCOL nStartCol, tools::Long nColOffset)
         aMultiSelContainer[nStartCol + i] = rNewCol;
 }
 
-void ScMultiSel::ShiftRows(SCROW nStartRow, tools::Long nRowOffset)
+void ScMultiSel::ShiftRows(SCROW nStartRow, sal_Int32 nRowOffset)
 {
     for (auto& aPair: aMultiSelContainer)
         aPair.Shift(nStartRow, nRowOffset);

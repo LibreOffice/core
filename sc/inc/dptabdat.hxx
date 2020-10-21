@@ -69,14 +69,14 @@ public:
         should be passed as a const instance. */
     struct SAL_DLLPRIVATE CalcInfo
     {
-        ::std::vector<tools::Long>             aColLevelDims;
+        ::std::vector<sal_Int32>        aColLevelDims;
         ::std::vector<ScDPDimension*>   aColDims;
         ::std::vector<ScDPLevel*>       aColLevels;
-        ::std::vector<tools::Long>             aRowLevelDims;
+        ::std::vector<sal_Int32>        aRowLevelDims;
         ::std::vector<ScDPDimension*>   aRowDims;
         ::std::vector<ScDPLevel*>       aRowLevels;
-        ::std::vector<tools::Long>             aPageDims;
-        ::std::vector<tools::Long>             aDataSrcCols;
+        ::std::vector<sal_Int32>        aPageDims;
+        ::std::vector<sal_Int32>        aDataSrcCols;
 
         ScDPInitState*                  pInitState;
         ScDPResultMember*               pColRoot;
@@ -90,19 +90,19 @@ public:
     ScDPTableData(const ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
-    OUString GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    OUString GetFormattedString(sal_Int32 nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
 
     tools::Long        GetDatePart( tools::Long nDateVal, tools::Long nHierarchy, tools::Long nLevel );
 
                 //! use (new) typed collection instead of ScStrCollection
                 //! or separate Str and ValueCollection
 
-    virtual tools::Long                    GetColumnCount() = 0;
-    virtual const std::vector< SCROW >& GetColumnEntries( tools::Long nColumn ) ;
-    virtual OUString                getDimensionName(tools::Long nColumn) = 0;
-    virtual bool                    getIsDataLayoutDimension(tools::Long nColumn) = 0;
-    virtual bool                    IsDateDimension(tools::Long nDim) = 0;
-    virtual sal_uInt32              GetNumberFormat(tools::Long nDim);
+    virtual sal_Int32               GetColumnCount() = 0;
+    virtual const std::vector< SCROW >& GetColumnEntries( sal_Int32 nColumn ) ;
+    virtual OUString                getDimensionName(sal_Int32 nColumn) = 0;
+    virtual bool                    getIsDataLayoutDimension(sal_Int32 nColumn) = 0;
+    virtual bool                    IsDateDimension(sal_Int32 nDim) = 0;
+    virtual sal_uInt32              GetNumberFormat(sal_Int32 nDim);
     sal_uInt32                      GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) = 0;
@@ -119,19 +119,19 @@ public:
     virtual void ReloadCacheTable() = 0;
 
                                     // override in ScDPGroupTableData:
-    virtual bool                    IsBaseForGroup(tools::Long nDim) const;
-    virtual tools::Long                    GetGroupBase(tools::Long nGroupDim) const;
-    virtual bool                    IsNumOrDateGroup(tools::Long nDim) const;
-    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, tools::Long nGroupIndex,
-                                               const ScDPItemData& rBaseData, tools::Long nBaseIndex ) const;
-    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, tools::Long nFirstIndex,
-                                                      const ScDPItemData& rSecondData, tools::Long nSecondIndex ) const;
+    virtual bool                    IsBaseForGroup(sal_Int32 nDim) const;
+    virtual sal_Int32               GetGroupBase(sal_Int32 nGroupDim) const;
+    virtual bool                    IsNumOrDateGroup(sal_Int32 nDim) const;
+    virtual bool                    IsInGroup( const ScDPItemData& rGroupData, sal_Int32 nGroupIndex,
+                                               const ScDPItemData& rBaseData, sal_Int32 nBaseIndex ) const;
+    virtual bool                    HasCommonElement( const ScDPItemData& rFirstData, sal_Int32 nFirstIndex,
+                                                      const ScDPItemData& rSecondData, sal_Int32     nSecondIndex ) const;
 
-    virtual tools::Long                            GetMembersCount( tools::Long nDim );
-    const ScDPItemData*   GetMemberByIndex( tools::Long nDim, tools::Long nIndex );
-    virtual const ScDPItemData*   GetMemberById( tools::Long nDim, tools::Long nId);
-    virtual tools::Long                GetSourceDim( tools::Long nDim );
-    virtual tools::Long                Compare( tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2);
+    virtual sal_Int32               GetMembersCount( sal_Int32 nDim );
+    const ScDPItemData*   GetMemberByIndex( sal_Int32 nDim, sal_Int32 nIndex );
+    virtual const ScDPItemData*   GetMemberById( sal_Int32 nDim, sal_Int32 nId);
+    virtual sal_Int32                GetSourceDim( sal_Int32 nDim );
+    virtual sal_Int32                Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 nDataId2);
 
 #if DUMP_PIVOT_TABLE
     virtual void Dump() const;
@@ -154,7 +154,7 @@ protected:
 
 private:
     void            GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                          const ::std::vector<tools::Long>& rDims, ::std::vector< SCROW >& rItemData);
+                                          const ::std::vector<sal_Int32>& rDims, ::std::vector< SCROW >& rItemData);
 };
 #endif
 

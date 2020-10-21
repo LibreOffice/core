@@ -476,12 +476,12 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
     uno::Reference<XAccessible> xRet;
     if ( mpTableInfo )
     {
-        tools::Long nColumns = mpTableInfo->GetCols();
+        sal_Int32 nColumns = mpTableInfo->GetCols();
         if ( nColumns > 0 )
         {
             // nCol, nRow are within the visible table, not the document
-            tools::Long nCol = nIndex % nColumns;
-            tools::Long nRow = nIndex / nColumns;
+            sal_Int32 nCol = nIndex % nColumns;
+            sal_Int32 nRow = nIndex / nColumns;
 
             xRet = getAccessibleCellAt( nRow, nCol );
         }

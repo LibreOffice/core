@@ -70,11 +70,6 @@ const BrowserMode BrowserStdFlags = BrowserMode::COLUMNSELECTION |
                                     BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL |
                                     BrowserMode::HIDESELECT;
 
-sal_Int32 lcl_getRowInData( tools::Long nRow )
-{
-    return static_cast< sal_Int32 >( nRow );
-}
-
 sal_Int32 lcl_getColumnInData( sal_uInt16 nCol )
 {
     return static_cast< sal_Int32 >( nCol ) - 1;
@@ -607,7 +602,7 @@ void DataBrowser::RenewTable()
     if (!m_apDataBrowserModel)
         return;
 
-    tools::Long   nOldRow     = GetCurRow();
+    sal_Int32  nOldRow     = GetCurRow();
     sal_uInt16 nOldColId   = GetCurColumnId();
 
     bool bLastUpdateMode = GetUpdateMode();
@@ -684,13 +679,13 @@ OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
     return OUString();
 }
 
-OUString DataBrowser::GetCellText( tools::Long nRow, sal_uInt16 nColumnId ) const
+OUString DataBrowser::GetCellText( sal_Int32 nRow, sal_uInt16 nColumnId ) const
 {
     OUString aResult;
 
     if( nColumnId == 0 )
     {
-        aResult = OUString::number(static_cast< sal_Int32 >( nRow ) + 1);
+        aResult = OUString::number(nRow + 1);
     }
     else if( nRow >= 0 && m_apDataBrowserModel)
     {
@@ -744,7 +739,7 @@ OUString DataBrowser::GetCellText( tools::Long nRow, sal_uInt16 nColumnId ) cons
     return aResult;
 }
 
-double DataBrowser::GetCellNumber( tools::Long nRow, sal_uInt16 nColumnId ) const
+double DataBrowser::GetCellNumber( sal_Int32 nRow, sal_uInt16 nColumnId ) const
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -913,7 +908,7 @@ void DataBrowser::RemoveColumn()
 
 void DataBrowser::InsertRow()
 {
-     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+     sal_Int32 nRowIdx = GetCurRow();
 
      if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
@@ -928,7 +923,7 @@ void DataBrowser::InsertRow()
 
 void DataBrowser::RemoveRow()
 {
-     sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+     sal_Int32 nRowIdx = GetCurRow();
 
      if( nRowIdx >= 0 && m_apDataBrowserModel)
     {
@@ -986,7 +981,7 @@ void DataBrowser::MoveRightColumn()
 
 void DataBrowser::MoveUpRow()
 {
-    sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+    sal_Int32 nRowIdx = GetCurRow();
 
     if( !(nRowIdx > 0 && m_apDataBrowserModel))
         return;
@@ -1007,7 +1002,7 @@ void DataBrowser::MoveUpRow()
 
 void DataBrowser::MoveDownRow()
 {
-    sal_Int32 nRowIdx = lcl_getRowInData( GetCurRow());
+    sal_Int32 nRowIdx = GetCurRow();
 
     if( !(nRowIdx >= 0 && m_apDataBrowserModel))
         return;
@@ -1063,7 +1058,7 @@ void DataBrowser::PaintCell(
         rDev.SetClipRegion();
 }
 
-bool DataBrowser::SeekRow( tools::Long nRow )
+bool DataBrowser::SeekRow( sal_Int32 nRow )
 {
     if( ! EditBrowseBox::SeekRow( nRow ))
         return false;
@@ -1078,14 +1073,14 @@ bool DataBrowser::SeekRow( tools::Long nRow )
 
 bool DataBrowser::IsTabAllowed( bool bForward ) const
 {
-    tools::Long nRow = GetCurRow();
-    tools::Long nCol = GetCurColumnId();
+    sal_Int32 nRow = GetCurRow();
+    sal_Int32 nCol = GetCurColumnId();
 
     // column 0 is header-column
-    tools::Long nBadCol = bForward
+    sal_Int32 nBadCol = bForward
         ? GetColumnCount() - 1
         : 1;
-    tools::Long nBadRow = bForward
+    sal_Int32 nBadRow = bForward
         ? GetRowCount() - 1
         : 0;
 
@@ -1099,7 +1094,7 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
              nCol != nBadCol );
 }
 
-::svt::CellController* DataBrowser::GetController( tools::Long /*nRow*/, sal_uInt16 nCol )
+::svt::CellController* DataBrowser::GetController( sal_Int32 /*nRow*/, sal_uInt16 nCol )
 {
     if( m_bIsReadOnly )
         return nullptr;
@@ -1116,7 +1111,7 @@ bool DataBrowser::IsTabAllowed( bool bForward ) const
 }
 
 void DataBrowser::InitController(
-    ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol )
+    ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol )
 {
     if( rController == m_rTextEditController )
     {
@@ -1176,7 +1171,7 @@ bool DataBrowser::SaveModified()
 
     bool bChangeValid = true;
 
-    const sal_Int32 nRow = lcl_getRowInData( GetCurRow());
+    const sal_Int32 nRow = GetCurRow();
     const sal_Int32 nCol = lcl_getColumnInData( GetCurColumnId());
 
     OSL_ENSURE( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );

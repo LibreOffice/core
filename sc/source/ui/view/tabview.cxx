@@ -2643,7 +2643,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         mnLOKEndHeaderRow = nEndRow;
     }
 
-    tools::Long nVisibleRows = nEndRow - nStartRow;
+    sal_Int32 nVisibleRows = nEndRow - nStartRow;
     if (nVisibleRows < 25)
         nVisibleRows = 25;
 
@@ -2741,7 +2741,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         mnLOKEndHeaderCol = nEndCol;
     }
 
-    tools::Long nVisibleCols = nEndCol - nStartCol;
+    sal_Int32 nVisibleCols = nEndCol - nStartCol;
     if (nVisibleCols < 10)
         nVisibleCols = 10;
 

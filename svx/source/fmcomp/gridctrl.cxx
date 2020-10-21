@@ -1590,7 +1590,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     m_aColumns.insert( m_aColumns.begin() + nNewModelPos, std::move(temp) );
 }
 
-bool DbGridControl::SeekRow(tools::Long nRow)
+bool DbGridControl::SeekRow(sal_Int32 nRow)
 {
     // in filter mode or in insert only mode we don't have any cursor!
     if ( !SeekCursor( nRow ) )
@@ -1623,12 +1623,12 @@ bool DbGridControl::SeekRow(tools::Long nRow)
 }
 
 // Is called whenever the visible amount of data changes
-void DbGridControl::VisibleRowsChanged( tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen )
+void DbGridControl::VisibleRowsChanged( sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen )
 {
     RecalcRows(nNewTopRow, nLinesOnScreen, false);
 }
 
-void DbGridControl::RecalcRows(tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
+void DbGridControl::RecalcRows(sal_Int32 nNewTopRow, sal_uInt16 nLinesOnScreen, bool bUpdateCursor)
 {
     // If no cursor -> no rows in the browser.
     if (!m_pSeekCursor)
@@ -1684,7 +1684,7 @@ void DbGridControl::RecalcRows(tools::Long nNewTopRow, sal_uInt16 nLinesOnScreen
     EnablePaint(true);
 }
 
-void DbGridControl::RowInserted(tools::Long nRow, tools::Long nNumRows, bool bDoPaint)
+void DbGridControl::RowInserted(sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint)
 {
     if (!nNumRows)
         return;
@@ -1704,7 +1704,7 @@ void DbGridControl::RowInserted(tools::Long nRow, tools::Long nNumRows, bool bDo
     m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
-void DbGridControl::RowRemoved(tools::Long nRow, tools::Long nNumRows, bool bDoPaint)
+void DbGridControl::RowRemoved(sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint)
 {
     if (!nNumRows)
         return;
@@ -1786,7 +1786,7 @@ void DbGridControl::AdjustRows()
     m_aBar->InvalidateState(DbGridControlNavigationBarState::Count);
 }
 
-svt::EditBrowseBox::RowStatus DbGridControl::GetRowStatus(tools::Long nRow) const
+svt::EditBrowseBox::RowStatus DbGridControl::GetRowStatus(sal_Int32 nRow) const
 {
     if (IsFilterRow(nRow))
         return EditBrowseBox::FILTER;
@@ -1829,7 +1829,7 @@ void DbGridControl::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect,
     }
 }
 
-bool DbGridControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol)
+bool DbGridControl::CursorMoving(sal_Int32 nNewRow, sal_uInt16 nNewCol)
 {
 
     DeactivateCell( false );
@@ -1846,7 +1846,7 @@ bool DbGridControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol)
     return EditBrowseBox::CursorMoving( nNewRow, nNewCol );
 }
 
-bool DbGridControl::SetCurrent(tools::Long nNewRow)
+bool DbGridControl::SetCurrent(sal_Int32 nNewRow)
 {
     // Each movement of the datacursor must start with BeginCursorAction and end with
     // EndCursorAction to block all notifications during the movement
@@ -2101,7 +2101,7 @@ sal_Int32 DbGridControl::AlignSeekCursor()
     return m_nSeekPos;
 }
 
-bool DbGridControl::SeekCursor(tools::Long nRow, bool bAbsolute)
+bool DbGridControl::SeekCursor(sal_Int32 nRow, bool bAbsolute)
 {
     // position SeekCursor onto the data cursor, no data transmission
 
@@ -2267,7 +2267,7 @@ void DbGridControl::MoveToLast()
 
 void DbGridControl::MoveToPrev()
 {
-    tools::Long nNewRow = std::max(GetCurRow() - 1, 0L);
+    sal_Int32 nNewRow = std::max(GetCurRow() - 1, sal_Int32(0));
     if (GetCurRow() != nNewRow)
         MoveToPosition(nNewRow);
 }
@@ -2432,7 +2432,7 @@ void DbGridControl::SetFilterMode(bool bMode)
         setDataSource(Reference< XRowSet > ());
 }
 
-OUString DbGridControl::GetCellText(tools::Long _nRow, sal_uInt16 _nColId) const
+OUString DbGridControl::GetCellText(sal_Int32 _nRow, sal_uInt16 _nColId) const
 {
     size_t Location = GetModelColumnPos( _nColId );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ].get() : nullptr;
@@ -2451,7 +2451,7 @@ OUString DbGridControl::GetCurrentRowCellText(DbGridColumn const * pColumn,const
     return aText;
 }
 
-sal_uInt32 DbGridControl::GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId)
+sal_uInt32 DbGridControl::GetTotalCellWidth(sal_Int32 nRow, sal_uInt16 nColId)
 {
     if (SeekRow(nRow))
     {
@@ -2584,7 +2584,7 @@ void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
     OStringTransfer::CopyString( GetCurrentRowCellText( pColumn,m_xPaintRow ), this );
 }
 
-void DbGridControl::executeRowContextMenu( tools::Long _nRow, const Point& _rPreferredPos )
+void DbGridControl::executeRowContextMenu( sal_Int32 _nRow, const Point& _rPreferredPos )
 {
     VclBuilder aBuilder(nullptr, AllSettings::GetUIRootDir(), "svx/ui/rowsmenu.ui", "");
     VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
@@ -2661,7 +2661,7 @@ void DbGridControl::DeleteSelectedRows()
         return;
 }
 
-CellController* DbGridControl::GetController(tools::Long /*nRow*/, sal_uInt16 nColumnId)
+CellController* DbGridControl::GetController(sal_Int32 /*nRow*/, sal_uInt16 nColumnId)
 {
     if (!IsValid(m_xCurrentRow) || !IsEnabled())
         return nullptr;
@@ -2854,7 +2854,7 @@ void DbGridControl::resetCurrentRow()
     RowModified(GetCurRow()); // will update the current controller if affected
 }
 
-void DbGridControl::RowModified( tools::Long nRow )
+void DbGridControl::RowModified( sal_Int32 nRow )
 {
     if (nRow == m_nCurrentPos && IsEditing())
     {
@@ -2875,7 +2875,7 @@ bool DbGridControl::IsCurrentAppending() const
     return m_xCurrentRow.is() && m_xCurrentRow->IsNew();
 }
 
-bool DbGridControl::IsInsertionRow(tools::Long nRow) const
+bool DbGridControl::IsInsertionRow(sal_Int32 nRow) const
 {
     return (m_nOptions & DbGridControlOptions::Insert) && m_nTotalCount >= 0 && (nRow == GetRowCount() - 1);
 }
