@@ -1026,6 +1026,26 @@ void GtkSalFrame::DisallowCycleFocusOut()
     gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), false);
 }
 
+bool GtkSalFrame::IsCycleFocusOutDisallowed() const
+{
+    return m_nSetFocusSignalId == 0;
+}
+
+void GtkSalFrame::AllowCycleFocusOut()
+{
+    if (m_nSetFocusSignalId)
+        return;
+    // enable/disable can-focus as control enters and leaves
+    // embedded native gtk widgets
+    m_nSetFocusSignalId = g_signal_connect(G_OBJECT(m_pWindow), "set-focus", G_CALLBACK(signalSetFocus), this);
+
+    // set container without can-focus and focus will tab between
+    // the native embedded widgets using the default gtk handling for
+    // that
+    gtk_widget_set_can_focus(GTK_WIDGET(m_pFixedContainer), true);
+}
+
+
 void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
     if( nStyle & SalFrameStyleFlags::DEFAULT ) // ensure default style
@@ -3198,6 +3218,8 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     bool bFocusInAnotherGtkWidget = false;
 
+    VclPtr<vcl::Window> xTopLevelInterimWindow;
+
     if (GTK_IS_WINDOW(pThis->m_pWindow))
     {
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
@@ -3216,6 +3238,24 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
             g_type_class_unref(pClass);
             if (bHandled)
                 return true;
+            // are we inside a full-app InterimItemWindow ?
+            // In which case no vcl::Window can have focus so
+            // find that InterimItemWindow and send unconsumed
+            // keystrokes to it to support ctrl-q etc
+            if (pThis->IsCycleFocusOutDisallowed())
+            {
+                GtkWidget* pSearch = pFocusWindow;
+                while (pSearch)
+                {
+                    void* pData = g_object_get_data(G_OBJECT(pSearch), "InterimWindowGlue");
+                    if (pData)
+                    {
+                        xTopLevelInterimWindow = static_cast<vcl::Window*>(pData);
+                        break;
+                    }
+                    pSearch = gtk_widget_get_parent(pSearch);
+                }
+            }
         }
     }
 
@@ -3303,6 +3343,14 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
     }
     else
     {
+        VclPtr<vcl::Window> xOrigFocusWin;
+        if (xTopLevelInterimWindow)
+        {
+            VclPtr<vcl::Window> xVclWindow = pThis->GetWindow();
+            xOrigFocusWin = xVclWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
+            xVclWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin = xTopLevelInterimWindow;
+        }
+
         bStopProcessingKey = pThis->doKeyCallback(pEvent->state,
                                                   pEvent->keyval,
                                                   pEvent->hardware_keycode,
@@ -3310,8 +3358,17 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
                                                   sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
                                                   (pEvent->type == GDK_KEY_PRESS),
                                                   false);
-        if( ! aDel.isDeleted() )
+        if (!aDel.isDeleted())
+        {
             pThis->m_nKeyModifiers = ModKeyFlags::NONE;
+
+            if (xTopLevelInterimWindow)
+            {
+                VclPtr<vcl::Window> xVclWindow = pThis->GetWindow();
+                xVclWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin = xOrigFocusWin;
+            }
+        }
+
     }
 
     if (!bFocusInAnotherGtkWidget && !aDel.isDeleted() && pThis->m_pIMHandler)

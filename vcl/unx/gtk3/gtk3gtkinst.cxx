@@ -16281,6 +16281,7 @@ private:
     std::vector<GtkLabel*> m_aMnemonicLabels;
 
     VclPtr<SystemChildWindow> m_xInterimGlue;
+    bool m_bAllowCycleFocusOut;
 
     void postprocess_widget(GtkWidget* pWidget)
     {
@@ -16448,12 +16449,14 @@ private:
         pThis->postprocess_widget(GTK_WIDGET(pObject));
     }
 public:
-    GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile, SystemChildWindow* pInterimGlue)
+    GtkInstanceBuilder(GtkWidget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                       SystemChildWindow* pInterimGlue, bool bAllowCycleFocusOut)
         : weld::Builder()
         , m_pStringReplace(Translate::GetReadStringHook())
         , m_pParentWidget(pParent)
         , m_nNotifySignalId(0)
         , m_xInterimGlue(pInterimGlue)
+        , m_bAllowCycleFocusOut(bAllowCycleFocusOut)
     {
         OUString sHelpRoot(rUIFile);
         ensure_intercept_drawing_area_accessibility();
@@ -16485,6 +16488,17 @@ public:
         {
             assert(m_pParentWidget);
             g_object_set_data(G_OBJECT(m_pParentWidget), "InterimWindowGlue", m_xInterimGlue.get());
+
+            if (!m_bAllowCycleFocusOut)
+            {
+                GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
+                assert(pTopLevel);
+                GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
+                assert(pFrame);
+                // unhook handler and let gtk cycle its own way through this widget's
+                // children because it has no non-gtk siblings
+                pFrame->DisallowCycleFocusOut();
+            }
         }
     }
 
@@ -16545,6 +16559,18 @@ public:
     {
         g_slist_free(m_pObjectList);
         g_object_unref(m_pBuilder);
+
+        if (m_xInterimGlue && !m_bAllowCycleFocusOut)
+        {
+            GtkWidget* pTopLevel = gtk_widget_get_toplevel(m_pParentWidget);
+            assert(pTopLevel);
+            GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
+            assert(pFrame);
+            // rehook handler and let vcl cycle its own way through this widget's
+            // children
+            pFrame->AllowCycleFocusOut();
+        }
+
         m_xInterimGlue.disposeAndClear();
     }
 
@@ -17038,7 +17064,7 @@ weld::Builder* GtkInstance::CreateBuilder(weld::Widget* pParent, const OUString&
     if (pParent && !pParentWidget) //remove when complete
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
     GtkWidget* pBuilderParent = pParentWidget ? pParentWidget->getWidget() : nullptr;
-    return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr);
+    return new GtkInstanceBuilder(pBuilderParent, rUIRoot, rUIFile, nullptr, true);
 }
 
 // tdf#135965 for the case of native widgets inside a GtkSalFrame and F1 pressed, run help
@@ -17112,19 +17138,8 @@ weld::Builder* GtkInstance::CreateInterimBuilder(vcl::Window* pParent, const OUS
     GtkWidget *pWindow = static_cast<GtkWidget*>(pEnvData->pWidget);
     gtk_widget_show_all(pWindow);
 
-    if (!bAllowCycleFocusOut)
-    {
-        GtkWidget* pTopLevel = gtk_widget_get_toplevel(pWindow);
-        assert(pTopLevel);
-        GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(pTopLevel);
-        assert(pFrame);
-        // unhook handler and let gtk cycle its own way through this widget's
-        // children because it has no non-gtk siblings
-        pFrame->DisallowCycleFocusOut();
-    }
-
     // build the widget tree as a child of the GtkEventBox GtkGrid parent
-    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile, xEmbedWindow.get());
+    return new GtkInstanceBuilder(pWindow, rUIRoot, rUIFile, xEmbedWindow.get(), bAllowCycleFocusOut);
 }
 
 weld::MessageDialog* GtkInstance::CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType, VclButtonsType eButtonsType, const OUString &rPrimaryMessage)
