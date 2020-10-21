@@ -62,9 +62,9 @@ class SdVectorizeDlg : public weld::GenericDialogController
     Bitmap              GetPreparedBitmap( Bitmap const & rBmp, Fraction& rScale );
     void                Calculate( Bitmap const & rBmp, GDIMetaFile& rMtf );
     static void         AddTile( BitmapReadAccess const * pRAcc, GDIMetaFile& rMtf,
-                                 long nPosX, long nPosY, long nWidth, long nHeight );
+                                 tools::Long nPosX, tools::Long nPosY, tools::Long nWidth, tools::Long nHeight );
 
-    DECL_LINK( ProgressHdl, long, void );
+    DECL_LINK( ProgressHdl, tools::Long, void );
     DECL_LINK( ClickPreviewHdl, weld::Button&, void );
     DECL_LINK( ClickOKHdl, weld::Button&, void );
     DECL_LINK( ToggleHdl, weld::ToggleButton&, void );

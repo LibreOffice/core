@@ -377,7 +377,7 @@ void SdCharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        mxMetric->set_value(static_cast<long>(fValue * 100.0), FieldUnit::PERCENT);
+        mxMetric->set_value(static_cast<::tools::Long>(fValue * 100.0), FieldUnit::PERCENT);
     }
 }
 
@@ -464,7 +464,7 @@ void SdTransparencyPropertyBox::setValue(const Any& rValue, const OUString&)
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        long nValue = static_cast<long>(fValue * 100);
+        ::tools::Long nValue = static_cast<::tools::Long>(fValue * 100);
         mxMetric->set_value(nValue, FieldUnit::PERCENT);
         updateMenu();
     }
@@ -567,7 +567,7 @@ void SdRotationPropertyBox::setValue( const Any& rValue, const OUString& )
     {
         double fValue = 0.0;
         rValue >>= fValue;
-        long nValue = static_cast<long>(fValue);
+        ::tools::Long nValue = static_cast<::tools::Long>(fValue);
         mxMetric->set_value(nValue, FieldUnit::DEGREE);
         updateMenu();
     }
@@ -707,11 +707,11 @@ void SdScalePropertyBox::setValue(const Any& rValue, const OUString&)
     if ( fValue2 < 0.0 )
         fValue2 += 1;
 
-    long nValue;
+    ::tools::Long nValue;
     if( fValue1 )
-        nValue = static_cast<long>(fValue1 * 100.0);
+        nValue = static_cast<::tools::Long>(fValue1 * 100.0);
     else
-        nValue = static_cast<long>(fValue2 * 100.0);
+        nValue = static_cast<::tools::Long>(fValue2 * 100.0);
     mxMetric->set_value(nValue, FieldUnit::PERCENT);
     updateMenu();
 }
@@ -1041,7 +1041,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage(weld::Container* pPar
         {
             double fIterateInterval = 0.0;
             pSet->getPropertyValue( nHandleIterateInterval ) >>= fIterateInterval;
-            mxMFTextDelay->set_value(static_cast<long>(fIterateInterval*10), FieldUnit::NONE);
+            mxMFTextDelay->set_value(static_cast<::tools::Long>(fIterateInterval*10), FieldUnit::NONE);
         }
     }
     else
@@ -1336,7 +1336,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 
     bool bValidSoundFile = false;
     bool bQuitLoop = false;
-    long nPos = 0;
+    ::tools::Long nPos = 0;
 
     while( !bQuitLoop && (aFileDialog.Execute() == ERRCODE_NONE) )
     {
@@ -1475,7 +1475,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(weld::Container* 
     {
         double fBegin = 0.0;
         pSet->getPropertyValue( nHandleBegin ) >>= fBegin;
-        mxMFStartDelay->set_value(static_cast<long>(fBegin*10), FieldUnit::NONE);
+        mxMFStartDelay->set_value(static_cast<::tools::Long>(fBegin*10), FieldUnit::NONE);
     }
 
     if( pSet->getPropertyState( nHandleDuration ) != STLPropertyState::Ambiguous )
@@ -1824,7 +1824,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(weld::Container* 
         {
             mxCBXGroupAuto->set_active(fTextGroupingAuto >= 0.0);
             if( fTextGroupingAuto >= 0.0 )
-                mxMFGroupAuto->set_value(static_cast<long>(fTextGroupingAuto*10), FieldUnit::NONE);
+                mxMFGroupAuto->set_value(static_cast<::tools::Long>(fTextGroupingAuto*10), FieldUnit::NONE);
         }
     }
     else
