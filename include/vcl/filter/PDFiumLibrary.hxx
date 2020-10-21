@@ -30,6 +30,8 @@
 
 #include <fpdf_doc.h>
 
+class SvMemoryStream;
+
 namespace vcl::pdf
 {
 constexpr char constDictionaryKeyTitle[] = "T";
@@ -236,6 +238,7 @@ public:
     basegfx::B2DSize getPageSize(int nIndex);
     int getPageCount();
     int getFileVersion();
+    bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion);
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex);
 };

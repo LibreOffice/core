@@ -14,7 +14,6 @@
 #if HAVE_FEATURE_PDFIUM
 #include <fpdfview.h>
 #include <fpdf_edit.h>
-#include <fpdf_save.h>
 #include <tools/UnitConversion.hxx>
 #endif
 
@@ -31,19 +30,6 @@ using namespace com::sun::star;
 namespace
 {
 #if HAVE_FEATURE_PDFIUM
-
-/// Callback class to be used with FPDF_SaveWithVersion().
-struct CompatibleWriter : public FPDF_FILEWRITE
-{
-    SvMemoryStream m_aStream;
-};
-
-int CompatibleWriterCallback(FPDF_FILEWRITE* pFileWrite, const void* pData, unsigned long nSize)
-{
-    auto pImpl = static_cast<CompatibleWriter*>(pFileWrite);
-    pImpl->m_aStream.WriteBytes(pData, nSize);
-    return 1;
-}
 
 /// Convert to inch, then assume 96 DPI.
 inline double pointToPixel(const double fPoint, const double fResolutionDPI)
@@ -93,24 +79,21 @@ bool getCompatibleStream(SvStream& rInStream, SvStream& rOutStream)
         SvMemoryStream aInBuffer;
         aInBuffer.WriteStream(rInStream, nSize);
 
-        // Load the buffer using pdfium.
-        FPDF_DOCUMENT pPdfDocument
-            = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
-        if (!pPdfDocument)
-            return false;
+        SvMemoryStream aSaved;
+        {
+            // Load the buffer using pdfium.
+            std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+                = pPdfium->openDocument(aInBuffer.GetData(), aInBuffer.GetSize());
+            if (!pPdfDocument)
+                return false;
 
-        CompatibleWriter aWriter;
-        aWriter.version = 1;
-        aWriter.WriteBlock = &CompatibleWriterCallback;
+            // 16 means PDF-1.6.
+            if (!pPdfDocument->saveWithVersion(aSaved, 16))
+                return false;
+        }
 
-        // 16 means PDF-1.6.
-        if (!FPDF_SaveWithVersion(pPdfDocument, &aWriter, 0, 16))
-            return false;
-
-        FPDF_CloseDocument(pPdfDocument);
-
-        aWriter.m_aStream.Seek(STREAM_SEEK_TO_BEGIN);
-        rOutStream.WriteStream(aWriter.m_aStream);
+        aSaved.Seek(STREAM_SEEK_TO_BEGIN);
+        rOutStream.WriteStream(aSaved);
     }
 
     return rOutStream.good();
