@@ -167,18 +167,24 @@ weld::Builder* Application::CreateBuilder(weld::Widget* pParent, const OUString 
     }
 
     if (bUseJSBuilder)
-        return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
+        return JSInstanceBuilder::CreateDialogBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
     else
         return ImplGetSVData()->mpDefInst->CreateBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
 }
 
 weld::Builder* Application::CreateInterimBuilder(vcl::Window* pParent, const OUString &rUIFile, sal_uInt64 nLOKWindowId)
 {
+    // Notebookbar sub controls
     if (comphelper::LibreOfficeKit::isActive()
         && (rUIFile == "svx/ui/stylespreview.ui"
         || rUIFile == "modules/scalc/ui/numberbox.ui"))
     {
-        return new JSInstanceBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
+        return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
+    }
+    else if (comphelper::LibreOfficeKit::isActive()
+        && (rUIFile == "modules/scalc/ui/filterdropdown.ui"))
+    {
+        return JSInstanceBuilder::CreateAutofilterWindowBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile);
     }
 
     return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, VclBuilderContainer::getUIRootDir(), rUIFile, nLOKWindowId);
