@@ -590,7 +590,7 @@ bool FuDraw::SetPointer(const SdrObject* pObj, const Point& rPos)
 
     const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
     sal_uInt16 nHitLog(sal_uInt16(mpWindow->PixelToLogic(Size(HITPIX, 0)).Width()));
-    long n2HitLog(nHitLog * 2);
+    ::tools::Long n2HitLog(nHitLog * 2);
     Point aHitPosR(rPos);
     Point aHitPosL(rPos);
     Point aHitPosT(rPos);

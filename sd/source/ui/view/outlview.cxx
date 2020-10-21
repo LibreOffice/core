@@ -1542,7 +1542,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     if( !(pPara && ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE)) )
         return;
 
-    long nPage = 0; // todo, printing??
+    ::tools::Long nPage = 0; // todo, printing??
     for ( sal_Int32 n = 0; n <= pInfo->mnPara; n++ )
     {
         Paragraph* p = mrOutliner.GetParagraph( n );
@@ -1550,8 +1550,8 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
             nPage++;
     }
 
-    long nBulletHeight = static_cast<long>(mrOutliner.GetLineHeight( pInfo->mnPara ));
-    long nFontHeight = 0;
+    ::tools::Long nBulletHeight = static_cast<::tools::Long>(mrOutliner.GetLineHeight( pInfo->mnPara ));
+    ::tools::Long nFontHeight = 0;
     if ( !rEditEngine.IsFlatMode() )
     {
         nFontHeight = nBulletHeight / 5;
@@ -1569,9 +1569,9 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
     if (aImageSize.Width() != 0)
     {
         const float fImageRatio  = static_cast<float>(aImageSize.Height()) / static_cast<float>(aImageSize.Width());
-        aImageSize.setWidth( static_cast<long>( fImageRatio * fImageHeight ) );
+        aImageSize.setWidth( static_cast<::tools::Long>( fImageRatio * fImageHeight ) );
     }
-    aImageSize.setHeight( static_cast<long>(fImageHeight) );
+    aImageSize.setHeight( static_cast<::tools::Long>(fImageHeight) );
 
     Point aImagePos( pInfo->mrStartPos );
     aImagePos.AdjustX(aOutSize.Width() - aImageSize.Width() - aOffset.Width() ) ;

@@ -273,7 +273,7 @@ void collectUIInformation(const OUString& aZoom)
 /**
  * set zoom factor
  */
-void DrawViewShell::SetZoom( long nZoom )
+void DrawViewShell::SetZoom( ::tools::Long nZoom )
 {
     // Make sure that the zoom factor will not be recalculated on
     // following window resizings.
@@ -601,11 +601,11 @@ void DrawViewShell::UpdateVRuler()
 
 IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 {
-    const long int nMax = maViewSize.Width() - maScrBarWH.Width()
+    const ::tools::Long nMax = maViewSize.Width() - maScrBarWH.Width()
         - maTabControl->GetPosPixel().X() ;
 
     Size aTabSize = maTabControl->GetSizePixel();
-    aTabSize.setWidth( std::min(pTab->GetSplitSize(), static_cast<long>(nMax-1)) );
+    aTabSize.setWidth( std::min(pTab->GetSplitSize(), static_cast<::tools::Long>(nMax-1)) );
 
     maTabControl->SetSizePixel(aTabSize);
 
@@ -711,7 +711,7 @@ void DrawViewShell::ResetActualPage()
  * Apply "Verb" on OLE-object.
  */
 
-ErrCode DrawViewShell::DoVerb(long nVerb)
+ErrCode DrawViewShell::DoVerb(::tools::Long nVerb)
 {
     if ( mpDrawView->AreObjectsMarked() )
     {
@@ -739,7 +739,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
  * Activate OLE-object
  */
 
-bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
+bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, ::tools::Long nVerb)
 {
     bool bActivated = false;
 

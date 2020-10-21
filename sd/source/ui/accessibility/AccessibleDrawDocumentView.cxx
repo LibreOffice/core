@@ -190,7 +190,7 @@ sal_Int32 SAL_CALL
 {
     ThrowIfDisposed ();
 
-    long nChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
+    tools::Long nChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
     // Forward request to children manager.
     if (mpChildrenManager != nullptr)
