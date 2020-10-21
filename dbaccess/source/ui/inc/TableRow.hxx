@@ -19,6 +19,7 @@
 #pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <tools/long.hxx>
 #include "TypeInfo.hxx"
 
 class SvStream;
@@ -38,7 +39,7 @@ namespace dbaui
     public:
         OTableRow();
         OTableRow(const css::uno::Reference< css::beans::XPropertySet >& xAffectedCol);
-        OTableRow( const OTableRow& rRow, long nPosition = -1 );
+        OTableRow( const OTableRow& rRow, tools::Long nPosition = -1 );
         ~OTableRow();
 
         OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }

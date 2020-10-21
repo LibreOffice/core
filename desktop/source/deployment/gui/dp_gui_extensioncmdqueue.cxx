@@ -286,7 +286,7 @@ void ProgressCmdEnv::progressSection( const OUString &rText,
 
 void ProgressCmdEnv::updateProgress()
 {
-    long nProgress = ((m_nCurrentProgress*5) % 100) + 5;
+    tools::Long nProgress = ((m_nCurrentProgress*5) % 100) + 5;
     if ( m_pDialogHelper )
         m_pDialogHelper->updateProgress( nProgress );
 }

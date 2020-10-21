@@ -64,20 +64,20 @@ namespace dbaui
         void                SaveValue() { m_aSavedValue = m_aFields; }
 
         void SetModifyHdl(const Link<IndexFieldsControl&,void>& _rHdl) { m_aModifyHdl = _rHdl; }
-        virtual OUString GetCellText(long _nRow,sal_uInt16 nColId) const override;
+        virtual OUString GetCellText(tools::Long _nRow,sal_uInt16 nColId) const override;
 
     private:
         // EditBrowseBox overridables
         virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect, sal_uInt16 _nColumnId ) const override;
-        virtual bool SeekRow(long nRow) override;
-        virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) override;
+        virtual bool SeekRow(tools::Long nRow) override;
+        virtual sal_uInt32 GetTotalCellWidth(tools::Long nRow, sal_uInt16 nColId) override;
         virtual bool IsTabAllowed(bool bForward) const override;
 
-        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId) override;
-        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId) override;
+        ::svt::CellController*  GetController(tools::Long _nRow, sal_uInt16 _nColumnId) override;
+        void                InitController(::svt::CellControllerRef&, tools::Long _nRow, sal_uInt16 _nColumnId) override;
 
         OUString GetRowCellText(const IndexFields::const_iterator& _rRow,sal_uInt16 nColId) const;
-        bool implGetFieldDesc(long _nRow, IndexFields::const_iterator& _rPos);
+        bool implGetFieldDesc(tools::Long _nRow, IndexFields::const_iterator& _rPos);
 
         bool isNewField() const { return GetCurRow() >= static_cast<sal_Int32>(m_aFields.size()); }
 

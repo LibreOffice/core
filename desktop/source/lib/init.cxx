@@ -506,8 +506,8 @@ RectangleAndPart RectangleAndPart::Create(const std::string& rPayload)
     }
 
     std::istringstream aStream(rPayload);
-    long nLeft, nTop, nWidth, nHeight;
-    long nPart = INT_MIN;
+    tools::Long nLeft, nTop, nWidth, nHeight;
+    tools::Long nPart = INT_MIN;
     char nComma;
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
@@ -755,8 +755,8 @@ css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::un
 
 // Adjusts page margins for Writer doc. Needed by ToggleOrientation
 void ExecuteMarginLRChange(
-    const long nPageLeftMargin,
-    const long nPageRightMargin,
+    const tools::Long nPageLeftMargin,
+    const tools::Long nPageRightMargin,
     SvxLongLRSpaceItem* pPageLRMarginItem)
 {
     pPageLRMarginItem->SetLeft( nPageLeftMargin );
@@ -767,8 +767,8 @@ void ExecuteMarginLRChange(
 
 // Adjusts page margins for Writer doc. Needed by ToggleOrientation
 void ExecuteMarginULChange(
-        const long nPageTopMargin,
-        const long nPageBottomMargin,
+        const tools::Long nPageTopMargin,
+        const tools::Long nPageBottomMargin,
         SvxLongULSpaceItem* pPageULMarginItem)
 {
     pPageULMarginItem->SetUpper( nPageTopMargin );
@@ -786,7 +786,7 @@ void ExecuteOrientationChange()
     std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ));
     // 1mm in twips rounded
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
-    constexpr long MINBODY = 56;
+    constexpr tools::Long MINBODY = 56;
 
     css::uno::Reference< css::document::XUndoManager > mxUndoManager(
                 getUndoManager( SfxViewFrame::Current()->GetFrame().GetFrameInterface() ) );
@@ -822,8 +822,8 @@ void ExecuteOrientationChange()
 
 
         // swap the width and height of the page size
-        const long nRotatedWidth = pPageSizeItem->GetSize().Height();
-        const long nRotatedHeight = pPageSizeItem->GetSize().Width();
+        const tools::Long nRotatedWidth = pPageSizeItem->GetSize().Height();
+        const tools::Long nRotatedHeight = pPageSizeItem->GetSize().Width();
         pPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
 
@@ -839,11 +839,11 @@ void ExecuteOrientationChange()
     // check, if margin values still fit to the changed page size.
     // if not, adjust margin values
     {
-        const long nML = pPageLRMarginItem->GetLeft();
-        const long nMR = pPageLRMarginItem->GetRight();
-        const long nTmpPW = nML + nMR + MINBODY;
+        const tools::Long nML = pPageLRMarginItem->GetLeft();
+        const tools::Long nMR = pPageLRMarginItem->GetRight();
+        const tools::Long nTmpPW = nML + nMR + MINBODY;
 
-        const long nPW  = pPageSizeItem->GetSize().Width();
+        const tools::Long nPW  = pPageSizeItem->GetSize().Width();
 
         if ( nTmpPW > nPW )
         {
@@ -857,11 +857,11 @@ void ExecuteOrientationChange()
             }
         }
 
-        const long nMT = pPageULMarginItem->GetUpper();
-        const long nMB = pPageULMarginItem->GetLower();
-        const long nTmpPH = nMT + nMB + MINBODY;
+        const tools::Long nMT = pPageULMarginItem->GetUpper();
+        const tools::Long nMB = pPageULMarginItem->GetLower();
+        const tools::Long nTmpPH = nMT + nMB + MINBODY;
 
-        const long nPH  = pPageSizeItem->GetSize().Height();
+        const tools::Long nPH  = pPageSizeItem->GetSize().Height();
 
         if ( nTmpPH > nPH )
         {
@@ -1037,8 +1037,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               const int nTileWidth, const int nTileHeight);
 static int doc_getTileMode(LibreOfficeKitDocument* pThis);
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
-                                long* pWidth,
-                                long* pHeight);
+                                tools::Long* pWidth,
+                                tools::Long* pHeight);
 static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
                                        const char* pArguments);
 
@@ -1819,7 +1819,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
             }
 
             std::istringstream aRectStream(aRectStr);
-            long nLeft, nTop, nWidth, nHeight;
+            tools::Long nLeft, nTop, nWidth, nHeight;
             char nComma;
             aRectStream >> nLeft >> nComma >> nTop >> nComma >> nWidth >> nComma >> nHeight;
             tools::Rectangle aNewRect(nLeft, nTop, nLeft + nWidth, nTop + nHeight);
@@ -1834,7 +1834,7 @@ bool CallbackFlushHandler::processWindowEvent(CallbackData& aCallbackData)
                 {
                     // Not possible that we encounter an empty rectangle here; we already handled this case above.
                     std::istringstream aOldRectStream(aOldTree.get<std::string>("rectangle", ""));
-                    long nOldLeft, nOldTop, nOldWidth, nOldHeight;
+                    tools::Long nOldLeft, nOldTop, nOldWidth, nOldHeight;
                     char nOldComma;
                     aOldRectStream >> nOldLeft >> nOldComma >> nOldTop >> nOldComma >> nOldWidth
                         >> nOldComma >> nOldHeight;
@@ -3314,8 +3314,8 @@ static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*
 }
 
 static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
-                                long* pWidth,
-                                long* pHeight)
+                                tools::Long* pWidth,
+                                tools::Long* pHeight)
 {
     comphelper::ProfileZone aZone("doc_getDocumentSize");
 
