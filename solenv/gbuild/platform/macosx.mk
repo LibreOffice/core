@@ -211,8 +211,7 @@ $(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(cal
 endef
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : \
-	RPATH := $(call gb_Library_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
 $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
 
 endef
