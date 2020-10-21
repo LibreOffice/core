@@ -109,7 +109,8 @@ dialogs = [
     {"command": "service:com.sun.star.deployment.ui.PackageManagerDialog", "closeButton": "close"},
     # {"command": ".uno:ConfigureDialog", "closeButton": "cancel"},
         # tested in uitest/writer_tests/customizeDialog.py
-    {"command": ".uno:OptionsTreeDialog", "closeButton": "cancel"},
+    #{"command": ".uno:OptionsTreeDialog", "closeButton": "cancel"},
+        # used in various places
     {"command": ".uno:ShowLicense", "closeButton": "close"},
     # {"command": ".uno:About", "closeButton": "close"},
         # tested in sw/qa/uitest/writer_tests5/about_test.py
