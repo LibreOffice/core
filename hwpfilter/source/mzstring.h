@@ -23,6 +23,7 @@
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif
+#include <tools/long.hxx>
 
 /** @name MzString class
 
@@ -98,7 +99,7 @@ class MzString
         MzString  &operator << (char);
         MzString  &operator << (unsigned char c)  { return *this<<static_cast<char>(c); }
         MzString  &operator << (int);
-        MzString  &operator << (long);
+        MzString  &operator << (tools::Long);
         MzString  &operator << (short i)      { return *this<<static_cast<int>(i); }
         MzString  &operator << (MzString const &);
 /* MzString &operator << (MzString *s)  { return *this<<*s; }

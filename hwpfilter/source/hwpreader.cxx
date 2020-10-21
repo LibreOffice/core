@@ -2046,7 +2046,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 padd("style:wrap", sXML_CDATA, "dynamic");
                 break;
         }
-        long color;
+        tools::Long color;
 // invisible line
         if( hdo->property.line_color > 0xffffff )
         {
