@@ -184,7 +184,7 @@ void PCDReader::ReadOrientation()
 void PCDReader::ReadImage()
 {
     sal_uInt32  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
-    long   nL,nCb,nCr,nRed,nGreen,nBlue;
+    tools::Long   nL,nCb,nCr,nRed,nGreen,nBlue;
     sal_uInt8 * pt;
     sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
     sal_uInt8 * pL1; // luminance for each pixel of the 2nd row of the current pair of rows
@@ -271,31 +271,31 @@ void PCDReader::ReadImage()
                 nXPair = nx >> 1;
                 if ( ndy == 0 )
                 {
-                    nL = static_cast<long>(pL0[ nx ]);
+                    nL = static_cast<tools::Long>(pL0[ nx ]);
                     if (( nx & 1 ) == 0 )
                     {
-                        nCb = static_cast<long>(pCb[ nXPair ]);
-                        nCr = static_cast<long>(pCr[ nXPair ]);
+                        nCb = static_cast<tools::Long>(pCb[ nXPair ]);
+                        nCr = static_cast<tools::Long>(pCr[ nXPair ]);
                     }
                     else
                     {
-                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCb[ nXPair + 1 ]) ) >> 1;
-                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCr[ nXPair + 1 ]) ) >> 1;
+                        nCb = ( static_cast<tools::Long>(pCb[ nXPair ]) + static_cast<tools::Long>(pCb[ nXPair + 1 ]) ) >> 1;
+                        nCr = ( static_cast<tools::Long>(pCr[ nXPair ]) + static_cast<tools::Long>(pCr[ nXPair + 1 ]) ) >> 1;
                     }
                 }
                 else {
                     nL = pL1[ nx ];
                     if ( ( nx & 1 ) == 0 )
                     {
-                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCbN[ nXPair ]) ) >> 1;
-                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCrN[ nXPair ]) ) >> 1;
+                        nCb = ( static_cast<tools::Long>(pCb[ nXPair ]) + static_cast<tools::Long>(pCbN[ nXPair ]) ) >> 1;
+                        nCr = ( static_cast<tools::Long>(pCr[ nXPair ]) + static_cast<tools::Long>(pCrN[ nXPair ]) ) >> 1;
                     }
                     else
                     {
-                        nCb = ( static_cast<long>(pCb[ nXPair ]) + static_cast<long>(pCb[ nXPair + 1 ]) +
-                               static_cast<long>(pCbN[ nXPair ]) + static_cast<long>(pCbN[ nXPair + 1 ]) ) >> 2;
-                        nCr = ( static_cast<long>(pCr[ nXPair ]) + static_cast<long>(pCr[ nXPair + 1]) +
-                               static_cast<long>(pCrN[ nXPair ]) + static_cast<long>(pCrN[ nXPair + 1 ]) ) >> 2;
+                        nCb = ( static_cast<tools::Long>(pCb[ nXPair ]) + static_cast<tools::Long>(pCb[ nXPair + 1 ]) +
+                               static_cast<tools::Long>(pCbN[ nXPair ]) + static_cast<tools::Long>(pCbN[ nXPair + 1 ]) ) >> 2;
+                        nCr = ( static_cast<tools::Long>(pCr[ nXPair ]) + static_cast<tools::Long>(pCr[ nXPair + 1]) +
+                               static_cast<tools::Long>(pCrN[ nXPair ]) + static_cast<tools::Long>(pCrN[ nXPair + 1 ]) ) >> 2;
                     }
                 }
                 // conversion of nL,nCb,nCr in nRed,nGreen,nBlue:

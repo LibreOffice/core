@@ -31,7 +31,7 @@ using namespace com::sun::star;
 
 int TBBase::nIndent = 0;
 
-void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >& xGraphic, long nNewSize )
+void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >& xGraphic, tools::Long nNewSize )
 {
     Graphic aGraphic( xGraphic );
     Size aSize = aGraphic.GetSizePixel();

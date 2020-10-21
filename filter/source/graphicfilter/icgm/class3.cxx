@@ -41,8 +41,8 @@ void CGM::ImplDoClass3()
         case 0x02 : /*VDC Real Precision*/
         {
             nUInteger = ImplGetUI16();
-            const long nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            const long nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantissa
+            const tools::Long nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
+            const tools::Long nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantissa
             switch( nUInteger )
             {
                 case 0 :

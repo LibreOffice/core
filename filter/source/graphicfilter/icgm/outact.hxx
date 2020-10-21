@@ -99,8 +99,8 @@ public:
     void                        NewRegion();
     void                        EndFigure();
     void                        RegPolyLine( tools::Polygon const &, bool bReverse = false );
-    void                        SetGradientOffset( long nHorzOfs, long nVertOfs );
-    void                        SetGradientAngle( long nAngle );
+    void                        SetGradientOffset( tools::Long nHorzOfs, tools::Long nVertOfs );
+    void                        SetGradientAngle( tools::Long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
     void                        SetGradientStyle( sal_uInt32 nStyle );
 };

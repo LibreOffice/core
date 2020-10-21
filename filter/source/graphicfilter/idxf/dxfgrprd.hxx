@@ -23,6 +23,7 @@
 #include <rtl/string.hxx>
 #include <sal/types.h>
 #include <tools/solar.h>
+#include <tools/long.hxx>
 
 class SvStream;
 
@@ -44,7 +45,7 @@ public:
     sal_uInt16 GetG() const;
         // Return the last group code (the one the last Read() did return).
 
-    long   GetI() const;
+    tools::Long   GetI() const;
         // Returns the integer value of the group which was read earlier with Read().
         // This read must have returned a group code for datatype Integer.
         // If not 0 is returned
@@ -62,7 +63,7 @@ public:
     sal_uInt64 remainingSize() const;
 private:
 
-    long   ReadI();
+    tools::Long   ReadI();
     double ReadF();
     void   ReadS();
 
@@ -73,7 +74,7 @@ private:
     OString S;
     union {
         double F;
-        long I;
+        tools::Long I;
     };
 };
 
@@ -94,7 +95,7 @@ inline sal_uInt16 DXFGroupReader::GetG() const
     return nLastG;
 }
 
-inline long DXFGroupReader::GetI() const
+inline tools::Long DXFGroupReader::GetI() const
 {
     return I;
 }

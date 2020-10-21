@@ -2512,7 +2512,7 @@ Size SdrPowerPointImport::GetPageSize() const
     {
         MapUnit eMap = pSdrModel->GetScaleUnit();
         bool bInch = IsInch( eMap );
-        long nInchMul = 1, nInchDiv = 1;
+        tools::Long nInchMul = 1, nInchDiv = 1;
         if ( bInch )
         {   // temporarily convert size (for rounding it) from inch to metric units
             Fraction aFact(GetMapFactor(eMap,MapUnit::Map100thMM).X());
@@ -5655,15 +5655,15 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                         if( pAcc )
                         {
                             sal_uLong nRt = 0, nGn = 0, nBl = 0;
-                            const long nWidth = aSize.Width();
-                            const long nHeight = aSize.Height();
+                            const tools::Long nWidth = aSize.Width();
+                            const tools::Long nHeight = aSize.Height();
 
                             if( pAcc->HasPalette() )
                             {
-                                for( long nY = 0; nY < nHeight; nY++ )
+                                for( tools::Long nY = 0; nY < nHeight; nY++ )
                                 {
                                     Scanline pScanline = pAcc->GetScanline( nY );
-                                    for( long nX = 0; nX < nWidth; nX++ )
+                                    for( tools::Long nX = 0; nX < nWidth; nX++ )
                                     {
                                         const BitmapColor& rCol = pAcc->GetPaletteColor( pAcc->GetIndexFromData( pScanline, nX ) );
                                         nRt+=rCol.GetRed(); nGn+=rCol.GetGreen(); nBl+=rCol.GetBlue();
@@ -5672,10 +5672,10 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, T
                             }
                             else
                             {
-                                for( long nY = 0; nY < nHeight; nY++ )
+                                for( tools::Long nY = 0; nY < nHeight; nY++ )
                                 {
                                     Scanline pScanline = pAcc->GetScanline( nY );
-                                    for( long nX = 0; nX < nWidth; nX++ )
+                                    for( tools::Long nX = 0; nX < nWidth; nX++ )
                                     {
                                         const BitmapColor aCol( pAcc->GetPixelFromData( pScanline, nX ) );
                                         nRt+=aCol.GetRed(); nGn+=aCol.GetGreen(); nBl+=aCol.GetBlue();
