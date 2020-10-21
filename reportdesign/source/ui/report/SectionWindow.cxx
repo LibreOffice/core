@@ -227,7 +227,7 @@ void OSectionWindow::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSizePixel();
-    long nEndWidth = long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
+    tools::Long nEndWidth = tools::Long(REPORT_ENDMARKER_WIDTH * GetMapMode().GetScaleX());
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
     aOutputSize.AdjustWidth( -(aThumbPos.X()) );
@@ -242,7 +242,7 @@ void OSectionWindow::Resize()
     {
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
 
-        long nStartWidth = long(REPORT_STARTMARKER_WIDTH * GetMapMode().GetScaleX());
+        tools::Long nStartWidth = tools::Long(REPORT_STARTMARKER_WIDTH * GetMapMode().GetScaleX());
 
         // set start marker
         m_aStartMarker->SetPosSizePixel(Point(0,0),Size(nStartWidth,aOutputSize.Height()));
@@ -260,7 +260,7 @@ void OSectionWindow::Resize()
         // set splitter
         aReportPos.AdjustY(aSectionSize.Height() );
         m_aSplitter->SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter->GetSizePixel().Height()));
-        aSectionSize.setHeight( static_cast<long>(1000 * static_cast<double>(GetMapMode().GetScaleY())) );
+        aSectionSize.setHeight( static_cast<tools::Long>(1000 * static_cast<double>(GetMapMode().GetScaleY())) );
         m_aSplitter->SetDragRectPixel( tools::Rectangle(Point(nStartWidth,0),aSectionSize));
 
         // set end marker
@@ -357,14 +357,14 @@ static void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)
     _rWindow.Invalidate(InvalidateFlags::Transparent);
 }
 
-static void lcl_setOrigin(vcl::Window& _rWindow,long _nX, long _nY)
+static void lcl_setOrigin(vcl::Window& _rWindow,tools::Long _nX, tools::Long _nY)
 {
     MapMode aMap = _rWindow.GetMapMode();
     aMap.SetOrigin( Point(- _nX, - _nY));
     _rWindow.SetMapMode( aMap );
 }
 
-void OSectionWindow::scrollChildren(long _nX)
+void OSectionWindow::scrollChildren(tools::Long _nX)
 {
     const Point aDelta( _nX,0 );
 

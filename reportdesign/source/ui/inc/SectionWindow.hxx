@@ -122,7 +122,7 @@ namespace rptui
         */
         void zoom(const Fraction& _aZoom);
 
-        void scrollChildren(long _nThumbPosX);
+        void scrollChildren(tools::Long _nThumbPosX);
     };
 
 } // rptui
