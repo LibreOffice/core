@@ -23,9 +23,12 @@
 #include <vcl/toolkit/vclmedit.hxx>
 #include <boost/property_tree/json_parser.hpp>
 
-JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aWindow)
+JSDialogNotifyIdle::JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow,
+                                       VclPtr<vcl::Window> aContentWindow, std::string sTypeOfJSON)
     : Idle("JSDialog notify")
-    , m_aWindow(aWindow)
+    , m_aNotifierWindow(aNotifierWindow)
+    , m_aContentWindow(aContentWindow)
+    , m_sTypeOfJSON(sTypeOfJSON)
     , m_LastNotificationMessage()
     , m_bForce(false)
 {
@@ -38,15 +41,16 @@ void JSDialogNotifyIdle::Invoke()
 {
     try
     {
-        if (!m_aWindow)
+        if (!m_aNotifierWindow)
             return;
 
-        const vcl::ILibreOfficeKitNotifier* pNotifier = m_aWindow->GetLOKNotifier();
+        const vcl::ILibreOfficeKitNotifier* pNotifier = m_aNotifierWindow->GetLOKNotifier();
         if (pNotifier)
         {
             tools::JsonWriter aJsonWriter;
-            m_aWindow->DumpAsPropertyTree(aJsonWriter);
-            aJsonWriter.put("id", m_aWindow->GetLOKWindowId());
+            m_aContentWindow->DumpAsPropertyTree(aJsonWriter);
+            aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+            aJsonWriter.put("jsontype", m_sTypeOfJSON);
             if (m_bForce || !aJsonWriter.isDataEquals(m_LastNotificationMessage))
             {
                 m_bForce = false;
@@ -83,6 +87,8 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("dialog")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
 {
@@ -96,6 +102,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     }
 }
 
+// used for notebookbar
 JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                      const OUString& rUIFile,
                                      const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -103,6 +110,8 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     : SalInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("notebookbar")
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
 {
@@ -119,6 +128,49 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
         }
         InsertWindowToMap(m_nWindowId);
     }
+}
+
+// used for autofilter dropdown
+JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                     const OUString& rUIFile)
+    : SalInstanceBuilder(pParent, rUIRoot, rUIFile)
+    , m_nWindowId(0)
+    , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("autofilter")
+    , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
+{
+    vcl::Window* pRoot = m_xBuilder->get_widget_root();
+    m_aContentWindow = pParent;
+    if (pRoot && pRoot->GetParent())
+    {
+        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        if (m_aParentDialog)
+            m_nWindowId = m_aParentDialog->GetLOKWindowId();
+        InsertWindowToMap(m_nWindowId);
+    }
+}
+
+JSInstanceBuilder* JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
+                                                          const OUString& rUIRoot,
+                                                          const OUString& rUIFile)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile);
+}
+
+JSInstanceBuilder* JSInstanceBuilder::CreateNotebookbarBuilder(
+    vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame, nWindowId);
+}
+
+JSInstanceBuilder* JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window* pParent,
+                                                                    const OUString& rUIRoot,
+                                                                    const OUString& rUIFile)
+{
+    return new JSInstanceBuilder(pParent, rUIRoot, rUIFile);
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
@@ -167,6 +219,19 @@ void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
     }
 }
 
+VclPtr<vcl::Window>& JSInstanceBuilder::GetContentWindow()
+{
+    if (m_aContentWindow)
+        return m_aContentWindow;
+    else
+        return m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog;
+}
+
+VclPtr<vcl::Window>& JSInstanceBuilder::GetNotifierWindow()
+{
+    return m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog;
+}
+
 std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 {
     ::Dialog* pDialog = m_xBuilder->get<::Dialog>(id);
@@ -174,8 +239,9 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 
     InsertWindowToMap(m_nWindowId);
 
-    std::unique_ptr<weld::Dialog> pRet(
-        pDialog ? new JSDialog(m_aOwnedToplevel, pDialog, this, false) : nullptr);
+    std::unique_ptr<weld::Dialog> pRet(pDialog ? new JSDialog(m_aOwnedToplevel, m_aOwnedToplevel,
+                                                              pDialog, this, false, m_sTypeOfJSON)
+                                               : nullptr);
     if (pDialog)
     {
         assert(!m_aOwnedToplevel && "only one toplevel per .ui allowed");
@@ -199,8 +265,8 @@ std::unique_ptr<weld::Dialog> JSInstanceBuilder::weld_dialog(const OString& id)
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
     ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
-    auto pWeldWidget = std::make_unique<JSLabel>(
-        m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pLabel, this, false);
+    auto pWeldWidget = std::make_unique<JSLabel>(GetNotifierWindow(), GetContentWindow(), pLabel,
+                                                 this, false, m_sTypeOfJSON);
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -211,9 +277,8 @@ std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
 {
     ::Button* pButton = m_xBuilder->get<::Button>(id);
-    auto pWeldWidget = pButton ? std::make_unique<JSButton>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                                 : m_aParentDialog,
-                                                            pButton, this, false)
+    auto pWeldWidget = pButton ? std::make_unique<JSButton>(GetNotifierWindow(), GetContentWindow(),
+                                                            pButton, this, false, m_sTypeOfJSON)
                                : nullptr;
 
     if (pWeldWidget)
@@ -225,9 +290,8 @@ std::unique_ptr<weld::Button> JSInstanceBuilder::weld_button(const OString& id)
 std::unique_ptr<weld::Entry> JSInstanceBuilder::weld_entry(const OString& id)
 {
     Edit* pEntry = m_xBuilder->get<Edit>(id);
-    auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                               : m_aParentDialog,
-                                                          pEntry, this, false)
+    auto pWeldWidget = pEntry ? std::make_unique<JSEntry>(GetNotifierWindow(), GetContentWindow(),
+                                                          pEntry, this, false, m_sTypeOfJSON)
                               : nullptr;
 
     if (pWeldWidget)
@@ -244,16 +308,16 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 
     if (pComboBox)
     {
-        pWeldWidget = std::make_unique<JSComboBox>(
-            m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pComboBox, this, false);
+        pWeldWidget = std::make_unique<JSComboBox>(GetNotifierWindow(), GetContentWindow(),
+                                                   pComboBox, this, false, m_sTypeOfJSON);
     }
     else
     {
         ListBox* pListBox = dynamic_cast<ListBox*>(pWidget);
-        pWeldWidget = pListBox ? std::make_unique<JSListBox>(m_bHasTopLevelDialog ? m_aOwnedToplevel
-                                                                                  : m_aParentDialog,
-                                                             pListBox, this, false)
-                               : nullptr;
+        pWeldWidget = pListBox
+                          ? std::make_unique<JSListBox>(GetNotifierWindow(), GetContentWindow(),
+                                                        pListBox, this, false, m_sTypeOfJSON)
+                          : nullptr;
     }
 
     if (pWeldWidget)
@@ -265,10 +329,10 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OString&
 std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& id)
 {
     TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-    auto pWeldWidget = pNotebook ? std::make_unique<JSNotebook>(
-                                       m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                       pNotebook, this, false)
-                                 : nullptr;
+    auto pWeldWidget = pNotebook
+                           ? std::make_unique<JSNotebook>(GetNotifierWindow(), GetContentWindow(),
+                                                          pNotebook, this, false, m_sTypeOfJSON)
+                           : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -279,10 +343,10 @@ std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OString& 
 std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OString& id)
 {
     FormattedField* pSpinButton = m_xBuilder->get<FormattedField>(id);
-    auto pWeldWidget = pSpinButton ? std::make_unique<JSSpinButton>(
-                                         m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                         pSpinButton, this, false)
-                                   : nullptr;
+    auto pWeldWidget = pSpinButton
+                           ? std::make_unique<JSSpinButton>(GetNotifierWindow(), GetContentWindow(),
+                                                            pSpinButton, this, false, m_sTypeOfJSON)
+                           : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -293,10 +357,10 @@ std::unique_ptr<weld::SpinButton> JSInstanceBuilder::weld_spin_button(const OStr
 std::unique_ptr<weld::CheckButton> JSInstanceBuilder::weld_check_button(const OString& id)
 {
     CheckBox* pCheckButton = m_xBuilder->get<CheckBox>(id);
-    auto pWeldWidget = pCheckButton ? std::make_unique<JSCheckButton>(
-                                          m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                          pCheckButton, this, false)
-                                    : nullptr;
+    auto pWeldWidget
+        = pCheckButton ? std::make_unique<JSCheckButton>(GetNotifierWindow(), GetContentWindow(),
+                                                         pCheckButton, this, false, m_sTypeOfJSON)
+                       : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -310,8 +374,8 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
 {
     VclDrawingArea* pArea = m_xBuilder->get<VclDrawingArea>(id);
     auto pWeldWidget = pArea ? std::make_unique<JSDrawingArea>(
-                                   m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog, pArea,
-                                   this, rA11yImpl, pUITestFactoryFunction, pUserData)
+                                   GetNotifierWindow(), GetContentWindow(), pArea, this, rA11yImpl,
+                                   pUITestFactoryFunction, pUserData, m_sTypeOfJSON)
                              : nullptr;
 
     if (pWeldWidget)
@@ -323,10 +387,10 @@ JSInstanceBuilder::weld_drawing_area(const OString& id, const a11yref& rA11yImpl
 std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id)
 {
     ToolBox* pToolBox = m_xBuilder->get<ToolBox>(id);
-    auto pWeldWidget = pToolBox ? std::make_unique<JSToolbar>(
-                                      m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                      pToolBox, this, false)
-                                : nullptr;
+    auto pWeldWidget = pToolBox
+                           ? std::make_unique<JSToolbar>(GetNotifierWindow(), GetContentWindow(),
+                                                         pToolBox, this, false, m_sTypeOfJSON)
+                           : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -337,10 +401,10 @@ std::unique_ptr<weld::Toolbar> JSInstanceBuilder::weld_toolbar(const OString& id
 std::unique_ptr<weld::TextView> JSInstanceBuilder::weld_text_view(const OString& id)
 {
     VclMultiLineEdit* pTextView = m_xBuilder->get<VclMultiLineEdit>(id);
-    auto pWeldWidget = pTextView ? std::make_unique<JSTextView>(
-                                       m_bHasTopLevelDialog ? m_aOwnedToplevel : m_aParentDialog,
-                                       pTextView, this, false)
-                                 : nullptr;
+    auto pWeldWidget = pTextView
+                           ? std::make_unique<JSTextView>(GetNotifierWindow(), GetContentWindow(),
+                                                          pTextView, this, false, m_sTypeOfJSON)
+                           : nullptr;
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -364,16 +428,19 @@ weld::MessageDialog* JSInstanceBuilder::CreateMessageDialog(weld::Widget* pParen
         tools::JsonWriter aJsonWriter;
         xMessageDialog->DumpAsPropertyTree(aJsonWriter);
         aJsonWriter.put("id", xMessageDialog->GetLOKWindowId());
+        aJsonWriter.put("jsontype", "dialog");
         std::unique_ptr<char[], o3tl::free_delete> message(aJsonWriter.extractData());
         pNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.get());
     }
 
-    return new JSMessageDialog(xMessageDialog, nullptr, true);
+    return new JSMessageDialog(xMessageDialog, xMessageDialog, nullptr, true);
 }
 
-JSDialog::JSDialog(VclPtr<vcl::Window> aOwnedToplevel, ::Dialog* pDialog,
-                   SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceDialog, ::Dialog>(aOwnedToplevel, pDialog, pBuilder, bTakeOwnership)
+JSDialog::JSDialog(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                   ::Dialog* pDialog, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                   std::string sTypeOfJSON)
+    : JSWidget<SalInstanceDialog, ::Dialog>(aNotifierWindow, aContentWindow, pDialog, pBuilder,
+                                            bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -389,9 +456,11 @@ void JSDialog::undo_collapse()
     notifyDialogState();
 }
 
-JSLabel::JSLabel(VclPtr<vcl::Window> aOwnedToplevel, FixedText* pLabel,
-                 SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceLabel, FixedText>(aOwnedToplevel, pLabel, pBuilder, bTakeOwnership)
+JSLabel::JSLabel(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                 FixedText* pLabel, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                 std::string sTypeOfJSON)
+    : JSWidget<SalInstanceLabel, FixedText>(aNotifierWindow, aContentWindow, pLabel, pBuilder,
+                                            bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -401,15 +470,19 @@ void JSLabel::set_label(const OUString& rText)
     notifyDialogState();
 };
 
-JSButton::JSButton(VclPtr<vcl::Window> aOwnedToplevel, ::Button* pButton,
-                   SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceButton, ::Button>(aOwnedToplevel, pButton, pBuilder, bTakeOwnership)
+JSButton::JSButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                   ::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                   std::string sTypeOfJSON)
+    : JSWidget<SalInstanceButton, ::Button>(aNotifierWindow, aContentWindow, pButton, pBuilder,
+                                            bTakeOwnership, sTypeOfJSON)
 {
 }
 
-JSEntry::JSEntry(VclPtr<vcl::Window> aOwnedToplevel, ::Edit* pEntry, SalInstanceBuilder* pBuilder,
-                 bool bTakeOwnership)
-    : JSWidget<SalInstanceEntry, ::Edit>(aOwnedToplevel, pEntry, pBuilder, bTakeOwnership)
+JSEntry::JSEntry(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                 ::Edit* pEntry, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                 std::string sTypeOfJSON)
+    : JSWidget<SalInstanceEntry, ::Edit>(aNotifierWindow, aContentWindow, pEntry, pBuilder,
+                                         bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -419,10 +492,11 @@ void JSEntry::set_text(const OUString& rText)
     notifyDialogState();
 }
 
-JSListBox::JSListBox(VclPtr<vcl::Window> aOwnedToplevel, ::ListBox* pListBox,
-                     SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(aOwnedToplevel, pListBox, pBuilder,
-                                                          bTakeOwnership)
+JSListBox::JSListBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                     ::ListBox* pListBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                     std::string sTypeOfJSON)
+    : JSWidget<SalInstanceComboBoxWithoutEdit, ::ListBox>(aNotifierWindow, aContentWindow, pListBox,
+                                                          pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -445,10 +519,11 @@ void JSListBox::set_active(int pos)
     notifyDialogState();
 }
 
-JSComboBox::JSComboBox(VclPtr<vcl::Window> aOwnedToplevel, ::ComboBox* pComboBox,
-                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(aOwnedToplevel, pComboBox, pBuilder,
-                                                        bTakeOwnership)
+JSComboBox::JSComboBox(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::ComboBox* pComboBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                       std::string sTypeOfJSON)
+    : JSWidget<SalInstanceComboBoxWithEdit, ::ComboBox>(aNotifierWindow, aContentWindow, pComboBox,
+                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -477,10 +552,11 @@ void JSComboBox::set_active(int pos)
     notifyDialogState();
 }
 
-JSNotebook::JSNotebook(VclPtr<vcl::Window> aOwnedToplevel, ::TabControl* pControl,
-                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceNotebook, ::TabControl>(aOwnedToplevel, pControl, pBuilder,
-                                                  bTakeOwnership)
+JSNotebook::JSNotebook(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::TabControl* pControl, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                       std::string sTypeOfJSON)
+    : JSWidget<SalInstanceNotebook, ::TabControl>(aNotifierWindow, aContentWindow, pControl,
+                                                  pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -518,10 +594,11 @@ void JSNotebook::insert_page(const OString& rIdent, const OUString& rLabel, int 
     notifyDialogState();
 }
 
-JSSpinButton::JSSpinButton(VclPtr<vcl::Window> aOwnedToplevel, ::FormattedField* pSpin,
-                           SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceSpinButton, ::FormattedField>(aOwnedToplevel, pSpin, pBuilder,
-                                                        bTakeOwnership)
+JSSpinButton::JSSpinButton(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                           ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
+                           bool bTakeOwnership, std::string sTypeOfJSON)
+    : JSWidget<SalInstanceSpinButton, ::FormattedField>(aNotifierWindow, aContentWindow, pSpin,
+                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -531,10 +608,10 @@ void JSSpinButton::set_value(int value)
     notifyDialogState();
 }
 
-JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* pBuilder,
-                                 bool bTakeOwnership)
+JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, VclPtr<vcl::Window> aContentWindow,
+                                 SalInstanceBuilder* pBuilder, bool bTakeOwnership)
     : SalInstanceMessageDialog(pDialog, pBuilder, bTakeOwnership)
-    , JSDialogSender(m_xMessageDialog)
+    , JSDialogSender(m_xMessageDialog, aContentWindow, "dialog")
 {
 }
 
@@ -550,10 +627,12 @@ void JSMessageDialog::set_secondary_text(const OUString& rText)
     notifyDialogState();
 }
 
-JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aOwnedToplevel, ::CheckBox* pCheckBox,
-                             SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceCheckButton, ::CheckBox>(aOwnedToplevel, pCheckBox, pBuilder,
-                                                   bTakeOwnership)
+JSCheckButton::JSCheckButton(VclPtr<vcl::Window> aNotifierWindow,
+                             VclPtr<vcl::Window> aContentWindow, ::CheckBox* pCheckBox,
+                             SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                             std::string sTypeOfJSON)
+    : JSWidget<SalInstanceCheckButton, ::CheckBox>(aNotifierWindow, aContentWindow, pCheckBox,
+                                                   pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -563,12 +642,14 @@ void JSCheckButton::set_active(bool active)
     notifyDialogState();
 }
 
-JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aOwnedToplevel, VclDrawingArea* pDrawingArea,
+JSDrawingArea::JSDrawingArea(VclPtr<vcl::Window> aNotifierWindow,
+                             VclPtr<vcl::Window> aContentWindow, VclDrawingArea* pDrawingArea,
                              SalInstanceBuilder* pBuilder, const a11yref& rAlly,
-                             FactoryFunction pUITestFactoryFunction, void* pUserData)
+                             FactoryFunction pUITestFactoryFunction, void* pUserData,
+                             std::string sTypeOfJSON)
     : SalInstanceDrawingArea(pDrawingArea, pBuilder, rAlly, pUITestFactoryFunction, pUserData,
                              false)
-    , JSDialogSender(aOwnedToplevel)
+    , JSDialogSender(aNotifierWindow, aContentWindow, sTypeOfJSON)
 {
 }
 
@@ -584,9 +665,11 @@ void JSDrawingArea::queue_draw_area(int x, int y, int width, int height)
     notifyDialogState();
 }
 
-JSToolbar::JSToolbar(VclPtr<vcl::Window> aOwnedToplevel, ::ToolBox* pToolbox,
-                     SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceToolbar, ::ToolBox>(aOwnedToplevel, pToolbox, pBuilder, bTakeOwnership)
+JSToolbar::JSToolbar(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                     ::ToolBox* pToolbox, SalInstanceBuilder* pBuilder, bool bTakeOwnership,
+                     std::string sTypeOfJSON)
+    : JSWidget<SalInstanceToolbar, ::ToolBox>(aNotifierWindow, aContentWindow, pToolbox, pBuilder,
+                                              bTakeOwnership, sTypeOfJSON)
 {
 }
 
@@ -596,10 +679,11 @@ void JSToolbar::signal_clicked(const OString& rIdent)
     notifyDialogState();
 }
 
-JSTextView::JSTextView(VclPtr<vcl::Window> aOwnedToplevel, ::VclMultiLineEdit* pTextView,
-                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
-    : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(aOwnedToplevel, pTextView, pBuilder,
-                                                        bTakeOwnership)
+JSTextView::JSTextView(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
+                       ::VclMultiLineEdit* pTextView, SalInstanceBuilder* pBuilder,
+                       bool bTakeOwnership, std::string sTypeOfJSON)
+    : JSWidget<SalInstanceTextView, ::VclMultiLineEdit>(aNotifierWindow, aContentWindow, pTextView,
+                                                        pBuilder, bTakeOwnership, sTypeOfJSON)
 {
 }
 
