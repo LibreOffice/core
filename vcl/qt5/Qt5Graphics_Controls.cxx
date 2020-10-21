@@ -306,8 +306,13 @@ bool Qt5Graphics_Controls::drawNativeControl(ControlType type, ControlPart part,
 
     if (type == ControlType::Pushbutton)
     {
+        const PushButtonValue& rPBValue = static_cast<const PushButtonValue&>(value);
         assert(part == ControlPart::Entire);
         QStyleOptionButton option;
+        if (nControlState & ControlState::DEFAULT)
+            option.features |= QStyleOptionButton::DefaultButton;
+        if (rPBValue.m_bFlatButton)
+            option.features |= QStyleOptionButton::Flat;
         draw(QStyle::CE_PushButton, option, m_image.get(), rBackgroundColor,
              vclStateValue2StateFlag(nControlState, value));
     }
