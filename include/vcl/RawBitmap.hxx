@@ -40,25 +40,25 @@ public:
         }
         mpData.reset(new sal_uInt8[nDataSize]);
     }
-    void SetPixel(tools::Long nY, tools::Long nX, Color nColor)
+    void SetPixel(sal_Int32 nY, sal_Int32 nX, Color nColor)
     {
-        tools::Long p = (nY * maSize.getWidth() + nX) * (mnBitCount / 8);
+        sal_Int32 p = (nY * maSize.getWidth() + nX) * (mnBitCount / 8);
         mpData[p++] = nColor.GetRed();
         mpData[p++] = nColor.GetGreen();
         mpData[p++] = nColor.GetBlue();
         if (mnBitCount == 32)
             mpData[p] = nColor.GetTransparency();
     }
-    Color GetPixel(tools::Long nY, tools::Long nX) const
+    Color GetPixel(sal_Int32 nY, sal_Int32 nX) const
     {
-        tools::Long p = (nY * maSize.getWidth() + nX) * mnBitCount / 8;
+        sal_Int32 p = (nY * maSize.getWidth() + nX) * mnBitCount / 8;
         if (mnBitCount == 24)
             return Color(mpData[p], mpData[p + 1], mpData[p + 2]);
         else
             return Color(mpData[p + 3], mpData[p], mpData[p + 1], mpData[p + 2]);
     }
     // so we don't accidentally leave any code in that uses palette color indexes
-    void SetPixel(tools::Long nY, tools::Long nX, BitmapColor nColor) = delete;
+    void SetPixel(sal_Int32 nY, sal_Int32 nX, BitmapColor nColor) = delete;
     tools::Long Height() { return maSize.Height(); }
     tools::Long Width() { return maSize.Width(); }
     sal_uInt8 GetBitCount() const { return mnBitCount; }

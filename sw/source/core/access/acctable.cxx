@@ -1583,11 +1583,11 @@ sal_Bool SAL_CALL SwAccessibleTable::selectColumn( sal_Int32 column )
     if( isAccessibleColumnSelected( column ) )
         return true;
 
-    tools::Long lRowCount = getAccessibleRowCount();
+    sal_Int32 lRowCount = getAccessibleRowCount();
 
-    for(tools::Long lRow = 0; lRow < lRowCount; lRow ++)
+    for(sal_Int32 lRow = 0; lRow < lRowCount; lRow ++)
     {
-        tools::Long lChildIndex = getAccessibleIndex(lRow, column);
+        sal_Int32 lChildIndex = getAccessibleIndex(lRow, column);
         selectAccessibleChild(lChildIndex);
     }
     return true;

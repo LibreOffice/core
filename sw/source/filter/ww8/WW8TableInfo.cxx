@@ -1103,7 +1103,7 @@ void WW8TableCellGrid::addShadowCells()
         bool bBeginningOfCell = true;
         bool bVertMerge = false;
         SwRect aRect = aCellIt->getRect();
-        tools::Long nRowSpan = 1;
+        sal_Int32 nRowSpan = 1;
         while (aCellIt != aCellEndIt)
         {
             WW8TableNodeInfo * pNodeInfo = aCellIt->getTableNodeInfo();

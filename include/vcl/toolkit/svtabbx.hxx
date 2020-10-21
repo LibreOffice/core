@@ -133,10 +133,10 @@ public:
 
     // Accessible -------------------------------------------------------------
 
-    bool            IsCellCheckBox( tools::Long _nRow, sal_uInt16 _nColumn, TriState& _rState );
+    bool            IsCellCheckBox( sal_Int32 _nRow, sal_uInt16 _nColumn, TriState& _rState );
 
     /** @return  The count of the rows. */
-    virtual tools::Long                    GetRowCount() const override;
+    virtual sal_Int32               GetRowCount() const override;
     /** @return  The count of the columns. */
     virtual sal_uInt16              GetColumnCount() const override;
 
@@ -160,19 +160,19 @@ public:
     virtual void                    SetNoSelection() override;
     using SvTabListBox::SelectAll;
     virtual void                    SelectAll() override;
-    virtual void                    SelectRow( tools::Long _nRow, bool _bSelect = true, bool bExpand = true ) override;
+    virtual void                    SelectRow( sal_Int32 _nRow, bool _bSelect = true, bool bExpand = true ) override;
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) override;
     virtual sal_Int32               GetSelectedRowCount() const override;
     virtual sal_Int32               GetSelectedColumnCount() const override;
     /** @return  <TRUE/>, if the row is selected. */
-    virtual bool                    IsRowSelected( tools::Long _nRow ) const override;
-    virtual bool                    IsColumnSelected( tools::Long _nColumn ) const override;
+    virtual bool                    IsRowSelected( sal_Int32 _nRow ) const override;
+    virtual bool                    IsColumnSelected( sal_Int32 _nColumn ) const override;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
-    virtual OUString                GetAccessibleCellText( tools::Long _nRow, sal_uInt16 _nColumnPos ) const override;
+    virtual OUString                GetAccessibleCellText( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const override;
 
     virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
     virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) override;

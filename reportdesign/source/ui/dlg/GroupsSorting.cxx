@@ -133,18 +133,18 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect = true);
 
-    virtual bool CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol) override;
+    virtual bool CursorMoving(sal_Int32 nNewRow, sal_uInt16 nNewCol) override;
     using ::svt::EditBrowseBox::GetRowCount;
 protected:
     virtual bool IsTabAllowed(bool bForward) const override;
 
-    virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
-    virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
+    virtual void InitController( ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( sal_Int32 nRow, sal_uInt16 nCol ) override;
     virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-    virtual bool SeekRow( tools::Long nRow ) override;
+    virtual bool SeekRow( sal_Int32 nRow ) override;
     virtual bool SaveModified() override;
-    virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColId ) const override;
-    virtual RowStatus GetRowStatus(tools::Long nRow) const override;
+    virtual OUString GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const override;
+    virtual RowStatus GetRowStatus(sal_Int32 nRow) const override;
 
     virtual void KeyInput(const KeyEvent& rEvt) override;
     virtual void Command( const CommandEvent& rEvt ) override;
@@ -483,7 +483,7 @@ bool OFieldExpressionControl::SaveModified()
     return true;
 }
 
-OUString OFieldExpressionControl::GetCellText( tools::Long nRow, sal_uInt16 /*nColId*/ ) const
+OUString OFieldExpressionControl::GetCellText( sal_Int32 nRow, sal_uInt16 /*nColId*/ ) const
 {
     OUString sText;
     if ( nRow != BROWSER_ENDOFSELECTION && m_aGroupPositions[nRow] != NO_GROUP )
@@ -507,13 +507,13 @@ OUString OFieldExpressionControl::GetCellText( tools::Long nRow, sal_uInt16 /*nC
     return sText;
 }
 
-void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColumnId )
+void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, sal_Int32 nRow, sal_uInt16 nColumnId )
 {
     weld::ComboBox& rComboBox = m_pComboCell->get_widget();
     rComboBox.set_entry_text(GetCellText(nRow, nColumnId));
 }
 
-bool OFieldExpressionControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol)
+bool OFieldExpressionControl::CursorMoving(sal_Int32 nNewRow, sal_uInt16 nNewCol)
 {
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
@@ -528,14 +528,14 @@ bool OFieldExpressionControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewC
     return true;
 }
 
-CellController* OFieldExpressionControl::GetController( tools::Long /*nRow*/, sal_uInt16 /*nColumnId*/ )
+CellController* OFieldExpressionControl::GetController( sal_Int32 /*nRow*/, sal_uInt16 /*nColumnId*/ )
 {
     ComboBoxCellController* pCellController = new ComboBoxCellController( m_pComboCell );
     pCellController->GetComboBox().set_entry_editable(m_pParent->m_pController->isEditable());
     return pCellController;
 }
 
-bool OFieldExpressionControl::SeekRow( tools::Long _nRow )
+bool OFieldExpressionControl::SeekRow( sal_Int32 _nRow )
 {
     // the basis class needs the call, because that's how the class knows which line will be painted
     EditBrowseBox::SeekRow(_nRow);
@@ -560,7 +560,7 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const tools::Rectan
         rDev.SetClipRegion();
 }
 
-EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(tools::Long nRow) const
+EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(sal_Int32 nRow) const
 {
     if (nRow >= 0 && nRow == m_nDataPos)
         return EditBrowseBox::CURRENT;
@@ -844,7 +844,7 @@ OGroupsSortingDialog::~OGroupsSortingDialog()
 void OGroupsSortingDialog::UpdateData( )
 {
     m_xFieldExpression->Invalidate();
-    tools::Long nCurRow = m_xFieldExpression->GetCurRow();
+    sal_Int32 nCurRow = m_xFieldExpression->GetCurRow();
     m_xFieldExpression->DeactivateCell();
     m_xFieldExpression->ActivateCell(nCurRow, m_xFieldExpression->GetCurColumnId());
     DisplayData(nCurRow);

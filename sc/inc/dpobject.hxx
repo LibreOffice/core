@@ -101,7 +101,7 @@ private:
     // see PivotTable::putToInteropGrabBag in sc/source/filter/oox/pivottablebuffer.cxx for details
     std::map<OUString, css::uno::Any> maInteropGrabBag;
 
-    tools::Long                    nHeaderRows;    // page fields plus filter button
+    sal_Int32               nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout:1;  // true : grid, false : standard
     bool                    bAllowMove:1;
     bool                    bSettingsChanged:1;

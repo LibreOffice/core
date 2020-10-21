@@ -142,8 +142,8 @@ public:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
 
-    void        ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, tools::Long nColOffset);
-    void        ShiftRows(const ScDocument& rDoc, SCROW nStartRow, tools::Long nRowOffset);
+    void        ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, sal_Int32 nColOffset);
+    void        ShiftRows(const ScDocument& rDoc, SCROW nStartRow, sal_Int32 nRowOffset);
 
     // Generate envelopes if multimarked and fills the passed ScRange object with
     // the smallest range that includes the marked area plus its envelopes.
