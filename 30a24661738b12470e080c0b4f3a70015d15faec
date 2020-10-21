@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1873e2a9_d502ad3a",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5536,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-10-21T14:01:58Z",
+      "side": 1,
+      "message": "Done\nhttps://git.libreoffice.org/core/commit/6f1ce0acadc5d6e4933cc3226f14a7796390a93a",
+      "parentUuid": "b6409ae6_503239fa",
+      "range": {
+        "startLine": 5536,
+        "startChar": 17,
+        "endLine": 5536,
+        "endChar": 36
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8adbc3a_4824c2b2",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7245dcb_3fe76e4f",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5540,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-10-21T14:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8adbc3a_4824c2b2",
+      "range": {
+        "startLine": 5540,
+        "startChar": 7,
+        "endLine": 5540,
+        "endChar": 96
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "5aa542e2_e568dab7",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5541,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-10-21T14:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88a07687_3876b2b6",
+      "range": {
+        "startLine": 5541,
+        "startChar": 42,
+        "endLine": 5541,
+        "endChar": 43
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1bc68f47_91b8399b",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3632ce8c_02833b82",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 5542,
+      "author": {
+        "id": 1002677
+      },
+      "writtenOn": "2020-10-21T14:01:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bc68f47_91b8399b",
+      "range": {
+        "startLine": 5542,
+        "startChar": 46,
+        "endLine": 5542,
+        "endChar": 47
+      },
+      "revId": "30a24661738b12470e080c0b4f3a70015d15faec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
