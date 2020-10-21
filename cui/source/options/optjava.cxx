@@ -568,6 +568,10 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     {
         // direct mode disregards Java settings made here, so gray them out
         m_xJavaFrame->set_sensitive(false);
+        // check whether a usable JRE was set
+        std::unique_ptr<JavaInfo> pSelectedJava;
+        eErr = jfw_getSelectedJRE( &pSelectedJava );
+        bEnabled = (eErr == JFW_E_NONE);
     }
     else if ( eErr != JFW_E_NONE )
         bEnabled = false;
