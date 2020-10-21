@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41b0b911_a4be88e4",
+        "filename": "cui/source/dialogs/tipofthedaydlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-21T09:37:26Z",
+      "side": 1,
+      "message": "I would suggest to move this also into the last \"if\"",
+      "range": {
+        "startLine": 124,
+        "startChar": 12,
+        "endLine": 124,
+        "endChar": 116
+      },
+      "revId": "cb9a4472f15f829567f2caeff7036dc36953d30e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
