@@ -48,7 +48,7 @@ ScDPTableData::~ScDPTableData()
 {
 }
 
-OUString ScDPTableData::GetFormattedString(tools::Long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
+OUString ScDPTableData::GetFormattedString(sal_Int32 nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {
     const ScDPCache& rCache = GetCacheTable().getCache();
     return rCache.GetFormattedString(nDim, rItem, bLocaleIndependent);
@@ -104,35 +104,35 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-sal_uInt32 ScDPTableData::GetNumberFormat(tools::Long)
+sal_uInt32 ScDPTableData::GetNumberFormat(sal_Int32)
 {
     return 0;           // default format
 }
 
-bool ScDPTableData::IsBaseForGroup(tools::Long) const
+bool ScDPTableData::IsBaseForGroup(sal_Int32) const
 {
     return false;       // always false
 }
 
-tools::Long ScDPTableData::GetGroupBase(tools::Long) const
+sal_Int32 ScDPTableData::GetGroupBase(sal_Int32) const
 {
     return -1;          // always none
 }
 
-bool ScDPTableData::IsNumOrDateGroup(tools::Long) const
+bool ScDPTableData::IsNumOrDateGroup(sal_Int32) const
 {
     return false;       // always false
 }
 
-bool ScDPTableData::IsInGroup( const ScDPItemData&, tools::Long,
-                               const ScDPItemData&, tools::Long ) const
+bool ScDPTableData::IsInGroup( const ScDPItemData&, sal_Int32,
+                               const ScDPItemData&, sal_Int32 ) const
 {
     OSL_FAIL("IsInGroup shouldn't be called for non-group data");
     return false;
 }
 
-bool ScDPTableData::HasCommonElement( const ScDPItemData&, tools::Long,
-                                      const ScDPItemData&, tools::Long ) const
+bool ScDPTableData::HasCommonElement( const ScDPItemData&, sal_Int32,
+                                      const ScDPItemData&, sal_Int32 ) const
 {
     OSL_FAIL("HasCommonElement shouldn't be called for non-group data");
     return false;
@@ -215,13 +215,13 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTab
 }
 
 void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                const vector<tools::Long>& rDims, vector<SCROW>& rItemData)
+                                const vector<sal_Int32>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
     rItemData.reserve(rItemData.size() + nDimSize);
     for (sal_Int32 i = 0; i < nDimSize; ++i)
     {
-        tools::Long nDim = rDims[i];
+        sal_Int32 nDim = rDims[i];
 
         if (getIsDataLayoutDimension(nDim))
         {
@@ -238,14 +238,14 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
     }
 }
 
-tools::Long ScDPTableData::GetMembersCount( tools::Long nDim )
+sal_Int32 ScDPTableData::GetMembersCount( sal_Int32 nDim )
 {
     if ( nDim > MAXCOL )
         return 0;
     return GetCacheTable().getFieldEntries( nDim ).size();
 }
 
-const ScDPItemData* ScDPTableData::GetMemberByIndex( tools::Long nDim, tools::Long nIndex )
+const ScDPItemData* ScDPTableData::GetMemberByIndex( sal_Int32 nDim, sal_Int32 nIndex )
 {
     if ( nIndex >= GetMembersCount( nDim ) )
         return nullptr;
@@ -255,23 +255,22 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( tools::Long nDim, tools::Lo
     return GetCacheTable().getCache().GetItemDataById( static_cast<SCCOL>(nDim), static_cast<SCROW>(nMembers[nIndex]) );
 }
 
-const ScDPItemData* ScDPTableData::GetMemberById( tools::Long nDim, tools::Long nId)
+const ScDPItemData* ScDPTableData::GetMemberById( sal_Int32 nDim, sal_Int32 nId)
 {
     return GetCacheTable().getCache().GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
-const std::vector< SCROW >& ScDPTableData::GetColumnEntries( tools::Long nColumn )
+const std::vector< SCROW >& ScDPTableData::GetColumnEntries( sal_Int32 nColumn )
 {
     return GetCacheTable().getFieldEntries( nColumn );
 }
 
-tools::Long ScDPTableData::GetSourceDim( tools::Long nDim )
+sal_Int32 ScDPTableData::GetSourceDim( sal_Int32 nDim )
 {
     return nDim;
-
 }
 
-tools::Long ScDPTableData::Compare( tools::Long nDim, tools::Long nDataId1, tools::Long nDataId2)
+sal_Int32 ScDPTableData::Compare( sal_Int32 nDim, sal_Int32 nDataId1, sal_Int32 nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;

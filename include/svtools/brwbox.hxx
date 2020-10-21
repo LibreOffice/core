@@ -54,7 +54,7 @@ namespace vcl {
 }
 
 #define BROWSER_INVALIDID           SAL_MAX_UINT16
-#define BROWSER_ENDOFSELECTION      (static_cast<tools::Long>(SFX_ENDOFSELECTION))
+constexpr sal_Int32 BROWSER_ENDOFSELECTION = SFX_ENDOFSELECTION;
 
 enum class BrowserMode
 {
@@ -119,19 +119,19 @@ namespace o3tl
 class BrowseEvent
 {
     VclPtr<vcl::Window>     pWin;
-    tools::Long                    nRow;
+    sal_Int32               nRow;
     tools::Rectangle        aRect;
     sal_uInt16              nCol;
     sal_uInt16              nColId;
 
 public:
                         BrowseEvent( vcl::Window* pWindow,
-                                     tools::Long nAbsRow,
+                                     sal_Int32 nAbsRow,
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
                                      const tools::Rectangle& rRect );
 
     vcl::Window*        GetWindow() const { return pWin; }
-    tools::Long                GetRow() const { return nRow; }
+    sal_Int32           GetRow() const { return nRow; }
     sal_uInt16          GetColumn() const { return nCol; }
     sal_uInt16          GetColumnId() const { return nColId; }
     const tools::Rectangle&    GetRect() const { return aRect; }
@@ -225,7 +225,7 @@ class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 public:
     BrowserMouseEvent( BrowserDataWin* pWin, const MouseEvent& rEvt );
     BrowserMouseEvent( vcl::Window* pWin, const MouseEvent& rEvt,
-                       tools::Long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
+                       sal_Int32 nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
                        const tools::Rectangle& rRect );
 };
 
@@ -287,9 +287,9 @@ private:
     bool            bHLines;        // draw lines between rows
     bool            bVLines;        // draw lines between columns
     bool            bBootstrapped;  // child windows resized etc.
-    tools::Long            nTopRow;        // no. of first visible row (0...)
-    tools::Long            nCurRow;        // no. of row with cursor
-    tools::Long            nRowCount;      // total number of rows in model
+    sal_Int32       nTopRow;        // no. of first visible row (0...)
+    sal_Int32       nCurRow;        // no. of row with cursor
+    sal_Int32       nRowCount;      // total number of rows in model
     sal_uInt16      nFirstCol;      // no. of first visible scrollable column
     sal_uInt16      nCurColId;      // column id of cursor
 
@@ -317,17 +317,17 @@ private:
     union
     {
         MultiSelection* pSel;       // selected rows for multi-selection
-        tools::Long            nSel;       // selected row for single-selection
+        sal_Int32       nSel;       // selected row for single-selection
     }               uRow;
     std::unique_ptr<MultiSelection> pColSel; // selected column-ids
 
     // fdo#83943, detect if making the cursor position visible is impossible to achieve
     struct CursorMoveAttempt
     {
-        tools::Long m_nCol;
-        tools::Long m_nRow;
+        sal_Int32 m_nCol;
+        sal_Int32 m_nRow;
         bool m_bScrolledToReachCell;
-        CursorMoveAttempt(tools::Long nCol, tools::Long nRow, bool bScrolledToReachCell)
+        CursorMoveAttempt(sal_Int32 nCol, sal_Int32 nRow, bool bScrolledToReachCell)
             : m_nCol(nCol)
             , m_nRow(nRow)
             , m_bScrolledToReachCell(bScrolledToReachCell)
@@ -359,7 +359,7 @@ private:
     SVT_DLLPRIVATE void            AutoSizeLastColumn();
 
     SVT_DLLPRIVATE tools::Long            ImpGetDataRowHeight() const;
-    SVT_DLLPRIVATE tools::Rectangle       ImplFieldRectPixel( tools::Long nRow, sal_uInt16 nColId ) const;
+    SVT_DLLPRIVATE tools::Rectangle       ImplFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColId ) const;
     SVT_DLLPRIVATE sal_uInt16      FrozenColCount() const;
 
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
@@ -371,7 +371,7 @@ private:
 
     SVT_DLLPRIVATE tools::Long GetBarHeight() const;
 
-    bool            GoToRow(tools::Long nRow, bool bRowColMove, bool bDoNotModifySelection = false );
+    bool            GoToRow(sal_Int32 nRow, bool bRowColMove, bool bDoNotModifySelection = false );
 
     bool            GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowColMove = false);
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect, bool bMakeVisible);
@@ -395,7 +395,7 @@ protected:
     // (with the help of RowInserted and RowRemoved), so overriding of
     // the method is needless
 public:
-    virtual tools::Long    GetRowCount() const override;
+    virtual sal_Int32  GetRowCount() const override;
 
 protected:
     // for display in VScrollBar set it e.g. on  "?"
@@ -408,7 +408,7 @@ protected:
         @param nRow
             nRow starts at 0
     */
-    virtual bool    SeekRow( tools::Long nRow ) = 0;
+    virtual bool    SeekRow( sal_Int32 nRow ) = 0;
     void            DrawCursor();
     void            PaintData(vcl::Window const & rWin, vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     virtual void    PaintField(vcl::RenderContext& rDev, const tools::Rectangle& rRect, sal_uInt16 nColumnId) const = 0;
@@ -426,11 +426,11 @@ protected:
     //   numbering of the visible scope has changed
     // - Scrolling (and thereof resulting in another first visible row)
     // - Resize the window
-    virtual void    VisibleRowsChanged( tools::Long nNewTopRow, sal_uInt16 nNumRows);
+    virtual void    VisibleRowsChanged( sal_Int32 nNewTopRow, sal_uInt16 nNumRows);
 
     // number of visible rows in the window (incl. "truncated" rows)
     sal_uInt16      GetVisibleRows() const;
-    tools::Long            GetTopRow() const { return nTopRow; }
+    sal_Int32       GetTopRow() const { return nTopRow; }
     sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable
@@ -488,7 +488,7 @@ public:
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
-    virtual bool    IsCursorMoveAllowed( tools::Long nNewRow, sal_uInt16 nNewColId ) const;
+    virtual bool    IsCursorMoveAllowed( sal_Int32 nNewRow, sal_uInt16 nNewColId ) const;
     virtual void    CursorMoved();
     virtual void    ColumnMoved( sal_uInt16 nColId );
     virtual void    ColumnResized( sal_uInt16 nColId );
@@ -533,56 +533,56 @@ public:
     bool            IsFrozen( sal_uInt16 nColumnId ) const;
 
     // movement of visible area
-    tools::Long            ScrollColumns( tools::Long nColumns );
-    tools::Long            ScrollRows( tools::Long nRows );
-    void            MakeFieldVisible( tools::Long nRow, sal_uInt16 nColId );
+    sal_Int32       ScrollColumns( sal_Int32 nColumns );
+    sal_Int32       ScrollRows( sal_Int32 nRows );
+    void            MakeFieldVisible( sal_Int32 nRow, sal_uInt16 nColId );
 
     // access and movement of cursor
-    tools::Long            GetCurRow() const { return nCurRow; }
+    sal_Int32       GetCurRow() const { return nCurRow; }
     sal_uInt16      GetCurColumnId() const { return nCurColId; }
-    bool            GoToRow( tools::Long nRow );
+    bool            GoToRow( sal_Int32 nRow );
     bool            GoToColumnId( sal_uInt16 nColId );
-    bool            GoToRowColumnId( tools::Long nRow, sal_uInt16 nColId );
+    bool            GoToRowColumnId( sal_Int32 nRow, sal_uInt16 nColId );
 
     // selections
     virtual void    SetNoSelection() override;
     virtual void    SelectAll() override;
-    virtual void    SelectRow( tools::Long nRow, bool _bSelect = true, bool bExpand = true ) override;
+    virtual void    SelectRow( sal_Int32 nRow, bool _bSelect = true, bool bExpand = true ) override;
     void            SelectColumnPos( sal_uInt16 nCol, bool _bSelect = true )
                         { SelectColumnPos( nCol, _bSelect, true); }
     void            SelectColumnId( sal_uInt16 nColId )
                         { SelectColumnPos( GetColumnPos(nColId), true, true); }
-    tools::Long            GetSelectRowCount() const;
+    sal_Int32       GetSelectRowCount() const;
     sal_uInt16          GetSelectColumnCount() const;
-    virtual bool    IsRowSelected( tools::Long nRow ) const override;
+    virtual bool    IsRowSelected( sal_Int32 nRow ) const override;
     bool            IsColumnSelected( sal_uInt16 nColumnId ) const;
-    tools::Long            FirstSelectedRow();
-    tools::Long            LastSelectedRow();
-    tools::Long            NextSelectedRow();
+    sal_Int32       FirstSelectedRow();
+    sal_Int32       LastSelectedRow();
+    sal_Int32       NextSelectedRow();
     const MultiSelection* GetColumnSelection() const { return pColSel.get(); }
     const MultiSelection* GetSelection() const
                     { return bMultiSelection ? uRow.pSel : nullptr; }
 
-    tools::Long            FirstSelectedColumn( ) const;
+    sal_Int32       FirstSelectedColumn( ) const;
 
     bool            IsResizing() const { return bResizing; }
 
     // access to positions of fields, column and rows
     BrowserDataWin&        GetDataWindow() const;
-    tools::Rectangle       GetRowRectPixel( tools::Long nRow ) const;
-    tools::Rectangle       GetFieldRectPixel( tools::Long nRow, sal_uInt16 nColId,
+    tools::Rectangle       GetRowRectPixel( sal_Int32 nRow ) const;
+    tools::Rectangle       GetFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColId,
                                        bool bRelToBrowser = true) const;
-    bool            IsFieldVisible( tools::Long nRow, sal_uInt16 nColId,
+    bool            IsFieldVisible( sal_Int32 nRow, sal_uInt16 nColId,
                                     bool bComplete = false ) const;
-    tools::Long            GetRowAtYPosPixel( tools::Long nY,
+    sal_Int32       GetRowAtYPosPixel( tools::Long nY,
                                         bool bRelToBrowser = true  ) const;
     sal_uInt16      GetColumnAtXPosPixel( tools::Long nX ) const;
 
     // invalidations
     void            Clear();
-    void            RowRemoved( tools::Long nRow, tools::Long nNumRows = 1, bool bDoPaint = true );
-    void            RowModified( tools::Long nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
-    void            RowInserted( tools::Long nRow, tools::Long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
+    void            RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows = 1, bool bDoPaint = true );
+    void            RowModified( sal_Int32 nRow, sal_uInt16 nColId = BROWSER_INVALIDID );
+    void            RowInserted( sal_Int32 nRow, sal_Int32 nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
 
     // miscellaneous
     bool            ReserveControlArea(sal_uInt16 nWidth = USHRT_MAX);
@@ -624,7 +624,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual OUString  GetCellText(tools::Long _nRow, sal_uInt16 _nColId) const;
+    virtual OUString  GetCellText(sal_Int32 _nRow, sal_uInt16 _nColId) const;
 
     /** @return
             the current column count
@@ -818,13 +818,13 @@ public:
     virtual bool                    HasRowHeader() const override;
     virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) override;
-    virtual bool                    IsColumnSelected( tools::Long _nColumn ) const override;
+    virtual bool                    IsColumnSelected( sal_Int32 _nColumn ) const override;
     virtual sal_Int32               GetSelectedRowCount() const override;
     virtual sal_Int32               GetSelectedColumnCount() const override;
     virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
     virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
-    virtual OUString                GetAccessibleCellText(tools::Long _nRow, sal_uInt16 _nColPos) const override;
+    virtual OUString                GetAccessibleCellText(sal_Int32 _nRow, sal_uInt16 _nColPos) const override;
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, MetricVector& rVector ) override;
     virtual tools::Rectangle        GetWindowExtentsRelative(const vcl::Window *pRelativeWindow) const override;
     virtual void                    GrabFocus() override;

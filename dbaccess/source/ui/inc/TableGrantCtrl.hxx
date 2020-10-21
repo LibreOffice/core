@@ -81,12 +81,12 @@ protected:
     virtual bool PreNotify(NotifyEvent& rNEvt ) override;
 
     virtual bool IsTabAllowed(bool bForward) const override;
-    virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
-    virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
+    virtual void InitController( ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( sal_Int32 nRow, sal_uInt16 nCol ) override;
     virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-    virtual bool SeekRow( tools::Long nRow ) override;
+    virtual bool SeekRow( sal_Int32 nRow ) override;
     virtual bool SaveModified() override;
-    virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColId ) const override;
+    virtual OUString GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const override;
 
     virtual void CellModified() override;
 

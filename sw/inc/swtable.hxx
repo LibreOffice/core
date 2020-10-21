@@ -405,7 +405,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 
     std::optional<Color> mxUserColor;
     std::optional<Color> mxNumFormatColor;
-    tools::Long mnRowSpan;
+    sal_Int32 mnRowSpan;
     bool mbDummyFlag;
 
     /// Do we contain any direct formatting?
@@ -484,8 +484,8 @@ public:
     void SetSaveUserColor(std::optional<Color> p ) { mxUserColor = p; }
     void SetSaveNumFormatColor( std::optional<Color> p ) { mxNumFormatColor = p; }
 
-    tools::Long getRowSpan() const;
-    void setRowSpan( tools::Long nNewRowSpan );
+    sal_Int32 getRowSpan() const;
+    void setRowSpan( sal_Int32 nNewRowSpan );
     bool getDummyFlag() const;
     void setDummyFlag( bool bDummy );
 

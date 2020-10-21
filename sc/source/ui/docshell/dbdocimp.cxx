@@ -233,7 +233,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             //  get column descriptions
 
-            tools::Long nColCount = 0;
+            sal_Int32 nColCount = 0;
             uno::Reference<sdbc::XResultSetMetaData> xMeta;
             uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( xRowSet, uno::UNO_QUERY );
             if ( xMetaSupp.is() )

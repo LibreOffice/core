@@ -142,14 +142,14 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
     ::svt::CellControllerRef    m_xController;
     ::svt::CellControllerRef    m_xCheckController;
 
-    tools::Long    m_nCurrentRow;
+    sal_Int32    m_nCurrentRow;
     bool    m_bModified;
 
 protected:
-    virtual bool                    SeekRow( tools::Long nRow ) override;
+    virtual bool                    SeekRow( sal_Int32 nRow ) override;
     virtual void                    PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const override;
-    virtual void                    InitController(::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol) override;
-    virtual ::svt::CellController*  GetController(tools::Long nRow, sal_uInt16 nCol) override;
+    virtual void                    InitController(::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol) override;
+    virtual ::svt::CellController*  GetController(sal_Int32 nRow, sal_uInt16 nCol) override;
     virtual bool                    SaveModified() override;
 
     std::vector<tools::Long>               GetOptimalColWidths() const;
@@ -163,7 +163,7 @@ public:
 
     bool                            IsModified()const override;
 
-    virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColumn ) const override;
+    virtual OUString GetCellText( sal_Int32 nRow, sal_uInt16 nColumn ) const override;
     virtual void                    Resize() override;
     virtual Size                    GetOptimalSize() const override;
 };
@@ -3670,13 +3670,13 @@ Size SwEntryBrowseBox::GetOptimalSize() const
     return aSize;
 }
 
-bool SwEntryBrowseBox::SeekRow( tools::Long nRow )
+bool SwEntryBrowseBox::SeekRow( sal_Int32 nRow )
 {
     m_nCurrentRow = nRow;
     return true;
 }
 
-OUString SwEntryBrowseBox::GetCellText(tools::Long nRow, sal_uInt16 nColumn) const
+OUString SwEntryBrowseBox::GetCellText(sal_Int32 nRow, sal_uInt16 nColumn) const
 {
     OUString pRet;
     if (o3tl::make_unsigned(nRow) < m_Entries.size())
@@ -3703,7 +3703,7 @@ void SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
     rDev.DrawText( rRect, GetCellText( m_nCurrentRow, nColumnId ), nStyle );
 }
 
-::svt::CellController* SwEntryBrowseBox::GetController(tools::Long /*nRow*/, sal_uInt16 nCol)
+::svt::CellController* SwEntryBrowseBox::GetController(sal_Int32 /*nRow*/, sal_uInt16 nCol)
 {
     return nCol < ITEM_CASE ? m_xController.get() : m_xCheckController.get();
 }
@@ -3754,7 +3754,7 @@ bool SwEntryBrowseBox::SaveModified()
 }
 
 void SwEntryBrowseBox::InitController(
-                ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol)
+                ::svt::CellControllerRef& rController, sal_Int32 nRow, sal_uInt16 nCol)
 {
     const OUString rText = GetCellText( nRow, nCol );
     if(nCol < ITEM_CASE)

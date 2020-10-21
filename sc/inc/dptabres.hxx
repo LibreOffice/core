@@ -105,7 +105,7 @@ struct ScDPSubTotalState
 class ScDPRunningTotalState
 {
 public:
-    typedef std::vector<tools::Long> IndexArray; /// array of long integers terminated by -1.
+    typedef std::vector<sal_Int32> IndexArray; /// array of sal_Int32 terminated by -1.
 
     ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot );
 
@@ -117,8 +117,8 @@ public:
     const IndexArray& GetRowVisible() const { return maRowVisible;}
     const IndexArray& GetRowSorted() const { return maRowSorted;}
 
-    void    AddColIndex( tools::Long nVisible, tools::Long nSorted );
-    void    AddRowIndex( tools::Long nVisible, tools::Long nSorted );
+    void    AddColIndex( sal_Int32 nVisible, tools::Long nSorted );
+    void    AddRowIndex( sal_Int32 nVisible, tools::Long nSorted );
     void    RemoveColIndex();
     void    RemoveRowIndex();
 
@@ -562,12 +562,12 @@ public:
     //  called for the reference dimension
     ScDPDataMember* GetRowReferenceMember(
         const ScDPRelativePos* pMemberPos, const OUString* pName,
-        const tools::Long* pRowIndexes, const tools::Long* pColIndexes ) const;
+        const sal_Int32* pRowIndexes, const sal_Int32* pColIndexes ) const;
 
     // uses row root member from ScDPRunningTotalState
     static ScDPDataMember* GetColReferenceMember(
         const ScDPRelativePos* pMemberPos, const OUString* pName,
-        tools::Long nRefDimPos, const ScDPRunningTotalState& rRunning );
+        sal_Int32 nRefDimPos, const ScDPRunningTotalState& rRunning );
 
 #if DUMP_PIVOT_TABLE
     void DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const;

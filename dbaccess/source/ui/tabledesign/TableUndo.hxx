@@ -57,28 +57,28 @@ namespace dbaui
     class OTableDesignCellUndoAct final : public OTableDesignUndoAct
     {
         sal_uInt16     m_nCol;
-        tools::Long           m_nRow;
+        sal_Int32      m_nRow;
         css::uno::Any  m_sOldText;
         css::uno::Any  m_sNewText;
 
         virtual void    Undo() override;
         virtual void    Redo() override;
     public:
-        OTableDesignCellUndoAct( OTableRowView* pOwner, tools::Long nRowID, sal_uInt16 nColumn );
+        OTableDesignCellUndoAct( OTableRowView* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn );
         virtual ~OTableDesignCellUndoAct() override;
     };
 
     class OTableEditorTypeSelUndoAct final : public OTableEditorUndoAct
     {
         sal_uInt16          m_nCol;
-        tools::Long            m_nRow;
+        sal_Int32       m_nRow;
         TOTypeInfoSP    m_pOldType;
         TOTypeInfoSP    m_pNewType;
 
         virtual void    Undo() override;
         virtual void    Redo() override;
     public:
-        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, tools::Long nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType );
+        OTableEditorTypeSelUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nRowID, sal_uInt16 nColumn, const TOTypeInfoSP& _pOldType );
         virtual ~OTableEditorTypeSelUndoAct() override;
     };
 
@@ -109,13 +109,13 @@ namespace dbaui
 
     class OTableEditorInsNewUndoAct final : public OTableEditorUndoAct
     {
-        tools::Long m_nInsPos;
-        tools::Long m_nInsRows;
+        sal_Int32 m_nInsPos;
+        sal_Int32 m_nInsRows;
 
         virtual void    Undo() override;
         virtual void    Redo() override;
     public:
-        OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, tools::Long nInsertPosition, tools::Long nInsertedRows );
+        OTableEditorInsNewUndoAct( OTableEditorCtrl* pOwner, sal_Int32 nInsertPosition, sal_Int32 nInsertedRows );
         virtual ~OTableEditorInsNewUndoAct() override;
     };
 

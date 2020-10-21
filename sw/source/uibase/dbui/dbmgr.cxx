@@ -1259,7 +1259,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             static_cast<CreateMonitor*>(xProgressDlg.get())->SetTotalCount(nMaxDocs);
         }
 
-        tools::Long nStartRow, nEndRow;
+        sal_Int32 nStartRow, nEndRow;
         bool bFreezedLayouts = false;
         // to collect temporary email files
         std::vector< OUString> aFilesToRemove;

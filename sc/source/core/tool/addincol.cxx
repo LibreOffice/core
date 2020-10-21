@@ -1424,7 +1424,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
 }
 
 template <typename T>
-static tools::Long lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
+static sal_Int32 lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
 {
     if (!pRowSeq->hasElements())
         return 0;
@@ -1499,23 +1499,23 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    tools::Long nRowCount = pRowSeq->getLength();
-                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    sal_Int32 nRowCount = pRowSeq->getLength();
+                    sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
+                        for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
                         {
-                            tools::Long nColCount = pRowArr[nRow].getLength();
+                            sal_Int32 nColCount = pRowArr[nRow].getLength();
                             const sal_Int32* pColArr = pRowArr[nRow].getConstArray();
-                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
+                            for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (sal_Int32 nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1534,23 +1534,23 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    tools::Long nRowCount = pRowSeq->getLength();
-                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    sal_Int32 nRowCount = pRowSeq->getLength();
+                    sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
+                        for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
                         {
-                            tools::Long nColCount = pRowArr[nRow].getLength();
+                            sal_Int32 nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
-                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
+                            for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                                 xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
-                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (sal_Int32 nCol=nColCount; nCol<nMaxColCount; nCol++)
                                 xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
@@ -1569,25 +1569,25 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
                 if ( pRowSeq )
                 {
-                    tools::Long nRowCount = pRowSeq->getLength();
-                    tools::Long nMaxColCount = lcl_GetMaxColCount(pRowSeq);
+                    sal_Int32 nRowCount = pRowSeq->getLength();
+                    sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
                         const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
-                        for (tools::Long nRow=0; nRow<nRowCount; nRow++)
+                        for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
                         {
-                            tools::Long nColCount = pRowArr[nRow].getLength();
+                            sal_Int32 nColCount = pRowArr[nRow].getLength();
                             const OUString* pColArr = pRowArr[nRow].getConstArray();
-                            for (tools::Long nCol=0; nCol<nColCount; nCol++)
+                            for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(pColArr[nCol]),
                                     static_cast<SCSIZE>(nCol), static_cast<SCSIZE>(nRow));
                             }
-                            for (tools::Long nCol=nColCount; nCol<nMaxColCount; nCol++)
+                            for (sal_Int32 nCol=nColCount; nCol<nMaxColCount; nCol++)
                             {
                                 xMatrix->PutString(
                                     svl::SharedString(EMPTY_OUSTRING),
