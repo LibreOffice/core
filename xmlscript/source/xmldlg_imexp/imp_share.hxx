@@ -311,6 +311,7 @@ class MenuPopupElement
 {
     std::vector< OUString > _itemValues;
     std::vector< sal_Int16 > _itemSelected;
+    bool _allowEmptyItems;
 public:
     css::uno::Sequence< OUString > getItemValues();
     css::uno::Sequence< sal_Int16 > getSelectedItems();
@@ -323,9 +324,11 @@ public:
     MenuPopupElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
+        ElementBase * pParent, DialogImport * pImport,
+        bool aAllowEmptyItems)
         : ElementBase( pImport->XMLNS_DIALOGS_UID,
                        rLocalName, xAttributes, pParent, pImport )
+        , _allowEmptyItems(aAllowEmptyItems)
         {}
 };
 
