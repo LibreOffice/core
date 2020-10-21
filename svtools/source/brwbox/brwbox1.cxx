@@ -824,7 +824,7 @@ OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
     return mvCols[ nItemPos ]->Title();
 }
 
-tools::Long BrowseBox::GetRowCount() const
+sal_Int32 BrowseBox::GetRowCount() const
 {
     return nRowCount;
 }
@@ -857,7 +857,7 @@ void BrowseBox::SetTitleLines( sal_uInt16 nLines )
     nTitleLines = nLines;
 }
 
-tools::Long BrowseBox::ScrollColumns( tools::Long nCols )
+sal_Int32 BrowseBox::ScrollColumns( sal_Int32 nCols )
 {
 
     if ( nFirstCol + nCols < 0 ||
@@ -999,7 +999,7 @@ tools::Long BrowseBox::ScrollColumns( tools::Long nCols )
 }
 
 
-tools::Long BrowseBox::ScrollRows( tools::Long nRows )
+sal_Int32 BrowseBox::ScrollRows( sal_Int32 nRows )
 {
     // compute new top row
     tools::Long nTmpMin = std::min( static_cast<tools::Long>(nTopRow + nRows), static_cast<tools::Long>(nRowCount - 1) );
@@ -1050,7 +1050,7 @@ tools::Long BrowseBox::ScrollRows( tools::Long nRows )
 }
 
 
-void BrowseBox::RowModified( tools::Long nRow, sal_uInt16 nColId )
+void BrowseBox::RowModified( sal_Int32 nRow, sal_uInt16 nColId )
 {
 
     if ( !GetUpdateMode() )
@@ -1134,7 +1134,7 @@ void BrowseBox::Clear()
     );
 }
 
-void BrowseBox::RowInserted( tools::Long nRow, tools::Long nNumRows, bool bDoPaint, bool bKeepSelection )
+void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, bool bKeepSelection )
 {
 
     if (nRow < 0)
@@ -1241,7 +1241,7 @@ void BrowseBox::RowInserted( tools::Long nRow, tools::Long nNumRows, bool bDoPai
 }
 
 
-void BrowseBox::RowRemoved( tools::Long nRow, tools::Long nNumRows, bool bDoPaint )
+void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
 {
 
     if ( nRow < 0 )
@@ -1412,13 +1412,13 @@ void BrowseBox::RowRemoved( tools::Long nRow, tools::Long nNumRows, bool bDoPain
 }
 
 
-bool BrowseBox::GoToRow( tools::Long nRow)
+bool BrowseBox::GoToRow( sal_Int32 nRow)
 {
     return GoToRow(nRow, false);
 }
 
 
-bool BrowseBox::GoToRow( tools::Long nRow, bool bRowColMove, bool bKeepSelection )
+bool BrowseBox::GoToRow( sal_Int32 nRow, bool bRowColMove, bool bKeepSelection )
 {
 
     tools::Long nOldCurRow = nCurRow;
@@ -1566,7 +1566,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
 }
 
 
-bool BrowseBox::GoToRowColumnId( tools::Long nRow, sal_uInt16 nColId )
+bool BrowseBox::GoToRowColumnId( sal_Int32 nRow, sal_uInt16 nColId )
 {
 
     // out of range?
@@ -1700,7 +1700,7 @@ void BrowseBox::SelectAll()
 }
 
 
-void BrowseBox::SelectRow( tools::Long nRow, bool _bSelect, bool bExpand )
+void BrowseBox::SelectRow( sal_Int32 nRow, bool _bSelect, bool bExpand )
 {
 
     if ( !bMultiSelection )
@@ -1772,7 +1772,7 @@ void BrowseBox::SelectRow( tools::Long nRow, bool _bSelect, bool bExpand )
 }
 
 
-tools::Long BrowseBox::GetSelectRowCount() const
+sal_Int32 BrowseBox::GetSelectRowCount() const
 {
 
     return bMultiSelection ? uRow.pSel->GetSelectCount() :
@@ -1853,34 +1853,34 @@ sal_uInt16 BrowseBox::GetSelectColumnCount() const
 }
 
 
-tools::Long BrowseBox::FirstSelectedColumn( ) const
+sal_Int32 BrowseBox::FirstSelectedColumn( ) const
 {
     return pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
 }
 
 
-tools::Long BrowseBox::FirstSelectedRow()
+sal_Int32 BrowseBox::FirstSelectedRow()
 {
 
     return bMultiSelection ? uRow.pSel->FirstSelected() : uRow.nSel;
 }
 
 
-tools::Long BrowseBox::NextSelectedRow()
+sal_Int32 BrowseBox::NextSelectedRow()
 {
 
     return bMultiSelection ? uRow.pSel->NextSelected() : BROWSER_ENDOFSELECTION;
 }
 
 
-tools::Long BrowseBox::LastSelectedRow()
+sal_Int32 BrowseBox::LastSelectedRow()
 {
 
     return bMultiSelection ? uRow.pSel->LastSelected() : uRow.nSel;
 }
 
 
-bool BrowseBox::IsRowSelected( tools::Long nRow ) const
+bool BrowseBox::IsRowSelected( sal_Int32 nRow ) const
 {
 
     return bMultiSelection ? uRow.pSel->IsSelected(nRow) : nRow == uRow.nSel;
@@ -1897,7 +1897,7 @@ bool BrowseBox::IsColumnSelected( sal_uInt16 nColumnId ) const
 
 void BrowseBox::MakeFieldVisible
 (
-    tools::Long    nRow,       // line number of the field (starting with 0)
+    sal_Int32   nRow,       // line number of the field (starting with 0)
     sal_uInt16  nColId     // column ID of the field
 )
 
@@ -1961,7 +1961,7 @@ void BrowseBox::MakeFieldVisible
 }
 
 
-bool BrowseBox::IsFieldVisible( tools::Long nRow, sal_uInt16 nColumnId,
+bool BrowseBox::IsFieldVisible( sal_Int32 nRow, sal_uInt16 nColumnId,
                                 bool bCompletely ) const
 {
 
@@ -1986,7 +1986,7 @@ bool BrowseBox::IsFieldVisible( tools::Long nRow, sal_uInt16 nColumnId,
 }
 
 
-tools::Rectangle BrowseBox::GetFieldRectPixel( tools::Long nRow, sal_uInt16 nColumnId,
+tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColumnId,
                                         bool bRelToBrowser) const
 {
 
@@ -2007,7 +2007,7 @@ tools::Rectangle BrowseBox::GetFieldRectPixel( tools::Long nRow, sal_uInt16 nCol
 }
 
 
-tools::Rectangle BrowseBox::GetRowRectPixel( tools::Long nRow  ) const
+tools::Rectangle BrowseBox::GetRowRectPixel( sal_Int32 nRow  ) const
 {
 
     // get the rectangle relative to DataWin
@@ -2031,7 +2031,7 @@ tools::Rectangle BrowseBox::GetRowRectPixel( tools::Long nRow  ) const
 }
 
 
-tools::Rectangle BrowseBox::ImplFieldRectPixel( tools::Long nRow, sal_uInt16 nColumnId ) const
+tools::Rectangle BrowseBox::ImplFieldRectPixel( sal_Int32 nRow, sal_uInt16 nColumnId ) const
 {
 
     // compute the X-coordinate relative to DataWin by accumulation
@@ -2061,7 +2061,7 @@ tools::Rectangle BrowseBox::ImplFieldRectPixel( tools::Long nRow, sal_uInt16 nCo
 }
 
 
-tools::Long BrowseBox::GetRowAtYPosPixel( tools::Long nY, bool bRelToBrowser ) const
+sal_Int32 BrowseBox::GetRowAtYPosPixel( tools::Long nY, bool bRelToBrowser ) const
 {
 
     // compute the Y-coordinate
@@ -2238,7 +2238,7 @@ void BrowseBox::SetMode( BrowserMode nMode )
 }
 
 
-void BrowseBox::VisibleRowsChanged( tools::Long, sal_uInt16 )
+void BrowseBox::VisibleRowsChanged( sal_Int32, sal_uInt16 )
 {
 
     // old behavior: automatically correct NumRows:
@@ -2253,7 +2253,7 @@ void BrowseBox::VisibleRowsChanged( tools::Long, sal_uInt16 )
 }
 
 
-bool BrowseBox::IsCursorMoveAllowed( tools::Long, sal_uInt16 ) const
+bool BrowseBox::IsCursorMoveAllowed( sal_Int32, sal_uInt16 ) const
 
 /*  [Description]
 

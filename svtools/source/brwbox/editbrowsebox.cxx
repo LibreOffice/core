@@ -196,7 +196,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::SeekRow(tools::Long nRow)
+    bool EditBrowseBox::SeekRow(sal_Int32 nRow)
     {
         nPaintRow = nRow;
         return true;
@@ -770,7 +770,7 @@ namespace svt
     }
 
 
-    bool EditBrowseBox::IsCursorMoveAllowed(tools::Long nNewRow, sal_uInt16 nNewColId) const
+    bool EditBrowseBox::IsCursorMoveAllowed(sal_Int32 nNewRow, sal_uInt16 nNewColId) const
     {
         sal_uInt16 nInfo = 0;
 
@@ -1152,7 +1152,7 @@ namespace svt
         sal_uInt32 nCurColWidth  = GetColumnWidth(nColId);
         sal_uInt32 nMinColWidth = CalcZoom(20); // minimum
         sal_uInt32 nNewColWidth = nMinColWidth;
-        tools::Long nMaxRows      = std::min(tools::Long(GetVisibleRows()), GetRowCount());
+        tools::Long nMaxRows      = std::min(sal_Int32(GetVisibleRows()), GetRowCount());
         tools::Long nLastVisRow   = GetTopRow() + nMaxRows - 1;
 
         if (GetTopRow() <= nLastVisRow) // calc the column with using the cell contents
