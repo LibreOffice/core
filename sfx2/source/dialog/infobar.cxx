@@ -457,7 +457,7 @@ void SfxInfoBarContainerWindow::Resize()
     auto nOrigWidth = rOrigSize.getWidth();
     auto nOrigHeight = rOrigSize.getHeight();
 
-    long nHeight = 0;
+    tools::Long nHeight = 0;
 
     for (auto& rxInfoBar : m_pInfoBars)
     {

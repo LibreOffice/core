@@ -13,6 +13,7 @@
 #include <sfx2/dllapi.h>
 
 #include <svl/style.hxx>
+#include <tools/long.hxx>
 
 #include <memory>
 
@@ -40,7 +41,7 @@ public:
 
     virtual std::unique_ptr<StylePreviewRenderer> CreateStylePreviewRenderer(
                     OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
-                    long nMaxHeight) = 0;
+                    tools::Long nMaxHeight) = 0;
 };
 
 } // end namespace sfx2

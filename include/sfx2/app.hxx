@@ -219,7 +219,7 @@ public:
     static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth);
 
     /** loads the application logo as used in the impress slideshow pause screen */
-    static BitmapEx GetApplicationLogo(long nWidth);
+    static BitmapEx GetApplicationLogo(tools::Long nWidth);
 
     /** this Theme contains Images so must be deleted before DeInitVCL */
     sfx2::sidebar::Theme & GetSidebarTheme();

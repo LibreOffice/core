@@ -387,8 +387,8 @@ friend class SfxDockingWindow;
     // The following members are only valid in the time from startDocking to
     // EndDocking:
     Size                aSplitSize;
-    long                nHorizontalSize;
-    long                nVerticalSize;
+    tools::Long                nHorizontalSize;
+    tools::Long                nVerticalSize;
     sal_uInt16          nLine;
     sal_uInt16          nPos;
     sal_uInt16          nDockLine;
@@ -1083,7 +1083,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, tools::Rect
     }
 
     // calculate borders to shrink inner area before checking for intersection with tracking rectangle
-    long nLRBorder, nTBBorder;
+    tools::Long nLRBorder, nTBBorder;
 
     // take the smaller size of docked and floating mode
     Size aBorderTmp = pImpl->aSplitSize;
