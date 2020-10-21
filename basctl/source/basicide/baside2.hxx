@@ -76,7 +76,7 @@ private:
     css::uno::Reference< css::beans::XMultiPropertySet >
                                       notifier_;
 
-    long            nCurTextWidth;
+    tools::Long            nCurTextWidth;
 
     ImplSVEvent* m_nSetSourceInBasicId;
 
@@ -159,7 +159,7 @@ public:
 class BreakPointWindow final : public vcl::Window
 {
     ModulWindow&    rModulWindow;
-    long            nCurYOffset;
+    tools::Long            nCurYOffset;
     sal_uInt16      nMarkerPos;
     BreakPointList  aBreakPointList;
     bool            bErrorMarker;
@@ -184,8 +184,8 @@ public:
     void            SetMarkerPos( sal_uInt16 nLine, bool bErrorMarker = false );
     void            SetNoMarker ();
 
-    void            DoScroll( long nVertScroll );
-    long&           GetCurYOffset()         { return nCurYOffset; }
+    void            DoScroll( tools::Long nVertScroll );
+    tools::Long&           GetCurYOffset()         { return nCurYOffset; }
     BreakPointList& GetBreakPoints()        { return aBreakPointList; }
 };
 
@@ -410,7 +410,7 @@ protected:
     // Window:
     virtual void Paint (vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     // Layout:
-    virtual void OnFirstSize (long nWidth, long nHeight) override;
+    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) override;
 
 private:
     // main child window

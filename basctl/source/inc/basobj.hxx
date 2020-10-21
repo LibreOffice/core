@@ -19,6 +19,7 @@
 #pragma once
 
 #include "scriptdocument.hxx"
+#include <tools/long.hxx>
 
 class SbMethod;
 class SbModule;
@@ -40,7 +41,7 @@ namespace basctl
 
     StarBASIC*      FindBasic( const SbxVariable* pVar );
     void            StopBasic();
-    long            HandleBasicError( StarBASIC const * pBasic );
+    tools::Long            HandleBasicError( StarBASIC const * pBasic );
     void            BasicStopped( bool* pbAppWindowDisabled = nullptr, bool* pbDispatcherLocked = nullptr, sal_uInt16* pnWaitCount = nullptr,
                             SfxUInt16Item** ppSWActionCount = nullptr, SfxUInt16Item** ppSWLockViewCount = nullptr );
 

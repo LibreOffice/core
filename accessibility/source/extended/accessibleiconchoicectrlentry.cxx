@@ -443,8 +443,8 @@ namespace accessibility
             aPnt += aItemRect.TopLeft();
             nIndex = aLayoutData.GetIndexForPoint( aPnt );
 
-            long nLen = aLayoutData.m_aUnicodeBoundRects.size();
-            for ( long i = 0; i < nLen; ++i )
+            tools::Long nLen = aLayoutData.m_aUnicodeBoundRects.size();
+            for ( tools::Long i = 0; i < nLen; ++i )
             {
                 tools::Rectangle aRect = aLayoutData.GetCharacterBounds(i);
                 bool bInside = aRect.IsInside( aPnt );

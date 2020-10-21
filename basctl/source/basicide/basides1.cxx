@@ -708,13 +708,13 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                         --nLine;
 
                                     // scroll window and set selection
-                                    long nVisHeight = pModWin->GetOutputSizePixel().Height();
-                                    long nTextHeight = pTextEngine->GetTextHeight();
+                                    tools::Long nVisHeight = pModWin->GetOutputSizePixel().Height();
+                                    tools::Long nTextHeight = pTextEngine->GetTextHeight();
                                     if ( nTextHeight > nVisHeight )
                                     {
-                                        long nMaxY = nTextHeight - nVisHeight;
-                                        long nOldY = pTextView->GetStartDocPos().Y();
-                                        long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
+                                        tools::Long nMaxY = nTextHeight - nVisHeight;
+                                        tools::Long nOldY = pTextView->GetStartDocPos().Y();
+                                        tools::Long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
                                         nNewY = std::min( nNewY, nMaxY );
                                         pTextView->Scroll( 0, -( nNewY - nOldY ) );
                                         pTextView->ShowCursor( false );

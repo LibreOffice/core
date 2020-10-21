@@ -65,7 +65,7 @@ protected:
     virtual void Resize () override;
     virtual void DataChanged (DataChangedEvent const& rDCEvt) override;
     // new:
-    virtual void OnFirstSize (long nWidth, long nHeight) = 0;
+    virtual void OnFirstSize (tools::Long nWidth, tools::Long nHeight) = 0;
 
 private:
     // the main child window (either ModulWindow or DialogWindow)
@@ -83,7 +83,7 @@ private:
         void Add (DockingWindow*, Size const&);
         void Remove (DockingWindow*);
         bool IsEmpty () const;
-        long GetSize () const;
+        tools::Long GetSize () const;
         void ArrangeIn (tools::Rectangle const&);
         void dispose();
 
@@ -97,7 +97,7 @@ private:
         // rectangle to move in
         tools::Rectangle aRect;
         // size (width or height)
-        long nSize;
+        tools::Long nSize;
         // the main splitting line
         VclPtr<Splitter> aSplitter;
         // the dockable windows (and some data)
@@ -110,15 +110,15 @@ private:
             // the window may fill the space of the adjacent currently
             // non-docking windows, but this change is not stored in these
             // variables. These change only when the splitter lines are moved.
-            long nStartPos, nEndPos;
+            tools::Long nStartPos, nEndPos;
             // splitter line window before the window
             // (the first one is always nullptr)
             VclPtr<Splitter> pSplit;
         };
         std::vector<Item> vItems;
 
-        Point MakePoint (long, long) const;
-        Size MakeSize (long, long) const;
+        Point MakePoint (tools::Long, tools::Long) const;
+        Size MakeSize (tools::Long, tools::Long) const;
         static bool IsDocking (DockingWindow const&);
         DECL_LINK(SplitHdl, Splitter*, void);
         void CheckMarginsFor (Splitter*);
