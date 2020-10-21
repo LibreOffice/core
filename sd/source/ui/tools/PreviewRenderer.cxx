@@ -435,7 +435,7 @@ Image PreviewRenderer::ScaleBitmap (
             break;
         Size aFrameSize (
             nWidth,
-            static_cast<long>((nWidth*1.0 * aSize.Height()) / aSize.Width() + 0.5));
+            static_cast<::tools::Long>((nWidth*1.0 * aSize.Height()) / aSize.Width() + 0.5));
         Size aPreviewSize (aFrameSize.Width()-2,aFrameSize.Height()-2);
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MapUnit::MapPixel);

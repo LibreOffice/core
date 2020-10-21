@@ -330,7 +330,7 @@ void SlideSorterView::UpdateOrientation()
 
         if (pDockingWindow != nullptr)
         {
-            const long nScrollBarSize (
+            const ::tools::Long nScrollBarSize (
                 Application::GetSettings().GetStyleSettings().GetScrollBarSize());
             switch (pDockingWindow->GetOrientation())
             {
@@ -443,7 +443,7 @@ void SlideSorterView::DeterminePageObjectVisibilities()
         mbPreciousFlagUpdatePending |= true;
 
     model::SharedPageDescriptor pDescriptor;
-    for (long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
+    for (::tools::Long nIndex=aUnion.Min(); nIndex<=aUnion.Max(); nIndex++)
     {
         pDescriptor = mrModel.GetPageDescriptor(nIndex);
         if (pDescriptor)
@@ -648,7 +648,7 @@ void SlideSorterView::Paint (
     // Try to prefetch all graphics from the pages to paint. This will be done
     // in threads to be more efficient than loading them on-demand one by one.
     std::vector<Graphic*> graphics;
-    for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
+    for (::tools::Long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
         if (!pDescriptor || ! pDescriptor->HasState(PageDescriptor::ST_Visible))
@@ -658,7 +658,7 @@ void SlideSorterView::Paint (
     if(graphics.size() > 1) // threading does not help with loading just one
         GraphicFilter::GetGraphicFilter().MakeGraphicsAvailableThreaded(graphics);
 
-    for (long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
+    for (::tools::Long nIndex=aRange.Min(); nIndex<=aRange.Max(); ++nIndex)
     {
         model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
         if (!pDescriptor || ! pDescriptor->HasState(PageDescriptor::ST_Visible))

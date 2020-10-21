@@ -144,7 +144,7 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const ::tools::Rectangle& aAvai
 
     // Restore the relative position.
     mpHorizontalScrollBar->SetThumbPos(
-        static_cast<long>(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
+        static_cast<::tools::Long>(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
 }
 
 void ScrollBarManager::PlaceVerticalScrollBar (const ::tools::Rectangle& aArea)
@@ -158,7 +158,7 @@ void ScrollBarManager::PlaceVerticalScrollBar (const ::tools::Rectangle& aArea)
     mpVerticalScrollBar->SetPosSizePixel(aPosition, aSize);
 
     // Restore the position.
-    mpVerticalScrollBar->SetThumbPos(static_cast<long>(nThumbPosition));
+    mpVerticalScrollBar->SetThumbPos(static_cast<::tools::Long>(nThumbPosition));
     mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
 }
 
@@ -192,7 +192,7 @@ void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
 
         mpHorizontalScrollBar->SetVisibleSize (aWindowModelSize.Width());
 
-        const long nWidth (mpContentWindow->PixelToLogic(
+        const ::tools::Long nWidth (mpContentWindow->PixelToLogic(
             mpContentWindow->GetSizePixel()).Width());
         // Make the line size about 10% of the visible width.
         mpHorizontalScrollBar->SetLineSize (nWidth / 10);
@@ -215,7 +215,7 @@ void ScrollBarManager::UpdateScrollBars(bool bUseScrolling)
 
         mpVerticalScrollBar->SetVisibleSize (aWindowModelSize.Height());
 
-        const long nHeight (mpContentWindow->PixelToLogic(
+        const ::tools::Long nHeight (mpContentWindow->PixelToLogic(
             mpContentWindow->GetSizePixel()).Height());
         // Make the line size about 10% of the visible height.
         mpVerticalScrollBar->SetLineSize (nHeight / 10);
@@ -279,8 +279,8 @@ void ScrollBarManager::SetWindowOrigin (
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
-        static_cast<long int>(mnHorizontalPosition * aViewSize.Width()),
-        static_cast<long int>(mnVerticalPosition * aViewSize.Height()));
+        static_cast<::tools::Long>(mnHorizontalPosition * aViewSize.Width()),
+        static_cast<::tools::Long>(mnVerticalPosition * aViewSize.Height()));
 
     pWindow->SetWinViewPos (aOrigin);
     pWindow->UpdateMapMode ();

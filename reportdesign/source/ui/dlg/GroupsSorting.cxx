@@ -133,18 +133,18 @@ public:
     */
     void moveGroups(const uno::Sequence<uno::Any>& _aGroups,sal_Int32 _nRow,bool _bSelect = true);
 
-    virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) override;
+    virtual bool CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol) override;
     using ::svt::EditBrowseBox::GetRowCount;
 protected:
     virtual bool IsTabAllowed(bool bForward) const override;
 
-    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) override;
-    virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) override;
+    virtual void InitController( ::svt::CellControllerRef& rController, tools::Long nRow, sal_uInt16 nCol ) override;
+    virtual ::svt::CellController* GetController( tools::Long nRow, sal_uInt16 nCol ) override;
     virtual void PaintCell( OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId ) const override;
-    virtual bool SeekRow( long nRow ) override;
+    virtual bool SeekRow( tools::Long nRow ) override;
     virtual bool SaveModified() override;
-    virtual OUString GetCellText( long nRow, sal_uInt16 nColId ) const override;
-    virtual RowStatus GetRowStatus(long nRow) const override;
+    virtual OUString GetCellText( tools::Long nRow, sal_uInt16 nColId ) const override;
+    virtual RowStatus GetRowStatus(tools::Long nRow) const override;
 
     virtual void KeyInput(const KeyEvent& rEvt) override;
     virtual void Command( const CommandEvent& rEvt ) override;
@@ -224,7 +224,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
     sal_Int32 nCount = xGroups->getCount();
     if ( nCount >= 1 )
     {
-        for( long nIndex=FirstSelectedRow(); nIndex != SFX_ENDOFSELECTION; nIndex=NextSelectedRow() )
+        for( tools::Long nIndex=FirstSelectedRow(); nIndex != SFX_ENDOFSELECTION; nIndex=NextSelectedRow() )
         {
             try
             {
@@ -483,7 +483,7 @@ bool OFieldExpressionControl::SaveModified()
     return true;
 }
 
-OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) const
+OUString OFieldExpressionControl::GetCellText( tools::Long nRow, sal_uInt16 /*nColId*/ ) const
 {
     OUString sText;
     if ( nRow != BROWSER_ENDOFSELECTION && m_aGroupPositions[nRow] != NO_GROUP )
@@ -507,19 +507,19 @@ OUString OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ 
     return sText;
 }
 
-void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
+void OFieldExpressionControl::InitController( CellControllerRef& /*rController*/, tools::Long nRow, sal_uInt16 nColumnId )
 {
     weld::ComboBox& rComboBox = m_pComboCell->get_widget();
     rComboBox.set_entry_text(GetCellText(nRow, nColumnId));
 }
 
-bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
+bool OFieldExpressionControl::CursorMoving(tools::Long nNewRow, sal_uInt16 nNewCol)
 {
 
     if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
         return false;
     m_nDataPos = nNewRow;
-    long nOldDataPos = GetCurRow();
+    tools::Long nOldDataPos = GetCurRow();
     InvalidateStatusCell( m_nDataPos );
     InvalidateStatusCell( nOldDataPos );
 
@@ -528,14 +528,14 @@ bool OFieldExpressionControl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
     return true;
 }
 
-CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt16 /*nColumnId*/ )
+CellController* OFieldExpressionControl::GetController( tools::Long /*nRow*/, sal_uInt16 /*nColumnId*/ )
 {
     ComboBoxCellController* pCellController = new ComboBoxCellController( m_pComboCell );
     pCellController->GetComboBox().set_entry_editable(m_pParent->m_pController->isEditable());
     return pCellController;
 }
 
-bool OFieldExpressionControl::SeekRow( long _nRow )
+bool OFieldExpressionControl::SeekRow( tools::Long _nRow )
 {
     // the basis class needs the call, because that's how the class knows which line will be painted
     EditBrowseBox::SeekRow(_nRow);
@@ -560,11 +560,11 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const tools::Rectan
         rDev.SetClipRegion();
 }
 
-EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
+EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(tools::Long nRow) const
 {
     if (nRow >= 0 && nRow == m_nDataPos)
         return EditBrowseBox::CURRENT;
-    if ( nRow != BROWSER_ENDOFSELECTION && nRow < static_cast<long>(m_aGroupPositions.size()) && m_aGroupPositions[nRow] != NO_GROUP )
+    if ( nRow != BROWSER_ENDOFSELECTION && nRow < static_cast<tools::Long>(m_aGroupPositions.size()) && m_aGroupPositions[nRow] != NO_GROUP )
     {
         try
         {
@@ -682,7 +682,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
             if ( nColId == HANDLE_ID )
             {
                 bool bEnable = false;
-                long nIndex = FirstSelectedRow();
+                tools::Long nIndex = FirstSelectedRow();
                 while( nIndex != SFX_ENDOFSELECTION && !bEnable )
                 {
                     if ( m_aGroupPositions[nIndex] != NO_GROUP )
@@ -715,14 +715,14 @@ void OFieldExpressionControl::DeleteRows()
     {
         DeactivateCell();
     }
-    long nIndex = FirstSelectedRow();
+    tools::Long nIndex = FirstSelectedRow();
     if (nIndex == SFX_ENDOFSELECTION)
     {
         nIndex = GetCurRow();
     }
     bool bFirstTime = true;
 
-    long nOldDataPos = nIndex;
+    tools::Long nOldDataPos = nIndex;
     uno::Sequence< beans::PropertyValue > aArgs(1);
     aArgs[0].Name = PROPERTY_GROUP;
     m_bIgnoreEvent = true;
@@ -844,7 +844,7 @@ OGroupsSortingDialog::~OGroupsSortingDialog()
 void OGroupsSortingDialog::UpdateData( )
 {
     m_xFieldExpression->Invalidate();
-    long nCurRow = m_xFieldExpression->GetCurRow();
+    tools::Long nCurRow = m_xFieldExpression->GetCurRow();
     m_xFieldExpression->DeactivateCell();
     m_xFieldExpression->ActivateCell(nCurRow, m_xFieldExpression->GetCurColumnId());
     DisplayData(nCurRow);
@@ -973,7 +973,7 @@ IMPL_LINK(OGroupsSortingDialog, OnFormatAction, const OString&, rCommand, void)
     if ( !m_xFieldExpression )
         return;
 
-    long nIndex = m_xFieldExpression->GetCurrRow();
+    tools::Long nIndex = m_xFieldExpression->GetCurrRow();
     sal_Int32 nGroupPos = m_xFieldExpression->getGroupPosition(nIndex);
     uno::Sequence<uno::Any> aClipboardList;
     if ( nIndex >= 0 && nGroupPos != NO_GROUP )

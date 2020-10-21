@@ -170,8 +170,8 @@ BitmapEx PageObjectPainter::CreateMarkedPreview (
     const sal_Int32 nIconHeight (rOverlay.GetSizePixel().Height());
     if (nIconWidth>0 && nIconHeight>0)
     {
-        for (long nX=0; nX<rSize.Width(); nX+=nIconWidth)
-            for (long nY=0; nY<rSize.Height(); nY+=nIconHeight)
+        for (::tools::Long nX=0; nX<rSize.Width(); nX+=nIconWidth)
+            for (::tools::Long nY=0; nY<rSize.Height(); nY+=nIconHeight)
                 pDevice->DrawBitmapEx(Point(nX,nY), rOverlay);
     }
     return pDevice->GetBitmapEx(Point(0,0), rSize);

@@ -1638,7 +1638,7 @@ private:
         pOutliner->SetPaperSize(aOutRect.GetSize());
         pOutliner->SetUpdateMode(true);
 
-        long nPageH = aOutRect.GetHeight();
+        ::tools::Long nPageH = aOutRect.GetHeight();
 
         std::vector< sal_Int32 > aPages;
         sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PageKind::Standard);
@@ -1651,7 +1651,7 @@ private:
             pOutliner->Clear();
 
             Paragraph* pPara = nullptr;
-            long nH (0);
+            ::tools::Long nH (0);
             while (nH < nPageH && nIndex<nCount)
             {
                 SdPage* pPage = GetFilteredPage(aPages[nIndex], PageKind::Standard);
@@ -1954,8 +1954,8 @@ private:
                 rInfo.msPageString.clear();
             rInfo.msPageString += rInfo.msTimeDate;
 
-            long aPageWidth   = aPageSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
-            long aPageHeight  = aPageSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder();
+            ::tools::Long aPageWidth   = aPageSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
+            ::tools::Long aPageHeight  = aPageSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder();
             // Bugfix for 44530:
             // if it was implicitly changed (Landscape/Portrait),
             // this is considered for tiling, respectively for the splitting up
@@ -2006,13 +2006,13 @@ private:
 
         if( fPageWH < fPrintWH )
         {
-            aPageSize_2.setWidth(  static_cast<long>( aPrintSize_2.Height() * fPageWH ) );
+            aPageSize_2.setWidth(  static_cast<::tools::Long>( aPrintSize_2.Height() * fPageWH ) );
             aPageSize_2.setHeight( aPrintSize_2.Height() );
         }
         else
         {
             aPageSize_2.setWidth( aPrintSize_2.Width() );
-            aPageSize_2.setHeight( static_cast<long>( aPrintSize_2.Width() / fPageWH ) );
+            aPageSize_2.setHeight( static_cast<::tools::Long>( aPrintSize_2.Width() / fPageWH ) );
         }
 
         MapMode aMap (rInfo.maMap);
@@ -2187,9 +2187,9 @@ private:
 
             // keep the page content at its position if it fits, otherwise
             // move it to the printable area
-            const long nPageWidth (
+            const ::tools::Long nPageWidth (
                 rInfo.maPageSize.Width() - rPage.GetLeftBorder() - rPage.GetRightBorder());
-            const long nPageHeight (
+            const ::tools::Long nPageHeight (
                 rInfo.maPageSize.Height() - rPage.GetUpperBorder() - rPage.GetLowerBorder());
 
             Point aOrigin ( 0, 0 );

@@ -64,7 +64,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     const OUString& rPresPage = rPresentationSettings.maPresPage;
     OUString        aFirstPage;
     SdPage*         pPage = nullptr;
-    long            nPage;
+    ::tools::Long            nPage;
 
     for( nPage = mpDoc->GetSdPageCount( PageKind::Standard ) - 1; nPage >= 0; nPage-- )
     {
@@ -111,7 +111,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     if( pDlg->Execute() != RET_OK )
         return;
 
-    long    nValue32;
+    ::tools::Long    nValue32;
     bool    bValue;
     bool    bValuesChanged = false;
 

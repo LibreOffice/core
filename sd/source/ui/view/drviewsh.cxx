@@ -127,19 +127,19 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
         }
         else
         {
-            const long distRight(rRect.Right() - aNewPos.X() - aVisAreaSize.Width());
+            const ::tools::Long distRight(rRect.Right() - aNewPos.X() - aVisAreaSize.Width());
 
             if(distRight > 0)
             {
-                long mult = (distRight / nFreeSpaceX) + 1;
+                ::tools::Long mult = (distRight / nFreeSpaceX) + 1;
                 aNewPos.AdjustX(mult * nFreeSpaceX );
             }
 
-            const long distLeft(aNewPos.X() - rRect.Left());
+            const ::tools::Long distLeft(aNewPos.X() - rRect.Left());
 
             if(distLeft > 0)
             {
-                long mult = (distLeft / nFreeSpaceX) + 1;
+                ::tools::Long mult = (distLeft / nFreeSpaceX) + 1;
                 aNewPos.AdjustX( -(mult * nFreeSpaceX) );
             }
         }
@@ -172,19 +172,19 @@ void DrawViewShell::MakeVisible(const ::tools::Rectangle& rRect, vcl::Window& rW
         }
         else
         {
-            const long distBottom(rRect.Bottom() - aNewPos.Y() - aVisAreaSize.Height());
+            const ::tools::Long distBottom(rRect.Bottom() - aNewPos.Y() - aVisAreaSize.Height());
 
             if(distBottom > 0)
             {
-                long mult = (distBottom / nFreeSpaceY) + 1;
+                ::tools::Long mult = (distBottom / nFreeSpaceY) + 1;
                 aNewPos.AdjustY(mult * nFreeSpaceY );
             }
 
-            const long distTop(aNewPos.Y() - rRect.Top());
+            const ::tools::Long distTop(aNewPos.Y() - rRect.Top());
 
             if(distTop > 0)
             {
-                long mult = (distTop / nFreeSpaceY) + 1;
+                ::tools::Long mult = (distTop / nFreeSpaceY) + 1;
                 aNewPos.AdjustY( -(mult * nFreeSpaceY) );
             }
         }

@@ -190,7 +190,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         const SvxLRSpaceItem& rItem = aAttr.Get( EE_PARA_LRSPACE );
                         std::unique_ptr<SvxLRSpaceItem> pNewItem(rItem.Clone());
 
-                        long nLeft = pNewItem->GetLeft();
+                        ::tools::Long nLeft = pNewItem->GetLeft();
                         if( nSlot == SID_INC_INDENT )
                             nLeft += 1000;
                         else
@@ -247,7 +247,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         const SvxULSpaceItem& rItem = aAttr.Get( EE_PARA_ULSPACE );
                         std::unique_ptr<SvxULSpaceItem> pNewItem(rItem.Clone());
 
-                        long nUpper = pNewItem->GetUpper();
+                        ::tools::Long nUpper = pNewItem->GetUpper();
                         if( nSlot == SID_PARASPACE_INCREASE )
                             nUpper += 100;
                         else
@@ -257,7 +257,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         }
                         pNewItem->SetUpper( static_cast<sal_uInt16>(nUpper) );
 
-                        long nLower = pNewItem->GetLower();
+                        ::tools::Long nLower = pNewItem->GetLower();
                         if( nSlot == SID_PARASPACE_INCREASE )
                             nLower += 100;
                         else
@@ -289,7 +289,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = aEditAttr.Get( EE_PARA_ULSPACE );
                     std::unique_ptr<SvxULSpaceItem> pNewItem(rItem.Clone());
-                    long nUpper = pNewItem->GetUpper();
+                    ::tools::Long nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nUpper += 100;
@@ -300,7 +300,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     }
                     pNewItem->SetUpper( static_cast<sal_uInt16>(nUpper) );
 
-                    long nLower = pNewItem->GetLower();
+                    ::tools::Long nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nLower += 100;
                     else

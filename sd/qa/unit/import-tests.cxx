@@ -1598,9 +1598,9 @@ void SdImportTest::testTdf93124()
         Bitmap::ScopedReadAccess pReadAccess(aBMP);
         int nNonWhiteCount = 0;
         // The word "Top" should be in rectangle 34,4 - 76,30. If text alignment is wrong, the rectangle will be white.
-        for (long nY = 4; nY < (4 + 26); ++nY)
+        for (tools::Long nY = 4; nY < (4 + 26); ++nY)
         {
-            for (long nX = 34; nX < (34 + 43); ++nX)
+            for (tools::Long nX = 34; nX < (34 + 43); ++nX)
             {
                 const Color aColor = pReadAccess->GetColor(nY, nX);
                 if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
@@ -1657,9 +1657,9 @@ void SdImportTest::testTdf99729()
         BitmapEx aBMPEx = aPNGReader.Read();
         Bitmap aBMP = aBMPEx.GetBitmap();
         Bitmap::ScopedReadAccess pRead(aBMP);
-        for (long nX = 154; nX < (154 + 12); ++nX)
+        for (tools::Long nX = 154; nX < (154 + 12); ++nX)
         {
-            for (long nY = 16; nY < (16 + 96); ++nY)
+            for (tools::Long nY = 16; nY < (16 + 96); ++nY)
             {
                 const Color aColor = pRead->GetColor(nY, nX);
                 if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
@@ -2169,10 +2169,10 @@ bool checkPatternValues(std::vector<sal_uInt8>& rExpected, Bitmap& rBitmap)
     const Color aBGColor(0xFFFFFF);
 
     Bitmap::ScopedReadAccess pAccess(rBitmap);
-    for (long y = 0; y < pAccess->Height(); ++y)
+    for (tools::Long y = 0; y < pAccess->Height(); ++y)
     {
         Scanline pScanline = pAccess->GetScanline( y );
-        for (long x = 0; x < pAccess->Width(); ++x)
+        for (tools::Long x = 0; x < pAccess->Width(); ++x)
         {
             Color aColor = pAccess->GetPixelFromData(pScanline, x);
             sal_uInt8 aValue = rExpected[y*8+x];
@@ -2619,7 +2619,7 @@ void SdImportTest::testTdf90626()
     {
         const SvxNumBulletItem *pNumFmt = aEdit.GetParaAttribs(i).GetItem(EE_PARA_NUMBULLET);
         CPPUNIT_ASSERT(pNumFmt);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(long(371), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), long(1));
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(371), pNumFmt->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight(), tools::Long(1));
     }
 
     xDocShRef->DoClose();
@@ -2664,7 +2664,7 @@ void SdImportTest::testTdf114913()
     CPPUNIT_ASSERT_MESSAGE("No text object", pTxtObj != nullptr);
     const SvxNumBulletItem *pItem = pTxtObj->GetOutlinerParaObject()->GetTextObject().GetParaAttribs(0).GetItem(EE_PARA_NUMBULLET);
     CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL(long(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(691), pItem->GetNumRule()->GetLevel(0).GetGraphicSize().getHeight());
 
     xDocShRef->DoClose();
 }
