@@ -59,13 +59,8 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
         osl::MutexGuard guard(jfw::FwkMutex::get());
 
         jfw::VendorSettings aVendorSettings;
-        //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
         std::vector<std::unique_ptr<JavaInfo>> vecInfo;
-        //get the list of paths to jre locations which have been
-        //added manually
-        const jfw::MergedSettings settings;
-        const std::vector<OUString>& vecJRELocations =
-            settings.getJRELocations();
+
         //Use all plug-in libraries to get Java installations.
         std::vector<std::unique_ptr<JavaInfo>> arInfos;
         std::vector<rtl::Reference<jfw_plugin::VendorBase>> infos;
@@ -81,32 +76,42 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
         for (auto & j: arInfos)
             vecInfo.push_back(std::move(j));
 
-        //Check if any plugin can detect JREs at the location
-        // of the paths added by jfw_addJRELocation
-        //Check every manually added location
-        for (auto const & ii: vecJRELocations)
+        // direct mode disregards Java settings, so only retrieve
+        // JREs from settings when application mode is used
+        if (jfw::getMode() == jfw::JFW_MODE_APPLICATION)
         {
-            std::unique_ptr<JavaInfo> aInfo;
-            plerr = jfw_plugin_getJavaInfoByPath(
-                ii,
-                aVendorSettings,
-                &aInfo);
-            if (plerr == javaPluginError::NoJre)
-                continue;
-            if (plerr == javaPluginError::FailedVersion)
-                continue;
-            else if (plerr != javaPluginError::NONE)
-                return JFW_E_ERROR;
-
-            // Was this JRE already added?
-            if (std::none_of(
-                    vecInfo.begin(), vecInfo.end(),
-                    [&aInfo](std::unique_ptr<JavaInfo> const & info) {
-                        return areEqualJavaInfo(
-                            info.get(), aInfo.get());
-                    }))
+            //get the list of paths to jre locations which have been
+            //added manually
+            const jfw::MergedSettings settings;
+            const std::vector<OUString> vecJRELocations =
+                settings.getJRELocations();
+            //Check if any plugin can detect JREs at the location
+            // of the paths added by jfw_addJRELocation
+            //Check every manually added location
+            for (auto const & ii: vecJRELocations)
             {
-                vecInfo.push_back(std::move(aInfo));
+                std::unique_ptr<JavaInfo> aInfo;
+                plerr = jfw_plugin_getJavaInfoByPath(
+                    ii,
+                    aVendorSettings,
+                    &aInfo);
+                if (plerr == javaPluginError::NoJre)
+                    continue;
+                if (plerr == javaPluginError::FailedVersion)
+                    continue;
+                else if (plerr != javaPluginError::NONE)
+                    return JFW_E_ERROR;
+
+                // Was this JRE already added?
+                if (std::none_of(
+                        vecInfo.begin(), vecInfo.end(),
+                        [&aInfo](std::unique_ptr<JavaInfo> const & info) {
+                            return areEqualJavaInfo(
+                                info.get(), aInfo.get());
+                        }))
+                {
+                    vecInfo.push_back(std::move(aInfo));
+                }
             }
         }
 
