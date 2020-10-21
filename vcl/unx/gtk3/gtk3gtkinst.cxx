@@ -13762,6 +13762,8 @@ public:
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
 
+        SolarMutexGuard aGuard;
+
         // at least editeng expects to have seen a start before accepting a commit
         pThis->StartExtTextInput();
 
@@ -13780,6 +13782,8 @@ public:
     static void signalIMPreeditChanged(GtkIMContext* pIMContext, gpointer im_handler)
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        SolarMutexGuard aGuard;
 
         sal_Int32 nCursorPos(0);
         sal_uInt8 nCursorFlags(0);
@@ -13804,6 +13808,8 @@ public:
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
 
+        SolarMutexGuard aGuard;
+
         OUString sSurroundingText;
         int nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
 
@@ -13824,6 +13830,8 @@ public:
         bool bRet = false;
 
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+
+        SolarMutexGuard aGuard;
 
         OUString sSurroundingText;
         sal_Int32 nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
@@ -13867,6 +13875,7 @@ public:
     static void signalIMPreeditStart(GtkIMContext*, gpointer im_handler)
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        SolarMutexGuard aGuard;
         pThis->StartExtTextInput();
         pThis->updateIMSpotLocation();
     }
@@ -13883,6 +13892,7 @@ public:
     static void signalIMPreeditEnd(GtkIMContext*, gpointer im_handler)
     {
         IMHandler* pThis = static_cast<IMHandler*>(im_handler);
+        SolarMutexGuard aGuard;
         pThis->updateIMSpotLocation();
         pThis->EndExtTextInput();
     }
