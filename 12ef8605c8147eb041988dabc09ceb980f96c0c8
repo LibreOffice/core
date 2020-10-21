@@ -34,6 +34,24 @@
       "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c3e9028_2d94bf58",
+        "filename": "oox/source/core/xmlfilterbase.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2020-10-21T06:47:21Z",
+      "side": 1,
+      "message": "We are using imported value of \"AppVersion\" property, to check if document was created with Office 2007 (`AppVersion` \u003d 12.0000). I\u0027m wondering if this variable is used somewhere else (eg. by other application).\n\nWe could assume that format of the OOXML files exported by LibreOffice is compatible with Office 2013 (version 15.0000), and always save `15.0000` value.\nMore information about version mapping: https://en.wikipedia.org/wiki/Microsoft_Office#History_of_releases\n\nMethod for checking if document was created by Office 2007:\n\nvoid XmlFilterBase::checkDocumentProperties(const Reference\u003cXDocumentProperties\u003e\u0026 xDocProps)\n{\n    mbMSO2007 \u003d false;\n    if (!xDocProps-\u003egetGenerator().startsWithIgnoreAsciiCase(\"Microsoft\"))\n        return;\n\n    uno::Reference\u003cbeans::XPropertyAccess\u003e xUserDefProps(xDocProps-\u003egetUserDefinedProperties(), uno::UNO_QUERY);\n    if (!xUserDefProps.is())\n        return;\n\n    comphelper::SequenceAsHashMap aUserDefinedProperties(xUserDefProps-\u003egetPropertyValues());\n    comphelper::SequenceAsHashMap::iterator it \u003d aUserDefinedProperties.find(\"AppVersion\");\n    if (it \u003d\u003d aUserDefinedProperties.end())\n        return;\n\n    OUString aValue;\n    if (!(it-\u003esecond \u003e\u003e\u003d aValue))\n        return;\n\n    if (!aValue.startsWithIgnoreAsciiCase(\"12.\"))\n        return;\n\n    SAL_INFO(\"oox\", \"a MSO 2007 document\");\n    mbMSO2007 \u003d true;\n}\n\nThe other solution (proposed by you), is not store AppVersion anywhere (including Custom Properties).",
+      "parentUuid": "3ccd002a_8b92cd15",
+      "revId": "12ef8605c8147eb041988dabc09ceb980f96c0c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
