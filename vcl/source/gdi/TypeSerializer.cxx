@@ -58,6 +58,11 @@ void TypeSerializer::readGradient(Gradient& rGradient)
     rGradient.SetStyle(static_cast<GradientStyle>(nStyle));
     rGradient.SetStartColor(aStartColor);
     rGradient.SetEndColor(aEndColor);
+    if (nAngle > 3600)
+    {
+        SAL_WARN("vcl", "angle out of range " << nAngle);
+        nAngle = 0;
+    }
     rGradient.SetAngle(Degree10(nAngle));
     rGradient.SetBorder(nBorder);
     rGradient.SetOfsX(nOffsetX);
