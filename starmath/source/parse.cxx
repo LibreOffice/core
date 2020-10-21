@@ -242,6 +242,7 @@ const SmTokenTableEntry aTokenTable[] =
     { "red", TRED, '\0', TG::Color, 0},
     { "rfloor", TRFLOOR, MS_RFLOOR, TG::RBrace, 0},  //! 0 to terminate expression
     { "rgb", TRGB, '\0', TG::Color, 0},
+    //{ "rgba", TRGBA, '\0', TG::Color, 0},
     { "right", TRIGHT, '\0', TG::NONE, 0},
     { "rightarrow" , TRIGHTARROW, MS_RIGHTARROW, TG::Standalone, 5},
     { "rline", TRLINE, MS_VERTLINE, TG::RBrace, 0},  //! 0 to terminate expression
