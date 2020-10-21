@@ -22,6 +22,29 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c07be24_1288b53c",
+        "filename": "drawinglayer/source/primitive2d/graphicprimitive2d.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-21T06:40:47Z",
+      "side": 1,
+      "message": "A custom literal could be interesting? like operator\"\"_deg10()\n\n    aSuppressGraphicAttr.SetRotation(0_deg10);",
+      "range": {
+        "startLine": 71,
+        "startChar": 37,
+        "endLine": 71,
+        "endChar": 48
+      },
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
