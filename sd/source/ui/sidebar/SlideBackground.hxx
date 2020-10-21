@@ -42,7 +42,7 @@ class XFillGradientItem;
 class XFillBitmapItem;
 class XFillHatchItem;
 
-const long MINBODY = 284;
+const tools::Long MINBODY = 284;
 
 namespace sd::sidebar {
 
@@ -133,10 +133,10 @@ private:
     bool         mbTitle;
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
-    long m_nPageLeftMargin;
-    long m_nPageRightMargin;
-    long m_nPageTopMargin;
-    long m_nPageBottomMargin;
+    ::tools::Long m_nPageLeftMargin;
+    ::tools::Long m_nPageRightMargin;
+    ::tools::Long m_nPageTopMargin;
+    ::tools::Long m_nPageBottomMargin;
     FieldUnit meFUnit;
     OUString maCustomEntry;
 
@@ -172,8 +172,8 @@ private:
     bool IsImpress();
     void addListener();
     void removeListener();
-    void ExecuteMarginLRChange(const long mnPageLeftMargin, const long mnPageRightMargin);
-    void ExecuteMarginULChange(const long mnPageTopMargin, const long mnPageBottomMargin);
+    void ExecuteMarginLRChange(const ::tools::Long mnPageLeftMargin, const ::tools::Long mnPageRightMargin);
+    void ExecuteMarginULChange(const ::tools::Long mnPageTopMargin, const ::tools::Long mnPageBottomMargin);
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
 

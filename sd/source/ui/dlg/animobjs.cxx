@@ -90,8 +90,8 @@ void SdDisplay::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectang
     Size aSize = GetOutputSizePixel();
 
     Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
-    aBmpSize.setWidth( static_cast<long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
-    aBmpSize.setHeight( static_cast<long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) ) );
+    aBmpSize.setWidth( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Width()) * static_cast<double>(aScale) ) );
+    aBmpSize.setHeight( static_cast<::tools::Long>( static_cast<double>(aBmpSize.Height()) * static_cast<double>(aScale) ) );
 
     if( aBmpSize.Width() < aSize.Width() )
         aPt.setX( ( aSize.Width() - aBmpSize.Width() ) / 2 );
@@ -256,7 +256,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
 
     // calculate overall time
     ::tools::Time aTime( 0 );
-    long nFullTime;
+    ::tools::Long nFullTime;
     if( m_xRbtBitmap->get_active() )
     {
         for (size_t i = 0; i < nCount; ++i)
@@ -738,7 +738,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             m_xLbLoopCount->set_active_text(OUString::number( nLoopCount ) );
                     }
 
-                    long nTime = rAnimationBitmap.mnWait;
+                    ::tools::Long nTime = rAnimationBitmap.mnWait;
                     ::tools::Time aTime( 0, 0, nTime / 100, nTime % 100 );
                     size_t nIndex = m_nCurrentFrame + 1;
                     m_FrameList.insert(
@@ -908,7 +908,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         for (size_t i = 0; i < nCount; ++i)
         {
             ::tools::Time const & rTime = m_FrameList[i].second;
-            long  nTime = rTime.GetNanoSec();
+            ::tools::Long  nTime = rTime.GetNanoSec();
             nTime += rTime.GetSec() * 100;
 
             BitmapEx const & rBitmapEx = m_FrameList[i].first;
