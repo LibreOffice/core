@@ -389,7 +389,7 @@ SdrObjectUniquePtr FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID
     basegfx::B3DRange aVolume(aObjVol);
     double fW(aVolume.getWidth());
     double fH(aVolume.getHeight());
-    ::tools::Rectangle a3DRect(0, 0, static_cast<long>(fW), static_cast<long>(fH));
+    ::tools::Rectangle a3DRect(0, 0, static_cast<::tools::Long>(fW), static_cast<::tools::Long>(fH));
     std::unique_ptr< E3dScene, SdrObjectFreeOp > pScene(new E3dScene(*mpDoc));
 
     // copied code from E3dView::InitScene

@@ -161,8 +161,8 @@ void Client::ViewChanged()
     Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
 
     aVisArea.SetSize( aSize );
-    Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
-                                        static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
+    Size                aScaledSize( static_cast< ::tools::Long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
+                                        static_cast< ::tools::Long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
     // react to the change if the difference is bigger than one pixel
     Size aPixelDiff =

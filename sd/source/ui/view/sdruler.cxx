@@ -120,7 +120,7 @@ void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 
 void Ruler::SetNullOffset(const Point& rOffset)
 {
-    long nOffset;
+    ::tools::Long nOffset;
 
     if ( bHorz )    nOffset = rOffset.X();
     else            nOffset = rOffset.Y();

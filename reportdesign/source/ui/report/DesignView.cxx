@@ -223,7 +223,7 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
                 ||  ( nSplitPos >= aPlaygroundSize.Width() )
                 )
             {
-                long nMinWidth = static_cast<long>(0.1*aPlaygroundSize.Width());
+                tools::Long nMinWidth = static_cast<tools::Long>(0.1*aPlaygroundSize.Width());
                 if ( m_pPropWin && m_pPropWin->IsVisible() )
                     nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
                 nSplitPos = static_cast<sal_Int32>(_rPlayground.Right() - nMinWidth);
@@ -234,7 +234,7 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
         if ( m_aSplitWin->IsItemValid(TASKPANE_ID) )
         {
             // normalize the split pos
-            const long nSplitterWidth = StyleSettings::GetSplitSize();
+            const tools::Long nSplitterWidth = StyleSettings::GetSplitSize();
             Point aTaskPanePos(nSplitPos + nSplitterWidth, _rPlayground.Top());
             if (m_pTaskPane && m_pTaskPane->IsVisible() && m_pPropWin)
             {
@@ -247,7 +247,7 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
                 nSplitPos = aTaskPanePos.X() - nSplitterWidth;
                 getController().setSplitPos(nSplitPos);
 
-                const long nTaskPaneSize = static_cast<long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
+                const tools::Long nTaskPaneSize = static_cast<tools::Long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
                 if ( m_aSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
                 {
                     m_aSplitWin->SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
@@ -399,8 +399,8 @@ void ODesignView::ImplInitSettings()
 IMPL_LINK_NOARG( ODesignView, SplitHdl, SplitWindow*, void )
 {
     const Size aOutputSize = GetOutputSizePixel();
-    const long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;
-    long nMinWidth = static_cast<long>(0.1*aOutputSize.Width());
+    const tools::Long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;
+    tools::Long nMinWidth = static_cast<tools::Long>(0.1*aOutputSize.Width());
     if ( m_pPropWin && m_pPropWin->IsVisible() )
         nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
 

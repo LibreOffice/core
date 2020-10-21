@@ -655,8 +655,8 @@ static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& 
     if( pLineEndList.is() )
     {
         OUString aArrowName(SvxResId(pResId));
-        long nCount = pLineEndList->Count();
-        long nIndex;
+        ::tools::Long nCount = pLineEndList->Count();
+        ::tools::Long nIndex;
         for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
             const XLineEndEntry* pEntry = pLineEndList->GetLineEnd(nIndex);
@@ -730,12 +730,12 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject const & rObj
     // #i3908# Here, the default Line Start/End width for arrow construction is
     // set. To have the same value in all situations (construction) in i3908
     // it was decided to change the default to 0.03 cm for all situations.
-    long nWidth = 300; // (1/100th mm)
+    ::tools::Long nWidth = 300; // (1/100th mm)
 
     // determine line width and calculate with it the line end width
     if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
-        long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
+        ::tools::Long nValue = aSet.Get( XATTR_LINEWIDTH ).GetValue();
         if( nValue > 0 )
             nWidth = nValue * 3;
     }
