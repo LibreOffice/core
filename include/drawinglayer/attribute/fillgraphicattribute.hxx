@@ -22,58 +22,51 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 
-
-// predefines
-
 class Graphic;
 
-namespace basegfx {
-    class B2DRange;
+namespace basegfx
+{
+class B2DRange;
 }
-
-namespace drawinglayer::attribute {
-    class ImpFillGraphicAttribute;
-}
-
 
 namespace drawinglayer::attribute
-    {
-        class DRAWINGLAYER_DLLPUBLIC FillGraphicAttribute
-        {
-        public:
-            typedef o3tl::cow_wrapper< ImpFillGraphicAttribute > ImplType;
+{
+class ImpFillGraphicAttribute;
+}
 
-        private:
-            ImplType mpFillGraphicAttribute;
+namespace drawinglayer::attribute
+{
+class DRAWINGLAYER_DLLPUBLIC FillGraphicAttribute
+{
+public:
+    typedef o3tl::cow_wrapper<ImpFillGraphicAttribute> ImplType;
 
-        public:
-            /// constructors/assignmentoperator/destructor
-            FillGraphicAttribute(
-                const Graphic& rGraphic,
-                const basegfx::B2DRange& rGraphicRange,
-                bool bTiling,
-                double fOffsetX = 0.0,
-                double fOffsetY = 0.0);
-            FillGraphicAttribute(const FillGraphicAttribute&);
-            FillGraphicAttribute& operator=(const FillGraphicAttribute&);
-            ~FillGraphicAttribute();
+private:
+    ImplType mpFillGraphicAttribute;
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
+public:
+    /// constructors/assignmentoperator/destructor
+    FillGraphicAttribute(const Graphic& rGraphic, const basegfx::B2DRange& rGraphicRange,
+                         bool bTiling, double fOffsetX = 0.0, double fOffsetY = 0.0);
+    FillGraphicAttribute(const FillGraphicAttribute&);
+    FillGraphicAttribute& operator=(const FillGraphicAttribute&);
+    ~FillGraphicAttribute();
 
-            // compare operator
-            bool operator==(const FillGraphicAttribute& rCandidate) const;
+    // checks if the incarnation is default constructed
+    bool isDefault() const;
 
-            // data read access
-            const Graphic& getGraphic() const;
-            const basegfx::B2DRange& getGraphicRange() const;
-            bool getTiling() const;
-            double getOffsetX() const;
-            double getOffsetY() const;
-        };
+    // compare operator
+    bool operator==(const FillGraphicAttribute& rCandidate) const;
+
+    // data read access
+    const Graphic& getGraphic() const;
+    const basegfx::B2DRange& getGraphicRange() const;
+    bool getTiling() const;
+    double getOffsetX() const;
+    double getOffsetY() const;
+};
 
 } // end of namespace drawinglayer::attribute
-
 
 #endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX
 
