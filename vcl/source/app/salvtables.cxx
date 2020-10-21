@@ -71,7 +71,6 @@
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
 #include <calendar.hxx>
-#include <vcl/menubtn.hxx>
 #include <verticaltabctrl.hxx>
 #include <window.h>
 #include <wizdlg.hxx>
