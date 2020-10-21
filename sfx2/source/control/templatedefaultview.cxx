@@ -27,7 +27,7 @@ TemplateDefaultView::TemplateDefaultView(std::unique_ptr<weld::ScrolledWindow> x
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
-    SfxThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
+    ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
     updateThumbnailDimensions(mnItemMaxSize);
 
     // startcenter specific settings
@@ -49,7 +49,7 @@ void TemplateDefaultView::showAllTemplates()
 
 bool TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
 {
-    return SfxThumbnailView::KeyInput(rKEvt);
+    return ThumbnailView::KeyInput(rKEvt);
 }
 
 bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )

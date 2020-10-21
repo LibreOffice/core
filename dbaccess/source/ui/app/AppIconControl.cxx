@@ -57,7 +57,7 @@ public:
 };
 
 OApplicationIconControl::OApplicationIconControl(std::unique_ptr<weld::ScrolledWindow> xScroll)
-    : SfxThumbnailView(std::move(xScroll), nullptr)
+    : ThumbnailView(std::move(xScroll), nullptr)
     , m_pActionListener(nullptr)
     , m_nMaxWidth(0)
     , m_nMaxHeight(0)
@@ -126,7 +126,7 @@ void OApplicationIconControl::Resize()
     // fill the full width of the allocated area and give two lines of space to
     // center the title in
     setItemDimensions(GetOutputSizePixel().Width(), m_nMaxHeight, GetTextHeight() * 2, 0);
-    SfxThumbnailView::Resize();
+    ThumbnailView::Resize();
 }
 
 bool OApplicationIconControl::IsMnemonicChar(sal_Unicode cChar, ElementType& rType) const
@@ -165,12 +165,12 @@ bool OApplicationIconControl::DoKeyShortCut(const KeyEvent& rKEvt)
 
 bool OApplicationIconControl::KeyInput(const KeyEvent& rKEvt)
 {
-    return DoKeyShortCut(rKEvt) || SfxThumbnailView::KeyInput(rKEvt);
+    return DoKeyShortCut(rKEvt) || ThumbnailView::KeyInput(rKEvt);
 }
 
 void OApplicationIconControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    SfxThumbnailView::SetDrawingArea(pDrawingArea);
+    ThumbnailView::SetDrawingArea(pDrawingArea);
     m_xDropTarget.reset(new OApplicationIconControlDropTarget(*this));
 }
 
@@ -203,13 +203,13 @@ OApplicationIconControl::~OApplicationIconControl()
 
 void OApplicationIconControl::GetFocus()
 {
-    SfxThumbnailView::GetFocus();
+    ThumbnailView::GetFocus();
     Invalidate(); // redraw focus rect
 }
 
 void OApplicationIconControl::LoseFocus()
 {
-    SfxThumbnailView::LoseFocus();
+    ThumbnailView::LoseFocus();
     Invalidate(); // redraw focus rect
 }
 

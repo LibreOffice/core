@@ -58,7 +58,7 @@ ThumbnailViewBase::~ThumbnailViewBase()
 {
 }
 
-BitmapEx SfxThumbnailView::readThumbnail(const OUString &msURL)
+BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -150,7 +150,7 @@ BitmapEx SfxThumbnailView::readThumbnail(const OUString &msURL)
     return aThumbnail;
 }
 
-SfxThumbnailView::SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
+ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu)
     : mnThumbnailHeight(0)
     , mnDisplayHeight(0)
     , mnVItemSpace(-1)
@@ -160,10 +160,10 @@ SfxThumbnailView::SfxThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow
     , mxContextMenu(std::move(xMenu))
 {
     ImplInit();
-    mxScrolledWindow->connect_vadjustment_changed(LINK(this, SfxThumbnailView, ImplScrollHdl));
+    mxScrolledWindow->connect_vadjustment_changed(LINK(this, ThumbnailView, ImplScrollHdl));
 }
 
-SfxThumbnailView::~SfxThumbnailView()
+ThumbnailView::~ThumbnailView()
 {
     css::uno::Reference< css::lang::XComponent> xComponent(mxAccessible, css::uno::UNO_QUERY);
 
@@ -175,7 +175,7 @@ SfxThumbnailView::~SfxThumbnailView()
     ImplDeleteItems();
 }
 
-bool SfxThumbnailView::MouseMove(const MouseEvent& rMEvt)
+bool ThumbnailView::MouseMove(const MouseEvent& rMEvt)
 {
     size_t nItemCount = mFilteredItemList.size();
     Point aPoint = rMEvt.GetPosPixel();
@@ -191,7 +191,7 @@ bool SfxThumbnailView::MouseMove(const MouseEvent& rMEvt)
     return true;
 }
 
-OUString SfxThumbnailView::RequestHelp(tools::Rectangle& rHelpRect)
+OUString ThumbnailView::RequestHelp(tools::Rectangle& rHelpRect)
 {
     if (!mbShowTooltips)
         return OUString();
@@ -214,7 +214,7 @@ OUString SfxThumbnailView::RequestHelp(tools::Rectangle& rHelpRect)
     return OUString();
 }
 
-void SfxThumbnailView::AppendItem(std::unique_ptr<ThumbnailViewItem> pItem)
+void ThumbnailView::AppendItem(std::unique_ptr<ThumbnailViewItem> pItem)
 {
     if (maFilterFunc(pItem.get()))
     {
@@ -235,7 +235,7 @@ void SfxThumbnailView::AppendItem(std::unique_ptr<ThumbnailViewItem> pItem)
     mItemList.push_back(std::move(pItem));
 }
 
-void SfxThumbnailView::ImplInit()
+void ThumbnailView::ImplInit()
 {
     mnItemWidth = 0;
     mnItemHeight = 0;
@@ -269,7 +269,7 @@ void SfxThumbnailView::ImplInit()
     mpItemAttrs->nMaxTextLength = 0;
 }
 
-void SfxThumbnailView::UpdateColors()
+void ThumbnailView::UpdateColors()
 {
     mpItemAttrs->aFillColor = maFillColor.getBColor();
     mpItemAttrs->aTextColor = maTextColor.getBColor();
@@ -280,7 +280,7 @@ void SfxThumbnailView::UpdateColors()
     mpItemAttrs->fHighlightTransparence = mfHighlightTransparence;
 }
 
-void SfxThumbnailView::ImplDeleteItems()
+void ThumbnailView::ImplDeleteItems()
 {
     const size_t n = mItemList.size();
 
@@ -314,7 +314,7 @@ void SfxThumbnailView::ImplDeleteItems()
     mpStartSelRange = mFilteredItemList.end();
 }
 
-void SfxThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
+void ThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
 {
     if (pItem->isVisible())
     {
@@ -325,22 +325,22 @@ void SfxThumbnailView::DrawItem(ThumbnailViewItem const *pItem)
     }
 }
 
-void SfxThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
+void ThumbnailView::OnItemDblClicked (ThumbnailViewItem*)
 {
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SfxThumbnailView::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAccessible()
 {
-    mxAccessible.set(new SfxThumbnailViewAcc(this));
+    mxAccessible.set(new ThumbnailViewAcc(this));
     return mxAccessible;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > SfxThumbnailView::getAccessible()
+css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::getAccessible()
 {
     return mxAccessible;
 }
 
-void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
+void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
 {
     if (!mnItemHeight || !mnItemWidth)
         return;
@@ -491,7 +491,7 @@ void SfxThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         mxScrolledWindow->set_vpolicy(mbScroll ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
 }
 
-size_t SfxThumbnailView::ImplGetItem( const Point& rPos ) const
+size_t ThumbnailView::ImplGetItem( const Point& rPos ) const
 {
     if ( !mbHasVisibleItems )
     {
@@ -507,12 +507,12 @@ size_t SfxThumbnailView::ImplGetItem( const Point& rPos ) const
     return THUMBNAILVIEW_ITEM_NOTFOUND;
 }
 
-ThumbnailViewItem* SfxThumbnailView::ImplGetItem( size_t nPos )
+ThumbnailViewItem* ThumbnailView::ImplGetItem( size_t nPos )
 {
     return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos] : nullptr;
 }
 
-sal_uInt16 SfxThumbnailView::ImplGetVisibleItemCount() const
+sal_uInt16 ThumbnailView::ImplGetVisibleItemCount() const
 {
     sal_uInt16 nRet = 0;
     const size_t nItemCount = mItemList.size();
@@ -526,7 +526,7 @@ sal_uInt16 SfxThumbnailView::ImplGetVisibleItemCount() const
     return nRet;
 }
 
-ThumbnailViewItem* SfxThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
+ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
 {
     const size_t nItemCount = mItemList.size();
 
@@ -541,28 +541,28 @@ ThumbnailViewItem* SfxThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos 
     return nullptr;
 }
 
-void SfxThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
+void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
 {
-    SfxThumbnailViewAcc* pAcc = SfxThumbnailViewAcc::getImplementation(mxAccessible);
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
 
     if( pAcc )
         pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
-bool SfxThumbnailView::ImplHasAccessibleListeners()
+bool ThumbnailView::ImplHasAccessibleListeners()
 {
-    SfxThumbnailViewAcc* pAcc = SfxThumbnailViewAcc::getImplementation(mxAccessible);
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-IMPL_LINK_NOARG(SfxThumbnailView, ImplScrollHdl, weld::ScrolledWindow&, void)
+IMPL_LINK_NOARG(ThumbnailView, ImplScrollHdl, weld::ScrolledWindow&, void)
 {
     CalculateItemPositions(true);
     if (IsReallyVisible() && IsUpdateMode())
         Invalidate();
 }
 
-bool SfxThumbnailView::KeyInput( const KeyEvent& rKEvt )
+bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 {
     bool bHandled = true;
 
@@ -745,7 +745,7 @@ bool SfxThumbnailView::KeyInput( const KeyEvent& rKEvt )
     return bHandled;
 }
 
-void SfxThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
+void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
 {
     // Get the item row
     size_t nPos = 0;
@@ -771,7 +771,7 @@ void SfxThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
     Invalidate();
 }
 
-bool SfxThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
+bool ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
 
@@ -890,7 +890,7 @@ bool SfxThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-void SfxThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void ThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
 
@@ -904,7 +904,7 @@ void SfxThumbnailView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(pDrawingArea->get_preferred_size());
 }
 
-void SfxThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     rRenderContext.Push(PushFlags::ALL);
 
@@ -939,7 +939,7 @@ void SfxThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     rRenderContext.Pop();
 }
 
-void SfxThumbnailView::GetFocus()
+void ThumbnailView::GetFocus()
 {
     // Select the first item if nothing selected
     int nSelected = -1;
@@ -955,24 +955,24 @@ void SfxThumbnailView::GetFocus()
     }
 
     // Tell the accessible object that we got the focus.
-    SfxThumbnailViewAcc* pAcc = SfxThumbnailViewAcc::getImplementation(mxAccessible);
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
     if( pAcc )
         pAcc->GetFocus();
 
     CustomWidgetController::GetFocus();
 }
 
-void SfxThumbnailView::LoseFocus()
+void ThumbnailView::LoseFocus()
 {
     CustomWidgetController::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
-    SfxThumbnailViewAcc* pAcc = SfxThumbnailViewAcc::getImplementation(mxAccessible);
+    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
     if( pAcc )
         pAcc->LoseFocus();
 }
 
-void SfxThumbnailView::Resize()
+void ThumbnailView::Resize()
 {
     CustomWidgetController::Resize();
     CalculateItemPositions();
@@ -981,7 +981,7 @@ void SfxThumbnailView::Resize()
         Invalidate();
 }
 
-void SfxThumbnailView::RemoveItem( sal_uInt16 nItemId )
+void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 {
     size_t nPos = GetItemPos( nItemId );
 
@@ -1024,7 +1024,7 @@ void SfxThumbnailView::RemoveItem( sal_uInt16 nItemId )
         Invalidate();
 }
 
-void SfxThumbnailView::Clear()
+void ThumbnailView::Clear()
 {
     ImplDeleteItems();
 
@@ -1037,7 +1037,7 @@ void SfxThumbnailView::Clear()
         Invalidate();
 }
 
-void SfxThumbnailView::updateItems (std::vector<std::unique_ptr<ThumbnailViewItem>> items)
+void ThumbnailView::updateItems (std::vector<std::unique_ptr<ThumbnailViewItem>> items)
 {
     ImplDeleteItems();
 
@@ -1049,7 +1049,7 @@ void SfxThumbnailView::updateItems (std::vector<std::unique_ptr<ThumbnailViewIte
     filterItems(maFilterFunc);
 }
 
-size_t SfxThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
+size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
 {
     for ( size_t i = 0, n = mFilteredItemList.size(); i < n; ++i ) {
         if ( mFilteredItemList[i]->mnId == nItemId ) {
@@ -1059,12 +1059,12 @@ size_t SfxThumbnailView::GetItemPos( sal_uInt16 nItemId ) const
     return THUMBNAILVIEW_ITEM_NOTFOUND;
 }
 
-sal_uInt16 SfxThumbnailView::GetItemId( size_t nPos ) const
+sal_uInt16 ThumbnailView::GetItemId( size_t nPos ) const
 {
     return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos]->mnId : 0 ;
 }
 
-sal_uInt16 SfxThumbnailView::GetItemId( const Point& rPos ) const
+sal_uInt16 ThumbnailView::GetItemId( const Point& rPos ) const
 {
     size_t nItemPos = ImplGetItem( rPos );
     if ( nItemPos != THUMBNAILVIEW_ITEM_NOTFOUND )
@@ -1073,17 +1073,17 @@ sal_uInt16 SfxThumbnailView::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-sal_uInt16 SfxThumbnailView::getNextItemId() const
+sal_uInt16 ThumbnailView::getNextItemId() const
 {
     return mItemList.empty() ? 1 : mItemList.back()->mnId + 1;
 }
 
-void SfxThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
+void ThumbnailView::setItemMaxTextLength(sal_uInt32 nLength)
 {
     mpItemAttrs->nMaxTextLength = nLength;
 }
 
-void SfxThumbnailView::setItemDimensions(tools::Long itemWidth, tools::Long thumbnailHeight, tools::Long displayHeight, int itemPadding)
+void ThumbnailView::setItemDimensions(tools::Long itemWidth, tools::Long thumbnailHeight, tools::Long displayHeight, int itemPadding)
 {
     mnItemWidth = itemWidth + 2*itemPadding;
     mnThumbnailHeight = thumbnailHeight;
@@ -1092,7 +1092,7 @@ void SfxThumbnailView::setItemDimensions(tools::Long itemWidth, tools::Long thum
     mnItemHeight = mnDisplayHeight + mnThumbnailHeight + 2*itemPadding;
 }
 
-void SfxThumbnailView::SelectItem( sal_uInt16 nItemId )
+void ThumbnailView::SelectItem( sal_uInt16 nItemId )
 {
     size_t nItemPos = GetItemPos( nItemId );
     if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
@@ -1149,7 +1149,7 @@ void SfxThumbnailView::SelectItem( sal_uInt16 nItemId )
     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::SELECTION_CHANGED, aOldAny, aNewAny );
 }
 
-bool SfxThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
+bool ThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
 {
     size_t nItemPos = GetItemPos( nItemId );
     if ( nItemPos == THUMBNAILVIEW_ITEM_NOTFOUND )
@@ -1159,7 +1159,7 @@ bool SfxThumbnailView::IsItemSelected( sal_uInt16 nItemId ) const
     return pItem->isSelected();
 }
 
-void SfxThumbnailView::deselectItems()
+void ThumbnailView::deselectItems()
 {
     for (std::unique_ptr<ThumbnailViewItem>& p : mItemList)
     {
@@ -1175,22 +1175,22 @@ void SfxThumbnailView::deselectItems()
         Invalidate();
 }
 
-void SfxThumbnailView::ShowTooltips( bool bShowTooltips )
+void ThumbnailView::ShowTooltips( bool bShowTooltips )
 {
     mbShowTooltips = bShowTooltips;
 }
 
-void SfxThumbnailView::DrawMnemonics( bool bDrawMnemonics )
+void ThumbnailView::DrawMnemonics( bool bDrawMnemonics )
 {
     mbDrawMnemonics = bDrawMnemonics;
 }
 
-void SfxThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )
+void ThumbnailView::SetMultiSelectionEnabled( bool bIsMultiSelectionEnabled )
 {
     mbIsMultiSelectionEnabled = bIsMultiSelectionEnabled;
 }
 
-void SfxThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)
+void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position
     maFilterFunc = func;
