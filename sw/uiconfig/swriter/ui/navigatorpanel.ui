@@ -336,7 +336,7 @@
                             <property name="tooltip_text" translatable="yes" context="navigatorpanel|spinbutton|tooltip_text">Go to Page</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="spinbutton-atkobject">
-                              <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|spinbutton">Enter page number and press "Enter". Use arrows to move to next page forward or backward.</property>
+                              <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|spinbutton">Enter page number and press Enter. Use arrows to move to next page forward or backward.</property>
                               </object>
                             </child>
                           </object>
