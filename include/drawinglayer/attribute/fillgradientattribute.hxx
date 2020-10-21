@@ -30,10 +30,7 @@ class BColor;
 namespace drawinglayer::attribute
 {
 class ImpFillGradientAttribute;
-}
 
-namespace drawinglayer::attribute
-{
 enum class GradientStyle
 {
     Linear,
@@ -44,10 +41,6 @@ enum class GradientStyle
     Rect
 };
 
-} // end of namespace drawinglayer::attribute
-
-namespace drawinglayer::attribute
-{
 class DRAWINGLAYER_DLLPUBLIC FillGradientAttribute
 {
 public:
