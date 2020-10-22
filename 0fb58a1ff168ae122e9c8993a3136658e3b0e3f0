@@ -122,6 +122,24 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b218b831_13d94fcf",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-22T09:52:02Z",
+      "side": 1,
+      "message": "I don\u0027t think we need to worry about the mismatch - any data that could cause trouble because of the mismatch is already bad data.\n\nBut your fix to prevent accessing uninitialised data is definitely necessary.\n\nI\u0027m a bit surprised that those readUInt16 methods are not throwing an exception when we read past EOF, but perhaps that is my Java bias showing.",
+      "parentUuid": "421a7857_46800687",
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
