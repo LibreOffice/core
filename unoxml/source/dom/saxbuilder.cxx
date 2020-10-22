@@ -310,17 +310,6 @@ namespace DOM
         m_aNodeStack.pop();
     }
 
-    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* xAttribs */ )
-    {
-        return nullptr;
-    }
-
-
-    Reference< XFastContextHandler > SAL_CALL CSAXDocumentBuilder::createUnknownChildContext( const OUString&/* rNamespace */, const OUString&/* rName */, const Reference< XFastAttributeList >&/* xAttribs */ )
-    {
-        return nullptr;
-    }
-
     void SAL_CALL CSAXDocumentBuilder::characters( const OUString& rChars )
     {
         ::osl::MutexGuard g(m_Mutex);

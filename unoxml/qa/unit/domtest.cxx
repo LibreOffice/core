@@ -137,16 +137,6 @@ struct DocumentHandler
     {
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 , const uno::Reference< xml::sax::XFastAttributeList >& ) override
-    {
-        return this;
-    }
-
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& , const OUString& , const uno::Reference< xml::sax::XFastAttributeList >& ) override
-    {
-        return this;
-    }
-
     virtual void SAL_CALL characters( const OUString& ) override
     {
     }
