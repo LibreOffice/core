@@ -1892,6 +1892,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
     CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
+{
+    load(DATA_DIRECTORY, "tdf132160.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // switch on "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+
+    // select and delete a word letter by letter
+    for (int i = 0; i <= 10; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Delete", {});
+    }
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("support"));
+
+    // this would crash due to bad redline range
+    for (int i = 0; i <= 10; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+    // TODO: fix order of the characters after Undo
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(" noitpyrcnE"));
+
+    // switch off "Show changes in margin" mode
+    dispatchCommand(mxComponent, ".uno:ShowChangesInMargin", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsShowChangesInMargin());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 {
     load(DATA_DIRECTORY, "tdf52391.fodt");
