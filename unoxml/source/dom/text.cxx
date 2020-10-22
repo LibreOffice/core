@@ -47,15 +47,12 @@ namespace DOM
 
     void CText::fastSaxify( Context& io_rContext )
     {
-        if (io_rContext.mxCurrentHandler.is())
+        try
         {
-            try
-            {
-                io_rContext.mxCurrentHandler->characters( getData() );
-            }
-            catch( Exception& )
-            {}
+            io_rContext.mxDocHandler->characters( getData() );
         }
+        catch( Exception& )
+        {}
     }
 
     OUString SAL_CALL CText::getNodeName()

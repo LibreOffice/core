@@ -24,7 +24,6 @@
 #include <com/sun/star/xml/sax/SAXException.idl>
 
 #include <com/sun/star/xml/sax/XFastAttributeList.idl>
-#include <com/sun/star/xml/sax/XFastContextHandler.idl>
 #include <com/sun/star/xml/sax/XLocator.idl>
 
 
@@ -35,7 +34,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 /** receives notification of sax document events from a
     XFastParser
  */
-interface XFastDocumentHandler: XFastContextHandler
+interface XFastDocumentHandler: com::sun::star::uno::XInterface
 {
 
     /** called by the parser when parsing of an XML stream is started.
@@ -61,6 +60,62 @@ interface XFastDocumentHandler: XFastContextHandler
      */
     void setDocumentLocator( [in] com::sun::star::xml::sax::XLocator xLocator )
             raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the beginning of an element .
+
+        @param Element
+            contains the integer token from the XFastTokenHandler
+            registered at the XFastParser.<br>
+
+            If the element has a namespace that was registered with the
+            XFastParser, <code>Element</code> contains the integer
+            token of the elements local name from the XFastTokenHandler
+            and the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            from the element.
+
+    */
+    void startFastElement( [in] long Element, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the beginning of an unknown element .
+
+        @param Namespace
+            contains the namespace url (not the prefix!) of this element.
+        @param Name
+            contains the elements local name.
+        @param Attribs
+            Contains a XFastAttributeList to access the attributes
+            from the element.
+     */
+    void startUnknownElement( [in] string Namespace, [in] string Name, [in] XFastAttributeList Attribs )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the end of a known element.
+        @see startFastElement
+     */
+    void endFastElement( [in] long Element )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of the end of a known element.
+        @see startUnknownElement
+     */
+    void endUnknownElement( [in] string Namespace, [in] string Name )
+            raises( com::sun::star::xml::sax::SAXException );
+
+
+    /** receives notification of character data.
+     */
+    void characters( [in] string aChars )
+            raises( com::sun::star::xml::sax::SAXException );
+
 
 };
 

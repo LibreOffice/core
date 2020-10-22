@@ -124,18 +124,6 @@ void SAL_CALL FilterDetectDocHandler::endUnknownElement(
 {
 }
 
-Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createFastChildContext(
-    sal_Int32 /*Element*/, const Reference<XFastAttributeList>& /*Attribs*/ )
-{
-    return this;
-}
-
-Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createUnknownChildContext(
-    const OUString& /*Namespace*/, const OUString& /*Name*/, const Reference<XFastAttributeList>& /*Attribs*/)
-{
-    return this;
-}
-
 void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 {
 }

@@ -261,9 +261,8 @@ namespace DOM
         // default: do nothing
     }
 
-    void CNode::fastSaxify(Context& io_rContext)
+    void CNode::fastSaxify(Context& )
     {
-        if (!io_rContext.mxDocHandler.is()) throw RuntimeException();
         // default: do nothing
     }
 

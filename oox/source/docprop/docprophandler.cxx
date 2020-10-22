@@ -392,17 +392,6 @@ void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUS
         m_nInBlock--;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createFastChildContext( ::sal_Int32, const uno::Reference< xml::sax::XFastAttributeList >& )
-{
-    // Should the arguments be parsed?
-    return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createUnknownChildContext( const OUString&, const OUString&, const uno::Reference< xml::sax::XFastAttributeList >& )
-{
-    return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
-}
-
 void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 {
     try

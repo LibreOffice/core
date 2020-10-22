@@ -171,16 +171,6 @@ public:
     void SAL_CALL endUnknownElement( const OUString& /*aNamespace*/, const OUString& /*aName*/ ) override
     {}
 
-    Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 /*aElement*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
-    {
-        return nullptr;
-    }
-
-    Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& /*aNamespace*/, const OUString& /*aName*/, const Reference< XFastAttributeList >& /*aAttribs*/ ) override
-    {
-        return this;
-    }
-
     void SAL_CALL characters( const OUString& /*aChars*/ ) override
     {}
 };
