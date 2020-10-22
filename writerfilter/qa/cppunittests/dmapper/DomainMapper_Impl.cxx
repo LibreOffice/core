@@ -125,6 +125,27 @@ CPPUNIT_TEST_FIXTURE(Test, testFrameDirection)
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL,
                          xFrame2->getPropertyValue("WritingMode").get<sal_Int16>());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "alt-chunk.docx";
+    getComponent() = loadFromDesktop(aURL);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xPara;
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer para 1"), xPara->getString());
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Outer para 2"), xPara->getString());
+
+    // Without the accompanying fix in place, this test would have failed with a
+    // container.NoSuchElementException, as the document had only 2 paragraphs, all the "inner"
+    // content was lost.
+    xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Inner para 1"), xPara->getString());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

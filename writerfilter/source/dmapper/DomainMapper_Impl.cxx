@@ -73,12 +73,19 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
 #include <editeng/flditem.hxx>
 #include <editeng/unotext.hxx>
 #include <o3tl/temporary.hxx>
 #include <oox/mathml/import.hxx>
 #include <xmloff/odffields.hxx>
 #include <rtl/uri.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+
 #include <dmapper/GraphicZOrderHelper.hxx>
 
 #include <oox/token/tokens.hxx>
@@ -3237,6 +3244,53 @@ void DomainMapper_Impl::ClearPreviousParagraph()
 
     // next table paragraph will be first paragraph in a cell
     m_bFirstParagraphInCell = true;
+}
+
+void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
+{
+    try
+    {
+        // Create the import filter.
+        uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
+            comphelper::getProcessServiceFactory());
+        uno::Reference<uno::XInterface> xDocxFilter
+            = xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.WriterFilter");
+
+        // Set the target document.
+        uno::Reference<document::XImporter> xImporter(xDocxFilter, uno::UNO_QUERY);
+        xImporter->setTargetDocument(m_xTextDocument);
+
+        // Set the import parameters.
+        uno::Reference<embed::XHierarchicalStorageAccess> xStorageAccess(m_xDocumentStorage,
+                                                                         uno::UNO_QUERY);
+        if (!xStorageAccess.is())
+        {
+            return;
+        }
+        // Turn the ZIP stream into a seekable one, as the importer only works with such streams.
+        uno::Reference<io::XStream> xStream = xStorageAccess->openStreamElementByHierarchicalName(
+            rStreamName, embed::ElementModes::READ);
+        std::unique_ptr<SvStream> pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
+        SvMemoryStream aMemory;
+        aMemory.WriteStream(*pStream);
+        uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
+        // Not handling AltChunk during paste for now.
+        uno::Reference<text::XTextRange> xInsertTextRange = GetCurrentXText()->getEnd();
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+            { "InputStream", uno::Any(xInputStream) },
+            { "InsertMode", uno::Any(true) },
+            { "TextInsertModeRange", uno::Any(xInsertTextRange) },
+        }));
+
+        // Do the actual import.
+        uno::Reference<document::XFilter> xFilter(xDocxFilter, uno::UNO_QUERY);
+        xFilter->filter(aDescriptor);
+    }
+    catch (const uno::Exception& rException)
+    {
+        SAL_WARN("writerfilter", "DomainMapper_Impl::HandleAltChunk: failed to handle alt chunk: "
+                                     << rException.Message);
+    }
 }
 
 static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
