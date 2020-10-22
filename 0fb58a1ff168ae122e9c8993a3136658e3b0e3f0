@@ -104,6 +104,24 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "421a7857_46800687",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-22T09:45:04Z",
+      "side": 1,
+      "message": "So you consider \u003chttps://git.libreoffice.org/core/+/0e8e352cc78af9b8cee27a77b0ac8e2e8f98f8cc%5E!/\u003e \"clamp angle to valid value\" the right fix to address this resulting sal_Int16 vs. sal_uInt16 mismatch in TypeSerializer::readGradient?  In which case, lets leave it at that.",
+      "parentUuid": "7fea8d6c_b6b683d6",
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
