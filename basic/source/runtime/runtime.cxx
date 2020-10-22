@@ -642,6 +642,8 @@ bool SbiRuntime::IsMissing( SbxVariable* pVar, sal_uInt16 nIdx )
 void SbiRuntime::SetParameters( SbxArray* pParams )
 {
     refParams = new SbxArray;
+    // tdf#85371 - grant write access to the variable/method
+    pMeth->SetFlag( SbxFlagBits::Write );
     // for the return value
     refParams->Put32( pMeth, 0 );
 
