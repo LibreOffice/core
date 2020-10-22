@@ -300,8 +300,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             CellType eCellType = aCurrCell.meType;
             if (eCellType == CELLTYPE_VALUE)
             {
-                // TODO: Check / handle special cases of number formats like boolean
                 bool bVal = true;
+                double fVal;
                 SvNumFormatType nCurrCellFormatType
                     = rDocument.GetFormatTable()->GetType(GetNumberFormat(nColCurr, nRowCurr));
                 if (nCurrCellFormatType == SvNumFormatType::DATE)
@@ -382,6 +382,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         return;
                     }
                 }
+                else if (nCurrCellFormatType == SvNumFormatType::LOGICAL
+                         && ((fVal = aCurrCell.mfValue) == 0.0 || fVal == 1.0))
+                {
+                }
                 else if (nValueCount >= 2)
                 {
                     for (SCSIZE i = 1; i < nValueCount && bVal; i++)
@@ -396,6 +400,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             if (i == 1)
                                 rInc = nDiff;
                             if (!::rtl::math::approxEqual(nDiff, rInc, 13))
+                                bVal = false;
+                            else if ((aCurrCell.mfValue == 0.0 || aCurrCell.mfValue == 1.0)
+                                     && (rDocument.GetFormatTable()->GetType(
+                                             GetNumberFormat(nColCurr, nRowCurr))
+                                         == SvNumFormatType::LOGICAL))
                                 bVal = false;
                         }
                         else
