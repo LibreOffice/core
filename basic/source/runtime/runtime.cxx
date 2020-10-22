@@ -83,6 +83,34 @@ using namespace ::com::sun::star;
 static void lcl_clearImpl( SbxVariableRef const & refVar, SbxDataType const & eType );
 static void lcl_eraseImpl( SbxVariableRef const & refVar, bool bVBAEnabled );
 
+namespace
+{
+    class ScopedWritableGuard
+    {
+        public:
+            ScopedWritableGuard( const SbxVariableRef& rVar, bool bMakeWritable )
+                : m_rVar( rVar )
+                , m_bReset( bMakeWritable && !rVar->CanWrite() )
+            {
+                if (m_bReset)
+                {
+                    m_rVar->SetFlag( SbxFlagBits::Write );
+                }
+            }
+            ~ScopedWritableGuard()
+            {
+                if (m_bReset)
+                {
+                    m_rVar->ResetFlag( SbxFlagBits::Write );
+                }
+            }
+
+        private:
+            SbxVariableRef m_rVar;
+            bool m_bReset;
+    };
+}
+
 bool SbiRuntime::isVBAEnabled()
 {
     bool bResult = false;
@@ -1131,6 +1159,9 @@ void SbiRuntime::PushFor()
     p->refEnd = PopVar();
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
+    // tdf#85371 - grant explicitly write access to the index variable
+    // since it could be the name of a method itself used in the next statement.
+    ScopedWritableGuard aGuard( p->refVar, p->refVar.get() == pMeth );
     *(p->refVar) = *xBgn;
     nForLvl++;
 }
@@ -2583,6 +2614,9 @@ void SbiRuntime::StepNEXT()
         StarBASIC::FatalError( ERRCODE_BASIC_INTERNAL_ERROR );
         return;
     }
+    // tdf#85371 - grant explicitly write access to the index variable
+    // since it could be the name of a method itself used in the next statement.
+    ScopedWritableGuard aGuard( pForStk->refVar, pForStk->refVar.get() == pMeth );
     pForStk->refVar->Compute( SbxPLUS, *pForStk->refInc );
 }
 
@@ -3360,7 +3394,13 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     sal_uInt16 uBase = static_cast<sal_uInt16>(nOp1 & 1);       // Can only be 0 or 1
     p1->PutInteger( uBase );
     if( !bCompatible )
+    {
+        // tdf#85371 - grant explicitly write access to the dimension variable
+        // since in Star/OpenOffice Basic the upper index border is affected,
+        // and the dimension variable could be the name of the method itself.
+        ScopedWritableGuard aGuard( x2, x2.get() == pMeth );
         x2->Compute( SbxPLUS, *p1 );
+    }
     PushVar( x2.get() );  // first the Expr
     PushVar( p1 );  // then the Base
 }
