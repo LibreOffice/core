@@ -1013,6 +1013,28 @@ namespace
         aPoint2.setY(aPoint2.getY() + 1);
         pShape->NbcMirror(aCenter, aPoint2);
     }
+
+    void doMirrorY(SdrObject* pShape)
+    {
+        Point aCenter(pShape->GetSnapRect().Center());
+        Point aPoint2(aCenter);
+        aPoint2.setX(aPoint2.getX() + 1);
+        pShape->NbcMirror(aCenter, aPoint2);
+    }
+
+    void handleMirroring(const ShapeTypeModel& rTypeModel, Reference<XShape>& rxShape)
+    {
+        if (!rTypeModel.maFlip.isEmpty())
+        {
+            if (SdrObject* pShape = GetSdrObjectFromXShape(rxShape))
+            {
+                if (rTypeModel.maFlip.startsWith("x"))
+                    doMirrorX(pShape);
+                if (rTypeModel.maFlip.endsWith("y"))
+                    doMirrorY(pShape);
+            }
+        }
+    }
 }
 
 LineShape::LineShape(Drawing& rDrawing)
@@ -1023,17 +1045,10 @@ LineShape::LineShape(Drawing& rDrawing)
 Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const awt::Rectangle& rShapeRect) const
 {
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
-    // Handle vertical flip.
-    // tdf#97517 The MirroredX property (in the CustomShapeGeometry property) is not supported for
-    // the LineShape by UNO, so we have to make the mirroring here
-    if (!maTypeModel.maFlip.isEmpty())
-    {
-        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
-        {
-            if (maTypeModel.maFlip.startsWith("x"))
-                doMirrorX(pShape);
-        }
-    }
+    // tdf#97517 tdf#137678
+    // The MirroredX and MirroredY properties (in the CustomShapeGeometry property) are not
+    // supported for the LineShape by UNO, so we have to make the mirroring here.
+    handleMirroring(maTypeModel, xShape);
     return xShape;
 }
 
@@ -1173,21 +1188,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     // Handle horizontal and vertical flip.
-    if (!maTypeModel.maFlip.isEmpty())
-    {
-        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
-        {
-            if (maTypeModel.maFlip.startsWith("x"))
-                doMirrorX(pShape);
-            if (maTypeModel.maFlip.endsWith("y"))
-            {
-                Point aCenter(pShape->GetSnapRect().Center());
-                Point aPoint2(aCenter);
-                aPoint2.setX(aPoint2.getX() + 1);
-                pShape->NbcMirror(aCenter, aPoint2);
-            }
-        }
-    }
+    handleMirroring(maTypeModel, xShape);
 
     return xShape;
 }
