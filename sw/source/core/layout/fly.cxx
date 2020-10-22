@@ -377,6 +377,32 @@ void SwFlyFrame::InitDrawObj()
                                 : nHellId );
 }
 
+static SwPosition ResolveFlyAnchor(SwFrameFormat const& rFlyFrame)
+{
+    SwFormatAnchor const& rAnch(rFlyFrame.GetAnchor());
+    if (rAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE)
+    {   // arbitrarily pick last node
+        return SwPosition(SwNodeIndex(rFlyFrame.GetDoc()->GetNodes().GetEndOfContent(), -1));
+    }
+    else
+    {
+        SwPosition const*const pPos(rAnch.GetContentAnchor());
+        assert(pPos);
+        if (SwFrameFormat const*const pParent = pPos->nNode.GetNode().GetFlyFormat())
+        {
+            return ResolveFlyAnchor(*pParent);
+        }
+        else if (pPos->nContent.GetIdxReg())
+        {
+            return *pPos;
+        }
+        else
+        {
+            return SwPosition(*pPos->nNode.GetNode().GetContentNode(), 0);
+        }
+    }
+}
+
 void SwFlyFrame::FinitDrawObj()
 {
     if(!GetVirtDrawObj() )
@@ -391,8 +417,27 @@ void SwFlyFrame::FinitDrawObj()
             for(SwViewShell& rCurrentShell : p1St->GetRingContainer())
             {   // At the moment the Drawing can do just do an Unmark on everything,
                 // as the Object was already removed
-                if(rCurrentShell.HasDrawView() )
-                    rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                if (rCurrentShell.HasDrawView() &&
+                    rCurrentShell.Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount())
+                {
+                    if (SwFEShell *const pFEShell = dynamic_cast<SwFEShell*>(&rCurrentShell))
+                    {   // tdf#131679 move any cursor out of fly
+                        SwFlyFrame const*const pOldSelFly = ::GetFlyFromMarked(nullptr,  pFEShell);
+                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                        if (pOldSelFly)
+                        {
+                            SwPosition const pos(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
+                            SwPaM const temp(pos);
+                            pFEShell->SetSelection(temp);
+                            // could also call SetCursor() like SwFEShell::SelectObj()
+                            // does, but that would access layout a bit much...
+                        }
+                    }
+                    else
+                    {
+                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                    }
+                }
             }
         }
     }
