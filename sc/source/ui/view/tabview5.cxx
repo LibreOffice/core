@@ -269,9 +269,9 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     if (pDrawView)
     {
         pDrawView->AddWindowToPaintView(pWin, nullptr);
-
         pWin->DrawLayerCreated();
     }
+    pWin->SetAutoSpellContext(mpSpellCheckCxt);
 }
 
 void ScTabView::TabChanged( bool bSameTabButMoved )
