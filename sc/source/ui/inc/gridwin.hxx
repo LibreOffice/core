@@ -145,7 +145,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     // zoom levels demanded from a ScGridWindow instance.
     std::vector<LOKCursorEntry> maLOKLastCursor;
 
-    std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
+    std::shared_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
     ScViewData&             mrViewData;
     ScSplitPos              eWhich;
@@ -433,7 +433,7 @@ public:
 
     void CursorChanged();
     void DrawLayerCreated();
-    void EnableAutoSpell( bool bEnable );
+    void SetAutoSpellContext( const std::shared_ptr<sc::SpellCheckContext> &ctx );
     void ResetAutoSpell();
     void ResetAutoSpellForContentChange();
     void SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<editeng::MisspellRanges>* pRanges );

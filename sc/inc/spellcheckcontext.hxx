@@ -43,6 +43,7 @@ class SpellCheckContext
 public:
     SpellCheckContext(ScDocument* pDocument, SCTAB nTab);
     ~SpellCheckContext();
+    void dispose();
 
     bool isMisspelled(SCCOL nCol, SCROW nRow) const;
     const std::vector<editeng::MisspellRanges>* getMisspellRanges(SCCOL nCol, SCROW nRow) const;
