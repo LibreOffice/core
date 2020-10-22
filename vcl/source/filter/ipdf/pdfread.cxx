@@ -171,8 +171,7 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         if (!pPdfBitmap)
             break;
 
-        const FPDF_DWORD nColor
-            = FPDFPage_HasTransparency(pPdfPage->getPointer()) ? 0x00000000 : 0xFFFFFFFF;
+        const FPDF_DWORD nColor = pPdfPage->hasTransparency() ? 0x00000000 : 0xFFFFFFFF;
         FPDFBitmap_FillRect(pPdfBitmap->getPointer(), 0, 0, nPageWidth, nPageHeight, nColor);
         FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), pPdfPage->getPointer(), /*start_x=*/0,
                               /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);

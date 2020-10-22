@@ -463,6 +463,8 @@ double PDFiumPage::getWidth() { return FPDF_GetPageWidth(mpPage); }
 
 double PDFiumPage::getHeight() { return FPDF_GetPageHeight(mpPage); }
 
+bool PDFiumPage::hasTransparency() { return FPDFPage_HasTransparency(mpPage); }
+
 PDFiumPathSegment::PDFiumPathSegment(FPDF_PATHSEGMENT pPathSegment)
     : mpPathSegment(pPathSegment)
 {
