@@ -460,7 +460,7 @@ public:
 
     bool IsTableShapeSupported() const { return mbIsTableShapeSupported; }
 
-    OUString const & GetODFVersion() const;
+    OUString GetODFVersion() const;
     bool IsOOoXML() const; // legacy non-ODF format?
 
     /**
