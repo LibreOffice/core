@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASEGFX_SOURCE_WORKBENCH_BEZIERCLIP_HXX
-#define INCLUDED_BASEGFX_SOURCE_WORKBENCH_BEZIERCLIP_HXX
+#pragma once
 
 #include <vector>
 
