@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_BASEGFX_SOURCE_INC_STRINGCONVERSIONTOOLS_HXX
-#define INCLUDED_BASEGFX_SOURCE_INC_STRINGCONVERSIONTOOLS_HXX
+
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -56,7 +56,5 @@ namespace basegfx::internal
                                  const sal_Int32 nLen);
 
 } // namespace basegfx::internal
-
-#endif // INCLUDED_BASEGFX_SOURCE_INC_STRINGCONVERSIONTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
