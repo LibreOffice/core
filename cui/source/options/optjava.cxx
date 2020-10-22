@@ -206,7 +206,7 @@ void SvxJavaOptionsPage::dispose()
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 {
-    bool bEnable = m_pJavaEnableCB->IsChecked();
+    bool bEnable = get<vcl::Window>("javaframe")->IsEnabled() && m_pJavaEnableCB->IsChecked();
     m_pJavaBox->Enable(bEnable);
     bEnable ? m_pJavaList->EnableTable() : m_pJavaList->DisableTable();
 }
