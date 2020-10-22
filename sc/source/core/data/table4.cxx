@@ -411,8 +411,59 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             }
             else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
             {
-                // TODO: check / handle if it is a sequence of userlist string
-                // or if the strings are composition of a number sequence and a constant string
+                OUString aStr;
+                GetString(nColCurr, nRowCurr, aStr);
+
+                bool bAllSame = true;
+                for (SCSIZE i = 0; i < nValueCount; ++i)
+                {
+                    OUString aTestStr;
+                    GetString(static_cast<SCCOL>(nCol1 + rNonOverlappedCellIdx[i] * nAddX),
+                              static_cast<SCROW>(nRow1 + rNonOverlappedCellIdx[i] * nAddY),
+                              aTestStr);
+                    if (aStr != aTestStr)
+                    {
+                        bAllSame = false;
+                        break;
+                    }
+                }
+                if (bAllSame && nValueCount > 1)
+                    return;
+
+                rListData = const_cast<ScUserListData*>(ScGlobal::GetUserList()->GetData(aStr));
+                if (rListData)
+                {
+                    bool bMatchCase = false;
+                    (void)rListData->GetSubIndex(aStr, rListIndex, bMatchCase);
+                    size_t nListStrCount = rListData->GetSubCount();
+                    sal_uInt16 nPrevListIndex, nInc = 0;
+                    for (SCSIZE i = 1; i < nValueCount && rListData; i++)
+                    {
+                        nColCurr = nCol1 + rNonOverlappedCellIdx[i] * nAddX;
+                        nRowCurr = nRow1 + rNonOverlappedCellIdx[i] * nAddY;
+                        GetString(nColCurr, nRowCurr, aStr);
+
+                        nPrevListIndex = rListIndex;
+                        if (!rListData->GetSubIndex(aStr, rListIndex, bMatchCase))
+                            rListData = nullptr;
+                        else
+                        {
+                            sal_Int32 nIncCurr = rListIndex - nPrevListIndex;
+                            if (nIncCurr < 0)
+                                nIncCurr += nListStrCount;
+                            if (i == 1)
+                                nInc = nIncCurr;
+                            else if (nInc != nIncCurr)
+                                rListData = nullptr;
+                        }
+                    }
+                    if (rListData) {
+                        rInc = nInc;
+                        rSkipOverlappedCells = true;
+                        return;
+                    }
+                }
+                // TODO: check / handle if it is a string containing a number
             }
         }
     }
@@ -988,37 +1039,94 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if (pListData)
         {
             sal_uInt16 nListCount = pListData->GetSubCount();
-            if ( !bPositive )
+            if (bSkipOverlappedCells)
             {
-                //  nListIndex of FillAnalyse points to the last entry -> adjust
-                sal_uLong nSub = nISrcStart - nISrcEnd;
-                for (sal_uLong i=0; i<nSub; i++)
+                int nFillerCount = 1 + ( nISrcEnd - nISrcStart ) * (bPositive ? 1 : -1);
+                std::vector<bool> aIsNonEmptyCell(nFillerCount, false);
+                SCCOLROW nLastValueIdx;
+                if (bPositive)
                 {
-                    if (nListIndex == 0) nListIndex = nListCount;
-                    --nListIndex;
+                    nLastValueIdx = nISrcEnd - (nFillerCount - 1 - aNonOverlappedCellIdx.back());
+                    for (auto i : aNonOverlappedCellIdx)
+                        aIsNonEmptyCell[i] = true;
+                }
+                else
+                {
+                    nLastValueIdx = nISrcEnd + aNonOverlappedCellIdx[0];
+                    for (auto i : aNonOverlappedCellIdx)
+                        aIsNonEmptyCell[nFillerCount - 1 - i] = true;
+                }
+
+                OUString aStr;
+                if (bVertical)
+                    GetString(rOuter, nLastValueIdx, aStr);
+                else
+                    GetString(nLastValueIdx, rOuter, aStr);
+
+                bool bMatchCase = false;
+                (void)pListData->GetSubIndex(aStr, nListIndex, bMatchCase);
+
+                sal_Int32 nFillerIdx = 0;
+                rInner = nIStart;
+                while (true)
+                {
+                    if (aIsNonEmptyCell[nFillerIdx])
+                    {
+                        if (bPositive)
+                        {
+                            nListIndex += nInc;
+                            if (nListIndex >= nListCount) nListIndex -= nListCount;
+                        }
+                        else
+                        {
+                            if (nListIndex < nInc) nListIndex += nListCount;
+                            nListIndex -= nInc;
+                        }
+                        aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
+
+                    }
+                    if (rInner == nIEnd) break;
+                    nFillerIdx = (nFillerIdx + 1) % nFillerCount;
+                    if (bPositive)
+                        ++rInner;
+                    else
+                        --rInner;
                 }
             }
-
-            rInner = nIStart;
-            while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
+            else
             {
-                if(!ColHidden(nCol) && !RowHidden(nRow))
+                if (!bPositive)
                 {
-                    if (bPositive)
-                    {
-                        ++nListIndex;
-                        if (nListIndex >= nListCount) nListIndex = 0;
-                    }
-                    else
+                    //  nListIndex of FillAnalyse points to the last entry -> adjust
+                    sal_uLong nSub = nISrcStart - nISrcEnd;
+                    for (sal_uLong i = 0; i < nSub; i++)
                     {
                         if (nListIndex == 0) nListIndex = nListCount;
                         --nListIndex;
                     }
-                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
                 }
 
-                if (rInner == nIEnd) break;
-                if (bPositive) ++rInner; else --rInner;
+                rInner = nIStart;
+                while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
+                {
+                    if (!ColHidden(nCol) && !RowHidden(nRow))
+                    {
+                        if (bPositive)
+                        {
+                            ++nListIndex;
+                            if (nListIndex >= nListCount) nListIndex = 0;
+                        }
+                        else
+                        {
+                            if (nListIndex == 0) nListIndex = nListCount;
+                            --nListIndex;
+                        }
+                        aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
+                    }
+
+                    if (rInner == nIEnd) break;
+                    if (bPositive) ++rInner; else --rInner;
+                }
             }
             if(pProgress)
             {
