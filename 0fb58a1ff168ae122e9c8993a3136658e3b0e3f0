@@ -69,6 +69,23 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3ff1f4b_8766ae99",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-22T09:30:16Z",
+      "side": 1,
+      "message": "Changing this from unsigned to singed causes issues, see the parenthetical last paragraph of the commit message of \u003chttps://gerrit.libreoffice.org/c/core/+/104650\u003e \"Guard against bad stream in TypeSerializer::readGradient\".",
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
