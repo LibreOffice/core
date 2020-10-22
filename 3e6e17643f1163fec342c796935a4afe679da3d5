@@ -22,6 +22,30 @@
       "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "390e9278_c108fc94",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-22T12:43:32Z",
+      "side": 1,
+      "message": "What about having a single GetSectionInfo() and pushing a default element on that stack in the DomainMapper_Impl ctor? That would avoid the cost/non-cost duplication and also the static as well.",
+      "parentUuid": "fd827707_e627156a",
+      "range": {
+        "startLine": 451,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 33
+      },
+      "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
