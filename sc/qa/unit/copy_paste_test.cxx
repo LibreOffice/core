@@ -45,6 +45,7 @@ public:
     void testTdf40993_fillMergedCells();
     void testTdf43958_clickSelectOnMergedCells();
     void testTdf88782_autofillLinearNumbersInMergedCells();
+    void tdf137621_autofillMergedBool();
     void tdf137205_autofillDatesInMergedCells();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
     CPPUNIT_TEST(testTdf43958_clickSelectOnMergedCells);
     CPPUNIT_TEST(testTdf88782_autofillLinearNumbersInMergedCells);
+    CPPUNIT_TEST(tdf137621_autofillMergedBool);
     CPPUNIT_TEST(tdf137205_autofillDatesInMergedCells);
     CPPUNIT_TEST_SUITE_END();
 
@@ -681,6 +683,37 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
         }
     }
 }
+
+void ScCopyPasteTest::tdf137621_autofillMergedBool()
+{
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137621_autofillMergedBool.", FORMAT_ODS, true);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pView = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pView != nullptr);
+
+    // fillauto booleans, this areas contain only merged cells
+    pView->FillAuto(FILL_TO_RIGHT, 0, 4, 3, 5, 8);   //A5:D6
+
+    // compare the results of fill-right with the reference stored in the test file
+    // this compare the whole area blindly, for concrete test cases, check the test file
+    for (int nCol = 4; nCol <= 11; nCol++) {
+        for (int nRow = 4; nRow <= 5; nRow++) {
+            CellType nType1 = rDoc.GetCellType(ScAddress(nCol, nRow, 0));
+            CellType nType2 = rDoc.GetCellType(ScAddress(nCol, nRow + 3, 0));
+            double* pValue1 = rDoc.GetValueCell(ScAddress(nCol, nRow, 0));
+            double* pValue2 = rDoc.GetValueCell(ScAddress(nCol, nRow + 3, 0));
+
+            CPPUNIT_ASSERT_EQUAL(nType1, nType2);
+            if (pValue2 != nullptr)
+                CPPUNIT_ASSERT_EQUAL(*pValue1, *pValue2);   //cells with boolean value
+            else
+                CPPUNIT_ASSERT_EQUAL(pValue1, pValue2);     //empty cells
+        }
+    }
+}
+
 void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
 {
     ScDocShellRef xDocSh = loadDocAndSetupModelViewController("tdf137205_AutofillDatesInMergedCells.", FORMAT_ODS, true);
