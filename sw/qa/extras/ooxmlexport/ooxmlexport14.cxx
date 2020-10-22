@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -39,6 +40,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <editsh.hxx>
 #include <frmatr.hxx>
+
+using namespace com::sun::star;
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -1260,6 +1263,17 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
         return;
     // The bound rect of shape will be wider if wrap does not work (the wrong value is 3167).
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "2500");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMirroredX.docx")
+{
+    // tdf#97517 The "flip:x" was not handled for VML line shapes.
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    auto aPolyPolygonBezier = getProperty<drawing::PolyPolygonBezierCoords>(getShape(1), "PolyPolygonBezier");
+    // this was 16540
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17496), aPolyPolygonBezier.Coordinates[0][0].X);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
