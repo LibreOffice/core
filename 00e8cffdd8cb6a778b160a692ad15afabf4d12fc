@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "810619a8_e1d6df96",
+        "filename": "vcl/unx/gtk3/gtk3gtkinst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 16701,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-22T06:20:04Z",
+      "side": 1,
+      "message": "gtk doesn\u0027t come with exactly the same concept",
+      "revId": "00e8cffdd8cb6a778b160a692ad15afabf4d12fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
