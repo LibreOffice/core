@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.36.0 -->
 <interface domain="sw">
-  <requires lib="gtk+" version="3.18"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes" context="testmailsettings|textbuffer1">%PRODUCTNAME could not connect to the outgoing mail server. Check your system's settings and the settings in %PRODUCTNAME. Check the server name, the port and the secure connections settings</property>
   </object>

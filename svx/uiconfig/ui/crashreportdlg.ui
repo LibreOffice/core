@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.36.0 -->
 <interface domain="svx">
-  <requires lib="gtk+" version="3.18"/>
+  <requires lib="gtk+" version="3.20"/>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
 You can soon find the report at:

@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.1 -->
 <!-- <?xml version="1.0" encoding="UTF-8"?> -->
 <interface domain="sc">
-  <requires lib="gtk+" version="3.18"/>
+  <requires lib="gtk+" version="3.20"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkMenu" id="Menu3D">
     <property name="visible">True</property>
