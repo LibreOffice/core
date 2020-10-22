@@ -22,6 +22,9 @@
 #if defined(LINUX)
 #  include <stdio.h>
 #endif
+#if defined(__FreeBSD__)
+#  include <sys/utsname.h>
+#endif
 
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
@@ -50,7 +53,6 @@ OUString SalGenericInstance::getOSVersion()
 {
     OUString aKernelVer = "unknown";
 
-// not so generic, but at least shared between all unix backend
 #if defined(LINUX)
     FILE* pVersion = fopen( "/proc/version", "r" );
     if ( pVersion )
@@ -70,8 +72,26 @@ OUString SalGenericInstance::getOSVersion()
         }
         fclose( pVersion );
     }
-#endif
     return aKernelVer;
+#elif defined(__FreeBSD__)
+    struct utsname stName;
+    if ( uname( &stName ) != 0 )
+        return aKernelVer;
+
+    sal_Int32 nDots = 0;
+    sal_Int32 nIndex = 0;
+    aKernelVer = OUString::createFromAscii( stName.release );
+    while ( nIndex++ < aKernelVer.getLength() )
+    {
+        const char c = stName.release[ nIndex ];
+        if ( c == ' ' || c == '-' || ( c == '.' && nDots++ > 0 ) )
+            break;
+    }
+    return OUString::createFromAscii( stName.sysname ) + " " +
+        aKernelVer.copy( 0, nIndex );
+#else
+    return aKernelVer;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
