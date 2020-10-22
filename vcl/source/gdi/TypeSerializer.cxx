@@ -33,16 +33,16 @@ void TypeSerializer::readGradient(Gradient& rGradient)
 {
     VersionCompat aCompat(mrStream, StreamMode::READ);
 
-    sal_uInt16 nStyle;
+    sal_uInt16 nStyle = 0;
     Color aStartColor;
     Color aEndColor;
-    sal_uInt16 nAngle;
-    sal_uInt16 nBorder;
-    sal_uInt16 nOffsetX;
-    sal_uInt16 nOffsetY;
-    sal_uInt16 nIntensityStart;
-    sal_uInt16 nIntensityEnd;
-    sal_uInt16 nStepCount;
+    sal_uInt16 nAngle = 0;
+    sal_uInt16 nBorder = 0;
+    sal_uInt16 nOffsetX = 0;
+    sal_uInt16 nOffsetY = 0;
+    sal_uInt16 nIntensityStart = 0;
+    sal_uInt16 nIntensityEnd = 0;
+    sal_uInt16 nStepCount = 0;
 
     mrStream.ReadUInt16(nStyle);
     readColor(aStartColor);
