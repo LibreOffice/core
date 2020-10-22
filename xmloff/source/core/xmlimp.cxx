@@ -274,7 +274,7 @@ public:
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;
 
-    OUString aODFVersion;
+    std::optional<OUString> mxODFVersion;
 
     bool mbIsOOoXML;
 
@@ -669,12 +669,12 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if ( rAttrName == "office:version" )
+        if ( rAttrName == "office:version" && !mpImpl->mxODFVersion )
         {
-            mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
+            mpImpl->mxODFVersion = xAttrList->getValueByIndex( i );
 
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
-            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( *mpImpl->mxODFVersion ) )
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
@@ -844,17 +844,17 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    if ( Attribs.is() )
+    if ( Attribs.is() && !mpImpl->mxODFVersion)
     {
         sax_fastparser::FastAttributeList& rAttribList =
             sax_fastparser::castToFastAttributeList( Attribs );
         auto aIter( rAttribList.find( XML_ELEMENT( OFFICE, XML_VERSION ) ) );
         if( aIter != rAttribList.end() )
         {
-            mpImpl->aODFVersion = aIter.toString();
+            mpImpl->mxODFVersion = aIter.toString();
 
             // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
-            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
+            if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( *mpImpl->mxODFVersion ) )
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
@@ -1925,9 +1925,9 @@ bool SvXMLImport::isGeneratorVersionOlderThan(
 }
 
 
-OUString const & SvXMLImport::GetODFVersion() const
+OUString SvXMLImport::GetODFVersion() const
 {
-    return mpImpl->aODFVersion;
+    return mpImpl->mxODFVersion ? *mpImpl->mxODFVersion : OUString();
 }
 
 bool SvXMLImport::IsOOoXML() const
