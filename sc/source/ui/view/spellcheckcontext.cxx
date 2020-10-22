@@ -220,6 +220,13 @@ SpellCheckContext::~SpellCheckContext()
 {
 }
 
+void SpellCheckContext::dispose()
+{
+    mpEngine.reset();
+    mpCache.reset();
+    pDoc = nullptr;
+}
+
 bool SpellCheckContext::isMisspelled(SCCOL nCol, SCROW nRow) const
 {
     const_cast<SpellCheckContext*>(this)->ensureResults(nCol, nRow);

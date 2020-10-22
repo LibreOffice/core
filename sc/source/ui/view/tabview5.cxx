@@ -46,6 +46,7 @@
 #include <docsh.hxx>
 #include <viewuno.hxx>
 #include <postit.hxx>
+#include <spellcheckcontext.hxx>
 
 #include <vcl/settings.hxx>
 
@@ -193,6 +194,10 @@ ScTabView::~ScTabView()
 
     pSelEngine.reset();
 
+    if (mpSpellCheckCxt)
+        mpSpellCheckCxt->dispose();
+    mpSpellCheckCxt.reset();
+
     mxInputHintOO.reset();
     for (i=0; i<4; i++)
         pGridWin[i].disposeAndClear();
@@ -268,9 +273,9 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     if (pDrawView)
     {
         pDrawView->AddWindowToPaintView(pWin, nullptr);
-
         pWin->DrawLayerCreated();
     }
+    pWin->SetAutoSpellContext(mpSpellCheckCxt);
 }
 
 void ScTabView::TabChanged( bool bSameTabButMoved )
