@@ -466,6 +466,8 @@ void ScGridWindow::dispose()
     mpDPFieldPopup.disposeAndClear();
     aComboButton.SetOutputDevice(nullptr);
 
+    mpSpellCheckCxt.reset();
+
     vcl::Window::dispose();
 }
 
@@ -5497,12 +5499,9 @@ void ScGridWindow::DrawLayerCreated()
     ImpCreateOverlayObjects();
 }
 
-void ScGridWindow::EnableAutoSpell( bool bEnable )
+void ScGridWindow::SetAutoSpellContext( const std::shared_ptr<sc::SpellCheckContext> &ctx )
 {
-    if (bEnable)
-        mpSpellCheckCxt.reset(new sc::SpellCheckContext(pViewData->GetDocument(), pViewData->GetTabNo()));
-    else
-        mpSpellCheckCxt.reset();
+    mpSpellCheckCxt = ctx;
 }
 
 void ScGridWindow::ResetAutoSpell()
