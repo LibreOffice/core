@@ -84,7 +84,7 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    aSysParentData.aWindow = static_cast<long>(nHandle);
+    aSysParentData.aWindow = nHandle;
     aSysParentData.bXEmbedSupport = bXEmbed;
 #endif
 

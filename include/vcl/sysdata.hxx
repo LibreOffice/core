@@ -109,7 +109,7 @@ struct SystemParentData
 #elif defined( IOS )
     // Nothing
 #elif defined( UNX )
-    tools::Long            aWindow;          // the window of the object
+    sal_uIntPtr     aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
                                       // should support the XEmbed protocol
 #endif
