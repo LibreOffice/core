@@ -16,6 +16,24 @@
       "revId": "81369d5d070f2152375635575a577a6c6260714b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41c2ec6d_c5526e16",
+        "filename": "vcl/unx/generic/app/geninst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1002792
+      },
+      "writtenOn": "2020-10-22T17:35:57Z",
+      "side": 1,
+      "message": "Yep, this is a stupid mistake. Fixed now.",
+      "parentUuid": "a4d80e0a_f1df15b9",
+      "revId": "81369d5d070f2152375635575a577a6c6260714b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
