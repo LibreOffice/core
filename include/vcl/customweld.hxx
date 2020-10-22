@@ -152,6 +152,7 @@ private:
     DECL_LINK(DoStyleUpdated, weld::Widget&, void);
     DECL_LINK(DoRequestHelp, tools::Rectangle&, OUString);
     DECL_LINK(DoGetSurrounding, OUString&, int);
+    DECL_LINK(DoDeleteSurrounding, const Selection&, bool);
 
 public:
     CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
