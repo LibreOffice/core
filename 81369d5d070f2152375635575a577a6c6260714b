@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4d80e0a_f1df15b9",
+        "filename": "vcl/unx/generic/app/geninst.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-22T16:37:30Z",
+      "side": 1,
+      "message": "now it\u0027ll be broken for any unix that isn\u0027t Linux and isn\u0027t FreeBSD, because the \n    return aKernelVar\nwill not exist",
+      "revId": "81369d5d070f2152375635575a577a6c6260714b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
