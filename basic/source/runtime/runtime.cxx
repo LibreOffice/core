@@ -30,6 +30,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 
+#include <comphelper/flagguard.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <o3tl/safeint.hxx>
@@ -1131,6 +1132,11 @@ void SbiRuntime::PushFor()
     p->refEnd = PopVar();
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
+    // tdf#85371 - grant explicitly write access to the index variable
+    // since it could be the name of a method itself used in the next
+    // statement. If it takes part in the usual assignment of the result
+    // of a function, the SbxFlagBits::Write-Flag will be reset in StepPUT.
+    p->refVar->SetFlag(SbxFlagBits::Write);
     *(p->refVar) = *xBgn;
     nForLvl++;
 }
@@ -3360,7 +3366,16 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     sal_uInt16 uBase = static_cast<sal_uInt16>(nOp1 & 1);       // Can only be 0 or 1
     p1->PutInteger( uBase );
     if( !bCompatible )
+    {
+        // tdf#85371 - grant explicitly write access to the dimension variable
+        // since in Star/OpenOffice Basic the upper index border is affected,
+        // and the dimension variable could be the name of the method itself.
+        // The SbxFlagBits::Write-Flag will be reset in StepPUT, if it takes
+        // part in an usual assignment.
+        x2->SetFlag( SbxFlagBits::Write );
+        const ::comphelper::ScopeGuard aWriteGuard([x2] { x2->ResetFlag( SbxFlagBits::Write ); });
         x2->Compute( SbxPLUS, *p1 );
+    }
     PushVar( x2.get() );  // first the Expr
     PushVar( p1 );  // then the Base
 }
