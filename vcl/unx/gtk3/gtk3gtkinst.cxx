@@ -13851,19 +13851,40 @@ public:
 
             if (nOffset > 0)
             {
-                while (nCursorIndex < sSurroundingText.getLength())
+                while (nOffset && nCursorIndex < sSurroundingText.getLength())
+                {
                     sSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+                    --nOffset;
+                }
             }
             else if (nOffset < 0)
             {
-                while (nCursorIndex > 0)
+                while (nOffset && nCursorIndex > 0)
+                {
                     sSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+                    ++nOffset;
+                }
+            }
+
+            if (nOffset)
+            {
+                SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to move to offset: " << nOffset);
+                return false;
             }
 
             sal_Int32 nCursorEndIndex(nCursorIndex);
             sal_Int32 nCount(0);
             while (nCount < nChars && nCursorEndIndex < sSurroundingText.getLength())
+            {
+                sSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
                 ++nCount;
+            }
+
+            if (nCount != nChars)
+            {
+                SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to select: " << nChars << " characters");
+                return false;
+            }
 
             bRet = pThis->m_pArea->im_context_delete_surrounding(Selection(nCursorIndex, nCursorEndIndex));
         }

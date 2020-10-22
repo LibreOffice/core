@@ -39,6 +39,8 @@ CustomWeld::CustomWeld(weld::Builder& rBuilder, const OString& rDrawingId,
     m_xDrawingArea->connect_command(LINK(this, CustomWeld, DoCommand));
     m_xDrawingArea->connect_query_tooltip(LINK(this, CustomWeld, DoRequestHelp));
     m_xDrawingArea->connect_im_context_get_surrounding(LINK(this, CustomWeld, DoGetSurrounding));
+    m_xDrawingArea->connect_im_context_delete_surrounding(
+        LINK(this, CustomWeld, DoDeleteSurrounding));
 }
 
 IMPL_LINK(CustomWeld, DoResize, const Size&, rSize, void)
@@ -99,6 +101,11 @@ IMPL_LINK(CustomWeld, DoRequestHelp, tools::Rectangle&, rHelpArea, OUString)
 IMPL_LINK(CustomWeld, DoGetSurrounding, OUString&, rSurrounding, int)
 {
     return m_rWidgetController.GetSurroundingText(rSurrounding);
+}
+
+IMPL_LINK(CustomWeld, DoDeleteSurrounding, const Selection&, rSelection, bool)
+{
+    return m_rWidgetController.DeleteSurroundingText(rSelection);
 }
 }
 
