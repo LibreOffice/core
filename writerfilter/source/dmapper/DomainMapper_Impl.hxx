@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <queue>
 #include <stack>
 #include <set>
@@ -1086,6 +1087,11 @@ public:
     std::vector<css::uno::Any> aFramedRedlines;
 
     bool IsParaWithInlineObject() const { return m_bParaWithInlineObject; }
+
+    css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
+
+    /// Handles <w:altChunk>.
+    void HandleAltChunk(const OUString& rStreamName);
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);

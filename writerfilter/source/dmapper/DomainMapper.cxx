@@ -169,8 +169,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
     //import document properties
     try
     {
-        uno::Reference< embed::XStorage > xDocumentStorage =
-            comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, bRepairStorage );
+        m_pImpl->m_xDocumentStorage = comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+            OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, bRepairStorage);
 
         uno::Reference< uno::XInterface > xTemp = xContext->getServiceManager()->createInstanceWithContext(
                                 "com.sun.star.document.OOXMLDocumentPropertiesImporter",
@@ -178,7 +178,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
         uno::Reference< document::XOOXMLDocumentPropertiesImporter > xImporter( xTemp, uno::UNO_QUERY_THROW );
         uno::Reference< document::XDocumentPropertiesSupplier > xPropSupplier( xModel, uno::UNO_QUERY_THROW);
-        xImporter->importProperties( xDocumentStorage, xPropSupplier->getDocumentProperties() );
+        xImporter->importProperties(m_pImpl->m_xDocumentStorage,
+                                    xPropSupplier->getDocumentProperties());
     }
     catch( const uno::Exception& ) {}
 }
@@ -1228,6 +1229,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             catch (const uno::Exception&)
             {
             }
+        }
+        break;
+        case NS_ooxml::LN_CT_AltChunk:
+        {
+            m_pImpl->HandleAltChunk(sStringValue);
         }
         break;
         default:
