@@ -156,6 +156,8 @@ private:
     VclPtr<ScCornerButton>      aTopButton;
     VclPtr<ScrollBarBox>        aScrollBarBox;
 
+    std::shared_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
+
     std::unique_ptr<sdr::overlay::OverlayObjectList> mxInputHintOO; // help hint for data validation
 
     std::unique_ptr<ScPageBreakData>  pPageBreakData;

@@ -46,6 +46,7 @@
 #include <viewuno.hxx>
 #include <appoptio.hxx>
 #include <attrib.hxx>
+#include <spellcheckcontext.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/lokhelper.hxx>
@@ -2234,12 +2235,19 @@ void ScTabView::EnableRefInput(bool bFlag)
 
 void ScTabView::EnableAutoSpell( bool bEnable )
 {
+    if (bEnable)
+        mpSpellCheckCxt =
+            std::make_shared<sc::SpellCheckContext>(&aViewData.GetDocument(),
+                                      aViewData.GetTabNo());
+    else
+        mpSpellCheckCxt.reset();
+
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
     {
         if (!pWin)
             continue;
 
-        pWin->EnableAutoSpell(bEnable);
+        pWin->SetAutoSpellContext(mpSpellCheckCxt);
     }
 }
 
