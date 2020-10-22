@@ -219,6 +219,8 @@ public:
 
     double getWidth();
     double getHeight();
+
+    bool hasTransparency();
 };
 
 class VCL_DLLPUBLIC PDFiumDocument final
