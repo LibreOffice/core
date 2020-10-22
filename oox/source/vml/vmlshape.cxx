@@ -1004,9 +1004,37 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
     return xShape;
 }
 
+namespace
+{
+    void doMirrorX(SdrObject* pShape)
+    {
+        Point aCenter(pShape->GetSnapRect().Center());
+        Point aPoint2(aCenter);
+        aPoint2.setY(aPoint2.getY() + 1);
+        pShape->NbcMirror(aCenter, aPoint2);
+    }
+}
+
 LineShape::LineShape(Drawing& rDrawing)
     : SimpleShape(rDrawing, "com.sun.star.drawing.LineShape")
 {
+}
+
+Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const awt::Rectangle& rShapeRect) const
+{
+    Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+    // Handle vertical flip.
+    // tdf#97517 The MirroredX property (in the CustomShapeGeometry property) is not supported for
+    // the LineShape by UNO, so we have to make the mirroring here
+    if (!maTypeModel.maFlip.isEmpty())
+    {
+        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
+        {
+            if (maTypeModel.maFlip.startsWith("x"))
+                doMirrorX(pShape);
+        }
+    }
+    return xShape;
 }
 
 awt::Rectangle LineShape::getAbsRectangle() const
@@ -1150,12 +1178,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
         {
             if (maTypeModel.maFlip.startsWith("x"))
-            {
-                Point aCenter(pShape->GetSnapRect().Center());
-                Point aPoint2(aCenter);
-                aPoint2.setY(aPoint2.getY() + 1);
-                pShape->NbcMirror(aCenter, aPoint2);
-            }
+                doMirrorX(pShape);
             if (maTypeModel.maFlip.endsWith("y"))
             {
                 Point aCenter(pShape->GetSnapRect().Center());

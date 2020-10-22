@@ -30,6 +30,7 @@
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -39,6 +40,8 @@
 #include <IDocumentSettingAccess.hxx>
 #include <editsh.hxx>
 #include <frmatr.hxx>
+
+using namespace com::sun::star;
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -1282,6 +1285,18 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
         return;
     // The bound rect of shape will be wider if wrap does not work (the wrong value is 3167).
     assertXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "width", "2500");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMirroredX.docx")
+{
+    // tdf#97517 The "flip:x" was not handled for VML line shapes.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    OUString sStyle = getXPath(pXmlDoc,
+        "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
+        "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("flip:x") > 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
