@@ -360,6 +360,11 @@ class LineShape final : public SimpleShape
 {
 public:
     explicit            LineShape( Drawing& rDrawing );
+    virtual css::uno::Reference< css::drawing::XShape >
+                        implConvertAndInsert(
+                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const css::awt::Rectangle& rShapeRect ) const override;
+
 
 private:
     /** Returns the absolute shape rectangle. */
