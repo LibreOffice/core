@@ -25,9 +25,8 @@
 #include <DrawController.hxx>
 
 #include <Client.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/tabpage.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
@@ -54,16 +53,6 @@ bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
         || rButton1.ButtonLabel == rButton2.ButtonLabel);
 }
 
-class TabBarControl : public ::TabControl
-{
-public:
-    TabBarControl (vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
-    virtual void Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-    virtual void ActivatePage() override;
-private:
-    ::rtl::Reference<ViewTabBar> mpViewTabBar;
-};
-
 } // end of anonymous namespace
 
 ViewTabBar::ViewTabBar (
@@ -73,17 +62,11 @@ ViewTabBar::ViewTabBar (
       mpTabControl(VclPtr<TabBarControl>::Create(GetAnchorWindow(rxViewTabBarId,rxController), this)),
       mxController(rxController),
       maTabBarButtons(),
-      mpTabPage(nullptr),
       mxViewTabBarId(rxViewTabBarId),
       mpViewShellBase(nullptr)
 {
-    // Set one new tab page for all tab entries.  We need it only to
-    // determine the height of the tab bar.
-    mpTabPage.reset(VclPtr<TabPage>::Create(mpTabControl.get()));
-    mpTabPage->Hide();
-
     // add some space before the tabitems
-    mpTabControl->SetItemsOffset(Point(5, 3));
+//TODO    mpTabControl->SetItemsOffset(Point(5, 3));
 
     // Tunnel through the controller and use the ViewShellBase to obtain the
     // view frame.
@@ -152,10 +135,6 @@ void ViewTabBar::disposing()
 
     {
         const SolarMutexGuard aSolarGuard;
-        // Set all references to the one tab page to NULL and delete the page.
-        for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
-            mpTabControl->SetTabPage(nIndex, nullptr);
-        mpTabPage.disposeAndClear();
         mpTabControl.disposeAndClear();
     }
 
@@ -319,7 +298,7 @@ sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
     return nResult;
 }
 
-bool ViewTabBar::ActivatePage()
+bool ViewTabBar::ActivatePage(size_t nIndex)
 {
     try
     {
@@ -346,7 +325,6 @@ bool ViewTabBar::ActivatePage()
             pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
         if (pIPClient==nullptr || ! pIPClient->IsObjectInPlaceActive())
         {
-            sal_uInt16 nIndex (mpTabControl->GetCurPageId() - 1);
             if (nIndex < maTabBarButtons.size())
             {
                 xConfigurationController->requestResourceActivation(
@@ -355,13 +333,6 @@ bool ViewTabBar::ActivatePage()
             }
 
             return true;
-        }
-        else
-        {
-            // When we run into this else branch then we have an active OLE
-            // object.  We ignore the request to switch views.  Additionally
-            // we put the active tab back to the one for the current view.
-            UpdateActiveButton();
         }
     }
     catch (const RuntimeException&)
@@ -378,16 +349,23 @@ int ViewTabBar::GetHeight() const
 
     if (!maTabBarButtons.empty())
     {
+#if 0
         TabPage* pActivePage (mpTabControl->GetTabPage(
             mpTabControl->GetCurPageId()));
         if (pActivePage!=nullptr && mpTabControl->IsReallyVisible())
             nHeight = pActivePage->GetPosPixel().Y();
+#else
+        if (mpTabControl->IsReallyVisible())
+            nHeight = mpTabControl->get_preferred_size().Height();
+#endif
 
         if (nHeight <= 0)
+        {
             // Using a default when the real height can not be determined.
             // To get correct height this method should be called when the
             // control is visible.
             nHeight = 21;
+        }
     }
 
     return nHeight;
@@ -430,13 +408,11 @@ void ViewTabBar::AddTabBarButton (
     const css::drawing::framework::TabBarButton& rButton,
     sal_Int32 nPosition)
 {
-    if (nPosition>=0
-        && nPosition<=mpTabControl->GetPageCount())
+    if (nPosition >= 0 &&
+        nPosition <= mpTabControl->GetNotebook().get_n_pages())
     {
-        sal_uInt16 nIndex (static_cast<sal_uInt16>(nPosition));
-
         // Insert the button into our local array.
-        maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);
+        maTabBarButtons.insert(maTabBarButtons.begin() + nPosition, rButton);
         UpdateTabBarButtons();
         UpdateActiveButton();
     }
@@ -501,8 +477,7 @@ void ViewTabBar::UpdateActiveButton()
     {
         if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
         {
-            mpTabControl->SetCurPageId(nIndex+1);
-            mpTabControl->::TabControl::ActivatePage();
+            mpTabControl->GetNotebook().set_current_page(nIndex);
             break;
         }
     }
@@ -510,27 +485,26 @@ void ViewTabBar::UpdateActiveButton()
 
 void ViewTabBar::UpdateTabBarButtons()
 {
-    sal_uInt16 nPageCount (mpTabControl->GetPageCount());
-    sal_uInt16 nIndex = 1;
+    weld::Notebook& rNotebook = mpTabControl->GetNotebook();
+    int nPageCount(rNotebook.get_n_pages());
+    int nIndex = 1;
     for (const auto& rTab : maTabBarButtons)
     {
+        OString sIdent(OString::number(nIndex));
         // Create a new tab when there are not enough.
         if (nPageCount < nIndex)
-            mpTabControl->InsertPage(nIndex, rTab.ButtonLabel);
-
-        // Update the tab.
-        mpTabControl->SetPageText(nIndex, rTab.ButtonLabel);
-        mpTabControl->SetHelpText(nIndex, rTab.HelpText);
-        mpTabControl->SetTabPage(nIndex, mpTabPage.get());
-
+            rNotebook.append_page(sIdent, rTab.ButtonLabel);
+        else
+        {
+            // Update the tab.
+            rNotebook.set_tab_label_text(sIdent, rTab.ButtonLabel);
+        }
         ++nIndex;
     }
 
     // Delete tabs that are no longer used.
     for (; nIndex<=nPageCount; ++nIndex)
-        mpTabControl->RemovePage(nIndex);
-
-    mpTabPage->Hide();
+        rNotebook.remove_page(OString::number(nIndex));
 }
 
 //===== TabBarControl =========================================================
@@ -538,36 +512,41 @@ void ViewTabBar::UpdateTabBarButtons()
 TabBarControl::TabBarControl (
     vcl::Window* pParentWindow,
     const ::rtl::Reference<ViewTabBar>& rpViewTabBar)
-    : ::TabControl(pParentWindow),
-      mpViewTabBar(rpViewTabBar)
+    : InterimItemWindow(pParentWindow, "modules/simpress/ui/tabviewbar.ui", "TabViewBar")
+    , mxTabControl(m_xBuilder->weld_notebook("tabcontrol"))
+    , mpViewTabBar(rpViewTabBar)
 {
-}
-
-void TabBarControl::Paint (vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect)
-{
-    Color aOriginalFillColor(rRenderContext.GetFillColor());
-    Color aOriginalLineColor(rRenderContext.GetLineColor());
-
     // Because the actual window background is transparent--to avoid
     // flickering due to multiple background paintings by this and by child
     // windows--we have to paint the background for this control explicitly:
     // the actual control is not painted over its whole bounding box.
-    rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetDialogColor());
-    rRenderContext.SetLineColor();
-    rRenderContext.DrawRect(rRect);
+    SetPaintTransparent(false);
+    SetBackground(Application::GetSettings().GetStyleSettings().GetDialogColor());
 
-    ::TabControl::Paint(rRenderContext, rRect);
+    InitControlBase(mxTabControl.get());
 
-    rRenderContext.SetFillColor(aOriginalFillColor);
-    rRenderContext.SetLineColor(aOriginalLineColor);
+    mxTabControl->connect_enter_page(LINK(this, TabBarControl, ActivatePageHdl));
 }
 
-void TabBarControl::ActivatePage()
+void TabBarControl::dispose()
 {
-    if (mpViewTabBar->ActivatePage())
+    mxTabControl.reset();
+    InterimItemWindow::dispose();
+}
+
+TabBarControl::~TabBarControl()
+{
+    disposeOnce();
+}
+
+IMPL_LINK(TabBarControl, ActivatePageHdl, const OString&, rPage, void)
+{
+    if (!mpViewTabBar->ActivatePage(mxTabControl->get_page_index(rPage)))
     {
-        // Call the parent so that the correct tab is highlighted.
-        this->::TabControl::ActivatePage();
+        // When we run into this else branch then we have an active OLE
+        // object.  We ignore the request to switch views.  Additionally
+        // we put the active tab back to the one for the current view.
+        mpViewTabBar->UpdateActiveButton();
     }
 }
 
