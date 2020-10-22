@@ -879,15 +879,6 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         nStartLine--;
     }
 
-    vcl::Region aClipRegion(GetClipRegionRect());
-
-    // first draw the lines, then clip them!
-    rRenderContext.SetClipRegion();
-    if (m_nStyle & (WB_HASLINES | WB_HASLINESATROOT))
-        DrawNet(rRenderContext);
-
-    rRenderContext.SetClipRegion(aClipRegion);
-
     if (!m_pCursor && !mbNoAutoCurEntry)
     {
         // do not select if multiselection or explicit set
@@ -903,8 +894,10 @@ void SvImpLBox::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
         pEntry = m_pView->NextVisible(pEntry);
     }
 
+    if (m_nStyle & (WB_HASLINES | WB_HASLINESATROOT))
+        DrawNet(rRenderContext);
+
     m_nFlags &= ~LBoxFlags::DeselectAll;
-    rRenderContext.SetClipRegion();
     m_nFlags &= ~LBoxFlags::InPaint;
 }
 
@@ -1034,63 +1027,35 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
     {
         if (m_pView->IsExpanded(pEntry))
         {
-            aPos1.setX( m_pView->GetTabPos(pEntry, pFirstDynamicTab) );
-            // if it is not a context bitmap, go a little to the right below the
-            // first text (node bitmap, too)
-            if (!m_pView->nContextBmpWidthMax)
-                aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
-
-            aPos1.setY( nY );
-            aPos1.AdjustY(nEntryHeightDIV2 );
-
-            pChild = m_pView->FirstChild( pEntry );
+            // draw vertical line
+            aPos1.setX(m_pView->GetTabPos(pEntry, pFirstDynamicTab) + m_nNodeBmpTabDistance +
+                       rExpandedNodeBitmap.GetSizePixel().Width() / 2);
+            aPos1.setY(nY + nEntryHeight);
+            pChild = m_pView->FirstChild(pEntry);
             assert(pChild && "Child?");
             pChild = pChild->LastSibling();
-            nDistance = static_cast<sal_uInt16>(m_pView->GetVisiblePos(pChild) - m_pView->GetVisiblePos(pEntry));
+            nDistance = static_cast<sal_uInt16>(m_pView->GetVisiblePos(pChild) -
+                                                m_pView->GetVisiblePos(pEntry));
             aPos2 = aPos1;
-            aPos2.AdjustY(nDistance * nEntryHeight );
+            aPos2.AdjustY((nDistance * nEntryHeight) - (nEntryHeightDIV2 + 2));
             rRenderContext.DrawLine(aPos1, aPos2);
         }
         // visible in control?
-        if (n >= nOffs && ((m_nStyle & WB_HASLINESATROOT) || !m_pTree->IsAtRootDepth(pEntry)))
+        if (n >= nOffs && !m_pTree->IsAtRootDepth(pEntry))
         {
-            // can we recycle aPos1?
-            if (!m_pView->IsExpanded(pEntry))
-            {
-                // nope
-                aPos1.setX( m_pView->GetTabPos(pEntry, pFirstDynamicTab) );
-                // if it is not a context bitmap, go a little to the right below
-                // the first text (node bitmap, too)
-                if (!m_pView->nContextBmpWidthMax)
-                    aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
-                aPos1.setY( nY );
-                aPos1.AdjustY(nEntryHeightDIV2 );
-                aPos2.setX( aPos1.X() );
-            }
-            aPos2.setY( aPos1.Y() );
-            aPos2.AdjustX( -(m_pView->GetIndent()) );
+            // draw horizontal line
+            aPos1.setX(m_pView->GetTabPos(m_pView->GetParent(pEntry), pFirstDynamicTab)
+                       + m_nNodeBmpTabDistance
+                       + rExpandedNodeBitmap.GetSizePixel().Width() / 2);
+            aPos1.setY(nY + nEntryHeightDIV2);
+            aPos2 = aPos1;
+            aPos2.AdjustX(m_pView->GetIndent() / 2);
             rRenderContext.DrawLine(aPos1, aPos2);
         }
         nY += nEntryHeight;
         pEntry = m_pView->NextVisible(pEntry);
     }
-    if (m_nStyle & WB_HASLINESATROOT)
-    {
-        pEntry = m_pView->First();
-        aPos1.setX( m_pView->GetTabPos(pEntry, pFirstDynamicTab) );
-        // if it is not a context bitmap, go a little to the right below the
-        // first text (node bitmap, too)
-        if (!m_pView->nContextBmpWidthMax)
-            aPos1.AdjustX(rExpandedNodeBitmap.GetSizePixel().Width() / 2 );
-        aPos1.AdjustX( -(m_pView->GetIndent()) );
-        aPos1.setY( GetEntryLine( pEntry ) );
-        aPos1.AdjustY(nEntryHeightDIV2 );
-        pChild = pEntry->LastSibling();
-        aPos2.setX( aPos1.X() );
-        aPos2.setY( GetEntryLine( pChild ) );
-        aPos2.AdjustY(nEntryHeightDIV2 );
-        rRenderContext.DrawLine(aPos1, aPos2);
-    }
+
     rRenderContext.Pop();
 }
 
