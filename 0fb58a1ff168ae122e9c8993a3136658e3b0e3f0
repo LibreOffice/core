@@ -140,6 +140,24 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ee7329b_99a33d6c",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-22T11:55:41Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t think we need to worry about the mismatch - any data that could cause trouble because of the mismatch is already bad data.\n\nOf course we need to worry about the mismatch.  If in TypeSerializer::readGradient an nAngle \u003e std::numeric_limits\u003csal_Int16\u003e::max() is read, we need to now handle that somehow to not trigger the assert in Degree10(nAngle).  My question was whether you consider \u003chttps://git.libreoffice.org/core/+/0e8e352cc78af9b8cee27a77b0ac8e2e8f98f8cc%5E!/\u003e \"clamp angle to valid value\" a sane fix for that (or whether it would e.g. be better to drop that and use Degree10(sal_Int32(nAngle)) instead).\n\n\u003e But your fix to prevent accessing uninitialised data is definitely necessary.\n\nSure, but that\u0027s not relevant for what I asked about (which is how to treat properly read in nAngle \u003e std::numeric_limits\u003csal_Int16\u003e::max().)",
+      "parentUuid": "b218b831_13d94fcf",
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
