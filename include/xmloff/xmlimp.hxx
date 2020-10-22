@@ -301,8 +301,6 @@ public:
 
     virtual ~SvXMLImport() throw() override;
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
-
     void startElement(const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs);
     void endElement(const OUString& aName);
