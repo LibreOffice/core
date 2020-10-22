@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd827707_e627156a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-22T05:12:53Z",
+      "side": 1,
+      "message": "Good - this kind of approach is used in a few places.\ne.g. drawinglayer/source/tools/wmfemfhelper.cxx  (hmm, by Armin Le Grand though...)",
+      "range": {
+        "startLine": 451,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 33
+      },
+      "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
