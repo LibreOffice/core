@@ -97,6 +97,12 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     if ( pRedline && !pRedline->IsVisible() )
     {
         const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
+        // skip older redlines in the same position
+        while ( nCurRedlinePos + 1 < rTable.size() &&
+            *pRedline->GetPoint() == *rTable[nCurRedlinePos + 1]->GetPoint() )
+        {
+            ++nCurRedlinePos;
+        }
         SwRangeRedline * pHiddenRedline( rTable[nCurRedlinePos] );
         pHiddenRedline->Show(0, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
         pHiddenRedline->Show(1, rTable.GetPos(pHiddenRedline), /*bForced=*/true);
