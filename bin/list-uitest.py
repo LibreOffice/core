@@ -8,6 +8,7 @@
 
 import os
 import datetime
+import re
 
 def analyze_file(filename):
     class_name = ""
@@ -38,8 +39,9 @@ def get_files_list(directory, extension):
 
 def linkFormat(name):
     if name.startswith('tdf'):
+        bugId = ''.join(re.findall(r'\d{6}|\d{5}', name.split('tdf')[1]))
         return "[https://bugs.documentfoundation.org/show_bug.cgi?id={} {}]"\
-                .format(name.split('tdf')[1], name)
+                .format(bugId, name)
     else:
         return name
 
@@ -67,10 +69,10 @@ def main():
                 for uitest_file in uitest_files:
                     class_name, method_names = analyze_file(uitest_file)
                     if class_name:
-                        print("* {} ({})".format(
+                        print("# {} ({})".format(
                             linkFormat(class_name),uitest_file[3:]))
                         for m in method_names:
-                            print('**' + linkFormat(m))
+                            print('##' + linkFormat(m))
     print()
     print('[[Category:QA]][[Category:Development]]')
 
