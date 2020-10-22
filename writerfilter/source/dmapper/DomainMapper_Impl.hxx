@@ -28,6 +28,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <unotools/saveopt.hxx>
+#include <com/sun/star/embed/XStorage.hpp>
 #include <queue>
 #include <stack>
 #include <tuple>
@@ -1021,6 +1022,11 @@ public:
     /// Forget about the previous paragraph, as it's not inside the same
     /// start/end node.
     void ClearPreviousParagraph();
+
+    css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
+
+    /// Handles <w:altChunk>.
+    void HandleAltChunk(const OUString& rStreamName);
 
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
