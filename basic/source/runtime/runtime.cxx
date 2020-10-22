@@ -1131,6 +1131,8 @@ void SbiRuntime::PushFor()
     p->refEnd = PopVar();
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
+    // tdf#85371 - grant explicitly write access to the index variable
+    p->refVar->SetFlag(SbxFlagBits::Write);
     *(p->refVar) = *xBgn;
     nForLvl++;
 }
@@ -3361,7 +3363,12 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     sal_uInt16 uBase = static_cast<sal_uInt16>(nOp1 & 1);       // Can only be 0 or 1
     p1->PutInteger( uBase );
     if( !bCompatible )
+    {
+        // tdf#85371 - grant explicitly write access to the dimension variable
+        x2->SetFlag( SbxFlagBits::Write );
         x2->Compute( SbxPLUS, *p1 );
+        x2->ResetFlag( SbxFlagBits::Write );
+    }
     PushVar( x2.get() );  // first the Expr
     PushVar( p1 );  // then the Base
 }
