@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9fd05f3_0648454c",
+        "filename": "toolkit/source/awt/vclxcontainer.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2020-10-22T14:18:04Z",
+      "side": 1,
+      "message": "Currently this gets correctly called when the user scrolls, and it no longer causes an infinite loop.\nProbably must go through the model, but no idea how to access the model from here.",
+      "range": {
+        "startLine": 321,
+        "startChar": 57,
+        "endLine": 324,
+        "endChar": 57
+      },
+      "revId": "c40a6de8746dd5413de9094112a6c41c548274a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
