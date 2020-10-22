@@ -86,6 +86,24 @@
       "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fea8d6c_b6b683d6",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-22T09:33:27Z",
+      "side": 1,
+      "message": "Yeah, different places in the code disagree about whether this should be\n\n   sal_uInt16\n   sal_Int16\n   long\n   unsigned long\n   sal_Int32\n\nso I chose the option that made sense given that we need a range of at least\n   -3600 to 3600\n(for calculation purposes) \n\nlots of places in the code then reduce that to a positive range before using it.",
+      "parentUuid": "a3ff1f4b_8766ae99",
+      "revId": "0fb58a1ff168ae122e9c8993a3136658e3b0e3f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
