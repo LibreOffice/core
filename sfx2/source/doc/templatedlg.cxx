@@ -1335,7 +1335,6 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(weld::Window* pParent)
 
     mxCBApp->set_sensitive(false);
     mxActionBar->hide();
-    mxMoreTemplatesButton->hide();
     mxMoveButton->hide();
     mxExportButton->hide();
     mxCBXHideDlg->show();

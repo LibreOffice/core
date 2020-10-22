@@ -88,6 +88,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkCheckButton" id="hidedialogcb">
+                <property name="label" translatable="yes" context="templatedlg|hidedialogcb">Show this dialog at startup</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
@@ -100,7 +116,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -114,7 +130,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
@@ -330,57 +346,15 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkBox" id="box3">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkMenuButton" id="action_menu">
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>
-                        <property name="image">image7</property>
-                        <property name="relief">none</property>
-                        <property name="always-show-image">True</property>
-                        <property name="popup">menu1</property>
-                        <property name="use-popover">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="btnMoreTemplates">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="templatedlg|online_link|tooltip_text">Add more templates via extension</property>
-                        <property name="image">image5</property>
-                        <property name="relief">none</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="hidedialogcb">
-                        <property name="label" translatable="yes" context="templatedlg|hidedialogcb">Show this dialog at startup</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="use-underline">True</property>
-                        <property name="xalign">0</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
+                  <object class="GtkMenuButton" id="action_menu">
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|action_menu|tooltip_text">Settings</property>
+                    <property name="image">image7</property>
+                    <property name="relief">none</property>
+                    <property name="always-show-image">True</property>
+                    <property name="popup">menu1</property>
+                    <property name="use-popover">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -389,68 +363,80 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButtonBox" id="bottom_action_box">
+                  <object class="GtkButton" id="btnMoreTemplates">
+                    <property name="label" translatable="yes" context="templatedlg|extensions_btn">_Extensions</property>
                     <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="spacing">3</property>
-                    <child>
-                      <object class="GtkButton" id="move_btn">
-                        <property name="label" translatable="yes" context="templatedlg|move_btn">Move</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="templatedlg|move_btn|tooltip_text">Move Templates</property>
-                        <property name="image">image3</property>
-                        <property name="relief">none</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="export_btn">
-                        <property name="label" translatable="yes" context="templatedlg|export_btn">Export</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="templatedlg|export_btn|tooltip_text">Export Templates</property>
-                        <property name="image">image1</property>
-                        <property name="relief">none</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="import_btn">
-                        <property name="label" translatable="yes" context="templatedlg|import_btn">Import</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes" context="templatedlg|import_btn|tooltip_text">Import Templates</property>
-                        <property name="image">image4</property>
-                        <property name="relief">none</property>
-                        <property name="always-show-image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|online_link|tooltip_text">Add more templates via extension</property>
+                    <property name="image">image5</property>
+                    <property name="relief">none</property>
+                    <property name="use-underline">True</property>
+                    <property name="always-show-image">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
+                    <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="import_btn">
+                    <property name="label" translatable="yes" context="templatedlg|import_btn">Import</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|import_btn|tooltip_text">Import Templates</property>
+                    <property name="image">image4</property>
+                    <property name="relief">none</property>
+                    <property name="always-show-image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="export_btn">
+                    <property name="label" translatable="yes" context="templatedlg|export_btn">Export</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|export_btn|tooltip_text">Export Templates</property>
+                    <property name="image">image1</property>
+                    <property name="relief">none</property>
+                    <property name="always-show-image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="move_btn">
+                    <property name="label" translatable="yes" context="templatedlg|move_btn">Move</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="tooltip-text" translatable="yes" context="templatedlg|move_btn|tooltip_text">Move Templates</property>
+                    <property name="image">image3</property>
+                    <property name="relief">none</property>
+                    <property name="always-show-image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
