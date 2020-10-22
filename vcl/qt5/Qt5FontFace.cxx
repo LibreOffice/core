@@ -41,6 +41,7 @@ using namespace vcl;
 Qt5FontFace::Qt5FontFace(const Qt5FontFace& rSrc)
     : PhysicalFontFace(rSrc)
     , m_aFontId(rSrc.m_aFontId)
+    , m_eFontIdType(rSrc.m_eFontIdType)
 {
     if (rSrc.m_xCharMap.is())
         m_xCharMap = rSrc.m_xCharMap;
@@ -123,13 +124,14 @@ Qt5FontFace* Qt5FontFace::fromQFont(const QFont& rFont)
 {
     FontAttributes aFA;
     fillAttributesFromQFont(rFont, aFA);
-    return new Qt5FontFace(aFA, rFont.toString());
+    return new Qt5FontFace(aFA, rFont.toString(), FontIdType::Font);
 }
 
 Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QString& aStyle)
 {
     QFontDatabase aFDB;
     FontAttributes aFA;
+
     aFA.SetFamilyName(toOUString(aFamily));
     if (IsStarSymbol(aFA.GetFamilyName()))
         aFA.SetSymbolFlag(true);
@@ -137,12 +139,21 @@ Qt5FontFace* Qt5FontFace::fromQFontDatabase(const QString& aFamily, const QStrin
     aFA.SetPitch(aFDB.isFixedPitch(aFamily, aStyle) ? PITCH_FIXED : PITCH_VARIABLE);
     aFA.SetWeight(Qt5FontFace::toFontWeight(aFDB.weight(aFamily, aStyle)));
     aFA.SetItalic(aFDB.italic(aFamily, aStyle) ? ITALIC_NORMAL : ITALIC_NONE);
-    return new Qt5FontFace(aFA, aFamily + "," + aStyle);
+
+    int nPointSize = 0;
+    QList<int> aPointList = aFDB.pointSizes(aFamily, aStyle);
+    if (!aPointList.empty())
+        nPointSize = aPointList[0];
+
+    return new Qt5FontFace(aFA, aFamily + "," + aStyle + "," + QString::number(nPointSize),
+                           FontIdType::FontDB);
 }
 
-Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID)
+Qt5FontFace::Qt5FontFace(const FontAttributes& rFA, const QString& rFontID,
+                         const FontIdType eFontIdType)
     : PhysicalFontFace(rFA)
     , m_aFontId(rFontID)
+    , m_eFontIdType(eFontIdType)
     , m_bFontCapabilitiesRead(false)
 {
 }
@@ -152,7 +163,24 @@ sal_IntPtr Qt5FontFace::GetFontId() const { return reinterpret_cast<sal_IntPtr>(
 QFont Qt5FontFace::CreateFont() const
 {
     QFont aFont;
-    aFont.fromString(m_aFontId);
+    switch (m_eFontIdType)
+    {
+        case FontDB:
+        {
+            QFontDatabase aFDB;
+            QStringList aStrList = m_aFontId.split(",");
+            if (3 == aStrList.size())
+                aFont = aFDB.font(aStrList[0], aStrList[1], aStrList[2].toInt());
+            else
+                SAL_WARN("vcl.qt5", "Invalid QFontDatabase font ID " << m_aFontId);
+            break;
+        }
+        case Font:
+            bool bRet = aFont.fromString(m_aFontId);
+            SAL_WARN_IF(!bRet, "vcl.qt5", "Failed to create QFont from ID: " << m_aFontId);
+            Q_UNUSED(bRet);
+            break;
+    }
     return aFont;
 }
 
@@ -167,8 +195,7 @@ FontCharMapRef Qt5FontFace::GetFontCharMap() const
     if (m_xCharMap.is())
         return m_xCharMap;
 
-    QFont aFont;
-    aFont.fromString(m_aFontId);
+    QFont aFont = CreateFont();
     QRawFont aRawFont(QRawFont::fromFont(aFont));
     QByteArray aCMapTable = aRawFont.fontTable("cmap");
     if (aCMapTable.isEmpty())
@@ -195,8 +222,7 @@ bool Qt5FontFace::GetFontCapabilities(vcl::FontCapabilities& rFontCapabilities) 
     }
     m_bFontCapabilitiesRead = true;
 
-    QFont aFont;
-    aFont.fromString(m_aFontId);
+    QFont aFont = CreateFont();
     QRawFont aRawFont(QRawFont::fromFont(aFont));
     QByteArray aOS2Table = aRawFont.fontTable("OS/2");
     if (!aOS2Table.isEmpty())

@@ -56,10 +56,13 @@ public:
     CreateFontInstance(const FontSelectPattern& rFSD) const override;
 
 private:
+    typedef enum { Font, FontDB } FontIdType;
+
     Qt5FontFace(const Qt5FontFace&);
-    Qt5FontFace(const FontAttributes& rFA, const QString& rFontID);
+    Qt5FontFace(const FontAttributes&, const QString& rFontID, const FontIdType);
 
     const QString m_aFontId;
+    const FontIdType m_eFontIdType;
     mutable FontCharMapRef m_xCharMap;
     mutable vcl::FontCapabilities m_aFontCapabilities;
     mutable bool m_bFontCapabilitiesRead;
