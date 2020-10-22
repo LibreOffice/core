@@ -25,8 +25,8 @@
 #include <com/sun/star/drawing/framework/XToolBar.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <vcl/tabctrl.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <vcl/InterimItemWindow.hxx>
 #include "MutexOwner.hxx"
 
 #include <vector>
@@ -39,9 +39,24 @@ namespace vcl { class Window; }
 
 namespace sd {
     class ViewShellBase;
+    class ViewTabBar;
 }
 
 namespace sd {
+
+class TabBarControl : public InterimItemWindow
+{
+public:
+    TabBarControl(vcl::Window* pParentWindow, const ::rtl::Reference<ViewTabBar>& rpViewTabBar);
+    virtual void dispose() override;
+    virtual ~TabBarControl() override;
+    weld::Notebook& GetNotebook() { return *mxTabControl; }
+private:
+    std::unique_ptr<weld::Notebook> mxTabControl;
+    ::rtl::Reference<ViewTabBar> mpViewTabBar;
+
+    DECL_LINK(ActivatePageHdl, const OString&, void);
+};
 
 typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XToolBar,
@@ -64,9 +79,9 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    const VclPtr< ::TabControl>& GetTabControl() const { return mpTabControl;}
+    const VclPtr<TabBarControl>& GetTabControl() const { return mpTabControl; }
 
-    bool ActivatePage();
+    bool ActivatePage(size_t nIndex);
 
     //----- drawing::framework::XConfigurationChangeListener ------------------
 
@@ -125,6 +140,8 @@ public:
     */
     int GetHeight() const;
 
+    void UpdateActiveButton();
+
     void AddTabBarButton (
         const css::drawing::framework::TabBarButton& rButton,
         const css::drawing::framework::TabBarButton& rAnchor);
@@ -138,16 +155,14 @@ public:
         GetTabBarButtons();
 
 private:
-    VclPtr< ::TabControl> mpTabControl;
+    VclPtr<TabBarControl> mpTabControl;
     css::uno::Reference<css::frame::XController> mxController;
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     typedef ::std::vector<css::drawing::framework::TabBarButton> TabBarButtonList;
     TabBarButtonList maTabBarButtons;
-    VclPtr<TabPage> mpTabPage;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
     ViewShellBase* mpViewShellBase;
 
-    void UpdateActiveButton();
     void AddTabBarButton (
         const css::drawing::framework::TabBarButton& rButton,
         sal_Int32 nPosition);
