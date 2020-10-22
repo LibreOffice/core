@@ -2162,20 +2162,6 @@ void SvXMLImport::NotifyMacroEventRead()
     mbNotifyMacroEventRead = true;
 }
 
-css::uno::Any SvXMLImport::queryInterface(css::uno::Type const & aType)
-{
-    assert( aType != cppu::UnoType<css::xml::sax::XDocumentHandler>::get() );
-    assert( aType != cppu::UnoType<css::xml::sax::XExtendedDocumentHandler>::get() );
-    return  cppu::WeakImplHelper<
-             css::xml::sax::XFastDocumentHandler,
-             css::lang::XServiceInfo,
-             css::lang::XInitialization,
-             css::document::XImporter,
-             css::document::XFilter,
-             css::lang::XUnoTunnel,
-             css::xml::sax::XFastParser>::queryInterface(aType);
-}
-
 SvXMLImportFastNamespaceHandler::SvXMLImportFastNamespaceHandler()
 {
 }
