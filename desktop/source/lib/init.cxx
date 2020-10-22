@@ -2227,8 +2227,9 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // not pass it as a parameter to the filter
         OUString aOptions = getUString(pOptions);
         const OUString aLanguage = extractParameter(aOptions, "Language");
+        bool isValidLangTag = LanguageTag::isValidBcp47(aLanguage, nullptr);
 
-        if (!aLanguage.isEmpty())
+        if (!aLanguage.isEmpty() && isValidLangTag)
         {
             SfxLokHelper::setDefaultLanguage(aLanguage);
             // Set the LOK language tag, used for dialog tunneling.
