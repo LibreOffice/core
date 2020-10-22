@@ -69,14 +69,10 @@ namespace DOM
         virtual void SAL_CALL endDocument() override;
         virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
         virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
-
-        // XFastContextHandler
         virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
         virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
         virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
         virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
         virtual void SAL_CALL characters( const OUString& aChars ) override;
 
         // XSAXDocumentBuilder

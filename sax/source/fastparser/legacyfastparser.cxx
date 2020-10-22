@@ -144,14 +144,10 @@ public:
     virtual void SAL_CALL endDocument() override;
     virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
     virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
-
-    // XFastContextHandler
     virtual void SAL_CALL startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
     virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
     virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
     virtual void SAL_CALL characters( const OUString& aChars ) override;
 
 };
@@ -261,17 +257,6 @@ void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& /*Name
     {
         m_xDocumentHandler->endElement( Name );
     }
-}
-
-Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
-{
-    return this;
-}
-
-
-Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createUnknownChildContext( const OUString&/* Namespace */, const OUString&/* Name */, const Reference< XFastAttributeList >&/* Attribs */ )
-{
-    return this;
 }
 
 void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )

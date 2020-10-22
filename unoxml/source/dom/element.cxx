@@ -141,7 +141,6 @@ namespace DOM
         else
             nElementToken = getToken( i_rContext, reinterpret_cast<char const *>(pName) );
 
-        Reference<XFastContextHandler> xParentHandler(i_rContext.mxCurrentHandler);
         try
         {
             Reference< XFastAttributeList > xAttr( i_rContext.mxAttribList.get() );
@@ -152,23 +151,11 @@ namespace DOM
                                              strlen(reinterpret_cast<char const *>(pPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
-                if( xParentHandler.is() )
-                    i_rContext.mxCurrentHandler = xParentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
-                else
-                    i_rContext.mxCurrentHandler = i_rContext.mxDocHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
-
-                if( i_rContext.mxCurrentHandler.is() )
-                    i_rContext.mxCurrentHandler->startUnknownElement( aNamespace, aElementName, xAttr );
+                i_rContext.mxDocHandler->startUnknownElement( aNamespace, aElementName, xAttr );
             }
             else
             {
-                if( xParentHandler.is() )
-                    i_rContext.mxCurrentHandler = xParentHandler->createFastChildContext( nElementToken, xAttr );
-                else
-                    i_rContext.mxCurrentHandler = i_rContext.mxDocHandler->createFastChildContext( nElementToken, xAttr );
-
-                if( i_rContext.mxCurrentHandler.is() )
-                    i_rContext.mxCurrentHandler->startFastElement( nElementToken, xAttr );
+                i_rContext.mxDocHandler->startFastElement( nElementToken, xAttr );
             }
         }
         catch( Exception& )
@@ -183,24 +170,23 @@ namespace DOM
             pNode->fastSaxify(i_rContext);
         }
 
-        if( i_rContext.mxCurrentHandler.is() ) try
+        try
         {
             if( nElementToken != FastToken::DONTKNOW )
-                i_rContext.mxCurrentHandler->endFastElement( nElementToken );
+                i_rContext.mxDocHandler->endFastElement( nElementToken );
             else
             {
                 const OUString aElementName( reinterpret_cast<char const *>(pPrefix),
                                              strlen(reinterpret_cast<char const *>(pPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
-                i_rContext.mxCurrentHandler->endUnknownElement( "", aElementName );
+                i_rContext.mxDocHandler->endUnknownElement( "", aElementName );
             }
         }
         catch( Exception& )
         {}
 
         // restore after children have been processed
-        i_rContext.mxCurrentHandler = xParentHandler;
         popContext(i_rContext);
     }
 

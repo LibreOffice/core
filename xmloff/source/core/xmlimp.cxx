@@ -53,6 +53,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/namecontainer.hxx>
@@ -80,6 +81,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 rtl::Reference< FastTokenHandler > SvXMLImport::xTokenHandler( new FastTokenHandler() );
@@ -939,20 +941,6 @@ void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OU
     uno::Reference<XFastContextHandler> xContext = std::move(maFastContexts.top());
     maFastContexts.pop();
     xContext->endUnknownElement( rPrefix, rLocalName );
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SvXMLImport::createFastChildContext (sal_Int32,
-    const uno::Reference< xml::sax::XFastAttributeList > &)
-{
-    return this;
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SvXMLImport::createUnknownChildContext (const OUString &, const OUString &,
-    const uno::Reference< xml::sax::XFastAttributeList > &)
-{
-    return this;
 }
 
 void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)

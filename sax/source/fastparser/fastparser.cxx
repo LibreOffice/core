@@ -101,7 +101,6 @@ struct NameWithToken
 
 struct SaxContext
 {
-    Reference< XFastContextHandler > mxContext;
     sal_Int32 mnElementToken;
     OUString  maNamespace;
     OUString  maElementName;
@@ -386,18 +385,6 @@ void Entity::startElement( Event const *pEvent )
     const OUString& aNamespace = pEvent->msNamespace;
     const OUString& aElementName = pEvent->msElementName;
 
-    // Use un-wrapped pointers to avoid significant acquire/release overhead
-    XFastContextHandler *pParentContext = nullptr;
-    if( !maContextStack.empty() )
-    {
-        pParentContext = maContextStack.top().mxContext.get();
-        if( !pParentContext )
-        {
-            maContextStack.push( SaxContext(nElementToken, aNamespace, aElementName) );
-            return;
-        }
-    }
-
     maContextStack.push( SaxContext( nElementToken, aNamespace, aElementName ) );
 
     try
@@ -416,28 +403,12 @@ void Entity::startElement( Event const *pEvent )
 
         if( nElementToken == FastToken::DONTKNOW )
         {
-            if( pParentContext )
-                xContext = pParentContext->createUnknownChildContext( aNamespace, aElementName, xAttr );
-            else if( mxDocumentHandler.is() )
-                xContext = mxDocumentHandler->createUnknownChildContext( aNamespace, aElementName, xAttr );
-
-            if( xContext.is() )
-            {
-                xContext->startUnknownElement( aNamespace, aElementName, xAttr );
-            }
+            mxDocumentHandler->startUnknownElement( aNamespace, aElementName, xAttr );
         }
         else
         {
-            if( pParentContext )
-                xContext = pParentContext->createFastChildContext( nElementToken, xAttr );
-            else if( mxDocumentHandler.is() )
-                xContext = mxDocumentHandler->createFastChildContext( nElementToken, xAttr );
-
-            if( xContext.is() )
-                xContext->startFastElement( nElementToken, xAttr );
+            mxDocumentHandler->startFastElement( nElementToken, xAttr );
         }
-        // swap the reference we own in to avoid referencing thrash.
-        maContextStack.top().mxContext = std::move( xContext );
     }
     catch (...)
     {
@@ -447,16 +418,9 @@ void Entity::startElement( Event const *pEvent )
 
 void Entity::characters( const OUString& sChars )
 {
-    if (maContextStack.empty())
+    try
     {
-        // Malformed XML stream !?
-        return;
-    }
-
-    XFastContextHandler * pContext( maContextStack.top().mxContext.get() );
-    if( pContext ) try
-    {
-        pContext->characters( sChars );
+        mxDocumentHandler->characters( sChars );
     }
     catch (...)
     {
@@ -466,27 +430,19 @@ void Entity::characters( const OUString& sChars )
 
 void Entity::endElement()
 {
-    if (maContextStack.empty())
-    {
-        // Malformed XML stream !?
-        return;
-    }
-
     const SaxContext& aContext = maContextStack.top();
-    XFastContextHandler* pContext( aContext.mxContext.get() );
-    if( pContext )
-        try
-        {
-            sal_Int32 nElementToken = aContext.mnElementToken;
-            if( nElementToken != FastToken::DONTKNOW )
-                pContext->endFastElement( nElementToken );
-            else
-                pContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
-        }
-        catch (...)
-        {
-            saveException( ::cppu::getCaughtException() );
-        }
+    try
+    {
+        sal_Int32 nElementToken = aContext.mnElementToken;
+        if( nElementToken != FastToken::DONTKNOW )
+            mxDocumentHandler->endFastElement( nElementToken );
+        else
+            mxDocumentHandler->endUnknownElement( aContext.maNamespace, aContext.maElementName );
+    }
+    catch (...)
+    {
+        saveException( ::cppu::getCaughtException() );
+    }
     maContextStack.pop();
 }
 
@@ -783,6 +739,12 @@ namespace
 ****************/
 void FastSaxParserImpl::parseStream(const InputSource& rStructSource)
 {
+    assert( maData.mxDocumentHandler );
+    if (! maData.mxDocumentHandler )
+    {
+        SAL_WARN("sax", "no document handler set, ignoring this stream");
+        return;
+    }
     xmlInitParser();
 
     // Only one text at one time

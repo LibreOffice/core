@@ -64,12 +64,30 @@ private:
     uno::Reference< io::XInputStream > createStream(const OString& sInput);
 };
 
+class MyDocumentHandler : public cppu::WeakImplHelper<css::xml::sax::XFastDocumentHandler>
+{
+public:
+    // css::xml::sax::XFastDocumentHandler:
+    virtual void SAL_CALL startDocument() override {}
+    virtual void SAL_CALL endDocument() override {}
+    virtual void SAL_CALL processingInstruction( const OUString& /*rTarget*/, const OUString& /*rData*/ ) override {}
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & /*xLocator*/) override {}
+    virtual void SAL_CALL startFastElement(::sal_Int32 /*Element*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*Attribs*/) override {}
+    virtual void SAL_CALL startUnknownElement(const OUString & /*Namespace*/, const OUString & /*Name*/,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*Attribs*/) override {}
+    virtual void SAL_CALL endFastElement(::sal_Int32 /*Element*/) override {}
+    virtual void SAL_CALL endUnknownElement(const OUString & /*Namespace*/, const OUString & /*Name*/) override {}
+    virtual void SAL_CALL characters(const OUString & /*aChars*/) override {}
+};
+
 void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
     mxTokenHandler.set( new DummyTokenHandler() );
     mxParser.set( new sax_fastparser::FastSaxParser() );
     mxParser->setTokenHandler( mxTokenHandler.get() );
+    mxParser->setFastDocumentHandler(new MyDocumentHandler());
 }
 
 uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInput)

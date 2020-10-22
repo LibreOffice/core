@@ -314,22 +314,6 @@ public:
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
-    // ::css::xml::sax::XFastContextHandler
-    virtual void SAL_CALL startFastElement(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-    virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
-        const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
-    virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
-        const OUString & Name) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
-    createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
-    createUnknownChildContext(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
-
     // XFastParser
     virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
     virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
@@ -340,6 +324,14 @@ public:
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
     virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void SAL_CALL startFastElement(sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+    virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
+        const OUString & Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
+    virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
+        const OUString & Name) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

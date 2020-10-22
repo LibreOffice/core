@@ -45,17 +45,40 @@ OOXMLFastDocumentHandler::~OOXMLFastDocumentHandler() {}
 
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
-(::sal_Int32
-#ifdef DBG_UTIL
-Element
-#endif
-, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
+(::sal_Int32 Element
+, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
 #ifdef DBG_UTIL
     clog << this << ":start element:"
          << fastTokenToId(Element)
          << endl;
 #endif
+    if ( mpStream == nullptr && mpDocument == nullptr )
+    {
+        // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
+        // --> do not provide a child context
+        maContexts.push(nullptr);
+        return;
+    }
+
+    css::uno::Reference< css::xml::sax::XFastContextHandler> xContext;
+    if (maContexts.empty())
+        xContext = OOXMLFactory::createFastChildContextFromStart(getContextHandler().get(), Element);
+    else
+    {
+        auto & parentContext = maContexts.top();
+        if (!parentContext)
+            // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
+            // --> do not provide a child context
+            ;
+        else
+        {
+            xContext = parentContext->createFastChildContext(Element, Attribs);
+        }
+    }
+    if (xContext)
+        xContext->startFastElement(Element, Attribs);
+    maContexts.push(xContext);
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::startUnknownElement
@@ -74,19 +97,20 @@ Name
     clog << this << ":start unknown element:"
          << Namespace  << ":" << Name << endl;
 #endif
+    maContexts.push(nullptr);
 }
 
-void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32
-#ifdef DBG_UTIL
-Element
-#endif
-)
+void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32 Element)
 {
 #ifdef DBG_UTIL
     clog << this << ":end element:"
          << fastTokenToId(Element)
          << endl;
 #endif
+    auto & parentContext = maContexts.top();
+    if (parentContext)
+        parentContext->endFastElement(Element);
+    maContexts.pop();
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::endUnknownElement
@@ -105,6 +129,7 @@ Name
          << Namespace << ":" << Name
          << endl;
 #endif
+    maContexts.pop();
 }
 
 rtl::Reference< OOXMLFastContextHandler > const &
@@ -120,44 +145,6 @@ OOXMLFastDocumentHandler::getContextHandler() const
     }
 
     return mxContextHandler;
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
- OOXMLFastDocumentHandler::createFastChildContext
-(::sal_Int32 Element,
- const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
-{
-    if ( mpStream == nullptr && mpDocument == nullptr )
-    {
-        // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
-        // --> do not provide a child context
-        return nullptr;
-    }
-
-    return OOXMLFactory::createFastChildContextFromStart(getContextHandler().get(), Element);
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-OOXMLFastDocumentHandler::createUnknownChildContext
-(const OUString &
-#ifdef DBG_UTIL
-Namespace
-#endif
-,
- const OUString &
-#ifdef DBG_UTIL
-Name
-#endif
-, const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
-{
-#ifdef DBG_UTIL
-    clog << this << ":createUnknownChildContext:"
-         << Namespace << ":"<< Name
-         << endl;
-#endif
-
-    return uno::Reference< xml::sax::XFastContextHandler >
-        ( new OOXMLFastDocumentHandler( m_xContext, nullptr, nullptr, 0 ) );
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::characters(const OUString & /*aChars*/)
