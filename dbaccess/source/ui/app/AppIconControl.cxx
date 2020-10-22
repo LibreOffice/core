@@ -63,6 +63,7 @@ OApplicationIconControl::OApplicationIconControl(std::unique_ptr<weld::ScrolledW
     , m_nMaxHeight(0)
 {
     mnVItemSpace = 6; // row spacing
+    mbSelectOnFocus = false;
     DrawMnemonics(true);
 }
 

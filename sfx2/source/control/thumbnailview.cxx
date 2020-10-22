@@ -155,6 +155,7 @@ ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std:
     , mnDisplayHeight(0)
     , mnVItemSpace(-1)
     , mbAllowVScrollBar(xWindow->get_vpolicy() != VclPolicyType::NEVER)
+    , mbSelectOnFocus(true)
     , mpItemAttrs(new ThumbnailItemAttributes)
     , mxScrolledWindow(std::move(xWindow))
     , mxContextMenu(std::move(xMenu))
@@ -941,17 +942,20 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rec
 
 void ThumbnailView::GetFocus()
 {
-    // Select the first item if nothing selected
-    int nSelected = -1;
-    for (size_t i = 0, n = mItemList.size(); i < n && nSelected == -1; ++i)
+    if (mbSelectOnFocus)
     {
-        if (mItemList[i]->isSelected())
-            nSelected = i;
-    }
+        // Select the first item if nothing selected
+        int nSelected = -1;
+        for (size_t i = 0, n = mItemList.size(); i < n && nSelected == -1; ++i)
+        {
+            if (mItemList[i]->isSelected())
+                nSelected = i;
+        }
 
-    if (nSelected == -1 && !mItemList.empty())
-    {
-        SelectItem(1);
+        if (nSelected == -1 && !mItemList.empty())
+        {
+            SelectItem(1);
+        }
     }
 
     // Tell the accessible object that we got the focus.
