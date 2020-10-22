@@ -2779,6 +2779,9 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
     if (priv->m_bUnipoll)
         g_setenv("SAL_LOK_OPTIONS", "unipoll", FALSE);
 
+    static const char testingLangs[] = "de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru";
+    g_setenv("LOK_ALLOWLIST_LANGUAGES", testingLangs, FALSE);
+
     priv->m_pOffice = lok_init_2(priv->m_aLOPath.c_str(), priv->m_aUserProfileURL.empty() ? nullptr : priv->m_aUserProfileURL.c_str());
 
     if (priv->m_pOffice == nullptr)
