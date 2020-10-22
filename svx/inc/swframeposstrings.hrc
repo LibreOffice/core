@@ -43,6 +43,7 @@ const char* RID_SVXSW_FRAMEPOSITIONS[] =
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Outer paragraph border"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Entire page"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area"),
+    NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area top"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Page text area bottom"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Base line"),
     NC_("RID_SVXSW_FRAMEPOSITIONS", "Character"),

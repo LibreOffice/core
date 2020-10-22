@@ -98,8 +98,9 @@ enum class LB {
     VertLine            = 0x080000, // vertical text line
 
     RelPagePrintAreaBottom = 0x100000, // bottom of text area of page
+    RelPagePrintAreaTop = 0x200000,
 
-    LAST = 0x200000
+    LAST = 0x400000
 };
 
 }
@@ -118,6 +119,7 @@ RelationMap const aRelationMap[] =
     {SvxSwFramePosString::REL_FRM_RIGHT, SvxSwFramePosString::MIR_REL_FRM_RIGHT, LB::RelFrameRight,   RelOrientation::FRAME_RIGHT},
     {SvxSwFramePosString::REL_PG_FRAME,  SvxSwFramePosString::REL_PG_FRAME,      LB::RelPageFrame,    RelOrientation::PAGE_FRAME},
     {SvxSwFramePosString::REL_PG_PRTAREA,SvxSwFramePosString::REL_PG_PRTAREA,    LB::RelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
+    {SvxSwFramePosString::REL_PG_PRTAREA_TOP,SvxSwFramePosString::REL_PG_PRTAREA_TOP,    LB::RelPagePrintAreaTop,  RelOrientation::PAGE_PRINT_AREA_TOP},
     {SvxSwFramePosString::REL_PG_PRTAREA_BOTTOM,SvxSwFramePosString::REL_PG_PRTAREA_BOTTOM,    LB::RelPagePrintAreaBottom,  RelOrientation::PAGE_PRINT_AREA_BOTTOM},
     {SvxSwFramePosString::REL_CHAR,      SvxSwFramePosString::REL_CHAR,          LB::RelChar,        RelOrientation::CHAR},
 
@@ -259,7 +261,7 @@ FrmMap const aHParaHtmlAbsMap[] =
 
 
 constexpr auto VERT_PARA_REL = LB::VertFrame|LB::VertPrintArea|
-                                      LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPagePrintAreaBottom;
+                                      LB::RelPageFrame|LB::RelPagePrintArea| LB::RelPagePrintAreaTop |LB::RelPagePrintAreaBottom;
 
 FrmMap const aVParaMap[] =
 {

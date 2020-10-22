@@ -49,6 +49,7 @@ public:
         MIR_REL_FRM_RIGHT          ,
         REL_PG_FRAME               ,
         REL_PG_PRTAREA             ,
+        REL_PG_PRTAREA_TOP         ,
         REL_PG_PRTAREA_BOTTOM      ,
         REL_BASE                   ,
         REL_CHAR                   ,
