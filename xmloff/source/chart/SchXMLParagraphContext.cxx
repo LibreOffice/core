@@ -52,45 +52,6 @@ SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
 SchXMLParagraphContext::~SchXMLParagraphContext()
 {}
 
-void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    // remember the id. It is used for storing the original cell range string in
-    // a local table (cached data)
-    if( !mpId )
-        return;
-
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    bool bHaveXmlId( false );
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if (IsXMLToken(aLocalName, XML_ID))
-        {
-            if (nPrefix == XML_NAMESPACE_XML)
-            {
-                (*mpId) = xAttrList->getValueByIndex( i );
-                bHaveXmlId = true;
-            }
-            if (nPrefix == XML_NAMESPACE_TEXT)
-            {   // text:id shall be ignored if xml:id exists
-                if (!bHaveXmlId)
-                {
-                    (*mpId) = xAttrList->getValueByIndex( i );
-                }
-            }
-        }
-    }
-}
-
-void SchXMLParagraphContext::EndElement()
-{
-    mrText = maBuffer.makeStringAndClear();
-}
-
 void SchXMLParagraphContext::startFastElement(
    sal_Int32 /*nElement*/,
    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
@@ -147,11 +108,6 @@ SvXMLImportContextRef SchXMLParagraphContext::CreateChildContext(
     }
 
     return nullptr;
-}
-
-void SchXMLParagraphContext::Characters( const OUString& rChars )
-{
-    maBuffer.append( rChars );
 }
 
 void SchXMLParagraphContext::characters( const OUString& rChars )

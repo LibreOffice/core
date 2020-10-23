@@ -48,11 +48,6 @@ XMLChangeInfoContext::~XMLChangeInfoContext()
 {
 }
 
-void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
-{
-    // no attributes
-}
-
 SvXMLImportContextRef XMLChangeInfoContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,

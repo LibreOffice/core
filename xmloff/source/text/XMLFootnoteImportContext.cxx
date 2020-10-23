@@ -150,12 +150,6 @@ void XMLFootnoteImportContext::StartElement(
     // else: ignore footnote! Content will be merged into document.
 }
 
-void XMLFootnoteImportContext::Characters(const OUString&)
-{
-    // ignore characters! Text must be contained in paragraphs!
-    // rHelper.InsertString(rString);
-}
-
 void XMLFootnoteImportContext::EndElement()
 {
     // get rid of last dummy paragraph

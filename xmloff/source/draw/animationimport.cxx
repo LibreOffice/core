@@ -533,14 +533,6 @@ AnimationNodeContext::AnimationNodeContext(
     }
 }
 
-void AnimationNodeContext::startFastElement( sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
-{
-    // code of StartElement is moved to init_node that is now called
-    // in c'tor before appending this node to its parent.
-    // This is needed for random nodes that need the correct target
-    // set when child nodes are appended.
-}
-
 void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( !mxNode.is() )

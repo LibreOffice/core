@@ -53,8 +53,6 @@ protected:
         enum IndexSourceParamEnum eParam,
         const OUString& rValue) override;
 
-    virtual void EndElement() override;
-
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

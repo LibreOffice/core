@@ -29,8 +29,6 @@ namespace dbaxml
 
         OXMLFileBasedDatabase( ODBFilter& rImport,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList );
-        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
         virtual ~OXMLFileBasedDatabase() override;
     };
 } // namespace dbaxml

@@ -372,9 +372,6 @@ public:
         const Reference< XFastAttributeList >& xAttrList,
         XMLAnimationsContext& rAnimationsContext);
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
-
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -386,9 +383,6 @@ class XMLAnimationsSoundContext : public SvXMLImportContext
 public:
 
     XMLAnimationsSoundContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList, XMLAnimationsEffectContext* pParent );
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
 };
 
 }
@@ -594,10 +588,6 @@ XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport )
 : SvXMLImportContext(rImport)
 {
 }
-
-void XMLAnimationsContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{}
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsContext::createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )

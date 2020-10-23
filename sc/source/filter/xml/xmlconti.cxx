@@ -95,11 +95,6 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::c
     return new SvXMLImportContext( GetImport() );
 }
 
-void ScXMLContentContext::Characters( const OUString& rChars )
-{
-    sValue.append(rChars);
-}
-
 void ScXMLContentContext::characters( const OUString& rChars )
 {
     sValue.append(rChars);

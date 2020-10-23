@@ -47,8 +47,6 @@ namespace dbaxml
                     );
         virtual ~OXMLHierarchyCollection() override;
 
-        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
         virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
             sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };

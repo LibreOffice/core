@@ -54,9 +54,6 @@ public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -66,8 +63,6 @@ class SwXMLBlockContext : public SvXMLImportContext
 public:
     SwXMLBlockContext( SwXMLBlockListImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 };
 
 class SwXMLTextBlockDocumentContext : public SvXMLImportContext
@@ -77,9 +72,6 @@ private:
 
 public:
     SwXMLTextBlockDocumentContext( SwXMLTextBlockImport& rImport );
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
@@ -93,9 +85,6 @@ private:
 public:
     SwXMLTextBlockBodyContext( SwXMLTextBlockImport& rImport );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -107,9 +96,6 @@ private:
 
 public:
     SwXMLTextBlockTextContext( SwXMLTextBlockImport& rImport );
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element,
@@ -123,9 +109,6 @@ private:
 
 public:
     SwXMLTextBlockParContext( SwXMLTextBlockImport & rImport );
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual void SAL_CALL characters( const OUString & aChars ) override;
 

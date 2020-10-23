@@ -59,9 +59,6 @@ public:
 
     SdXMLBodyContext_Impl( SdXMLImport& rImport );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
                 sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
@@ -94,13 +91,6 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-
-    virtual void SAL_CALL characters( const OUString& /*aChars*/ ) override {}
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
-
-    virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 };
 
 }
@@ -193,13 +183,6 @@ public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -212,22 +195,6 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
     SdXMLDocContext_Impl(i_rImport),
     SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
-}
-
-void SAL_CALL SdXMLFlatDocContext_Impl::startFastElement( sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
-{
-    SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList);
-}
-
-void SAL_CALL SdXMLFlatDocContext_Impl::endFastElement( sal_Int32 nElement )
-{
-    SvXMLMetaDocumentContext::endFastElement(nElement);
-}
-
-void SAL_CALL SdXMLFlatDocContext_Impl::characters( const OUString& rChars )
-{
-    SvXMLMetaDocumentContext::characters(rChars);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SdXMLFlatDocContext_Impl::createFastChildContext(

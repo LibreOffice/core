@@ -119,9 +119,4 @@ void XMLSectionSourceDDEImportContext::startFastElement(sal_Int32 /*nElement*/,
 
 }
 
-void XMLSectionSourceDDEImportContext::endFastElement(sal_Int32 /*nElement*/)
-{
-    // nothing to be done!
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

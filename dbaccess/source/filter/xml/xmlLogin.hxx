@@ -29,8 +29,6 @@ namespace dbaxml
 
         OXMLLogin( ODBFilter& rImport,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList );
-        virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
         virtual ~OXMLLogin() override;
 
     };

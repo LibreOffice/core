@@ -164,10 +164,6 @@ ORptFilter& OXMLRowColumn::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 
-void OXMLRowColumn::endFastElement(sal_Int32 )
-{
-}
-
 } // namespace rptxml
 
 

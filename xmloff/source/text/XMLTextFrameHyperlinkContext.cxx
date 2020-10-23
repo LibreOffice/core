@@ -97,10 +97,6 @@ XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
 
-void XMLTextFrameHyperlinkContext::EndElement()
-{
-}
-
 SvXMLImportContextRef XMLTextFrameHyperlinkContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

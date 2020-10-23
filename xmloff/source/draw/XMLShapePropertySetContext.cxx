@@ -60,8 +60,6 @@ void XMLShapePropertySetContext::endFastElement(sal_Int32 )
 
     XMLPropertyState aPropState( mnBulletIndex, Any(xNumRule) );
     mrProperties.push_back( aPropState );
-
-    SvXMLPropertySetContext::EndElement();
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapePropertySetContext::createFastChildContext(

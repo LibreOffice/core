@@ -43,9 +43,6 @@ public:
     SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
                 SvXMLImport& rImport );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -161,12 +158,6 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
 
 SchXMLBodyContext::~SchXMLBodyContext()
 {}
-
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return nullptr;
-}
 
 SvXMLImportContextRef SchXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,

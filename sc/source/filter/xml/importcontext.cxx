@@ -30,22 +30,4 @@ const ScXMLImport& ScXMLImportContext::GetScImport() const
     return static_cast<const ScXMLImport&>(GetImport());
 }
 
-void SAL_CALL ScXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/)
-{
-}
-
-void SAL_CALL ScXMLImportContext::endFastElement(sal_Int32 /*nElement*/)
-{
-}
-
-void SAL_CALL ScXMLImportContext::characters(const OUString &)
-{
-}
-
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLImportContext::createFastChildContext(
-    sal_Int32/* nElement */, const css::uno::Reference< css::xml::sax::XFastAttributeList >&/* xAttrList */ )
-{
-    return nullptr;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

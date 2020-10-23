@@ -89,17 +89,6 @@ XMLEventsImportContext::~XMLEventsImportContext()
 }
 
 
-void XMLEventsImportContext::StartElement(
-    const Reference<XAttributeList> &)
-{
-    // nothing to be done
-}
-
-void XMLEventsImportContext::EndElement()
-{
-    // nothing to be done
-}
-
 SvXMLImportContextRef XMLEventsImportContext::CreateChildContext(
     sal_uInt16 /*p_nPrefix*/,
     const OUString& /*rLocalName*/,
@@ -139,17 +128,6 @@ SvXMLImportContextRef XMLEventsImportContext::CreateChildContext(
     // b) delegate to factory
     return GetImport().GetEventImport().CreateContext(
         GetImport(), xAttrList, this, sEventName, sLanguage);
-}
-
-void XMLEventsImportContext::startFastElement(sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >&)
-{
-    // nothing to be done
-}
-
-void XMLEventsImportContext::endFastElement(sal_Int32 /*nElement*/)
-{
-    // nothing to be done
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext::createFastChildContext(

@@ -35,9 +35,6 @@ class SchXMLListItemContext : public SvXMLImportContext
 public:
     SchXMLListItemContext( SvXMLImport& rImport, const OUString& rLocalName, OUString& rText );
 
-    virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList ) override;
-    virtual void EndElement() override;
-
     virtual SvXMLImportContextRef CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -55,14 +52,6 @@ SchXMLListItemContext::SchXMLListItemContext(
         , OUString& rText )
         : SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName )
         , m_rText( rText )
-{
-}
-
-void SchXMLListItemContext::StartElement( const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
-{
-}
-
-void SchXMLListItemContext::EndElement()
 {
 }
 
@@ -88,10 +77,6 @@ SchXMLTextListContext::SchXMLTextListContext(
 }
 
 SchXMLTextListContext::~SchXMLTextListContext()
-{
-}
-
-void SchXMLTextListContext::StartElement( const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
 }
 

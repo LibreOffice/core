@@ -68,9 +68,6 @@ public:
     SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, const uno::Reference< XNameContainer >& xTable,
         bool bOOoFormat );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext(sal_Int32 Element,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;

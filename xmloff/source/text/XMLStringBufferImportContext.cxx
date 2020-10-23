@@ -56,22 +56,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLStringBufferImportC
     return new XMLStringBufferImportContext(GetImport(), rTextBuffer);
 }
 
-SvXMLImportContextRef XMLStringBufferImportContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const Reference<XAttributeList> &)
-{
-    return new XMLStringBufferImportContext(GetImport(), nPrefix,
-                                            rLocalName, rTextBuffer);
-}
-
 void XMLStringBufferImportContext::characters(const OUString& rChars )
-{
-    rTextBuffer.append(rChars);
-}
-
-void XMLStringBufferImportContext::Characters(
-    const OUString& rChars )
 {
     rTextBuffer.append(rChars);
 }
@@ -80,22 +65,6 @@ void XMLStringBufferImportContext::endFastElement(sal_Int32 nElement)
 {
     // add return for paragraph elements
     if ( nElement == XML_ELEMENT(TEXT, XML_P) || nElement == XML_ELEMENT(LO_EXT, XML_P))
-    {
-        rTextBuffer.append(u'\x000a');
-    }
-}
-
-void XMLStringBufferImportContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-}
-
-void XMLStringBufferImportContext::EndElement()
-{
-    // add return for paragraph elements
-    if ( (XML_NAMESPACE_TEXT == GetPrefix() ||
-                XML_NAMESPACE_LO_EXT == GetPrefix()) &&
-         (IsXMLToken(GetLocalName(), XML_P))    )
     {
         rTextBuffer.append(u'\x000a');
     }

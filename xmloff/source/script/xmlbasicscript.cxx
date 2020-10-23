@@ -71,11 +71,6 @@ bool BasicElementBase::getBoolAttr(bool* pRet, sal_Int32 nToken,
     return false;
 }
 
-void BasicElementBase::startFastElement(sal_Int32 /*nElement*/,
-                                        const Reference<XFastAttributeList>& /*xAttributes*/)
-{
-}
-
 // BasicLibrariesElement
 
 BasicLibrariesElement::BasicLibrariesElement(SvXMLImport& rImport,
