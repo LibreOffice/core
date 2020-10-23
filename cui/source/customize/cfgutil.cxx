@@ -47,6 +47,7 @@
 #include <bitmaps.hlst>
 #include <sfx2/app.hxx>
 #include <sfx2/minfitem.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/DisableInteractionHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
@@ -781,6 +782,48 @@ void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
     }
 }
 
+void SfxConfigGroupListBox::FillScriptListAll(const css::uno::Reference< css::script::browse::XBrowseNode >& xNode,
+                                           SvTreeListEntry* pParent)
+{
+    try
+    {
+        if ( xNode->hasChildNodes() )
+        {
+            Image aImage;
+            OUString sName;
+            SvTreeListEntry* pEntry;
+
+            // tdf#120362: Don't ask to enable disabled Java when filling script list
+            css::uno::ContextLayer layer(
+                new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+
+            Sequence< Reference< browse::XBrowseNode > > xChildren = xNode->getChildNodes();
+            for ( sal_Int32 it = 0; it < xChildren.getLength(); ++it )
+            {
+                Reference< browse::XBrowseNode >& xChild = xChildren[it];
+                sName = xChild->getName();
+
+                if ( sName == "share")
+                    continue;
+
+                if ( sName == "user" )
+                {
+                    sName = xImp->m_sMyMacros;
+                }
+
+                aImage = GetImage( xChild, m_xContext, sName == "Root" );
+                pEntry = InsertEntry( sName, pParent );
+                SetExpandedEntryBmp( pEntry, aImage );
+                SetCollapsedEntryBmp( pEntry, aImage );
+                FillScriptListAll(xChild, pEntry);
+            }
+        }
+    }
+    catch (RuntimeException&)
+    {
+    }
+}
+
 void SfxConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchInformation>& xCommands)
 {
     for (const auto & rInfo : xCommands)
@@ -849,7 +892,10 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         {
              //We are only showing scripts not slot APIs so skip
              //Root node and show location nodes
-            FillScriptList(rootNode, nullptr, false);
+            if (comphelper::LibreOfficeKit::isActive())
+                FillScriptListAll(rootNode, nullptr);
+            else
+                FillScriptList(rootNode, nullptr, false);
         }
     }
 

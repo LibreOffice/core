@@ -192,6 +192,8 @@ class SfxConfigGroupListBox : public SvTreeListBox
     void InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                          SvTreeListEntry* pParentEntry, bool bCheapChildrenOnDemand);
+    void FillScriptListAll(const css::uno::Reference< css::script::browse::XBrowseNode >& xNode,
+                         SvTreeListEntry* pEntry);
     void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
     OUString MapCommand2UIName(const OUString& sCommand);
 
