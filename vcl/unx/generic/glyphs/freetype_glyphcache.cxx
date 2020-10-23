@@ -430,9 +430,17 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
     mfStretch = static_cast<double>(mnWidth) / rFSD.mnHeight;
-    // sanity check (e.g. #i66394#, #i66244#, #i66537#)
-    if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
+    // sanity checks (e.g. #i66394#, #i66244#, #i66537#)
+    if (mnWidth < 0)
+    {
+        SAL_WARN("vcl", "FreetypeFont negative font width of: " << mnWidth);
         return;
+    }
+    if (mfStretch > +64.0 || mfStretch < -64.0)
+    {
+        SAL_WARN("vcl", "FreetypeFont excessive stretch of: " << mfStretch);
+        return;
+    }
 
     if( !maFaceFT )
         return;
