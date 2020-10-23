@@ -133,8 +133,7 @@ SvXMLImportContextRef XMLIndexTOCStylesContext::CreateChildContext(
     }
 
     // always return default context; we already got the interesting info
-    return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
-                                                  xAttrList);
+    return new SvXMLImportContext(GetImport());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

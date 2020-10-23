@@ -1234,8 +1234,7 @@ SvXMLImportContextRef XMLDatabaseFieldImportContext::CreateChildContext(
         ProcessAttribute( XML_TOKEN_INVALID, OUString() );
     }
 
-    return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
-                                                  xAttrList);
+    return nullptr;
 }
 
 

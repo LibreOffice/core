@@ -641,8 +641,6 @@ bool SdXMLNumberFormatImportContext::compareStyle( const SdXMLFixedDataStyle* pS
 
 void SdXMLNumberFormatImportContext::endFastElement(sal_Int32 )
 {
-    SvXMLNumFormatContext::EndElement();
-
     for( ; mnIndex < 16; mnIndex++ )
     {
         mnElements[mnIndex] = DataStyleNumber::NONE;
