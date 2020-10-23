@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8d3a5ad_133b337f",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-23T14:43:34Z",
+      "side": 1,
+      "message": "does isValidLangTag already imply !aLanguage.isEmpty()?",
+      "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
