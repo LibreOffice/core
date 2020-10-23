@@ -214,9 +214,8 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     std::unique_ptr<SvXMLNamespaceMap>    mpNamespaceMap;
     std::unique_ptr<SvXMLUnitConverter>   mpUnitConv;
-    std::stack<SvXMLImportContextRef>     maContexts;
-    std::stack<css::uno::Reference<css::xml::sax::XFastContextHandler>>
-                                          maFastContexts;
+    std::stack<SvXMLImportContextRef, std::vector<SvXMLImportContextRef>>
+                                          maContexts;
     std::unique_ptr<SvXMLNumFmtHelper>    mpNumImport;
     std::unique_ptr<ProgressBarHelper>    mpProgressBarHelper;
     std::unique_ptr<XMLEventImportHelper> mpEventImportHelper;
@@ -227,7 +226,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
 
     SvXMLImportFlags  mnImportFlags;
     std::set< OUString > embeddedFontUrlsKnown;
-    bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     rtl::Reference < comphelper::AttributeList > maAttrList;
@@ -242,7 +240,6 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     void registerNamespaces();
     std::unique_ptr<SvXMLNamespaceMap> processNSAttributes(
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
-    void Characters(const OUString& aChars);
 
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
@@ -300,10 +297,6 @@ public:
     void cleanup() throw();
 
     virtual ~SvXMLImport() throw() override;
-
-    void startElement(const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs);
-    void endElement(const OUString& aName);
 
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;
