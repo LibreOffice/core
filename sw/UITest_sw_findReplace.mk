@@ -12,5 +12,5 @@ $(eval $(call gb_UITest_add_modules,sw_findReplace,$(SRCDIR)/sw/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,sw_findReplace, \
-    TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
+    TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))

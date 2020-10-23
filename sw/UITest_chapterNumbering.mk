@@ -12,5 +12,5 @@ $(eval $(call gb_UITest_add_modules,chapterNumbering,$(SRCDIR)/sw/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,chapterNumbering, \
-    TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
+    TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
