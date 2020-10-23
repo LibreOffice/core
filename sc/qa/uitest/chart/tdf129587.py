@@ -8,10 +8,11 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.path import get_srcdir_url
+import org.libreoffice.unotest
+import pathlib
 
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf129587(UITestCase):
    def test_tdf129587(self):
