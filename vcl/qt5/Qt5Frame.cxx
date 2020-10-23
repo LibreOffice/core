@@ -1023,6 +1023,7 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     Color aText = toColor(pal.color(QPalette::Active, QPalette::Text));
     Color aBase = toColor(pal.color(QPalette::Active, QPalette::Base));
     Color aButn = toColor(pal.color(QPalette::Active, QPalette::ButtonText));
+    Color aMid = toColor(pal.color(QPalette::Active, QPalette::Mid));
     Color aHigh = toColor(pal.color(QPalette::Active, QPalette::Highlight));
     Color aHighText = toColor(pal.color(QPalette::Active, QPalette::HighlightedText));
     Color aLink = toColor(pal.color(QPalette::Active, QPalette::Link));
@@ -1046,7 +1047,6 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.SetFieldColor(aBase);
     style.SetWindowColor(aBase);
     style.SetActiveTabColor(aBase);
-    style.SetWorkspaceColor(aBase);
     style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
 
     // Buttons
@@ -1078,9 +1078,14 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
     style.BatchSetBackgrounds(aBack);
     style.SetInactiveTabColor(aBack);
 
+    // Workspace
+    style.SetWorkspaceColor(aMid);
+
     // Selection
     style.SetHighlightColor(aHigh);
     style.SetHighlightTextColor(aHighText);
+    style.SetActiveColor(aHigh);
+    style.SetActiveTextColor(aHighText);
 
     // Links
     style.SetLinkColor(aLink);
