@@ -50,11 +50,6 @@ XMLBase64ImportContext::~XMLBase64ImportContext()
 {
 }
 
-void XMLBase64ImportContext::EndElement()
-{
-    endFastElement(0);
-}
-
 void XMLBase64ImportContext::endFastElement(sal_Int32 )
 {
     OUString sChars = maCharBuffer.makeStringAndClear().trim();
@@ -65,11 +60,6 @@ void XMLBase64ImportContext::endFastElement(sal_Int32 )
         xOut->writeBytes( aBuffer );
     }
     xOut->closeOutput();
-}
-
-void XMLBase64ImportContext::Characters( const OUString& rChars )
-{
-    characters(rChars);
 }
 
 void XMLBase64ImportContext::characters( const OUString& rChars )

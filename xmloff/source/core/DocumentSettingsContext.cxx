@@ -135,9 +135,6 @@ public:
                                     XMLConfigBaseContext* pBaseContext);
 
     void AddPropertyValue() { maProps.push_back(maProp); }
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 };
 
 class XMLConfigItemContext : public SvXMLImportContext
@@ -154,9 +151,6 @@ public:
                                     css::uno::Any& rAny,
                                     const OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 

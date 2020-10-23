@@ -89,8 +89,6 @@ namespace xmloff
 
         // register the events
         m_rEventAttacher.registerEvents(aTranslated);
-
-        XMLEventsImportContext::EndElement();
     }
 
     //= ODefaultEventAttacherManager

@@ -189,12 +189,6 @@ void ScXMLCellFieldSheetNameContext::SetStyleName(const OUString& rStyleName)
     maStyleName = rStyleName;
 }
 
-void SAL_CALL ScXMLCellFieldSheetNameContext::startFastElement( sal_Int32 /*nElement*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    // <text:sheet-name> has no attributes (that I'm aware of).
-}
-
 void SAL_CALL ScXMLCellFieldSheetNameContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     mrParentCxt.PushFieldSheetName(maStyleName);
