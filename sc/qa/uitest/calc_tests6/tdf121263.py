@@ -9,11 +9,8 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_column
-from uitest.path import get_srcdir_url
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.calc.document import get_cell_by_position
-import time
-from uitest.debug import sleep
 
 class tdf121263(UITestCase):
 
