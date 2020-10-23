@@ -12,5 +12,5 @@ $(eval $(call gb_UITest_add_modules,sw_ui_fmtui,$(SRCDIR)/sw/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,sw_ui_fmtui, \
-    TDOC="$(SRCDIR)/sw/qa/uitest/ui/fmtui/data" \
+    TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
