@@ -183,10 +183,6 @@ namespace xmloff
         OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter);
 
-        virtual SvXMLImportContextRef CreateChildContext(
-            sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
-
         virtual void StartElement(
             const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
     };

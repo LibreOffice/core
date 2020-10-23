@@ -37,8 +37,6 @@ namespace rptxml
                     ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                     ,const css::uno::Reference< css::report::XReportComponent >& _xComponent
                     );
-        virtual void SAL_CALL startFastElement(
-                sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
         virtual ~OXMLComponent() override;
     };
 

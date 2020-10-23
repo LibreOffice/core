@@ -48,9 +48,6 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         const std::shared_ptr<AnimationsImportHelperImpl>& pImpl = nullptr );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-
     virtual css::uno::Reference< XFastContextHandler >  SAL_CALL createFastChildContext(sal_Int32 Element,
         const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 

@@ -88,7 +88,6 @@ namespace xmloff
     void OFormsRootImport::StartElement( const Reference< XAttributeList >& _rxAttrList )
     {
         ENTER_LOG_CONTEXT( "xmloff::OFormsRootImport - importing the complete tree" );
-        SvXMLImportContext::StartElement( _rxAttrList );
 
         try
         {
@@ -113,7 +112,6 @@ namespace xmloff
 
     void OFormsRootImport::EndElement()
     {
-        SvXMLImportContext::EndElement();
         LEAVE_LOG_CONTEXT( );
     }
 

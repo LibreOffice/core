@@ -364,15 +364,12 @@ SvXMLImportContextRef OPropertyElementsContext::CreateChildContext(sal_uInt16 _n
     void OPropertyElementsContext::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         OSL_ENSURE(0 == _rxAttrList->getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
-        SvXMLImportContext::StartElement(_rxAttrList);
     }
 
     void OPropertyElementsContext::Characters(const OUString& _rChars)
     {
         OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
-        SvXMLImportContext::Characters(_rChars);
     }
-
 #endif
 
 //= OSinglePropertyContext
@@ -381,12 +378,6 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
     ,m_xPropertyImporter(_rPropertyImporter)
 {
-}
-
-SvXMLImportContextRef OSinglePropertyContext::CreateChildContext(sal_uInt16 /*_nPrefix*/, const OUString& /*_rLocalName*/,
-        const Reference< XAttributeList >&)
-{
-    return nullptr;
 }
 
 void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rxAttrList)

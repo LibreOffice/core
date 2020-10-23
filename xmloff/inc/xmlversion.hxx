@@ -77,9 +77,6 @@ public:
 
     virtual ~XMLVersionListContext() override;
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext(sal_Int32 nElement,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
@@ -96,9 +93,6 @@ public:
 
     XMLVersionContext( XMLVersionListImport& rImport,
                           const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
 
     virtual ~XMLVersionContext() override;
 };
