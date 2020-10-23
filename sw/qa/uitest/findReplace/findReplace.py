@@ -14,7 +14,6 @@ from uitest.uihelper.common import get_state_as_dict, type_text
 from uitest.debug import sleep
 import org.libreoffice.unotest
 import pathlib
-from uitest.path import get_srcdir_url
 
 def get_url_for_data_file(file_name):
     return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()

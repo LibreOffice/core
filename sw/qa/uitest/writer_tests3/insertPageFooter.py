@@ -6,8 +6,6 @@
 #
 
 from uitest.framework import UITestCase
-from uitest.debug import sleep
-from uitest.path import get_srcdir_url
 
 class WriterInsertPageFooter(UITestCase):
 
