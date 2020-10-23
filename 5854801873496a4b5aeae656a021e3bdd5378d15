@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "028b7cdc_c5db57e3",
+        "filename": "basegfx/source/workbench/bezierclip.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2020-10-23T08:44:32Z",
+      "side": 1,
+      "message": "It seems like this one is forgotten here. They are parts of a pair, this line and the two lines you already removed above.\n\nSo please remove this line as well, leaving only one empty line between\n\n/* vim:set shiftwidth\u003d4 softtabstop\u003d4 expandtab: */\n\nand\n\ntemplate \u003ctypename NumType\u003e bool tolGreaterEqual( NumType n1, NumType n2 ) { return tolEqual(n1,n2) || n1\u003en2; }",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 58
+      },
+      "revId": "5854801873496a4b5aeae656a021e3bdd5378d15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
