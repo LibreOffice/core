@@ -139,7 +139,8 @@ dialogs = [
     # {"command": ".uno:SpellDialog", "closeButton": "close"},
         # an extra dialog appears
     {"command": ".uno:Hyphenate", "closeButton": "cancel"},
-    {"command": ".uno:ChineseConversion", "closeButton": "cancel"},
+    #{"command": ".uno:ChineseConversion", "closeButton": "cancel"},
+        # tested in sc/qa/uitest/calc_tests6/tdf104378.py
     # {"command": ".uno:AutoCorrectDlg", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests6/autocorrectOptions.py
     {"command": ".uno:GoalSeekDialog", "closeButton": "cancel", "skipTestOK": True},
