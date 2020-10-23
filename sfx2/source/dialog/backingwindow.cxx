@@ -63,7 +63,7 @@ using namespace ::com::sun::star::document;
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 // increase size of the text in the buttons on the left fMultiplier-times
-float const fMultiplier = 1.4f;
+float const g_fMultiplier = 1.4f;
 
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
@@ -227,42 +227,80 @@ void BackingWindow::initControls()
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
     mpLocalView->Hide();
 
-    mpTemplateButton->SetDelayMenu(true);
-    mpTemplateButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
-    mpRecentButton->SetDelayMenu(true);
-    mpRecentButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
-
     //set handlers
     mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
     mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
     mpLocalView->ShowTooltips( true );
 
-    setupButton( mpOpenButton );
-    setupButton( mpRemoteButton );
-    setupButton( mpRecentButton );
-    setupButton( mpTemplateButton );
-    setupButton( mpWriterAllButton );
-    setupButton( mpDrawAllButton );
-    setupButton( mpCalcAllButton );
-    setupButton( mpDBAllButton );
-    setupButton( mpImpressAllButton );
-    setupButton( mpMathAllButton );
-
     checkInstalledModules();
 
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
-    // setup nice colors
-    vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    mpCreateLabel->SetControlFont(aFont);
+    mxOpenButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxRemoteButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxWriterAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxDrawAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxCalcAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxDBAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxImpressAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+    mxMathAllButton->SetClickHdl(LINK(this, BackingWindow, ClickHdl));
+
+    setupMenuButton(mxRecentButton);
+    setupMenuButton(mxTemplateButton);
+
+    ApplyStyleSettings();
+}
+
+void BackingWindow::DataChanged(const DataChangedEvent& rDCEvt)
+{
+    if ((rDCEvt.GetType() != DataChangedEventType::SETTINGS)
+            || !(rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        InterimItemWindow::DataChanged(rDCEvt);
+        return;
+    }
+
+    ApplyStyleSettings();
+    Invalidate();
+}
+
+template <typename WidgetClass>
+void BackingWindow::setLargerFont(WidgetClass& pWidget, const vcl::Font& rFont)
+{
+    vcl::Font aFont(rFont);
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * g_fMultiplier));
+    pWidget->SetControlFont(aFont);
+}
+
+void BackingWindow::ApplyStyleSettings()
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color aButtonsBackground(rStyleSettings.GetWindowColor());
+    const vcl::Font& aButtonFont(rStyleSettings.GetPushButtonFont());
+    const vcl::Font& aLabelFont(rStyleSettings.GetLabelFont());
+
+    // setup larger fonts
+    setLargerFont(mxOpenButton, aButtonFont);
+    setLargerFont(mxOpenButton, aButtonFont);
+    setLargerFont(mxRemoteButton, aButtonFont);
+    setLargerFont(mxRecentButton, aButtonFont);
+    setLargerFont(mxTemplateButton, aButtonFont);
+    setLargerFont(mxWriterAllButton, aButtonFont);
+    setLargerFont(mxDrawAllButton, aButtonFont);
+    setLargerFont(mxCalcAllButton, aButtonFont);
+    setLargerFont(mxDBAllButton, aButtonFont);
+    setLargerFont(mxImpressAllButton, aButtonFont);
+    setLargerFont(mxMathAllButton, aButtonFont);
+    setLargerFont(mxCreateLabel, aLabelFont);
 
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
     aWallpaper.SetStyle(WallpaperStyle::BottomRight);
-
     mpButtonsBox->SetBackground(aWallpaper);
+
+    mxAllButtonsBox->SetBackground(aButtonsBackground);
+    mxSmallButtonsBox->SetBackground(aButtonsBackground);
 
     Resize();
 
@@ -291,20 +329,10 @@ void BackingWindow::initializeLocalView()
     }
 }
 
-void BackingWindow::setupButton( PushButton* pButton )
+void BackingWindow::setupMenuButton(MenuToggleButton* pButton)
 {
-    // the buttons should have a bit bigger font
-    vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    pButton->SetControlFont(aFont);
-    pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
-}
-
-void BackingWindow::setupButton( MenuToggleButton* pButton )
-{
-    vcl::Font aFont(pButton->GetSettings().GetStyleSettings().GetPushButtonFont());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    pButton->SetControlFont(aFont);
+    pButton->SetDelayMenu(true);
+    pButton->SetDropDown(PushButtonDropdownStyle::SplitMenuButton);
 
     PopupMenu* pMenu = pButton->GetPopupMenu();
     pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries);
