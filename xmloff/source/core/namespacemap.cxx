@@ -319,6 +319,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
         if (eMode == QNameMode::AttrNameCached && sEntryName.indexOf(':') != -1)
         {
             SAL_INFO("xmloff", "invalid attribute name with multiple ':'");
+            assert(false);
             return XML_NAMESPACE_UNKNOWN;
         }
 

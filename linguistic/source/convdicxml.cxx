@@ -85,10 +85,6 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void SAL_CALL startFastElement(
-            sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
-    virtual void SAL_CALL characters( const OUString &rChars ) override;
     virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
@@ -156,8 +152,8 @@ public:
 
 }
 
-void ConvDicXMLImportContext::characters(const OUString & /*rChars*/)
-{
+//void ConvDicXMLImportContext::characters(const OUString & /*rChars*/)
+//{
     /*
     Whitespace occurring within the content of token elements is "trimmed"
     from the ends (i.e. all whitespace at the beginning and end of the
@@ -166,7 +162,7 @@ void ConvDicXMLImportContext::characters(const OUString & /*rChars*/)
     */
     //collapsing not done yet!
 
-}
+//}
 
 css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChildContext(
         sal_Int32 Element,

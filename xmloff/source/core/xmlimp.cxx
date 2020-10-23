@@ -334,6 +334,7 @@ public:
 SvXMLImportContext *SvXMLImport::CreateFastContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
+    assert(false);
     SAL_WARN( "xmloff.core", "CreateFastContext should be overridden, for element " << nElement);
     return new SvXMLImportContext( *this );
 }
@@ -404,7 +405,6 @@ SvXMLImport::SvXMLImport(
                 util::MeasureUnit::MM_100TH, util::MeasureUnit::MM_100TH) ),
 
     mnImportFlags( nImportFlags ),
-    isFastContext( false ),
     maNamespaceHandler( new SvXMLImportFastNamespaceHandler() ),
     mbIsFormsSupported( true ),
     mbIsTableShapeSupported( false ),
@@ -421,6 +421,8 @@ SvXMLImport::SvXMLImport(
         bIsNSMapsInitialized = true;
     }
     registerNamespaces();
+    maNamespaceAttrList = new comphelper::AttributeList;
+    maAttrList = new comphelper::AttributeList;
 }
 
 void SvXMLImport::cleanup() throw ()
@@ -429,12 +431,6 @@ void SvXMLImport::cleanup() throw ()
         mxModel->removeEventListener(mxEventListener);
     // clear context stacks first in case of parse error because the context
     // class dtors are full of application logic
-    while (!maFastContexts.empty())
-    {
-        if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maFastContexts.top().get()))
-            pStylesContext->dispose();
-        maFastContexts.pop();
-    }
     while (!maContexts.empty())
     {
         if (SvXMLStylesContext* pStylesContext = dynamic_cast<SvXMLStylesContext*>(maContexts.top().get()))
@@ -725,119 +721,10 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
     return pRewindMap;
 }
 
-void SvXMLImport::startElement( const OUString& rName,
-                                         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    //    SAL_INFO("svg", "startElement " << rName);
-    // Process namespace attributes. This must happen before creating the
-    // context, because namespace declaration apply to the element name itself.
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap(processNSAttributes(xAttrList));
-
-    // Get element's namespace and local name.
-    OUString aLocalName;
-    sal_uInt16 nPrefix =
-        mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-
-    // If there are contexts already, call a CreateChildContext at the topmost
-    // context. Otherwise, create a default context.
-    SvXMLImportContextRef xContext;
-    if(!maContexts.empty())
-    {
-        xContext = maContexts.top()->CreateChildContext(nPrefix, aLocalName, xAttrList);
-        SAL_WARN_IF( xContext.is() && xContext->IsPrefixFilledIn() && (xContext->GetPrefix() != nPrefix), "xmloff.core",
-                "SvXMLImport::startElement: created context has wrong prefix" );
-    }
-    else
-    {
-        Reference<xml::sax::XLocator> xDummyLocator;
-        Sequence < OUString > aParams { rName };
-
-        SetError( XMLERROR_FLAG_SEVERE|XMLERROR_UNKNOWN_ROOT,
-                  aParams, "Root element " + rName + " unknown", xDummyLocator );
-    }
-
-    if ( !xContext.is() )
-        SAL_INFO_IF( !xContext.is(), "xmloff.core", "SvXMLImport::startElement: missing context for element " << rName );
-
-    if( !xContext.is() )
-        xContext.set(new SvXMLImportContext( *this, nPrefix, aLocalName ));
-
-    // Remember old namespace map.
-    if( pRewindMap )
-        xContext->PutRewindMap(std::move(pRewindMap));
-
-    // Call a startElement at the new context.
-    xContext->StartElement( xAttrList );
-
-    // Push context on stack.
-    maContexts.push(xContext);
-}
-
-void SvXMLImport::endElement( const OUString&
-#ifdef DBG_UTIL
-rName
-#endif
-)
-{
-    if (maContexts.empty())
-    {
-        SAL_WARN("xmloff.core", "SvXMLImport::endElement: no context left");
-        return;
-    }
-
-    std::unique_ptr<SvXMLNamespaceMap> pRewindMap;
-
-    {
-        // Get topmost context and remove it from the stack.
-        SvXMLImportContextRef xContext = std::move(maContexts.top());
-        maContexts.pop();
-
-#ifdef DBG_UTIL
-        // Non product only: check if endElement call matches startELement call.
-        if (xContext->IsPrefixFilledIn()) // prefix+localname are only valid in the non-FastParser case
-        {
-            OUString aLocalName;
-            sal_uInt16 nPrefix =
-                mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-            SAL_WARN_IF( xContext->GetPrefix() != nPrefix,  "xmloff.core", "SvXMLImport::endElement: popped context has wrong prefix" );
-            SAL_WARN_IF( xContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname '"
-                         << aLocalName << "' expected. '" << xContext->GetLocalName() << "' with impl " << getImplementationName() );
-        }
-#endif
-
-        // Call a EndElement at the current context.
-        xContext->EndElement();
-        // Get a namespace map to rewind.
-        pRewindMap = xContext->TakeRewindMap();
-        // note: delete xContext *before* rewinding namespace map!
-    }
-
-    // Rewind a namespace map.
-    if (pRewindMap)
-    {
-        mpNamespaceMap.reset();
-        mpNamespaceMap = std::move(pRewindMap);
-    }
-}
 
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
 {
-    if ( !maFastContexts.empty() )
-    {
-        maFastContexts.top()->characters( rChars );
-    }
-    else if( !maContexts.empty() )
-    {
-        maContexts.top()->Characters( rChars );
-    }
-}
-
-void SvXMLImport::Characters( const OUString& rChars )
-{
-    if( !maContexts.empty() )
-    {
-        maContexts.top()->Characters( rChars );
-    }
+    maContexts.top()->characters( rChars );
 }
 
 void SAL_CALL SvXMLImport::processingInstruction( const OUString&,
@@ -854,6 +741,7 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
+    SAL_INFO("xmloff.core", "startFastElement " << SvXMLImport::getNameFromToken( Element ));
     if ( Attribs.is() && !mpImpl->mxODFVersion)
     {
         sax_fastparser::FastAttributeList& rAttribList =
@@ -874,80 +762,173 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
         }
     }
 
-    //Namespace handling is unnecessary. It is done by the fastparser itself.
-    uno::Reference<XFastContextHandler> xContext;
-    if (!maFastContexts.empty())
+    maNamespaceAttrList->Clear();
+
+    maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
+    std::unique_ptr<SvXMLNamespaceMap> pRewindMap(
+            processNSAttributes( maNamespaceAttrList.get() ));
+
+    SvXMLImportContextRef xContext;
+    const bool bRootContext = maContexts.empty();
+    if (!maContexts.empty())
     {
-        uno::Reference<XFastContextHandler> pHandler = maFastContexts.top();
-        xContext = pHandler->createFastChildContext( Element, Attribs );
+        const SvXMLImportContextRef & pHandler = maContexts.top();
+        SAL_INFO("xmloff.core", "calling createFastChildContext on " << typeid(*pHandler.get()).name());
+        auto tmp = pHandler->createFastChildContext( Element, Attribs );
+        if (!tmp)
+        {
+            // fall back to slow-parser path
+            const OUString& rPrefix = SvXMLImport::getNamespacePrefixFromToken(Element, &GetNamespaceMap());
+            const OUString& rLocalName = SvXMLImport::getNameFromToken( Element );
+            OUString aName = rPrefix.isEmpty() ? rLocalName : rPrefix + SvXMLImport::aNamespaceSeparator + rLocalName;
+            OUString aLocalName;
+            sal_uInt16 nPrefix =
+                mpNamespaceMap->GetKeyByAttrName( aName, &aLocalName );
+
+            maAttrList->Clear();
+
+            if ( Attribs.is() )
+            {
+                for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+                {
+                    sal_Int32 nToken = it.getToken();
+                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
+                    OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+                    if ( !rAttrNamespacePrefix.isEmpty() )
+                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+
+                    maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
+                }
+
+                const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+                for ( const auto& rUnknownAttrib : unknownAttribs )
+                {
+                    const OUString& rAttrValue = rUnknownAttrib.Value;
+                    const OUString& rAttrName = rUnknownAttrib.Name;
+                    // note: rAttrName is expected to be namespace-prefixed here
+                    maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+                }
+            }
+
+            SAL_INFO("xmloff.core", "calling CreateChildContext on " << typeid(*pHandler).name());
+            tmp = pHandler->CreateChildContext(nPrefix, aLocalName, maAttrList.get() ).get();
+        }
+        xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
+        assert(tmp && xContext || (!tmp && !xContext));
     }
     else
         xContext.set( CreateFastContext( Element, Attribs ) );
 
     SAL_INFO_IF(!xContext.is(), "xmloff.core", "No fast context for element " << getNameFromToken(Element));
-    if ( !xContext.is() )
+    if (bRootContext && !xContext)
+    {
+        OUString aName = getNameFromToken(Element);
+        SetError( XMLERROR_FLAG_SEVERE | XMLERROR_UNKNOWN_ROOT,
+                  { aName }, "Root element " + aName + " unknown", Reference<xml::sax::XLocator>() );
+    }
+    if ( !xContext )
         xContext.set( new SvXMLImportContext( *this ) );
-
-    isFastContext = true;
 
     // Call a startElement at the new context.
     xContext->startFastElement( Element, Attribs );
 
-    if ( isFastContext )
-    {
-        if ( maNamespaceAttrList.is() )
-            maNamespaceAttrList->Clear();
-        else
-            maNamespaceAttrList = new comphelper::AttributeList;
-
-        maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
-        std::unique_ptr<SvXMLNamespaceMap> pRewindMap(
-                processNSAttributes( maNamespaceAttrList.get() ));
-        assert( dynamic_cast<SvXMLImportContext*>( xContext.get() ) != nullptr );
-        SvXMLImportContext *pContext = static_cast<SvXMLImportContext*>( xContext.get() );
-        if (pRewindMap)
-            pContext->PutRewindMap(std::move(pRewindMap));
-        maContexts.push(pContext);
-    }
+    if (pRewindMap)
+        xContext->PutRewindMap(std::move(pRewindMap));
 
     // Push context on stack.
-    maFastContexts.push(xContext);
+    maContexts.push(xContext);
 }
 
-void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const OUString & rLocalName,
+void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rNamespace, const OUString & rName,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    uno::Reference<XFastContextHandler> xContext;
-    if (!maFastContexts.empty())
+    SAL_INFO("xmloff.core", "startUnknownElement " << rNamespace << " " << rName);
+    SvXMLImportContextRef xContext;
+    const bool bRootContext = maContexts.empty();
+    if (!maContexts.empty())
     {
-        uno::Reference<XFastContextHandler> pHandler = maFastContexts.top();
-        xContext = pHandler->createUnknownChildContext( rPrefix, rLocalName, Attribs );
+        const SvXMLImportContextRef & pHandler = maContexts.top();
+        SAL_INFO("xmloff.core", "calling createUnknownChildContext on " << typeid(*pHandler.get()).name());
+        auto tmp = pHandler->createUnknownChildContext( rNamespace, rName, Attribs );
+        if (!tmp)
+        {
+            // fall back to slow-parser path
+            OUString aLocalName;
+            sal_uInt16 nPrefix = mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
+
+            maAttrList->Clear();
+            maNamespaceHandler->addNSDeclAttributes( maAttrList );
+
+            if ( Attribs.is() )
+            {
+                for( auto &it : sax_fastparser::castToFastAttributeList( Attribs ) )
+                {
+                    sal_Int32 nToken = it.getToken();
+                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &GetNamespaceMap());
+                    OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
+                    if ( !rAttrNamespacePrefix.isEmpty() )
+                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+
+                    maAttrList->AddAttribute( sAttrName, "CDATA", it.toString() );
+                }
+
+                const uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
+                for ( const auto& rUnknownAttrib : unknownAttribs )
+                {
+                    const OUString& rAttrValue = rUnknownAttrib.Value;
+                    const OUString& rAttrName = rUnknownAttrib.Name;
+                    // note: rAttrName is expected to be namespace-prefixed here
+                    maAttrList->AddAttribute( rAttrName, "CDATA", rAttrValue );
+                }
+            }
+
+            SAL_INFO("xmloff.core", "calling CreateChildContext on " << typeid(*pHandler).name());
+            tmp = pHandler->CreateChildContext(nPrefix, aLocalName, maAttrList.get() ).get();
+        }
+        xContext = dynamic_cast<SvXMLImportContext*>(tmp.get());
+        assert(tmp && xContext || (!tmp && !xContext));
     }
     else
         xContext.set( CreateFastContext( -1, Attribs ) );
 
-    SAL_WARN_IF(!xContext.is(), "xmloff.core", "No context for unknown-element " << rLocalName);
+    SAL_WARN_IF(!xContext.is(), "xmloff.core", "No context for unknown-element " << rNamespace << " " << rName);
+    if (bRootContext && !xContext)
+    {
+        SetError( XMLERROR_FLAG_SEVERE | XMLERROR_UNKNOWN_ROOT,
+                  { rName }, "Root element " + rName + " unknown", Reference<xml::sax::XLocator>() );
+    }
     if ( !xContext.is() )
         xContext.set( new SvXMLImportContext( *this ) );
 
-    xContext->startUnknownElement( rPrefix, rLocalName, Attribs );
-    maFastContexts.push(xContext);
+    xContext->startUnknownElement( rNamespace, rName, Attribs );
+    maContexts.push(xContext);
 }
 
 void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
 {
-    uno::Reference<XFastContextHandler> xContext = std::move(maFastContexts.top());
-    maFastContexts.pop();
-    isFastContext = true;
+    SAL_INFO("xmloff.core", "endFastElement " << SvXMLImport::getNameFromToken( Element ));
+    if (maContexts.empty())
+    {
+        SAL_WARN("xmloff.core", "SvXMLImport::endFastElement: no context left");
+        assert(false);
+        return;
+    }
+    SvXMLImportContextRef xContext = std::move(maContexts.top());
+    maContexts.pop();
     xContext->endFastElement( Element );
-    if (isFastContext)
-        maContexts.pop();
 }
 
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
 {
-    uno::Reference<XFastContextHandler> xContext = std::move(maFastContexts.top());
-    maFastContexts.pop();
+    SAL_INFO("xmloff.core", "endUnknownElement " << rPrefix << " " << rLocalName);
+    if (maContexts.empty())
+    {
+        SAL_WARN("xmloff.core", "SvXMLImport::endUnknownElement: no context left");
+        assert(false);
+        return;
+    }
+    SvXMLImportContextRef xContext = std::move(maContexts.top());
+    maContexts.pop();
     xContext->endUnknownElement( rPrefix, rLocalName );
 }
 

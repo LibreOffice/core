@@ -250,8 +250,6 @@ static auto PopFieldmark(XMLTextImportHelper & rHelper) -> void
 
 void XMLTextMarkImportContext::EndElement()
 {
-    SvXMLImportContext::EndElement();
-
     static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
 
     lcl_MarkType nTmp{};

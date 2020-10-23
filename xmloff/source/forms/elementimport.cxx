@@ -1738,8 +1738,6 @@ namespace xmloff
             _rxAttrList->getValueByName(sDefaultSelectedAttribute));
         if (bDefaultSelected)
             m_xListBoxImport->implDefaultSelectCurrentItem();
-
-        SvXMLImportContext::StartElement(_rxAttrList);
     }
 
     //= OComboItemImport
@@ -1755,8 +1753,6 @@ namespace xmloff
         const OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
             GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label)));
         m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
-
-        SvXMLImportContext::StartElement(_rxAttrList);
     }
 
     //= OColumnWrapperImport
