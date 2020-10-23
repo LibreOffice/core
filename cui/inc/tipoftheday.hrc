@@ -133,7 +133,7 @@ const std::tuple<const char*, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Date/time value is just a number of days since a chosen day zero; in the number, integer part represents date, and fractional part is time (elapsed part of a day), with 0.5 representing noon."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Shift+%MOD1+Del deletes from cursor to the end of the current sentence."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use column or row labels in formulas. For example, if you have two columns, “Time” and “KM”, use =Time/KM to get minutes per kilometer."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed by the “marching ants” around cells in Calc? Press escape to stop them; the copied content will remain available for pasting."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Annoyed by the “marching ants” around cells in Calc? Press escape to stop them; the copied content will remain available for pasting."), "", "marchingants.gif"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to become a %PRODUCTNAME Ambassador? There are certifications for developers, admins, and trainers."), "http://www.documentfoundation.org/certification", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Mix portrait and landscape orientations in a Calc spreadsheet by applying different page styles on sheets."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click on the special character icon in the toolbar to get quick access to favorite and recent characters to insert."), "", ""},
