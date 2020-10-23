@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "334c4756_c9a911de",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-23T05:29:53Z",
+      "side": 1,
+      "message": "We seem to not discriminate between sub and function?",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 646,
+        "endChar": 41
+      },
+      "revId": "d72a80ab52a1b912ffa73e509a6ff903b300c43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
