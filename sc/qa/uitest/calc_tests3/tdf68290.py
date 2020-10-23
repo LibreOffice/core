@@ -6,15 +6,16 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
-from uitest.path import get_srcdir_url
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
-from uitest.debug import sleep
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
+import org.libreoffice.unotest
+import pathlib
+
 #Enhancement: EDITING: cursor moves with Enter key
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf68290(UITestCase):
 
