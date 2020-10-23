@@ -78,9 +78,6 @@ class BackingWindow : public InterimItemWindow
     bool mbInitControls;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
-    void setupButton(weld::Button& rButton);
-    void setupButton(weld::MenuButton& rButton);
-
     void dispatchURL(const OUString& i_rURL,
                      const OUString& i_rTarget = OUString("_default"),
                      const css::uno::Reference<css::frame::XDispatchProvider >& i_xProv = css::uno::Reference<css::frame::XDispatchProvider>(),
@@ -99,6 +96,11 @@ class BackingWindow : public InterimItemWindow
     void initializeLocalView();
 
     void checkInstalledModules();
+
+    void DataChanged(const DataChangedEvent&) override;
+
+    template <typename WidgetClass> void setLargerFont(WidgetClass&, const vcl::Font&);
+    void ApplyStyleSettings();
 
 public:
     explicit BackingWindow(vcl::Window* pParent);

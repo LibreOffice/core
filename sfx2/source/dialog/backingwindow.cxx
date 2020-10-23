@@ -62,7 +62,7 @@ using namespace ::com::sun::star::document;
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 // increase size of the text in the buttons on the left fMultiplier-times
-float const fMultiplier = 1.4f;
+float const g_fMultiplier = 1.4f;
 
 BackingWindow::BackingWindow(vcl::Window* i_pParent)
     : InterimItemWindow(i_pParent, "sfx/ui/startcenter.ui", "StartCenter", false)
@@ -204,32 +204,77 @@ void BackingWindow::initControls()
     //initialize Template view
     mxLocalView->Hide();
 
-
     //set handlers
     mxLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
     mxLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
     mxLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
     mxLocalView->ShowTooltips( true );
 
-    setupButton(*mxOpenButton);
-    setupButton(*mxRemoteButton);
-    setupButton(*mxRecentButton);
-    setupButton(*mxTemplateButton);
-    setupButton(*mxWriterAllButton);
-    setupButton(*mxDrawAllButton);
-    setupButton(*mxCalcAllButton);
-    setupButton(*mxDBAllButton);
-    setupButton(*mxImpressAllButton);
-    setupButton(*mxMathAllButton);
-
     checkInstalledModules();
 
     mxExtensionsButton->connect_clicked(LINK(this, BackingWindow, ExtLinkClickHdl));
 
-    // setup larger font
-    vcl::Font aFont(mxCreateLabel->get_font());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    mxCreateLabel->set_font(aFont);
+    mxOpenButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxRemoteButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxRecentButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxTemplateButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxWriterAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxDrawAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxCalcAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxDBAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxImpressAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+    mxMathAllButton->connect_clicked(LINK(this, BackingWindow, ClickHdl));
+
+    mxRecentButton->connect_selected(LINK(this, BackingWindow, MenuSelectHdl));
+    mxTemplateButton->connect_selected(LINK(this, BackingWindow, MenuSelectHdl));
+
+    ApplyStyleSettings();
+}
+
+void BackingWindow::DataChanged(const DataChangedEvent& rDCEvt)
+{
+    if ((rDCEvt.GetType() != DataChangedEventType::SETTINGS)
+        || !(rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
+    {
+        InterimItemWindow::DataChanged(rDCEvt);
+        return;
+    }
+
+    ApplyStyleSettings();
+    Invalidate();
+}
+
+template <typename WidgetClass>
+void BackingWindow::setLargerFont(WidgetClass& pWidget, const vcl::Font& rFont)
+{
+    vcl::Font aFont(rFont);
+    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * g_fMultiplier));
+    pWidget->set_font(aFont);
+}
+
+void BackingWindow::ApplyStyleSettings()
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    const Color aButtonsBackground(rStyleSettings.GetWindowColor());
+    const vcl::Font& aButtonFont(rStyleSettings.GetPushButtonFont());
+    const vcl::Font& aLabelFont(rStyleSettings.GetLabelFont());
+
+    // setup larger fonts
+    setLargerFont(mxOpenButton, aButtonFont);
+    setLargerFont(mxOpenButton, aButtonFont);
+    setLargerFont(mxRemoteButton, aButtonFont);
+    setLargerFont(mxRecentButton, aButtonFont);
+    setLargerFont(mxTemplateButton, aButtonFont);
+    setLargerFont(mxWriterAllButton, aButtonFont);
+    setLargerFont(mxDrawAllButton, aButtonFont);
+    setLargerFont(mxCalcAllButton, aButtonFont);
+    setLargerFont(mxDBAllButton, aButtonFont);
+    setLargerFont(mxImpressAllButton, aButtonFont);
+    setLargerFont(mxMathAllButton, aButtonFont);
+    setLargerFont(mxCreateLabel, aLabelFont);
+
+    mxAllButtonsBox->set_background(aButtonsBackground);
+    mxSmallButtonsBox->set_background(aButtonsBackground);
 
     // compute the menubar height
     sal_Int32 nMenuHeight = 0;
@@ -257,25 +302,6 @@ void BackingWindow::initializeLocalView()
         mxLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::NONE));
         mxLocalView->showAllTemplates();
     }
-}
-
-void BackingWindow::setupButton(weld::Button& rButton)
-{
-    // the buttons should have a bit bigger font
-    vcl::Font aFont(rButton.get_font());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    rButton.set_font(aFont);
-    rButton.connect_clicked( LINK( this, BackingWindow, ClickHdl ) );
-}
-
-void BackingWindow::setupButton(weld::MenuButton& rButton)
-{
-    vcl::Font aFont(rButton.get_font());
-    aFont.SetFontSize(Size(0, aFont.GetFontSize().Height() * fMultiplier));
-    rButton.set_font(aFont);
-
-    rButton.connect_clicked(LINK(this, BackingWindow, ClickHdl));
-    rButton.connect_selected(LINK(this, BackingWindow, MenuSelectHdl));
 }
 
 void BackingWindow::checkInstalledModules()
