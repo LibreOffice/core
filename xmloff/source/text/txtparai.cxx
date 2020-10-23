@@ -200,27 +200,6 @@ XMLCharContext::XMLCharContext(
 XMLCharContext::~XMLCharContext()
 {
 }
-void XMLCharContext::EndElement()
-{
-    if ( !m_nCount )
-        InsertControlCharacter( m_nControl );
-    else
-    {
-        if( 1U == m_nCount )
-        {
-            OUString sBuff( &m_c, 1 );
-            InsertString(sBuff);
-        }
-        else
-        {
-            OUStringBuffer sBuff(static_cast<int>(m_nCount));
-            while( m_nCount-- )
-                sBuff.append( &m_c, 1 );
-
-            InsertString(sBuff.makeStringAndClear() );
-        }
-    }
-}
 void XMLCharContext::endFastElement(sal_Int32 )
 {
     if ( !m_nCount )

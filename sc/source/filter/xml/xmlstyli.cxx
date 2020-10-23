@@ -339,9 +339,6 @@ public:
             SvXMLImport& rImport, sal_Int32 nElement,
             const uno::Reference< xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
-
     ScCondFormatEntry* CreateConditionEntry();
 };
 
@@ -677,9 +674,8 @@ XMLTableStylesContext::~XMLTableStylesContext()
 {
 }
 
-void XMLTableStylesContext::endFastElement(sal_Int32 nElement)
+void XMLTableStylesContext::endFastElement(sal_Int32 )
 {
-    SvXMLStylesContext::endFastElement(nElement);
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else

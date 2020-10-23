@@ -205,10 +205,6 @@ void SAL_CALL SvXMLMetaDocumentContext::startFastElement(sal_Int32 /*nElement*/,
     mxDocBuilder->startFastElement(XML_ELEMENT(OFFICE, XML_DOCUMENT_META), xAttrList);
 }
 
-void SAL_CALL SvXMLMetaDocumentContext::endFastElement(sal_Int32 /*nElement*/)
-{
-}
-
 void SvXMLMetaDocumentContext::FinishMetaElement()
 {
     // hardcode office:document-meta (necessary in case of flat file ODF)
@@ -222,10 +218,6 @@ void SvXMLMetaDocumentContext::FinishMetaElement()
     {
         lcl_initGenerator(GetImport(), mxDocBuilder);
     }
-}
-
-void SAL_CALL SvXMLMetaDocumentContext::characters( const OUString& /*rChars*/ )
-{
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLMetaDocumentContext::createFastChildContext(

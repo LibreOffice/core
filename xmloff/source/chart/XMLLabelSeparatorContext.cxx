@@ -40,10 +40,6 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
 XMLLabelSeparatorContext::~XMLLabelSeparatorContext()
 {}
 
-void XMLLabelSeparatorContext::startFastElement( sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-}
-
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLabelSeparatorContext::createFastChildContext(
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )

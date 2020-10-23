@@ -79,12 +79,6 @@ ScXMLTableColContext::~ScXMLTableColContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableColContext::createFastChildContext(
-    sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return nullptr;
-}
-
 void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScXMLImport& rXMLImport = GetScImport();
