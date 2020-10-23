@@ -82,6 +82,32 @@ int OutputDevice::GetDevFontCount() const
 
         if (!mpDeviceFontList->Count())
         {
+            /* tdf#137643 if our fonts were cleared due to FontChanged
+               while Updates of fonts was locked, then update them
+               prematurely now on this request
+            */
+            auto svdata = ImplGetSVData();
+            DBG_TESTSOLARMUTEX();
+            if (svdata->mbFontUpdatesPending)
+            {
+                auto nLockCount = svdata->mnFontUpdatesLockCount;
+                // call with mnFontUpdatesLockCount of 0 to get immediate results
+                svdata->mnFontUpdatesLockCount = 0;
+
+                ImplRefreshAllFontData(svdata->mbFontUpdatesNewLists);
+                // can set these to false now as the update is done
+                svdata->mbFontUpdatesPending = false;
+                svdata->mbFontUpdatesNewLists = false;
+
+                // restore lock count
+                svdata->mnFontUpdatesLockCount = nLockCount;;
+
+                mpDeviceFontList = mxFontCollection->GetDeviceFontList();
+            }
+        }
+
+        if (!mpDeviceFontList->Count())
+        {
             mpDeviceFontList.reset();
             return 0;
         }
