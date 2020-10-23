@@ -89,17 +89,6 @@ XMLEventsImportContext::~XMLEventsImportContext()
 }
 
 
-void XMLEventsImportContext::StartElement(
-    const Reference<XAttributeList> &)
-{
-    // nothing to be done
-}
-
-void XMLEventsImportContext::EndElement()
-{
-    // nothing to be done
-}
-
 SvXMLImportContextRef XMLEventsImportContext::CreateChildContext(
     sal_uInt16 /*p_nPrefix*/,
     const OUString& /*rLocalName*/,
