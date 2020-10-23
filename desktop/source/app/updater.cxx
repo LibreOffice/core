@@ -43,6 +43,8 @@
 
 #include <officecfg/Setup.hxx>
 
+#include <functional>
+#include <memory>
 #include <set>
 
 namespace {
@@ -538,13 +540,14 @@ size_t WriteCallbackFile(void *ptr, size_t size,
 std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 {
     Updater::log("Download: " + rURL);
-    CURL* curl = curl_easy_init();
+    std::unique_ptr<CURL, std::function<void(CURL *)>> curl(
+        curl_easy_init(), [](CURL * p) { curl_easy_cleanup(p); });
 
     if (!curl)
         return std::string();
 
-    curl_easy_setopt(curl, CURLOPT_URL, rURL.getStr());
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, kUserAgent);
+    curl_easy_setopt(curl.get(), CURLOPT_URL, rURL.getStr());
+    curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, kUserAgent);
     bool bUseProxy = false;
     if (bUseProxy)
     {
@@ -557,18 +560,18 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
     char buf[] = "Expect:";
     curl_slist* headerlist = nullptr;
     headerlist = curl_slist_append(headerlist, buf);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1); // follow redirects
+    curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, headerlist);
+    curl_easy_setopt(curl.get(), CURLOPT_FOLLOWLOCATION, 1); // follow redirects
     // only allow redirect to http:// and https://
-    curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+    curl_easy_setopt(curl.get(), CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
 
     std::string response_body;
     utl::TempFile aTempFile;
     WriteDataFile aFile(aTempFile.GetStream(StreamMode::WRITE));
     if (!bFile)
     {
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA,
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,
                 static_cast<void *>(&response_body));
 
         aTempFile.EnableKillingFile(true);
@@ -581,17 +584,17 @@ std::string download_content(const OString& rURL, bool bFile, OUString& rHash)
 
         aTempFile.EnableKillingFile(false);
 
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallbackFile);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA,
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEFUNCTION, WriteCallbackFile);
+        curl_easy_setopt(curl.get(), CURLOPT_WRITEDATA,
                 static_cast<void *>(&aFile));
     }
 
     // Fail if 400+ is returned from the web server.
-    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1);
+    curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1);
 
-    CURLcode cc = curl_easy_perform(curl);
+    CURLcode cc = curl_easy_perform(curl.get());
     long http_code = 0;
-    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+    curl_easy_getinfo(curl.get(), CURLINFO_RESPONSE_CODE, &http_code);
     if (http_code != 200)
     {
         SAL_WARN("desktop.updater", "download did not succeed. Error code: " << http_code);
