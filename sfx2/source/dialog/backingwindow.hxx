@@ -100,6 +100,11 @@ class BackingWindow : public InterimItemWindow
 
     void checkInstalledModules();
 
+    void DataChanged(const DataChangedEvent&) override;
+
+    template <typename WidgetClass> void setLargerFont(std::unique_ptr<WidgetClass>&, const vcl::Font&);
+    void ApplyStyleSettings();
+
 public:
     explicit BackingWindow(vcl::Window* pParent);
     virtual ~BackingWindow() override;
