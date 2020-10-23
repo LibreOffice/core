@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "216576ac_8a576d1e",
+        "filename": "sc/source/ui/view/spellcheckcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-23T08:08:12Z",
+      "side": 1,
+      "message": "since MisspellType is uniquely owned, and a copyable/movable type (std::vector), and the size of an empty vector is only two size_t bigger than a pointer, you might as well have \n\n    typedef std::unordered_map\u003cCellPos, MisspellType, CellPos::Hash\u003e CellMapType;\n    typedef std::unordered_map\u003cconst rtl_uString*, MisspellType\u003e SharedStringMapType;\n\nand save an indirection and a heap allocation and dealing with null pointers",
+      "revId": "7987caffc0663640a3747d4e1dc9b762ff5466af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73bdb7fe_918da484",
+        "filename": "sc/source/ui/view/spellcheckcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-23T08:08:12Z",
+      "side": 1,
+      "message": "duplicate typedef",
+      "revId": "7987caffc0663640a3747d4e1dc9b762ff5466af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
