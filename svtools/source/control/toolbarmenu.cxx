@@ -218,6 +218,7 @@ void InterimToolbarPopup::dispose()
     m_xContainer->move(m_xPopup->getContainer(), m_xPopup->getTopLevel());
     m_xPopup.reset();
     m_xContainer.reset();
+    m_xBuilder.reset();
     m_xBox.clear();
     m_xFrame.clear();
     DockingWindow::dispose();
