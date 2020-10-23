@@ -83,8 +83,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     bool mbInitControls;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
-    void setupButton(PushButton* pButton);
-    void setupButton(MenuToggleButton* pButton);
+    void setupMenuButton(MenuToggleButton* pButton);
 
     void dispatchURL(const OUString& i_rURL,
                      const OUString& i_rTarget = OUString("_default"),
@@ -103,6 +102,11 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     void initializeLocalView();
 
     void checkInstalledModules();
+
+    void DataChanged(const DataChangedEvent&) override;
+
+    template <typename WidgetClass> void setLargerFont(WidgetClass&, const vcl::Font&);
+    void ApplyStyleSettings();
 
 public:
     explicit BackingWindow(vcl::Window* pParent);
