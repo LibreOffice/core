@@ -167,7 +167,7 @@ $(eval $(call gb_Module_add_uicheck_targets,sw,\
 	UITest_writer_tests5 \
 	UITest_writer_tests6 \
 	UITest_writer_tests7 \
-	UITest_table \
+	UITest_sw_table \
 	UITest_sw_findReplace \
 	UITest_sw_findSimilarity \
 	UITest_chapterNumbering \
