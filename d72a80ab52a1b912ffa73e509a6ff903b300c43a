@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "150fb777_6dc4b2e2",
+        "filename": "basic/qa/basic_coverage/test_method_name_variable.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-10-23T08:46:57Z",
+      "side": 1,
+      "message": "It is very strange and actually this problem should not occur. I will check if I can fix the problem directly in the ReDim function itself.",
+      "parentUuid": "7342a6a6_a55106d7",
+      "range": {
+        "startLine": 12,
+        "startChar": 23,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "d72a80ab52a1b912ffa73e509a6ff903b300c43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "334c4756_c9a911de",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "By the way, it would be nice to have a comment where will this flag be reset.",
       "parentUuid": "334c4756_c9a911de",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 646,
+        "endChar": 41
+      },
+      "revId": "d72a80ab52a1b912ffa73e509a6ff903b300c43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a53d8f6d_073b2c60",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2020-10-23T08:46:57Z",
+      "side": 1,
+      "message": "What do you think about giving the index write access in the FOR LOOP STEP and reverting the above statement and checking for the problem in ReDim itself?",
+      "parentUuid": "562a89a3_b12139a3",
       "range": {
         "startLine": 646,
         "startChar": 4,
