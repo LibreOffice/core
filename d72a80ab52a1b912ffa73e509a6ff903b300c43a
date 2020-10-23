@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7342a6a6_a55106d7",
+        "filename": "basic/qa/basic_coverage/test_method_name_variable.vb",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-23T05:37:14Z",
+      "side": 1,
+      "message": "Actually I don\u0027t understand why using method name in ReDim failed - is this related to method name not being RW, or is this own problem that ReDim requires RW access to its argument for no apparent reason?",
+      "range": {
+        "startLine": 12,
+        "startChar": 23,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "d72a80ab52a1b912ffa73e509a6ff903b300c43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "334c4756_c9a911de",
         "filename": "basic/source/runtime/runtime.cxx",
         "patchSetId": 2
@@ -13,6 +36,30 @@
       "writtenOn": "2020-10-23T05:29:53Z",
       "side": 1,
       "message": "We seem to not discriminate between sub and function?",
+      "range": {
+        "startLine": 646,
+        "startChar": 4,
+        "endLine": 646,
+        "endChar": 41
+      },
+      "revId": "d72a80ab52a1b912ffa73e509a6ff903b300c43a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "562a89a3_b12139a3",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-23T05:37:14Z",
+      "side": 1,
+      "message": "By the way, it would be nice to have a comment where will this flag be reset.",
+      "parentUuid": "334c4756_c9a911de",
       "range": {
         "startLine": 646,
         "startChar": 4,
