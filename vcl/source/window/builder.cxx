@@ -1595,11 +1595,7 @@ void VclBuilder::preload()
 // find -name '*ui*' | xargs grep 'class=".*lo-' |
 //     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
     static const char *aWidgetLibs[] = {
-        "sfxlo",  "svtlo",     "svxcorelo", "foruilo",
-        "vcllo",  "svxlo",     "cuilo",     "swlo",
-        "swuilo", "sclo",      "sdlo",      "chartcontrollerlo",
-        "smlo",   "scuilo",    "basctllo",  "sduilo",
-        "scnlo",  "xsltdlglo", "pcrlo" // "dbulo"
+        "sfxlo",  "svtlo"
     };
     for (const auto & lib : aWidgetLibs)
     {
