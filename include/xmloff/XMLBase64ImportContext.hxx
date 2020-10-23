@@ -49,10 +49,6 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override {}
     virtual void SAL_CALL endFastElement(sal_Int32) override;
     virtual void SAL_CALL characters( const OUString& rChars ) override;
-
-    virtual void EndElement() override;
-    virtual void Characters( const OUString& rChars ) override;
-
 };
 
 #endif // INCLUDED_XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
