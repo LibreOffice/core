@@ -19,21 +19,26 @@
 #pragma once
 
 #include <vcl/weld.hxx>
+#include "cuigrfflt.hxx"
 
 class TipOfTheDayDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::Image> m_pImage;
+    CuiGraphicPreviewWindow m_aPreview;
+
     std::unique_ptr<weld::Label> m_pText;
     std::unique_ptr<weld::CheckButton> m_pShowTip;
     std::unique_ptr<weld::Button> m_pNext;
     std::unique_ptr<weld::LinkButton> m_pLink;
+    std::unique_ptr<weld::CustomWeld> m_pPreview;
 
+    Graphic m_aGraphic;
     sal_Int32 m_nCurrentTip;
     sal_Int32 m_nDay;
     void UpdateTip();
     DECL_LINK(OnNextClick, weld::Button&, void);
     DECL_LINK(OnLinkClick, weld::LinkButton&, bool);
+    DECL_LINK(ImplModifyHdl, LinkParamNone*, void);
 
 public:
     TipOfTheDayDialog(weld::Window* pWindow);
