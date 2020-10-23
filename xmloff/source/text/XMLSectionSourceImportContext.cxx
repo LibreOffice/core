@@ -123,9 +123,4 @@ void XMLSectionSourceImportContext::StartElement(
     }
 }
 
-void XMLSectionSourceImportContext::EndElement()
-{
-    // this space intentionally left blank.
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

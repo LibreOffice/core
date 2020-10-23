@@ -518,8 +518,6 @@ public:
 
     virtual void TCharacters(const OUString & /*rChars*/);
     virtual void SAL_CALL characters(const OUString &rChars) override;
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference<css::xml::sax::XFastAttributeList>& /*rAttrList*/) override
     {
         if (GetSmImport().TooDeep())
@@ -545,12 +543,6 @@ void SmXMLImportContext::characters(const OUString &rChars)
     const OUString &rChars2 = rChars.trim();
     if (!rChars2.isEmpty())
         TCharacters(rChars2/*.collapse()*/);
-}
-
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLImportContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
-{
-    return nullptr;
 }
 
 namespace {
@@ -1859,9 +1851,6 @@ public:
         {}
 
     /*Don't do anything with alignment for now*/
-    void SAL_CALL endFastElement(sal_Int32 ) override
-    {
-    }
 };
 
 
@@ -1887,13 +1876,6 @@ class SmXMLOfficeContext_Impl : public virtual SvXMLImportContext
 public:
     SmXMLOfficeContext_Impl( SmXMLImport &rImport )
         : SvXMLImportContext(rImport) {}
-
-    virtual void SAL_CALL characters( const OUString& /*aChars*/ ) override {}
-
-    virtual void SAL_CALL startFastElement( sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ ) override {}
-
-    virtual void SAL_CALL endFastElement( sal_Int32 /*nElement*/ ) override {}
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -1925,13 +1907,6 @@ public:
     SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual void SAL_CALL characters( const OUString& aChars ) override;
-
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
@@ -1944,22 +1919,6 @@ SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
     SmXMLOfficeContext_Impl(i_rImport),
     SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
-}
-
-void SAL_CALL SmXMLFlatDocContext_Impl::startFastElement( sal_Int32 nElement,
-    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
-{
-    SvXMLMetaDocumentContext::startFastElement(nElement, xAttrList);
-}
-
-void SAL_CALL SmXMLFlatDocContext_Impl::endFastElement( sal_Int32 nElement )
-{
-    SvXMLMetaDocumentContext::endFastElement(nElement);
-}
-
-void SAL_CALL SmXMLFlatDocContext_Impl::characters( const OUString& rChars )
-{
-    SvXMLMetaDocumentContext::characters(rChars);
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SmXMLFlatDocContext_Impl::createFastChildContext(

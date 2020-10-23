@@ -49,8 +49,6 @@ public:
             css::text::TextContentAnchorType eDefaultAnchorType );
     virtual ~XMLTextFrameHyperlinkContext() override;
 
-    virtual void EndElement() override;
-
     SvXMLImportContextRef CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;

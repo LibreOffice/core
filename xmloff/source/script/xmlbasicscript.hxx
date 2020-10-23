@@ -38,10 +38,6 @@ protected:
 
 public:
     BasicElementBase(SvXMLImport& rImport);
-
-    virtual void SAL_CALL startFastElement(
-        sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttribs) override;
 };
 
 class BasicLibrariesElement : public BasicElementBase
