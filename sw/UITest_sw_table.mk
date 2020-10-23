@@ -11,6 +11,7 @@ $(eval $(call gb_UITest_add_modules,sw_table,$(SRCDIR)/sw/qa/uitest,\
 	table/ \
 ))
 
+<<<<<<< HEAD:sw/UITest_sw_table.mk
 $(eval $(call gb_UITest_set_defs,sw_table, \
-    TDOC="$(SRCDIR)/sw/qa/uitest/writer_tests/data" \
+    TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
