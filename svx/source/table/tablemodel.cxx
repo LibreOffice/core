@@ -743,7 +743,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                             if( bUndo )
                                 xTargetCell->AddUndo();
                             xTargetCell->merge( nColSpan - nRemove, xCell->getRowSpan() );
-                            xTargetCell->replaceContentAndFormating( xCell );
+                            xTargetCell->replaceContentAndFormatting( xCell );
                         }
                     }
                 }
@@ -901,7 +901,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                             if( bUndo )
                                 xTargetCell->AddUndo();
                             xTargetCell->merge( xCell->getColumnSpan(), nRowSpan - nRemove );
-                            xTargetCell->replaceContentAndFormating( xCell );
+                            xTargetCell->replaceContentAndFormatting( xCell );
                         }
                     }
                 }

@@ -2830,7 +2830,7 @@ bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
                     xTargetCell->AddUndo();
                     // Prevent cell span exceeding the pasting range.
                     if (nColumns < nTargetCol + xSourceCell->getColumnSpan())
-                        xTargetCell->replaceContentAndFormating(xSourceCell);
+                        xTargetCell->replaceContentAndFormatting(xSourceCell);
                     else
                         xTargetCell->cloneFrom(xSourceCell);
 
