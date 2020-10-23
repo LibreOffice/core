@@ -5,12 +5,13 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.path import get_srcdir_url
 from uitest.config import DEFAULT_SLEEP
 import time
+import org.libreoffice.unotest
+import pathlib
 
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sw/qa/uitest/writer_tests7/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class tdf131936(UITestCase):
 
