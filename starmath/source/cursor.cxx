@@ -1311,7 +1311,6 @@ void SmCursor::EndEdit(){
     //Update the edit engine and text of the document
     OUString formula;
     SmNodeToTextVisitor(mpTree, formula);
-    //mpTree->CreateTextFromNode(formula);
     mpDocShell->maText = formula;
     mpDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
     mpDocShell->GetEditEngine().QuickFormatDoc();
