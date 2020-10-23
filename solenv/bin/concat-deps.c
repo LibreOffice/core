@@ -32,7 +32,7 @@
 #define CORE_LITTLE_ENDIAN
 #endif /* Def _MSC_VER */
 
-#if defined(__linux) || defined(__FreeBSD_kernel__)
+#if defined(__linux) || defined(__FreeBSD__)
 #include <sys/param.h>
 #if __BYTE_ORDER == __LITTLE_ENDIAN
 #undef CORE_BIG_ENDIAN

@@ -345,7 +345,7 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
 
 #undef SEPARATOR // It is used at least in enum class MenuItemType
 
-#endif // defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
+#endif // defined(__linux__) || defined (__FreeBSD__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
 
 #ifdef __cplusplus
 }
