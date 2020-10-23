@@ -22,6 +22,30 @@
       "revId": "1eb066eb752503658a4aedf6556ce52eb0326bd2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b771bd6_acc80a64",
+        "filename": "bin/list-uitest.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2020-10-23T14:35:03Z",
+      "side": 1,
+      "message": "maybe, the result is the same though",
+      "parentUuid": "52d0c161_f819a897",
+      "range": {
+        "startLine": 41,
+        "startChar": 24,
+        "endLine": 41,
+        "endChar": 35
+      },
+      "revId": "1eb066eb752503658a4aedf6556ce52eb0326bd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
