@@ -219,6 +219,8 @@ public:
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+    boost::property_tree::ptree DumpAsPropertyTree(SvTreeListEntry* pEntry);
+    virtual boost::property_tree::ptree DumpAsPropertyTree() override;
 };
 
 struct CuiConfigGroupBoxResource_Impl;
