@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dc4c4d5_68bd42b5",
+        "filename": "vcl/unx/generic/app/geninst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-23T00:09:12Z",
+      "side": 1,
+      "message": "It feels slightly better to not create the OUString from full Ascii and then copy part of it, but scan the Ascii first until it\u0027s \\0 or space or dash or 2nd dot, and then use std::string_view of the end range... But not a big deal.",
+      "range": {
+        "startLine": 84,
+        "startChar": 12,
+        "endLine": 84,
+        "endChar": 45
+      },
+      "revId": "cbf506bc618f540741e89b39f8a1302e7eba9cf1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
