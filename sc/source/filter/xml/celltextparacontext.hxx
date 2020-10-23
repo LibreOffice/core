@@ -68,8 +68,6 @@ public:
 
     void SetStyleName(const OUString& rStyleName);
 
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 

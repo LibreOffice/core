@@ -141,9 +141,8 @@ OTableStylesContext::~OTableStylesContext()
 
 }
 
-void OTableStylesContext::endFastElement(sal_Int32 nElement)
+void OTableStylesContext::endFastElement(sal_Int32 )
 {
-    SvXMLStylesContext::endFastElement(nElement);
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else

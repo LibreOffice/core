@@ -14,6 +14,7 @@
 #include "plugin.hxx"
 #include "check.hxx"
 #include <iostream>
+#include <unordered_map>
 #include "clang/AST/CXXInheritance.h"
 
 /*
@@ -36,8 +37,23 @@ public:
 
     bool preRun() override
     {
-        //        std::string fn(handler.getMainFileName());
-        //        loplugin::normalizeDotDotInFilePath(fn);
+        StringRef fn(handler.getMainFileName());
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/core/xmlictxt.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/core/xmlimp.cxx"))
+            return false;
+        // These are mostly classes delegating calls to other classes
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/text/XMLTextFrameContext.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/draw/ximpshap.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/xmloff/source/table/XMLTableImport.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn,
+                                     SRCDIR "/sc/source/filter/xml/XMLTrackedChangesContext.cxx"))
+            return false;
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/filter/xml/xmlannoi.cxx"))
+            return false;
         return true;
     }
 
@@ -50,21 +66,16 @@ public:
     }
 
     bool VisitCXXMethodDecl(const CXXMethodDecl*);
-};
+    bool VisitCXXMemberCallExpr(const CXXMemberCallExpr*);
 
-static bool containsStartFastElementMethod(const CXXRecordDecl* cxxRecordDecl)
-{
-    auto dc = loplugin::DeclCheck(cxxRecordDecl);
-    if (dc.Class("XFastContextHandler"))
-        return false;
-    for (auto it = cxxRecordDecl->method_begin(); it != cxxRecordDecl->method_end(); ++it)
-    {
-        auto i = *it;
-        if (i->getIdentifier() && i->getName() == "startFastElement")
-            return true;
-    }
-    return false;
-}
+private:
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> startFastElementSet;
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> StartElementSet;
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> endFastElementSet;
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> EndElementSet;
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> charactersSet;
+    std::unordered_map<const CXXRecordDecl*, const CXXMethodDecl*> CharactersSet;
+};
 
 bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 {
@@ -82,111 +93,165 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     if (loplugin::DeclCheck(cxxRecordDecl).Class("SvXMLImportContext"))
         return true;
 
-    if (methodDecl->getName() == "createFastChildContext" || methodDecl->getName() == "characters"
-        || methodDecl->getName() == "endFastElement")
+    if (!loplugin::isDerivedFrom(cxxRecordDecl, [](Decl const* decl) -> bool {
+            auto const dc = loplugin::DeclCheck(decl);
+            return bool(dc.ClassOrStruct("SvXMLImportContext").GlobalNamespace());
+        }))
+        return true;
+
+    auto name = methodDecl->getName();
+    if (name == "startFastElement")
+        startFastElementSet.insert({ cxxRecordDecl, methodDecl });
+    else if (name == "StartElement")
+        StartElementSet.insert({ cxxRecordDecl, methodDecl });
+    else if (name == "endFastElement")
+        endFastElementSet.insert({ cxxRecordDecl, methodDecl });
+    else if (name == "EndElement")
+        EndElementSet.insert({ cxxRecordDecl, methodDecl });
+    else if (name == "characters")
     {
-        auto className = cxxRecordDecl->getName();
-        if (className == "OOXMLFactory") // writerfilter
-            return true;
-        if (className == "SvXMLLegacyToFastDocHandler" || className == "ImportDocumentHandler"
-            || className == "ExportDocumentHandler") // reportdesign
-            return true;
-        if (className == "XMLEmbeddedObjectExportFilter" || className == "XMLBasicExportFilter"
-            || className == "XMLTransformerBase" || className == "SvXMLMetaExport") // xmloff
-            return true;
-
-        if (containsStartFastElementMethod(cxxRecordDecl))
-            return true;
-
-        bool foundStartFastElement = false;
-        bool foundImportContext = false;
-
-        CXXBasePaths aPaths;
-        cxxRecordDecl->lookupInBases(
-            [&](const CXXBaseSpecifier* Specifier, CXXBasePath & /*Path*/) -> bool {
-                if (!Specifier->getType().getTypePtr())
-                    return false;
-                const CXXRecordDecl* baseCXXRecordDecl = Specifier->getType()->getAsCXXRecordDecl();
-                if (!baseCXXRecordDecl)
-                    return false;
-                if (baseCXXRecordDecl->isInvalidDecl())
-                    return false;
-                if (loplugin::DeclCheck(baseCXXRecordDecl).Class("SvXMLImportContext"))
-                    foundImportContext |= true;
-                else
-                    foundStartFastElement |= containsStartFastElementMethod(baseCXXRecordDecl);
-                return false;
-            },
-            aPaths);
-
-        if (foundImportContext && !foundStartFastElement)
-            report(DiagnosticsEngine::Warning, "must override startFastElement too",
-                   compat::getBeginLoc(methodDecl))
-                << methodDecl->getSourceRange();
+        if (methodDecl->getNumParams() == 1)
+            charactersSet.insert({ cxxRecordDecl, methodDecl });
     }
-    else if (methodDecl->getName() == "StartElement" || methodDecl->getName() == "EndElement"
-             || methodDecl->getName() == "Characters")
+    else if (name == "Characters")
     {
-        if (loplugin::DeclCheck(cxxRecordDecl).Class("SchXMLAxisContext"))
-            return true;
-        if (loplugin::DeclCheck(cxxRecordDecl).Class("SchXMLChartContext"))
-            return true;
-        if (loplugin::DeclCheck(cxxRecordDecl).Class("SchXMLParagraphContext"))
-            return true;
-        if (loplugin::DeclCheck(cxxRecordDecl).Class("SchXMLLegendContext"))
-            return true;
-        if (loplugin::DeclCheck(cxxRecordDecl).Class("SchXMLPropertyMappingContext"))
-            return true;
+        if (methodDecl->getNumParams() == 1)
+            CharactersSet.insert({ cxxRecordDecl, methodDecl });
+    }
 
-        bool foundImportContext = false;
-        CXXBasePaths aPaths;
-        cxxRecordDecl->lookupInBases(
-            [&](const CXXBaseSpecifier* Specifier, CXXBasePath & /*Path*/) -> bool {
-                if (!Specifier->getType().getTypePtr())
-                    return false;
-                const CXXRecordDecl* baseCXXRecordDecl = Specifier->getType()->getAsCXXRecordDecl();
-                if (!baseCXXRecordDecl)
-                    return false;
-                if (baseCXXRecordDecl->isInvalidDecl())
-                    return false;
-                if (loplugin::DeclCheck(baseCXXRecordDecl).Class("SvXMLImportContext"))
-                    foundImportContext |= true;
-                return false;
-            },
-            aPaths);
-
-        if (!foundImportContext)
-            return true;
-
-        bool foundConstructor = false;
-        for (auto it = cxxRecordDecl->ctor_begin(); it != cxxRecordDecl->ctor_end(); ++it)
+    {
+        auto it1 = endFastElementSet.find(cxxRecordDecl);
+        auto it2 = EndElementSet.find(cxxRecordDecl);
+        if (it1 != endFastElementSet.end() && it2 != EndElementSet.end())
         {
-            const CXXConstructorDecl* ctor = *it;
-            bool foundInt16 = false;
-            for (auto paramIt = ctor->param_begin(); paramIt != ctor->param_end(); ++paramIt)
-            {
-                const ParmVarDecl* pvd = *paramIt;
-                auto tc = loplugin::TypeCheck(pvd->getType());
-                if (tc.Typedef("sal_uInt16"))
-                    foundInt16 = true;
-                else if (tc.LvalueReference().Const().Class("OUString") && foundInt16)
-                    foundConstructor = true;
-                else
-                    foundInt16 = false;
-                if (tc.LvalueReference().Const().Class("OUString")
-                    && pvd->getName() == "rLocalName")
-                    foundConstructor = true;
-            }
+            auto methodDecl1 = it1->second;
+            report(DiagnosticsEngine::Warning, "cannot override both endFastElement and EndElement",
+                   compat::getBeginLoc(methodDecl1))
+                << methodDecl1->getSourceRange();
+            auto methodDecl2 = it2->second;
+            report(DiagnosticsEngine::Warning, "cannot override both endFastElement and EndElement",
+                   compat::getBeginLoc(methodDecl2))
+                << methodDecl2->getSourceRange();
         }
-
-        if (!foundConstructor)
-            report(DiagnosticsEngine::Warning,
-                   "overrides startElement, but looks like a fastparser context class, no "
-                   "constructor that takes slowparser args",
-                   compat::getBeginLoc(methodDecl))
-                << methodDecl->getSourceRange();
     }
 
+    {
+        auto it1 = startFastElementSet.find(cxxRecordDecl);
+        auto it2 = StartElementSet.find(cxxRecordDecl);
+        if (it1 != startFastElementSet.end() && it2 != StartElementSet.end())
+        {
+            auto methodDecl1 = it1->second;
+            report(DiagnosticsEngine::Warning,
+                   "cannot override both startFastElement and StartElement",
+                   compat::getBeginLoc(methodDecl1))
+                << methodDecl1->getSourceRange();
+            auto methodDecl2 = it2->second;
+            report(DiagnosticsEngine::Warning,
+                   "cannot override both startFastElement and StartElement",
+                   compat::getBeginLoc(methodDecl2))
+                << methodDecl2->getSourceRange();
+        }
+    }
+    {
+        auto it1 = charactersSet.find(cxxRecordDecl);
+        auto it2 = CharactersSet.find(cxxRecordDecl);
+        if (it1 != charactersSet.end() && it2 != CharactersSet.end())
+        {
+            auto methodDecl1 = it1->second;
+            report(DiagnosticsEngine::Warning, "cannot override both characters and Characters",
+                   compat::getBeginLoc(methodDecl1))
+                << methodDecl1->getSourceRange();
+            auto methodDecl2 = it2->second;
+            report(DiagnosticsEngine::Warning, "cannot override both characters and Characters",
+                   compat::getBeginLoc(methodDecl2))
+                << methodDecl2->getSourceRange();
+        }
+    }
+
+    auto checkEmpty = [&]() {
+        if (!methodDecl->isThisDeclarationADefinition())
+            return;
+        auto compoundStmt = dyn_cast_or_null<CompoundStmt>(methodDecl->getBody());
+        if (compoundStmt == nullptr || compoundStmt->size() > 0)
+            return;
+        report(DiagnosticsEngine::Warning, "empty, should be removed",
+               compat::getBeginLoc(methodDecl))
+            << methodDecl->getSourceRange();
+        auto canonicalDecl = methodDecl->getCanonicalDecl();
+        if (canonicalDecl != methodDecl)
+            report(DiagnosticsEngine::Note, "definition here", compat::getBeginLoc(canonicalDecl))
+                << canonicalDecl->getSourceRange();
+    };
+    auto checkOnlyReturn = [&]() {
+        if (!methodDecl->isThisDeclarationADefinition())
+            return;
+        auto compoundStmt = dyn_cast_or_null<CompoundStmt>(methodDecl->getBody());
+        if (compoundStmt == nullptr || compoundStmt->size() > 1)
+            return;
+        auto returnStmt = dyn_cast_or_null<ReturnStmt>(*compoundStmt->body_begin());
+        if (!returnStmt)
+            return;
+        auto cxxConstructExpr
+            = dyn_cast_or_null<CXXConstructExpr>(returnStmt->getRetValue()->IgnoreImplicit());
+        if (!cxxConstructExpr)
+            return;
+        if (cxxConstructExpr->getNumArgs() != 1)
+            return;
+        if (!isa<CXXNullPtrLiteralExpr>(cxxConstructExpr->getArg(0)->IgnoreImplicit()))
+            return;
+        report(DiagnosticsEngine::Warning, "empty, should be removed",
+               compat::getBeginLoc(methodDecl))
+            << methodDecl->getSourceRange();
+        auto canonicalDecl = methodDecl->getCanonicalDecl();
+        if (canonicalDecl != methodDecl)
+            report(DiagnosticsEngine::Note, "definition here", compat::getBeginLoc(canonicalDecl))
+                << canonicalDecl->getSourceRange();
+    };
+
+    if (name == "startFastElement")
+        checkEmpty();
+    else if (name == "endFastElement")
+        checkEmpty();
+    else if (name == "characters")
+        checkEmpty();
+    else if (name == "createFastChildContext")
+        checkOnlyReturn();
+    else if (name == "createUnknownChildContext")
+        checkOnlyReturn();
+
+    return true;
+}
+
+bool XmlImport::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
+{
+    auto beginLoc = compat::getBeginLoc(callExpr);
+    if (!beginLoc.isValid() || ignoreLocation(callExpr))
+        return true;
+
+    CXXMethodDecl* methodDecl = callExpr->getMethodDecl();
+    if (!methodDecl || !methodDecl->getIdentifier())
+        return true;
+
+    auto cxxRecordDecl = methodDecl->getParent();
+    if (!cxxRecordDecl || !cxxRecordDecl->getIdentifier())
+        return true;
+
+    if (!loplugin::DeclCheck(cxxRecordDecl).Class("SvXMLImportContext"))
+        return true;
+
+    auto name = methodDecl->getName();
+    if (name == "startFastElement" || name == "characters" || name == "endFastElement"
+        || name == "createFastChildContext" || name == "createUnknownChildContext"
+        || name == "StartElement" || name == "EndElement" || name == "Characters"
+        || name == "CreateChildContext")
+    {
+        /**
+         * Calling this superclass method from a subclass method will mess with the fallback logic in the superclass.
+         */
+        report(DiagnosticsEngine::Warning, "don't call this superclass method",
+               compat::getBeginLoc(callExpr))
+            << callExpr->getSourceRange();
+    }
     return true;
 }
 
