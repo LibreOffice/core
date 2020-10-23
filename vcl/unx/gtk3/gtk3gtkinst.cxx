@@ -13714,7 +13714,8 @@ public:
             gtk_widget_realize(pWidget);
         GdkWindow* pWin = gtk_widget_get_window(pWidget);
         gtk_im_context_set_client_window(m_pIMContext, pWin);
-        gtk_im_context_focus_in(m_pIMContext);
+        if (gtk_widget_has_focus(m_pArea->getWidget()))
+            gtk_im_context_focus_in(m_pIMContext);
     }
 
     void signalFocus(bool bIn)
@@ -13745,6 +13746,9 @@ public:
 
         g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusOutSignalId);
         g_signal_handler_disconnect(m_pArea->getWidget(), m_nFocusInSignalId);
+
+        if (gtk_widget_has_focus(m_pArea->getWidget()))
+            gtk_im_context_focus_out(m_pIMContext);
 
         // first give IC a chance to deinitialize
         gtk_im_context_set_client_window(m_pIMContext, nullptr);
