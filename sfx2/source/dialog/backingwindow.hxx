@@ -75,8 +75,6 @@ class BackingWindow : public InterimItemWindow
 
     css::uno::Reference<css::datatransfer::dnd::XDropTarget> mxDropTarget;
 
-    tools::Rectangle maStartCentButtons;
-
     bool mbInitControls;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
 
