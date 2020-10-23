@@ -16,6 +16,24 @@
       "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78dfca62_a523518a",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-10-23T21:24:06Z",
+      "side": 1,
+      "message": "No, online side can send not empty but invalid lang tag.",
+      "parentUuid": "b8d3a5ad_133b337f",
+      "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
