@@ -54,6 +54,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <svtools/imagemgr.hxx>
+#include <vcl/svlbitm.hxx>
 #include <vcl/treelistentry.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -551,6 +552,39 @@ void SfxConfigGroupListBox::dispose()
     ClearAll();
     pFunctionListBox.clear();
     SvTreeListBox::dispose();
+}
+
+boost::property_tree::ptree SfxConfigGroupListBox::DumpAsPropertyTree(SvTreeListEntry* pEntry)
+{
+    SvLBoxString* pString;
+    SvTreeListEntry* pChild;
+    boost::property_tree::ptree aTree;
+    std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator> aIters =
+        GetModel()->GetChildIterators(pEntry);
+
+    SvTreeListEntries::const_iterator it = aIters.first, itEnd = aIters.second;
+    for (; it != itEnd; ++it)
+    {
+        boost::property_tree::ptree aEntry;
+        pChild = (*it).get();
+        pString = static_cast<SvLBoxString*>(pChild->GetFirstItem(SvLBoxItemType::String));
+        if (pString)
+        {
+            aEntry.put("text", pString->GetText());
+            if (pChild->HasChildren())
+                aEntry.add_child("entries", DumpAsPropertyTree(pChild));
+            aTree.push_back(std::make_pair("", aEntry));
+        }
+    }
+    return aTree;
+}
+
+boost::property_tree::ptree SfxConfigGroupListBox::DumpAsPropertyTree()
+{
+    boost::property_tree::ptree aTree(SvTreeListBox::DumpAsPropertyTree());
+    aTree.add_child("entries", DumpAsPropertyTree(nullptr));
+
+    return aTree;
 }
 
 void SfxConfigGroupListBox::ClearAll()
