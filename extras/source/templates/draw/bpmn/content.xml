@@ -846,7 +846,7 @@
         <draw:frame draw:style-name="gr10" draw:text-style-name="P10" draw:layer="layout" svg:width="6.783cm" svg:height="2.188cm" svg:x="5.97cm" svg:y="10.75cm">
           <draw:text-box>
             <text:p>
-              <text:span text:style-name="T4">Direct formating </text:span>
+              <text:span text:style-name="T4">Direct formatting </text:span>
               <text:span text:style-name="T5">BPMN gallery items use 11px font size to fit well in writer and draw. Bold borders have 0,10 mm line width.</text:span>
             </text:p>
           </draw:text-box>
@@ -923,7 +923,7 @@
           <draw:text-box>
             <text:p>
               <text:span text:style-name="T4">BPMN gallery </text:span>
-              <text:span text:style-name="T5">gallery items store the styles as direct formating style, so when you move an gallery item into the page click Format → Clear Direct Formating and the gallery items use the defined styles. </text:span>
+              <text:span text:style-name="T5">gallery items store the styles as direct formatting style, so when you move an gallery item into the page click Format → Clear Direct Formatting and the gallery items use the defined styles. </text:span>
             </text:p>
           </draw:text-box>
         </draw:frame>
