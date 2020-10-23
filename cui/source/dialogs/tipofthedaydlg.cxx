@@ -25,8 +25,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/help.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -46,11 +44,11 @@
 
 TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/tipofthedaydialog.ui", "TipOfTheDayDialog")
-    , m_pImage(m_xBuilder->weld_image("imImage"))
     , m_pText(m_xBuilder->weld_label("lbText"))
     , m_pShowTip(m_xBuilder->weld_check_button("cbShowTip"))
     , m_pNext(m_xBuilder->weld_button("btnNext"))
     , m_pLink(m_xBuilder->weld_link_button("btnLink"))
+    , m_pPreview(new weld::CustomWeld(*m_xBuilder, "imPreview", m_aPreview))
 {
     m_pShowTip->set_active(officecfg::Office::Common::Misc::ShowTipOfTheDay::get());
     m_pNext->connect_clicked(LINK(this, TipOfTheDayDialog, OnNextClick));
@@ -61,6 +59,8 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     m_nDay = std::chrono::duration_cast<std::chrono::hours>(t0).count() / 24;
     if (m_nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
         m_nCurrentTip++;
+
+    m_aPreview.init(&m_aGraphic, LINK(this, TipOfTheDayDialog, ImplModifyHdl));
 
     UpdateTip();
 }
@@ -172,20 +172,16 @@ void TipOfTheDayDialog::UpdateTip()
     // image
     OUString aURL("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/tipoftheday/");
     rtl::Bootstrap::expandMacros(aURL);
-    OUString aImage = sImage;
+    OUString aImageName = sImage;
     // use default image if none is available with the number
-    if (aImage.isEmpty() || !file_exists(aURL + aImage))
-        aImage = "tipoftheday.png";
-    // draw image
-    Graphic aGraphic;
-    if (GraphicFilter::LoadGraphic(aURL + aImage, OUString(), aGraphic) == ERRCODE_NONE)
-    {
-        ScopedVclPtr<VirtualDevice> m_pVirDev = m_pImage->create_virtual_device();
-        m_pVirDev->SetOutputSizePixel(aGraphic.GetSizePixel());
-        m_pVirDev->DrawBitmapEx(Point(0, 0), aGraphic.GetBitmapEx());
-        m_pImage->set_image(m_pVirDev.get());
-        m_pVirDev.disposeAndClear();
-    }
+    if (aImageName.isEmpty() || !file_exists(aURL + aImageName))
+        aImageName = "tipoftheday.png";
+    GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), m_aGraphic);
+}
+
+IMPL_LINK_NOARG(TipOfTheDayDialog, ImplModifyHdl, LinkParamNone*, void)
+{
+    m_aPreview.SetPreview(m_aGraphic);
 }
 
 IMPL_LINK(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, rButton, bool)
