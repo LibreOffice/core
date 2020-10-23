@@ -499,7 +499,7 @@ void Cell::cloneFrom( const CellRef& xCell )
 {
     if( xCell.is() )
     {
-        replaceContentAndFormating( xCell );
+        replaceContentAndFormatting( xCell );
 
         mnCellContentType = xCell->mnCellContentType;
 
@@ -515,7 +515,7 @@ void Cell::cloneFrom( const CellRef& xCell )
     notifyModified();
 }
 
-void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
+void Cell::replaceContentAndFormatting( const CellRef& xSourceCell )
 {
     if( !(xSourceCell.is() && mpProperties) )
         return;
