@@ -46,6 +46,30 @@
       "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbde8419_9b86a8e5",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2020-10-23T09:44:15Z",
+      "side": 1,
+      "message": "There will still need to be a const / non-const version of GetSectionInfo since most \"get flag\" functions that will be calling this are const, and \"set flag\" cannot be const.\n\nSo I have been trying to use the same basic design between SectionInfo and ParaInfo. Ensuring a sectionInfo via the CTOR might work for Sections, but it won\u0027t work for Paragraphs - since at least in RTF you can EndParagraph without a StartParagraph - and that could eventually try to pop/query an empty stack.  (Of course, every instance that does that could be considered a bug that needs to be fixed, but I don\u0027t necessarily want to be the guy that has to fix all the complicated, pre-existing problems.)\n\nRTF import is pretty easy to make a malicious document I think, so I\u0027m trying to make this somewhat bullet-proof as a reference. The alternative is to always use \"Get/Set flag\" functions and in them verify the stack is not empty. If using a static variable is terrible design, I guess I would have to do that instead.",
+      "parentUuid": "390e9278_c108fc94",
+      "range": {
+        "startLine": 451,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 33
+      },
+      "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
