@@ -528,6 +528,7 @@ public:
     static gboolean             NativeWidgetHelpPressed(GtkAccelGroup*, GObject*, guint,
         GdkModifierType, gpointer pFrame);
     static OUString             GetPreeditDetails(GtkIMContext* pIMContext, std::vector<ExtTextInputAttr>& rInputFlags, sal_Int32& rCursorPos, sal_uInt8& rCursorFlags);
+    static Selection            CalcDeleteSurroundingSelection(const OUString& rSurroundingText, int nCursorIndex, int nOffset, int nChars);
 
     void DisallowCycleFocusOut();
     bool IsCycleFocusOutDisallowed() const;
