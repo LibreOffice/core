@@ -2648,6 +2648,7 @@ void ScXMLExport::ExportAutoStyles_()
 
     if (getExportFlags() & SvXMLExportFlags::MASTERSTYLES)
     {
+        exportAutoDataStyles();
         GetPageExport()->exportAutoStyles();
     }
 
