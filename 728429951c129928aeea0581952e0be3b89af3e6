@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cec39330_b85a7cb0",
+        "filename": "vcl/quartz/salgdiutils.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-24T16:24:35Z",
+      "side": 1,
+      "message": "should not these two fields then be set to nullptr here?",
+      "revId": "728429951c129928aeea0581952e0be3b89af3e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7287336_a8a5c903",
+        "filename": "vcl/quartz/salgdiutils.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-24T16:24:35Z",
+      "side": 1,
+      "message": "would be nice to add the commentary from Leo Wang here:\n\"This provides speed improvements while keeping the color space of the internal bitmap the same (SRGB). It creates a CGImage of the color space of the current display when painting the layer to the screen context.\"",
+      "revId": "728429951c129928aeea0581952e0be3b89af3e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
