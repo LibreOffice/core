@@ -63,7 +63,7 @@ int wmain(int argc, wchar_t** argv)
         wchar_t woutput[1000];
         if (GetShortPathNameW(argv[2], woutput, sizeof(woutput) / sizeof(woutput[0])) == 0)
         {
-            fprintf(stderr, "%S --8.3: Could not get short pathname.\n", argv[0]);
+            fprintf(stderr, "%S --8.3: Could not get short pathname of %S.\n", argv[0], argv[2]);
             exit(1);
         }
 
