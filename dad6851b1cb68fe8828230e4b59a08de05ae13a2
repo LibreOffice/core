@@ -22,6 +22,30 @@
       "revId": "dad6851b1cb68fe8828230e4b59a08de05ae13a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "993985a5_e0b06164",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 18
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-10-24T23:10:17Z",
+      "side": 0,
+      "message": "Marking again.",
+      "parentUuid": "91b2f12d_556106f2",
+      "range": {
+        "startLine": 501,
+        "startChar": 12,
+        "endLine": 501,
+        "endChar": 32
+      },
+      "revId": "dad6851b1cb68fe8828230e4b59a08de05ae13a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
