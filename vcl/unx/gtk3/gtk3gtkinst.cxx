@@ -13848,51 +13848,9 @@ public:
         OUString sSurroundingText;
         sal_Int32 nCursorIndex = pThis->m_pArea->im_context_get_surrounding(sSurroundingText);
 
-        if (nCursorIndex != -1)
-        {
-            // Note that offset and n_chars are in characters not in bytes
-            // which differs from the usage other places in GtkIMContext
-
-            if (nOffset > 0)
-            {
-                while (nOffset && nCursorIndex < sSurroundingText.getLength())
-                {
-                    sSurroundingText.iterateCodePoints(&nCursorIndex, 1);
-                    --nOffset;
-                }
-            }
-            else if (nOffset < 0)
-            {
-                while (nOffset && nCursorIndex > 0)
-                {
-                    sSurroundingText.iterateCodePoints(&nCursorIndex, -1);
-                    ++nOffset;
-                }
-            }
-
-            if (nOffset)
-            {
-                SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to move to offset: " << nOffset);
-                return false;
-            }
-
-            sal_Int32 nCursorEndIndex(nCursorIndex);
-            sal_Int32 nCount(0);
-            while (nCount < nChars && nCursorEndIndex < sSurroundingText.getLength())
-            {
-                sSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
-                ++nCount;
-            }
-
-            if (nCount != nChars)
-            {
-                SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to select: " << nChars << " characters");
-                return false;
-            }
-
-            bRet = pThis->m_pArea->im_context_delete_surrounding(Selection(nCursorIndex, nCursorEndIndex));
-        }
-
+        Selection aSelection = GtkSalFrame::CalcDeleteSurroundingSelection(sSurroundingText, nCursorIndex, nOffset, nChars);
+        if (aSelection != Selection(-1, -1))
+            bRet = pThis->m_pArea->im_context_delete_surrounding(aSelection);
         return bRet;
     }
 

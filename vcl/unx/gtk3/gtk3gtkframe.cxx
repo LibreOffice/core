@@ -4400,6 +4400,56 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     return false;
 }
 
+Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText, int nCursorIndex, int nOffset, int nChars)
+{
+    Selection aInvalid(-1, -1);
+
+    if (nCursorIndex == -1)
+        return aInvalid;
+
+    // Note that offset and n_chars are in characters not in bytes
+    // which differs from the usage other places in GtkIMContext
+
+    if (nOffset > 0)
+    {
+        while (nOffset && nCursorIndex < rSurroundingText.getLength())
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, 1);
+            --nOffset;
+        }
+    }
+    else if (nOffset < 0)
+    {
+        while (nOffset && nCursorIndex > 0)
+        {
+            rSurroundingText.iterateCodePoints(&nCursorIndex, -1);
+            ++nOffset;
+        }
+    }
+
+    if (nOffset)
+    {
+        SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to move to offset: " << nOffset);
+        return aInvalid;
+    }
+
+    sal_Int32 nCursorEndIndex(nCursorIndex);
+    sal_Int32 nCount(0);
+    while (nCount < nChars && nCursorEndIndex < rSurroundingText.getLength())
+    {
+        rSurroundingText.iterateCodePoints(&nCursorEndIndex, 1);
+        ++nCount;
+    }
+
+    if (nCount != nChars)
+    {
+        SAL_WARN("vcl.gtk", "IM delete-surrounding, unable to select: " << nChars << " characters");
+        return aInvalid;
+    }
+
+    return Selection(nCursorIndex, nCursorEndIndex);
+}
+
 gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint offset, gint nchars,
     gpointer /*im_handler*/ )
 {
