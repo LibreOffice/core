@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "863f5644_d8adf95e",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-24T09:04:18Z",
+      "side": 0,
+      "message": "Interesting that both __linux and __linux__ are used ... consistency is overrated :-)",
+      "range": {
+        "startLine": 35,
+        "startChar": 12,
+        "endLine": 35,
+        "endChar": 19
+      },
+      "revId": "11179a25f8d37ced272353af2837f6406323bf35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
