@@ -866,7 +866,7 @@ gnu)
     _os=GNU
      ;;
 
-cygwin*|interix*)
+cygwin*|wsl*)
 
     # When building on Windows normally with MSVC under Cygwin,
     # configure thinks that the host platform (the platform the
@@ -8818,7 +8818,7 @@ else
         if test -n "$NASM"; then
             AC_MSG_CHECKING([for object file format of host system])
             case "$host_os" in
-              cygwin* | mingw* | pw32* | interix*)
+              cygwin* | mingw* | pw32* | wsl*)
                 case "$host_cpu" in
                   x86_64)
                     objfmt='Win64-COFF'
