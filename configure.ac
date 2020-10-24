@@ -3744,10 +3744,14 @@ find_msvc()
     unset vctest vcnum vcnumwithdot vcbuildnumber
 
     vs_versions_to_check "$1"
-    vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
+    if test "$build_os" = wsl; then
+        vswhere="$PROGRAMFILESX86"
+    else
+        vswhere="$(perl -e 'print $ENV{"ProgramFiles(x86)"}')"
+    fi
     vswhere+="\\Microsoft Visual Studio\\Installer\\vswhere.exe"
     PathFormat "$vswhere"
-    vswhere=$formatted_path
+    vswhere=$formatted_path_unix
     for ver in $vsversions; do
         vswhereoutput=`$vswhere -version "@<:@ $ver , $(expr $ver + 1) @:}@" -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | head -1`
         # Fall back to all MS products (this includes VC++ Build Tools)
@@ -3757,7 +3761,7 @@ find_msvc()
         fi
         if test -n "$vswhereoutput"; then
             PathFormat "$vswhereoutput"
-            vctest=$formatted_path
+            vctest=$formatted_path_unix
             break
         fi
     done
