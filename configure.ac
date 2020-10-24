@@ -210,7 +210,11 @@ dnl ===================================================================
 # Linux on WSL) trust that.
 if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
     ac_cv_host="x86_64-pc-wsl"
+    ac_cv_host_cpu="x86_64"
+    ac_cv_host_os="wsl"
     ac_cv_build="$ac_cv_host"
+    ac_cv_build_cpu="$ac_cv_host_cpu"
+    ac_cv_build_os="$ac_cv_host_os"
 
     # Emulation of Cygwin's cygpath command for WSL.
     cygpath()
@@ -308,6 +312,7 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
 fi
 
 AC_CANONICAL_HOST
+AC_CANONICAL_BUILD
 
 AC_MSG_CHECKING([for product name])
 PRODUCTNAME="AC_PACKAGE_NAME"
