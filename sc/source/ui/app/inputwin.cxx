@@ -1219,11 +1219,15 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     Color aBgColor = rStyleSettings.GetWindowColor();
     rRenderContext.SetBackground(aBgColor);
 
-    if (mbInvalidate)
+    // tdf#137713 we rely on GetEditView creating it if it doesn't already exist so
+    // GetEditView() must be called unconditionally
+    if (EditView* pView = GetEditView())
     {
-        if (EditView* pView = GetEditView())
+        if (mbInvalidate)
+        {
             pView->Invalidate();
-        mbInvalidate = false;
+            mbInvalidate = false;
+        }
     }
 
     WeldEditView::Paint(rRenderContext, rRect);
