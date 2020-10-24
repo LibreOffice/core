@@ -63,12 +63,20 @@ FilterLibs()
 
 PathFormat()
 {
-    # Args: $1: A pathname. On Cygwin, in either the Unix or the Windows format.
+    # Args: $1: A pathname. On Cygwin and WSL, in either the Unix or the Windows format. Note that this
+    # function is called also on Unix.
     #
-    # Return value: $formatted_path. The pathname in Windows format, but using forward slashes instead
-    # of backslashes, using 8.3 pathnames if necessary.
+    # Return value: $formatted_path and $formatted_path_unix.
     #
-    # Errors out if 8.3 names are needed but aren't present for some of the path component.
+    # $formatted_path is the argument in Windows format, but using forward slashes instead of
+    # backslashes, using 8.3 pathname components if necessary (if it otherwise would contains spaces
+    # or shell metacharacters).
+    #
+    # $formatted_path_unix is the argument in a form usable in Cygwin or WSL, using 8.3 components if
+    # necessary. On Cygwin, it is the same as $formatted_path, but on WSL it is $formatted_path as a
+    # Unix pathname.
+    #
+    # Errors out if 8.3 names are needed but aren't present for some of the path components.
 
     # Examples:
     #
@@ -86,8 +94,16 @@ PathFormat()
     #
     # /usr/bin/find.exe => C:/cygwin64/bin/find.exe
 
+    if test -n "$UNITTEST_WSL_PATHFORMAT"; then
+        printf "PathFormat $1 ==> "
+    fi
+
     formatted_path="$1"
-    if test "$build_os" = "cygwin"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
+        if test "$build_os" = "wsl"; then
+            formatted_path=$(echo "$formatted_path" | tr -d '\r')
+        fi
+
         pf_conv_to_dos=
         # spaces,parentheses,brackets,braces are problematic in pathname
         # so are backslashes
@@ -97,7 +113,14 @@ PathFormat()
             ;;
         esac
         if test "$pf_conv_to_dos" = "yes"; then
-            if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+            if test "$build_os" = "wsl"; then
+                case "$formatted_path" in
+                    /*)
+                        formatted_path=$(wslpath -w "$formatted_path")
+                        ;;
+                esac
+                formatted_path=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --8.3 "$formatted_path")
+            elif test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 formatted_path=`cygpath -sm "$formatted_path"`
             else
                 formatted_path=`cygpath -d "$formatted_path"`
@@ -112,12 +135,20 @@ PathFormat()
             if test "$fp_count_colon" = "0"; then
                 new_formatted_path=`realpath "$formatted_path"`
                 if test $? -ne 0;  then
-                    AC_MSG_WARN([realpath failed for "$1", not necessarily a problem.])
+                    AC_MSG_WARN([realpath failed for "$formatted_path", not necessarily a problem.])
                 else
                     formatted_path="$new_formatted_path"
                 fi
             fi
-            formatted_path=`cygpath -m "$formatted_path"`
+            if test "$build_os" = "wsl"; then
+                if test "$fp_count_colon" != "0"; then
+                    formatted_path=$(wslpath -m $(wslpath "$formatted_path"))
+                else
+                    formatted_path=$(wslpath -m "$formatted_path")
+                fi
+            else
+                formatted_path=`cygpath -m "$formatted_path"`
+            fi
             if test $? -ne 0;  then
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
@@ -126,6 +157,13 @@ PathFormat()
         if test "$fp_count_space" != "0"; then
             AC_MSG_ERROR([converted path "$formatted_path" still contains spaces. Short filenames (8.3 filenames) support was disabled on this system?])
         fi
+    fi
+    if test "$build_os" = "wsl"; then
+        # WSL can't run Windows binaries from Windows pathnames so we need a separate return value in Unix format
+        formatted_path_unix=$(wslpath "$formatted_path")
+    else
+        # But Cygwin can
+        formatted_path_unix="$formatted_path"
     fi
 }
 
@@ -313,6 +351,23 @@ fi
 
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
+
+if test -n "$UNITTEST_WSL_PATHFORMAT"; then
+    BUILDDIR=.
+    GREP=grep
+
+    # Use of PathFormat must be after AC_CANONICAL_BUILD above
+    PathFormat /
+    printf "$formatted_path , $formatted_path_unix\n"
+
+    PathFormat $PWD
+    printf "$formatted_path , $formatted_path_unix\n"
+
+    PathFormat "$PROGRAMFILESX86"
+    printf "$formatted_path , $formatted_path_unix\n"
+
+    exit 0
+fi
 
 AC_MSG_CHECKING([for product name])
 PRODUCTNAME="AC_PACKAGE_NAME"
