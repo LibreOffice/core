@@ -1533,10 +1533,12 @@ bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
             TextGrabFocus();
     }
 
+    bool bClickOnSelection = false;
     if (m_xEditView)
+    {
         m_xEditView->SetEditEngineUpdateMode( true );
-
-    bool bClickOnSelection = m_xEditView->IsSelectionAtPoint(rMEvt.GetPosPixel());
+        bClickOnSelection = m_xEditView->IsSelectionAtPoint(rMEvt.GetPosPixel());
+    }
     if (!bClickOnSelection)
     {
         rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
