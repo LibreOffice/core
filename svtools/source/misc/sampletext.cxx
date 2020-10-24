@@ -14,7 +14,7 @@
 #include <i18nutil/unicode.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <list>
+#include <vector>
 #include <map>
 
 // This should only be used when a commonly used font incorrectly declares its
@@ -1216,7 +1216,7 @@ namespace
     }
 }
 
-const std::map<UScriptCode, std::list<OUString>> distCjkMap =
+const std::map<UScriptCode, std::vector<OUString>> distCjkMap =
 {
     { USCRIPT_KOREAN,  { " KR", "Korean"} },   // Korean
     { USCRIPT_JAPANESE, {" JP", "Japanese"} } , // Japanese
@@ -1273,10 +1273,10 @@ namespace
 
             // for the last time, Check the ISO code strings or font specific strings
             const OUString &rName = rDevice.GetFont().GetFamilyName();
-            std::map<UScriptCode, std::list<OUString>>::const_iterator distCjkMapIt;
+            std::map<UScriptCode, std::vector<OUString>>::const_iterator distCjkMapIt;
             for (distCjkMapIt = distCjkMap.begin(); distCjkMapIt != distCjkMap.end(); ++distCjkMapIt) {
-                std::list<OUString> cjkCodeList = distCjkMapIt->second;
-                std::list<OUString>::const_iterator cjkPtr;
+                std::vector<OUString> cjkCodeList = distCjkMapIt->second;
+                std::vector<OUString>::const_iterator cjkPtr;
                 for (cjkPtr = cjkCodeList.begin(); cjkPtr != cjkCodeList.end(); ++cjkPtr) {
                     if (rName.indexOf(*cjkPtr) > 0) {
                         return distCjkMapIt->first;
