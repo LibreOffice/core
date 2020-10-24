@@ -3555,7 +3555,7 @@ reg_get_value_64()
 }
 
 case "$host_os" in
-cygwin*)
+cygwin*|wsl*)
     COM=MSC
     USING_X11=
     OS=WNT
@@ -4603,7 +4603,7 @@ aix*)
     P_SEP=:
     ;;
 
-cygwin*)
+cygwin*|wsl*)
     # Already handled
     ;;
 
@@ -8312,7 +8312,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
         ;;
 
-    cygwin*)
+    cygwin*|wsl*)
         JAVAINC="-I$JAVA_HOME/include/win32"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
@@ -13932,7 +13932,7 @@ AC_SUBST(TEMP_DIRECTORY)
 if test -n "$LO_PATH_FOR_BUILD"; then
     LO_PATH="$LO_PATH_FOR_BUILD"
     case "$host_os" in
-    cygwin*)
+    cygwin*|wsl*)
         pathmunge "$MSVC_HOST_PATH" "before"
         ;;
     esac
@@ -13947,7 +13947,7 @@ else
         fi
         ;;
 
-    cygwin*)
+    cygwin*|wsl*)
         # Win32 make needs native paths
         if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
             LO_PATH=`cygpath -p -m "$PATH"`
