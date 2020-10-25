@@ -4376,28 +4376,22 @@ static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::
     return xText;
 }
 
-gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer /*im_handler*/ )
+gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer im_handler )
 {
-    vcl::Window *pFocusWin = Application::GetFocusWindow();
-    if (!pFocusWin)
-        return true;
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
-    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
-    if (xText.is())
-    {
-        sal_Int32 nPosition = xText->getCaretPosition();
-        if (nPosition != -1)
-        {
-            OUString sAllText = xText->getText();
-            OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
-            OUString sCursorText(sAllText.copy(0, nPosition));
-            gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
-                OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
-            return true;
-        }
-    }
+    SalSurroundingTextRequestEvent aEvt;
+    aEvt.maText.clear();
+    aEvt.mnStart = aEvt.mnEnd = 0;
 
-    return false;
+    SolarMutexGuard aGuard;
+    pThis->m_pFrame->CallCallback(SalEvent::SurroundingTextRequest, &aEvt);
+
+    OString sUTF = OUStringToOString(aEvt.maText, RTL_TEXTENCODING_UTF8);
+    OUString sCursorText(aEvt.maText.copy(0, aEvt.mnStart));
+    gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
+        OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
+    return true;
 }
 
 Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText, int nCursorIndex, int nOffset, int nChars)
