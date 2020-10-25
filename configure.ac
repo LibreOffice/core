@@ -6158,9 +6158,10 @@ find_winsdk_version()
             if test -n "$regvalue"; then
                 winsdkbinsubdir="$regvalue".0
                 winsdklibsubdir=$winsdkbinsubdir
-                tmppath="$winsdktest\\Include\\$winsdklibsubdir"
+                local tmppath="$winsdktest\\Include\\$winsdklibsubdir"
+                local tmppath_unix=$(cygpath -u "$tmppath")
                 # test exist the SDK path
-                if test -d "$tmppath"; then
+                if test -d "$tmppath_unix"; then
                    # when path is convertible to a short path then path is okay
                    cygpath -d "$tmppath" >/dev/null 2>&1
                    if test $? -ne 0; then
