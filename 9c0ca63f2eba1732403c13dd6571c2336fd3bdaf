@@ -34,6 +34,24 @@
       "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d1d8b7_45182171",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2020-10-25T18:02:18Z",
+      "side": 1,
+      "message": "What I meant is:  When we now check for `isValidLangTag`, do we still need to also check for `!aLanguage.isEmpty() \u0026\u0026`?",
+      "parentUuid": "78dfca62_a523518a",
+      "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
