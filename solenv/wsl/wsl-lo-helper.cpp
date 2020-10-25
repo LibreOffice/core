@@ -36,6 +36,54 @@ static void print_result(const wchar_t* argv0, const wchar_t* result)
     fflush(stdout);
 }
 
+static REGSAM parse_bitness(const wchar_t* argv0, const wchar_t* command, const wchar_t* bitness)
+{
+    if (wcscmp(bitness, L"32") == 0)
+        return KEY_WOW64_32KEY;
+    else if (wcscmp(bitness, L"64") == 0)
+        return KEY_WOW64_64KEY;
+    else
+    {
+        fprintf(stderr, "%S %S: Use 32 or 64.\n", argv0, command);
+        exit(1);
+    }
+}
+
+static void parse_hive(const wchar_t* argv0, const wchar_t* path, HKEY* hivep,
+                       const wchar_t** hive_namep)
+{
+    if (wcscmp(path, L"HKEY_CLASSES_ROOT") == 0)
+    {
+        *hivep = HKEY_CLASSES_ROOT;
+        *hive_namep = L"HKEY_CLASSES_ROOT";
+    }
+    else if (wcscmp(path, L"HKEY_CURRENT_CONFIG") == 0)
+    {
+        *hivep = HKEY_CURRENT_CONFIG;
+        *hive_namep = L"HKEY_CURRENT_CONFIG";
+    }
+    else if (wcscmp(path, L"HKEY_CURRENT_USER") == 0)
+    {
+        *hivep = HKEY_CURRENT_USER;
+        *hive_namep = L"HKEY_CURRENT_USER";
+    }
+    else if (wcscmp(path, L"HKEY_LOCAL_MACHINE") == 0)
+    {
+        *hivep = HKEY_LOCAL_MACHINE;
+        *hive_namep = L"HKEY_LOCAL_MACHINE";
+    }
+    else if (wcscmp(path, L"HKEY_USERS") == 0)
+    {
+        *hivep = HKEY_USERS;
+        *hive_namep = L"HKEY_USERS";
+    }
+    else
+    {
+        fprintf(stderr, "%S: Invalid Registry hive %S.\n", argv0, path);
+        exit(1);
+    }
+}
+
 int wmain(int argc, wchar_t** argv)
 {
     if (argc <= 1)
@@ -45,6 +93,8 @@ int wmain(int argc, wchar_t** argv)
         fprintf(stderr, "    Print the 8.3 form of a Windows pathnam. Fail it not present.\n");
         fprintf(stderr, "%S --read-registry [32|64] <path>\n", argv[0]);
         fprintf(stderr, "    Read a string value from the Registry and print it.\n");
+        fprintf(stderr, "%S --list-registry [32|64] <path>\n", argv[0]);
+        fprintf(stderr, "    List subkeys of a key in the Registry.\n");
         exit(1);
     }
 
@@ -77,16 +127,7 @@ int wmain(int argc, wchar_t** argv)
             exit(1);
         }
 
-        REGSAM sam;
-        if (wcscmp(argv[2], L"32") == 0)
-            sam = KEY_WOW64_32KEY;
-        else if (wcscmp(argv[2], L"64") == 0)
-            sam = KEY_WOW64_64KEY;
-        else
-        {
-            fprintf(stderr, "%S --read-registry: Use 32 or 64.\n", argv[0]);
-            exit(1);
-        }
+        REGSAM sam = parse_bitness(argv[0], L"--read-registry", argv[2]);
 
         wchar_t* path = wcsdup(argv[3]);
 
@@ -106,36 +147,7 @@ int wmain(int argc, wchar_t** argv)
 
         HKEY hive;
         const wchar_t* hive_name;
-        if (wcscmp(path, L"HKEY_CLASSES_ROOT") == 0)
-        {
-            hive = HKEY_CLASSES_ROOT;
-            hive_name = L"HKEY_CLASSES_ROOT";
-        }
-        else if (wcscmp(path, L"HKEY_CURRENT_CONFIG") == 0)
-        {
-            hive = HKEY_CURRENT_CONFIG;
-            hive_name = L"HKEY_CURRENT_CONFIG";
-        }
-        else if (wcscmp(path, L"HKEY_CURRENT_USER") == 0)
-        {
-            hive = HKEY_CURRENT_USER;
-            hive_name = L"HKEY_CURRENT_USER";
-        }
-        else if (wcscmp(path, L"HKEY_LOCAL_MACHINE") == 0)
-        {
-            hive = HKEY_LOCAL_MACHINE;
-            hive_name = L"HKEY_LOCAL_MACHINE";
-        }
-        else if (wcscmp(path, L"HKEY_USERS") == 0)
-        {
-            hive = HKEY_USERS;
-            hive_name = L"HKEY_USERS";
-        }
-        else
-        {
-            fprintf(stderr, "%S: Invalid Registry hive %S.\n", argv[0], path);
-            exit(1);
-        }
+        parse_hive(argv[0], path, &hive, &hive_name);
 
         DWORD type;
         wchar_t result[1000];
@@ -173,6 +185,54 @@ int wmain(int argc, wchar_t** argv)
             exit(1);
         }
         print_result(argv[0], result);
+    }
+    else if (wcscmp(argv[1], L"--list-registry") == 0)
+    {
+        if (argc != 4)
+        {
+            fprintf(stderr, "%S --list-registry: Bitness and path arguments expected.\n", argv[0]);
+            exit(1);
+        }
+
+        REGSAM sam = parse_bitness(argv[0], L"--list-registry", argv[2]);
+
+        wchar_t* path = wcsdup(argv[3]);
+
+        for (wchar_t* p = path; *p != L'\0'; p++)
+            if (*p == '/')
+                *p = '\\';
+
+        wchar_t* const first_backslash = wcschr(path, L'\\');
+        if (first_backslash == NULL)
+        {
+            fprintf(stderr, "%S: Invalid path %S to key in the Registry.\n", argv[0], path);
+            exit(1);
+        }
+
+        *first_backslash = L'\0';
+        wchar_t* const key_path = first_backslash + 1;
+
+        HKEY hive;
+        const wchar_t* hive_name;
+        parse_hive(argv[0], path, &hive, &hive_name);
+
+        HKEY key;
+        if (RegOpenKeyExW(hive, key_path, 0, KEY_ENUMERATE_SUB_KEYS | sam, &key) != ERROR_SUCCESS)
+        {
+            fprintf(stderr, "%S: Opening key %S\\%S in %S-bit Registry failed.\n", argv[0],
+                    hive_name, key_path, argv[2]);
+            exit(1);
+        }
+
+        DWORD index = 0;
+        wchar_t name[256];
+        DWORD namelen = sizeof(name) / sizeof(name[0]);
+        while (RegEnumKeyExW(key, index, name, &namelen, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
+        {
+            printf("%S\n", name);
+            index++;
+            namelen = sizeof(name) / sizeof(name[0]);
+        }
     }
     else
     {
