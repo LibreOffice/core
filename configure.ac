@@ -3554,7 +3554,7 @@ reg_get_value()
     unset regvalue
 
     if test "$build_os" = "wsl"; then
-        regvalue=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --read-registry $1 "$2")
+        regvalue=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --read-registry $1 "$2" 2>/dev/null)
         return
     fi
 
@@ -3917,7 +3917,7 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
     # Find the proper version of MSBuild.exe to use based on the VS version
-    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath 2>/dev/null
+    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
     if test -n "$regvalue" ; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
