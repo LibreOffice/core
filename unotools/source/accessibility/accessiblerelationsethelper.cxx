@@ -22,108 +22,34 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <vector>
 #include <comphelper/sequence.hxx>
 
 using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-class AccessibleRelationSetHelperImpl
+namespace
 {
-public:
-    AccessibleRelationSetHelperImpl();
-    AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl);
-
-    /// @throws uno::RuntimeException
-    sal_Int32 getRelationCount() const;
-    /// @throws lang::IndexOutOfBoundsException
-    /// @throws uno::RuntimeException
-    AccessibleRelation const & getRelation( sal_Int32 nIndex ) const;
-    /// @throws uno::RuntimeException
-    bool containsRelation( sal_Int16 aRelationType ) const;
-    /// @throws uno::RuntimeException
-    AccessibleRelation getRelationByType( sal_Int16 aRelationType ) const;
-    /// @throws uno::RuntimeException
-    void AddRelation(const AccessibleRelation& rRelation);
-
-private:
-    std::vector<AccessibleRelation> maRelations;
-};
-
-AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl()
-{
-}
-
-AccessibleRelationSetHelperImpl::AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl)
-    : maRelations(rImpl.maRelations)
-{
-}
-
-sal_Int32 AccessibleRelationSetHelperImpl::getRelationCount() const
-{
-    return maRelations.size();
-}
-
-AccessibleRelation const & AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nIndex ) const
-{
-    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maRelations.size()))
-        throw lang::IndexOutOfBoundsException();
-    return maRelations[nIndex];
-}
-
-bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType ) const
-{
-    AccessibleRelation defaultRelation; // default is INVALID
-    AccessibleRelation relationByType = getRelationByType(aRelationType);
-    return relationByType.RelationType != defaultRelation.RelationType;
-}
-
-AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16 aRelationType ) const
-{
-    sal_Int32 nCount(getRelationCount());
-    sal_Int32 i(0);
-    while (i < nCount)
+    AccessibleRelation lcl_getRelationByType( std::vector<AccessibleRelation>& raRelations, sal_Int16 aRelationType )
     {
-        if (maRelations[i].RelationType == aRelationType)
-            return maRelations[i];
-        i++;
+        for (const auto& aRelation: raRelations)
+        {
+            if (aRelation.RelationType == aRelationType)
+                return aRelation;
+        }
+        return AccessibleRelation();
     }
-    return AccessibleRelation();
 }
-
-void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRelation)
-{
-    sal_Int32 nCount(getRelationCount());
-    sal_Int32 i(0);
-    bool bFound(false);
-    while ((i < nCount) && !bFound)
-    {
-        if (maRelations[i].RelationType == rRelation.RelationType)
-            bFound = true;
-        else
-            i++;
-    }
-    if (bFound)
-        maRelations[i].TargetSet = comphelper::concatSequences(maRelations[i].TargetSet, rRelation.TargetSet);
-    else
-        maRelations.push_back(rRelation);
-}
-
 //=====  internal  ============================================================
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
-    : mpHelperImpl(new AccessibleRelationSetHelperImpl)
 {
 }
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelationSetHelper& rHelper)
-    : cppu::WeakImplHelper<XAccessibleRelationSet>(rHelper)
+    : cppu::WeakImplHelper<XAccessibleRelationSet>(rHelper),
+      maRelations(rHelper.maRelations)
 {
-    if (rHelper.mpHelperImpl)
-        mpHelperImpl.reset(new AccessibleRelationSetHelperImpl(*rHelper.mpHelperImpl));
-    else
-        mpHelperImpl.reset(new AccessibleRelationSetHelperImpl());
 }
 
 AccessibleRelationSetHelper::~AccessibleRelationSetHelper()
@@ -141,7 +67,8 @@ sal_Int32 SAL_CALL
     AccessibleRelationSetHelper::getRelationCount(  )
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->getRelationCount();
+
+    return maRelations.size();
 }
 
     /** Returns the relation of this relation set that is specified by
@@ -161,7 +88,11 @@ sal_Int32 SAL_CALL
         AccessibleRelationSetHelper::getRelation( sal_Int32 nIndex )
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->getRelation(nIndex);
+
+    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maRelations.size()))
+        throw lang::IndexOutOfBoundsException();
+
+    return maRelations[nIndex];
 }
 
     /** Tests whether the relation set contains a relation matching the
@@ -180,7 +111,10 @@ sal_Bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation( sal_Int16 aRelationType )
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->containsRelation(aRelationType);
+
+    AccessibleRelation defaultRelation; // default is INVALID
+    AccessibleRelation relationByType = lcl_getRelationByType(maRelations, aRelationType);
+    return relationByType.RelationType != defaultRelation.RelationType;
 }
 
     /** Retrieve and return the relation with the given relation type.
@@ -198,13 +132,23 @@ AccessibleRelation SAL_CALL
         AccessibleRelationSetHelper::getRelationByType( sal_Int16 aRelationType )
 {
     osl::MutexGuard aGuard (maMutex);
-    return mpHelperImpl->getRelationByType(aRelationType);
+
+    return lcl_getRelationByType(maRelations, aRelationType);
 }
 
 void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelation)
 {
     osl::MutexGuard aGuard (maMutex);
-    mpHelperImpl->AddRelation(rRelation);
+
+    for (auto& aRelation: maRelations)
+    {
+        if (aRelation.RelationType == rRelation.RelationType)
+        {
+            aRelation.TargetSet = comphelper::concatSequences(aRelation.TargetSet, rRelation.TargetSet);
+            return;
+        }
+    }
+    maRelations.push_back(rRelation);
 }
 
 //=====  XTypeProvider  =======================================================

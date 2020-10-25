@@ -25,9 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <memory>
-
-class AccessibleRelationSetHelperImpl;
+#include <vector>
 
 //= XAccessibleRelationSet helper classes
 
@@ -123,7 +121,7 @@ private:
     /// Mutex guarding this object.
     ::osl::Mutex maMutex;
     /// The implementation of this helper interface.
-    std::unique_ptr<AccessibleRelationSetHelperImpl>    mpHelperImpl;
+    std::vector<css::accessibility::AccessibleRelation> maRelations;
 };
 
 }
