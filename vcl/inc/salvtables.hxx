@@ -1100,6 +1100,7 @@ private:
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
     DECL_LINK(QueryTooltipHdl, tools::Rectangle&, OUString);
     DECL_LINK(GetSurroundingHdl, OUString&, int);
+    DECL_LINK(DeleteSurroundingHdl, const Selection&, bool);
     DECL_LINK(StartDragHdl, VclDrawingArea*, bool);
 
     // SalInstanceWidget has a generic listener for all these

@@ -46,6 +46,7 @@ class SidebarTextControl : public Control
         virtual void    RequestHelp(const HelpEvent &rEvt) override;
         virtual OUString GetSurroundingText() const override;
         virtual Selection GetSurroundingTextSelection() const override;
+        virtual bool DeleteSurroundingText(const Selection& rSelection) override;
 
     public:
         SidebarTextControl( sw::annotation::SwAnnotationWin& rSidebarWin,

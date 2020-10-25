@@ -1003,6 +1003,23 @@ Selection Window::GetSurroundingTextSelection() const
     }
 }
 
+bool Window::DeleteSurroundingText(const Selection& rSelection)
+{
+    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+    {
+        return false;
+    }
+    else if ( mpViewShell->GetView()->IsTextEdit() )
+    {
+        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        return pOLV->GetEditView().DeleteSurroundingText(rSelection);
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Window::LogicInvalidate(const ::tools::Rectangle* pRectangle)
 {
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);

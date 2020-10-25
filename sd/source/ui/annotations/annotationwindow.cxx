@@ -228,6 +228,13 @@ Selection AnnotationTextWindow::GetSurroundingTextSelection() const
         return Selection( 0, 0 );
 }
 
+bool AnnotationTextWindow::DeleteSurroundingText(const Selection& rSelection)
+{
+    if( mpOutlinerView )
+        return mpOutlinerView->DeleteSurroundingText(rSelection);
+    return false;
+}
+
 /************** AnnotationWindow***********************************++*/
 
 AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent )
