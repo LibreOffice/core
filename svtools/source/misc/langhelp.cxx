@@ -139,6 +139,18 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
                         aPackages.emplace_back("libreoffice-langpack-zh-Hans");
                     else if (MsLangId::isTraditionalChinese(eType))
                         aPackages.emplace_back("libreoffice-langpack-zh-Hant");
+                    else if (install == "pt")
+                    {
+                        if (aWantedTag.getCountry().equalsIgnoreAsciiCase("PT"))
+                            aPackages.emplace_back("libreoffice-langpack-pt-PT");
+                        else if (aWantedTag.getCountry().equalsIgnoreAsciiCase("BR"))
+                            aPackages.emplace_back("libreoffice-langpack-pt-BR");
+                        else
+                        {
+                            aPackages.emplace_back("libreoffice-langpack-pt-PT");
+                            aPackages.emplace_back("libreoffice-langpack-pt-BR");
+                        }
+                    }
                     else
                         aPackages.emplace_back("libreoffice-langpack-" + install);
                 }
