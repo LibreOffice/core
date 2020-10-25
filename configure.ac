@@ -142,7 +142,21 @@ PathFormat()
             fi
             if test "$build_os" = "wsl"; then
                 if test "$fp_count_colon" != "0"; then
-                    formatted_path=$(wslpath -m $(wslpath "$formatted_path"))
+                    formatted_path=$(wslpath "$formatted_path")
+                    local final_slash=
+                    case "$formatted_path" in
+                        */)
+                            final_slash=/
+                            ;;
+                    esac
+                    formatted_path=$(wslpath -m $formatted_path)
+                    case "$formatted_path" in
+                        */)
+                            ;;
+                        *)
+                            formatted_path="$formatted_path"$final_slash
+                            ;;
+                    esac
                 else
                     formatted_path=$(wslpath -m "$formatted_path")
                 fi
