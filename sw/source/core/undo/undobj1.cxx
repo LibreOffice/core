@@ -695,22 +695,20 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
         m_pItemSet->InvalidateItem( nWhich );
 }
 
-void SwUndoSetFlyFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
+void SwUndoSetFlyFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if( !pOld )
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy || !pLegacy->m_pOld)
         return;
+    const sal_uInt16 nWhich = pLegacy->m_pOld->Which();
 
-    sal_uInt16 nWhich = pOld->Which();
-
-    if( nWhich < POOLATTR_END )
-        PutAttr( nWhich, pOld );
-    else if( RES_ATTRSET_CHG == nWhich )
+    if(nWhich < POOLATTR_END)
+        PutAttr(nWhich, pLegacy->m_pOld);
+    else if(RES_ATTRSET_CHG == nWhich)
     {
-        SfxItemIter aIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
         for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-        {
-            PutAttr( pItem->Which(), pItem );
-        }
+            PutAttr(pItem->Which(), pItem);
     }
 }
 

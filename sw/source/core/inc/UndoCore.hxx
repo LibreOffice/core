@@ -196,7 +196,7 @@ class SwUndoSetFlyFormat : public SwUndo, public SwClient
     bool m_bAnchorChanged;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
-    void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    void SwClientNotify(const SwModify&, const SfxHint&) override;
     void GetAnchor( SwFormatAnchor& rAnhor, sal_uLong nNode, sal_Int32 nContent );
 
 public:
