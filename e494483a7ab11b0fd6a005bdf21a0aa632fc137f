@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b947a77_f83b661a",
+        "filename": "sc/source/core/data/table5.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-25T16:01:35Z",
+      "side": 1,
+      "message": "To avoid the warning change...\nScDrawObjData* pData \u003d pDrawLayer-\u003eGetObjData(aObj);\nto\nScDrawObjData* pData \u003d ScDrawLayer::GetObjData(aObj);\nhere and in the other location",
+      "revId": "e494483a7ab11b0fd6a005bdf21a0aa632fc137f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
