@@ -108,14 +108,16 @@ namespace TextFormatCollFunc
     }
 } // end of namespace TextFormatCollFunc
 
-void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if( GetDoc()->IsInDtor() )
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+       return;
+    if(GetDoc()->IsInDtor())
     {
-        SwFormatColl::Modify( pOld, pNew );
+        SwFormatColl::SwClientNotify(rModify, rHint);
         return;
     }
-
     bool bNewParent( false ); // #i66431# - adjust type of <bNewParent>
     const SvxULSpaceItem *pNewULSpace = nullptr, *pOldULSpace = nullptr;
     const SvxLRSpaceItem *pNewLRSpace = nullptr, *pOldLRSpace = nullptr;
@@ -125,8 +127,9 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     const SwNumRuleItem* pNewNumRuleItem( nullptr );
 
     const SwAttrSetChg *pNewChgSet = nullptr,  *pOldChgSet = nullptr;
-
-    switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
+    const auto pOld = pLegacy->m_pOld;
+    const auto pNew = pLegacy->m_pNew;
+    switch( pLegacy->GetWhich() )
     {
     case RES_ATTRSET_CHG:
         // Only recalculate if we're not the sender!
@@ -312,7 +315,7 @@ void SwTextFormatColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
     }
 
     if( bContinue )
-        SwFormatColl::Modify( pOld, pNew );
+        SwFormatColl::SwClientNotify(rModify, rHint);
 }
 
 bool SwTextFormatColl::IsAtDocNodeSet() const
