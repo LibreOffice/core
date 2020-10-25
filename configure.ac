@@ -3703,16 +3703,21 @@ vs_versions_to_check()
 
 win_get_env_from_vsvars32bat()
 {
-    WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
+    local WRAPPERBATCHFILEPATH="`mktemp -t wrpXXXXXX.bat`"
     # Also seems to be located in another directory under the same name: vsvars32.bat
     # https://github.com/bazelbuild/bazel/blob/master/src/main/native/build_windows_jni.sh#L56-L57
     printf '@call "%s/../Common7/Tools/VsDevCmd.bat" /no_logo\r\n' "$(cygpath -w $VC_PRODUCT_DIR)" > $WRAPPERBATCHFILEPATH
     # use 'echo.%ENV%' syntax (instead of 'echo %ENV%') to avoid outputting "ECHO is off." in case when ENV is empty or a space
     printf '@setlocal\r\n@echo.%%%s%%\r\n@endlocal\r\n' "$1" >> $WRAPPERBATCHFILEPATH
-    chmod +x $WRAPPERBATCHFILEPATH
-    _win_get_env_from_vsvars32bat=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
+    local result
+    if test "$build_os" = "wsl"; then
+        result=$(cd /mnt/c && cmd.exe /c $(wslpath -w $WRAPPERBATCHFILEPATH) | tr -d '\r')
+    else
+        chmod +x $WRAPPERBATCHFILEPATH
+        result=$("$WRAPPERBATCHFILEPATH" | tr -d '\r')
+    fi
     rm -f $WRAPPERBATCHFILEPATH
-    printf '%s' "$_win_get_env_from_vsvars32bat"
+    printf '%s' "$result"
 }
 
 find_ucrt()
@@ -3720,7 +3725,7 @@ find_ucrt()
     reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/InstallationFolder"
     if test -n "$regvalue"; then
         PathFormat "$regvalue"
-        UCRTSDKDIR=$formatted_path
+        UCRTSDKDIR=$formatted_path_unix
         reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v10.0/ProductVersion"
         UCRTVERSION=$regvalue
         # Rest if not exist
