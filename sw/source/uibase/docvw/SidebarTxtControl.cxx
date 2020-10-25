@@ -430,6 +430,13 @@ Selection SidebarTextControl::GetSurroundingTextSelection() const
         return Selection( 0, 0 );
 }
 
+bool SidebarTextControl::DeleteSurroundingText(const Selection& rSelection)
+{
+    if (OutlinerView* pTextView = GetTextView())
+        return pTextView->DeleteSurroundingText(rSelection);
+    return false;
+}
+
 css::uno::Reference< css::accessibility::XAccessible > SidebarTextControl::CreateAccessible()
 {
 

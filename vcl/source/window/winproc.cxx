@@ -2274,6 +2274,23 @@ static void ImplHandleSalSurroundingTextRequest( vcl::Window *pWindow,
         pEvt->mnEnd = aSelRange.Max();
 }
 
+static void ImplHandleSalDeleteSurroundingTextRequest( vcl::Window *pWindow,
+                         SalSurroundingTextSelectionChangeEvent *pEvt )
+{
+    vcl::Window* pChild = ImplGetKeyInputWindow( pWindow );
+
+    Selection aSelection(pEvt->mnStart, pEvt->mnEnd);
+    if (pChild && pChild->DeleteSurroundingText(aSelection))
+    {
+        pEvt->mnStart = aSelection.Min();
+        pEvt->mnEnd = aSelection.Max();
+    }
+    else
+    {
+        pEvt->mnStart = pEvt->mnEnd = SAL_MAX_UINT32;
+    }
+}
+
 static void ImplHandleSurroundingTextSelectionChange( vcl::Window *pWindow,
                               sal_uLong nStart,
                               sal_uLong nEnd )
@@ -2568,6 +2585,9 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
             break;
         case SalEvent::SurroundingTextRequest:
             ImplHandleSalSurroundingTextRequest( pWindow, const_cast<SalSurroundingTextRequestEvent *>(static_cast<SalSurroundingTextRequestEvent const *>(pEvent)) );
+            break;
+        case SalEvent::DeleteSurroundingTextRequest:
+            ImplHandleSalDeleteSurroundingTextRequest( pWindow, const_cast<SalSurroundingTextSelectionChangeEvent *>(static_cast<SalSurroundingTextSelectionChangeEvent const *>(pEvent)) );
             break;
         case SalEvent::SurroundingTextSelectionChange:
         {

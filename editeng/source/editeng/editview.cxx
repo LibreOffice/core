@@ -1549,6 +1549,17 @@ Selection EditView::GetSurroundingTextSelection() const
     }
 }
 
+bool EditView::DeleteSurroundingText(const Selection& rRange)
+{
+    ESelection aSel(GetSelection());
+    aSel.nEndPara = aSel.nStartPara;
+    aSel.nStartPos = rRange.Min();
+    aSel.nEndPos = rRange.Max();
+    SetSelection(aSel);
+    DeleteSelected();
+    return true;
+}
+
 void EditView::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool bClearMark)
 {
     Point aDocPos(pImpEditView->GetDocPos(rPosition));

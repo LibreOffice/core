@@ -64,6 +64,7 @@ public:
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
 };
 
 class AnnotationWindow : public FloatingWindow
