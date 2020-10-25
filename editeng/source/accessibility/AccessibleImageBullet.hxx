@@ -171,6 +171,8 @@ namespace accessibility
          */
         SvxViewForwarder&   GetViewForwarder() const;
 
+        css::awt::Rectangle implGetBounds();
+
         // the paragraph index in the edit engine (guarded by solar mutex)
         sal_Int32   mnParagraphIndex;
 

@@ -214,7 +214,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0,
                    "AccessibleEditableTextPara::contains: index value overflow");
 
-        awt::Rectangle aTmpRect = getBounds();
+        awt::Rectangle aTmpRect = implGetBounds();
         tools::Rectangle aRect( Point(aTmpRect.X, aTmpRect.Y), Size(aTmpRect.Width, aTmpRect.Height) );
         Point aPoint( rPoint.X, rPoint.Y );
 
@@ -230,11 +230,15 @@ namespace accessibility
 
     awt::Rectangle SAL_CALL AccessibleImageBullet::getBounds(  )
     {
-
         SolarMutexGuard aGuard;
 
+        return implGetBounds();
+    }
+    awt::Rectangle AccessibleImageBullet::implGetBounds(  )
+    {
+
         DBG_ASSERT(GetParagraphIndex() >= 0,
-                   "AccessibleEditableTextPara::getBounds: index value overflow");
+                   "AccessibleEditableTextPara::implGetBounds: index value overflow");
 
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( GetParagraphIndex() );
@@ -271,7 +275,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        awt::Rectangle aRect = getBounds();
+        awt::Rectangle aRect = implGetBounds();
 
         return awt::Point( aRect.X, aRect.Y );
     }
@@ -307,7 +311,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        awt::Rectangle aRect = getBounds();
+        awt::Rectangle aRect = implGetBounds();
 
         return awt::Size( aRect.Width, aRect.Height );
     }
