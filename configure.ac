@@ -3942,7 +3942,8 @@ if test "$_os" = "WINNT"; then
     # Find the version of devenv.exe
     # MSVC 2017 devenv does not start properly from a DOS 8.3 path
     DEVENV=$(cygpath -lm "$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe")
-    if test ! -e "$DEVENV"; then
+    DEVENV_unix=$(cygpath -u "$DEVENV")
+    if test ! -e "$DEVENV_unix"; then
         AC_MSG_WARN([No devenv.exe found - this is expected for VC++ Build Tools])
     fi
 
