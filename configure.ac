@@ -6304,7 +6304,7 @@ dnl Check for the Windows  SDK.
 dnl =========================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
-    if test "$build_os" = "cygwin"; then
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
         find_winsdk
         WINDOWS_SDK_HOME=$winsdktest
 
@@ -6367,7 +6367,8 @@ the  Windows SDK are installed.])
     fi
     PathFormat "$WINDOWS_SDK_HOME"
     WINDOWS_SDK_HOME="$formatted_path"
-    if test "$build_os" = "cygwin"; then
+    WINDOWS_SDK_HOME_unix="$formatted_path_unix"
+    if test "$build_os" = "cygwin" -o "$build_os" = "wsl"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/Include"
         if test -d "$WINDOWS_SDK_HOME/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
@@ -6385,21 +6386,25 @@ the  Windows SDK are installed.])
     dnl msiglobal.pm:
     if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
         WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+        WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
+        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
             WINDOWS_SDK_WILANGID="${WINDOWS_SDK_HOME}/bin/${WINDOWS_SDK_LIB_SUBDIR}/${WIN_BUILD_ARCH}/WiLangId.vbs"
+            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
         fi
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
             WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/bin/$WIN_BUILD_ARCH/WiLangId.vbs
+            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
         fi
-        if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+        if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
             WINDOWS_SDK_WILANGID=$(cygpath -sm "C:/Program Files (x86)/Windows Kits/8.1/bin/$WIN_BUILD_ARCH/WiLangId.vbs")
+            WINDOWS_SDK_WILANGID_unix=$(cygpath -u "$WINDOWS_SDK_WILANGID")
         fi
     fi
     if test -n "$with_lang" -a "$with_lang" != "en-US"; then
         if test -n "$with_package_format" -a "$with_package_format" != no; then
             for i in "$with_package_format"; do
                 if test "$i" = "msi"; then
-                    if ! test -e "$WINDOWS_SDK_WILANGID" ; then
+                    if ! test -e "$WINDOWS_SDK_WILANGID_unix" ; then
                         AC_MSG_ERROR([WiLangId.vbs not found - building translated packages will fail])
                     fi
                 fi
