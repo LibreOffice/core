@@ -94,14 +94,58 @@ int wmain(int argc, wchar_t** argv)
             if (*p == '/')
                 *p = '\\';
 
+        wchar_t* const first_backslash = wcschr(path, L'\\');
+        if (first_backslash == NULL)
+        {
+            fprintf(stderr, "%S: Invalid path %S to value in the Registry.\n", argv[0], path);
+            exit(1);
+        }
+
+        *first_backslash = L'\0';
+        wchar_t* const key_path = first_backslash + 1;
+
+        HKEY hive;
+        const wchar_t* hive_name;
+        if (wcscmp(path, L"HKEY_CLASSES_ROOT") == 0)
+        {
+            hive = HKEY_CLASSES_ROOT;
+            hive_name = L"HKEY_CLASSES_ROOT";
+        }
+        else if (wcscmp(path, L"HKEY_CURRENT_CONFIG") == 0)
+        {
+            hive = HKEY_CURRENT_CONFIG;
+            hive_name = L"HKEY_CURRENT_CONFIG";
+        }
+        else if (wcscmp(path, L"HKEY_CURRENT_USER") == 0)
+        {
+            hive = HKEY_CURRENT_USER;
+            hive_name = L"HKEY_CURRENT_USER";
+        }
+        else if (wcscmp(path, L"HKEY_LOCAL_MACHINE") == 0)
+        {
+            hive = HKEY_LOCAL_MACHINE;
+            hive_name = L"HKEY_LOCAL_MACHINE";
+        }
+        else if (wcscmp(path, L"HKEY_USERS") == 0)
+        {
+            hive = HKEY_USERS;
+            hive_name = L"HKEY_USERS";
+        }
+        else
+        {
+            fprintf(stderr, "%S: Invalid Registry hive %S.\n", argv[0], path);
+            exit(1);
+        }
+
         DWORD type;
         wchar_t result[1000];
         DWORD count = sizeof(result);
 
-        wchar_t* last_backslash = wcsrchr(path, L'\\');
+        wchar_t* last_backslash = wcsrchr(key_path, L'\\');
         if (last_backslash == NULL)
         {
-            fprintf(stderr, "%S: Invalid path to value in the Registry.\n", argv[0]);
+            fprintf(stderr, "%S: Invalid path %S\\%S to value in the Registry.\n", argv[0],
+                    hive_name, key_path);
             exit(1);
         }
 
@@ -109,23 +153,23 @@ int wmain(int argc, wchar_t** argv)
         wchar_t* value = last_backslash + 1;
 
         HKEY key;
-        if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, path, 0, KEY_QUERY_VALUE | sam, &key)
-            != ERROR_SUCCESS)
+        if (RegOpenKeyExW(hive, key_path, 0, KEY_QUERY_VALUE | sam, &key) != ERROR_SUCCESS)
         {
-            fprintf(stderr, "%S: Opening key %S in %S-bit Registry failed.\n", argv[0], path,
-                    argv[2]);
+            fprintf(stderr, "%S: Opening key %S\\%S in %S-bit Registry failed.\n", argv[0],
+                    hive_name, key_path, argv[2]);
             exit(1);
         }
 
         if (RegQueryValueExW(key, value, NULL, &type, (LPBYTE)result, &count) != ERROR_SUCCESS)
         {
-            fprintf(stderr, "%S: Reading value %S\\%S from %S-bit Registry failed.\n", argv[0],
-                    path, value, argv[2]);
+            fprintf(stderr, "%S: Reading value %S\\%S\\%S from %S-bit Registry failed.\n", argv[0],
+                    hive_name, key_path, value, argv[2]);
             exit(1);
         }
         if (type != REG_SZ)
         {
-            fprintf(stderr, "%S: Value %S\\%S is not a string.\n", argv[0], path, value);
+            fprintf(stderr, "%S: Value %S\\%S\\%S is not a string.\n", argv[0], hive_name, key_path,
+                    value);
             exit(1);
         }
         print_result(argv[0], result);
