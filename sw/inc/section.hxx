@@ -153,7 +153,7 @@ private:
             bool const bHidden, bool const bCondition);
 
 protected:
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
 
@@ -281,7 +281,7 @@ class SW_DLLPUBLIC SwSectionFormat final
     SAL_DLLPRIVATE void UpdateParent();      // Parent has been changed.
 
     SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc );
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     virtual ~SwSectionFormat() override;
