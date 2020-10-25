@@ -2908,7 +2908,15 @@ OUString Edit::GetSurroundingText() const
 
 Selection Edit::GetSurroundingTextSelection() const
 {
-  return GetSelection();
+    return GetSelection();
+}
+
+bool Edit::DeleteSurroundingText(const Selection& rSelection)
+{
+    SetSelection(rSelection);
+    DeleteSelected();
+    // maybe we should update mpIMEInfos here
+    return true;
 }
 
 FactoryFunction Edit::GetUITestFactory() const

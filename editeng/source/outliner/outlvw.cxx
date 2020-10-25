@@ -1409,8 +1409,12 @@ Selection OutlinerView::GetSurroundingTextSelection() const
     return pEditView->GetSurroundingTextSelection();
 }
 
-// ===== some code for thesaurus sub menu within context menu
+bool OutlinerView::DeleteSurroundingText(const Selection& rSelection)
+{
+    return pEditView->DeleteSurroundingText(rSelection);
+}
 
+// ===== some code for thesaurus sub menu within context menu
 
 namespace {
 

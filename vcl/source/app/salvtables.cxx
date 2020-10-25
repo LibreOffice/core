@@ -5848,6 +5848,7 @@ SalInstanceDrawingArea::SalInstanceDrawingArea(VclDrawingArea* pDrawingArea, Sal
     m_xDrawingArea->SetCommandHdl(LINK(this, SalInstanceDrawingArea, CommandHdl));
     m_xDrawingArea->SetQueryTooltipHdl(LINK(this, SalInstanceDrawingArea, QueryTooltipHdl));
     m_xDrawingArea->SetGetSurroundingHdl(LINK(this, SalInstanceDrawingArea, GetSurroundingHdl));
+    m_xDrawingArea->SetDeleteSurroundingHdl(LINK(this, SalInstanceDrawingArea, DeleteSurroundingHdl));
     m_xDrawingArea->SetStartDragHdl(LINK(this, SalInstanceDrawingArea, StartDragHdl));
 }
 
@@ -5941,6 +5942,7 @@ void SalInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataConta
 
 SalInstanceDrawingArea::~SalInstanceDrawingArea()
 {
+    m_xDrawingArea->SetDeleteSurroundingHdl(Link<const Selection&, bool>());
     m_xDrawingArea->SetGetSurroundingHdl(Link<OUString&, int>());
     m_xDrawingArea->SetQueryTooltipHdl(Link<tools::Rectangle&, OUString>());
     m_xDrawingArea->SetCommandHdl(Link<const CommandEvent&, bool>());
@@ -6015,6 +6017,11 @@ IMPL_LINK(SalInstanceDrawingArea, CommandHdl, const CommandEvent&, rEvent, bool)
 IMPL_LINK(SalInstanceDrawingArea, GetSurroundingHdl, OUString&, rSurrounding, int)
 {
     return m_aGetSurroundingHdl.Call(rSurrounding);
+}
+
+IMPL_LINK(SalInstanceDrawingArea, DeleteSurroundingHdl, const Selection&, rSelection, bool)
+{
+    return m_aDeleteSurroundingHdl.Call(rSelection);
 }
 
 IMPL_LINK(SalInstanceDrawingArea, QueryTooltipHdl, tools::Rectangle&, rHelpArea, OUString)

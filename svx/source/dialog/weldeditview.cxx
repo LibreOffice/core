@@ -1448,18 +1448,9 @@ int WeldEditView::GetSurroundingText(OUString& rSurrounding)
 
 bool WeldEditView::DeleteSurroundingText(const Selection& rRange)
 {
-    bool bRes(false);
-    if (m_xEditView)
-    {
-        ESelection aSel(m_xEditView->GetSelection());
-        aSel.nEndPara = aSel.nStartPara;
-        aSel.nStartPos = rRange.Min();
-        aSel.nEndPos = rRange.Max();
-        m_xEditView->SetSelection(aSel);
-        m_xEditView->DeleteSelected();
-        bRes = true;
-    }
-    return bRes;
+    if (!m_xEditView)
+        return false;
+    return m_xEditView->DeleteSurroundingText(rRange);
 }
 
 void WeldEditView::GetFocus()
