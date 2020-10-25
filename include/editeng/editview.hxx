@@ -309,6 +309,7 @@ public:
 
     OUString        GetSurroundingText() const;
     Selection       GetSurroundingTextSelection() const;
+    bool            DeleteSurroundingText(const Selection& rRange);
 
     /** Tries to determine the language of 'rText', returning a matching known
         locale if possible, or a fallback, or LANGUAGE_NONE if nothing found or

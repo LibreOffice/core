@@ -191,6 +191,8 @@ protected:
 
     OUString GetSurroundingText() const override;
     Selection GetSurroundingTextSelection() const override;
+    bool DeleteSurroundingText(const Selection& rSelection) override;
+
     /// @see Window::LogicInvalidate().
     void LogicInvalidate(const ::tools::Rectangle* pRectangle) override;
     /// Same as MouseButtonDown(), but coordinates are in logic unit.
