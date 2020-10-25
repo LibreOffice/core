@@ -3917,7 +3917,7 @@ if test "$_os" = "WINNT"; then
 
     AC_MSG_CHECKING([for MSBuild.exe location for: $vcnumwithdot])
     # Find the proper version of MSBuild.exe to use based on the VS version
-    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
+    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath 2>/dev/null
     if test -n "$regvalue" ; then
         AC_MSG_RESULT([found: $regvalue])
         MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
