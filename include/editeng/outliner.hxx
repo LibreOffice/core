@@ -354,6 +354,7 @@ public:
 
     OUString    GetSurroundingText() const;
     Selection   GetSurroundingTextSelection() const;
+    bool        DeleteSurroundingText(const Selection& rRange);
 
     void        SetEndCutPasteLinkHdl(const Link<LinkParamNone*,void> &rLink) { aEndCutPasteLink = rLink; }
 };
