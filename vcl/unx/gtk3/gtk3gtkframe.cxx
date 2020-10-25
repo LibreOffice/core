@@ -58,7 +58,6 @@
 #include <cstdlib>
 #include <cmath>
 
-#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
@@ -4360,22 +4359,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
         pThis->updateIMSpotLocation();
 }
 
-static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::Window *pFocusWin)
-{
-    uno::Reference<accessibility::XAccessibleEditableText> xText;
-    try
-    {
-        uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible() );
-        if (xAccessible.is())
-            xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
-    }
-    catch(const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION( "vcl.gtk3", "Exception in getting input method surrounding text");
-    }
-    return xText;
-}
-
 gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
@@ -4396,7 +4379,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
 
 Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundingText, int nCursorIndex, int nOffset, int nChars)
 {
-    Selection aInvalid(-1, -1);
+    Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
 
     if (nCursorIndex == -1)
         return aInvalid;
@@ -4445,42 +4428,37 @@ Selection GtkSalFrame::CalcDeleteSurroundingSelection(const OUString& rSurroundi
 }
 
 gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint offset, gint nchars,
-    gpointer /*im_handler*/ )
+    gpointer im_handler )
 {
-    vcl::Window *pFocusWin = Application::GetFocusWindow();
-    if (!pFocusWin)
-        return true;
+    GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
-    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
-    if (xText.is())
-    {
-        sal_Int32 nPosition = xText->getCaretPosition();
-        // #i111768# range checking
-        sal_Int32 nDeletePos = nPosition + offset;
-        sal_Int32 nDeleteEnd = nDeletePos + nchars;
-        if (nDeletePos < 0)
-            nDeletePos = 0;
-        if (nDeleteEnd < 0)
-            nDeleteEnd = 0;
-        if (nDeleteEnd > xText->getCharacterCount())
-            nDeleteEnd = xText->getCharacterCount();
+    // First get the surrounding text
+    SalSurroundingTextRequestEvent aSurroundingTextEvt;
+    aSurroundingTextEvt.maText.clear();
+    aSurroundingTextEvt.mnStart = aSurroundingTextEvt.mnEnd = 0;
 
-        xText->deleteText(nDeletePos, nDeleteEnd);
-        //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
-        if (nDeletePos < nPosition)
-        {
-            if (nDeleteEnd <= nPosition)
-                nPosition = nPosition - (nDeleteEnd - nDeletePos);
-            else
-                nPosition = nDeletePos;
+    SolarMutexGuard aGuard;
+    pThis->m_pFrame->CallCallback(SalEvent::SurroundingTextRequest, &aSurroundingTextEvt);
 
-            if (xText->getCharacterCount() >= nPosition)
-                xText->setCaretPosition( nPosition );
-        }
-        return true;
-    }
+    // Turn offset, nchars into a utf-16 selection
+    Selection aSelection = GtkSalFrame::CalcDeleteSurroundingSelection(aSurroundingTextEvt.maText,
+                                                                       aSurroundingTextEvt.mnStart,
+                                                                       offset, nchars);
+    Selection aInvalid(SAL_MAX_UINT32, SAL_MAX_UINT32);
+    if (aSelection == aInvalid)
+        return false;
 
-    return false;
+    SalSurroundingTextSelectionChangeEvent aEvt;
+    aEvt.mnStart = aSelection.Min();
+    aEvt.mnEnd = aSelection.Max();
+
+    pThis->m_pFrame->CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
+
+    aSelection = Selection(aEvt.mnStart, aEvt.mnEnd);
+    if (aSelection == aInvalid)
+        return false;
+
+    return true;
 }
 
 Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )

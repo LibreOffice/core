@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <sal/types.h>
+#include <tools/diagnose_ex.h>
 #include <vcl/salgtype.hxx>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
@@ -57,6 +58,7 @@
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -3769,6 +3771,64 @@ OUString Window::GetSurroundingText() const
 Selection Window::GetSurroundingTextSelection() const
 {
   return Selection( 0, 0 );
+}
+
+namespace
+{
+    using namespace com::sun::star;
+
+    uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText(vcl::Window *pFocusWin)
+    {
+        uno::Reference<accessibility::XAccessibleEditableText> xText;
+        try
+        {
+            uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible() );
+            if (xAccessible.is())
+                xText = FindFocusedEditableText(xAccessible->getAccessibleContext());
+        }
+        catch(const uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION( "vcl.gtk3", "Exception in getting input method surrounding text");
+        }
+        return xText;
+    }
+}
+
+// this is a rubbish implementation using a11y, ideally all subclasses implementing
+// GetSurroundingText/GetSurroundingTextSelection should implement this and then this
+// should be removed in favor of a stub that returns false
+bool Window::DeleteSurroundingText(const Selection& rSelection)
+{
+    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(this);
+    if (xText.is())
+    {
+        sal_Int32 nPosition = xText->getCaretPosition();
+        // #i111768# range checking
+        sal_Int32 nDeletePos = rSelection.Min();
+        sal_Int32 nDeleteEnd = rSelection.Max();
+        if (nDeletePos < 0)
+            nDeletePos = 0;
+        if (nDeleteEnd < 0)
+            nDeleteEnd = 0;
+        if (nDeleteEnd > xText->getCharacterCount())
+            nDeleteEnd = xText->getCharacterCount();
+
+        xText->deleteText(nDeletePos, nDeleteEnd);
+        //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
+        if (nDeletePos < nPosition)
+        {
+            if (nDeleteEnd <= nPosition)
+                nPosition = nPosition - (nDeleteEnd - nDeletePos);
+            else
+                nPosition = nDeletePos;
+
+            if (xText->getCharacterCount() >= nPosition)
+                xText->setCaretPosition( nPosition );
+        }
+        return true;
+    }
+
+    return false;
 }
 
 bool Window::UsePolyPolygonForComplexGradient()

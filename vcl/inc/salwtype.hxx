@@ -80,6 +80,7 @@ enum class SalEvent {
     ShowDialog,
     MenuButtonCommand,
     SurroundingTextRequest,
+    DeleteSurroundingTextRequest,
     SurroundingTextSelectionChange,
     StartReconversion,
     QueryCharPosition,
