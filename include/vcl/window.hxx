@@ -1534,6 +1534,7 @@ public:
 
     virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+    virtual bool DeleteSurroundingText(const Selection& rSelection);
 
     virtual FactoryFunction GetUITestFactory() const;
 
