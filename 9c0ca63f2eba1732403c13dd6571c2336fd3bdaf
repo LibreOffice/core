@@ -52,6 +52,24 @@
       "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3205b9f_260d1a59",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2232,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2020-10-25T21:01:21Z",
+      "side": 1,
+      "message": "Yes understand now. You mean empty is already invalid tag. I\u0027ll test and fix it. Thanks.",
+      "parentUuid": "03d1d8b7_45182171",
+      "revId": "9c0ca63f2eba1732403c13dd6571c2336fd3bdaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
