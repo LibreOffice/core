@@ -2859,19 +2859,27 @@ void VclDrawingArea::StartDrag(sal_Int8, const Point&)
 
 OUString VclDrawingArea::GetSurroundingText() const
 {
+    if (!m_aGetSurroundingHdl.IsSet())
+        return Control::GetSurroundingText();
     OUString sSurroundingText;
-    if (m_aGetSurroundingHdl.Call(sSurroundingText) != -1)
-        return sSurroundingText;
-    return Control::GetSurroundingText();
+    m_aGetSurroundingHdl.Call(sSurroundingText);
+    return sSurroundingText;
 }
 
 Selection VclDrawingArea::GetSurroundingTextSelection() const
 {
+    if (!m_aGetSurroundingHdl.IsSet())
+        return Control::GetSurroundingTextSelection();
     OUString sSurroundingText;
     int nCursor = m_aGetSurroundingHdl.Call(sSurroundingText);
-    if (nCursor != -1)
-        return Selection(nCursor, nCursor);
-    return Control::GetSurroundingTextSelection();
+    return Selection(nCursor, nCursor);
+}
+
+bool VclDrawingArea::DeleteSurroundingText(const Selection& rSelection)
+{
+    if (!m_aDeleteSurroundingHdl.IsSet())
+        return Control::DeleteSurroundingText(rSelection);
+    return m_aDeleteSurroundingHdl.Call(rSelection);
 }
 
 VclHPaned::~VclHPaned()

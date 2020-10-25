@@ -648,6 +648,7 @@ private:
     Link<const CommandEvent&, bool> m_aCommandHdl;
     Link<tools::Rectangle&, OUString> m_aQueryTooltipHdl;
     Link<OUString&, int> m_aGetSurroundingHdl;
+    Link<const Selection&, bool> m_aDeleteSurroundingHdl;
     Link<VclDrawingArea*, bool> m_aStartDragHdl;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override
@@ -748,6 +749,7 @@ public:
     }
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
+    virtual bool DeleteSurroundingText(const Selection& rSelection) override;
     void SetUITestFactory(FactoryFunction pFactoryFunction, void* pUserData)
     {
         m_pFactoryFunction = pFactoryFunction;
@@ -800,6 +802,10 @@ public:
     void SetGetSurroundingHdl(const Link<OUString&, int>& rLink)
     {
         m_aGetSurroundingHdl = rLink;
+    }
+    void SetDeleteSurroundingHdl(const Link<const Selection&, bool>& rLink)
+    {
+        m_aDeleteSurroundingHdl = rLink;
     }
     void SetStartDragHdl(const Link<VclDrawingArea*, bool>& rLink)
     {
