@@ -411,10 +411,15 @@ void SwSection::SetEditInReadonly(bool const bFlag)
     }
 }
 
-void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwSection::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    auto pOld = pLegacy->m_pOld;
+    auto pNew = pLegacy->m_pNew;
     bool bUpdateFootnote = false;
-    switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
+    switch(pLegacy->GetWhich())
     {
     case RES_ATTRSET_CHG:
         if (pNew && pOld)
@@ -729,10 +734,15 @@ void SwSectionFormat::MakeFrames()
     }
 }
 
-void SwSectionFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwSectionFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
     bool bClients = false;
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pLegacy->GetWhich();
+    auto pOld = pLegacy->m_pOld;
+    auto pNew = pLegacy->m_pNew;
     switch( nWhich )
     {
     case RES_ATTRSET_CHG:
