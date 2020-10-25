@@ -3531,6 +3531,11 @@ reg_get_value()
     # Return value: $regvalue
     unset regvalue
 
+    if test "$build_os" = "wsl"; then
+        regvalue=$($BUILDDIR/solenv/wsl/wsl-lo-helper.exe --read-registry $1 "$2")
+        return
+    fi
+
     local _regentry="/proc/registry${1}/${2}"
     if test -f "$_regentry"; then
         # Stop bash complaining about \0 bytes in input, as it can't handle them.
