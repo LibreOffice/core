@@ -296,7 +296,11 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
             fi
 
             case "$input" in
-                [[a-zA-Z]]:\\* | \\*)
+                /mnt/*)
+                    # A Windows file in WSL format
+                    input=$(wslpath -w "$input")
+                    ;;
+                [[a-zA-Z]]:\\* | \\* | [[a-zA-Z]]:/* | /*)
                     # Already in Windows format
                     ;;
                 /*)
@@ -317,7 +321,7 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
             # Print Unix path
 
             case "$input" in
-                [[a-zA-Z]]:\\* | \\*)
+                [[a-zA-Z]]:\\* | \\* | [[a-zA-Z]]:/* | /*)
                     wslpath -u "$input"
                     ;;
                 /)
@@ -333,17 +337,21 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
     if test -n "$UNITTEST_WSL_CYGPATH"; then
         BUILDDIR=.
 
+        # Nothing special with these file names, just arbitrary ones picked to test with
         cygpath -d /usr/lib64/ld-linux-x86-64.so.2
         cygpath -w /usr/lib64/ld-linux-x86-64.so.2
         cygpath -m /usr/lib64/ld-linux-x86-64.so.2
         cygpath -m -s /usr/lib64/ld-linux-x86-64.so.2
-        cygpath -d /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        # At least on my machine for instance this file does have an 8.3 name
+        cygpath -d /mnt/c/windows/WindowsUpdate.log
+        # But for instance this one doesn't
         cygpath -w /mnt/c/windows/system32/AboutSettingsHandlers.dll
-        cygpath -ws /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -ws /mnt/c/windows/WindowsUpdate.log
         cygpath -m /mnt/c/windows/system32/AboutSettingsHandlers.dll
-        cygpath -ms /mnt/c/windows/system32/AboutSettingsHandlers.dll
+        cygpath -ms /mnt/c/windows/WindowsUpdate.log
 
         cygpath -u 'c:\windows\system32\AboutSettingsHandlers.dll'
+        cygpath -u 'c:/windows/system32/AboutSettingsHandlers.dll'
 
         exit 0
     fi
