@@ -8,12 +8,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.path import get_srcdir_url
 from uitest.uihelper.common import get_state_as_dict
+import org.libreoffice.unotest
+import pathlib
 
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sw/qa/uitest/writer_tests/data/" + file_name
-
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 class versionDialog(UITestCase):
 
