@@ -3967,7 +3967,7 @@ if test "$_os" = "WINNT"; then
         # Remove /cl.exe from CC case insensitive
         AC_MSG_NOTICE([found Visual C++ $vcyear])
 
-        export INCLUDE=`cygpath -d "$COMPATH\Include"`
+        export INCLUDE=`cygpath -d "$COMPATH/Include"`
 
         PathFormat "$COMPATH"
         COMPATH=`win_short_path_for_make "$formatted_path"`
