@@ -44,7 +44,7 @@ int wmain(int argc, wchar_t** argv)
         fprintf(stderr, "%S --8.3 <windows-pathname>\n", argv[0]);
         fprintf(stderr, "    Print the 8.3 form of a Windows pathnam. Fail it not present.\n");
         fprintf(stderr, "%S --read-registry [32|64] <path>\n", argv[0]);
-        fprintf(stderr, "    Read a string value from HKLM in the Registry and print it.\n");
+        fprintf(stderr, "    Read a string value from the Registry and print it.\n");
         exit(1);
     }
 
