@@ -10,8 +10,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, type_text
 
-import time
-
 class SimpleWriterTest(UITestCase):
 
     def test_start_writer(self):
@@ -23,17 +21,6 @@ class SimpleWriterTest(UITestCase):
         xWriterEdit = xWriterDoc.getChild("writer_edit")
 
         xWriterEdit.executeAction("SET", mkPropertyValues({"ZOOM": "200"}))
-
-        self.ui_test.close_doc()
-
-    def test_type_text(self):
-
-        self.ui_test.create_doc_in_start_center("writer")
-
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-
-        type_text(xWriterEdit, "This is my first writer text written through the UI testing")
 
         self.ui_test.close_doc()
 
@@ -50,20 +37,6 @@ class SimpleWriterTest(UITestCase):
             state = get_state_as_dict(xWriterEdit)
 
         xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
-
-        self.ui_test.close_doc()
-
-
-    def test_select_text(self):
-
-        self.ui_test.create_doc_in_start_center("writer")
-
-        xWriterDoc = self.xUITest.getTopFocusWindow()
-        xWriterEdit = xWriterDoc.getChild("writer_edit")
-
-        type_text(xWriterEdit, "This is my first writer text written through the UI testing")
-
-        xWriterEdit.executeAction("SELECT", mkPropertyValues({"START_POS": "0", "END_POS": "4"}))
 
         self.ui_test.close_doc()
 
