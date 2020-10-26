@@ -226,6 +226,12 @@ DECLARE_ODFEXPORT_TEST(testTdf43569, "tdf43569_conditionalfield.doc")
     CPPUNIT_ASSERT(xFields->hasMoreElements());
 }
 
+DECLARE_ODFEXPORT_TEST(testTdf130314, "tdf130314.docx")
+{
+    // Without the fix in place, this test would have hung
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
