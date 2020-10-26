@@ -39,7 +39,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	idxdict \
 	langsupport \
 	$(if $(filter iOS,$(OS)),LibreOffice) \
-	libtest \
 	lngconvex \
 	localize \
 	makedepend \
