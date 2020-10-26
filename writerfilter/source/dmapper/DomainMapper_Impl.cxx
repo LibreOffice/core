@@ -2076,7 +2076,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     m_bParaHadField = false;
 
     // don't overwrite m_bFirstParagraphInCell in table separator nodes
-    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth)
+    // and in text boxes anchored to the first paragraph of table cells
+    if (m_nTableDepth > 0 && m_nTableDepth == m_nTableCellDepth && !IsInShape())
         m_bFirstParagraphInCell = false;
 
     m_bParaAutoBefore = false;
