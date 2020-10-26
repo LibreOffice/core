@@ -46,6 +46,30 @@
       "revId": "39ae9d29be0b4308b6e6ab7ee52c3fe6d6dc7d0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7cfb3f0_fd05185a",
+        "filename": "include/editeng/svxrtf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T12:17:06Z",
+      "side": 1,
+      "message": "Thanks for the reply! :-)",
+      "parentUuid": "6b01672f_c0c9f86a",
+      "range": {
+        "startLine": 174,
+        "startChar": 26,
+        "endLine": 174,
+        "endChar": 28
+      },
+      "revId": "39ae9d29be0b4308b6e6ab7ee52c3fe6d6dc7d0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
