@@ -2679,6 +2679,18 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
     return m_pActionViewShell;
 }
 
+SwHTMLFrameFormatListener::SwHTMLFrameFormatListener(SwFrameFormat* pFrameFormat)
+    : m_pFrameFormat(pFrameFormat)
+{
+    StartListening(m_pFrameFormat->GetNotifier());
+}
+
+void SwHTMLFrameFormatListener::Notify(const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::Dying)
+        m_pFrameFormat = nullptr;
+}
+
 void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                              std::deque<std::unique_ptr<HTMLAttr>> *pPostIts )
 {
@@ -2938,7 +2950,14 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
     for( auto n = m_aMoveFlyFrames.size(); n; )
     {
-        SwFrameFormat *pFrameFormat = m_aMoveFlyFrames[ --n ];
+        SwFrameFormat *pFrameFormat = m_aMoveFlyFrames[--n]->GetFrameFormat();
+        if (!pFrameFormat)
+        {
+            SAL_WARN("sw.html", "SwFrameFormat deleted during import");
+            m_aMoveFlyFrames.erase( m_aMoveFlyFrames.begin() + n );
+            m_aMoveFlyCnts.erase( m_aMoveFlyCnts.begin() + n );
+            continue;
+        }
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
