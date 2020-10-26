@@ -1309,6 +1309,17 @@ DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredY, "tdf137678_testVmlLineShapeM
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15148), aPolyPolygonBezier.Coordinates[0][0].Y);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeRotated, "tdf137765_testVmlLineShapeRotated.docx")
+{
+    // tdf#f137765 The "rotation" (in style attribute) was not handled corretly for VML line shapes.
+    // TODO: fix export too
+    if (mbExported)
+        return;
+    auto aPolyPolygonBezier = getProperty<drawing::PolyPolygonBezierCoords>(getShape(1), "PolyPolygonBezier");
+    // this was 13834
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14443), aPolyPolygonBezier.Coordinates[0][0].Y);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
