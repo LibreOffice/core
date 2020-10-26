@@ -23,16 +23,15 @@
 #include <svl/itemset.hxx>
 #include <svtools/parrtf.hxx>
 #include <rtl/ustring.hxx>
+#include <tools/color.hxx>
 
 #include <editeng/editengdllapi.h>
 
-#include <deque>
 #include <vector>
 #include <map>
 #include <memory>
 
 namespace vcl { class Font; }
-class Color;
 struct SvxRTFStyleType;
 class SvxRTFItemStackType;
 class SvxRTFItemStackList : public std::vector<std::unique_ptr<SvxRTFItemStackType>> {};
@@ -160,7 +159,7 @@ struct RTFPardAttrMapIds
 
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
-    std::deque< Color* >  aColorTbl;
+    std::vector<Color>    maColorTable;
     SvxRTFFontTbl         m_FontTable;
     SvxRTFStyleTbl        m_StyleTable;
     std::deque< std::unique_ptr<SvxRTFItemStackType> >  aAttrStack;
@@ -172,7 +171,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 
     std::unique_ptr<EditPosition> pInsPos;
     SfxItemPool* pAttrPool;
-    std::unique_ptr<Color>  pDfltColor;
+    std::optional<Color>  mxDefaultColor;
     std::unique_ptr<vcl::Font>   pDfltFont;
     std::unique_ptr<SfxItemSet> pRTFDefaults;
 
@@ -339,10 +338,9 @@ public:
 
 inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
-    Color* pColor = pDfltColor.get();
-    if( nId < aColorTbl.size() )
-        pColor = aColorTbl[ nId ];
-    return *pColor;
+    if( nId < maColorTable.size() )
+        return maColorTable[ nId ];
+    return *mxDefaultColor;
 }
 
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
