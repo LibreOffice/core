@@ -66,7 +66,9 @@
   <block-list:block block-list:abbreviated-name="Dockument" block-list:name="Dokument"/>
   <block-list:block block-list:abbreviated-name="dre" block-list:name="der"/>
   <block-list:block block-list:abbreviated-name="dsa" block-list:name="das"/>
-  <block-list:block block-list:abbreviated-name="dßa" block-list:name="daß"/>
+  <block-list:block block-list:abbreviated-name="dßa" block-list:name="dass"/>
+  <block-list:block block-list:abbreviated-name="daß" block-list:name="dass"/>
+  <block-list:block block-list:abbreviated-name="dssa" block-list:name="dass"/>
   <block-list:block block-list:abbreviated-name="edr" block-list:name="der"/>
   <block-list:block block-list:abbreviated-name="edr" block-list:name="der"/>
   <block-list:block block-list:abbreviated-name="emfehlen" block-list:name="empfehlen"/>
