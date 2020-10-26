@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1f0d212_8cb75c60",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 20
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2020-10-26T20:18:10Z",
+      "side": 1,
+      "message": "This line doesn\u0027t look right to me, its the packing properties for frameFL_REGISTER and I think it should remain as 3. Though I\u0027m not sure if that is why this is failing",
+      "revId": "2149f48ccdb23d26d987b02afb5e0987615fc1ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
