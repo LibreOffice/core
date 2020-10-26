@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47011efa_954bf4eb",
+        "filename": "sw/source/core/doc/docfmt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2020-10-26T08:34:25Z",
+      "side": 1,
+      "message": "Please ignore this comment, I forgot to remove before upload.",
+      "range": {
+        "startLine": 306,
+        "startChar": 73,
+        "endLine": 306,
+        "endChar": 106
+      },
+      "revId": "da77ea6f68fd4f1fd8a0967407f19ae43cf50fa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
