@@ -42,8 +42,7 @@ public:
         if (loplugin::isSamePathname(fn, SRCDIR "/sal/rtl/alloc_cache.cxx"))
             return;
         // false +, slightly odd usage, but not wrong
-        if (loplugin::isSamePathname(fn, SRCDIR "/libreofficekit/qa/tilebench/tilebench.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/smoketest/libtest.cxx"))
+        if (loplugin::isSamePathname(fn, SRCDIR "/libreofficekit/qa/tilebench/tilebench.cxx"))
             return;
         // uses the Unix convention of "non-zero return indicates error"
         if (loplugin::isSamePathname(fn, SRCDIR "/idlc/source/idlcproduce.cxx"))

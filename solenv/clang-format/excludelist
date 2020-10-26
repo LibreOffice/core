@@ -12479,7 +12479,6 @@ slideshow/test/tests.hxx
 slideshow/test/testshape.cxx
 slideshow/test/testview.cxx
 slideshow/test/views.cxx
-smoketest/libtest.cxx
 smoketest/smoketest.cxx
 solenv/bin/concat-deps.c
 solenv/gbuildtojson/gbuildtojson.cxx

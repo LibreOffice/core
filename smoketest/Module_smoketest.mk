@@ -26,12 +26,6 @@ $(eval $(call gb_Module_add_targets,smoketest,\
 endif
 endif
 
-ifneq ($(filter LINUX WNT,$(OS)),)
-$(eval $(call gb_Module_add_check_targets,smoketest,\
-	Executable_libtest \
-))
-endif
-
 ifneq (MACOSX/TRUE,$(OS)/$(ENABLE_MACOSX_SANDBOX))
 ifneq ($(filter EXTENSIONS,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,smoketest,\
