@@ -17,6 +17,7 @@
 
 #include <memory>
 #include <vector>
+#include <optional>
 
 //TODO: merge this with conditio.hxx
 
@@ -116,8 +117,7 @@ struct SC_DLLPUBLIC ScDataBarFormatData
         mnMaxLength(r.mnMaxLength),
         mbOnlyBar(r.mbOnlyBar)
     {
-        if(r.mpNegativeColor)
-            mpNegativeColor.reset(new Color(*r.mpNegativeColor));
+        mxNegativeColor = r.mxNegativeColor;
 
         if(r.mpLowerLimit)
             mpLowerLimit.reset( new ScColorScaleEntry(*r.mpLowerLimit));
@@ -138,7 +138,7 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      *
      * Default color is 0xFF0000, this value is not set
      */
-    std::unique_ptr<Color> mpNegativeColor;
+    std::optional<Color> mxNegativeColor;
     /**
      * Color of the axis if used
      * Default color is black
