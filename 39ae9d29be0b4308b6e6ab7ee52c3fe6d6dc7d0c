@@ -22,6 +22,30 @@
       "revId": "39ae9d29be0b4308b6e6ab7ee52c3fe6d6dc7d0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b01672f_c0c9f86a",
+        "filename": "include/editeng/svxrtf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2020-10-26T12:11:52Z",
+      "side": 1,
+      "message": "caolan likes using x for any \"smart\" thing e.g. std::unique_ptr, std::shared_ptr, rtl::Reference, uno::Reference,\n\nand std::optional tends to act like a smart pointer - uses operator* and operator-\u003e\n\nso it seemd logical.\n\n\u003cshrug\u003e\n\nNo real strong feelings about it, tho",
+      "parentUuid": "ff4ca0db_2209b3fe",
+      "range": {
+        "startLine": 174,
+        "startChar": 26,
+        "endLine": 174,
+        "endChar": 28
+      },
+      "revId": "39ae9d29be0b4308b6e6ab7ee52c3fe6d6dc7d0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
