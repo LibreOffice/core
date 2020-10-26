@@ -1353,7 +1353,7 @@ libo_FUZZ_ARG_ENABLE(pdfimport,
 
 libo_FUZZ_ARG_ENABLE(pdfium,
     AS_HELP_STRING([--disable-pdfium],
-        [Disable building PDFium.])
+        [Disable building PDFium. Results in unsecure PDF signature verification.])
 )
 
 libo_FUZZ_ARG_ENABLE(skia,
