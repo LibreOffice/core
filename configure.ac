@@ -5041,260 +5041,6 @@ fi
 AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
-dnl Set up a different compiler to produce tools to run on the build
-dnl machine when doing cross-compilation
-dnl ===================================================================
-
-m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
-m4_pattern_allow([PKG_CONFIG_LIBDIR])
-if test "$cross_compiling" = "yes"; then
-    AC_MSG_CHECKING([for BUILD platform configuration])
-    echo
-    rm -rf CONF-FOR-BUILD config_build.mk
-    mkdir CONF-FOR-BUILD
-    # Here must be listed all files needed when running the configure script. In particular, also
-    # those expanded by the AC_CONFIG_FILES() call near the end of this configure.ac. For clarity,
-    # keep them in the same order as there.
-    (cd $SRC_ROOT && tar cf - \
-        config.guess \
-        bin/get_config_variables \
-        solenv/bin/getcompver.awk \
-        solenv/inc/langlist.mk \
-        download.lst \
-        config_host.mk.in \
-        config_host_lang.mk.in \
-        Makefile.in \
-        bin/bffvalidator.sh.in \
-        bin/odfvalidator.sh.in \
-        bin/officeotron.sh.in \
-        hardened_runtime.xcent.in \
-        instsetoo_native/util/openoffice.lst.in \
-        config_host/*.in \
-        sysui/desktop/macosx/Info.plist.in) \
-    | (cd CONF-FOR-BUILD && tar xf -)
-    cp configure CONF-FOR-BUILD
-    test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
-    (
-    unset COM USING_X11 OS CPUNAME
-    unset CC CXX SYSBASE CFLAGS
-    unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
-    unset CPPUNIT_CFLAGS CPPUNIT_LIBS
-    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
-    if test -n "$CC_FOR_BUILD"; then
-        export CC="$CC_FOR_BUILD"
-        CC_BASE=`first_arg_basename "$CC"`
-    fi
-    if test -n "$CXX_FOR_BUILD"; then
-        export CXX="$CXX_FOR_BUILD"
-        CXX_BASE=`first_arg_basename "$CXX"`
-    fi
-    test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
-    cd CONF-FOR-BUILD
-
-    sub_conf_opts=""
-    test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
-    test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
-    test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
-    if test -n "$ENABLE_JAVA"; then
-        case "$_os" in
-        iOS) sub_conf_opts="$sub_conf_opts --without-java" ;; # force it off, like it used to be
-        Android)
-            # Hack for Android - the build doesn't need a host JDK, so just forward to build for convenience
-            test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
-            ;;
-        *)
-            if test -z "$with_jdk_home"; then
-                AC_MSG_ERROR([Missing host JDK! This can't be detected for the build OS, so you have to specify it with --with-jdk-home.])
-            fi
-            ;;
-        esac
-    else
-        sub_conf_opts="$sub_conf_opts --without-java"
-    fi
-    test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
-    test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
-
-    # Don't bother having configure look for stuff not needed for the build platform anyway
-    ./configure \
-        --build="$build_alias" \
-        --disable-cups \
-        --disable-firebird-sdbc \
-        --disable-gpgmepp \
-        --disable-gstreamer-1-0 \
-        --disable-gtk3 \
-        --disable-mariadb-sdbc \
-        --disable-online-update \
-        --disable-opencl \
-        --disable-pch \
-        --disable-pdfimport \
-        --disable-postgresql-sdbc \
-        --disable-skia \
-        --enable-icecream="$enable_icecream" \
-        --without-doxygen \
-        --without-webdav \
-        --with-parallelism="$with_parallelism" \
-        --with-theme="$with_theme" \
-        --with-tls=openssl \
-        $sub_conf_opts \
-        --srcdir=$srcdir \
-        2>&1 | sed -e 's/^/    /'
-    test -f ./config_host.mk 2>/dev/null || exit
-
-    # filter permitted build targets
-    PERMITTED_BUILD_TARGETS="
-        AVMEDIA
-        BOOST
-        CLUCENE
-        DBCONNECTIVITY
-        DESKTOP
-        DYNLOADING
-        EPOXY
-        EXPAT
-        GLM
-        GRAPHITE
-        HARFBUZZ
-        ICU
-        LCMS2
-        LIBJPEG_TURBO
-        LIBLANGTAG
-        LibO
-        LIBFFI
-        LIBPN
-        LIBXML2
-        LIBXSLT
-        MDDS
-        NATIVE
-        OPENSSL
-        ORCUS
-        PYTHON
-        SCRIPTING
-        ZLIB
-"
-    # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
-    # newlined lists, to use grep as a filter
-    PERMITTED_BUILD_TARGETS=$(echo "$PERMITTED_BUILD_TARGETS" | sed -e '/^ *$/d' -e 's/ *//')
-    BUILD_TARGETS="$(sed -n -e '/^export BUILD_TYPE=/ s/.*=//p' config_host.mk | tr ' ' '\n')"
-    BUILD_TARGETS="$(echo "$BUILD_TARGETS" | grep -F "$PERMITTED_BUILD_TARGETS" | tr '\n' ' ')"
-    sed -i -e "s/ BUILD_TYPE=.*$/ BUILD_TYPE=$BUILD_TARGETS/" config_host.mk
-
-    cp config_host.mk ../config_build.mk
-    cp config_host_lang.mk ../config_build_lang.mk
-    mv config.log ../config.Build.log
-    mkdir -p ../config_build
-    mv config_host/*.h ../config_build
-
-    # all these will get a _FOR_BUILD postfix
-    DIRECT_FOR_BUILD_SETTINGS="
-        CC
-        CXX
-        ILIB
-        JAVA_HOME
-        JAVAIFLAGS
-        JDK
-        LIBO_BIN_FOLDER
-        LIBO_LIB_FOLDER
-        LIBO_URE_LIB_FOLDER
-        LIBO_URE_MISC_FOLDER
-        OS
-        SDKDIRNAME
-        SYSTEM_LIBXML
-        SYSTEM_LIBXSLT
-"
-    # these overwrite host config with build config
-    OVERWRITING_SETTINGS="
-        ANT
-        ANT_HOME
-        ANT_LIB
-        HSQLDB_USE_JDBC_4_1
-        JAVA_CLASSPATH_NOT_SET
-        JAVA_SOURCE_VER
-        JAVA_TARGET_VER
-        JAVACFLAGS
-        JAVACOMPILER
-        JAVADOC
-        JAVADOCISGJDOC
-"
-    # these need some special handling
-    EXTRA_HANDLED_SETTINGS="
-        INSTDIR
-        INSTROOT
-        PATH
-        WORKDIR
-"
-    OLD_PATH=$PATH
-    . ./bin/get_config_variables $DIRECT_FOR_BUILD_SETTINGS $OVERWRITING_SETTINGS $EXTRA_HANDLED_SETTINGS
-    BUILD_PATH=$PATH
-    PATH=$OLD_PATH
-
-    line=`echo "LO_PATH_FOR_BUILD='${BUILD_PATH}'" | sed -e 's,/CONF-FOR-BUILD,,g'`
-    echo "$line" >>build-config
-
-    for V in $DIRECT_FOR_BUILD_SETTINGS; do
-        VV='$'$V
-        VV=`eval "echo $VV"`
-        if test -n "$VV"; then
-            line=${V}_FOR_BUILD='${'${V}_FOR_BUILD:-$VV'}'
-            echo "$line" >>build-config
-        fi
-    done
-
-    for V in $OVERWRITING_SETTINGS; do
-        VV='$'$V
-        VV=`eval "echo $VV"`
-        if test -n "$VV"; then
-            line=${V}='${'${V}:-$VV'}'
-            echo "$line" >>build-config
-        fi
-    done
-
-    for V in INSTDIR INSTROOT WORKDIR; do
-        VV='$'$V
-        VV=`eval "echo $VV"`
-        VV=`echo $VV | sed -e "s,/CONF-FOR-BUILD/\([[a-z]]*\),/\1_for_build,g"`
-        if test -n "$VV"; then
-            line="${V}_FOR_BUILD='$VV'"
-            echo "$line" >>build-config
-        fi
-    done
-
-    )
-    test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
-    test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
-    perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
-             -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
-
-    eval `cat CONF-FOR-BUILD/build-config`
-
-    AC_MSG_RESULT([checking for BUILD platform configuration... done])
-
-    rm -rf CONF-FOR-BUILD
-else
-    OS_FOR_BUILD="$OS"
-    CC_FOR_BUILD="$CC"
-    CXX_FOR_BUILD="$CXX"
-    INSTDIR_FOR_BUILD="$INSTDIR"
-    INSTROOT_FOR_BUILD="$INSTROOT"
-    LIBO_BIN_FOLDER_FOR_BUILD="$LIBO_BIN_FOLDER"
-    LIBO_LIB_FOLDER_FOR_BUILD="$LIBO_LIB_FOLDER"
-    LIBO_URE_LIB_FOLDER_FOR_BUILD="$LIBO_URE_LIB_FOLDER"
-    LIBO_URE_MISC_FOLDER_FOR_BUILD="$LIBO_URE_MISC_FOLDER"
-    SDKDIRNAME_FOR_BUILD="$SDKDIRNAME"
-    WORKDIR_FOR_BUILD="$WORKDIR"
-fi
-AC_SUBST(OS_FOR_BUILD)
-AC_SUBST(INSTDIR_FOR_BUILD)
-AC_SUBST(INSTROOT_FOR_BUILD)
-AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
-AC_SUBST(LIBO_LIB_FOLDER_FOR_BUILD)
-AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
-AC_SUBST(LIBO_URE_MISC_FOLDER_FOR_BUILD)
-AC_SUBST(SDKDIRNAME_FOR_BUILD)
-AC_SUBST(WORKDIR_FOR_BUILD)
-AC_SUBST(CC_FOR_BUILD)
-AC_SUBST(CXX_FOR_BUILD)
-
-dnl ===================================================================
 dnl Check for syslog header
 dnl ===================================================================
 AC_CHECK_HEADER(syslog.h, AC_DEFINE(HAVE_SYSLOG_H))
@@ -13863,6 +13609,261 @@ if test "$build_os" = "cygwin"; then
     TEMP_DIRECTORY=`cygpath -m "$TEMP_DIRECTORY"`
 fi
 AC_SUBST(TEMP_DIRECTORY)
+
+dnl ===================================================================
+dnl Set up a different compiler to produce tools to run on the build
+dnl machine when doing cross-compilation
+dnl ===================================================================
+
+m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
+m4_pattern_allow([PKG_CONFIG_LIBDIR])
+if test "$cross_compiling" = "yes"; then
+    AC_MSG_CHECKING([for BUILD platform configuration])
+    echo
+    rm -rf CONF-FOR-BUILD config_build.mk
+    mkdir CONF-FOR-BUILD
+    # Here must be listed all files needed when running the configure script. In particular, also
+    # those expanded by the AC_CONFIG_FILES() call near the end of this configure.ac. For clarity,
+    # keep them in the same order as there.
+    (cd $SRC_ROOT && tar cf - \
+        config.guess \
+        bin/get_config_variables \
+        solenv/bin/getcompver.awk \
+        solenv/inc/langlist.mk \
+        download.lst \
+        config_host.mk.in \
+        config_host_lang.mk.in \
+        Makefile.in \
+        bin/bffvalidator.sh.in \
+        bin/odfvalidator.sh.in \
+        bin/officeotron.sh.in \
+        hardened_runtime.xcent.in \
+        instsetoo_native/util/openoffice.lst.in \
+        config_host/*.in \
+        sysui/desktop/macosx/Info.plist.in) \
+    | (cd CONF-FOR-BUILD && tar xf -)
+    cp configure CONF-FOR-BUILD
+    test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
+    (
+    unset COM USING_X11 OS CPUNAME
+    unset CC CXX SYSBASE CFLAGS
+    unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
+    unset CPPUNIT_CFLAGS CPPUNIT_LIBS
+    unset LIBXML_CFLAGS LIBXML_LIBS LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC PKG_CONFIG_LIBDIR
+    if test -n "$CC_FOR_BUILD"; then
+        export CC="$CC_FOR_BUILD"
+        CC_BASE=`first_arg_basename "$CC"`
+    fi
+    if test -n "$CXX_FOR_BUILD"; then
+        export CXX="$CXX_FOR_BUILD"
+        CXX_BASE=`first_arg_basename "$CXX"`
+    fi
+    test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
+    cd CONF-FOR-BUILD
+
+    sub_conf_opts=""
+    test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
+    test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
+    test "$with_junit" = "no" && sub_conf_opts="$sub_conf_opts --without-junit"
+    if test -n "$ENABLE_JAVA"; then
+        case "$_os" in
+        iOS) sub_conf_opts="$sub_conf_opts --without-java" ;; # force it off, like it used to be
+        Android)
+            # Hack for Android - the build doesn't need a host JDK, so just forward to build for convenience
+            test -n "$with_jdk_home" && sub_conf_opts="$sub_conf_opts --with-jdk-home=$with_jdk_home"
+            ;;
+        *)
+            if test -z "$with_jdk_home"; then
+                AC_MSG_ERROR([Missing host JDK! This can't be detected for the build OS, so you have to specify it with --with-jdk-home.])
+            fi
+            ;;
+        esac
+    else
+        sub_conf_opts="$sub_conf_opts --without-java"
+    fi
+    test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
+    test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
+    sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
+
+    # Don't bother having configure look for stuff not needed for the build platform anyway
+    ./configure \
+        --build="$build_alias" \
+        --disable-cups \
+        --disable-firebird-sdbc \
+        --disable-gpgmepp \
+        --disable-gstreamer-1-0 \
+        --disable-gtk3 \
+        --disable-mariadb-sdbc \
+        --disable-online-update \
+        --disable-opencl \
+        --disable-pch \
+        --disable-pdfimport \
+        --disable-postgresql-sdbc \
+        --disable-skia \
+        --enable-icecream="$enable_icecream" \
+        --without-doxygen \
+        --without-webdav \
+        --with-parallelism="$with_parallelism" \
+        --with-theme="$with_theme" \
+        --with-tls=openssl \
+        $sub_conf_opts \
+        --srcdir=$srcdir \
+        2>&1 | sed -e 's/^/    /'
+    test -f ./config_host.mk 2>/dev/null || exit
+
+    # filter permitted build targets
+    PERMITTED_BUILD_TARGETS="
+        AVMEDIA
+        BOOST
+        CLUCENE
+        DBCONNECTIVITY
+        DESKTOP
+        DYNLOADING
+        EPOXY
+        EXPAT
+        GLM
+        GRAPHITE
+        HARFBUZZ
+        ICU
+        LCMS2
+        LIBJPEG_TURBO
+        LIBLANGTAG
+        LibO
+        LIBFFI
+        LIBPN
+        LIBXML2
+        LIBXSLT
+        MDDS
+        NATIVE
+        OPENSSL
+        ORCUS
+        PYTHON
+        SCRIPTING
+        ZLIB
+"
+    # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
+    # newlined lists, to use grep as a filter
+    PERMITTED_BUILD_TARGETS=$(echo "$PERMITTED_BUILD_TARGETS" | sed -e '/^ *$/d' -e 's/ *//')
+    BUILD_TARGETS="$(sed -n -e '/^export BUILD_TYPE=/ s/.*=//p' config_host.mk | tr ' ' '\n')"
+    BUILD_TARGETS="$(echo "$BUILD_TARGETS" | grep -F "$PERMITTED_BUILD_TARGETS" | tr '\n' ' ')"
+    sed -i -e "s/ BUILD_TYPE=.*$/ BUILD_TYPE=$BUILD_TARGETS/" config_host.mk
+
+    cp config_host.mk ../config_build.mk
+    cp config_host_lang.mk ../config_build_lang.mk
+    mv config.log ../config.Build.log
+    mkdir -p ../config_build
+    mv config_host/*.h ../config_build
+
+    # all these will get a _FOR_BUILD postfix
+    DIRECT_FOR_BUILD_SETTINGS="
+        CC
+        CXX
+        ILIB
+        JAVA_HOME
+        JAVAIFLAGS
+        JDK
+        LIBO_BIN_FOLDER
+        LIBO_LIB_FOLDER
+        LIBO_URE_LIB_FOLDER
+        LIBO_URE_MISC_FOLDER
+        OS
+        SDKDIRNAME
+        SYSTEM_LIBXML
+        SYSTEM_LIBXSLT
+"
+    # these overwrite host config with build config
+    OVERWRITING_SETTINGS="
+        ANT
+        ANT_HOME
+        ANT_LIB
+        HSQLDB_USE_JDBC_4_1
+        JAVA_CLASSPATH_NOT_SET
+        JAVA_SOURCE_VER
+        JAVA_TARGET_VER
+        JAVACFLAGS
+        JAVACOMPILER
+        JAVADOC
+        JAVADOCISGJDOC
+"
+    # these need some special handling
+    EXTRA_HANDLED_SETTINGS="
+        INSTDIR
+        INSTROOT
+        PATH
+        WORKDIR
+"
+    OLD_PATH=$PATH
+    . ./bin/get_config_variables $DIRECT_FOR_BUILD_SETTINGS $OVERWRITING_SETTINGS $EXTRA_HANDLED_SETTINGS
+    BUILD_PATH=$PATH
+    PATH=$OLD_PATH
+
+    line=`echo "LO_PATH_FOR_BUILD='${BUILD_PATH}'" | sed -e 's,/CONF-FOR-BUILD,,g'`
+    echo "$line" >>build-config
+
+    for V in $DIRECT_FOR_BUILD_SETTINGS; do
+        VV='$'$V
+        VV=`eval "echo $VV"`
+        if test -n "$VV"; then
+            line=${V}_FOR_BUILD='${'${V}_FOR_BUILD:-$VV'}'
+            echo "$line" >>build-config
+        fi
+    done
+
+    for V in $OVERWRITING_SETTINGS; do
+        VV='$'$V
+        VV=`eval "echo $VV"`
+        if test -n "$VV"; then
+            line=${V}='${'${V}:-$VV'}'
+            echo "$line" >>build-config
+        fi
+    done
+
+    for V in INSTDIR INSTROOT WORKDIR; do
+        VV='$'$V
+        VV=`eval "echo $VV"`
+        VV=`echo $VV | sed -e "s,/CONF-FOR-BUILD/\([[a-z]]*\),/\1_for_build,g"`
+        if test -n "$VV"; then
+            line="${V}_FOR_BUILD='$VV'"
+            echo "$line" >>build-config
+        fi
+    done
+
+    )
+    test -f CONF-FOR-BUILD/build-config || AC_MSG_ERROR([Running configure script for BUILD system failed, see CONF-FOR-BUILD/config.log])
+    test -f config_build.mk || AC_MSG_ERROR([A file called config_build.mk was supposed to have been copied here, but it isn't found])
+    perl -pi -e 's,/(workdir|instdir)(/|$),/\1_for_build\2,g;' \
+             -e 's,/CONF-FOR-BUILD,,g;' config_build.mk
+
+    eval `cat CONF-FOR-BUILD/build-config`
+
+    AC_MSG_RESULT([checking for BUILD platform configuration... done])
+
+    rm -rf CONF-FOR-BUILD
+else
+    OS_FOR_BUILD="$OS"
+    CC_FOR_BUILD="$CC"
+    CXX_FOR_BUILD="$CXX"
+    INSTDIR_FOR_BUILD="$INSTDIR"
+    INSTROOT_FOR_BUILD="$INSTROOT"
+    LIBO_BIN_FOLDER_FOR_BUILD="$LIBO_BIN_FOLDER"
+    LIBO_LIB_FOLDER_FOR_BUILD="$LIBO_LIB_FOLDER"
+    LIBO_URE_LIB_FOLDER_FOR_BUILD="$LIBO_URE_LIB_FOLDER"
+    LIBO_URE_MISC_FOLDER_FOR_BUILD="$LIBO_URE_MISC_FOLDER"
+    SDKDIRNAME_FOR_BUILD="$SDKDIRNAME"
+    WORKDIR_FOR_BUILD="$WORKDIR"
+fi
+AC_SUBST(OS_FOR_BUILD)
+AC_SUBST(INSTDIR_FOR_BUILD)
+AC_SUBST(INSTROOT_FOR_BUILD)
+AC_SUBST(LIBO_BIN_FOLDER_FOR_BUILD)
+AC_SUBST(LIBO_LIB_FOLDER_FOR_BUILD)
+AC_SUBST(LIBO_URE_LIB_FOLDER_FOR_BUILD)
+AC_SUBST(LIBO_URE_MISC_FOLDER_FOR_BUILD)
+AC_SUBST(SDKDIRNAME_FOR_BUILD)
+AC_SUBST(WORKDIR_FOR_BUILD)
+AC_SUBST(CC_FOR_BUILD)
+AC_SUBST(CXX_FOR_BUILD)
+
 
 # setup the PATH for the environment
 if test -n "$LO_PATH_FOR_BUILD"; then
