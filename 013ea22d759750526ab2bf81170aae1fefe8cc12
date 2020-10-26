@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26538772_efed8353",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 5516,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-26T15:32:33Z",
+      "side": 1,
+      "message": "has",
+      "range": {
+        "startLine": 5516,
+        "startChar": 17,
+        "endLine": 5516,
+        "endChar": 21
+      },
+      "revId": "013ea22d759750526ab2bf81170aae1fefe8cc12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
