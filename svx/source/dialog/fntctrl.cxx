@@ -144,7 +144,7 @@ class FontPrevWin_Impl
     bool mbDelPrinter;
 
     Reference <XBreakIterator> mxBreak;
-    std::vector<long> maTextWidth;
+    std::vector<tools::Long> maTextWidth;
     std::deque<sal_Int32> maScriptChg;
     std::vector<sal_uInt16> maScriptType;
     SvxFont maCJKFont;

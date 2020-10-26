@@ -905,7 +905,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     ScIconSetType eType = pOldIconSetInfo->eIconSetType;
     sal_Int32 nIndex = pOldIconSetInfo->nIconIndex;
     const BitmapEx& rIcon = getIcon(rIconSetBitmapMap, eType, nIndex);
-    tools::Long aOrigSize = std::max<long>(0,std::min(rRect.GetSize().getWidth() - 4 * nOneX, rRect.GetSize().getHeight() -4 * nOneY));
+    tools::Long aOrigSize = std::max<tools::Long>(0,std::min(rRect.GetSize().getWidth() - 4 * nOneX, rRect.GetSize().getHeight() -4 * nOneY));
     rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
 }
 

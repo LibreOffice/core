@@ -347,7 +347,7 @@ class SwTextPaintInfo : public SwTextSizeInfo
     sw::WrongListIterator *m_pWrongList;
     sw::WrongListIterator *m_pGrammarCheckList;
     sw::WrongListIterator *m_pSmartTags;
-    std::vector<long>* pSpaceAdd;
+    std::vector<tools::Long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
     SwTextFly    aTextFly;    // Calculate the FlyFrame
     Point       aPos;       // Paint position
@@ -448,8 +448,8 @@ public:
         { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->size() )
                    ? (*pSpaceAdd)[nSpaceIdx] : 0; }
 
-    void SetpSpaceAdd( std::vector<long>* pNew ){ pSpaceAdd = pNew; }
-    std::vector<long>* GetpSpaceAdd() const { return pSpaceAdd; }
+    void SetpSpaceAdd( std::vector<tools::Long>* pNew ){ pSpaceAdd = pNew; }
+    std::vector<tools::Long>* GetpSpaceAdd() const { return pSpaceAdd; }
 
     void SetWrongList(sw::WrongListIterator *const pNew) { m_pWrongList = pNew; }
     sw::WrongListIterator* GetpWrongList() const { return m_pWrongList; }

@@ -283,7 +283,7 @@ void SmEditWindow::Resize()
         if (pEditView->GetVisArea().Top() > nMaxVisAreaStart)
         {
             tools::Rectangle aVisArea(pEditView->GetVisArea() );
-            aVisArea.SetTop( std::max<long>(nMaxVisAreaStart, 0) );
+            aVisArea.SetTop( std::max<tools::Long>(nMaxVisAreaStart, 0) );
             aVisArea.SetSize(pEditView->GetOutputArea().GetSize());
             pEditView->SetVisArea(aVisArea);
             pEditView->ShowCursor();

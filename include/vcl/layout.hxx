@@ -222,8 +222,8 @@ private:
     VclButtonBoxStyle m_eLayoutStyle;
     struct Requisition
     {
-        std::vector<long> m_aMainGroupDimensions;
-        std::vector<long> m_aSubGroupDimensions;
+        std::vector<tools::Long> m_aMainGroupDimensions;
+        std::vector<tools::Long> m_aSubGroupDimensions;
         Size m_aMainGroupSize;
         Size m_aSubGroupSize;
     };

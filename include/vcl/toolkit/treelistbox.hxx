@@ -664,7 +664,7 @@ public:
     SvTreeListEntry*    GetNextEntryInView(SvTreeListEntry*) const;
     void            ScrollToAbsPos( tools::Long nPos );
 
-    tools::Long            getPreferredDimensions(std::vector<long> &rWidths) const;
+    tools::Long            getPreferredDimensions(std::vector<tools::Long> &rWidths) const;
 
     virtual Size    GetOptimalSize() const override;
 

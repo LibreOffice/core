@@ -87,8 +87,8 @@ class ScPrintFuncCache
     ScPrintSelectionStatus  aSelection;
     ScDocShell*             pDocSh;
     tools::Long                    nTotalPages;
-    std::vector<long>       nPages;
-    std::vector<long>       nFirstAttr;
+    std::vector<tools::Long>       nPages;
+    std::vector<tools::Long>       nFirstAttr;
     std::vector<ScPrintPageLocation> aLocations;
     bool                    bLocInitialized;
 

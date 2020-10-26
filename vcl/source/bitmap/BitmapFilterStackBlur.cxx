@@ -74,12 +74,12 @@ struct BlurArrays
     BlurSharedData maShared;
 
     std::vector<sal_uInt8> maStackBuffer;
-    std::vector<long> maPositionTable;
-    std::vector<long> maWeightTable;
+    std::vector<tools::Long> maPositionTable;
+    std::vector<tools::Long> maWeightTable;
 
-    std::vector<long> mnSumVector;
-    std::vector<long> mnInSumVector;
-    std::vector<long> mnOutSumVector;
+    std::vector<tools::Long> mnSumVector;
+    std::vector<tools::Long> mnInSumVector;
+    std::vector<tools::Long> mnOutSumVector;
 
     BlurArrays(BlurSharedData const& rShared)
         : maShared(rShared)

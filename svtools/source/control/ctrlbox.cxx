@@ -91,7 +91,7 @@ tools::Long BorderWidthImpl::GetLine1( tools::Long nWidth ) const
     {
         tools::Long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
         tools::Long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
-        result = std::max<long>(0,
+        result = std::max<tools::Long>(0,
                     static_cast<tools::Long>((m_nRate1 * nWidth) + 0.5)
                         - (nConstant2 + nConstantD));
         if (result == 0 && m_nRate1 > 0.0 && nWidth > 0)
@@ -109,7 +109,7 @@ tools::Long BorderWidthImpl::GetLine2( tools::Long nWidth ) const
     {
         tools::Long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
         tools::Long const nConstantD = (m_nFlags & BorderWidthImplFlags::CHANGE_DIST ) ? 0 : m_nRateGap;
-        result = std::max<long>(0,
+        result = std::max<tools::Long>(0,
                     static_cast<tools::Long>((m_nRate2 * nWidth) + 0.5)
                         - (nConstant1 + nConstantD));
     }
@@ -123,7 +123,7 @@ tools::Long BorderWidthImpl::GetGap( tools::Long nWidth ) const
     {
         tools::Long const nConstant1 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE1) ? 0 : m_nRate1;
         tools::Long const nConstant2 = (m_nFlags & BorderWidthImplFlags::CHANGE_LINE2) ? 0 : m_nRate2;
-        result = std::max<long>(0,
+        result = std::max<tools::Long>(0,
                     static_cast<tools::Long>((m_nRateGap * nWidth) + 0.5)
                         - (nConstant1 + nConstant2));
     }

@@ -538,12 +538,12 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
         {
             BitmapColor aCol;
             tools::Long nR, nG, nB;
-            const tools::Long nMinR = MinMax<long>(rTransColor.GetRed() - nTol, 0, 255);
-            const tools::Long nMaxR = MinMax<long>(rTransColor.GetRed() + nTol, 0, 255);
-            const tools::Long nMinG = MinMax<long>(rTransColor.GetGreen() - nTol, 0, 255);
-            const tools::Long nMaxG = MinMax<long>(rTransColor.GetGreen() + nTol, 0, 255);
-            const tools::Long nMinB = MinMax<long>(rTransColor.GetBlue() - nTol, 0, 255);
-            const tools::Long nMaxB = MinMax<long>(rTransColor.GetBlue() + nTol, 0, 255);
+            const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
+            const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
+            const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
+            const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
+            const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
+            const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
 
             if (pReadAcc->HasPalette())
             {
@@ -632,13 +632,13 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
         const tools::Long nBottom = aRect.Bottom();
         const BitmapColor aMatch(pReadAcc->GetBestMatchingColor(rColor));
 
-        std::vector<long> aLine;
+        std::vector<tools::Long> aLine;
         tools::Long nYStart(nTop);
         tools::Long nY(nTop);
 
         for (; nY <= nBottom; nY++)
         {
-            std::vector<long> aNewLine;
+            std::vector<tools::Long> aNewLine;
             tools::Long nX(nLeft);
             Scanline pScanlineRead = pReadAcc->GetScanline(nY);
 
@@ -863,12 +863,12 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
 
     if (pAcc)
     {
-        const tools::Long nMinR = MinMax<long>(rSearchColor.GetRed() - nTol, 0, 255);
-        const tools::Long nMaxR = MinMax<long>(rSearchColor.GetRed() + nTol, 0, 255);
-        const tools::Long nMinG = MinMax<long>(rSearchColor.GetGreen() - nTol, 0, 255);
-        const tools::Long nMaxG = MinMax<long>(rSearchColor.GetGreen() + nTol, 0, 255);
-        const tools::Long nMinB = MinMax<long>(rSearchColor.GetBlue() - nTol, 0, 255);
-        const tools::Long nMaxB = MinMax<long>(rSearchColor.GetBlue() + nTol, 0, 255);
+        const tools::Long nMinR = MinMax<tools::Long>(rSearchColor.GetRed() - nTol, 0, 255);
+        const tools::Long nMaxR = MinMax<tools::Long>(rSearchColor.GetRed() + nTol, 0, 255);
+        const tools::Long nMinG = MinMax<tools::Long>(rSearchColor.GetGreen() - nTol, 0, 255);
+        const tools::Long nMaxG = MinMax<tools::Long>(rSearchColor.GetGreen() + nTol, 0, 255);
+        const tools::Long nMinB = MinMax<tools::Long>(rSearchColor.GetBlue() - nTol, 0, 255);
+        const tools::Long nMaxB = MinMax<tools::Long>(rSearchColor.GetBlue() + nTol, 0, 255);
 
         if (pAcc->HasPalette())
         {
@@ -940,12 +940,12 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, sa
                 const Color& rCol = pSearchColors[i];
                 const sal_uInt8 nTol = pTols[i];
 
-                pMinR[i] = MinMax<long>(rCol.GetRed() - nTol, 0, 255);
-                pMaxR[i] = MinMax<long>(rCol.GetRed() + nTol, 0, 255);
-                pMinG[i] = MinMax<long>(rCol.GetGreen() - nTol, 0, 255);
-                pMaxG[i] = MinMax<long>(rCol.GetGreen() + nTol, 0, 255);
-                pMinB[i] = MinMax<long>(rCol.GetBlue() - nTol, 0, 255);
-                pMaxB[i] = MinMax<long>(rCol.GetBlue() + nTol, 0, 255);
+                pMinR[i] = MinMax<tools::Long>(rCol.GetRed() - nTol, 0, 255);
+                pMaxR[i] = MinMax<tools::Long>(rCol.GetRed() + nTol, 0, 255);
+                pMinG[i] = MinMax<tools::Long>(rCol.GetGreen() - nTol, 0, 255);
+                pMaxG[i] = MinMax<tools::Long>(rCol.GetGreen() + nTol, 0, 255);
+                pMinB[i] = MinMax<tools::Long>(rCol.GetBlue() - nTol, 0, 255);
+                pMaxB[i] = MinMax<tools::Long>(rCol.GetBlue() + nTol, 0, 255);
             }
         }
         else

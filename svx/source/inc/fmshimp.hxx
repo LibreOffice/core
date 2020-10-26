@@ -178,7 +178,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : public FmXFormShe
         // since I want to mark an SdrObject when searching for the treatment of the "found",
         // I get all relevant objects before yanking up of the search dialog
         // (the array is thus only valid during the search process)
-    std::vector<long> m_arrRelativeGridColumn;
+    std::vector<tools::Long> m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
     ImplSVEvent *   m_nInvalidationEvent;

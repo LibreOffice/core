@@ -457,7 +457,7 @@ class ParaPortion;
 class EditLine
 {
 public:
-    typedef std::vector<long> CharPosArrayType;
+    typedef std::vector<tools::Long> CharPosArrayType;
 
 private:
     CharPosArrayType aPositions;

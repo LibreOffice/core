@@ -1246,7 +1246,7 @@ static tools::Long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumForma
     const tools::Long nReverseListIndented = GetListFirstLineIndent(rFormat);
     tools::Long nExtraListIndent = nPseudoListBodyIndent + nReverseListIndented;
 
-    return std::max<long>(nExtraListIndent, 0);
+    return std::max<tools::Long>(nExtraListIndent, 0);
 }
 
 // #i103711#

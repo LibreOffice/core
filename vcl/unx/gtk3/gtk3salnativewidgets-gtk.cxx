@@ -239,7 +239,7 @@ namespace
         nMinWidth += margin.left + margin.right + border.left + border.right + padding.left + padding.right;
         nMinHeight += margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
 
-        rSize = Size(std::max<long>(rSize.Width(), nMinWidth), std::max<long>(rSize.Height(), nMinHeight));
+        rSize = Size(std::max<tools::Long>(rSize.Width(), nMinWidth), std::max<tools::Long>(rSize.Height(), nMinHeight));
     }
 }
 
@@ -1935,7 +1935,7 @@ static tools::Rectangle GetWidgetSize(const tools::Rectangle& rControlRegion, Gt
 {
     GtkRequisition aReq;
     gtk_widget_get_preferred_size(widget, nullptr, &aReq);
-    tools::Long nHeight = std::max<long>(rControlRegion.GetHeight(), aReq.height);
+    tools::Long nHeight = std::max<tools::Long>(rControlRegion.GetHeight(), aReq.height);
     return tools::Rectangle(rControlRegion.TopLeft(), Size(rControlRegion.GetWidth(), nHeight));
 }
 
