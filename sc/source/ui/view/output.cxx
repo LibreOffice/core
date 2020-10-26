@@ -277,12 +277,12 @@ void ScOutputData::SetMetaFileMode( bool bNewMode )
 void ScOutputData::SetSyntaxMode( bool bNewMode )
 {
     mbSyntaxMode = bNewMode;
-    if ( bNewMode && !pValueColor )
+    if ( bNewMode && !mxValueColor )
     {
         const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
-        pValueColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor ) );
-        pTextColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor ) );
-        pFormulaColor.reset( new Color( rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor ) );
+        mxValueColor = rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor;
+        mxTextColor = rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor;
+        mxFormulaColor = rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor;
     }
 }
 

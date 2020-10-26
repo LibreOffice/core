@@ -864,13 +864,13 @@ void ScOutputData::SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell
     switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
-            pFont->SetColor(*pValueColor);
+            pFont->SetColor(*mxValueColor);
         break;
         case CELLTYPE_STRING:
-            pFont->SetColor(*pTextColor);
+            pFont->SetColor(*mxTextColor);
         break;
         case CELLTYPE_FORMULA:
-            pFont->SetColor(*pFormulaColor);
+            pFont->SetColor(*mxFormulaColor);
         break;
         default:
         {
@@ -894,13 +894,13 @@ void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue
     switch (rCell.meType)
     {
         case CELLTYPE_VALUE:
-            aColor = *pValueColor;
+            aColor = *mxValueColor;
             break;
         case CELLTYPE_STRING:
-            aColor = *pTextColor;
+            aColor = *mxTextColor;
             break;
         case CELLTYPE_FORMULA:
-            aColor = *pFormulaColor;
+            aColor = *mxFormulaColor;
             break;
         default:
         {
