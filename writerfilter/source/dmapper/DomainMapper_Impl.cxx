@@ -302,7 +302,9 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_aAnnotationPositions(),
         m_aSmartTagHandler(m_xComponentContext, m_xTextDocument),
         m_xInsertTextRange(rMediaDesc.getUnpackedValueOrDefault("TextInsertModeRange", uno::Reference<text::XTextRange>())),
+        m_xAltChunkStartingRange(rMediaDesc.getUnpackedValueOrDefault("AltChunkStartingRange", uno::Reference<text::XTextRange>())),
         m_bIsNewDoc(!rMediaDesc.getUnpackedValueOrDefault("InsertMode", false)),
+        m_bIsAltChunk(rMediaDesc.getUnpackedValueOrDefault("AltChunkMode", false)),
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
         m_bInTableStyleRunProps(false),
         m_nTableDepth(0),
@@ -345,6 +347,11 @@ DomainMapper_Impl::DomainMapper_Impl(
     m_pSdtHelper = new SdtHelper(*this);
 
     m_aRedlines.push(std::vector<RedlineParamsPtr>());
+
+    if (m_bIsAltChunk)
+    {
+        m_bIsFirstSection = false;
+    }
 }
 
 
@@ -2987,10 +2994,18 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
         uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
         // Not handling AltChunk during paste for now.
         uno::Reference<text::XTextRange> xInsertTextRange = GetCurrentXText()->getEnd();
+        uno::Reference<text::XTextRange> xSectionStartingRange;
+        SectionPropertyMap* pSectionContext = GetSectionContext();
+        if (pSectionContext)
+        {
+            xSectionStartingRange = pSectionContext->GetStartingRange();
+        }
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
             { "InputStream", uno::Any(xInputStream) },
             { "InsertMode", uno::Any(true) },
             { "TextInsertModeRange", uno::Any(xInsertTextRange) },
+            { "AltChunkMode", uno::Any(true) },
+            { "AltChunkStartingRange", uno::Any(xSectionStartingRange) },
         }));
 
         // Do the actual import.
