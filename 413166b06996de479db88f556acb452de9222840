@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4964cd03_170aa8e2",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T17:36:55Z",
+      "side": 1,
+      "message": "No need to include flagguard; include comphelper/scopeguard.hxx",
+      "range": {
+        "startLine": 33,
+        "startChar": 10,
+        "endLine": 33,
+        "endChar": 34
+      },
+      "revId": "413166b06996de479db88f556acb452de9222840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83202150_5de71457",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1137,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T17:36:55Z",
+      "side": 1,
+      "message": "... and what if it won\u0027t?\n\nAnd why can\u0027t we use the scope guard also here? just to reset the flag right where we use it?",
+      "range": {
+        "startLine": 1137,
+        "startChar": 18,
+        "endLine": 1137,
+        "endChar": 58
+      },
+      "revId": "413166b06996de479db88f556acb452de9222840",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
