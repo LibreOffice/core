@@ -14,7 +14,7 @@ $(eval $(call gb_UITest_add_modules,autofilter,$(SRCDIR)/sc/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,autofilter, \
-    TDOC="$(SRCDIR)/sc/qa/uitest/autofilter/data" \
+    TDOC="$(SRCDIR)/sc/qa/uitest/data/autofilter" \
 ))
 
 # vim: set noet sw=4 ts=4:
