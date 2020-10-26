@@ -4677,10 +4677,10 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 
                 if(pFormatData->mbNeg)
                 {
-                    if(pFormatData->mpNegativeColor)
+                    if(pFormatData->mxNegativeColor)
                     {
                         OUStringBuffer aBuffer;
-                        ::sax::Converter::convertColor(aBuffer, *pFormatData->mpNegativeColor);
+                        ::sax::Converter::convertColor(aBuffer, *pFormatData->mxNegativeColor);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, aBuffer.makeStringAndClear());
                     }
                     else

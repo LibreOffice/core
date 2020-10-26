@@ -1197,9 +1197,9 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             if (aValue >>= bUseNegativeColor)
             {
                 getCoreObject()->GetDataBarData()->mbNeg = bUseNegativeColor;
-                if (bUseNegativeColor && !getCoreObject()->GetDataBarData()->mpNegativeColor)
+                if (bUseNegativeColor && !getCoreObject()->GetDataBarData()->mxNegativeColor)
                 {
-                    getCoreObject()->GetDataBarData()->mpNegativeColor.reset(new Color(COL_AUTO));
+                    getCoreObject()->GetDataBarData()->mxNegativeColor = COL_AUTO;
                 }
             }
         }
@@ -1237,7 +1237,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             if (!(aValue >>= nNegativeColor) || !getCoreObject()->GetDataBarData()->mbNeg)
                 throw lang::IllegalArgumentException();
 
-            (*getCoreObject()->GetDataBarData()->mpNegativeColor) = nNegativeColor;
+            getCoreObject()->GetDataBarData()->mxNegativeColor = nNegativeColor;
 
         }
         break;
@@ -1332,9 +1332,9 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         break;
         case NegativeColor:
         {
-            if (getCoreObject()->GetDataBarData()->mbNeg && getCoreObject()->GetDataBarData()->mpNegativeColor)
+            if (getCoreObject()->GetDataBarData()->mbNeg && getCoreObject()->GetDataBarData()->mxNegativeColor)
             {
-                aAny <<= *getCoreObject()->GetDataBarData()->mpNegativeColor;
+                aAny <<= *getCoreObject()->GetDataBarData()->mxNegativeColor;
             }
         }
         break;

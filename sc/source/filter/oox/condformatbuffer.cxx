@@ -1302,7 +1302,7 @@ void ExtCfDataBarRule::finalizeImport()
         case NEGATIVEFILLCOLOR:
         {
             ScDataBarFormatData* pDataBar = mpTarget;
-            pDataBar->mpNegativeColor.reset( new ::Color(maModel.mnNegativeColor) );
+            pDataBar->mxNegativeColor = maModel.mnNegativeColor;
             pDataBar->mbNeg = true;
             break;
         }
