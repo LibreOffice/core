@@ -130,7 +130,7 @@ class SwImplProtocol
     std::unique_ptr<SvFileStream> m_pStream; // output stream
     std::unique_ptr<std::set<sal_uInt16>>
         m_pFrameIds; // which FrameIds shall be logged ( NULL == all)
-    std::vector<long> m_aVars; // variables
+    std::vector<tools::Long> m_aVars; // variables
     OStringBuffer m_aLayer; // indentation of output ("  " per start/end)
     SwFrameType m_nTypes; // which types shall be logged
     sal_uInt16 m_nLineCount; // printed lines

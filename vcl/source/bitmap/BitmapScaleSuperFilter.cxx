@@ -53,8 +53,8 @@ struct ScaleContext
     tools::Long mnDestW;
     bool mbHMirr;
     bool mbVMirr;
-    std::vector<long> maMapIX;
-    std::vector<long> maMapIY;
+    std::vector<tools::Long> maMapIX;
+    std::vector<tools::Long> maMapIY;
     std::vector<BilinearWeightType> maMapFX;
     std::vector<BilinearWeightType> maMapFY;
 
@@ -78,7 +78,7 @@ struct ScaleContext
     }
 
     static void generateMap(tools::Long nSourceLength, tools::Long nDestinationLength, bool bMirrored,
-        std::vector<long> & rMapIX, std::vector<BilinearWeightType> & rMapFX)
+        std::vector<tools::Long> & rMapIX, std::vector<BilinearWeightType> & rMapFX)
     {
         const double fRevScale = (nDestinationLength > 1) ? double(nSourceLength - 1) / (nDestinationLength - 1) : 0.0;
 

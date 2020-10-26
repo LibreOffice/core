@@ -279,7 +279,7 @@ int officeloader_impl(bool bAllowConsole)
             LocalFree(argv2);
         }
 
-        if (_ltow(static_cast<long>(GetCurrentProcessId()), szParentProcessId, 10) && bHeadlessMode)
+        if (_ltow(static_cast<tools::Long>(GetCurrentProcessId()), szParentProcessId, 10) && bHeadlessMode)
             SetEnvironmentVariableW(L"ATTACHED_PARENT_PROCESSID", szParentProcessId);
 
         PROCESS_INFORMATION aProcessInfo;

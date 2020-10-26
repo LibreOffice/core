@@ -349,7 +349,7 @@ namespace drawinglayer::primitive2d
             if(nTextLength)
             {
                 aRetval.reserve(nTextLength);
-                std::vector<long> aArray(nTextLength);
+                std::vector<tools::Long> aArray(nTextLength);
                 mrDevice.GetTextArray(rText, aArray.data(), nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }
@@ -374,7 +374,7 @@ namespace drawinglayer::primitive2d
             if(nTextLength)
             {
                 aRetval.reserve(2 * nTextLength);
-                std::vector<long> aArray(2 * nTextLength);
+                std::vector<tools::Long> aArray(2 * nTextLength);
                 mrDevice.GetCaretPositions(rText, aArray.data(), nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }
@@ -457,7 +457,7 @@ namespace drawinglayer::primitive2d
             // TODO: eKerning
 
             // set FontHeight and init to no FontScaling
-            o_rSize.setY(std::max<long>(rFont.GetFontSize().getHeight(), 0));
+            o_rSize.setY(std::max<tools::Long>(rFont.GetFontSize().getHeight(), 0));
             o_rSize.setX(o_rSize.getY());
 
 #ifdef _WIN32

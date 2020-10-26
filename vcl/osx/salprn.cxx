@@ -306,14 +306,14 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                      fYScaling = static_cast<double>(nDPIY)/72.0;
 
         NSSize aPaperSize = [mpPrintInfo paperSize];
-        rPaperSize.setWidth( static_cast<long>( double(aPaperSize.width) * fXScaling ) );
-        rPaperSize.setHeight( static_cast<long>( double(aPaperSize.height) * fYScaling ) );
+        rPaperSize.setWidth( static_cast<tools::Long>( double(aPaperSize.width) * fXScaling ) );
+        rPaperSize.setHeight( static_cast<tools::Long>( double(aPaperSize.height) * fYScaling ) );
 
         NSRect aImageRect = [mpPrintInfo imageablePageBounds];
-        rPageOffset.setX( static_cast<long>( aImageRect.origin.x * fXScaling ) );
-        rPageOffset.setY( static_cast<long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling ) );
-        o_rOutWidth   = static_cast<long>( aImageRect.size.width * fXScaling );
-        o_rOutHeight  = static_cast<long>( aImageRect.size.height * fYScaling );
+        rPageOffset.setX( static_cast<tools::Long>( aImageRect.origin.x * fXScaling ) );
+        rPageOffset.setY( static_cast<tools::Long>( (aPaperSize.height - aImageRect.size.height - aImageRect.origin.y) * fYScaling ) );
+        o_rOutWidth   = static_cast<tools::Long>( aImageRect.size.width * fXScaling );
+        o_rOutHeight  = static_cast<tools::Long>( aImageRect.size.height * fYScaling );
 
         if( mePageOrientation == Orientation::Landscape )
         {

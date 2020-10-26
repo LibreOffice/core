@@ -706,8 +706,8 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     else
         h -= 100;
 
-    return Size(std::max<long>(w, 640 - 15),
-                std::max<long>(h, 480 - 50));
+    return Size(std::max<tools::Long>(w, 640 - 15),
+                std::max<tools::Long>(h, 480 - 50));
 #else
     // Don't bother with ancient magic numbers of unclear relevance on non-desktop apps anyway. It
     // seems that at least currently in the iOS app, this function is called just once per dialog,

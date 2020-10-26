@@ -431,8 +431,8 @@ static LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wPar
 
                     // transform coordinates
                     POINT pt;
-                    pt.x = static_cast<long>(LOWORD( lParam ));
-                    pt.y = static_cast<long>(HIWORD( lParam ));
+                    pt.x = static_cast<tools::Long>(LOWORD( lParam ));
+                    pt.y = static_cast<tools::Long>(HIWORD( lParam ));
                     MapWindowPoints( hWnd, hWndParent, &pt, 1 );
                     lParam = MAKELPARAM( static_cast<WORD>(pt.x), static_cast<WORD>(pt.y) );
 

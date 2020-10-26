@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC TextRanger
     struct RangeCacheItem
     {
         Range range;        //!< Range for which we calculated results.
-        std::deque<long> results;  //!< Calculated results for the range.
+        std::deque<tools::Long> results;  //!< Calculated results for the range.
         RangeCacheItem(const Range& rng) : range(rng) {};
     };
     std::deque<RangeCacheItem> mRangeCache; //!< Cached range calculations.
@@ -63,7 +63,7 @@ public:
                 sal_uInt16 nCacheSize, sal_uInt16 nLeft, sal_uInt16 nRight,
                 bool bSimple, bool bInner, bool bVert = false );
     ~TextRanger();
-    std::deque<long>* GetTextRanges( const Range& rRange );
+    std::deque<tools::Long>* GetTextRanges( const Range& rRange );
     sal_uInt16 GetRight() const { return nRight; }
     sal_uInt16 GetLeft() const { return nLeft; }
     sal_uInt16 GetUpper() const { return nUpper; }

@@ -400,12 +400,12 @@ void AquaSalFrame::initShow()
         if( mpParent ) // center relative to parent
         {
             // center on parent
-            long nNewX = mpParent->maGeometry.nX + (static_cast<long>(mpParent->maGeometry.nWidth) - static_cast<long>(maGeometry.nWidth))/2;
+            long nNewX = mpParent->maGeometry.nX + (static_cast<tools::Long>(mpParent->maGeometry.nWidth) - static_cast<tools::Long>(maGeometry.nWidth))/2;
             if( nNewX < aScreenRect.Left() )
                 nNewX = aScreenRect.Left();
             if( long(nNewX + maGeometry.nWidth) > aScreenRect.Right() )
                 nNewX = aScreenRect.Right() - maGeometry.nWidth-1;
-            long nNewY = mpParent->maGeometry.nY + (static_cast<long>(mpParent->maGeometry.nHeight) - static_cast<long>(maGeometry.nHeight))/2;
+            long nNewY = mpParent->maGeometry.nY + (static_cast<tools::Long>(mpParent->maGeometry.nHeight) - static_cast<tools::Long>(maGeometry.nHeight))/2;
             if( nNewY < aScreenRect.Top() )
                 nNewY = aScreenRect.Top();
             if( nNewY > aScreenRect.Bottom() )
@@ -1459,10 +1459,10 @@ void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
         pScreen = [NSScreen mainScreen];
     NSRect aRect = [pScreen visibleFrame];
     CocoaToVCL( aRect );
-    rRect.SetLeft( static_cast<long>(aRect.origin.x) );
-    rRect.SetTop( static_cast<long>(aRect.origin.y) );
-    rRect.SetRight( static_cast<long>(aRect.origin.x + aRect.size.width - 1) );
-    rRect.SetBottom( static_cast<long>(aRect.origin.y + aRect.size.height - 1) );
+    rRect.SetLeft( static_cast<tools::Long>(aRect.origin.x) );
+    rRect.SetTop( static_cast<tools::Long>(aRect.origin.y) );
+    rRect.SetRight( static_cast<tools::Long>(aRect.origin.x + aRect.size.width - 1) );
+    rRect.SetBottom( static_cast<tools::Long>(aRect.origin.y + aRect.size.height - 1) );
 }
 
 SalFrame::SalPointerState AquaSalFrame::GetPointerState()
@@ -1475,7 +1475,7 @@ SalFrame::SalPointerState AquaSalFrame::GetPointerState()
     // get position
     NSPoint aPt = [mpNSWindow mouseLocationOutsideOfEventStream];
     CocoaToVCL( aPt, false );
-    state.maPos = Point(static_cast<long>(aPt.x), static_cast<long>(aPt.y));
+    state.maPos = Point(static_cast<tools::Long>(aPt.x), static_cast<tools::Long>(aPt.y));
 
     NSEvent* pCur = [NSApp currentEvent];
     bool bMouseEvent = false;

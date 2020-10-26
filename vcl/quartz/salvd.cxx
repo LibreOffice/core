@@ -93,8 +93,8 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX
         if (maLayer.isSet())
         {
             const CGSize aSize = CGLayerGetSize(maLayer.get());
-            nDX = static_cast<long>(aSize.width);
-            nDY = static_cast<long>(aSize.height);
+            nDX = static_cast<tools::Long>(aSize.width);
+            nDY = static_cast<tools::Long>(aSize.height);
         }
         else
         {

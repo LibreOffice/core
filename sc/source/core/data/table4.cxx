@@ -1125,7 +1125,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             if ( nListCount )
             {
                 sal_uLong nSub = nSrcCount - 1; //  nListIndex is from last source entry
-                while ( nIndex < sal::static_int_cast<long>(nSub) )
+                while ( nIndex < sal::static_int_cast<tools::Long>(nSub) )
                     nIndex += nListCount;
                 sal_uLong nPos = ( nListIndex + nIndex - nSub ) % nListCount;
                 aValue = pListData->GetSubStr(sal::static_int_cast<sal_uInt16>(nPos));

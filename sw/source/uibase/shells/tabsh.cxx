@@ -873,8 +873,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     tools::Long maxX = 0;
                     tools::Long maxY = 0;
-                    tools::Long minX = std::numeric_limits<long>::max();
-                    tools::Long minY = std::numeric_limits<long>::max();
+                    tools::Long minX = std::numeric_limits<tools::Long>::max();
+                    tools::Long minY = std::numeric_limits<tools::Long>::max();
                     tools::Long nbBoxes = aBoxes.size();
                     for ( tools::Long i = 0; i < nbBoxes; i++ )
                     {

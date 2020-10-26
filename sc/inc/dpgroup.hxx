@@ -122,7 +122,7 @@ class ScDPGroupTableData final : public ScDPTableData
                             pNumGroups;     // array[nSourceCount]
     ScDocument*             pDoc;
 
-    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
+    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<tools::Long>& rDims);
     virtual tools::Long                GetSourceDim( tools::Long nDim ) override;
 
     bool        IsNumGroupDimension( tools::Long nDimension ) const;
