@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cada6337_640bc816",
+        "filename": "cui/uiconfig/ui/paraindentspacing.ui",
+        "patchSetId": 22
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2020-10-26T23:16:02Z",
+      "side": 1,
+      "message": "Usually it was \"3\" -- but tried tonight with \"1\" and \"2\" (which also fail), and the last failure tried again with \"3\"\n\nAdditional observations:\n\nAlways stops at: \"[build UIT] sc\"  in linux_clang_dbgutil \nwith \"FAILURE: \nKilled by the kill-wrapper, typically due to no stdout/-err activity during a specified timeout interval.\"\n\n(the other systems are always compiled successfully)\n\nIf I put back the \"label\" that was clipped out, then everything works -- which is why I believe the problem is there.\n\nIs it possible that removing the label has disturbed a unit test -- so that the timeout is not because of the gtk3+ but because of the change in the dialog box?",
+      "range": {
+        "startLine": 510,
+        "startChar": 35,
+        "endLine": 510,
+        "endChar": 48
+      },
+      "revId": "e35204537fa87dcda3ff19c82d3309d36a717730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
