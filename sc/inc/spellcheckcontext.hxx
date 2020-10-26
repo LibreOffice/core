@@ -52,6 +52,7 @@ public:
 
     void reset();
     void resetForContentChange();
+    void setTabNo(SCTAB nTab);
 
 private:
     void ensureResults(SCCOL nCol, SCROW nRow);
