@@ -135,16 +135,28 @@ CPPUNIT_TEST_FIXTURE(Test, testAltChunk)
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xPara;
+    uno::Reference<beans::XPropertySet> xParaProps;
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Outer para 1"), xPara->getString());
+    xParaProps.set(xPara, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("outer, before sect break"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"),
+                         xParaProps->getPropertyValue("PageStyleName").get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Outer para 2"), xPara->getString());
+    xParaProps.set(xPara, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("outer, after sect break"), xPara->getString());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Converted1
+    // - Actual  : Standard
+    // i.e. the page break between the first and the second paragraph was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString("Converted1"),
+                         xParaProps->getPropertyValue("PageStyleName").get<OUString>());
 
     // Without the accompanying fix in place, this test would have failed with a
     // container.NoSuchElementException, as the document had only 2 paragraphs, all the "inner"
     // content was lost.
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Inner para 1"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("inner doc, first para"), xPara->getString());
 }
 }
 

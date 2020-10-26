@@ -1828,7 +1828,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     evenOddStyle->setPropertyValue( getPropertyName( PROP_PAGE_STYLE_LAYOUT ), uno::makeAny( style::PageStyleLayout_RIGHT ) );
             }
 
-            if ( xRangeProperties.is() && rDM_Impl.IsNewDoc() )
+            if (rDM_Impl.m_xAltChunkStartingRange.is())
+            {
+                xRangeProperties.set(rDM_Impl.m_xAltChunkStartingRange, uno::UNO_QUERY);
+            }
+            if (xRangeProperties.is() && (rDM_Impl.IsNewDoc() || rDM_Impl.IsAltChunk()))
             {
                 // Avoid setting page style in case of autotext: so inserting the autotext at the
                 // end of the document does not introduce an unwanted page break.
