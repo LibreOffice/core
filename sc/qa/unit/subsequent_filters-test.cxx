@@ -2380,8 +2380,8 @@ void ScFiltersTest::testCondFormatThemeColorXLSX()
     const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
 
     CPPUNIT_ASSERT_EQUAL(Color(157, 195, 230), pDataBarFormatData->maPositiveColor);
-    CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, *pDataBarFormatData->mpNegativeColor);
+    CPPUNIT_ASSERT(pDataBarFormatData->mxNegativeColor);
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, *pDataBarFormatData->mxNegativeColor);
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), rDoc.GetCondFormList(1)->size());
     pFormat = rDoc.GetCondFormat(0, 0, 1);
@@ -2419,8 +2419,8 @@ void ScFiltersTest::testCondFormatThemeColor2XLSX()
     const ScDataBarFormatData* pDataBarFormatData = pDataBar->GetDataBarData();
 
     CPPUNIT_ASSERT_EQUAL(Color(99, 142, 198), pDataBarFormatData->maPositiveColor);
-    CPPUNIT_ASSERT(pDataBarFormatData->mpNegativeColor);
-    CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mpNegativeColor);
+    CPPUNIT_ASSERT(pDataBarFormatData->mxNegativeColor);
+    CPPUNIT_ASSERT_EQUAL(Color(217, 217, 217), *pDataBarFormatData->mxNegativeColor);
     CPPUNIT_ASSERT_EQUAL(Color(197, 90, 17), pDataBarFormatData->maAxisColor);
 
     xDocSh->DoClose();

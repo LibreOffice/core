@@ -935,9 +935,9 @@ std::unique_ptr<ScDataBarInfo> ScDataBarFormat::GetDataBarInfo(const ScAddress& 
     // set color
     if(mpFormatData->mbNeg && nValue < 0)
     {
-        if(mpFormatData->mpNegativeColor)
+        if(mpFormatData->mxNegativeColor)
         {
-            pInfo->maColor = *mpFormatData->mpNegativeColor;
+            pInfo->maColor = *mpFormatData->mxNegativeColor;
         }
         else
         {

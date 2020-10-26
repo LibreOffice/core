@@ -471,7 +471,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
         // we might check here for 0xff0000 and don't write it
         Color nColor;
         sax::Converter::convertColor( nColor, sNegativeColor );
-        mpFormatData->mpNegativeColor.reset(new Color(nColor));
+        mpFormatData->mxNegativeColor = nColor;
     }
     else
         mpFormatData->mbNeg = false;

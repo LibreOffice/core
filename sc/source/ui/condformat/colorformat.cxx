@@ -94,8 +94,8 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBa
 
     mxLbPos->SelectEntry(rData.maPositiveColor);
     mxLbFillType->set_active( rData.mbGradient ? 1 : 0 );
-    if (rData.mpNegativeColor)
-        mxLbNeg->SelectEntry(*rData.mpNegativeColor);
+    if (rData.mxNegativeColor)
+        mxLbNeg->SelectEntry(*rData.mxNegativeColor);
 
     switch (rData.meAxisPosition)
     {
@@ -175,7 +175,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
 {
     ScDataBarFormatData* pData = new ScDataBarFormatData();
     pData->maPositiveColor = mxLbPos->GetSelectEntryColor();
-    pData->mpNegativeColor.reset(new Color(mxLbNeg->GetSelectEntryColor()));
+    pData->mxNegativeColor = mxLbNeg->GetSelectEntryColor();
     pData->mbGradient = ( mxLbFillType->get_active() == 1 );
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
