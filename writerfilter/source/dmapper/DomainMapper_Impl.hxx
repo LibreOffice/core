@@ -585,8 +585,10 @@ private:
 
 public:
     css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
+    css::uno::Reference<css::text::XTextRange> m_xAltChunkStartingRange;
 private:
     bool m_bIsNewDoc;
+    bool m_bIsAltChunk = false;
     bool m_bIsReadGlossaries;
 public:
     DomainMapper_Impl(
@@ -999,6 +1001,8 @@ public:
 
     /// If we're importing into a new document, or just pasting to an existing one.
     bool IsNewDoc() const { return m_bIsNewDoc;}
+
+    bool IsAltChunk() const { return m_bIsAltChunk;}
 
     /// If we're importing autotext.
     bool IsReadGlossaries() const { return m_bIsReadGlossaries;}

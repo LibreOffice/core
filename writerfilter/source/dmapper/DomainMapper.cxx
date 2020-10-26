@@ -1065,7 +1065,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->m_oBackgroundColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_PageNumber_start:
-            if (pSectionContext != nullptr)
+            if (pSectionContext != nullptr && !m_pImpl->IsAltChunk())
                 pSectionContext->SetPageNumber(nIntValue);
         break;
         case NS_ooxml::LN_CT_PageNumber_fmt:
@@ -2138,9 +2138,15 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
-            pSectionContext->Insert( PROP_HEIGHT, uno::makeAny( CT_PageSz.h ) );
+            if (!m_pImpl->IsAltChunk())
+            {
+                pSectionContext->Insert(PROP_HEIGHT, uno::makeAny(CT_PageSz.h));
+            }
             pSectionContext->Insert( PROP_IS_LANDSCAPE, uno::makeAny( CT_PageSz.orient ));
-            pSectionContext->Insert( PROP_WIDTH, uno::makeAny( CT_PageSz.w ) );
+            if (!m_pImpl->IsAltChunk())
+            {
+                pSectionContext->Insert(PROP_WIDTH, uno::makeAny(CT_PageSz.w));
+            }
         }
         break;
 
