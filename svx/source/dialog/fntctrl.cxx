@@ -32,6 +32,7 @@
 
 #include <vector>
 #include <deque>
+#include <optional>
 #include <svtools/colorcfg.hxx>
 #include <svtools/sampletext.hxx>
 
@@ -150,10 +151,10 @@ class FontPrevWin_Impl
     SvxFont maCTLFont;
     OUString maText;
     OUString maScriptText;
-    std::unique_ptr<Color> mpColor;
-    std::unique_ptr<Color> mpBackColor;
-    std::unique_ptr<Color> mpTextLineColor;
-    std::unique_ptr<Color> mpOverlineColor;
+    std::optional<Color> mxColor;
+    std::optional<Color> mxBackColor;
+    std::optional<Color> mxTextLineColor;
+    std::optional<Color> mxOverlineColor;
     tools::Long mnAscent;
     sal_Unicode mcStartBracket;
     sal_Unicode mcEndBracket;
@@ -585,31 +586,31 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& r
 
 void SvxFontPrevWindow::SetColor(const Color &rColor)
 {
-    pImpl->mpColor.reset(new Color(rColor));
+    pImpl->mxColor = rColor;
     Invalidate();
 }
 
 void SvxFontPrevWindow::ResetColor()
 {
-    pImpl->mpColor.reset();
+    pImpl->mxColor.reset();
     Invalidate();
 }
 
 void SvxFontPrevWindow::SetBackColor(const Color &rColor)
 {
-    pImpl->mpBackColor.reset(new Color(rColor));
+    pImpl->mxBackColor = rColor;
     Invalidate();
 }
 
 void SvxFontPrevWindow::SetTextLineColor(const Color &rColor)
 {
-    pImpl->mpTextLineColor.reset(new Color(rColor));
+    pImpl->mxTextLineColor = rColor;
     Invalidate();
 }
 
 void SvxFontPrevWindow::SetOverlineColor(const Color &rColor)
 {
-    pImpl->mpOverlineColor.reset(new Color(rColor));
+    pImpl->mxOverlineColor = rColor;
     Invalidate();
 }
 
@@ -708,37 +709,37 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
         if (nY + pImpl->mnAscent > aLogSize.Height())
             nY = aLogSize.Height() - pImpl->mnAscent;
 
-        if (pImpl->mpBackColor)
+        if (pImpl->mxBackColor)
         {
             tools::Rectangle aRect(Point(0, 0), aLogSize);
             Color aLineCol = rRenderContext.GetLineColor();
             Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor(*pImpl->mpBackColor);
+            rRenderContext.SetFillColor(*pImpl->mxBackColor);
             rRenderContext.DrawRect(aRect);
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);
         }
-        if (pImpl->mpColor)
+        if (pImpl->mxColor)
         {
             tools::Rectangle aRect(Point(nX, nY), aTxtSize);
             Color aLineCol = rRenderContext.GetLineColor();
             Color aFillCol = rRenderContext.GetFillColor();
             rRenderContext.SetLineColor();
-            rRenderContext.SetFillColor(*pImpl->mpColor);
+            rRenderContext.SetFillColor(*pImpl->mxColor);
             rRenderContext.DrawRect(aRect);
             rRenderContext.SetLineColor(aLineCol);
             rRenderContext.SetFillColor(aFillCol);
         }
 
-        if (pImpl->mpTextLineColor)
+        if (pImpl->mxTextLineColor)
         {
-            rRenderContext.SetTextLineColor(*pImpl->mpTextLineColor);
+            rRenderContext.SetTextLineColor(*pImpl->mxTextLineColor);
         }
 
-        if (pImpl->mpOverlineColor)
+        if (pImpl->mxOverlineColor)
         {
-            rRenderContext.SetOverlineColor(*pImpl->mpOverlineColor);
+            rRenderContext.SetOverlineColor(*pImpl->mxOverlineColor);
         }
 
         tools::Long nStdAscent = pImpl->mnAscent;
