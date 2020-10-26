@@ -58,6 +58,7 @@
 #include <rangeutl.hxx>
 #include <client.hxx>
 #include <tabprotection.hxx>
+#include <spellcheckcontext.hxx>
 #include <markdata.hxx>
 #include <formula/FormulaCompiler.hxx>
 #include <comphelper/lok.hxx>
@@ -1869,6 +1870,8 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     bool bFocus = pGridWin[eOldActive] && pGridWin[eOldActive]->HasFocus();
 
     aViewData.SetTabNo( nTab );
+    if (mpSpellCheckCxt)
+        mpSpellCheckCxt->setTabNo( nTab );
     // UpdateShow before SetCursor, so that UpdateAutoFillMark finds the correct
     // window  (is called from SetCursor)
     UpdateShow();

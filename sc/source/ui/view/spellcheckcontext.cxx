@@ -209,6 +209,14 @@ void SpellCheckContext::dispose()
     pDoc = nullptr;
 }
 
+void SpellCheckContext::setTabNo(SCTAB nTab)
+{
+    if (mnTab == nTab)
+        return;
+    mnTab = nTab;
+    reset();
+}
+
 bool SpellCheckContext::isMisspelled(SCCOL nCol, SCROW nRow) const
 {
     const_cast<SpellCheckContext*>(this)->ensureResults(nCol, nRow);
