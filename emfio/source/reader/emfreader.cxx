@@ -507,7 +507,8 @@ namespace emfio
         // ours.
         aGraphic.getVectorGraphicData()->setSizeHint(maSizeHint);
 
-        maBmpSaveList.emplace_back(new BSaveStruct(aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY));
+        maBmpSaveList.emplace_back(
+            new BSaveStruct(aGraphic.GetBitmapEx(), aOutputRect, SRCCOPY, /*bForceAlpha=*/true));
         const std::shared_ptr<VectorGraphicData> pVectorGraphicData
             = aGraphic.getVectorGraphicData();
         if (!pVectorGraphicData)

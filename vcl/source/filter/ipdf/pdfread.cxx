@@ -130,7 +130,7 @@ VectorGraphicDataArray createVectorGraphicDataArray(SvStream& rStream)
 
 namespace vcl
 {
-size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
+size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
 #if HAVE_FEATURE_PDFIUM
@@ -171,15 +171,24 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
         if (!pPdfBitmap)
             break;
 
-        const FPDF_DWORD nColor = pPdfPage->hasTransparency() ? 0x00000000 : 0xFFFFFFFF;
+        bool bTransparent = pPdfPage->hasTransparency();
+        if (pSizeHint)
+        {
+            // This is the PDF-in-EMF case: force transparency, even in case pdfium would tell us
+            // the PDF is not transparent.
+            bTransparent = true;
+        }
+        const FPDF_DWORD nColor = bTransparent ? 0x00000000 : 0xFFFFFFFF;
         FPDFBitmap_FillRect(pPdfBitmap->getPointer(), 0, 0, nPageWidth, nPageHeight, nColor);
         FPDF_RenderPageBitmap(pPdfBitmap->getPointer(), pPdfPage->getPointer(), /*start_x=*/0,
                               /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
 
         // Save the buffer as a bitmap.
         Bitmap aBitmap(Size(nPageWidth, nPageHeight), 24);
+        AlphaMask aMask(Size(nPageWidth, nPageHeight));
         {
             BitmapScopedWriteAccess pWriteAccess(aBitmap);
+            AlphaScopedWriteAccess pMaskAccess(aMask);
             const auto pPdfBuffer
                 = static_cast<ConstScanline>(FPDFBitmap_GetBuffer(pPdfBitmap->getPointer()));
             const int nStride = FPDFBitmap_GetStride(pPdfBitmap->getPointer());
@@ -188,10 +197,24 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBi
                 ConstScanline pPdfLine = pPdfBuffer + (nStride * nRow);
                 // pdfium byte order is BGRA.
                 pWriteAccess->CopyScanline(nRow, pPdfLine, ScanlineFormat::N32BitTcBgra, nStride);
+                pPdfLine = pPdfBuffer + (nStride * nRow) + 3;
+                Scanline pMaskScanLine = pMaskAccess->GetScanline(nRow);
+                for (size_t x = 0; x < nPageWidth; ++x)
+                {
+                    pMaskAccess->SetPixelOnData(pMaskScanLine, x, BitmapColor(255 - *pPdfLine));
+                    pPdfLine += 4;
+                }
             }
         }
 
-        rBitmaps.emplace_back(std::move(aBitmap));
+        if (bTransparent)
+        {
+            rBitmaps.emplace_back(aBitmap, aMask);
+        }
+        else
+        {
+            rBitmaps.emplace_back(std::move(aBitmap));
+        }
     }
 
     return rBitmaps.size();

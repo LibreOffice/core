@@ -1837,7 +1837,14 @@ namespace emfio
                             {
                                 if ( nRasterOperation == 0x33 )
                                     aBitmap.Invert();
-                                ImplDrawBitmap( aPos, aSize, BitmapEx(aBitmap) );
+                                if (pSave->m_bForceAlpha)
+                                {
+                                    ImplDrawBitmap(aPos, aSize, pSave->aBmpEx);
+                                }
+                                else
+                                {
+                                    ImplDrawBitmap(aPos, aSize, BitmapEx(aBitmap));
+                                }
                             }
                             break;
 

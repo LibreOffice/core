@@ -146,7 +146,7 @@ void VectorGraphicData::ensurePdfReplacement()
         return; // nothing to do
 
     // use PDFium directly
-    std::vector<Bitmap> aBitmaps;
+    std::vector<BitmapEx> aBitmaps;
     sal_Int32 nUsePageIndex = 0;
     if (mnPageIndex >= 0)
         nUsePageIndex = mnPageIndex;
