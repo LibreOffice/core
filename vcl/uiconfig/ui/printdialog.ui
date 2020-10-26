@@ -91,26 +91,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="moreoptionsbtn">
-                <property name="label" translatable="yes" context="printdialog|moreoptions">More Options...</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="margin_right">10</property>
-                <property name="use_underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="moreoptionsbtn-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|moreoptionsbtn">In the More Options window you can set some additional options for the current print job.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="printdialog|print">_Print</property>
                 <property name="visible">True</property>
@@ -755,7 +735,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkLabel" id="cbPrintOrder">
+                                                <object class="GtkLabel" id="cbPrintOrder">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
@@ -786,7 +766,7 @@
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">1</property>
-                                                    <property name="top_attach">4</property>
+                                                    <property name="top_attach">5</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -832,6 +812,31 @@
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">3</property>
                                                   </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCheckButton" id="singlejobs">
+                                                    <property name="label" translatable="yes" context="printdialog|singlejobs">Create separate print jobs for collated output</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="draw_indicator">True</property>
+                                                    <child internal-child="accessible">
+                                                      <object class="AtkObject" id="singlejobs-atkobject">
+                                                        <property name="AtkObject::accessible-description" translatable="yes" context="printdialog|extended_tip|collate">Check to not rely on the printer to create collated copies but create a print job for each copy instead.</property>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">4</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
                                                 </child>
                                                 <child>
                                                   <placeholder/>

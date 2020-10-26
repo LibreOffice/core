@@ -63,36 +63,6 @@ namespace {
    }
 }
 
-MoreOptionsDialog::MoreOptionsDialog(PrintDialog* i_pParent)
-    : GenericDialogController(i_pParent->getDialog(), "vcl/ui/moreoptionsdialog.ui", "MoreOptionsDialog")
-    , mpParent( i_pParent )
-    , mxOKButton(m_xBuilder->weld_button("ok"))
-    , mxCancelButton(m_xBuilder->weld_button("cancel"))
-    , mxSingleJobsBox(m_xBuilder->weld_check_button("singlejobs"))
-{
-    mxSingleJobsBox->set_active( mpParent->isSingleJobs() );
-
-    mxOKButton->connect_clicked( LINK( this, MoreOptionsDialog, ClickHdl ) );
-    mxCancelButton->connect_clicked( LINK( this, MoreOptionsDialog, ClickHdl ) );
-}
-
-MoreOptionsDialog::~MoreOptionsDialog()
-{
-}
-
-IMPL_LINK (MoreOptionsDialog, ClickHdl, weld::Button&, rButton, void)
-{
-    if (&rButton == mxOKButton.get())
-    {
-        mpParent->mbSingleJobs = mxSingleJobsBox->get_active();
-        m_xDialog->response(RET_OK);
-    }
-    else if (&rButton == mxCancelButton.get())
-    {
-        m_xDialog->response(RET_CANCEL);
-    }
-}
-
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow(PrintDialog* pDialog)
     : mpDialog(pDialog)
     , maMtf()
@@ -531,6 +501,7 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     , mxPageRangeEdit(m_xBuilder->weld_entry("pagerange"))
     , mxPageRangesRadioButton(m_xBuilder->weld_radio_button("rbRangePages"))
     , mxPaperSidesBox(m_xBuilder->weld_combo_box("sidesbox"))
+    , mxSingleJobsBox(m_xBuilder->weld_check_button("singlejobs"))
     , mxReverseOrderBox(m_xBuilder->weld_check_button("reverseorder"))
     , mxOKButton(m_xBuilder->weld_button("ok"))
     , mxCancelButton(m_xBuilder->weld_button("cancel"))
@@ -674,7 +645,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, const std::shared_ptr<PrinterC
     mxCancelButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxHelpButton->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxSetupButton->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
-    mxMoreOptionsBtn->connect_clicked( LINK( this, PrintDialog, ClickHdl ) );
     mxBackwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxForwardBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
     mxFirstBtn->connect_clicked(LINK(this, PrintDialog, ClickHdl));
@@ -1868,6 +1838,12 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
                                  makeAny( isCollate() ) );
         checkControlDependencies();
     }
+    else if( &rButton == mxSingleJobsBox.get() )
+    {
+        maPController->setValue( "SingleJob",
+                                 makeAny( isSingleJobs() ) );
+        checkControlDependencies();
+    }
     else if( &rButton == mxReverseOrderBox.get() )
     {
         bool bChecked = mxReverseOrderBox->get_active();
@@ -1879,11 +1855,6 @@ IMPL_LINK(PrintDialog, ClickHdl, weld::Button&, rButton, void)
     else if( &rButton == mxBorderCB.get() )
     {
         updateNup();
-    }
-    else if ( &rButton == mxMoreOptionsBtn.get() )
-    {
-        mxMoreOptionsDlg.reset(new MoreOptionsDialog(this));
-        mxMoreOptionsDlg->run();
     }
     else
     {
