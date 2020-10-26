@@ -60,8 +60,6 @@ TipOfTheDayDialog::TipOfTheDayDialog(weld::Window* pParent)
     if (m_nDay > officecfg::Office::Common::Misc::LastTipOfTheDayShown::get())
         m_nCurrentTip++;
 
-    m_aPreview.init(&m_aGraphic, LINK(this, TipOfTheDayDialog, ImplModifyHdl));
-
     UpdateTip();
 }
 
@@ -176,12 +174,9 @@ void TipOfTheDayDialog::UpdateTip()
     // use default image if none is available with the number
     if (aImageName.isEmpty() || !file_exists(aURL + aImageName))
         aImageName = "tipoftheday.png";
-    GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), m_aGraphic);
-}
-
-IMPL_LINK_NOARG(TipOfTheDayDialog, ImplModifyHdl, LinkParamNone*, void)
-{
-    m_aPreview.SetPreview(m_aGraphic);
+    Graphic aGraphic;
+    GraphicFilter::LoadGraphic(aURL + aImageName, OUString(), aGraphic);
+    m_aPreview.SetPreview(aGraphic);
 }
 
 IMPL_LINK(TipOfTheDayDialog, OnLinkClick, weld::LinkButton&, rButton, bool)
