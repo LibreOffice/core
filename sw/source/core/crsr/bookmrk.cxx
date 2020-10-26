@@ -708,7 +708,7 @@ namespace sw::mark
     void DropDownFieldmark::SendLOKMessage(const OString& sAction)
     {
         const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isLOKMobilePhone())
+        if (!pViewShell || pViewShell->isLOKMobilePhone())
         {
               return;
         }
@@ -766,7 +766,7 @@ namespace sw::mark
         }
         if (sPayload.toString() != m_sLastSentLOKMsg) {
             m_sLastSentLOKMsg = sPayload.toString();
-            pEditWin->GetView().GetWrtShell().GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_FORM_FIELD_BUTTON, m_sLastSentLOKMsg.getStr());
         }
     }
 
