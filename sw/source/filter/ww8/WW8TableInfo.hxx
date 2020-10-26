@@ -255,7 +255,7 @@ public:
 
 class WW8TableCellGrid
 {
-    typedef std::set<long> RowTops_t;
+    typedef std::set<tools::Long> RowTops_t;
     typedef std::map<long, WW8TableCellGridRow::Pointer_t> Rows_t;
 
     RowTops_t m_aRowTops;

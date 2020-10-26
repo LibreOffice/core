@@ -85,10 +85,10 @@ private:
     rtl::Reference<ScDPDimensions> pDimensions; // api objects
                                                 // settings:
 
-    std::vector<long> maColDims;
-    std::vector<long> maRowDims;
-    std::vector<long> maDataDims;
-    std::vector<long> maPageDims;
+    std::vector<tools::Long> maColDims;
+    std::vector<tools::Long> maRowDims;
+    std::vector<tools::Long> maDataDims;
+    std::vector<tools::Long> maPageDims;
     ScDPResultTree maResFilterSet;
 
     bool                    bColumnGrand;

@@ -363,7 +363,7 @@ static tools::Long ImplLogicToPixel( tools::Long n, tools::Long nDPI, tools::Lon
 #else
     (void) nThres;
     assert(nMapNum >= 0);
-    assert(nMapNum == 0 || std::abs(n) < std::numeric_limits<long>::max() / nMapNum / nDPI); //detect overflows
+    assert(nMapNum == 0 || std::abs(n) < std::numeric_limits<tools::Long>::max() / nMapNum / nDPI); //detect overflows
 #endif
     {
         sal_Int64 n64 = n;

@@ -818,7 +818,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         tools::Long nTmpWidth = 0;
         tools::Long nXWidth = nMaxLineWidth;
 
-        std::deque<long>* pTextRanges = nullptr;
+        std::deque<tools::Long>* pTextRanges = nullptr;
         tools::Long nTextExtraYOffset = 0;
         tools::Long nTextXOffset = 0;
         tools::Long nTextLineHeight = 0;

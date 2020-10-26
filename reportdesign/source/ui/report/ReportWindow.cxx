@@ -178,7 +178,7 @@ void OReportWindow::Resize()
     aPageSize.setHeight( m_aHRuler->GetSizePixel().Height() );
 
     const tools::Long nTermp(m_aViewsWindow->getTotalHeight() + aPageSize.Height());
-    tools::Long nSectionsHeight = ::std::max<long>(nTermp,aTotalOutputSize.Height());
+    tools::Long nSectionsHeight = ::std::max<tools::Long>(nTermp,aTotalOutputSize.Height());
 
     m_aHRuler->SetPosSizePixel(aStartPoint,aPageSize);
     m_aHRuler->SetNullOffset(nLeftMargin);

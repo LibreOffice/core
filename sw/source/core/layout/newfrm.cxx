@@ -106,7 +106,7 @@ static SwRectFnCollection aHorizontal = {
     /*.fnXDiff =*/&FirstMinusSecond,
     /*.fnYDiff =*/&FirstMinusSecond,
     /*.fnXInc =*/&SwIncrement,
-    /*.fnYInc =*/&o3tl::saturating_add<long>,
+    /*.fnYInc =*/&o3tl::saturating_add<tools::Long>,
 
     /*.fnSetLeftAndWidth =*/&SwRect::SetLeftAndWidth,
     /*.fnSetTopAndHeight =*/&SwRect::SetTopAndHeight

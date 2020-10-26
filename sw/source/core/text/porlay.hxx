@@ -79,7 +79,7 @@ class SwLineLayout : public SwTextPortion
 {
 private:
     SwLineLayout *m_pNext;                // The next Line
-    std::unique_ptr<std::vector<long>> m_pLLSpaceAdd;     // Used for justified alignment
+    std::unique_ptr<std::vector<tools::Long>> m_pLLSpaceAdd;     // Used for justified alignment
     std::unique_ptr<std::deque<sal_uInt16>> m_pKanaComp;  // Used for Kana compression
     sal_uInt16 m_nRealHeight;             // The height resulting from line spacing and register
     sal_uInt16 m_nTextHeight;             // The max height of all non-FlyCnt portions in this Line
@@ -187,7 +187,7 @@ public:
     }
     tools::Long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*m_pLLSpaceAdd)[ nIdx ]; }
     void RemoveFirstLLSpaceAdd() { m_pLLSpaceAdd->erase( m_pLLSpaceAdd->begin() ); }
-    std::vector<long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd.get(); }
+    std::vector<tools::Long>* GetpLLSpaceAdd() const { return m_pLLSpaceAdd.get(); }
 
     // Stuff for Kana compression
     void SetKanaComp( std::unique_ptr<std::deque<sal_uInt16>> pNew ){ m_pKanaComp = std::move(pNew); }
