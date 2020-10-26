@@ -58,7 +58,7 @@ private:
 
 protected:
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
-    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) override;
+    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     SwNoTextFrame( SwNoTextNode * const, SwFrame* );

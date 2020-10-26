@@ -720,9 +720,12 @@ void SwNoTextFrame::ClearCache()
     }
 }
 
-void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    sal_uInt16 nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
+    auto pLegacy = dynamic_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy)
+        return;
+    sal_uInt16 nWhich = pLegacy->GetWhich();
 
     // #i73788#
     // no <SwContentFrame::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
@@ -731,7 +734,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
          RES_GRF_REREAD_AND_INCACHE != nWhich &&
          RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
     {
-        SwContentFrame::Modify( pOld, pNew );
+        SwContentFrame::SwClientNotify(rModify, rHint);
     }
 
     bool bComplete = true;
@@ -762,7 +765,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             sal_uInt16 n;
             for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
-                if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->
+                if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->
                                 GetItemState( n, false ))
                 {
                     ClearCache();
@@ -841,7 +844,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
 
     default:
-        if ( !pNew || !isGRFATR(nWhich) )
+        if ( !pLegacy->m_pNew || !isGRFATR(nWhich) )
             return;
     }
 
