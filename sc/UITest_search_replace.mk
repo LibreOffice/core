@@ -14,6 +14,6 @@ $(eval $(call gb_UITest_add_modules,search_replace,$(SRCDIR)/sc/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,search_replace, \
-    TDOC="$(SRCDIR)/sc/qa/uitest/search_replace/data" \
+    TDOC="$(SRCDIR)/sc/qa/uitest/data/search_replace" \
 ))
 # vim: set noet sw=4 ts=4:

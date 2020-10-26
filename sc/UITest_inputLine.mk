@@ -14,7 +14,7 @@ $(eval $(call gb_UITest_add_modules,inputLine,$(SRCDIR)/sc/qa/uitest,\
 ))
 
 $(eval $(call gb_UITest_set_defs,inputLine, \
-    TDOC="$(SRCDIR)/sc/qa/uitest/calc_tests/data" \
+    TDOC="$(SRCDIR)/sc/qa/uitest/data" \
 ))
 
 # vim: set noet sw=4 ts=4:
