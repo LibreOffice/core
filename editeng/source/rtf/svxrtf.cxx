@@ -72,13 +72,11 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn )
     , bIsInReadStyleTab( false)
 {
     pDfltFont.reset( new vcl::Font );
-    pDfltColor.reset( new Color );
+    mxDefaultColor = Color();
 }
 
 SvxRTFParser::~SvxRTFParser()
 {
-    if( !aColorTbl.empty() )
-        ClearColorTbl();
     if( !aAttrStack.empty() )
         ClearAttrStack();
 }
@@ -95,7 +93,7 @@ SvParserState SvxRTFParser::CallParser()
     if( !pInsPos )
         return SvParserState::Error;
 
-    if( !aColorTbl.empty() )
+    if( !maColorTable.empty() )
         ClearColorTbl();
     m_FontTable.clear();
     m_StyleTable.clear();
@@ -422,11 +420,11 @@ void SvxRTFParser::ReadColorTable()
             {
                 // one color is finished, fill in the table
                 // try to map the values to SV internal names
-                Color* pColor = new Color( nRed, nGreen, nBlue );
-                if( aColorTbl.empty() &&
+                Color aColor( nRed, nGreen, nBlue );
+                if( maColorTable.empty() &&
                     sal_uInt8(-1) == nRed && sal_uInt8(-1) == nGreen && sal_uInt8(-1) == nBlue )
-                    *pColor = COL_AUTO;
-                aColorTbl.push_back( pColor );
+                    aColor = COL_AUTO;
+                maColorTable.push_back( aColor );
                 nRed = 0;
                 nGreen = 0;
                 nBlue = 0;
@@ -579,11 +577,7 @@ void SvxRTFParser::ReadFontTable()
 
 void SvxRTFParser::ClearColorTbl()
 {
-    while ( !aColorTbl.empty() )
-    {
-        delete aColorTbl.back();
-        aColorTbl.pop_back();
-    }
+    maColorTable.clear();
 }
 
 void SvxRTFParser::ClearAttrStack()
