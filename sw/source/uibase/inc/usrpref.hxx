@@ -30,8 +30,8 @@ class SwMasterUsrPref;
 class SwContentViewConfig : public utl::ConfigItem
 {
 private:
-    SwMasterUsrPref&        rParent;
-    bool                    bWeb;
+    SwMasterUsrPref&        m_rParent;
+    bool                    m_bWeb;
 
     css::uno::Sequence<OUString> GetPropertyNames() const;
 
@@ -51,8 +51,8 @@ public:
 class SwLayoutViewConfig : public utl::ConfigItem
 {
 private:
-    SwMasterUsrPref&    rParent;
-    bool                bWeb;
+    SwMasterUsrPref&    m_rParent;
+    bool                m_bWeb;
 
     css::uno::Sequence<OUString> GetPropertyNames() const;
 
@@ -70,7 +70,7 @@ public:
 class SwGridConfig : public utl::ConfigItem
 {
 private:
-    SwMasterUsrPref&    rParent;
+    SwMasterUsrPref&    m_rParent;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -88,7 +88,7 @@ public:
 class SwCursorConfig : public utl::ConfigItem
 {
 private:
-    SwMasterUsrPref&    rParent;
+    SwMasterUsrPref&    m_rParent;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
