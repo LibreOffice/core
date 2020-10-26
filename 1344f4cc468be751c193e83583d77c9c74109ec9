@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08d0aeba_3d25171d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1297,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-26T11:39:10Z",
+      "side": 1,
+      "message": "3000",
+      "range": {
+        "startLine": 1297,
+        "startChar": 16,
+        "endLine": 1297,
+        "endChar": 21
+      },
+      "revId": "1344f4cc468be751c193e83583d77c9c74109ec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eda6579f_ba6d1dd3",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2020-10-26T11:39:10Z",
+      "side": 1,
+      "message": "3956",
+      "range": {
+        "startLine": 1298,
+        "startChar": 48,
+        "endLine": 1298,
+        "endChar": 53
+      },
+      "revId": "1344f4cc468be751c193e83583d77c9c74109ec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
