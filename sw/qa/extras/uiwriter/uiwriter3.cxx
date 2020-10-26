@@ -1043,6 +1043,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132944)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf104649)
+{
+    load(DATA_DIRECTORY, "tdf104649.docx");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134931)
 {
     load(DATA_DIRECTORY, "tdf134931.odt");
