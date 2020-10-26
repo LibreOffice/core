@@ -325,6 +325,15 @@ namespace o3tl
     template<> struct typed_flags<HtmlFrameFormatFlags> : is_typed_flags<HtmlFrameFormatFlags, 0x0f> {};
 }
 
+class SwHTMLFrameFormatListener : public SvtListener
+{
+    SwFrameFormat* m_pFrameFormat;
+public:
+    SwHTMLFrameFormatListener(SwFrameFormat* pFrameFormat);
+    SwFrameFormat* GetFrameFormat() { return m_pFrameFormat; }
+    virtual void Notify(const SfxHint&) override;
+};
+
 class SwHTMLParser : public SfxHTMLParser, public SvtListener
 {
     friend class SectionSaveStruct;
@@ -360,7 +369,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     HTMLAttrs      m_aParaAttrs; // temporary paragraph attributes
     std::shared_ptr<HTMLAttrTable>  m_xAttrTab;   // "open" attributes
     HTMLAttrContexts m_aContexts;// the current context of attribute/token
-    std::vector<SwFrameFormat *> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
+    std::vector<std::unique_ptr<SwHTMLFrameFormatListener>> m_aMoveFlyFrames;// Fly-Frames, the anchor is moved
     std::deque<sal_Int32> m_aMoveFlyCnts;// and the Content-Positions
     //stray SwTableBoxes which need to be deleted to avoid leaking, but hold
     //onto them until parsing is done
