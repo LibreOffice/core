@@ -33,6 +33,7 @@
 #include <vcl/outdev.hxx>
 
 #include <memory>
+#include <optional>
 
 namespace drawinglayer::processor2d { class BaseProcessor2D; }
 
@@ -571,7 +572,7 @@ public:
     bool GetBackgroundBrush(
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
         const SvxBrushItem*& rpBrush,
-        const Color*& rpColor,
+        std::optional<Color>& rxColor,
         SwRect &rOrigRect,
         bool bLowerMode,
         bool bConsiderTextBox ) const;

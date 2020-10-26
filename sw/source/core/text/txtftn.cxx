@@ -1321,7 +1321,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
 
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
-            pFnt->SetBackColor( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
+            pFnt->SetBackColor( static_cast<const SvxBrushItem*>(pItem)->GetColor() );
     }
     else
         pFnt = nullptr;

@@ -62,9 +62,9 @@ SvStatistics g_SvStat;
 using namespace ::com::sun::star;
 
 // set background brush, depending on character formatting
-void SwFont::SetBackColor( Color* pNewColor )
+void SwFont::SetBackColor( std::optional<Color> xNewColor )
 {
-    m_pBackColor.reset( pNewColor );
+    mxBackColor = xNewColor;
     m_bFontChg = true;
     m_aSub[SwFontScript::Latin].m_nFontCacheId = m_aSub[SwFontScript::CJK].m_nFontCacheId = m_aSub[SwFontScript::CTL].m_nFontCacheId = nullptr;
 }
@@ -494,7 +494,7 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
 void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
                          const IDocumentSettingAccess *pIDocumentSettingAccess )
 {
-    m_pBackColor.reset();
+    mxBackColor.reset();
 
     if( pAttrSet )
     {
@@ -667,7 +667,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
             SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue() );
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
-            m_pBackColor.reset( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
+            mxBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
             true, &pItem ))
             SetHighlightColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
@@ -710,7 +710,7 @@ SwFont::SwFont( const SwFont &rFont )
     : m_aSub(rFont.m_aSub)
 {
     m_nActual = rFont.m_nActual;
-    m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
+    mxBackColor = rFont.mxBackColor;
     m_aHighlightColor = rFont.m_aHighlightColor;
     m_aTopBorder = rFont.m_aTopBorder;
     m_aBottomBorder = rFont.m_aBottomBorder;
@@ -833,7 +833,7 @@ SwFont::SwFont( const SwAttrSet* pAttrSet,
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
         true, &pItem ))
-        m_pBackColor.reset( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
+        mxBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
     if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_HIGHLIGHT,
         true, &pItem ))
         SetHighlightColor(static_cast<const SvxBrushItem*>(pItem)->GetColor());
@@ -904,7 +904,7 @@ SwFont& SwFont::operator=( const SwFont &rFont )
         m_aSub[SwFontScript::CJK] = rFont.m_aSub[SwFontScript::CJK];
         m_aSub[SwFontScript::CTL] = rFont.m_aSub[SwFontScript::CTL];
         m_nActual = rFont.m_nActual;
-        m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
+        mxBackColor = rFont.mxBackColor;
         m_aHighlightColor = rFont.m_aHighlightColor;
         m_aTopBorder = rFont.m_aTopBorder;
         m_aBottomBorder = rFont.m_aBottomBorder;
