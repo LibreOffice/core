@@ -70,6 +70,30 @@
       "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2569874_7facfff7",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2020-10-26T08:48:45Z",
+      "side": 1,
+      "message": "The RTF tokenizer already has a place where it deals with an empty stack. We just throw up our hands and do a \u0027throw std::out_of_range(\"empty rtf state stack\");\u0027. Perhaps you should do the same here, in case such empty stack cases are beyond hope anyway?",
+      "parentUuid": "bbde8419_9b86a8e5",
+      "range": {
+        "startLine": 451,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 33
+      },
+      "revId": "3e6e17643f1163fec342c796935a4afe679da3d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
