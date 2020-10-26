@@ -770,7 +770,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             // When custom shape is rotated, bitmap have to be rotated too.
             if(rPropMap.hasProperty(PROP_RotateAngle))
             {
-                tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<long>();
+                tools::Long nAngle = rPropMap.getProperty(PROP_RotateAngle).get<tools::Long>();
                 xGraphic = lclRotateGraphic(xGraphic, Degree10(nAngle/10) );
             }
 

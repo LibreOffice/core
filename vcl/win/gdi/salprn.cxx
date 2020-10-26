@@ -328,7 +328,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         if ( (pSetupData->GetSystem() == JOBSETUP_SYSTEM_WINDOWS) &&
              (pPrinter->maDriverName == pSetupData->GetDriver()) &&
              (pSetupData->GetDriverDataLen() > sizeof( SalDriverData )) &&
-             static_cast<long>(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
+             static_cast<tools::Long>(pSetupData->GetDriverDataLen() - pSetupDriverData->mnDriverOffset) == nSysJobSize &&
              pSetupDriverData->mnSysSignature == SAL_DRIVERDATA_SYSSIGN )
         {
             if( pDevModeW &&

@@ -1088,8 +1088,8 @@ void SmShowSymbolSet::calccols(const vcl::RenderContext& rRenderContext)
 
     nColumns = aOutputSize.Width() / nLen;
     nRows = aOutputSize.Height() / nLen;
-    nColumns = std::max<long>(1, nColumns);
-    nRows = std::max<long>(1, nRows);
+    nColumns = std::max<tools::Long>(1, nColumns);
+    nRows = std::max<tools::Long>(1, nRows);
 
     nXOffset = (aOutputSize.Width() - (nColumns * nLen)) / 2;
     nYOffset = (aOutputSize.Height() - (nRows * nLen)) / 2;

@@ -1867,7 +1867,7 @@ void ScInterpreter::ScFrequency()
         return;
 
     vector<double>  aBinArray;
-    vector<long>    aBinIndexOrder;
+    vector<tools::Long>    aBinIndexOrder;
 
     GetSortArray( 1, aBinArray, &aBinIndexOrder, false, false );
     SCSIZE nBinSize = aBinArray.size();

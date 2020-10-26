@@ -222,7 +222,7 @@ bool ScDocShell::IsDocument( const INetURLObject& rURL )
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales)
+static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<tools::Long>& rScales)
 {
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     if (!pFormatter)
@@ -343,7 +343,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
 
         aProgress.SetState( 0 );
 
-        vector<long> aScales(nColCount, -1);
+        vector<tools::Long> aScales(nColCount, -1);
         for (i=0; i<nColCount; i++)
         {
             OUString aHeader = xMeta->getColumnLabel( i+1 );

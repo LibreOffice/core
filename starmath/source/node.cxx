@@ -1921,7 +1921,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
-    std::vector<long> aColWidth(mnNumCols);
+    std::vector<tools::Long> aColWidth(mnNumCols);
 
     // arrange subnodes and calculate the above arrays contents
     size_t nNodes = GetNumSubNodes();
@@ -1945,7 +1945,7 @@ void SmMatrixNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100;
 
     // build array that holds the leftmost position for each column
-    std::vector<long> aColLeft(mnNumCols);
+    std::vector<tools::Long> aColLeft(mnNumCols);
     tools::Long  nX = 0;
     for (size_t j = 0; j < mnNumCols; ++j)
     {

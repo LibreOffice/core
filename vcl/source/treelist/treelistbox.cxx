@@ -3033,7 +3033,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, tools::Long nX
     return pItemClicked;
 }
 
-tools::Long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
+tools::Long SvTreeListBox::getPreferredDimensions(std::vector<tools::Long> &rWidths) const
 {
     tools::Long nHeight = 0;
     rWidths.clear();
@@ -3064,7 +3064,7 @@ tools::Long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) co
 
 Size SvTreeListBox::GetOptimalSize() const
 {
-    std::vector<long> aWidths;
+    std::vector<tools::Long> aWidths;
     Size aRet(0, getPreferredDimensions(aWidths));
     for (tools::Long aWidth : aWidths)
         aRet.AdjustWidth(aWidth );

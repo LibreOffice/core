@@ -2463,7 +2463,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             // Add padding to get the bullet point centered in PPT
             Size aDestSize(64, 64);
             float fBulletSizeRelX = fBulletSizeRel / aGraphicSize.Height * aGraphicSize.Width;
-            tools::Long nPaddingX = std::max<long>(0, std::lround((aDestSize.Width() - fBulletSizeRelX * aDestSize.Width()) / 2.f));
+            tools::Long nPaddingX = std::max<tools::Long>(0, std::lround((aDestSize.Width() - fBulletSizeRelX * aDestSize.Width()) / 2.f));
             tools::Long nPaddingY = std::lround((aDestSize.Height() - fBulletSizeRel * aDestSize.Height()) / 2.f);
             tools::Rectangle aDestRect(nPaddingX, nPaddingY, aDestSize.Width() - nPaddingX, aDestSize.Height() - nPaddingY);
 

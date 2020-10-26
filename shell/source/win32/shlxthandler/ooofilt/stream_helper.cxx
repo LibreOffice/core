@@ -66,7 +66,7 @@ long BufferStream::stell ()
 
     hr = stream->Seek (Move, STREAM_SEEK_CUR, &NewPosition);
     if (hr == S_OK)
-        return static_cast<long>(NewPosition.QuadPart);
+        return static_cast<tools::Long>(NewPosition.QuadPart);
     else
         return -1;
 }

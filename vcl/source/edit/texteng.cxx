@@ -1519,7 +1519,7 @@ void TextEngine::FormatDoc()
                 // otherwise remains Empty() for Paperwidth 0 (AutoPageSize)
                 const tools::Long nWidth = mnMaxTextWidth
                     ? mnMaxTextWidth
-                    : std::numeric_limits<long>::max();
+                    : std::numeric_limits<tools::Long>::max();
                 const Range aInvRange( GetInvalidYOffsets( nPara ) );
                 maInvalidRect = tools::Rectangle( Point( 0, nY+aInvRange.Min() ),
                     Size( nWidth, aInvRange.Len() ) );
@@ -2146,7 +2146,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         tools::Long nTmpWidth = mpDoc->GetLeftMargin();
         // do not subtract margin; it is included in TmpWidth
         tools::Long nXWidth = std::max(
-            mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<long>::max(), nTmpWidth);
+            mnMaxTextWidth ? mnMaxTextWidth : std::numeric_limits<tools::Long>::max(), nTmpWidth);
 
         // search for Portion that does not fit anymore into line
         TETextPortion* pPortion = nullptr;

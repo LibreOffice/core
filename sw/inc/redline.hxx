@@ -158,7 +158,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     bool m_bIsVisible : 1;
     sal_uInt32 m_nId;
 
-    std::optional<long> m_oLOKLastNodeTop;
+    std::optional<tools::Long> m_oLOKLastNodeTop;
 
     void MoveToSection();
     void CopyToSection();

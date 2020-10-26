@@ -105,7 +105,7 @@ struct ScDPSubTotalState
 class ScDPRunningTotalState
 {
 public:
-    typedef std::vector<long> IndexArray; /// array of long integers terminated by -1.
+    typedef std::vector<tools::Long> IndexArray; /// array of long integers terminated by -1.
 
     ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPResultMember* pRowRoot );
 

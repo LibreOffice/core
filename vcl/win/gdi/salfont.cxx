@@ -67,7 +67,7 @@ using namespace vcl;
 
 static FIXED FixedFromDouble( double d )
 {
-    const long l = static_cast<long>( d * 65536. );
+    const long l = static_cast<tools::Long>( d * 65536. );
     return *reinterpret_cast<FIXED const *>(&l);
 }
 

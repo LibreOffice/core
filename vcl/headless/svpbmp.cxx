@@ -102,7 +102,7 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     tools::Long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    bool bFail = o3tl::checked_multiply<tools::Long>(pDIB->mnWidth, nBitCount, nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");

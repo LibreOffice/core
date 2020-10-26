@@ -215,7 +215,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTab
 }
 
 void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                const vector<long>& rDims, vector<SCROW>& rItemData)
+                                const vector<tools::Long>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
     rItemData.reserve(rItemData.size() + nDimSize);
