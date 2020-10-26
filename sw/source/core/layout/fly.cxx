@@ -409,22 +409,26 @@ void SwFlyFrame::FinitDrawObj()
                 if (rCurrentShell.HasDrawView() &&
                     rCurrentShell.Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount())
                 {
-                    if (SwFEShell *const pFEShell = dynamic_cast<SwFEShell*>(&rCurrentShell))
-                    {   // tdf#131679 move any cursor out of fly
-                        SwFlyFrame const*const pOldSelFly = ::GetFlyFromMarked(nullptr,  pFEShell);
-                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
-                        if (pOldSelFly)
-                        {
-                            SwPosition const pos(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
-                            SwPaM const temp(pos);
-                            pFEShell->SetSelection(temp);
-                            // could also call SetCursor() like SwFEShell::SelectObj()
-                            // does, but that would access layout a bit much...
-                        }
-                    }
-                    else
+                    SwFlyFrame const*const pOldSelFly = ::GetFlyFromMarked(nullptr, &rCurrentShell);
+                    if (pOldSelFly == this)
                     {
-                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                        assert(rCurrentShell.Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1);
+                        if (SwFEShell *const pFEShell = dynamic_cast<SwFEShell*>(&rCurrentShell))
+                        {   // tdf#131679 move any cursor out of fly
+                            rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                            if (pOldSelFly)
+                            {
+                                SwPosition const pos(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
+                                SwPaM const temp(pos);
+                                pFEShell->SetSelection(temp);
+                                // could also call SetCursor() like SwFEShell::SelectObj()
+                                // does, but that would access layout a bit much...
+                            }
+                        }
+                        else
+                        {
+                            rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                        }
                     }
                 }
             }
