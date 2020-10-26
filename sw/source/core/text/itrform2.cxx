@@ -64,7 +64,7 @@ namespace {
     tools::Long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                                     SwLineLayout const &rCurr,
                                     TextFrameIndex nOldLineEnd,
-                                    const std::vector<long> &rFlyStarts );
+                                    const std::vector<tools::Long> &rFlyStarts );
     //! Determine if we need to build hidden portions
     bool lcl_BuildHiddenPortion(const SwTextSizeInfo& rInf, TextFrameIndex &rPos);
 
@@ -1592,7 +1592,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
     // before and after the BuildPortions call
     const bool bOptimizeRepaint = AllowRepaintOpt();
     TextFrameIndex const nOldLineEnd = nStartPos + m_pCurr->GetLen();
-    std::vector<long> flyStarts;
+    std::vector<tools::Long> flyStarts;
 
     // these are the conditions for a fly position comparison
     if ( bOptimizeRepaint && m_pCurr->IsFly() )
@@ -2772,7 +2772,7 @@ namespace {
     tools::Long lcl_CalcOptRepaint( SwTextFormatter &rThis,
                          SwLineLayout const &rCurr,
                          TextFrameIndex const nOldLineEnd,
-                         const std::vector<long> &rFlyStarts )
+                         const std::vector<tools::Long> &rFlyStarts )
     {
         SwTextFormatInfo& txtFormatInfo = rThis.GetInfo();
         if ( txtFormatInfo.GetIdx() < txtFormatInfo.GetReformatStart() )

@@ -3681,7 +3681,7 @@ public:
 
     virtual void columns_autosize() override
     {
-        std::vector<long> aWidths;
+        std::vector<tools::Long> aWidths;
         m_xTreeView->getPreferredDimensions(aWidths);
         if (aWidths.size() > 2)
         {
@@ -3708,7 +3708,7 @@ public:
 
     virtual void set_column_fixed_widths(const std::vector<int>& rWidths) override
     {
-        std::vector<long> aTabPositions;
+        std::vector<tools::Long> aTabPositions;
         aTabPositions.push_back(0);
         for (size_t i = 0; i < rWidths.size(); ++i)
             aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
@@ -5036,7 +5036,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)
 
 IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
 {
-    std::vector<long> aTabPositions;
+    std::vector<tools::Long> aTabPositions;
     aTabPositions.push_back(0);
     for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
         aTabPositions.push_back(aTabPositions[i]

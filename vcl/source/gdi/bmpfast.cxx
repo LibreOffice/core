@@ -525,7 +525,7 @@ bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSr
     // special handling of trivial cases
     if( nSrcFormat == nDstFormat )
     {
-        memcpy( ImplGetScanline( rDst, nY ), aSrcScanline, std::min<long>(nSrcScanlineSize, rDst.mnScanlineSize));
+        memcpy( ImplGetScanline( rDst, nY ), aSrcScanline, std::min<tools::Long>(nSrcScanlineSize, rDst.mnScanlineSize));
         return true;
     }
 

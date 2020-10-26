@@ -308,7 +308,7 @@ std::unique_ptr<BitmapBuffer> StretchAndConvert(
     pDstBuffer->mnWidth = rTwoRect.mnDestWidth;
     pDstBuffer->mnHeight = rTwoRect.mnDestHeight;
     tools::Long nScanlineBase;
-    bool bFail = o3tl::checked_multiply<long>(pDstBuffer->mnBitCount, pDstBuffer->mnWidth, nScanlineBase);
+    bool bFail = o3tl::checked_multiply<tools::Long>(pDstBuffer->mnBitCount, pDstBuffer->mnWidth, nScanlineBase);
     if (bFail)
     {
         SAL_WARN("vcl.gdi", "checked multiply failed");

@@ -91,7 +91,7 @@ void OApplicationIconControl::Fill()
         m_nMaxWidth = std::max(m_nMaxWidth, rSize.Width());
         m_nMaxHeight = std::max(m_nMaxHeight, rSize.Height());
         xItem->maTitle = DBA_RES(aCategorie.pLabelResId);
-        m_nMaxWidth = std::max<long>(m_nMaxWidth, GetTextWidth(xItem->maTitle));
+        m_nMaxWidth = std::max<tools::Long>(m_nMaxWidth, GetTextWidth(xItem->maTitle));
         AppendItem(std::move(xItem));
     }
 

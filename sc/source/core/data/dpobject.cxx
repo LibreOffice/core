@@ -2159,7 +2159,7 @@ static void lcl_FillOldFields( ScPivotFieldVector& rFields,
     //TODO: merge multiple occurrences (data field with different functions)
     //TODO: force data field in one dimension
 
-    vector<long> aPos;
+    vector<tools::Long> aPos;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );

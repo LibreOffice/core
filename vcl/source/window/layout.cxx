@@ -417,7 +417,7 @@ Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
     return aRet;
 }
 
-static tools::Long getMaxNonOutlier(const std::vector<long> &rG, tools::Long nAvgDimension)
+static tools::Long getMaxNonOutlier(const std::vector<tools::Long> &rG, tools::Long nAvgDimension)
 {
     tools::Long nMaxDimensionNonOutlier = 0;
     for (auto const& nPrimaryChildDimension : rG)
@@ -431,11 +431,11 @@ static tools::Long getMaxNonOutlier(const std::vector<long> &rG, tools::Long nAv
     return nMaxDimensionNonOutlier;
 }
 
-static std::vector<long> setButtonSizes(const std::vector<long> &rG,
+static std::vector<tools::Long> setButtonSizes(const std::vector<tools::Long> &rG,
     const std::vector<bool> &rNonHomogeneous,
     tools::Long nAvgDimension, tools::Long nMaxNonOutlier, tools::Long nMinWidth)
 {
-    std::vector<long> aVec;
+    std::vector<tools::Long> aVec;
     //set everything < 1.5 times the average to the same width, leave the
     //outliers un-touched
     std::vector<bool>::const_iterator aJ = rNonHomogeneous.begin();
@@ -470,9 +470,9 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
 
     bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VclButtonBoxStyle::Spread || m_eLayoutStyle == VclButtonBoxStyle::Center);
 
-    std::vector<long> aMainGroupSizes;
+    std::vector<tools::Long> aMainGroupSizes;
     std::vector<bool> aMainGroupNonHomogeneous;
-    std::vector<long> aSubGroupSizes;
+    std::vector<tools::Long> aSubGroupSizes;
     std::vector<bool> aSubGroupNonHomogeneous;
 
     for (const vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
@@ -666,8 +666,8 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     Size aChildSize;
     setSecondaryDimension(aChildSize, getSecondaryDimension(rAllocation));
 
-    std::vector<long>::const_iterator aPrimaryI = aReq.m_aMainGroupDimensions.begin();
-    std::vector<long>::const_iterator aSecondaryI = aReq.m_aSubGroupDimensions.begin();
+    std::vector<tools::Long>::const_iterator aPrimaryI = aReq.m_aMainGroupDimensions.begin();
+    std::vector<tools::Long>::const_iterator aSecondaryI = aReq.m_aSubGroupDimensions.begin();
     bool bIgnoreSecondaryPacking = (m_eLayoutStyle == VclButtonBoxStyle::Spread || m_eLayoutStyle == VclButtonBoxStyle::Center);
     for (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
     {

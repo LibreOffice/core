@@ -93,7 +93,7 @@ namespace {
 class SvxBoundArgs
 {
     std::vector<bool> aBoolArr;
-    std::deque<long>* pLongArr;
+    std::deque<tools::Long>* pLongArr;
     TextRanger *pTextRanger;
     tools::Long nMin;
     tools::Long nMax;
@@ -126,7 +126,7 @@ class SvxBoundArgs
     tools::Long A( const Point& rP ) const { return bRotate ? rP.Y() : rP.X(); }
     tools::Long B( const Point& rP ) const { return bRotate ? rP.X() : rP.Y(); }
 public:
-    SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong, const Range& rRange );
+    SvxBoundArgs( TextRanger* pRanger, std::deque<tools::Long>* pLong, const Range& rRange );
     void NotePoint( const tools::Long nA ) { NoteMargin( nA - nStart, nA + nEnd ); }
     void NoteMargin( const tools::Long nL, const tools::Long nR )
         { if( nMin > nL ) nMin = nL; if( nMax < nR ) nMax = nR; }
@@ -142,7 +142,7 @@ public:
 
 }
 
-SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, std::deque<long>* pLong,
+SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, std::deque<tools::Long>* pLong,
     const Range& rRange )
     : pLongArr(pLong)
     , pTextRanger(pRanger)
@@ -488,18 +488,18 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
 {
     SetConcat( true );
     DBG_ASSERT( pPoly, "Nothing to do?" );
-    std::deque<long>* pOld = pLongArr;
-    pLongArr = new std::deque<long>;
+    std::deque<tools::Long>* pOld = pLongArr;
+    pLongArr = new std::deque<tools::Long>;
     aBoolArr.clear();
     bInner = false;
     Calc( *pPoly ); // Note that this updates pLongArr, which is why we swapped it out earlier.
-    std::deque<long>::size_type nCount = pLongArr->size();
-    std::deque<long>::size_type nIdx = 0;
-    std::deque<long>::size_type i = 0;
+    std::deque<tools::Long>::size_type nCount = pLongArr->size();
+    std::deque<tools::Long>::size_type nIdx = 0;
+    std::deque<tools::Long>::size_type i = 0;
     bool bSubtract = pTextRanger->IsInner();
     while( i < nCount )
     {
-        std::deque<long>::size_type nOldCount = pOld->size();
+        std::deque<tools::Long>::size_type nOldCount = pOld->size();
         if( nIdx == nOldCount )
         {   // Reached the end of the old Array...
             if( !bSubtract )
@@ -508,7 +508,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
         }
         tools::Long nLeft = (*pLongArr)[ i++ ];
         tools::Long nRight = (*pLongArr)[ i++ ];
-        std::deque<long>::size_type nLeftPos = nIdx + 1;
+        std::deque<tools::Long>::size_type nLeftPos = nIdx + 1;
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
         if( nLeftPos >= nOldCount )
@@ -517,7 +517,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
                 pOld->insert( pOld->begin() + nOldCount, pLongArr->begin() + i - 2, pLongArr->end() );
             break;
         }
-        std::deque<long>::size_type nRightPos = nLeftPos - 1;
+        std::deque<tools::Long>::size_type nRightPos = nLeftPos - 1;
         while( nRightPos < nOldCount && nRight >= (*pOld)[ nRightPos ] )
             nRightPos += 2;
         if( nRightPos < nLeftPos )
@@ -630,7 +630,7 @@ void SvxBoundArgs::NoteUpLow( tools::Long nA, const sal_uInt8 nArea )
     }
 }
 
-std::deque<long>* TextRanger::GetTextRanges( const Range& rRange )
+std::deque<tools::Long>* TextRanger::GetTextRanges( const Range& rRange )
 {
     DBG_ASSERT( rRange.Min() || rRange.Max(), "Zero-Range not allowed, Bye Bye" );
     //Can we find the result we need in the cache?

@@ -152,7 +152,7 @@ protected:
     virtual ::svt::CellController*  GetController(tools::Long nRow, sal_uInt16 nCol) override;
     virtual bool                    SaveModified() override;
 
-    std::vector<long>               GetOptimalColWidths() const;
+    std::vector<tools::Long>               GetOptimalColWidths() const;
 
 public:
     SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent);
@@ -3622,7 +3622,7 @@ void SwEntryBrowseBox::Resize()
     SwEntryBrowseBox_Base::Resize();
 
     tools::Long nWidth = GetSizePixel().Width();
-    std::vector<long> aWidths = GetOptimalColWidths();
+    std::vector<tools::Long> aWidths = GetOptimalColWidths();
     tools::Long nNaturalWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
     tools::Long nExcess = ((nWidth - nNaturalWidth) / aWidths.size()) - 1;
 
@@ -3630,9 +3630,9 @@ void SwEntryBrowseBox::Resize()
         SetColumnWidth(i+1, aWidths[i] + nExcess);
 }
 
-std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
+std::vector<tools::Long> SwEntryBrowseBox::GetOptimalColWidths() const
 {
-    std::vector<long> aWidths;
+    std::vector<tools::Long> aWidths;
 
     tools::Long nStandardColMinWidth = approximate_digit_width() * 15;
     tools::Long nYesNoWidth = approximate_digit_width() * 5;
@@ -3661,7 +3661,7 @@ Size SwEntryBrowseBox::GetOptimalSize() const
 {
     Size aSize = LogicToPixel(Size(276 , 175), MapMode(MapUnit::MapAppFont));
 
-    std::vector<long> aWidths = GetOptimalColWidths();
+    std::vector<tools::Long> aWidths = GetOptimalColWidths();
 
     tools::Long nWidth(std::accumulate(aWidths.begin(), aWidths.end(), 0));
 

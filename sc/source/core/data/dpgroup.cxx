@@ -553,7 +553,7 @@ OUString ScDPGroupTableData::getDimensionName(tools::Long nColumn)
 {
     if ( nColumn >= nSourceCount )
     {
-        if ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
+        if ( nColumn == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
             nColumn = nSourceCount;                         // index of data layout in source data
         else
             return aGroups[nColumn - nSourceCount].GetName();
@@ -565,14 +565,14 @@ OUString ScDPGroupTableData::getDimensionName(tools::Long nColumn)
 bool ScDPGroupTableData::getIsDataLayoutDimension(tools::Long nColumn)
 {
     // position of data layout dimension is moved from source data
-    return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
+    return ( nColumn == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
 }
 
 bool ScDPGroupTableData::IsDateDimension(tools::Long nDim)
 {
     if ( nDim >= nSourceCount )
     {
-        if ( nDim == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
+        if ( nDim == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
             nDim = nSourceCount;                            // index of data layout in source data
         else
             nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
@@ -585,7 +585,7 @@ sal_uInt32 ScDPGroupTableData::GetNumberFormat(tools::Long nDim)
 {
     if ( nDim >= nSourceCount )
     {
-        if ( nDim == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
+        if ( nDim == sal::static_int_cast<tools::Long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
             nDim = nSourceCount;                            // index of data layout in source data
         else
             nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
@@ -801,7 +801,7 @@ void ScDPGroupTableData::ReloadCacheTable()
     pSourceData->ReloadCacheTable();
 }
 
-void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<long>& rDims)
+void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<tools::Long>& rDims)
 {
     tools::Long nGroupedColumns = aGroups.size();
 

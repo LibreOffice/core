@@ -165,7 +165,7 @@ OUString ScDPSource::GetDataDimName(tools::Long nIndex)
 
 tools::Long ScDPSource::GetPosition(tools::Long nColumn)
 {
-    std::vector<long>::const_iterator it, itBeg = maColDims.begin(), itEnd = maColDims.end();
+    std::vector<tools::Long>::const_iterator it, itBeg = maColDims.begin(), itEnd = maColDims.end();
     it = std::find(itBeg, itEnd, nColumn);
     if (it != itEnd)
         return std::distance(itBeg, it);
@@ -193,10 +193,10 @@ tools::Long ScDPSource::GetPosition(tools::Long nColumn)
 
 namespace {
 
-bool testSubTotal( bool& rAllowed, tools::Long nColumn, const std::vector<long>& rDims, ScDPSource* pSource )
+bool testSubTotal( bool& rAllowed, tools::Long nColumn, const std::vector<tools::Long>& rDims, ScDPSource* pSource )
 {
     rAllowed = true;
-    std::vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
+    std::vector<tools::Long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
     for (; it != itEnd; ++it)
     {
         if (*it != nColumn)
@@ -222,9 +222,9 @@ bool testSubTotal( bool& rAllowed, tools::Long nColumn, const std::vector<long>&
     return false;
 }
 
-void removeDim( tools::Long nRemove, std::vector<long>& rDims )
+void removeDim( tools::Long nRemove, std::vector<tools::Long>& rDims )
 {
-    std::vector<long>::iterator it = std::find(rDims.begin(), rDims.end(), nRemove);
+    std::vector<tools::Long>::iterator it = std::find(rDims.begin(), rDims.end(), nRemove);
     if (it != rDims.end())
         rDims.erase(it);
 }
@@ -598,7 +598,7 @@ static tools::Long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, cons
 
 void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &rHasAutoShow)
 {
-    const std::vector<long>& rDims = bIsRow ? maRowDims : maColDims;
+    const std::vector<tools::Long>& rDims = bIsRow ? maRowDims : maColDims;
     for (const auto& rDimIndex : rDims)
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(rDimIndex);
@@ -957,7 +957,7 @@ void ScDPSource::FillLevelList( sheet::DataPilotFieldOrientation nOrientation, s
 {
     rList.clear();
 
-    std::vector<long>* pDimIndex = nullptr;
+    std::vector<tools::Long>* pDimIndex = nullptr;
     switch (nOrientation)
     {
         case sheet::DataPilotFieldOrientation_COLUMN:

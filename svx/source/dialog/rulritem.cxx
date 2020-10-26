@@ -584,8 +584,8 @@ SvxColumnDescription::SvxColumnDescription(tools::Long start, tools::Long end, t
     nEnd     (end),
     bVisible (bVis),
     // fdo#85858 hack: clamp these to smaller value to prevent overflow
-    nEndMin(std::min<long>(endMin, std::numeric_limits<unsigned short>::max())),
-    nEndMax(std::min<long>(endMax, std::numeric_limits<unsigned short>::max()))
+    nEndMin(std::min<tools::Long>(endMin, std::numeric_limits<unsigned short>::max())),
+    nEndMax(std::min<tools::Long>(endMax, std::numeric_limits<unsigned short>::max()))
 {}
 
 bool SvxColumnDescription::operator==(const SvxColumnDescription& rCmp) const

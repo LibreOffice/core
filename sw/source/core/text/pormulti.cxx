@@ -515,7 +515,7 @@ bool SwDoubleLinePortion::ChgSpaceAdd( SwLineLayout* pCurr,
 //            pCurr->SetLLSpaceAdd( nMultiSpace, 0 );
             // #i65711# SetLLSpaceAdd replaces the first value,
             // instead we want to insert a new first value:
-            std::vector<long>* pVec = pCurr->GetpLLSpaceAdd();
+            std::vector<tools::Long>* pVec = pCurr->GetpLLSpaceAdd();
             pVec->insert( pVec->begin(), nMultiSpace );
             bRet = true;
         }
@@ -1411,7 +1411,7 @@ class SwSpaceManipulator
 {
     SwTextPaintInfo& rInfo;
     SwMultiPortion& rMulti;
-    std::vector<long>* pOldSpaceAdd;
+    std::vector<tools::Long>* pOldSpaceAdd;
     sal_uInt16 nOldSpIdx;
     tools::Long nSpaceAdd;
     bool bSpaceChg;

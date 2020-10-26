@@ -2361,7 +2361,7 @@ void lcl_getGroupIndexes(const ScOutlineArray& rArray, SCCOLROW nStart, SCCOLROW
 void lcl_createGroupsData(
         SCCOLROW nHeaderIndex, SCCOLROW nEnd, tools::Long nSizePx, tools::Long nTotalPx,
         const ScOutlineArray& rArray, std::vector<size_t>& rGroupIndexes,
-        std::vector<long>& rGroupStartPositions, OStringBuffer& rGroupsBuffer)
+        std::vector<tools::Long>& rGroupStartPositions, OStringBuffer& rGroupsBuffer)
 {
     const size_t nGroupDepth = rArray.GetDepth();
     // create string data for group controls
@@ -2683,7 +2683,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
             rJsonWriter.put("groupLevels", static_cast<sal_Int64>(nRowGroupDepth));
         }
 
-        std::vector<long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
+        std::vector<tools::Long> aRowGroupStartPositions(nRowGroupDepth, -nTotalPixels);
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
         {
             // nSize will be 0 for hidden rows.
@@ -2776,7 +2776,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
             rJsonWriter.put("groupLevels", static_cast<sal_Int64>(nColGroupDepth));
         }
 
-        std::vector<long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
+        std::vector<tools::Long> aColGroupStartPositions(nColGroupDepth, -nTotalPixels);
         nPrevSizePx = -1;
         for (SCCOL nCol = nStartCol + 1; nCol <= nEndCol; ++nCol)
         {

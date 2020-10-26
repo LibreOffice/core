@@ -11,10 +11,11 @@
 
 #include <ostream>
 #include <vector>
+#include <tools/long.hxx>
 
 #if HAVE_MORE_FONTS
 // must be declared before inclusion of test/bootstrapfixture.hxx
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec);
 #endif
 #include <test/bootstrapfixture.hxx>
 
@@ -25,7 +26,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& 
 #include <salgdi.hxx>
 
 #if HAVE_MORE_FONTS
-static std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<tools::Long>& rVec)
 {
     rStream << "{ ";
     for (size_t i = 0; i < rVec.size() - 1; i++)
@@ -75,9 +76,9 @@ void VclComplexTextTest::testArabic()
     pOutDev->SetFont( aFont );
 
     // absolute character widths AKA text array.
-    std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
+    std::vector<tools::Long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
                                       36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
-    std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
+    std::vector<tools::Long> aCharWidths(aOneTwoThree.getLength(), 0);
     tools::Long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
 
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
