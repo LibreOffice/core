@@ -392,7 +392,7 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
             {
                 const SwTwips nWidth = rBoxes[i]->GetFrameFormat()->GetFrameSize().GetWidth();
                 nSum += nWidth;
-                const tools::Long nTmp = lcl_MulDiv64<long>(nSum, nAct, nWish);
+                const tools::Long nTmp = lcl_MulDiv64<tools::Long>(nSum, nAct, nWish);
 
                 if (rBoxes[i] != pCur)
                 {
@@ -648,7 +648,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
             for ( size_t i = 0; (i < rBoxes.size()) && (rBoxes[i] != pCur); ++i)
             {
-                nLeft += lcl_MulDiv64<long>(
+                nLeft += lcl_MulDiv64<tools::Long>(
                     rBoxes[i]->GetFrameFormat()->GetFrameSize().GetWidth(),
                     nOldAct, rParm.nOldWish);
             }
@@ -660,7 +660,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         if ( nLeft != rParm.rOld.GetLeft() ) // There are still boxes before this.
         {
             // Right edge is left edge plus width.
-            const tools::Long nWidth = lcl_MulDiv64<long>(
+            const tools::Long nWidth = lcl_MulDiv64<tools::Long>(
                 pBox->GetFrameFormat()->GetFrameSize().GetWidth(),
                 nOldAct, rParm.nOldWish);
             const tools::Long nRight = nLeft + nWidth;
@@ -694,7 +694,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             if ( rParm.rOld.Count() )
             {
                 // Calculate the difference to the edge touching the first box.
-                const tools::Long nWidth = lcl_MulDiv64<long>(
+                const tools::Long nWidth = lcl_MulDiv64<tools::Long>(
                     pBox->GetFrameFormat()->GetFrameSize().GetWidth(),
                     nOldAct, rParm.nOldWish);
                 const tools::Long nTmp = nWidth + rParm.rOld.GetLeft();
@@ -1172,8 +1172,8 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             nOldPos = rOld[i] - rParm.rOld.GetLeft();
             nNewPos = rNew[i] - rParm.rNew.GetLeft();
         }
-        nNewPos = lcl_MulDiv64<long>(nNewPos, rParm.nNewWish, nNewWidth);
-        nOldPos = lcl_MulDiv64<long>(nOldPos, rParm.nOldWish, nOldWidth);
+        nNewPos = lcl_MulDiv64<tools::Long>(nNewPos, rParm.nNewWish, nNewWidth);
+        nOldPos = lcl_MulDiv64<tools::Long>(nOldPos, rParm.nOldWish, nOldWidth);
         if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )
         {
             ColChange aChg( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );

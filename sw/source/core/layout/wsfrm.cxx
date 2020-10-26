@@ -2150,7 +2150,7 @@ SwTwips SwContentFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
         if( GetUpper() )
         {
             if( bTst || !GetUpper()->IsFooterFrame() )
-                nReal = GetUpper()->Grow( nDist - std::max<long>(nReal, 0),
+                nReal = GetUpper()->Grow( nDist - std::max<tools::Long>(nReal, 0),
                                           bTst, bInfo );
             else
             {

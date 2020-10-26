@@ -308,7 +308,7 @@ void SwLineLayout::InitSpaceAdd()
 
 void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
 {
-    m_pLLSpaceAdd.reset( new std::vector<long> );
+    m_pLLSpaceAdd.reset( new std::vector<tools::Long> );
     SetLLSpaceAdd( nInit, 0 );
 }
 

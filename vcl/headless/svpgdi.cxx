@@ -186,7 +186,7 @@ namespace
         pDst->maPalette = pSrc->maPalette;
 
         tools::Long nScanlineBase;
-        const bool bFail = o3tl::checked_multiply<long>(pDst->mnBitCount, nWidth, nScanlineBase);
+        const bool bFail = o3tl::checked_multiply<tools::Long>(pDst->mnBitCount, nWidth, nScanlineBase);
         if (bFail)
         {
             SAL_WARN("vcl.gdi", "checked multiply failed");

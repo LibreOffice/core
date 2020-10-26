@@ -4125,7 +4125,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         PopError();
 }
 
-void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<tools::Long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_COUNT_DOUBLE_FOR_SORT(mrDoc.GetSheetLimits()))
@@ -4141,7 +4141,7 @@ void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortAr
         QuickSort( rSortArray, pIndexOrder);
 }
 
-static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSortArray, vector<long>* pIndexOrder )
+static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSortArray, vector<tools::Long>* pIndexOrder )
 {
     // If pIndexOrder is not NULL, we assume rSortArray.size() == pIndexOrder->size().
 
@@ -4192,7 +4192,7 @@ static void lcl_QuickSort( tools::Long nLo, tools::Long nHi, vector<double>& rSo
     }
 }
 
-void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<long>* pIndexOrder )
+void ScInterpreter::QuickSort( vector<double>& rSortArray, vector<tools::Long>* pIndexOrder )
 {
     tools::Long n = static_cast<tools::Long>(rSortArray.size());
 

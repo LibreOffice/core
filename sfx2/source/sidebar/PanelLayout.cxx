@@ -58,7 +58,7 @@ Size PanelLayout::GetOptimalSize() const
         SidebarController* pController
             = SidebarController::GetSidebarControllerForFrame(mxFrame);
         if (pController)
-            aSize.setWidth(std::min<long>(
+            aSize.setWidth(std::min<tools::Long>(
                 aSize.Width(), (pController->getMaximumWidth() - TabBar::GetDefaultWidth())
                                    * GetDPIScaleFactor()));
     }

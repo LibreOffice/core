@@ -769,9 +769,9 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         aCachedDims.push_back(pDim);
     }
 
-    std::vector<long> aRowFields;
-    std::vector<long> aColFields;
-    std::vector<long> aPageFields;
+    std::vector<tools::Long> aRowFields;
+    std::vector<tools::Long> aColFields;
+    std::vector<tools::Long> aPageFields;
     std::vector<DataField> aDataFields;
 
     tools::Long nDataDimCount = rSaveData.GetDataDimensionCount();

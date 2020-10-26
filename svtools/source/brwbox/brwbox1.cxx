@@ -1004,7 +1004,7 @@ tools::Long BrowseBox::ScrollRows( tools::Long nRows )
     // compute new top row
     tools::Long nTmpMin = std::min( static_cast<tools::Long>(nTopRow + nRows), static_cast<tools::Long>(nRowCount - 1) );
 
-    tools::Long nNewTopRow = std::max<long>( nTmpMin, 0 );
+    tools::Long nNewTopRow = std::max<tools::Long>( nTmpMin, 0 );
 
     if ( nNewTopRow == nTopRow )
         return 0;
@@ -1017,7 +1017,7 @@ tools::Long BrowseBox::ScrollRows( tools::Long nRows )
     // compute new top row again (nTopRow might have changed!)
     nTmpMin = std::min( static_cast<tools::Long>(nTopRow + nRows), static_cast<tools::Long>(nRowCount - 1) );
 
-    nNewTopRow = std::max<long>( nTmpMin, 0 );
+    nNewTopRow = std::max<tools::Long>( nTmpMin, 0 );
 
     StartScroll();
 
@@ -1659,7 +1659,7 @@ void BrowseBox::SelectAll()
         tools::Rectangle aHighlightRect;
         sal_uInt16 nVisibleRows =
             static_cast<sal_uInt16>(pDataWin->GetOutputSizePixel().Height() / GetDataRowHeight() + 1);
-        for ( tools::Long nRow = std::max<long>( nTopRow, uRow.pSel->FirstSelected() );
+        for ( tools::Long nRow = std::max<tools::Long>( nTopRow, uRow.pSel->FirstSelected() );
               nRow != BROWSER_ENDOFSELECTION && nRow < nTopRow + nVisibleRows;
               nRow = uRow.pSel->NextSelected() )
             aHighlightRect.Union( tools::Rectangle(

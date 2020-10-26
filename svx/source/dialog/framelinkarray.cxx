@@ -152,7 +152,7 @@ void Cell::MirrorSelfX()
 }
 
 
-static void lclRecalcCoordVec( std::vector<long>& rCoords, const std::vector<long>& rSizes )
+static void lclRecalcCoordVec( std::vector<tools::Long>& rCoords, const std::vector<tools::Long>& rSizes )
 {
     DBG_ASSERT( rCoords.size() == rSizes.size() + 1, "lclRecalcCoordVec - inconsistent vectors" );
     auto aCIt = rCoords.begin();
@@ -185,10 +185,10 @@ const Cell OBJ_CELL_NONE;
 struct ArrayImpl
 {
     CellVec             maCells;
-    std::vector<long>   maWidths;
-    std::vector<long>   maHeights;
-    mutable std::vector<long>     maXCoords;
-    mutable std::vector<long>     maYCoords;
+    std::vector<tools::Long>   maWidths;
+    std::vector<tools::Long>   maHeights;
+    mutable std::vector<tools::Long>     maXCoords;
+    mutable std::vector<tools::Long>     maYCoords;
     size_t              mnWidth;
     size_t              mnHeight;
     size_t              mnFirstClipCol;

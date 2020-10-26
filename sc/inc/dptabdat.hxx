@@ -69,14 +69,14 @@ public:
         should be passed as a const instance. */
     struct SAL_DLLPRIVATE CalcInfo
     {
-        ::std::vector<long>             aColLevelDims;
+        ::std::vector<tools::Long>             aColLevelDims;
         ::std::vector<ScDPDimension*>   aColDims;
         ::std::vector<ScDPLevel*>       aColLevels;
-        ::std::vector<long>             aRowLevelDims;
+        ::std::vector<tools::Long>             aRowLevelDims;
         ::std::vector<ScDPDimension*>   aRowDims;
         ::std::vector<ScDPLevel*>       aRowLevels;
-        ::std::vector<long>             aPageDims;
-        ::std::vector<long>             aDataSrcCols;
+        ::std::vector<tools::Long>             aPageDims;
+        ::std::vector<tools::Long>             aDataSrcCols;
 
         ScDPInitState*                  pInitState;
         ScDPResultMember*               pColRoot;
@@ -154,7 +154,7 @@ protected:
 
 private:
     void            GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
-                                          const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
+                                          const ::std::vector<tools::Long>& rDims, ::std::vector< SCROW >& rItemData);
 };
 #endif
 

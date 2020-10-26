@@ -67,7 +67,7 @@
 
 #define SC_PREVIEW_SHADOWSIZE   2
 
-static tools::Long lcl_GetDisplayStart( SCTAB nTab, const ScDocument* pDoc, std::vector<long>& nPages )
+static tools::Long lcl_GetDisplayStart( SCTAB nTab, const ScDocument* pDoc, std::vector<tools::Long>& nPages )
 {
     tools::Long nDisplayStart = 0;
     for (SCTAB i=0; i<nTab; i++)

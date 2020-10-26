@@ -2256,7 +2256,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                 else
                 {
                     newSourceRowSpan += pSubTableBox->GetTabLines().size() - 1;
-                    newBoxRowSpan = -(newSourceRowSpan - sal::static_int_cast<long>(i));
+                    newBoxRowSpan = -(newSourceRowSpan - sal::static_int_cast<tools::Long>(i));
                 }
                 pNewLine->GetTabBoxes()[nInsPos]->setRowSpan(newBoxRowSpan);
                 if (i == pSubTableBox->GetTabLines().size() - 1)

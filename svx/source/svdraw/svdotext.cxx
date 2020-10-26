@@ -492,7 +492,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set minimum width.
         const tools::Long nDist = GetTextLeftDistance() + GetTextRightDistance();
-        const tools::Long nW = std::max<long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
+        const tools::Long nW = std::max<tools::Long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
 
         aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
@@ -507,7 +507,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set Minimum height.
         const tools::Long nDist = GetTextUpperDistance() + GetTextLowerDistance();
-        const tools::Long nH = std::max<long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
+        const tools::Long nH = std::max<tools::Long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
 
         aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 

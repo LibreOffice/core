@@ -41,8 +41,8 @@ private:
                                         // calculated:
     SCTAB           nTabCount;
     SCTAB           nTabsTested;        // for how many sheets is nPages valid?
-    std::vector<long>       nPages;
-    std::vector<long>       nFirstAttr;
+    std::vector<tools::Long>       nPages;
+    std::vector<tools::Long>       nFirstAttr;
     SCTAB           nTab;               // Sheet
     tools::Long            nTabPage;           // Page of sheet
     tools::Long            nTabStart;          // First (real) page of the sheet
@@ -80,7 +80,7 @@ private:
     bool            mbHasEmptyRangeTable:1; /// we have at least one sheet with empty print range (print range set to '- none -').
 
     ScRange         aPageArea;
-    std::vector<long> mvRight;
+    std::vector<tools::Long> mvRight;
     tools::Long            nLeftPosition;
     tools::Long            mnScale;
     SCCOL           nColNumberButtonDown;

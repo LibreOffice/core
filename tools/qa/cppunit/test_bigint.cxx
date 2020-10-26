@@ -59,27 +59,27 @@ void BigIntTest::testConstructionFromLongLong()
 #if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
     // positive number just fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::max()));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::max()));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::max(), static_cast<long>(bi));
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<tools::Long>::max(), static_cast<tools::Long>(bi));
     }
 
     // negative number just fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::min()));
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::min()));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::min(), static_cast<long>(bi));
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<tools::Long>::min(), static_cast<tools::Long>(bi));
     }
 
     // positive number not fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::max())
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::max())
                   + static_cast<sal_Int64>(1));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());
@@ -89,7 +89,7 @@ void BigIntTest::testConstructionFromLongLong()
 
     // negative number not fitting to long
     {
-        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::min())
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<tools::Long>::min())
                   - static_cast<sal_Int64>(1));
         CPPUNIT_ASSERT(bi.IsSet());
         CPPUNIT_ASSERT(!bi.IsZero());

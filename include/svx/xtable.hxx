@@ -175,7 +175,7 @@ public:
     XPropertyListType Type() const { return meType; }
     tools::Long Count() const;
 
-    void Insert(std::unique_ptr<XPropertyEntry> pEntry, tools::Long nIndex = std::numeric_limits<long>::max());
+    void Insert(std::unique_ptr<XPropertyEntry> pEntry, tools::Long nIndex = std::numeric_limits<tools::Long>::max());
     void Replace(std::unique_ptr<XPropertyEntry> pEntry, tools::Long nIndex);
     void Remove(tools::Long nIndex);
 

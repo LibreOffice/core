@@ -93,7 +93,7 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
     {
         maStatsUpdateIdle.Stop();
         while (IncrementalDocStatCalculate(
-                    std::numeric_limits<long>::max(), bFields)) {}
+                    std::numeric_limits<tools::Long>::max(), bFields)) {}
     }
     else if (IncrementalDocStatCalculate(5000, bFields))
         maStatsUpdateIdle.Start();

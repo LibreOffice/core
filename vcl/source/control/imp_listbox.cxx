@@ -296,7 +296,7 @@ tools::Long ImplEntryList::GetAddedHeight( sal_Int32 i_nEndIndex, sal_Int32 i_nB
         while( nIndex != LISTBOX_ENTRY_NOTFOUND && nIndex < nStop )
         {
             tools::Long nPosHeight = GetEntryPtr( nIndex )->getHeightWithMargin();
-            if (nHeight > ::std::numeric_limits<long>::max() - nPosHeight)
+            if (nHeight > ::std::numeric_limits<tools::Long>::max() - nPosHeight)
             {
                 SAL_WARN( "vcl", "ImplEntryList::GetAddedHeight: truncated");
                 break;
