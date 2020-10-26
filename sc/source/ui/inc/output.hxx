@@ -28,6 +28,7 @@
 #include <editeng/svxenum.hxx>
 #include <vcl/outdev.hxx>
 #include <o3tl/deleter.hxx>
+#include <optional>
 
 namespace sc {
     struct SpellCheckContext;
@@ -216,9 +217,9 @@ private:
     bool mbForceAutoColor;
 
     bool mbSyntaxMode;          // Syntax highlighting
-    std::unique_ptr<Color> pValueColor;
-    std::unique_ptr<Color> pTextColor;
-    std::unique_ptr<Color> pFormulaColor;
+    std::optional<Color> mxValueColor;
+    std::optional<Color> mxTextColor;
+    std::optional<Color> mxFormulaColor;
 
     Color   aGridColor;
 
