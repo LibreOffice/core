@@ -808,16 +808,16 @@ static bool lcl_GetBackgroundColor( Color & rColor,
                              SwCursorShell* pCursorSh )
 {
     const SvxBrushItem* pBackgrdBrush = nullptr;
-    const Color* pSectionTOXColor = nullptr;
+    std::optional<Color> xSectionTOXColor;
     SwRect aDummyRect;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( pFrame &&
-         pFrame->GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false ) )
+         pFrame->GetBackgroundBrush( aFillAttributes, pBackgrdBrush, xSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false ) )
     {
-        if ( pSectionTOXColor )
+        if ( xSectionTOXColor )
         {
-            rColor = *pSectionTOXColor;
+            rColor = *xSectionTOXColor;
             return true;
         }
         else

@@ -30,6 +30,7 @@
 #include <editeng/borderline.hxx>
 #include <optional>
 #include <o3tl/enumarray.hxx>
+#include <optional>
 
 class SfxItemSet;
 class SwAttrSet;
@@ -133,8 +134,8 @@ class SwFont
     // CTL == Complex text layout ( Hebrew, Arabic )
     o3tl::enumarray<SwFontScript, SwSubFont>   m_aSub; // Latin-, CJK- and CTL-font
 
-    std::unique_ptr<Color>
-                m_pBackColor;     // background color (i.e. at character styles)
+    std::optional<Color>
+                mxBackColor;     // background color (i.e. at character styles)
     Color       m_aHighlightColor;   // highlight color
     Color       m_aUnderColor;    // color of the underlining
     Color       m_aOverColor;     // color of the overlining
@@ -186,8 +187,8 @@ public:
     // gets a font cache id via SwFntAccess
     void AllocFontCacheId( SwViewShell const *pSh, SwFontScript nWhich );
     // set background color
-    void SetBackColor( Color* pNewColor );
-    const Color* GetBackColor() const{ return m_pBackColor.get(); }
+    void SetBackColor( std::optional<Color> xNewColor );
+    const std::optional<Color>& GetBackColor() const{ return mxBackColor; }
     void SetHighlightColor( const Color& aNewColor );
     const Color& GetHighlightColor() const { return m_aHighlightColor; }
 

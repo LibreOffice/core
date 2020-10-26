@@ -524,7 +524,7 @@ SwTextPaintInfo::SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint )
 /// Returns if the current background color is dark.
 static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
 {
-    const Color* pCol = rInf.GetFont()->GetBackColor();
+    std::optional<Color> pCol = rInf.GetFont()->GetBackColor();
     if( ! pCol || COL_TRANSPARENT == *pCol )
     {
         const SvxBrushItem* pItem;
@@ -538,18 +538,18 @@ static bool lcl_IsDarkBackground( const SwTextPaintInfo& rInf )
         if( rInf.GetTextFrame()->GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, false, /*bConsiderTextBox=*/false ) )
         {
             if ( !pCol )
-                pCol = &pItem->GetColor();
+                pCol = pItem->GetColor();
 
             // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
             if ( *pCol == COL_TRANSPARENT)
-                pCol = nullptr;
+                pCol.reset();
         }
         else
-            pCol = nullptr;
+            pCol.reset();
     }
 
     if( !pCol )
-        pCol = &aGlobalRetoucheColor;
+        pCol = aGlobalRetoucheColor;
 
     return pCol->IsDark();
 }

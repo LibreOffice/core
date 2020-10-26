@@ -3752,15 +3752,15 @@ bool SwFlyFrame::IsBackgroundTransparent() const
          GetFormat()->IsBackgroundBrushInherited() )
     {
         const SvxBrushItem* pBackgrdBrush = nullptr;
-        const Color* pSectionTOXColor = nullptr;
+        std::optional<Color> xSectionTOXColor;
         SwRect aDummyRect;
         drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-        if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
+        if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, xSectionTOXColor, aDummyRect, false, /*bConsiderTextBox=*/false) )
         {
-            if ( pSectionTOXColor &&
-                 (pSectionTOXColor->GetTransparency() != 0) &&
-                 (*pSectionTOXColor != COL_TRANSPARENT) )
+            if ( xSectionTOXColor &&
+                 (xSectionTOXColor->GetTransparency() != 0) &&
+                 (xSectionTOXColor != COL_TRANSPARENT) )
             {
                 bBackgroundTransparent = true;
             }
@@ -6202,7 +6202,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
     const SvxBrushItem* pItem;
     // temporary background brush for a fly frame without a background brush
     std::unique_ptr<SvxBrushItem> pTmpBackBrush;
-    const Color* pCol;
+    std::optional<Color> pCol;
     SwRect aOrigBackRect;
     const bool bPageFrame = IsPageFrame();
     bool bLowMode = true;
@@ -7010,11 +7010,11 @@ void SwLayoutFrame::RefreshExtraData( const SwRect &rRect ) const
 Color SwPageFrame::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
-    const Color* pDummyColor;
+    std::optional<Color> xDummyColor;
     SwRect aDummyRect;
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
-    if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true, /*bConsiderTextBox=*/false) )
+    if ( GetBackgroundBrush( aFillAttributes, pBrushItem, xDummyColor, aDummyRect, true, /*bConsiderTextBox=*/false) )
     {
         if(aFillAttributes && aFillAttributes->isUsed())
         {
@@ -7187,7 +7187,7 @@ void SwFrame::Retouch( const SwPageFrame * pPage, const SwRect &rRect ) const
 bool SwFrame::GetBackgroundBrush(
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SvxBrushItem* & rpBrush,
-    const Color*& rpCol,
+    std::optional<Color>& rxCol,
     SwRect &rOrigRect,
     bool bLowerMode,
     bool bConsiderTextBox ) const
@@ -7196,7 +7196,7 @@ bool SwFrame::GetBackgroundBrush(
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
     const SwViewOption *pOpt = pSh->GetViewOptions();
     rpBrush = nullptr;
-    rpCol = nullptr;
+    rxCol.reset();
     do
     {
         if ( pFrame->IsPageFrame() && !pOpt->IsPageBack() )
@@ -7252,7 +7252,7 @@ bool SwFrame::GetBackgroundBrush(
                 !pOpt->IsPDFExport() &&
                 pSh->GetOut()->GetOutDevType() != OUTDEV_PRINTER )
             {
-                rpCol = &SwViewOption::GetIndexShadingsColor();
+                rxCol = SwViewOption::GetIndexShadingsColor();
             }
         }
 
@@ -7300,7 +7300,7 @@ bool SwFrame::GetBackgroundBrush(
             !rBack.GetColor().GetTransparency() || rBack.GetGraphicPos() != GPOS_NONE ||
 
             // done when direct color is forced
-            rpCol ||
+            rxCol ||
 
             // done when consider BG transparency and color is not completely transparent
             (bConsiderBackgroundTransparency && (rBack.GetColor() != COL_TRANSPARENT))
