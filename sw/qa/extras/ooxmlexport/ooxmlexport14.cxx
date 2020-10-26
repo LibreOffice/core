@@ -1313,6 +1313,18 @@ DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredY, "tdf137678_testVmlLineShapeM
     CPPUNIT_ASSERT(sStyle.indexOf("flip:y") > 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeRotated, "tdf137765_testVmlLineShapeRotated.docx")
+{
+    // tdf#137765 The "rotation" (in style attribute) was not handled correctly for VML line shapes.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    OUString sStyle = getXPath(pXmlDoc,
+        "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
+        "style");
+    CPPUNIT_ASSERT(sStyle.indexOf("flip:x") > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
