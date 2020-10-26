@@ -57,7 +57,7 @@ public:
 private:
     void ensureResults(SCCOL nCol, SCROW nRow);
     void resetCache(bool bContentChangeOnly = false);
-    void resetEngine();
+    void setup();
 };
 }
 

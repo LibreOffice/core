@@ -500,6 +500,8 @@ void ScGridWindow::dispose()
     mpDPFieldPopup.disposeAndClear();
     aComboButton.SetOutputDevice(nullptr);
 
+    if (mpSpellCheckCxt)
+        mpSpellCheckCxt->reset();
     mpSpellCheckCxt.reset();
 
     vcl::Window::dispose();

@@ -269,7 +269,8 @@ void SpellCheckContext::reset()
 {
     meLanguage = ScGlobal::GetEditDefaultLanguage();
     resetCache();
-    resetEngine();
+    mpEngine.reset();
+    mpStatus.reset();
 }
 
 void SpellCheckContext::resetForContentChange()
@@ -279,8 +280,12 @@ void SpellCheckContext::resetForContentChange()
 
 void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 {
-    if (!mpEngine || !mpCache)
+    if (!mpEngine || !mpCache ||
+        ScGlobal::GetEditDefaultLanguage() != meLanguage)
+    {
         reset();
+        setup();
+    }
 
     // perhaps compute the pivot rangelist once in some pivot-table change handler ?
     if (pDoc->HasPivotTable())
@@ -306,8 +311,6 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
         return;
     }
 
-    if (ScGlobal::GetEditDefaultLanguage() != meLanguage)
-        reset();
 
     // Cell content is either shared-string or EditTextObject
 
@@ -366,7 +369,6 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
     mpResult->set(nCol, nRow, pRanges.get());
     mpCache->set(nCol, nRow, aCell, std::move(pRanges));
-
 }
 
 void SpellCheckContext::resetCache(bool bContentChangeOnly)
@@ -384,7 +386,7 @@ void SpellCheckContext::resetCache(bool bContentChangeOnly)
         mpCache->clear(meLanguage);
 }
 
-void SpellCheckContext::resetEngine()
+void SpellCheckContext::setup()
 {
     mpEngine.reset(new ScTabEditEngine(pDoc));
     mpStatus.reset(new SpellCheckStatus());
