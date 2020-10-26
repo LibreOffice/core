@@ -1543,6 +1543,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104354_2, "tdf104354-2.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell5->getText()), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf137593, "tdf137593.docx")
+{
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // zero auto spacing, if the first paragraph contains text boxes
+    // This was 280.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:tc/w:p[1]/w:pPr/w:spacing", "before", "0");
+}
+
 DECLARE_OOXMLEXPORT_EXPORTONLY_TEST(testTdf115557, "tdf115557.docx")
 {
     // A chart anchored to a footnote multiplied during import
