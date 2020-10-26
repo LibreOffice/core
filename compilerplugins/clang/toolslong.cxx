@@ -121,6 +121,11 @@ void ToolsLong::run()
     if (!compiler.getLangOpts().CPlusPlus)
         return;
 
+    StringRef fn(handler.getMainFileName());
+    // sberg says this is fine
+    if (loplugin::isSamePathname(fn, SRCDIR "/pyuno/source/module/pyuno.cxx"))
+        return;
+
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
     for (auto const& dcl : reverseSourceOrder(varDecls_))
