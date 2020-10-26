@@ -12,14 +12,6 @@ $(eval $(call gb_Module_Module,uitest))
 
 $(eval $(call gb_Module_add_uicheck_targets,uitest,\
     UITest_calc_demo \
-    UITest_writer_demo1 \
-    UITest_writer_demo2 \
-    UITest_writer_demo3 \
-    UITest_writer_demo4 \
-    UITest_writer_demo5 \
-    UITest_writer_demo6 \
-    UITest_writer_demo7 \
-    UITest_writer_demo8 \
     UITest_impress_demo \
     UITest_demo_ui \
     UITest_math_demo \
