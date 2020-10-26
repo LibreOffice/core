@@ -257,7 +257,7 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
 private:
     EditView*                 pEditView;
     std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>>  pCursor;
-    std::unique_ptr<Color>    pBackgroundColor;
+    std::optional<Color>      mxBackgroundColor;
     /// Containing view shell, if any.
     OutlinerViewShell*        mpViewShell;
     /// Another shell, just listening to our state, if any.
@@ -436,9 +436,9 @@ public:
     bool        DoAutoHeight() const            { return bool( nControl & EVControlBits::AUTOSIZEY); }
     bool        DoInvalidateMore() const        { return bool( nControl & EVControlBits::INVONEMORE ); }
 
-    void            SetBackgroundColor( const Color& rColor );
-    const Color&    GetBackgroundColor() const {
-                        return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
+    void        SetBackgroundColor( const Color& rColor );
+    const Color & GetBackgroundColor() const {
+                        return ( mxBackgroundColor ? *mxBackgroundColor : pOutWin->GetBackground().GetColor() ); }
 
     /// Informs this edit view about which view shell contains it.
     void RegisterViewShell(OutlinerViewShell* pViewShell);

@@ -214,7 +214,7 @@ ImpEditView::~ImpEditView()
 
 void ImpEditView::SetBackgroundColor( const Color& rColor )
 {
-    pBackgroundColor.reset( new Color( rColor ) );
+    mxBackgroundColor = rColor;
 }
 
 void ImpEditView::RegisterViewShell(OutlinerViewShell* pViewShell)
