@@ -88,7 +88,7 @@ class BubbleWindow : public FloatingWindow
     Size            maMaxTextSize;
     tools::Rectangle       maTitleRect;
     tools::Rectangle       maTextRect;
-    long            mnTipOffset;
+    tools::Long     mnTipOffset;
 
 private:
     void            RecalcTextRects();
@@ -711,7 +711,7 @@ void BubbleWindow::Resize()
     tools::Rectangle aRect( 0, TIP_HEIGHT, aSize.Width(), aSize.Height() - TIP_HEIGHT );
     maRectPoly = tools::Polygon( aRect, 6, 6 );
     vcl::Region aRegion( maRectPoly );
-    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
+    tools::Long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
     Point aPointArr[4];
     aPointArr[0] = Point( nTipOffset, TIP_HEIGHT );
@@ -751,7 +751,7 @@ void BubbleWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Re
 
     Color aOldLine = GetLineColor();
     Size aSize = GetSizePixel();
-    long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
+    tools::Long nTipOffset = aSize.Width() - TIP_RIGHT_OFFSET + mnTipOffset;
 
     SetLineColor( GetSettings().GetStyleSettings().GetHelpColor() );
     DrawLine( Point( nTipOffset+2, TIP_HEIGHT ),
