@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d4569ca5_28e3eb84",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T12:13:11Z",
+      "side": 1,
+      "message": "Here you set the write flag; is it only for the next line 1136, or is it used also elsewhere?",
+      "range": {
+        "startLine": 1135,
+        "startChar": 4,
+        "endLine": 1135,
+        "endChar": 43
+      },
+      "revId": "74c419436d439303ddde25c0e2daa81649d467ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26d8aca9_585ac52b",
+        "filename": "basic/source/runtime/runtime.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3368,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T12:13:11Z",
+      "side": 1,
+      "message": "A helper guard would be nice here, which would take a pointer to variable in its ctor, would add the write flag *if not yet set* in the ctor, and would reset it in dtor *if had set in ctor*. Creating such a helper object here would call the ctor -\u003e set the flag, then call dtor at \"}\" -\u003e reset the flag...",
+      "range": {
+        "startLine": 3368,
+        "startChar": 8,
+        "endLine": 3368,
+        "endChar": 42
+      },
+      "revId": "74c419436d439303ddde25c0e2daa81649d467ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
