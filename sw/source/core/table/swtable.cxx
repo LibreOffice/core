@@ -71,32 +71,6 @@ using namespace com::sun::star;
 static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign, sal_uLong nNdPos );
 
-inline const Color* SwTableBox::GetSaveUserColor() const
-{
-    return mpUserColor.get();
-}
-
-inline const Color* SwTableBox::GetSaveNumFormatColor() const
-{
-    return mpNumFormatColor.get();
-}
-
-inline void SwTableBox::SetSaveUserColor(const Color* p )
-{
-    if (p)
-        mpUserColor.reset(new Color(*p));
-    else
-        mpUserColor.reset();
-}
-
-inline void SwTableBox::SetSaveNumFormatColor( const Color* p )
-{
-    if (p)
-        mpNumFormatColor.reset(new Color(*p));
-    else
-        mpNumFormatColor.reset();
-}
-
 tools::Long SwTableBox::getRowSpan() const
 {
     return mnRowSpan;
@@ -1990,8 +1964,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         GetItemState( RES_CHRATR_COLOR, false, &pItem ))
         pItem = nullptr;
 
-    const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
-    const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
+    const std::optional<Color>& pOldNumFormatColor = rBox.GetSaveNumFormatColor();
+    std::optional<Color> pNewUserColor;
+    if (pItem)
+        pNewUserColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
 
     if( ( pNewUserColor && pOldNumFormatColor &&
             *pNewUserColor == *pOldNumFormatColor ) ||
@@ -2013,14 +1989,14 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
     else
     {
         // Save user color, set NumFormat color if needed, but never reset the color
-        rBox.SetSaveUserColor( pNewUserColor );
+        rBox.SetSaveUserColor( pNewUserColor ? *pNewUserColor : std::optional<Color>() );
 
         if( pCol )
             // if needed, set the color
             pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
     }
-    rBox.SetSaveNumFormatColor( pCol );
+    rBox.SetSaveNumFormatColor( pCol ? *pCol : std::optional<Color>() );
 
     if( pTNd->GetText() != rText )
     {
@@ -2098,7 +2074,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     bool bChgAlign = pDoc->IsInsTableAlignNum();
     const SfxPoolItem* pItem;
 
-    const Color* pCol = nullptr;
+    const Color * pCol = nullptr;
     if( getSwDefaultTextFormat() != nFormat )
     {
         // special text format:
@@ -2132,8 +2108,10 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         GetItemState( RES_CHRATR_COLOR, false, &pItem ))
         pItem = nullptr;
 
-    const Color* pOldNumFormatColor = rBox.GetSaveNumFormatColor();
-    const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : nullptr;
+    const std::optional<Color>& pOldNumFormatColor = rBox.GetSaveNumFormatColor();
+    std::optional<Color> pNewUserColor;
+    if (pItem)
+        pNewUserColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
 
     if( ( pNewUserColor && pOldNumFormatColor &&
             *pNewUserColor == *pOldNumFormatColor ) ||
@@ -2162,7 +2140,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
             pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
 
     }
-    rBox.SetSaveNumFormatColor( pCol );
+    rBox.SetSaveNumFormatColor( pCol ? *pCol : std::optional<Color>() );
 
     // assign vertical orientation
     if( bChgAlign &&

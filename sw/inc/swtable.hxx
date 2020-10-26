@@ -31,6 +31,7 @@
 #include <vector>
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
+#include <optional>
 
 class SwStartNode;
 class SwFormat;
@@ -402,8 +403,8 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     const SwStartNode * m_pStartNode;
     SwTableLine *m_pUpper;
 
-    std::unique_ptr<Color> mpUserColor;
-    std::unique_ptr<Color> mpNumFormatColor;
+    std::optional<Color> mxUserColor;
+    std::optional<Color> mxNumFormatColor;
     tools::Long mnRowSpan;
     bool mbDummyFlag;
 
@@ -478,10 +479,10 @@ public:
     void ActualiseValueBox();
 
     // Access on internal data - currently used for the NumFormatter.
-    inline const Color* GetSaveUserColor()  const;
-    inline const Color* GetSaveNumFormatColor() const;
-    inline void SetSaveUserColor(const Color* p );
-    inline void SetSaveNumFormatColor( const Color* p );
+    const std::optional<Color>& GetSaveUserColor()  const { return mxUserColor; }
+    const std::optional<Color>& GetSaveNumFormatColor() const { return mxNumFormatColor; }
+    void SetSaveUserColor(std::optional<Color> p ) { mxUserColor = p; }
+    void SetSaveNumFormatColor( std::optional<Color> p ) { mxNumFormatColor = p; }
 
     tools::Long getRowSpan() const;
     void setRowSpan( tools::Long nNewRowSpan );
