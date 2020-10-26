@@ -30,9 +30,9 @@ class Bitmap;
 namespace vcl
 {
 /// Fills the rBitmaps vector with rendered pages.
-VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<Bitmap>& rBitmaps,
-                                      size_t nFirstPage = 0, int nPages = 1,
-                                      const basegfx::B2DTuple* pSizeHint = nullptr);
+VCL_DLLPUBLIC size_t RenderPDFBitmaps(const void* pBuffer, int nSize,
+                                      std::vector<BitmapEx>& rBitmaps, size_t nFirstPage = 0,
+                                      int nPages = 1, const basegfx::B2DTuple* pSizeHint = nullptr);
 
 /// Imports a PDF stream into rGraphic as VectorGraphicData.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);

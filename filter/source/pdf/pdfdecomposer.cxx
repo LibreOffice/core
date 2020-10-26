@@ -67,7 +67,7 @@ uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL XPdfDecomposer::ge
     if (nPageIndex < 0)
         nPageIndex = 0;
 
-    std::vector<Bitmap> aBitmaps;
+    std::vector<BitmapEx> aBitmaps;
     int rv = vcl::RenderPDFBitmaps(xPdfData.getConstArray(), xPdfData.getLength(), aBitmaps,
                                    nPageIndex, 1);
     if (rv == 0)

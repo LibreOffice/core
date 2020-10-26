@@ -441,6 +441,7 @@ namespace emfio
         BitmapEx            aBmpEx;
         tools::Rectangle    aOutRect;
         sal_uInt32          nWinRop;
+        bool m_bForceAlpha = false;
 
         BSaveStruct(const Bitmap& rBmp, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
             : aBmpEx(rBmp)
@@ -448,10 +449,12 @@ namespace emfio
             , nWinRop(nRop)
         {}
 
-        BSaveStruct(const BitmapEx& rBmpEx, const tools::Rectangle& rOutRect, sal_uInt32 nRop)
+        BSaveStruct(const BitmapEx& rBmpEx, const tools::Rectangle& rOutRect, sal_uInt32 nRop,
+                    bool bForceAlpha = false)
             : aBmpEx(rBmpEx)
             , aOutRect(rOutRect)
             , nWinRop(nRop)
+            , m_bForceAlpha(bForceAlpha)
         {}
     };
 
