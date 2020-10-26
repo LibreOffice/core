@@ -46,6 +46,30 @@
       "revId": "004b65494dc6e73666f2e89ad891cef2f5fbfdf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516735bc_9edb7336",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 6166,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-10-26T06:31:31Z",
+      "side": 1,
+      "message": "Except that it gives different error messages in the two cases. Whether that is pointless I can\u0027t say. How often do these error situations occur in real life anyway, I don\u0027t know?",
+      "parentUuid": "120d1455_d2649635",
+      "range": {
+        "startLine": 6166,
+        "startChar": 19,
+        "endLine": 6166,
+        "endChar": 56
+      },
+      "revId": "004b65494dc6e73666f2e89ad891cef2f5fbfdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
