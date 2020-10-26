@@ -22,6 +22,30 @@
       "revId": "004b65494dc6e73666f2e89ad891cef2f5fbfdf5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "120d1455_d2649635",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 6166,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2020-10-26T06:29:51Z",
+      "side": 1,
+      "message": "Quote possible, sure.",
+      "parentUuid": "82cf265a_60e9fc23",
+      "range": {
+        "startLine": 6166,
+        "startChar": 19,
+        "endLine": 6166,
+        "endChar": 56
+      },
+      "revId": "004b65494dc6e73666f2e89ad891cef2f5fbfdf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
     }
   ]
 }
