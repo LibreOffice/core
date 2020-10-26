@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff4ca0db_2209b3fe",
+        "filename": "include/editeng/svxrtf.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2020-10-26T12:09:10Z",
+      "side": 1,
+      "message": "I understand that this is purely a matter of personal preferences, but just thought maybe we could discuss it here:\n\nI thought that \"x\" is only for UNO interfaces in LO. \"p\" is for pointer-like object (so any smart pointer, except those pointing to UNO interfaces). And std::optional is not a pointer-like thing, but rather pretending to be an object ... so ma* seems to be a better match?",
+      "range": {
+        "startLine": 174,
+        "startChar": 26,
+        "endLine": 174,
+        "endChar": 28
+      },
+      "revId": "39ae9d29be0b4308b6e6ab7ee52c3fe6d6dc7d0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": true
+    }
+  ]
+}
