@@ -412,6 +412,7 @@ void SwFlyFrame::FinitDrawObj()
                     if (SwFEShell *const pFEShell = dynamic_cast<SwFEShell*>(&rCurrentShell))
                     {   // tdf#131679 move any cursor out of fly
                         SwFlyFrame const*const pOldSelFly = ::GetFlyFromMarked(nullptr,  pFEShell);
+                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
                         if (pOldSelFly)
                         {
                             SwPosition const pos(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
@@ -421,7 +422,10 @@ void SwFlyFrame::FinitDrawObj()
                             // does, but that would access layout a bit much...
                         }
                     }
-                    rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                    else
+                    {
+                        rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+                    }
                 }
             }
         }
