@@ -27,6 +27,7 @@
 
 #include <editeng/editengdllapi.h>
 
+#include <optional>
 #include <vector>
 #include <map>
 #include <memory>
