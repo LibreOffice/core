@@ -679,7 +679,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     awt::Rectangle aShapeRect(rShapeRect);
     std::optional<sal_Int32> oRotation;
     bool bFlipX = false, bFlipY = false;
-    if (!maTypeModel.maRotation.isEmpty())
+    // tdf#137765: skip this rotation for line shapes
+    if (!maTypeModel.maRotation.isEmpty() && maService != "com.sun.star.drawing.LineShape")
         oRotation = ConversionHelper::decodeRotation(maTypeModel.maRotation);
     if (!maTypeModel.maFlip.isEmpty())
     {
@@ -1035,6 +1036,22 @@ namespace
             }
         }
     }
+
+    void handleRotation(const ShapeTypeModel& rTypeModel, Reference<XShape>& rxShape)
+    {
+        if (!rTypeModel.maRotation.isEmpty())
+        {
+            if (SdrObject* pShape = GetSdrObjectFromXShape(rxShape))
+            {
+                // -1 is required because the direction of MSO rotation is the opposite of ours
+                // 100 is required because in this part of the code the angle is in a hundredth of
+                // degrees.
+                auto nAngle = -1 * 100.0 * rTypeModel.maRotation.toDouble();
+                double nHRad = nAngle * F_PI18000;
+                pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle, sin(nHRad), cos(nHRad));
+            }
+        }
+    }
 }
 
 LineShape::LineShape(Drawing& rDrawing)
@@ -1045,6 +1062,8 @@ LineShape::LineShape(Drawing& rDrawing)
 Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const awt::Rectangle& rShapeRect) const
 {
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
+    // tdf#137765
+    handleRotation(maTypeModel, xShape);
     // tdf#97517 tdf#137678
     // The MirroredX and MirroredY properties (in the CustomShapeGeometry property) are not
     // supported for the LineShape by UNO, so we have to make the mirroring here.
@@ -1174,18 +1193,7 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 
     // tdf#105875 handle rotation
     // Note: must rotate before flip!
-    if (!maTypeModel.maRotation.isEmpty())
-    {
-        if (SdrObject* pShape = GetSdrObjectFromXShape(xShape))
-        {
-            // -1 is required because the direction of MSO rotation is the opposite of ours
-            // 100 is required because in this part of the code the angle is in a hundredth of
-            // degrees.
-            auto nAngle = -1 * 100.0 * maTypeModel.maRotation.toDouble();
-            double nHRad = nAngle * F_PI18000;
-            pShape->NbcRotate(pShape->GetSnapRect().Center(), nAngle, sin(nHRad), cos(nHRad));
-        }
-    }
+    handleRotation(maTypeModel, xShape);
 
     // Handle horizontal and vertical flip.
     handleMirroring(maTypeModel, xShape);
