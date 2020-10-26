@@ -284,7 +284,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
         (RndStdIds::FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
         css::text::WrapTextMode_THROUGH == pFlyFormat->GetSurround().GetSurround() )
     {
-        m_aMoveFlyFrames.push_back( pFlyFormat );
+        m_aMoveFlyFrames.emplace_back(std::make_unique<SwHTMLFrameFormatListener>(pFlyFormat));
         m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );
     }
 }
