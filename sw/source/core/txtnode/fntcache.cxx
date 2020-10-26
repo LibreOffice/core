@@ -2610,7 +2610,9 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
         if ( bChgFntColor )
         {
             // check if current background has a user defined setting
-            const Color* pCol = GetFont() ? GetFont()->GetBackColor() : nullptr;
+            std::optional<Color> pCol;
+            if (GetFont())
+                pCol = GetFont()->GetBackColor();
             Color aColor;
             if( ! pCol || COL_TRANSPARENT == *pCol )
             {
@@ -2630,27 +2632,27 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
                     {
                         // First see if fill attributes provide a color.
                         aColor = Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
-                        pCol = &aColor;
+                        pCol = aColor;
                     }
 
                     // If not, then fall back to the old brush item.
                     if ( !pCol )
                     {
-                        pCol = &pItem->GetColor();
+                        pCol = pItem->GetColor();
                     }
 
                     /// OD 30.08.2002 #99657#
                     /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
                     if ( *pCol == COL_TRANSPARENT)
-                        pCol = nullptr;
+                        pCol.reset();
                 }
                 else
-                    pCol = nullptr;
+                    pCol.reset();
             }
 
             // no user defined color at paragraph or font background
             if ( ! pCol )
-                pCol = &aGlobalRetoucheColor;
+                pCol = aGlobalRetoucheColor;
 
             if( GetShell() && GetShell()->GetWin() )
             {

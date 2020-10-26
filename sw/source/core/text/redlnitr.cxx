@@ -860,7 +860,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, ExtTextInputAttr nAttr )
     {
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         rFnt.SetColor( rStyleSettings.GetHighlightTextColor() );
-        rFnt.SetBackColor( new Color( rStyleSettings.GetHighlightColor() ) );
+        rFnt.SetBackColor( rStyleSettings.GetHighlightColor() );
     }
     if ( nAttr & ExtTextInputAttr::GrayWaveline )
         rFnt.SetGreyWave( true );
