@@ -333,6 +333,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
+/*
     if( pStt->nContent.GetIndex() )     // just one part
     {
         // set up a later, and all CharFormatAttr -> TextFormatAttr
@@ -352,6 +353,66 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         ++aTmpStt;
     }
+ */
+    /* start of partial revert of commit 850ac2446efbbf5a236c3109af45d804d6a984d3 */
+    if( pStt->nContent.GetIndex() )     // nur ein Teil
+    {
+        // dann spaeter aufsetzen und alle CharFmtAttr -> TxtFmtAttr
+        SwTextNode* pTNd = aTmpStt.GetNode().GetTextNode();
+        if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
+        {
+            SfxItemIter aIter( *pTNd->GetpSwAttrSet() );
+            const SfxPoolItem* pItem = aIter.GetCurItem();
+            SfxItemSet aCharSet( GetAttrPool(), svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END>{} );
+
+            sal_uInt16 aCharFmtSetRange[] = {
+                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+                0
+            };
+
+            while( sal_True )
+            {
+                if( IsInRange( aCharFmtSetRange, pItem->Which() ))
+                {
+                    pTNd->GetOrCreateSwpHints();
+
+                    aCharSet.Put( *pItem );
+
+                    if( pHst )
+                    {
+                        SwRegHistory aRegH( pTNd, *pTNd, pHst );
+                        pTNd->ResetAttr( pItem->Which() );
+                    }
+                    else
+                        pTNd->ResetAttr( pItem->Which() );
+                }
+                if( aIter.IsAtEnd() )
+                    break;
+                pItem = aIter.NextItem();
+            }
+
+            if ( aCharSet.Count() )
+            {
+                if ( pHst )
+                {
+                    SwRegHistory history( pTNd, *pTNd, pHst );
+                    history.InsertItems( aCharSet, 0, pTNd->GetText().getLength(),
+                        SetAttrMode::NOFORMATATTR, nullptr );
+                }
+                else
+                {
+                    SwTextAttr* pNew =
+                        MakeTextAttr( *this, aCharSet, 0, pTNd->GetText().getLength() );
+                    pTNd->InsertHint( pNew );
+                }
+            }
+        }
+
+        aTmpStt++;
+    }
+    /* end of partial revert of commit 850ac2446efbbf5a236c3109af45d804d6a984d3 */
+
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetContentNode()->Len() )
     {
          // set up a later, and all CharFormatAttr -> TextFormatAttr
