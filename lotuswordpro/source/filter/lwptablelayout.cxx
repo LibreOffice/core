@@ -879,7 +879,14 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
             XFRow* pXFRow = pTmpTable->GetRow(1);
             pXFTable->AddHeaderRow(pXFRow);
             pTmpTable->RemoveRow(1);
-            nContentRow = m_RowsMap[0]->GetCurMaxSpannedRows(0,nCol);
+            auto iter = m_RowsMap.find(0);
+            if (iter == m_RowsMap.end())
+            {
+                SAL_WARN("lwp", "row 0 is unknown");
+                nContentRow = 0;
+            }
+            else
+                nContentRow = iter->second->GetCurMaxSpannedRows(0,nCol);
         }
     }
     return nContentRow;
