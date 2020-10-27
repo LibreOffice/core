@@ -201,12 +201,10 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
     {
         aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
         aWndPos   ->SetHelpId       (HID_INSWIN_POS);
-    }
-    mxTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-    mxTextWindow->SetHelpId       (HID_INSWIN_INPUT);
 
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
+        mxTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+        mxTextWindow->SetHelpId       (HID_INSWIN_INPUT);
+
         // No SetHelpText: the helptexts come from the Help
         SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
         SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
