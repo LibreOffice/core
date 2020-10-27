@@ -634,7 +634,7 @@ static void lcl_ExportSoftPageBreak(
     SwSoftPageBreakList& rBreakArr,
     const sal_Int32 nIndex)
 {
-    for ( auto aIter = rBreakArr.begin(), aEnd = rBreakArr.end(); aIter != aEnd; )
+    for ( auto aIter = rBreakArr.begin(); aIter != rBreakArr.end(); )
     {
         if ( nIndex > *aIter )
         {
