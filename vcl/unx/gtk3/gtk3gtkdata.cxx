@@ -131,10 +131,18 @@ GdkCursor* GtkSalDisplay::getFromSvg(OUString const & name, int nXHot, int nYHot
     assert(pPixBuf && "missing image?");
     if (!pPixBuf)
         return nullptr;
+
     guint nDefaultCursorSize = gdk_display_get_default_cursor_size( m_pGdkDisplay );
-    GdkPixbuf* pScaledPixBuf = gdk_pixbuf_scale_simple(pPixBuf, nDefaultCursorSize, nDefaultCursorSize, GDK_INTERP_HYPER);
+    int nPixWidth = gdk_pixbuf_get_width(pPixBuf);
+    int nPixHeight = gdk_pixbuf_get_height(pPixBuf);
+    double fScalefactor = static_cast<double>(nDefaultCursorSize) / std::max(nPixWidth, nPixHeight);
+    GdkPixbuf* pScaledPixBuf = gdk_pixbuf_scale_simple(pPixBuf,
+                                                       nPixWidth * fScalefactor,
+                                                       nPixHeight * fScalefactor,
+                                                       GDK_INTERP_HYPER);
     g_object_unref(pPixBuf);
-    GdkCursor* pCursor = gdk_cursor_new_from_pixbuf( m_pGdkDisplay, pScaledPixBuf, nXHot, nYHot);
+    GdkCursor* pCursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pScaledPixBuf,
+                                                    nXHot * fScalefactor, nYHot * fScalefactor);
     return pCursor;
 }
 
