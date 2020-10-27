@@ -11,9 +11,7 @@
 $(eval $(call gb_Module_Module,uitest))
 
 $(eval $(call gb_Module_add_uicheck_targets,uitest,\
-    UITest_calc_demo \
     UITest_impress_demo \
     UITest_demo_ui \
     UITest_math_demo \
-    UITest_manual_tests \
 ))

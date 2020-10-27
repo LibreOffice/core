@@ -12,23 +12,6 @@ from uitest.framework import UITestCase
 
 class GridWinTest(UITestCase):
 
-    def test_select_object(self):
-
-        self.ui_test.create_doc_in_start_center("calc")
-        xCalcDoc = self.xUITest.getTopFocusWindow()
-        xGridWindow = xCalcDoc.getChild("grid_window")
-
-        selectProps = mkPropertyValues({"CELL": "B10"})
-        xGridWindow.executeAction("SELECT", selectProps)
-
-        xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
-
-        xGridWindow.executeAction("ACTIVATE", tuple())
-
-        xGridWindow.executeAction("DESELECT", tuple())
-
-        self.ui_test.close_doc()
-
     def test_select_sheet(self):
 
         self.ui_test.create_doc_in_start_center("calc")
